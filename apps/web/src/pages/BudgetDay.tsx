@@ -1,4 +1,4 @@
-import { formatGbpBn, formatPct } from '@btc/engine';
+import { computeReactions, distributionalNotes, formatGbpBn, formatPct } from '@btc/engine';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdviserBriefing } from '../components/AdviserBriefing';
@@ -8,9 +8,10 @@ import { JourneyLayout } from '../components/JourneyLayout';
 import { formatLeverValue } from '../components/LeverControl';
 import { MeasuresTable } from '../components/MeasuresTable';
 import { PathChart } from '../components/PathChart';
+import { ReactionPanel } from '../components/ReactionPanel';
 import { Scorecard } from '../components/Scorecard';
 import { VerdictCard } from '../components/VerdictCard';
-import { briefingsFor, households, levers, leversByCategory, vintage } from '../data';
+import { briefingsFor, households, levers, leversByCategory, reactions, vintage } from '../data';
 import { StepLink } from '../journey/links';
 import { useBudget } from '../state/budget';
 
@@ -30,6 +31,8 @@ export function BudgetDayPage() {
     .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
     .filter((x) => x.value !== x.lever.control.default);
   const met = outcome.verdicts.filter((v) => ['met', 'withinCap'].includes(v.status)).length;
+  const signals = computeReactions({ outcome, levers, reactions, typicalErrorGbpm });
+  const notes = distributionalNotes(outcome, levers, targetYear).slice(0, 3);
 
   async function copyLink() {
     const url = `${window.location.origin}/budget-day?${query}`;
@@ -49,12 +52,26 @@ export function BudgetDayPage() {
     <JourneyLayout step="budget-day">
       <h1 className="page-title">Step 4 · Budget day</h1>
       <p className="lede">
-        Wednesday 28 October 2026. {met} of {outcome.verdicts.length} tests pass on your figures.
+        Wednesday 28 October 2026. {reactions.intro} {met} of {outcome.verdicts.length} tests pass
+        on your figures.
       </p>
-      <section aria-labelledby="verdicts-heading">
-        <h2 id="verdicts-heading" className="sr-only">
-          Fiscal rule verdicts
-        </h2>
+      <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} />
+      <div className="reactions">
+        <ReactionPanel audience="rules" signals={signals} />
+        <ReactionPanel audience="markets" signals={signals} />
+        <ReactionPanel audience="parliament" signals={signals} />
+        <ReactionPanel audience="public" signals={signals} notes={notes} />
+      </div>
+      <details className="panel" aria-labelledby="verdicts-heading">
+        <summary className="group__head">
+          <span className="group__line">
+            <span className="group__name">The rules in full</span>
+            <span className="group__count">{outcome.verdicts.length}</span>
+          </span>
+          <span className="group__say">
+            What each rule requires, the margin, and what it is worth per household.
+          </span>
+        </summary>
         <div className="verdicts">
           {outcome.verdicts.map((verdict) => (
             <VerdictCard
@@ -65,13 +82,20 @@ export function BudgetDayPage() {
             />
           ))}
         </div>
-      </section>
-      <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} />
+      </details>
       {briefingsFor('budget-day').map((b) => (
         <AdviserBriefing key={b.id} briefing={b} compact />
       ))}
-      <section className="panel" aria-labelledby="measures-heading">
-        <h2 id="measures-heading">Your measures</h2>
+      <details className="panel">
+        <summary className="group__head">
+          <span className="group__line">
+            <span className="group__name">Your measures</span>
+            <span className="group__count">{outcome.leverEffects.length}</span>
+          </span>
+          <span className="group__say">
+            Every lever you moved, and what it does in {targetYear}.
+          </span>
+        </summary>
         <MeasuresTable outcome={outcome} levers={levers} targetYear={targetYear} />
         <p className="source">
           Economic assumptions:{' '}
@@ -83,16 +107,23 @@ export function BudgetDayPage() {
           {' · '}
           <StepLink to="/assumptions">change</StepLink>
         </p>
-      </section>
-      <section className="panel" aria-labelledby="notes-heading">
-        <h2 id="notes-heading">What your advisers want on the record</h2>
+      </details>
+      <details className="panel">
+        <summary className="group__head">
+          <span className="group__line">
+            <span className="group__name">What your advisers want on the record</span>
+          </span>
+          <span className="group__say">
+            The caveats attached to the measures you chose, in their own words.
+          </span>
+        </summary>
         <ClosingNotes outcome={outcome} levers={levers} />
-      </section>
+      </details>
       <InteractionsNotice interactions={outcome.interactions} />
-      <section aria-labelledby="charts-heading">
-        <h2 id="charts-heading" className="sr-only">
-          Five-year paths
-        </h2>
+      <details className="panel details">
+        <summary>
+          <h2>Five-year paths</h2>
+        </summary>
         <div className="charts">
           <PathChart
             title="Current budget surplus"
@@ -136,13 +167,16 @@ export function BudgetDayPage() {
             zeroLine
           />
         </div>
-      </section>
+      </details>
       <div className="toolbar">
         <button type="button" className="btn btn--primary" onClick={copyLink}>
           {copied ? 'Link copied' : 'Copy a link to this Budget'}
         </button>
         <StepLink to="/budget/taxes" className="btn">
           Back to taxes and spending
+        </StepLink>
+        <StepLink to="/recommendations" className="btn">
+          Back to your colleagues
         </StepLink>
         <button
           type="button"

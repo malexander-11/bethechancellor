@@ -1,6 +1,7 @@
 import {
   parseAdvisers,
   parseBriefings,
+  parseReactions,
   parseContext,
   parseHouseholds,
   parseLever,
@@ -17,6 +18,7 @@ import {
 } from '@btc/engine';
 import advisersJson from '@data/journey/advisers.json';
 import briefingsJson from '@data/journey/briefings.json';
+import reactionsJson from '@data/journey/reactions.json';
 import contextJson from '@data/context/2026-09.json';
 import householdsJson from '@data/reference/uk-households.json';
 import presetsJson from '@data/presets/presets.json';
@@ -37,6 +39,7 @@ export const households = parseHouseholds(householdsJson);
 export const context = parseContext(contextJson);
 export const advisers = parseAdvisers(advisersJson);
 export const briefings = parseBriefings(briefingsJson);
+export const reactions = parseReactions(reactionsJson);
 export const levers: Lever[] = Object.keys(leverModules)
   .sort()
   .map((key) => parseLever(leverModules[key]))
