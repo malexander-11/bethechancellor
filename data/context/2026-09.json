@@ -199,8 +199,7 @@
         "label": "OBR March 2026",
         "source": {
           "sourceId": "obr-efo-2026-03",
-          "table": "Table 5.1",
-          "quote": "March 2026 PSNB forecast 152.7 132.7 115.5 96.5 86.0 63.4 59.0"
+          "table": "Table 5.1"
         }
       },
       "latest": {

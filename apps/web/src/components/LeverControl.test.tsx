@@ -74,4 +74,31 @@ describe('LeverControl', () => {
     expect(formatLeverValue(fuel, 10)).toBe('+10%');
     expect(formatLeverValue(nicpt, 1040)).toBe('+£1,040');
   });
+
+  it('shows the level a setting moves to, a select for inheritance tax and £bn for departments', () => {
+    const itbr = levers.find((l) => l.code === 'itbr');
+    const iht = levers.find((l) => l.code === 'iht');
+    const dhsc = levers.find((l) => l.code === 'dhsc');
+    if (!itbr || !iht || !dhsc) throw new Error('missing levers');
+    const first = render(<LeverControl lever={itbr} value={1} onChange={() => undefined} />);
+    expect(within(first.container).getByText('20%')).toBeInTheDocument();
+    expect(within(first.container).getByText('21%')).toBeInTheDocument();
+    expect(within(first.container).getByRole('slider')).toHaveAttribute(
+      'aria-valuetext',
+      '21% (+1p)',
+    );
+    first.unmount();
+    const second = render(<LeverControl lever={iht} value={-40} onChange={() => undefined} />);
+    const select = within(second.container).getByRole('combobox');
+    expect(select).toHaveValue('-40');
+    expect(
+      within(second.container).getByRole('option', { name: 'Abolish (0%)' }),
+    ).toBeInTheDocument();
+    expect(within(second.container).getByText('0%')).toBeInTheDocument();
+    second.unmount();
+    const third = render(<LeverControl lever={dhsc} value={2} onChange={() => undefined} />);
+    expect(within(third.container).getByText('£232.0bn')).toBeInTheDocument();
+    expect(within(third.container).getByText('£236.6bn')).toBeInTheDocument();
+    expect(third.container.querySelector('.lever__level-note')?.textContent).toMatch(/in 2028-29/);
+  });
 });

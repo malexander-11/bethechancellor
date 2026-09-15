@@ -1,9 +1,18 @@
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
+import { AssumptionsPage } from './pages/Assumptions';
 import { BudgetPage } from './pages/Budget';
+import { BudgetDayPage } from './pages/BudgetDay';
 import { MethodologyPage } from './pages/Methodology';
+import { StartPage } from './pages/Start';
 import { Disclaimer } from './components/Disclaimer';
+
+/** Old and shorthand paths redirect into the journey with the budget's query string intact. */
+function RedirectKeepingQuery({ to }: { to: string }) {
+  const { search } = useLocation();
+  return <Navigate to={{ pathname: to, search }} replace />;
+}
 
 export function App() {
   return (
@@ -16,8 +25,9 @@ export function App() {
           </NavLink>
           <nav className="site-nav" aria-label="Main">
             <NavLink to="/" end>
-              Your Budget
+              Start
             </NavLink>
+            <NavLink to="/budget/taxes">Your Budget</NavLink>
             <NavLink to="/methodology">Methodology</NavLink>
             <NavLink to="/about">About &amp; sources</NavLink>
           </nav>
@@ -25,11 +35,15 @@ export function App() {
       </header>
       <main className="page">
         <Routes>
-          <Route path="/" element={<BudgetPage />} />
-          <Route path="/b" element={<BudgetPage />} />
+          <Route path="/" element={<StartPage />} />
+          <Route path="/assumptions" element={<AssumptionsPage />} />
+          <Route path="/budget" element={<RedirectKeepingQuery to="/budget/taxes" />} />
+          <Route path="/budget/:tab" element={<BudgetPage />} />
+          <Route path="/budget-day" element={<BudgetDayPage />} />
+          <Route path="/b" element={<RedirectKeepingQuery to="/budget/taxes" />} />
           <Route path="/methodology" element={<MethodologyPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="*" element={<BudgetPage />} />
+          <Route path="*" element={<RedirectKeepingQuery to="/" />} />
         </Routes>
         <Disclaimer />
       </main>

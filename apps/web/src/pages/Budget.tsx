@@ -1,12 +1,16 @@
 import { formatGbpBn, formatPct } from '@btc/engine';
 import { useState } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
+import { AdviserBriefing } from '../components/AdviserBriefing';
 import { AttributionList } from '../components/AttributionList';
 import { InteractionsNotice } from '../components/InteractionsNotice';
-import { LeverControl } from '../components/LeverControl';
+import { JourneyLayout } from '../components/JourneyLayout';
+import { LeverControl, formatLeverValue } from '../components/LeverControl';
 import { PathChart } from '../components/PathChart';
 import { PresetPicker } from '../components/PresetPicker';
-import { VerdictCard } from '../components/VerdictCard';
-import { groupLevers, households, leversByCategory, rules, vintage } from '../data';
+import { Scorecard } from '../components/Scorecard';
+import { briefingsFor, groupLevers, leversByCategory, rules, vintage } from '../data';
+import { StepLink } from '../journey/links';
 import { useBudget } from '../state/budget';
 
 const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDateString('en-GB', {
@@ -15,9 +19,21 @@ const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDat
   year: 'numeric',
 });
 
+function slug(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+}
+
 export function BudgetPage() {
+  const { tab } = useParams();
   const { state, dispatch, outcome, query } = useBudget();
   const [copied, setCopied] = useState(false);
+  if (tab !== 'taxes' && tab !== 'spending') {
+    return (
+      <Navigate to={{ pathname: '/budget/taxes', search: query ? `?${query}` : '' }} replace />
+    );
+  }
+  const step = tab;
+  const items = step === 'taxes' ? leversByCategory.tax : leversByCategory.spend;
   const { paths } = outcome;
   const years = paths.years;
   const targetYear =
@@ -26,9 +42,13 @@ export function BudgetPage() {
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
+  const macroSummary = leversByCategory.macro
+    .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
+    .filter((x) => x.value !== x.lever.control.default)
+    .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`);
 
   async function copyLink() {
-    const url = `${window.location.origin}/b?${query}`;
+    const url = `${window.location.origin}/budget-day?${query}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
@@ -42,99 +62,72 @@ export function BudgetPage() {
   const surplus = (values: Record<string, number>) => years.map((y) => -(values[y] ?? 0) / 1000);
 
   return (
-    <>
-      <h1 className="page-title">Set the budget. See if the rules hold.</h1>
+    <JourneyLayout step={step}>
+      <h1 className="page-title">Step 2 · Set taxes and spending</h1>
       <p className="lede">
-        Start from the Office for Budget Responsibility&rsquo;s March 2026 forecast, change taxes,
-        spending and what you believe about the economy, and watch the Chancellor&rsquo;s room for
-        manoeuvre change. Every number tells you whether it is an official costing, a mechanical
-        consequence, an assumption or commentary.
+        Every control shows the level it moves a rate, threshold or budget to. Official costings
+        carry the direct badge; arithmetic on published plans is mechanical; your advisers&rsquo;
+        opinions are commentary and change no number.
       </p>
-      <div className="context-strip" role="note">
-        <span>
-          Baseline: <strong>{vintage.event}</strong>
-        </span>
-        <span>
-          Rules: <strong>{rules.title}</strong>
-        </span>
-        <span>
-          Next formal assessment: <strong>Budget, {nextBudget}</strong>
-        </span>
-      </div>
+      <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
+      <p className="assumptions-line">
+        Economic assumptions:{' '}
+        {macroSummary.length > 0 ? macroSummary.join(' · ') : "the OBR's March view"} ·{' '}
+        <StepLink to="/assumptions">change</StepLink>
+      </p>
+      <nav className="tabs" aria-label="Taxes or spending">
+        <StepLink
+          to="/budget/taxes"
+          className={({ isActive }) => `tab${isActive ? ' tab--active' : ''}`}
+        >
+          Taxes
+        </StepLink>
+        <StepLink
+          to="/budget/spending"
+          className={({ isActive }) => `tab${isActive ? ' tab--active' : ''}`}
+        >
+          Spending
+        </StepLink>
+      </nav>
 
       <div className="layout">
         <aside>
-          <section className="panel" aria-labelledby="assumptions-heading">
-            <h2 id="assumptions-heading">Economic assumptions</h2>
-            <p className="panel__hint">
-              These are not policies. They replace the OBR&rsquo;s view of the economy with yours,
-              using the OBR&rsquo;s own published sensitivities.
-            </p>
-            <PresetPicker
-              onApply={(leverValues) => dispatch({ type: 'applyPreset', leverValues })}
-              current={state.leverValues}
-            />
-            {leversByCategory.macro.map((lever) => (
-              <LeverControl
-                key={lever.id}
-                lever={lever}
-                value={state.leverValues[lever.code] ?? lever.control.default}
-                effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                summaryYear={targetYear}
-                onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-              />
-            ))}
-          </section>
-
-          <section className="panel" aria-labelledby="tax-heading">
-            <h2 id="tax-heading">Tax</h2>
-            <p className="panel__hint">
-              Official direct costings: HMRC&rsquo;s ready reckoner (June 2025) carried to the OBR
-              March 2026 forecast, and the Treasury&rsquo;s Budget 2025 scorecard. Measures start in
-              April 2027, the first April after the Budget. HMRC has deferred its 2026 edition while
-              it reviews key assumptions.
-            </p>
-            {groupLevers(leversByCategory.tax).map((group) => (
-              <div key={group.name}>
-                <h3 className="section-label">{group.name}</h3>
-                {group.levers.map((lever) => (
-                  <LeverControl
-                    key={lever.id}
-                    lever={lever}
-                    value={state.leverValues[lever.code] ?? lever.control.default}
-                    effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                    summaryYear={targetYear}
-                    onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-                  />
-                ))}
-              </div>
-            ))}
-          </section>
-
-          <section className="panel" aria-labelledby="spend-heading">
-            <h2 id="spend-heading">Spending</h2>
-            <p className="panel__hint">
-              Day-to-day budgets follow the June 2025 Spending Review settlements to 2028-29,
-              carried forward with the OBR&rsquo;s total path; investment and welfare lines follow
-              the OBR March 2026 forecast; the four Budget 2025 decisions use the Treasury&rsquo;s
-              own costings. Changes start in April 2027.
-            </p>
-            {groupLevers(leversByCategory.spend).map((group) => (
-              <div key={group.name}>
-                <h3 className="section-label">{group.name}</h3>
-                {group.levers.map((lever) => (
-                  <LeverControl
-                    key={lever.id}
-                    lever={lever}
-                    value={state.leverValues[lever.code] ?? lever.control.default}
-                    effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                    summaryYear={targetYear}
-                    onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-                  />
-                ))}
-              </div>
-            ))}
-          </section>
+          {briefingsFor(step).map((b) => (
+            <AdviserBriefing key={b.id} briefing={b} />
+          ))}
+          {groupLevers(items).map((group) => (
+            <section
+              key={group.name}
+              className="panel"
+              aria-labelledby={`group-${slug(group.name)}`}
+            >
+              <h2 id={`group-${slug(group.name)}`}>{group.name}</h2>
+              {briefingsFor(step, group.name).map((b) => (
+                <AdviserBriefing key={b.id} briefing={b} compact />
+              ))}
+              {group.levers.map((lever) => (
+                <LeverControl
+                  key={lever.id}
+                  lever={lever}
+                  value={state.leverValues[lever.code] ?? lever.control.default}
+                  effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                  summaryYear={targetYear}
+                  onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
+                />
+              ))}
+            </section>
+          ))}
+          <p className="hero-start__actions">
+            {step === 'taxes' ? (
+              <StepLink to="/budget/spending" className="btn btn--primary">
+                Next: spending
+              </StepLink>
+            ) : (
+              <StepLink to="/budget-day" className="btn btn--primary">
+                Go to Budget day
+              </StepLink>
+            )}
+          </p>
         </aside>
 
         <div>
@@ -187,27 +180,7 @@ export function BudgetPage() {
             </div>
           )}
 
-          <section aria-labelledby="verdicts-heading">
-            <h2 id="verdicts-heading" className="sr-only">
-              Fiscal rule verdicts
-            </h2>
-            <div className="verdicts">
-              {outcome.verdicts.map((verdict) => (
-                <VerdictCard
-                  key={verdict.ruleId}
-                  verdict={verdict}
-                  householdCount={households.value}
-                  typicalErrorGbpm={typicalErrorGbpm}
-                />
-              ))}
-            </div>
-          </section>
-
-          <section
-            className="panel"
-            aria-labelledby="attribution-heading"
-            style={{ marginTop: 16 }}
-          >
+          <section className="panel" aria-labelledby="attribution-heading">
             <h2 id="attribution-heading">
               What moved the {targetYear} current budget and borrowing
             </h2>
@@ -237,10 +210,18 @@ export function BudgetPage() {
             </div>
           )}
 
-          <section aria-labelledby="charts-heading" style={{ marginTop: 16 }}>
-            <h2 id="charts-heading" className="sr-only">
-              Five-year paths
-            </h2>
+          <section className="panel" aria-labelledby="presets-heading">
+            <h2 id="presets-heading">Try a ready-made Budget</h2>
+            <PresetPicker
+              onApply={(leverValues) => dispatch({ type: 'applyPreset', leverValues })}
+              current={state.leverValues}
+            />
+          </section>
+
+          <details className="panel details">
+            <summary>
+              <h2>Five-year paths</h2>
+            </summary>
             <div className="charts">
               <PathChart
                 title="Current budget surplus"
@@ -284,9 +265,9 @@ export function BudgetPage() {
                 zeroLine
               />
             </div>
-          </section>
+          </details>
         </div>
       </div>
-    </>
+    </JourneyLayout>
   );
 }

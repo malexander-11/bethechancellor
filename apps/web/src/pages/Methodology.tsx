@@ -100,6 +100,20 @@ export function MethodologyPage() {
         <li>Ratios to GDP are recomputed, and each rule is tested in its target year.</li>
       </ol>
 
+      <h2>The journey and the advisers</h2>
+      <p>
+        The game walks through four steps: confirm the assumptions, set taxes, set spending, and
+        Budget day. The advisers are roles, not people; every paragraph they say cites a public
+        document and is labelled commentary. Their suggested slider settings follow a stated rule:
+        the latest market or independent reading minus the OBR&rsquo;s March assumption, rounded to
+        the slider&rsquo;s step. Controls show the level a setting moves to (20% to 21%, £12,570 to
+        £13,070), but the engine costs the change, exactly as before: levels are display only. VAT
+        base-broadening toggles use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not
+        represent what abolishing a relief would raise; abolishing inheritance tax removes the
+        OBR&rsquo;s whole receipts line; reversing the October 2024 capital gains tax rise uses the
+        Treasury&rsquo;s own costing of the package.
+      </p>
+
       <h2>Spending levers</h2>
       <p>
         Departmental sliders scale the Spending Review 2025 settlements (resource budgets excluding

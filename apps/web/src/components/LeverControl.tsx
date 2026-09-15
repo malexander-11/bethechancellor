@@ -1,4 +1,13 @@
-import { formatGbpBn, type Lever, type LeverEffect } from '@btc/engine';
+import {
+  baselinePath,
+  formatGbpBn,
+  formatLevel,
+  levelValue,
+  policyYearsOf,
+  type Lever,
+  type LeverEffect,
+} from '@btc/engine';
+import { vintage } from '../data';
 import { useId, useState } from 'react';
 import { LabelBadge } from './LabelBadge';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
@@ -52,6 +61,56 @@ function tone(v: number): string {
   return v > 0.5 ? 'amount--better' : v < -0.5 ? 'amount--worse' : '';
 }
 
+const POLICY_YEARS = policyYearsOf(vintage);
+
+/**
+ * The level a setting moves to ("20% → 21%", "£232.0bn → £236.6bn in 2028-29"): from the lever's
+ * level metadata, or for percentage-of-baseline levers from the baseline path itself.
+ */
+export function levelChange(
+  lever: Lever,
+  value: number,
+  summaryYear?: string,
+): { from: string; to: string; note?: string } | null {
+  const level = lever.control.level;
+  if (level) {
+    return {
+      from: formatLevel(level, level.baseline),
+      to: formatLevel(level, levelValue(level, value)),
+    };
+  }
+  if (lever.costing.kind === 'pctOfBaseline') {
+    const path = baselinePath(lever, vintage, POLICY_YEARS);
+    const published =
+      lever.costing.baseline.from === 'published' ? lever.costing.baseline.years : null;
+    const year =
+      (published ? [...published].sort().at(-1) : summaryYear) ??
+      POLICY_YEARS[POLICY_YEARS.length - 1] ??
+      '';
+    const base = path.values[year] ?? 0;
+    return {
+      from: formatGbpBn(base, 1),
+      to: formatGbpBn(base * (1 + value / 100), 1),
+      note: `in ${year}`,
+    };
+  }
+  return null;
+}
+
+/** Slider end labels: the level at each end when the lever has level metadata, else the change. */
+function endLabel(lever: Lever, value: number): string {
+  const level = lever.control.level;
+  return level ? formatLevel(level, levelValue(level, value)) : formatLeverValue(lever, value);
+}
+
+function nearestOption(lever: Lever, value: number): string {
+  const options = Object.keys(lever.control.labels ?? {}).map(Number);
+  if (options.length === 0) return String(value);
+  return String(
+    options.reduce((best, v) => (Math.abs(v - value) < Math.abs(best - value) ? v : best)),
+  );
+}
+
 export function LeverControl({
   lever,
   value,
@@ -69,6 +128,8 @@ export function LeverControl({
   const [open, setOpen] = useState(false);
   const { min, max, step } = lever.control;
   const isToggle = lever.control.kind === 'toggle';
+  const isSelect = lever.control.kind === 'select';
+  const change = !isToggle ? levelChange(lever, value, summaryYear) : null;
   const isCapital = lever.classification?.currentOrCapital === 'capital';
   const barnett = lever.classification?.barnettConsequential === true;
   const isDefault = value === lever.control.default;
@@ -108,24 +169,66 @@ export function LeverControl({
       {!isToggle ? (
         <>
           <div className="lever__value">
-            <strong>{isDefault ? 'As the OBR forecast' : formatLeverValue(lever, value)}</strong>
-            {!isDefault && lever.control.formatLabel ? ` ${lever.control.formatLabel}` : ''}
+            {change ? (
+              <>
+                <span className="lever__level-from">{change.from}</span>
+                <span className="lever__arrow" aria-hidden="true">
+                  {' → '}
+                </span>
+                <strong className="lever__level-to">{change.to}</strong>
+                {change.note ? <span className="lever__level-note"> {change.note}</span> : null}
+                <span className="lever__delta">
+                  {isDefault ? 'as the OBR forecast' : formatLeverValue(lever, value)}
+                  {!isDefault && lever.control.formatLabel ? ` ${lever.control.formatLabel}` : ''}
+                </span>
+              </>
+            ) : (
+              <>
+                <strong>
+                  {isDefault ? 'As the OBR forecast' : formatLeverValue(lever, value)}
+                </strong>
+                {!isDefault && lever.control.formatLabel ? ` ${lever.control.formatLabel}` : ''}
+              </>
+            )}
           </div>
-          <input
-            id={id}
-            type="range"
-            min={min}
-            max={max}
-            step={step}
-            value={value}
-            onChange={(e) => onChange(Number(e.target.value))}
-            aria-valuetext={formatLeverValue(lever, value)}
-          />
-          <div className="lever__scale" aria-hidden="true">
-            <span>{formatLeverValue(lever, min)}</span>
-            <span>{min < 0 && max > 0 ? 'OBR' : ''}</span>
-            <span>{formatLeverValue(lever, max)}</span>
-          </div>
+          {isSelect ? (
+            <select
+              id={id}
+              className="lever__select"
+              value={nearestOption(lever, value)}
+              onChange={(e) => onChange(Number(e.target.value))}
+            >
+              {Object.entries(lever.control.labels ?? {})
+                .sort((a, b) => Number(a[0]) - Number(b[0]))
+                .map(([v, label]) => (
+                  <option key={v} value={v}>
+                    {label}
+                  </option>
+                ))}
+            </select>
+          ) : (
+            <>
+              <input
+                id={id}
+                type="range"
+                min={min}
+                max={max}
+                step={step}
+                value={value}
+                onChange={(e) => onChange(Number(e.target.value))}
+                aria-valuetext={
+                  change
+                    ? `${change.to} (${formatLeverValue(lever, value)})`
+                    : formatLeverValue(lever, value)
+                }
+              />
+              <div className="lever__scale" aria-hidden="true">
+                <span>{endLabel(lever, min)}</span>
+                <span>{min < 0 && max > 0 ? 'OBR' : ''}</span>
+                <span>{endLabel(lever, max)}</span>
+              </div>
+            </>
+          )}
         </>
       ) : null}
       <p className="lever__desc">{lever.description}</p>

@@ -18,6 +18,7 @@ export interface BudgetState {
 export type BudgetAction =
   | { type: 'setLever'; code: string; value: number }
   | { type: 'applyPreset'; leverValues: Record<string, number> }
+  | { type: 'setLevers'; values: Record<string, number> }
   | { type: 'reset' }
   | { type: 'setFeedback'; value: boolean }
   | { type: 'setAssessAsOf'; value: AssessAsOf }
@@ -47,6 +48,15 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
     }
     case 'applyPreset':
       return { ...state, leverValues: { ...action.leverValues } };
+    case 'setLevers': {
+      const leverValues = { ...state.leverValues };
+      for (const [code, value] of Object.entries(action.values)) {
+        const lever = levers.find((l) => l.code === code);
+        if (lever && value === lever.control.default) delete leverValues[code];
+        else leverValues[code] = value;
+      }
+      return { ...state, leverValues };
+    }
     case 'reset':
       return { ...state, leverValues: {}, debtInterestFeedback: true, assessAsOf: 'vintage' };
     case 'setFeedback':
@@ -56,6 +66,11 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
     case 'dismissWarnings':
       return { ...state, warnings: [] };
   }
+}
+
+/** Every page of the journey carries the budget in its query string; only the reference pages do not. */
+export function isJourneyPath(path: string): boolean {
+  return !['/methodology', '/about'].some((p) => path === p || path.startsWith(`${p}/`));
 }
 
 export function permalinkQuery(state: BudgetState): string {
@@ -108,7 +123,7 @@ export function BudgetProvider({ children, search }: { children: ReactNode; sear
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const path = window.location.pathname;
-    if (path !== '/' && path !== '/b') return;
+    if (!isJourneyPath(path)) return;
     const id = window.setTimeout(() => {
       const next = `${path}?${query}`;
       if (`${window.location.pathname}${window.location.search}` !== next) {
