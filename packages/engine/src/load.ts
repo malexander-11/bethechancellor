@@ -3,6 +3,7 @@ import { DataError } from './errors.js';
 import {
   advisersFileSchema,
   briefingsFileSchema,
+  reactionsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
   householdsReferenceSchema,
@@ -20,6 +21,7 @@ import {
 import type {
   AdvisersFile,
   BriefingsFile,
+  ReactionsFile,
   ContextFile,
   HmrcExtract,
   HouseholdsReference,
@@ -118,6 +120,10 @@ export function parseAdvisers(json: unknown): AdvisersFile {
 
 export function parseBriefings(json: unknown): BriefingsFile {
   return parseWith(briefingsFileSchema, json, 'briefings');
+}
+
+export function parseReactions(json: unknown): ReactionsFile {
+  return parseWith(reactionsFileSchema, json, 'Budget day reactions');
 }
 
 export interface Dataset {

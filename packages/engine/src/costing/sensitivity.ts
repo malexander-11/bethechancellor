@@ -53,6 +53,7 @@ export function costSensitivityLever(
     currentSpending: zeros(policyYears),
     capitalSpending: zeros(policyYears),
     welfareInCap: zeros(policyYears),
+    financialTransactions: zeros(policyYears),
     macroPsnb,
     macroCurrent,
     gdpGrowthAdjustmentPp,

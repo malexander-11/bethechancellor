@@ -27,6 +27,11 @@ export interface LeverEffect {
   currentSpending: YearValues;
   capitalSpending: YearValues;
   welfareInCap: YearValues;
+  /**
+   * Buying or selling a financial asset: cash out, so gilts to issue and interest to pay, but no
+   * expenditure in the national accounts and no immediate effect on net financial liabilities.
+   */
+  financialTransactions: YearValues;
   /** Macro sensitivities only: positive = more borrowing. */
   macroPsnb: YearValues;
   /** The part of macroPsnb that falls on the current budget. */
@@ -70,6 +75,8 @@ export interface Deltas {
   currentSpending: YearValues;
   capitalSpending: YearValues;
   welfareInCap: YearValues;
+  /** Cash paid for financial assets: borrowed, so it accrues interest, but it is not spending. */
+  financialTransactions?: YearValues;
   macroPsnb: YearValues;
   macroCurrent: YearValues;
 }
@@ -101,6 +108,7 @@ export interface FiscalPaths {
     currentSpending: YearValues;
     capitalSpending: YearValues;
     welfareInCap: YearValues;
+    financialTransactions: YearValues;
     macroPsnb: YearValues;
     macroCurrent: YearValues;
     primaryBorrowing: YearValues;

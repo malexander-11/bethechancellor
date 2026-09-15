@@ -455,6 +455,224 @@
       "retrievedOn": "2026-09-15",
       "licence": "OGL-3.0",
       "notes": "Section 1 puts a duty on the Secretary of State to meet the 0.7 per cent of gross national income target for official development assistance. Section 2 covers the accountability to Parliament if the target is not met in a year."
+    },
+    {
+      "id": "dfe-school-pupils-2025-26",
+      "org": "DfE",
+      "title": "Schools, pupils and their characteristics",
+      "edition": "Academic year 2025/26 (January 2026 school census)",
+      "url": "https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics/2025-26",
+      "landingUrl": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2026",
+      "publishedOn": "2026-06-04",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Accredited official statistics. 8,920,227 pupils in all schools, of which 8,355,420 in state-funded schools. 2,214,994 eligible for free school meals on the benefits criteria (26.5% of state-funded pupils). Almost 1.6 million infants took a free meal on census day, of whom over 1.2 million through universal infant free school meals. The state-funded totals are sums of the published school-type rows; the department prints no single state-funded total."
+    },
+    {
+      "id": "dfe-uifsm-grant-2026-27",
+      "org": "DfE",
+      "title": "Universal infant free school meals: conditions of grant 2026 to 2027",
+      "url": "https://www.gov.uk/government/publications/universal-infant-free-school-meals-uifsm-2026-to-2027/universal-infant-free-school-meals-uifsm-conditions-of-grant-2026-to-2027",
+      "publishedOn": "2026-06-15",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "\"A meal rate uplift to £2.66 will be implemented for the 2026 to 2027 academic year... An allocation assumes that pupils will take 190 school meals over an academic year, providing £505 per eligible pupil.\""
+    },
+    {
+      "id": "dfe-fsm-expansion-2026-27",
+      "org": "DfE",
+      "title": "Free school meals expansion grant: methodology",
+      "url": "https://www.gov.uk/government/publications/free-school-meals-expansion-grant-2026-to-2027/free-school-meals-expansion-grant-methodology",
+      "publishedOn": "2026-05-08",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "From the 2026/27 academic year free school meals in England are extended to every child in a household on universal credit, funded with \"over £1 billion over the multi-year spending review period from 2026 to 2029\". Confirms the schools national funding formula free school meal factor at £505 a pupil a year."
+    },
+    {
+      "id": "dfe-student-loan-forecasts-2025-26",
+      "org": "DfE",
+      "title": "Student loan forecasts for England",
+      "edition": "Financial year 2025-26",
+      "url": "https://explore-education-statistics.service.gov.uk/find-statistics/student-loan-forecasts-for-england/2025-26",
+      "landingUrl": "https://www.gov.uk/government/statistics/student-loan-forecasts-england-2025-to-2026",
+      "publishedOn": "2026-07-09",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Official statistics. Table 1 gives loan outlay by product; Table 4b the Resource Accounting and Budgeting charge; Table 4c the transfer proportion, which is the share of loan outlay that scores as government expenditure in the national accounts."
+    },
+    {
+      "id": "ons-student-loans-method",
+      "org": "ONS",
+      "title": "Student loans in the public sector finances: a methodological guide",
+      "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/methodologies/studentloansinthepublicsectorfinancesamethodologicalguide",
+      "publishedOn": "2020-01-22",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "\"Splitting lending into two components: a genuine loan and government spending. This new approach recognises that a significant proportion of student loan debt will never be repaid by recording government expenditure related to the cancellation of student loans in the period that loans are issued.\" The loaned portion is a financial transaction; only the transfer portion scores in borrowing."
+    },
+    {
+      "id": "dfe-tuition-fees-2026-27",
+      "org": "DfE",
+      "title": "Changes to tuition fees: 2026 to 2027 academic year and 2027 to 2028 academic year",
+      "url": "https://www.gov.uk/government/publications/tuition-fees-and-student-support-2026-to-2027-academic-year/changes-to-tuition-fees-2026-to-2027-academic-year-and-2027-to-2028-academic-year",
+      "publishedOn": "2025-11-26",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "The maximum tuition fee for a standard full-time course at a provider with a Teaching Excellence Framework award and an access and participation plan is £9,790 in 2026/27 and £10,050 in 2027/28."
+    },
+    {
+      "id": "defra-water-nationalisation-cost",
+      "org": "Defra",
+      "title": "Nationalising the water sector: how we assessed the cost",
+      "url": "https://www.gov.uk/government/publications/nationalising-the-water-sector-how-we-assessed-the-cost/nationalising-the-water-sector-how-we-assessed-the-cost",
+      "publishedOn": "2025-09-16",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "\"The Department for Environment, Food and Rural Affairs (Defra) has estimated that nationalising the water industry would cost approximately £100 billion.\" The regulatory capital value of the sector was £99.3bn in 2024 and £106.7bn in 2025. Defra treats that value as debt plus equity and applies no discount or premium, on the ground that creditors could demand compensation immediately."
+    },
+    {
+      "id": "ons-psf-methodology",
+      "org": "ONS",
+      "title": "Monthly statistics on the public sector finances: a methodological guide",
+      "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/methodologies/monthlystatisticsonthepublicsectorfinancesamethodologicalguide",
+      "publishedOn": "2023-10-04",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Section 5.1.3: \"When cash is used to purchase a financial asset of equal value, there is no change to overall indebtedness... Hence there is no expenditure and the transaction has no impact on PSNB. However, there is necessarily a cash payment, which impacts on PSNCR.\" Section 5.1.4 adds that reclassifying a body into the public sector changes net debt without any cash moving."
+    },
+    {
+      "id": "hmt-budgeting-guidance-2025-26",
+      "org": "HMT",
+      "title": "Consolidated budgeting guidance 2025-26",
+      "url": "https://www.gov.uk/government/publications/consolidated-budgeting-guidance-2025-to-2026/consolidated-budgeting-guidance-2025-26",
+      "publishedOn": "2025-02-27",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Chapter 8: financial transactions \"do not score as spending and there is no immediate effect on Public Sector Net Financial Liabilities (PSNFL)... This will increase public sector net debt (PSND)\". Purchases of equity score in a ringfence within capital DEL. Chapter 3: capital grants score in the capital budget and affect public sector net investment."
+    },
+    {
+      "id": "hmt-spending-review-2025",
+      "org": "HMT",
+      "title": "Spending Review 2025",
+      "url": "https://www.gov.uk/government/publications/spending-review-2025-document/spending-review-2025-html",
+      "publishedOn": "2025-06-11",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Confirms £39bn for the Social and Affordable Homes Programme over ten years from 2026-27, reaching £4bn a year in 2029-30; official development assistance falling to 0.3% of gross national income by 2027; and NATO-qualifying defence spending reaching 2.6% of GDP by 2027."
+    },
+    {
+      "id": "mhclg-sahp-2026-2036",
+      "org": "MHCLG",
+      "title": "Social and Affordable Homes Programme 2026 to 2036: policy statement",
+      "url": "https://www.gov.uk/government/publications/launching-the-social-and-affordable-homes-programme-2026-to-2036/social-and-affordable-homes-programme-2026-2036-mhclg-policy-statement-to-accompany-guidance-to-bidders-from-homes-england-and-the-greater-london-aut",
+      "publishedOn": "2025-11-07",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "\"could deliver around 300,000 affordable homes over its lifetime, with around 180,000 for Social Rent.\" At least 60% of homes must be for social rent. The department does not publish standard grant rates: \"we are not publishing standard grant rates\"."
+    },
+    {
+      "id": "mhclg-affordable-housing-supply-2024-25",
+      "org": "MHCLG",
+      "title": "Affordable housing supply in England: 2024 to 2025",
+      "url": "https://www.gov.uk/government/statistics/affordable-housing-supply-in-england-2024-to-2025/affordable-housing-supply-in-england-2024-to-2025",
+      "publishedOn": "2025-11-20",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "National Statistics. 64,762 affordable homes completed in England in 2024-25, the highest since 2014-15, of which 12,198 for social rent, the highest since 2012-13."
+    },
+    {
+      "id": "wtc-final-report-2020",
+      "org": "Other",
+      "title": "A wealth tax for the UK: Wealth Tax Commission final report",
+      "url": "https://www.wealthandpolicy.com/wp/WealthTaxFinalReport.pdf",
+      "landingUrl": "https://www.wealthandpolicy.com/wp/WealthTaxFinalReport.html",
+      "publishedOn": "2020-12-09",
+      "retrievedOn": "2026-09-15",
+      "licence": "Other",
+      "notes": "Advani, Chamberlain and Summers. Table ES.2 and Table 8: an annual wealth tax above £10m at 1.12% raises £9.9bn with low avoidance and £8.7bn with high avoidance, from 22,000 taxpayers, before administration costs. Section 6.3 warns that its analysis \"has been constrained by a lack of reliable data on individuals with total wealth above £10 million\"."
+    },
+    {
+      "id": "wtc-revenue-modelling-2020",
+      "org": "Other",
+      "title": "Revenue and distributional modelling for a wealth tax (Evidence Paper 13)",
+      "url": "https://www.wealthandpolicy.com/wp/EP13_Modelling.pdf",
+      "landingUrl": "https://www.wealthandpolicy.com/wp/113.html",
+      "publishedOn": "2020-12-09",
+      "retrievedOn": "2026-09-15",
+      "licence": "Other",
+      "notes": "Advani, Hughson and Tarrant. Table 1 gives the annual wealth tax rates and revenues. Section 3.1: behavioural responses to a 1% rate are assumed to cut the tax base by 7% to 17%, the low and high avoidance scenarios. A 10% non-compliance rate is applied separately."
+    },
+    {
+      "id": "ons-wealth-and-assets-2020-22",
+      "org": "ONS",
+      "title": "Household total wealth in Great Britain: April 2020 to March 2022",
+      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/totalwealthingreatbritain/april2020tomarch2022",
+      "publishedOn": "2025-01-24",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "The wealthiest 1% of households hold at least £3,121,500, which is the highest threshold published; nothing is published about wealth above £10m. \"Estimating aggregate household wealth can be difficult as the wealthiest households can be underrepresented.\" Accreditation of the survey was suspended from this round in June 2025."
+    },
+    {
+      "id": "hmrc-iht-liabilities-2023-24",
+      "org": "HMRC",
+      "title": "Inheritance Tax liabilities statistics",
+      "edition": "Estates passing on death in 2023 to 2024",
+      "url": "https://www.gov.uk/government/statistics/inheritance-tax-liabilities-statistics",
+      "publishedOn": "2026-07-30",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Accredited official statistics. Table 12.1a: 220 taxpaying estates above £10m in 2023-24 paid £1,040m of inheritance tax, 15% of the total, at an average effective rate of 18%, lower than the 25% paid by estates between £3m and £7.5m."
+    },
+    {
+      "id": "dwp-uc-statistics-2026-05",
+      "org": "DWP",
+      "title": "Universal Credit quarterly statistics, 29 April 2013 to 14 May 2026",
+      "url": "https://www.gov.uk/government/statistics/universal-credit-quarterly-statistics-29-april-2013-to-14-may-2026/universal-credit-quarterly-statistics-29-april-2013-to-14-may-2026",
+      "publishedOn": "2026-08-18",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "8.4 million people on Universal Credit in May 2026. By immigration status, 84.5% are in the Common Travel Area group (UK, Ireland or right of abode); with the EU Settlement Scheme and indefinite leave to remain the three account for 96.2%, \"in line with the general principle that only people who are settled in the UK or protected by the EU Exit Withdrawal Agreement should be able to claim Universal Credit\"."
+    },
+    {
+      "id": "govuk-public-funds",
+      "org": "HomeOffice",
+      "title": "Public funds",
+      "url": "https://www.gov.uk/government/publications/public-funds--2/public-funds",
+      "publishedOn": "2025-04-09",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "\"The NRPF condition means you will not be able to claim most benefits, tax credits or housing assistance that are paid by the state.\" Contributory benefits, including the state pension, are not public funds and can be claimed by people with no recourse to public funds who have the contribution record."
+    },
+    {
+      "id": "govuk-nato-five-per-cent",
+      "org": "Parliament",
+      "title": "UK to deliver on 5% NATO pledge as Government drives greater security for working people",
+      "url": "https://www.gov.uk/government/news/uk-to-deliver-on-5-nato-pledge-as-government-drives-greater-security-for-working-people",
+      "publishedOn": "2025-06-23",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "\"With the new 5% commitment on national security, the UK expects a projected split of 3.5% (core defence) and 1.5% (resilience and security) to be agreed at the NATO summit, with a target date of 2035.\""
+    },
+    {
+      "id": "fcdo-oda-2025",
+      "org": "FCDO",
+      "title": "Statistics on International Development: provisional UK official development assistance spend 2025",
+      "url": "https://www.gov.uk/government/statistics/statistics-on-international-development-provisional-uk-official-development-assistance-spend-2025/statistics-on-international-development-provisional-uk-official-development-assistance-spend-2025",
+      "publishedOn": "2026-04-09",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Accredited official statistics. UK aid was £13,036m in 2025, 0.43% of gross national income, down from 0.50% in 2024. The UK spent 0.7% of national income on aid from 2013 to 2020. 18.3% of aid in 2025 was spent inside the UK on refugee and asylum costs."
+    },
+    {
+      "id": "iwc-final-report-2025",
+      "org": "Defra",
+      "title": "Independent Water Commission: final report",
+      "url": "https://assets.publishing.service.gov.uk/media/687dfcc4312ee8a5f0806be6/Independent_Water_Commission_-_Final_Report_-_21_July.pdf",
+      "landingUrl": "https://www.gov.uk/government/news/roadmap-to-rebuild-trust-in-water-sector-unveiled-in-major-new-report",
+      "publishedOn": "2025-07-21",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "The Cunliffe review. Water companies will spend £104bn on investment and operation over the five years to 2030, about £44bn of it enhancement. Footnote 569 gives the sector capital value as £103bn in 2024-25. Paragraph 684 records that the review was barred by its terms of reference from considering public ownership."
     }
   ]
 }

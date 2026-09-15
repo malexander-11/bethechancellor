@@ -16,6 +16,7 @@ export function aggregateEffects(
     currentSpending: zeros(policyYears),
     capitalSpending: zeros(policyYears),
     welfareInCap: zeros(policyYears),
+    financialTransactions: zeros(policyYears),
     macroPsnb: zeros(policyYears),
     macroCurrent: zeros(policyYears),
   };
@@ -26,6 +27,7 @@ export function aggregateEffects(
     addInto(deltas.currentSpending, e.currentSpending);
     addInto(deltas.capitalSpending, e.capitalSpending);
     addInto(deltas.welfareInCap, e.welfareInCap);
+    addInto(deltas.financialTransactions ?? {}, e.financialTransactions);
     addInto(deltas.macroPsnb, e.macroPsnb);
     addInto(deltas.macroCurrent, e.macroCurrent);
     growthAdjPp += e.gdpGrowthAdjustmentPp;

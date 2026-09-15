@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "id": "free-university-education",
+  "code": "freeuni",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 70,
+  "title": "Free university education: abolish undergraduate tuition fees",
+  "shortTitle": "Free university education",
+  "headline": "Pay universities directly instead of lending to students. £7.7bn.",
+  "description": "Abolish the £9,790 tuition fee and fund teaching by grant. The headline is £11.5bn of fee loans a year, but a third of that already scores as government spending, because the national accounts treat the part of a loan nobody expects to be repaid as expenditure the day it is issued. Only the rest changes. This is the clearest lesson on the page about how the rules work: converting a loan into a grant moves money from a financial transaction, which does not count as borrowing, into spending, which does.",
+  "baselinePolicy": {
+    "text": "Full-time undergraduates borrow £11.5bn a year in fee loans, rising to £12.8bn by 2030-31. About a third of each year's outlay is already recorded as government expenditure through the transfer proportion; the rest is a loan asset.",
+    "source": {
+      "sourceId": "dfe-student-loan-forecasts-2025-26",
+      "table": "Table 1 and Table 4c"
+    },
+    "alreadyIncludes": [
+      "The maximum tuition fee rising to £9,790 in 2026/27 and £10,050 in 2027/28.",
+      "The transfer proportion of Plan 5 full-time loans, 34% in 2026-27 falling to 31% in 2030-31."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "delType": "RDEL",
+    "department": "Education",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 7227,
+      "2027-28": 7675,
+      "2028-29": 7960,
+      "2029-30": 8405,
+      "2030-31": 8863
+    },
+    "source": {
+      "sourceId": "dfe-student-loan-forecasts-2025-26",
+      "table": "Table 1 and Table 4c"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "dfe-student-loan-forecasts-2025-26",
+      "method": {
+        "name": "seriesProduct",
+        "terms": [
+          {
+            "label": "Full-time undergraduate tuition fee loans",
+            "unit": "£ million a year",
+            "values": {
+              "2026-27": 10950,
+              "2027-28": 11455,
+              "2028-29": 11880,
+              "2029-30": 12360,
+              "2030-31": 12845
+            },
+            "source": {
+              "sourceId": "dfe-student-loan-forecasts-2025-26",
+              "table": "Table 1",
+              "note": "Plan 2 and Plan 5 full-time higher education fee loans combined"
+            }
+          },
+          {
+            "label": "Share that is a loan today, so not yet counted as spending",
+            "unit": "fraction",
+            "values": {
+              "2026-27": 0.66,
+              "2027-28": 0.67,
+              "2028-29": 0.67,
+              "2029-30": 0.68,
+              "2030-31": 0.69
+            },
+            "source": {
+              "sourceId": "dfe-student-loan-forecasts-2025-26",
+              "table": "Table 4c",
+              "note": "one minus the transfer proportion for Plan 5 full-time higher education loans"
+            }
+          }
+        ]
+      },
+      "note": "Fee loan outlay times the share of it that is not already scored as expenditure. Under a grant the whole outlay is spending, so the change is the part that was a loan. Nobody has costed this policy officially."
+    },
+    "caveats": [
+      "Repayments already due on loans issued before the change carry on, so this does not lose them. It does give up the repayments that the new cohorts would have made, which start after graduation and fall outside this forecast.",
+      "This covers tuition fee loans only. Maintenance loans, about £9.5bn a year, are untouched: students would still borrow to live.",
+      "The transfer proportion is the national accounts measure and is not the same as the department's budgeting measure, the Resource Accounting and Budgeting charge, which is 33% to 34%. They are close but not interchangeable."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "loan-to-grant",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": true,
+      "text": "The national accounts split a student loan in two: the part nobody expects back is expenditure on the day it is issued, the rest is a financial asset. Turning fee loans into grants converts that asset into spending, which is why the cost falls on the current budget rather than on investment.",
+      "sources": [
+        {
+          "sourceId": "ons-student-loans-method",
+          "quote": "splitting lending into two components: a genuine loan and government spending"
+        }
+      ]
+    },
+    {
+      "id": "who-gains",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Under Plan 5 about 55% of full-time students are expected to repay in full, so abolishing fees is worth most to those graduates. The 45% who would never have repaid their whole loan gain less, because the write-off was already doing the work.",
+      "sources": [
+        {
+          "sourceId": "dfe-student-loan-forecasts-2025-26",
+          "table": "Table 5"
+        }
+      ]
+    },
+    {
+      "id": "devolution",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Tuition fees are devolved: Scotland already funds Scottish undergraduates without fees. This covers English-domiciled students only.",
+      "sources": [{ "sourceId": "dfe-tuition-fees-2026-27" }]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

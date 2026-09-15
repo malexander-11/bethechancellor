@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "id": "expand-social-rent",
+  "code": "socrent",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 90,
+  "title": "Expand social rent construction",
+  "shortTitle": "More social rent homes",
+  "headline": "Double the housing programme. £3.9bn of capital a year.",
+  "description": "Add £3.9bn a year to the Social and Affordable Homes Programme, roughly doubling it once it reaches full rate. At the programme's own average of about £130,000 of grant per home, that funds around 30,000 more affordable homes a year, of which at least 60% must be social rent. For comparison, England completed 12,198 social rent homes in 2024-25, the most since 2012-13. This is capital spending, so it counts against the investment rule but not the stability rule.",
+  "baselinePolicy": {
+    "text": "The Spending Review confirmed £39bn for the Social and Affordable Homes Programme over ten years from 2026-27, reaching £4bn a year in 2029-30. It could deliver around 300,000 affordable homes, about 180,000 of them for social rent.",
+    "source": { "sourceId": "hmt-spending-review-2025" },
+    "alreadyIncludes": [
+      "£39bn for the Social and Affordable Homes Programme, 2026-27 to 2035-36: £27.3bn through Homes England outside London and up to £11.7bn through the Greater London Authority.",
+      "£2.5bn of low-interest loans to social housing providers, which are financial transactions, not grant."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "capital",
+    "delType": "CDEL",
+    "department": "Housing, Communities and Local Government",
+    "psnflTreatment": "standard",
+    "barnettConsequential": true
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 3900,
+      "2027-28": 3900,
+      "2028-29": 3900,
+      "2029-30": 3900,
+      "2030-31": 3900
+    },
+    "source": { "sourceId": "mhclg-sahp-2026-2036" },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "mhclg-sahp-2026-2036",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2027-28",
+        "resultGbpm": 3900,
+        "terms": [
+          {
+            "label": "Extra affordable homes a year",
+            "value": 30,
+            "unit": "thousand homes",
+            "source": {
+              "sourceId": "mhclg-affordable-housing-supply-2024-25",
+              "note": "against 64,762 affordable completions in England in 2024-25, of which 12,198 for social rent"
+            }
+          },
+          {
+            "label": "Grant per home, the programme's own average",
+            "value": 130,
+            "unit": "£ thousand",
+            "source": {
+              "sourceId": "mhclg-sahp-2026-2036",
+              "note": "£39bn divided by the around 300,000 homes the department says the programme could deliver"
+            }
+          }
+        ]
+      },
+      "note": "Extra homes times the programme's own average grant. The department deliberately publishes no standard grant rate, so the £130,000 is £39bn divided by around 300,000 homes: our arithmetic on two published figures, not a rate anyone has set."
+    },
+    "caveats": [
+      "The department does not publish grant rates: \"we are not publishing standard grant rates\". Social rent homes cost more grant per home than shared ownership, so a programme weighted to social rent buys fewer homes than the average implies.",
+      "Grant is not the only constraint. Land, planning consent and building capacity all bind, and the existing programme is already a step change in output.",
+      "Capital grant scores in borrowing and in public sector net investment. It does not count against the stability rule, which is about day-to-day spending."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "capital-not-current",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": true,
+      "text": "Capital grants score in the capital budget and affect public sector net investment, so this moves borrowing and the debt rule while leaving the current budget alone. The £2.5bn of loans in the same settlement work the other way: they are financial transactions and do not score as spending at all.",
+      "sources": [
+        { "sourceId": "hmt-budgeting-guidance-2025-26", "note": "chapter 3" },
+        { "sourceId": "hmt-spending-review-2025" }
+      ]
+    },
+    {
+      "id": "housing-benefit-offset",
+      "kind": "interaction",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Social rents are below market rents, so tenants moving from the private rented sector claim less housing support. That saving falls on day-to-day spending over years, is not counted here, and would partly offset the capital cost over time.",
+      "sources": [{ "sourceId": "mhclg-sahp-2026-2036" }]
+    },
+    {
+      "id": "barnett",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Housing is devolved. This is an English programme, so Scotland, Wales and Northern Ireland would receive Barnett consequentials on top.",
+      "sources": [{ "sourceId": "hmt-statement-of-funding-policy-2025", "paragraph": "3.9-3.18" }]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

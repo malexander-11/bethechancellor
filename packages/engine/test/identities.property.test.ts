@@ -18,6 +18,7 @@ const deltasArb: fc.Arbitrary<Deltas> = fc
     currentSpending: yearValues(money),
     capitalSpending: yearValues(money),
     welfareInCap: yearValues(money),
+    financialTransactions: yearValues(fc.integer({ min: 0, max: 60000 })),
     macroPsnb: yearValues(money),
     share: fc.double({ min: 0, max: 1, noNaN: true }),
   })
@@ -101,6 +102,7 @@ describe('accounting identities hold for arbitrary lever vectors', () => {
         ...d,
         receipts: Object.fromEntries(years.map((y) => [y, 0])),
         welfareInCap: Object.fromEntries(years.map((y) => [y, 0])),
+        financialTransactions: Object.fromEntries(years.map((y) => [y, 0])),
         macroPsnb: Object.fromEntries(years.map((y) => [y, 0])),
         macroCurrent: Object.fromEntries(years.map((y) => [y, 0])),
       }));
@@ -127,6 +129,7 @@ describe('accounting identities hold for arbitrary lever vectors', () => {
           currentSpending: {},
           capitalSpending: {},
           welfareInCap: {},
+          financialTransactions: {},
           macroPsnb: {},
           macroCurrent: {},
         };

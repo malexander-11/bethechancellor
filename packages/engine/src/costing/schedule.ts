@@ -23,21 +23,30 @@ export function costScheduleLever(
   const raw: YearValues = {};
   const factor: YearValues = {};
   const sourceYearFor: Record<string, string> = {};
+  // A one-off falls entirely in the implementation year; a yearly schedule runs from it.
+  const onceYear = Object.keys(costing.effect)[0] ?? '';
+  const onceAmount = costing.effect[onceYear] ?? 0;
   for (const y of policyYears) {
-    const published = costing.effect[y] ?? 0;
-    const active = fyStart(y) >= start;
+    const published = costing.once
+      ? y === settings.implementationYear
+        ? onceAmount
+        : 0
+      : (costing.effect[y] ?? 0);
+    const active = costing.once ? true : fyStart(y) >= start;
     scaled[y] = active ? published * value : 0;
     raw[y] = active ? published : 0;
     factor[y] = value;
-    sourceYearFor[y] = y;
+    sourceYearFor[y] = costing.once ? onceYear : y;
   }
   applyClassification(effect, lever, scaled);
   effect.steps.push({
     op: 'manual',
-    formula: `Scheduled effect × ${value} from ${settings.implementationYear}: ${policyYears
-      .filter((y) => fyStart(y) >= start)
-      .map((y) => `${y}: ${fmt(scaled[y] ?? 0)}`)
-      .join(', ')}`,
+    formula: costing.once
+      ? `One-off payment of ${fmt(onceAmount)} × ${value} in ${settings.implementationYear}`
+      : `Scheduled effect × ${value} from ${settings.implementationYear}: ${policyYears
+          .filter((y) => fyStart(y) >= start)
+          .map((y) => `${y}: ${fmt(scaled[y] ?? 0)}`)
+          .join(', ')}`,
     factor: value,
     source: costing.source,
   });

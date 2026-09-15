@@ -85,10 +85,13 @@ export function runFiscalArithmetic(input: ArithmeticInput): FiscalPaths {
     policyYears.map((y) => primary[y] ?? 0),
     policyYears.map((y) => (marginalRatePct[y] ?? 0) / 100),
     input.debtInterestFeedback,
+    policyYears.map((y) => valueOrZero(deltas.financialTransactions ?? {}, y)),
   );
 
   const borrowingDelta = zeros(years);
   const interestDelta = zeros(years);
+  // Net financial liabilities move with borrowing only: cash swapped for a financial asset of the
+  // same value leaves the measure unchanged, though the cash still has to be borrowed and serviced.
   const extraDebt = zeros(years);
   let cumulative = 0;
   policyYears.forEach((y, i) => {
@@ -160,6 +163,7 @@ export function runFiscalArithmetic(input: ArithmeticInput): FiscalPaths {
       currentSpending: fill(deltas.currentSpending),
       capitalSpending: fill(deltas.capitalSpending),
       welfareInCap: fill(deltas.welfareInCap),
+      financialTransactions: fill(deltas.financialTransactions ?? {}),
       macroPsnb: fill(deltas.macroPsnb),
       macroCurrent: fill(deltas.macroCurrent),
       primaryBorrowing: fill(primary),

@@ -17,10 +17,19 @@ export {
   parseContext,
   parseAdvisers,
   parseBriefings,
+  parseReactions,
   parseVintage,
   validateDataset,
   type Dataset,
 } from './load.js';
+export {
+  computeReactions,
+  distributionalNotes,
+  readings,
+  type DistributionalNote,
+  type ReactionSignal,
+  type ReactionsInput,
+} from './reactions.js';
 export { validateVintage } from './validate/validateVintage.js';
 export { checkRawSourceConsistency, type ExtractedSources } from './validate/rawSource.js';
 export {

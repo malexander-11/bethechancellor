@@ -28,14 +28,16 @@ describe('word budgets: one line visible, the rest a click away', () => {
   });
 
   it('a step reads as a briefing, not a report', () => {
-    for (const step of ['taxes', 'spending'] as const) {
+    for (const step of ['taxes', 'spending', 'recommendations'] as const) {
       const stepBriefings = briefings.briefings.filter((b) => b.step === step);
       const stepLevers = levers.filter(
         (l) =>
           !l.deprecated &&
           (step === 'taxes'
             ? l.category === 'tax'
-            : l.category === 'spend' || l.category === 'welfare'),
+            : step === 'recommendations'
+              ? l.category === 'campaign'
+              : l.category === 'spend' || l.category === 'welfare'),
       );
       // Advisers speak in headlines; their paragraphs sit behind a disclosure.
       const briefingWords = stepBriefings.reduce((acc, b) => acc + words(b.headline), 0);

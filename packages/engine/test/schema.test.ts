@@ -4,9 +4,12 @@ import { describe, expect, it } from 'vitest';
 import {
   DataError,
   leverSchema,
+  parseDwpBenefitExtract,
   parseHmrcExtract,
   parseContext,
   parseLever,
+  parsePesaExtract,
+  parseReactions,
   parseReliefExtract,
   parseScorecardExtract,
   parseSr25Extract,
@@ -25,6 +28,11 @@ describe('every JSON file under data/ validates against its schema', () => {
     expect(ds.levers.every((l) => l.status === 'reviewed')).toBe(true);
   });
 
+  it('parses the Budget day reaction bands', () => {
+    const file = path.join(DATA_DIR, 'journey/reactions.json');
+    expect(() => parseReactions(JSON.parse(readFileSync(file, 'utf8')))).not.toThrow();
+  });
+
   it('has no JSON file that is not covered by a parser', () => {
     const covered = new Set([
       'sources/sources.json',
@@ -34,6 +42,7 @@ describe('every JSON file under data/ validates against its schema', () => {
       'reference/uk-households.json',
       'journey/advisers.json',
       'journey/briefings.json',
+      'journey/reactions.json',
     ]);
     for (const file of listJsonFiles(DATA_DIR)) {
       const rel = path.relative(DATA_DIR, file);
@@ -54,6 +63,8 @@ describe('every JSON file under data/ validates against its schema', () => {
           expect(() => parseScorecardExtract(parsed)).not.toThrow();
         if (rel.includes('tax-reliefs')) expect(() => parseReliefExtract(parsed)).not.toThrow();
         if (rel.includes('sr25')) expect(() => parseSr25Extract(parsed)).not.toThrow();
+        if (rel.includes('dwp-benefit')) expect(() => parseDwpBenefitExtract(parsed)).not.toThrow();
+        if (rel.includes('pesa')) expect(() => parsePesaExtract(parsed)).not.toThrow();
       } else {
         expect(covered.has(rel), `${rel} has no parser in the test`).toBe(true);
       }

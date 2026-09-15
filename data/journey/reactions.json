@@ -1,0 +1,528 @@
+{
+  "schemaVersion": 1,
+  "intro": "The OBR has certified the forecast and the Budget is out. Here is how it reads.",
+  "signals": [
+    {
+      "id": "rules-stability",
+      "audience": "rules",
+      "measure": "stabilityHeadroomGbpm",
+      "reading": {
+        "label": "Headroom against the stability rule",
+        "unit": "GBPm"
+      },
+      "bands": [
+        {
+          "id": "missed",
+          "upTo": -1,
+          "level": "bad",
+          "headline": "You have missed your own stability rule.",
+          "detail": "The rule requires the current budget to be in surplus in the target year. Yours is not. A Chancellor who misses this rule at the Budget has to say at the despatch box how it will be met, or change the rule.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.6-3.11"
+            }
+          ]
+        },
+        {
+          "id": "wafer-thin",
+          "upTo": 10000,
+          "level": "mixed",
+          "headline": "You meet the rule, but by less than your predecessor did.",
+          "detail": "The March forecast left £23.6bn of headroom. Anything below that invites the question of what happens at the next forecast, because the OBR revises its judgements twice a year and the rule is only tested once.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.1: Fiscal rules",
+              "page": "89"
+            },
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.6-3.11"
+            }
+          ]
+        },
+        {
+          "id": "restored",
+          "upTo": 30000,
+          "level": "good",
+          "headline": "You meet the rule with roughly the room your predecessor had.",
+          "detail": "Headroom in this range is normal by recent standards: the March forecast left £23.6bn. It is still small next to the forecast error, which is the point of the second signal below.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.1: Fiscal rules",
+              "page": "89"
+            }
+          ]
+        },
+        {
+          "id": "ample",
+          "level": "good",
+          "headline": "You have given yourself unusually large headroom.",
+          "detail": "More room than any recent Budget has left. It buys insurance against a bad forecast, and it means either taxes are higher or spending lower than they needed to be to meet the rule.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.1: Fiscal rules",
+              "page": "89"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rules-forecast-error",
+      "audience": "rules",
+      "measure": "stabilityHeadroomVsTypicalError",
+      "reading": {
+        "label": "Headroom as a multiple of the OBR’s typical forecast error",
+        "unit": "ratio"
+      },
+      "bands": [
+        {
+          "id": "swamped",
+          "upTo": 0.5,
+          "level": "bad",
+          "headline": "A normal forecast error would wipe this out.",
+          "detail": "The OBR’s average absolute error on receipts five years ahead is 0.9% of GDP, about £32bn in 2030-31. Headroom smaller than half that is inside the noise: it tells you little about whether the rule will still be met next year.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.6: Forecast errors",
+              "page": "98"
+            }
+          ]
+        },
+        {
+          "id": "thin",
+          "upTo": 1,
+          "level": "mixed",
+          "headline": "Your margin is smaller than the OBR’s own typical forecast error.",
+          "detail": "The OBR’s average absolute five-year error on receipts is 0.9% of GDP. A Budget inside that margin can be blown off course by revisions that have nothing to do with your decisions.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.6: Forecast errors",
+              "page": "98"
+            }
+          ]
+        },
+        {
+          "id": "covered",
+          "level": "good",
+          "headline": "Your margin is larger than the OBR’s typical forecast error.",
+          "detail": "Headroom bigger than the OBR’s average absolute five-year receipts error of 0.9% of GDP. An ordinary forecast revision would not by itself put you in breach.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.6: Forecast errors",
+              "page": "98"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rules-investment",
+      "audience": "rules",
+      "measure": "investmentRuleStatus",
+      "reading": {
+        "label": "Investment rule",
+        "unit": "status"
+      },
+      "bands": [
+        {
+          "id": "met",
+          "upTo": 0,
+          "level": "good",
+          "headline": "Net financial liabilities still fall as a share of the economy.",
+          "detail": "The investment rule is met. It looks at debt measured as public sector net financial liabilities, which counts financial assets the government owns, so buying an asset with borrowed money does not automatically breach it.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.33-3.44"
+            }
+          ]
+        },
+        {
+          "id": "missed",
+          "level": "bad",
+          "headline": "Debt no longer falls in the target year. The investment rule is missed.",
+          "detail": "The rule requires net financial liabilities to be falling as a share of the economy by the target year. Capital spending does not count against the stability rule, but it does count here.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.33-3.44"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rules-welfare-cap",
+      "audience": "rules",
+      "measure": "welfareCapStatus",
+      "reading": {
+        "label": "Welfare cap",
+        "unit": "status"
+      },
+      "bands": [
+        {
+          "id": "within",
+          "upTo": 0,
+          "level": "good",
+          "headline": "Capped welfare spending is inside the cap.",
+          "detail": "The cap is £194.5bn in 2029-30. The state pension sits outside it, so pension decisions do not move this test.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.45-3.52"
+            }
+          ]
+        },
+        {
+          "id": "margin",
+          "upTo": 1,
+          "level": "mixed",
+          "headline": "Capped welfare is above the cap but inside the 5% margin.",
+          "detail": "Where the March forecast left it: £199.2bn against a £194.5bn cap, inside the £204.2bn ceiling. Formally this is a breach of the cap, not of the margin, and the OBR assesses it once a year.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.45-3.52"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 4.6: Welfare spending",
+              "page": "72"
+            }
+          ]
+        },
+        {
+          "id": "breach",
+          "level": "bad",
+          "headline": "Capped welfare has broken through the margin as well as the cap.",
+          "detail": "Above the £204.2bn ceiling. The Chancellor must explain the breach to Parliament and set out what will be done about it.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.45-3.52"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "markets-borrowing",
+      "audience": "markets",
+      "measure": "borrowingChangeGbpm",
+      "reading": {
+        "label": "Change in borrowing in the target year",
+        "unit": "GBPm"
+      },
+      "bands": [
+        {
+          "id": "big-cut",
+          "upTo": -20000,
+          "level": "good",
+          "headline": "You are issuing far less debt than the forecast assumed.",
+          "detail": "Gilt sales fall with borrowing. What commentators watch after a Budget is the change in the financing remit, not the level of debt: less issuance than expected is the easiest thing for a market to absorb.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.1: Fiscal rules",
+              "page": "89"
+            },
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            }
+          ]
+        },
+        {
+          "id": "cut",
+          "upTo": -2000,
+          "level": "good",
+          "headline": "Borrowing is a little lower than the forecast assumed.",
+          "detail": "A modest reduction in gilt issuance. Gilt yields were 5.35% when this Budget was put together against the 4.5% the March forecast assumed, so the direction helps.",
+          "sources": [
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            }
+          ]
+        },
+        {
+          "id": "neutral",
+          "upTo": 2000,
+          "level": "neutral",
+          "headline": "Borrowing is roughly where the forecast had it.",
+          "detail": "Nothing here changes the financing remit much. Gilt yields at 5.35% were already well above the 4.5% the March forecast assumed, which is a bigger fact than anything in this Budget.",
+          "sources": [
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.5: Fiscal sensitivities",
+              "page": "96"
+            }
+          ]
+        },
+        {
+          "id": "rise",
+          "upTo": 20000,
+          "level": "mixed",
+          "headline": "You are borrowing more than the forecast assumed.",
+          "detail": "More gilts to sell into a market where ten-year yields were already 5.35% against the OBR’s 4.5% assumption. The OBR puts the cost of a one percentage point rise in rates at about £15bn a year of borrowing by 2030-31.",
+          "sources": [
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.5: Fiscal sensitivities",
+              "page": "96"
+            }
+          ]
+        },
+        {
+          "id": "big-rise",
+          "level": "bad",
+          "headline": "A large unfunded increase in borrowing.",
+          "detail": "An issuance programme well beyond what the forecast assumed, into a market where yields were already 5.35% against the OBR’s 4.5%. The OBR’s own sensitivity says a one percentage point rise in rates costs about £15bn a year by 2030-31, so the reaction can cost more than the measure raised.",
+          "sources": [
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.5: Fiscal sensitivities",
+              "page": "96"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "markets-debt-path",
+      "audience": "markets",
+      "measure": "debtFallingPp",
+      "reading": {
+        "label": "Change in net financial liabilities in the target year",
+        "unit": "pp"
+      },
+      "bands": [
+        {
+          "id": "falling",
+          "upTo": -0.05,
+          "level": "good",
+          "headline": "Debt is on a falling path in the target year.",
+          "detail": "Net financial liabilities fall as a share of the economy. A falling debt ratio is the thing ratings agencies and gilt investors look at over the medium term, rather than any single year’s deficit.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 5.1: Fiscal rules",
+              "page": "89"
+            }
+          ]
+        },
+        {
+          "id": "flat",
+          "upTo": 0.05,
+          "level": "mixed",
+          "headline": "Debt is flat as a share of the economy.",
+          "detail": "Neither falling nor rising to speak of. The March forecast had it falling by about 0.8% of GDP in the target year, equivalent to about £27bn.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Paragraph 5.12",
+              "page": "92"
+            }
+          ]
+        },
+        {
+          "id": "rising",
+          "level": "bad",
+          "headline": "Debt is rising as a share of the economy in the target year.",
+          "detail": "The March forecast had net financial liabilities falling by about 0.8% of GDP, roughly £27bn. Reversing that is the change a gilt market notices, whatever the deficit does.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Paragraph 5.12",
+              "page": "92"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parliament-recommendations",
+      "audience": "parliament",
+      "measure": "recommendationsAdopted",
+      "reading": {
+        "label": "Recommendations from colleagues adopted",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "none",
+          "upTo": 0,
+          "level": "mixed",
+          "headline": "You adopted none of your colleagues’ eleven recommendations.",
+          "detail": "Every one of them has organised support behind it. Refusing all eleven is a defensible Budget and an exposed one: each campaign now has a vote to point at.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.6-3.11"
+            }
+          ]
+        },
+        {
+          "id": "few",
+          "upTo": 3,
+          "level": "neutral",
+          "headline": "You took a few of your colleagues’ recommendations.",
+          "detail": "Enough to show you listened, few enough to keep the arithmetic under control. None of these carried an official costing, so each one you adopted is a number you will have to defend.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.6-3.11"
+            }
+          ]
+        },
+        {
+          "id": "many",
+          "level": "mixed",
+          "headline": "You adopted most of what your colleagues asked for.",
+          "detail": "A politically generous Budget. None of these policies has a certified costing, so the more of them you take, the more of your Budget rests on arithmetic nobody else has checked.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.6-3.11"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parliament-reversals",
+      "audience": "parliament",
+      "measure": "budget2025Reversals",
+      "reading": {
+        "label": "Decisions from Budget 2025 and the Spending Review reversed",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "none",
+          "upTo": 0,
+          "level": "neutral",
+          "headline": "You left your predecessor’s decisions in place.",
+          "detail": "Continuity has its own argument: every reversal reopens a fight that Parliament has already had once.",
+          "sources": [
+            {
+              "sourceId": "hmt-budget-2025-table-4-1",
+              "table": "Table 4.1"
+            }
+          ]
+        },
+        {
+          "id": "some",
+          "upTo": 2,
+          "level": "mixed",
+          "headline": "You reversed some of your predecessor’s decisions.",
+          "detail": "Each reversal is a measure Parliament voted for being undone, and the benches that won those votes are still there.",
+          "sources": [
+            {
+              "sourceId": "hmt-budget-2025-table-4-1",
+              "table": "Table 4.1"
+            }
+          ]
+        },
+        {
+          "id": "many",
+          "level": "bad",
+          "headline": "You have unpicked a large part of the last Budget.",
+          "detail": "Reversing this much invites the charge that the Government does not know its own mind, and every measure has a constituency that organised for it the first time.",
+          "sources": [
+            {
+              "sourceId": "hmt-budget-2025-table-4-1",
+              "table": "Table 4.1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "public-tax-take",
+      "audience": "public",
+      "measure": "taxTakeChangePp",
+      "reading": {
+        "label": "Change in the tax take as a share of the economy",
+        "unit": "pp"
+      },
+      "bands": [
+        {
+          "id": "cut",
+          "upTo": -0.2,
+          "level": "good",
+          "headline": "You have cut the tax take, which was heading for a historic high.",
+          "detail": "On the March forecast receipts rise from 34.5% of GDP in 2024-25 to 38.5% by 2030-31, which the OBR calls a historic high. You have moved that down.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Paragraph 3.1",
+              "page": "39"
+            }
+          ]
+        },
+        {
+          "id": "steady",
+          "upTo": 0.2,
+          "level": "neutral",
+          "headline": "The tax take is roughly where the forecast had it.",
+          "detail": "Still heading for 38.5% of GDP by 2030-31 against 34.5% in 2024-25, which the OBR describes as a historic high. Most of that rise is frozen thresholds, not new taxes.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Paragraph 3.1",
+              "page": "39"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Paragraph 3.2",
+              "page": "40"
+            }
+          ]
+        },
+        {
+          "id": "rise",
+          "upTo": 0.6,
+          "level": "mixed",
+          "headline": "You have pushed the tax take above a level the OBR already calls a historic high.",
+          "detail": "The forecast had receipts reaching 38.5% of GDP by 2030-31, up from 34.5% in 2024-25. You are adding to that.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Paragraph 3.1",
+              "page": "39"
+            }
+          ]
+        },
+        {
+          "id": "big-rise",
+          "level": "bad",
+          "headline": "A large rise in the tax take, on top of a record one already in the forecast.",
+          "detail": "Receipts were already forecast to reach 38.5% of GDP by 2030-31 from 34.5% in 2024-25. A rise of this size on top is felt in pay packets and prices well before the target year.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Paragraph 3.1",
+              "page": "39"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

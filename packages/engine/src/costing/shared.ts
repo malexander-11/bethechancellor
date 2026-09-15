@@ -21,6 +21,7 @@ export function emptyEffect(
     currentSpending: zeros(policyYears),
     capitalSpending: zeros(policyYears),
     welfareInCap: zeros(policyYears),
+    financialTransactions: zeros(policyYears),
     macroPsnb: zeros(policyYears),
     macroCurrent: zeros(policyYears),
     gdpGrowthAdjustmentPp: 0,
@@ -37,6 +38,9 @@ export function applyClassification(effect: LeverEffect, lever: Lever, values: Y
   for (const [year, v] of Object.entries(values)) {
     if (c.side === 'receipts') {
       effect.receipts[year] = (effect.receipts[year] ?? 0) + v;
+    } else if (c.psnflTreatment === 'financialTransaction') {
+      // Cash for an asset: gilts to issue and interest to pay, but not expenditure.
+      effect.financialTransactions[year] = (effect.financialTransactions[year] ?? 0) + v;
     } else {
       const capitalShare = c.capitalShare ?? (c.currentOrCapital === 'capital' ? 1 : 0);
       if (capitalShare > 0)

@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "id": "water-public-ownership",
+  "code": "water",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 80,
+  "title": "Bring water into public ownership",
+  "shortTitle": "Water in public ownership",
+  "headline": "£100bn of borrowing that barely touches the deficit.",
+  "description": "Buy the water and sewerage companies of England and Wales. The Environment Department has published its own costing: about £100bn, the capital value of the sector, covering the equity and the debt. Almost none of that scores as borrowing, because buying an asset is a swap, not spending. What you do pay is interest on the £100bn of gilts you issue, about £5bn a year. This is the sharpest illustration of the two rules on the page: the stability rule barely moves and the money still has to be found.",
+  "baselinePolicy": {
+    "text": "The water and sewerage companies are privately owned. Their regulatory capital value was £106.7bn in 2025. Defra estimates nationalisation at about £100bn, covering equity and assumed debt with no discount or premium.",
+    "source": {
+      "sourceId": "defra-water-nationalisation-cost",
+      "quote": "The Department for Environment, Food and Rural Affairs (Defra) has estimated that nationalising the water industry would cost approximately £100 billion."
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "capital",
+    "psnflTreatment": "financialTransaction"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 100000
+    },
+    "source": {
+      "sourceId": "defra-water-nationalisation-cost"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "defra-water-nationalisation-cost",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2027-28",
+        "resultGbpm": 100000,
+        "terms": [
+          {
+            "label": "Cost of acquiring the water sector, as Defra assesses it",
+            "value": 100000,
+            "unit": "£ million, once",
+            "source": {
+              "sourceId": "defra-water-nationalisation-cost",
+              "quote": "nationalising the water industry would cost approximately £100 billion"
+            }
+          }
+        ]
+      },
+      "note": "Defra's own headline figure, paid once in the year you do it. The regulatory capital value was £106.7bn in 2025; Defra treats it as debt plus equity and applies no discount or premium, because creditors could demand compensation immediately."
+    },
+    "caveats": [
+      "Buying an asset is a financial transaction. The Treasury's own guidance says such transactions \"do not score as spending and there is no immediate effect on Public Sector Net Financial Liabilities\", though they do raise net debt and the cash the government has to borrow. That is why this shows almost nothing against the two fiscal rules and a large interest bill.",
+      "The interest is real and is charged here. The operating surplus the companies generate would offset part of it, but no sector-wide profit figure is published, so none is netted off: the cost shown is too high by that amount.",
+      "Once the companies sit inside the public sector their own debt, on gearing of just under 70%, comes onto the public balance sheet without any cash changing hands. Whether that lands in the rules' debt measure is a classification decision for the statisticians, and this tool does not model it.",
+      "Water is devolved. Scottish Water is already publicly owned and Welsh Water is a company limited by guarantee with no shareholders, so this covers the English and Welsh regulated companies Defra costed."
+    ],
+    "once": true
+  },
+  "considerations": [
+    {
+      "id": "financial-transaction",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": true,
+      "text": "Cash paid for a financial asset of equal value leaves overall indebtedness unchanged, so there is no expenditure and no effect on borrowing. There is still a cash payment, which has to be financed.",
+      "sources": [
+        {
+          "sourceId": "ons-psf-methodology",
+          "note": "section 5.1.3",
+          "quote": "When cash is used to purchase a financial asset of equal value, there is no change to overall indebtedness"
+        },
+        {
+          "sourceId": "hmt-budgeting-guidance-2025-26",
+          "note": "chapter 8"
+        }
+      ]
+    },
+    {
+      "id": "investment-programme",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The sector is committed to £104bn of spending between 2025 and 2030, about £44bn of it new investment. In public ownership that programme becomes the government's to fund and to deliver.",
+      "sources": [
+        {
+          "sourceId": "iwc-final-report-2025"
+        }
+      ]
+    },
+    {
+      "id": "compensation-fight",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "Defra notes that between 1993 and 2024 the market value of these companies averaged about 10% above their capital value, and that paying less than the capital value would be contested. The price is a matter for Parliament and, in the end, the courts.",
+      "sources": [
+        {
+          "sourceId": "defra-water-nationalisation-cost"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

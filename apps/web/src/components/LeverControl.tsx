@@ -170,10 +170,14 @@ export function LeverControl({
   const isSelect = lever.control.kind === 'select';
   const change = !isToggle ? levelChange(lever, value, summaryYear) : null;
   const isCapital = lever.classification?.currentOrCapital === 'capital';
+  const isFinancialTransaction = lever.classification?.psnflTreatment === 'financialTransaction';
+  const cashOut = effect
+    ? Object.values(effect.financialTransactions).reduce((a, b) => a + b, 0)
+    : 0;
   const barnett = lever.classification?.barnettConsequential === true;
   const isDefault = value === lever.control.default;
   const improvement =
-    effect && summaryYear
+    effect && summaryYear && !isFinancialTransaction
       ? isCapital
         ? borrowingImprovement(effect, summaryYear)
         : currentBudgetImprovement(effect, summaryYear)
@@ -298,6 +302,16 @@ export function LeverControl({
               Barnett applies
             </span>
           ) : null}
+        </p>
+      ) : null}
+      {isFinancialTransaction && cashOut !== 0 ? (
+        <p className="lever__effect">
+          Cash to borrow: {formatGbpBn(Math.abs(cashOut), 1)}
+          <span className="lever__effect-note">
+            {' '}
+            · buying an asset is not spending, so borrowing and the debt rule barely move. The
+            interest on the money is charged separately.
+          </span>
         </p>
       ) : null}
       {improvement !== null && summaryYear ? (

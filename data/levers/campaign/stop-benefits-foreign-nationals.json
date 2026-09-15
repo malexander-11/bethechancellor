@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "id": "stop-benefits-foreign-nationals",
+  "code": "nonuk",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 110,
+  "title": "Stop benefits to foreign nationals",
+  "shortTitle": "Stop benefits to foreign nationals",
+  "headline": "Contested. Most of the people it names are already settled here.",
+  "description": "Withdraw universal credit from claimants who are not British or Irish. Read the composition before the number. Of the 8.4 million people on universal credit in May 2026, 84.5% are British, Irish or have a right of abode. Add those with settled status under the EU Settlement Scheme and those with indefinite leave to remain and the three groups are 96.2% of the caseload. People subject to immigration control already have no recourse to public funds and cannot claim. So this is not a policy about people claiming without a right to: it is a policy about withdrawing that right from settled residents and refugees.",
+  "baselinePolicy": {
+    "text": "To claim universal credit a person must be British or Irish, have a right of abode, or hold an immigration status that permits recourse to public funds. 15.5% of the caseload is outside the Common Travel Area group, and most of those hold settled status, indefinite leave to remain or refugee status.",
+    "source": { "sourceId": "dwp-uc-statistics-2026-05", "table": "Table 1" },
+    "alreadyIncludes": [
+      "The no recourse to public funds condition, which already bars most benefits to people subject to immigration control."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "psnflTreatment": "standard",
+    "insideWelfareCap": true
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": -13586,
+      "2027-28": -13698,
+      "2028-29": -13888,
+      "2029-30": -14285,
+      "2030-31": -14713
+    },
+    "source": {
+      "sourceId": "dwp-benefit-expenditure-2026",
+      "table": "Table 1a",
+      "note": "Universal Credit line"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "dwp-benefit-expenditure-2026",
+      "method": {
+        "name": "seriesProduct",
+        "terms": [
+          {
+            "label": "Universal credit expenditure",
+            "unit": "£ million a year",
+            "values": {
+              "2026-27": 87649,
+              "2027-28": 88373,
+              "2028-29": 89603,
+              "2029-30": 92159,
+              "2030-31": 94921
+            },
+            "source": {
+              "sourceId": "dwp-benefit-expenditure-2026",
+              "table": "Table 1a",
+              "note": "Universal Credit line, nominal"
+            }
+          },
+          {
+            "label": "Share of claimants outside the Common Travel Area group",
+            "unit": "fraction, negative because it is a saving",
+            "values": {
+              "2026-27": -0.155,
+              "2027-28": -0.155,
+              "2028-29": -0.155,
+              "2029-30": -0.155,
+              "2030-31": -0.155
+            },
+            "source": {
+              "sourceId": "dwp-uc-statistics-2026-05",
+              "table": "Table 1",
+              "note": "100% less the 84.5% who are British, Irish or have a right of abode, May 2026"
+            }
+          }
+        ]
+      },
+      "note": "Universal credit spending times the share of claimants who are not British or Irish. Nobody has costed this policy; this is our arithmetic on two published tables, and it assumes those claimants cost the same on average as everyone else."
+    },
+    "caveats": [
+      "This assumes a non-British claimant costs the same as a British one. That is almost certainly too high: 57.4% of claimants on the EU Settlement Scheme are in work, the highest rate of any group, against 35.6% of the Common Travel Area group, and people in work claim less.",
+      "Universal credit only. Other benefits, the state pension among them, are untouched. Contributory benefits including the state pension are not public funds and are paid on the contribution record whatever someone's nationality.",
+      "Withdrawing entitlement does not make the need disappear. Costs would fall on local authorities, homelessness services and the NHS, and none of that is counted here.",
+      "The caseload share is a May 2026 snapshot held flat across the forecast."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "already-excluded",
+      "kind": "legal",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "People who need permission to be in the UK and have a no recourse to public funds condition already cannot claim universal credit, housing benefit, child benefit or personal independence payment. The policy therefore has nothing to bite on among that group.",
+      "sources": [
+        {
+          "sourceId": "govuk-public-funds",
+          "quote": "The NRPF condition means you will not be able to claim most benefits, tax credits or housing assistance that are paid by the state."
+        }
+      ]
+    },
+    {
+      "id": "withdrawal-agreement",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Almost 745,000 claimants hold status under the EU Settlement Scheme, whose rights are protected by the EU withdrawal agreement. Removing their entitlement would need primary legislation and would put the UK in breach of a treaty.",
+      "sources": [
+        {
+          "sourceId": "dwp-uc-statistics-2026-05",
+          "quote": "only people who are settled in the UK or protected by the EU Exit Withdrawal Agreement should be able to claim Universal Credit"
+        }
+      ]
+    },
+    {
+      "id": "refugees",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "130,618 claimants have refugee status and 52,499 humanitarian protection. Refugees have the lowest employment rate of any group on universal credit, 29.9%, so withdrawal would fall hardest on people the UK has agreed to protect.",
+      "sources": [{ "sourceId": "dwp-uc-statistics-2026-05", "table": "Table 1" }]
+    },
+    {
+      "id": "nationality-is-not-status",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The department is explicit that entitlement follows immigration status, not nationality. A policy written in terms of nationality would cut across the system that actually decides who can claim, and would need a new test built to administer it.",
+      "sources": [
+        {
+          "sourceId": "dwp-uc-statistics-2026-05",
+          "quote": "it is immigration status that determines benefit entitlement not nationality"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

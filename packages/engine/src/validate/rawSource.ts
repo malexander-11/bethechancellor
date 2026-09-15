@@ -543,6 +543,22 @@ function checkDerivedArithmetic(
       if (level === null || level === undefined) continue;
       expected[year] = level * (factor - 1);
     }
+  } else if (method.name === 'seriesProduct') {
+    const years = new Set(Object.keys(costing.effect));
+    for (const term of method.terms) for (const year of Object.keys(term.values)) years.add(year);
+    for (const year of [...years].sort()) {
+      let product = 1;
+      let complete = true;
+      for (const term of method.terms) {
+        const v = term.values[year];
+        if (v === undefined) {
+          complete = false;
+          break;
+        }
+        product *= v;
+      }
+      if (complete) expected[year] = product;
+    }
   } else {
     const product = method.terms.reduce((acc, t) => acc * t.value, 1);
     const slack = Math.max(1, Math.abs(method.resultGbpm) * 0.01);

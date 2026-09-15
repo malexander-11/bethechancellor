@@ -82,12 +82,11 @@
       "direction": "ambiguous",
       "magnitudeWords": "large",
       "alreadyInDirectCosting": false,
-      "text": "NATO's 5% is core defence plus 1.5% of GDP on resilience and infrastructure, and the target date is 2035. Applying 5% to core defence alone, immediately, goes well beyond what the alliance agreed.",
+      "text": "NATO agreed 5% by 2035, split 3.5% for core defence and up to 1.5% for resilience, critical infrastructure and the defence industrial base, which is not military spending. Applying 5% to core defence alone, immediately, is a far bigger commitment than the one the alliance made.",
       "sources": [
         {
-          "sourceId": "obr-efo-2026-03",
-          "table": "Paragraph 4.15",
-          "page": "65"
+          "sourceId": "govuk-nato-five-per-cent",
+          "quote": "a projected split of 3.5% (core defence) and 1.5% (resilience and security) to be agreed at the NATO summit, with a target date of 2035"
         }
       ]
     },
@@ -104,6 +103,24 @@
           "table": "Paragraph 4.16",
           "page": "66",
           "quote": "falling by 4.4 per cent a year in real terms in the final two years of the forecast"
+        }
+      ]
+    },
+    {
+      "id": "nato-qualifying",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Three different measures are in play. The Spending Review counts NATO-qualifying spending, which reaches 2.6% of GDP by 2027 and includes part of the intelligence budget. The OBR counts defence spending, 2.4% in 2025-26. NATO counts its own definition, on which the UK spent 2.33% in 2024.",
+      "sources": [
+        {
+          "sourceId": "hmt-spending-review-2025"
+        },
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Paragraph 4.15",
+          "page": "65"
         }
       ]
     }

@@ -238,6 +238,23 @@ export const rawSourceSchema = z.discriminatedUnion('kind', [
         ]),
       }),
       /**
+       * Two or more published year series multiplied together, year by year: an outlay times the
+       * share of it that scores somewhere, for instance. Every term carries its own source.
+       */
+      z.strictObject({
+        name: z.literal('seriesProduct'),
+        terms: z
+          .array(
+            z.strictObject({
+              label: z.string().min(1),
+              values: yearValuesSchema,
+              unit: z.string().min(1),
+              source: sourceRefSchema,
+            }),
+          )
+          .min(2),
+      }),
+      /**
        * A product of published quantities, each with its own source, giving a first-year figure
        * that then moves with a forecast series (or stays flat in cash).
        */
@@ -335,6 +352,11 @@ export const costingSchema = z.discriminatedUnion('kind', [
     kind: z.literal('schedule'),
     /** Engine sign by fiscal year; years before the implementation year are ignored at runtime. */
     effect: yearValuesSchema,
+    /**
+     * A single payment rather than a yearly one: the amount falls in the implementation year and
+     * nothing after it. `effect` then carries exactly one entry, the amount.
+     */
+    once: z.boolean().optional(),
     source: sourceRefSchema,
     rawSource: rawSourceSchema.optional(),
     caveats: z.array(z.string()),
@@ -454,6 +476,17 @@ export const leverSchema = z
     reviewedOn: isoDateSchema.optional(),
   })
   .superRefine((lever, ctx) => {
+    if (
+      lever.costing.kind === 'schedule' &&
+      lever.costing.once === true &&
+      Object.keys(lever.costing.effect).length !== 1
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'a one-off schedule carries exactly one amount, paid in the implementation year',
+        path: ['costing', 'effect'],
+      });
+    }
     if (lever.category === 'macro') {
       if (lever.costing.kind !== 'sensitivity') {
         ctx.addIssue({
