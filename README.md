@@ -4,16 +4,21 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 4 (the guided journey)**. You are appointed Chancellor with a Budget to deliver
+Status: **Phase 5 (the full journey)**. You are appointed Chancellor with a Budget to deliver
 on 28 October 2026. Step 1 confirms the economic assumptions (the OBR's March 2026 view against
-the latest market and independent readings, with the advisers' suggested settings); step 2 sets
-taxes and spending under a live scorecard, with every control showing the level it moves to;
-step 3 is Budget day: the verdict on each fiscal rule, your measures, and what the advisers want
-on the record. Under the hood: the OBR March 2026 baseline, 31 tax levers (HMRC ready reckoner,
-Budget 2025 and Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT
-base-broadening options, inheritance tax up to abolition), 19 spending levers (Spending Review
-2025 settlements, OBR welfare lines, Budget 2025 spending decisions) and five adviser roles whose
-every sentence cites a public document. Next: the rebase to the 28 October 2026 forecast.
+the latest market and independent readings, with the advisers' suggested settings). Step 2 sets
+taxes and spending under a live scorecard, with every control showing the level it moves to and
+departmental budgets shown as real growth a year against their own history. Step 3 is the list
+of eleven policies your colleagues in Parliament are campaigning for, each costed, each with its
+workings on the card. Step 4 is Budget day, read back as feedback from four audiences: your own
+rules, the markets, Parliament and the public.
+
+Under the hood: the OBR March 2026 baseline, 31 tax levers (HMRC ready reckoner, Budget 2025 and
+Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options,
+inheritance tax up to abolition), 19 spending levers (Spending Review 2025 settlements, OBR
+welfare lines, Budget 2025 spending decisions) with milestones from PESA, 11 campaign policies
+costed from published statistics by a stated method, and five adviser roles whose every sentence
+cites a public document. Next: the rebase to the 28 October 2026 forecast.
 
 ## Principles
 
@@ -23,6 +28,11 @@ every sentence cites a public document. Next: the rebase to the 28 October 2026 
 - **Second-round effects are words, not numbers.** Behavioural and macroeconomic knock-on
   effects are described qualitatively with sources. The interface labels every figure as a
   direct costing, a mechanical consequence, an assumption, or commentary.
+- **Where nobody has published a costing, the arithmetic is ours and the workings are on the
+  card.** The eleven policies MPs campaign for have no certified costing. Each states its method,
+  its published inputs and its assumptions, is badged an assumption rather than a direct costing,
+  and is reproduced from those inputs by a test. Where the base is contested, the card says so
+  before it shows the number.
 - **Rebasing is a data refresh.** The baseline forecast is a versioned "vintage". When the OBR
   publishes a new forecast (next: Budget, 28 October 2026) the data is regenerated and the app
   re-reads it.
@@ -35,7 +45,8 @@ See `docs/methodology.md` for the accounting spine and `docs/adr/` for design de
 apps/web            Vite + React front end (deployed on Vercel)
 packages/engine     pure TypeScript fiscal engine, schemas and tests
 packages/pipeline   scripts that fetch, extract and validate source data
-data/               sourced JSON: vintages, rules, levers, context readings, adviser briefings, raw source files
+data/               sourced JSON: vintages, rules, levers, context readings, adviser briefings,
+                    Budget day reaction bands, raw source files
 docs/               methodology and architecture decision records
 ```
 

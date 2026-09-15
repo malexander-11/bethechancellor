@@ -92,3 +92,45 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
 - **Barnett.** Set `classification.barnettConsequential: true` on comparable departments and add
   `devolution` considerations (with `appliesWhen` above/below 0) citing the Statement of Funding
   Policy; never add a numeric knock-on.
+
+### Campaign policies (`data/levers/campaign/`)
+
+These are the policies colleagues in Parliament campaign for. None has a certified costing, so
+the arithmetic is ours and the card has to show it.
+
+- **Category and group.** `category: "campaign"`, `group: "Recommendations from Parliament"`,
+  `control.kind: "toggle"`. They render on the `recommendations` step, in `order`.
+- **Badge.** `assumption`, never `direct`, unless the costing reuses a published row verbatim
+  (only `it50` does, five one-penny steps of HMRC's additional-rate row).
+- **Raw source.** `kind: "derivedFromPublished"` with a `method`, a `sourceId` and a `note` that
+  says where the inputs come from and what the arithmetic assumes. `validate:data` reproduces
+  the schedule from the method, so an edited figure fails.
+
+| Method          | Fields                                                                              | Reproduces                                                          |
+| --------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `gdpShareGap`   | `targetPctGdp`, `baselinePctGdp` by year                                            | (target − baseline) ÷ 100 × nominal GDP                             |
+| `upratingGap`   | `rowId`, `baseYear`, `currentSeries`, `replacementSeries`                           | the extract's row × the compounding ratio of the two vintage series |
+| `statedProduct` | `terms` (label, value, unit, source), `resultGbpm`, `baseYear`, optional `growWith` | the product of the terms, then flat in cash or grown with a head    |
+| `seriesProduct` | two or more `terms`, each with `values` by year                                     | the terms multiplied year by year                                   |
+
+- **One-off payments** set `costing.once: true` on the schedule with exactly one amount; it falls
+  in the implementation year and nothing after.
+- **Financial transactions** set `classification.psnflTreatment: "financialTransaction"`. The
+  amount is borrowed and carries interest but is not spending, so borrowing and net financial
+  liabilities do not move. Say so in the caveats.
+- **Mixed current and capital** set `classification.capitalShare` with the published split in a
+  caveat. Capital escapes the stability rule, so the split is not cosmetic.
+- **Contested figures** open the `headline` with the word "contested" and carry the reason as a
+  `legal`, `behavioural` or `administrative` consideration, cited. State the alternative
+  published figure in the caveats where there is one.
+
+### Budget day reactions (`data/journey/reactions.json`)
+
+One `intro` and a list of signals. Each signal names an `audience`, a `measure` the engine reads
+off the outcome, a `reading` label and unit for display, and `bands` in ascending order of `upTo`
+with the last band carrying none. A band holds a `level`, a `headline` of at most 140 characters,
+a `detail` and at least one source. No reaction text may live anywhere else: a test asserts that
+every rendered headline and detail is one of these.
+
+Market bands describe what commentators watch and cite the evidence (the OBR's interest-rate
+sensitivity, the gilt yield in the context file). They never predict a market move.

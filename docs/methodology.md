@@ -244,10 +244,11 @@ figure so that a "pass" reads as a forecast, not a fact.
 
 ## 9. Not modelled
 
-Growth effects of the player's choices; market reactions to the fiscal stance; Barnett
-consequentials (described under each department, never added to the number) and the devolved
-governments' own choices; departmental underspending against plans; financial transactions
-other than those in the baseline; depreciation on new capital spending; classification changes.
+Growth effects of the player's choices; market reactions to the fiscal stance (Budget day
+describes what commentators watch, it does not predict what they do); Barnett consequentials
+(described under each department, never added to the number) and the devolved governments' own
+choices; departmental underspending against plans; the effect on the rules' debt measure of
+reclassifying a body into the public sector; depreciation on new capital spending.
 
 ## 10. Reproducibility
 
@@ -322,3 +323,62 @@ option, so a hand-edited link cannot land between options.
   row and cuts mirror it, an assumption the drawer states.
 - **Insurance premium tax** is retired: its code stays reserved and old links decode with a
   warning.
+
+## 12. Policies nobody has costed, and Budget day (ADR-0008)
+
+### Arithmetic we do ourselves
+
+Eleven policies your colleagues in Parliament campaign for have no certified costing, because
+none of them is government policy. Rather than print a slogan with no number, the repository
+does the arithmetic and shows it. Each such lever carries a `derivedFromPublished` raw source
+naming the method and its published inputs, and `checkRawSourceConsistency` reproduces the
+schedule from them: an edited figure fails exactly as a tampered HMRC row does.
+
+| Method          | Arithmetic                                                | Example                                                                  |
+| --------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `gdpShareGap`   | (target share − forecast share) × nominal GDP             | Defence at 5% of GDP: (5% − 2.88%) × £3,510.6bn = £74.4bn in 2029-30     |
+| `upratingGap`   | benefit line × compounding ratio of two uprating paths    | Triple lock to CPI: caseload growth is in both paths, so it cancels      |
+| `statedProduct` | published quantities multiplied out, each with its source | Free school meals: 4.44m pupils × £505 a pupil                           |
+| `seriesProduct` | published year series multiplied year by year             | Free tuition: fee-loan outlay × the share not already scored as spending |
+
+All of these are badged **assumption**, never direct. The one exception is the 50% income tax
+rate, which is five one-penny steps of HMRC's own additional-rate row and keeps its direct badge.
+
+Two figures rest on a contested base. Their cards say so, in the headline, before the number:
+the wealth tax, because the Wealth Tax Commission says its own work "has been constrained by a
+lack of reliable data on individuals with total wealth above £10 million" and because the Office
+for National Statistics publishes nothing above the top 1% threshold of £3.1m and had that
+survey's accreditation suspended in 2025; withdrawing benefits from foreign nationals, because
+96.2% of the universal credit caseload is settled here, protected by the withdrawal agreement or
+holding indefinite leave, and people subject to immigration control already have no recourse to
+public funds.
+
+### Financial transactions
+
+Cash paid for a financial asset is borrowed and carries interest, but it is not expenditure:
+"there is no change to overall indebtedness ... Hence there is no expenditure and the transaction
+has no impact on PSNB" (ONS, public sector finances methodological guide, 5.1.3). A lever with
+`classification.psnflTreatment: 'financialTransaction'` routes its amount to a channel that
+enters the debt-interest base and nothing else, so neither borrowing nor net financial
+liabilities move. Buying the water companies at Defra's own £100bn therefore costs £100bn of
+gilts and about £5bn a year of interest, and leaves the stability rule almost untouched. Free
+tuition is the mirror: it converts a loan into a grant, moving money out of a financial
+transaction and into spending.
+
+A schedule may be `once`, paid in the implementation year only, for a purchase rather than a
+programme. A spending classification may carry a `capitalShare`, because a defence uplift is not
+all day-to-day money: the Spending Review's own settlement is 43% capital, and capital does not
+count against the stability rule.
+
+### Budget day signals
+
+`computeReactions` is a pure function from the outcome and the lever set. Each signal reads one
+number (headroom, headroom against the OBR's typical forecast error, the change in borrowing, the
+change in the debt path, the change in the tax take, how many recommendations were adopted, how
+many Budget 2025 decisions were reversed, the two rule statuses) and picks the first band whose
+threshold the reading does not exceed. Every word shown lives in `data/journey/reactions.json`
+with its sources, and a test asserts that no signal text exists outside it. The reading that
+chose the band is printed beside the text.
+
+The public panel is not a band: it carries the distributional considerations of the levers the
+player moved, in their own words and with their own citations, ordered by the size of the measure.

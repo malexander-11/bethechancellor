@@ -129,13 +129,46 @@ export function MethodologyPage() {
         never added to the number.
       </p>
 
+      <h2>Policies nobody has costed</h2>
+      <p>
+        The eleven policies your colleagues in Parliament campaign for have no certified costing,
+        because none of them is government policy. Rather than print a slogan with no number, we do
+        the arithmetic and show it: each card names the method, the published figures it rests on
+        and what it assumes, and a test reproduces the figure from those inputs. They are badged as
+        assumptions, never as direct costings. Where the base itself is contested, as with a tax on
+        wealth above £10 million and with withdrawing benefits from foreign nationals, the card says
+        so before it shows the number.
+      </p>
+
+      <h2>Buying things is not spending</h2>
+      <p>
+        Cash paid for a financial asset is borrowed and carries interest, but it is not expenditure,
+        so it moves neither borrowing nor net financial liabilities. Buying the water companies at
+        the Environment Department&rsquo;s own £100 billion costs £100 billion of gilts and about £5
+        billion a year of interest, and barely touches the stability rule. Abolishing tuition fees
+        does the opposite: it turns a loan, which is a financial transaction, into a grant, which is
+        spending. The two together are the clearest illustration in this tool of what the two fiscal
+        rules actually measure.
+      </p>
+
+      <h2>Budget day</h2>
+      <p>
+        Four panels: your own rules, the markets, Parliament and the public. Each signal is a rule
+        over your Budget, and the reading that selected it is printed beside the words so you can
+        check the judgement. Every sentence is authored with its sources; nothing is generated. The
+        market panel describes what commentators watch, citing the OBR&rsquo;s own interest-rate
+        sensitivity and the gilt yield at the time this was built. It does not predict what markets
+        would do. The public panel carries the distributional notes of the levers you moved, in
+        their own words.
+      </p>
+
       <h2>What is not modelled</h2>
       <p>
-        Growth effects of your choices, market reactions to the fiscal stance, Barnett
-        consequentials (described, not computed), financial transactions beyond the baseline,
-        depreciation on new investment, and classification changes. The OBR&rsquo;s typical
-        five-year forecast error for receipts is 0.9% of GDP, about £32 billion by 2030-31, larger
-        than any recent headroom; the verdict cards show it beside every figure.
+        Growth effects of your choices, what markets would actually do, Barnett consequentials
+        (described, not computed), the effect on the debt measure of moving a company into the
+        public sector, and depreciation on new investment. The OBR&rsquo;s typical five-year
+        forecast error for receipts is 0.9% of GDP, about £32 billion by 2030-31, larger than any
+        recent headroom; the verdict cards show it beside every figure.
       </p>
     </article>
   );
