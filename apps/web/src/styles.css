@@ -1623,3 +1623,34 @@ details.table-view td:first-child {
 .signal__notes li {
   margin-bottom: 5px;
 }
+
+.briefing-row {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+  margin-bottom: 10px;
+}
+
+.cards {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+.cards .lever {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: var(--surface);
+}
+
+@media (min-width: 860px) {
+  .briefing-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}

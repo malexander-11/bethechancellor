@@ -42,40 +42,38 @@ export function RecommendationsPage() {
         arithmetic, not an official costing.
       </p>
       <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
-      <div className="layout">
-        <aside>
-          {briefingsFor('recommendations').map((b) => (
-            <AdviserBriefing key={b.id} briefing={b} />
-          ))}
-          <p className="adopted-line" role="status">
-            {adopted.length === 0
-              ? 'Nothing adopted yet.'
-              : `${adopted.length} adopted · ${
-                  total >= 0 ? 'costing' : 'raising'
-                } ${formatGbpBn(Math.abs(total), 1)} in ${targetYear}`}
-          </p>
-          {items.map((lever) => (
-            <LeverControl
-              key={lever.id}
-              lever={lever}
-              value={state.leverValues[lever.code] ?? lever.control.default}
-              effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-              summaryYear={targetYear}
-              onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-            />
-          ))}
-          <p className="hero-start__actions">
-            <StepLink to="/budget-day" className="btn btn--primary">
-              Go to Budget day
-            </StepLink>
-          </p>
-        </aside>
-        <div>
-          {briefingsFor('recommendations', 'Recommendations from Parliament').map((b) => (
-            <AdviserBriefing key={b.id} briefing={b} />
-          ))}
-        </div>
+      <div className="briefing-row">
+        {briefingsFor('recommendations').map((b) => (
+          <AdviserBriefing key={b.id} briefing={b} compact />
+        ))}
       </div>
+      <p className="adopted-line" role="status">
+        {adopted.length === 0
+          ? 'Nothing adopted yet. Adopting one is a toggle; the scorecard moves as you read.'
+          : `${adopted.length} adopted · ${
+              total >= 0 ? 'costing' : 'raising'
+            } ${formatGbpBn(Math.abs(total), 1)} in ${targetYear}`}
+      </p>
+      <div className="cards">
+        {items.map((lever) => (
+          <LeverControl
+            key={lever.id}
+            lever={lever}
+            value={state.leverValues[lever.code] ?? lever.control.default}
+            effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+            summaryYear={targetYear}
+            onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
+          />
+        ))}
+      </div>
+      <p className="hero-start__actions">
+        <StepLink to="/budget/spending" className="btn">
+          Back to spending
+        </StepLink>
+        <StepLink to="/budget-day" className="btn btn--primary">
+          Go to Budget day
+        </StepLink>
+      </p>
     </JourneyLayout>
   );
 }

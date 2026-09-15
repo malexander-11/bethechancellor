@@ -8,8 +8,8 @@
   "order": 70,
   "title": "Free university education: abolish undergraduate tuition fees",
   "shortTitle": "Free university education",
-  "headline": "Pay universities directly instead of lending to students. £7.7bn.",
-  "description": "Abolish the £9,790 tuition fee and fund teaching by grant. The headline is £11.5bn of fee loans a year, but a third of that already scores as government spending, because the national accounts treat the part of a loan nobody expects to be repaid as expenditure the day it is issued. Only the rest changes. This is the clearest lesson on the page about how the rules work: converting a loan into a grant moves money from a financial transaction, which does not count as borrowing, into spending, which does.",
+  "headline": "Pay universities directly instead of lending. £8.4bn by 2029-30.",
+  "description": "Abolish the £9,790 tuition fee and fund teaching by grant. Students borrow £12.4bn in fee loans in 2029-30, but a third of that already scores as government spending, because the national accounts treat the part of a loan nobody expects to be repaid as expenditure the day it is issued. Only the rest changes, so the cost is £8.4bn rather than the headline. This is the clearest lesson on the page about how the rules work: converting a loan into a grant moves money from a financial transaction, which does not count as borrowing, into spending, which does.",
   "baselinePolicy": {
     "text": "Full-time undergraduates borrow £11.5bn a year in fee loans, rising to £12.8bn by 2030-31. About a third of each year's outlay is already recorded as government expenditure through the transfer proportion; the rest is a loan asset.",
     "source": {
@@ -134,7 +134,11 @@
       "magnitudeWords": "moderate",
       "alreadyInDirectCosting": false,
       "text": "Tuition fees are devolved: Scotland already funds Scottish undergraduates without fees. This covers English-domiciled students only.",
-      "sources": [{ "sourceId": "dfe-tuition-fees-2026-27" }]
+      "sources": [
+        {
+          "sourceId": "dfe-tuition-fees-2026-27"
+        }
+      ]
     }
   ],
   "status": "reviewed",
