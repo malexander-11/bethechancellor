@@ -57,7 +57,8 @@ function main(): void {
   const sr25File = path.join(DERIVED_DIR, SR25_EXTRACT_FILE);
   if (existsSync(sr25File)) extracted.sr25 = parseSr25Extract(readJson(sr25File));
   else problems.push(`${SR25_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
-  for (const lever of ds.levers) problems.push(...checkRawSourceConsistency(lever, extracted));
+  for (const lever of ds.levers)
+    problems.push(...checkRawSourceConsistency(lever, extracted, ds.vintage));
 
   for (const source of ds.sources.sources) {
     if (!source.localPath) continue;

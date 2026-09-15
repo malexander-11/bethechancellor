@@ -81,6 +81,44 @@ function PublishedRows({ lever }: { lever: Lever }) {
       </>
     );
   }
+  if (raw.kind === 'hmrcReliefCost') {
+    const years = [...new Set(raw.rows.flatMap((r) => Object.keys(r.values)))].sort();
+    return (
+      <>
+        <h4>
+          HMRC cost of the relief <LabelBadge badge="direct" />
+        </h4>
+        <div className="table-scroll">
+          <table className="detail-table">
+            <thead>
+              <tr>
+                <th>Relief (£m, as published)</th>
+                {years.map((y) => (
+                  <th key={y}>{y}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {raw.rows.map((row) => (
+                <tr key={row.rowId}>
+                  <td>{row.name}</td>
+                  {years.map((y) => (
+                    <td key={y}>{(row.values[y] ?? 0).toLocaleString('en-GB')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {source ? (
+          <p>
+            <SourceLink ref={source} />
+          </p>
+        ) : null}
+        {raw.note ? <p className="source">{raw.note}</p> : null}
+      </>
+    );
+  }
   if (raw.kind === 'hmtSr25') {
     const years = [...new Set(raw.rows.flatMap((r) => Object.keys(r.values)))].sort();
     return (

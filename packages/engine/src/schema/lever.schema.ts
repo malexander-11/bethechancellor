@@ -35,8 +35,31 @@ export const spendingHeadSchema = z.enum([
   'otherWelfare',
 ]);
 
-/** Any vintage series a published figure can be carried forward with: a receipts head, nominal GDP or a spending line. */
-export const growthHeadSchema = z.enum([...taxHeadSchema.options, ...spendingHeadSchema.options]);
+/** A receipts line in the vintage's receiptsByTax record, e.g. "receiptsByTax.inheritanceTax". */
+export const receiptsByTaxHeadSchema = z
+  .string()
+  .regex(/^receiptsByTax\.[A-Za-z]+$/, 'receipts heads look like receiptsByTax.inheritanceTax');
+
+/** Any vintage series a published figure can be carried forward with: a receipts head, nominal GDP, a spending line or a receipts-by-tax line. */
+export const growthHeadSchema = z.union([
+  taxHeadSchema,
+  spendingHeadSchema,
+  receiptsByTaxHeadSchema,
+]);
+
+/**
+ * How to show the level a setting moves a rate or threshold to (display only; costings and
+ * permalinks keep the change). `add`: level = baseline + value; `pctChange`: level = baseline × (1 + value ÷ 100).
+ */
+export const levelSchema = z.strictObject({
+  baseline: z.number(),
+  unit: z.enum(['pct', 'GBP', 'pence', 'GBPperWeek', 'GBPbn']),
+  apply: z.enum(['add', 'pctChange']),
+  label: z.string().min(1),
+  decimals: z.number().int().min(0).max(2).optional(),
+  source: sourceRefSchema,
+  note: z.string().optional(),
+});
 
 export const controlSchema = z
   .strictObject({
@@ -48,9 +71,38 @@ export const controlSchema = z
     step: z.number().positive(),
     default: z.number(),
     formatLabel: z.string().optional(),
+    /** For `select`: the offered values (as strings) and their labels, e.g. { "-40": "Abolish (0%)", "0": "40%" }. */
     labels: z.record(z.string(), z.string()).optional(),
+    level: levelSchema.optional(),
   })
   .superRefine((control, ctx) => {
+    if (control.kind === 'select') {
+      const keys = Object.keys(control.labels ?? {});
+      if (keys.length < 2) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'a select needs labels for its options',
+          path: ['labels'],
+        });
+      }
+      if (!keys.includes(String(control.default))) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'a select must label its default value',
+          path: ['labels'],
+        });
+      }
+      for (const key of keys) {
+        const v = Number(key);
+        if (!Number.isFinite(v) || v < control.min || v > control.max) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `select option ${key} is outside [min, max]`,
+            path: ['labels'],
+          });
+        }
+      }
+    }
     if (control.min >= control.max) {
       ctx.addIssue({ code: 'custom', message: 'min must be below max', path: ['min'] });
     }
@@ -139,6 +191,21 @@ export const rawSourceSchema = z.discriminatedUnion('kind', [
     note: z.string().optional(),
   }),
   z.strictObject({
+    kind: z.literal('hmrcReliefCost'),
+    sourceId: z.string().min(1),
+    rows: z
+      .array(
+        z.strictObject({
+          rowId: z.string().min(1),
+          name: z.string().min(1),
+          /** £ million cost of the relief as published, by fiscal year. */
+          values: yearValuesSchema,
+        }),
+      )
+      .min(1),
+    note: z.string().optional(),
+  }),
+  z.strictObject({
     kind: z.literal('hmtSr25'),
     sourceId: z.string().min(1),
     /** Worksheet the rows come from, e.g. "Table 5.3 RDELex". */
@@ -185,7 +252,15 @@ export const costingSchema = z.discriminatedUnion('kind', [
           /** Engine sign, keyed by ready-reckoner year. */
           effect: yearValuesSchema,
           from: z
-            .strictObject({ rowIds: z.array(z.string().min(1)).min(1), multiplier: z.number() })
+            .strictObject({
+              rowIds: z.array(z.string().min(1)).min(1).optional(),
+              /** A vintage series such as "receiptsByTax.inheritanceTax" (the whole tax line). */
+              vintageSeries: receiptsByTaxHeadSchema.optional(),
+              multiplier: z.number(),
+            })
+            .refine((f) => (f.rowIds ? 1 : 0) + (f.vintageSeries ? 1 : 0) === 1, {
+              message: 'a lookup point cites either HMRC rows or one vintage series',
+            })
             .optional(),
         }),
       )

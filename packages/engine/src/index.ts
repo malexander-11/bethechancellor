@@ -22,7 +22,10 @@ export { checkRawSourceConsistency, type ExtractedSources } from './validate/raw
 export {
   hasHead,
   headSeries,
+  isSpendingHead,
   isTaxHead,
+  receiptsByTaxKey,
+  receiptsByTaxSeries,
   spendingSeries,
   taxHeadSeries,
 } from './costing/taxHead.js';
@@ -73,3 +76,4 @@ export {
   type PermalinkState,
 } from './permalink/codec.js';
 export { formatGbp, formatGbpBn, formatPct, perHousehold } from './format.js';
+export { describeLevelChange, formatLevel, levelValue } from './levels.js';

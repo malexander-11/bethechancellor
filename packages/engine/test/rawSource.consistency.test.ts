@@ -16,7 +16,7 @@ describe('every direct costing reproduces from the extracted published tables', 
   it.each(taxLevers.map((l) => [l.id, l] as const))(
     '%s matches its cited rows or lines',
     (_id, lever) => {
-      expect(checkRawSourceConsistency(lever, extracted)).toEqual([]);
+      expect(checkRawSourceConsistency(lever, extracted, ds.vintage)).toEqual([]);
     },
   );
 
@@ -40,7 +40,7 @@ describe('every direct costing reproduces from the extracted published tables', 
   it.each(spendingLevers.map((l) => [l.id, l] as const))(
     '%s matches its cited Spending Review rows, HMRC rows or scorecard lines',
     (_id, lever) => {
-      expect(checkRawSourceConsistency(lever, extracted)).toEqual([]);
+      expect(checkRawSourceConsistency(lever, extracted, ds.vintage)).toEqual([]);
     },
   );
 
@@ -54,7 +54,7 @@ describe('every direct costing reproduces from the extracted published tables', 
       throw new Error('missing dhsc');
     health.costing.baseline.values['2028-29'] =
       (health.costing.baseline.values['2028-29'] ?? 0) + 10;
-    expect(checkRawSourceConsistency(health, extracted).length).toBeGreaterThan(0);
+    expect(checkRawSourceConsistency(health, extracted, ds.vintage).length).toBeGreaterThan(0);
     const other = structuredClone(spendingLevers.find((l) => l.code === 'otherd'));
     if (
       !other ||
@@ -64,25 +64,25 @@ describe('every direct costing reproduces from the extracted published tables', 
       throw new Error('missing otherd');
     if (other.costing.baseline.rawSource.kind === 'hmtSr25')
       other.costing.baseline.rawSource.rows.pop();
-    expect(checkRawSourceConsistency(other, extracted).length).toBeGreaterThan(0);
+    expect(checkRawSourceConsistency(other, extracted, ds.vintage).length).toBeGreaterThan(0);
     const toggle = structuredClone(spendingLevers.find((l) => l.code === 'rv2ch'));
     if (!toggle || toggle.costing.kind !== 'schedule') throw new Error('missing rv2ch');
     toggle.costing.effect['2029-30'] = 3095;
-    expect(checkRawSourceConsistency(toggle, extracted).length).toBeGreaterThan(0);
+    expect(checkRawSourceConsistency(toggle, extracted, ds.vintage).length).toBeGreaterThan(0);
     const cb = structuredClone(spendingLevers.find((l) => l.code === 'chb'));
     if (!cb || cb.costing.kind !== 'linearPerUnit') throw new Error('missing chb');
     cb.costing.perUnit['2026-27'] = -565;
-    expect(checkRawSourceConsistency(cb, extracted).length).toBeGreaterThan(0);
+    expect(checkRawSourceConsistency(cb, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 
   it('detects a tampered figure', () => {
     const lever = structuredClone(taxLevers.find((l) => l.code === 'itbr'));
     if (!lever || lever.costing.kind !== 'linearPerUnit') throw new Error('missing itbr');
     lever.costing.perUnit['2028-29'] = 9000;
-    expect(checkRawSourceConsistency(lever, extracted).length).toBeGreaterThan(0);
+    expect(checkRawSourceConsistency(lever, extracted, ds.vintage).length).toBeGreaterThan(0);
     const toggle = structuredClone(taxLevers.find((l) => l.code === 'rvfrz'));
     if (!toggle || toggle.costing.kind !== 'schedule') throw new Error('missing rvfrz');
     toggle.costing.effect['2029-30'] = -1;
-    expect(checkRawSourceConsistency(toggle, extracted).length).toBeGreaterThan(0);
+    expect(checkRawSourceConsistency(toggle, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 });

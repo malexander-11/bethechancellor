@@ -158,6 +158,16 @@ export function validateDataset(ds: Dataset): string[] {
         `lever ${lever.id} uprates with head "${lever.costing.uprating.head}" missing from vintage ${ds.vintage.id}`,
       );
     }
+    if (lever.costing.kind === 'lookupTable') {
+      for (const point of lever.costing.points) {
+        const series = point.from?.vintageSeries;
+        if (series && !hasHead(ds.vintage, series)) {
+          problems.push(
+            `lever ${lever.id} lookup point ${point.input} cites series "${series}" missing from vintage ${ds.vintage.id}`,
+          );
+        }
+      }
+    }
     if (lever.costing.kind === 'pctOfBaseline') {
       const baseline = lever.costing.baseline;
       const head = baseline.from === 'vintage' ? baseline.series : baseline.extendWith;

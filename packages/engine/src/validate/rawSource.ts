@@ -1,3 +1,4 @@
+import { receiptsByTaxSeries } from '../costing/taxHead.js';
 import type {
   HmrcExtract,
   Lever,
@@ -5,6 +6,7 @@ import type {
   ReliefExtract,
   ScorecardExtract,
   Sr25Extract,
+  Vintage,
   YearValues,
 } from '../types/data.js';
 
@@ -18,15 +20,15 @@ export interface ExtractedSources {
   reliefs?: ReliefExtract;
 }
 
+type Side = 'receipts' | 'spending';
+
+const TOLERANCE = 0.5;
+
 function scorecardFor(extracted: ExtractedSources, sourceId: string): ScorecardExtract | undefined {
   const keyed = extracted.scorecards?.[sourceId];
   if (keyed) return keyed;
   return extracted.scorecard?.sourceId === sourceId ? extracted.scorecard : undefined;
 }
-
-type Side = 'receipts' | 'spending';
-
-const TOLERANCE = 0.5;
 
 /**
  * Engine sign of a published HMRC row. On the receipts side a "yield" raises revenue (+) and a
@@ -45,16 +47,25 @@ function reversalSign(side: Side): number {
   return side === 'receipts' ? -1 : 1;
 }
 
+/** Removing a relief collects the tax it forgoes: more receipts (+), or less spending if ever used that way. */
+function reliefSign(side: Side): number {
+  return side === 'receipts' ? 1 : -1;
+}
+
 function close(a: number, b: number): boolean {
   return Math.abs(a - b) <= TOLERANCE;
 }
 
 /**
- * Every direct costing and every published baseline must reproduce from the extracted tables:
- * cited rows exist with the same values, and the engine-sign tables equal the signed sums of
- * those rows.
+ * Every direct costing and every published baseline must reproduce from the extracted tables (or,
+ * for a lookup point that cites a vintage series, from the vintage): cited rows exist with the
+ * same values, and the engine-sign tables equal the signed sums of those rows.
  */
-export function checkRawSourceConsistency(lever: Lever, extracted: ExtractedSources): string[] {
+export function checkRawSourceConsistency(
+  lever: Lever,
+  extracted: ExtractedSources,
+  vintage?: Vintage,
+): string[] {
   const costing = lever.costing;
   const side: Side = lever.classification?.side ?? 'receipts';
   if (costing.kind === 'pctOfBaseline') {
@@ -77,9 +88,40 @@ export function checkRawSourceConsistency(lever: Lever, extracted: ExtractedSour
   const raw = costing.rawSource;
   if (!raw)
     return lever.badge === 'direct' ? [`${lever.id}: direct costing without rawSource`] : [];
-  if (raw.kind === 'hmrcReadyReckoner') return checkHmrcRows(lever, raw, side, extracted);
+  if (raw.kind === 'hmrcReadyReckoner') return checkHmrcRows(lever, raw, side, extracted, vintage);
   if (raw.kind === 'hmtScorecard') return checkScorecardLines(lever, raw, side, extracted);
+  if (raw.kind === 'hmrcReliefCost') return checkReliefRows(lever, raw, side, extracted);
   return [`${lever.id}: Spending Review rows can only back a percentage-of-baseline costing`];
+}
+
+/** Expected engine-sign effect of a lookup point that cites a vintage series (the whole tax line). */
+function vintageSeriesEffect(
+  lever: Lever,
+  series: string,
+  multiplier: number,
+  years: string[],
+  vintage: Vintage | undefined,
+  problems: string[],
+): YearValues | null {
+  if (!vintage) {
+    problems.push(`${lever.id}: lookup point cites ${series} but no vintage was given to check`);
+    return null;
+  }
+  const found = receiptsByTaxSeries(vintage, series);
+  if (!found) {
+    problems.push(`${lever.id}: series ${series} is not in vintage ${vintage.id}`);
+    return null;
+  }
+  const out: YearValues = {};
+  for (const y of years) {
+    const v = found.values[y];
+    if (v === undefined) {
+      problems.push(`${lever.id}: series ${series} has no value for ${y}`);
+      continue;
+    }
+    out[y] = multiplier * v;
+  }
+  return out;
 }
 
 function checkHmrcRows(
@@ -87,6 +129,7 @@ function checkHmrcRows(
   raw: Extract<RawSource, { kind: 'hmrcReadyReckoner' }>,
   side: Side,
   extracted: ExtractedSources,
+  vintage: Vintage | undefined,
 ): string[] {
   const problems: string[] = [];
   const costing = lever.costing;
@@ -168,21 +211,38 @@ function checkHmrcRows(
         continue;
       }
       if (!point.from) {
-        problems.push(`${lever.id}: lookup point ${point.input} does not cite rows (from)`);
+        problems.push(`${lever.id}: lookup point ${point.input} does not cite its source (from)`);
         continue;
       }
-      const expected = sumRows(point.from.rowIds);
-      for (const y of extract.years) {
-        const want = (expected[y] ?? 0) * point.from.multiplier;
+      const years = Object.keys(point.effect);
+      const expected = point.from.vintageSeries
+        ? vintageSeriesEffect(
+            lever,
+            point.from.vintageSeries,
+            point.from.multiplier,
+            years,
+            vintage,
+            problems,
+          )
+        : scale(sumRows(point.from.rowIds ?? []), point.from.multiplier);
+      if (!expected) continue;
+      for (const y of years) {
+        const want = expected[y] ?? 0;
         if (!close(point.effect[y] ?? 0, want)) {
           problems.push(
-            `${lever.id}: lookup point ${point.input} ${y} = ${point.effect[y]} but cited rows × ${point.from.multiplier} give ${want}`,
+            `${lever.id}: lookup point ${point.input} ${y} = ${point.effect[y]} but its source gives ${want}`,
           );
         }
       }
     }
   }
   return problems;
+}
+
+function scale(values: YearValues, multiplier: number): YearValues {
+  const out: YearValues = {};
+  for (const [y, v] of Object.entries(values)) out[y] = v * multiplier;
+  return out;
 }
 
 function checkScorecardLines(
@@ -214,8 +274,8 @@ function checkScorecardLines(
       sum[y] = (sum[y] ?? 0) + published;
     }
   }
+  const sign = reversalSign(side);
   if (costing.kind === 'schedule') {
-    const sign = reversalSign(side);
     for (const [y, v] of Object.entries(costing.effect)) {
       if (!extract.years.includes(y)) {
         problems.push(`${lever.id}: schedule year ${y} is outside the scorecard years`);
@@ -227,6 +287,75 @@ function checkScorecardLines(
           `${lever.id}: schedule ${y} = ${v} but the cited lines (${side} side) give ${want}`,
         );
     }
+  }
+  if (costing.kind === 'linearPerUnit') {
+    // A scorecard-backed toggle: one unit reverses the lines for the years it cites.
+    if (costing.decreasePerUnit)
+      problems.push(`${lever.id}: a scorecard-backed toggle cannot have a decrease table`);
+    for (const [y, v] of Object.entries(costing.perUnit)) {
+      if (!extract.years.includes(y)) {
+        problems.push(`${lever.id}: perUnit year ${y} is outside the scorecard years`);
+        continue;
+      }
+      const want = sign * (sum[y] ?? 0);
+      if (!close(v, want))
+        problems.push(
+          `${lever.id}: perUnit ${y} = ${v} but the cited lines (${side} side) give ${want}`,
+        );
+    }
+  }
+  return problems;
+}
+
+function checkReliefRows(
+  lever: Lever,
+  raw: Extract<RawSource, { kind: 'hmrcReliefCost' }>,
+  side: Side,
+  extracted: ExtractedSources,
+): string[] {
+  const problems: string[] = [];
+  const costing = lever.costing;
+  const extract = extracted.reliefs;
+  if (!extract) return [`${lever.id}: no tax relief extract available to check against`];
+  if (extract.sourceId !== raw.sourceId)
+    problems.push(`${lever.id}: rawSource cites ${raw.sourceId}, extract is ${extract.sourceId}`);
+  const byId = new Map(extract.rows.map((r) => [r.rowId, r] as const));
+  const sum: YearValues = {};
+  for (const row of raw.rows) {
+    const found = byId.get(row.rowId);
+    if (!found) {
+      problems.push(`${lever.id}: relief row "${row.rowId}" not in the extract`);
+      continue;
+    }
+    if (found.name !== row.name)
+      problems.push(
+        `${lever.id}: relief ${row.rowId} name "${row.name}" differs from published "${found.name}"`,
+      );
+    for (const [y, cited] of Object.entries(row.values)) {
+      const published = found.values[y];
+      if (published === null || published === undefined) {
+        problems.push(
+          `${lever.id}: relief ${row.rowId} ${y} is not published (${found.markers[y] ?? 'missing'})`,
+        );
+        continue;
+      }
+      if (!close(cited, published))
+        problems.push(
+          `${lever.id}: relief ${row.rowId} ${y} cited ${cited} but published ${published}`,
+        );
+      sum[y] = (sum[y] ?? 0) + published;
+    }
+  }
+  if (costing.kind !== 'linearPerUnit') {
+    return [...problems, `${lever.id}: relief costs back a linear (toggle) costing only`];
+  }
+  if (costing.decreasePerUnit)
+    problems.push(`${lever.id}: a relief-cost toggle cannot have a decrease table`);
+  const sign = reliefSign(side);
+  for (const [y, v] of Object.entries(costing.perUnit)) {
+    const want = sign * (sum[y] ?? 0);
+    if (!close(v, want))
+      problems.push(`${lever.id}: perUnit ${y} = ${v} but the cited relief rows give ${want}`);
   }
   return problems;
 }

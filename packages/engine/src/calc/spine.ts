@@ -32,9 +32,17 @@ export function resolveSettings(vintage: Vintage, input: SettingsInput | undefin
   };
 }
 
-/** Snap a raw lever value to the control's step and range. */
+/** Snap a raw lever value to the control's step and range; a select snaps to its nearest offered option. */
 export function normaliseLeverValue(lever: Lever, raw: number): number {
   const { min, max, step } = lever.control;
+  if (lever.control.kind === 'select' && lever.control.labels) {
+    const options = Object.keys(lever.control.labels)
+      .map(Number)
+      .filter((v) => Number.isFinite(v));
+    if (options.length > 0) {
+      return options.reduce((best, v) => (Math.abs(v - raw) < Math.abs(best - raw) ? v : best));
+    }
+  }
   const clamped = Math.min(max, Math.max(min, raw));
   const snapped = min + Math.round((clamped - min) / step) * step;
   const decimals = Math.max(0, Math.min(6, (step.toString().split('.')[1] ?? '').length));

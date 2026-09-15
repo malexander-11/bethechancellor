@@ -36,6 +36,7 @@ import type {
 } from '../schema/context.schema.js';
 import type {
   growthHeadSchema,
+  levelSchema,
   rawSourceSchema,
   spendingHeadSchema,
   taxHeadSchema,
@@ -58,6 +59,7 @@ export type WelfareCapRule = Extract<FiscalRule, { kind: 'welfareCap' }>;
 export type RuleSet = z.infer<typeof ruleSetSchema>;
 export type Lever = z.infer<typeof leverSchema>;
 export type LeverControl = z.infer<typeof controlSchema>;
+export type LevelDisplay = z.infer<typeof levelSchema>;
 export type Costing = z.infer<typeof costingSchema>;
 export type Consideration = z.infer<typeof considerationSchema>;
 export type HouseholdsReference = z.infer<typeof householdsReferenceSchema>;
