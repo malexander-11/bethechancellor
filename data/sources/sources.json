@@ -198,6 +198,218 @@
       "retrievedOn": "2026-09-15",
       "licence": "OGL-3.0",
       "notes": "Barnett formula (paragraphs 3.9-3.18): change to planned UK Government departmental spending × comparability factor × population proportion, applied to resource and capital DEL separately. Annex B lists the departmental comparability factors used at Spending Review 2025; the FCDO and Ministry of Defence undertake only reserved activities and have none (B.12)."
+    },
+    {
+      "id": "hmrc-tax-reliefs-2026-01",
+      "org": "HMRC",
+      "title": "Estimated cost of tax reliefs",
+      "edition": "January 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/69a0194e3e672177d0bc76e6/tax_relief_statistics_january_2026.ods",
+      "landingUrl": "https://www.gov.uk/government/statistics/tax-reliefs",
+      "publishedOn": "2026-01-22",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmrc-tax-reliefs-2026-01/tax_relief_statistics_january_2026.ods",
+      "sha256": "fa94a61fe6b6a02c19b87a656154f27eaf5f00f35f0cce9339b8101b9ac8ee4a",
+      "notes": "Table 2 gives six-year cost estimates (£ million, 2020-21 to 2025-26) of each tax relief; the later years are projections. They are estimates of the cost of the relief as it stands, not forecasts of what removing it would raise; see the background quality report."
+    },
+    {
+      "id": "hmrc-tax-reliefs-quality-report",
+      "org": "HMRC",
+      "title": "Background quality report: tax relief statistics",
+      "url": "https://www.gov.uk/government/statistics/background-quality-report-tax-relief-statistics/background-quality-report-tax-relief-statistics",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Section 4, Accuracy and reliability: \"These figures should be interpreted as estimates of the amount of relief which is claimed and subsequently granted each year. These estimates do not represent the gain to the exchequer should a relief be abolished.\" Costs are on an accruals basis.",
+      "landingUrl": "https://www.gov.uk/government/statistics/background-quality-report-tax-relief-statistics"
+    },
+    {
+      "id": "hmt-autumn-budget-2024-table-5-1",
+      "org": "HMT",
+      "title": "Autumn Budget 2024 Table 5.1: policy decisions",
+      "url": "https://assets.publishing.service.gov.uk/media/67222f364da1c0d41942a9b2/Table_5.1_-_Autumn_Budget_2024_Policy_Decisions.xlsx",
+      "landingUrl": "https://www.gov.uk/government/publications/autumn-budget-2024",
+      "publishedOn": "2024-10-30",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmt-autumn-budget-2024/Table_5.1_-_Autumn_Budget_2024_Policy_Decisions.xlsx",
+      "sha256": "6249ec5be2634b738be2da1b15fa45fc59afd239ad5ec8c221960428d30d6a37",
+      "notes": "Certified costings of Autumn Budget 2024 measures, £ million 2024-25 to 2029-30, positive reduces borrowing. Lines used: 25 (additional-dwellings stamp duty surcharge 3% to 5%), 27 (capital gains tax main rates to 18% and 24% with BADR and IR changes), 30 (inheritance tax thresholds frozen to April 2030)."
+    },
+    {
+      "id": "hmt-forecasts-2026-08",
+      "org": "HMT",
+      "title": "Forecasts for the UK economy: a comparison of independent forecasts",
+      "edition": "No. 469, August 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6a8564f81b45e4e555421e63/Forecasts_for_the_UK_Economy_-_August_2026.pdf",
+      "landingUrl": "https://www.gov.uk/government/statistics/forecasts-for-the-uk-economy-august-2026",
+      "retrievedOn": "2026-09-15",
+      "licence": "Other",
+      "localPath": "data/raw/hmt-forecasts-2026-08/Forecasts_for_the_UK_Economy_-_August_2026.pdf",
+      "sha256": "70a6828cc4a895328e758361c64d2366dc23c170ca180f92fa616b80aa5dbdaf",
+      "notes": "Averages of independent forecasts. Short term: 2026 GDP growth 1.1%, CPI Q4 3.3%, RPI Q4 4.2%, PSNB 2026-27 £119.0bn; 2027 GDP 1.1%, CPI 2.3%. Medium term (calendar years 2026 to 2030): GDP 1.1, 1.2, 1.4, 1.4, 1.5%; CPI 3.1, 2.7, 2.2, 2.1, 2.0%; RPI 3.7, 3.8, 3.2, 2.9, 2.8%; PSNB (2026-27 to 2030-31) £126.4bn, 106.6, 99.5, 90.3, 82.2. HMT states that the averages and ranges may be reproduced free of charge provided they are reproduced accurately and not used in a misleading context; the underlying forecasts remain the copyright of the forecasting organisations."
+    },
+    {
+      "id": "legislation-fa-2007-s1",
+      "org": "Parliament",
+      "title": "Finance Act 2007, section 1: charge and rates for 2007-08",
+      "url": "https://www.legislation.gov.uk/ukpga/2007/11/section/1",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "For 2007-08 the starting rate was 10%, the basic rate 22% and the higher rate 40%."
+    },
+    {
+      "id": "legislation-fa-2008-s1",
+      "org": "Parliament",
+      "title": "Finance Act 2008, section 1: charge and main rates for 2008-09",
+      "url": "https://www.legislation.gov.uk/ukpga/2008/9/section/1",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "For 2008-09 the basic rate is 20% and the higher rate 40%; the basic rate has been 20% since."
+    },
+    {
+      "id": "legislation-fa-2012-s1",
+      "org": "Parliament",
+      "title": "Finance Act 2012, section 1: charge for 2012-13 and rates for 2012-13 and subsequent tax years",
+      "url": "https://www.legislation.gov.uk/ukpga/2012/14/section/1",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Additional rate 50% for 2012-13 and 45% from 2013-14; basic rate 20%, higher rate 40%."
+    },
+    {
+      "id": "legislation-fa-2021-s5",
+      "org": "Parliament",
+      "title": "Finance Act 2021, section 5: basic rate limit and personal allowance for future tax years (as amended)",
+      "url": "https://www.legislation.gov.uk/ukpga/2021/26/section/5",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Sets the basic rate limit at £37,700 and the personal allowance at £12,570 for 2022-23 to 2030-31 (the later years added by amendment), switching off indexation for those years."
+    },
+    {
+      "id": "govuk-income-tax-rates",
+      "org": "HMRC",
+      "title": "Rates and allowances for Income Tax: current and past",
+      "url": "https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Personal allowance £12,570 and basic rate limit £37,700 in each year 2023-24 to 2026-27; basic rate 20%, higher rate 40% (£37,701 to £125,140 of taxable income), additional rate 45%."
+    },
+    {
+      "id": "govuk-nics-rates",
+      "org": "HMRC",
+      "title": "Rates and allowances: National Insurance contributions",
+      "url": "https://www.gov.uk/government/publications/rates-and-allowances-national-insurance-contributions/rates-and-allowances-national-insurance-contributions",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "2026-27: employee (Class 1) 8% between the primary threshold (£242 a week) and the upper earnings limit (£967), 2% above; employer 15% above the secondary threshold (£96 a week), 13.8% up to 2024-25; Class 4 self-employed 6% between £12,570 and £50,270 and 2% above."
+    },
+    {
+      "id": "govuk-corporation-tax-rates",
+      "org": "HMRC",
+      "title": "Rates and allowances: Corporation Tax",
+      "url": "https://www.gov.uk/government/publications/rates-and-allowances-corporation-tax/rates-and-allowances-corporation-tax",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Main rate 25% for profits over £250,000 from April 2023 (19% in 2022); small profits rate 19%; marginal relief between £50,000 and £250,000."
+    },
+    {
+      "id": "govuk-iht-thresholds",
+      "org": "HMRC",
+      "title": "Inheritance Tax thresholds and interest rates",
+      "url": "https://www.gov.uk/government/publications/rates-and-allowances-inheritance-tax-thresholds-and-interest-rates/inheritance-tax-thresholds-and-interest-rates",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Nil-rate band £325,000 from 6 April 2009 to 5 April 2031; £312,000 in 2008-09."
+    },
+    {
+      "id": "govuk-fuel-duty-rates",
+      "org": "HMRC",
+      "title": "Excise Duty hydrocarbon oils rates",
+      "url": "https://www.gov.uk/government/publications/rates-and-allowances-excise-duty-hydrocarbon-oils/excise-duty-hydrocarbon-oils-rates",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Unleaded petrol and diesel 52.95p per litre from 23 March 2022."
+    },
+    {
+      "id": "govuk-cgt-rates",
+      "org": "HMRC",
+      "title": "Capital Gains Tax: rates",
+      "url": "https://www.gov.uk/capital-gains-tax/rates",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Higher and additional rate taxpayers pay 24% on gains from 6 April 2026; basic rate taxpayers pay 18% on gains within their remaining basic rate band and 24% above it."
+    },
+    {
+      "id": "govuk-sdlt-rates",
+      "org": "HMRC",
+      "title": "Stamp Duty Land Tax: residential property rates",
+      "url": "https://www.gov.uk/stamp-duty-land-tax/residential-property-rates",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Single property: 0% to £125,000, 2% to £250,000, 5% to £925,000, 10% to £1.5 million, 12% above; usually 5% on top if you own another residential property."
+    },
+    {
+      "id": "govuk-vat-rates",
+      "org": "HMRC",
+      "title": "VAT rates",
+      "url": "https://www.gov.uk/vat-rates",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Standard rate 20% since 4 January 2011 (17.5% before); reduced rate 5% (for example children's car seats and home energy); zero rate (for example most food and children's clothes); some things exempt (postage stamps, financial and property transactions)."
+    },
+    {
+      "id": "govuk-vat-goods-rates",
+      "org": "HMRC",
+      "title": "VAT rates on different goods and services",
+      "url": "https://www.gov.uk/guidance/vat-rates-on-different-goods-and-services",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Lists the goods and services at 0%, 5% and 20%: most food and drink, children's clothes and footwear, books and newspapers, passenger transport for 10 or more, construction of new dwellings at 0%; domestic fuel and power at 5%."
+    },
+    {
+      "id": "govuk-alcohol-duty-rates",
+      "org": "HMRC",
+      "title": "Alcohol Duty rates",
+      "url": "https://www.gov.uk/guidance/alcohol-duty-rates",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Rates from 1 February 2026 per litre of pure alcohol: beer 1.3% to 3.4% ABV £9.96, 3.5% to 8.4% £22.58, 8.5% to 22% £30.62, above 22% £33.99; still cider 3.5% to 8.4% £10.39."
+    },
+    {
+      "id": "govuk-child-benefit-rates",
+      "org": "HMRC",
+      "title": "Child Benefit: what you'll get",
+      "url": "https://www.gov.uk/child-benefit/what-youll-get",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Weekly rates: £27.05 for the eldest or only child, £17.90 for each additional child."
+    },
+    {
+      "id": "boe-iadb-gilt-10y",
+      "org": "BoE",
+      "title": "Bank of England Interactive Statistical Database: 10-year nominal par gilt yield (IUDMNZC)",
+      "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2026&Dateto=now&SeriesCodes=IUDMNZC,IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+      "retrievedOn": "2026-09-15",
+      "licence": "Other",
+      "notes": "Daily series. 4.63% on 2 January 2026; 5.35% on 11 September 2026 (with Bank Rate 3.75%)."
+    },
+    {
+      "id": "ons-timeseries-d7g7",
+      "org": "ONS",
+      "title": "CPI annual rate, all items (D7G7, MM23)",
+      "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23/data",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "2.9% in July 2026 (published 19 August 2026)."
+    },
+    {
+      "id": "ons-timeseries-czbh",
+      "org": "ONS",
+      "title": "RPI all items, percentage change over 12 months (CZBH, MM23)",
+      "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/czbh/mm23/data",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "3.2% in July 2026 (published 19 August 2026)."
     }
   ]
 }

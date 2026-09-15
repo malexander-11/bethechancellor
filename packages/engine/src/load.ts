@@ -1,10 +1,12 @@
 import type { ZodType } from 'zod';
 import { DataError } from './errors.js';
 import {
+  contextFileSchema,
   hmrcExtractSchema,
   householdsReferenceSchema,
   leverSchema,
   presetsFileSchema,
+  reliefExtractSchema,
   ruleSetSchema,
   scorecardExtractSchema,
   sourcesFileSchema,
@@ -12,10 +14,12 @@ import {
   vintageSchema,
 } from './schema/index.js';
 import type {
+  ContextFile,
   HmrcExtract,
   HouseholdsReference,
   Lever,
   PresetsFile,
+  ReliefExtract,
   RuleSet,
   ScorecardExtract,
   SourcesFile,
@@ -84,6 +88,14 @@ export function parseSr25Extract(json: unknown): Sr25Extract {
   return parseWith(sr25ExtractSchema, json, 'Spending Review 2025 DEL tables extract');
 }
 
+export function parseReliefExtract(json: unknown): ReliefExtract {
+  return parseWith(reliefExtractSchema, json, 'HMRC tax relief cost extract');
+}
+
+export function parseContext(json: unknown): ContextFile {
+  return parseWith(contextFileSchema, json, 'context file');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -91,6 +103,8 @@ export interface Dataset {
   levers: Lever[];
   presets?: PresetsFile;
   households?: HouseholdsReference;
+  /** "What has changed since the forecast" files, newest last. */
+  contexts?: ContextFile[];
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -110,7 +124,14 @@ export function validateDataset(ds: Dataset): string[] {
   const known = new Set(ds.sources.sources.map((s) => s.id));
   const referenced = new Set<string>();
   collectSourceIds(
-    [ds.vintage, ds.rules, ds.levers, ds.presets ?? null, ds.households ?? null],
+    [
+      ds.vintage,
+      ds.rules,
+      ds.levers,
+      ds.presets ?? null,
+      ds.households ?? null,
+      ds.contexts ?? null,
+    ],
     referenced,
   );
   for (const id of referenced) {
@@ -163,6 +184,25 @@ export function validateDataset(ds: Dataset): string[] {
   for (const preset of ds.presets?.presets ?? []) {
     for (const code of Object.keys(preset.leverValues)) {
       if (!codes.has(code)) problems.push(`preset ${preset.id} sets unknown lever code ${code}`);
+    }
+  }
+  for (const context of ds.contexts ?? []) {
+    if (context.vintageId !== ds.vintage.id) {
+      problems.push(
+        `context ${context.id} compares against vintage ${context.vintageId}, not ${ds.vintage.id}`,
+      );
+    }
+    for (const reading of context.readings) {
+      if (reading.leverCode && !codes.has(reading.leverCode)) {
+        problems.push(
+          `context ${context.id} reading ${reading.id} sets unknown lever code ${reading.leverCode}`,
+        );
+      }
+      if (reading.leverCode && !reading.suggestion) {
+        problems.push(
+          `context ${context.id} reading ${reading.id} names a lever but has no suggestion rule`,
+        );
+      }
     }
   }
   return problems;

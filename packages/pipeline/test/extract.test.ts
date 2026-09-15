@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { extractBudget2025Scorecard } from '../src/extract-budget-2025-scorecard.js';
+import {
+  extractAutumnBudget2024Scorecard,
+  extractBudget2025Scorecard,
+} from '../src/extract-budget-2025-scorecard.js';
 import { extractHmrcReadyReckoner, slugify } from '../src/extract-hmrc-trr.js';
 import { cleanSr25Label, extractSr25DelTables } from '../src/extract-sr25.js';
+import { extractTaxReliefs, parseReliefNumber } from '../src/extract-tax-reliefs.js';
 
 describe('HMRC ready reckoner extraction', () => {
   const extract = extractHmrcReadyReckoner();
@@ -101,5 +105,78 @@ describe('Spending Review 2025 DEL tables extraction', () => {
     expect(
       cleanSr25Label('Total Resource DEL excluding depreciation and technical changes for IFRS9'),
     ).toBe('Total Resource DEL excluding depreciation and technical changes for IFRS9');
+  });
+});
+
+describe('Autumn Budget 2024 scorecard extraction', () => {
+  it('reads the measures with the same conventions as Budget 2025', async () => {
+    const extract = await extractAutumnBudget2024Scorecard();
+    expect(extract.sourceId).toBe('hmt-autumn-budget-2024-table-5-1');
+    expect(extract.years).toEqual([
+      '2024-25',
+      '2025-26',
+      '2026-27',
+      '2027-28',
+      '2028-29',
+      '2029-30',
+    ]);
+    expect(extract.measures.length).toBeGreaterThan(60);
+    const cgt = extract.measures.find((m) => m.number === 27);
+    expect(cgt?.type).toBe('Tax');
+    expect(
+      cgt?.title.startsWith('Capital Gains Tax: Increase the main rates of CGT to 18% and 24%'),
+    ).toBe(true);
+    expect(cgt?.values).toEqual({
+      '2024-25': 90,
+      '2025-26': 1440,
+      '2026-27': 1370,
+      '2027-28': 1350,
+      '2028-29': 2180,
+      '2029-30': 2490,
+    });
+    expect(extract.measures.find((m) => m.number === 25)?.values['2029-30']).toBe(310);
+  });
+});
+
+describe('HMRC tax relief cost extraction', () => {
+  it('reads Table 2 in £ million with markers kept for unpublished cells', () => {
+    const extract = extractTaxReliefs();
+    expect(extract.years).toEqual([
+      '2020-21',
+      '2021-22',
+      '2022-23',
+      '2023-24',
+      '2024-25',
+      '2025-26',
+    ]);
+    expect(extract.rows.length).toBeGreaterThan(150);
+    const food = extract.rows.find((r) => r.rowId === 'vat-ns7');
+    expect(food?.name).toBe('Food');
+    expect(food?.taxType).toBe('VAT');
+    expect(food?.values['2025-26']).toBe(27400);
+    expect(food?.values['2022-23']).toBe(23800);
+    expect(food?.values['2023-24']).toBe(26100);
+    const fuel = extract.rows.find((r) => r.rowId === 'vat-ns4');
+    expect(fuel?.values['2025-26']).toBe(7000);
+    const hospitality = extract.rows.find((r) =>
+      r.name.startsWith('Temporary reduced rate of VAT'),
+    );
+    expect(hospitality?.values['2025-26']).toBeNull();
+    expect(hospitality?.markers['2025-26']).toBe('Not available');
+    expect(extract.rows.some((r) => Object.values(r.markers).includes('Disclosive'))).toBe(true);
+  });
+
+  it('parses published numbers, negligible and markers', () => {
+    expect(parseReliefNumber('27,400')).toEqual({ value: 27400, negligible: false, marker: null });
+    expect(parseReliefNumber('Negligible')).toEqual({
+      value: null,
+      negligible: true,
+      marker: 'Negligible',
+    });
+    expect(parseReliefNumber('Disclosive')).toEqual({
+      value: null,
+      negligible: false,
+      marker: 'Disclosive',
+    });
   });
 });

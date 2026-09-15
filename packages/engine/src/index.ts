@@ -11,6 +11,8 @@ export {
   parseScorecardExtract,
   parseSources,
   parseSr25Extract,
+  parseReliefExtract,
+  parseContext,
   parseVintage,
   validateDataset,
   type Dataset,

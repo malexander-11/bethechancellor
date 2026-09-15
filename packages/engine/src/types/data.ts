@@ -25,9 +25,15 @@ import type {
 } from '../schema/reference.schema.js';
 import type {
   hmrcExtractSchema,
+  reliefExtractSchema,
   scorecardExtractSchema,
   sr25ExtractSchema,
 } from '../schema/derived.schema.js';
+import type {
+  contextFileSchema,
+  contextReadingSchema,
+  suggestionRuleSchema,
+} from '../schema/context.schema.js';
 import type {
   growthHeadSchema,
   rawSourceSchema,
@@ -58,6 +64,10 @@ export type HouseholdsReference = z.infer<typeof householdsReferenceSchema>;
 export type HmrcExtract = z.infer<typeof hmrcExtractSchema>;
 export type ScorecardExtract = z.infer<typeof scorecardExtractSchema>;
 export type Sr25Extract = z.infer<typeof sr25ExtractSchema>;
+export type ReliefExtract = z.infer<typeof reliefExtractSchema>;
+export type ContextFile = z.infer<typeof contextFileSchema>;
+export type ContextReading = z.infer<typeof contextReadingSchema>;
+export type SuggestionRule = z.infer<typeof suggestionRuleSchema>;
 export type RawSource = z.infer<typeof rawSourceSchema>;
 export type TaxHead = z.infer<typeof taxHeadSchema>;
 export type SpendingHead = z.infer<typeof spendingHeadSchema>;

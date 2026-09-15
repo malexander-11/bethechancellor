@@ -2,6 +2,7 @@ import type {
   HmrcExtract,
   Lever,
   RawSource,
+  ReliefExtract,
   ScorecardExtract,
   Sr25Extract,
   YearValues,
@@ -9,8 +10,18 @@ import type {
 
 export interface ExtractedSources {
   hmrc?: HmrcExtract;
+  /** The Budget 2025 scorecard (kept for callers that pass one scorecard). */
   scorecard?: ScorecardExtract;
+  /** Scorecards keyed by source id (Budget 2025, Autumn Budget 2024, …). */
+  scorecards?: Record<string, ScorecardExtract>;
   sr25?: Sr25Extract;
+  reliefs?: ReliefExtract;
+}
+
+function scorecardFor(extracted: ExtractedSources, sourceId: string): ScorecardExtract | undefined {
+  const keyed = extracted.scorecards?.[sourceId];
+  if (keyed) return keyed;
+  return extracted.scorecard?.sourceId === sourceId ? extracted.scorecard : undefined;
 }
 
 type Side = 'receipts' | 'spending';
@@ -182,10 +193,8 @@ function checkScorecardLines(
 ): string[] {
   const problems: string[] = [];
   const costing = lever.costing;
-  const extract = extracted.scorecard;
-  if (!extract) return [`${lever.id}: no scorecard extract available to check against`];
-  if (extract.sourceId !== raw.sourceId)
-    problems.push(`${lever.id}: rawSource cites ${raw.sourceId}, extract is ${extract.sourceId}`);
+  const extract = scorecardFor(extracted, raw.sourceId);
+  if (!extract) return [`${lever.id}: no scorecard extract for ${raw.sourceId} to check against`];
   const byNumber = new Map(extract.measures.map((m) => [m.number, m] as const));
   const sum: YearValues = {};
   for (const line of raw.lines) {

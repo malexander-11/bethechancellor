@@ -5,7 +5,9 @@ import {
   DataError,
   leverSchema,
   parseHmrcExtract,
+  parseContext,
   parseLever,
+  parseReliefExtract,
   parseScorecardExtract,
   parseSr25Extract,
   parseVintage,
@@ -37,6 +39,8 @@ describe('every JSON file under data/ validates against its schema', () => {
         expect(() => parseLever(JSON.parse(readFileSync(file, 'utf8')))).not.toThrow();
       } else if (rel.startsWith('raw/')) {
         continue;
+      } else if (rel.startsWith('context/')) {
+        expect(() => parseContext(JSON.parse(readFileSync(file, 'utf8')))).not.toThrow();
       } else if (rel.startsWith('derived/')) {
         const parsed = JSON.parse(readFileSync(file, 'utf8')) as {
           schemaVersion?: number;
@@ -44,7 +48,9 @@ describe('every JSON file under data/ validates against its schema', () => {
         };
         expect(parsed.schemaVersion).toBe(1);
         if (rel.includes('hmrc-trr')) expect(() => parseHmrcExtract(parsed)).not.toThrow();
-        if (rel.includes('table-4-1')) expect(() => parseScorecardExtract(parsed)).not.toThrow();
+        if (rel.includes('table-4-1') || rel.includes('table-5-1'))
+          expect(() => parseScorecardExtract(parsed)).not.toThrow();
+        if (rel.includes('tax-reliefs')) expect(() => parseReliefExtract(parsed)).not.toThrow();
         if (rel.includes('sr25')) expect(() => parseSr25Extract(parsed)).not.toThrow();
       } else {
         expect(covered.has(rel), `${rel} has no parser in the test`).toBe(true);

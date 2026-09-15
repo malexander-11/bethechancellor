@@ -1,7 +1,8 @@
 /**
- * Extract HM Treasury's Budget 2025 Table 4.1 policy decisions (xlsx) into JSON: one entry per
- * numbered measure with its title, Tax/Spend type and £ million values by fiscal year.
- * HMT's sign convention is kept as published: positive values reduce borrowing.
+ * Extract an HM Treasury policy-decisions scorecard (xlsx) into JSON: one entry per numbered
+ * measure with its title, Tax/Spend type and £ million values by fiscal year. HMT's sign
+ * convention is kept as published: positive values reduce borrowing. Used for Budget 2025
+ * Table 4.1 and Autumn Budget 2024 Table 5.1.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -37,12 +38,38 @@ function asNumber(cell: CellValue): number | null {
   return null;
 }
 
-export async function extractBudget2025Scorecard(
-  localPath = 'data/raw/hmt-budget-2025/Table_4.1_-_Budget_2025_Policy_Decisions.xlsx',
-  sourceId = 'hmt-budget-2025-table-4-1',
-): Promise<ScorecardExtract> {
+export interface ScorecardSource {
+  localPath: string;
+  sourceId: string;
+  sheet: string;
+}
+
+export const BUDGET_2025_SCORECARD: ScorecardSource = {
+  localPath: 'data/raw/hmt-budget-2025/Table_4.1_-_Budget_2025_Policy_Decisions.xlsx',
+  sourceId: 'hmt-budget-2025-table-4-1',
+  sheet: 'PresentationalScorecardRounded',
+};
+
+export const AUTUMN_BUDGET_2024_SCORECARD: ScorecardSource = {
+  localPath: 'data/raw/hmt-autumn-budget-2024/Table_5.1_-_Autumn_Budget_2024_Policy_Decisions.xlsx',
+  sourceId: 'hmt-autumn-budget-2024-table-5-1',
+  sheet: 'Table 5.1',
+};
+
+export function extractBudget2025Scorecard(): Promise<ScorecardExtract> {
+  return extractScorecard(BUDGET_2025_SCORECARD);
+}
+
+export function extractAutumnBudget2024Scorecard(): Promise<ScorecardExtract> {
+  return extractScorecard(AUTUMN_BUDGET_2024_SCORECARD);
+}
+
+export async function extractScorecard({
+  localPath,
+  sourceId,
+  sheet,
+}: ScorecardSource): Promise<ScorecardExtract> {
   const file = path.join(REPO_ROOT, localPath);
-  const sheet = 'PresentationalScorecardRounded';
   const rows = await readSheetRows(file, sheet);
   const headerIndex = rows.findIndex((r) =>
     r.some((c) => typeof c === 'string' && FY.test(c.trim())),

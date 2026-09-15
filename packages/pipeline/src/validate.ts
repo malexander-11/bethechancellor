@@ -5,12 +5,19 @@ import {
   checkRawSourceConsistency,
   DataError,
   parseHmrcExtract,
+  parseReliefExtract,
   parseScorecardExtract,
   parseSr25Extract,
   validateDataset,
   type ExtractedSources,
 } from '@btc/engine';
-import { HMRC_EXTRACT_FILE, SCORECARD_EXTRACT_FILE, SR25_EXTRACT_FILE } from './derive.js';
+import {
+  AB2024_EXTRACT_FILE,
+  HMRC_EXTRACT_FILE,
+  RELIEFS_EXTRACT_FILE,
+  SCORECARD_EXTRACT_FILE,
+  SR25_EXTRACT_FILE,
+} from './derive.js';
 import { loadDataset } from './lib/dataset.js';
 import { readJson, sha256 } from './lib/io.js';
 import { DERIVED_DIR, REPO_ROOT } from './lib/paths.js';
@@ -32,12 +39,21 @@ function main(): void {
   // Every direct costing must reproduce from the extracted published tables.
   const extracted: ExtractedSources = {};
   const hmrcFile = path.join(DERIVED_DIR, HMRC_EXTRACT_FILE);
-  const scorecardFile = path.join(DERIVED_DIR, SCORECARD_EXTRACT_FILE);
   if (existsSync(hmrcFile)) extracted.hmrc = parseHmrcExtract(readJson(hmrcFile));
   else problems.push(`${HMRC_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
-  if (existsSync(scorecardFile))
-    extracted.scorecard = parseScorecardExtract(readJson(scorecardFile));
-  else problems.push(`${SCORECARD_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
+  extracted.scorecards = {};
+  for (const file of [SCORECARD_EXTRACT_FILE, AB2024_EXTRACT_FILE]) {
+    const target = path.join(DERIVED_DIR, file);
+    if (!existsSync(target)) {
+      problems.push(`${file} is missing (run npm run derive -w @btc/pipeline)`);
+      continue;
+    }
+    const scorecard = parseScorecardExtract(readJson(target));
+    extracted.scorecards[scorecard.sourceId] = scorecard;
+  }
+  const reliefsFile = path.join(DERIVED_DIR, RELIEFS_EXTRACT_FILE);
+  if (existsSync(reliefsFile)) extracted.reliefs = parseReliefExtract(readJson(reliefsFile));
+  else problems.push(`${RELIEFS_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
   const sr25File = path.join(DERIVED_DIR, SR25_EXTRACT_FILE);
   if (existsSync(sr25File)) extracted.sr25 = parseSr25Extract(readJson(sr25File));
   else problems.push(`${SR25_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
@@ -65,7 +81,7 @@ function main(): void {
     process.exit(1);
   }
   process.stdout.write(
-    `data ok: ${ds.vintages.length} vintage(s), ${ds.ruleSets.length} rule set(s), ${ds.levers.length} lever(s), ${ds.presets.presets.length} preset(s), ${ds.sources.sources.length} source(s)\n`,
+    `data ok: ${ds.vintages.length} vintage(s), ${ds.ruleSets.length} rule set(s), ${ds.levers.length} lever(s), ${ds.presets.presets.length} preset(s), ${ds.contexts.length} context file(s), ${ds.sources.sources.length} source(s)\n`,
   );
 }
 

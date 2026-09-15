@@ -2,11 +2,13 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  parseContext,
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
   parsePresets,
   parseRules,
+  parseReliefExtract,
   parseScorecardExtract,
   parseSources,
   parseSr25Extract,
@@ -43,14 +45,23 @@ export function loadDataset(): Required<Dataset> {
     levers,
     presets: parsePresets(readJson('presets/presets.json')),
     households: parseHouseholds(readJson('reference/uk-households.json')),
+    contexts: listJsonFiles(path.join(DATA_DIR, 'context')).map((f) =>
+      parseContext(JSON.parse(readFileSync(f, 'utf8'))),
+    ),
   };
 }
 
 export function loadExtracts(): ExtractedSources {
+  const budget2025 = parseScorecardExtract(readJson('derived/hmt-budget-2025-table-4-1.raw.json'));
+  const autumn2024 = parseScorecardExtract(
+    readJson('derived/hmt-autumn-budget-2024-table-5-1.raw.json'),
+  );
   return {
     hmrc: parseHmrcExtract(readJson('derived/hmrc-trr-2025-06.raw.json')),
-    scorecard: parseScorecardExtract(readJson('derived/hmt-budget-2025-table-4-1.raw.json')),
+    scorecard: budget2025,
+    scorecards: { [budget2025.sourceId]: budget2025, [autumn2024.sourceId]: autumn2024 },
     sr25: parseSr25Extract(readJson('derived/hmt-sr25-del.raw.json')),
+    reliefs: parseReliefExtract(readJson('derived/hmrc-tax-reliefs-2026-01.raw.json')),
   };
 }
 

@@ -5,3 +5,4 @@ export * from './rules.schema.js';
 export * from './lever.schema.js';
 export * from './reference.schema.js';
 export * from './derived.schema.js';
+export * from './context.schema.js';

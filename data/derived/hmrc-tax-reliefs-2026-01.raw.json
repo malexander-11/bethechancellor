@@ -1,0 +1,5522 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "hmrc-tax-reliefs-2026-01",
+  "sheet": "Table_2",
+  "title": "Table 2: Six-year cost estimates (figures given in £ million)",
+  "years": [
+    "2020-21",
+    "2021-22",
+    "2022-23",
+    "2023-24",
+    "2024-25",
+    "2025-26"
+  ],
+  "rows": [
+    {
+      "rowId": "cgt-ns3",
+      "code": "CGT - NS3",
+      "name": "Enterprise Investment Scheme (EIS) - disposal relief",
+      "taxType": "Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 55,
+        "2021-22": 110,
+        "2022-23": 65,
+        "2023-24": 45,
+        "2024-25": 55,
+        "2025-26": 65
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Gains on disposals of EIS shares after a qualifying period are exempt from CGT."
+    },
+    {
+      "rowId": "cgt-ns4",
+      "code": "CGT - NS4",
+      "name": "Seed Enterprise Investment Scheme (SEIS) - disposal relief",
+      "taxType": "Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": 5,
+        "2023-24": null,
+        "2024-25": 5,
+        "2025-26": 5
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": false,
+        "2023-24": true,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2023-24": "Negligible"
+      },
+      "description": "Gains on disposals of SEIS shares after a qualifying period are exempt from CGT."
+    },
+    {
+      "rowId": "cgt-ns5",
+      "code": "CGT - NS5",
+      "name": "Social Investment Tax Relief (SITR) - disposal relief",
+      "taxType": "Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "Gains on disposals of SITR shares after a qualifying period are exempt from CGT."
+    },
+    {
+      "rowId": "cgt-ns6",
+      "code": "CGT - NS6",
+      "name": "Venture Capital Trusts (VCTs) - disposal relief",
+      "taxType": "Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Gains on disposals of VCT shares after a qualifying period are exempt from CGT."
+    },
+    {
+      "rowId": "cgt-ns1",
+      "code": "CGT - NS1",
+      "name": "Private residence relief",
+      "taxType": "Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 29300,
+        "2021-22": 35700,
+        "2022-23": 34200,
+        "2023-24": 28600,
+        "2024-25": 31800,
+        "2025-26": 32900
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Gains on the disposal of a residence is exempt from CGT to the extent it has been used as the person's only or main residence."
+    },
+    {
+      "rowId": "cgt-ns2",
+      "code": "CGT - NS2",
+      "name": "Business Asset Disposal Relief",
+      "taxType": "Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 1100,
+        "2021-22": 1200,
+        "2022-23": 1200,
+        "2023-24": 1000,
+        "2024-25": 3400,
+        "2025-26": 800
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Certain disposals chargeable to CGT by individuals and qualifying trustees of all or part of a business are charged at 10% for gains up to April 2025, 14% for gains between April 2025 and April 2026 and 18% thereafter.Qualifying gains for each individual are subject to a £1 million lifetime limit. The relief is typically available when disposing of all or part of your business. Cost estimates and volumes for BADR also include claims for Investors' Relief as the two reliefs cannot be separated in the data at present. Investors’ Relief claims make up only a very small proportion of the totals presented in the tables."
+    },
+    {
+      "rowId": "nsu-cgt2",
+      "code": "NSU - CGT2",
+      "name": "Investors' Relief",
+      "taxType": "Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2022-23": "Not available",
+        "2023-24": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "Disposals chargeable to CGT of shares held in unlisted companies for a period of at least three years are charged at a rate of 10% subject to a lifetime limit of qualifying gains. The relief is not usually available if you or someone connected with you is an employee of the company. Cost estimates and claim volumes for Investors' Relief are included in the total for BADR (detailed on the row above) as the two reliefs cannot be separated in the data at present.Investors’ Relief claims make up only a very small proportion of the totals presented."
+    },
+    {
+      "rowId": "iht-ns1",
+      "code": "IHT - NS1",
+      "name": "Agricultural property relief",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 360,
+        "2021-22": 550,
+        "2022-23": 660,
+        "2023-24": 660,
+        "2024-25": 700,
+        "2025-26": 725
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from IHT on a transfer of agricultural property."
+    },
+    {
+      "rowId": "iht-ns2",
+      "code": "IHT - NS2",
+      "name": "Business property relief",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 1210,
+        "2021-22": 1050,
+        "2022-23": 1260,
+        "2023-24": 1220,
+        "2024-25": 1340,
+        "2025-26": 1400
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from IHT on the transfer of relevant business property."
+    },
+    {
+      "rowId": "iht-ns3",
+      "code": "IHT - NS3",
+      "name": "Conditional exemption",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 55,
+        "2021-22": 35,
+        "2022-23": 10,
+        "2023-24": 10,
+        "2024-25": 10,
+        "2025-26": 10
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Transfers on death of pre-eminent property are exempt from Inheritance Tax, on condition of reasonable public access."
+    },
+    {
+      "rowId": "iht-ns4",
+      "code": "IHT - NS4",
+      "name": "Armed forces and emergency service personnel - death in service",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Estates of armed forces and emergency services personnel whose deaths occur whilst serving, or as a result of injuries during past service, are exempt from IHT."
+    },
+    {
+      "rowId": "iht-ns5-nsu-iht22-nsu-iht6",
+      "code": "IHT - NS5, NSU - IHT22, NSU - IHT6",
+      "name": "Transfers between Spouses and Civil Partners",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 3250,
+        "2021-22": 4240,
+        "2022-23": 5170,
+        "2023-24": 4500,
+        "2024-25": 4920,
+        "2025-26": 5220
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Transfer of any asset to a spouse/civil partner is exempt from IHT."
+    },
+    {
+      "rowId": "iht-ns6",
+      "code": "IHT - NS6",
+      "name": "Gifts to charities",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 630,
+        "2021-22": 855,
+        "2022-23": 1170,
+        "2023-24": 1070,
+        "2024-25": 1160,
+        "2025-26": 1220
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Gifts to charities and property held on trust for charitable purposes are exempt from IHT."
+    },
+    {
+      "rowId": "iht-ns7",
+      "code": "IHT - NS7",
+      "name": "Gifts to Charities - tax charged at lower rate",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 50,
+        "2021-22": 55,
+        "2022-23": 55,
+        "2023-24": 50,
+        "2024-25": 50,
+        "2025-26": 55
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Rate of IHT is reduced if 10% or more of an estate is left to a qualifying charity."
+    },
+    {
+      "rowId": "iht-ns8",
+      "code": "IHT - NS8",
+      "name": "Quick succession relief",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 20,
+        "2021-22": 15,
+        "2022-23": 25,
+        "2023-24": 25,
+        "2024-25": 25,
+        "2025-26": 30
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "The relief reduces the IHT payable in certain cases where two chargeable transfers occur within 5 years of each other."
+    },
+    {
+      "rowId": "iht-ns9",
+      "code": "IHT - NS9",
+      "name": "Taper Relief",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 75,
+        "2021-22": 70,
+        "2022-23": 70,
+        "2023-24": 70,
+        "2024-25": 75,
+        "2025-26": 80
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "IHT rate subject to a sliding scale reduction of between 80%-20% for chargeable transfers made between 3 and 7 years prior to death."
+    },
+    {
+      "rowId": "iht-ns10",
+      "code": "IHT - NS10",
+      "name": "Gifts to political parties",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Gifts to major political parties are exempt from IHT."
+    },
+    {
+      "rowId": "iht-ns11",
+      "code": "IHT - NS11",
+      "name": "Woodland relief",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Allows deferral of IHT on unsold timber or woodlands until the point at which it is sold."
+    },
+    {
+      "rowId": "iht-s1",
+      "code": "IHT - S1",
+      "name": "Residence Nil Rate Band",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 1650,
+        "2021-22": 2060,
+        "2022-23": 2370,
+        "2023-24": 2190,
+        "2024-25": 2340,
+        "2025-26": 2440
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "An additional threshold when a residence is being passed on to a direct descendant."
+    },
+    {
+      "rowId": "sdlt-ns4",
+      "code": "SDLT - NS4",
+      "name": "First Time Buyers Relief",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 90,
+        "2021-22": 370,
+        "2022-23": 710,
+        "2023-24": 540,
+        "2024-25": 770,
+        "2025-26": 750
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from SDLT for first time buyers (as defined) of purchases of residential property for £500,000 or less (£625,000 or less from 23 September 2022), provided the purchaser intends to occupy the property as their only or main residence. The relief applies to purchases from 22 November 2017."
+    },
+    {
+      "rowId": "sdlt-ns1",
+      "code": "SDLT - NS1",
+      "name": "Collective enfranchisement by leaseholders",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Disclosive"
+      },
+      "description": "Relief from SDLT where leaseholders of flats act together to purchase the freehold, so that the SDLT payable in respect of each flat's share of the freehold is closer to the amount that would apply had each share beenpurchased individually."
+    },
+    {
+      "rowId": "sdlt-ns2",
+      "code": "SDLT - NS2",
+      "name": "Transfers to charities",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 210,
+        "2021-22": 310,
+        "2022-23": 330,
+        "2023-24": 330,
+        "2024-25": 310,
+        "2025-26": 280
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from SDLT on land acquisitions by charities for charitable purposes."
+    },
+    {
+      "rowId": "sdlt-ns3",
+      "code": "SDLT - NS3",
+      "name": "Certain acquisitions by registered social landlords",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 210,
+        "2021-22": 250,
+        "2022-23": 360,
+        "2023-24": 310,
+        "2024-25": 370,
+        "2025-26": 350
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from SDLT on land acquired by registered social landlords."
+    },
+    {
+      "rowId": "sdlt-ns5",
+      "code": "SDLT - NS5",
+      "name": "Acquisition by a house-building company from an individual acquiring a new dwelling from the house-building company",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 75,
+        "2021-22": 20,
+        "2022-23": 25,
+        "2023-24": 25,
+        "2024-25": 40,
+        "2025-26": 50
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from SDLT for purchases by house building companies when buying residential property from an individual who themselves is buying a new dwelling from the house building company."
+    },
+    {
+      "rowId": "ct-ns1",
+      "code": "CT - NS1",
+      "name": "Animation Tax Relief",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 25,
+        "2021-22": 20,
+        "2022-23": 25,
+        "2023-24": 35,
+        "2024-25": 60,
+        "2025-26": 80
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Animation production companies can claim additional corporation tax relief on producing animated TV programmes in the UK. Companies not making a profit may be able to surrender the loss and receive a tax credit."
+    },
+    {
+      "rowId": "ct-ns2",
+      "code": "CT - NS2",
+      "name": "Children's TV Tax Relief",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 20,
+        "2021-22": 30,
+        "2022-23": 25,
+        "2023-24": 55,
+        "2024-25": 65,
+        "2025-26": 70
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Television production companies can claim additional corporation tax relief on producing children's programmes in the UK. Companies not making a profit may be able to surrender the loss and receive a tax credit."
+    },
+    {
+      "rowId": "ct-ns4",
+      "code": "CT - NS4",
+      "name": "High-End TV Tax Relief",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 360,
+        "2021-22": 990,
+        "2022-23": 1100,
+        "2023-24": 1100,
+        "2024-25": 1000,
+        "2025-26": 1100
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Television production companies can claim additional corporation tax relief on producing high-end TV programmes in the UK. Companies not making a profit may be able to surrender a loss in return for a tax credit.For expenditure incurred from 1 January 2024, companies were able to claim a new, ‘above-the-line’ tax credit, the Audio-Visual Expenditure Credit (AVEC). This will run in parallel with the existing HETV relief until HETV sunsets in April 2027, and will replace it from that date. Figures for 2024-25 include claims for AVEC made by TV production companies."
+    },
+    {
+      "rowId": "ct-ns9",
+      "code": "CT - NS9",
+      "name": "Theatre tax relief",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 35,
+        "2021-22": 70,
+        "2022-23": 160,
+        "2023-24": 260,
+        "2024-25": 290,
+        "2025-26": 280
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Theatre companies can claim additional corporation tax relief for UK or EEA expenditure incurred on producing theatrical productions. Companies not making a profit may be able to surrender the loss and receive a tax credit."
+    },
+    {
+      "rowId": "ct-ns11",
+      "code": "CT - NS11",
+      "name": "Video games tax relief",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 215,
+        "2021-22": 280,
+        "2022-23": 290,
+        "2023-24": 325,
+        "2024-25": 350,
+        "2025-26": 350
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Video game development companies can claim additional corporation tax relief for UK or EEA expenditure incurred on producing video games. Companies not making a profit may be able to surrender the loss and receive a tax credit."
+    },
+    {
+      "rowId": "ct-ns12",
+      "code": "CT - NS12",
+      "name": "Museums and Galleries exhibition tax relief (MGETR)",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 10,
+        "2021-22": 15,
+        "2022-23": 20,
+        "2023-24": 30,
+        "2024-25": 30,
+        "2025-26": 30
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Charitable museum companies can claim additional corporation tax relief for UK or European Economic Area (EEA) expenditure incurred on producing exhibitions. Companies not making a profit may be able to surrender the loss and receive a payable tax credit."
+    },
+    {
+      "rowId": "ct-ns13",
+      "code": "CT - NS13",
+      "name": "Orchestra tax relief",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 15,
+        "2022-23": 35,
+        "2023-24": 50,
+        "2024-25": 55,
+        "2025-26": 55
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Orchestra companies can claim additional corporation tax relief for UK or EEA expenditure incurred on producing orchestral concerts. Companies not making a profit may be able to surrender the loss and receive a tax credit."
+    },
+    {
+      "rowId": "ct-ns3",
+      "code": "CT - NS3",
+      "name": "Film tax relief",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 420,
+        "2021-22": 520,
+        "2022-23": 555,
+        "2023-24": 535,
+        "2024-25": 570,
+        "2025-26": 635
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Film production companies can claim additional corporation tax relief for film production expenditure in the UK. Companies not making a profit may be able to surrender a loss in return for a tax credit.For expenditure incurred from 1 January 2024, companies are able to claim a new, ‘above-the-line’ tax credit, the Audio-Visual Expenditure Credit (AVEC). This will run in parallel with the existing Film Tax Relief until Film Tax Relief sunsets in April 2027, and will replace it from that date. Figures for 2024-25 include claims made for AVEC by film production companies."
+    },
+    {
+      "rowId": "ct-ns5",
+      "code": "CT - NS5",
+      "name": "Land remediation relief",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 50,
+        "2021-22": 55,
+        "2022-23": 70,
+        "2023-24": 55,
+        "2024-25": 65,
+        "2025-26": 65
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Corporation tax relief for land remediation expenditure incurred for the purposes of remedying contaminated or derelict land. The relief is an enhanced deduction from income of 150% of the qualifying land remediation expenditure. A company making a loss may surrender the loss to HMRC in return for a payable tax credit of 16% of the loss."
+    },
+    {
+      "rowId": "ct-ns7",
+      "code": "CT - NS7",
+      "name": "Research and development tax relief: R&D Expenditure Credit",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 2700,
+        "2021-22": 3000,
+        "2022-23": 3200,
+        "2023-24": 4400,
+        "2024-25": 5300,
+        "2025-26": 5400
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Until 2024, this relief is mainly for larger companies, allowing companies to claim a taxable credit on their qualifying R&D expenditure. For accounting periods beginning on or after 1 April 2024, the RDEC scheme will become the merged RDEC scheme and will apply to all companies claiming R&D relief who do not satisfy the R&D intensity condition."
+    },
+    {
+      "rowId": "ct-ns8",
+      "code": "CT - NS8",
+      "name": "Research and development tax relief: small and medium companies scheme",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 4200,
+        "2021-22": 4600,
+        "2022-23": 4400,
+        "2023-24": 3100,
+        "2024-25": 3400,
+        "2025-26": 3200
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "The SME scheme provides small and medium-sized companies with relief on R&D expenditure. Companies can claim an enhancement of 86% on their qualifying R&D expenditure against taxable profits. Loss-makers can surrender all or part of their losses attributable to R&D for a payable credit at a rate of 10% of the surrendered losses. Certain companies qualifying as R&D intensive (that is, their R&D expenditure is 40% or more of total expenditure) can surrender their losses for a 14.5% credit. These rates apply to expenditure incurred from 1 April 2023. Prior to this, the enhancement was 130% and the credit rate on surrenderable loss was 14.5% for all companies.For accounting periods starting on or after 1 April 2024, the relief for lossmaking, R&D intensive SMEs is referred to as ERIS and the intensity threshold is reduced to 30%. SMEs that do not pass the intensity condition or are profit-making will instead claim the merged RDEC scheme, which provides an ‘above the line’ credit of 20% on qualifying expenditure."
+    },
+    {
+      "rowId": "ct-ns6",
+      "code": "CT - NS6",
+      "name": "Patent box",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 1200,
+        "2021-22": 1300,
+        "2022-23": 1400,
+        "2023-24": 2000,
+        "2024-25": 2300,
+        "2025-26": 2300
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "A reduced corporation tax rate for profits from patents."
+    },
+    {
+      "rowId": "ct-ns10",
+      "code": "CT - NS10",
+      "name": "Tonnage tax",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 90,
+        "2021-22": 105,
+        "2022-23": 100,
+        "2023-24": 130,
+        "2024-25": 140,
+        "2025-26": 145
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "The tonnage tax regime was introduced in the UK in 2000 as a low tax regime to support the shipping industry. Profits chargeable to corporation tax are calculated by applying a standard daily profit rate to the net tonnage of each ship in a shipping company's fleet."
+    },
+    {
+      "rowId": "it-ct-ns3",
+      "code": "IT_CT - NS3",
+      "name": "Capital allowances: ring-fence oil business trades, first-year capital allowances for plant or machinery",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 1200,
+        "2021-22": 1200,
+        "2022-23": 1900,
+        "2023-24": 1700,
+        "2024-25": 1900,
+        "2025-26": 1700
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Full expensing (100% capital allowance rate) for qualifying investment by a company on plant or machinery for use wholly in a ring-fence trade."
+    },
+    {
+      "rowId": "ct-s4-nsu-ct1-nsu-ct2-nsu-ct10",
+      "code": "CT - S4, NSU - CT1, NSU - CT2, NSU - CT10",
+      "name": "Allowances against Supplementary Charge",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 95,
+        "2021-22": 290,
+        "2022-23": 630,
+        "2023-24": 310,
+        "2024-25": 230,
+        "2025-26": 210
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Allowance against supplementary charge for capital expenditure for onshore and offshore oil-related activities."
+    },
+    {
+      "rowId": "nsu-ct6",
+      "code": "NSU - CT6",
+      "name": "Friendly societies",
+      "taxType": "Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Exemption from corporation tax for certain life assurance and other long-term business written by friendly societies."
+    },
+    {
+      "rowId": "it-ct-ns2",
+      "code": "IT_CT - NS2",
+      "name": "Community Investment Tax Relief (CITR)",
+      "taxType": "Income Tax and Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": null,
+        "2021-22": 5,
+        "2022-23": 5,
+        "2023-24": 5,
+        "2024-25": 5,
+        "2025-26": 5
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Negligible"
+      },
+      "description": "CITR provides relief against income / corporation tax for individuals / companies on investments (loans, securities or share capital) made in Community Development Finance Institutions (CDFIs). These accredited intermediary organisations then invest in enterprises in or serving disadvantaged communities. The tax relief is worth up to 25% of the value of the investment in the CDFI and is spread over five years, starting with the year in which the investment is made."
+    },
+    {
+      "rowId": "it-ct-ns1",
+      "code": "IT_CT - NS1",
+      "name": "Capital allowances - annual investment allowance",
+      "taxType": "Income Tax and Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 4100,
+        "2021-22": 3300,
+        "2022-23": 2500,
+        "2023-24": 4500,
+        "2024-25": 5000,
+        "2025-26": 5000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Annual Investment Allowance provides 100% income tax/corporation tax relief on qualifying capital expenditure up to a limit of £1 million. This limit has been permanently set to £1 million per annum as of Autumn Budget 2022."
+    },
+    {
+      "rowId": "it-ns22",
+      "code": "IT - NS22",
+      "name": "Rent-a-room relief",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 180,
+        "2021-22": 180,
+        "2022-23": 130,
+        "2023-24": 170,
+        "2024-25": 160,
+        "2025-26": 160
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Rent-a-room relief is available to individuals who let furnished rooms in their only or main home. No tax is payable if the gross rents do not exceed £7,500 a year."
+    },
+    {
+      "rowId": "it-ns15",
+      "code": "IT - NS15",
+      "name": "Marriage Allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 560,
+        "2021-22": 560,
+        "2022-23": 580,
+        "2023-24": 580,
+        "2024-25": 580,
+        "2025-26": 590
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Gives a tax reduction to a person whose spouse or civil partner has elected for a reduced Personal Allowance."
+    },
+    {
+      "rowId": "it-ns3",
+      "code": "IT - NS3",
+      "name": "Blind person's allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 15,
+        "2021-22": 20,
+        "2022-23": 15,
+        "2023-24": 20,
+        "2024-25": 25,
+        "2025-26": 25
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "For income tax purposes, people certified blind and on a local authority register of blind persons (where different rules apply for England and Wales, Scotland and Northern Ireland) can claim an additional personal allowance."
+    },
+    {
+      "rowId": "it-ns9",
+      "code": "IT - NS9",
+      "name": "Exemption for the first £30,000 of a termination award that would otherwise be chargeable as specific employment income",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 1400,
+        "2021-22": 1100,
+        "2022-23": 700,
+        "2023-24": 700,
+        "2024-25": 700,
+        "2025-26": 800
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Where payments and benefits on termination of employment are below £30,000, they will not be taxed as employment income. The £30,000 threshold does not apply to any element of the payment that is post-employment notice pay (which is chargeable to income tax)."
+    },
+    {
+      "rowId": "it-ns17",
+      "code": "IT - NS17",
+      "name": "Pensions and annuities paid to holders of the Victoria Cross and certain other gallantry awards",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "This exempts from income tax pensions paid in connection with specified awards for bravery such as the Victoria Cross (for which an annual pension of £1,495 is payable)."
+    },
+    {
+      "rowId": "it-ns18",
+      "code": "IT - NS18",
+      "name": "Personal Savings Allowance (PSA)",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 270,
+        "2021-22": 200,
+        "2022-23": 440,
+        "2023-24": 690,
+        "2024-25": 770,
+        "2025-26": 800
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "0% tax rate on taxable savings income. Most taxpayers get PSA of £1000, Higher Rate taxpayers get £500 PSA and PSA is not available to additional rate taxpayers."
+    },
+    {
+      "rowId": "it-ns29-nsu-it-ct26",
+      "code": "IT - NS29, NSU - IT_CT26",
+      "name": "War disablement benefits",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 85,
+        "2021-22": 20,
+        "2022-23": 20,
+        "2023-24": 50,
+        "2024-25": 50,
+        "2025-26": 50
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "No income tax liability arises in respect of pensions paid to members of the Armed Forces where the pension is paid as a consequence of wounds or disability attributable to service for the Armed Forces of the Crown."
+    },
+    {
+      "rowId": "it-ns30",
+      "code": "IT - NS30",
+      "name": "War Widows Pension",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 95,
+        "2021-22": 85,
+        "2022-23": 85,
+        "2023-24": 95,
+        "2024-25": 95,
+        "2025-26": 95
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "No income tax liability arises in relation to a pension paid by the Ministry of Defence in respect of death due to military or war service for the Armed Forces or Merchant Navy."
+    },
+    {
+      "rowId": "it-ns24",
+      "code": "IT - NS24",
+      "name": "Seafarers' earnings deduction",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 240,
+        "2021-22": 270,
+        "2022-23": 320,
+        "2023-24": 370,
+        "2024-25": 393,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2025-26": "Not available"
+      },
+      "description": "100% deduction for earnings from employment as a seafarer."
+    },
+    {
+      "rowId": "it-ns10",
+      "code": "IT - NS10",
+      "name": "Foreign service allowance paid to Crown servants abroad",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 90,
+        "2021-22": 100,
+        "2022-23": 110,
+        "2023-24": 120,
+        "2024-25": 110,
+        "2025-26": 120
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Allowances paid to Crown employees in respect of their foreign service are exempt from income tax."
+    },
+    {
+      "rowId": "it-ns16",
+      "code": "IT - NS16",
+      "name": "Operational Allowance for members of Armed Forces - Income Tax Relief",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 10,
+        "2021-22": 10,
+        "2022-23": 5,
+        "2023-24": 5,
+        "2024-25": 5,
+        "2025-26": 5
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "An exemption in respect of payments to members of the armed forces in relation to the Operational Allowance."
+    },
+    {
+      "rowId": "it-ns25",
+      "code": "IT - NS25",
+      "name": "Seed Enterprise Investment Scheme (SEIS) - Income Tax relief",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 85,
+        "2021-22": 100,
+        "2022-23": 75,
+        "2023-24": 120,
+        "2024-25": 130,
+        "2025-26": 120
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Tax relief against the income tax liability for individuals of 50% of the amounts subscribed for shares in new qualifying trading companies. The maximum amount subscribed in a tax year on which relief can be claimed is £100,000."
+    },
+    {
+      "rowId": "it-ns27",
+      "code": "IT - NS27",
+      "name": "Social Investment Tax Relief (SITR) - income tax relief",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "Tax relief against the income tax liability for individuals of 30% of the amounts invested in newly issued holdings in qualifying social enterprises. The maximum amount invested in social enterprises on which relief can be claimed is £1 million."
+    },
+    {
+      "rowId": "it-ns28",
+      "code": "IT - NS28",
+      "name": "Venture Capital Trusts (VCTs) - Income Tax Relief",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 200,
+        "2021-22": 330,
+        "2022-23": 320,
+        "2023-24": 260,
+        "2024-25": 280,
+        "2025-26": 290
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Tax relief against the income tax liability for individuals of 30% of the amounts subscribed for shares in VCTs, up to £200,000 in a tax year."
+    },
+    {
+      "rowId": "it-ns5",
+      "code": "IT - NS5",
+      "name": "Venture Capital Trusts (VCTs) - exemption from income tax on dividends received from VCTs",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 75,
+        "2021-22": 90,
+        "2022-23": 130,
+        "2023-24": 110,
+        "2024-25": 130,
+        "2025-26": 140
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "For individuals aged 18 or over, dividends received from VCTs on shares acquired within the permitted maximum of £200,000 per year (whether by subscription for new shares or otherwise) are exempt from income tax."
+    },
+    {
+      "rowId": "it-ns7",
+      "code": "IT - NS7",
+      "name": "Enterprise Investment Scheme (EIS) - Income Tax Relief",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 460,
+        "2021-22": 640,
+        "2022-23": 550,
+        "2023-24": 440,
+        "2024-25": 480,
+        "2025-26": 470
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Tax relief against the income tax liability for individuals of 30% of the amounts subscribed for shares in early stage qualifying trading companies. The maximum amount subscribed in a tax year on which relief can be claimed is £2 million, but any amount over £1 million must be for shares issued by one or more knowledge-intensive companies."
+    },
+    {
+      "rowId": "it-ns11-nsu-it49",
+      "code": "IT - NS11, NSU - IT49",
+      "name": "Charitable donations",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 2080,
+        "2021-22": 2140,
+        "2022-23": 2430,
+        "2023-24": 2470,
+        "2024-25": 2670,
+        "2025-26": 2860
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exempts charitable donations from Income Tax (Gift Aid, Higher Rate Relief, Payroll Giving, Gifts of Shares and Property.)"
+    },
+    {
+      "rowId": "it-ns13",
+      "code": "IT - NS13",
+      "name": "Income from savings certificates",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 20,
+        "2021-22": 75,
+        "2022-23": 170,
+        "2023-24": 125,
+        "2024-25": 26,
+        "2025-26": 32
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Interest on authorised savings certificates (issued under National Loans Act 1968, National Debt Act 1958 and FA1920) is exempt from income tax."
+    },
+    {
+      "rowId": "it-ns21",
+      "code": "IT - NS21",
+      "name": "Registered pension schemes",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 25000,
+        "2021-22": 24700,
+        "2022-23": 25800,
+        "2023-24": 28200,
+        "2024-25": 32300,
+        "2025-26": 33500
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Covers net relief including relief on contributions, relief on investment returns, and tax paid in retirement (net of 25% lump sum)."
+    },
+    {
+      "rowId": "it-ns21-2",
+      "code": "IT - NS21",
+      "name": "Pension schemes - member contributions",
+      "taxType": "Income Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2022-23": "Not available",
+        "2023-24": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "A scheme member can contribute up to 100% of earned income into a pension scheme. Where the member has no income, they can make contributions of up to £3,600."
+    },
+    {
+      "rowId": "it-ns6",
+      "code": "IT - NS6",
+      "name": "Employer Supported Childcare including workplace nurseries IT",
+      "taxType": "Income Tax and NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 460,
+        "2021-22": 360,
+        "2022-23": 290,
+        "2023-24": 250,
+        "2024-25": 200,
+        "2025-26": 180
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from income tax for an employee in respect of employer provided care (unlimited), childcare vouchers (currently, up to £55 per week) and directly-contracted childcare (currently, up to £55 per week)."
+    },
+    {
+      "rowId": "it-ns1",
+      "code": "IT - NS1",
+      "name": "Approved Company Share Option Plans (CSOP)",
+      "taxType": "Income Tax and NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": 50,
+        "2022-23": 30,
+        "2023-24": 30,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "A CSOP is a discretionary share option scheme. There is no income tax/NIC on grant or on exercise (as long as the exercise is between 3 and 10 years after the grant)."
+    },
+    {
+      "rowId": "it-ns8",
+      "code": "IT - NS8",
+      "name": "Enterprise Management Incentives (EMI)",
+      "taxType": "Income Tax and NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": 680,
+        "2022-23": 510,
+        "2023-24": 400,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "If an employee holds options to qualifying EMI shares (maximum £250k) there is no income tax/NICs on grant or on exercise (as long as option not issued at a discount)."
+    },
+    {
+      "rowId": "it-ns23",
+      "code": "IT - NS23",
+      "name": "Save As You Earn",
+      "taxType": "Income Tax and NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": 250,
+        "2022-23": 160,
+        "2023-24": 490,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "All employee share option scheme where employees can save up to £500 per month for 3 or 5 years out of net pay. At the end of the period they can take savings in cash plus bonus or use funds to exercise options over shares in the company at a discount of up to 20%. There is no income tax/NICs on grant, and gain on exercise is free of income tax/NICs."
+    },
+    {
+      "rowId": "it-ns26",
+      "code": "IT - NS26",
+      "name": "Share Incentive Plan (SIP)",
+      "taxType": "Income Tax and NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": 420,
+        "2022-23": 400,
+        "2023-24": 370,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "A SIP is an all employee share scheme where: companies can give employees up to £3,600 free shares per annum; you can buy up to £1,800 or 10% of your income for the tax year worth of partnership shares; your employer can give you up to 2 free matching shares for each partnership share you buy; and the individual can buy more shares from the dividends they get from the other types of share if their employer's scheme allows it. There is no income tax/NIC when shares are awarded or if the shares are withdrawn after 5 years."
+    },
+    {
+      "rowId": "it-ns12",
+      "code": "IT - NS12",
+      "name": "Individual Savings Accounts",
+      "taxType": "Income Tax and Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 4100,
+        "2021-22": 4300,
+        "2022-23": 4950,
+        "2023-24": 6650,
+        "2024-25": 9750,
+        "2025-26": 9650
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Individuals do not pay tax on any income (i.e. dividends, interest and bonuses) they receive from their ISA savings and investments. Individuals do not pay tax on capital gains arising on their disposals of ISA investments. In 2017 the Lifetime ISA was introduced, which had a government bonus as well as the tax relief."
+    },
+    {
+      "rowId": "it-ns14",
+      "code": "IT - NS14",
+      "name": "[of which are Junior Individual Savings Accounts]",
+      "taxType": "Not available",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Not available"
+    },
+    {
+      "rowId": "it-ns2",
+      "code": "IT - NS2",
+      "name": "Bereavement payments (formerly widows' payments)",
+      "taxType": "Income Tax and NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Exempts Bereavement Support Payments from income tax."
+    },
+    {
+      "rowId": "it-ns20",
+      "code": "IT - NS20",
+      "name": "Professional subscriptions",
+      "taxType": "Income Tax and NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 150,
+        "2021-22": 160,
+        "2022-23": 170,
+        "2023-24": 190,
+        "2024-25": 200,
+        "2025-26": 210
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "For income tax purposes, a deduction can be claimed from the earnings of an employment for specified professional membership fees and annual subscriptions."
+    },
+    {
+      "rowId": "it-ns4",
+      "code": "IT - NS4",
+      "name": "Child Trust Fund account savings",
+      "taxType": "Income Tax and Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Individuals do not pay tax on the income and capital gains arising on their Child Trust Fund investments."
+    },
+    {
+      "rowId": "it-ns19",
+      "code": "IT - NS19",
+      "name": "Premium Bond prizes",
+      "taxType": "Income Tax and Capital Gains Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 10,
+        "2021-22": 25,
+        "2022-23": 120,
+        "2023-24": 275,
+        "2024-25": 268,
+        "2025-26": 213
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Premium bond prizes are free from income tax and capital gains tax."
+    },
+    {
+      "rowId": "nsu-it-ct27",
+      "code": "NSU - IT_CT27",
+      "name": "Cycle to work",
+      "taxType": "Income Tax and NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 110,
+        "2021-22": 90,
+        "2022-23": 110,
+        "2023-24": 110,
+        "2024-25": 120,
+        "2025-26": 130
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "An income tax exemption for the employer provision of cycles or cyclists' safety equipment to employees, provided the equipment is generally available to all employees, and that the equipment is used for qualifying journeys."
+    },
+    {
+      "rowId": "capital-allowances-structures-and-buildings-allowance",
+      "code": "Not available",
+      "name": "Capital allowances: structures and buildings allowance",
+      "taxType": "Income Tax and Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 10,
+        "2021-22": 35,
+        "2022-23": 65,
+        "2023-24": 130,
+        "2024-25": 220,
+        "2025-26": 310
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "A capital allowance providing relief for qualifying construction costs of new commercial buildings or structures, and renovation or conversion costs of existing ones for non-residential use."
+    },
+    {
+      "rowId": "relief-for-freeport-tax-sites",
+      "code": "Not available",
+      "name": "Relief for Freeport tax sites",
+      "taxType": "NICs, Income Tax, Stamp Duty Land Tax and Corporation Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": 10,
+        "2023-24": 20,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "The following reliefs are available in English Freeport tax sites: 1. A zero rate of Class 1 secondary NICs for eligible employees up to the freeports upper secondary threshold; 2. A 100% first-year allowance for expenditure by companies on certain new plant or machinery for use within Freeport tax sites. 3. An enhanced structures and buildings capital allowance providing relief for investment in qualifying construction costs of non-residential buildings or structures, and renovation or conversion costs of existing ones. 4. Relief from SDLT for purchases of non-residential land and property."
+    },
+    {
+      "rowId": "nic-ns1",
+      "code": "NIC - NS1",
+      "name": "Relief on employer National Insurance contributions for apprentices under 25",
+      "taxType": "NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 190,
+        "2021-22": 230,
+        "2022-23": 290,
+        "2023-24": 320,
+        "2024-25": 370,
+        "2025-26": 570
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "A zero rate of Class 1 secondary NICs for apprentices under 25 up to the apprentice upper secondary threshold"
+    },
+    {
+      "rowId": "nic-ns2",
+      "code": "NIC - NS2",
+      "name": "Relief on employer National Insurance contributions for employees under 21",
+      "taxType": "NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 560,
+        "2021-22": 670,
+        "2022-23": 850,
+        "2023-24": 960,
+        "2024-25": 1100,
+        "2025-26": 1900
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "A zero rate of Class 1 secondary NICs for employees under 21 up to the upper secondary threshold"
+    },
+    {
+      "rowId": "nic-ns6",
+      "code": "NIC - NS6",
+      "name": "Employment Allowance",
+      "taxType": "NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 2400,
+        "2021-22": 2600,
+        "2022-23": 3100,
+        "2023-24": 3100,
+        "2024-25": 3300,
+        "2025-26": 7400
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Allows eligible employers to reduce their annual National Insurance by up to £4,000 from April 2020, up to £5,000 from April 2022, and up to £10,500 from April 2025"
+    },
+    {
+      "rowId": "nic-ns4",
+      "code": "NIC - NS4",
+      "name": "Contributions to, and benefits from, registered pension schemes",
+      "taxType": "NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 23200,
+        "2021-22": 22600,
+        "2022-23": 24300,
+        "2023-24": 24000,
+        "2024-25": 23100,
+        "2025-26": 25600
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Payments by way of an employer’s contribution towards a registered pension scheme or by way of any benefit pursuant to a registered pension scheme are disregarded in the calculation of earnings for the purposes of earnings-related contributions."
+    },
+    {
+      "rowId": "relief-on-employer-national-insurance-contributions-for-veterans",
+      "code": "Not available",
+      "name": "Relief on employer National Insurance contributions for veterans",
+      "taxType": "NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": 5,
+        "2024-25": 5,
+        "2025-26": 5
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": true,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2022-23": "Negligible"
+      },
+      "description": "A zero rate of Class 1 secondary NICs for qualifying veterans up to the veterans upper secondary threshold"
+    },
+    {
+      "rowId": "relief-on-employer-national-insurance-contributions-for-investment-zone-employees",
+      "code": "Not available",
+      "name": "Relief on employer National Insurance contributions for investment zone employees",
+      "taxType": "NICs",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2022-23": "Not available",
+        "2023-24": "Not available",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "A zero rate of Class 1 secondary NICs for eligible investment zone employees up to the investment zones secondary threshold"
+    },
+    {
+      "rowId": "al-ns1",
+      "code": "AL - NS1",
+      "name": "Exemption for china clay waste and ball clay waste",
+      "taxType": "Aggregates Levy",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": 5,
+        "2022-23": 5,
+        "2023-24": null,
+        "2024-25": 5,
+        "2025-26": 5
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": true,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2023-24": "Negligible"
+      },
+      "description": "Aggregate arising as a by-product of china clay or ball clay extraction and separation is exempt from Aggregates Levy."
+    },
+    {
+      "rowId": "al-ns2",
+      "code": "AL - NS2",
+      "name": "Exemption for material arising from utility works",
+      "taxType": "Aggregates Levy",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 5,
+        "2022-23": 5,
+        "2023-24": 5,
+        "2024-25": 5,
+        "2025-26": 5
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Aggregate which arises in the course of utility works under specified Acts/Orders is exempt from Aggregates Levy."
+    },
+    {
+      "rowId": "apd-ns1",
+      "code": "APD - NS1",
+      "name": "Exemption for children aged between two and sixteen in standard class travel",
+      "taxType": "Air Passenger Duty",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 25,
+        "2022-23": 55,
+        "2023-24": 60,
+        "2024-25": 70,
+        "2025-26": 75
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Children under 16 in travelling in the lowest class of travel are exempt from APD."
+    },
+    {
+      "rowId": "nsu-apd1",
+      "code": "NSU - APD1",
+      "name": "Passengers carried on flights departing from airports in the Scottish Highlands and Islands",
+      "taxType": "Air Passenger Duty",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": 5,
+        "2022-23": 10,
+        "2023-24": 5,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "APD is not payable on flights departing from airports in the Scottish Highlands and Islands (SH&I)."
+    },
+    {
+      "rowId": "ccl-ns1",
+      "code": "CCL - NS1",
+      "name": "Exemption for supplies to good quality CHP stations",
+      "taxType": "Climate Change Levy",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 255,
+        "2021-22": 280,
+        "2022-23": 335,
+        "2023-24": 350,
+        "2024-25": 380,
+        "2025-26": 355
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption for the proportion of the fuel input in a combined heat and power quality assurance (CHPQA) scheme that is used in production of good quality combined heat and power."
+    },
+    {
+      "rowId": "ccl-ns3",
+      "code": "CCL - NS3",
+      "name": "Exemption of energy used in some forms of transport",
+      "taxType": "Climate Change Levy",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 35,
+        "2021-22": 35,
+        "2022-23": 30,
+        "2023-24": 35,
+        "2024-25": 40,
+        "2025-26": 50
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption for commodities used in some forms of transport, including electrified rail transport and illuminating a ship during journeys outside territorial waters."
+    },
+    {
+      "rowId": "ccl-ns4",
+      "code": "CCL - NS4",
+      "name": "Exemptions for supplies used in metallurgical and mineralogical processes",
+      "taxType": "Climate Change Levy",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 180,
+        "2021-22": 215,
+        "2022-23": 215,
+        "2023-24": 230,
+        "2024-25": 265,
+        "2025-26": 270
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption for commodities used in mineralogical and metallurgical processes."
+    },
+    {
+      "rowId": "ccl-ns5",
+      "code": "CCL - NS5",
+      "name": "Reduced rate for participants in Climate Change agreements",
+      "taxType": "Climate Change Levy",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 200,
+        "2021-22": 255,
+        "2022-23": 235,
+        "2023-24": 240,
+        "2024-25": 265,
+        "2025-26": 275
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Reduced rates for energy intensive users. Covers energy intensive industries that have entered into a negotiated climate change agreement (CCA) with the Environment Agency."
+    },
+    {
+      "rowId": "cpf-ns1",
+      "code": "CPF - NS1",
+      "name": "Exclusion from CPS rates for supplies to good quality CHP stations",
+      "taxType": "Carbon Price Floor",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 60,
+        "2021-22": 55,
+        "2022-23": 55,
+        "2023-24": 50,
+        "2024-25": 45,
+        "2025-26": 45
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exclusion from CPS rates of CCL and fuel duty for the proportion of taxable commodities used in a combined heat and power quality insurance scheme to generate electricity that is self-supplied or supplied direct to the user."
+    },
+    {
+      "rowId": "cpf-ns2",
+      "code": "CPF - NS2",
+      "name": "Exclusion for coal slurry for use in electricity generation",
+      "taxType": "Carbon Price Floor",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Exclusion from carbon price support (CPS) rates of climate change levy (CCL) of coal fines from settlement ponds."
+    },
+    {
+      "rowId": "et-ns1",
+      "code": "ET - NS1",
+      "name": "Small Brewers Relief",
+      "taxType": "Excise Duty",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": 35,
+        "2021-22": 75,
+        "2022-23": 70,
+        "2023-24": 25,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "Small Brewers Relief is available to beer producers that are eligible for reduced rates of duty i.e. if they produce no more than 5,000 hectolitres they pay 50% of the normal duty rate and between 5,000 and 60,000 hectolitres there are tapered reduced rates."
+    },
+    {
+      "rowId": "small-producer-relief",
+      "code": "Not available",
+      "name": "Small Producer Relief",
+      "taxType": "Excise Duty",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": 50,
+        "2024-25": 85,
+        "2025-26": 110
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2022-23": "Not available"
+      },
+      "description": "Small Producer Relief replaces and extends Small Brewers Relief, providing reduced rates of duty to all alcoholic product types under 8.5% ABV, for small producers that produce 4500 hectolitres of alcohol or less per year."
+    },
+    {
+      "rowId": "draught-relief",
+      "code": "Not available",
+      "name": "Draught Relief",
+      "taxType": "Excise Duty",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": 100,
+        "2024-25": 165,
+        "2025-26": 240
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2022-23": "Not available"
+      },
+      "description": "Draught Relief is available to eligible products that are generally sold in on-trade venues such as pubs i.e. alcoholic products under 8.5% ABV, in containers that hold at least 20 litres and are designed to connect to a draught dispense system."
+    },
+    {
+      "rowId": "hod-ns1",
+      "code": "HOD - NS1",
+      "name": "Duty rate for marked gas oil and kerosene used as fuel in an engine, other than in a road vehicle or for heating",
+      "taxType": "Hydrocarbon Oil Duties",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 2200,
+        "2021-22": 2400,
+        "2022-23": 890,
+        "2023-24": 850,
+        "2024-25": 930,
+        "2025-26": 1000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Use of gas oil as motor fuel other than in road vehicles is included in the scope of the partial rebate that also applies to heating use. A partial rebate applies to kerosene used as motor fuel other than in a road vehicle. This includes use in off-road vehicles, rail, inland waterways, transport refrigeration units, generating sets etc."
+    },
+    {
+      "rowId": "lft-ns1",
+      "code": "LFT - NS1",
+      "name": "Exemption for dredging material",
+      "taxType": "Landfill Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Material removed from inland waterways and harbours by dredging and disposed of at an authorised landfill site is exempt from landfill tax."
+    },
+    {
+      "rowId": "lft-ns2",
+      "code": "LFT - NS2",
+      "name": "Landfill Communities Fund",
+      "taxType": "Landfill Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 30,
+        "2021-22": 35,
+        "2022-23": 30,
+        "2023-24": 25,
+        "2024-25": 25,
+        "2025-26": 25
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Landfill site owners can claim a credit against their landfill tax liability for contributions made to approved environmental bodies, up to a specified limit."
+    },
+    {
+      "rowId": "prt-ns1",
+      "code": "PRT - NS1",
+      "name": "Relief for research expenditure",
+      "taxType": "Petroleum Revenue Tax",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2022-23": "Not available",
+        "2023-24": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "Research expenditure is an allowable relief."
+    },
+    {
+      "rowId": "temporary-reduced-rate-of-vat-for-hospitality-holiday-accommodation-and-attractions",
+      "code": "Not available",
+      "name": "Temporary reduced rate of VAT for hospitality, holiday accommodation and attractions.",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": 3100,
+        "2021-22": 5500,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2022-23": "Not available",
+        "2023-24": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "A temporary reduced rate of VAT (5%) for certain supplies of hospitality, hotel and holiday accommodation, and admission to certain attractions."
+    },
+    {
+      "rowId": "vat-ns1",
+      "code": "VAT - NS1",
+      "name": "Zero rate for printed matter and e-publications",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 1600,
+        "2021-22": 1700,
+        "2022-23": 1700,
+        "2023-24": 1700,
+        "2024-25": 1700,
+        "2025-26": 1700
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating applies to supplies of books, newspapers, magazines etc. in printed form and when supplied electronically."
+    },
+    {
+      "rowId": "vat-ns2",
+      "code": "VAT - NS2",
+      "name": "The VAT Zero rate for children's clothing and protective footwear and helmets",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 1500,
+        "2021-22": 1800,
+        "2022-23": 2100,
+        "2023-24": 2200,
+        "2024-25": 2200,
+        "2025-26": 2300
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating of children's clothing and footwear and protective boots and helmets (including motorcycle and bicycle helmets)."
+    },
+    {
+      "rowId": "vat-ns3",
+      "code": "VAT - NS3",
+      "name": "Construction and sale of new dwellings (includes refunds to DIY builders)",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 14500,
+        "2021-22": 15900,
+        "2022-23": 16600,
+        "2023-24": 14500,
+        "2024-25": 14400,
+        "2025-26": 14600
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating of construction and sale of new relevant residential and relevant charitable buildings."
+    },
+    {
+      "rowId": "vat-ns4",
+      "code": "VAT - NS4",
+      "name": "Domestic fuel and power",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 4900,
+        "2021-22": 5400,
+        "2022-23": 8800,
+        "2023-24": 7600,
+        "2024-25": 6800,
+        "2025-26": 7000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Reduced rate of VAT on supplies of domestic fuel and power."
+    },
+    {
+      "rowId": "vat-ns5",
+      "code": "VAT - NS5",
+      "name": "Domestic passenger transport",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 2100,
+        "2021-22": 3500,
+        "2022-23": 5700,
+        "2023-24": 5200,
+        "2024-25": 5600,
+        "2025-26": 5800
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating applies to the transport of passengers where the mode of transport takes more than 10 passengers, by Post Bus or on the UK portion of scheduled flights."
+    },
+    {
+      "rowId": "vat-ns6",
+      "code": "VAT - NS6",
+      "name": "Drugs and supplies on prescription",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 3300,
+        "2021-22": 3300,
+        "2022-23": 3500,
+        "2023-24": 3600,
+        "2024-25": 3800,
+        "2025-26": 4000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating applies to drugs dispensed by a pharmacist for personal use."
+    },
+    {
+      "rowId": "vat-ns7",
+      "code": "VAT - NS7",
+      "name": "Food",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 20600,
+        "2021-22": 21000,
+        "2022-23": 23800,
+        "2023-24": 26100,
+        "2024-25": 26300,
+        "2025-26": 27400
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating of most food (including cold food for takeaway)."
+    },
+    {
+      "rowId": "vat-ns8",
+      "code": "VAT - NS8",
+      "name": "International passenger transport (UK portion)",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 40,
+        "2021-22": 90,
+        "2022-23": 120,
+        "2023-24": 250,
+        "2024-25": 280,
+        "2025-26": 300
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating applies to the UK portion of the international transport of passengers on scheduled services."
+    },
+    {
+      "rowId": "vat-ns9",
+      "code": "VAT - NS9",
+      "name": "The Reduced rate of VAT for Children’s car seats.",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 15,
+        "2021-22": 15,
+        "2022-23": 15,
+        "2023-24": 20,
+        "2024-25": 20,
+        "2025-26": 15
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Reduced rate of VAT on supplies of children's car seats."
+    },
+    {
+      "rowId": "vat-ns10",
+      "code": "VAT - NS10",
+      "name": "Reduced rate for contraceptive products",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 10,
+        "2021-22": 10,
+        "2022-23": 10,
+        "2023-24": 15,
+        "2024-25": 15,
+        "2025-26": 15
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Reduced rate of VAT on contraceptive products."
+    },
+    {
+      "rowId": "vat-ns11",
+      "code": "VAT - NS11",
+      "name": "Reduced rate of VAT on energy saving materials",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 200,
+        "2021-22": 300,
+        "2022-23": 570,
+        "2023-24": 680,
+        "2024-25": 720,
+        "2025-26": 800
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Reduced rate of VAT on supplies of installing energy saving materials in residential accommodation."
+    },
+    {
+      "rowId": "vat-ns12",
+      "code": "VAT - NS12",
+      "name": "Reduced rate for smoking cessation products",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 20,
+        "2021-22": 20,
+        "2022-23": 20,
+        "2023-24": 20,
+        "2024-25": 20,
+        "2025-26": 20
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Reduced rate of VAT on products designed to help people give up smoking."
+    },
+    {
+      "rowId": "vat-ns13",
+      "code": "VAT - NS13",
+      "name": "Zero rate for women's sanitary products from 01/01/2021.",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 55,
+        "2021-22": 70,
+        "2022-23": 75,
+        "2023-24": 85,
+        "2024-25": 95,
+        "2025-26": 95
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rate of VAT on women's sanitary products."
+    },
+    {
+      "rowId": "vat-ns14",
+      "code": "VAT - NS14",
+      "name": "VAT registration threshold",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 2600,
+        "2021-22": 3200,
+        "2022-23": 2900,
+        "2023-24": 2900,
+        "2024-25": 3000,
+        "2025-26": 3100
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exception from compulsory registration for VAT for traders with taxable supplies below the registration threshold."
+    },
+    {
+      "rowId": "vat-ns15",
+      "code": "VAT - NS15",
+      "name": "Vehicles and other supplies to disabled people [vehicles only]",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 860,
+        "2021-22": 930,
+        "2022-23": 1040,
+        "2023-24": 1250,
+        "2024-25": 1430,
+        "2025-26": 1490
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating of certain aids and qualifying motor vehicles to the disabled."
+    },
+    {
+      "rowId": "vat-ns16",
+      "code": "VAT - NS16",
+      "name": "Water and sewerage services",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 2400,
+        "2021-22": 2400,
+        "2022-23": 2400,
+        "2023-24": 2700,
+        "2024-25": 2900,
+        "2025-26": 3700
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating applies to the supply of sewerage services and water (otherwise than for use in an industrial business activity)."
+    },
+    {
+      "rowId": "nsu-vat26",
+      "code": "NSU - VAT26",
+      "name": "Supplies to charities",
+      "taxType": "VAT",
+      "reliefType": "Non-structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 220,
+        "2021-22": 250,
+        "2022-23": 280,
+        "2023-24": 290,
+        "2024-25": 310,
+        "2025-26": 320
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Zero rating applies to certain supplies made to charities."
+    },
+    {
+      "rowId": "su-cgt1",
+      "code": "SU - CGT1",
+      "name": "Annual Exempt Amount CGT",
+      "taxType": "Capital Gains Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": 1180,
+        "2021-22": 1450,
+        "2022-23": 1350,
+        "2023-24": 620,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "Capital Gains Tax (CGT) is a tax on the gain made when an individual or trust disposes of an asset that has increased in value. An individual/trust is only liable to CGT on gains made on the chargeable asset(s) disposed of in a tax year (net of allowable losses) which fall above the CGT Annual Exempt Amount (AEA), which was set at £12,300 for individuals and £6,150 for trusts (half the individual AEA) up to 2022/23. At Autumn Budget 2022 the Government announced that in 2023/24 those will be reduced to £6,000 for individuals and £3,000 for trusts and then again in 2024/25 to £3,000 for individuals and £1,500 for trusts."
+    },
+    {
+      "rowId": "cgt-s1",
+      "code": "CGT - S1",
+      "name": "Deduction of trading losses against capital gains",
+      "taxType": "Capital Gains Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 10,
+        "2022-23": 10,
+        "2023-24": 10,
+        "2024-25": 10,
+        "2025-26": 10
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Where a trading loss cannot be fully set against income it can be set against the amount otherwise chargeable to CGT for the tax year disregarding the annual exempt amount"
+    },
+    {
+      "rowId": "iht-s2",
+      "code": "IHT - S2",
+      "name": "Double taxation relief",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 15,
+        "2022-23": 5,
+        "2023-24": 5,
+        "2024-25": 10,
+        "2025-26": 10
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Double tax relief agreements with some countries apply to IHT and have the effect of reducing the amount of tax due by the amount paid in the foreign country."
+    },
+    {
+      "rowId": "iht-s3",
+      "code": "IHT - S3",
+      "name": "Interest-free instalments",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Provides interest relief on instalments for certain classes of asset up until the date the instalment becomes due."
+    },
+    {
+      "rowId": "iht-s4",
+      "code": "IHT - S4",
+      "name": "Nil rate band for chargeable transfers not exceeding the threshold for estates left on death",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 21000,
+        "2021-22": 21400,
+        "2022-23": 26200,
+        "2023-24": 22600,
+        "2024-25": 23600,
+        "2025-26": 24300
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "IHT nil rate band for chargeable transfers not exceeding the threshold (£325,000)."
+    },
+    {
+      "rowId": "loss-on-sale-of-land",
+      "code": "Not available",
+      "name": "Loss on sale of land",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 30,
+        "2021-22": 75,
+        "2022-23": 155,
+        "2023-24": 140,
+        "2024-25": 160,
+        "2025-26": 175
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Where an interest in land is sold for a price that is different from the value at the date of death within four years, relief may be available to use the sale price."
+    },
+    {
+      "rowId": "loss-on-sale-of-shares",
+      "code": "Not available",
+      "name": "Loss on sale of shares",
+      "taxType": "Inheritance Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": null,
+        "2021-22": 50,
+        "2022-23": 15,
+        "2023-24": 15,
+        "2024-25": 15,
+        "2025-26": 15
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Negligible"
+      },
+      "description": "If quoted stocks and shares in a person's estate are sold within one year of death at a lower value then a claim may be made, for IHT purposes, to reduce the value at death by the amount of the overall loss made by the sales to the lower value."
+    },
+    {
+      "rowId": "sdlt-s1",
+      "code": "SDLT - S1",
+      "name": "Alternative Property Finance",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 15,
+        "2021-22": 20,
+        "2022-23": 25,
+        "2023-24": 15,
+        "2024-25": 25,
+        "2025-26": 25
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "The alternative finance rules work to prevent double charges to SDLT applying where certain types of alternative property financing is used to buy a property. The rules ensure that the SDLT charged is broadly the same as if conventional mortgage financing had been used."
+    },
+    {
+      "rowId": "sdlt-s2",
+      "code": "SDLT - S2",
+      "name": "Compulsory Purchase Facilitating Development",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 5,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": 5,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": false,
+        "2025-26": true
+      },
+      "markers": {
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Relief from SDLT for compulsory purchase of land designed to facilitate development by a person other than the acquiring authority. Prevents a double charge to SDLT."
+    },
+    {
+      "rowId": "sdlt-s3",
+      "code": "SDLT - S3",
+      "name": "Group Relief",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 1700,
+        "2021-22": 1700,
+        "2022-23": 1800,
+        "2023-24": 1700,
+        "2024-25": 1600,
+        "2025-26": 2200
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from SDLT on the transfer of property between group companies."
+    },
+    {
+      "rowId": "sdlt-s4",
+      "code": "SDLT - S4",
+      "name": "Incorporation of Limited Liability Partnership",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 5,
+        "2022-23": 15,
+        "2023-24": 5,
+        "2024-25": 10,
+        "2025-26": 25
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from SDLT where an interest in land is transferred by a partner in an LLP acting as a nominee for the for the partners to an LLP in connection with its incorporation."
+    },
+    {
+      "rowId": "sdlt-s5",
+      "code": "SDLT - S5",
+      "name": "Pre-completion transaction",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 170,
+        "2021-22": 170,
+        "2022-23": 200,
+        "2023-24": 120,
+        "2024-25": 160,
+        "2025-26": 130
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief is available to a purchaser (who before completing their purchase) enters into a further contract under which another person becomes entitled to the property. Prevents a double charge to SDLT."
+    },
+    {
+      "rowId": "sdlt-s6",
+      "code": "SDLT - S6",
+      "name": "Reconstruction Relief",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 5,
+        "2022-23": 5,
+        "2023-24": null,
+        "2024-25": 5,
+        "2025-26": 5
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": true,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2023-24": "Negligible"
+      },
+      "description": "Relief from SDLT where an acquiring company acquires the shares of a target company under a scheme of reconstruction."
+    },
+    {
+      "rowId": "sdlt-s7",
+      "code": "SDLT - S7",
+      "name": "Relief from flat rate of SDLT for corporate bodies",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 75,
+        "2021-22": 90,
+        "2022-23": 90,
+        "2023-24": 65,
+        "2024-25": 55,
+        "2025-26": 45
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief from the 15% SDLT rate for businesses of property letting, trading and redeveloping."
+    },
+    {
+      "rowId": "sdlt-s8",
+      "code": "SDLT - S8",
+      "name": "Relocation of employment",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Relief from SDLT on a purchase of residential property by an employer where an employee needs to change residence due to relocation of their employment. Relief prevents double charge to SDLT as purchaser is effectively acting as an intermediary."
+    },
+    {
+      "rowId": "sdlt-s9",
+      "code": "SDLT - S9",
+      "name": "Right to buy transactions",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Sales at a discount by the public bodies defined in Schedule 9 of Finance Act 2003 are eligible for relief fromSDLT on (1) the contingent consideration arising from potential repayments to the vendor by the tenant that can occur if the property is re-sold within 5 years of purchase, and (2) Any consideration that would be payable if the contingency is or were to occur."
+    },
+    {
+      "rowId": "sdlt-s10",
+      "code": "SDLT - S10",
+      "name": "Transfers Involving Multiple Dwellings",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 880,
+        "2021-22": 910,
+        "2022-23": 700,
+        "2023-24": 610,
+        "2024-25": 300,
+        "2025-26": 15
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Where two or more dwellings are bought in a transaction or in multiple transactions which are linked, the purchaser may claim relief so that the SDLT due on each property is closer to the amount that would apply if the dwellings had been purchased individually."
+    },
+    {
+      "rowId": "sdlt-s11",
+      "code": "SDLT - S11",
+      "name": "Transfers Involving Public Bodies",
+      "taxType": "Stamp Duty Land Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 5,
+        "2022-23": 5,
+        "2023-24": 5,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Relief for transfers from one public body to another in connection with a statutory reorganisation. HM Treasury may provide that the relief applies where only one party is a public body."
+    },
+    {
+      "rowId": "ct-s3",
+      "code": "CT - S3",
+      "name": "Payments to relevant scientific research associations",
+      "taxType": "Corporation Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Disclosive",
+        "2021-22": "Disclosive",
+        "2022-23": "Disclosive",
+        "2023-24": "Disclosive",
+        "2024-25": "Disclosive",
+        "2025-26": "Disclosive"
+      },
+      "description": "Gives relief for payments for certain scientific research."
+    },
+    {
+      "rowId": "ct-s1",
+      "code": "CT - S1",
+      "name": "Double Taxation Relief CT",
+      "taxType": "Corporation Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 2900,
+        "2021-22": 3700,
+        "2022-23": 4700,
+        "2023-24": 5200,
+        "2024-25": 5400,
+        "2025-26": 5600
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "DTR is designed to prevent or alleviate the double taxation of income and gains in both the UK and a foreign jurisdiction."
+    },
+    {
+      "rowId": "ct-s5",
+      "code": "CT - S5",
+      "name": "Ring-fenced oil and gas trades: tax relief for decommissioning expenditure",
+      "taxType": "Corporation Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 450,
+        "2021-22": 560,
+        "2022-23": 790,
+        "2023-24": 870,
+        "2024-25": 1000,
+        "2025-26": 1000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Tax relief from expenditure to decommission oil and gas infrastructure on the UKCS."
+    },
+    {
+      "rowId": "it-s9",
+      "code": "IT - S9",
+      "name": "Farming etc averaging of profits",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 35,
+        "2021-22": 40,
+        "2022-23": 70,
+        "2023-24": 35,
+        "2024-25": 35,
+        "2025-26": 40
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Provides relief for farmers affected by fluctuating profits. Where the difference between the profits of two consecutive years of assessment is 30% or more of the higher of the two figures of profit (and regardless of whether the difference is a rise or a fall), the profits of the two years may be averaged. From 2016-17 profits can be averaged over two years or five years. Rules are the same as those for creative artists."
+    },
+    {
+      "rowId": "it-s19",
+      "code": "IT - S19",
+      "name": "Post-trading expenditure",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 5,
+        "2022-23": 5,
+        "2023-24": 5,
+        "2024-25": 5,
+        "2025-26": 5
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Up to seven years after the cessation of trade, a person may make a claim for post-cessation trade expenses against net income subject to income tax."
+    },
+    {
+      "rowId": "it-s1",
+      "code": "IT - S1",
+      "name": "£10 Christmas bonus for pensioners",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 15,
+        "2021-22": 15,
+        "2022-23": 15,
+        "2023-24": 20,
+        "2024-25": 20,
+        "2025-26": 20
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Broadly speaking, the social security benefits payable to supplement an individual's income are not subject to tax. For example, disability living allowance, housing benefit, income-related employment and support allowance, pensioners' Christmas bonus."
+    },
+    {
+      "rowId": "it-s3",
+      "code": "IT - S3",
+      "name": "Allowances to rehabilitees",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Broadly speaking, the social security benefits payable to supplement an individual's income are not subject to tax. For example, disability living allowance, housing benefit, income-related employment and support allowance, pensioners' Christmas bonus."
+    },
+    {
+      "rowId": "it-s4",
+      "code": "IT - S4",
+      "name": "Attendance allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 480,
+        "2021-22": 450,
+        "2022-23": 510,
+        "2023-24": 870,
+        "2024-25": 990,
+        "2025-26": 1040
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Broadly speaking, the social security benefits payable to supplement an individual's income are not subject to tax. For example, disability living allowance, housing benefit, income-related employment and support allowance, pensioners' Christmas bonus."
+    },
+    {
+      "rowId": "it-s7",
+      "code": "IT - S7",
+      "name": "Children's allowance to Forces' widows",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Broadly speaking, the social security benefits payable to supplement an individual's income are not subject to tax. For example, disability living allowance, housing benefit, income-related employment and support allowance, pensioners' Christmas bonus."
+    },
+    {
+      "rowId": "it-s8",
+      "code": "IT - S8",
+      "name": "Disability living allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 1600,
+        "2021-22": 1800,
+        "2022-23": 2100,
+        "2023-24": 2900,
+        "2024-25": 3400,
+        "2025-26": 3700
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Broadly speaking, the social security benefits payable to supplement an individual's income are not subject to tax. For example, disability living allowance, housing benefit, income-related employment and support allowance, pensioners' Christmas bonus."
+    },
+    {
+      "rowId": "it-s11",
+      "code": "IT - S11",
+      "name": "Guardian's allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Broadly speaking, the social security benefits payable to supplement an individual's income are not subject to tax. For example, disability living allowance, housing benefit, income-related employment and support allowance, pensioners' Christmas bonus."
+    },
+    {
+      "rowId": "it-s14",
+      "code": "IT - S14",
+      "name": "Married Couple's Allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 140,
+        "2021-22": 120,
+        "2022-23": 95,
+        "2023-24": 90,
+        "2024-25": 80,
+        "2025-26": 65
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "An income tax reduction is available to married couples and civil partners where one partner was born before 6 April 1935."
+    },
+    {
+      "rowId": "it-s15",
+      "code": "IT - S15",
+      "name": "Maternity allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 10,
+        "2021-22": 20,
+        "2022-23": 25,
+        "2023-24": 30,
+        "2024-25": 35,
+        "2025-26": 35
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Broadly speaking, the social security benefits payable to supplement an individual's income are not subject to tax. For example, disability living allowance, housing benefit, income-related employment and support allowance, pensioners' Christmas bonus."
+    },
+    {
+      "rowId": "it-s16",
+      "code": "IT - S16",
+      "name": "NI benefit child dependency additions",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Broadly speaking, the social security benefits payable to supplement an individual's income are not subject to tax. For example, disability living allowance, housing benefit, income-related employment and support allowance, pensioners' Christmas bonus."
+    },
+    {
+      "rowId": "it-s17",
+      "code": "IT - S17",
+      "name": "Personal allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 112000,
+        "2021-22": 117000,
+        "2022-23": 122000,
+        "2023-24": 128000,
+        "2024-25": 132000,
+        "2025-26": 135000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Amount of income an individual, under 65, can receive each year without having to pay income tax on it."
+    },
+    {
+      "rowId": "it-s18",
+      "code": "IT - S18",
+      "name": "Personal dividend allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 590,
+        "2021-22": 630,
+        "2022-23": 610,
+        "2023-24": 390,
+        "2024-25": 230,
+        "2025-26": 230
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "First £2,000 of dividend income taxed at 0% for all individuals"
+    },
+    {
+      "rowId": "it-s20",
+      "code": "IT - S20",
+      "name": "Severe disablement allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Broadly speaking, the social security benefits payable to supplement an individual's income are not subject to tax. For example, disability living allowance, housing benefit, income-related employment and support allowance, pensioners' Christmas bonus."
+    },
+    {
+      "rowId": "it-s5",
+      "code": "IT - S5",
+      "name": "British Government securities where owner not resident in UK",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 2800,
+        "2021-22": 2700,
+        "2022-23": 4500,
+        "2023-24": 6400,
+        "2024-25": 5200,
+        "2025-26": 5700
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "FOTRA securities - exemption from income tax and corporation tax for income from securities free of tax to residents abroad."
+    },
+    {
+      "rowId": "it-s10",
+      "code": "IT - S10",
+      "name": "First £70 of National Savings Bank ordinary account interest",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "The first £70 of interest is exempt from income tax. However, the Ordinary Account is no longer offered - existing deposits are grandfathered but still receive interest at 0.1%."
+    },
+    {
+      "rowId": "it-s12",
+      "code": "IT - S12",
+      "name": "Life annuities interest",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Relief for those aged 65 and over who take out loans to buy a life annuity (a home income plan) ended with effect from 9 March 1999."
+    },
+    {
+      "rowId": "homeworkers-allowance",
+      "code": "Not available",
+      "name": "Homeworkers Allowance",
+      "taxType": "Income Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 320,
+        "2021-22": 210,
+        "2022-23": 60,
+        "2023-24": 20,
+        "2024-25": 15,
+        "2025-26": 15
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Employers can make tax free payments for the additional household costs incurred by employees who work at home under homeworking arrangements. Where an employer does not reimburse these costs, providing certain conditions are met, employees can claim tax relief on a flat rate allowance of £6 per week or on the actual costs incurred where evidence is provided. The circumstances under which a tax free payment can be made by the employer are less restrictive than the conditions that need to be met where the employee claims tax relief."
+    },
+    {
+      "rowId": "it-s6",
+      "code": "IT - S6",
+      "name": "Certain expenses of MPs, government ministers etc",
+      "taxType": "Income Tax and NICs",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 5,
+        "2021-22": 5,
+        "2022-23": 5,
+        "2023-24": 5,
+        "2024-25": 5,
+        "2025-26": 5
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Members of Parliament are exempt from paying tax on accommodation provided in connection with their official duties."
+    },
+    {
+      "rowId": "it-ct-s4",
+      "code": "IT_CT - S4",
+      "name": "Rollover relief for balancing charges on ships",
+      "taxType": "Income Tax and Corporation Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Special rules for ships which allow first-year or writing-down allowances to be postponed and claimed later and which also allow balancing charges to be deferred and attributed to qualifying expenditure on another ship."
+    },
+    {
+      "rowId": "it-ct-s1",
+      "code": "IT_CT - S1",
+      "name": "Business Premises Renovation Allowance",
+      "taxType": "Income Tax and Corporation Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 0,
+        "2021-22": 0,
+        "2022-23": 0,
+        "2023-24": 0,
+        "2024-25": 0,
+        "2025-26": 0
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "100% capital allowances for cost of renovating long-term empty or derelict business properties in disadvantaged areas of UK. Abolished in 2017."
+    },
+    {
+      "rowId": "it-ct-s2",
+      "code": "IT_CT - S2",
+      "name": "Capital allowances (includes Annual Investment Allowance, Ring-fence oil and gas trade, first-year capital allowances for plant and machinery)",
+      "taxType": "Income Tax and Corporation Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 15400,
+        "2021-22": 19100,
+        "2022-23": 22200,
+        "2023-24": 28000,
+        "2024-25": 30300,
+        "2025-26": 30000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Capital allowances provisions in relation to capital contributions paid or received."
+    },
+    {
+      "rowId": "it-cgt-s1",
+      "code": "IT_CGT - S1",
+      "name": "Foreign Tax Credits and reliefs under Double Taxation Agreement",
+      "taxType": "Income Tax and Capital Gains Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 2400,
+        "2021-22": 3000,
+        "2022-23": 3200,
+        "2023-24": 3300,
+        "2024-25": 3300,
+        "2025-26": 3700
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption for foreign benefits substantially similar in character to UK tax exempt benefits."
+    },
+    {
+      "rowId": "nic-s2",
+      "code": "NIC - S2",
+      "name": "Exemption for individuals over State Pension Age",
+      "taxType": "NICs",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 840,
+        "2021-22": 1100,
+        "2022-23": 1200,
+        "2023-24": 1500,
+        "2024-25": 1200,
+        "2025-26": 1200
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Pensioners and non-UK resident persons are exempt from Class 1, 2, and 4 NICs."
+    },
+    {
+      "rowId": "nic-s3",
+      "code": "NIC - S3",
+      "name": "Lower Profits Limit",
+      "taxType": "NICs",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 2600,
+        "2021-22": 2600,
+        "2022-23": 3500,
+        "2023-24": 3400,
+        "2024-25": 2300,
+        "2025-26": 2300
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "There is a lower earnings limit below which Class 4 NICs are not payable."
+    },
+    {
+      "rowId": "nic-s4",
+      "code": "NIC - S4",
+      "name": "Primary Threshold",
+      "taxType": "NICs",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 30000,
+        "2021-22": 31200,
+        "2022-23": 44100,
+        "2023-24": 42200,
+        "2024-25": 30000,
+        "2025-26": 30400
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Point at which earnings become liable for employee main rate NICs."
+    },
+    {
+      "rowId": "nic-s5",
+      "code": "NIC - S5",
+      "name": "Reduced contributions for self-employed not attributable to reduced pensions eligibility but otherwise in line with underlying source movement",
+      "taxType": "NICs",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 5950,
+        "2021-22": 6600,
+        "2022-23": 6650,
+        "2023-24": 6600,
+        "2024-25": 7400,
+        "2025-26": 10050
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Represents the difference between Class 2 and 4 NICs paid by the self employed on their profits and an estimate of the Class 1 NICs that would be paid at contracted out rates on an equivalent amount of employee earnings. The Class 1 estimate includes employer contributions due but assumes a corresponding reduction in earnings to hold staff costs broadly constant, and also takes account of the resulting reduction in income tax."
+    },
+    {
+      "rowId": "nic-s6",
+      "code": "NIC - S6",
+      "name": "Secondary Threshold",
+      "taxType": "NICs",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 32300,
+        "2021-22": 33300,
+        "2022-23": 40400,
+        "2023-24": 39000,
+        "2024-25": 39800,
+        "2025-26": 24400
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Point at which earnings become liable for employer main rate NICs."
+    },
+    {
+      "rowId": "al-s1",
+      "code": "AL - S1",
+      "name": "Exemption for building ('dimension') stone",
+      "taxType": "Aggregates Levy",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 10,
+        "2021-22": 15,
+        "2022-23": 15,
+        "2023-24": 10,
+        "2024-25": 10,
+        "2025-26": 15
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Rock which is sent for cutting to form a stone with one or more flat sides is exempt from Aggregates Levy."
+    },
+    {
+      "rowId": "al-s2",
+      "code": "AL - S2",
+      "name": "Relief for aggregate exported from the UK",
+      "taxType": "Aggregates Levy",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 15,
+        "2021-22": 10,
+        "2022-23": 10,
+        "2023-24": 10,
+        "2024-25": 10,
+        "2025-26": 10
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Tax credit may be available against Aggregates Levy if that aggregate is exported from the UK."
+    },
+    {
+      "rowId": "al-s3",
+      "code": "AL - S3",
+      "name": "Coal, Lignite and Slate",
+      "taxType": "Aggregates Levy",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 10,
+        "2021-22": 10,
+        "2022-23": 15,
+        "2023-24": 10,
+        "2024-25": 10,
+        "2025-26": 10
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Aggregate consisting mainly of coal, lignite or slate is exempt from Aggregates Levy."
+    },
+    {
+      "rowId": "apd-s1",
+      "code": "APD - S1",
+      "name": "Exemption for Cabin Crew",
+      "taxType": "Air Passenger Duty",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 40,
+        "2021-22": 75,
+        "2022-23": 145,
+        "2023-24": 165,
+        "2024-25": 170,
+        "2025-26": 185
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Cabin crew are exempt from APD. There is a statutory requirement for cabin crew to be on board for H&S purposes."
+    },
+    {
+      "rowId": "ccl-s1",
+      "code": "CCL - S1",
+      "name": "Exemption of electricity provided to third parties from certain CHP schemes",
+      "taxType": "Climate Change Levy",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Electricity generated in wholly exempt CHP stations is outside the scope of the climate change levy. Electricity produced in partly exempt CHPs and supplied either directly or indirectly to the end consumer is also exempt."
+    },
+    {
+      "rowId": "ccl-s2",
+      "code": "CCL - S2",
+      "name": "Exemption of energy supplies not used as fuel",
+      "taxType": "Climate Change Levy",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 50,
+        "2021-22": 50,
+        "2022-23": 45,
+        "2023-24": 40,
+        "2024-25": 45,
+        "2025-26": 45
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption for commodities not used as fuel. Includes non-fuel use (e.g. coal used as a raw material to make carbon filters) and mixed use (i.e. as both a fuel and raw material)."
+    },
+    {
+      "rowId": "ccl-s3",
+      "code": "CCL - S3",
+      "name": "Lower rate for supplies for use in certain metal recycling processes",
+      "taxType": "Climate Change Levy",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Lower rate of climate change levy for taxable commodities used in certain metal recycling processes."
+    },
+    {
+      "rowId": "ccl-s4",
+      "code": "CCL - S4",
+      "name": "Supply of taxable commodities not for burning or consuming in the UK",
+      "taxType": "Climate Change Levy",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 420,
+        "2021-22": 620,
+        "2022-23": 1300,
+        "2023-24": 1610,
+        "2024-25": 1900,
+        "2025-26": 1935
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption for taxable commodities not burnt in the UK (i.e. exports and wholesale supplies)."
+    },
+    {
+      "rowId": "cpf-s1",
+      "code": "CPF - S1",
+      "name": "CPS rates applied to oil relieved from duty due to use in electricity generation",
+      "taxType": "Carbon Price Floor",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Exclusion from CPS rates of hydrocarbon oil duty for oil used in electricity generation on which relief from other rates of hydrocarbon oil duty has not been claimed."
+    },
+    {
+      "rowId": "cpf-s2",
+      "code": "CPF - S2",
+      "name": "Exclusion for fuels used in CHP stations to produce non-electrical outputs",
+      "taxType": "Carbon Price Floor",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 110,
+        "2021-22": 100,
+        "2022-23": 105,
+        "2023-24": 110,
+        "2024-25": 95,
+        "2025-26": 105
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exclusion from CPS rates of CCL and hydrocarbon oil duty for the proportion of CPS rate commodities used in a CHPQA scheme to generate heat, steam or mechanical power."
+    },
+    {
+      "rowId": "cpf-s3",
+      "code": "CPF - S3",
+      "name": "Exclusion for fuels used in electricity generation in Northern Ireland",
+      "taxType": "Carbon Price Floor",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 25,
+        "2021-22": 40,
+        "2022-23": 35,
+        "2023-24": 25,
+        "2024-25": 20,
+        "2025-26": 15
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exclusion from CPS rates of CCL and hydrocarbon oil duty of commodities used to generate electricity in Northern Ireland."
+    },
+    {
+      "rowId": "cpf-s4",
+      "code": "CPF - S4",
+      "name": "Exclusion for fuels used in small combined heat and power (CHP) stations",
+      "taxType": "Carbon Price Floor",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Exclusion from CPS rates of CCL for taxable commodities used in Combined Heat and Power Quality Assurance (CHPQA) schemes with a generating capacity of no more than 2MW."
+    },
+    {
+      "rowId": "cpf-s5",
+      "code": "CPF - S5",
+      "name": "Exclusion for fuels used in small generators",
+      "taxType": "Carbon Price Floor",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Exclusion from CPS rates of CCL for taxable commodities used by persons or related persons with a combined generating capacity of no more than 2 mega watts (MW), excluding any Combined Heat and Power (CHP) stations or stand-by generators."
+    },
+    {
+      "rowId": "cpf-s6",
+      "code": "CPF - S6",
+      "name": "Exclusion for fuels used in stand-by generators",
+      "taxType": "Carbon Price Floor",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "Exclusion from CPS rates of CCL for taxable commodities used to generate electricity in the event of failure of the mains power supply."
+    },
+    {
+      "rowId": "et-s1",
+      "code": "ET - S1",
+      "name": "Small Lottery Exemptions (Licensed)",
+      "taxType": "Excise Duty",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 100,
+        "2021-22": 110,
+        "2022-23": 110,
+        "2023-24": 110,
+        "2024-25": 110,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2025-26": "Not available"
+      },
+      "description": "Lottery Duty is a duty on taking a ticket or chance in a lottery that is promoted in the UK, unless specifically exempt. Most lotteries, except the National Lottery, are exempt from the duty. These include all lotteries promoted by someone holding a Lottery Operating Licence under Part 11 of the Gambling Act 2005, and any lottery exempted from those licensing requirements under Schedule 11 of the Act. The Schedule 11 exemptions are: incidental non-commercial lotteries (must be promoted wholly for a purpose other than private gain) - this covers charity fund raising events, such as bazaars, fetes, sporting or athletic events; dinners (lottery tickets sold at football club annual dinners); private lotteries; private society lotteries(only members of the society, or people on the society’s premises, can take part); work lotteries (only people who work on the same premises can take part) - this covers events such as office sweepstakes and office party raffles; residents lotteries (only people who live at the same premises may take part); customer lotteries (only customers at the business premises may take part); small society lotteries (for the benefit of a non-commercial society, established and conducted for charitable purposes); must be registered with a Local Authority."
+    },
+    {
+      "rowId": "lft-s1",
+      "code": "LFT - S1",
+      "name": "Exemption for pet cemeteries",
+      "taxType": "Landfill Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": true,
+        "2021-22": true,
+        "2022-23": true,
+        "2023-24": true,
+        "2024-25": true,
+        "2025-26": true
+      },
+      "markers": {
+        "2020-21": "Negligible",
+        "2021-22": "Negligible",
+        "2022-23": "Negligible",
+        "2023-24": "Negligible",
+        "2024-25": "Negligible",
+        "2025-26": "Negligible"
+      },
+      "description": "A disposal is not a taxable disposal if it is material consisting of the remains of domestic pets."
+    },
+    {
+      "rowId": "hod-s1",
+      "code": "HOD - S1",
+      "name": "Tied oils scheme (Industrial Relief Scheme)",
+      "taxType": "Hydrocarbon Oil Duties",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 910,
+        "2021-22": 380,
+        "2022-23": 270,
+        "2023-24": 290,
+        "2024-25": 260,
+        "2025-26": 250
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Relief for oil used as solvents, lubricants etc, and in the production of products such as paints."
+    },
+    {
+      "rowId": "prt-s1",
+      "code": "PRT - S1",
+      "name": "Oil allowance",
+      "taxType": "Petroleum Revenue Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2022-23": "Not available",
+        "2023-24": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "The allowance ensures that for at least the first ten years of a field’s life (and most probably for rather longer) a substantial slice of production is free from PRT."
+    },
+    {
+      "rowId": "prt-s2",
+      "code": "PRT - S2",
+      "name": "Tax relief for decommissioning expenditure",
+      "taxType": "Petroleum Revenue Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 370,
+        "2021-22": 320,
+        "2022-23": 340,
+        "2023-24": 330,
+        "2024-25": 250,
+        "2025-26": 350
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Broadly, tax relief is available under section 164 where a person who is carrying on a ring fence trade incurs ‘general decommissioning expenditure’ and the plant and machinery concerned has been brought into use for the purpose of that ring fence trade."
+    },
+    {
+      "rowId": "prt-s3",
+      "code": "PRT - S3",
+      "name": "Unrelieved field loss",
+      "taxType": "Petroleum Revenue Tax",
+      "reliefType": "Structural",
+      "firstForecastYear": "Not available",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "Not available",
+        "2021-22": "Not available",
+        "2022-23": "Not available",
+        "2023-24": "Not available",
+        "2024-25": "Not available",
+        "2025-26": "Not available"
+      },
+      "description": "Unrelieved losses from an abandoned field can be set-off against a profitable field for PRT."
+    },
+    {
+      "rowId": "ved-s1",
+      "code": "VED - S1",
+      "name": "Exemption for disabled motorists",
+      "taxType": "Vehicle Excise Duty",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 200,
+        "2021-22": 180,
+        "2022-23": 210,
+        "2023-24": 220,
+        "2024-25": 240,
+        "2025-26": 310
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "VED exemption if claiming higher rate mobility component for Disability Living Allowance or enhanced rate mobility component of Personal Independence Payment."
+    },
+    {
+      "rowId": "ved-s2",
+      "code": "VED - S2",
+      "name": "Exemption for Historic Cars",
+      "taxType": "Vehicle Excise Duty",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 110,
+        "2021-22": 120,
+        "2022-23": 130,
+        "2023-24": 140,
+        "2024-25": 150,
+        "2025-26": 160
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "From 1 April each year, vehicles constructed more than 40 years before the 1 January of that year, are exempt from paying VED."
+    },
+    {
+      "rowId": "vat-s1",
+      "code": "VAT - S1",
+      "name": "Betting and gaming and lottery duties",
+      "taxType": "VAT",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 1600,
+        "2021-22": 1800,
+        "2022-23": 1800,
+        "2023-24": 1300,
+        "2024-25": 1400,
+        "2025-26": 1400
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption from VAT for betting, playing games of chance, dutiable machine takings or taking part in a lottery."
+    },
+    {
+      "rowId": "vat-s2",
+      "code": "VAT - S2",
+      "name": "Burial and cremation",
+      "taxType": "VAT",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 770,
+        "2021-22": 760,
+        "2022-23": 760,
+        "2023-24": 760,
+        "2024-25": 710,
+        "2025-26": 740
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption from VAT for burial and cremation services."
+    },
+    {
+      "rowId": "vat-s3",
+      "code": "VAT - S3",
+      "name": "Central Government, Health Authorities and NHS Trusts of VAT incurred on contracted-out services under the Section 41(3) refund scheme",
+      "taxType": "VAT",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 9000,
+        "2021-22": 10400,
+        "2022-23": 11000,
+        "2023-24": 11900,
+        "2024-25": 12200,
+        "2025-26": 13200
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Refund of VAT incurred on certain supplies by government departments (including health authorities and NHS trusts), where the supply does not amount to carrying on a business."
+    },
+    {
+      "rowId": "vat-s4",
+      "code": "VAT - S4",
+      "name": "Education",
+      "taxType": "VAT",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 4100,
+        "2021-22": 4400,
+        "2022-23": 4800,
+        "2023-24": 5200,
+        "2024-25": 5100,
+        "2025-26": 4300
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption from VAT for education by eligible bodies."
+    },
+    {
+      "rowId": "vat-s5",
+      "code": "VAT - S5",
+      "name": "Finance and insurance",
+      "taxType": "VAT",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 13200,
+        "2021-22": 14800,
+        "2022-23": 16400,
+        "2023-24": 17400,
+        "2024-25": 18200,
+        "2025-26": 19000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption from VAT for finance and insurance and reinsurance transactions, as well as certain insurance related services."
+    },
+    {
+      "rowId": "vat-s6",
+      "code": "VAT - S6",
+      "name": "Health Services",
+      "taxType": "VAT",
+      "reliefType": "Structural",
+      "firstForecastYear": "2023 to 2024",
+      "values": {
+        "2020-21": 400,
+        "2021-22": 1300,
+        "2022-23": 1400,
+        "2023-24": 1800,
+        "2024-25": 1900,
+        "2025-26": 2000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption from VAT of the medical care by certain registered health professionals."
+    },
+    {
+      "rowId": "vat-s7",
+      "code": "VAT - S7",
+      "name": "Local Authority-type bodies of VAT incurred on non-business purchases under the Section 33 refund scheme (includes academies, museums and galleries under the Section 33A refund scheme)",
+      "taxType": "VAT",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 11200,
+        "2021-22": 12200,
+        "2022-23": 13500,
+        "2023-24": 15400,
+        "2024-25": 16500,
+        "2025-26": 17400
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Refund by HMRC of VAT incurred on non-business activities by local authorities and public bodies."
+    },
+    {
+      "rowId": "vat-s8",
+      "code": "VAT - S8",
+      "name": "Northern Ireland Government bodies of VAT incurred on non-business purchases under the Section 99 refund scheme",
+      "taxType": "VAT",
+      "reliefType": "Structural",
+      "firstForecastYear": "2025 to 2026",
+      "values": {
+        "2020-21": 500,
+        "2021-22": 580,
+        "2022-23": 620,
+        "2023-24": 620,
+        "2024-25": 660,
+        "2025-26": 710
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Refund by HMRC of VAT to the Government of Northern Ireland charged on supplies of goods or services to or on imports of goods by the Government of Northern Ireland."
+    },
+    {
+      "rowId": "vat-s9",
+      "code": "VAT - S9",
+      "name": "Rent on domestic dwellings",
+      "taxType": "VAT",
+      "reliefType": "Structural",
+      "firstForecastYear": "2024 to 2025",
+      "values": {
+        "2020-21": 6600,
+        "2021-22": 6800,
+        "2022-23": 7000,
+        "2023-24": 7600,
+        "2024-25": 8300,
+        "2025-26": 9000
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {},
+      "description": "Exemption from VAT for supplies of residential land and property."
+    },
+    {
+      "rowId": "end-of-worksheet",
+      "code": "",
+      "name": "End of worksheet.",
+      "taxType": "",
+      "reliefType": "",
+      "firstForecastYear": "",
+      "values": {
+        "2020-21": null,
+        "2021-22": null,
+        "2022-23": null,
+        "2023-24": null,
+        "2024-25": null,
+        "2025-26": null
+      },
+      "negligible": {
+        "2020-21": false,
+        "2021-22": false,
+        "2022-23": false,
+        "2023-24": false,
+        "2024-25": false,
+        "2025-26": false
+      },
+      "markers": {
+        "2020-21": "blank",
+        "2021-22": "blank",
+        "2022-23": "blank",
+        "2023-24": "blank",
+        "2024-25": "blank",
+        "2025-26": "blank"
+      },
+      "description": ""
+    }
+  ],
+  "source": {
+    "sourceId": "hmrc-tax-reliefs-2026-01",
+    "localPath": "data/raw/hmrc-tax-reliefs-2026-01/tax_relief_statistics_january_2026.ods",
+    "sha256": "fa94a61fe6b6a02c19b87a656154f27eaf5f00f35f0cce9339b8101b9ac8ee4a"
+  }
+}

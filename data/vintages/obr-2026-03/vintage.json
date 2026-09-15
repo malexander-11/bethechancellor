@@ -5,7 +5,9 @@
   "organisation": "OBR",
   "event": "Spring Forecast 2026: Economic and fiscal outlook, March 2026",
   "publishedOn": "2026-03-03",
-  "primarySource": { "sourceId": "obr-efo-2026-03" },
+  "primarySource": {
+    "sourceId": "obr-efo-2026-03"
+  },
   "years": {
     "outturn": ["2024-25"],
     "inYear": "2025-26",
@@ -67,42 +69,101 @@
     "realGdpGrowth": {
       "unit": "pct",
       "periodicity": "CY",
-      "values": { "2025": 1.4, "2026": 1.1, "2027": 1.6, "2028": 1.6, "2029": 1.5, "2030": 1.5 },
-      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.2 and Chapter 2 summary" }
+      "values": {
+        "2025": 1.4,
+        "2026": 1.1,
+        "2027": 1.6,
+        "2028": 1.6,
+        "2029": 1.5,
+        "2030": 1.5
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 2.2 and Chapter 2 summary"
+      }
     },
     "cpiInflation": {
       "unit": "pct",
       "periodicity": "CY",
-      "values": { "2026": 2.3, "2027": 2.0, "2028": 2.0, "2029": 2.0, "2030": 2.0 },
-      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.2" }
+      "values": {
+        "2026": 2.3,
+        "2027": 2.0,
+        "2028": 2.0,
+        "2029": 2.0,
+        "2030": 2.0
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 2.2"
+      }
     },
     "unemploymentRate": {
       "unit": "pct",
       "periodicity": "CY",
-      "values": { "2026": 5.3, "2027": 4.9, "2028": 4.4, "2029": 4.2, "2030": 4.1 },
-      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.2" }
+      "values": {
+        "2026": 5.3,
+        "2027": 4.9,
+        "2028": 4.4,
+        "2029": 4.2,
+        "2030": 4.1
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 2.2"
+      }
     },
     "conditioningAssumptions": {
       "bankRateAveragePct": {
         "value": 3.6,
         "period": "average 2026 to 2030",
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 2.1"
+        }
       },
       "giltYield10yPct": {
         "value": 4.5,
         "period": "10 working days to 22 January 2026",
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.1", "paragraph": "2.5" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 2.1",
+          "paragraph": "2.5"
+        }
       },
       "giltYield30yPct": {
         "value": 5.3,
         "period": "10 working days to 22 January 2026",
-        "source": { "sourceId": "obr-efo-2026-03", "paragraph": "2.5" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "2.5"
+        }
       },
       "nominalGdpCumulativeGrowthPct": {
         "value": 18.6,
         "period": "2025-26 to 2030-31",
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 2.1"
+        }
       }
+    },
+    "rpiInflation": {
+      "unit": "pct",
+      "periodicity": "CY",
+      "values": {
+        "2025": 4.1,
+        "2026": 3.1,
+        "2027": 2.9,
+        "2028": 2.9,
+        "2029": 2.9,
+        "2030": 2.3
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "2.23"
+      },
+      "provisional": true,
+      "note": "The OBR gives 4.1% for 2025, 3.1% for 2026, an average of 2.9% a year for 2027 to 2029 (shown here in each of those years) and 2.3% for 2030."
     }
   },
   "fiscal": {
@@ -153,7 +214,10 @@
         "2029-30": 87000,
         "2030-31": 89300
       },
-      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 5.1" },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 5.1"
+      },
       "provisional": true,
       "derivation": [
         {
@@ -298,7 +362,10 @@
         "2029-30": 389900,
         "2030-31": 406900
       },
-      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 4.6"
+      }
     },
     "welfareInCap": {
       "unit": "GBPm",
@@ -331,7 +398,10 @@
           "2029-30": 187500,
           "2030-31": 196200
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.6"
+        }
       },
       "universalCreditAndLegacy": {
         "unit": "GBPm",
@@ -345,7 +415,10 @@
           "2029-30": 103100,
           "2030-31": 106200
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.6"
+        }
       },
       "disabilityBenefits": {
         "unit": "GBPm",
@@ -359,7 +432,10 @@
           "2029-30": 61100,
           "2030-31": 65500
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.6"
+        }
       },
       "childBenefit": {
         "unit": "GBPm",
@@ -373,7 +449,10 @@
           "2029-30": 13900,
           "2030-31": 14000
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.6"
+        }
       },
       "otherWelfare": {
         "unit": "GBPm",
@@ -387,7 +466,10 @@
           "2029-30": 24300,
           "2030-31": 25200
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.6"
+        }
       }
     },
     "debtInterestNetApf": {
@@ -421,7 +503,10 @@
           "2029-30": 11.8,
           "2030-31": 11.9
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "nics": {
         "unit": "pctGDP",
@@ -435,7 +520,10 @@
           "2029-30": 6.8,
           "2030-31": 6.8
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "vat": {
         "unit": "pctGDP",
@@ -449,7 +537,10 @@
           "2029-30": 6.1,
           "2030-31": 6.2
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "onshoreCorporationTax": {
         "unit": "pctGDP",
@@ -499,7 +590,10 @@
           "2029-30": 1.2,
           "2030-31": 1.2
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "fuelDuties": {
         "unit": "pctGDP",
@@ -513,7 +607,10 @@
           "2029-30": 0.8,
           "2030-31": 0.7
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "alcoholAndTobaccoDuties": {
         "unit": "pctGDP",
@@ -527,7 +624,10 @@
           "2029-30": 0.6,
           "2030-31": 0.6
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "psnbNeutralReceipts": {
         "unit": "pctGDP",
@@ -559,7 +659,10 @@
           "2029-30": 2.2,
           "2030-31": 2.2
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "nationalAccountsTaxes": {
         "unit": "pctGDP",
@@ -573,7 +676,10 @@
           "2029-30": 38.3,
           "2030-31": 38.5
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "interestAndDividendReceipts": {
         "unit": "pctGDP",
@@ -587,7 +693,10 @@
           "2029-30": 1.4,
           "2030-31": 1.4
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "otherReceipts": {
         "unit": "pctGDP",
@@ -601,7 +710,10 @@
           "2029-30": 2.9,
           "2030-31": 2.8
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       },
       "currentReceipts": {
         "unit": "pctGDP",
@@ -615,7 +727,10 @@
           "2029-30": 42.5,
           "2030-31": 42.7
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1"
+        }
       }
     },
     "spendingComponentsPctGdp": {
@@ -631,7 +746,10 @@
           "2029-30": 44.4,
           "2030-31": 44.3
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "del": {
         "unit": "pctGDP",
@@ -645,7 +763,10 @@
           "2029-30": 20.8,
           "2030-31": 20.7
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "rdel": {
         "unit": "pctGDP",
@@ -659,7 +780,10 @@
           "2029-30": 16.9,
           "2030-31": 16.9
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "cdel": {
         "unit": "pctGDP",
@@ -673,7 +797,10 @@
           "2029-30": 3.8,
           "2030-31": 3.8
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "ame": {
         "unit": "pctGDP",
@@ -687,7 +814,10 @@
           "2029-30": 23.6,
           "2030-31": 23.6
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "welfare": {
         "unit": "pctGDP",
@@ -701,7 +831,10 @@
           "2029-30": 11.1,
           "2030-31": 11.2
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "debtInterestNetApf": {
         "unit": "pctGDP",
@@ -715,7 +848,10 @@
           "2029-30": 3.8,
           "2030-31": 3.8
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "locallyFinancedExpenditure": {
         "unit": "pctGDP",
@@ -729,7 +865,10 @@
           "2029-30": 2.8,
           "2030-31": 2.9
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "publicCorporationsExpenditure": {
         "unit": "pctGDP",
@@ -743,7 +882,10 @@
           "2029-30": 0.4,
           "2030-31": 0.4
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "psnbNeutralSpending": {
         "unit": "pctGDP",
@@ -757,7 +899,10 @@
           "2029-30": 3.5,
           "2030-31": 3.5
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
       },
       "otherAme": {
         "unit": "pctGDP",
@@ -771,7 +916,392 @@
           "2029-30": 1.9,
           "2030-31": 1.8
         },
-        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.1"
+        }
+      }
+    },
+    "receiptsByTax": {
+      "incomeTax": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 305900,
+          "2025-26": 331400,
+          "2026-27": 359600,
+          "2027-28": 384600,
+          "2028-29": 395600,
+          "2029-30": 413800,
+          "2030-31": 430800
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "nationalInsurance": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 171400,
+          "2025-26": 204000,
+          "2026-27": 211600,
+          "2027-28": 218900,
+          "2028-29": 226500,
+          "2029-30": 237600,
+          "2030-31": 245800
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "vat": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 173300,
+          "2025-26": 180900,
+          "2026-27": 188700,
+          "2027-28": 197800,
+          "2028-29": 205800,
+          "2029-30": 214700,
+          "2030-31": 223800
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "corporationTax": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 93200,
+          "2025-26": 98800,
+          "2026-27": 102500,
+          "2027-28": 109100,
+          "2028-29": 113400,
+          "2029-30": 117800,
+          "2030-31": 123200
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "onshoreCorporationTax": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 91000,
+          "2025-26": 96800,
+          "2026-27": 101400,
+          "2027-28": 108500,
+          "2028-29": 113100,
+          "2029-30": 117600,
+          "2030-31": 123000
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "fuelDuties": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 24400,
+          "2025-26": 24200,
+          "2026-27": 24600,
+          "2027-28": 26500,
+          "2028-29": 26600,
+          "2029-30": 26400,
+          "2030-31": 25700
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "businessRates": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 32100,
+          "2025-26": 33700,
+          "2026-27": 37100,
+          "2027-28": 37900,
+          "2028-29": 38800,
+          "2029-30": 42100,
+          "2030-31": 42100
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "councilTax": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 47400,
+          "2025-26": 50900,
+          "2026-27": 53700,
+          "2027-28": 56800,
+          "2028-29": 60700,
+          "2029-30": 64100,
+          "2030-31": 67600
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "capitalGainsTax": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 13700,
+          "2025-26": 21800,
+          "2026-27": 20800,
+          "2027-28": 25500,
+          "2028-29": 28900,
+          "2029-30": 32000,
+          "2030-31": 34900
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "inheritanceTax": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 8300,
+          "2025-26": 8700,
+          "2026-27": 9500,
+          "2027-28": 11200,
+          "2028-29": 12800,
+          "2029-30": 13700,
+          "2030-31": 14700
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "propertyTransactionTaxes": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 15200,
+          "2025-26": 16900,
+          "2026-27": 19700,
+          "2027-28": 21900,
+          "2028-29": 24300,
+          "2029-30": 26300,
+          "2030-31": 28100
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "stampTaxesOnShares": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 4300,
+          "2025-26": 4600,
+          "2026-27": 5000,
+          "2027-28": 5200,
+          "2028-29": 5400,
+          "2029-30": 5600,
+          "2030-31": 5700
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "tobaccoDuties": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 7900,
+          "2025-26": 7700,
+          "2026-27": 7500,
+          "2027-28": 7300,
+          "2028-29": 7000,
+          "2029-30": 6700,
+          "2030-31": 6600
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "alcoholDuties": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 12500,
+          "2025-26": 12300,
+          "2026-27": 12700,
+          "2027-28": 13100,
+          "2028-29": 13600,
+          "2029-30": 14100,
+          "2030-31": 14500
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "airPassengerDuty": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 4100,
+          "2025-26": 4500,
+          "2026-27": 5200,
+          "2027-28": 5500,
+          "2028-29": 5800,
+          "2029-30": 6100,
+          "2030-31": 6400
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "insurancePremiumTax": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 8900,
+          "2025-26": 9100,
+          "2026-27": 9300,
+          "2027-28": 9500,
+          "2028-29": 9700,
+          "2029-30": 10000,
+          "2030-31": 10200
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "vehicleExciseDuties": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 8200,
+          "2025-26": 9400,
+          "2026-27": 9900,
+          "2027-28": 10300,
+          "2028-29": 11800,
+          "2029-30": 12500,
+          "2030-31": 13300
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "nationalAccountsTaxes": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 1013000,
+          "2025-26": 1108000,
+          "2026-27": 1171000,
+          "2027-28": 1236000,
+          "2028-29": 1283000,
+          "2029-30": 1343000,
+          "2030-31": 1397000
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
+      },
+      "currentReceipts": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 1139000,
+          "2025-26": 1235000,
+          "2026-27": 1304000,
+          "2027-28": 1375000,
+          "2028-29": 1427000,
+          "2029-30": 1492000,
+          "2030-31": 1551000
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5: Current receipts",
+          "page": "112"
+        },
+        "provisional": true,
+        "note": "Published to £0.1 billion in the EFO's detailed tables; converted to £ million."
       }
     }
   },
@@ -899,10 +1429,15 @@
       "description": "A 1 percentage point change in the effective tax rate in each year changes borrowing by £36 billion in 2030-31. Informational: used for the uncertainty display, not a slider.",
       "unit": "pp",
       "perUnit": 1,
-      "effectOnPsnbGbpm": { "2030-31": -36000 },
+      "effectOnPsnbGbpm": {
+        "2030-31": -36000
+      },
       "currentBudgetShare": 1,
       "rampNote": "End-year only.",
-      "source": { "sourceId": "obr-efo-2026-03", "paragraph": "6.17" }
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "6.17"
+      }
     }
   ],
   "uncertainty": {
@@ -918,7 +1453,10 @@
       "year": "2029-30",
       "value": 23600,
       "toleranceGbpm": 50,
-      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 5.1" }
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 5.1"
+      }
     },
     "psnflChangePctGdp": {
       "year": "2029-30",
@@ -931,7 +1469,10 @@
         "note": "Rounded table shares give -0.7pp; the text gives -0.8pp."
       }
     },
-    "welfareCapStatus": { "year": "2029-30", "value": "aboveCapWithinMargin" }
+    "welfareCapStatus": {
+      "year": "2029-30",
+      "value": "aboveCapWithinMargin"
+    }
   },
   "context": {
     "headroomAtPublicationGbpm": 23600,

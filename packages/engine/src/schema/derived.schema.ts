@@ -77,3 +77,33 @@ export const scorecardExtractSchema = z.strictObject({
   ),
   source: extractSourceSchema,
 });
+
+/**
+ * Output of the pipeline's extraction of HMRC's "Estimated cost of tax reliefs" (Table 2, six-year
+ * cost estimates, £ million). These are the static cost of each relief, not the yield from removing it.
+ */
+export const reliefExtractSchema = z.strictObject({
+  schemaVersion: z.literal(1),
+  sourceId: z.string().min(1),
+  sheet: z.string().min(1),
+  title: z.string().min(1),
+  years: z.array(fiscalYearSchema).min(1),
+  rows: z
+    .array(
+      z.strictObject({
+        rowId: z.string().min(1),
+        code: z.string(),
+        name: z.string().min(1),
+        taxType: z.string(),
+        reliefType: z.string(),
+        firstForecastYear: z.string(),
+        values: z.record(fiscalYearSchema, z.number().nullable()),
+        negligible: z.record(fiscalYearSchema, z.boolean()),
+        /** HMRC's text where no number is published ("Not available", "Disclosive", …). */
+        markers: z.record(fiscalYearSchema, z.string()),
+        description: z.string(),
+      }),
+    )
+    .min(1),
+  source: extractSourceSchema,
+});

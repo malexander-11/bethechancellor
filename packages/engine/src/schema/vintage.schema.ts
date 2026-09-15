@@ -58,6 +58,7 @@ export const vintageSchema = z.strictObject({
     nominalGdpCentred: seriesSchema,
     realGdpGrowth: seriesSchema,
     cpiInflation: seriesSchema,
+    rpiInflation: seriesSchema.optional(),
     unemploymentRate: seriesSchema.optional(),
     conditioningAssumptions: z.record(z.string(), scalarAssumptionSchema),
   }),
@@ -77,6 +78,8 @@ export const vintageSchema = z.strictObject({
     welfareComponents: z.record(z.string(), seriesSchema).optional(),
     debtInterestNetApf: seriesSchema,
     receiptsByHeadPctGdp: z.record(z.string(), seriesSchema),
+    /** £ million receipts by individual tax (EFO detailed Table A.5). */
+    receiptsByTax: z.record(z.string(), seriesSchema).optional(),
     spendingComponentsPctGdp: z.record(z.string(), seriesSchema).optional(),
   }),
   assumptions: z.strictObject({
