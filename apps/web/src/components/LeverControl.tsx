@@ -179,7 +179,6 @@ export function LeverControl({
                 {change.note ? <span className="lever__level-note"> {change.note}</span> : null}
                 <span className="lever__delta">
                   {isDefault ? 'as the OBR forecast' : formatLeverValue(lever, value)}
-                  {!isDefault && lever.control.formatLabel ? ` ${lever.control.formatLabel}` : ''}
                 </span>
               </>
             ) : (
@@ -231,18 +230,25 @@ export function LeverControl({
           )}
         </>
       ) : null}
-      <p className="lever__desc">{lever.description}</p>
-      {lookupPoints ? (
-        <p className="lever__note">
-          HMRC publishes estimates at {lookupPoints.join(', ')}; values in between are interpolated
-          in a straight line and the slider stops at HMRC&rsquo;s largest published change.
-        </p>
-      ) : null}
-      {barnett ? (
-        <p className="lever__note">
-          Barnett formula: a change here would also move the block grants to Scotland, Wales and
-          Northern Ireland in proportion. That knock-on is described in the sources, not counted in
-          the number. <LabelBadge badge="commentary" />
+      <p className="lever__desc">{lever.headline ?? lever.description}</p>
+      {lookupPoints || barnett ? (
+        <p className="lever__tags">
+          {lookupPoints ? (
+            <span
+              className="tag"
+              title={`HMRC publishes estimates at ${lookupPoints.join(', ')}; values in between are interpolated in a straight line.`}
+            >
+              HMRC points only
+            </span>
+          ) : null}
+          {barnett ? (
+            <span
+              className="tag"
+              title="A change here also moves the Scottish, Welsh and Northern Ireland block grants. That knock-on is described in the sources, not counted in the number."
+            >
+              Barnett applies
+            </span>
+          ) : null}
         </p>
       ) : null}
       {improvement !== null && summaryYear ? (
@@ -264,7 +270,7 @@ export function LeverControl({
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
         >
-          {open ? 'Hide sources' : 'Where does this number come from?'}
+          {open ? 'Hide detail' : 'Detail and sources'}
         </button>
         {!isDefault ? (
           <button

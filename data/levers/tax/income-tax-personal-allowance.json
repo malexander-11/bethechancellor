@@ -8,6 +8,7 @@
   "order": 40,
   "title": "Personal allowance",
   "shortTitle": "Personal allowance",
+  "headline": "£12,570 and frozen to 2031. Each £100 costs about £1bn.",
   "description": "Raise the £12,570 tax-free personal allowance. HMRC publishes the cost of +£100 and of +10% (about £1,257); values in between are interpolated in a straight line.",
   "baselinePolicy": {
     "text": "Personal allowance £12,570, unchanged since April 2021 and frozen until April 2031 (Budget 2025, Table 4.1 line 46). It is withdrawn at £1 for every £2 of income above £100,000.",

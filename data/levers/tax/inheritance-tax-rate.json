@@ -8,6 +8,7 @@
   "order": 20,
   "title": "Inheritance tax rate",
   "shortTitle": "Inheritance tax",
+  "headline": "40% above £325,000, frozen since 2009. Abolition costs £13.7bn.",
   "description": "Set the rate charged on estates above the £325,000 nil-rate band (frozen since 2009 and now to April 2031): keep it at 40%, move it between 30% and 50%, or abolish the tax. Rises use HMRC's ready reckoner; cuts mirror it; abolition gives up the OBR's whole inheritance tax line (£13.7bn in 2029-30).",
   "baselinePolicy": {
     "text": "Standard rate 40% above a £325,000 nil-rate band plus a £175,000 residence nil-rate band; thresholds frozen until April 2031 (Budget 2025, Table 4.1 line 55).",

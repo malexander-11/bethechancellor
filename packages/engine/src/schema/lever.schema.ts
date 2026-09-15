@@ -328,6 +328,9 @@ export const leverSchema = z
     order: z.number().int().optional(),
     title: z.string().min(1),
     shortTitle: z.string().min(1),
+    /** The one line shown on the card. Everything longer belongs in `description`. */
+    headline: z.string().min(1).max(90).optional(),
+    /** The full explanation, shown in the provenance drawer. */
     description: z.string().min(1),
     baselinePolicy: z.strictObject({
       text: z.string().min(1),
@@ -395,6 +398,13 @@ export const leverSchema = z
       }
       if (!lever.group) {
         ctx.addIssue({ code: 'custom', message: 'policy levers need a UI group', path: ['group'] });
+      }
+      if (!lever.headline) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'policy levers need a headline: the one line shown on the card',
+          path: ['headline'],
+        });
       }
       if (
         lever.badge === 'direct' &&

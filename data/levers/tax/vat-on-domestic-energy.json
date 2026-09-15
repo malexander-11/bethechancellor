@@ -8,6 +8,7 @@
   "order": 40,
   "title": "Charge full VAT on domestic energy",
   "shortTitle": "VAT on domestic energy",
+  "headline": "Domestic energy pays 5%, not 20%. The gap costs £7.0bn.",
   "description": "Charge the standard 20% rate of VAT on domestic fuel and power, which currently pay the 5% reduced rate. HMRC puts the cost of the current relief at £7.0bn in 2025-26; that is the static cost of the relief, not a forecast of what charging VAT would raise.",
   "baselinePolicy": {
     "text": "Domestic fuel and power pay the 5% reduced rate.",

@@ -19,10 +19,6 @@ const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDat
   year: 'numeric',
 });
 
-function slug(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-}
-
 export function BudgetPage() {
   const { tab } = useParams();
   const { state, dispatch, outcome, query } = useBudget();
@@ -42,6 +38,7 @@ export function BudgetPage() {
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
+  const moved = new Set(outcome.leverEffects.map((e) => e.code));
   const macroSummary = leversByCategory.macro
     .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
     .filter((x) => x.value !== x.lever.control.default)
@@ -65,9 +62,7 @@ export function BudgetPage() {
     <JourneyLayout step={step}>
       <h1 className="page-title">Step 2 · Set taxes and spending</h1>
       <p className="lede">
-        Every control shows the level it moves a rate, threshold or budget to. Official costings
-        carry the direct badge; arithmetic on published plans is mechanical; your advisers&rsquo;
-        opinions are commentary and change no number.
+        Each control shows what it moves to. Every number carries a badge saying where it came from.
       </p>
       <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
       <p className="assumptions-line">
@@ -95,15 +90,23 @@ export function BudgetPage() {
           {briefingsFor(step).map((b) => (
             <AdviserBriefing key={b.id} briefing={b} />
           ))}
-          {groupLevers(items).map((group) => (
-            <section
-              key={group.name}
-              className="panel"
-              aria-labelledby={`group-${slug(group.name)}`}
-            >
-              <h2 id={`group-${slug(group.name)}`}>{group.name}</h2>
+          {groupLevers(items).map((group, index) => (
+            <details key={group.name} className="panel group" open={index === 0}>
+              <summary className="group__head">
+                <span className="group__line">
+                  <span className="group__name">{group.name}</span>
+                  <span className="group__count">
+                    {group.levers.filter((l) => moved.has(l.code)).length > 0
+                      ? `${group.levers.filter((l) => moved.has(l.code)).length} changed`
+                      : group.levers.length}
+                  </span>
+                </span>
+                {briefingsFor(step, group.name)[0] ? (
+                  <span className="group__say">{briefingsFor(step, group.name)[0]?.headline}</span>
+                ) : null}
+              </summary>
               {briefingsFor(step, group.name).map((b) => (
-                <AdviserBriefing key={b.id} briefing={b} compact />
+                <AdviserBriefing key={b.id} briefing={b} compact variant="body" />
               ))}
               {group.levers.map((lever) => (
                 <LeverControl
@@ -115,7 +118,7 @@ export function BudgetPage() {
                   onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
                 />
               ))}
-            </section>
+            </details>
           ))}
           <p className="hero-start__actions">
             {step === 'taxes' ? (

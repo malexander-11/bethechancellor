@@ -8,6 +8,7 @@
   "order": 30,
   "title": "Stamp duty: 5% band",
   "shortTitle": "Stamp duty 5% band",
+  "headline": "5% on the slice of a purchase from £250,001 to £925,000.",
   "description": "Change the 5% rate of stamp duty land tax on the part of a home’s price between £250,001 and £925,000 (England and Northern Ireland), in percentage points. HMRC gives separate figures for a rise and a cut.",
   "baselinePolicy": {
     "text": "Residential rates 0% to £250,000 (£300,000 for first-time buyers), 5% to £925,000, 10% to £1.5m, 12% above; a surcharge applies to additional dwellings.",

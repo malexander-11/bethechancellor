@@ -8,6 +8,7 @@
   "order": 20,
   "title": "Employee and self-employed NICs additional rate",
   "shortTitle": "Employee NICs additional rate",
+  "headline": "2% above £50,270. A point raises about £2.4bn.",
   "description": "Change the 2% rate paid on earnings above £50,270 by employees and the self-employed, in percentage points.",
   "baselinePolicy": {
     "text": "Employee Class 1 additional rate 2% above £50,270; Class 4 additional rate 2%.",

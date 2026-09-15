@@ -8,6 +8,7 @@
   "order": 60,
   "title": "Charge VAT on books, newspapers and magazines",
   "shortTitle": "VAT on printed matter",
+  "headline": "Books, papers and magazines are zero-rated, at a cost of £1.7bn.",
   "description": "Charge the standard 20% rate of VAT on books, newspapers, magazines, maps and their electronic equivalents, currently zero-rated. HMRC puts the cost of the current relief at £1.7bn in 2025-26; that is the static cost of the relief, not a forecast of what charging VAT would raise.",
   "baselinePolicy": {
     "text": "Books, children's picture books, maps, magazines, newspapers and printed music are zero-rated (VAT Notice 701/10), in printed and electronic form.",

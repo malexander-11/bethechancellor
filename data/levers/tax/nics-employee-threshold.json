@@ -8,6 +8,7 @@
   "order": 40,
   "title": "Employee NICs threshold",
   "shortTitle": "NICs threshold",
+  "headline": "£12,570 a year. Raising it by £1,000 costs about £2.4bn.",
   "description": "Raise or lower the £12,570 a year (£242 a week) at which employees start paying National Insurance, in steps of £104 a year (£2 a week), the unit HMRC publishes.",
   "baselinePolicy": {
     "text": "Primary threshold £12,570 a year, aligned with the personal allowance and frozen until April 2031 (Budget 2025, Table 4.1 line 46).",

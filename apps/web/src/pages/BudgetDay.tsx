@@ -50,8 +50,6 @@ export function BudgetDayPage() {
       <h1 className="page-title">Step 3 · Budget day</h1>
       <p className="lede">
         Wednesday 28 October 2026. {met} of {outcome.verdicts.length} tests pass on your figures.
-        Below: the verdict on each rule, the measures you announced as the levels they move to, and
-        what your advisers want on the record.
       </p>
       <section aria-labelledby="verdicts-heading">
         <h2 id="verdicts-heading" className="sr-only">

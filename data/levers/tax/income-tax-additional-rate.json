@@ -8,6 +8,7 @@
   "order": 30,
   "title": "Additional rate of income tax",
   "shortTitle": "Additional rate",
+  "headline": "45% since 2013, after a year at 50%. It raises surprisingly little.",
   "description": "Change the 45% rate paid on income above £125,140, in pence in the pound. HMRC expects a cut to cost more than a rise raises, because the highest earners respond most to rates.",
   "baselinePolicy": {
     "text": "Additional rate 45% above £125,140 (UK rates).",

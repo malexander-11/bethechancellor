@@ -8,6 +8,7 @@
   "order": 20,
   "title": "VAT reduced rate",
   "shortTitle": "VAT reduced rate",
+  "headline": "5% on domestic energy and a few other things. A point raises about £0.5bn.",
   "description": "Change the 5% reduced rate of VAT (domestic energy, children’s car seats and some other items), in percentage points.",
   "baselinePolicy": {
     "text": "Reduced rate 5%.",

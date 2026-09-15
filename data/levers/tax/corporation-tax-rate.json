@@ -8,6 +8,7 @@
   "order": 10,
   "title": "Corporation tax rate",
   "shortTitle": "Corporation tax",
+  "headline": "25% since 2023, up from 19%. A point is worth about £4bn.",
   "description": "Change the rates of corporation tax on company profits (25% main rate, 19% small profits rate), in percentage points.",
   "baselinePolicy": {
     "text": "Main rate 25% on profits over £250,000; small profits rate 19% up to £50,000 with marginal relief between.",

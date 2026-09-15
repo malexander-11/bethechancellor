@@ -6,6 +6,7 @@
       "step": "start",
       "adviser": "permanent-secretary",
       "title": "Chancellor, welcome. The Budget is on 28 October.",
+      "headline": "Two rules and a cap. Miss them and the OBR says so on 28 October.",
       "paragraphs": [
         {
           "text": "The Budget is on Wednesday 28 October 2026. The Office for Budget Responsibility publishes a new economic and fiscal forecast alongside it and, once a year at the autumn Budget, formally assesses whether the Government's plans meet the fiscal rules. That assessment is the test your Budget has to pass.",
@@ -48,6 +49,7 @@
       "step": "assumptions",
       "adviser": "chief-economic-adviser",
       "title": "The forecast rests on assumptions that have moved",
+      "headline": "The OBR froze its assumptions in January. Markets have moved since.",
       "paragraphs": [
         {
           "text": "The OBR conditions its forecast on market expectations for interest rates taken in a window before publication (the 10 working days to 22 January 2026 for the March forecast) and on its own view of growth and inflation. When those move, the arithmetic moves even if policy does not.",
@@ -84,6 +86,7 @@
       "step": "taxes",
       "adviser": "director-of-tax",
       "title": "Where the money comes from",
+      "headline": "Income tax, National Insurance and VAT raise 58% of everything.",
       "paragraphs": [
         {
           "text": "Public sector receipts total £1,235bn in 2025-26. Income tax (£331bn), National Insurance (£204bn) and VAT (£181bn) raise 58% of it between them. Corporation tax adds £98.8bn, council tax £50.9bn, business rates £33.7bn, fuel duty £24.2bn, capital gains tax £21.8bn, property transaction taxes £16.9bn, alcohol and tobacco duties £20.0bn and inheritance tax £8.7bn.",
@@ -227,6 +230,7 @@
       "step": "taxes",
       "adviser": "political-adviser",
       "title": "What will be contested",
+      "headline": "The threshold freeze raises the most and everyone pays it. Fuel duty has not risen since 2011.",
       "paragraphs": [
         {
           "text": "The threshold freeze is the biggest revenue raiser in the system and is paid by everyone in work: the OBR notes its yield comes from a broad base of taxpayers. Ending it costs money in every year to 2031; extending it further is not on offer, because Budget 2025 already runs it to April 2031.",
@@ -282,6 +286,7 @@
       "group": "Budget 2025 decisions",
       "adviser": "political-adviser",
       "title": "Your predecessor's decisions",
+      "headline": "Your predecessor raised £13bn from frozen thresholds alone. You can undo any of it.",
       "paragraphs": [
         {
           "text": "Budget 2025 (26 November 2025) raised revenue mainly by extending the personal tax threshold freeze for three more years to April 2031 (£8.4bn in 2029-30 including the employer threshold), raising the rates on dividend, savings and property income (£2.2bn), capping salary-sacrifice pension contributions (£4.8bn) and raising remote gaming duty (£1.1bn), while cancelling fuel duty uprating for 2026-27 and extending the 5p cut to August 2026 (£-0.8bn). Each can be reversed here at the Treasury's own costing.",
@@ -301,6 +306,7 @@
       "group": "Income tax",
       "adviser": "director-of-tax",
       "title": "Income tax: rates that have not moved, thresholds that have not either",
+      "headline": "Rates have barely moved since 2008. Frozen thresholds do the work instead.",
       "paragraphs": [
         {
           "text": "The basic rate has been 20% since 2008-09, when it was cut from 22%; the higher rate has been 40% throughout; the additional rate has been 45% since 2013-14, after a year at 50%.",
@@ -361,6 +367,7 @@
       "group": "National Insurance",
       "adviser": "director-of-tax",
       "title": "National Insurance: cut for employees, raised for employers",
+      "headline": "Cut for employees in 2024, raised for employers in 2025.",
       "paragraphs": [
         {
           "text": "Employees pay 8% between £12,570 and £50,270 a year and 2% above; the main rate was 12% until January 2024 and 10% until April 2024. Employers pay 15% on earnings above £5,000 a year (£96 a week) since April 2025, up from 13.8% on earnings above £9,100.",
@@ -396,6 +403,7 @@
       "group": "Business",
       "adviser": "director-of-tax",
       "title": "Corporation tax",
+      "headline": "25% since 2023. Receipts hold at about 3.3% of GDP.",
       "paragraphs": [
         {
           "text": "The main rate has been 25% since April 2023 (19% before), with a 19% small profits rate for profits under £50,000 and marginal relief to £250,000. Onshore corporation tax raises £96.8bn in 2025-26, 3.2% of GDP rising to 3.4% by 2030-31.",
@@ -421,6 +429,7 @@
       "group": "VAT",
       "adviser": "director-of-tax",
       "title": "VAT: one big rate and some very large exceptions",
+      "headline": "One rate at 20%, and exceptions worth more than £60bn a year.",
       "paragraphs": [
         {
           "text": "The standard rate has been 20% since 4 January 2011. VAT raises £181bn (5.9% of GDP) in 2025-26 and is forecast to reach £224bn in 2030-31 as spending shifts towards standard-rated goods.",
@@ -455,6 +464,7 @@
       "group": "Capital taxes",
       "adviser": "director-of-tax",
       "title": "Capital taxes: small today, growing fast",
+      "headline": "Small taxes growing fast: capital gains receipts are up about 60% this year.",
       "paragraphs": [
         {
           "text": "Capital gains tax: main rates 18% and 24% since 30 October 2024. Receipts are £21.8bn in 2025-26, about 60% up on the year because disposals were brought forward ahead of the rate rise, and are forecast to reach £34.9bn in 2030-31 on rising equity prices.",
@@ -508,6 +518,7 @@
       "group": "Duties",
       "adviser": "director-of-tax",
       "title": "Duties: fuel and alcohol",
+      "headline": "Fuel duty has not risen since 2011-12, and electric cars are eroding it.",
       "paragraphs": [
         {
           "text": "Fuel duty on petrol and diesel has been 52.95p a litre since the 5p cut of March 2022, and the OBR notes the rate has not been increased since 2011-12. Budget 2025 planned to unwind the cut in three stages (1p in September 2026, 2p in December 2026, 2p in March 2027) and to uprate with RPI from April 2027. Receipts are £24.2bn in 2025-26, peaking at about £27 billion in 2028-29 before electric vehicles erode the base.",
@@ -545,6 +556,7 @@
       "step": "spending",
       "adviser": "director-of-public-spending",
       "title": "Where the money goes",
+      "headline": "Day-to-day budgets are set to 2028-29. After that there are only totals.",
       "paragraphs": [
         {
           "text": "Day-to-day departmental spending (resource DEL) is £548bn in 2026-27 and grows at an average of 1.1% a year in real terms to £582bn in 2028-29, the last year of the Spending Review settlements. Capital budgets are £122bn in 2026-27, rising to £134bn by 2029-30.",
@@ -627,6 +639,7 @@
       "step": "spending",
       "adviser": "political-adviser",
       "title": "What will be contested",
+      "headline": "Health is protected. The Foreign Office, Transport and the Home Office are not.",
       "paragraphs": [
         {
           "text": "Departmental cuts fall unevenly. The Spending Review protected health (NHS England up 3.0% a year in real terms to 2028-29) while the Foreign Office (down 6.9% a year), Transport (down 5.0%) and the Home Office (down 1.7%) take real cuts; anything you take from 'all other' budgets lands on departments already squeezed.",
@@ -664,6 +677,7 @@
       "group": "Budget 2025 spending decisions",
       "adviser": "political-adviser",
       "title": "Your predecessor's decisions",
+      "headline": "Your predecessor's welfare U-turns cost about £9bn a year. You can reverse them.",
       "paragraphs": [
         {
           "text": "Budget 2025 removed the two-child limit in universal credit from April 2026 (costing £3.1bn in 2029-30), confirmed the PIP eligibility changes would not proceed (£4.5bn), paid winter fuel payments to pensioners with incomes up to £35,000 (£1.3bn) and counted £4.0bn of further efficiency savings from departments. Each can be reversed here at the Treasury's costing.",
@@ -683,6 +697,7 @@
       "group": "Day-to-day departmental budgets",
       "adviser": "director-of-public-spending",
       "title": "The Spending Review settlements",
+      "headline": "Settlements run to 2028-29. Beyond that we extend them, and say so.",
       "paragraphs": [
         {
           "text": "The June 2025 Spending Review fixed day-to-day budgets to 2028-29. Average real growth a year from 2025-26: Health and Social Care 2.8% (NHS England 3.0%), Education 0.7%, Justice 1.8%, local government grant 1.1%, Defence 0.7%, Home Office -1.7%, Transport -5.0% and the Foreign, Commonwealth and Development Office -6.9%. Total resource DEL excluding depreciation grows 1.2% a year.",
@@ -719,6 +734,7 @@
       "group": "Public investment",
       "adviser": "director-of-public-spending",
       "title": "Public investment",
+      "headline": "Investment adds to debt, not to the day-to-day budget the stability rule tests.",
       "paragraphs": [
         {
           "text": "Capital DEL is £122bn in 2026-27 and £134bn in 2029-30 after the OBR's underspend assumptions (£9.7 billion this year, about £3.7 billion a year after). Defence capital rises from £23.2bn in 2025-26 to £33.2bn in 2029-30. Investment adds to borrowing and to net financial liabilities but not to the current budget, so it tests the investment rule, not the stability rule.",
@@ -741,6 +757,7 @@
       "group": "Welfare",
       "adviser": "director-of-public-spending",
       "title": "Welfare",
+      "headline": "Half of welfare sits inside the cap, and it is already above it.",
       "paragraphs": [
         {
           "text": "In 2029-30 the OBR forecasts pensioner spending of £188bn, universal credit and legacy benefits £103bn, disability benefits £61.1bn, child benefit £13.9bn and other welfare £24.3bn. Spending inside the welfare cap is £199bn against a cap of £194.5 billion: above the cap but inside its 5% margin.",
@@ -775,6 +792,7 @@
       "step": "budget-day",
       "adviser": "permanent-secretary",
       "title": "How the OBR will judge this Budget",
+      "headline": "Headroom is a forecast. The OBR's typical five-year error is £33bn.",
       "paragraphs": [
         {
           "text": "The OBR tests the stability rule on the current budget in the target year, the investment rule on whether net financial liabilities are falling as a share of GDP, and the welfare cap on capped spending against the cap and margin. It publishes its verdict with the Budget; the Chancellor may only suspend the rules in a significant shock, and the OBR judges whether one has occurred.",
@@ -801,6 +819,7 @@
       "step": "budget-day",
       "adviser": "chief-economic-adviser",
       "title": "Your assumptions are not the OBR's",
+      "headline": "These are your assumptions, not the OBR's. It publishes its own on 28 October.",
       "paragraphs": [
         {
           "text": "Any change you made to the interest rate, growth or inflation sliders is your view, costed with the OBR's published sensitivities. On 28 October the OBR will publish its own updated forecast; the arithmetic here shows what your Budget looks like if your assumptions turn out to be right.",

@@ -8,6 +8,7 @@
   "order": 10,
   "title": "Public investment (capital budgets)",
   "shortTitle": "Public investment",
+  "headline": "£134bn in 2029-30. Adds to debt, not to the day-to-day budget.",
   "description": "Change total departmental capital budgets from April 2027, as a percentage of the OBR's forecast (£132.8bn in 2027-28, £134.2bn in 2029-30). Investment adds to borrowing and to net financial liabilities but not to the current budget, so it tests the investment rule rather than the stability rule. A 1% change is about £1.3bn a year.",
   "baselinePolicy": {
     "text": "Capital DEL of £122.5bn in 2026-27 rising to £134.2bn in 2029-30 and £138.1bn in 2030-31, after the OBR's underspend assumptions of £9.7bn in 2026-27 and about £3.7bn a year in the final three years of the Spending Review period.",

@@ -310,6 +310,21 @@ export function ProvenanceDrawer({ lever, effect }: { lever: Lever; effect?: Lev
   const considerations = applicableConsiderations(lever, effect?.value);
   return (
     <div className="drawer">
+      <p className="drawer__lede">{lever.description}</p>
+      {lever.costing.kind === 'lookupTable' ? (
+        <p className="source">
+          HMRC publishes estimates at its own points only; values in between are interpolated in a
+          straight line and the control stops at the largest published change.
+        </p>
+      ) : null}
+      {lever.classification?.barnettConsequential ? (
+        <p className="source">
+          Barnett formula: a change here would also move the block grants to Scotland, Wales and
+          Northern Ireland in proportion. That knock-on is described below, not counted in the
+          number.
+        </p>
+      ) : null}
+
       <h4>What the OBR baseline already assumes</h4>
       <p>{lever.baselinePolicy.text}</p>
       <p>

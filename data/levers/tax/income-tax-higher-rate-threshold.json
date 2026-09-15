@@ -8,6 +8,7 @@
   "order": 50,
   "title": "Higher-rate threshold (basic rate band)",
   "shortTitle": "Higher-rate threshold",
+  "headline": "£50,270 and frozen to 2031. Raising it is what ends fiscal drag.",
   "description": "Move the point at which the 40% rate starts, as a percentage change in the £37,700 basic rate band (10% is about £3,770). HMRC publishes −10%, +1% and +10%; values in between are interpolated.",
   "baselinePolicy": {
     "text": "Basic rate limit £37,700, so the higher rate starts at £50,270. Frozen until April 2031 (Budget 2025, Table 4.1 line 46).",

@@ -47,6 +47,8 @@ export const briefingSchema = z.strictObject({
   group: z.string().min(1).optional(),
   adviser: slug,
   title: z.string().min(1),
+  /** The one line the adviser says out loud. The paragraphs are the detail behind it. */
+  headline: z.string().min(1).max(140),
   paragraphs: z.array(briefingParagraphSchema).min(1),
   facts: z.array(briefingFactSchema).optional(),
 });

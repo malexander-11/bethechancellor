@@ -8,6 +8,7 @@
   "order": 70,
   "title": "Charge VAT on public transport fares",
   "shortTitle": "VAT on passenger transport",
+  "headline": "Bus, train and plane fares are zero-rated, at a cost of £5.8bn.",
   "description": "Charge the standard 20% rate of VAT on passenger transport in vehicles, boats and aircraft carrying 10 or more people, currently zero-rated. HMRC puts the cost of the current relief at £5.8bn in 2025-26; that is the static cost of the relief, not a forecast of what charging VAT would raise.",
   "baselinePolicy": {
     "text": "Passenger transport in a vehicle, boat or aircraft that carries not less than 10 passengers is zero-rated (VAT Notice 744A).",

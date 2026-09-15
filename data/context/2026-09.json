@@ -5,7 +5,7 @@
   "asOf": "2026-09-15",
   "vintageId": "obr-2026-03",
   "adviser": "chief-economic-adviser",
-  "intro": "The OBR's March forecast is the baseline for every number in this Budget. Six months on, markets and independent forecasters have moved. Confirm the OBR's assumptions or replace them with your own; the sliders use the OBR's published sensitivities and are labelled as assumptions.",
+  "intro": "The OBR's March forecast is your baseline. Six months on, markets and forecasters have moved. Confirm its assumptions or replace them with your own.",
   "readings": [
     {
       "id": "gilt-10y",

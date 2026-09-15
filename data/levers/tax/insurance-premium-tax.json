@@ -8,6 +8,7 @@
   "order": 30,
   "title": "Insurance premium tax",
   "shortTitle": "Insurance premium tax",
+  "headline": "Retired from this Budget. Old links still work.",
   "description": "Change the 12% standard rate of insurance premium tax on most general insurance, in percentage points.",
   "baselinePolicy": {
     "text": "Standard rate 12%; higher rate 20% on travel insurance and some vehicle and appliance insurance.",

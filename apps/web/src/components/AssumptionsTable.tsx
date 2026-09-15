@@ -4,26 +4,58 @@ import { LabelBadge } from './LabelBadge';
 import { LeverControl, formatLeverValue } from './LeverControl';
 import { SourceLink } from './SourceLink';
 
-function Reading({ value, unit }: { value: ContextReading['obr']; unit: ContextReading['unit'] }) {
-  if (value.value !== undefined) {
-    return <strong className="reading__value">{formatReading(value.value, unit)}</strong>;
-  }
-  const years = Object.keys(value.series ?? {});
+/**
+ * One figure for a reading: the scalar, or the average over its years. The average is what the
+ * advisers' gap rule compares, so the card and the suggestion agree.
+ */
+function summarise(value: ContextReading['obr'], unit: ContextReading['unit']): string {
+  if (value.value !== undefined) return formatReading(value.value, unit);
+  const years = Object.values(value.series ?? {});
+  if (years.length === 0) return '';
+  const mean = years.reduce((a, b) => a + b, 0) / years.length;
+  return formatReading(mean, unit, 1);
+}
+
+function isSeries(value: ContextReading['obr']): boolean {
+  return value.series !== undefined;
+}
+
+/** The OBR's figure against the latest one, in one line. */
+function Compare({ reading }: { reading: ContextReading }) {
   return (
-    <span className="reading__series">
-      {years.map((y) => (
-        <span key={y} className="reading__year">
-          <small>{y}</small> {formatReading(value.series?.[y] ?? 0, unit, 1)}
-        </span>
-      ))}
-    </span>
+    <div className="reading__compare">
+      <span className="reading__side">
+        <small>OBR in March{isSeries(reading.obr) ? ', average' : ''}</small>
+        <strong>{summarise(reading.obr, reading.unit)}</strong>
+      </span>
+      <span className="reading__arrow" aria-hidden="true">
+        →
+      </span>
+      <span className="reading__side">
+        <small>Latest{isSeries(reading.latest) ? ', average' : ''}</small>
+        <strong>{summarise(reading.latest, reading.unit)}</strong>
+      </span>
+    </div>
   );
 }
 
-/**
- * One reading from the context file: the OBR's March assumption against the latest figure, the
- * advisers' suggested setting, and the slider that applies it (for readings that drive a lever).
- */
+function Why({ reading }: { reading: ContextReading }) {
+  return (
+    <details className="reading__why">
+      <summary>Why this matters</summary>
+      <p>{reading.text}</p>
+      <div className="briefing__sources">
+        <SourceLink ref={reading.obr.source} />
+        <SourceLink ref={reading.latest.source} />
+      </div>
+      <p className="source">
+        {reading.obr.label}. {reading.latest.label}.
+      </p>
+    </details>
+  );
+}
+
+/** A reading that drives one of the economic sliders. */
 export function AssumptionReading({
   reading,
   lever,
@@ -33,50 +65,50 @@ export function AssumptionReading({
   onChange,
 }: {
   reading: ContextReading;
-  lever?: Lever;
-  value?: number;
+  lever: Lever;
+  value: number;
   effect?: LeverEffect;
   summaryYear: string;
-  onChange?: (value: number) => void;
+  onChange: (value: number) => void;
 }) {
-  const suggestion = lever ? suggestSetting(reading, lever) : null;
+  const suggestion = suggestSetting(reading, lever);
   return (
     <article className="reading">
       <h3 className="reading__title">{reading.title}</h3>
-      <div className="reading__grid">
-        <div>
-          <div className="reading__label">OBR in March</div>
-          <Reading value={reading.obr} unit={reading.unit} />
-          <div className="source">
-            {reading.obr.label} · <SourceLink ref={reading.obr.source} />
-          </div>
-        </div>
-        <div>
-          <div className="reading__label">Latest</div>
-          <Reading value={reading.latest} unit={reading.unit} />
-          <div className="source">
-            {reading.latest.label} · <SourceLink ref={reading.latest.source} />
-          </div>
-        </div>
-      </div>
-      <p className="reading__text">{reading.text}</p>
-      {lever && suggestion ? (
+      <Compare reading={reading} />
+      {suggestion ? (
         <p className="reading__suggestion">
           <LabelBadge badge="assumption" /> Advisers suggest{' '}
           <strong>{formatLeverValue(lever, suggestion.value)}</strong>
-          {suggestion.value === lever.control.default ? ' (keep the OBR path)' : ''}.{' '}
-          <span className="source">{suggestion.rationale}</span>
+          {suggestion.value === lever.control.default ? ' (keep the OBR path)' : ''}
+          <span className="reading__rationale" title={suggestion.rationale}>
+            {' '}
+            why?
+          </span>
         </p>
       ) : null}
-      {lever && value !== undefined && onChange ? (
-        <LeverControl
-          lever={lever}
-          value={value}
-          effect={effect}
-          summaryYear={summaryYear}
-          onChange={onChange}
-        />
-      ) : null}
+      <LeverControl
+        lever={lever}
+        value={value}
+        effect={effect}
+        summaryYear={summaryYear}
+        onChange={onChange}
+      />
+      <Why reading={reading} />
     </article>
+  );
+}
+
+/** A reading with no slider: context, shown as one row. */
+export function ContextRow({ reading }: { reading: ContextReading }) {
+  return (
+    <tr>
+      <th scope="row">{reading.title}</th>
+      <td>{summarise(reading.obr, reading.unit)}</td>
+      <td>{summarise(reading.latest, reading.unit)}</td>
+      <td className="source">
+        <SourceLink ref={reading.latest.source} />
+      </td>
+    </tr>
   );
 }

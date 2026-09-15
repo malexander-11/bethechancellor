@@ -8,6 +8,7 @@
   "order": 50,
   "title": "Child benefit rates",
   "shortTitle": "Child benefit rates",
+  "headline": "£27.05 a week for the eldest child, £17.90 for the others.",
   "description": "Change both child benefit rates (the eldest-child rate and the rate for each other child) by the same amount per week from April 2027, costed from HMRC's ready reckoner. Each £1 a week costs about £0.6bn a year.",
   "baselinePolicy": {
     "text": "Child benefit spending of £13.4bn in 2025-26 rising to £13.9bn in 2029-30 and £14.0bn in 2030-31 (Table 4.6), with rates uprated as in the OBR's forecast.",

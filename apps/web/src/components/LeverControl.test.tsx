@@ -52,10 +52,10 @@ describe('LeverControl', () => {
       />,
     );
     const scope = within(container);
-    expect(scope.getByText(/Barnett formula/)).toBeInTheDocument();
+    expect(scope.getByText('Barnett applies')).toBeInTheDocument();
     const current = scope.getByText(/Current budget in 2029-30/);
     expect(current.textContent).toMatch(/2\.4bn/);
-    fireEvent.click(scope.getByRole('button', { name: /Where does this number come from/ }));
+    fireEvent.click(scope.getByRole('button', { name: /Detail and sources/ }));
     expect(scope.getByText(/Spending Review 2025 rows/)).toBeInTheDocument();
     expect(scope.getAllByText(/extended from 2028-29/)).toHaveLength(2);
     // Only the "increase" Barnett note applies at +1%.

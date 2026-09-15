@@ -6,10 +6,14 @@
   "badge": "assumption",
   "title": "Economic growth (nominal GDP, each year)",
   "shortTitle": "Growth",
+  "headline": "Faster growth raises receipts and shrinks debt. 0.1pp a year is worth £8bn.",
   "description": "How much faster or slower the cash economy grows each year than the OBR forecast. Faster growth raises receipts and shrinks debt as a share of the economy.",
   "baselinePolicy": {
     "text": "OBR March 2026: real GDP growth 1.1% in 2026 then about 1.5 to 1.6% a year; nominal GDP grows 18.6% in total between 2025-26 and 2030-31.",
-    "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.1 and Table 2.2" }
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table 2.1 and Table 2.2"
+    }
   },
   "control": {
     "kind": "slider",
@@ -21,7 +25,10 @@
     "formatLabel": "percentage points a year versus the OBR forecast"
   },
   "appliesFrom": "firstForecastYear",
-  "costing": { "kind": "sensitivity", "sensitivityId": "nominalGrowth0p1pp" },
+  "costing": {
+    "kind": "sensitivity",
+    "sensitivityId": "nominalGrowth0p1pp"
+  },
   "considerations": [
     {
       "id": "growth-dominates",
@@ -31,8 +38,13 @@
       "alreadyInDirectCosting": false,
       "text": "Growth is the biggest single driver of the public finances: a tenth of a point a year is worth about as much by the end of the forecast as a penny on the basic rate of income tax. This is why the OBR's growth judgement, not any single tax measure, usually decides whether the rules are met.",
       "sources": [
-        { "sourceId": "obr-efo-2026-03", "paragraph": "6.17" },
-        { "sourceId": "hmrc-trr-2025-06" }
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "6.17"
+        },
+        {
+          "sourceId": "hmrc-trr-2025-06"
+        }
       ]
     },
     {
@@ -42,7 +54,11 @@
       "magnitudeWords": "unknown",
       "alreadyInDirectCosting": false,
       "text": "Your own choices can affect growth, for example through public investment or the design of taxes, but the size and timing are uncertain and contested. This tool does not translate policy into growth; it lets you state a growth assumption explicitly instead.",
-      "sources": [{ "sourceId": "nesta-ifs-be-the-chancellor" }]
+      "sources": [
+        {
+          "sourceId": "nesta-ifs-be-the-chancellor"
+        }
+      ]
     }
   ],
   "status": "reviewed",

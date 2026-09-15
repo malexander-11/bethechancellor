@@ -1,5 +1,5 @@
 import { AdviserBriefing } from '../components/AdviserBriefing';
-import { AssumptionReading } from '../components/AssumptionsTable';
+import { AssumptionReading, ContextRow } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { Scorecard } from '../components/Scorecard';
@@ -51,23 +51,50 @@ export function AssumptionsPage() {
           const lever = reading.leverCode
             ? levers.find((l) => l.code === reading.leverCode)
             : undefined;
+          if (!lever) return null;
           return (
             <AssumptionReading
               key={reading.id}
               reading={reading}
               lever={lever}
-              value={lever ? (state.leverValues[lever.code] ?? lever.control.default) : undefined}
-              effect={lever ? outcome.leverEffects.find((e) => e.code === lever.code) : undefined}
+              value={state.leverValues[lever.code] ?? lever.control.default}
+              effect={outcome.leverEffects.find((e) => e.code === lever.code)}
               summaryYear={targetYear}
-              onChange={
-                lever
-                  ? (value) => dispatch({ type: 'setLever', code: lever.code, value })
-                  : undefined
-              }
+              onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
             />
           );
         })}
       </div>
+      <details className="panel">
+        <summary className="group__head">
+          <span className="group__line">
+            <span className="group__name">Also changed since March</span>
+            <span className="group__count">
+              {context.readings.filter((r) => !r.leverCode).length}
+            </span>
+          </span>
+          <span className="group__say">No slider here: context for the numbers above.</span>
+        </summary>
+        <div className="table-scroll">
+          <table className="measures">
+            <thead>
+              <tr>
+                <th>Reading</th>
+                <th>OBR in March</th>
+                <th>Latest</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {context.readings
+                .filter((r) => !r.leverCode)
+                .map((r) => (
+                  <ContextRow key={r.id} reading={r} />
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
       {briefingsFor('assumptions').map((b) => (
         <AdviserBriefing key={b.id} briefing={b} />
       ))}

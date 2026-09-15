@@ -8,6 +8,7 @@
   "order": 10,
   "title": "VAT standard rate",
   "shortTitle": "VAT standard rate",
+  "headline": "20% since 2011. A point is worth £9.5bn, the biggest single lever here.",
   "description": "Change the 20% standard rate of VAT, in percentage points.",
   "baselinePolicy": {
     "text": "Standard rate 20%; VAT receipts about 6% of GDP.",
