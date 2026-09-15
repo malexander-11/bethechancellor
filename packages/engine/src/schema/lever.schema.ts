@@ -392,6 +392,11 @@ export const classificationSchema = z.strictObject({
   delType: z.enum(['RDEL', 'CDEL']).optional(),
   department: z.string().optional(),
   insideWelfareCap: z.boolean().optional(),
+  /**
+   * The share of a spending change that is capital, where it splits. Omit for a change that is
+   * wholly one or the other, which `currentOrCapital` already says.
+   */
+  capitalShare: z.number().min(0).max(1).optional(),
   psnflTreatment: z.enum(['standard', 'financialTransaction']).default('standard'),
   barnettConsequential: z.boolean().optional(),
 });
@@ -402,7 +407,7 @@ export const leverSchema = z
     id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
     /** Short stable code used in permalinks. Never reused. */
     code: z.string().regex(/^[a-z][a-z0-9]{1,7}$/),
-    category: z.enum(['tax', 'spend', 'welfare', 'macro']),
+    category: z.enum(['tax', 'spend', 'welfare', 'macro', 'campaign']),
     badge: badgeSchema,
     /** UI grouping within a category, e.g. "Income tax"; ordered by `order`. */
     group: z.string().min(1).optional(),

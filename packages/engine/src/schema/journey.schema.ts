@@ -9,6 +9,7 @@ export const journeyStepSchema = z.enum([
   'assumptions',
   'taxes',
   'spending',
+  'recommendations',
   'budget-day',
 ]);
 

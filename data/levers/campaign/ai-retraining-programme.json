@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "id": "ai-retraining-programme",
+  "code": "airet",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 50,
+  "title": "An artificial intelligence retraining programme",
+  "shortTitle": "AI retraining, £1bn",
+  "headline": "£1bn a year to retrain people whose work automates.",
+  "description": "A new programme to retrain workers whose jobs are displaced by artificial intelligence, at £1bn a year of day-to-day spending. There is no costing to look up, because the policy is a sum of money: the cost is the amount you choose to spend. For scale, Budget 2025 put about £520m a year into the Youth Guarantee, the Growth and Skills Levy and employment support together, so this is roughly double the whole of that package.",
+  "baselinePolicy": {
+    "text": "Budget 2025 added about £0.5bn a year to jobs and skills programmes from 2026-27, falling back to £0.1bn by 2029-30. Nothing in the baseline is an artificial intelligence retraining programme.",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 24"
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "delType": "RDEL",
+    "psnflTreatment": "standard",
+    "barnettConsequential": true
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 1000,
+      "2027-28": 1000,
+      "2028-29": 1000,
+      "2029-30": 1000,
+      "2030-31": 1000
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 24, for scale"
+    },
+    "caveats": [
+      "This is not a costing. The programme is defined by its budget, so the cost is the budget: £1bn a year, flat in cash, which means it shrinks a little in real terms each year.",
+      "Whether £1bn buys a retraining programme that works is a question about design and delivery, not about the public finances."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "flat-in-cash",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "Held flat in cash, £1bn in 2027-28 is worth about £940m by 2030-31 in today's prices on the OBR's deflator.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.3: Determinants of the fiscal forecast",
+          "page": "110"
+        }
+      ]
+    },
+    {
+      "id": "barnett",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Skills policy is devolved, so an English programme of this kind would generate Barnett consequentials for Scotland, Wales and Northern Ireland on top of the figure shown.",
+      "sources": [{ "sourceId": "hmt-statement-of-funding-policy-2025", "paragraph": "3.9-3.18" }]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

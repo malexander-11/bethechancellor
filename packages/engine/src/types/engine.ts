@@ -17,7 +17,7 @@ export type SettingsInput = Partial<Settings>;
 export interface LeverEffect {
   leverId: string;
   code: string;
-  category: 'tax' | 'spend' | 'welfare' | 'macro';
+  category: 'tax' | 'spend' | 'welfare' | 'macro' | 'campaign';
   title: string;
   value: number;
   badge: Badge;

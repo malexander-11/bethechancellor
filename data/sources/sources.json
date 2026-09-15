@@ -445,6 +445,16 @@
       "localPath": "data/raw/dwp-benefit-expenditure-2026/outturn-and-forecast-tables-spring-forecast-2026.ods",
       "sha256": "705fb8fb5ace47e37eafe0b3817d5a6de538ce8fb2a67746e8f92d15ecd616e6",
       "notes": "Official statistics in development. Table 1a gives expenditure by benefit in nominal terms, 1948-49 to 2030-31, on the same forecast as the OBR’s. The State Pension line is the base for costing a change to how the pension is uprated."
+    },
+    {
+      "id": "legislation-ida-2015",
+      "org": "Parliament",
+      "title": "International Development (Official Development Assistance Target) Act 2015",
+      "url": "https://www.legislation.gov.uk/ukpga/2015/12/contents",
+      "publishedOn": "2015-03-26",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Section 1 puts a duty on the Secretary of State to meet the 0.7 per cent of gross national income target for official development assistance. Section 2 covers the accountability to Parliament if the target is not met in a year."
     }
   ]
 }

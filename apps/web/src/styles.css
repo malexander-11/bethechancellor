@@ -1539,3 +1539,12 @@ details.table-view td:first-child {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+.adopted-line {
+  margin: 0 0 0.75rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-weight: 600;
+}

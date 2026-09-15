@@ -37,10 +37,12 @@ export function applyClassification(effect: LeverEffect, lever: Lever, values: Y
   for (const [year, v] of Object.entries(values)) {
     if (c.side === 'receipts') {
       effect.receipts[year] = (effect.receipts[year] ?? 0) + v;
-    } else if (c.currentOrCapital === 'capital') {
-      effect.capitalSpending[year] = (effect.capitalSpending[year] ?? 0) + v;
     } else {
-      effect.currentSpending[year] = (effect.currentSpending[year] ?? 0) + v;
+      const capitalShare = c.capitalShare ?? (c.currentOrCapital === 'capital' ? 1 : 0);
+      if (capitalShare > 0)
+        effect.capitalSpending[year] = (effect.capitalSpending[year] ?? 0) + v * capitalShare;
+      if (capitalShare < 1)
+        effect.currentSpending[year] = (effect.currentSpending[year] ?? 0) + v * (1 - capitalShare);
     }
     if (c.side === 'spending' && c.insideWelfareCap) {
       effect.welfareInCap[year] = (effect.welfareInCap[year] ?? 0) + v;

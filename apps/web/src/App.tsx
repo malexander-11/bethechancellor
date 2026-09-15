@@ -5,6 +5,7 @@ import { AssumptionsPage } from './pages/Assumptions';
 import { BudgetPage } from './pages/Budget';
 import { BudgetDayPage } from './pages/BudgetDay';
 import { MethodologyPage } from './pages/Methodology';
+import { RecommendationsPage } from './pages/Recommendations';
 import { StartPage } from './pages/Start';
 import { Disclaimer } from './components/Disclaimer';
 
@@ -39,6 +40,7 @@ export function App() {
           <Route path="/assumptions" element={<AssumptionsPage />} />
           <Route path="/budget" element={<RedirectKeepingQuery to="/budget/taxes" />} />
           <Route path="/budget/:tab" element={<BudgetPage />} />
+          <Route path="/recommendations" element={<RecommendationsPage />} />
           <Route path="/budget-day" element={<BudgetDayPage />} />
           <Route path="/b" element={<RedirectKeepingQuery to="/budget/taxes" />} />
           <Route path="/methodology" element={<MethodologyPage />} />

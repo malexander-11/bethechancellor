@@ -47,7 +47,7 @@ export function BudgetDayPage() {
 
   return (
     <JourneyLayout step="budget-day">
-      <h1 className="page-title">Step 3 · Budget day</h1>
+      <h1 className="page-title">Step 4 · Budget day</h1>
       <p className="lede">
         Wednesday 28 October 2026. {met} of {outcome.verdicts.length} tests pass on your figures.
       </p>

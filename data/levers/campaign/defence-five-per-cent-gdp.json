@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "id": "defence-five-per-cent-gdp",
+  "code": "def5",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 30,
+  "title": "Immediately raise core defence spending to 5% of GDP",
+  "shortTitle": "Defence to 5% of GDP",
+  "headline": "The single most expensive thing on this page: £74bn a year.",
+  "description": "NATO members agreed in June 2025 to spend 5% of GDP on defence and security by 2035, of which 3.5% is core defence and 1.5% is resilience and infrastructure. This recommendation asks for 5% on core defence alone, now. The OBR's forecast already has core defence rising from 2.4% of GDP in 2025-26 to 3.0% by 2030-31 to meet the 3.5%-by-2035 commitment. The cost here is the gap between 5% and that path, multiplied by nominal GDP. It is larger than the entire education budget.",
+  "baselinePolicy": {
+    "text": "The OBR assumes defence spending rises from 2.4% of GDP in 2025-26 to 3.0% by 2030-31, on the way to the Government's commitment of 3.5% by 2035.",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Paragraph 4.15",
+      "page": "65",
+      "quote": "spending on defence rises from 2.4 per cent in 2025-26 to 3.0 per cent by the end of the forecast"
+    },
+    "alreadyIncludes": [
+      "Defence RDEL of £42.0bn and CDEL of £31.5bn in 2028-29 (Spending Review 2025, Tables 5.3 and 5.4)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "capitalShare": 0.43,
+    "delType": "RDEL",
+    "department": "Defence",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 78492,
+      "2027-28": 77262,
+      "2028-29": 75925,
+      "2029-30": 74425,
+      "2030-31": 72646
+    },
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Paragraph 4.15 and the nominal GDP forecast",
+      "page": "65"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "obr-efo-2026-03",
+      "method": {
+        "name": "gdpShareGap",
+        "targetPctGdp": 5,
+        "baselinePctGdp": {
+          "2026-27": 2.52,
+          "2027-28": 2.64,
+          "2028-29": 2.76,
+          "2029-30": 2.88,
+          "2030-31": 3.0
+        }
+      },
+      "note": "The OBR publishes the two ends of the path, 2.4% in 2025-26 and 3.0% in 2030-31, not the years between. Those are filled in by straight-line interpolation, which is our assumption, not the OBR's. The cost is then (5% − that share) × nominal GDP."
+    },
+    "caveats": [
+      "The share is split 43% capital and 57% day-to-day, the split in the Spending Review's own defence settlement for 2028-29 (£31.5bn capital, £42.0bn resource). Capital spending does not count against the stability rule, so the split matters as much as the total.",
+      "Nobody has costed this policy. The arithmetic is ours: a target share of GDP against the forecast share.",
+      "Money is not capability. Whether defence could absorb this much this fast is a question about industry and people, not about the public finances."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "core-versus-total",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "NATO's 5% is core defence plus 1.5% of GDP on resilience and infrastructure, and the target date is 2035. Applying 5% to core defence alone, immediately, goes well beyond what the alliance agreed.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Paragraph 4.15",
+          "page": "65"
+        }
+      ]
+    },
+    {
+      "id": "crowds-out",
+      "kind": "interaction",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The OBR already notes that meeting existing commitments leaves unprotected day-to-day spending falling 4.4% a year in real terms at the end of the forecast. An uplift of this size inside a fixed envelope would have to come from somewhere else, or from borrowing.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Paragraph 4.16",
+          "page": "66",
+          "quote": "falling by 4.4 per cent a year in real terms in the final two years of the forecast"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

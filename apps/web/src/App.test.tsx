@@ -44,7 +44,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Step 3 · Budget day')).toBeInTheDocument();
+    expect(screen.getByText('Step 4 · Budget day')).toBeInTheDocument();
     expect(screen.getByText('Your measures')).toBeInTheDocument();
     expect(screen.getAllByText('Rule met').length).toBeGreaterThanOrEqual(2);
   });

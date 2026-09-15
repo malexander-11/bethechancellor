@@ -3,14 +3,15 @@ import type { ReactNode } from 'react';
 import { StepLink } from '../journey/links';
 
 const STEPS: Array<{
-  id: 'start' | 'assumptions' | 'budget' | 'budget-day';
+  id: 'start' | 'assumptions' | 'budget' | 'recommendations' | 'budget-day';
   label: string;
   to: string;
 }> = [
   { id: 'start', label: 'Start', to: '/' },
   { id: 'assumptions', label: '1 · Assumptions', to: '/assumptions' },
   { id: 'budget', label: '2 · Taxes and spending', to: '/budget/taxes' },
-  { id: 'budget-day', label: '3 · Budget day', to: '/budget-day' },
+  { id: 'recommendations', label: '3 · Your colleagues', to: '/recommendations' },
+  { id: 'budget-day', label: '4 · Budget day', to: '/budget-day' },
 ];
 
 function stepGroup(step: JourneyStep): (typeof STEPS)[number]['id'] {

@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "id": "triple-lock-to-cpi",
+  "code": "cpilock",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 20,
+  "title": "Replace the triple lock with CPI inflation only",
+  "shortTitle": "Triple lock to CPI",
+  "headline": "Uprate the state pension by prices alone. Saves £2.7bn by 2029-30.",
+  "description": "The triple lock raises the state pension by the highest of CPI inflation, average earnings growth and 2.5%. Replace it with CPI inflation from April 2027. On the OBR's own forecast CPI is 2.0% and earnings growth 2.1% to 2.4%, so it is the 2.5% floor that binds every year: the whole saving comes from dropping that floor. The gap compounds, which is why a small annual difference reaches £3.7bn by 2030-31. Nothing here changes who gets the pension, only how fast it rises.",
+  "baselinePolicy": {
+    "text": "The OBR's forecast has the triple lock delivering 2.5% a year from 2027-28, above CPI of 2.0% and earnings growth of 2.1% to 2.4%.",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table A.3: Determinants of the fiscal forecast",
+      "page": "110"
+    },
+    "alreadyIncludes": [
+      "State pension expenditure rising from £146.1bn in 2025-26 to £180.7bn in 2030-31 on the triple lock (DWP Table 1a)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "psnflTreatment": "standard",
+    "insideWelfareCap": false
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": -930,
+      "2028-29": -1755,
+      "2029-30": -2674,
+      "2030-31": -3674
+    },
+    "source": {
+      "sourceId": "dwp-benefit-expenditure-2026",
+      "table": "Table 1a",
+      "note": "State Pension line, £ million nominal"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "dwp-benefit-expenditure-2026",
+      "method": {
+        "name": "upratingGap",
+        "rowId": "state-pension",
+        "baseYear": "2026-27",
+        "currentSeries": "tripleLockUprating",
+        "replacementSeries": "cpiInflationFy"
+      },
+      "note": "DWP's state pension line times the cumulative ratio of the two uprating paths, compounding from April 2027. Caseload growth is in both paths, so it cancels in the ratio. Nobody has costed this policy officially; this is our arithmetic on two published series."
+    },
+    "caveats": [
+      "The state pension is outside the welfare cap, so this saving does not change the cap verdict.",
+      "The saving assumes the whole line moves with the headline uprating. A small part of the DWP line is not uprated this way, so this slightly overstates the effect.",
+      "A change to uprating is permanent: the gap keeps widening beyond the forecast, well past the figures shown here."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "floor-binds",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The saving exists only because the OBR expects inflation and earnings to be below 2.5%. If either came in higher, the triple lock would deliver the same as CPI or earnings and the saving would shrink or vanish.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.3: Determinants of the fiscal forecast",
+          "page": "110"
+        }
+      ]
+    },
+    {
+      "id": "pensioner-incomes",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "This reaches every one of the roughly 13 million people on the state pension, and it compounds: a pensioner's income is permanently lower than under the triple lock, by more each year.",
+      "sources": [
+        {
+          "sourceId": "dwp-benefit-expenditure-2026",
+          "table": "Table 1a"
+        }
+      ]
+    },
+    {
+      "id": "legislation-needed",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "The earnings element of the uprating is set in statute, so replacing the triple lock needs primary legislation, not a Budget decision alone.",
+      "sources": [{ "sourceId": "dwp-benefit-expenditure-2026" }]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

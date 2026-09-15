@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "id": "aid-zero-point-seven-gni",
+  "code": "aid07",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 40,
+  "title": "Restore foreign aid to 0.7% of gross national income",
+  "shortTitle": "Aid back to 0.7%",
+  "headline": "Back to the old target from 0.3%. Costs about £14bn a year.",
+  "description": "Official development assistance was cut to 0.3% of gross national income from 2027 to help pay for defence. Restoring the 0.7% target, which was law from 2015 until it was suspended, means finding another 0.4% of national income. The OBR's forecast already assumes the 0.3% commitment, so the cost here is the difference between the two shares.",
+  "baselinePolicy": {
+    "text": "The OBR assumes aid grows in line with gross national income after 2028-29, in line with the Government's commitment to spend 0.3% of GNI on aid by 2027.",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Paragraph 4.15",
+      "page": "66",
+      "quote": "in line with the Government's commitment to spend 0.3 per cent of GNI on ODA by 2027"
+    },
+    "alreadyIncludes": [
+      "Foreign, Commonwealth and Development Office day-to-day budget falling from £8.4bn in 2025-26 to £7.1bn in 2028-29 (Spending Review 2025, Table 5.3)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "delType": "RDEL",
+    "department": "Foreign, Commonwealth and Development Office",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 12660,
+      "2027-28": 13095,
+      "2028-29": 13558,
+      "2029-30": 14042,
+      "2030-31": 14529
+    },
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Paragraph 4.15 and the nominal GDP forecast",
+      "page": "66"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "obr-efo-2026-03",
+      "method": {
+        "name": "gdpShareGap",
+        "targetPctGdp": 0.7,
+        "baselinePctGdp": {
+          "2026-27": 0.3,
+          "2027-28": 0.3,
+          "2028-29": 0.3,
+          "2029-30": 0.3,
+          "2030-31": 0.3
+        }
+      },
+      "note": "The gap between the two targets is 0.4% of national income. The OBR forecasts gross domestic product, not gross national income; the two differ by a point or two, so this uses GDP as the denominator and the figure is approximate."
+    },
+    "caveats": [
+      "Gross national income is not gross domestic product. Using GDP as the denominator is our approximation and makes the cost slightly too high.",
+      "Some aid spending scores as capital and some sits outside the aid department's budget; this treats the whole uplift as day-to-day spending."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "statutory-target",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "The 0.7% target is in the International Development (Official Development Assistance Target) Act 2015. The Act anticipates the target being missed and requires the Secretary of State to explain why, rather than making the shortfall unlawful.",
+      "sources": [{ "sourceId": "legislation-ida-2015" }]
+    },
+    {
+      "id": "aid-in-the-uk",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "A share of the aid budget is spent inside the UK, mainly on supporting asylum seekers, so the amount reaching other countries depends on decisions made elsewhere in government as well as on the total.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Paragraph 4.15",
+          "page": "66"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

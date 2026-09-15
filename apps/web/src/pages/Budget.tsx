@@ -126,8 +126,8 @@ export function BudgetPage() {
                 Next: spending
               </StepLink>
             ) : (
-              <StepLink to="/budget-day" className="btn btn--primary">
-                Go to Budget day
+              <StepLink to="/recommendations" className="btn btn--primary">
+                Next: what your colleagues want
               </StepLink>
             )}
           </p>
