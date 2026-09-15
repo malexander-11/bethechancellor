@@ -9,6 +9,7 @@ import {
   extractAutumnBudget2024Scorecard,
   extractBudget2025Scorecard,
 } from './extract-budget-2025-scorecard.js';
+import { extractDwpBenefits } from './extract-dwp-benefits.js';
 import { extractHmrcReadyReckoner } from './extract-hmrc-trr.js';
 import { extractPesaFunctions } from './extract-pesa.js';
 import { extractSr25DelTables } from './extract-sr25.js';
@@ -26,6 +27,7 @@ export const SR25_EXTRACT_FILE = 'hmt-sr25-del.raw.json';
 export const AB2024_EXTRACT_FILE = 'hmt-autumn-budget-2024-table-5-1.raw.json';
 export const RELIEFS_EXTRACT_FILE = 'hmrc-tax-reliefs-2026-01.raw.json';
 export const PESA_EXTRACT_FILE = 'hmt-pesa-2025-functions.raw.json';
+export const DWP_EXTRACT_FILE = 'dwp-benefit-expenditure-2026-table-1a.raw.json';
 
 export async function derive(options: DeriveOptions = {}): Promise<string[]> {
   const outDir = options.outDir ?? DERIVED_DIR;
@@ -70,6 +72,11 @@ export async function derive(options: DeriveOptions = {}): Promise<string[]> {
   writeJson(pesaPath, pesa);
   written.push(pesaPath);
 
+  const dwp = extractDwpBenefits();
+  const dwpPath = path.join(outDir, DWP_EXTRACT_FILE);
+  writeJson(dwpPath, dwp);
+  written.push(dwpPath);
+
   const manifest = {
     schemaVersion: 1,
     description:
@@ -82,6 +89,7 @@ export async function derive(options: DeriveOptions = {}): Promise<string[]> {
       AB2024_EXTRACT_FILE,
       RELIEFS_EXTRACT_FILE,
       PESA_EXTRACT_FILE,
+      DWP_EXTRACT_FILE,
     ],
   };
   const manifestPath = path.join(outDir, 'manifest.json');

@@ -10,6 +10,7 @@ import {
   parseLever,
   parsePresets,
   parseRules,
+  parseDwpBenefitExtract,
   parsePesaExtract,
   parseReliefExtract,
   parseScorecardExtract,
@@ -68,6 +69,7 @@ export function loadExtracts(): ExtractedSources {
     sr25: parseSr25Extract(readJson('derived/hmt-sr25-del.raw.json')),
     reliefs: parseReliefExtract(readJson('derived/hmrc-tax-reliefs-2026-01.raw.json')),
     pesa: parsePesaExtract(readJson('derived/hmt-pesa-2025-functions.raw.json')),
+    dwp: parseDwpBenefitExtract(readJson('derived/dwp-benefit-expenditure-2026-table-1a.raw.json')),
   };
 }
 

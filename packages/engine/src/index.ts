@@ -12,6 +12,7 @@ export {
   parseSources,
   parseSr25Extract,
   parseReliefExtract,
+  parseDwpBenefitExtract,
   parsePesaExtract,
   parseContext,
   parseAdvisers,

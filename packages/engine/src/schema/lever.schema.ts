@@ -205,6 +205,65 @@ export const rawSourceSchema = z.discriminatedUnion('kind', [
       .min(1),
     note: z.string().optional(),
   }),
+  /**
+   * Arithmetic this repository does itself on published series, for policies nobody has costed
+   * officially. The method names exactly what is computed so the validator can reproduce it; the
+   * lever still carries the assumptions in words.
+   */
+  z.strictObject({
+    kind: z.literal('derivedFromPublished'),
+    method: z.discriminatedUnion('name', [
+      /** (target share − the forecast share) × nominal GDP, e.g. defence at 5% of GDP. */
+      z.strictObject({
+        name: z.literal('gdpShareGap'),
+        targetPctGdp: z.number().positive(),
+        /** The share already in the forecast, per cent of GDP by year. */
+        baselinePctGdp: yearValuesSchema,
+      }),
+      /**
+       * A benefit line uprated by one published series instead of another: the saving is the line
+       * times the cumulative ratio of the two uprating paths, compounding from the base year.
+       */
+      z.strictObject({
+        name: z.literal('upratingGap'),
+        /** The extract's row, e.g. DWP Table 1a "state-pension". */
+        rowId: z.string().min(1),
+        /** Last year on the current uprating path; the change starts the year after. */
+        baseYear: fiscalYearSchema,
+        currentSeries: z.enum(['tripleLockUprating', 'averageEarningsGrowth', 'cpiInflationFy']),
+        replacementSeries: z.enum([
+          'tripleLockUprating',
+          'averageEarningsGrowth',
+          'cpiInflationFy',
+        ]),
+      }),
+      /**
+       * A product of published quantities, each with its own source, giving a first-year figure
+       * that then moves with a forecast series (or stays flat in cash).
+       */
+      z.strictObject({
+        name: z.literal('statedProduct'),
+        terms: z
+          .array(
+            z.strictObject({
+              label: z.string().min(1),
+              value: z.number(),
+              unit: z.string().min(1),
+              source: sourceRefSchema,
+            }),
+          )
+          .min(1),
+        /** £ million in `baseYear`, equal to the product of the terms. */
+        resultGbpm: z.number(),
+        baseYear: fiscalYearSchema,
+        /** Grow the result with this forecast series; omit to hold it flat in cash. */
+        growWith: growthHeadSchema.optional(),
+      }),
+    ]),
+    sourceId: z.string().min(1),
+    /** Where the published inputs come from and what the arithmetic assumes. */
+    note: z.string().min(1),
+  }),
   z.strictObject({
     kind: z.literal('hmtSr25'),
     sourceId: z.string().min(1),

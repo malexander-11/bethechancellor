@@ -161,6 +161,78 @@ function PublishedRows({ lever }: { lever: Lever }) {
       </>
     );
   }
+  if (raw.kind === 'derivedFromPublished') {
+    const method = raw.method;
+    return (
+      <>
+        <h4>
+          Our own arithmetic on published figures <LabelBadge badge="assumption" />
+        </h4>
+        {method.name === 'gdpShareGap' ? (
+          <div className="table-scroll">
+            <table className="detail-table">
+              <thead>
+                <tr>
+                  <th>Share of GDP</th>
+                  {Object.keys(method.baselinePctGdp)
+                    .sort()
+                    .map((y) => (
+                      <th key={y}>{y}</th>
+                    ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Already in the forecast</td>
+                  {Object.keys(method.baselinePctGdp)
+                    .sort()
+                    .map((y) => (
+                      <td key={y}>{(method.baselinePctGdp[y] ?? 0).toFixed(2)}%</td>
+                    ))}
+                </tr>
+                <tr>
+                  <td>This policy</td>
+                  {Object.keys(method.baselinePctGdp)
+                    .sort()
+                    .map((y) => (
+                      <td key={y}>{method.targetPctGdp.toFixed(2)}%</td>
+                    ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        ) : null}
+        {method.name === 'upratingGap' ? (
+          <p>
+            The {method.rowId.replace(/-/g, ' ')} line, uprated by{' '}
+            {seriesName(method.replacementSeries)} instead of {seriesName(method.currentSeries)}{' '}
+            from {method.baseYear}. The two paths compound, so the gap widens every year.
+          </p>
+        ) : null}
+        {method.name === 'statedProduct' ? (
+          <ul>
+            {method.terms.map((t) => (
+              <li key={t.label}>
+                {t.label}: <strong>{t.value.toLocaleString('en-GB')}</strong> {t.unit}{' '}
+                <SourceLink ref={t.source} />
+              </li>
+            ))}
+            <li>
+              Multiplied out: <strong>£{(method.resultGbpm / 1000).toFixed(1)}bn</strong> in{' '}
+              {method.baseYear}
+              {method.growWith ? ', then moving with the forecast for that line' : ', flat in cash'}
+            </li>
+          </ul>
+        ) : null}
+        {source ? (
+          <p>
+            <SourceLink ref={source} />
+          </p>
+        ) : null}
+        <p className="source">{raw.note}</p>
+      </>
+    );
+  }
   return (
     <>
       <h4>
@@ -187,6 +259,16 @@ function PublishedRows({ lever }: { lever: Lever }) {
       {raw.note ? <p className="source">{raw.note}</p> : null}
     </>
   );
+}
+
+const SERIES_NAMES: Record<string, string> = {
+  tripleLockUprating: 'the triple lock',
+  cpiInflationFy: 'CPI inflation',
+  averageEarningsGrowth: 'average earnings',
+};
+
+function seriesName(key: string): string {
+  return SERIES_NAMES[key] ?? key;
 }
 
 function Caveats({ caveats }: { caveats: string[] }) {

@@ -431,6 +431,20 @@
       "localPath": "data/raw/hmt-pesa-2025/PESA_2025_CP_Chapter_4_tables.xlsx",
       "sha256": "bc275bc1efed362ba3ed15fb27db010692caa879d201897dc5d64c46bc942570",
       "notes": "Accredited official statistics. Table 4.3 gives public sector expenditure on services by function in real terms (£ billion, 2024-25 prices) and Table 4.4 the same as a share of GDP, both 2002-03 to 2024-25. Function spending covers the whole public sector, including local government and the devolved administrations, so it is wider than a UK Government department's budget."
+    },
+    {
+      "id": "dwp-benefit-expenditure-2026",
+      "org": "DWP",
+      "title": "Benefit expenditure and caseload tables 2026: outturn and forecast tables",
+      "edition": "Spring Forecast 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/69dcdc56d3e08b8871b66628/outturn-and-forecast-tables-spring-forecast-2026.ods",
+      "landingUrl": "https://www.gov.uk/government/publications/benefit-expenditure-and-caseload-tables-2026",
+      "publishedOn": "2026-04-14",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/dwp-benefit-expenditure-2026/outturn-and-forecast-tables-spring-forecast-2026.ods",
+      "sha256": "705fb8fb5ace47e37eafe0b3817d5a6de538ce8fb2a67746e8f92d15ecd616e6",
+      "notes": "Official statistics in development. Table 1a gives expenditure by benefit in nominal terms, 1948-49 to 2030-31, on the same forecast as the OBR’s. The State Pension line is the base for costing a change to how the pension is uprated."
     }
   ]
 }

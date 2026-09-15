@@ -1,5 +1,6 @@
-import { receiptsByTaxSeries } from '../costing/taxHead.js';
+import { headSeries, receiptsByTaxSeries } from '../costing/taxHead.js';
 import type {
+  DwpBenefitExtract,
   HmrcExtract,
   Lever,
   PesaExtract,
@@ -20,11 +21,14 @@ export interface ExtractedSources {
   sr25?: Sr25Extract;
   reliefs?: ReliefExtract;
   pesa?: PesaExtract;
+  dwp?: DwpBenefitExtract;
 }
 
 type Side = 'receipts' | 'spending';
 
 const TOLERANCE = 0.5;
+/** Arithmetic this repository does itself is authored rounded to whole £ million. */
+const DERIVED_TOLERANCE = 1;
 
 function scorecardFor(extracted: ExtractedSources, sourceId: string): ScorecardExtract | undefined {
   const keyed = extracted.scorecards?.[sourceId];
@@ -155,6 +159,8 @@ export function checkRawSourceConsistency(
     return and(checkHmrcRows(lever, raw, side, extracted, vintage));
   if (raw.kind === 'hmtScorecard') return and(checkScorecardLines(lever, raw, side, extracted));
   if (raw.kind === 'hmrcReliefCost') return and(checkReliefRows(lever, raw, side, extracted));
+  if (raw.kind === 'derivedFromPublished')
+    return and(checkDerivedArithmetic(lever, raw, extracted, vintage));
   return and([`${lever.id}: Spending Review rows can only back a percentage-of-baseline costing`]);
 }
 
@@ -480,5 +486,101 @@ function checkSr25Rows(
         `${lever.id}: baseline ${y} = ${values[y]} but the cited rows give ${expected[y]}`,
       );
   }
+  return problems;
+}
+
+/**
+ * Arithmetic this repository does itself on published series. The lever states the method and its
+ * inputs; this reproduces the schedule from them, so an edited figure fails the same way a tampered
+ * HMRC row does. Signs are the engine's: the method returns the change as the lever's side records it.
+ */
+function checkDerivedArithmetic(
+  lever: Lever,
+  raw: Extract<RawSource, { kind: 'derivedFromPublished' }>,
+  extracted: ExtractedSources,
+  vintage: Vintage | undefined,
+): string[] {
+  const costing = lever.costing;
+  if (costing.kind !== 'schedule')
+    return [`${lever.id}: derived arithmetic can only back a schedule costing`];
+  if (!vintage) return [`${lever.id}: derived arithmetic needs a vintage to check against`];
+  const problems: string[] = [];
+  const method = raw.method;
+  const expected: YearValues = {};
+
+  if (method.name === 'gdpShareGap') {
+    const gdp = vintage.economy.nominalGdpFy.values;
+    for (const [year, share] of Object.entries(method.baselinePctGdp)) {
+      const denominator = gdp[year];
+      if (denominator === undefined) {
+        problems.push(`${lever.id}: vintage ${vintage.id} has no nominal GDP for ${year}`);
+        continue;
+      }
+      expected[year] = ((method.targetPctGdp - share) / 100) * denominator;
+    }
+  } else if (method.name === 'upratingGap') {
+    const extract = extracted.dwp;
+    if (!extract) return [`${lever.id}: no DWP benefit extract to check the uprating against`];
+    if (extract.sourceId !== raw.sourceId)
+      problems.push(`${lever.id}: cites ${raw.sourceId} but the extract is ${extract.sourceId}`);
+    const row = extract.rows.find((r) => r.rowId === method.rowId);
+    if (!row) return [`${lever.id}: row "${method.rowId}" is not in ${extract.sheet}`];
+    const current = vintage.economy[method.currentSeries]?.values;
+    const replacement = vintage.economy[method.replacementSeries]?.values;
+    if (!current || !replacement)
+      return [`${lever.id}: vintage ${vintage.id} is missing an uprating series`];
+    let factor = 1;
+    for (const year of Object.keys(row.values).sort()) {
+      if (year <= method.baseYear) continue;
+      const now = current[year];
+      const instead = replacement[year];
+      if (now === undefined || instead === undefined) {
+        problems.push(`${lever.id}: no uprating for ${year} in vintage ${vintage.id}`);
+        continue;
+      }
+      factor *= (1 + instead / 100) / (1 + now / 100);
+      const level = row.values[year];
+      if (level === null || level === undefined) continue;
+      expected[year] = level * (factor - 1);
+    }
+  } else {
+    const product = method.terms.reduce((acc, t) => acc * t.value, 1);
+    const slack = Math.max(1, Math.abs(method.resultGbpm) * 0.01);
+    if (Math.abs(product - method.resultGbpm) > slack)
+      problems.push(
+        `${lever.id}: the stated terms multiply to ${Math.round(product)} but the result is ${method.resultGbpm}`,
+      );
+    if (!method.growWith) {
+      for (const year of Object.keys(costing.effect)) expected[year] = method.resultGbpm;
+    } else {
+      const head = headSeries(vintage, method.growWith);
+      const base = head[method.baseYear];
+      if (base === undefined || base === 0)
+        return [`${lever.id}: no ${method.growWith} value for ${method.baseYear}`];
+      for (const year of Object.keys(costing.effect)) {
+        const level = head[year];
+        if (level === undefined) {
+          problems.push(`${lever.id}: no ${method.growWith} value for ${year}`);
+          continue;
+        }
+        expected[year] = (method.resultGbpm * level) / base;
+      }
+    }
+  }
+
+  for (const [year, value] of Object.entries(expected)) {
+    const authored = costing.effect[year];
+    if (authored === undefined) {
+      problems.push(`${lever.id}: no scheduled effect for ${year} (the method gives one)`);
+      continue;
+    }
+    if (Math.abs(authored - value) > DERIVED_TOLERANCE)
+      problems.push(
+        `${lever.id}: ${year} is authored as ${authored} but the method gives ${Math.round(value)}`,
+      );
+  }
+  for (const year of Object.keys(costing.effect))
+    if (expected[year] === undefined)
+      problems.push(`${lever.id}: ${year} has a scheduled effect the method cannot reproduce`);
   return problems;
 }

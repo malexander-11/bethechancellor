@@ -4,6 +4,9 @@ import { unzipSync } from 'fflate';
 
 export type OdsCell = string;
 
+/** Guard against a pathological repeat count; real sheets never carry this many columns. */
+const MAX_REPEAT = 1024;
+
 interface XmlNode {
   [key: string]: unknown;
 }
@@ -59,12 +62,21 @@ export function readOdsTable(
   for (const row of asArray(table['table:table-row'] as XmlNode | XmlNode[])) {
     const repeatRow = Number(row['@_table:number-rows-repeated'] ?? 1);
     const cells: OdsCell[] = [];
+    // A run of blank cells is only materialised once a later cell has content, so the
+    // "repeat to the end of the sheet" marker at a row's end costs nothing while runs of
+    // repeated values in the middle of a row keep every column in its published position.
+    let pendingBlanks = 0;
     for (const cell of asArray(row['table:table-cell'] as XmlNode | XmlNode[])) {
-      const repeat = Math.min(Number(cell['@_table:number-columns-repeated'] ?? 1), 50);
+      const repeat = Math.min(Number(cell['@_table:number-columns-repeated'] ?? 1), MAX_REPEAT);
       const text = textOf(cell['text:p']);
+      if (text === '') {
+        pendingBlanks += repeat;
+        continue;
+      }
+      for (let i = 0; i < Math.min(pendingBlanks, MAX_REPEAT); i += 1) cells.push('');
+      pendingBlanks = 0;
       for (let i = 0; i < repeat; i += 1) cells.push(text);
     }
-    while (cells.length > 0 && cells[cells.length - 1] === '') cells.pop();
     if (cells.length === 0) continue;
     for (let i = 0; i < Math.min(repeatRow, 1); i += 1) rows.push([...cells]);
   }

@@ -138,3 +138,28 @@ export const pesaExtractSchema = z.strictObject({
     .min(1),
   source: extractSourceSchema,
 });
+
+/**
+ * Output of the pipeline's DWP benefit expenditure extraction (Table 1a, expenditure by benefit in
+ * nominal terms). DWP's forecast is consistent with the OBR's, so these lines can be combined with
+ * the vintage's uprating assumptions.
+ */
+export const dwpBenefitExtractSchema = z.strictObject({
+  schemaVersion: z.literal(1),
+  sourceId: z.string().min(1),
+  sheet: z.string().min(1),
+  title: z.string().min(1),
+  years: z.array(fiscalYearSchema).min(1),
+  rows: z
+    .array(
+      z.strictObject({
+        rowId: z.string().min(1),
+        label: z.string().min(1),
+        /** DWP's benefit-type marker, e.g. "(C)" contributory, "(IR)" income-related. */
+        marker: z.string(),
+        values: z.record(fiscalYearSchema, z.number().nullable()),
+      }),
+    )
+    .min(1),
+  source: extractSourceSchema,
+});

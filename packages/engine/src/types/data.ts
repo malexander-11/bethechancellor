@@ -25,6 +25,7 @@ import type {
 } from '../schema/reference.schema.js';
 import type {
   hmrcExtractSchema,
+  dwpBenefitExtractSchema,
   pesaExtractSchema,
   reliefExtractSchema,
   scorecardExtractSchema,
@@ -78,6 +79,7 @@ export type ScorecardExtract = z.infer<typeof scorecardExtractSchema>;
 export type Sr25Extract = z.infer<typeof sr25ExtractSchema>;
 export type ReliefExtract = z.infer<typeof reliefExtractSchema>;
 export type PesaExtract = z.infer<typeof pesaExtractSchema>;
+export type DwpBenefitExtract = z.infer<typeof dwpBenefitExtractSchema>;
 export type ContextFile = z.infer<typeof contextFileSchema>;
 export type ContextReading = z.infer<typeof contextReadingSchema>;
 export type SuggestionRule = z.infer<typeof suggestionRuleSchema>;

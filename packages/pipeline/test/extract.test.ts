@@ -3,6 +3,7 @@ import {
   extractAutumnBudget2024Scorecard,
   extractBudget2025Scorecard,
 } from '../src/extract-budget-2025-scorecard.js';
+import { extractDwpBenefits } from '../src/extract-dwp-benefits.js';
 import { extractHmrcReadyReckoner, slugify } from '../src/extract-hmrc-trr.js';
 import { cleanSr25Label, extractSr25DelTables } from '../src/extract-sr25.js';
 import { extractTaxReliefs, parseReliefNumber } from '../src/extract-tax-reliefs.js';
@@ -178,5 +179,47 @@ describe('HMRC tax relief cost extraction', () => {
       negligible: false,
       marker: 'Disclosive',
     });
+  });
+});
+
+describe("DWP's benefit expenditure tables", () => {
+  const extract = extractDwpBenefits();
+
+  it('reads Table 1a on the same years as the OBR forecast', () => {
+    expect(extract.sheet).toBe('Table_1a');
+    expect(extract.title).toBe('Table 1a: Expenditure by benefit');
+    expect(extract.years.at(0)).toBe('2019-20');
+    expect(extract.years.at(-1)).toBe('2030-31');
+  });
+
+  it('gives the state pension, pension credit and winter fuel lines in £ million', () => {
+    const pension = extract.rows.find((r) => r.rowId === 'state-pension');
+    expect(pension?.label).toBe('State Pension');
+    expect(pension?.values['2025-26']).toBe(146071);
+    expect(pension?.values['2027-28']).toBe(158924);
+    expect(pension?.values['2029-30']).toBe(172195);
+    expect(pension?.values['2030-31']).toBe(180695);
+    expect(extract.rows.find((r) => r.rowId === 'pension-credit')?.values['2025-26']).toBe(6144);
+    expect(extract.rows.find((r) => r.rowId === 'winter-fuel-payments')?.values['2030-31']).toBe(
+      2006,
+    );
+    expect(
+      extract.rows.find((r) => r.rowId === 'total-benefit-expenditure')?.values['2025-26'],
+    ).toBe(309058);
+  });
+
+  it('keeps every column in place when a row has a long run of repeated cells', () => {
+    // Universal Credit did not exist until 2013, so its row opens with 65 repeated dashes.
+    const uc = extract.rows.find((r) => r.rowId === 'universal-credit');
+    expect(uc?.values['2025-26']).toBe(79208);
+    expect(uc?.values['2030-31']).toBe(94921);
+    expect(
+      extract.rows.find((r) => r.rowId === 'of-which-within-welfare-cap')?.values['2029-30'],
+    ).toBe(79177);
+  });
+
+  it('carries DWP benefit-type markers without swallowing the label', () => {
+    expect(extract.rows.find((r) => r.rowId === 'pension-credit')?.marker).toBe('(IR)');
+    expect(extract.rows.find((r) => r.rowId === 'attendance-allowance')?.marker).toBe('(NC / NIR)');
   });
 });

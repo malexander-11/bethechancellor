@@ -7,6 +7,7 @@ import {
   hmrcExtractSchema,
   householdsReferenceSchema,
   leverSchema,
+  dwpBenefitExtractSchema,
   pesaExtractSchema,
   presetsFileSchema,
   reliefExtractSchema,
@@ -23,6 +24,7 @@ import type {
   HmrcExtract,
   HouseholdsReference,
   Lever,
+  DwpBenefitExtract,
   PesaExtract,
   PresetsFile,
   ReliefExtract,
@@ -100,6 +102,10 @@ export function parseReliefExtract(json: unknown): ReliefExtract {
 
 export function parsePesaExtract(json: unknown): PesaExtract {
   return parseWith(pesaExtractSchema, json, 'PESA expenditure by function extract');
+}
+
+export function parseDwpBenefitExtract(json: unknown): DwpBenefitExtract {
+  return parseWith(dwpBenefitExtractSchema, json, 'DWP benefit expenditure extract');
 }
 
 export function parseContext(json: unknown): ContextFile {
