@@ -9,6 +9,7 @@ import {
   parseRules,
   parseScorecardExtract,
   parseSources,
+  parseSr25Extract,
   parseVintage,
   type Dataset,
   type ExtractedSources,
@@ -49,6 +50,7 @@ export function loadExtracts(): ExtractedSources {
   return {
     hmrc: parseHmrcExtract(readJson('derived/hmrc-trr-2025-06.raw.json')),
     scorecard: parseScorecardExtract(readJson('derived/hmt-budget-2025-table-4-1.raw.json')),
+    sr25: parseSr25Extract(readJson('derived/hmt-sr25-del.raw.json')),
   };
 }
 

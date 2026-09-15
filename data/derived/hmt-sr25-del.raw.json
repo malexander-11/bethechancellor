@@ -1,0 +1,1207 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "hmt-sr25-del-tables",
+  "tables": [
+    {
+      "sheet": "Table 5.3 RDELex",
+      "title": "Resource Departmental Expenditure Limits (DEL) excluding depreciation",
+      "unit": "GBPm",
+      "publishedUnit": "£ billion (current prices)",
+      "years": [
+        "2023-24",
+        "2024-25",
+        "2025-26",
+        "2026-27",
+        "2027-28",
+        "2028-29"
+      ],
+      "realGrowthPeriods": [
+        "2025-26 to 2028-29",
+        "2023-24 to 2028-29"
+      ],
+      "rows": [
+        {
+          "rowId": "health-and-social-care",
+          "label": "Health and Social Care",
+          "memo": false,
+          "values": {
+            "2023-24": 177927,
+            "2024-25": 193301,
+            "2025-26": 201970.662,
+            "2026-27": 211001.517,
+            "2027-28": 221321.987,
+            "2028-29": 231977.319
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.02793,
+            "2023-24 to 2028-29": 0.026833
+          }
+        },
+        {
+          "rowId": "of-which-nhs-england",
+          "label": "of which: NHS England",
+          "memo": true,
+          "values": {
+            "2023-24": 170999,
+            "2024-25": 186805.456,
+            "2025-26": 195593.318,
+            "2026-27": 204905.423,
+            "2027-28": 215385.542,
+            "2028-29": 226131.375
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.029802,
+            "2023-24 to 2028-29": 0.02995
+          }
+        },
+        {
+          "rowId": "education",
+          "label": "Education",
+          "memo": false,
+          "values": {
+            "2023-24": 81757.462,
+            "2024-25": 89231,
+            "2025-26": 94100.751,
+            "2026-27": 98307.461,
+            "2027-28": 100120.926,
+            "2028-29": 101483.652
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.006573,
+            "2023-24 to 2028-29": 0.014245
+          }
+        },
+        {
+          "rowId": "of-which-core-schools",
+          "label": "of which: core schools",
+          "memo": true,
+          "values": {
+            "2023-24": 57700,
+            "2024-25": 61553.578,
+            "2025-26": 64823.354,
+            "2026-27": 66960.714,
+            "2027-28": 68393.279,
+            "2028-29": 69473.005
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.004475,
+            "2023-24 to 2028-29": 0.006475
+          }
+        },
+        {
+          "rowId": "home-office",
+          "label": "Home Office",
+          "memo": false,
+          "values": {
+            "2023-24": 19013,
+            "2024-25": 18373,
+            "2025-26": 20463.483,
+            "2026-27": 20878.783,
+            "2027-28": 20358.783,
+            "2028-29": 20566.783
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": -0.016804,
+            "2023-24 to 2028-29": -0.026017
+          }
+        },
+        {
+          "rowId": "of-which-home-office-excl-asylum-forecast",
+          "label": "of which: Home Office (excl. asylum forecast)",
+          "memo": true,
+          "values": {
+            "2023-24": 14268,
+            "2024-25": 14451,
+            "2025-26": 16875.483,
+            "2026-27": 17278.783,
+            "2027-28": 17458.783,
+            "2028-29": 18066.783
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.00412,
+            "2023-24 to 2028-29": -0.000568
+          }
+        },
+        {
+          "rowId": "memo-police-core-spending-power",
+          "label": "Memo: Police Core Spending Power",
+          "memo": true,
+          "values": {
+            "2023-24": 16456,
+            "2024-25": 17593,
+            "2025-26": 18677,
+            "2026-27": 19553,
+            "2027-28": 20297,
+            "2028-29": 20798
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.017378,
+            "2023-24 to 2028-29": 0.023241
+          }
+        },
+        {
+          "rowId": "justice",
+          "label": "Justice",
+          "memo": false,
+          "values": {
+            "2023-24": 10440,
+            "2024-25": 11173,
+            "2025-26": 11865.032,
+            "2026-27": 12567.268,
+            "2027-28": 12927.403,
+            "2028-29": 13245.538
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.018227,
+            "2023-24 to 2028-29": 0.02433
+          }
+        },
+        {
+          "rowId": "law-officers-departments",
+          "label": "Law Officers' Departments",
+          "memo": false,
+          "values": {
+            "2023-24": 837,
+            "2024-25": 911,
+            "2025-26": 1027.013,
+            "2026-27": 1063.776,
+            "2027-28": 1099.641,
+            "2028-29": 1132.506
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.014065,
+            "2023-24 to 2028-29": 0.034563
+          }
+        },
+        {
+          "rowId": "defence",
+          "label": "Defence",
+          "memo": false,
+          "values": {
+            "2023-24": 34775,
+            "2024-25": 37608,
+            "2025-26": 38939.425,
+            "2026-27": 39609.925,
+            "2027-28": 40964.525,
+            "2028-29": 42040.425
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.00694,
+            "2023-24 to 2028-29": 0.009485
+          }
+        },
+        {
+          "rowId": "single-intelligence-account",
+          "label": "Single Intelligence Account",
+          "memo": false,
+          "values": {
+            "2023-24": 2810,
+            "2024-25": 3088,
+            "2025-26": 3043.155,
+            "2026-27": 3223.155,
+            "2027-28": 3419.155,
+            "2028-29": 3587.155
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.036859,
+            "2023-24 to 2028-29": 0.027838
+          }
+        },
+        {
+          "rowId": "foreign-commonwealth-and-development-office",
+          "label": "Foreign, Commonwealth and Development Office",
+          "memo": false,
+          "values": {
+            "2023-24": 7678,
+            "2024-25": 8323,
+            "2025-26": 8380.405,
+            "2026-27": 6595.012,
+            "2027-28": 7015.782,
+            "2028-29": 7146.002
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": -0.069227,
+            "2023-24 to 2028-29": -0.043039
+          }
+        },
+        {
+          "rowId": "mhclg-local-government",
+          "label": "MHCLG Local Government",
+          "memo": false,
+          "values": {
+            "2023-24": 9580,
+            "2024-25": 11356,
+            "2025-26": 15033.654,
+            "2026-27": 15358.654,
+            "2027-28": 15617.154,
+            "2028-29": 15833.654
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.01074,
+            "2023-24 to 2028-29": 0.051911
+          }
+        },
+        {
+          "rowId": "memo-local-government-core-spending-power",
+          "label": "Memo: Local Government Core Spending Power",
+          "memo": true,
+          "values": {
+            "2023-24": 60382,
+            "2024-25": 64982.1,
+            "2025-26": 69424,
+            "2026-27": 73162,
+            "2027-28": 76144,
+            "2028-29": 79262
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.025879,
+            "2023-24 to 2028-29": 0.031027
+          }
+        },
+        {
+          "rowId": "mhclg-housing-communities-and-local-government",
+          "label": "MHCLG Housing, Communities and Local Government",
+          "memo": false,
+          "values": {
+            "2023-24": 3255,
+            "2024-25": 4257,
+            "2025-26": 4148.318,
+            "2026-27": 4245.206,
+            "2027-28": 4228.256,
+            "2028-29": 4210.768
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": -0.013552,
+            "2023-24 to 2028-29": 0.014345
+          }
+        },
+        {
+          "rowId": "culture-media-and-sport",
+          "label": "Culture, Media and Sport",
+          "memo": false,
+          "values": {
+            "2023-24": 1538,
+            "2024-25": 1646,
+            "2025-26": 1549.101,
+            "2026-27": 1588.881,
+            "2027-28": 1633.381,
+            "2028-29": 2031.581
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": -0.012078,
+            "2023-24 to 2028-29": -0.020479
+          }
+        },
+        {
+          "rowId": "science-innovation-and-technology",
+          "label": "Science, Innovation and Technology",
+          "memo": false,
+          "values": {
+            "2023-24": 291,
+            "2024-25": 584,
+            "2025-26": 560.35,
+            "2026-27": 790.16,
+            "2027-28": 767.65,
+            "2028-29": 734.65
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.074281,
+            "2023-24 to 2028-29": 0.085929
+          }
+        },
+        {
+          "rowId": "transport",
+          "label": "Transport",
+          "memo": false,
+          "values": {
+            "2023-24": 7895,
+            "2024-25": 8278,
+            "2025-26": 8281.457,
+            "2026-27": 8118.657,
+            "2027-28": 7671.457,
+            "2028-29": 7509.457
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": -0.049953,
+            "2023-24 to 2028-29": -0.036137
+          }
+        },
+        {
+          "rowId": "energy-security-and-net-zero",
+          "label": "Energy Security and Net Zero",
+          "memo": false,
+          "values": {
+            "2023-24": 1298,
+            "2024-25": 1599,
+            "2025-26": 1936.535,
+            "2026-27": 2043.035,
+            "2027-28": 2040.535,
+            "2028-29": 1740.535
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.004787,
+            "2023-24 to 2028-29": 0.033154
+          }
+        },
+        {
+          "rowId": "environment-food-and-rural-affairs",
+          "label": "Environment, Food and Rural Affairs",
+          "memo": false,
+          "values": {
+            "2023-24": 4741,
+            "2024-25": 5009,
+            "2025-26": 4809.004,
+            "2026-27": 4777.054,
+            "2027-28": 4748.404,
+            "2028-29": 4679.104
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": -0.027372,
+            "2023-24 to 2028-29": -0.027142
+          }
+        },
+        {
+          "rowId": "business-and-trade",
+          "label": "Business and Trade",
+          "memo": false,
+          "values": {
+            "2023-24": 1648,
+            "2024-25": 1735,
+            "2025-26": 1788.781,
+            "2026-27": 1878.381,
+            "2027-28": 1788.781,
+            "2028-29": 1788.781
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": -0.018453,
+            "2023-24 to 2028-29": 0.000663
+          }
+        },
+        {
+          "rowId": "work-and-pensions",
+          "label": "Work and Pensions",
+          "memo": false,
+          "values": {
+            "2023-24": 8399,
+            "2024-25": 9140,
+            "2025-26": 10232.784,
+            "2026-27": 10813.594,
+            "2027-28": 11033.624,
+            "2028-29": 10947.304
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.003881,
+            "2023-24 to 2028-29": 0.025442
+          }
+        },
+        {
+          "rowId": "hm-revenue-and-customs",
+          "label": "HM Revenue and Customs",
+          "memo": false,
+          "values": {
+            "2023-24": 5969,
+            "2024-25": 5206,
+            "2025-26": 5915.488,
+            "2026-27": 6419.142,
+            "2027-28": 6453.896,
+            "2028-29": 6390.857
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.007165,
+            "2023-24 to 2028-29": 0.017611
+          }
+        },
+        {
+          "rowId": "hm-treasury",
+          "label": "HM Treasury",
+          "memo": false,
+          "values": {
+            "2023-24": 356,
+            "2024-25": 356,
+            "2025-26": 416.622,
+            "2026-27": 431.122,
+            "2027-28": 427.222,
+            "2028-29": 418.622
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": -0.016885,
+            "2023-24 to 2028-29": -0.004822
+          }
+        },
+        {
+          "rowId": "cabinet-office",
+          "label": "Cabinet Office",
+          "memo": false,
+          "values": {
+            "2023-24": 908,
+            "2024-25": 688,
+            "2025-26": 833.659,
+            "2026-27": 977.329,
+            "2027-28": 1170.279,
+            "2028-29": 1000.279
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.02713,
+            "2023-24 to 2028-29": -0.017668
+          }
+        },
+        {
+          "rowId": "scottish-government",
+          "label": "Scottish Government",
+          "memo": false,
+          "values": {
+            "2023-24": 37447,
+            "2024-25": 39925,
+            "2025-26": 41506.531,
+            "2026-27": 42709.497,
+            "2027-28": 43829.762,
+            "2028-29": 44987.209
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.008251,
+            "2023-24 to 2028-29": 0.010714
+          }
+        },
+        {
+          "rowId": "welsh-government",
+          "label": "Welsh Government",
+          "memo": false,
+          "values": {
+            "2023-24": 16421,
+            "2024-25": 17231,
+            "2025-26": 17869.829,
+            "2026-27": 18359.96,
+            "2027-28": 18863.919,
+            "2028-29": 19421.104
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.009165,
+            "2023-24 to 2028-29": 0.007147
+          }
+        },
+        {
+          "rowId": "northern-ireland-executive",
+          "label": "Northern Ireland Executive",
+          "memo": false,
+          "values": {
+            "2023-24": 14803,
+            "2024-25": 15657,
+            "2025-26": 16204.769,
+            "2026-27": 16347.97,
+            "2027-28": 16834.653,
+            "2028-29": 17334.294
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.003842,
+            "2023-24 to 2028-29": 0.005079
+          }
+        },
+        {
+          "rowId": "small-and-independent-bodies",
+          "label": "Small and Independent Bodies",
+          "memo": false,
+          "values": {
+            "2023-24": 2377.538,
+            "2024-25": 2845,
+            "2025-26": 2830.676,
+            "2026-27": 3068.777,
+            "2027-28": 2983.74,
+            "2028-29": 2931.426
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": -0.006944,
+            "2023-24 to 2028-29": 0.019312
+          }
+        },
+        {
+          "rowId": "reserves",
+          "label": "Reserves",
+          "memo": false,
+          "values": {
+            "2023-24": null,
+            "2024-25": null,
+            "2025-26": 3410.694,
+            "2026-27": 4341.109,
+            "2027-28": 4317.971,
+            "2028-29": 4668.628
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": null,
+            "2023-24 to 2028-29": null
+          }
+        },
+        {
+          "rowId": "total-resource-del-excluding-depreciation",
+          "label": "Total Resource DEL excluding depreciation",
+          "memo": false,
+          "values": {
+            "2023-24": 452164,
+            "2024-25": 487520,
+            "2025-26": 517118.178,
+            "2026-27": 535515.425,
+            "2027-28": 551638.716,
+            "2028-29": 567807.634
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.012,
+            "2023-24 to 2028-29": 0.017
+          }
+        },
+        {
+          "rowId": "remove-technical-changes-for-ifrs9-that-do-not-affect-public-sector-current-expenditure",
+          "label": "Remove technical changes for IFRS9 that do not affect Public Sector Current Expenditure",
+          "memo": false,
+          "values": {
+            "2023-24": null,
+            "2024-25": null,
+            "2025-26": null,
+            "2026-27": -47.41,
+            "2027-28": -62.455,
+            "2028-29": -100.608
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": null,
+            "2023-24 to 2028-29": null
+          }
+        },
+        {
+          "rowId": "total-resource-del-excluding-depreciation-and-technical-changes-for-ifrs9",
+          "label": "Total Resource DEL excluding depreciation and technical changes for IFRS9",
+          "memo": false,
+          "values": {
+            "2023-24": 452164,
+            "2024-25": 487520,
+            "2025-26": 517118.178,
+            "2026-27": 535468.014,
+            "2027-28": 551576.262,
+            "2028-29": 567707.027
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2028-29": 0.012,
+            "2023-24 to 2028-29": 0.017
+          }
+        }
+      ]
+    },
+    {
+      "sheet": "Table 5.4 CDEL",
+      "title": "Capital Departmental Expenditure Limits (DEL)",
+      "unit": "GBPm",
+      "publishedUnit": "£ billion (current prices)",
+      "years": [
+        "2023-24",
+        "2024-25",
+        "2025-26",
+        "2026-27",
+        "2027-28",
+        "2028-29",
+        "2029-30"
+      ],
+      "realGrowthPeriods": [
+        "2025-26 to 2029-30",
+        "2023-24 to 2029-30"
+      ],
+      "rows": [
+        {
+          "rowId": "health-and-social-care",
+          "label": "Health and Social Care",
+          "memo": false,
+          "values": {
+            "2023-24": 10542,
+            "2024-25": 11644.349,
+            "2025-26": 13596.952,
+            "2026-27": 14011.608,
+            "2027-28": 13529.045,
+            "2028-29": 14769.009,
+            "2029-30": 14628.356
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.000349,
+            "2023-24 to 2029-30": 0.032116
+          }
+        },
+        {
+          "rowId": "education",
+          "label": "Education",
+          "memo": false,
+          "values": {
+            "2023-24": 6155,
+            "2024-25": 5717.138,
+            "2025-26": 6781,
+            "2026-27": 8250,
+            "2027-28": 7695,
+            "2028-29": 7695,
+            "2029-30": 7695
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.013068,
+            "2023-24 to 2029-30": 0.014331
+          }
+        },
+        {
+          "rowId": "home-office",
+          "label": "Home Office",
+          "memo": false,
+          "values": {
+            "2023-24": 1298,
+            "2024-25": 1801.059,
+            "2025-26": 1506,
+            "2026-27": 1719,
+            "2027-28": 1720.9,
+            "2028-29": 1690.6,
+            "2029-30": 1666.2
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.006666,
+            "2023-24 to 2029-30": 0.018807
+          }
+        },
+        {
+          "rowId": "justice",
+          "label": "Justice",
+          "memo": false,
+          "values": {
+            "2023-24": 1453,
+            "2024-25": 1688.758,
+            "2025-26": 2010,
+            "2026-27": 2349.667,
+            "2027-28": 2339.667,
+            "2028-29": 2339.667,
+            "2029-30": 1990
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.020907,
+            "2023-24 to 2029-30": 0.029867
+          }
+        },
+        {
+          "rowId": "law-officers-departments",
+          "label": "Law Officers' Departments",
+          "memo": false,
+          "values": {
+            "2023-24": 38,
+            "2024-25": 88,
+            "2025-26": 66.7,
+            "2026-27": 75.31,
+            "2027-28": 55.92,
+            "2028-29": 217.31,
+            "2029-30": 39.34
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.139825,
+            "2023-24 to 2029-30": -0.017065
+          }
+        },
+        {
+          "rowId": "defence",
+          "label": "Defence",
+          "memo": false,
+          "values": {
+            "2023-24": 19127,
+            "2024-25": 22703.647,
+            "2025-26": 23240,
+            "2026-27": 25900.746,
+            "2027-28": 30002.698,
+            "2028-29": 31481.656,
+            "2029-30": 33162.283
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.072807,
+            "2023-24 to 2029-30": 0.071164
+          }
+        },
+        {
+          "rowId": "single-intelligence-account",
+          "label": "Single Intelligence Account",
+          "memo": false,
+          "values": {
+            "2023-24": 1372,
+            "2024-25": 1420.855,
+            "2025-26": 1487.879,
+            "2026-27": 1871.879,
+            "2027-28": 1716.879,
+            "2028-29": 1763.879,
+            "2029-30": 1612.879
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.001074,
+            "2023-24 to 2029-30": 0.003667
+          }
+        },
+        {
+          "rowId": "foreign-commonwealth-and-development-office",
+          "label": "Foreign, Commonwealth and Development Office",
+          "memo": false,
+          "values": {
+            "2023-24": 3435,
+            "2024-25": 2736.83,
+            "2025-26": 3738.9,
+            "2026-27": 3219.776,
+            "2027-28": 2189.629,
+            "2028-29": 2735.377,
+            "2029-30": 3039.909
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.06795,
+            "2023-24 to 2029-30": -0.042427
+          }
+        },
+        {
+          "rowId": "mhclg-housing-communities-and-local-government",
+          "label": "MHCLG Housing, Communities and Local Government",
+          "memo": false,
+          "values": {
+            "2023-24": 6848,
+            "2024-25": 8444.51,
+            "2025-26": 8800,
+            "2026-27": 9756.5,
+            "2027-28": 9243,
+            "2028-29": 9247,
+            "2029-30": 9494.6
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.000365,
+            "2023-24 to 2029-30": 0.031974
+          }
+        },
+        {
+          "rowId": "culture-media-and-sport",
+          "label": "Culture, Media and Sport",
+          "memo": false,
+          "values": {
+            "2023-24": 530,
+            "2024-25": 726.124,
+            "2025-26": 749.7,
+            "2026-27": 749.798,
+            "2027-28": 749.507,
+            "2028-29": 749.845,
+            "2029-30": 720.675
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.028097,
+            "2023-24 to 2029-30": 0.028633
+          }
+        },
+        {
+          "rowId": "science-innovation-and-technology",
+          "label": "Science, Innovation and Technology",
+          "memo": false,
+          "values": {
+            "2023-24": 12364,
+            "2024-25": 13266.951,
+            "2025-26": 14672.3,
+            "2026-27": 15136.265,
+            "2027-28": 15675.835,
+            "2028-29": 15800.278,
+            "2029-30": 16152.402
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.005413,
+            "2023-24 to 2029-30": 0.021793
+          }
+        },
+        {
+          "rowId": "transport-excl-high-speed-2",
+          "label": "Transport (excl. High Speed 2)",
+          "memo": false,
+          "values": {
+            "2023-24": 14355,
+            "2024-25": 13760.615,
+            "2025-26": 14684,
+            "2026-27": 17004,
+            "2027-28": 17276,
+            "2028-29": 18341,
+            "2029-30": 19640
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.039056,
+            "2023-24 to 2029-30": 0.018926
+          }
+        },
+        {
+          "rowId": "transport-high-speed-27",
+          "label": "Transport - High Speed 27",
+          "memo": false,
+          "values": {
+            "2023-24": 7788,
+            "2024-25": 6905,
+            "2025-26": 7100,
+            "2026-27": 7100,
+            "2027-28": 7100,
+            "2028-29": 5600,
+            "2029-30": 5500
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.079156,
+            "2023-24 to 2029-30": -0.07777
+          }
+        },
+        {
+          "rowId": "energy-security-and-net-zero-excl-sizewell-c",
+          "label": "Energy Security and Net Zero (excl. Sizewell C)",
+          "memo": false,
+          "values": {
+            "2023-24": 4032,
+            "2024-25": 4003.283,
+            "2025-26": 9434.13,
+            "2026-27": 7970,
+            "2027-28": 9088.46,
+            "2028-29": 10906,
+            "2029-30": 11279.92
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.026386,
+            "2023-24 to 2029-30": 0.160061
+          }
+        },
+        {
+          "rowId": "energy-security-and-net-zero-sizewell-c",
+          "label": "Energy Security and Net Zero - Sizewell C",
+          "memo": false,
+          "values": {
+            "2023-24": 1095,
+            "2024-25": 1787,
+            "2025-26": 2700,
+            "2026-27": 2906,
+            "2027-28": 3183,
+            "2028-29": 2546,
+            "2029-30": 2833
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.006585,
+            "2023-24 to 2029-30": 0.145043
+          }
+        },
+        {
+          "rowId": "environment-food-and-rural-affairs",
+          "label": "Environment, Food and Rural Affairs",
+          "memo": false,
+          "values": {
+            "2023-24": 2055,
+            "2024-25": 2300.309,
+            "2025-26": 2733,
+            "2026-27": 2760.26,
+            "2027-28": 2781.18,
+            "2028-29": 2755.98,
+            "2029-30": 2739.89
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.017838,
+            "2023-24 to 2029-30": 0.025266
+          }
+        },
+        {
+          "rowId": "business-and-trade",
+          "label": "Business and Trade",
+          "memo": false,
+          "values": {
+            "2023-24": 964,
+            "2024-25": 1508.348,
+            "2025-26": 1496,
+            "2026-27": 1837.529,
+            "2027-28": 2038.52,
+            "2028-29": 2010.669,
+            "2029-30": 1893.629
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.04112,
+            "2023-24 to 2029-30": 0.093669
+          }
+        },
+        {
+          "rowId": "work-and-pensions",
+          "label": "Work and Pensions",
+          "memo": false,
+          "values": {
+            "2023-24": 632,
+            "2024-25": 624.889,
+            "2025-26": 731,
+            "2026-27": 957.935,
+            "2027-28": 810.547,
+            "2028-29": 575.867,
+            "2029-30": 507.99
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.103822,
+            "2023-24 to 2029-30": -0.057663
+          }
+        },
+        {
+          "rowId": "hm-revenue-and-customs",
+          "label": "HM Revenue and Customs",
+          "memo": false,
+          "values": {
+            "2023-24": 725,
+            "2024-25": 742.709,
+            "2025-26": 871.721,
+            "2026-27": 889.643,
+            "2027-28": 610.709,
+            "2028-29": 477.72,
+            "2029-30": 308.196
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.243128,
+            "2023-24 to 2029-30": -0.152582
+          }
+        },
+        {
+          "rowId": "hm-treasury",
+          "label": "HM Treasury",
+          "memo": false,
+          "values": {
+            "2023-24": 1,
+            "2024-25": 769.474,
+            "2025-26": 828.235,
+            "2026-27": 818.927,
+            "2027-28": 70.985,
+            "2028-29": 61.735,
+            "2029-30": 62.895
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.191675,
+            "2023-24 to 2029-30": 0.121581
+          }
+        },
+        {
+          "rowId": "cabinet-office",
+          "label": "Cabinet Office",
+          "memo": false,
+          "values": {
+            "2023-24": 431,
+            "2024-25": 362.361,
+            "2025-26": 483.969,
+            "2026-27": 622,
+            "2027-28": 451.5,
+            "2028-29": 318.7,
+            "2029-30": 168
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.184554,
+            "2023-24 to 2029-30": -0.128481
+          }
+        },
+        {
+          "rowId": "scottish-government",
+          "label": "Scottish Government",
+          "memo": false,
+          "values": {
+            "2023-24": 5967,
+            "2024-25": 5920.262,
+            "2025-26": 6545.802,
+            "2026-27": 7053.973,
+            "2027-28": 6956.18,
+            "2028-29": 7069.538,
+            "2029-30": 7128.821
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.002706,
+            "2023-24 to 2029-30": 0.006684
+          }
+        },
+        {
+          "rowId": "welsh-government",
+          "label": "Welsh Government",
+          "memo": false,
+          "values": {
+            "2023-24": 3125,
+            "2024-25": 3200.485,
+            "2025-26": 3361.382,
+            "2026-27": 3559.431,
+            "2027-28": 3469.821,
+            "2028-29": 3498.983,
+            "2029-30": 3497.882
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": -0.00864,
+            "2023-24 to 2029-30": -0.004192
+          }
+        },
+        {
+          "rowId": "northern-ireland-executive",
+          "label": "Northern Ireland Executive",
+          "memo": false,
+          "values": {
+            "2023-24": 2109,
+            "2024-25": 2049.233,
+            "2025-26": 2198.604,
+            "2026-27": 2430.789,
+            "2027-28": 2400.534,
+            "2028-29": 2420.726,
+            "2029-30": 2436.686
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.007101,
+            "2023-24 to 2029-30": 0.001083
+          }
+        },
+        {
+          "rowId": "small-and-independent-bodies",
+          "label": "Small and Independent Bodies",
+          "memo": false,
+          "values": {
+            "2023-24": 322,
+            "2024-25": 415.882,
+            "2025-26": 405.386,
+            "2026-27": 542.012,
+            "2027-28": 449.714,
+            "2028-29": 437.297,
+            "2029-30": 438.991
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.001282,
+            "2023-24 to 2029-30": 0.029081
+          }
+        },
+        {
+          "rowId": "growth-mission-fund",
+          "label": "Growth Mission Fund",
+          "memo": false,
+          "values": {
+            "2023-24": null,
+            "2024-25": null,
+            "2025-26": null,
+            "2026-27": 60,
+            "2027-28": 60,
+            "2028-29": 60,
+            "2029-30": 60
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": null,
+            "2023-24 to 2029-30": null
+          }
+        },
+        {
+          "rowId": "reserves",
+          "label": "Reserves",
+          "memo": false,
+          "values": {
+            "2023-24": 0,
+            "2024-25": 0,
+            "2025-26": 1081.823,
+            "2026-27": 2371.631,
+            "2027-28": 2380.5,
+            "2028-29": 2388.791,
+            "2029-30": 2284.358
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": null,
+            "2023-24 to 2029-30": null
+          }
+        },
+        {
+          "rowId": "provision-for-intra-governmental-leases",
+          "label": "Provision for intra-governmental leases",
+          "memo": false,
+          "values": {
+            "2023-24": null,
+            "2024-25": null,
+            "2025-26": null,
+            "2026-27": 742.174,
+            "2027-28": 1219.088,
+            "2028-29": 1150.361,
+            "2029-30": 930.667
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": null,
+            "2023-24 to 2029-30": null
+          }
+        },
+        {
+          "rowId": "total-capital-del",
+          "label": "Total Capital DEL",
+          "memo": false,
+          "values": {
+            "2023-24": 106763,
+            "2024-25": 114588.071,
+            "2025-26": 131304.484,
+            "2026-27": 142666.853,
+            "2027-28": 145264.818,
+            "2028-29": 149108.988,
+            "2029-30": 151912.568
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": 0.018,
+            "2023-24 to 2029-30": 0.036
+          }
+        },
+        {
+          "rowId": "remove-cdel-financial-transactions-ft",
+          "label": "Remove CDEL Financial Transactions (FT)",
+          "memo": false,
+          "values": {
+            "2023-24": -566,
+            "2024-25": 177.515,
+            "2025-26": -2205.167,
+            "2026-27": -3699.534,
+            "2027-28": -4602.862,
+            "2028-29": -7110.655,
+            "2029-30": -8781.214
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": null,
+            "2023-24 to 2029-30": null
+          }
+        },
+        {
+          "rowId": "capital-del-excl-fts",
+          "label": "Capital DEL excl. FTs",
+          "memo": false,
+          "values": {
+            "2023-24": 106197,
+            "2024-25": 114765.586,
+            "2025-26": 129099.317,
+            "2026-27": 138967.32,
+            "2027-28": 140661.956,
+            "2028-29": 141997.175,
+            "2029-30": 143131.354
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": null,
+            "2023-24 to 2029-30": null
+          }
+        },
+        {
+          "rowId": "of-which-net-neutral-reprofile-of-spring-statement-2025-non-ft-envelope",
+          "label": "Of which: net neutral reprofile of Spring Statement 2025 non-FT envelope",
+          "memo": true,
+          "values": {
+            "2023-24": null,
+            "2024-25": null,
+            "2025-26": null,
+            "2026-27": 3327.392,
+            "2027-28": -622.403,
+            "2028-29": -879.184,
+            "2029-30": -1825.812
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": null,
+            "2023-24 to 2029-30": null
+          }
+        },
+        {
+          "rowId": "memo-spring-statement-2025-cdel-excl-fts",
+          "label": "Memo: Spring Statement 2025 CDEL excl. FTs",
+          "memo": true,
+          "values": {
+            "2023-24": null,
+            "2024-25": null,
+            "2025-26": null,
+            "2026-27": 135639.928,
+            "2027-28": 141284.359,
+            "2028-29": 142876.359,
+            "2029-30": 144957.166
+          },
+          "averageAnnualRealGrowth": {
+            "2025-26 to 2029-30": null,
+            "2023-24 to 2029-30": null
+          }
+        }
+      ]
+    }
+  ],
+  "source": {
+    "sourceId": "hmt-sr25-del-tables",
+    "localPath": "data/raw/hmt-sr25/SR25_Department_DEL_tables.xlsx",
+    "sha256": "79509ff795cb82956a925cade47945720a497cdccecf4cdfa60fa83a2a1db0a0"
+  }
+}

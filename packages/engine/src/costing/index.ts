@@ -3,6 +3,7 @@ import type { Lever, Vintage } from '../types/data.js';
 import type { LeverEffect, Settings } from '../types/engine.js';
 import { costLinearLever } from './linear.js';
 import { costLookupLever } from './lookup.js';
+import { costPctOfBaselineLever } from './pctOfBaseline.js';
 import { costScheduleLever } from './schedule.js';
 import { costSensitivityLever } from './sensitivity.js';
 
@@ -23,10 +24,8 @@ export function costLever(
       return costLookupLever(lever, value, vintage, settings, policyYears);
     case 'schedule':
       return costScheduleLever(lever, value, vintage, settings, policyYears);
-    case 'shareOfBaselineSeries':
-      throw new EngineError(
-        `costing kind "shareOfBaselineSeries" (lever ${lever.id}) arrives with the spending levers`,
-      );
+    case 'pctOfBaseline':
+      return costPctOfBaselineLever(lever, value, vintage, settings, policyYears);
     default: {
       const exhaustive: never = lever.costing;
       throw new EngineError(`unknown costing ${JSON.stringify(exhaustive)}`);

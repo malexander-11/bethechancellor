@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "id": "justice",
+  "code": "moj",
+  "category": "spend",
+  "badge": "mechanical",
+  "group": "Day-to-day departmental budgets",
+  "order": 50,
+  "title": "Justice",
+  "shortTitle": "Justice",
+  "description": "Change the day-to-day (resource) budget of the Ministry of Justice (courts, prisons and probation in England and Wales) from April 2027, as a percentage of its Spending Review 2025 settlement. A 1% change is about £0.1bn a year by 2028-29.",
+  "baselinePolicy": {
+    "text": "Spending Review 2025 settlement: resource DEL excluding depreciation of £11.9bn in 2025-26, £12.6bn in 2026-27, £12.9bn in 2027-28 and £13.2bn in 2028-29, an average real-terms change of 1.8% a year (Table 5.3). Budgets for 2029-30 and 2030-31 have not been allocated to departments.",
+    "source": {
+      "sourceId": "hmt-sr25-del-tables",
+      "table": "Table 5.3 RDELex"
+    },
+    "alreadyIncludes": []
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -10,
+    "max": 10,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "of the department's day-to-day budget"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "delType": "RDEL",
+    "department": "Justice",
+    "psnflTreatment": "standard",
+    "barnettConsequential": true
+  },
+  "costing": {
+    "kind": "pctOfBaseline",
+    "baseline": {
+      "from": "published",
+      "years": ["2025-26", "2026-27", "2027-28", "2028-29"],
+      "values": {
+        "2025-26": 11865.032,
+        "2026-27": 12567.268,
+        "2027-28": 12927.403,
+        "2028-29": 13245.538
+      },
+      "extendWith": "rdel",
+      "rawSource": {
+        "kind": "hmtSr25",
+        "sourceId": "hmt-sr25-del-tables",
+        "sheet": "Table 5.3 RDELex",
+        "rows": [
+          {
+            "rowId": "justice",
+            "label": "Justice",
+            "role": "add",
+            "values": {
+              "2023-24": 10440,
+              "2024-25": 11173,
+              "2025-26": 11865.032,
+              "2026-27": 12567.268,
+              "2027-28": 12927.403,
+              "2028-29": 13245.538
+            }
+          }
+        ],
+        "note": "Published in £ billion; converted to £ million at extraction. Outturn years are shown for context; the lever uses 2025-26 to 2028-29."
+      }
+    },
+    "source": {
+      "sourceId": "hmt-sr25-del-tables",
+      "table": "Table 5.3 RDELex"
+    },
+    "caveats": [
+      "The Spending Review sets day-to-day budgets to 2028-29 only; 2029-30 and 2030-31 have not been allocated to departments. Those years carry the 2028-29 settlement forward in line with the OBR's total RDEL path (£594bn in 2029-30 and £614bn in 2030-31, EFO paragraph 4.14). That is an assumption, shown as such in the calculation.",
+      "The OBR's total RDEL (£582bn in 2028-29) is higher than the Spending Review total (£568bn) because of later decisions, such as the £4.1bn added to the 2028-29 envelope for special educational needs, and forecast adjustments. This lever scales the department's Spending Review line; the OBR total remains the baseline aggregate.",
+      "A change is applied in full to current spending and borrowing. No allowance is made for underspending against plans, which the OBR assumes averages about £1.8bn a year across all departments (EFO paragraph 4.11)."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "barnett-up",
+      "kind": "devolution",
+      "direction": "costsMore",
+      "magnitudeWords": "moderate",
+      "appliesWhen": {
+        "above": 0
+      },
+      "alreadyInDirectCosting": false,
+      "text": "Barnett formula: a change to the Ministry of Justice's planned budget changes the block grants to Scotland, Wales and Northern Ireland by the change × the department's comparability factor (Scotland 100%, Wales 0%, Northern Ireland 100% at Spending Review 2025) × each nation's population share. An increase here would also raise those block grants; that knock-on is not in the number.",
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "3.9-3.18",
+          "table": "Annex B"
+        }
+      ]
+    },
+    {
+      "id": "barnett-down",
+      "kind": "devolution",
+      "direction": "costsLess",
+      "magnitudeWords": "moderate",
+      "appliesWhen": {
+        "below": 0
+      },
+      "alreadyInDirectCosting": false,
+      "text": "Barnett formula: a change to the Ministry of Justice's planned budget changes the block grants to Scotland, Wales and Northern Ireland by the change × the department's comparability factor (Scotland 100%, Wales 0%, Northern Ireland 100% at Spending Review 2025) × each nation's population share. A cut here would also cut those block grants; that further saving is not in the number.",
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "3.9-3.18",
+          "table": "Annex B"
+        }
+      ]
+    },
+    {
+      "id": "post-sr-envelope",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "For the years after 2028-29 the OBR works from the Treasury's total envelope rather than departmental plans. On its illustrative assumptions (NHS spending up 2.6% a year in real terms, defence rising towards 3% of GDP, aid growing with national income, schools flat per pupil in real terms), it finds that 'unprotected' day-to-day spending would fall by 4.4% a year in real terms in 2029-30 and 2030-31, and that spending would need to be £13.5bn higher in 2030-31 to avoid real cuts. Extending every department with the total, as this tool does, therefore overstates the likely baseline for unprotected departments in those two years and understates it for protected ones.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.14-4.16"
+        }
+      ]
+    },
+    {
+      "id": "efficiencies-risk",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The settlements assume technical efficiencies of £14bn announced at the Spending Review and further efficiencies announced at Budget 2025 by 2028-29. The OBR lists these not being realised as expected among the significant risks to departmental spending.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

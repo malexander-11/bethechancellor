@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "universal-credit",
+  "code": "wuc",
+  "category": "welfare",
+  "badge": "mechanical",
+  "group": "Welfare",
+  "order": 20,
+  "title": "Universal credit and legacy benefits",
+  "shortTitle": "Universal credit",
+  "description": "Change spending on universal credit and the legacy benefits it replaces from April 2027, as a percentage of the OBR's forecast (£103.1bn in 2029-30). A 1% change is about £1.0bn a year.",
+  "baselinePolicy": {
+    "text": "Universal credit and legacy equivalents (tax credits, working-age housing benefit, incapacity benefits, income support and jobseeker's allowance) of £91.9bn in 2025-26 rising to £103.1bn in 2029-30 (Table 4.6).",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table 4.6"
+    },
+    "alreadyIncludes": [
+      "Removal of the two-child limit on the universal credit child element from April 2026 (Budget 2025, Table 4.1 line 6).",
+      "Changes to the universal credit standard allowance and health element legislated in 2025 (Budget 2025 policy costings)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -10,
+    "max": 10,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "of forecast spending on this line"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": true,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "pctOfBaseline",
+    "baseline": {
+      "from": "vintage",
+      "series": "universalCreditAndLegacy"
+    },
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table 4.6"
+    },
+    "caveats": [
+      "Welfare-cap treatment is approximated by line: this whole line is counted inside the cap. The cap excludes the state pension and the payments most sensitive to the economic cycle (jobseeker's allowance and its universal credit equivalent), so a small part of this line is really outside it.",
+      "A uniform percentage change to a forecast line is a stylised device standing in for the many policies that could deliver it (rates, uprating, eligibility); no behavioural response is included."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "caseload-uncertainty",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The OBR revised down the universal credit unemployed caseload in March 2026 because a 300,000 rise in measured unemployment had not fed through to claims, and it assumes incapacity caseload growth slows to about 1% a year by 2029-30, which it calls highly uncertain. Spending on this line can move by billions without any policy change.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.24"
+        },
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.25"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "reinstate-two-child-limit",
+      "text": "The two-child limit is part of universal credit spending, so the two changes overlap.",
+      "severity": "info"
+    }
+  ]
+}

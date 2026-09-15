@@ -188,6 +188,16 @@
       "retrievedOn": "2026-09-15",
       "licence": "OGL-3.0",
       "notes": "6 July 2026 entry: publication of the Direct effects of illustrative tax changes bulletin (due 7 July 2026) deferred to complete a review of the key assumptions underpinning some of the estimates."
+    },
+    {
+      "id": "hmt-statement-of-funding-policy-2025",
+      "org": "HMT",
+      "title": "Statement of Funding Policy: Funding the Scottish Government, Welsh Government and Northern Ireland Executive",
+      "edition": "June 2025 (Spending Review 2025)",
+      "url": "https://assets.publishing.service.gov.uk/media/684859e3d0ca5d7801e4e6f6/Statement_of_Funding_Policy.pdf",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Barnett formula (paragraphs 3.9-3.18): change to planned UK Government departmental spending × comparability factor × population proportion, applied to resource and capital DEL separately. Annex B lists the departmental comparability factors used at Spending Review 2025; the FCDO and Ministry of Defence undertake only reserved activities and have none (B.12)."
     }
   ]
 }

@@ -7,7 +7,7 @@ import type {
   Vintage,
   YearValues,
 } from '../types/data.js';
-import { taxHeadSeries } from './taxHead.js';
+import { describeHead, headSeries } from './taxHead.js';
 
 export interface PublishedSeries {
   /** Published years in order, e.g. the three ready-reckoner years. */
@@ -43,7 +43,7 @@ export function uprateToForecast(
   const n = published.years.length;
   if (n === 0) throw new EngineError('published series has no years');
   const start = fyStart(implementationYear);
-  const head = rule.method === 'growWithSeries' ? taxHeadSeries(vintage, rule.head) : undefined;
+  const head = rule.method === 'growWithSeries' ? headSeries(vintage, rule.head) : undefined;
   const values: YearValues = {};
   const factors: YearValues = {};
   const sourceYearFor: Record<string, string> = {};
@@ -102,7 +102,7 @@ export function uprateToForecast(
     factors[target] = factor;
     steps.push({
       op: beyond ? 'extend' : 'scale',
-      formula: `${target}: ${fmt(base)} (published for ${sourceYear}) × ${fmt(headTarget)} ÷ ${fmt(headSourceValue)} (OBR ${rule.head} receipts, ${target} ÷ ${sourceYear}) = ${fmt(value)}`,
+      formula: `${target}: ${fmt(base)} (published for ${sourceYear}) × ${fmt(headTarget)} ÷ ${fmt(headSourceValue)} (OBR ${describeHead(rule.head)}, ${target} ÷ ${sourceYear}) = ${fmt(value)}`,
       factor,
       from: sourceYear,
       to: target,

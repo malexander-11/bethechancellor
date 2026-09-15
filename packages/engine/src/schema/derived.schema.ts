@@ -26,6 +26,40 @@ export const hmrcExtractSchema = z.strictObject({
   source: extractSourceSchema,
 });
 
+/**
+ * Output of the pipeline's Spending Review 2025 departmental DEL tables extraction. Values are
+ * £ million (the published tables are £ billion); real growth is a fraction a year as published.
+ */
+export const sr25ExtractSchema = z.strictObject({
+  schemaVersion: z.literal(1),
+  sourceId: z.string().min(1),
+  tables: z
+    .array(
+      z.strictObject({
+        sheet: z.string().min(1),
+        title: z.string().min(1),
+        unit: z.literal('GBPm'),
+        publishedUnit: z.string(),
+        years: z.array(fiscalYearSchema).min(1),
+        realGrowthPeriods: z.array(z.string()),
+        rows: z
+          .array(
+            z.strictObject({
+              rowId: z.string().min(1),
+              label: z.string().min(1),
+              /** "of which" and "Memo:" rows: context only, never part of a total. */
+              memo: z.boolean(),
+              values: z.record(fiscalYearSchema, z.number().nullable()),
+              averageAnnualRealGrowth: z.record(z.string(), z.number().nullable()),
+            }),
+          )
+          .min(1),
+      }),
+    )
+    .min(1),
+  source: extractSourceSchema,
+});
+
 /** Output of the pipeline's Budget 2025 Table 4.1 extraction. HMT sign: positive reduces borrowing. */
 export const scorecardExtractSchema = z.strictObject({
   schemaVersion: z.literal(1),

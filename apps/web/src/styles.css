@@ -831,3 +831,38 @@ details.table-view td:first-child {
 .section-label + .lever {
   border-top: 0;
 }
+
+.attribution--columns li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  column-gap: 12px;
+  align-items: center;
+}
+
+.attribution__header {
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.attribution--columns .amount,
+.attribution__header span:not(:first-child) {
+  text-align: right;
+  min-width: 5.5em;
+}
+
+.lever__effect-note {
+  color: var(--muted);
+  font-variant-numeric: normal;
+}
+
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.detail-table th:not(:first-child),
+.detail-table td:not(:first-child) {
+  white-space: nowrap;
+}

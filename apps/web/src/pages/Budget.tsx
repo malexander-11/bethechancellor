@@ -43,12 +43,12 @@ export function BudgetPage() {
 
   return (
     <>
-      <h1 className="page-title">Set the assumptions. See if the rules hold.</h1>
+      <h1 className="page-title">Set the budget. See if the rules hold.</h1>
       <p className="lede">
-        Start from the Office for Budget Responsibility&rsquo;s March 2026 forecast, change what you
-        believe about the economy, and watch the Chancellor&rsquo;s room for manoeuvre change. Every
-        number tells you whether it is an official costing, a mechanical consequence, an assumption
-        or commentary.
+        Start from the Office for Budget Responsibility&rsquo;s March 2026 forecast, change taxes,
+        spending and what you believe about the economy, and watch the Chancellor&rsquo;s room for
+        manoeuvre change. Every number tells you whether it is an official costing, a mechanical
+        consequence, an assumption or commentary.
       </p>
       <div className="context-strip" role="note">
         <span>
@@ -113,22 +113,27 @@ export function BudgetPage() {
 
           <section className="panel" aria-labelledby="spend-heading">
             <h2 id="spend-heading">Spending</h2>
-            {leversByCategory.spend.length === 0 ? (
-              <p className="coming">
-                Departmental budgets, investment and welfare levers follow, built from the Spending
-                Review 2025 settlements and the OBR welfare forecast.
-              </p>
-            ) : (
-              leversByCategory.spend.map((lever) => (
-                <LeverControl
-                  key={lever.id}
-                  lever={lever}
-                  value={state.leverValues[lever.code] ?? lever.control.default}
-                  effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                  onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-                />
-              ))
-            )}
+            <p className="panel__hint">
+              Day-to-day budgets follow the June 2025 Spending Review settlements to 2028-29,
+              carried forward with the OBR&rsquo;s total path; investment and welfare lines follow
+              the OBR March 2026 forecast; the four Budget 2025 decisions use the Treasury&rsquo;s
+              own costings. Changes start in April 2027.
+            </p>
+            {groupLevers(leversByCategory.spend).map((group) => (
+              <div key={group.name}>
+                <h3 className="section-label">{group.name}</h3>
+                {group.levers.map((lever) => (
+                  <LeverControl
+                    key={lever.id}
+                    lever={lever}
+                    value={state.leverValues[lever.code] ?? lever.control.default}
+                    effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                    summaryYear={targetYear}
+                    onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
+                  />
+                ))}
+              </div>
+            ))}
           </section>
         </aside>
 
@@ -203,10 +208,13 @@ export function BudgetPage() {
             aria-labelledby="attribution-heading"
             style={{ marginTop: 16 }}
           >
-            <h2 id="attribution-heading">What moved the {targetYear} current budget</h2>
+            <h2 id="attribution-heading">
+              What moved the {targetYear} current budget and borrowing
+            </h2>
             <p className="panel__hint">
-              Each line is the effect on day-to-day borrowing in the stability rule&rsquo;s target
-              year. Positive means the position gets worse.
+              Each line is the effect in the stability rule&rsquo;s target year on the current
+              budget (day-to-day borrowing) and on total borrowing, which adds investment. Positive
+              means the position gets worse.
             </p>
             <AttributionList
               rows={outcome.attribution}

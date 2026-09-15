@@ -72,6 +72,10 @@ export function groupLevers(items: Lever[]): LeverGroup[] {
     'Capital taxes',
     'Duties',
     'Reverse Budget 2025 measures',
+    'Day-to-day departmental budgets',
+    'Public investment',
+    'Welfare',
+    'Budget 2025 spending decisions',
   ];
   return groups.sort((a, b) => {
     const ia = GROUP_ORDER.indexOf(a.name);

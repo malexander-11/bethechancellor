@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "disability-benefits",
+  "code": "wdis",
+  "category": "welfare",
+  "badge": "mechanical",
+  "group": "Welfare",
+  "order": 30,
+  "title": "Disability benefits",
+  "shortTitle": "Disability benefits",
+  "description": "Change spending on personal independence payment, disability living allowance and attendance allowance from April 2027, as a percentage of the OBR's forecast (£61.1bn in 2029-30). A 1% change is about £0.6bn a year.",
+  "baselinePolicy": {
+    "text": "Disability benefits of £45.4bn in 2025-26 rising to £61.1bn in 2029-30 and £65.5bn in 2030-31, with disability caseloads forecast to rise from 6.5 million to 8.8 million between 2024-25 and 2030-31 (Table 4.6; paragraph 4.23).",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table 4.6"
+    },
+    "alreadyIncludes": [
+      "Not proceeding with the Spring Statement 2025 changes to personal independence payment eligibility (Budget 2025, Table 4.1 line 83)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -10,
+    "max": 10,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "of forecast spending on this line"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": true,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "pctOfBaseline",
+    "baseline": {
+      "from": "vintage",
+      "series": "disabilityBenefits"
+    },
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table 4.6"
+    },
+    "caveats": [
+      "Welfare-cap treatment is approximated by line: this whole line is counted inside the cap. The cap excludes the state pension and the payments most sensitive to the economic cycle (jobseeker's allowance and its universal credit equivalent), so a small part of this line is really outside it.",
+      "A uniform percentage change to a forecast line is a stylised device standing in for the many policies that could deliver it (rates, uprating, eligibility); no behavioural response is included."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "eligibility-savings-shortfall",
+      "kind": "behavioural",
+      "direction": "costsMore",
+      "magnitudeWords": "moderate",
+      "appliesWhen": {
+        "below": 0
+      },
+      "alreadyInDirectCosting": false,
+      "text": "The OBR notes that previous changes to eligibility for public spending programmes, such as replacing disability living allowance with personal independence payment, did not achieve the savings planned. A cut to this line is likely to save less than the arithmetic shows.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        }
+      ]
+    },
+    {
+      "id": "caseload-growth",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Rising caseloads drive this line: the OBR forecasts disability caseloads up by 2.3 million by 2030-31 and health-related spending up 0.4% of GDP, with higher-than-expected demand for child disability benefits in recent outturn.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.23"
+        },
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.24"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "proceed-with-pip-changes",
+      "text": "Both change disability benefit spending; the Treasury's costing assumes the OBR's caseload, so the combination is approximate.",
+      "severity": "info"
+    }
+  ]
+}

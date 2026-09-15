@@ -51,3 +51,22 @@ vintage in the web app, and keep the old vintage so existing permalinks still re
    `alreadyInDirectCosting: true` when the published figure already contains the behaviour.
 6. Give the lever a `group`, an `order`, a unique stable `code`, and set `status: reviewed` with
    `reviewedOn` once the above is checked.
+
+### Spending levers
+
+- **Sides and signs.** Spending levers carry `classification.side: "spending"`; spending positive
+  means more spending. An HMRC `cost` row is then positive and a `yield` row negative, and a
+  scorecard reversal's schedule equals plus the summed lines. `validate:data` applies the
+  side-aware rule, so authoring the tax-side sign fails.
+- **Percentage-of-baseline costings** (`kind: "pctOfBaseline"`, badge `mechanical`, control unit
+  `pct`) scale either a vintage series (`baseline.from: "vintage"`, e.g. `cdel`,
+  `disabilityBenefits`) or a published plan (`baseline.from: "published"`) with `years`, `values`
+  in £ million, `extendWith` (the vintage series that carries the last plan year forward) and a
+  `rawSource` of kind `hmtSr25` citing rows of `derived/hmt-sr25-del.raw.json` by `rowId`, label
+  and values. Rows with `role: "subtract"` build a residual; memo rows ("of which", "Memo:") are
+  rejected.
+- **Welfare cap.** Set `insideWelfareCap: true` on current spending levers whose line is inside
+  the cap and state the by-line approximation in the caveats.
+- **Barnett.** Set `classification.barnettConsequential: true` on comparable departments and add
+  `devolution` considerations (with `appliesWhen` above/below 0) citing the Statement of Funding
+  Policy; never add a numeric knock-on.

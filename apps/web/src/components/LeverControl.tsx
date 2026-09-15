@@ -38,6 +38,20 @@ function currentBudgetImprovement(effect: LeverEffect, year: string): number {
   );
 }
 
+/** Effect on total borrowing in a year, investment included. Positive = less borrowing. */
+function borrowingImprovement(effect: LeverEffect, year: string): number {
+  return (
+    (effect.receipts[year] ?? 0) -
+    (effect.currentSpending[year] ?? 0) -
+    (effect.capitalSpending[year] ?? 0) -
+    (effect.macroPsnb[year] ?? 0)
+  );
+}
+
+function tone(v: number): string {
+  return v > 0.5 ? 'amount--better' : v < -0.5 ? 'amount--worse' : '';
+}
+
 export function LeverControl({
   lever,
   value,
@@ -55,8 +69,15 @@ export function LeverControl({
   const [open, setOpen] = useState(false);
   const { min, max, step } = lever.control;
   const isToggle = lever.control.kind === 'toggle';
+  const isCapital = lever.classification?.currentOrCapital === 'capital';
+  const barnett = lever.classification?.barnettConsequential === true;
   const isDefault = value === lever.control.default;
-  const improvement = effect && summaryYear ? currentBudgetImprovement(effect, summaryYear) : null;
+  const improvement =
+    effect && summaryYear
+      ? isCapital
+        ? borrowingImprovement(effect, summaryYear)
+        : currentBudgetImprovement(effect, summaryYear)
+      : null;
   const lookupPoints =
     lever.costing.kind === 'lookupTable'
       ? lever.costing.points
@@ -114,11 +135,23 @@ export function LeverControl({
           in a straight line and the slider stops at HMRC&rsquo;s largest published change.
         </p>
       ) : null}
+      {barnett ? (
+        <p className="lever__note">
+          Barnett formula: a change here would also move the block grants to Scotland, Wales and
+          Northern Ireland in proportion. That knock-on is described in the sources, not counted in
+          the number. <LabelBadge badge="commentary" />
+        </p>
+      ) : null}
       {improvement !== null && summaryYear ? (
-        <p
-          className={`lever__effect ${improvement > 0.5 ? 'amount--better' : improvement < -0.5 ? 'amount--worse' : ''}`}
-        >
-          Current budget in {summaryYear}: {formatGbpBn(improvement, 1, true)}
+        <p className={`lever__effect ${tone(improvement)}`}>
+          {isCapital ? 'Borrowing' : 'Current budget'} in {summaryYear}:{' '}
+          {formatGbpBn(improvement, 1, true)}
+          {isCapital ? (
+            <span className="lever__effect-note">
+              {' '}
+              · current budget unchanged: investment sits outside the stability rule
+            </span>
+          ) : null}
         </p>
       ) : null}
       <div className="lever__actions">

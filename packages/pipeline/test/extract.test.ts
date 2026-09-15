@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { extractBudget2025Scorecard } from '../src/extract-budget-2025-scorecard.js';
 import { extractHmrcReadyReckoner, slugify } from '../src/extract-hmrc-trr.js';
+import { cleanSr25Label, extractSr25DelTables } from '../src/extract-sr25.js';
 
 describe('HMRC ready reckoner extraction', () => {
   const extract = extractHmrcReadyReckoner();
@@ -61,5 +62,44 @@ describe('Budget 2025 scorecard extraction', () => {
       '2029-30': 7780,
       '2030-31': 12435,
     });
+  });
+});
+
+describe('Spending Review 2025 DEL tables extraction', () => {
+  it('reads resource and capital DEL by department in £ million', async () => {
+    const extract = await extractSr25DelTables();
+    const rdel = extract.tables.find((t) => t.sheet === 'Table 5.3 RDELex');
+    const cdel = extract.tables.find((t) => t.sheet === 'Table 5.4 CDEL');
+    expect(rdel?.years).toEqual(['2023-24', '2024-25', '2025-26', '2026-27', '2027-28', '2028-29']);
+    expect(rdel?.realGrowthPeriods).toEqual(['2025-26 to 2028-29', '2023-24 to 2028-29']);
+    const health = rdel?.rows.find((r) => r.rowId === 'health-and-social-care');
+    expect(health?.label).toBe('Health and Social Care');
+    expect(health?.memo).toBe(false);
+    expect(health?.values['2028-29']).toBeCloseTo(231977.319, 3);
+    expect(health?.averageAnnualRealGrowth['2025-26 to 2028-29']).toBeCloseTo(0.0279, 4);
+    expect(rdel?.rows.find((r) => r.rowId === 'of-which-nhs-england')?.memo).toBe(true);
+    const total = rdel?.rows.find((r) => r.rowId === 'total-resource-del-excluding-depreciation');
+    expect(total?.values['2028-29']).toBeCloseTo(567807.634, 3);
+    expect(rdel?.rows.find((r) => r.rowId === 'reserves')?.values['2023-24']).toBeNull();
+    expect(cdel?.years.at(-1)).toBe('2029-30');
+    expect(cdel?.rows.find((r) => r.rowId === 'total-capital-del')?.values['2029-30']).toBeCloseTo(
+      151912.568,
+      3,
+    );
+  });
+
+  it('strips glued footnote markers but keeps numbers that belong to the name', () => {
+    expect(cleanSr25Label('Health and Social Care4')).toBe('Health and Social Care');
+    expect(cleanSr25Label('Transport (excl. High Speed 2)6')).toBe(
+      'Transport (excl. High Speed 2)',
+    );
+    expect(cleanSr25Label('Energy Security and Net Zero - Sizewell C7')).toBe(
+      'Energy Security and Net Zero - Sizewell C',
+    );
+    expect(cleanSr25Label('Cabinet Office10')).toBe('Cabinet Office');
+    expect(cleanSr25Label(' Scottish Government ')).toBe('Scottish Government');
+    expect(
+      cleanSr25Label('Total Resource DEL excluding depreciation and technical changes for IFRS9'),
+    ).toBe('Total Resource DEL excluding depreciation and technical changes for IFRS9');
   });
 });

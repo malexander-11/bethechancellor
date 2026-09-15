@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "id": "pensioner-benefits",
+  "code": "wpens",
+  "category": "welfare",
+  "badge": "mechanical",
+  "group": "Welfare",
+  "order": 10,
+  "title": "Pensioner benefits",
+  "shortTitle": "Pensioner benefits",
+  "description": "Change spending on the state pension and other pensioner benefits from April 2027, as a percentage of the OBR's forecast (£187.5bn in 2029-30). A 1% change is about £1.9bn a year. This line sits outside the welfare cap.",
+  "baselinePolicy": {
+    "text": "Pensioner spending, which the OBR defines as state pension, pension credit, pensioner housing benefit and winter fuel payments, of £161.2bn in 2025-26 rising to £187.5bn in 2029-30 and £196.2bn in 2030-31 (Table 4.6).",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table 4.6"
+    },
+    "alreadyIncludes": [
+      "Triple-lock uprating of the state pension and larger cohorts reaching state pension age, adding 0.6% of GDP to pensioner spending by 2030-31 (EFO paragraph 4.23).",
+      "The rise in the state pension age from 66 to 67 between 2026 and 2028, reducing pensioner spending by roughly 0.3% of GDP in 2030-31 (EFO paragraph 4.23).",
+      "Winter fuel payments for pensioners with taxable income of £35,000 or less from winter 2025 (Budget 2025, Table 4.1 line 84)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -5,
+    "max": 5,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "of forecast spending on this line"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": false,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "pctOfBaseline",
+    "baseline": {
+      "from": "vintage",
+      "series": "pensionerSpending"
+    },
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table 4.6"
+    },
+    "caveats": [
+      "Welfare-cap treatment is approximated by line: this whole line is counted outside the cap because the state pension dominates it. Pension credit, pensioner housing benefit and winter fuel payments are in fact inside the cap.",
+      "A uniform percentage change to a forecast line is a stylised device standing in for the many policies that could deliver it (rates, uprating, eligibility); no behavioural response is included."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "triple-lock-drivers",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The OBR attributes the rise in pensioner spending to larger state pension cohorts (about 850,000 people reaching state pension age a year by 2030-31, up from 700,000 in 2022-23) and triple-lock uprating, partly offset by the higher state pension age. Changing this line in practice means changing uprating or eligibility rules whose costs depend on earnings and inflation.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.23"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "winter-fuel-pension-credit-only",
+      "text": "Winter fuel payments are part of pensioner spending, so the two changes overlap.",
+      "severity": "info"
+    }
+  ]
+}

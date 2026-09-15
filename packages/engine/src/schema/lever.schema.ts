@@ -22,6 +22,22 @@ export const taxHeadSchema = z.enum([
   'nominalGdp',
 ]);
 
+/** Spending lines in the vintage that a baseline can be taken from or a published figure can grow with. */
+export const spendingHeadSchema = z.enum([
+  'rdel',
+  'cdel',
+  'welfareTotal',
+  'welfareInCap',
+  'pensionerSpending',
+  'universalCreditAndLegacy',
+  'disabilityBenefits',
+  'childBenefit',
+  'otherWelfare',
+]);
+
+/** Any vintage series a published figure can be carried forward with: a receipts head, nominal GDP or a spending line. */
+export const growthHeadSchema = z.enum([...taxHeadSchema.options, ...spendingHeadSchema.options]);
+
 export const controlSchema = z
   .strictObject({
     kind: z.enum(['slider', 'stepper', 'toggle', 'select']),
@@ -64,6 +80,7 @@ export const considerationSchema = z.strictObject({
     'legal',
     'interaction',
     'market',
+    'devolution',
   ]),
   direction: z.enum(['raisesLess', 'raisesMore', 'costsMore', 'costsLess', 'ambiguous']),
   magnitudeWords: z.enum(['small', 'moderate', 'large', 'unknown']).optional(),
@@ -79,7 +96,7 @@ export const considerationSchema = z.strictObject({
 export const upratingRuleSchema = z.discriminatedUnion('method', [
   z.strictObject({
     method: z.literal('growWithSeries'),
-    head: taxHeadSchema,
+    head: growthHeadSchema,
     note: z.string(),
   }),
   z.strictObject({ method: z.literal('flatCash'), note: z.string() }),
@@ -119,6 +136,25 @@ export const rawSourceSchema = z.discriminatedUnion('kind', [
       )
       .min(1),
     signConvention: z.literal('positiveReducesBorrowing'),
+    note: z.string().optional(),
+  }),
+  z.strictObject({
+    kind: z.literal('hmtSr25'),
+    sourceId: z.string().min(1),
+    /** Worksheet the rows come from, e.g. "Table 5.3 RDELex". */
+    sheet: z.string().min(1),
+    rows: z
+      .array(
+        z.strictObject({
+          rowId: z.string().min(1),
+          label: z.string().min(1),
+          /** add = part of the baseline; subtract = taken out of it (the "all other" residual). */
+          role: z.enum(['add', 'subtract']).default('add'),
+          /** £ million by fiscal year as extracted (the published table is £ billion). */
+          values: yearValuesSchema,
+        }),
+      )
+      .min(1),
     note: z.string().optional(),
   }),
 ]);
@@ -170,10 +206,22 @@ export const costingSchema = z.discriminatedUnion('kind', [
     caveats: z.array(z.string()),
   }),
   z.strictObject({
-    kind: z.literal('shareOfBaselineSeries'),
-    series: z.string().min(1),
-    mode: z.enum(['pctRealPerYear', 'pctCash', 'absoluteGbpm']),
-    deflator: z.enum(['gdpDeflator', 'cpi', 'none']),
+    kind: z.literal('pctOfBaseline'),
+    /** The £ million path the percentage applies to from the implementation year. */
+    baseline: z.discriminatedUnion('from', [
+      z.strictObject({ from: z.literal('vintage'), series: spendingHeadSchema }),
+      z.strictObject({
+        from: z.literal('published'),
+        years: z.array(fiscalYearSchema).min(1),
+        /** £ million by published year (a spending plan is positive). */
+        values: yearValuesSchema,
+        /** Vintage series whose growth carries the last published year forward. */
+        extendWith: growthHeadSchema,
+        rawSource: rawSourceSchema,
+      }),
+    ]),
+    source: sourceRefSchema,
+    caveats: z.array(z.string()),
   }),
   z.strictObject({
     kind: z.literal('sensitivity'),
@@ -284,6 +332,54 @@ export const leverSchema = z
           code: 'custom',
           message: 'a direct costing must cite its published rows or lines in rawSource',
           path: ['costing', 'rawSource'],
+        });
+      }
+    }
+    if (lever.costing.kind === 'pctOfBaseline') {
+      if (lever.control.unit !== 'pct') {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'a percentage-of-baseline lever is controlled in per cent',
+          path: ['control', 'unit'],
+        });
+      }
+      if (lever.badge !== 'mechanical') {
+        ctx.addIssue({
+          code: 'custom',
+          message:
+            'a percentage of a published baseline is mechanical arithmetic, not a direct costing',
+          path: ['badge'],
+        });
+      }
+      const baseline = lever.costing.baseline;
+      if (baseline.from === 'published') {
+        if (baseline.rawSource.kind !== 'hmtSr25') {
+          ctx.addIssue({
+            code: 'custom',
+            message: 'a published baseline must cite Spending Review rows (hmtSr25)',
+            path: ['costing', 'baseline', 'rawSource'],
+          });
+        }
+        for (const y of baseline.years) {
+          if (baseline.values[y] === undefined) {
+            ctx.addIssue({
+              code: 'custom',
+              message: `published baseline has no value for ${y}`,
+              path: ['costing', 'baseline', 'values'],
+            });
+          }
+        }
+      }
+    }
+    if (lever.classification?.insideWelfareCap) {
+      if (
+        lever.classification.side !== 'spending' ||
+        lever.classification.currentOrCapital !== 'current'
+      ) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'only current spending can sit inside the welfare cap',
+          path: ['classification', 'insideWelfareCap'],
         });
       }
     }

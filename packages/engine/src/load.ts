@@ -8,6 +8,7 @@ import {
   ruleSetSchema,
   scorecardExtractSchema,
   sourcesFileSchema,
+  sr25ExtractSchema,
   vintageSchema,
 } from './schema/index.js';
 import type {
@@ -18,8 +19,10 @@ import type {
   RuleSet,
   ScorecardExtract,
   SourcesFile,
+  Sr25Extract,
   Vintage,
 } from './types/data.js';
+import { hasHead } from './costing/taxHead.js';
 import { validateVintage } from './validate/validateVintage.js';
 
 function parseWith<T>(schema: ZodType<T>, json: unknown, label: string): T {
@@ -77,6 +80,10 @@ export function parseScorecardExtract(json: unknown): ScorecardExtract {
   return parseWith(scorecardExtractSchema, json, 'Budget 2025 scorecard extract');
 }
 
+export function parseSr25Extract(json: unknown): Sr25Extract {
+  return parseWith(sr25ExtractSchema, json, 'Spending Review 2025 DEL tables extract');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -116,22 +123,28 @@ export function validateDataset(ds: Dataset): string[] {
     if (ids.has(lever.id)) problems.push(`duplicate lever id ${lever.id}`);
     codes.add(lever.code);
     ids.add(lever.id);
-    if (lever.classification?.taxHead && lever.classification.taxHead !== 'nominalGdp') {
-      if (!ds.vintage.fiscal.receiptsByHeadPctGdp[lever.classification.taxHead]) {
-        problems.push(
-          `lever ${lever.id} cites tax head "${lever.classification.taxHead}" missing from vintage ${ds.vintage.id}`,
-        );
-      }
+    if (lever.classification?.taxHead && !hasHead(ds.vintage, lever.classification.taxHead)) {
+      problems.push(
+        `lever ${lever.id} cites tax head "${lever.classification.taxHead}" missing from vintage ${ds.vintage.id}`,
+      );
     }
     if (
       (lever.costing.kind === 'linearPerUnit' || lever.costing.kind === 'lookupTable') &&
       lever.costing.uprating.method === 'growWithSeries' &&
-      lever.costing.uprating.head !== 'nominalGdp' &&
-      !ds.vintage.fiscal.receiptsByHeadPctGdp[lever.costing.uprating.head]
+      !hasHead(ds.vintage, lever.costing.uprating.head)
     ) {
       problems.push(
         `lever ${lever.id} uprates with head "${lever.costing.uprating.head}" missing from vintage ${ds.vintage.id}`,
       );
+    }
+    if (lever.costing.kind === 'pctOfBaseline') {
+      const baseline = lever.costing.baseline;
+      const head = baseline.from === 'vintage' ? baseline.series : baseline.extendWith;
+      if (!hasHead(ds.vintage, head)) {
+        problems.push(
+          `lever ${lever.id} needs series "${head}" missing from vintage ${ds.vintage.id}`,
+        );
+      }
     }
     if (lever.costing.kind === 'sensitivity') {
       const id = lever.costing.sensitivityId;

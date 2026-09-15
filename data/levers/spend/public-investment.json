@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "public-investment",
+  "code": "cdel",
+  "category": "spend",
+  "badge": "mechanical",
+  "group": "Public investment",
+  "order": 10,
+  "title": "Public investment (capital budgets)",
+  "shortTitle": "Public investment",
+  "description": "Change total departmental capital budgets from April 2027, as a percentage of the OBR's forecast (£132.8bn in 2027-28, £134.2bn in 2029-30). Investment adds to borrowing and to net financial liabilities but not to the current budget, so it tests the investment rule rather than the stability rule. A 1% change is about £1.3bn a year.",
+  "baselinePolicy": {
+    "text": "Capital DEL of £122.5bn in 2026-27 rising to £134.2bn in 2029-30 and £138.1bn in 2030-31, after the OBR's underspend assumptions of £9.7bn in 2026-27 and about £3.7bn a year in the final three years of the Spending Review period.",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "paragraph": "4.12"
+    },
+    "alreadyIncludes": [
+      "Spending Review 2025 capital settlements to 2029-30, including defence capital rising from £23.2bn to £33.2bn (Table 5.4).",
+      "Total capital spending assumed at £138bn in 2030-31, implying real growth of 0.8% in that year (EFO paragraph 4.14)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -10,
+    "max": 20,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "of departmental capital budgets"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "capital",
+    "delType": "CDEL",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "pctOfBaseline",
+    "baseline": {
+      "from": "vintage",
+      "series": "cdel"
+    },
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table 4.1"
+    },
+    "caveats": [
+      "Applied to the OBR's capital DEL forecast, which already nets off its underspend assumption; a change is assumed to be spent in full.",
+      "Every pound is treated as public sector net investment: depreciation on new assets and any financial-transaction element (loans and equity, which affect net financial liabilities differently) are not modelled."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "financial-transactions",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Part of capital DEL is financial transactions such as loans and equity: the Spending Review tables strip out £8.8bn in 2029-30 to give capital DEL excluding financial transactions of £143.1bn against a total of £151.9bn. Financial transactions add to borrowing measures but are matched by an asset in net financial liabilities, so the effect of a change on the investment rule depends on its mix.",
+      "sources": [
+        {
+          "sourceId": "hmt-sr25-del-tables",
+          "table": "Table 5.4 CDEL"
+        }
+      ]
+    },
+    {
+      "id": "underspend",
+      "kind": "administrative",
+      "direction": "costsLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Departments have historically underspent capital budgets; the OBR assumes £9.7bn of underspending in 2026-27 and about £3.7bn a year after that, and notes that in 2025-26 departments surrendered only 0.2% of capital budgets against a post-pandemic average closer to 5%. Extra capital budgets may not all be spent when planned.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.12"
+        }
+      ]
+    },
+    {
+      "id": "no-growth-effects",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "Any effect of public investment on the economy's capacity, and so on receipts, is not modelled here; the OBR's forecast is not re-run when you change the lever.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.12"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

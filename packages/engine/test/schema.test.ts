@@ -7,6 +7,7 @@ import {
   parseHmrcExtract,
   parseLever,
   parseScorecardExtract,
+  parseSr25Extract,
   parseVintage,
   seriesSchema,
   validateDataset,
@@ -18,7 +19,7 @@ describe('every JSON file under data/ validates against its schema', () => {
 
   it('loads the full dataset and passes cross-file checks', () => {
     expect(validateDataset(ds)).toEqual([]);
-    expect(ds.levers.length).toBeGreaterThanOrEqual(26);
+    expect(ds.levers.length).toBeGreaterThanOrEqual(45);
     expect(ds.levers.every((l) => l.status === 'reviewed')).toBe(true);
   });
 
@@ -44,6 +45,7 @@ describe('every JSON file under data/ validates against its schema', () => {
         expect(parsed.schemaVersion).toBe(1);
         if (rel.includes('hmrc-trr')) expect(() => parseHmrcExtract(parsed)).not.toThrow();
         if (rel.includes('table-4-1')) expect(() => parseScorecardExtract(parsed)).not.toThrow();
+        if (rel.includes('sr25')) expect(() => parseSr25Extract(parsed)).not.toThrow();
       } else {
         expect(covered.has(rel), `${rel} has no parser in the test`).toBe(true);
       }

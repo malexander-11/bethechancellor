@@ -10,13 +10,21 @@ export {
   parseRules,
   parseScorecardExtract,
   parseSources,
+  parseSr25Extract,
   parseVintage,
   validateDataset,
   type Dataset,
 } from './load.js';
 export { validateVintage } from './validate/validateVintage.js';
 export { checkRawSourceConsistency, type ExtractedSources } from './validate/rawSource.js';
-export { taxHeadSeries } from './costing/taxHead.js';
+export {
+  hasHead,
+  headSeries,
+  isTaxHead,
+  spendingSeries,
+  taxHeadSeries,
+} from './costing/taxHead.js';
+export { baselinePath, type BaselinePath } from './costing/pctOfBaseline.js';
 export { uprateToForecast, type PublishedSeries, type UpratedSeries } from './costing/uprate.js';
 export { interpolateLookup } from './costing/lookup.js';
 export { costLever } from './costing/index.js';

@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "id": "all-other-departments",
+  "code": "otherd",
+  "category": "spend",
+  "badge": "mechanical",
+  "group": "Day-to-day departmental budgets",
+  "order": 90,
+  "title": "All other day-to-day budgets",
+  "shortTitle": "All other departments",
+  "description": "Change everything else in day-to-day departmental spending from April 2027: the block grants to Scotland, Wales and Northern Ireland, the smaller departments (Work and Pensions, HMRC, Energy, Environment, Culture, Science, Business, Cabinet Office and others) and the Reserve. Together they are £128.0bn in 2028-29, so a 1% change is about £1.3bn a year.",
+  "baselinePolicy": {
+    "text": "Spending Review 2025 total resource DEL excluding depreciation of £517.1bn in 2025-26 rising to £567.8bn in 2028-29 (average real growth 1.2% a year), less the eight departments shown separately, leaves £118.1bn in 2025-26 and £128.0bn in 2028-29 (Table 5.3).",
+    "source": {
+      "sourceId": "hmt-sr25-del-tables",
+      "table": "Table 5.3 RDELex"
+    },
+    "alreadyIncludes": [
+      "Block grants in 2028-29 of £45.0bn (Scottish Government), £19.4bn (Welsh Government) and £17.3bn (Northern Ireland Executive), set by the Barnett formula (Spending Review 2025, Table 5.3).",
+      "A Reserve of £4.7bn in 2028-29 (Spending Review 2025, Table 5.3)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -10,
+    "max": 10,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "of all other day-to-day budgets"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "delType": "RDEL",
+    "department": "All other resource DEL",
+    "psnflTreatment": "standard",
+    "barnettConsequential": false
+  },
+  "costing": {
+    "kind": "pctOfBaseline",
+    "baseline": {
+      "from": "published",
+      "years": ["2025-26", "2026-27", "2027-28", "2028-29"],
+      "values": {
+        "2025-26": 118083.309,
+        "2026-27": 123078.148,
+        "2027-28": 125640.699,
+        "2028-29": 128004.804
+      },
+      "extendWith": "rdel",
+      "rawSource": {
+        "kind": "hmtSr25",
+        "sourceId": "hmt-sr25-del-tables",
+        "sheet": "Table 5.3 RDELex",
+        "rows": [
+          {
+            "rowId": "total-resource-del-excluding-depreciation",
+            "label": "Total Resource DEL excluding depreciation",
+            "role": "add",
+            "values": {
+              "2023-24": 452164,
+              "2024-25": 487520,
+              "2025-26": 517118.178,
+              "2026-27": 535515.425,
+              "2027-28": 551638.716,
+              "2028-29": 567807.634
+            }
+          },
+          {
+            "rowId": "health-and-social-care",
+            "label": "Health and Social Care",
+            "role": "subtract",
+            "values": {
+              "2023-24": 177927,
+              "2024-25": 193301,
+              "2025-26": 201970.662,
+              "2026-27": 211001.517,
+              "2027-28": 221321.987,
+              "2028-29": 231977.319
+            }
+          },
+          {
+            "rowId": "education",
+            "label": "Education",
+            "role": "subtract",
+            "values": {
+              "2023-24": 81757.462,
+              "2024-25": 89231,
+              "2025-26": 94100.751,
+              "2026-27": 98307.461,
+              "2027-28": 100120.926,
+              "2028-29": 101483.652
+            }
+          },
+          {
+            "rowId": "defence",
+            "label": "Defence",
+            "role": "subtract",
+            "values": {
+              "2023-24": 34775,
+              "2024-25": 37608,
+              "2025-26": 38939.425,
+              "2026-27": 39609.925,
+              "2027-28": 40964.525,
+              "2028-29": 42040.425
+            }
+          },
+          {
+            "rowId": "home-office",
+            "label": "Home Office",
+            "role": "subtract",
+            "values": {
+              "2023-24": 19013,
+              "2024-25": 18373,
+              "2025-26": 20463.483,
+              "2026-27": 20878.783,
+              "2027-28": 20358.783,
+              "2028-29": 20566.783
+            }
+          },
+          {
+            "rowId": "justice",
+            "label": "Justice",
+            "role": "subtract",
+            "values": {
+              "2023-24": 10440,
+              "2024-25": 11173,
+              "2025-26": 11865.032,
+              "2026-27": 12567.268,
+              "2027-28": 12927.403,
+              "2028-29": 13245.538
+            }
+          },
+          {
+            "rowId": "mhclg-local-government",
+            "label": "MHCLG Local Government",
+            "role": "subtract",
+            "values": {
+              "2023-24": 9580,
+              "2024-25": 11356,
+              "2025-26": 15033.654,
+              "2026-27": 15358.654,
+              "2027-28": 15617.154,
+              "2028-29": 15833.654
+            }
+          },
+          {
+            "rowId": "foreign-commonwealth-and-development-office",
+            "label": "Foreign, Commonwealth and Development Office",
+            "role": "subtract",
+            "values": {
+              "2023-24": 7678,
+              "2024-25": 8323,
+              "2025-26": 8380.405,
+              "2026-27": 6595.012,
+              "2027-28": 7015.782,
+              "2028-29": 7146.002
+            }
+          },
+          {
+            "rowId": "transport",
+            "label": "Transport",
+            "role": "subtract",
+            "values": {
+              "2023-24": 7895,
+              "2024-25": 8278,
+              "2025-26": 8281.457,
+              "2026-27": 8118.657,
+              "2027-28": 7671.457,
+              "2028-29": 7509.457
+            }
+          }
+        ],
+        "note": "Residual: the published total less the eight departments with their own levers. Published in £ billion; converted to £ million at extraction."
+      }
+    },
+    "source": {
+      "sourceId": "hmt-sr25-del-tables",
+      "table": "Table 5.3 RDELex"
+    },
+    "caveats": [
+      "The residual is a mixed bag: devolved block grants, smaller departments and the Reserve. A uniform percentage change is a stylised device, not a policy.",
+      "The Spending Review sets day-to-day budgets to 2028-29 only; 2029-30 and 2030-31 have not been allocated to departments. Those years carry the 2028-29 settlement forward in line with the OBR's total RDEL path (£594bn in 2029-30 and £614bn in 2030-31, EFO paragraph 4.14). That is an assumption, shown as such in the calculation.",
+      "The OBR's total RDEL (£582bn in 2028-29) is higher than the Spending Review total (£568bn) because of later decisions, such as the £4.1bn added to the 2028-29 envelope for special educational needs, and forecast adjustments. This lever scales the department's Spending Review line; the OBR total remains the baseline aggregate.",
+      "A change is applied in full to current spending and borrowing. No allowance is made for underspending against plans, which the OBR assumes averages about £1.8bn a year across all departments (EFO paragraph 4.11)."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "block-grants",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "About two-thirds of this residual is the block grants to the Scottish Government, Welsh Government and Northern Ireland Executive. In practice those are set by the Barnett formula from changes to comparable UK departments' budgets, and how they are spent is for the devolved governments; changing them directly here is a simplification.",
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "3.15-3.16"
+        },
+        {
+          "sourceId": "hmt-sr25-del-tables",
+          "table": "Table 5.3 RDELex"
+        }
+      ]
+    },
+    {
+      "id": "post-sr-envelope",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "For the years after 2028-29 the OBR works from the Treasury's total envelope rather than departmental plans. On its illustrative assumptions (NHS spending up 2.6% a year in real terms, defence rising towards 3% of GDP, aid growing with national income, schools flat per pupil in real terms), it finds that 'unprotected' day-to-day spending would fall by 4.4% a year in real terms in 2029-30 and 2030-31, and that spending would need to be £13.5bn higher in 2030-31 to avoid real cuts. Extending every department with the total, as this tool does, therefore overstates the likely baseline for unprotected departments in those two years and understates it for protected ones.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.14-4.16"
+        }
+      ]
+    },
+    {
+      "id": "efficiencies-risk",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The settlements assume technical efficiencies of £14bn announced at the Spending Review and further efficiencies announced at Budget 2025 by 2028-29. The OBR lists these not being realised as expected among the significant risks to departmental spending.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "drop-efficiency-savings",
+      "text": "The Budget 2025 efficiency savings fall on departments' day-to-day budgets, including these; the two changes overlap.",
+      "severity": "info"
+    }
+  ]
+}

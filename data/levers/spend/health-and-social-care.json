@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "id": "health-and-social-care",
+  "code": "dhsc",
+  "category": "spend",
+  "badge": "mechanical",
+  "group": "Day-to-day departmental budgets",
+  "order": 10,
+  "title": "Health and Social Care (mostly NHS England)",
+  "shortTitle": "Health and Social Care",
+  "description": "Change the day-to-day (resource) budget of the Department of Health and Social Care (NHS England is £226.1bn of its £232.0bn budget in 2028-29) from April 2027, as a percentage of its Spending Review 2025 settlement. A 1% change is about £2.3bn a year by 2028-29.",
+  "baselinePolicy": {
+    "text": "Spending Review 2025 settlement: resource DEL excluding depreciation of £202.0bn in 2025-26, £211.0bn in 2026-27, £221.3bn in 2027-28 and £232.0bn in 2028-29, an average real-terms change of 2.8% a year (Table 5.3). Budgets for 2029-30 and 2030-31 have not been allocated to departments.",
+    "source": {
+      "sourceId": "hmt-sr25-del-tables",
+      "table": "Table 5.3 RDELex"
+    },
+    "alreadyIncludes": [
+      "NHS England resource budget rising from £195.6bn in 2025-26 to £226.1bn in 2028-29, an average real increase of 3.0% a year (Spending Review 2025, Table 5.3)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -10,
+    "max": 10,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "of the department's day-to-day budget"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "delType": "RDEL",
+    "department": "Health and Social Care",
+    "psnflTreatment": "standard",
+    "barnettConsequential": true
+  },
+  "costing": {
+    "kind": "pctOfBaseline",
+    "baseline": {
+      "from": "published",
+      "years": ["2025-26", "2026-27", "2027-28", "2028-29"],
+      "values": {
+        "2025-26": 201970.662,
+        "2026-27": 211001.517,
+        "2027-28": 221321.987,
+        "2028-29": 231977.319
+      },
+      "extendWith": "rdel",
+      "rawSource": {
+        "kind": "hmtSr25",
+        "sourceId": "hmt-sr25-del-tables",
+        "sheet": "Table 5.3 RDELex",
+        "rows": [
+          {
+            "rowId": "health-and-social-care",
+            "label": "Health and Social Care",
+            "role": "add",
+            "values": {
+              "2023-24": 177927,
+              "2024-25": 193301,
+              "2025-26": 201970.662,
+              "2026-27": 211001.517,
+              "2027-28": 221321.987,
+              "2028-29": 231977.319
+            }
+          }
+        ],
+        "note": "Published in £ billion; converted to £ million at extraction. Outturn years are shown for context; the lever uses 2025-26 to 2028-29."
+      }
+    },
+    "source": {
+      "sourceId": "hmt-sr25-del-tables",
+      "table": "Table 5.3 RDELex"
+    },
+    "caveats": [
+      "The Spending Review sets day-to-day budgets to 2028-29 only; 2029-30 and 2030-31 have not been allocated to departments. Those years carry the 2028-29 settlement forward in line with the OBR's total RDEL path (£594bn in 2029-30 and £614bn in 2030-31, EFO paragraph 4.14). That is an assumption, shown as such in the calculation.",
+      "The OBR's total RDEL (£582bn in 2028-29) is higher than the Spending Review total (£568bn) because of later decisions, such as the £4.1bn added to the 2028-29 envelope for special educational needs, and forecast adjustments. This lever scales the department's Spending Review line; the OBR total remains the baseline aggregate.",
+      "A change is applied in full to current spending and borrowing. No allowance is made for underspending against plans, which the OBR assumes averages about £1.8bn a year across all departments (EFO paragraph 4.11)."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "barnett-up",
+      "kind": "devolution",
+      "direction": "costsMore",
+      "magnitudeWords": "moderate",
+      "appliesWhen": {
+        "above": 0
+      },
+      "alreadyInDirectCosting": false,
+      "text": "Barnett formula: a change to Health and Social Care's planned budget changes the block grants to Scotland, Wales and Northern Ireland by the change × the department's comparability factor (Scotland 99.5%, Wales 99.5%, Northern Ireland 99.5% at Spending Review 2025) × each nation's population share. An increase here would also raise those block grants; that knock-on is not in the number.",
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "3.9-3.18",
+          "table": "Annex B"
+        }
+      ]
+    },
+    {
+      "id": "barnett-down",
+      "kind": "devolution",
+      "direction": "costsLess",
+      "magnitudeWords": "moderate",
+      "appliesWhen": {
+        "below": 0
+      },
+      "alreadyInDirectCosting": false,
+      "text": "Barnett formula: a change to Health and Social Care's planned budget changes the block grants to Scotland, Wales and Northern Ireland by the change × the department's comparability factor (Scotland 99.5%, Wales 99.5%, Northern Ireland 99.5% at Spending Review 2025) × each nation's population share. A cut here would also cut those block grants; that further saving is not in the number.",
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "3.9-3.18",
+          "table": "Annex B"
+        }
+      ]
+    },
+    {
+      "id": "pay-and-strikes",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The OBR lists further strikes by resident doctors, estimated to cost about £250 million per five-day strike, and pay review body recommendations coming in above departmental expectations among the risks to the settlement.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        }
+      ]
+    },
+    {
+      "id": "post-sr-envelope",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "For the years after 2028-29 the OBR works from the Treasury's total envelope rather than departmental plans. On its illustrative assumptions (NHS spending up 2.6% a year in real terms, defence rising towards 3% of GDP, aid growing with national income, schools flat per pupil in real terms), it finds that 'unprotected' day-to-day spending would fall by 4.4% a year in real terms in 2029-30 and 2030-31, and that spending would need to be £13.5bn higher in 2030-31 to avoid real cuts. Extending every department with the total, as this tool does, therefore overstates the likely baseline for unprotected departments in those two years and understates it for protected ones.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.14-4.16"
+        }
+      ]
+    },
+    {
+      "id": "efficiencies-risk",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The settlements assume technical efficiencies of £14bn announced at the Spending Review and further efficiencies announced at Budget 2025 by 2028-29. The OBR lists these not being realised as expected among the significant risks to departmental spending.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

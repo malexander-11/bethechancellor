@@ -100,13 +100,28 @@ export function MethodologyPage() {
         <li>Ratios to GDP are recomputed, and each rule is tested in its target year.</li>
       </ol>
 
+      <h2>Spending levers</h2>
+      <p>
+        Departmental sliders scale the Spending Review 2025 settlements (resource budgets excluding
+        depreciation) for 2025-26 to 2028-29. The Spending Review stops there, so 2029-30 and
+        2030-31 carry the last settlement forward in line with the OBR&rsquo;s total day-to-day
+        spending path; the drawer marks that as an assumption. The investment slider scales the
+        OBR&rsquo;s capital budget forecast and moves borrowing and net financial liabilities but
+        not the current budget. Welfare sliders scale the OBR&rsquo;s welfare lines, with
+        welfare-cap membership approximated line by line (pensioner spending outside, the rest
+        inside). Child benefit uses HMRC&rsquo;s ready reckoner and the four Budget 2025 spending
+        decisions use the Treasury&rsquo;s scorecard, both on the spending side. Barnett
+        consequentials for Scotland, Wales and Northern Ireland are described under each department,
+        never added to the number.
+      </p>
+
       <h2>What is not modelled</h2>
       <p>
-        Growth effects of your choices, market reactions to the fiscal stance, devolved budgets,
-        financial transactions beyond the baseline, depreciation on new investment, and
-        classification changes. The OBR&rsquo;s typical five-year forecast error for receipts is
-        0.9% of GDP, about £32 billion by 2030-31, larger than any recent headroom; the verdict
-        cards show it beside every figure.
+        Growth effects of your choices, market reactions to the fiscal stance, Barnett
+        consequentials (described, not computed), financial transactions beyond the baseline,
+        depreciation on new investment, and classification changes. The OBR&rsquo;s typical
+        five-year forecast error for receipts is 0.9% of GDP, about £32 billion by 2030-31, larger
+        than any recent headroom; the verdict cards show it beside every figure.
       </p>
     </article>
   );

@@ -23,8 +23,18 @@ import type {
   presetSchema,
   presetsFileSchema,
 } from '../schema/reference.schema.js';
-import type { hmrcExtractSchema, scorecardExtractSchema } from '../schema/derived.schema.js';
-import type { rawSourceSchema, taxHeadSchema, upratingRuleSchema } from '../schema/lever.schema.js';
+import type {
+  hmrcExtractSchema,
+  scorecardExtractSchema,
+  sr25ExtractSchema,
+} from '../schema/derived.schema.js';
+import type {
+  growthHeadSchema,
+  rawSourceSchema,
+  spendingHeadSchema,
+  taxHeadSchema,
+  upratingRuleSchema,
+} from '../schema/lever.schema.js';
 
 export type Badge = z.infer<typeof badgeSchema>;
 export type SourceRef = z.infer<typeof sourceRefSchema>;
@@ -47,8 +57,11 @@ export type Consideration = z.infer<typeof considerationSchema>;
 export type HouseholdsReference = z.infer<typeof householdsReferenceSchema>;
 export type HmrcExtract = z.infer<typeof hmrcExtractSchema>;
 export type ScorecardExtract = z.infer<typeof scorecardExtractSchema>;
+export type Sr25Extract = z.infer<typeof sr25ExtractSchema>;
 export type RawSource = z.infer<typeof rawSourceSchema>;
 export type TaxHead = z.infer<typeof taxHeadSchema>;
+export type SpendingHead = z.infer<typeof spendingHeadSchema>;
+export type GrowthHead = z.infer<typeof growthHeadSchema>;
 export type UpratingRule = z.infer<typeof upratingRuleSchema>;
 export type Preset = z.infer<typeof presetSchema>;
 export type PresetsFile = z.infer<typeof presetsFileSchema>;

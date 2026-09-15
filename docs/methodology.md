@@ -180,6 +180,53 @@ HMRC notes that rate and threshold changes are only approximately additive, and 
 touch the same tax (fuel duty rates and the fuel duty freeze reversal). Authored interaction
 notes appear when both levers of a pair are moved; they change no numbers.
 
+### Spending levers (ADR-0006)
+
+Spending levers add a third source, the **Spending Review 2025 departmental DEL tables** (HMT,
+June 2025; `data/raw/hmt-sr25/`), and reuse the other two on the spending side.
+
+- **Percentage of a baseline path.** Eight departments and an "all other" residual scale their
+  Spending Review resource settlement (resource DEL excluding depreciation, Table 5.3, published
+  in £ billion and converted to £ million at extraction): effect = setting ÷ 100 × baseline, from
+  the start year. The Spending Review stops at 2028-29, so 2029-30 and 2030-31 carry the 2028-29
+  settlement forward with the growth of the OBR's total RDEL (594,200 ÷ 581,800 = 1.021 for
+  2029-30; 614,200 ÷ 581,800 = 1.056 for 2030-31). That extension is an assumption and is marked
+  as one in the drawer: the OBR says the same envelope implies real cuts to "unprotected" budgets
+  (EFO paragraph 4.16), so the pro-rata path is probably too high for those departments and too
+  low for protected ones. The residual is the published total less the eight rows, rebuilt by the
+  validator from the cited rows. The investment lever and the four welfare lines scale OBR forecast
+  series directly (Table 4.1 CDEL; Table 4.6 components), which need no extension.
+
+  Worked example, Health and Social Care +1%: plan 221,322 (2027-28) → 2,213; 231,977 (2028-29) →
+  2,320; extended 231,977 × 1.021 = 236,921 (2029-30) → 2,369; 244,896 (2030-31) → 2,449 (£m).
+  The OBR's total RDEL (582bn in 2028-29) is higher than the Spending Review total (568bn) because
+  of later decisions and forecast adjustments; the lever scales the department's line and the OBR
+  total remains the baseline aggregate.
+
+- **Signs on the spending side.** Spending positive means more spending. An HMRC "cost" row
+  (child benefit rates) is therefore positive and a "yield" row negative, the reverse of the tax
+  side. A Budget 2025 scorecard measure that raised spending has a negative scorecard value;
+  reversing it saves that amount, so the schedule equals plus the summed lines (minus them on the
+  receipts side). The validator applies the side-aware rule, so a wrong sign fails `validate:data`.
+
+- **Welfare cap by line.** The cap covers most welfare except the state pension and the payments
+  most sensitive to the cycle. Pensioner spending is treated as outside the cap and the other lines
+  as inside, which misplaces small parts of each (pension credit, winter fuel payments and
+  pensioner housing benefit are inside; jobseeker payments are outside). Check against the EFO:
+  2029-30 welfare 389.9bn less inside-cap 199.2bn leaves 190.7bn outside against pensioner
+  spending of 187.5bn.
+
+- **Investment.** Capital changes add to borrowing and to net financial liabilities and reach the
+  current budget only through debt interest, which is the framework's design and the reason the
+  attribution list carries a borrowing column. Depreciation on new assets and the financial
+  transaction share of capital DEL are not modelled.
+
+- **Barnett consequentials are described, not computed.** A change to a comparable department's
+  budget would change the block grants to Scotland, Wales and Northern Ireland by the change ×
+  comparability factor × population share (Statement of Funding Policy, June 2025, paragraphs
+  3.9-3.18 and Annex B). Each comparable department carries that note with its factors; the
+  numbers exclude it, and the "all other" residual includes the block grants themselves.
+
 ## 7. Assumption sliders
 
 The sliders use the OBR's published sensitivities for the March 2026 forecast: a sustained
@@ -197,9 +244,10 @@ figure so that a "pass" reads as a forecast, not a fact.
 
 ## 9. Not modelled
 
-Growth effects of the player's choices; market reactions to the fiscal stance; devolved
-budgets beyond Barnett consequentials (Phase 3); financial transactions other than those in
-the baseline; depreciation on new capital spending; classification changes.
+Growth effects of the player's choices; market reactions to the fiscal stance; Barnett
+consequentials (described under each department, never added to the number) and the devolved
+governments' own choices; departmental underspending against plans; financial transactions
+other than those in the baseline; depreciation on new capital spending; classification changes.
 
 ## 10. Reproducibility
 

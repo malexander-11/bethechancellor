@@ -51,6 +51,10 @@ export interface CostingDetail {
   /** Effect after uprating, engine sign, by target year. */
   uprated: YearValues;
   caveats: string[];
+  /** Percentage-of-baseline levers: the £ million path the percentage applies to, by target year. */
+  baseline?: YearValues;
+  /** Percentage-of-baseline levers with a published plan: the first year carried beyond the plan. */
+  extendedFrom?: string;
 }
 
 export interface InteractionNotice {

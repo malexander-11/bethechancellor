@@ -5,6 +5,10 @@ function tone(v: number): string {
   return v > 0.5 ? 'amount--worse' : v < -0.5 ? 'amount--better' : '';
 }
 
+function size(row: AttributionRow): number {
+  return Math.max(Math.abs(row.currentBudgetGbpm), Math.abs(row.psnbGbpm));
+}
+
 export function AttributionList({
   rows,
   baselineHeadroomGbpm,
@@ -20,13 +24,17 @@ export function AttributionList({
       </p>
     );
   }
-  const levers = rows
-    .filter((r) => r.kind !== 'debtInterest')
-    .sort((a, b) => Math.abs(b.currentBudgetGbpm) - Math.abs(a.currentBudgetGbpm));
+  const levers = rows.filter((r) => r.kind !== 'debtInterest').sort((a, b) => size(b) - size(a));
   const interest = rows.filter((r) => r.kind === 'debtInterest');
-  const total = rows.reduce((acc, r) => acc + r.currentBudgetGbpm, 0);
+  const totalCurrent = rows.reduce((acc, r) => acc + r.currentBudgetGbpm, 0);
+  const totalBorrowing = rows.reduce((acc, r) => acc + r.psnbGbpm, 0);
   return (
-    <ul className="attribution">
+    <ul className="attribution attribution--columns">
+      <li className="attribution__header">
+        <span>Change</span>
+        <span>Current budget</span>
+        <span>Borrowing</span>
+      </li>
       {[...levers, ...interest].map((row) => (
         <li key={`${row.kind}-${row.code ?? row.label}`}>
           <span>
@@ -35,11 +43,19 @@ export function AttributionList({
           <span className={`amount ${tone(row.currentBudgetGbpm)}`}>
             {formatGbpBn(row.currentBudgetGbpm, 1, true)}
           </span>
+          <span className={`amount ${tone(row.psnbGbpm)}`}>
+            {formatGbpBn(row.psnbGbpm, 1, true)}
+          </span>
         </li>
       ))}
       <li>
-        <strong>Total change to headroom</strong>
-        <strong className={`amount ${tone(total)}`}>{formatGbpBn(-total, 1, true)}</strong>
+        <strong>Total (positive = worse)</strong>
+        <strong className={`amount ${tone(totalCurrent)}`}>
+          {formatGbpBn(totalCurrent, 1, true)}
+        </strong>
+        <strong className={`amount ${tone(totalBorrowing)}`}>
+          {formatGbpBn(totalBorrowing, 1, true)}
+        </strong>
       </li>
     </ul>
   );

@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "id": "defence",
+  "code": "mod",
+  "category": "spend",
+  "badge": "mechanical",
+  "group": "Day-to-day departmental budgets",
+  "order": 30,
+  "title": "Defence (day-to-day)",
+  "shortTitle": "Defence",
+  "description": "Change the day-to-day (resource) budget of the Ministry of Defence (its capital budget, which rises faster, is part of the public investment lever) from April 2027, as a percentage of its Spending Review 2025 settlement. A 1% change is about £0.4bn a year by 2028-29.",
+  "baselinePolicy": {
+    "text": "Spending Review 2025 settlement: resource DEL excluding depreciation of £38.9bn in 2025-26, £39.6bn in 2026-27, £41.0bn in 2027-28 and £42.0bn in 2028-29, an average real-terms change of 0.7% a year (Table 5.3). Budgets for 2029-30 and 2030-31 have not been allocated to departments.",
+    "source": {
+      "sourceId": "hmt-sr25-del-tables",
+      "table": "Table 5.3 RDELex"
+    },
+    "alreadyIncludes": [
+      "Defence capital DEL rising from £23.2bn in 2025-26 to £33.2bn in 2029-30 (Spending Review 2025, Table 5.4), outside this lever."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -10,
+    "max": 10,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "of the department's day-to-day budget"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "delType": "RDEL",
+    "department": "Defence",
+    "psnflTreatment": "standard",
+    "barnettConsequential": false
+  },
+  "costing": {
+    "kind": "pctOfBaseline",
+    "baseline": {
+      "from": "published",
+      "years": ["2025-26", "2026-27", "2027-28", "2028-29"],
+      "values": {
+        "2025-26": 38939.425,
+        "2026-27": 39609.925,
+        "2027-28": 40964.525,
+        "2028-29": 42040.425
+      },
+      "extendWith": "rdel",
+      "rawSource": {
+        "kind": "hmtSr25",
+        "sourceId": "hmt-sr25-del-tables",
+        "sheet": "Table 5.3 RDELex",
+        "rows": [
+          {
+            "rowId": "defence",
+            "label": "Defence",
+            "role": "add",
+            "values": {
+              "2023-24": 34775,
+              "2024-25": 37608,
+              "2025-26": 38939.425,
+              "2026-27": 39609.925,
+              "2027-28": 40964.525,
+              "2028-29": 42040.425
+            }
+          }
+        ],
+        "note": "Published in £ billion; converted to £ million at extraction. Outturn years are shown for context; the lever uses 2025-26 to 2028-29."
+      }
+    },
+    "source": {
+      "sourceId": "hmt-sr25-del-tables",
+      "table": "Table 5.3 RDELex"
+    },
+    "caveats": [
+      "The Spending Review sets day-to-day budgets to 2028-29 only; 2029-30 and 2030-31 have not been allocated to departments. Those years carry the 2028-29 settlement forward in line with the OBR's total RDEL path (£594bn in 2029-30 and £614bn in 2030-31, EFO paragraph 4.14). That is an assumption, shown as such in the calculation.",
+      "The OBR's total RDEL (£582bn in 2028-29) is higher than the Spending Review total (£568bn) because of later decisions, such as the £4.1bn added to the 2028-29 envelope for special educational needs, and forecast adjustments. This lever scales the department's Spending Review line; the OBR total remains the baseline aggregate.",
+      "A change is applied in full to current spending and borrowing. No allowance is made for underspending against plans, which the OBR assumes averages about £1.8bn a year across all departments (EFO paragraph 4.11)."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "no-barnett",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "No Barnett consequentials: the Statement of Funding Policy does not complete comparability factors for departments that only undertake reserved activities, which it says includes the Foreign, Commonwealth and Development Office and the Ministry of Defence.",
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "B.12"
+        }
+      ]
+    },
+    {
+      "id": "defence-path",
+      "kind": "macro",
+      "direction": "costsMore",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The Government is committed to the Strategic Defence Review and to spending 3.5% of GDP on defence by 2035. The OBR notes that reaching that target on a straight-line path, rather than the Spending Review path, would add about 0.2% of GDP (£6bn) in the final year of the Spending Review period, and its post-2028-29 illustration has defence rising to 3.0% of GDP by the end of the forecast.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        },
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.15"
+        }
+      ]
+    },
+    {
+      "id": "post-sr-envelope",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "For the years after 2028-29 the OBR works from the Treasury's total envelope rather than departmental plans. On its illustrative assumptions (NHS spending up 2.6% a year in real terms, defence rising towards 3% of GDP, aid growing with national income, schools flat per pupil in real terms), it finds that 'unprotected' day-to-day spending would fall by 4.4% a year in real terms in 2029-30 and 2030-31, and that spending would need to be £13.5bn higher in 2030-31 to avoid real cuts. Extending every department with the total, as this tool does, therefore overstates the likely baseline for unprotected departments in those two years and understates it for protected ones.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.14-4.16"
+        }
+      ]
+    },
+    {
+      "id": "efficiencies-risk",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The settlements assume technical efficiencies of £14bn announced at the Spending Review and further efficiencies announced at Budget 2025 by 2028-29. The OBR lists these not being realised as expected among the significant risks to departmental spending.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "id": "winter-fuel-pension-credit-only",
+  "code": "rvwfp",
+  "category": "welfare",
+  "badge": "direct",
+  "group": "Budget 2025 spending decisions",
+  "order": 30,
+  "title": "Winter fuel payments for pension credit recipients only",
+  "shortTitle": "Winter fuel: pension credit only",
+  "description": "From winter 2025 winter fuel payments in England and Wales go to pensioners with taxable income of £35,000 or less, with the payment recovered through the tax system from higher-income pensioners. Switch this on to return to paying only pension credit recipients from winter 2027, saving the Treasury's costing of the wider payment (£1.3bn in 2029-30).",
+  "baselinePolicy": {
+    "text": "Winter fuel payments targeted at pensioners with taxable income at or below £35,000 from winter 2025, at a cost of £1.8bn in 2025-26 and about £1.3bn a year by 2029-30 (Budget 2025, Table 4.1 line 84).",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 84"
+    },
+    "alreadyIncludes": [
+      "Winter fuel payments for pensioners with taxable income of £35,000 or less from winter 2025 (Budget 2025, Table 4.1 line 84)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "psnflTreatment": "standard",
+    "insideWelfareCap": true
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": -1785,
+      "2026-27": -1390,
+      "2027-28": -910,
+      "2028-29": -1330,
+      "2029-30": -1340,
+      "2030-31": -1325
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "lines": [
+        {
+          "number": 84,
+          "title": "Winter Fuel Payment: Target to pensioners with taxable income below or equal to £35,000 from Winter 2025",
+          "values": {
+            "2025-26": -1785,
+            "2026-27": -1390,
+            "2027-28": -910,
+            "2028-29": -1330,
+            "2029-30": -1340,
+            "2030-31": -1325
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury's costing with the sign kept (a measure that increased borrowing was more spending; reversing it is the same amount of spending saved)."
+    },
+    "caveats": [
+      "The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here; the difference is small relative to the figures. Effects before the start year are not applied."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "devolved-winter-payments",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": true,
+      "text": "Winter heating assistance is devolved in Scotland and winter fuel payments are a transferred matter in Northern Ireland. The Treasury presents the costing on a UK-wide basis, including the resulting changes to the Scottish block grant adjustment and Northern Ireland Executive funding; the devolved governments decide their own schemes.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "84"
+        }
+      ]
+    },
+    {
+      "id": "opt-outs",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's costing allows for more pensioners opting out of the payment where it would be recovered by HMRC, and names the size of that response as its main uncertainty.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "84"
+        }
+      ]
+    },
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; see the Budget 2025 policy costings document for the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

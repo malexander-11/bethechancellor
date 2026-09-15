@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "id": "drop-efficiency-savings",
+  "code": "rveff",
+  "category": "spend",
+  "badge": "direct",
+  "group": "Budget 2025 spending decisions",
+  "order": 40,
+  "title": "Drop the extra efficiency savings pencilled in from 2028-29",
+  "shortTitle": "Drop extra efficiency savings",
+  "description": "Budget 2025 counted further efficiency and other savings from departments' day-to-day budgets from 2028-29, rising from £1.4bn to £4.9bn in 2030-31. Switch this on to drop them and fund departments in full instead.",
+  "baselinePolicy": {
+    "text": "Additional efficiencies and savings in resource DEL of £1.4bn in 2028-29, £4.0bn in 2029-30 and £4.9bn in 2030-31 (Budget 2025, Table 4.1 line 37).",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 37"
+    },
+    "alreadyIncludes": [
+      "Technical efficiencies of £14bn announced at Spending Review 2025 and the further efficiencies announced at Budget 2025 (EFO paragraph 4.13)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "psnflTreatment": "standard",
+    "delType": "RDEL"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 0,
+      "2026-27": 0,
+      "2027-28": 0,
+      "2028-29": 1415,
+      "2029-30": 3950,
+      "2030-31": 4900
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "lines": [
+        {
+          "number": 37,
+          "title": "RDEL: Go further on efficiencies and savings",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 0,
+            "2027-28": 0,
+            "2028-29": 1415,
+            "2029-30": 3950,
+            "2030-31": 4900
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury's costing with the sign kept (a measure that increased borrowing was more spending; reversing it is the same amount of spending saved)."
+    },
+    "caveats": [
+      "The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here; the difference is small relative to the figures. Effects before the start year are not applied.",
+      "Which departments would bear the savings is not specified in the scorecard; the change is applied to total day-to-day spending."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "delivery-risk",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The OBR lists the Spending Review and Budget 2025 efficiencies not being realised as expected among the significant risks to departmental spending. Dropping them here funds the same output at higher cost; keeping them assumes they are delivered.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        }
+      ]
+    },
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; see the Budget 2025 policy costings document for the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

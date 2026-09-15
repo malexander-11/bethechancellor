@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "id": "proceed-with-pip-changes",
+  "code": "rvpip",
+  "category": "welfare",
+  "badge": "direct",
+  "group": "Budget 2025 spending decisions",
+  "order": 20,
+  "title": "Proceed with the Spring Statement 2025 PIP eligibility changes",
+  "shortTitle": "Proceed with PIP changes",
+  "description": "Spring Statement 2025 proposed that claimants score at least four points in one daily living activity to qualify for the daily living part of personal independence payment; Budget 2025 scored not proceeding. Switch this on to proceed from April 2027, saving the Treasury's costing of the U-turn (£4.5bn in 2029-30).",
+  "baselinePolicy": {
+    "text": "Not proceeding with the Spring Statement 2025 PIP eligibility changes, at a cost rising from £1.8bn in 2027-28 to £5.3bn in 2030-31 (Budget 2025, Table 4.1 line 83).",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 83"
+    },
+    "alreadyIncludes": [
+      "Not proceeding with the Spring Statement 2025 changes to personal independence payment eligibility (Budget 2025, Table 4.1 line 83)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "psnflTreatment": "standard",
+    "insideWelfareCap": true
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 0,
+      "2026-27": -235,
+      "2027-28": -1755,
+      "2028-29": -3350,
+      "2029-30": -4495,
+      "2030-31": -5345
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "lines": [
+        {
+          "number": 83,
+          "title": "Personal Independence Payment: Not proceeding with Spring Statement 2025 reforms to eligibility",
+          "values": {
+            "2025-26": 0,
+            "2026-27": -235,
+            "2027-28": -1755,
+            "2028-29": -3350,
+            "2029-30": -4495,
+            "2030-31": -5345
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury's costing with the sign kept (a measure that increased borrowing was more spending; reversing it is the same amount of spending saved)."
+    },
+    "caveats": [
+      "The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here; the difference is small relative to the figures. Effects before the start year are not applied."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "assessment-capacity",
+      "kind": "administrative",
+      "direction": "costsMore",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The Treasury's costing of the reforms allowed for more mandatory reconsiderations and appeals, and names behavioural assumptions and DWP's capacity to carry out award reviews when due as the main uncertainties. The OBR adds that earlier eligibility changes (disability living allowance to personal independence payment) did not achieve the savings planned, so the saving shown may be optimistic.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "83"
+        },
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        }
+      ]
+    },
+    {
+      "id": "passported-benefits",
+      "kind": "interaction",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's cost base includes benefits passported from PIP, such as carer's allowance and the universal credit carer element, so the figure is wider than PIP itself.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "83"
+        }
+      ]
+    },
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; see the Budget 2025 policy costings document for the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

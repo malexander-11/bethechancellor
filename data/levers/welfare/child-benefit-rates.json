@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "id": "child-benefit-rates",
+  "code": "chb",
+  "category": "welfare",
+  "badge": "direct",
+  "group": "Welfare",
+  "order": 50,
+  "title": "Child benefit rates",
+  "shortTitle": "Child benefit rates",
+  "description": "Change both child benefit rates (the eldest-child rate and the rate for each other child) by the same amount per week from April 2027, costed from HMRC's ready reckoner. Each £1 a week costs about £0.6bn a year.",
+  "baselinePolicy": {
+    "text": "Child benefit spending of £13.4bn in 2025-26 rising to £13.9bn in 2029-30 and £14.0bn in 2030-31 (Table 4.6), with rates uprated as in the OBR's forecast.",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table 4.6"
+    }
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "GBP",
+    "min": -5,
+    "max": 10,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "a week on both rates"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": true,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 565,
+      "2027-28": 575,
+      "2028-29": 575
+    },
+    "basis": "cash",
+    "symmetric": false,
+    "decreasePerUnit": {
+      "2026-27": -565,
+      "2027-28": -580,
+      "2028-29": -565
+    },
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "child-benefit--increase-first-child-rate-by-gbp-1-per-week-cost",
+          "label": "Increase first child rate by £1 per week (cost)",
+          "hmrcSign": "cost",
+          "role": "increase",
+          "values": {
+            "2026-27": 335,
+            "2027-28": 335,
+            "2028-29": 330
+          }
+        },
+        {
+          "rowId": "child-benefit--increase-subsequent-child-rate-by-gbp-1-per-week-cost",
+          "label": "Increase subsequent child rate by £1 per week (cost)",
+          "hmrcSign": "cost",
+          "role": "increase",
+          "values": {
+            "2026-27": 230,
+            "2027-28": 240,
+            "2028-29": 245
+          }
+        },
+        {
+          "rowId": "child-benefit--decrease-first-child-rate-by-gbp-1-per-week-yield",
+          "label": "Decrease first child rate by £1 per week (yield)",
+          "hmrcSign": "yield",
+          "role": "decrease",
+          "values": {
+            "2026-27": 335,
+            "2027-28": 355,
+            "2028-29": 345
+          }
+        },
+        {
+          "rowId": "child-benefit--decrease-subsequent-child-rate-by-gbp-1-per-week-yield",
+          "label": "Decrease subsequent child rate by £1 per week (yield)",
+          "hmrcSign": "yield",
+          "role": "decrease",
+          "values": {
+            "2026-27": 230,
+            "2027-28": 225,
+            "2028-29": 220
+          }
+        }
+      ],
+      "combine": "sum",
+      "note": "Spending side: an HMRC 'cost' is more spending (positive here) and a 'yield' is less. The eldest-child and other-children rows are summed so the slider moves both rates together."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "childBenefit",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for child benefit spending (Table 4.6), following ADR-0004."
+    },
+    "caveats": [
+      "HMRC's estimates are on its Spring Statement 2025 baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the OBR's child benefit spending forecast; the level is not rebased. HMRC deferred its 2026 edition to review key assumptions.",
+      "HMRC publishes separate rows for a rise and a cut; the slider uses the rise rows for increases and the cut rows for decreases."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmrc-direct",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's figure is a direct effect including its standard behavioural assumptions, but not wider effects on the economy. The high income child benefit charge claws some child benefit back from higher earners; HMRC's direct effect is net of the interactions it models.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ]
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

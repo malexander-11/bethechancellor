@@ -20,6 +20,7 @@
   ],
   "outputs": [
     "hmrc-trr-2025-06.raw.json",
-    "hmt-budget-2025-table-4-1.raw.json"
+    "hmt-budget-2025-table-4-1.raw.json",
+    "hmt-sr25-del.raw.json"
   ]
 }

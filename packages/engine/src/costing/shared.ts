@@ -2,6 +2,7 @@ import { EngineError } from '../errors.js';
 import { zeros } from '../calc/series.js';
 import type { Lever, Vintage, YearValues } from '../types/data.js';
 import type { CostingDetail, LeverEffect } from '../types/engine.js';
+import { headSourceTable } from './taxHead.js';
 import { uprateToForecast, type UpratedSeries } from './uprate.js';
 
 export function emptyEffect(
@@ -61,7 +62,10 @@ export function upratePublished(
   }
   const headSource = {
     sourceId: vintage.primarySource.sourceId,
-    table: 'Table 3.1 (receipts by head, % of GDP) and derived nominal GDP',
+    table:
+      costing.uprating.method === 'growWithSeries'
+        ? headSourceTable(costing.uprating.head)
+        : 'not used',
   };
   return uprateToForecast(
     { years, values: rawByPublishedYear },

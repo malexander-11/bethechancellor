@@ -61,6 +61,51 @@
           "sourceId": "hmt-budget-2025-table-4-1"
         }
       ]
+    },
+    {
+      "id": "reverse-welfare-u-turns",
+      "title": "Reverse the welfare U-turns",
+      "description": "Reinstate the two-child limit, proceed with the Spring Statement 2025 PIP changes and return winter fuel payments to pension credit recipients from April 2027, using the Treasury's costings. Brings welfare-cap spending back inside the cap.",
+      "leverValues": {
+        "rv2ch": 1,
+        "rvpip": 1,
+        "rvwfp": 1
+      },
+      "badge": "direct",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-table-4-1"
+        }
+      ]
+    },
+    {
+      "id": "nhs-first",
+      "title": "NHS first, squeeze the rest",
+      "description": "Add 2% to the Health and Social Care budget and take 3% from all other day-to-day budgets from April 2027, applied to the Spending Review 2025 settlements.",
+      "leverValues": {
+        "dhsc": 2,
+        "otherd": -3
+      },
+      "badge": "mechanical",
+      "sources": [
+        {
+          "sourceId": "hmt-sr25-del-tables"
+        }
+      ]
+    },
+    {
+      "id": "investment-push",
+      "title": "Investment push",
+      "description": "Raise departmental capital budgets by 10% from April 2027. Borrowing and net financial liabilities rise; the current budget moves only through debt interest, so watch the investment rule rather than the stability rule.",
+      "leverValues": {
+        "cdel": 10
+      },
+      "badge": "mechanical",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03"
+        }
+      ]
     }
   ]
 }
