@@ -37,6 +37,28 @@ export interface LeverEffect {
   marginalRateAdjustmentPp: number;
   steps: DerivationStep[];
   warnings: string[];
+  /** For the provenance drawer: raw published figure, factor and uprated value per target year. */
+  detail?: CostingDetail;
+}
+
+export interface CostingDetail {
+  /** Target fiscal year → the published (ready-reckoner) year it was taken from. */
+  sourceYearFor: Record<string, string>;
+  /** Effect in the published year's terms before uprating, engine sign, by target year. */
+  raw: YearValues;
+  /** Uprating factor by target year (1 when no uprating applies). */
+  factor: YearValues;
+  /** Effect after uprating, engine sign, by target year. */
+  uprated: YearValues;
+  caveats: string[];
+}
+
+export interface InteractionNotice {
+  leverIds: [string, string];
+  codes: [string, string];
+  titles: [string, string];
+  text: string;
+  severity: 'info' | 'warn';
 }
 
 export interface Deltas {
@@ -139,5 +161,6 @@ export interface Outcome {
   leverEffects: LeverEffect[];
   verdicts: RuleVerdict[];
   attribution: AttributionRow[];
+  interactions: InteractionNotice[];
   warnings: string[];
 }

@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "id": "insurance-premium-tax",
+  "code": "ipt",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Duties",
+  "order": 30,
+  "title": "Insurance premium tax",
+  "shortTitle": "Insurance premium tax",
+  "description": "Change the 12% standard rate of insurance premium tax on most general insurance, in percentage points.",
+  "baselinePolicy": {
+    "text": "Standard rate 12%; higher rate 20% on travel insurance and some vehicle and appliance insurance.",
+    "source": {
+      "sourceId": "hmrc-trr-2025-06-bulletin"
+    },
+    "alreadyIncludes": []
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": -6,
+    "max": 8,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "percentage points"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 630,
+      "2027-28": 640,
+      "2028-29": 660
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "insurance-premium-tax--change-standard-rate-by-1-percentage-point",
+          "label": "Change standard rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 630,
+            "2027-28": 640,
+            "2028-29": 660
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "otherTaxes",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so rate changes are scaled linearly here.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmrc-direct",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's figure is a direct effect on this tax and closely related tax bases. It includes HMRC's standard behavioural response (for personal taxes, through taxable income elasticities and tax-motivated incorporation), but not wider effects on the economy such as inflation or investment, which HMRC says are usually captured in the OBR's economy forecast instead.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

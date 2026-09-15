@@ -158,6 +158,36 @@
       "retrievedOn": "2026-09-15",
       "licence": "Other",
       "notes": "Press coverage used only as qualitative context: UBS estimated gilt yields about 70 basis points above the March assumption, removing roughly £10bn of headroom; the Budget is on 28 October 2026."
+    },
+    {
+      "id": "hmrc-trr-2025-06-bulletin",
+      "org": "HMRC",
+      "title": "Direct effects of illustrative tax changes bulletin (June 2025)",
+      "edition": "June 2025",
+      "url": "https://www.gov.uk/government/statistics/direct-effects-of-illustrative-tax-changes/direct-effects-of-illustrative-tax-changes-bulletin-january-2025",
+      "landingUrl": "https://www.gov.uk/government/statistics/direct-effects-of-illustrative-tax-changes",
+      "publishedOn": "2025-06-24",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Methodology notes: direct effects on the tax base and closely related bases; behavioural responses via taxable income elasticities and tax-motivated incorporation; wider economic effects excluded; rate changes scale roughly linearly, allowances and limits do not; CGT and SDLT non-linear and asymmetrical."
+    },
+    {
+      "id": "osr-trr-review-2025-12",
+      "org": "Other",
+      "title": "Compliance review of the Direct effects of illustrative tax changes bulletin (Office for Statistics Regulation)",
+      "url": "https://osr.statisticsauthority.gov.uk/publication/compliance-review-of-direct-effects-of-illustrative-tax-changes-bulletin/",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "December 2025 review prompted by concerns about transparency of pre- and post-behavioural estimates; recommends a detailed methodology document and reconsideration of the official statistics label."
+    },
+    {
+      "id": "hmrc-stats-schedule",
+      "org": "HMRC",
+      "title": "Schedule of updates and announcements for HMRC's statistics",
+      "url": "https://www.gov.uk/government/statistics/schedule-of-updates-and-announcements-for-hmrcs-statistics",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "6 July 2026 entry: publication of the Direct effects of illustrative tax changes bulletin (due 7 July 2026) deferred to complete a review of the key assumptions underpinning some of the estimates."
     }
   ]
 }

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "id": "reverse-threshold-freeze",
+  "code": "rvfrz",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Reverse Budget 2025 measures",
+  "order": 10,
+  "title": "End the personal tax threshold freeze in April 2028",
+  "shortTitle": "End threshold freeze early",
+  "description": "Budget 2025 froze income tax and National Insurance thresholds for three more years, to April 2031. Switch this on to let them rise with inflation from April 2028 instead, giving up the revenue the freeze would have raised.",
+  "baselinePolicy": {
+    "text": "Thresholds frozen until April 2031 (Budget 2025, Table 4.1 lines 46 and 47).",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "lines 46, 47"
+    },
+    "alreadyIncludes": [
+      "Income tax personal allowance, higher-rate threshold and equivalent National Insurance thresholds frozen until April 2031 (Budget 2025, Table 4.1 line 46)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 0,
+      "2026-27": 0,
+      "2027-28": 30,
+      "2028-29": -3655,
+      "2029-30": -8395,
+      "2030-31": -13360
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "lines": [
+        {
+          "number": 46,
+          "title": "Personal Tax: Maintain the personal income tax and equivalent national insurance thresholds at current levels for a further three years until April 2031",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 0,
+            "2027-28": -25,
+            "2028-29": 3365,
+            "2029-30": 7780,
+            "2030-31": 12435
+          }
+        },
+        {
+          "number": 47,
+          "title": "National Insurance: Maintain the secondary threshold for employer contributions at current level for a further three years until April 2031",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 0,
+            "2027-28": -5,
+            "2028-29": 290,
+            "2029-30": 615,
+            "2030-31": 925
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury's costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here; the difference is small relative to the figures. Effects before the start year are not applied."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; see the Budget 2025 policy costings document for the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    },
+    {
+      "id": "freeze-broad-base",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "The OBR notes that yield from frozen thresholds is paid by a broad base of taxpayers, so it is less sensitive to behavioural change than yield from higher rates.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "3.4"
+        }
+      ],
+      "magnitudeWords": "moderate"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "income-tax-basic-rate",
+      "text": "Both change the income tax base; the combination is approximate.",
+      "severity": "info"
+    }
+  ]
+}

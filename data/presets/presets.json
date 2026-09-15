@@ -7,17 +7,59 @@
       "description": "No changes: the baseline as published by the OBR on 3 March 2026.",
       "leverValues": {},
       "badge": "direct",
-      "sources": [{ "sourceId": "obr-efo-2026-03" }]
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03"
+        }
+      ]
     },
     {
       "id": "higher-gilt-yields-2026-09",
       "title": "Higher gilt yields, September 2026 (illustrative)",
       "description": "Interest rates 0.75 percentage points above the March assumption, roughly the rise in gilt yields reported by September 2026. Everything else unchanged. This is not an OBR forecast.",
-      "leverValues": { "rate": 0.75 },
+      "leverValues": {
+        "rate": 0.75
+      },
       "badge": "assumption",
       "sources": [
-        { "sourceId": "press-investing-2026-09-11" },
-        { "sourceId": "boe-iadb-bank-rate" }
+        {
+          "sourceId": "press-investing-2026-09-11"
+        },
+        {
+          "sourceId": "boe-iadb-bank-rate"
+        }
+      ]
+    },
+    {
+      "id": "penny-off-basic-rate",
+      "title": "A penny off the basic rate",
+      "description": "Cut the basic rate of income tax by 1p from April 2027, costed from HMRC’s ready reckoner. Everything else as the OBR forecast.",
+      "leverValues": {
+        "itbr": -1
+      },
+      "badge": "direct",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06"
+        }
+      ]
+    },
+    {
+      "id": "budget-2025-tax-measures-unwound",
+      "title": "Budget 2025 tax rises unwound",
+      "description": "Reverse the threshold freeze, the investment-income rises, the salary-sacrifice cap, the fuel duty freeze and the gambling duty rises from April 2027, using the Treasury’s own costings.",
+      "leverValues": {
+        "rvfrz": 1,
+        "rvinv": 1,
+        "rvsal": 1,
+        "rvfuel": 1,
+        "rvgam": 1
+      },
+      "badge": "direct",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-table-4-1"
+        }
       ]
     }
   ]

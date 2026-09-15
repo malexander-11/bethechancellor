@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "id": "nics-employer-rate",
+  "code": "nicer",
+  "category": "tax",
+  "badge": "direct",
+  "group": "National Insurance",
+  "order": 30,
+  "title": "Employer NICs rate",
+  "shortTitle": "Employer NICs",
+  "description": "Change the 15% rate employers pay on wages above £5,000 a year, in percentage points.",
+  "baselinePolicy": {
+    "text": "Employer Class 1 rate 15% above a £5,000 secondary threshold since April 2025; the threshold is frozen until April 2031 (Budget 2025, Table 4.1 line 47).",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 47"
+    },
+    "alreadyIncludes": [
+      "Employer NICs secondary threshold frozen at £5,000 until April 2031 (Budget 2025, Table 4.1 line 47)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": -3,
+    "max": 3,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "percentage points"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "nics",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 11150,
+      "2027-28": 11250,
+      "2028-29": 11550
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "national-insurance-contributions-rates--change-class-1-employer-rate-by-1-percentage-point",
+          "label": "Change Class 1 employer rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 11150,
+            "2027-28": 11250,
+            "2028-29": 11550
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "nics",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so rate changes are scaled linearly here.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "employer-nics-incidence",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC's figure is the direct effect on employer contributions. Who ultimately bears the cost (through wages, prices or profits) and the knock-on to income tax and other receipts sits in the OBR's wider economy forecast, not in this number.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "large"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "corporation-tax-rate",
+      "text": "Employer costs and company profits interact: a change to one alters the base of the other, which neither direct estimate captures.",
+      "severity": "info"
+    }
+  ]
+}

@@ -1,11 +1,12 @@
 import { formatGbpBn, formatPct } from '@btc/engine';
 import { useState } from 'react';
 import { AttributionList } from '../components/AttributionList';
+import { InteractionsNotice } from '../components/InteractionsNotice';
 import { LeverControl } from '../components/LeverControl';
 import { PathChart } from '../components/PathChart';
 import { PresetPicker } from '../components/PresetPicker';
 import { VerdictCard } from '../components/VerdictCard';
-import { households, leversByCategory, rules, vintage } from '../data';
+import { groupLevers, households, leversByCategory, rules, vintage } from '../data';
 import { useBudget } from '../state/budget';
 
 const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDateString('en-GB', {
@@ -79,6 +80,7 @@ export function BudgetPage() {
                 lever={lever}
                 value={state.leverValues[lever.code] ?? lever.control.default}
                 effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                summaryYear={targetYear}
                 onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
               />
             ))}
@@ -86,23 +88,27 @@ export function BudgetPage() {
 
           <section className="panel" aria-labelledby="tax-heading">
             <h2 id="tax-heading">Tax</h2>
-            {leversByCategory.tax.length === 0 ? (
-              <p className="coming">
-                Tax levers (income tax, National Insurance, VAT, corporation tax, capital taxes,
-                duties) arrive in the next release, costed from HMRC&rsquo;s ready reckoner and
-                Treasury policy costings.
-              </p>
-            ) : (
-              leversByCategory.tax.map((lever) => (
-                <LeverControl
-                  key={lever.id}
-                  lever={lever}
-                  value={state.leverValues[lever.code] ?? lever.control.default}
-                  effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                  onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-                />
-              ))
-            )}
+            <p className="panel__hint">
+              Official direct costings: HMRC&rsquo;s ready reckoner (June 2025) carried to the OBR
+              March 2026 forecast, and the Treasury&rsquo;s Budget 2025 scorecard. Measures start in
+              April 2027, the first April after the Budget. HMRC has deferred its 2026 edition while
+              it reviews key assumptions.
+            </p>
+            {groupLevers(leversByCategory.tax).map((group) => (
+              <div key={group.name}>
+                <h3 className="section-label">{group.name}</h3>
+                {group.levers.map((lever) => (
+                  <LeverControl
+                    key={lever.id}
+                    lever={lever}
+                    value={state.leverValues[lever.code] ?? lever.control.default}
+                    effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                    summaryYear={targetYear}
+                    onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
+                  />
+                ))}
+              </div>
+            ))}
           </section>
 
           <section className="panel" aria-labelledby="spend-heading">
@@ -209,6 +215,8 @@ export function BudgetPage() {
               }
             />
           </section>
+
+          <InteractionsNotice interactions={outcome.interactions} />
 
           {outcome.warnings.length > 0 && (
             <div className="warnings" role="note">

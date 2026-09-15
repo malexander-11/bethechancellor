@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "id": "reverse-gambling-duty-rise",
+  "code": "rvgam",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Reverse Budget 2025 measures",
+  "order": 50,
+  "title": "Reverse the remote gaming and betting duty rises",
+  "shortTitle": "Reverse gambling duty rise",
+  "description": "Budget 2025 raised Remote Gaming Duty to 40% from April 2026, introduced a 25% remote betting rate from April 2027 and abolished bingo duty. Switch this on to reverse the package from the start year.",
+  "baselinePolicy": {
+    "text": "Remote Gaming Duty 40% from April 2026; Remote Betting Rate 25% from April 2027; bingo duty abolished (Table 4.1 line 60).",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "lines 60"
+    },
+    "alreadyIncludes": ["Gambling duty changes (Budget 2025, Table 4.1 line 60)."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 0,
+      "2026-27": -810,
+      "2027-28": -1065,
+      "2028-29": -1100,
+      "2029-30": -1135,
+      "2030-31": -1155
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "lines": [
+        {
+          "number": 60,
+          "title": "Gambling Duty: Increase Remote Gaming Duty to 40% from 1 April 2026, introduce a new Remote Betting Rate at 25% (excluding Self-Service Betting Terminals, spread betting, pool betting & UK horseracing) from 1 April 2027, and abolish Bingo Duty from 1 April 2026",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 810,
+            "2027-28": 1065,
+            "2028-29": 1100,
+            "2029-30": 1135,
+            "2030-31": 1155
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury's costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here; the difference is small relative to the figures. Effects before the start year are not applied."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; see the Budget 2025 policy costings document for the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

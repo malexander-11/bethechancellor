@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "id": "nics-employee-main-rate",
+  "code": "nicm",
+  "category": "tax",
+  "badge": "direct",
+  "group": "National Insurance",
+  "order": 10,
+  "title": "Employee and self-employed NICs main rate",
+  "shortTitle": "Employee NICs main rate",
+  "description": "Change the main employee rate (8% on earnings between £12,570 and £50,270) and the matching self-employed Class 4 rate (6%) together, in percentage points.",
+  "baselinePolicy": {
+    "text": "Employee Class 1 main rate 8%; self-employed Class 4 main rate 6%; thresholds frozen until April 2031.",
+    "source": {
+      "sourceId": "hmrc-trr-2025-06-bulletin"
+    },
+    "alreadyIncludes": [
+      "Income tax personal allowance, higher-rate threshold and equivalent National Insurance thresholds frozen until April 2031 (Budget 2025, Table 4.1 line 46)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": -4,
+    "max": 4,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "percentage points"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "nics",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 5790,
+      "2027-28": 5825,
+      "2028-29": 5845
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "national-insurance-contributions-rates--change-class-1-employee-main-rate-by-1-percentage-point",
+          "label": "Change Class 1 employee main rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 5350,
+            "2027-28": 5300,
+            "2028-29": 5400
+          }
+        },
+        {
+          "rowId": "national-insurance-contributions-rates--change-class-4-main-rate-by-1-percentage-point",
+          "label": "Change Class 4 main rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 440,
+            "2027-28": 525,
+            "2028-29": 445
+          }
+        }
+      ],
+      "combine": "sum"
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "nics",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "Sum of HMRC's Class 1 employee main rate and Class 4 main rate rows.",
+      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so rate changes are scaled linearly here.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmrc-direct",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's figure is a direct effect on this tax and closely related tax bases. It includes HMRC's standard behavioural response (for personal taxes, through taxable income elasticities and tax-motivated incorporation), but not wider effects on the economy such as inflation or investment, which HMRC says are usually captured in the OBR's economy forecast instead.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

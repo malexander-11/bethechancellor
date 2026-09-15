@@ -10,7 +10,8 @@
     "fetch": "tsx src/fetch.ts",
     "validate": "tsx src/validate.ts",
     "derive": "tsx src/derive.ts",
-    "check-drift": "tsx src/check-drift.ts"
+    "check-drift": "tsx src/check-drift.ts",
+    "test": "vitest run"
   },
   "dependencies": {
     "@btc/engine": "*",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "tsx": "^4.19.0"
+    "tsx": "^4.19.0",
+    "vitest": "^4.0.0"
   }
 }

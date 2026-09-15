@@ -1,0 +1,1147 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "hmrc-trr-2025-06",
+  "sheet": "Publication_Format",
+  "years": [
+    "2026-27",
+    "2027-28",
+    "2028-29"
+  ],
+  "rows": [
+    {
+      "rowId": "income-tax-rates--change-starting-rate-for-savings-income-by-1p",
+      "section": "Income Tax rates",
+      "label": "Change starting rate for savings income by 1p",
+      "values": {
+        "2026-27": 0,
+        "2027-28": 10,
+        "2028-29": 5
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-rates--change-basic-rate-by-1p",
+      "section": "Income Tax rates",
+      "label": "Change basic rate by 1p",
+      "values": {
+        "2026-27": 6900,
+        "2027-28": 8250,
+        "2028-29": 8200
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-rates--change-higher-rate-by-1p",
+      "section": "Income Tax rates",
+      "label": "Change higher rate by 1p",
+      "values": {
+        "2026-27": 1600,
+        "2027-28": 2150,
+        "2028-29": 2100
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-rates--increase-additional-rate-by-1p-yield",
+      "section": "Income Tax rates",
+      "label": "Increase additional rate by 1p (yield)",
+      "values": {
+        "2026-27": 145,
+        "2027-28": 265,
+        "2028-29": 230
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-rates--decrease-additional-rate-by-1p-cost",
+      "section": "Income Tax rates",
+      "label": "Decrease additional rate by 1p (cost)",
+      "values": {
+        "2026-27": 175,
+        "2027-28": 335,
+        "2028-29": 300
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-allowances-and-reliefs--change-personal-allowance-by-gbp-100",
+      "section": "Income Tax allowances and reliefs",
+      "label": "Change personal allowance by £100",
+      "values": {
+        "2026-27": 810,
+        "2027-28": 1050,
+        "2028-29": 1000
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-allowances-and-reliefs--change-personal-allowance-by-1-pct",
+      "section": "Income Tax allowances and reliefs",
+      "label": "Change personal allowance by 1%",
+      "values": {
+        "2026-27": 1000,
+        "2027-28": 1200,
+        "2028-29": 1100
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-allowances-and-reliefs--change-personal-allowance-by-10-pct",
+      "section": "Income Tax allowances and reliefs",
+      "label": "Change personal allowance by 10%",
+      "values": {
+        "2026-27": 10000,
+        "2027-28": 11650,
+        "2028-29": 11500
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-allowances-and-reliefs--change-savings-allowance-by-gbp-100-for-br-and-gbp-50-for-hr-taxpayers",
+      "section": "Income Tax allowances and reliefs",
+      "label": "Change Savings allowance by £100 for BR and £50 for HR taxpayers",
+      "values": {
+        "2026-27": 0,
+        "2027-28": 30,
+        "2028-29": 25
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-allowances-and-reliefs--change-dividend-allowance-by-gbp-100",
+      "section": "Income Tax allowances and reliefs",
+      "label": "Change dividend allowance by £100",
+      "values": {
+        "2026-27": 0,
+        "2027-28": 70,
+        "2028-29": 65
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-limits--change-starting-rate-limit-for-savings-income-by-gbp-100",
+      "section": "Income Tax limits",
+      "label": "Change starting rate limit for savings income by £100",
+      "values": {
+        "2026-27": null,
+        "2027-28": 5,
+        "2028-29": 5
+      },
+      "negligible": {
+        "2026-27": true,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-limits--change-basic-rate-limit-by-1-pct",
+      "section": "Income Tax limits",
+      "label": "Change basic rate limit by 1%",
+      "values": {
+        "2026-27": 495,
+        "2027-28": 665,
+        "2028-29": 670
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-limits--increase-basic-rate-limit-by-10-pct-cost",
+      "section": "Income Tax limits",
+      "label": "Increase basic rate limit by 10% (cost)",
+      "values": {
+        "2026-27": 4600,
+        "2027-28": 6250,
+        "2028-29": 6000
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-limits--decrease-basic-rate-limit-by-10-pct-yield",
+      "section": "Income Tax limits",
+      "label": "Decrease basic rate limit by 10% (yield)",
+      "values": {
+        "2026-27": 5400,
+        "2027-28": 7200,
+        "2028-29": 6950
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-allowances-starting-and-basic-rate-limits--change-all-main-allowances-starting-and-basic-rate-limits-by-1-pct",
+      "section": "Income Tax allowances, starting and basic rate limits",
+      "label": "Change all main allowances, starting and basic rate limits by 1%",
+      "values": {
+        "2026-27": 1450,
+        "2027-28": 1850,
+        "2028-29": 1800
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-allowances-starting-and-basic-rate-limits--increase-all-main-allowances-starting-and-basic-rate-limits-by-10-pct-cost",
+      "section": "Income Tax allowances, starting and basic rate limits",
+      "label": "Increase all main allowances, starting and basic rate limits by 10% (cost)",
+      "values": {
+        "2026-27": 14400,
+        "2027-28": 17700,
+        "2028-29": 17300
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "income-tax-allowances-starting-and-basic-rate-limits--decrease-all-main-allowances-starting-and-basic-rate-limits-by-10-pct-yield",
+      "section": "Income Tax allowances, starting and basic rate limits",
+      "label": "Decrease all main allowances, starting and basic rate limits by 10% (yield)",
+      "values": {
+        "2026-27": 16100,
+        "2027-28": 19700,
+        "2028-29": 19350
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contributions-rates--change-class-1-employee-main-rate-by-1-percentage-point",
+      "section": "National Insurance contributions rates",
+      "label": "Change Class 1 employee main rate by 1 percentage point",
+      "values": {
+        "2026-27": 5350,
+        "2027-28": 5300,
+        "2028-29": 5400
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contributions-rates--change-class-1-employee-additional-rate-by-1-percentage-point",
+      "section": "National Insurance contributions rates",
+      "label": "Change Class 1 employee additional rate by 1 percentage point",
+      "values": {
+        "2026-27": 2000,
+        "2027-28": 2000,
+        "2028-29": 2050
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contributions-rates--change-class-1-employer-rate-by-1-percentage-point",
+      "section": "National Insurance contributions rates",
+      "label": "Change Class 1 employer rate by 1 percentage point",
+      "values": {
+        "2026-27": 11150,
+        "2027-28": 11250,
+        "2028-29": 11550
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contributions-rates--change-class-4-main-rate-by-1-percentage-point",
+      "section": "National Insurance contributions rates",
+      "label": "Change Class 4 main rate by 1 percentage point",
+      "values": {
+        "2026-27": 440,
+        "2027-28": 525,
+        "2028-29": 445
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contributions-rates--change-class-4-additional-rate-by-1-percentage-point",
+      "section": "National Insurance contributions rates",
+      "label": "Change Class 4 additional rate by 1 percentage point",
+      "values": {
+        "2026-27": 295,
+        "2027-28": 355,
+        "2028-29": 320
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contribution-limits--change-employee-entry-threshold-by-gbp-2-per-week",
+      "section": "National Insurance Contribution Limits",
+      "label": "Change employee entry threshold by £2 per week",
+      "values": {
+        "2026-27": 210,
+        "2027-28": 230,
+        "2028-29": 250
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contribution-limits--change-employer-threshold-by-gbp-2-per-week",
+      "section": "National Insurance Contribution Limits",
+      "label": "Change employer threshold by £2 per week",
+      "values": {
+        "2026-27": 420,
+        "2027-28": 430,
+        "2028-29": 470
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contribution-limits--change-lower-profits-limit-by-gbp-104-per-year",
+      "section": "National Insurance Contribution Limits",
+      "label": "Change lower profits limit by £104 per year",
+      "values": {
+        "2026-27": 15,
+        "2027-28": 15,
+        "2028-29": 20
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contribution-limits--change-upper-profits-limit-by-gbp-520-per-year",
+      "section": "National Insurance Contribution Limits",
+      "label": "Change upper profits limit by £520 per year",
+      "values": {
+        "2026-27": 10,
+        "2027-28": 10,
+        "2028-29": 10
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "national-insurance-contribution-limits--change-upper-earnings-limit-by-gbp-10-per-week",
+      "section": "National Insurance Contribution Limits",
+      "label": "Change upper earnings limit by £10 per week",
+      "values": {
+        "2026-27": 220,
+        "2027-28": 220,
+        "2028-29": 200
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "child-benefit--increase-first-child-rate-by-gbp-1-per-week-cost",
+      "section": "Child Benefit",
+      "label": "Increase first child rate by £1 per week (cost)",
+      "values": {
+        "2026-27": 335,
+        "2027-28": 335,
+        "2028-29": 330
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "child-benefit--decrease-first-child-rate-by-gbp-1-per-week-yield",
+      "section": "Child Benefit",
+      "label": "Decrease first child rate by £1 per week (yield)",
+      "values": {
+        "2026-27": 335,
+        "2027-28": 355,
+        "2028-29": 345
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "child-benefit--increase-subsequent-child-rate-by-gbp-1-per-week-cost",
+      "section": "Child Benefit",
+      "label": "Increase subsequent child rate by £1 per week (cost)",
+      "values": {
+        "2026-27": 230,
+        "2027-28": 240,
+        "2028-29": 245
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "child-benefit--decrease-subsequent-child-rate-by-gbp-1-per-week-yield",
+      "section": "Child Benefit",
+      "label": "Decrease subsequent child rate by £1 per week (yield)",
+      "values": {
+        "2026-27": 230,
+        "2027-28": 225,
+        "2028-29": 220
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "corporation-tax--increase-corporation-tax-by-1-percentage-point",
+      "section": "Corporation tax",
+      "label": "Increase Corporation tax by 1 percentage point",
+      "values": {
+        "2026-27": 3600,
+        "2027-28": 3900,
+        "2028-29": 4000
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "capital-gains-tax--increase-business-asset-disposal-relief-rate-by-1-percentage-point",
+      "section": "Capital Gains Tax",
+      "label": "Increase Business Asset Disposal Relief rate by 1 percentage point",
+      "values": {
+        "2026-27": 10,
+        "2027-28": 135,
+        "2028-29": 180
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "capital-gains-tax--increase-business-asset-disposal-relief-rate-by-5-percentage-points",
+      "section": "Capital Gains Tax",
+      "label": "Increase Business Asset Disposal Relief rate by 5 percentage points",
+      "values": {
+        "2026-27": 40,
+        "2027-28": 635,
+        "2028-29": 840
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "capital-gains-tax--increase-lower-capital-gains-tax-rate-by-1-percentage-point",
+      "section": "Capital Gains Tax",
+      "label": "Increase lower Capital Gains Tax rate by 1 percentage point",
+      "values": {
+        "2026-27": -5,
+        "2027-28": 10,
+        "2028-29": 5
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "capital-gains-tax--increase-lower-capital-gains-tax-rate-by-5-percentage-points",
+      "section": "Capital Gains Tax",
+      "label": "Increase lower Capital Gains Tax rate by 5 percentage points",
+      "values": {
+        "2026-27": -40,
+        "2027-28": 20,
+        "2028-29": -10
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "capital-gains-tax--increase-lower-capital-gains-tax-rate-by-10-percentage-points",
+      "section": "Capital Gains Tax",
+      "label": "Increase lower Capital Gains Tax rate by 10 percentage points",
+      "values": {
+        "2026-27": -130,
+        "2027-28": -55,
+        "2028-29": -135
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "capital-gains-tax--increase-higher-capital-gains-tax-rate-by-1-percentage-point",
+      "section": "Capital Gains Tax",
+      "label": "Increase higher Capital Gains Tax rate by 1 percentage point",
+      "values": {
+        "2026-27": -15,
+        "2027-28": 80,
+        "2028-29": -30
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "capital-gains-tax--increase-higher-capital-gains-tax-rate-by-5-percentage-points",
+      "section": "Capital Gains Tax",
+      "label": "Increase higher Capital Gains Tax rate by 5 percentage points",
+      "values": {
+        "2026-27": -170,
+        "2027-28": -235,
+        "2028-29": -870
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "capital-gains-tax--increase-higher-capital-gains-tax-rate-by-10-percentage-points",
+      "section": "Capital Gains Tax",
+      "label": "Increase higher Capital Gains Tax rate by 10 percentage points",
+      "values": {
+        "2026-27": -540,
+        "2027-28": -2060,
+        "2028-29": -3565
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "capital-gains-tax--increase-annual-exempt-amount-by-gbp-500-for-individuals-and-gbp-250-for-trusts",
+      "section": "Capital Gains Tax",
+      "label": "Increase Annual Exempt Amount by £500 for individuals and £250 for trusts",
+      "values": {
+        "2026-27": 0,
+        "2027-28": -35,
+        "2028-29": -30
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "inheritance-tax--increase-standard-rate-for-estates-left-on-death-by-1-percentage-point",
+      "section": "Inheritance tax",
+      "label": "Increase standard rate for estates left on death by 1 percentage point",
+      "values": {
+        "2026-27": 105,
+        "2027-28": 240,
+        "2028-29": 290
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "inheritance-tax--increase-nil-rate-band-by-gbp-5-000-cost",
+      "section": "Inheritance tax",
+      "label": "Increase Nil Rate Band by £5,000 (cost)",
+      "values": {
+        "2026-27": 60,
+        "2027-28": 140,
+        "2028-29": 165
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "inheritance-tax--increase-residence-nil-rate-band-by-gbp-5-000-cost",
+      "section": "Inheritance tax",
+      "label": "Increase Residence Nil Rate Band by £5,000 (cost)",
+      "values": {
+        "2026-27": 25,
+        "2027-28": 55,
+        "2028-29": 65
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--beer-and-cider-duties",
+      "section": "1% change in various duties",
+      "label": "Beer and cider duties",
+      "values": {
+        "2026-27": 25,
+        "2027-28": 30,
+        "2028-29": 30
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--wine-and-other-fermented-product-duties",
+      "section": "1% change in various duties",
+      "label": "Wine and other fermented product duties",
+      "values": {
+        "2026-27": 40,
+        "2027-28": 40,
+        "2028-29": 40
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--spirits-duties",
+      "section": "1% change in various duties",
+      "label": "Spirits duties",
+      "values": {
+        "2026-27": 40,
+        "2027-28": 40,
+        "2028-29": 45
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--tobacco-duties",
+      "section": "1% change in various duties",
+      "label": "Tobacco Duties",
+      "values": {
+        "2026-27": 5,
+        "2027-28": 10,
+        "2028-29": 15
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--petrol",
+      "section": "1% change in various duties",
+      "label": "Petrol",
+      "values": {
+        "2026-27": 100,
+        "2027-28": 100,
+        "2028-29": 100
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--diesel",
+      "section": "1% change in various duties",
+      "label": "Diesel",
+      "values": {
+        "2026-27": 140,
+        "2027-28": 135,
+        "2028-29": 130
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--rebated-oil",
+      "section": "1% change in various duties",
+      "label": "Rebated oil",
+      "values": {
+        "2026-27": null,
+        "2027-28": null,
+        "2028-29": null
+      },
+      "negligible": {
+        "2026-27": true,
+        "2027-28": true,
+        "2028-29": true
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--climate-change-levy",
+      "section": "1% change in various duties",
+      "label": "Climate change levy",
+      "values": {
+        "2026-27": 15,
+        "2027-28": 15,
+        "2028-29": 15
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--carbon-price-support",
+      "section": "1% change in various duties",
+      "label": "Carbon price support",
+      "values": {
+        "2026-27": 5,
+        "2027-28": 5,
+        "2028-29": null
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": true
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--aggregates-levy",
+      "section": "1% change in various duties",
+      "label": "Aggregates levy",
+      "values": {
+        "2026-27": 5,
+        "2027-28": 5,
+        "2028-29": 5
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "1-pct-change-in-various-duties--landfill-tax",
+      "section": "1% change in various duties",
+      "label": "Landfill tax",
+      "values": {
+        "2026-27": null,
+        "2027-28": null,
+        "2028-29": null
+      },
+      "negligible": {
+        "2026-27": true,
+        "2027-28": true,
+        "2028-29": true
+      }
+    },
+    {
+      "rowId": "vehicle-excise-duty--increase-rates-by-gbp-1-for-motorbikes-and-gbp-5-for-all-other-vehicles",
+      "section": "Vehicle excise duty",
+      "label": "Increase rates by £1 for motorbikes and £5 for all other vehicles",
+      "values": {
+        "2026-27": 205,
+        "2027-28": 210,
+        "2028-29": 215
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "air-passenger-duty--increase-reduced-rate-by-gbp-1",
+      "section": "Air passenger duty",
+      "label": "Increase reduced rate by £1",
+      "values": {
+        "2026-27": 115,
+        "2027-28": 125,
+        "2028-29": 130
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "vat--change-reduced-rate-by-1-percentage-point",
+      "section": "VAT",
+      "label": "Change reduced rate by 1 percentage point",
+      "values": {
+        "2026-27": 490,
+        "2027-28": 480,
+        "2028-29": 480
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "vat--change-standard-rate-by-1-percentage-point",
+      "section": "VAT",
+      "label": "Change standard rate by 1 percentage point",
+      "values": {
+        "2026-27": 8800,
+        "2027-28": 9200,
+        "2028-29": 9550
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "insurance-premium-tax--change-standard-rate-by-1-percentage-point",
+      "section": "Insurance premium tax",
+      "label": "Change standard rate by 1 percentage point",
+      "values": {
+        "2026-27": 630,
+        "2027-28": 640,
+        "2028-29": 660
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "insurance-premium-tax--change-higher-rate-by-1-percentage-point",
+      "section": "Insurance premium tax",
+      "label": "Change higher rate by 1 percentage point",
+      "values": {
+        "2026-27": 20,
+        "2027-28": 20,
+        "2028-29": 20
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--cut-residential-2-pct-marginal-rate-by-1-percentage-point-cost",
+      "section": "Stamp duty land tax",
+      "label": "Cut residential 2% marginal rate by 1 percentage point (Cost)",
+      "values": {
+        "2026-27": 450,
+        "2027-28": 460,
+        "2028-29": 525
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--raise-residential-2-pct-marginal-rate-by-1-percentage-point-yield",
+      "section": "Stamp duty land tax",
+      "label": "Raise residential 2% marginal rate by 1 percentage point (Yield)",
+      "values": {
+        "2026-27": 420,
+        "2027-28": 425,
+        "2028-29": 490
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--cut-residential-5-pct-marginal-rate-by-1-percentage-point-cost",
+      "section": "Stamp duty land tax",
+      "label": "Cut residential 5% marginal rate by 1 percentage point (Cost)",
+      "values": {
+        "2026-27": 775,
+        "2027-28": 795,
+        "2028-29": 940
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--raise-residential-5-pct-marginal-rate-by-1-percentage-point-yield",
+      "section": "Stamp duty land tax",
+      "label": "Raise residential 5% marginal rate by 1 percentage point (Yield)",
+      "values": {
+        "2026-27": 685,
+        "2027-28": 680,
+        "2028-29": 815
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--cut-residential-10-pct-marginal-rate-by-1-percentage-point-cost",
+      "section": "Stamp duty land tax",
+      "label": "Cut residential 10% marginal rate by 1 percentage point (Cost)",
+      "values": {
+        "2026-27": 40,
+        "2027-28": 25,
+        "2028-29": 35
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--raise-residential-10-pct-marginal-rate-by-1-percentage-point-yield",
+      "section": "Stamp duty land tax",
+      "label": "Raise residential 10% marginal rate by 1 percentage point (Yield)",
+      "values": {
+        "2026-27": 35,
+        "2027-28": 15,
+        "2028-29": 25
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--cut-residential-12-pct-marginal-rate-by-1-percentage-point-cost",
+      "section": "Stamp duty land tax",
+      "label": "Cut residential 12% marginal rate by 1 percentage point (Cost)",
+      "values": {
+        "2026-27": -10,
+        "2027-28": -40,
+        "2028-29": -35
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--raise-residential-12-pct-marginal-rate-by-1-percentage-point-yield",
+      "section": "Stamp duty land tax",
+      "label": "Raise residential 12% marginal rate by 1 percentage point (Yield)",
+      "values": {
+        "2026-27": -25,
+        "2027-28": -60,
+        "2028-29": -60
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--decrease-higher-rates-of-duty-on-additional-dwellings-by-1-percentage-point-cost",
+      "section": "Stamp duty land tax",
+      "label": "Decrease Higher Rates of Duty on Additional Dwellings by 1 percentage point (Cost)",
+      "values": {
+        "2026-27": 90,
+        "2027-28": 5,
+        "2028-29": 100
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--increase-higher-rates-of-duty-on-additional-dwellings-by-1-percentage-point-yield",
+      "section": "Stamp duty land tax",
+      "label": "Increase Higher Rates of Duty on Additional Dwellings by 1 percentage point (Yield)",
+      "values": {
+        "2026-27": -45,
+        "2027-28": -130,
+        "2028-29": -50
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--decrease-nrsdlt-by-1-percentage-point-cost",
+      "section": "Stamp duty land tax",
+      "label": "Decrease NRSDLT by 1 percentage point (Cost)",
+      "values": {
+        "2026-27": 10,
+        "2027-28": -5,
+        "2028-29": 25
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--increase-nrsdlt-by-1-percentage-point-yield",
+      "section": "Stamp duty land tax",
+      "label": "Increase NRSDLT by 1 percentage point (Yield)",
+      "values": {
+        "2026-27": -10,
+        "2027-28": -25,
+        "2028-29": 0
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--decrease-non-residential-5-pct-marginal-rate-by-1-percentage-point-cost",
+      "section": "Stamp duty land tax",
+      "label": "Decrease non-residential 5% marginal rate by 1 percentage point (Cost)",
+      "values": {
+        "2026-27": 305,
+        "2027-28": 355,
+        "2028-29": 410
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    },
+    {
+      "rowId": "stamp-duty-land-tax--increase-non-residential-5-pct-marginal-rate-by-1-percentage-point-yield",
+      "section": "Stamp duty land tax",
+      "label": "Increase non-residential 5% marginal rate by 1 percentage point (Yield)",
+      "values": {
+        "2026-27": 150,
+        "2027-28": 185,
+        "2028-29": 230
+      },
+      "negligible": {
+        "2026-27": false,
+        "2027-28": false,
+        "2028-29": false
+      }
+    }
+  ],
+  "notes": [
+    "Neg stands for negligible, it represents values that are larger than zero but would round down to zero.",
+    "For detailed methodology notes please refer to the Direct Effects of Illustrative Changes Bulletin on gov.uk.",
+    "End of worksheet."
+  ],
+  "source": {
+    "sourceId": "hmrc-trr-2025-06",
+    "localPath": "data/raw/hmrc-trr-2025-06/June_2025_TRR.ods",
+    "sha256": "1201953391d6201d1df8df4d60288c9094b43e0679ebf285e82ad3c912d476c1"
+  }
+}

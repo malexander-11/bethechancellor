@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "id": "income-tax-additional-rate",
+  "code": "itar",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Income tax",
+  "order": 30,
+  "title": "Additional rate of income tax",
+  "shortTitle": "Additional rate",
+  "description": "Change the 45% rate paid on income above £125,140, in pence in the pound. HMRC expects a cut to cost more than a rise raises, because the highest earners respond most to rates.",
+  "baselinePolicy": {
+    "text": "Additional rate 45% above £125,140 (UK rates).",
+    "source": {
+      "sourceId": "hmrc-trr-2025-06-bulletin"
+    },
+    "alreadyIncludes": [
+      "Income tax personal allowance, higher-rate threshold and equivalent National Insurance thresholds frozen until April 2031 (Budget 2025, Table 4.1 line 46)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "p",
+    "min": -5,
+    "max": 5,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "pence in the pound"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 145,
+      "2027-28": 265,
+      "2028-29": 230
+    },
+    "basis": "accruals",
+    "symmetric": false,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "income-tax-rates--increase-additional-rate-by-1p-yield",
+          "label": "Increase additional rate by 1p (yield)",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 145,
+            "2027-28": 265,
+            "2028-29": 230
+          }
+        },
+        {
+          "rowId": "income-tax-rates--decrease-additional-rate-by-1p-cost",
+          "label": "Decrease additional rate by 1p (cost)",
+          "hmrcSign": "cost",
+          "role": "decrease",
+          "values": {
+            "2026-27": 175,
+            "2027-28": 335,
+            "2028-29": 300
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "incomeTax",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC publishes separate figures for a rise (yield) and a cut (cost); this lever uses each for its direction.",
+      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so rate changes are scaled linearly here.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ],
+    "decreasePerUnit": {
+      "2026-27": -175,
+      "2027-28": -335,
+      "2028-29": -300
+    }
+  },
+  "considerations": [
+    {
+      "id": "additional-rate-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's estimate assumes a strong behavioural response at the top of the income distribution through its taxable income elasticities, so the yield is small relative to the size of the tax base. HMRC itself says there is significant uncertainty around these assumptions.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "large"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

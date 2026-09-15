@@ -1,18 +1,22 @@
 import type { ZodType } from 'zod';
 import { DataError } from './errors.js';
 import {
+  hmrcExtractSchema,
   householdsReferenceSchema,
   leverSchema,
   presetsFileSchema,
   ruleSetSchema,
+  scorecardExtractSchema,
   sourcesFileSchema,
   vintageSchema,
 } from './schema/index.js';
 import type {
+  HmrcExtract,
   HouseholdsReference,
   Lever,
   PresetsFile,
   RuleSet,
+  ScorecardExtract,
   SourcesFile,
   Vintage,
 } from './types/data.js';
@@ -65,6 +69,14 @@ export function parseHouseholds(json: unknown): HouseholdsReference {
   return parseWith(householdsReferenceSchema, json, 'households reference');
 }
 
+export function parseHmrcExtract(json: unknown): HmrcExtract {
+  return parseWith(hmrcExtractSchema, json, 'HMRC ready reckoner extract');
+}
+
+export function parseScorecardExtract(json: unknown): ScorecardExtract {
+  return parseWith(scorecardExtractSchema, json, 'Budget 2025 scorecard extract');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -104,6 +116,23 @@ export function validateDataset(ds: Dataset): string[] {
     if (ids.has(lever.id)) problems.push(`duplicate lever id ${lever.id}`);
     codes.add(lever.code);
     ids.add(lever.id);
+    if (lever.classification?.taxHead && lever.classification.taxHead !== 'nominalGdp') {
+      if (!ds.vintage.fiscal.receiptsByHeadPctGdp[lever.classification.taxHead]) {
+        problems.push(
+          `lever ${lever.id} cites tax head "${lever.classification.taxHead}" missing from vintage ${ds.vintage.id}`,
+        );
+      }
+    }
+    if (
+      (lever.costing.kind === 'linearPerUnit' || lever.costing.kind === 'lookupTable') &&
+      lever.costing.uprating.method === 'growWithSeries' &&
+      lever.costing.uprating.head !== 'nominalGdp' &&
+      !ds.vintage.fiscal.receiptsByHeadPctGdp[lever.costing.uprating.head]
+    ) {
+      problems.push(
+        `lever ${lever.id} uprates with head "${lever.costing.uprating.head}" missing from vintage ${ds.vintage.id}`,
+      );
+    }
     if (lever.costing.kind === 'sensitivity') {
       const id = lever.costing.sensitivityId;
       if (!ds.vintage.sensitivities.some((s) => s.id === id)) {

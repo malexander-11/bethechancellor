@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "id": "vat-reduced-rate",
+  "code": "vatr",
+  "category": "tax",
+  "badge": "direct",
+  "group": "VAT",
+  "order": 20,
+  "title": "VAT reduced rate",
+  "shortTitle": "VAT reduced rate",
+  "description": "Change the 5% reduced rate of VAT (domestic energy, children’s car seats and some other items), in percentage points.",
+  "baselinePolicy": {
+    "text": "Reduced rate 5%.",
+    "source": {
+      "sourceId": "hmrc-trr-2025-06-bulletin"
+    },
+    "alreadyIncludes": []
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": -5,
+    "max": 10,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "percentage points"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "vat",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 490,
+      "2027-28": 480,
+      "2028-29": 480
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "vat--change-reduced-rate-by-1-percentage-point",
+          "label": "Change reduced rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 490,
+            "2027-28": 480,
+            "2028-29": 480
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "vat",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "Large changes are scaled linearly from HMRC's 1 point figure, which is only approximate.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmrc-direct",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's figure is a direct effect on this tax and closely related tax bases. It includes HMRC's standard behavioural response (for personal taxes, through taxable income elasticities and tax-motivated incorporation), but not wider effects on the economy such as inflation or investment, which HMRC says are usually captured in the OBR's economy forecast instead.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

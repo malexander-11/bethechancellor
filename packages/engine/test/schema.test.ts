@@ -4,7 +4,9 @@ import { describe, expect, it } from 'vitest';
 import {
   DataError,
   leverSchema,
+  parseHmrcExtract,
   parseLever,
+  parseScorecardExtract,
   parseVintage,
   seriesSchema,
   validateDataset,
@@ -16,7 +18,7 @@ describe('every JSON file under data/ validates against its schema', () => {
 
   it('loads the full dataset and passes cross-file checks', () => {
     expect(validateDataset(ds)).toEqual([]);
-    expect(ds.levers.length).toBeGreaterThanOrEqual(3);
+    expect(ds.levers.length).toBeGreaterThanOrEqual(26);
     expect(ds.levers.every((l) => l.status === 'reviewed')).toBe(true);
   });
 
@@ -32,8 +34,16 @@ describe('every JSON file under data/ validates against its schema', () => {
       const rel = path.relative(DATA_DIR, file);
       if (rel.startsWith('levers/')) {
         expect(() => parseLever(JSON.parse(readFileSync(file, 'utf8')))).not.toThrow();
-      } else if (rel.startsWith('raw/') || rel.startsWith('derived/')) {
+      } else if (rel.startsWith('raw/')) {
         continue;
+      } else if (rel.startsWith('derived/')) {
+        const parsed = JSON.parse(readFileSync(file, 'utf8')) as {
+          schemaVersion?: number;
+          sourceId?: string;
+        };
+        expect(parsed.schemaVersion).toBe(1);
+        if (rel.includes('hmrc-trr')) expect(() => parseHmrcExtract(parsed)).not.toThrow();
+        if (rel.includes('table-4-1')) expect(() => parseScorecardExtract(parsed)).not.toThrow();
       } else {
         expect(covered.has(rel), `${rel} has no parser in the test`).toBe(true);
       }

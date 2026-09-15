@@ -3,16 +3,23 @@ export * from './schema/index.js';
 export type * from './types/data.js';
 export type * from './types/engine.js';
 export {
+  parseHmrcExtract,
   parseHouseholds,
   parseLever,
   parsePresets,
   parseRules,
+  parseScorecardExtract,
   parseSources,
   parseVintage,
   validateDataset,
   type Dataset,
 } from './load.js';
 export { validateVintage } from './validate/validateVintage.js';
+export { checkRawSourceConsistency, type ExtractedSources } from './validate/rawSource.js';
+export { taxHeadSeries } from './costing/taxHead.js';
+export { uprateToForecast, type PublishedSeries, type UpratedSeries } from './costing/uprate.js';
+export { interpolateLookup } from './costing/lookup.js';
+export { costLever } from './costing/index.js';
 export {
   computeOutcome,
   normaliseLeverValue,

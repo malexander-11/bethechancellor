@@ -113,20 +113,72 @@ baseline caused by the player's choices.
 
 ## 6. Direct costings and uprating
 
-HMRC's _Direct effects of illustrative tax changes_ (June 2025 edition) covers 2026-27 to
-2028-29 on a Spring Statement 2025 baseline. The July 2026 edition was deferred while HMRC
-reviews its behavioural assumptions. To reach the 2029-30 target year, each figure is:
+Tax levers use two official sources, both committed under `data/raw/` with their hashes:
 
-1. shifted so that ready-reckoner year 1 aligns with the chosen implementation year;
-2. scaled by the growth of the relevant tax head in the current OBR forecast between the
-   source year and the game year;
-3. extended beyond the horizon by growing the year-3 (steady-state) figure with the same tax
-   head.
+- **HMRC, _Direct effects of illustrative tax changes_, June 2025.** One row per illustrative
+  change (for example "Change basic rate by 1p"), £ million for 2026-27, 2027-28 and 2028-29,
+  for an April 2026 start on HMRC's Spring Statement 2025 indexed baseline. HMRC's figures are
+  direct effects on the tax concerned and closely related bases, include HMRC's standard
+  behavioural response, and exclude wider economic effects. The July 2026 edition was deferred
+  while HMRC reviews key assumptions, after the Office for Statistics Regulation asked for more
+  transparency about pre- and post-behavioural estimates.
+- **HM Treasury, Budget 2025 Table 4.1 policy decisions.** Certified costings of each Budget
+  measure to 2030-31, positive when they reduce borrowing. The "reverse a Budget 2025 measure"
+  toggles use these lines with the sign reversed.
 
-Each step is recorded as a derivation and shown beside the raw figure. Rate changes scale
-roughly linearly with size; allowances and thresholds do not, and CGT and stamp duty are
-non-linear and asymmetric, so those levers use lookup tables at the published points and
-refuse to extrapolate. See ADR-0004.
+The pipeline extracts both tables to `data/derived/`, and every lever cites the rows or lines it
+uses. A validation step rebuilds each lever's per-unit table from the cited rows and fails if it
+differs, so the numbers in the app cannot drift from the published ones.
+
+### Costing kinds
+
+- **Linear per unit.** Effect = setting ÷ unit size × published effect per unit. Asymmetric
+  rows (a rise "yield" and a cut "cost") are kept separate and chosen by the sign of the setting.
+  Combined levers (employee plus self-employed NICs, petrol plus diesel) sum their rows.
+- **Lookup table.** Where HMRC says changes are non-linear (capital gains tax, the personal
+  allowance, the higher-rate threshold), the lever uses HMRC's published points only, interpolates
+  in a straight line between them and never goes beyond the largest published change.
+- **Schedule.** Dated effects by year, used for the Budget 2025 reversals; nothing applies before
+  the start year.
+
+### Uprating (ADR-0004)
+
+HMRC's years run from April 2026. The game's measures start in April 2027 (the first April after
+the Budget of 28 October 2026) and the rules bite in 2029-30, so each published profile is carried
+forward:
+
+1. Published year k applies to `start year + k − 1`.
+2. Each value is multiplied by the growth of the relevant OBR receipts head between the published
+   year and the target year: receipts head in £ million = share of GDP (EFO Table 3.1) × nominal
+   GDP.
+3. Beyond the third published year, the third-year figure grows with the same head.
+4. Every step is recorded and shown in the provenance drawer beside the raw figure.
+
+Worked example, basic rate +1p, start April 2027, income tax receipts (£m) 2026-27 360,810;
+2027-28 383,035; 2028-29 396,572; 2029-30 414,251; 2030-31 432,244:
+
+| Year    | Published (year taken) | Factor                    | Used  |
+| ------- | ---------------------- | ------------------------- | ----- |
+| 2027-28 | 6,900 (2026-27)        | 383,035 ÷ 360,810 = 1.062 | 7,325 |
+| 2028-29 | 8,250 (2027-28)        | 396,572 ÷ 383,035 = 1.035 | 8,542 |
+| 2029-30 | 8,200 (2028-29)        | 414,251 ÷ 396,572 = 1.045 | 8,566 |
+| 2030-31 | 8,200 (2028-29)        | 432,244 ÷ 396,572 = 1.090 | 8,938 |
+
+So a penny on the basic rate adds about £8.6 billion to 2029-30 headroom before the small interest
+saving on lower borrowing. The receipts shares are published to 0.1% of GDP, so factors carry
+about ±1% of rounding noise. The level of HMRC's baseline is not rebased to March 2026; that
+correction waits for the March 2025 receipts tables.
+
+Head used by tax: income tax levers and the threshold-freeze reversal → income tax; NICs → NICs;
+VAT → VAT; corporation tax → onshore corporation tax; capital gains, inheritance and stamp duty
+→ capital taxes; fuel duty → fuel duties; alcohol → alcohol and tobacco duties; insurance
+premium tax → other taxes.
+
+### Interactions
+
+HMRC notes that rate and threshold changes are only approximately additive, and two levers can
+touch the same tax (fuel duty rates and the fuel duty freeze reversal). Authored interaction
+notes appear when both levers of a pair are moved; they change no numbers.
 
 ## 7. Assumption sliders
 

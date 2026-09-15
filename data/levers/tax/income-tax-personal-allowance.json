@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "id": "income-tax-personal-allowance",
+  "code": "itpa",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Income tax",
+  "order": 40,
+  "title": "Personal allowance",
+  "shortTitle": "Personal allowance",
+  "description": "Raise the £12,570 tax-free personal allowance. HMRC publishes the cost of +£100 and of +10% (about £1,257); values in between are interpolated in a straight line.",
+  "baselinePolicy": {
+    "text": "Personal allowance £12,570, unchanged since April 2021 and frozen until April 2031 (Budget 2025, Table 4.1 line 46). It is withdrawn at £1 for every £2 of income above £100,000.",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 46"
+    },
+    "alreadyIncludes": [
+      "Income tax personal allowance, higher-rate threshold and equivalent National Insurance thresholds frozen until April 2031 (Budget 2025, Table 4.1 line 46)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "GBP",
+    "min": 0,
+    "max": 1250,
+    "step": 50,
+    "default": 0,
+    "formatLabel": "added to the allowance"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "lookupTable",
+    "input": "GBP",
+    "points": [
+      {
+        "input": 0,
+        "effect": {
+          "2026-27": 0,
+          "2027-28": 0,
+          "2028-29": 0
+        }
+      },
+      {
+        "input": 100,
+        "effect": {
+          "2026-27": -810,
+          "2027-28": -1050,
+          "2028-29": -1000
+        },
+        "from": {
+          "rowIds": ["income-tax-allowances-and-reliefs--change-personal-allowance-by-gbp-100"],
+          "multiplier": 1
+        }
+      },
+      {
+        "input": 1257,
+        "effect": {
+          "2026-27": -10000,
+          "2027-28": -11650,
+          "2028-29": -11500
+        },
+        "from": {
+          "rowIds": ["income-tax-allowances-and-reliefs--change-personal-allowance-by-10-pct"],
+          "multiplier": 1
+        }
+      }
+    ],
+    "interpolation": "linear",
+    "extrapolation": "forbid",
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "income-tax-allowances-and-reliefs--change-personal-allowance-by-gbp-100",
+          "label": "Change personal allowance by £100",
+          "hmrcSign": "cost",
+          "role": "increase",
+          "values": {
+            "2026-27": 810,
+            "2027-28": 1050,
+            "2028-29": 1000
+          }
+        },
+        {
+          "rowId": "income-tax-allowances-and-reliefs--change-personal-allowance-by-10-pct",
+          "label": "Change personal allowance by 10%",
+          "hmrcSign": "cost",
+          "role": "increase",
+          "values": {
+            "2026-27": 10000,
+            "2027-28": 11650,
+            "2028-29": 11500
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "incomeTax",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: the costs of raising an allowance do not scale linearly, so only HMRC's published points are used and the lever stops at HMRC's largest published change.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmrc-direct",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's figure is a direct effect on this tax and closely related tax bases. It includes HMRC's standard behavioural response (for personal taxes, through taxable income elasticities and tax-motivated incorporation), but not wider effects on the economy such as inflation or investment, which HMRC says are usually captured in the OBR's economy forecast instead.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "nics-employee-threshold",
+      "text": "The personal allowance and the National Insurance primary threshold are both £12,570; moving one without the other breaks the alignment that simplifies payroll.",
+      "severity": "info"
+    }
+  ],
+  "indexation": {
+    "baseline": "frozen",
+    "frozenUntil": "2030-31",
+    "note": "Frozen in cash terms until April 2031 (Budget 2025)."
+  }
+}

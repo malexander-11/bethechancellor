@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "id": "sdlt-residential-5pc-band",
+  "code": "sdlt5",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital taxes",
+  "order": 30,
+  "title": "Stamp duty: 5% band",
+  "shortTitle": "Stamp duty 5% band",
+  "description": "Change the 5% rate of stamp duty land tax on the part of a home’s price between £250,001 and £925,000 (England and Northern Ireland), in percentage points. HMRC gives separate figures for a rise and a cut.",
+  "baselinePolicy": {
+    "text": "Residential rates 0% to £250,000 (£300,000 for first-time buyers), 5% to £925,000, 10% to £1.5m, 12% above; a surcharge applies to additional dwellings.",
+    "source": {
+      "sourceId": "hmrc-trr-2025-06-bulletin"
+    },
+    "alreadyIncludes": []
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": -5,
+    "max": 5,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "percentage points on the 5% band"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 685,
+      "2027-28": 680,
+      "2028-29": 815
+    },
+    "basis": "accruals",
+    "symmetric": false,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "stamp-duty-land-tax--raise-residential-5-pct-marginal-rate-by-1-percentage-point-yield",
+          "label": "Raise residential 5% marginal rate by 1 percentage point (Yield)",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 685,
+            "2027-28": 680,
+            "2028-29": 815
+          }
+        },
+        {
+          "rowId": "stamp-duty-land-tax--cut-residential-5-pct-marginal-rate-by-1-percentage-point-cost",
+          "label": "Cut residential 5% marginal rate by 1 percentage point (Cost)",
+          "hmrcSign": "cost",
+          "role": "decrease",
+          "values": {
+            "2026-27": 775,
+            "2027-28": 795,
+            "2028-29": 940
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "capitalTaxes",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: stamp duty changes are non-linear and asymmetrical; scaling the 1 point figures to larger changes is only approximate.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ],
+    "decreasePerUnit": {
+      "2026-27": -775,
+      "2027-28": -795,
+      "2028-29": -940
+    }
+  },
+  "considerations": [
+    {
+      "id": "sdlt-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's direct estimates include the behavioural response of buyers and sellers to transaction taxes, which makes stamp duty changes non-linear and asymmetrical.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "moderate"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

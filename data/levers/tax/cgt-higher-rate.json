@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "id": "cgt-higher-rate",
+  "code": "cgth",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital taxes",
+  "order": 10,
+  "title": "Capital gains tax higher rate",
+  "shortTitle": "CGT higher rate",
+  "description": "Raise the higher rate of capital gains tax (24%), in percentage points. HMRC publishes +1, +5 and +10 points; its estimates show a rise losing revenue as people delay or avoid selling assets.",
+  "baselinePolicy": {
+    "text": "Higher rate 24% (18% basic rate) on most gains since 30 October 2024; the OBR notes capital taxes are paid by a narrow base and are highly sensitive to asset prices.",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "paragraph": "1.22 and Box 3.1"
+    },
+    "alreadyIncludes": [
+      "Budget 2025 reduced capital gains tax relief on disposals to employee ownership trusts from 100% to 50% (Table 4.1 line 53)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": 0,
+    "max": 10,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "percentage points on the higher rate"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "lookupTable",
+    "input": "pp",
+    "points": [
+      {
+        "input": 0,
+        "effect": {
+          "2026-27": 0,
+          "2027-28": 0,
+          "2028-29": 0
+        }
+      },
+      {
+        "input": 1,
+        "effect": {
+          "2026-27": -15,
+          "2027-28": 80,
+          "2028-29": -30
+        },
+        "from": {
+          "rowIds": [
+            "capital-gains-tax--increase-higher-capital-gains-tax-rate-by-1-percentage-point"
+          ],
+          "multiplier": 1
+        }
+      },
+      {
+        "input": 5,
+        "effect": {
+          "2026-27": -170,
+          "2027-28": -235,
+          "2028-29": -870
+        },
+        "from": {
+          "rowIds": [
+            "capital-gains-tax--increase-higher-capital-gains-tax-rate-by-5-percentage-points"
+          ],
+          "multiplier": 1
+        }
+      },
+      {
+        "input": 10,
+        "effect": {
+          "2026-27": -540,
+          "2027-28": -2060,
+          "2028-29": -3565
+        },
+        "from": {
+          "rowIds": [
+            "capital-gains-tax--increase-higher-capital-gains-tax-rate-by-10-percentage-points"
+          ],
+          "multiplier": 1
+        }
+      }
+    ],
+    "interpolation": "linear",
+    "extrapolation": "forbid",
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "capital-gains-tax--increase-higher-capital-gains-tax-rate-by-1-percentage-point",
+          "label": "Increase higher Capital Gains Tax rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": -15,
+            "2027-28": 80,
+            "2028-29": -30
+          }
+        },
+        {
+          "rowId": "capital-gains-tax--increase-higher-capital-gains-tax-rate-by-5-percentage-points",
+          "label": "Increase higher Capital Gains Tax rate by 5 percentage points",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": -170,
+            "2027-28": -235,
+            "2028-29": -870
+          }
+        },
+        {
+          "rowId": "capital-gains-tax--increase-higher-capital-gains-tax-rate-by-10-percentage-points",
+          "label": "Increase higher Capital Gains Tax rate by 10 percentage points",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": -540,
+            "2027-28": -2060,
+            "2028-29": -3565
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "capitalTaxes",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: capital gains tax changes are non-linear and asymmetrical, and large increases can reduce the yield because of behavioural responses; only HMRC's published points are used.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "cgt-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's estimates build in a large behavioural response: people can choose when, and whether, to sell assets. That is why the published yield falls, and turns negative, as the increase grows. The Office for Statistics Regulation has asked HMRC to be clearer about the split between pre- and post-behavioural estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "large"
+    },
+    {
+      "id": "cgt-asset-prices",
+      "kind": "market",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "Capital gains receipts move with asset prices: the OBR estimates that 1% growth in equity prices raises capital gains tax liabilities on financial assets by about 2.7%, so the baseline itself is uncertain.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "Box 3.1"
+        }
+      ],
+      "magnitudeWords": "large"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

@@ -1,0 +1,1165 @@
+{
+  "schemaVersion": 1,
+  "sourceId": "hmt-budget-2025-table-4-1",
+  "sheet": "PresentationalScorecardRounded",
+  "years": [
+    "2025-26",
+    "2026-27",
+    "2027-28",
+    "2028-29",
+    "2029-30",
+    "2030-31"
+  ],
+  "signConvention": "positiveReducesBorrowing",
+  "measures": [
+    {
+      "number": 1,
+      "title": "Renewables Obligation: Fund 75% of the domestic share of the Renewables Obligation via the Exchequer over the Spending Review period",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -2580,
+        "2027-28": -2100,
+        "2028-29": -2195,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 2,
+      "title": "Warm Homes Plan: Increase funding for the Warm Homes Plan and expand the Warm Home Discount Scheme",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -355,
+        "2027-28": -535,
+        "2028-29": -535,
+        "2029-30": -355,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 3,
+      "title": "Fuel Duty: Cancel uprating for 2026-27; extend the 5p cut in rates to 31 August 2026, then increase by 1p from 1 September 2026, 2p from 1 December 2026, and 2p from 1 March 2027",
+      "type": "Tax",
+      "values": {
+        "2025-26": -45,
+        "2026-27": -2370,
+        "2027-28": -855,
+        "2028-29": -855,
+        "2029-30": -850,
+        "2030-31": -840
+      }
+    },
+    {
+      "number": 4,
+      "title": "Rail Fares: Freeze rail fares in England for one year from 1 March 2026",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -145,
+        "2027-28": -150,
+        "2028-29": -155,
+        "2029-30": -160,
+        "2030-31": -165
+      }
+    },
+    {
+      "number": 5,
+      "title": "Health and Social Care: Freeze NHS prescription charges in England for one year from 1 April 2026",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -15,
+        "2027-28": -15,
+        "2028-29": -15,
+        "2029-30": -15,
+        "2030-31": -15
+      }
+    },
+    {
+      "number": 6,
+      "title": "Universal Credit Child Element: Remove the two child limit from April 2026, taking 450,000 children out of poverty",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -2365,
+        "2027-28": -2590,
+        "2028-29": -2815,
+        "2029-30": -3095,
+        "2030-31": -3235
+      }
+    },
+    {
+      "number": 7,
+      "title": "Universal Credit: Extend the £2,500 surplus earnings threshold for one year from 6 April 2026",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -145,
+        "2027-28": 0,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 8,
+      "title": "Child Benefit: Exempt 16–19-year-olds with an illness or disability from the 12-hour weekly rule and equalise the treatment of non-standard educational settings from 1 September 2025",
+      "type": "Spend",
+      "values": {
+        "2025-26": -15,
+        "2026-27": -25,
+        "2027-28": -25,
+        "2028-29": -25,
+        "2029-30": -25,
+        "2030-31": -25
+      }
+    },
+    {
+      "number": 9,
+      "title": "Carer’s Allowance Review: Reassess overpayments from 2015 to 2025 caused by incorrect operational guidance",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -20,
+        "2027-28": -35,
+        "2028-29": -20,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 10,
+      "title": "Housing Benefit: Reduce the financial cliff edge for claimants in supported housing and temporary accommodation from Autumn 2026",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -10,
+        "2027-28": -20,
+        "2028-29": -25,
+        "2029-30": -25,
+        "2030-31": -25
+      }
+    },
+    {
+      "number": 11,
+      "title": "DWP Fraud and Error: Extend Targeted Case Review of Universal Credit to 2030-31",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 0,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 1265
+      }
+    },
+    {
+      "number": 12,
+      "title": "DWP Fraud and Error: Improve accuracy in Pension Credit claims from April 2026",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 15,
+        "2027-28": 85,
+        "2028-29": 135,
+        "2029-30": 75,
+        "2030-31": 60
+      }
+    },
+    {
+      "number": 13,
+      "title": "Health and Disability Benefits: Improve operations by increasing face-to-face assessments, increasing WCA reassessment capability, and PIP award review changes, starting from April 2026",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 85,
+        "2027-28": 310,
+        "2028-29": 520,
+        "2029-30": 580,
+        "2030-31": 455
+      }
+    },
+    {
+      "number": 14,
+      "title": "Motability: Introduce VAT at the standard rate on Advance Payments paid to Motability or equivalent schemes, and Insurance Premium Tax at the standard rate on insurance related to vehicle leases, from 1 July 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 90,
+        "2027-28": 165,
+        "2028-29": 225,
+        "2029-30": 280,
+        "2030-31": 305
+      }
+    },
+    {
+      "number": 15,
+      "title": "Housing Benefit and Pension Credit Administration: Bring together the administration of pensioner Housing Benefit and Pension Credit from Autumn 2026",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": -10,
+        "2028-29": 105,
+        "2029-30": 225,
+        "2030-31": 265
+      }
+    },
+    {
+      "number": 16,
+      "title": "National Insurance: Remove access to Class 2 National Insurance contributions (NICs) and increase the initial residency and contributions history requirements for Class 3 NICs for individuals abroad from 6 April 2026",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": 5,
+        "2028-29": 10,
+        "2029-30": 10,
+        "2030-31": 15
+      }
+    },
+    {
+      "number": 17,
+      "title": "Rebuilding Britain: Accelerate delivery of growth-enhancing capital investment, including the Lower Thames Crossing",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -3210,
+        "2027-28": -1015,
+        "2028-29": 1100,
+        "2029-30": 1525,
+        "2030-31": -310
+      }
+    },
+    {
+      "number": 18,
+      "title": "Business Rates: Introduce both a three year Transitional Relief scheme, partially funded by a 1p Transitional Relief Supplement in 2026/27, and a Supporting Small Business scheme from 1 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 40,
+        "2026-27": -2140,
+        "2027-28": -1390,
+        "2028-29": -885,
+        "2029-30": 15,
+        "2030-31": -5
+      }
+    },
+    {
+      "number": 19,
+      "title": "Business Rates: Introduce two new lower multipliers for eligible retail, hospitality and leisure properties funded by a new high-value multiplier from 1 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -50,
+        "2027-28": 40,
+        "2028-29": 35,
+        "2029-30": 35,
+        "2030-31": 35
+      }
+    },
+    {
+      "number": 20,
+      "title": "Enterprise Management Incentives (EMI): Increase eligibility to allow scale-ups, as well as start-ups, to access the scheme from 6 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -70,
+        "2027-28": -230,
+        "2028-29": -410,
+        "2029-30": -585,
+        "2030-31": -695
+      }
+    },
+    {
+      "number": 21,
+      "title": "Venture Capital Schemes: Increase the Venture Capital Trust (VCT) scheme and the Enterprise Investment Scheme (EIS) annual and lifetime investment limits and the gross assets test from 6 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": -60,
+        "2028-29": -45,
+        "2029-30": -50,
+        "2030-31": -55
+      }
+    },
+    {
+      "number": 22,
+      "title": "Venture Capital Schemes: Reduce the VCT scheme Income Tax relief from 6 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 125,
+        "2028-29": 95,
+        "2029-30": 95,
+        "2030-31": 100
+      }
+    },
+    {
+      "number": 23,
+      "title": "UK Listing Relief: Stamp Duty Reserve Tax relief for transfers of a company's securities for a three-year period from the point of listing, effective from 27 November 2025",
+      "type": "Tax",
+      "values": {
+        "2025-26": -25,
+        "2026-27": -35,
+        "2027-28": -45,
+        "2028-29": -50,
+        "2029-30": -50,
+        "2030-31": -50
+      }
+    },
+    {
+      "number": 24,
+      "title": "Jobs and Skills: Invest in Youth Guarantee, Growth and Skills Levy, and employment & skills support4",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -520,
+        "2027-28": -555,
+        "2028-29": -495,
+        "2029-30": -110,
+        "2030-31": -105
+      }
+    },
+    {
+      "number": 25,
+      "title": "Planning Capacity and Capability: Fund additional capacity in the planning system to get Britain building",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -20,
+        "2027-28": -20,
+        "2028-29": -20,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 26,
+      "title": "British Business Bank: Expand the Growth Guarantee Scheme to support businesses impacted by changes in global tariffs",
+      "type": "Spend",
+      "values": {
+        "2025-26": -50,
+        "2026-27": 0,
+        "2027-28": 0,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 27,
+      "title": "Clamping Down on Illegal High Street Operations: Invest in a new cross-government taskforce, additional Insolvency Service staff and enhanced Trading Standards and law enforcement capabilities",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -15,
+        "2027-28": -15,
+        "2028-29": -15,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 28,
+      "title": "VAT: Introduce a relief for business donations of goods to charity for onward distribution or use in the delivery of their services, from 1 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -10,
+        "2027-28": -10,
+        "2028-29": -10,
+        "2029-30": -10,
+        "2030-31": -10
+      }
+    },
+    {
+      "number": 29,
+      "title": "Cross-border VAT Grouping: Revert to unconditional whole entity cross-border VAT grouping from 26 November 2025",
+      "type": "Tax",
+      "values": {
+        "2025-26": -40,
+        "2026-27": -45,
+        "2027-28": -10,
+        "2028-29": -10,
+        "2029-30": -10,
+        "2030-31": -10
+      }
+    },
+    {
+      "number": 30,
+      "title": "National Level Regulation: Provide funding to reduce regulatory burden for large food businesses",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": -5,
+        "2028-29": -5,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 31,
+      "title": "Fisheries and Coastal Growth: Launch a fund to support the domestic fishing sector and coastal communities",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -25,
+        "2027-28": -35,
+        "2028-29": -35,
+        "2029-30": -45,
+        "2030-31": -25
+      }
+    },
+    {
+      "number": 32,
+      "title": "Innovation in Wales: Invest in a world-leading semiconductor technologies cluster",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": -5,
+        "2028-29": -5,
+        "2029-30": -5,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 33,
+      "title": "Northern Ireland: Post-Brexit trade support",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -10,
+        "2027-28": -5,
+        "2028-29": -5,
+        "2029-30": -5,
+        "2030-31": -5
+      }
+    },
+    {
+      "number": 34,
+      "title": "Kernow Industrial Growth Fund: Provide funding to support growth in Cornwall",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": -10,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 35,
+      "title": "Business Rates Retention: Extend Greater London Authority enhanced business rates retention arrangements, and pilot Business Rate Retentions for West England Combined Authority, Cornwall, and Liverpool City Region, for three years from April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": -5,
+        "2028-29": -10,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 36,
+      "title": "Port Talbot: Remediate contaminated brownfield land adjacent to the Celtic Freeport",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": 0,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 37,
+      "title": "RDEL: Go further on efficiencies and savings",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 0,
+        "2028-29": 1415,
+        "2029-30": 3950,
+        "2030-31": 4900
+      }
+    },
+    {
+      "number": 38,
+      "title": "Health and Social Care: Bringing forward SR25 funding to support the abolition of NHS England and unlock savings",
+      "type": "Spend",
+      "values": {
+        "2025-26": -510,
+        "2026-27": -510,
+        "2027-28": 70,
+        "2028-29": 955,
+        "2029-30": 975,
+        "2030-31": 1010
+      }
+    },
+    {
+      "number": 39,
+      "title": "NHS: Investing in NHS technology to improve productivity",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": -355,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 40,
+      "title": "Home Office: Provide additional funding to tackle people smuggling gangs",
+      "type": "Spend",
+      "values": {
+        "2025-26": -100,
+        "2026-27": 0,
+        "2027-28": 0,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 41,
+      "title": "Systems & Compliance: Invest in HMRC, DWP and other departments to: reduce fraud and error in the welfare system & public sector; ensure tax compliance and implement Budget tax measures; and increase departmental resilience to economic shocks",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -410,
+        "2027-28": -490,
+        "2028-29": -295,
+        "2029-30": -165,
+        "2030-31": -220
+      }
+    },
+    {
+      "number": 42,
+      "title": "National Year of Reading: Fund state-funded secondary schools in England to increase book supplies",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": 0,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 43,
+      "title": "Investing in Communities: Provide funding to refurbish and improve up to 200 playgrounds in England",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -10,
+        "2027-28": -10,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 44,
+      "title": "Environmental Regeneration: Launch a new grant scheme for public bodies to support land remediation and reinvest water company fines in projects to clean up rivers, lakes and seas",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -20,
+        "2027-28": -5,
+        "2028-29": 35,
+        "2029-30": 10,
+        "2030-31": 10
+      }
+    },
+    {
+      "number": 45,
+      "title": "UK-EU Deal: Fund DEFRA costs in 2025-26 for domestic implementation of UK-EU Sanitary and Phytosanitary Agreement",
+      "type": "Spend",
+      "values": {
+        "2025-26": -30,
+        "2026-27": 0,
+        "2027-28": 0,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 46,
+      "title": "Personal Tax: Maintain the personal income tax and equivalent national insurance thresholds at current levels for a further three years until April 2031",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": -25,
+        "2028-29": 3365,
+        "2029-30": 7780,
+        "2030-31": 12435
+      }
+    },
+    {
+      "number": 47,
+      "title": "National Insurance: Maintain the secondary threshold for employer contributions at current level for a further three years until April 2031",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": -5,
+        "2028-29": 290,
+        "2029-30": 615,
+        "2030-31": 925
+      }
+    },
+    {
+      "number": 48,
+      "title": "Student Loans: Freeze Plan 2 repayment threshold for three years from 6 April 2027",
+      "type": "Spend",
+      "values": {
+        "2025-26": 285,
+        "2026-27": 5915,
+        "2027-28": 255,
+        "2028-29": 290,
+        "2029-30": 355,
+        "2030-31": 380
+      }
+    },
+    {
+      "number": 49,
+      "title": "Property Income: Introduce separate tax rates for property income at 22% for the property basic rate, 42% for the property higher rate and 47% for the property additional rate, from 6 April 2027",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 5,
+        "2028-29": 590,
+        "2029-30": 435,
+        "2030-31": 445
+      }
+    },
+    {
+      "number": 50,
+      "title": "Dividend Income: Increase tax rates on dividend income by 2ppts at the ordinary and upper rate from 6 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 280,
+        "2027-28": 985,
+        "2028-29": 1160,
+        "2029-30": 1325,
+        "2030-31": 1390
+      }
+    },
+    {
+      "number": 51,
+      "title": "Savings Income: Increase tax rates on savings income by 2ppts at the basic, higher and additional rate from 6 April 2027 and maintain the Starting Rate of Savings limit at £5000 from April 2026 to April 2031",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 5,
+        "2027-28": 55,
+        "2028-29": 525,
+        "2029-30": 470,
+        "2030-31": 505
+      }
+    },
+    {
+      "number": 52,
+      "title": "Salary Sacrifice: Limit the value of salary sacrificed pension contributions that can receive employee and employer NICs relief to £2,000 per year from 6 April 2029",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -40,
+        "2027-28": -55,
+        "2028-29": -75,
+        "2029-30": 4845,
+        "2030-31": 2585
+      }
+    },
+    {
+      "number": 53,
+      "title": "Capital Gains Tax: Reduce Capital Gains Tax relief on qualifying disposals to employee ownership trusts from 100% to 50% from 26 November 2025",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 185,
+        "2027-28": 775,
+        "2028-29": 825,
+        "2029-30": 905,
+        "2030-31": 985
+      }
+    },
+    {
+      "number": 54,
+      "title": "High Value Council Tax Surcharge: Introduce a surcharge on owners of residential properties valued over £2m in England from 1 April 2028",
+      "type": "Tax",
+      "values": {
+        "2025-26": -60,
+        "2026-27": -120,
+        "2027-28": -155,
+        "2028-29": 400,
+        "2029-30": 430,
+        "2030-31": 435
+      }
+    },
+    {
+      "number": 55,
+      "title": "Inheritance Tax: Maintain the nil-rate band, residence nil-rate band, and allowance for 100% rate of agricultural property relief and business property relief for a further year, from April 2030 until April 2031",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 0,
+        "2028-29": 0,
+        "2029-30": 0,
+        "2030-31": 130
+      }
+    },
+    {
+      "number": 56,
+      "title": "Cap trust charges at £5m for pre-30 October 2024 excluded property trusts for charges applying from 6 April 2025 and close post-departure trade profits loophole from 6 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": 110,
+        "2028-29": 155,
+        "2029-30": 140,
+        "2030-31": 110
+      }
+    },
+    {
+      "number": 57,
+      "title": "Writing-down Allowances: Reduce the main rate writing-down allowance to 14% from April 2026 and introduce a new 40% first-year allowance from 1 January 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 35,
+        "2026-27": 1035,
+        "2027-28": 1505,
+        "2028-29": 1490,
+        "2029-30": 1470,
+        "2030-31": 1450
+      }
+    },
+    {
+      "number": 58,
+      "title": "Air Passenger Duty: Extend the scope of the higher rate to cover all private jets over 5.7 tonnes from 1 April 2027",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 10,
+        "2028-29": 10,
+        "2029-30": 10,
+        "2030-31": 10
+      }
+    },
+    {
+      "number": 59,
+      "title": "HMRC: Further measures to close the tax gap5",
+      "type": "Tax",
+      "values": {
+        "2025-26": 75,
+        "2026-27": 435,
+        "2027-28": 695,
+        "2028-29": 1250,
+        "2029-30": 2415,
+        "2030-31": 2590
+      }
+    },
+    {
+      "number": 60,
+      "title": "Gambling Duty: Increase Remote Gaming Duty to 40% from 1 April 2026, introduce a new Remote Betting Rate at 25% (excluding Self-Service Betting Terminals, spread betting, pool betting & UK horseracing) from 1 April 2027, and abolish Bingo Duty from 1 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 810,
+        "2027-28": 1065,
+        "2028-29": 1100,
+        "2029-30": 1135,
+        "2030-31": 1155
+      }
+    },
+    {
+      "number": 61,
+      "title": "Gambling Commission: Provide funding to tackle the illegal market",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": -10,
+        "2028-29": -10,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 62,
+      "title": "Tour Operators' Margin Scheme: Exclude Private Hire Vehicle Services from the scope of the scheme from 2 January 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 190,
+        "2026-27": 725,
+        "2027-28": 665,
+        "2028-29": 655,
+        "2029-30": 650,
+        "2030-31": 675
+      }
+    },
+    {
+      "number": 63,
+      "title": "Low Value Imports: Reform the customs treatment of low value imports from March 2029",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 0,
+        "2028-29": 40,
+        "2029-30": 535,
+        "2030-31": 555
+      }
+    },
+    {
+      "number": 64,
+      "title": "Emissions Trading Scheme (ETS): Expansion of the UK ETS to International Maritime Routes from 2028",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 0,
+        "2028-29": 75,
+        "2029-30": 290,
+        "2030-31": 285
+      }
+    },
+    {
+      "number": 65,
+      "title": "Defined Benefit (DB) Pension Scheme Surplus Extraction: Introduce flexibilities for employers and direct payments to members from April 2027",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 30,
+        "2027-28": 120,
+        "2028-29": 125,
+        "2029-30": 135,
+        "2030-31": 145
+      }
+    },
+    {
+      "number": 66,
+      "title": "Landfill Tax: Increase the lower rate by the cash increase of the standard rate from 1 April 2026 and in each year of the forecast period",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 35,
+        "2027-28": 60,
+        "2028-29": 85,
+        "2029-30": 110,
+        "2030-31": 130
+      }
+    },
+    {
+      "number": 67,
+      "title": "Soft Drink Industry Levy: Reduce the levy threshold from 5g to 4.5g/100ml and extend to milk-based drinks and milk substitutes from 1 January 2028",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 10,
+        "2028-29": 40,
+        "2029-30": 40,
+        "2030-31": 40
+      }
+    },
+    {
+      "number": 68,
+      "title": "Non-reimbursed Homeworking Expenses: Remove the tax relief available from 6 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 10,
+        "2027-28": 30,
+        "2028-29": 25,
+        "2029-30": 25,
+        "2030-31": 25
+      }
+    },
+    {
+      "number": 69,
+      "title": "Carbon Border Adjustment Mechanism (CBAM): Remove indirect emissions from scope of the CBAM from 1 January 2027",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -40,
+        "2027-28": -170,
+        "2028-29": -180,
+        "2029-30": -170,
+        "2030-31": -165
+      }
+    },
+    {
+      "number": 70,
+      "title": "Advanced Corporation Tax (ACT) reform: Abolish shadow ACT restrictions to relax the limits on companies’ use of surplus ACT balances from 1 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -10,
+        "2027-28": -10,
+        "2028-29": -15,
+        "2029-30": -15,
+        "2030-31": -10
+      }
+    },
+    {
+      "number": 71,
+      "title": "Electric Vehicle Excise Duty (eVED): Introduce a new mileage supplement for electric and plug-in hybrid cars from 1 April 2028",
+      "type": "Tax",
+      "values": {
+        "2025-26": -5,
+        "2026-27": -10,
+        "2027-28": -15,
+        "2028-29": 1100,
+        "2029-30": 1435,
+        "2030-31": 1865
+      }
+    },
+    {
+      "number": 72,
+      "title": "Support for British automotive industry: Provide additional Electric Car Grant funding & extend to 2029-30 and invest in EV charging infrastructure",
+      "type": "Spend",
+      "values": {
+        "2025-26": -50,
+        "2026-27": -215,
+        "2027-28": -340,
+        "2028-29": -440,
+        "2029-30": -425,
+        "2030-31": -25
+      }
+    },
+    {
+      "number": 73,
+      "title": "Support for British automotive industry: Increase the Expensive Car Supplement threshold for zero emission vehicles to £50,000, from 1 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -50,
+        "2027-28": -110,
+        "2028-29": -190,
+        "2029-30": -325,
+        "2030-31": -505
+      }
+    },
+    {
+      "number": 74,
+      "title": "Support for British automotive industry: Delay bringing Employee Car Ownership schemes within the Benefit in Kind rules from 6 April 2026 to 6 April 2030, with a two year transition period",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -150,
+        "2027-28": -150,
+        "2028-29": -150,
+        "2029-30": -155,
+        "2030-31": -140
+      }
+    },
+    {
+      "number": 75,
+      "title": "Support for British automotive industry: Extend 100% first-year allowances for zero-emission cars and electric vehicle charge points to 31 March 2027 for Corporation Tax and 5 April 2027 for Income Tax",
+      "type": "Tax",
+      "values": {
+        "2025-26": -5,
+        "2026-27": -145,
+        "2027-28": -100,
+        "2028-29": 15,
+        "2029-30": 20,
+        "2030-31": 25
+      }
+    },
+    {
+      "number": 76,
+      "title": "Sizewell C: Reclassify construction costs and recognise income generated through the Regulated Asset Base levy",
+      "type": "Spend",
+      "values": {
+        "2025-26": 50,
+        "2026-27": 510,
+        "2027-28": 580,
+        "2028-29": 675,
+        "2029-30": 795,
+        "2030-31": 970
+      }
+    },
+    {
+      "number": 77,
+      "title": "Plug-in hybrid electric vehicle (PHEV) emissions regulatory standard changes and Benefit in Kind easement",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 35,
+        "2027-28": 60,
+        "2028-29": 75,
+        "2029-30": 80,
+        "2030-31": 85
+      }
+    },
+    {
+      "number": 78,
+      "title": "Student Finance: Confirm policy detail for the Lifelong Learning Entitlement launch on 1 January 2027 and increase spending on student loans due to a new means-tested maintenance grant offer for students studying certain courses from academic year 2028/29",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": 0,
+        "2027-28": 5,
+        "2028-29": 5,
+        "2029-30": 5,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 79,
+      "title": "Supporting Savers: Make the Help to Save scheme permanent, maintain total ISA annual subscription limit at £20,000 with cash limit reduced to £12,000 for under-65s from April 2027, delay ISA digitalisation until April 2028 and maintain the ISA subscription limits until 2030/31",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -5,
+        "2027-28": -10,
+        "2028-29": -5,
+        "2029-30": -35,
+        "2030-31": -15
+      }
+    },
+    {
+      "number": 80,
+      "title": "Agricultural Property Relief and Business Property Relief: Allow any unused allowance for the 100% rate of relief to be transferable between spouses and civil partners from 6 April 2026",
+      "type": "Tax",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -30,
+        "2027-28": -70,
+        "2028-29": -70,
+        "2029-30": -70,
+        "2030-31": -70
+      }
+    },
+    {
+      "number": 81,
+      "title": "British Coal Staff Superannuation Scheme: Transfer investment reserve to scheme members",
+      "type": "Spend",
+      "values": {
+        "2025-26": -1975,
+        "2026-27": -25,
+        "2027-28": -25,
+        "2028-29": -20,
+        "2029-30": -20,
+        "2030-31": -15
+      }
+    },
+    {
+      "number": 82,
+      "title": "Defined Benefit Pensions: Provide inflation protection for pre-1997 pensions in the Pension Protection Fund (PPF) and Financial Assistance Scheme (FAS) where members’ former schemes provided it, from 1 January 2027",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -1255,
+        "2027-28": -60,
+        "2028-29": -60,
+        "2029-30": -65,
+        "2030-31": -70
+      }
+    },
+    {
+      "number": 83,
+      "title": "Personal Independence Payment: Not proceeding with Spring Statement 2025 reforms to eligibility",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -235,
+        "2027-28": -1755,
+        "2028-29": -3350,
+        "2029-30": -4495,
+        "2030-31": -5345
+      }
+    },
+    {
+      "number": 84,
+      "title": "Winter Fuel Payment: Target to pensioners with taxable income below or equal to £35,000 from Winter 2025",
+      "type": "Spend",
+      "values": {
+        "2025-26": -1785,
+        "2026-27": -1390,
+        "2027-28": -910,
+        "2028-29": -1330,
+        "2029-30": -1340,
+        "2030-31": -1325
+      }
+    },
+    {
+      "number": 85,
+      "title": "Universal Credit: Changes to the standard allowance and health element to protect existing claimants and new health element claimants who meet the Severe Conditions Criteria from April 2026",
+      "type": "Spend",
+      "values": {
+        "2025-26": 0,
+        "2026-27": -245,
+        "2027-28": -475,
+        "2028-29": -630,
+        "2029-30": -790,
+        "2030-31": -945
+      }
+    },
+    {
+      "number": 86,
+      "title": "Loan Charge: Government response to the independent review",
+      "type": "Tax",
+      "values": {
+        "2025-26": -25,
+        "2026-27": -95,
+        "2027-28": -30,
+        "2028-29": 35,
+        "2029-30": -155,
+        "2030-31": -95
+      }
+    },
+    {
+      "number": 87,
+      "title": "Compensation Payments: Make compensation available to those affected by Post Office Capture IT software shortfalls and deliver recommendations from Volume 1 of the Post Office Horizon IT Inquiry's final report",
+      "type": "Spend",
+      "values": {
+        "2025-26": -15,
+        "2026-27": -125,
+        "2027-28": -65,
+        "2028-29": -60,
+        "2029-30": 0,
+        "2030-31": 0
+      }
+    },
+    {
+      "number": 88,
+      "title": "Tariffs: Changes since Spring 2025",
+      "type": "Tax",
+      "values": {
+        "2025-26": -55,
+        "2026-27": -150,
+        "2027-28": -95,
+        "2028-29": -100,
+        "2029-30": -100,
+        "2030-31": -105
+      }
+    }
+  ],
+  "source": {
+    "sourceId": "hmt-budget-2025-table-4-1",
+    "localPath": "data/raw/hmt-budget-2025/Table_4.1_-_Budget_2025_Policy_Decisions.xlsx",
+    "sha256": "cf68c672e022a23b4327e8f863380cdd47c286081986a6515ac2ee1e85435921"
+  }
+}

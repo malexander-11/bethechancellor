@@ -6,10 +6,10 @@ import { derive } from './derive.js';
 import { listFiles } from './lib/io.js';
 import { DERIVED_DIR, REPO_ROOT } from './lib/paths.js';
 
-function main(): void {
+async function main(): Promise<void> {
   const tmp = mkdtempSync(path.join(os.tmpdir(), 'btc-derived-'));
   try {
-    derive({ outDir: tmp });
+    await derive({ outDir: tmp });
     const fresh = listFiles(tmp).map((f) => path.relative(tmp, f));
     const committed = listFiles(DERIVED_DIR).map((f) => path.relative(DERIVED_DIR, f));
     const problems: string[] = [];
@@ -37,4 +37,7 @@ function main(): void {
   }
 }
 
-main();
+main().catch((error: unknown) => {
+  process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
+  process.exit(1);
+});

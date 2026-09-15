@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "id": "income-tax-basic-rate",
+  "code": "itbr",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Income tax",
+  "order": 10,
+  "title": "Basic rate of income tax",
+  "shortTitle": "Basic rate",
+  "description": "Change the 20% rate paid on income between the personal allowance and the higher-rate threshold, in pence in the pound.",
+  "baselinePolicy": {
+    "text": "Basic rate 20% on income between £12,570 and £50,270 (taxpayers on UK rates; Scotland sets its own rates and bands). Income tax personal allowance, higher-rate threshold and equivalent National Insurance thresholds frozen until April 2031 (Budget 2025, Table 4.1 line 46).",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "paragraph": "3.2"
+    },
+    "alreadyIncludes": [
+      "Income tax personal allowance, higher-rate threshold and equivalent National Insurance thresholds frozen until April 2031 (Budget 2025, Table 4.1 line 46)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "p",
+    "min": -3,
+    "max": 5,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "pence in the pound"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 6900,
+      "2027-28": 8250,
+      "2028-29": 8200
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "income-tax-rates--change-basic-rate-by-1p",
+          "label": "Change basic rate by 1p",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 6900,
+            "2027-28": 8250,
+            "2028-29": 8200
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "incomeTax",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so rate changes are scaled linearly here.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmrc-direct",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's figure is a direct effect on this tax and closely related tax bases. It includes HMRC's standard behavioural response (for personal taxes, through taxable income elasticities and tax-motivated incorporation), but not wider effects on the economy such as inflation or investment, which HMRC says are usually captured in the OBR's economy forecast instead.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    },
+    {
+      "id": "fiscal-drag",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "Income tax receipts are already forecast to rise strongly without any rate change, because thresholds are frozen while earnings grow. The OBR attributes most of the rise in personal taxes to earnings growth combined with the freeze to April 2031.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "3.2"
+        }
+      ],
+      "magnitudeWords": "large"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "income-tax-higher-rate-threshold",
+      "text": "HMRC notes that rate and threshold changes are only approximately additive: the cost of a rate cut is smaller when allowances or limits are raised at the same time.",
+      "severity": "info"
+    },
+    {
+      "withLever": "reverse-threshold-freeze",
+      "text": "Both change the income tax base; HMRC's rate estimates assume the frozen thresholds in the baseline, so the combination is approximate.",
+      "severity": "info"
+    }
+  ]
+}

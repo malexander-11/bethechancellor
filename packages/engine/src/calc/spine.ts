@@ -2,6 +2,7 @@ import { EngineError } from '../errors.js';
 import type { Lever, RuleSet, Vintage } from '../types/data.js';
 import type {
   AttributionRow,
+  InteractionNotice,
   LeverEffect,
   Outcome,
   Settings,
@@ -102,6 +103,8 @@ export function computeOutcome(input: ComputeInput): Outcome {
     });
   }
 
+  const interactions = findInteractions(levers, effects);
+
   return {
     vintageId: vintage.id,
     rulesId: rules.id,
@@ -110,6 +113,36 @@ export function computeOutcome(input: ComputeInput): Outcome {
     leverEffects: effects,
     verdicts,
     attribution,
+    interactions,
     warnings,
   };
+}
+
+/** Surface authored interaction notes when both levers of a pair are away from their defaults. */
+export function findInteractions(
+  levers: readonly Lever[],
+  effects: readonly LeverEffect[],
+): InteractionNotice[] {
+  const active = new Map(effects.map((e) => [e.leverId, e] as const));
+  const byId = new Map(levers.map((l) => [l.id, l] as const));
+  const seen = new Set<string>();
+  const out: InteractionNotice[] = [];
+  for (const lever of levers) {
+    if (!active.has(lever.id)) continue;
+    for (const interaction of lever.interactions ?? []) {
+      const other = byId.get(interaction.withLever);
+      if (!other || !active.has(other.id)) continue;
+      const key = [lever.id, other.id].sort().join('|');
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({
+        leverIds: [lever.id, other.id],
+        codes: [lever.code, other.code],
+        titles: [lever.shortTitle, other.shortTitle],
+        text: interaction.text,
+        severity: interaction.severity,
+      });
+    }
+  }
+  return out;
 }

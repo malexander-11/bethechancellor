@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "reverse-fuel-duty-freeze",
+  "code": "rvfuel",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Reverse Budget 2025 measures",
+  "order": 40,
+  "title": "Reverse the 2026-27 fuel duty freeze from April 2027",
+  "shortTitle": "Reverse fuel duty freeze",
+  "description": "Budget 2025 cancelled the 2026-27 fuel duty uprating and phased out the 5p cut by March 2027. Switch this on to put duty back on its pre-Budget path from the start year, recovering the revenue the freeze gives up.",
+  "baselinePolicy": {
+    "text": "Fuel duty 2026-27 uprating cancelled; 5p cut extended to 31 August 2026 then phased out by March 2027 (Table 4.1 line 3).",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "lines 3"
+    },
+    "alreadyIncludes": ["Fuel duty freeze for 2026-27 (Budget 2025, Table 4.1 line 3)."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "fuelDuties",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 45,
+      "2026-27": 2370,
+      "2027-28": 855,
+      "2028-29": 855,
+      "2029-30": 850,
+      "2030-31": 840
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "lines": [
+        {
+          "number": 3,
+          "title": "Fuel Duty: Cancel uprating for 2026-27; extend the 5p cut in rates to 31 August 2026, then increase by 1p from 1 September 2026, 2p from 1 December 2026, and 2p from 1 March 2027",
+          "values": {
+            "2025-26": -45,
+            "2026-27": -2370,
+            "2027-28": -855,
+            "2028-29": -855,
+            "2029-30": -850,
+            "2030-31": -840
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury's costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here; the difference is small relative to the figures. Effects before the start year are not applied."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; see the Budget 2025 policy costings document for the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "fuel-duty",
+      "text": "Both change fuel duty rates; the combined effect is approximate.",
+      "severity": "warn"
+    }
+  ]
+}

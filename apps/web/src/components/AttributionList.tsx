@@ -1,6 +1,10 @@
 import { formatGbpBn, type AttributionRow } from '@btc/engine';
 import { LabelBadge } from './LabelBadge';
 
+function tone(v: number): string {
+  return v > 0.5 ? 'amount--worse' : v < -0.5 ? 'amount--better' : '';
+}
+
 export function AttributionList({
   rows,
   baselineHeadroomGbpm,
@@ -16,28 +20,26 @@ export function AttributionList({
       </p>
     );
   }
+  const levers = rows
+    .filter((r) => r.kind !== 'debtInterest')
+    .sort((a, b) => Math.abs(b.currentBudgetGbpm) - Math.abs(a.currentBudgetGbpm));
+  const interest = rows.filter((r) => r.kind === 'debtInterest');
   const total = rows.reduce((acc, r) => acc + r.currentBudgetGbpm, 0);
   return (
     <ul className="attribution">
-      {rows.map((row) => (
+      {[...levers, ...interest].map((row) => (
         <li key={`${row.kind}-${row.code ?? row.label}`}>
           <span>
             {row.label} <LabelBadge badge={row.badge} />
           </span>
-          <span
-            className={`amount ${row.currentBudgetGbpm > 0.5 ? 'amount--worse' : row.currentBudgetGbpm < -0.5 ? 'amount--better' : ''}`}
-          >
+          <span className={`amount ${tone(row.currentBudgetGbpm)}`}>
             {formatGbpBn(row.currentBudgetGbpm, 1, true)}
           </span>
         </li>
       ))}
       <li>
         <strong>Total change to headroom</strong>
-        <strong
-          className={`amount ${total > 0.5 ? 'amount--worse' : total < -0.5 ? 'amount--better' : ''}`}
-        >
-          {formatGbpBn(-total, 1, true)}
-        </strong>
+        <strong className={`amount ${tone(total)}`}>{formatGbpBn(-total, 1, true)}</strong>
       </li>
     </ul>
   );

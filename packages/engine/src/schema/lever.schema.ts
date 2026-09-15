@@ -8,10 +8,25 @@ import {
 
 const yearValuesSchema = z.record(fiscalYearSchema, z.number());
 
+/** Receipts heads in the vintage's receiptsByHeadPctGdp, plus nominal GDP itself. */
+export const taxHeadSchema = z.enum([
+  'incomeTax',
+  'nics',
+  'vat',
+  'onshoreCorporationTax',
+  'capitalTaxes',
+  'businessRates',
+  'fuelDuties',
+  'alcoholAndTobaccoDuties',
+  'otherTaxes',
+  'nominalGdp',
+]);
+
 export const controlSchema = z
   .strictObject({
     kind: z.enum(['slider', 'stepper', 'toggle', 'select']),
-    unit: z.enum(['pp', 'GBP', 'pctRealPerYear', 'GBPbn', 'bool', 'option']),
+    /** p = pence in the pound; pp = percentage points; pct = per cent change; GBP = pounds a year. */
+    unit: z.enum(['p', 'pp', 'pct', 'GBP', 'pctRealPerYear', 'GBPbn', 'bool', 'option']),
     min: z.number(),
     max: z.number(),
     step: z.number().positive(),
@@ -29,6 +44,12 @@ export const controlSchema = z
         message: 'default must lie within [min, max]',
         path: ['default'],
       });
+    }
+    if (
+      control.kind === 'toggle' &&
+      !(control.min === 0 && control.max === 1 && control.step === 1)
+    ) {
+      ctx.addIssue({ code: 'custom', message: 'toggles use min 0, max 1, step 1', path: ['kind'] });
     }
   });
 
@@ -54,47 +75,99 @@ export const considerationSchema = z.strictObject({
   sources: z.array(sourceRefSchema).min(1),
 });
 
+/** How ready-reckoner figures are carried to the game's years (ADR-0004). */
 export const upratingRuleSchema = z.discriminatedUnion('method', [
   z.strictObject({
     method: z.literal('growWithSeries'),
-    series: z.string().min(1),
-    shiftProfileToImplementationYear: z.boolean(),
-    steadyStateFromYear: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+    head: taxHeadSchema,
     note: z.string(),
   }),
   z.strictObject({ method: z.literal('flatCash'), note: z.string() }),
   z.strictObject({ method: z.literal('none') }),
 ]);
 
+/** A published HMRC ready-reckoner row as cited by a lever. Values are as published (£m). */
+export const hmrcRowRefSchema = z.strictObject({
+  rowId: z.string().min(1),
+  label: z.string().min(1),
+  /** HMRC's sign: a "yield" row is positive when receipts rise; a "cost" row is positive when they fall. */
+  hmrcSign: z.enum(['yield', 'cost']),
+  /** Which table the row feeds for asymmetric levers. */
+  role: z.enum(['increase', 'decrease']).default('increase'),
+  values: yearValuesSchema,
+});
+
+export const rawSourceSchema = z.discriminatedUnion('kind', [
+  z.strictObject({
+    kind: z.literal('hmrcReadyReckoner'),
+    sourceId: z.string().min(1),
+    years: z.array(fiscalYearSchema).length(3),
+    rows: z.array(hmrcRowRefSchema).min(1),
+    combine: z.enum(['sum']).optional(),
+    note: z.string().optional(),
+  }),
+  z.strictObject({
+    kind: z.literal('hmtScorecard'),
+    sourceId: z.string().min(1),
+    lines: z
+      .array(
+        z.strictObject({
+          number: z.number().int().positive(),
+          title: z.string().min(1),
+          values: yearValuesSchema,
+        }),
+      )
+      .min(1),
+    signConvention: z.literal('positiveReducesBorrowing'),
+    note: z.string().optional(),
+  }),
+]);
+
 export const costingSchema = z.discriminatedUnion('kind', [
   z.strictObject({
     kind: z.literal('linearPerUnit'),
+    /** Size of one control unit in the lever's own terms (1 for a penny or a point; 104 for £2 a week). */
     unitDelta: z.number().positive(),
+    /** Effect of one unit increase, engine sign (receipts positive = more revenue), keyed by ready-reckoner year. */
     perUnit: yearValuesSchema,
     basis: z.enum(['accruals', 'cash', 'liability']),
     symmetric: z.boolean(),
+    /** Effect of one unit DEcrease, engine sign, for asymmetric levers. */
     decreasePerUnit: yearValuesSchema.optional(),
     source: sourceRefSchema,
-    rawSource: z
-      .strictObject({ years: z.array(fiscalYearSchema), values: yearValuesSchema })
-      .optional(),
+    rawSource: rawSourceSchema.optional(),
     uprating: upratingRuleSchema,
     caveats: z.array(z.string()),
   }),
   z.strictObject({
     kind: z.literal('lookupTable'),
-    input: z.enum(['pp', 'GBP']),
-    points: z.array(z.strictObject({ input: z.number(), effect: yearValuesSchema })).min(2),
-    interpolation: z.enum(['linear', 'monotoneCubic']),
-    extrapolation: z.enum(['clamp', 'forbid']),
+    input: z.enum(['p', 'pp', 'pct', 'GBP']),
+    points: z
+      .array(
+        z.strictObject({
+          input: z.number(),
+          /** Engine sign, keyed by ready-reckoner year. */
+          effect: yearValuesSchema,
+          from: z
+            .strictObject({ rowIds: z.array(z.string().min(1)).min(1), multiplier: z.number() })
+            .optional(),
+        }),
+      )
+      .min(2),
+    interpolation: z.literal('linear'),
+    extrapolation: z.literal('forbid'),
     source: sourceRefSchema,
+    rawSource: rawSourceSchema.optional(),
     uprating: upratingRuleSchema,
     caveats: z.array(z.string()),
   }),
   z.strictObject({
     kind: z.literal('schedule'),
-    steps: z.array(z.strictObject({ from: fiscalYearSchema, effect: yearValuesSchema })).min(1),
+    /** Engine sign by fiscal year; years before the implementation year are ignored at runtime. */
+    effect: yearValuesSchema,
     source: sourceRefSchema,
+    rawSource: rawSourceSchema.optional(),
+    caveats: z.array(z.string()),
   }),
   z.strictObject({
     kind: z.literal('shareOfBaselineSeries'),
@@ -111,7 +184,7 @@ export const costingSchema = z.discriminatedUnion('kind', [
 export const classificationSchema = z.strictObject({
   side: z.enum(['receipts', 'spending']),
   currentOrCapital: z.enum(['current', 'capital']),
-  taxHead: z.string().optional(),
+  taxHead: taxHeadSchema.optional(),
   delType: z.enum(['RDEL', 'CDEL']).optional(),
   department: z.string().optional(),
   insideWelfareCap: z.boolean().optional(),
@@ -127,6 +200,9 @@ export const leverSchema = z
     code: z.string().regex(/^[a-z][a-z0-9]{1,7}$/),
     category: z.enum(['tax', 'spend', 'welfare', 'macro']),
     badge: badgeSchema,
+    /** UI grouping within a category, e.g. "Income tax"; ordered by `order`. */
+    group: z.string().min(1).optional(),
+    order: z.number().int().optional(),
     title: z.string().min(1),
     shortTitle: z.string().min(1),
     description: z.string().min(1),
@@ -194,6 +270,60 @@ export const leverSchema = z
           path: ['classification'],
         });
       }
+      if (!lever.group) {
+        ctx.addIssue({ code: 'custom', message: 'policy levers need a UI group', path: ['group'] });
+      }
+      if (
+        lever.badge === 'direct' &&
+        (lever.costing.kind === 'linearPerUnit' ||
+          lever.costing.kind === 'lookupTable' ||
+          lever.costing.kind === 'schedule') &&
+        !lever.costing.rawSource
+      ) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'a direct costing must cite its published rows or lines in rawSource',
+          path: ['costing', 'rawSource'],
+        });
+      }
+    }
+    if (lever.costing.kind === 'lookupTable') {
+      const inputs = lever.costing.points.map((p) => p.input);
+      const min = Math.min(...inputs);
+      const max = Math.max(...inputs);
+      if (lever.control.min < min || lever.control.max > max) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `control range [${lever.control.min}, ${lever.control.max}] must stay inside the published points [${min}, ${max}]`,
+          path: ['control'],
+        });
+      }
+      if (!inputs.includes(0)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'lookup tables need a point at 0',
+          path: ['costing', 'points'],
+        });
+      }
+      if (new Set(inputs).size !== inputs.length) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'lookup inputs must be distinct',
+          path: ['costing', 'points'],
+        });
+      }
+    }
+    if (
+      lever.costing.kind === 'linearPerUnit' &&
+      !lever.costing.symmetric &&
+      !lever.costing.decreasePerUnit &&
+      lever.control.min < 0
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'an asymmetric lever that can decrease needs decreasePerUnit',
+        path: ['costing', 'decreasePerUnit'],
+      });
     }
     if (lever.status === 'reviewed' && !lever.reviewedOn) {
       ctx.addIssue({

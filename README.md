@@ -4,10 +4,10 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 1 (foundations)**. The fiscal rules, the OBR March 2026 baseline, the
-calculation engine and the verdict screen exist; the only levers so far are the three economic
-assumption sliders (interest rates, growth, inflation). Tax levers come in Phase 2 and spending
-levers in Phase 3.
+Status: **Phase 2 (tax levers)**. The fiscal rules, the OBR March 2026 baseline, the
+calculation engine and the verdict screen exist, with three economic assumption sliders and 23
+tax levers costed from HMRC's ready reckoner and the Treasury's Budget 2025 scorecard, including
+toggles that reverse Budget 2025 tax measures. Spending levers come in Phase 3.
 
 ## Principles
 

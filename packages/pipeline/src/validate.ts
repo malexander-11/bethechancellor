@@ -1,10 +1,18 @@
 /** Validate everything under data/: schemas, consistency checks, cross-file references, raw file hashes. */
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { DataError, validateDataset } from '@btc/engine';
+import {
+  checkRawSourceConsistency,
+  DataError,
+  parseHmrcExtract,
+  parseScorecardExtract,
+  validateDataset,
+  type ExtractedSources,
+} from '@btc/engine';
+import { HMRC_EXTRACT_FILE, SCORECARD_EXTRACT_FILE } from './derive.js';
 import { loadDataset } from './lib/dataset.js';
-import { sha256 } from './lib/io.js';
-import { REPO_ROOT } from './lib/paths.js';
+import { readJson, sha256 } from './lib/io.js';
+import { DERIVED_DIR, REPO_ROOT } from './lib/paths.js';
 
 function main(): void {
   const problems: string[] = [];
@@ -19,6 +27,18 @@ function main(): void {
     throw error;
   }
   problems.push(...validateDataset(ds));
+
+  // Every direct costing must reproduce from the extracted published tables.
+  const extracted: ExtractedSources = {};
+  const hmrcFile = path.join(DERIVED_DIR, HMRC_EXTRACT_FILE);
+  const scorecardFile = path.join(DERIVED_DIR, SCORECARD_EXTRACT_FILE);
+  if (existsSync(hmrcFile)) extracted.hmrc = parseHmrcExtract(readJson(hmrcFile));
+  else problems.push(`${HMRC_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
+  if (existsSync(scorecardFile))
+    extracted.scorecard = parseScorecardExtract(readJson(scorecardFile));
+  else problems.push(`${SCORECARD_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
+  for (const lever of ds.levers) problems.push(...checkRawSourceConsistency(lever, extracted));
+
   for (const source of ds.sources.sources) {
     if (!source.localPath) continue;
     const target = path.join(REPO_ROOT, source.localPath);

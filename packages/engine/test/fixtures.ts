@@ -2,13 +2,16 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  parseHmrcExtract,
   parseHouseholds,
   parseLever,
   parsePresets,
   parseRules,
+  parseScorecardExtract,
   parseSources,
   parseVintage,
   type Dataset,
+  type ExtractedSources,
 } from '../src/index.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -39,6 +42,13 @@ export function loadDataset(): Required<Dataset> {
     levers,
     presets: parsePresets(readJson('presets/presets.json')),
     households: parseHouseholds(readJson('reference/uk-households.json')),
+  };
+}
+
+export function loadExtracts(): ExtractedSources {
+  return {
+    hmrc: parseHmrcExtract(readJson('derived/hmrc-trr-2025-06.raw.json')),
+    scorecard: parseScorecardExtract(readJson('derived/hmt-budget-2025-table-4-1.raw.json')),
   };
 }
 

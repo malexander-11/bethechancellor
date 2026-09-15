@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "id": "reverse-investment-income-rises",
+  "code": "rvinv",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Reverse Budget 2025 measures",
+  "order": 20,
+  "title": "Reverse the Budget 2025 rises on dividend, savings and property income",
+  "shortTitle": "Reverse investment-income rises",
+  "description": "Budget 2025 raised tax rates on dividends by 2 points from April 2026 and on savings and property income by 2 points from April 2027. Switch this on to reverse all three from the start year.",
+  "baselinePolicy": {
+    "text": "Dividend rates +2 points from April 2026; savings income +2 points and separate property income rates (22%, 42%, 47%) from April 2027 (Table 4.1 lines 49 to 51).",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "lines 49, 50, 51"
+    },
+    "alreadyIncludes": [
+      "Dividend, savings and property income tax rises (Budget 2025, Table 4.1 lines 49, 50, 51)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 0,
+      "2026-27": -285,
+      "2027-28": -1045,
+      "2028-29": -2275,
+      "2029-30": -2230,
+      "2030-31": -2340
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "lines": [
+        {
+          "number": 49,
+          "title": "Property Income: Introduce separate tax rates for property income at 22% for the property basic rate, 42% for the property higher rate and 47% for the property additional rate, from 6 April 2027",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 0,
+            "2027-28": 5,
+            "2028-29": 590,
+            "2029-30": 435,
+            "2030-31": 445
+          }
+        },
+        {
+          "number": 50,
+          "title": "Dividend Income: Increase tax rates on dividend income by 2ppts at the ordinary and upper rate from 6 April 2026",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 280,
+            "2027-28": 985,
+            "2028-29": 1160,
+            "2029-30": 1325,
+            "2030-31": 1390
+          }
+        },
+        {
+          "number": 51,
+          "title": "Savings Income: Increase tax rates on savings income by 2ppts at the basic, higher and additional rate from 6 April 2027 and maintain the Starting Rate of Savings limit at £5000 from April 2026 to April 2031",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 5,
+            "2027-28": 55,
+            "2028-29": 525,
+            "2029-30": 470,
+            "2030-31": 505
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury's costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here; the difference is small relative to the figures. Effects before the start year are not applied."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; see the Budget 2025 policy costings document for the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}
