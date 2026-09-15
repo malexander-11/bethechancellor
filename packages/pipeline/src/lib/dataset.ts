@@ -1,5 +1,7 @@
 import path from 'node:path';
 import {
+  parseAdvisers,
+  parseBriefings,
   parseContext,
   parseHouseholds,
   parseLever,
@@ -40,9 +42,23 @@ export function loadDataset(
   const contexts = listFiles(path.join(DATA_DIR, 'context'), isJson).map((f) =>
     parseContext(readJson(f)),
   );
+  const advisers = parseAdvisers(readJson(path.join(DATA_DIR, 'journey', 'advisers.json')));
+  const briefings = parseBriefings(readJson(path.join(DATA_DIR, 'journey', 'briefings.json')));
   const vintage = vintages.find((v) => v.id === defaultVintageId);
   const rules = ruleSets.find((r) => r.id === defaultRulesId);
   if (!vintage) throw new Error(`default vintage ${defaultVintageId} not found`);
   if (!rules) throw new Error(`default rule set ${defaultRulesId} not found`);
-  return { sources, vintage, rules, levers, presets, households, contexts, vintages, ruleSets };
+  return {
+    sources,
+    vintage,
+    rules,
+    levers,
+    presets,
+    households,
+    contexts,
+    advisers,
+    briefings,
+    vintages,
+    ruleSets,
+  };
 }

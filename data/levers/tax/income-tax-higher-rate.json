@@ -26,7 +26,18 @@
     "max": 10,
     "step": 1,
     "default": 0,
-    "formatLabel": "pence in the pound"
+    "formatLabel": "pence in the pound",
+    "level": {
+      "baseline": 40,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Higher rate of income tax",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-income-tax-rates"
+      },
+      "note": "40% in every Finance Act since 2007-08 cited here."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

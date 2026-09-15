@@ -1,6 +1,8 @@
 import type { ZodType } from 'zod';
 import { DataError } from './errors.js';
 import {
+  advisersFileSchema,
+  briefingsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
   householdsReferenceSchema,
@@ -14,6 +16,8 @@ import {
   vintageSchema,
 } from './schema/index.js';
 import type {
+  AdvisersFile,
+  BriefingsFile,
   ContextFile,
   HmrcExtract,
   HouseholdsReference,
@@ -96,6 +100,14 @@ export function parseContext(json: unknown): ContextFile {
   return parseWith(contextFileSchema, json, 'context file');
 }
 
+export function parseAdvisers(json: unknown): AdvisersFile {
+  return parseWith(advisersFileSchema, json, 'advisers');
+}
+
+export function parseBriefings(json: unknown): BriefingsFile {
+  return parseWith(briefingsFileSchema, json, 'briefings');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -105,6 +117,8 @@ export interface Dataset {
   households?: HouseholdsReference;
   /** "What has changed since the forecast" files, newest last. */
   contexts?: ContextFile[];
+  advisers?: AdvisersFile;
+  briefings?: BriefingsFile;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -131,6 +145,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.presets ?? null,
       ds.households ?? null,
       ds.contexts ?? null,
+      ds.briefings ?? null,
     ],
     referenced,
   );
@@ -196,7 +211,45 @@ export function validateDataset(ds: Dataset): string[] {
       if (!codes.has(code)) problems.push(`preset ${preset.id} sets unknown lever code ${code}`);
     }
   }
+  const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
+  const groupsByStep = {
+    taxes: new Set(ds.levers.filter((l) => l.category === 'tax').map((l) => l.group ?? '')),
+    spending: new Set(
+      ds.levers
+        .filter((l) => l.category === 'spend' || l.category === 'welfare')
+        .map((l) => l.group ?? ''),
+    ),
+  };
+  const briefingIds = new Set<string>();
+  for (const briefing of ds.briefings?.briefings ?? []) {
+    if (briefingIds.has(briefing.id)) problems.push(`duplicate briefing id ${briefing.id}`);
+    briefingIds.add(briefing.id);
+    const adviser = adviserById.get(briefing.adviser);
+    if (!adviser) {
+      problems.push(`briefing ${briefing.id} names unknown adviser ${briefing.adviser}`);
+    } else if (!adviser.steps.includes(briefing.step)) {
+      problems.push(
+        `briefing ${briefing.id}: adviser ${adviser.id} does not speak on ${briefing.step}`,
+      );
+    }
+    if (briefing.group) {
+      const groups =
+        briefing.step === 'taxes'
+          ? groupsByStep.taxes
+          : briefing.step === 'spending'
+            ? groupsByStep.spending
+            : undefined;
+      if (!groups || !groups.has(briefing.group)) {
+        problems.push(
+          `briefing ${briefing.id}: no lever group "${briefing.group}" on step ${briefing.step}`,
+        );
+      }
+    }
+  }
   for (const context of ds.contexts ?? []) {
+    if (adviserById.size > 0 && !adviserById.has(context.adviser)) {
+      problems.push(`context ${context.id} names unknown adviser ${context.adviser}`);
+    }
     if (context.vintageId !== ds.vintage.id) {
       problems.push(
         `context ${context.id} compares against vintage ${context.vintageId}, not ${ds.vintage.id}`,

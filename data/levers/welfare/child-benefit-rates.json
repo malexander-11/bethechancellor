@@ -23,7 +23,18 @@
     "max": 10,
     "step": 1,
     "default": 0,
-    "formatLabel": "a week on both rates"
+    "formatLabel": "a week on both rates",
+    "level": {
+      "baseline": 27.05,
+      "unit": "GBPperWeek",
+      "apply": "add",
+      "label": "Child benefit, eldest or only child",
+      "decimals": 2,
+      "source": {
+        "sourceId": "govuk-child-benefit-rates"
+      },
+      "note": "£17.90 a week for each additional child moves by the same amount."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

@@ -25,7 +25,18 @@
     "max": 4,
     "step": 0.5,
     "default": 0,
-    "formatLabel": "percentage points"
+    "formatLabel": "percentage points",
+    "level": {
+      "baseline": 8,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Employee National Insurance main rate",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-nics-rates"
+      },
+      "note": "8% since 6 April 2024; 10% from January 2024 and 12% before."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

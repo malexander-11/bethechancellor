@@ -27,7 +27,17 @@
     "max": 10,
     "step": 1,
     "default": 0,
-    "formatLabel": "change in the basic rate band"
+    "formatLabel": "change in the basic rate band",
+    "level": {
+      "baseline": 50270,
+      "unit": "GBP",
+      "apply": "pctChange",
+      "label": "Higher-rate threshold",
+      "source": {
+        "sourceId": "govuk-income-tax-rates"
+      },
+      "note": "Personal allowance £12,570 plus the basic rate limit £37,700; frozen to April 2031."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

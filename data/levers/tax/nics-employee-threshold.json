@@ -27,7 +27,17 @@
     "max": 3120,
     "step": 104,
     "default": 0,
-    "formatLabel": "a year, on the threshold"
+    "formatLabel": "a year, on the threshold",
+    "level": {
+      "baseline": 12570,
+      "unit": "GBP",
+      "apply": "add",
+      "label": "Employee National Insurance threshold (a year)",
+      "source": {
+        "sourceId": "govuk-nics-rates"
+      },
+      "note": "£242 a week, £12,570 a year; the slider moves in steps of £2 a week."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

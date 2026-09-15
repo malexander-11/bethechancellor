@@ -32,6 +32,8 @@ describe('every JSON file under data/ validates against its schema', () => {
       'rules/charter-2026-02.json',
       'presets/presets.json',
       'reference/uk-households.json',
+      'journey/advisers.json',
+      'journey/briefings.json',
     ]);
     for (const file of listJsonFiles(DATA_DIR)) {
       const rel = path.relative(DATA_DIR, file);

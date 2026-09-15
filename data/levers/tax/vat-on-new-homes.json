@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "id": "vat-on-new-homes",
+  "code": "vathome",
+  "category": "tax",
+  "badge": "direct",
+  "group": "VAT",
+  "order": 80,
+  "title": "Charge VAT on new homes",
+  "shortTitle": "VAT on new homes",
+  "description": "Charge the standard 20% rate of VAT on the construction and first sale of new dwellings, currently zero-rated. HMRC puts the cost of the current relief at £14.6bn in 2025-26; that is the static cost of the relief, not a forecast of what charging VAT would raise.",
+  "baselinePolicy": {
+    "text": "Construction and the first freehold or long leasehold sale of new dwellings, and of buildings for relevant residential or charitable purposes, are zero-rated (VAT Notice 708).",
+    "source": {
+      "sourceId": "govuk-vat-goods-rates"
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "vat",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2025-26": 14600
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "table": "Table 2"
+    },
+    "rawSource": {
+      "kind": "hmrcReliefCost",
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "rows": [
+        {
+          "rowId": "vat-ns3",
+          "name": "Construction and sale of new dwellings (includes refunds to DIY builders)",
+          "values": {
+            "2025-26": 14600
+          }
+        }
+      ],
+      "note": "HMRC's estimate of the cost of the relief in 2025-26 (its latest year), carried forward with the OBR's VAT receipts path."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "vat",
+      "note": "The 2025-26 relief cost is applied from the start year and scaled by the OBR's VAT receipts forecast (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: \"These figures should be interpreted as estimates of the amount of relief which is claimed and subsequently granted each year. These estimates do not represent the gain to the exchequer should a relief be abolished.\" The toggle shows that static cost as revenue; the true yield would be lower once buyers respond and would depend on transitional arrangements.",
+      "HMRC's description of the relief: Zero rating of construction and sale of new relevant residential and relevant charitable buildings."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The figure is the cost of the relief with today's spending patterns. Charging VAT would raise prices, so people would buy less of these goods and more of others; HMRC's ready reckoner for the standard rate builds in such responses, but its relief cost estimates do not.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-quality-report",
+          "paragraph": "4"
+        },
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ]
+    },
+    {
+      "id": "largest-reliefs",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Zero and reduced rates are among the largest reliefs in the tax system: HMRC costs food at £27.4bn, new dwellings £14.6bn, domestic fuel and power £7.0bn, domestic passenger transport £5.8bn, children's clothing £2.3bn and printed matter £1.7bn in 2025-26. Who bears a change depends on how much of their spending households put on these goods, which this tool does not model.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-2026-01",
+          "table": "Table 2"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "vat-standard-rate",
+      "text": "The relief cost is valued at today's 20% standard rate; changing the standard rate changes what these toggles would raise.",
+      "severity": "info"
+    }
+  ]
+}

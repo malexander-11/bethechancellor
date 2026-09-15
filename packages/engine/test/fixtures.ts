@@ -2,6 +2,8 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  parseAdvisers,
+  parseBriefings,
   parseContext,
   parseHmrcExtract,
   parseHouseholds,
@@ -48,6 +50,8 @@ export function loadDataset(): Required<Dataset> {
     contexts: listJsonFiles(path.join(DATA_DIR, 'context')).map((f) =>
       parseContext(JSON.parse(readFileSync(f, 'utf8'))),
     ),
+    advisers: parseAdvisers(readJson('journey/advisers.json')),
+    briefings: parseBriefings(readJson('journey/briefings.json')),
   };
 }
 

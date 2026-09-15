@@ -26,7 +26,18 @@
     "max": 10,
     "step": 1,
     "default": 0,
-    "formatLabel": "percentage points on the higher rate"
+    "formatLabel": "percentage points on the higher rate",
+    "level": {
+      "baseline": 24,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Higher rate of capital gains tax",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-cgt-rates"
+      },
+      "note": "24% for higher and additional rate taxpayers since 30 October 2024; 20% before."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

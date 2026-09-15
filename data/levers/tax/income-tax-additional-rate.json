@@ -25,7 +25,18 @@
     "max": 5,
     "step": 1,
     "default": 0,
-    "formatLabel": "pence in the pound"
+    "formatLabel": "pence in the pound",
+    "level": {
+      "baseline": 45,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Additional rate of income tax",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-income-tax-rates"
+      },
+      "note": "45% since 2013-14 (Finance Act 2012, section 1); 50% in 2012-13."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

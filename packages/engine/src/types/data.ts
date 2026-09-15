@@ -30,6 +30,13 @@ import type {
   sr25ExtractSchema,
 } from '../schema/derived.schema.js';
 import type {
+  adviserSchema,
+  advisersFileSchema,
+  briefingSchema,
+  briefingsFileSchema,
+  journeyStepSchema,
+} from '../schema/journey.schema.js';
+import type {
   contextFileSchema,
   contextReadingSchema,
   suggestionRuleSchema,
@@ -70,6 +77,11 @@ export type ReliefExtract = z.infer<typeof reliefExtractSchema>;
 export type ContextFile = z.infer<typeof contextFileSchema>;
 export type ContextReading = z.infer<typeof contextReadingSchema>;
 export type SuggestionRule = z.infer<typeof suggestionRuleSchema>;
+export type JourneyStep = z.infer<typeof journeyStepSchema>;
+export type Adviser = z.infer<typeof adviserSchema>;
+export type AdvisersFile = z.infer<typeof advisersFileSchema>;
+export type Briefing = z.infer<typeof briefingSchema>;
+export type BriefingsFile = z.infer<typeof briefingsFileSchema>;
 export type RawSource = z.infer<typeof rawSourceSchema>;
 export type TaxHead = z.infer<typeof taxHeadSchema>;
 export type SpendingHead = z.infer<typeof spendingHeadSchema>;

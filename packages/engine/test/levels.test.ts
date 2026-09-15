@@ -68,21 +68,10 @@ describe('level display helpers', () => {
 
   it('describes a change as "from → to" only when the lever has level metadata', () => {
     const itbr = ds.levers.find((l) => l.code === 'itbr');
-    if (!itbr) throw new Error('missing itbr');
-    const withLevel = {
-      ...itbr,
-      control: {
-        ...itbr.control,
-        level: {
-          baseline: 20,
-          unit: 'pct' as const,
-          apply: 'add' as const,
-          label: 'Basic rate',
-          source: src,
-        },
-      },
-    };
-    expect(describeLevelChange(parseLever(withLevel), 1)).toBe('20.0% → 21.0%');
-    expect(describeLevelChange(itbr, 1)).toBeNull();
+    const alc = ds.levers.find((l) => l.code === 'alc');
+    if (!itbr || !alc) throw new Error('missing levers');
+    expect(describeLevelChange(itbr, 1)).toBe('20% → 21%');
+    expect(describeLevelChange(parseLever(itbr), -1)).toBe('20% → 19%');
+    expect(describeLevelChange(alc, 5)).toBeNull();
   });
 });

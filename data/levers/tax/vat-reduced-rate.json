@@ -23,7 +23,18 @@
     "max": 10,
     "step": 1,
     "default": 0,
-    "formatLabel": "percentage points"
+    "formatLabel": "percentage points",
+    "level": {
+      "baseline": 5,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Reduced rate of VAT",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-vat-rates"
+      },
+      "note": "5% on domestic fuel and power, children's car seats and a few other items."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

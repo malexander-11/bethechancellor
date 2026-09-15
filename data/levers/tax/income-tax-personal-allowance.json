@@ -27,7 +27,17 @@
     "max": 1250,
     "step": 50,
     "default": 0,
-    "formatLabel": "added to the allowance"
+    "formatLabel": "added to the allowance",
+    "level": {
+      "baseline": 12570,
+      "unit": "GBP",
+      "apply": "add",
+      "label": "Personal allowance",
+      "source": {
+        "sourceId": "govuk-income-tax-rates"
+      },
+      "note": "£12,570 in every year from 2022-23 to 2030-31 under Finance Act 2021, section 5, as amended."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

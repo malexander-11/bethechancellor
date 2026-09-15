@@ -25,7 +25,17 @@
     "max": 4,
     "step": 0.5,
     "default": 0,
-    "formatLabel": "percentage points"
+    "formatLabel": "percentage points",
+    "level": {
+      "baseline": 2,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Employee National Insurance rate above the upper earnings limit",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-nics-rates"
+      }
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

@@ -27,7 +27,18 @@
     "max": 20,
     "step": 1,
     "default": 0,
-    "formatLabel": "change in duty rates"
+    "formatLabel": "change in duty rates",
+    "level": {
+      "baseline": 57.95,
+      "unit": "pence",
+      "apply": "pctChange",
+      "label": "Fuel duty per litre",
+      "decimals": 2,
+      "source": {
+        "sourceId": "hmt-budget-2025-table-4-1"
+      },
+      "note": "52.95p today (since 23 March 2022). Budget 2025 planned rises of 1p in September 2026, 2p in December 2026 and 2p in March 2027, taking the rate to 57.95p before RPI uprating from April 2027; the level shown is your change applied to that planned rate."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

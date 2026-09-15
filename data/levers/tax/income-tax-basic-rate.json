@@ -26,7 +26,18 @@
     "max": 5,
     "step": 1,
     "default": 0,
-    "formatLabel": "pence in the pound"
+    "formatLabel": "pence in the pound",
+    "level": {
+      "baseline": 20,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Basic rate of income tax",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-income-tax-rates"
+      },
+      "note": "20% since 2008-09 (Finance Act 2008, section 1); 22% in 2007-08."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

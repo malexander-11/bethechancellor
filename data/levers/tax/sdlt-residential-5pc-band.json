@@ -23,7 +23,17 @@
     "max": 5,
     "step": 1,
     "default": 0,
-    "formatLabel": "percentage points on the 5% band"
+    "formatLabel": "percentage points on the 5% band",
+    "level": {
+      "baseline": 5,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Stamp duty rate on the £250,001 to £925,000 slice",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-sdlt-rates"
+      }
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

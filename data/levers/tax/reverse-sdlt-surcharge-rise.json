@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "id": "reverse-sdlt-surcharge-rise",
+  "code": "rvhrad",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital taxes",
+  "order": 40,
+  "title": "Cut the stamp duty surcharge on additional homes back to 3%",
+  "shortTitle": "Surcharge back to 3%",
+  "description": "Autumn Budget 2024 raised the stamp duty surcharge on second homes and buy-to-let purchases from 3 to 5 percentage points. Switch this on to return it to 3 points from April 2027, giving up the Treasury's costing (£0.3bn in 2029-30).",
+  "baselinePolicy": {
+    "text": "Higher rates for additional dwellings 5 percentage points above the standard rates since 31 October 2024 (Autumn Budget 2024, Table 5.1 line 25).",
+    "source": {
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "table": "Table 5.1",
+      "note": "line 25"
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2027-28": -255,
+      "2028-29": -280,
+      "2029-30": -310
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "table": "Table 5.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "lines": [
+        {
+          "number": 25,
+          "title": "Stamp Duty Land Tax (SDLT): Increase the Higher Rate of Additional Dwelling (HRAD) of SDLT by 2ppts from 3% to 5% from 31 October 2024",
+          "values": {
+            "2024-25": 115,
+            "2025-26": 90,
+            "2026-27": 170,
+            "2027-28": 255,
+            "2028-29": 280,
+            "2029-30": 310
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury's costing with its sign reversed for 2027-28 to 2029-30; 2030-31 carries the 2029-30 figure forward with the OBR's capital taxes receipts path."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "capitalTaxes",
+      "note": "Applied in the years the scorecard covers and extended to 2030-31 with the OBR's capital taxes receipts (ADR-0004)."
+    },
+    "caveats": [
+      "The Treasury's costing is on the OBR's October 2024 forecast and reflects the property market then expected; the level is not rebased."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified costing of the surcharge rise, including the transactions response the Treasury and OBR agreed.",
+      "sources": [
+        {
+          "sourceId": "hmt-autumn-budget-2024-table-5-1",
+          "table": "Table 5.1"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "sdlt-residential-5pc-band",
+      "text": "Both change stamp duty on residential purchases; HMRC's band figures are for main homes and the surcharge applies on top.",
+      "severity": "info"
+    }
+  ]
+}

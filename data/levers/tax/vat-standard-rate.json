@@ -24,7 +24,18 @@
     "max": 3,
     "step": 1,
     "default": 0,
-    "formatLabel": "percentage points"
+    "formatLabel": "percentage points",
+    "level": {
+      "baseline": 20,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Standard rate of VAT",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-vat-rates"
+      },
+      "note": "20% since 4 January 2011; 17.5% before."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

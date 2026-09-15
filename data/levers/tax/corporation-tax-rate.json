@@ -24,7 +24,18 @@
     "max": 5,
     "step": 1,
     "default": 0,
-    "formatLabel": "percentage points"
+    "formatLabel": "percentage points",
+    "level": {
+      "baseline": 25,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Main rate of corporation tax",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-corporation-tax-rates"
+      },
+      "note": "25% since April 2023; 19% in 2022. The 19% small profits rate is unchanged by this lever."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {

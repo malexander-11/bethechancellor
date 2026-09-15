@@ -13,6 +13,8 @@ export {
   parseSr25Extract,
   parseReliefExtract,
   parseContext,
+  parseAdvisers,
+  parseBriefings,
   parseVintage,
   validateDataset,
   type Dataset,

@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "reverse-cgt-rate-rise",
+  "code": "rvcgt",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital taxes",
+  "order": 20,
+  "title": "Reverse the October 2024 capital gains tax rate rise",
+  "shortTitle": "Reverse 2024 CGT rise",
+  "description": "Autumn Budget 2024 raised the main rates of capital gains tax to 18% and 24% (from 10% and 20%) and raised the Business Asset Disposal Relief and Investors' Relief rate to 14% and then 18%. Switch this on to reverse the package from April 2027, giving up the Treasury's costing of it (£2.5bn in 2029-30).",
+  "baselinePolicy": {
+    "text": "Main rates of capital gains tax 18% and 24% since 30 October 2024, with the Business Asset Disposal Relief and Investors' Relief rate 14% from April 2025 and 18% from April 2026 (Autumn Budget 2024, Table 5.1 line 27).",
+    "source": {
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "table": "Table 5.1",
+      "note": "line 27"
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2027-28": -1350,
+      "2028-29": -2180,
+      "2029-30": -2490
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "table": "Table 5.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "lines": [
+        {
+          "number": 27,
+          "title": "Capital Gains Tax: Increase the main rates of CGT to 18% and 24% from 30 October 2024, and the Business Asset Disposal Relief (BADR) and Investors' Relief (IR) rate to 14% from 6 April 2025 and to 18% from 6 April 2026",
+          "values": {
+            "2024-25": 90,
+            "2025-26": 1440,
+            "2026-27": 1370,
+            "2027-28": 1350,
+            "2028-29": 2180,
+            "2029-30": 2490
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury's costing with its sign reversed for 2027-28 to 2029-30; 2030-31 carries the 2029-30 figure forward with the OBR's capital taxes receipts path."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "capitalTaxes",
+      "note": "Applied in the years the scorecard covers and extended to 2030-31 with the OBR's capital taxes receipts (ADR-0004)."
+    },
+    "caveats": [
+      "The Treasury's line covers the whole package, including the Business Asset Disposal Relief and Investors' Relief changes; the main-rate part cannot be separated from published figures. The costing is on the OBR's October 2024 forecast; the level is not rebased."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified costing of the October 2024 package, including the behavioural response the Treasury and OBR agreed at the time.",
+      "sources": [
+        {
+          "sourceId": "hmt-autumn-budget-2024-table-5-1",
+          "table": "Table 5.1"
+        }
+      ]
+    },
+    {
+      "id": "forestalling",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The OBR notes that capital gains tax receipts rose about 60% in 2025-26 because disposals were brought forward ahead of the October 2024 rate rise, with the tax paid in January 2026. Timing responses of that kind mean the yield of a rate change in any single year can differ sharply from the steady state.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "3.24-3.25"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "cgt-higher-rate",
+      "text": "Both change capital gains tax rates: HMRC's points assume today's 24% rate, while the reversal is costed on the October 2024 forecast, so the combination is approximate.",
+      "severity": "warn"
+    }
+  ]
+}
