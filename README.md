@@ -4,13 +4,16 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 3 (spending levers)**. The fiscal rules, the OBR March 2026 baseline, the
-calculation engine and the verdict screen exist, with three economic assumption sliders, 23 tax
-levers costed from HMRC's ready reckoner and the Treasury's Budget 2025 scorecard, and 19
-spending levers: eight departments plus a residual scaled from the Spending Review 2025
-settlements, public investment, four OBR welfare lines, child benefit rates and four toggles that
-reverse Budget 2025 spending decisions. Barnett consequentials are described, not computed.
-Phase 4 adds polish, share previews and the rebase to the 28 October 2026 forecast.
+Status: **Phase 4 (the guided journey)**. You are appointed Chancellor with a Budget to deliver
+on 28 October 2026. Step 1 confirms the economic assumptions (the OBR's March 2026 view against
+the latest market and independent readings, with the advisers' suggested settings); step 2 sets
+taxes and spending under a live scorecard, with every control showing the level it moves to;
+step 3 is Budget day: the verdict on each fiscal rule, your measures, and what the advisers want
+on the record. Under the hood: the OBR March 2026 baseline, 31 tax levers (HMRC ready reckoner,
+Budget 2025 and Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT
+base-broadening options, inheritance tax up to abolition), 19 spending levers (Spending Review
+2025 settlements, OBR welfare lines, Budget 2025 spending decisions) and five adviser roles whose
+every sentence cites a public document. Next: the rebase to the 28 October 2026 forecast.
 
 ## Principles
 
@@ -32,7 +35,7 @@ See `docs/methodology.md` for the accounting spine and `docs/adr/` for design de
 apps/web            Vite + React front end (deployed on Vercel)
 packages/engine     pure TypeScript fiscal engine, schemas and tests
 packages/pipeline   scripts that fetch, extract and validate source data
-data/               sourced JSON: vintages, rules, levers, references, raw source files
+data/               sourced JSON: vintages, rules, levers, context readings, adviser briefings, raw source files
 docs/               methodology and architecture decision records
 ```
 

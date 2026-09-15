@@ -255,3 +255,70 @@ other than those in the baseline; depreciation on new capital spending; classifi
 property tests for the accounting identities, and unit tests for the rule logic. Everything
 under `data/` is validated against the engine's schemas, and `data/derived/` is regenerated
 by the pipeline in CI and compared with the committed files.
+
+## 11. The guided journey (ADR-0007)
+
+From Phase 4 the app is a walk-through rather than a single sandbox page: **Start** (the
+scenario: appointed Chancellor, Budget on 28 October 2026), **Step 1 Assumptions**, **Step 2
+Taxes and spending** (two tabs under a scorecard) and **Step 3 Budget day**. The budget travels
+between steps in the URL's query string, so any step can be linked to; old `/b` links redirect
+into the taxes tab.
+
+### Advisers
+
+Five roles, no people: Permanent Secretary, Chief Economic Adviser, Director of Tax, Director of
+Public Spending and Political Adviser (`data/journey/advisers.json`). Everything they say is an
+authored paragraph in `data/journey/briefings.json` with at least one source per paragraph, or
+an existing lever consideration; the validator checks that every adviser exists, speaks on the
+step, and that every group briefing names a real lever group. On Budget day the closing notes
+are the considerations of the levers the player moved, routed to an adviser by kind:
+behavioural and interaction notes to the tax or spending director, macro and market notes to the
+Chief Economic Adviser, administrative notes to the Permanent Secretary, distributional,
+devolution and legal notes to the Political Adviser. No text is generated.
+
+### The assumptions step and the suggestion rule
+
+`data/context/2026-09.json` holds dated readings, each with the OBR's March figure and the
+latest figure and their sources: the 10-year gilt yield (Bank of England), Bank Rate, real GDP
+growth, CPI and RPI (averages of independent forecasts compiled by HM Treasury, plus ONS
+outturns) and borrowing. Readings that drive a slider carry a suggestion rule. The `gap` rule
+is mechanical: latest minus OBR (the mean over shared years for a series), rounded to the
+slider's step and clamped to its range; with the September 2026 readings that gives +0.75
+points on the rates slider (5.35% against 4.5%) and +0.5 on RPI (an average gap of 0.46). An
+`authored` rule carries a value and its reasoning, used for growth, where weaker real growth and
+higher inflation roughly cancel on nominal GDP. Suggestions are badged as assumptions; the OBR's
+own path is one click away.
+
+### The scorecard
+
+For the stability rule's target year: headroom (the big number, against the OBR's March
+figure and the typical forecast error), the three verdicts, the current budget balance,
+borrowing, net financial liabilities as a share of GDP and borrowing as a share of GDP, each as
+March → yours. All come from the same outcome the verdict cards use.
+
+### Levels, not deltas
+
+Controls show the level a setting moves to: "20% → 21%", "£12,570 → £13,070", "£50,270 →
+£55,297", "57.95p → 60.85p", "£232.0bn → £236.6bn in 2028-29". The level is display metadata
+(`control.level`: baseline, unit, add or percentage change, source), or for
+percentage-of-baseline levers the baseline path itself. The engine still costs the change, the
+permalink still stores the change, and no baseline enters the arithmetic. Inheritance tax is a
+select (abolish, 30%, 35%, 40%, 45%, 50%); the engine snaps a select to its nearest offered
+option, so a hand-edited link cannot land between options.
+
+### New direct costings in Phase 4
+
+- **VAT base-broadening toggles** (food, domestic energy, children's clothing, printed matter,
+  passenger transport, new homes) use HMRC's _Estimated cost of tax reliefs_ (January 2026,
+  Table 2, 2025-26), carried forward with the OBR's VAT receipts path. HMRC's caveat is quoted
+  on every toggle: the figures "do not represent the gain to the exchequer should a relief be
+  abolished". They are shown as the static cost of the relief; the true yield would be lower.
+- **Reversing the October 2024 CGT rate rise** and **cutting the additional-dwellings stamp
+  duty surcharge back to 3%** use Autumn Budget 2024 Table 5.1 (lines 27 and 25) with the sign
+  reversed for 2027-28 to 2029-30 and the capital taxes head for 2030-31; the CGT line bundles
+  the Business Asset Disposal Relief and Investors' Relief changes, which the toggle says.
+- **Inheritance tax abolition** removes the OBR's forecast inheritance tax receipts (EFO Table
+  A.5, now in the vintage as `receiptsByTax`) year by year; rises use HMRC's 1 percentage point
+  row and cuts mirror it, an assumption the drawer states.
+- **Insurance premium tax** is retired: its code stays reserved and old links decode with a
+  warning.

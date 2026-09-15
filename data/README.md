@@ -10,6 +10,9 @@ rules/<id>.json           a Charter for Budget Responsibility rule set
 levers/<category>/*.json  policy levers (tax, spend, welfare) and assumption sliders (macro)
 reference/*.json          non-forecast reference numbers (e.g. UK households)
 presets/presets.json      named combinations of lever settings
+context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the latest figures, with suggestion rules
+journey/advisers.json     the adviser roles (titles, remits, steps)
+journey/briefings.json    sourced adviser briefings per step and lever group
 raw/<source-id>/          committed copies of small source files, with sha256 in the registry
 derived/                  pipeline outputs (regenerated in CI and compared with the commit)
 ```
@@ -51,6 +54,25 @@ vintage in the web app, and keep the old vintage so existing permalinks still re
    `alreadyInDirectCosting: true` when the published figure already contains the behaviour.
 6. Give the lever a `group`, an `order`, a unique stable `code`, and set `status: reviewed` with
    `reviewedOn` once the above is checked.
+
+### Levels and the journey
+
+- **Levels.** Give a rate or threshold lever `control.level` (`baseline`, `unit`, `apply: add |
+pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows "20% → 21%".
+  The level never enters the costing; percentage-of-baseline levers need no level metadata.
+- **Selects.** `control.kind: "select"` with `labels` keyed by value ("-40": "Abolish (0%)");
+  the engine snaps to the nearest offered option.
+- **Relief-cost toggles.** `rawSource.kind: "hmrcReliefCost"` cites rows of
+  `derived/hmrc-tax-reliefs-2026-01.raw.json`; `perUnit` is the published cost for the cited
+  year, uprated with the tax head. Quote HMRC's caveat in the caveats.
+- **Scorecard-backed toggles.** A `linearPerUnit` toggle may cite `hmtScorecard` lines from any
+  extracted scorecard (Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is minus the
+  summed lines for the cited years on the receipts side.
+- **Vintage-series lookup points.** `points[].from.vintageSeries` ("receiptsByTax.inheritanceTax")
+  with a `multiplier`; checked against the vintage.
+- **Briefings** need an existing adviser who speaks on the step, a real lever group for group
+  briefings, and at least one source per paragraph. **Context readings** that name a
+  `leverCode` need a `suggestion` rule (`gap` or `authored`).
 
 ### Spending levers
 
