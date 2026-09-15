@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "charter-2026-02",
+  "permalinkCode": "ch2602",
+  "title": "Charter for Budget Responsibility: Autumn 2025 (in force February 2026)",
+  "inForceFrom": "2026-02-24",
+  "source": { "sourceId": "hmt-charter-2025-autumn", "paragraph": "3.6-3.11" },
+  "assessment": {
+    "formalCadence": "Once a year, at the autumn Budget, by the Office for Budget Responsibility.",
+    "nextFormalAssessmentOn": "2026-10-28",
+    "note": "The March 2026 forecast was not a formal assessment. The forecast published on 28 October 2026 will cover 2027-28 to 2031-32, making 2029-30 the third year and switching both rules to their rolling form."
+  },
+  "escapeClause": {
+    "text": "In the event of an emergency, or a significant negative economic shock to the UK economy, the Chancellor of the Exchequer may temporarily suspend the fiscal mandate and supplementary targets. When making this determination, the Chancellor of the Exchequer must write to the OBR seeking its assessment of the severity of the shock, and its potential impact on the public finances.",
+    "source": { "sourceId": "hmt-charter-2025-autumn", "paragraph": "3.9-3.10" }
+  },
+  "rules": [
+    {
+      "kind": "currentBudget",
+      "id": "stability",
+      "name": "Stability rule",
+      "fixedTargetYear": "2029-30",
+      "rollingFromThirdYear": true,
+      "requirementBeforeRolling": "surplus",
+      "requirementOnceRolling": "balanceOrSurplus",
+      "balanceTolerancePctGdp": 0.5,
+      "charterText": "The current budget must be in surplus in 2029-30, until 2029-30 becomes the third year of the forecast period. From that point, the current budget must then remain in balance or in surplus from the third year of the rolling forecast period.",
+      "toleranceText": "Balance is defined as a range: in surplus, or in deficit of no more than 0.5% of GDP. If the range is used between fiscal events, the current budget must return to surplus from the third year at the following fiscal event.",
+      "plainEnglish": "Day-to-day spending must be covered by tax and other revenue in the target year. Borrowing is only allowed for investment.",
+      "source": { "sourceId": "hmt-charter-2025-autumn", "paragraph": "3.6" },
+      "toleranceSource": {
+        "sourceId": "hmt-strong-fiscal-framework-2024-10",
+        "paragraph": "Box 1 and 1.12"
+      }
+    },
+    {
+      "kind": "stockFalling",
+      "id": "investment",
+      "name": "Investment rule",
+      "metric": "psnfl",
+      "fixedTargetYear": "2029-30",
+      "rollingFromThirdYear": true,
+      "charterText": "A target to ensure debt, defined as Public Sector Net Financial Liabilities (PSNFL), is falling as a share of the economy by 2029-30, until 2029-30 becomes the third year of the forecast period. Debt should then fall by the third year of the rolling forecast period.",
+      "plainEnglish": "Government debt, measured as net financial liabilities, must be a smaller share of the economy in the target year than the year before.",
+      "source": { "sourceId": "hmt-charter-2025-autumn", "paragraph": "3.7" }
+    },
+    {
+      "kind": "welfareCap",
+      "id": "welfareCap",
+      "name": "Welfare cap",
+      "capYear": "2029-30",
+      "capGbpm": 194500,
+      "marginPct": 5,
+      "formalAssessment": "First Budget of each Parliament; monitored against the pathway and margin at other Budgets.",
+      "mode": "monitor",
+      "charterText": "To ensure that expenditure on welfare remains sustainable, a target to ensure that expenditure on welfare is contained within a predetermined cap and margin set by the Treasury.",
+      "plainEnglish": "Spending on most working-age and child benefits (not the state pension or unemployment benefits) must stay within a cash cap plus a 5% margin in 2029-30.",
+      "source": { "sourceId": "hmt-charter-2025-autumn", "paragraph": "3.8 and 3.33-3.44" },
+      "capSource": {
+        "sourceId": "ifg-current-fiscal-rules",
+        "note": "Cap of £194.5bn in 2029-30 with a 5% margin, as set at Autumn Budget 2024 and described by the IfG."
+      }
+    }
+  ]
+}

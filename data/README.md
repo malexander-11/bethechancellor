@@ -1,0 +1,34 @@
+# Data
+
+Everything the engine reads lives here as JSON validated by the schemas in
+`packages/engine/src/schema`. Nothing is hard-coded in the app.
+
+```
+sources/sources.json      registry of every source document (id, org, title, url, dates, licence)
+vintages/<id>/vintage.json  one OBR forecast: years, economy, fiscal aggregates, sensitivities, checks
+rules/<id>.json           a Charter for Budget Responsibility rule set
+levers/<category>/*.json  policy levers (tax, spend, welfare) and assumption sliders (macro)
+reference/*.json          non-forecast reference numbers (e.g. UK households)
+presets/presets.json      named combinations of lever settings
+raw/<source-id>/          committed copies of small source files, with sha256 in the registry
+derived/                  pipeline outputs (regenerated in CI and compared with the commit)
+```
+
+## Conventions
+
+- Money is in **£ million** (`unit: "GBPm"`). Shares of GDP are in per cent (`pctGDP`).
+- Fiscal years are `YYYY-YY` strings; calendar years are `YYYY`. A series declares which
+  (`periodicity: "FY" | "CY"`).
+- Every series, sensitivity and costing has a `source` (`{ sourceId, table?, page?,
+paragraph?, quote?, note? }`) pointing into `sources/sources.json`.
+- A number that was transformed from its source carries `derivation: [DerivationStep]` and,
+  if it rests on rounded inputs or an interim assumption, `provisional: true`.
+- Signs: receipts positive = more revenue; spending positive = more spending; PSNB positive
+  = borrowing. Convert source conventions at extraction and record a `signFlip` step.
+- Lever `code`s are short, stable and never reused; they appear in permalinks.
+- A lever is shown in production only when `status` is `reviewed`.
+
+## Rebasing to a new forecast
+
+Create `vintages/<new-id>/vintage.json`, run `npm run validate:data`, update the default
+vintage in the web app, and keep the old vintage so existing permalinks still render.

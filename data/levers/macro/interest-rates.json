@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "macro-interest-rates",
+  "code": "rate",
+  "category": "macro",
+  "badge": "assumption",
+  "title": "Interest rates (Bank Rate and gilt yields)",
+  "shortTitle": "Interest rates",
+  "description": "How much higher or lower interest rates are than the OBR assumed in March 2026, sustained across the forecast. Higher rates raise the cost of servicing government debt.",
+  "baselinePolicy": {
+    "text": "OBR conditioning assumption, March 2026: Bank Rate averages 3.6% over 2026 to 2030; 10-year gilt yield 4.5%; 30-year gilt yield 5.3% (market prices in the 10 working days to 22 January 2026).",
+    "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.1" }
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": -2,
+    "max": 3,
+    "step": 0.25,
+    "default": 0,
+    "formatLabel": "percentage points versus the OBR assumption"
+  },
+  "appliesFrom": "firstForecastYear",
+  "costing": { "kind": "sensitivity", "sensitivityId": "rates1pp" },
+  "considerations": [
+    {
+      "id": "rates-market-2026-09",
+      "kind": "market",
+      "direction": "costsMore",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Gilt yields rose sharply after the March 2026 forecast. In September 2026 the 10-year yield was roughly 0.5 to 0.7 percentage points above the OBR's assumption and 30-year yields were the highest since 1998. Analysts estimated this alone removed about £10bn of headroom.",
+      "sources": [
+        { "sourceId": "press-investing-2026-09-11" },
+        { "sourceId": "boe-iadb-bank-rate" }
+      ]
+    },
+    {
+      "id": "rates-feedback",
+      "kind": "interaction",
+      "direction": "costsMore",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Higher rates also raise the interest cost of any extra borrowing you choose (shown as the mechanical debt-interest line). A full OBR forecast would also change growth and inflation in response; this tool does not.",
+      "sources": [{ "sourceId": "obr-efo-2026-03", "paragraph": "6.16" }]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-15"
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "presets": [
+    {
+      "id": "obr-march-2026",
+      "title": "OBR March 2026 forecast",
+      "description": "No changes: the baseline as published by the OBR on 3 March 2026.",
+      "leverValues": {},
+      "badge": "direct",
+      "sources": [{ "sourceId": "obr-efo-2026-03" }]
+    },
+    {
+      "id": "higher-gilt-yields-2026-09",
+      "title": "Higher gilt yields, September 2026 (illustrative)",
+      "description": "Interest rates 0.75 percentage points above the March assumption, roughly the rise in gilt yields reported by September 2026. Everything else unchanged. This is not an OBR forecast.",
+      "leverValues": { "rate": 0.75 },
+      "badge": "assumption",
+      "sources": [
+        { "sourceId": "press-investing-2026-09-11" },
+        { "sourceId": "boe-iadb-bank-rate" }
+      ]
+    }
+  ]
+}

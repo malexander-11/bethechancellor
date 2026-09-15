@@ -1,0 +1,88 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { describe, expect, it } from 'vitest';
+import {
+  DataError,
+  leverSchema,
+  parseLever,
+  parseVintage,
+  seriesSchema,
+  validateDataset,
+} from '../src/index.js';
+import { DATA_DIR, listJsonFiles, loadDataset, readJson } from './fixtures.js';
+
+describe('every JSON file under data/ validates against its schema', () => {
+  const ds = loadDataset();
+
+  it('loads the full dataset and passes cross-file checks', () => {
+    expect(validateDataset(ds)).toEqual([]);
+    expect(ds.levers.length).toBeGreaterThanOrEqual(3);
+    expect(ds.levers.every((l) => l.status === 'reviewed')).toBe(true);
+  });
+
+  it('has no JSON file that is not covered by a parser', () => {
+    const covered = new Set([
+      'sources/sources.json',
+      'vintages/obr-2026-03/vintage.json',
+      'rules/charter-2026-02.json',
+      'presets/presets.json',
+      'reference/uk-households.json',
+    ]);
+    for (const file of listJsonFiles(DATA_DIR)) {
+      const rel = path.relative(DATA_DIR, file);
+      if (rel.startsWith('levers/')) {
+        expect(() => parseLever(JSON.parse(readFileSync(file, 'utf8')))).not.toThrow();
+      } else if (rel.startsWith('raw/') || rel.startsWith('derived/')) {
+        continue;
+      } else {
+        expect(covered.has(rel), `${rel} has no parser in the test`).toBe(true);
+      }
+    }
+  });
+
+  it('rejects a series whose year keys do not match its periodicity', () => {
+    const bad = seriesSchema.safeParse({
+      unit: 'GBPm',
+      periodicity: 'FY',
+      values: { '2029': 1 },
+      source: { sourceId: 'x' },
+    });
+    expect(bad.success).toBe(false);
+  });
+
+  it('rejects a macro lever with a direct costing and a tax lever without classification', () => {
+    const lever = readJson('levers/macro/interest-rates.json') as Record<string, unknown>;
+    const macroWithLinear = {
+      ...lever,
+      costing: {
+        kind: 'linearPerUnit',
+        unitDelta: 1,
+        perUnit: {},
+        basis: 'accruals',
+        symmetric: true,
+        source: { sourceId: 'x' },
+        uprating: { method: 'none' },
+        caveats: [],
+      },
+    };
+    expect(leverSchema.safeParse(macroWithLinear).success).toBe(false);
+    const taxWithoutClassification = { ...macroWithLinear, category: 'tax', badge: 'direct' };
+    expect(leverSchema.safeParse(taxWithoutClassification).success).toBe(false);
+  });
+
+  it('rejects a vintage whose forecast years are not consecutive', () => {
+    const vintage = structuredClone(readJson('vintages/obr-2026-03/vintage.json')) as {
+      years: { forecast: string[] };
+    };
+    vintage.years.forecast = ['2026-27', '2027-28', '2029-30', '2030-31', '2031-32'];
+    expect(() => parseVintage(vintage)).toThrow(DataError);
+  });
+
+  it('rejects a vintage that breaks the PSNI identity', () => {
+    const vintage = structuredClone(readJson('vintages/obr-2026-03/vintage.json')) as {
+      fiscal: { psni: { values: Record<string, number> } };
+    };
+    vintage.fiscal.psni.values['2029-30'] = 1;
+    expect(() => parseVintage(vintage)).toThrow(/identity PSNI/);
+  });
+});

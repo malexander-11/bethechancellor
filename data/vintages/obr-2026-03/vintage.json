@@ -1,0 +1,943 @@
+{
+  "schemaVersion": 1,
+  "id": "obr-2026-03",
+  "permalinkCode": "obr2603",
+  "organisation": "OBR",
+  "event": "Spring Forecast 2026: Economic and fiscal outlook, March 2026",
+  "publishedOn": "2026-03-03",
+  "primarySource": { "sourceId": "obr-efo-2026-03" },
+  "years": {
+    "outturn": ["2024-25"],
+    "inYear": "2025-26",
+    "forecast": ["2026-27", "2027-28", "2028-29", "2029-30", "2030-31"]
+  },
+  "economy": {
+    "nominalGdpFy": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 2935600,
+        "2025-26": 3056900,
+        "2026-27": 3165000,
+        "2027-28": 3273800,
+        "2028-29": 3389500,
+        "2029-30": 3510600,
+        "2030-31": 3632300
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 3.1 and Table 3.2",
+        "note": "Derived: current receipts (£bn, Table 3.2) divided by current receipts as a share of GDP (Table 3.1)."
+      },
+      "provisional": true,
+      "derivation": [
+        {
+          "op": "ratio",
+          "formula": "receipts £m ÷ (receipts % GDP ÷ 100), e.g. 2029-30: 1,492,000 ÷ 0.425 = 3,510,588",
+          "note": "Inputs are rounded to £1bn and 0.1% of GDP, so the result is accurate to roughly ±0.1%. Replace with the OBR supplementary economy table when committed."
+        }
+      ]
+    },
+    "nominalGdpCentred": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 3011100,
+        "2025-26": 3099500,
+        "2026-27": 3221600,
+        "2027-28": 3335300,
+        "2028-29": 3448700,
+        "2029-30": 3566900,
+        "2030-31": 3697900
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 5.6",
+        "note": "Derived: PSNFL £bn divided by PSNFL as a share of GDP, both from Table 5.6. Debt ratios use GDP centred on end-March."
+      },
+      "provisional": true,
+      "derivation": [
+        {
+          "op": "ratio",
+          "formula": "PSNFL £m ÷ (PSNFL % GDP ÷ 100), e.g. 2029-30: 2,932,000 ÷ 0.822 = 3,566,910",
+          "note": "Rounded inputs; accurate to roughly ±0.1%."
+        }
+      ]
+    },
+    "realGdpGrowth": {
+      "unit": "pct",
+      "periodicity": "CY",
+      "values": { "2025": 1.4, "2026": 1.1, "2027": 1.6, "2028": 1.6, "2029": 1.5, "2030": 1.5 },
+      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.2 and Chapter 2 summary" }
+    },
+    "cpiInflation": {
+      "unit": "pct",
+      "periodicity": "CY",
+      "values": { "2026": 2.3, "2027": 2.0, "2028": 2.0, "2029": 2.0, "2030": 2.0 },
+      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.2" }
+    },
+    "unemploymentRate": {
+      "unit": "pct",
+      "periodicity": "CY",
+      "values": { "2026": 5.3, "2027": 4.9, "2028": 4.4, "2029": 4.2, "2030": 4.1 },
+      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.2" }
+    },
+    "conditioningAssumptions": {
+      "bankRateAveragePct": {
+        "value": 3.6,
+        "period": "average 2026 to 2030",
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.1" }
+      },
+      "giltYield10yPct": {
+        "value": 4.5,
+        "period": "10 working days to 22 January 2026",
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.1", "paragraph": "2.5" }
+      },
+      "giltYield30yPct": {
+        "value": 5.3,
+        "period": "10 working days to 22 January 2026",
+        "source": { "sourceId": "obr-efo-2026-03", "paragraph": "2.5" }
+      },
+      "nominalGdpCumulativeGrowthPct": {
+        "value": 18.6,
+        "period": "2025-26 to 2030-31",
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 2.1" }
+      }
+    }
+  },
+  "fiscal": {
+    "psnb": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 152700,
+        "2025-26": 132700,
+        "2026-27": 115500,
+        "2027-28": 96500,
+        "2028-29": 86000,
+        "2029-30": 63400,
+        "2030-31": 59000
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 5.1",
+        "quote": "March 2026 PSNB forecast 152.7 132.7 115.5 96.5 86.0 63.4 59.0"
+      }
+    },
+    "currentBudgetDeficit": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2025-26": 49200,
+        "2026-27": 33900,
+        "2027-28": 4600,
+        "2028-29": -3300,
+        "2029-30": -23600,
+        "2030-31": -30300
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 5.1",
+        "quote": "March 2026 current budget deficit 49.2 33.9 4.6 -3.3 -23.6 -30.3",
+        "note": "Negative values are surpluses."
+      }
+    },
+    "psni": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2025-26": 83500,
+        "2026-27": 81600,
+        "2027-28": 91900,
+        "2028-29": 89300,
+        "2029-30": 87000,
+        "2030-31": 89300
+      },
+      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 5.1" },
+      "provisional": true,
+      "derivation": [
+        {
+          "op": "difference",
+          "formula": "PSNB − current budget deficit, e.g. 2029-30: 63,400 − (−23,600) = 87,000"
+        }
+      ]
+    },
+    "psnfl": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 2439000,
+        "2025-26": 2554000,
+        "2026-27": 2661000,
+        "2027-28": 2765000,
+        "2028-29": 2859000,
+        "2029-30": 2932000,
+        "2030-31": 2999000
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 5.6",
+        "quote": "March 2026 forecast 2,439 2,554 2,661 2,765 2,859 2,932 2,999"
+      }
+    },
+    "psnflPctGdp": {
+      "unit": "pctGDP",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 81.0,
+        "2025-26": 82.4,
+        "2026-27": 82.6,
+        "2027-28": 82.9,
+        "2028-29": 82.9,
+        "2029-30": 82.2,
+        "2030-31": 81.1
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 5.6",
+        "quote": "March 2026 forecast 81.0 82.4 82.6 82.9 82.9 82.2 81.1"
+      }
+    },
+    "psnflOtherFlows": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2025-26": -18100,
+        "2026-27": -7800,
+        "2027-28": 7300,
+        "2028-29": 8200,
+        "2029-30": 9000,
+        "2030-31": 8700
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 5.5",
+        "quote": "Valuation changes -18.1 -7.8 7.3 8.2 9.0 8.7",
+        "note": "Year-on-year change in PSNFL = PSNB + valuation changes (funded pensions, APF sales losses, gilt premia, other). Held fixed by the engine."
+      }
+    },
+    "receipts": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 1139000,
+        "2025-26": 1235000,
+        "2026-27": 1304000,
+        "2027-28": 1375000,
+        "2028-29": 1427000,
+        "2029-30": 1492000,
+        "2030-31": 1551000
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 3.2",
+        "quote": "March 2026 forecast 1,139 1,235 1,304 1,375 1,427 1,492 1,551"
+      }
+    },
+    "tme": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 1292000,
+        "2025-26": 1368000,
+        "2026-27": 1419000,
+        "2027-28": 1472000,
+        "2028-29": 1513000,
+        "2029-30": 1555000,
+        "2030-31": 1611000
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 4.2",
+        "quote": "March 2026 forecast 1,292 1,368 1,419 1,472 1,513 1,555 1,611"
+      }
+    },
+    "rdel": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2025-26": 522900,
+        "2026-27": 548200,
+        "2027-28": 563700,
+        "2028-29": 581800,
+        "2029-30": 594200,
+        "2030-31": 614200
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 4.4",
+        "quote": "March 2026 RDEL 522.9 548.2 563.7 581.8 594.2 614.2"
+      }
+    },
+    "cdel": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2025-26": 116600,
+        "2026-27": 122500,
+        "2027-28": 132800,
+        "2028-29": 132800,
+        "2029-30": 134200,
+        "2030-31": 138100
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 4.4",
+        "quote": "March 2026 CDEL 116.6 122.5 132.8 132.8 134.2 138.1"
+      }
+    },
+    "welfareTotal": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 314800,
+        "2025-26": 332900,
+        "2026-27": 352800,
+        "2027-28": 363100,
+        "2028-29": 373800,
+        "2029-30": 389900,
+        "2030-31": 406900
+      },
+      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+    },
+    "welfareInCap": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 158900,
+        "2025-26": 169100,
+        "2026-27": 177700,
+        "2027-28": 184200,
+        "2028-29": 191300,
+        "2029-30": 199200,
+        "2030-31": 207000
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 4.6",
+        "quote": "Inside welfare cap 158.9 169.1 177.7 184.2 191.3 199.2 207.0"
+      }
+    },
+    "welfareComponents": {
+      "pensionerSpending": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 151000,
+          "2025-26": 161200,
+          "2026-27": 169200,
+          "2027-28": 173900,
+          "2028-29": 178900,
+          "2029-30": 187500,
+          "2030-31": 196200
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+      },
+      "universalCreditAndLegacy": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 89200,
+          "2025-26": 91900,
+          "2026-27": 97800,
+          "2027-28": 98900,
+          "2028-29": 100300,
+          "2029-30": 103100,
+          "2030-31": 106200
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+      },
+      "disabilityBenefits": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 41400,
+          "2025-26": 45400,
+          "2026-27": 50200,
+          "2027-28": 53800,
+          "2028-29": 57300,
+          "2029-30": 61100,
+          "2030-31": 65500
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+      },
+      "childBenefit": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 13300,
+          "2025-26": 13400,
+          "2026-27": 13700,
+          "2027-28": 13800,
+          "2028-29": 13900,
+          "2029-30": 13900,
+          "2030-31": 14000
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+      },
+      "otherWelfare": {
+        "unit": "GBPm",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 19800,
+          "2025-26": 21000,
+          "2026-27": 21800,
+          "2027-28": 22700,
+          "2028-29": 23400,
+          "2029-30": 24300,
+          "2030-31": 25200
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.6" }
+      }
+    },
+    "debtInterestNetApf": {
+      "unit": "GBPm",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 105700,
+        "2025-26": 109700,
+        "2026-27": 109400,
+        "2027-28": 116700,
+        "2028-29": 125900,
+        "2029-30": 134700,
+        "2030-31": 137100
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 4.8",
+        "quote": "March 2026 forecast 105.7 109.7 109.4 116.7 125.9 134.7 137.1"
+      }
+    },
+    "receiptsByHeadPctGdp": {
+      "incomeTax": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 10.4,
+          "2025-26": 10.9,
+          "2026-27": 11.4,
+          "2027-28": 11.7,
+          "2028-29": 11.7,
+          "2029-30": 11.8,
+          "2030-31": 11.9
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "nics": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 5.8,
+          "2025-26": 6.7,
+          "2026-27": 6.7,
+          "2027-28": 6.7,
+          "2028-29": 6.7,
+          "2029-30": 6.8,
+          "2030-31": 6.8
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "vat": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 5.9,
+          "2025-26": 5.9,
+          "2026-27": 6.0,
+          "2027-28": 6.0,
+          "2028-29": 6.1,
+          "2029-30": 6.1,
+          "2030-31": 6.2
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "onshoreCorporationTax": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 3.1,
+          "2025-26": 3.2,
+          "2026-27": 3.2,
+          "2027-28": 3.3,
+          "2028-29": 3.3,
+          "2029-30": 3.4,
+          "2030-31": 3.4
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1",
+          "note": "Includes Pillar 2 taxes."
+        }
+      },
+      "capitalTaxes": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 1.4,
+          "2025-26": 1.7,
+          "2026-27": 1.7,
+          "2027-28": 1.9,
+          "2028-29": 2.1,
+          "2029-30": 2.2,
+          "2030-31": 2.3
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1",
+          "note": "Capital gains tax, inheritance tax, property transaction taxes and stamp taxes on shares."
+        }
+      },
+      "businessRates": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 1.1,
+          "2025-26": 1.1,
+          "2026-27": 1.2,
+          "2027-28": 1.2,
+          "2028-29": 1.1,
+          "2029-30": 1.2,
+          "2030-31": 1.2
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "fuelDuties": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 0.8,
+          "2025-26": 0.8,
+          "2026-27": 0.8,
+          "2027-28": 0.8,
+          "2028-29": 0.8,
+          "2029-30": 0.8,
+          "2030-31": 0.7
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "alcoholAndTobaccoDuties": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 0.7,
+          "2025-26": 0.7,
+          "2026-27": 0.6,
+          "2027-28": 0.6,
+          "2028-29": 0.6,
+          "2029-30": 0.6,
+          "2030-31": 0.6
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "psnbNeutralReceipts": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 3.0,
+          "2025-26": 3.2,
+          "2026-27": 3.2,
+          "2027-28": 3.2,
+          "2028-29": 3.3,
+          "2029-30": 3.3,
+          "2030-31": 3.3
+        },
+        "source": {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 3.1",
+          "note": "Council tax, VAT refunds, environmental levies, extended producer responsibility, community infrastructure levy."
+        }
+      },
+      "otherTaxes": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 2.2,
+          "2025-26": 2.2,
+          "2026-27": 2.2,
+          "2027-28": 2.2,
+          "2028-29": 2.2,
+          "2029-30": 2.2,
+          "2030-31": 2.2
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "nationalAccountsTaxes": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 34.5,
+          "2025-26": 36.3,
+          "2026-27": 37.0,
+          "2027-28": 37.7,
+          "2028-29": 37.8,
+          "2029-30": 38.3,
+          "2030-31": 38.5
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "interestAndDividendReceipts": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 1.5,
+          "2025-26": 1.3,
+          "2026-27": 1.4,
+          "2027-28": 1.4,
+          "2028-29": 1.4,
+          "2029-30": 1.4,
+          "2030-31": 1.4
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "otherReceipts": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 2.8,
+          "2025-26": 2.8,
+          "2026-27": 2.9,
+          "2027-28": 2.9,
+          "2028-29": 2.9,
+          "2029-30": 2.9,
+          "2030-31": 2.8
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      },
+      "currentReceipts": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 38.8,
+          "2025-26": 40.4,
+          "2026-27": 41.2,
+          "2027-28": 42.0,
+          "2028-29": 42.1,
+          "2029-30": 42.5,
+          "2030-31": 42.7
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 3.1" }
+      }
+    },
+    "spendingComponentsPctGdp": {
+      "tme": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 44.0,
+          "2025-26": 44.8,
+          "2026-27": 44.9,
+          "2027-28": 44.9,
+          "2028-29": 44.6,
+          "2029-30": 44.4,
+          "2030-31": 44.3
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "del": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 20.6,
+          "2025-26": 20.9,
+          "2026-27": 21.2,
+          "2027-28": 21.3,
+          "2028-29": 21.1,
+          "2029-30": 20.8,
+          "2030-31": 20.7
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "rdel": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 16.8,
+          "2025-26": 17.1,
+          "2026-27": 17.3,
+          "2027-28": 17.2,
+          "2028-29": 17.2,
+          "2029-30": 16.9,
+          "2030-31": 16.9
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "cdel": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 3.8,
+          "2025-26": 3.8,
+          "2026-27": 3.9,
+          "2027-28": 4.1,
+          "2028-29": 3.9,
+          "2029-30": 3.8,
+          "2030-31": 3.8
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "ame": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 23.4,
+          "2025-26": 23.8,
+          "2026-27": 23.7,
+          "2027-28": 23.7,
+          "2028-29": 23.6,
+          "2029-30": 23.6,
+          "2030-31": 23.6
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "welfare": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 10.7,
+          "2025-26": 10.9,
+          "2026-27": 11.2,
+          "2027-28": 11.1,
+          "2028-29": 11.0,
+          "2029-30": 11.1,
+          "2030-31": 11.2
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "debtInterestNetApf": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 3.6,
+          "2025-26": 3.6,
+          "2026-27": 3.5,
+          "2027-28": 3.6,
+          "2028-29": 3.7,
+          "2029-30": 3.8,
+          "2030-31": 3.8
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "locallyFinancedExpenditure": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 2.7,
+          "2025-26": 2.9,
+          "2026-27": 3.0,
+          "2027-28": 3.0,
+          "2028-29": 2.9,
+          "2029-30": 2.8,
+          "2030-31": 2.9
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "publicCorporationsExpenditure": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 0.5,
+          "2025-26": 0.4,
+          "2026-27": 0.5,
+          "2027-28": 0.4,
+          "2028-29": 0.4,
+          "2029-30": 0.4,
+          "2030-31": 0.4
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "psnbNeutralSpending": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 3.3,
+          "2025-26": 3.4,
+          "2026-27": 3.5,
+          "2027-28": 3.5,
+          "2028-29": 3.5,
+          "2029-30": 3.5,
+          "2030-31": 3.5
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      },
+      "otherAme": {
+        "unit": "pctGDP",
+        "periodicity": "FY",
+        "values": {
+          "2024-25": 2.6,
+          "2025-26": 2.6,
+          "2026-27": 2.0,
+          "2027-28": 2.1,
+          "2028-29": 2.0,
+          "2029-30": 1.9,
+          "2030-31": 1.8
+        },
+        "source": { "sourceId": "obr-efo-2026-03", "table": "Table 4.1" }
+      }
+    }
+  },
+  "assumptions": {
+    "marginalInterestRateOnNewBorrowingPct": {
+      "unit": "pct",
+      "periodicity": "FY",
+      "values": {
+        "2025-26": 4.5,
+        "2026-27": 4.5,
+        "2027-28": 4.5,
+        "2028-29": 4.5,
+        "2029-30": 4.5,
+        "2030-31": 4.5
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table 2.1",
+        "note": "10-year gilt yield in the OBR's conditioning window, used as the marginal cost of additional borrowing (ADR-0005)."
+      },
+      "provisional": true,
+      "derivation": [
+        {
+          "op": "manual",
+          "formula": "flat 4.5% in every year",
+          "note": "The OBR publishes a market-implied yield path; a flat rate is used until the supplementary economy table is committed."
+        }
+      ]
+    },
+    "halfYearConvention": true
+  },
+  "sensitivities": [
+    {
+      "id": "rates1pp",
+      "title": "Bank Rate and gilt yields, +1 percentage point (sustained)",
+      "description": "The OBR estimates that a sustained 1 percentage point increase in Bank Rate and gilt yields would raise borrowing by £15 billion in 2030-31, and that a 1 percentage point fall would lower it by a broadly similar amount. The November 2025 forecast gave £16 billion for 2029-30.",
+      "unit": "pp",
+      "perUnit": 1,
+      "effectOnPsnbGbpm": {
+        "2026-27": 10000,
+        "2027-28": 15000,
+        "2028-29": 15000,
+        "2029-30": 15000,
+        "2030-31": 15000
+      },
+      "currentBudgetShare": 1,
+      "adjusts": [
+        {
+          "target": "marginalInterestRate",
+          "how": "adds the slider value to the marginal rate on new borrowing"
+        }
+      ],
+      "rampNote": "OBR states the end-year effect only. 2027-28 onwards is held at £15bn (the OBR's £16bn for 2029-30 in November 2025 and £15bn for 2030-31 in March 2026 imply a broadly flat profile). 2026-27 is set at two-thirds of that because Bank Rate passes through to reserves remuneration immediately while gilt refinancing is gradual; this first-year figure is an assumption.",
+      "provisional": true,
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "1.21 and 6.16",
+        "quote": "A sustained 1 percentage point increase in Bank Rate and gilt yields would increase borrowing by £15 billion in 2030-31"
+      },
+      "secondarySource": {
+        "sourceId": "obr-efo-2025-11",
+        "quote": "A 1 percentage point increase in Bank Rate and gilt yields would reduce the current surplus by £16 billion in 2029-30"
+      }
+    },
+    {
+      "id": "nominalGrowth0p1pp",
+      "title": "Nominal GDP growth, +0.1 percentage point a year",
+      "description": "The OBR estimates that a 0.1 percentage point change in nominal GDP growth in each year changes borrowing by £8 billion in 2030-31. Higher growth lowers borrowing.",
+      "unit": "pp",
+      "perUnit": 0.1,
+      "effectOnPsnbGbpm": {
+        "2026-27": -1600,
+        "2027-28": -3200,
+        "2028-29": -4800,
+        "2029-30": -6400,
+        "2030-31": -8000
+      },
+      "currentBudgetShare": 1,
+      "adjusts": [
+        {
+          "target": "nominalGdp",
+          "how": "compounds both GDP denominators by (1 + growth change) each year from 2026-27"
+        }
+      ],
+      "rampNote": "OBR states the 2030-31 effect only. The path is assumed to build linearly because the effect scales with the cumulative level of GDP.",
+      "provisional": true,
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "6.17",
+        "quote": "A 0.1 percentage point change in nominal GDP growth in each year is estimated to lead to a change in PSNB of £8 billion in 2030-31"
+      }
+    },
+    {
+      "id": "rpi1pp",
+      "title": "RPI inflation, +1 percentage point (sustained)",
+      "description": "The OBR estimates that a 1 percentage point increase in RPI inflation across the forecast raises borrowing by £11 billion in 2030-31, while a 1 percentage point decrease lowers it by £10 billion, mainly through accrued interest on index-linked gilts.",
+      "unit": "pp",
+      "perUnit": 1,
+      "effectOnPsnbGbpm": {
+        "2026-27": 11000,
+        "2027-28": 11000,
+        "2028-29": 11000,
+        "2029-30": 11000,
+        "2030-31": 11000
+      },
+      "effectOnPsnbGbpmDecrease": {
+        "2026-27": -10000,
+        "2027-28": -10000,
+        "2028-29": -10000,
+        "2029-30": -10000,
+        "2030-31": -10000
+      },
+      "currentBudgetShare": 1,
+      "rampNote": "OBR states the 2030-31 effect only. A flat profile is assumed because the RPI uplift on index-linked gilts accrues immediately.",
+      "provisional": true,
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "6.17",
+        "quote": "A 1 percentage point increase in RPI inflation across the forecast is estimated to lead to an increase in PSNB of £11 billion in 2030-31, while a 1 percentage point decrease ... a decrease in PSNB of 10 billion in 2030-31"
+      }
+    },
+    {
+      "id": "effectiveTaxRate1pp",
+      "title": "Effective tax rate, +1 percentage point",
+      "description": "A 1 percentage point change in the effective tax rate in each year changes borrowing by £36 billion in 2030-31. Informational: used for the uncertainty display, not a slider.",
+      "unit": "pp",
+      "perUnit": 1,
+      "effectOnPsnbGbpm": { "2030-31": -36000 },
+      "currentBudgetShare": 1,
+      "rampNote": "End-year only.",
+      "source": { "sourceId": "obr-efo-2026-03", "paragraph": "6.17" }
+    }
+  ],
+  "uncertainty": {
+    "receiptsMeanAbsFiveYearErrorPctGdp": 0.9,
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "paragraph": "3.4",
+      "quote": "Historically, the average absolute five-year forecast difference for receipts as a share of GDP is 0.9 percentage points."
+    }
+  },
+  "checks": {
+    "stabilityHeadroomGbpm": {
+      "year": "2029-30",
+      "value": 23600,
+      "toleranceGbpm": 50,
+      "source": { "sourceId": "obr-efo-2026-03", "table": "Table 5.1" }
+    },
+    "psnflChangePctGdp": {
+      "year": "2029-30",
+      "value": -0.7,
+      "tolerancePp": 0.15,
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "5.23",
+        "quote": "before falling by 0.8 per cent of GDP (equivalent to £27 billion) in 2029-30",
+        "note": "Rounded table shares give -0.7pp; the text gives -0.8pp."
+      }
+    },
+    "welfareCapStatus": { "year": "2029-30", "value": "aboveCapWithinMargin" }
+  },
+  "context": {
+    "headroomAtPublicationGbpm": 23600,
+    "notes": [
+      "The fiscal rules were not formally assessed at this forecast; the OBR assesses them once a year at the autumn Budget. The £23.6bn is the forecast current budget surplus in 2029-30.",
+      "Since March 2026 gilt yields have risen sharply; in September 2026 analysts estimated headroom of roughly £8-14bn. The next formal assessment is at the Budget on 28 October 2026."
+    ]
+  }
+}

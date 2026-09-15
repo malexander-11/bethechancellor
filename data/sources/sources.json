@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "obr-efo-2026-03",
+      "org": "OBR",
+      "title": "Economic and fiscal outlook – March 2026",
+      "edition": "Spring Forecast 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/69a6d7b62e1f4fbda4252208/economic-and-fiscal-outlook-march-2026-web-accessible.pdf",
+      "landingUrl": "https://obr.uk/efo/economic-and-fiscal-outlook-march-2026/",
+      "publishedOn": "2026-03-03",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Web-accessible PDF mirrored on gov.uk. Supplementary tables are on obr.uk and not yet committed; figures here are read from the PDF tables."
+    },
+    {
+      "id": "obr-efo-2025-11",
+      "org": "OBR",
+      "title": "Economic and fiscal outlook – November 2025",
+      "edition": "Budget 2025",
+      "url": "https://obr.uk/docs/dlm_uploads/OBR_Economic_and_fiscal_outlook_November_2025.pdf",
+      "landingUrl": "https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/",
+      "publishedOn": "2025-11-26",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Used for the interest-rate sensitivity stated for 2029-30 and the November headroom of £22bn."
+    },
+    {
+      "id": "hmt-charter-2025-autumn",
+      "org": "HMT",
+      "title": "Charter for Budget Responsibility: Autumn 2025",
+      "edition": "Presented to Parliament February 2026; approved by the House of Commons 24 February 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/69778bb967ae94b32801385b/260122_-_Updated_Charter_-_Jan_2026_changes.pdf",
+      "landingUrl": "https://www.gov.uk/government/publications/draft-charter-for-budget-responsibility-autumn-2025",
+      "publishedOn": "2026-02-23",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0"
+    },
+    {
+      "id": "hmt-strong-fiscal-framework-2024-10",
+      "org": "HMT",
+      "title": "A strong fiscal framework: explaining the government's new fiscal framework and rules",
+      "url": "https://assets.publishing.service.gov.uk/media/67211bf34da1c0d41942a8bf/A_strong_fiscal_framework.pdf",
+      "publishedOn": "2024-10-30",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Defines 'balance' for the rolling stability rule as a range of surplus or deficit no larger than 0.5% of GDP (Box 1, para 1.12)."
+    },
+    {
+      "id": "ifg-current-fiscal-rules",
+      "org": "IfG",
+      "title": "Current UK fiscal rules (explainer)",
+      "url": "https://www.instituteforgovernment.org.uk/explainer/current-fiscal-rules",
+      "retrievedOn": "2026-09-15",
+      "licence": "Other",
+      "notes": "Secondary source for the welfare cap level (£194.5bn in 2029-30) and 5% margin. Primary source is HM Treasury, Autumn Budget 2024."
+    },
+    {
+      "id": "hmrc-trr-2025-06",
+      "org": "HMRC",
+      "title": "Direct effects of illustrative tax changes",
+      "edition": "June 2025 (updated 24 June 2025); years 2026-27 to 2028-29, April 2026 implementation",
+      "url": "https://assets.publishing.service.gov.uk/media/68552862b46781eacfd71d71/June_2025_TRR_ODS__1_.ods",
+      "landingUrl": "https://www.gov.uk/government/statistics/direct-effects-of-illustrative-tax-changes",
+      "publishedOn": "2025-06-24",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmrc-trr-2025-06/June_2025_TRR.ods",
+      "notes": "The July 2026 edition was deferred by HMRC pending a review of key behavioural assumptions.",
+      "sha256": "1201953391d6201d1df8df4d60288c9094b43e0679ebf285e82ad3c912d476c1"
+    },
+    {
+      "id": "hmt-budget-2025-table-4-1",
+      "org": "HMT",
+      "title": "Budget 2025: Table 4.1 policy decisions",
+      "url": "https://assets.publishing.service.gov.uk/media/69269df29fd433badebc31b3/Table_4.1_-_Budget_2025_Policy_Decisions.xlsx",
+      "landingUrl": "https://www.gov.uk/government/publications/supporting-documents-for-budget-2025",
+      "publishedOn": "2025-11-26",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmt-budget-2025/Table_4.1_-_Budget_2025_Policy_Decisions.xlsx",
+      "notes": "Positive values reduce borrowing. 88 measures, £ million, 2025-26 to 2030-31.",
+      "sha256": "cf68c672e022a23b4327e8f863380cdd47c286081986a6515ac2ee1e85435921"
+    },
+    {
+      "id": "hmt-budget-2025-policy-costings",
+      "org": "HMT",
+      "title": "Budget 2025: policy costings",
+      "url": "https://assets.publishing.service.gov.uk/media/692872fd2a37784b16ecf676/Budget_2025-Policy_Costings.pdf",
+      "landingUrl": "https://www.gov.uk/government/publications/supporting-documents-for-budget-2025",
+      "publishedOn": "2025-11-26",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0"
+    },
+    {
+      "id": "hmt-sr25-del-tables",
+      "org": "HMT",
+      "title": "Spending Review 2025: unrounded departmental Resource DEL, Capital DEL and Total DEL tables",
+      "url": "https://assets.publishing.service.gov.uk/media/685bf942c07c71e5a870981b/SR25_Department_DEL_tables.xlsx",
+      "landingUrl": "https://www.gov.uk/government/publications/supporting-documents-for-spending-review-2025",
+      "publishedOn": "2025-06-11",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmt-sr25/SR25_Department_DEL_tables.xlsx",
+      "sha256": "79509ff795cb82956a925cade47945720a497cdccecf4cdfa60fa83a2a1db0a0"
+    },
+    {
+      "id": "ons-psf-2026-07",
+      "org": "ONS",
+      "title": "Public sector finances, UK: July 2026",
+      "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/july2026",
+      "publishedOn": "2026-08-21",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "notes": "Outturn context: borrowing April to July 2026 £56.7bn, £2.3bn above the OBR March 2026 profile; PSNFL 83.7% of GDP at end July 2026."
+    },
+    {
+      "id": "ons-timeseries-j5ii",
+      "org": "ONS",
+      "title": "Public sector net borrowing excluding public sector banks, £ million (series J5II)",
+      "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/timeseries/j5ii/pusf/data",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0"
+    },
+    {
+      "id": "ons-families-households-2024",
+      "org": "ONS",
+      "title": "Families and households in the UK: 2024",
+      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/bulletins/familiesandhouseholds/2024",
+      "publishedOn": "2025-07-23",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0"
+    },
+    {
+      "id": "boe-iadb-bank-rate",
+      "org": "BoE",
+      "title": "Bank of England Interactive Statistical Database: Official Bank Rate (series IUDBEDR)",
+      "url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
+      "retrievedOn": "2026-09-15",
+      "licence": "Other",
+      "notes": "Bank Rate 3.75% at the September 2026 decision window; next decision 17 September 2026."
+    },
+    {
+      "id": "nesta-ifs-be-the-chancellor",
+      "org": "Nesta",
+      "title": "Be the Chancellor (interactive tool built by IFS researchers for Nesta's UK 2040 Options)",
+      "url": "https://www.nesta.org.uk/data-visualisation-and-interactive/be-the-chancellor/",
+      "retrievedOn": "2026-09-15",
+      "licence": "Other",
+      "notes": "Design reference only: tax, spend, growth and interest-rate levers; outputs for 2029-30. No figures reproduced."
+    },
+    {
+      "id": "press-investing-2026-09-11",
+      "org": "Other",
+      "title": "How much has UK fiscal headroom narrowed ahead of autumn budget? (Investing.com, citing UBS)",
+      "url": "https://www.investing.com/news/economy-news/how-much-has-uk-fiscal-headroom-narrowed-ahead-of-autumn-budget-4897694",
+      "publishedOn": "2026-09-11",
+      "retrievedOn": "2026-09-15",
+      "licence": "Other",
+      "notes": "Press coverage used only as qualitative context: UBS estimated gilt yields about 70 basis points above the March assumption, removing roughly £10bn of headroom; the Budget is on 28 October 2026."
+    }
+  ]
+}
