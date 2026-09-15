@@ -2,6 +2,7 @@ import { receiptsByTaxSeries } from '../costing/taxHead.js';
 import type {
   HmrcExtract,
   Lever,
+  PesaExtract,
   RawSource,
   ReliefExtract,
   ScorecardExtract,
@@ -18,6 +19,7 @@ export interface ExtractedSources {
   scorecards?: Record<string, ScorecardExtract>;
   sr25?: Sr25Extract;
   reliefs?: ReliefExtract;
+  pesa?: PesaExtract;
 }
 
 type Side = 'receipts' | 'spending';
@@ -57,6 +59,61 @@ function close(a: number, b: number): boolean {
 }
 
 /**
+ * A milestone that cites a PESA row must reproduce from the extracted table: a growth rate is
+ * recomputed from its two years, a level or share is read straight off.
+ */
+export function checkMilestones(lever: Lever, extracted: ExtractedSources): string[] {
+  const problems: string[] = [];
+  for (const milestone of lever.milestones ?? []) {
+    const from = milestone.from;
+    if (!from) continue;
+    const extract = extracted.pesa;
+    if (!extract) return [`${lever.id}: no PESA extract to check milestones against`];
+    const table = extract.tables.find((t) => t.sheet === from.pesaSheet);
+    if (!table) {
+      problems.push(`${lever.id}: PESA sheet ${from.pesaSheet} not in the extract`);
+      continue;
+    }
+    const row = table.rows.find((r) => r.rowId === from.rowId);
+    if (!row) {
+      problems.push(`${lever.id}: PESA row "${from.rowId}" not in ${table.sheet}`);
+      continue;
+    }
+    const to = row.values[from.toYear];
+    if (to === null || to === undefined) {
+      problems.push(`${lever.id}: PESA row ${row.rowId} has no value for ${from.toYear}`);
+      continue;
+    }
+    if (milestone.unit === 'pctRealPerYear') {
+      const startYear = from.fromYear;
+      if (!startYear) {
+        problems.push(`${lever.id}: milestone "${milestone.label}" needs fromYear`);
+        continue;
+      }
+      const start = row.values[startYear];
+      if (start === null || start === undefined || start <= 0) {
+        problems.push(`${lever.id}: PESA row ${row.rowId} has no value for ${startYear}`);
+        continue;
+      }
+      const years = Number(from.toYear.slice(0, 4)) - Number(startYear.slice(0, 4));
+      const expected = ((to / start) ** (1 / years) - 1) * 100;
+      if (Math.abs(milestone.value - expected) > 0.05) {
+        problems.push(
+          `${lever.id}: milestone "${milestone.label}" = ${milestone.value} but ${row.rowId} gives ${expected.toFixed(2)}`,
+        );
+      }
+      continue;
+    }
+    if (Math.abs(milestone.value - to) > 0.05) {
+      problems.push(
+        `${lever.id}: milestone "${milestone.label}" = ${milestone.value} but ${row.rowId} ${from.toYear} is ${to}`,
+      );
+    }
+  }
+  return problems;
+}
+
+/**
  * Every direct costing and every published baseline must reproduce from the extracted tables (or,
  * for a lookup point that cites a vintage series, from the vintage): cited rows exist with the
  * same values, and the engine-sign tables equal the signed sums of those rows.
@@ -68,14 +125,18 @@ export function checkRawSourceConsistency(
 ): string[] {
   const costing = lever.costing;
   const side: Side = lever.classification?.side ?? 'receipts';
+  const found = checkMilestones(lever, extracted);
+  const and = (more: string[]): string[] => [...found, ...more];
   if (costing.kind === 'pctOfBaseline') {
-    if (costing.baseline.from !== 'published') return [];
-    return checkSr25Rows(
-      lever,
-      costing.baseline.rawSource,
-      costing.baseline.years,
-      costing.baseline.values,
-      extracted,
+    if (costing.baseline.from !== 'published') return found;
+    return and(
+      checkSr25Rows(
+        lever,
+        costing.baseline.rawSource,
+        costing.baseline.years,
+        costing.baseline.values,
+        extracted,
+      ),
     );
   }
   if (
@@ -83,15 +144,18 @@ export function checkRawSourceConsistency(
     costing.kind !== 'lookupTable' &&
     costing.kind !== 'schedule'
   ) {
-    return [];
+    return found;
   }
   const raw = costing.rawSource;
   if (!raw)
-    return lever.badge === 'direct' ? [`${lever.id}: direct costing without rawSource`] : [];
-  if (raw.kind === 'hmrcReadyReckoner') return checkHmrcRows(lever, raw, side, extracted, vintage);
-  if (raw.kind === 'hmtScorecard') return checkScorecardLines(lever, raw, side, extracted);
-  if (raw.kind === 'hmrcReliefCost') return checkReliefRows(lever, raw, side, extracted);
-  return [`${lever.id}: Spending Review rows can only back a percentage-of-baseline costing`];
+    return lever.badge === 'direct'
+      ? and([`${lever.id}: direct costing without rawSource`])
+      : found;
+  if (raw.kind === 'hmrcReadyReckoner')
+    return and(checkHmrcRows(lever, raw, side, extracted, vintage));
+  if (raw.kind === 'hmtScorecard') return and(checkScorecardLines(lever, raw, side, extracted));
+  if (raw.kind === 'hmrcReliefCost') return and(checkReliefRows(lever, raw, side, extracted));
+  return and([`${lever.id}: Spending Review rows can only back a percentage-of-baseline costing`]);
 }
 
 /** Expected engine-sign effect of a lookup point that cites a vintage series (the whole tax line). */

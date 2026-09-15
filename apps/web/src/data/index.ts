@@ -103,7 +103,7 @@ export function groupLevers(items: Lever[]): LeverGroup[] {
     'VAT',
     'Capital taxes',
     'Duties',
-    'Budget 2025 spending decisions',
+    'Budget 2025 and Spending Review decisions',
     'Day-to-day departmental budgets',
     'Public investment',
     'Welfare',

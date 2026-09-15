@@ -1,13 +1,19 @@
 import {
   baselinePath,
+  deflatorIndex,
   formatGbpBn,
   formatLevel,
+  formatPct,
+  fyStart,
   levelValue,
   policyYearsOf,
+  realGrowthPerYear,
   type Lever,
   type LeverEffect,
+  type YearValues,
 } from '@btc/engine';
 import { vintage } from '../data';
+import { Milestones } from './Milestones';
 import { useId, useState } from 'react';
 import { LabelBadge } from './LabelBadge';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
@@ -62,16 +68,33 @@ function tone(v: number): string {
 }
 
 const POLICY_YEARS = policyYearsOf(vintage);
+const IMPLEMENTATION_YEAR = vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? '';
+const DEFLATOR = vintage.economy.gdpDeflator ? deflatorIndex(vintage) : null;
+
+export interface LevelChange {
+  from: string;
+  to: string;
+  note?: string;
+  /** Spending controls lead with real-terms growth; the cash budget sits beneath it. */
+  real?: { from: string; to: string; note: string };
+}
+
+/** The path a percentage-of-baseline lever produces at a setting. */
+function policyValues(base: YearValues, value: number): YearValues {
+  const start = fyStart(IMPLEMENTATION_YEAR);
+  const out: YearValues = {};
+  for (const [year, v] of Object.entries(base)) {
+    out[year] = fyStart(year) >= start ? v * (1 + value / 100) : v;
+  }
+  return out;
+}
 
 /**
- * The level a setting moves to ("20% → 21%", "£232.0bn → £236.6bn in 2028-29"): from the lever's
- * level metadata, or for percentage-of-baseline levers from the baseline path itself.
+ * What a setting moves to. Rates and thresholds show their new level ("20% → 21%"); spending
+ * leads with real-terms growth a year, because that is how settlements are argued about, and
+ * shows the resulting cash budget beneath it.
  */
-export function levelChange(
-  lever: Lever,
-  value: number,
-  summaryYear?: string,
-): { from: string; to: string; note?: string } | null {
+export function levelChange(lever: Lever, value: number, summaryYear?: string): LevelChange | null {
   const level = lever.control.level;
   if (level) {
     return {
@@ -88,11 +111,27 @@ export function levelChange(
       POLICY_YEARS[POLICY_YEARS.length - 1] ??
       '';
     const base = path.values[year] ?? 0;
-    return {
+    const change: LevelChange = {
       from: formatGbpBn(base, 1),
       to: formatGbpBn(base * (1 + value / 100), 1),
       note: `in ${year}`,
     };
+    // Real growth runs from the last year your Budget cannot touch to the year shown above.
+    const fromYear = POLICY_YEARS.filter((y) => fyStart(y) < fyStart(IMPLEMENTATION_YEAR)).at(-1);
+    if (DEFLATOR && fromYear && fyStart(year) > fyStart(fromYear)) {
+      try {
+        const before = realGrowthPerYear(path.values, DEFLATOR, fromYear, year);
+        const after = realGrowthPerYear(policyValues(path.values, value), DEFLATOR, fromYear, year);
+        change.real = {
+          from: formatPct(before, 1, true),
+          to: formatPct(after, 1, true),
+          note: `a year in real terms, ${fromYear} to ${year}`,
+        };
+      } catch {
+        // No deflator for these years: the cash figures stand alone.
+      }
+    }
+    return change;
   }
   return null;
 }
@@ -171,12 +210,21 @@ export function LeverControl({
           <div className="lever__value">
             {change ? (
               <>
-                <span className="lever__level-from">{change.from}</span>
+                <span className="lever__level-from">{(change.real ?? change).from}</span>
                 <span className="lever__arrow" aria-hidden="true">
                   {' → '}
                 </span>
-                <strong className="lever__level-to">{change.to}</strong>
-                {change.note ? <span className="lever__level-note"> {change.note}</span> : null}
+                <strong className="lever__level-to">{(change.real ?? change).to}</strong>
+                {change.real ? (
+                  <span className="lever__level-note"> {change.real.note}</span>
+                ) : change.note ? (
+                  <span className="lever__level-note"> {change.note}</span>
+                ) : null}
+                {change.real ? (
+                  <span className="lever__cash">
+                    {change.from} → {change.to} {change.note}
+                  </span>
+                ) : null}
                 <span className="lever__delta">
                   {isDefault ? 'as the OBR forecast' : formatLeverValue(lever, value)}
                 </span>
@@ -231,6 +279,7 @@ export function LeverControl({
         </>
       ) : null}
       <p className="lever__desc">{lever.headline ?? lever.description}</p>
+      {lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
       {lookupPoints || barnett ? (
         <p className="lever__tags">
           {lookupPoints ? (

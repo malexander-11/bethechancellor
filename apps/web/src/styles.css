@@ -1502,3 +1502,40 @@ details.table-view td:first-child {
   margin-top: 0;
   padding-top: 4px;
 }
+
+.lever__cash {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.milestones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.milestone {
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 0.78rem;
+  cursor: help;
+}
+
+.milestone__label {
+  color: var(--muted);
+}
+
+.milestone__value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

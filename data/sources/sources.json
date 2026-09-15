@@ -419,6 +419,18 @@
       "retrievedOn": "2026-09-15",
       "licence": "OGL-3.0",
       "notes": "The standard Inheritance Tax rate is 40%, charged on the part of the estate above the threshold."
+    },
+    {
+      "id": "hmt-pesa-2025",
+      "org": "HMT",
+      "title": "Public Expenditure Statistical Analyses 2025, chapter 4 tables",
+      "url": "https://assets.publishing.service.gov.uk/media/6874fe33b1b4ebc2c2e46574/PESA_2025_CP_Chapter_4_tables.xlsx",
+      "landingUrl": "https://www.gov.uk/government/statistics/public-expenditure-statistical-analyses-2025",
+      "retrievedOn": "2026-09-15",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmt-pesa-2025/PESA_2025_CP_Chapter_4_tables.xlsx",
+      "sha256": "bc275bc1efed362ba3ed15fb27db010692caa879d201897dc5d64c46bc942570",
+      "notes": "Accredited official statistics. Table 4.3 gives public sector expenditure on services by function in real terms (£ billion, 2024-25 prices) and Table 4.4 the same as a share of GDP, both 2002-03 to 2024-25. Function spending covers the whole public sector, including local government and the devolved administrations, so it is wider than a UK Government department's budget."
     }
   ]
 }

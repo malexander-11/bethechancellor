@@ -304,6 +304,28 @@ export const costingSchema = z.discriminatedUnion('kind', [
   }),
 ]);
 
+/**
+ * A reference point shown beside a spending control: what this budget has done before, or what a
+ * target would cost. Milestones with a `from` are recomputed by the validator from the cited
+ * PESA table, so they cannot drift from the published statistics.
+ */
+export const milestoneSchema = z.strictObject({
+  label: z.string().min(1),
+  value: z.number(),
+  unit: z.enum(['pctRealPerYear', 'pctGDP', 'GBPbn']),
+  from: z
+    .strictObject({
+      pesaSheet: z.enum(['4_3', '4_4']),
+      rowId: z.string().min(1),
+      /** Required for a growth rate; omitted when reading a single year. */
+      fromYear: fiscalYearSchema.optional(),
+      toYear: fiscalYearSchema,
+    })
+    .optional(),
+  source: sourceRefSchema,
+  note: z.string().optional(),
+});
+
 export const classificationSchema = z.strictObject({
   side: z.enum(['receipts', 'spending']),
   currentOrCapital: z.enum(['current', 'capital']),
@@ -351,6 +373,8 @@ export const leverSchema = z
         note: z.string(),
       })
       .optional(),
+    /** Reference points shown beside the control: history, targets, what a commitment costs. */
+    milestones: z.array(milestoneSchema).optional(),
     considerations: z.array(considerationSchema),
     interactions: z
       .array(

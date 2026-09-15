@@ -82,6 +82,84 @@
       "A change is applied in full to current spending and borrowing. No allowance is made for underspending against plans, which the OBR assumes averages about £1.8bn a year across all departments (EFO paragraph 4.11)."
     ]
   },
+  "milestones": [
+    {
+      "label": "This Spending Review",
+      "value": 0.69,
+      "unit": "pctRealPerYear",
+      "source": {
+        "sourceId": "hmt-sr25-del-tables",
+        "table": "Table 5.3 RDELex"
+      },
+      "note": "Average real growth a year to 2028-29, as published in the Spending Review."
+    },
+    {
+      "label": "2010-11 to 2019-20",
+      "value": -0.93,
+      "unit": "pctRealPerYear",
+      "from": {
+        "pesaSheet": "4_3",
+        "rowId": "defence",
+        "fromYear": "2010-11",
+        "toYear": "2019-20"
+      },
+      "source": {
+        "sourceId": "hmt-pesa-2025",
+        "table": "Table 4.3"
+      },
+      "note": "Covers this function across the whole public sector, including local government and the devolved administrations, so it is wider than the department's budget."
+    },
+    {
+      "label": "Defence, share of GDP in 2024-25",
+      "value": 2.2,
+      "unit": "pctGDP",
+      "from": {
+        "pesaSheet": "4_4",
+        "rowId": "defence",
+        "toYear": "2024-25"
+      },
+      "source": {
+        "sourceId": "hmt-pesa-2025",
+        "table": "Table 4.4"
+      },
+      "note": "Covers this function across the whole public sector, including local government and the devolved administrations, so it is wider than the department's budget."
+    },
+    {
+      "label": "Defence, share of GDP in 2010-11",
+      "value": 2.4,
+      "unit": "pctGDP",
+      "from": {
+        "pesaSheet": "4_4",
+        "rowId": "defence",
+        "toYear": "2010-11"
+      },
+      "source": {
+        "sourceId": "hmt-pesa-2025",
+        "table": "Table 4.4"
+      },
+      "note": "Covers this function across the whole public sector, including local government and the devolved administrations, so it is wider than the department's budget."
+    },
+    {
+      "label": "OBR forecast for 2030-31",
+      "value": 3.0,
+      "unit": "pctGDP",
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "4.15"
+      },
+      "note": "The OBR assumes defence rises from 2.4% of GDP in 2025-26 to 3.0% by the end of the forecast."
+    },
+    {
+      "label": "NATO pledge by 2035",
+      "value": 3.5,
+      "unit": "pctGDP",
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "4.13"
+      },
+      "note": "Reaching 3.5% by 2035 on a straight line would add about 0.2% of GDP (£6bn) in 2028-29; the full 1.1% of GDP is about £40bn in 2025-26 terms."
+    }
+  ],
   "considerations": [
     {
       "id": "no-barnett",

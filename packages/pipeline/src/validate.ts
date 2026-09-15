@@ -5,6 +5,7 @@ import {
   checkRawSourceConsistency,
   DataError,
   parseHmrcExtract,
+  parsePesaExtract,
   parseReliefExtract,
   parseScorecardExtract,
   parseSr25Extract,
@@ -14,6 +15,7 @@ import {
 import {
   AB2024_EXTRACT_FILE,
   HMRC_EXTRACT_FILE,
+  PESA_EXTRACT_FILE,
   RELIEFS_EXTRACT_FILE,
   SCORECARD_EXTRACT_FILE,
   SR25_EXTRACT_FILE,
@@ -54,6 +56,9 @@ function main(): void {
   const reliefsFile = path.join(DERIVED_DIR, RELIEFS_EXTRACT_FILE);
   if (existsSync(reliefsFile)) extracted.reliefs = parseReliefExtract(readJson(reliefsFile));
   else problems.push(`${RELIEFS_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
+  const pesaFile = path.join(DERIVED_DIR, PESA_EXTRACT_FILE);
+  if (existsSync(pesaFile)) extracted.pesa = parsePesaExtract(readJson(pesaFile));
+  else problems.push(`${PESA_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
   const sr25File = path.join(DERIVED_DIR, SR25_EXTRACT_FILE);
   if (existsSync(sr25File)) extracted.sr25 = parseSr25Extract(readJson(sr25File));
   else problems.push(`${SR25_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);

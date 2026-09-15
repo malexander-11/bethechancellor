@@ -107,3 +107,34 @@ export const reliefExtractSchema = z.strictObject({
     .min(1),
   source: extractSourceSchema,
 });
+
+/**
+ * Output of the pipeline's PESA chapter 4 extraction: public sector expenditure on services by
+ * function, in real terms and as a share of GDP. Whole-public-sector measures, wider than a
+ * department's budget.
+ */
+export const pesaExtractSchema = z.strictObject({
+  schemaVersion: z.literal(1),
+  sourceId: z.string().min(1),
+  tables: z
+    .array(
+      z.strictObject({
+        sheet: z.string().min(1),
+        title: z.string().min(1),
+        unit: z.enum(['GBPbn', 'pctGDP']),
+        years: z.array(fiscalYearSchema).min(1),
+        rows: z
+          .array(
+            z.strictObject({
+              rowId: z.string().min(1),
+              label: z.string().min(1),
+              memo: z.boolean(),
+              values: z.record(fiscalYearSchema, z.number().nullable()),
+            }),
+          )
+          .min(1),
+      }),
+    )
+    .min(1),
+  source: extractSourceSchema,
+});

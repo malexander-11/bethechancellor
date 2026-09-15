@@ -97,8 +97,18 @@ describe('LeverControl', () => {
     expect(within(second.container).getByText('0%')).toBeInTheDocument();
     second.unmount();
     const third = render(<LeverControl lever={dhsc} value={2} onChange={() => undefined} />);
-    expect(within(third.container).getByText('£232.0bn')).toBeInTheDocument();
-    expect(within(third.container).getByText('£236.6bn')).toBeInTheDocument();
-    expect(third.container.querySelector('.lever__level-note')?.textContent).toMatch(/in 2028-29/);
+    // Spending leads with real-terms growth and shows the cash budget beneath it.
+    expect(within(third.container).getByText('+2.9%')).toBeInTheDocument();
+    expect(within(third.container).getByText('+3.9%')).toBeInTheDocument();
+    expect(third.container.querySelector('.lever__level-note')?.textContent).toMatch(
+      /a year in real terms, 2026-27 to 2028-29/,
+    );
+    expect(third.container.querySelector('.lever__cash')?.textContent).toMatch(
+      /£232\.0bn → £236\.6bn in 2028-29/,
+    );
+    // The Spending Review's own figure and the 2010s record sit beside the control.
+    const milestones = third.container.querySelector('.milestones')?.textContent ?? '';
+    expect(milestones).toMatch(/This Spending Review\+2\.8% a year/);
+    expect(milestones).toMatch(/2010-11 to 2019-20\+1\.8% a year/);
   });
 });

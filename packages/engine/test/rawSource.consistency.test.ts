@@ -75,6 +75,15 @@ describe('every direct costing reproduces from the extracted published tables', 
     expect(checkRawSourceConsistency(cb, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 
+  it('detects a tampered milestone', () => {
+    const health = structuredClone(ds.levers.find((l) => l.code === 'dhsc'));
+    if (!health?.milestones) throw new Error('missing dhsc milestones');
+    const cited = health.milestones.find((m) => m.from);
+    if (!cited) throw new Error('no milestone cites a table');
+    cited.value += 1;
+    expect(checkRawSourceConsistency(health, extracted, ds.vintage).length).toBeGreaterThan(0);
+  });
+
   it('detects a tampered figure', () => {
     const lever = structuredClone(taxLevers.find((l) => l.code === 'itbr'));
     if (!lever || lever.costing.kind !== 'linearPerUnit') throw new Error('missing itbr');

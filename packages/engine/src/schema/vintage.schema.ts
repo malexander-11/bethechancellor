@@ -59,6 +59,12 @@ export const vintageSchema = z.strictObject({
     realGdpGrowth: seriesSchema,
     cpiInflation: seriesSchema,
     rpiInflation: seriesSchema.optional(),
+    /** GDP deflator index by financial year, 2024-25 = 1. "Real terms" means deflated by this. */
+    gdpDeflator: seriesSchema.optional(),
+    /** Financial-year determinants of the fiscal forecast (EFO Table A.3). */
+    cpiInflationFy: seriesSchema.optional(),
+    tripleLockUprating: seriesSchema.optional(),
+    averageEarningsGrowth: seriesSchema.optional(),
     unemploymentRate: seriesSchema.optional(),
     conditioningAssumptions: z.record(z.string(), scalarAssumptionSchema),
   }),

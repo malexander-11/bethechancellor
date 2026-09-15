@@ -28,6 +28,11 @@
       "sha256": "70a6828cc4a895328e758361c64d2366dc23c170ca180f92fa616b80aa5dbdaf"
     },
     {
+      "sourceId": "hmt-pesa-2025",
+      "localPath": "data/raw/hmt-pesa-2025/PESA_2025_CP_Chapter_4_tables.xlsx",
+      "sha256": "bc275bc1efed362ba3ed15fb27db010692caa879d201897dc5d64c46bc942570"
+    },
+    {
       "sourceId": "hmt-sr25-del-tables",
       "localPath": "data/raw/hmt-sr25/SR25_Department_DEL_tables.xlsx",
       "sha256": "79509ff795cb82956a925cade47945720a497cdccecf4cdfa60fa83a2a1db0a0"
@@ -38,6 +43,7 @@
     "hmt-budget-2025-table-4-1.raw.json",
     "hmt-sr25-del.raw.json",
     "hmt-autumn-budget-2024-table-5-1.raw.json",
-    "hmrc-tax-reliefs-2026-01.raw.json"
+    "hmrc-tax-reliefs-2026-01.raw.json",
+    "hmt-pesa-2025-functions.raw.json"
   ]
 }

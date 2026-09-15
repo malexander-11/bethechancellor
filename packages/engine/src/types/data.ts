@@ -25,6 +25,7 @@ import type {
 } from '../schema/reference.schema.js';
 import type {
   hmrcExtractSchema,
+  pesaExtractSchema,
   reliefExtractSchema,
   scorecardExtractSchema,
   sr25ExtractSchema,
@@ -44,6 +45,7 @@ import type {
 import type {
   growthHeadSchema,
   levelSchema,
+  milestoneSchema,
   rawSourceSchema,
   spendingHeadSchema,
   taxHeadSchema,
@@ -67,6 +69,7 @@ export type RuleSet = z.infer<typeof ruleSetSchema>;
 export type Lever = z.infer<typeof leverSchema>;
 export type LeverControl = z.infer<typeof controlSchema>;
 export type LevelDisplay = z.infer<typeof levelSchema>;
+export type Milestone = z.infer<typeof milestoneSchema>;
 export type Costing = z.infer<typeof costingSchema>;
 export type Consideration = z.infer<typeof considerationSchema>;
 export type HouseholdsReference = z.infer<typeof householdsReferenceSchema>;
@@ -74,6 +77,7 @@ export type HmrcExtract = z.infer<typeof hmrcExtractSchema>;
 export type ScorecardExtract = z.infer<typeof scorecardExtractSchema>;
 export type Sr25Extract = z.infer<typeof sr25ExtractSchema>;
 export type ReliefExtract = z.infer<typeof reliefExtractSchema>;
+export type PesaExtract = z.infer<typeof pesaExtractSchema>;
 export type ContextFile = z.infer<typeof contextFileSchema>;
 export type ContextReading = z.infer<typeof contextReadingSchema>;
 export type SuggestionRule = z.infer<typeof suggestionRuleSchema>;

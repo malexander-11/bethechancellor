@@ -52,6 +52,24 @@
       "A uniform percentage change to a forecast line is a stylised device standing in for the many policies that could deliver it (rates, uprating, eligibility); no behavioural response is included."
     ]
   },
+  "milestones": [
+    {
+      "label": "Social protection, 2010-11 to 2024-25",
+      "value": 1.03,
+      "unit": "pctRealPerYear",
+      "from": {
+        "pesaSheet": "4_3",
+        "rowId": "social-protection",
+        "fromYear": "2010-11",
+        "toYear": "2024-25"
+      },
+      "source": {
+        "sourceId": "hmt-pesa-2025",
+        "table": "Table 4.3"
+      },
+      "note": "All social protection spending, including the state pension and working-age benefits."
+    }
+  ],
   "considerations": [
     {
       "id": "caseload-uncertainty",

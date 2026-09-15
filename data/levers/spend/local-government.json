@@ -82,6 +82,18 @@
       "A change is applied in full to current spending and borrowing. No allowance is made for underspending against plans, which the OBR assumes averages about £1.8bn a year across all departments (EFO paragraph 4.11)."
     ]
   },
+  "milestones": [
+    {
+      "label": "This Spending Review",
+      "value": 1.07,
+      "unit": "pctRealPerYear",
+      "source": {
+        "sourceId": "hmt-sr25-del-tables",
+        "table": "Table 5.3 RDELex"
+      },
+      "note": "Average real growth a year to 2028-29, as published in the Spending Review."
+    }
+  ],
   "considerations": [
     {
       "id": "barnett-up",

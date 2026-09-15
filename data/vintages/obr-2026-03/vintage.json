@@ -164,6 +164,83 @@
       },
       "provisional": true,
       "note": "The OBR gives 4.1% for 2025, 3.1% for 2026, an average of 2.9% a year for 2027 to 2029 (shown here in each of those years) and 2.3% for 2030."
+    },
+    "gdpDeflator": {
+      "unit": "index",
+      "periodicity": "FY",
+      "values": {
+        "2023-24": 0.961538,
+        "2024-25": 1.0,
+        "2025-26": 1.032,
+        "2026-27": 1.05264,
+        "2027-28": 1.07264,
+        "2028-29": 1.09302,
+        "2029-30": 1.113788,
+        "2030-31": 1.136063
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table A.3: Determinants of the fiscal forecast",
+        "page": "110"
+      },
+      "note": "Index with 2024-25 = 1, chained from the OBR's financial-year GDP deflator growth (4.0, 3.2, 2.0, 1.9, 1.9, 1.9, 2.0 per cent). Real terms in this tool means deflated by this index."
+    },
+    "cpiInflationFy": {
+      "unit": "pct",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 2.4,
+        "2025-26": 3.4,
+        "2026-27": 2.0,
+        "2027-28": 1.9,
+        "2028-29": 2.0,
+        "2029-30": 2.0,
+        "2030-31": 2.0
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table A.3: Determinants of the fiscal forecast",
+        "page": "110"
+      },
+      "note": "CPI inflation by financial year, as the OBR's fiscal determinants table gives it."
+    },
+    "tripleLockUprating": {
+      "unit": "pct",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 4.1,
+        "2025-26": 4.8,
+        "2026-27": 3.7,
+        "2027-28": 2.5,
+        "2028-29": 2.5,
+        "2029-30": 2.5,
+        "2030-31": 2.5
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table A.3: Determinants of the fiscal forecast",
+        "page": "110"
+      },
+      "note": "The uprating the triple lock delivers, as published by the OBR. It is the 2.5% floor that binds from 2027-28, not earnings or prices."
+    },
+    "averageEarningsGrowth": {
+      "unit": "pct",
+      "periodicity": "FY",
+      "values": {
+        "2024-25": 5.6,
+        "2025-26": 4.6,
+        "2026-27": 3.2,
+        "2027-28": 2.2,
+        "2028-29": 2.1,
+        "2029-30": 2.3,
+        "2030-31": 2.4
+      },
+      "source": {
+        "sourceId": "obr-efo-2026-03",
+        "table": "Table A.3: Determinants of the fiscal forecast",
+        "page": "110"
+      },
+      "note": "Average weekly earnings growth by financial year."
     }
   },
   "fiscal": {

@@ -80,6 +80,34 @@
       "A change is applied in full to current spending and borrowing. No allowance is made for underspending against plans, which the OBR assumes averages about £1.8bn a year across all departments (EFO paragraph 4.11)."
     ]
   },
+  "milestones": [
+    {
+      "label": "This Spending Review",
+      "value": 1.82,
+      "unit": "pctRealPerYear",
+      "source": {
+        "sourceId": "hmt-sr25-del-tables",
+        "table": "Table 5.3 RDELex"
+      },
+      "note": "Average real growth a year to 2028-29, as published in the Spending Review."
+    },
+    {
+      "label": "2010-11 to 2024-25",
+      "value": 0.52,
+      "unit": "pctRealPerYear",
+      "from": {
+        "pesaSheet": "4_3",
+        "rowId": "public-order-and-safety",
+        "fromYear": "2010-11",
+        "toYear": "2024-25"
+      },
+      "source": {
+        "sourceId": "hmt-pesa-2025",
+        "table": "Table 4.3"
+      },
+      "note": "Public order and safety across the whole public sector: police, courts, prisons, fire and immigration."
+    }
+  ],
   "considerations": [
     {
       "id": "barnett-up",
