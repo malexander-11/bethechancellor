@@ -85,7 +85,11 @@ export function CompromisePage() {
     spend({ delays: next });
   };
   const dropPriority = (id: string) => {
-    spend({ priorities: game.priorities.filter((p) => p !== id), capital: game.capital - 1 });
+    spend({
+      priorities: game.priorities.filter((p) => p !== id),
+      dropped: [...game.dropped, id],
+      capital: game.capital - 1,
+    });
     setAsk(null);
   };
   const releasePromise = (id: string) => {

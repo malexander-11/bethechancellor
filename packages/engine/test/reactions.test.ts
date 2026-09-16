@@ -2,11 +2,14 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  ambitionStatus,
   computeOutcome,
   computeReactions,
   distributionalNotes,
+  freshGame,
   parseReactions,
   readings,
+  type GamePermalink,
 } from '../src/index.js';
 import { DATA_DIR, loadDataset } from './fixtures.js';
 
@@ -111,6 +114,88 @@ describe('Budget day reads back as feedback, not a table', () => {
     // Ordered by the size of the measure, so the biggest thing you did comes first.
     expect(notes[0]?.leverTitle).toBeDefined();
     expect(distributionalNotes(run({}), ds.levers, '2029-30')).toEqual([]);
+  });
+
+  it('speaks in groups and phases, and names the decisions behind each reading', () => {
+    const outcome = run({ def5: 1, itbr: 1 });
+    const signals = computeReactions({ outcome, levers: ds.levers, reactions, typicalErrorGbpm });
+    expect(signals.some((s) => s.phase === 'morning')).toBe(true);
+    expect(signals.some((s) => s.phase === 'afternoon')).toBe(true);
+    const groups = new Set(signals.filter((s) => s.audience === 'parliament').map((s) => s.group));
+    expect(groups.has('MPs in marginal seats')).toBe(true);
+    expect(groups.has('No. 10')).toBe(true);
+    const borrowing = signals.find((s) => s.id === 'markets-borrowing');
+    expect(borrowing?.causes).toContain('Defence to 5% of GDP');
+    // Without a game the game readings sit at nought and say nothing about promises.
+    expect(signals.find((s) => s.id === 'parliament-marginals')?.level).toBe('good');
+  });
+
+  it('reads the game: broken promises, unfunded priorities, the target and the breach', () => {
+    const game: GamePermalink = {
+      ...freshGame(7),
+      headroomTargetBn: 30,
+      priorities: ['prisons', 'dip-gap'],
+      protectedPromises: ['tax-lock', 'ct-cap'],
+      breachAccepted: true,
+      capital: 2,
+      dropped: ['borders'],
+    };
+    const outcome = run({ itbr: 1, moj: 10 });
+    const status = ambitionStatus(game, ds.pm, outcome, ds.levers);
+    const values = readings({
+      outcome,
+      levers: ds.levers,
+      reactions,
+      typicalErrorGbpm,
+      game,
+      status,
+    });
+    expect(values.promisesBroken).toBe(1);
+    expect(values.prioritiesUnfunded).toBe(1);
+    expect(values.prioritiesFunded).toBe(1);
+    expect(values.capitalSpent).toBe(1);
+    expect(values.breachAccepted).toBe(1);
+    expect(values.headroomVsTargetGbpm).toBeCloseTo((values.stabilityHeadroomGbpm ?? 0) - 30000, 6);
+    expect(values.rebellionRisk).toBe(2 + 1 + 0 + 1);
+    const signals = computeReactions({
+      outcome,
+      levers: ds.levers,
+      reactions,
+      typicalErrorGbpm,
+      game,
+      status,
+    });
+    const marginals = signals.find((s) => s.id === 'parliament-marginals');
+    expect(marginals?.level).toBe('bad');
+    expect(marginals?.causes[0]).toMatch(/The tax lock \(Basic rate\)/);
+    expect(signals.find((s) => s.id === 'parliament-no10')?.causes).toEqual([
+      "Fund the Defence Investment Plan's gap",
+    ]);
+  });
+
+  it('measures credibility as the share of the improvement that rests on uncertified figures', () => {
+    const certified = readings({
+      outcome: run({ itbr: 2 }),
+      levers: ds.levers,
+      reactions,
+      typicalErrorGbpm,
+    });
+    expect(certified.credibilityShare).toBe(0);
+    const contested = readings({
+      outcome: run({ wealth: 1 }),
+      levers: ds.levers,
+      reactions,
+      typicalErrorGbpm,
+    });
+    expect(contested.credibilityShare).toBe(1);
+    const mixed = readings({
+      outcome: run({ wealth: 1, itbr: 2 }),
+      levers: ds.levers,
+      reactions,
+      typicalErrorGbpm,
+    });
+    expect(mixed.credibilityShare).toBeGreaterThan(0);
+    expect(mixed.credibilityShare).toBeLessThan(1);
   });
 
   it('bands are ordered so every reading lands in exactly one', () => {

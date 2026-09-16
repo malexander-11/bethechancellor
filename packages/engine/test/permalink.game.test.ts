@@ -43,6 +43,7 @@ describe('the playthrough in the link (g= and S=)', () => {
       revealed: true,
       rabbit: 'flagship:ufsm',
       breachAccepted: true,
+      dropped: ['prisons'],
     };
     const q = encodePermalink(
       { ...base, leverValues: { itbr: 1, rate: 0.75 }, game, snapshot: { itbr: 2, ufsm: 1 } },

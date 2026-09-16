@@ -8,6 +8,8 @@ import {
   parseInterventions,
   parseCompromise,
   parseRabbit,
+  parseHouseholdsFile,
+  parseSpeech,
   parseReactions,
   parseContext,
   parseHouseholds,
@@ -32,6 +34,8 @@ import ministersJson from '@data/journey/ministers.json';
 import interventionsJson from '@data/journey/interventions.json';
 import compromiseJson from '@data/journey/compromise.json';
 import rabbitJson from '@data/journey/rabbit.json';
+import electorateJson from '@data/journey/households.json';
+import speechJson from '@data/journey/speech.json';
 import reactionsJson from '@data/journey/reactions.json';
 import contextJson from '@data/context/2026-09.json';
 import householdsJson from '@data/reference/uk-households.json';
@@ -61,6 +65,8 @@ export const ministers = parseMinisters(ministersJson);
 export const interventions = parseInterventions(interventionsJson);
 export const compromise = parseCompromise(compromiseJson);
 export const rabbit = parseRabbit(rabbitJson);
+export const electorate = parseHouseholdsFile(electorateJson);
+export const speech = parseSpeech(speechJson);
 export const levers: Lever[] = Object.keys(leverModules)
   .sort()
   .map((key) => parseLever(leverModules[key]))
@@ -87,6 +93,8 @@ const problems = validateDataset({
   interventions,
   compromise,
   rabbit,
+  electorate,
+  speech,
 });
 if (problems.length > 0) {
   throw new Error(`data set is inconsistent:\n - ${problems.join('\n - ')}`);

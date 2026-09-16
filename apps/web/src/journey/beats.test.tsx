@@ -39,8 +39,11 @@ describe('a step arrives in beats', () => {
 
   it('leaves exactly one live continue button at a time, and none at the end', () => {
     at(`/budget-day?${BASE}`);
-    expect(screen.getAllByRole('button', { name: /Continue/ })).toHaveLength(1);
-    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    // Four beats: the speech, the afternoon, the morning after, the close.
+    for (let i = 0; i < 3; i += 1) {
+      expect(screen.getAllByRole('button', { name: /Continue/ })).toHaveLength(1);
+      fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    }
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
   });
 

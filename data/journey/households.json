@@ -1,0 +1,663 @@
+{
+  "schemaVersion": 1,
+  "households": [
+    {
+      "id": "uc-family",
+      "who": "A family on universal credit with two children",
+      "fact": {
+        "text": "Ending the two-child limit was scored as lifting 450,000 children out of poverty from April 2026.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-document",
+            "quote": "lifting 450,000 children out of poverty"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "touches": [
+        {
+          "code": "rv2ch",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The two-child limit is back. We were told in November it was gone for good; the money for the second child goes with it.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2025-document"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "wuc",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "Universal credit is cut. Every pound of it was already spent before it arrived.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "wuc",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "Universal credit goes up. It is the first Budget in years where the number on the statement went the right way.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "ufsm",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "Free school meals for both of them, without the form. That is a bill gone and a bit of dignity back.",
+            "sources": [
+              {
+                "sourceId": "dfe-fsm-expansion-2026-27"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "rvfrz",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "The thresholds will rise again from 2028. On our wages that is a few pounds a month back, eventually.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "3.2"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vatfood",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "VAT on food. The weekly shop is the one bill we cannot cut, and it just went up by a fifth.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "bus2",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "The £2 bus fare stays. That is how the children get to school and how I get to work.",
+            "sources": [
+              {
+                "sourceId": "govuk-bus-fare-cap-2027"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "fuel",
+          "when": "below",
+          "effect": "gains",
+          "line": {
+            "text": "Cheaper petrol helps a little, when we can afford to fill up at all.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "untouched": {
+        "text": "Nothing in it for us either way. The rent is the same, the shop is the same, the statement is the same.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "understood": {
+        "text": "I could tell what it was for. Whether it reaches us is another matter, but at least I know what they were trying to do.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "puzzled": {
+        "text": "I could not tell you what that Budget was about. Lots of numbers, and none of them ours.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "mortgage-couple",
+      "who": "A couple on median earnings with a mortgage",
+      "fact": {
+        "text": "Ten-year gilt yields were 5.35% in September against the 4.5% the March forecast assumed; fixed mortgage rates follow gilts.",
+        "sources": [
+          {
+            "sourceId": "boe-iadb-gilt-10y"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "touches": [
+        {
+          "code": "itbr",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "A penny on the basic rate. We both pay it, on every pound above the allowance, and the allowance is frozen too.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "3.2"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itbr",
+          "when": "below",
+          "effect": "gains",
+          "line": {
+            "text": "A penny off the basic rate. It is the first tax cut we have actually seen in a payslip.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "rvfrz",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "The thresholds unfreeze in 2028. Later than we would like, but it stops the quiet tax rise the last lot built in.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "3.2"
+              },
+              {
+                "sourceId": "hmt-budget-2025-speech"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nicm",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "National Insurance up. That was the one they promised not to touch.",
+            "sources": [
+              {
+                "sourceId": "labour-manifesto-2024-strong-foundations"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vats",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "VAT up. Everything from the car service to the school shoes costs more, and it is the promise they said they would keep.",
+            "sources": [
+              {
+                "sourceId": "labour-manifesto-2024-strong-foundations"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vatnrg",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "VAT on gas and electricity at the full rate, after they took it off electricity in October. We do not understand which way they are going.",
+            "sources": [
+              {
+                "sourceId": "govuk-vat-electricity-cut-2026"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "sdlt5",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "More stamp duty. We were hoping to move next year; that just got harder.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "fuel",
+          "when": "below",
+          "effect": "gains",
+          "line": {
+            "text": "Cheaper fuel. Two cars, two commutes, so we notice it.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "dhsc",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "More for the NHS. We have been waiting eleven months for an appointment; if this shortens it, it is worth more than a tax cut.",
+            "sources": [
+              {
+                "sourceId": "govuk-elective-reform-plan-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "untouched": {
+        "text": "It left us alone. The mortgage is the thing that decides our year, and the Budget did not move it.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "understood": {
+        "text": "It had a point and it stuck to it. We may not agree with the point, but we could see it.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "puzzled": {
+        "text": "We watched it and could not say afterwards what it was trying to do.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "pensioner",
+      "who": "A pensioner on the state pension",
+      "fact": {
+        "text": "About 850,000 people a year reach state pension age by 2030-31, up from 700,000 in 2022-23; the triple lock decides what each of them gets.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.23"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "touches": [
+        {
+          "code": "cpilock",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The triple lock goes. My pension rises with prices only from now on, and every year the gap gets a little wider.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.23"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "wpens",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "Something extra for pensioners on top of the lock. It is not often we are the ones getting more.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "wpens",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "Pensioner benefits cut. We were told the lock was safe; this is a cut by another route.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "rvwfp",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The winter fuel payment is back to pension credit only. We had it back for one winter; now it is gone again.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2025-table-4-1",
+                "table": "Table 4.1",
+                "note": "line 84"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vatnrg",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "VAT on the heating at the full rate. In this house the heating is not optional.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itpa",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "A smaller personal allowance means more of my pension is taxed. I did not expect to be a taxpayer at this age.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "dhsc",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "More money for the health service. At my age that is the Budget.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "untouched": {
+        "text": "Nothing for us and nothing against us. The lock held and the winter payment held; we will take that.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "understood": {
+        "text": "I could see what they were doing. I am not sure it was for people like me, but it was for something.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "puzzled": {
+        "text": "A lot of talk and I still do not know what it was for.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "tradesperson",
+      "who": "A self-employed tradesperson who drives for work",
+      "fact": {
+        "text": "Fuel duty has not risen since 2011-12; the last Budget kept the 5p cut going and pencilled in rises from September 2026.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "3.2"
+          },
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 3"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "touches": [
+        {
+          "code": "fuel",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Fuel duty up. Every job starts with a tank of diesel and I cannot pass that on to a customer who is already stretched.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "fuel",
+          "when": "below",
+          "effect": "gains",
+          "line": {
+            "text": "Fuel duty down. On the miles I do, that is real money, every week.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "rvfuel",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The fuel duty rises are back on from April. Fifteen years of freezes and they picked now.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nicm",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Class 4 National Insurance up. Self-employed people pay it on every pound of profit, and there is no employer to share it.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vats",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "VAT up. I am VAT-registered, so it is my invoices that go up, and customers who notice.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "ct",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Corporation tax up. I run through a small company like most of the trade; that is my margin.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "cdel",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "More public investment. Half my work is subcontracting on public jobs; when the capital budget moves, so does my order book.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.12"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "untouched": {
+        "text": "It did not touch the van, the diesel or the invoices. That is a good Budget as far as I am concerned.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "understood": {
+        "text": "I got what it was for. Not for me, but I got it.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "puzzled": {
+        "text": "Could not tell you. I had the radio on and it was a list of numbers.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "professional",
+      "who": "A higher-rate professional with savings",
+      "fact": {
+        "text": "Income tax thresholds are frozen to April 2031, so earnings growth pulls more people into the higher and additional rates each year.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "3.2"
+          },
+          {
+            "sourceId": "hmt-budget-2025-document"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "touches": [
+        {
+          "code": "ithr",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "The higher rate goes up. On everything above the threshold, which the freeze keeps dragging down towards us.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "3.2"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itbrl",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "The higher-rate threshold rises. Less of my pay is taxed at 40%; that is the first time in years.",
+            "sources": [
+              {
+                "sourceId": "govuk-income-tax-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itbrl",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "The higher-rate threshold falls. More of my pay at 40%, on top of the freeze.",
+            "sources": [
+              {
+                "sourceId": "govuk-income-tax-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itar",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "The additional rate up. It is a small group paying it, and I am in it.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "it50",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "A 50% rate above £125,000. I remember the last one; it lasted a year.",
+            "sources": [
+              {
+                "sourceId": "legislation-fa-2012-s1"
+              },
+              {
+                "sourceId": "govuk-income-tax-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "cgth",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Capital gains tax up. The savings I built were taxed once when I earned them; now the gains are taxed harder too.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "rvcgt",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "The 2024 capital gains rise reversed. Selling the shares just got a little less painful.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "iht",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Inheritance tax up. It is my parents’ house, and now it is the taxman’s share of it.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "rvinv",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "The dividend and savings tax rises are reversed. The savings account and the ISA both breathe.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "wealth",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "A wealth tax above £10 million. Not me, but I know the argument about who leaves.",
+            "sources": [
+              {
+                "sourceId": "wtc-final-report-2020"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "untouched": {
+        "text": "Nothing in it for me and nothing out of me, beyond the freeze that was already there.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "understood": {
+        "text": "Clear enough. I could tell you what it was for in one sentence.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "puzzled": {
+        "text": "I read the coverage twice and could not find the thread.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    }
+  ]
+}

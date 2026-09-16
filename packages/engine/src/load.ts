@@ -10,6 +10,8 @@ import {
   interventionsFileSchema,
   compromiseFileSchema,
   rabbitFileSchema,
+  householdsFileSchema,
+  speechFileSchema,
   reactionsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -35,6 +37,8 @@ import type {
   InterventionsFile,
   CompromiseFile,
   RabbitFile,
+  HouseholdsFile,
+  SpeechFile,
   ReactionsFile,
   ContextFile,
   HmrcExtract,
@@ -168,6 +172,14 @@ export function parseRabbit(json: unknown): RabbitFile {
   return parseWith(rabbitFileSchema, json, 'the rabbit');
 }
 
+export function parseHouseholdsFile(json: unknown): HouseholdsFile {
+  return parseWith(householdsFileSchema, json, 'the households');
+}
+
+export function parseSpeech(json: unknown): SpeechFile {
+  return parseWith(speechFileSchema, json, 'the speech');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -186,6 +198,8 @@ export interface Dataset {
   interventions?: InterventionsFile;
   compromise?: CompromiseFile;
   rabbit?: RabbitFile;
+  electorate?: HouseholdsFile;
+  speech?: SpeechFile;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -219,6 +233,8 @@ export function validateDataset(ds: Dataset): string[] {
       ds.interventions ?? null,
       ds.compromise ?? null,
       ds.rabbit ?? null,
+      ds.electorate ?? null,
+      ds.speech ?? null,
     ],
     referenced,
   );
@@ -521,6 +537,29 @@ export function validateDataset(ds: Dataset): string[] {
       } else if (option.value === lever.control.default) {
         problems.push(`rabbit ${option.id} leaves the lever where it is`);
       }
+    }
+  }
+  if (ds.electorate) {
+    // A household touched by a lever the desk does not have would never feel anything.
+    for (const household of ds.electorate.households) {
+      for (const touch of household.touches) {
+        if (!codes.has(touch.code)) {
+          problems.push(`household ${household.id} is touched by unknown lever "${touch.code}"`);
+        }
+      }
+    }
+  }
+  if (ds.speech) {
+    if (!ds.speech.opening.default) problems.push('the speech has no default opening');
+    for (const theme of ds.pm?.themes ?? []) {
+      if (!ds.speech.opening[theme.id])
+        problems.push(`the speech has no opening for theme ${theme.id}`);
+    }
+    for (const key of ['met', 'missed', 'breach']) {
+      if (!ds.speech.peroration[key]) problems.push(`the speech has no ${key} peroration`);
+    }
+    for (const key of ['keep', 'flagship', ...(ds.rabbit?.options.map((o) => o.id) ?? [])]) {
+      if (!ds.speech.rabbit[key]) problems.push(`the speech has no flourish for rabbit ${key}`);
     }
   }
   if (ds.compromise) {

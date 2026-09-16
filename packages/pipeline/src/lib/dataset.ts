@@ -10,6 +10,8 @@ import {
   parseInterventions,
   parseCompromise,
   parseRabbit,
+  parseHouseholdsFile,
+  parseSpeech,
   parseHouseholds,
   parseLever,
   parsePresets,
@@ -60,6 +62,10 @@ export function loadDataset(
   );
   const compromise = parseCompromise(readJson(path.join(DATA_DIR, 'journey', 'compromise.json')));
   const rabbit = parseRabbit(readJson(path.join(DATA_DIR, 'journey', 'rabbit.json')));
+  const electorate = parseHouseholdsFile(
+    readJson(path.join(DATA_DIR, 'journey', 'households.json')),
+  );
+  const speech = parseSpeech(readJson(path.join(DATA_DIR, 'journey', 'speech.json')));
   const vintage = vintages.find((v) => v.id === defaultVintageId);
   const rules = ruleSets.find((r) => r.id === defaultRulesId);
   if (!vintage) throw new Error(`default vintage ${defaultVintageId} not found`);
@@ -81,6 +87,8 @@ export function loadDataset(
     interventions,
     compromise,
     rabbit,
+    electorate,
+    speech,
     vintages,
     ruleSets,
   };

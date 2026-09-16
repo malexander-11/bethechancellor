@@ -12,6 +12,8 @@ import {
   parseInterventions,
   parseCompromise,
   parseRabbit,
+  parseHouseholdsFile,
+  parseSpeech,
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
@@ -68,6 +70,8 @@ export function loadDataset(): Required<Dataset> {
     interventions: parseInterventions(readJson('journey/interventions.json')),
     compromise: parseCompromise(readJson('journey/compromise.json')),
     rabbit: parseRabbit(readJson('journey/rabbit.json')),
+    electorate: parseHouseholdsFile(readJson('journey/households.json')),
+    speech: parseSpeech(readJson('journey/speech.json')),
   };
 }
 

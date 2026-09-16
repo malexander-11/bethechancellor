@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "intro": "The OBR has certified the forecast and the Budget is out. Here is how it reads.",
+  "intro": "The OBR has certified the forecast and the Budget is out. Here is how it reads on the afternoon, and how it reads the morning after.",
   "signals": [
     {
       "id": "rules-stability",
@@ -358,6 +358,7 @@
     {
       "id": "parliament-recommendations",
       "audience": "parliament",
+      "group": "Your colleagues",
       "measure": "recommendationsAdopted",
       "reading": {
         "label": "Recommendations from colleagues adopted",
@@ -407,6 +408,7 @@
     {
       "id": "parliament-reversals",
       "audience": "parliament",
+      "group": "The backbenches",
       "measure": "budget2025Reversals",
       "reading": {
         "label": "Decisions from Budget 2025 and the Spending Review reversed",
@@ -519,6 +521,915 @@
               "sourceId": "obr-efo-2026-03",
               "table": "Paragraph 3.1",
               "page": "39"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parliament-marginals",
+      "audience": "parliament",
+      "group": "MPs in marginal seats",
+      "measure": "promisesBroken",
+      "reading": {
+        "label": "Promises made in Downing Street broken",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "kept",
+          "upTo": 0,
+          "level": "good",
+          "headline": "Every promise the Prime Minister asked you to keep survives.",
+          "detail": "The manifesto tax lock and the last Budget’s commitments stand. MPs in marginal seats have nothing to explain on the doorstep, which is the outcome they wanted most.",
+          "sources": [
+            {
+              "sourceId": "labour-manifesto-2024-strong-foundations",
+              "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+            },
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            }
+          ]
+        },
+        {
+          "id": "one",
+          "upTo": 1,
+          "level": "bad",
+          "headline": "A promise made in Downing Street is broken, and the marginal seats know which one.",
+          "detail": "The manifesto was explicit and the last Budget restated it. The MPs who won narrowly will be asked about this first, and the words are on the record.",
+          "sources": [
+            {
+              "sourceId": "labour-manifesto-2024-strong-foundations",
+              "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+            },
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            }
+          ]
+        },
+        {
+          "id": "several",
+          "level": "bad",
+          "headline": "More than one promise is broken.",
+          "detail": "Each one was made in writing. The marginal seats now have a list, and so does everyone else.",
+          "sources": [
+            {
+              "sourceId": "labour-manifesto-2024-strong-foundations",
+              "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+            },
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parliament-left",
+      "audience": "parliament",
+      "group": "The left of the party",
+      "measure": "welfareReversals",
+      "reading": {
+        "label": "Welfare decisions of Budget 2025 reversed",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "stand",
+          "upTo": 0,
+          "level": "good",
+          "headline": "The welfare U-turns of last November stand.",
+          "detail": "Ending the two-child limit was scored as lifting 450,000 children out of poverty. The left of the party fought for that and for the PIP reversal; leaving them in place costs you nothing here.",
+          "sources": [
+            {
+              "sourceId": "hmt-budget-2025-document"
+            },
+            {
+              "sourceId": "hmt-budget-2025-table-4-1",
+              "table": "Table 4.1"
+            }
+          ]
+        },
+        {
+          "id": "reversed",
+          "level": "bad",
+          "headline": "You have re-run a welfare cut the party fought to reverse.",
+          "detail": "Reinstating the two-child limit, proceeding with the PIP changes or narrowing winter fuel payments again is the argument of last year run backwards. The Treasury’s own scorecard describes the two-child limit’s removal as lifting 450,000 children out of poverty.",
+          "sources": [
+            {
+              "sourceId": "hmt-budget-2025-document"
+            },
+            {
+              "sourceId": "hmt-budget-2025-table-4-1",
+              "table": "Table 4.1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parliament-ministers",
+      "audience": "parliament",
+      "group": "Ministers whose budgets moved",
+      "measure": "departmentsCut",
+      "reading": {
+        "label": "Departmental and welfare budgets cut",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "none",
+          "upTo": 0,
+          "level": "neutral",
+          "headline": "No department loses money.",
+          "detail": "Every settlement from the Spending Review stands or grows. Ministers have nothing to write to you about, which is not the same as having nothing to ask for.",
+          "sources": [
+            {
+              "sourceId": "hmt-sr25-del-tables",
+              "table": "Table 5.3 RDELex"
+            }
+          ]
+        },
+        {
+          "id": "some",
+          "upTo": 2,
+          "level": "mixed",
+          "headline": "A department or two takes a cut, and their ministers say so.",
+          "detail": "The Spending Review already has unprotected budgets falling in real terms in the later years; a cut on top is felt in a specific service, and the minister responsible will name it.",
+          "sources": [
+            {
+              "sourceId": "hmt-sr25-del-tables",
+              "table": "Table 5.3 RDELex"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "4.14-4.16"
+            }
+          ]
+        },
+        {
+          "id": "many",
+          "level": "bad",
+          "headline": "Cuts across Whitehall: the letters are already being drafted.",
+          "detail": "Several settlements are below the Spending Review. The OBR notes the squeeze on unprotected departments after 2028-29 is already severe; ministers will argue each one in public.",
+          "sources": [
+            {
+              "sourceId": "hmt-sr25-del-tables",
+              "table": "Table 5.3 RDELex"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "4.16"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parliament-no10",
+      "audience": "parliament",
+      "group": "No. 10",
+      "measure": "prioritiesUnfunded",
+      "reading": {
+        "label": "Priorities agreed with the Prime Minister still unfunded",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "delivered",
+          "upTo": 0,
+          "level": "good",
+          "headline": "Downing Street got what it agreed.",
+          "detail": "Every priority from the conversation in Downing Street is funded. The Prime Minister’s programme is in the Budget, which is what the meeting was for.",
+          "sources": [
+            {
+              "sourceId": "no10-first-speech-2026-07-20"
+            },
+            {
+              "sourceId": "no10-commons-statement-2026-09-01"
+            }
+          ]
+        },
+        {
+          "id": "one",
+          "upTo": 1,
+          "level": "mixed",
+          "headline": "One priority agreed in Downing Street is not funded.",
+          "detail": "The Prime Minister set out the programme in public in July and September. A missing piece will be noticed by the people it was promised to.",
+          "sources": [
+            {
+              "sourceId": "no10-first-speech-2026-07-20"
+            },
+            {
+              "sourceId": "no10-commons-statement-2026-09-01"
+            }
+          ]
+        },
+        {
+          "id": "several",
+          "level": "bad",
+          "headline": "The Prime Minister’s priorities are not in the Budget.",
+          "detail": "The programme was set out in public; the Budget does not fund it. Downing Street will read that before anyone else does.",
+          "sources": [
+            {
+              "sourceId": "no10-first-speech-2026-07-20"
+            },
+            {
+              "sourceId": "no10-commons-statement-2026-09-01"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parliament-whips",
+      "audience": "parliament",
+      "group": "The whips",
+      "measure": "rebellionRisk",
+      "reading": {
+        "label": "Rebellion risk: promises broken, priorities unfunded, welfare reversed, capital spent",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "calm",
+          "upTo": 0,
+          "level": "good",
+          "headline": "The whips expect a quiet vote.",
+          "detail": "Nothing here breaks a written commitment or reverses what the party fought for. The Budget resolutions pass on the usual numbers.",
+          "sources": [
+            {
+              "sourceId": "labour-manifesto-2024-strong-foundations",
+              "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+            }
+          ]
+        },
+        {
+          "id": "grumbling",
+          "upTo": 2,
+          "level": "neutral",
+          "headline": "Grumbling, not rebellion.",
+          "detail": "A concession or an unfunded promise gives the backbenches something to say. The whips can count the votes.",
+          "sources": [
+            {
+              "sourceId": "labour-manifesto-2024-strong-foundations",
+              "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+            }
+          ]
+        },
+        {
+          "id": "restive",
+          "upTo": 4,
+          "level": "mixed",
+          "headline": "The backbenches are restive.",
+          "detail": "Several things at once: a broken commitment, a missing priority or a welfare reversal. Each has organised support behind it and the whips are counting.",
+          "sources": [
+            {
+              "sourceId": "labour-manifesto-2024-strong-foundations",
+              "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+            },
+            {
+              "sourceId": "hmt-budget-2025-document"
+            }
+          ]
+        },
+        {
+          "id": "revolt",
+          "level": "bad",
+          "headline": "An open revolt on the Budget resolutions.",
+          "detail": "Promises broken and priorities dropped in the same Budget. The people who campaigned on the manifesto now have several reasons to vote against it.",
+          "sources": [
+            {
+              "sourceId": "labour-manifesto-2024-strong-foundations",
+              "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+            },
+            {
+              "sourceId": "hmt-budget-2025-document"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "markets-target",
+      "audience": "markets",
+      "measure": "headroomVsTargetGbpm",
+      "reading": {
+        "label": "Headroom against the target you set",
+        "unit": "GBPm"
+      },
+      "bands": [
+        {
+          "id": "well-short",
+          "upTo": -5000,
+          "level": "bad",
+          "headline": "Headroom is well below the margin you set out to keep.",
+          "detail": "The last Budget made a virtue of more than doubling headroom to £21.7bn; commentators had already called the margin wafer-thin before that evaporated. The Bank found gilt moves this year amplified by hedge fund deleveraging. A thin margin is noticed.",
+          "sources": [
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            },
+            {
+              "sourceId": "ifg-healey-tax-budget-2026"
+            },
+            {
+              "sourceId": "boe-fsr-2026-07"
+            }
+          ]
+        },
+        {
+          "id": "short",
+          "upTo": 0,
+          "level": "mixed",
+          "headline": "Below the target you set yourself.",
+          "detail": "The margin is smaller than you planned for. The OBR’s typical five-year error is about £32bn, so the difference is one of degree, and the market prices degrees.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "3.4"
+            },
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            }
+          ]
+        },
+        {
+          "id": "inside",
+          "upTo": 10000,
+          "level": "neutral",
+          "headline": "Inside your target, narrowly.",
+          "detail": "You kept the margin you said you would keep. Whether it is enough is the OBR’s forecast error against your headroom, and that comparison is printed on the scorecard.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "3.4"
+            }
+          ]
+        },
+        {
+          "id": "comfortable",
+          "level": "good",
+          "headline": "Comfortably inside the margin you set.",
+          "detail": "More room than you planned to keep, in a market where thin margins have been punished. The Chancellor’s letter to the Treasury Committee promised a buffer; this is one.",
+          "sources": [
+            {
+              "sourceId": "hmt-tsc-budget-2026-letter"
+            },
+            {
+              "sourceId": "boe-fsr-2026-07"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "markets-credibility",
+      "audience": "markets",
+      "measure": "credibilityShare",
+      "reading": {
+        "label": "Share of the package’s improvement resting on uncertified costings",
+        "unit": "ratio"
+      },
+      "bands": [
+        {
+          "id": "certified",
+          "upTo": 0.1,
+          "level": "good",
+          "headline": "The package rests on certified costings.",
+          "detail": "What improves the current budget comes from HMRC rows and Treasury scorecard lines. The OBR will certify those without argument.",
+          "sources": [
+            {
+              "sourceId": "osr-trr-review-2025-12"
+            }
+          ]
+        },
+        {
+          "id": "some",
+          "upTo": 0.4,
+          "level": "mixed",
+          "headline": "A meaningful share rests on figures nobody certified.",
+          "detail": "Part of the yield comes from measures whose own cards call the figure contested or static. HMRC says a relief’s cost is not the yield from removing it; the OBR scores accordingly.",
+          "sources": [
+            {
+              "sourceId": "hmrc-tax-reliefs-quality-report"
+            },
+            {
+              "sourceId": "osr-trr-review-2025-12"
+            }
+          ]
+        },
+        {
+          "id": "most",
+          "level": "bad",
+          "headline": "Most of the yield rests on figures nobody certified.",
+          "detail": "The package leans on contested bases and static relief costs. The OBR’s re-scoring is where that lands, and the market has read the OBR before.",
+          "sources": [
+            {
+              "sourceId": "hmrc-tax-reliefs-quality-report"
+            },
+            {
+              "sourceId": "osr-trr-review-2025-12"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "markets-inflation",
+      "audience": "markets",
+      "measure": "priceRaisingMeasures",
+      "reading": {
+        "label": "Measures that raise prices",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "none",
+          "upTo": 0,
+          "level": "neutral",
+          "headline": "Nothing here pushes prices up.",
+          "detail": "No VAT, duty or fuel rise. RPI follows the forecast, and index-linked gilts with it.",
+          "sources": [
+            {
+              "sourceId": "ons-timeseries-czbh"
+            }
+          ]
+        },
+        {
+          "id": "some",
+          "upTo": 2,
+          "level": "mixed",
+          "headline": "Price-raising measures feed RPI, and RPI feeds the debt interest bill.",
+          "detail": "VAT and duty rises pass into prices. The OBR’s sensitivity puts a point on RPI at about £11bn of borrowing by 2030-31, largely through index-linked gilts.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "6.17"
+            },
+            {
+              "sourceId": "ons-timeseries-czbh"
+            }
+          ]
+        },
+        {
+          "id": "many",
+          "level": "bad",
+          "headline": "Several price-raising measures at once.",
+          "detail": "RPI, the index the gilt market watches, will carry the VAT and duty changes into the interest bill. The OBR’s own sensitivity says what a point costs.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "6.17"
+            },
+            {
+              "sourceId": "ons-timeseries-czbh"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "markets-breach",
+      "audience": "markets",
+      "measure": "breachAccepted",
+      "reading": {
+        "label": "Breach acknowledged",
+        "unit": "status"
+      },
+      "bands": [
+        {
+          "id": "none",
+          "upTo": 0,
+          "level": "neutral",
+          "headline": "You are proceeding on your own rules.",
+          "detail": "No rule is knowingly missed. The Charter’s escape clause stays unused.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.9-3.10"
+            }
+          ]
+        },
+        {
+          "id": "acknowledged",
+          "level": "bad",
+          "headline": "You have said openly that a rule will be missed.",
+          "detail": "The Charter allows suspension in an emergency or a significant shock judged by the OBR; a choice is neither. The Bank’s account of 2025 attributes higher long rates partly to concerns around fiscal sustainability.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.9-3.10"
+            },
+            {
+              "sourceId": "boe-insights-long-rates-2025"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "public-rabbit",
+      "audience": "public",
+      "measure": "rabbitGbpm",
+      "reading": {
+        "label": "What the rabbit costs in the target year",
+        "unit": "GBPm"
+      },
+      "bands": [
+        {
+          "id": "big",
+          "upTo": -5000,
+          "level": "mixed",
+          "headline": "A big giveaway in the last minute of the speech.",
+          "detail": "The rabbit is the headline and its cost is the small print. The last Budget made headroom the headline instead; this one buys applause with it.",
+          "sources": [
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            }
+          ]
+        },
+        {
+          "id": "modest",
+          "upTo": -1,
+          "level": "neutral",
+          "headline": "A modest surprise for the speech.",
+          "detail": "Something to cheer that costs less than the room you had. The morning papers will still price it.",
+          "sources": [
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            }
+          ]
+        },
+        {
+          "id": "none",
+          "level": "neutral",
+          "headline": "No rabbit.",
+          "detail": "The headroom is the announcement. Fewer cheers in the chamber; fewer questions the next morning.",
+          "sources": [
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "public-compromises",
+      "audience": "public",
+      "measure": "compromisesGbpm",
+      "reading": {
+        "label": "Promised spending scaled back since the desk",
+        "unit": "GBPm"
+      },
+      "bands": [
+        {
+          "id": "none",
+          "upTo": 0,
+          "level": "neutral",
+          "headline": "Nothing promised was scaled back.",
+          "detail": "The package that left the desk is the package in the box.",
+          "sources": [
+            {
+              "sourceId": "no10-first-speech-2026-07-20"
+            }
+          ]
+        },
+        {
+          "id": "some",
+          "upTo": 5000,
+          "level": "mixed",
+          "headline": "Something promised was scaled back between the desk and the box.",
+          "detail": "Delays and narrowings are visible to the people who were promised the thing. The Prime Minister set the programme out in public.",
+          "sources": [
+            {
+              "sourceId": "no10-first-speech-2026-07-20"
+            }
+          ]
+        },
+        {
+          "id": "much",
+          "level": "bad",
+          "headline": "Big promises shrank between the desk and the box.",
+          "detail": "What the Prime Minister announced in July and September is not what the Budget funds. The gap is the story.",
+          "sources": [
+            {
+              "sourceId": "no10-first-speech-2026-07-20"
+            },
+            {
+              "sourceId": "no10-commons-statement-2026-09-01"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morning-fiscal-drag",
+      "audience": "public",
+      "phase": "morning",
+      "measure": "thresholdFreezeKept",
+      "reading": {
+        "label": "Threshold freeze kept",
+        "unit": "status"
+      },
+      "bands": [
+        {
+          "id": "ended",
+          "upTo": 0,
+          "level": "good",
+          "headline": "The papers notice the tax cut you did not announce: thresholds rise from 2028.",
+          "detail": "Ending the freeze early lets thresholds rise with prices from April 2028. Frozen thresholds were the largest revenue-raiser in the last Budget, and your predecessor conceded they affect working people.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "3.2"
+            },
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            }
+          ]
+        },
+        {
+          "id": "kept",
+          "level": "mixed",
+          "headline": "The morning papers have done the sums on frozen thresholds.",
+          "detail": "Thresholds stay frozen to April 2031. The OBR says the freeze pulls people into higher bands as earnings grow; the last Chancellor said it would affect working people. That is the tax rise in this Budget that nobody voted on.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "3.2"
+            },
+            {
+              "sourceId": "hmt-budget-2025-speech"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morning-costings",
+      "audience": "markets",
+      "phase": "morning",
+      "measure": "credibilityShare",
+      "reading": {
+        "label": "Share of the package’s improvement resting on uncertified costings",
+        "unit": "ratio"
+      },
+      "bands": [
+        {
+          "id": "hold",
+          "upTo": 0.1,
+          "level": "good",
+          "headline": "The costings survive a second reading.",
+          "detail": "Analysts find HMRC rows and Treasury lines behind the yield. Nothing to re-score.",
+          "sources": [
+            {
+              "sourceId": "osr-trr-review-2025-12"
+            }
+          ]
+        },
+        {
+          "id": "questioned",
+          "upTo": 0.4,
+          "level": "mixed",
+          "headline": "Analysts question the contested costings.",
+          "detail": "The morning notes go through the measures whose own cards call the base contested. HMRC’s caveat that a relief’s cost is not its yield is quoted back at you.",
+          "sources": [
+            {
+              "sourceId": "hmrc-tax-reliefs-quality-report"
+            },
+            {
+              "sourceId": "osr-trr-review-2025-12"
+            }
+          ]
+        },
+        {
+          "id": "doubted",
+          "level": "bad",
+          "headline": "The yield is doubted in print.",
+          "detail": "Most of the improvement rests on figures the OBR did not certify as scored. Commentators price the difference.",
+          "sources": [
+            {
+              "sourceId": "hmrc-tax-reliefs-quality-report"
+            },
+            {
+              "sourceId": "osr-trr-review-2025-12"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morning-efficiencies",
+      "audience": "parliament",
+      "group": "The select committee",
+      "phase": "morning",
+      "measure": "efficienciesKept",
+      "reading": {
+        "label": "Efficiency savings still pencilled in",
+        "unit": "status"
+      },
+      "bands": [
+        {
+          "id": "dropped",
+          "upTo": 0,
+          "level": "neutral",
+          "headline": "You dropped the pencilled-in efficiencies and said so.",
+          "detail": "The committee notes the honesty: the OBR listed those savings not being realised among the significant risks to departmental spending.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "4.13"
+            }
+          ]
+        },
+        {
+          "id": "kept",
+          "level": "mixed",
+          "headline": "£14bn of efficiencies are still pencilled in, and the committee asks where they are.",
+          "detail": "The settlements assume technical efficiencies from the Spending Review and more from Budget 2025 by 2028-29. The OBR lists them not being realised as expected among the significant risks. The question is who delivers them.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "4.13"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morning-financing",
+      "audience": "markets",
+      "phase": "morning",
+      "measure": "cumulativeBorrowingChangeGbpm",
+      "reading": {
+        "label": "Extra borrowing over the forecast",
+        "unit": "GBPm"
+      },
+      "bands": [
+        {
+          "id": "less",
+          "upTo": -10000,
+          "level": "good",
+          "headline": "The gilt remit shrinks.",
+          "detail": "Less to issue over the forecast than the market expected. The Bank notes sovereign issuance at historically high levels; less of it is welcome.",
+          "sources": [
+            {
+              "sourceId": "boe-fsr-2026-07"
+            }
+          ]
+        },
+        {
+          "id": "flat",
+          "upTo": 10000,
+          "level": "neutral",
+          "headline": "The financing remit is about what the market expected.",
+          "detail": "Nothing here changes what the Debt Management Office has to sell.",
+          "sources": [
+            {
+              "sourceId": "boe-fsr-2026-07"
+            }
+          ]
+        },
+        {
+          "id": "more",
+          "upTo": 50000,
+          "level": "mixed",
+          "headline": "More gilts to sell over the forecast.",
+          "detail": "The extra borrowing has to be financed. The Bank notes issuance already at historically high levels and shifting to shorter maturities; the remit grows.",
+          "sources": [
+            {
+              "sourceId": "boe-fsr-2026-07"
+            },
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            }
+          ]
+        },
+        {
+          "id": "much-more",
+          "level": "bad",
+          "headline": "A much larger gilt programme.",
+          "detail": "The extra issuance over the forecast is large against a market the Bank describes as sensitive to changes in expectations about debt sustainability.",
+          "sources": [
+            {
+              "sourceId": "boe-fsr-2026-07"
+            },
+            {
+              "sourceId": "boe-insights-long-rates-2025"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morning-delays",
+      "audience": "parliament",
+      "group": "Ministers",
+      "phase": "morning",
+      "measure": "delayedMeasures",
+      "reading": {
+        "label": "Measures that start later than planned",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "none",
+          "upTo": 0,
+          "level": "neutral",
+          "headline": "Everything starts when it was promised.",
+          "detail": "No measure was pushed back to a later year.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "4.13"
+            }
+          ]
+        },
+        {
+          "id": "some",
+          "level": "mixed",
+          "headline": "The start dates are the story.",
+          "detail": "One or more measures begin a year or more later than the programme implied. The OBR scores what falls inside the forecast; the department waits.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "4.13"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morning-delivery",
+      "audience": "public",
+      "phase": "morning",
+      "measure": "prioritiesFunded",
+      "reading": {
+        "label": "Priorities funded",
+        "unit": "count"
+      },
+      "bands": [
+        {
+          "id": "none",
+          "upTo": 0,
+          "level": "neutral",
+          "headline": "Nothing new to deliver, so nothing to fall short on.",
+          "detail": "No funded flagship, so the morning after has no delivery question to ask.",
+          "sources": [
+            {
+              "sourceId": "nao-send-2024"
+            }
+          ]
+        },
+        {
+          "id": "some",
+          "level": "mixed",
+          "headline": "Money is not delivery.",
+          "detail": "Each funded flagship arrives with the constraints its own documents state: places take years, capacity is not cash, deficits close slower than money moves. The morning papers ask about the second year.",
+          "sources": [
+            {
+              "sourceId": "nao-send-2024"
+            },
+            {
+              "sourceId": "govuk-elective-reform-plan-2025"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morning-breach",
+      "audience": "rules",
+      "phase": "morning",
+      "measure": "breachAccepted",
+      "reading": {
+        "label": "Breach acknowledged",
+        "unit": "status"
+      },
+      "bands": [
+        {
+          "id": "none",
+          "upTo": 0,
+          "level": "neutral",
+          "headline": "No rule is knowingly missed.",
+          "detail": "The OBR’s assessment on Budget day and yours agree.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.9-3.10"
+            }
+          ]
+        },
+        {
+          "id": "acknowledged",
+          "level": "bad",
+          "headline": "The OBR will publish that a rule is missed, and you said so first.",
+          "detail": "Saying it first is the honest course and it does not change the arithmetic. The escape clause is for a shock the OBR agrees is one.",
+          "sources": [
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.9-3.10"
             }
           ]
         }

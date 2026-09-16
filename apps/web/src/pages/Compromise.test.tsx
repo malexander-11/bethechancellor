@@ -75,7 +75,9 @@ describe('making it add up', () => {
     fireEvent.click(within(route).getByRole('button', { name: /Drop it, and own it/ }));
     await waitFor(() => {
       expect(g()).toMatch(/cp\.2/);
-      expect(g()).not.toMatch(/prisons/);
+      // Out of the priorities, and into the record of what was dropped.
+      expect(g()).toMatch(/pr\.dip-gap(_|$)/);
+      expect(g()).toMatch(/dp\.prisons/);
     });
     expect(within(route).getByText(/Political capital: 2 of 3/)).toBeInTheDocument();
   });

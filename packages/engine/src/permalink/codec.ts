@@ -51,6 +51,7 @@ export function encodeGame(g: GamePermalink): string {
   if (g.revealed) items.push('rv.1');
   if (g.rabbit) items.push(`rb.${g.rabbit}`);
   if (g.breachAccepted) items.push('br.1');
+  if (g.dropped.length > 0) items.push(`dp.${g.dropped.join(LIST_SEPARATOR)}`);
   return items.join(ITEM_SEPARATOR);
 }
 
@@ -100,6 +101,7 @@ export function decodeGame(raw: string, warnings: string[]): GamePermalink | und
   const rb = items.get('rb');
   if (rb && slugOk(rb)) g.rabbit = rb;
   g.breachAccepted = items.get('br') === '1';
+  g.dropped = list('dp');
   return g;
 }
 

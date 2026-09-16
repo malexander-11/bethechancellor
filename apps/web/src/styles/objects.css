@@ -1234,3 +1234,182 @@
 .choice--taken {
   opacity: 0.6;
 }
+
+/* ------------------------------------------------------------ budget day */
+
+.reactions--three {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1000px) {
+  .reactions--three {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.signal__group {
+  margin: 0 0 2px;
+  font-size: 0.66rem;
+}
+
+.signal__causes {
+  margin: 2px 0 3px;
+  font-size: 0.82rem;
+}
+
+.signal__because {
+  font-family: var(--font-label);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.rules-strip {
+  margin: 12px 0;
+  padding: 12px 16px;
+}
+
+.rules-strip__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+  margin-bottom: 8px;
+}
+
+.rules-strip__head .reaction__title {
+  margin: 0;
+}
+
+.rules-strip__headroom {
+  display: flex;
+  flex-direction: column;
+}
+
+.rules-strip__headroom strong {
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.rules-strip__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.households {
+  list-style: none;
+  margin: 8px 0 12px;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.household {
+  padding: 12px 14px;
+  background: var(--paper);
+  background-image: var(--paper-grain);
+  border-radius: 2px;
+  box-shadow: var(--shadow);
+  border-top: 3px solid var(--border);
+  color: var(--ink);
+}
+
+.household--gains {
+  border-top-color: var(--stamp-good);
+}
+
+.household--pays {
+  border-top-color: var(--stamp-bad);
+}
+
+.household--mixed {
+  border-top-color: var(--stamp-warn);
+}
+
+.household__who {
+  margin: 0 0 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.household__net--gains {
+  border-color: var(--stamp-good);
+  color: var(--stamp-good);
+  background: color-mix(in srgb, var(--stamp-good) 10%, transparent);
+}
+
+.household__net--pays {
+  border-color: var(--stamp-bad);
+  color: var(--stamp-bad);
+  background: color-mix(in srgb, var(--stamp-bad) 10%, transparent);
+}
+
+.household__line {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.household__line .source {
+  display: block;
+  font-size: 0.76rem;
+}
+
+.household__line--verdict {
+  font-style: italic;
+}
+
+.household__fact {
+  margin: 6px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.speech {
+  padding: 18px 22px 16px 60px;
+  margin: 8px 0 12px;
+}
+
+.speech__para {
+  margin: 0 0 12px;
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+.speech__para--opening::first-letter {
+  font-size: 1.6em;
+  font-weight: 700;
+}
+
+.speech__para--peroration {
+  font-weight: 600;
+}
+
+.speech__sources {
+  font-size: 0.76rem;
+}
+
+.speech__strip {
+  margin: 14px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.delivery {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.delivery li {
+  margin: 4px 0;
+}

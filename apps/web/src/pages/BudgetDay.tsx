@@ -1,26 +1,44 @@
-import { computeReactions, distributionalNotes, formatGbpBn, formatPct } from '@btc/engine';
-import { useState } from 'react';
+import {
+  ambitionStatus,
+  assembleSpeech,
+  computeOutcome,
+  computeReactions,
+  distributionalNotes,
+  FINAL_STAGE,
+  formatGbpBn,
+  formatPct,
+  householdReactions,
+} from '@btc/engine';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdviserBriefing } from '../components/AdviserBriefing';
 import { ClosingNotes } from '../components/ClosingNotes';
+import { Households } from '../components/Households';
 import { InteractionsNotice } from '../components/InteractionsNotice';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { formatLeverValue } from '../components/LeverControl';
 import { MeasuresTable } from '../components/MeasuresTable';
 import { PathChart } from '../components/PathChart';
 import { ReactionPanel } from '../components/ReactionPanel';
+import { RulesStrip } from '../components/RulesStrip';
 import { Scorecard } from '../components/Scorecard';
+import { Speech } from '../components/Speech';
 import { VerdictCard } from '../components/VerdictCard';
 import {
   briefingsFor,
   context,
+  electorate,
   households,
   levers,
   leversByCategory,
+  pm,
+  rabbit,
   reactions,
+  rules,
+  speech as speechFile,
   vintage,
 } from '../data';
-import { Beat, Beats } from '../journey/beats';
+import { Beat, Beats, resetProgress } from '../journey/beats';
 import { StepLink } from '../journey/links';
 import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { useBudget } from '../state/budget';
@@ -28,10 +46,17 @@ import { useBudget } from '../state/budget';
 const ASSUMPTION_CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
 
+/**
+ * Stage 7. Four beats: the speech, built from the actual choices; Budget afternoon, when
+ * Parliament, the markets and the electorate react to the headlines; the morning after, when
+ * they have read the detail; and the close. Every reaction is a game judgement that names the
+ * decisions behind it and wears the badge; the rules are the one audience that is arithmetic.
+ */
 export function BudgetDayPage() {
   const { state, dispatch, outcome, query } = useBudget();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
+  const game = state.game;
   const { paths } = outcome;
   const years = paths.years;
   const targetYear =
@@ -41,15 +66,106 @@ export function BudgetDayPage() {
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
   const macroSummary =
-    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES, state.game?.revealed) ??
+    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES, game?.revealed) ??
     leversByCategory.macro
       .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
       .filter((x) => x.value !== x.lever.control.default)
       .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
       .join(' · ');
   const met = outcome.verdicts.filter((v) => ['met', 'withinCap'].includes(v.status)).length;
-  const signals = computeReactions({ outcome, levers, reactions, typicalErrorGbpm });
+
+  // The game's readings: ambitions against the package, and the package as it left the desk.
+  const status = useMemo(
+    () => (game ? ambitionStatus(game, pm, outcome, levers) : undefined),
+    [game, outcome],
+  );
+  const snapshotOutcome = useMemo(() => {
+    if (!game || !state.snapshot) return undefined;
+    const policy: Record<string, number> = {};
+    for (const [code, v] of Object.entries(state.snapshot)) {
+      if (!MACRO_CODES.includes(code)) policy[code] = v;
+    }
+    for (const code of MACRO_CODES) {
+      if (state.leverValues[code] !== undefined) policy[code] = state.leverValues[code]!;
+    }
+    return computeOutcome({
+      vintage,
+      rules,
+      levers,
+      settings: { ...outcome.settings, leverValues: policy },
+    });
+  }, [game, state.snapshot, state.leverValues, outcome.settings]);
+  const rabbitChoice = useMemo(() => {
+    if (!game?.rabbit) return undefined;
+    if (game.rabbit === 'keep') return { label: 'keeping the headroom' };
+    if (game.rabbit.startsWith('flagship:')) {
+      const id = game.rabbit.slice('flagship:'.length);
+      const flagship = pm.flagships.find((f) => f.id === id);
+      return { label: `going further on ${flagship?.title ?? id}` };
+    }
+    const option = rabbit.options.find((o) => o.id === game.rabbit);
+    return option ? { code: option.code, label: option.title } : undefined;
+  }, [game]);
+  const signals = useMemo(
+    () =>
+      computeReactions({
+        outcome,
+        levers,
+        reactions,
+        typicalErrorGbpm,
+        ...(game ? { game } : {}),
+        ...(status ? { status } : {}),
+        ...(snapshotOutcome ? { snapshotOutcome } : {}),
+        macroCodes: MACRO_CODES,
+        ...(rabbitChoice ? { rabbit: rabbitChoice } : {}),
+      }),
+    [outcome, typicalErrorGbpm, game, status, snapshotOutcome, rabbitChoice],
+  );
+  const afternoon = signals.filter((s) => s.phase === 'afternoon');
+  const morning = signals.filter((s) => s.phase === 'morning');
   const notes = distributionalNotes(outcome, levers, targetYear).slice(0, 3);
+  const sizeOf = (code: string) => {
+    const e = outcome.leverEffects.find((x) => x.code === code);
+    if (!e) return 0;
+    return (
+      Math.abs(e.receipts[targetYear] ?? 0) +
+      Math.abs(e.currentSpending[targetYear] ?? 0) +
+      Math.abs(e.capitalSpending[targetYear] ?? 0)
+    );
+  };
+  const voters = householdReactions(
+    electorate,
+    outcome.settings.leverValues,
+    levers,
+    sizeOf,
+    status ?? null,
+    Boolean(game?.theme),
+  );
+  const theSpeech = useMemo(
+    () =>
+      assembleSpeech({
+        speech: speechFile,
+        outcome,
+        levers,
+        ...(game ? { game } : {}),
+        pm,
+        ...(status ? { status } : {}),
+        ...(state.snapshot ? { snapshot: state.snapshot } : {}),
+        macroCodes: MACRO_CODES,
+        rabbitTitles: Object.fromEntries(rabbit.options.map((o) => [o.id, o.title])),
+      }),
+    [outcome, game, status, state.snapshot],
+  );
+  const fundedFlagships = (status?.priorities ?? []).filter(
+    (p) => p.status === 'funded' || p.status === 'delayed',
+  );
+
+  /** Reaching the close is the end of the story; a link shared from here opens everything. */
+  const reachClose = () => {
+    if (game && game.reached < FINAL_STAGE) {
+      dispatch({ type: 'updateGame', patch: { reached: FINAL_STAGE } });
+    }
+  };
 
   async function copyLink() {
     const url = `${window.location.origin}/budget-day?${query}`;
@@ -73,20 +189,72 @@ export function BudgetDayPage() {
         on your figures.
       </p>
       <Beats step="budget-day">
-        <Beat title="The box opens, and the room reacts" continueLabel="See the workings">
+        <Beat title="The speech" continueLabel="Sit down, and hear the room">
+          <Speech speech={theSpeech} />
+        </Beat>
+        <Beat title="Budget afternoon" continueLabel="Sleep on it">
           <Scorecard
             outcome={outcome}
             typicalErrorGbpm={typicalErrorGbpm}
-            revealed={state.game?.revealed ?? false}
+            revealed={game?.revealed ?? false}
           />
-          <div className="reactions">
-            <ReactionPanel audience="rules" signals={signals} />
-            <ReactionPanel audience="markets" signals={signals} />
-            <ReactionPanel audience="parliament" signals={signals} />
-            <ReactionPanel audience="public" signals={signals} notes={notes} />
+          <RulesStrip outcome={outcome} signals={afternoon} typicalErrorGbpm={typicalErrorGbpm} />
+          <div className="reactions reactions--three">
+            <ReactionPanel audience="parliament" signals={afternoon} />
+            <ReactionPanel audience="markets" signals={afternoon} />
+            <ReactionPanel audience="public" signals={afternoon} notes={notes} />
           </div>
+          <h2 className="section-label">Five households</h2>
+          <Households reactions={voters} />
         </Beat>
-        <Beat title="The workings behind the verdict">
+        <Beat title="The morning after" continueLabel="Read the verdict" onAdvance={reachClose}>
+          <p className="panel__hint">
+            Thursday morning. The detail has been read: the small print, the start dates, the
+            costings, the financing. Reactions harden or soften, and each says which decision did
+            it.
+          </p>
+          <div className="reactions reactions--three">
+            <ReactionPanel
+              audience="parliament"
+              signals={morning}
+              title="Parliament, the morning after"
+            />
+            <ReactionPanel
+              audience="markets"
+              signals={morning}
+              title="The markets, the morning after"
+            />
+            <ReactionPanel
+              audience="public"
+              signals={morning}
+              title="The electorate, the morning after"
+            />
+          </div>
+          {morning.some((s) => s.audience === 'rules') ? (
+            <div className="reactions">
+              <ReactionPanel
+                audience="rules"
+                signals={morning}
+                title="Your own rules, the morning after"
+              />
+            </div>
+          ) : null}
+          {fundedFlagships.length > 0 ? (
+            <section className="panel" aria-labelledby="delivery-heading">
+              <h2 id="delivery-heading" className="section-label">
+                What the money does and does not buy
+              </h2>
+              <ul className="delivery">
+                {fundedFlagships.map((p) => (
+                  <li key={p.flagship.id}>
+                    <strong>{p.flagship.title}.</strong> {p.flagship.delivery.text}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+        </Beat>
+        <Beat title="The close">
           <details className="panel" aria-labelledby="verdicts-heading">
             <summary className="group__head">
               <span className="group__line">
@@ -201,6 +369,7 @@ export function BudgetDayPage() {
               className="btn"
               onClick={() => {
                 dispatch({ type: 'reset' });
+                resetProgress();
                 navigate('/');
               }}
             >

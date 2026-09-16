@@ -82,11 +82,29 @@ export const reactionMeasureSchema = z.enum([
   'investmentRuleStatus',
   'welfareCapStatus',
   'borrowingChangeGbpm',
+  'cumulativeBorrowingChangeGbpm',
   'debtChangePp',
   'debtFallingPp',
   'taxTakeChangePp',
   'recommendationsAdopted',
   'budget2025Reversals',
+  // The game's own readings (Phase 8): nought or the baseline value without a game.
+  'headroomVsTargetGbpm',
+  'promisesBroken',
+  'prioritiesUnfunded',
+  'prioritiesFunded',
+  'welfareReversals',
+  'departmentsCut',
+  'rebellionRisk',
+  'credibilityShare',
+  'priceRaisingMeasures',
+  'compromisesGbpm',
+  'rabbitGbpm',
+  'breachAccepted',
+  'capitalSpent',
+  'delayedMeasures',
+  'thresholdFreezeKept',
+  'efficienciesKept',
 ]);
 
 /**
@@ -106,6 +124,10 @@ export const reactionSignalSchema = z
   .strictObject({
     id: slug,
     audience: reactionAudienceSchema,
+    /** Who within the audience is speaking: a backbench group, a desk in the City, a household. */
+    group: z.string().min(1).optional(),
+    /** Budget afternoon is the headline reaction; the morning after is the reassessment. */
+    phase: z.enum(['afternoon', 'morning']).default('afternoon'),
     measure: reactionMeasureSchema,
     /** How the reading is written out beside the text. */
     reading: z.strictObject({

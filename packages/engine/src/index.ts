@@ -26,6 +26,8 @@ export {
   parseInterventions,
   parseCompromise,
   parseRabbit,
+  parseHouseholdsFile,
+  parseSpeech,
   parseVintage,
   validateDataset,
   type Dataset,
@@ -34,7 +36,9 @@ export {
   computeReactions,
   distributionalNotes,
   readings,
+  readingsWithCauses,
   type DistributionalNote,
+  type Readings,
   type ReactionSignal,
   type ReactionsInput,
 } from './reactions.js';
@@ -62,6 +66,8 @@ export * from './game/ministers.js';
 export * from './game/interventions.js';
 export * from './game/forecast.js';
 export * from './game/compromise.js';
+export * from './game/households.js';
+export * from './game/speech.js';
 export { applyRevision } from './calc/spine.js';
 export { costLever } from './costing/index.js';
 export {

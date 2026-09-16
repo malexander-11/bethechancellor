@@ -361,3 +361,85 @@ export const rabbitFileSchema = z
       ids.add(o.id);
     });
   });
+
+/* ---------------------------------------------------------- the electorate */
+
+/** How one lever touches one household: the direction, and the line they say when it does. */
+export const householdTouchSchema = z.strictObject({
+  code: z.string().min(1),
+  /** `on` for a toggle switched on; `above`/`below` the default for a slider; `moved` for either way. */
+  when: z.enum(['on', 'above', 'below', 'moved']),
+  effect: z.enum(['gains', 'pays']),
+  line: simulatedLineSchema,
+});
+
+/**
+ * A household archetype (stage 7): who they are, one sourced fact about people like them, the
+ * levers that touch them, and what they say when nothing does. Simulated throughout; the fact
+ * carries its source; no household ever quotes a number the engine did not compute.
+ */
+export const householdSchema = z.strictObject({
+  id: slug,
+  who: z.string().min(1),
+  fact: simulatedLineSchema,
+  touches: z.array(householdTouchSchema).min(1),
+  untouched: simulatedLineSchema,
+  /** Whether they could tell what the Budget was for: a theme delivered, or not. */
+  understood: simulatedLineSchema,
+  puzzled: simulatedLineSchema,
+});
+
+export const householdsFileSchema = z
+  .strictObject({
+    schemaVersion: z.literal(1),
+    households: z.array(householdSchema).min(3),
+  })
+  .superRefine((file, ctx) => {
+    const ids = new Set<string>();
+    file.households.forEach((h, i) => {
+      if (ids.has(h.id))
+        ctx.addIssue({
+          code: 'custom',
+          message: `duplicate household ${h.id}`,
+          path: ['households', i],
+        });
+      ids.add(h.id);
+    });
+  });
+
+/* -------------------------------------------------------------- the speech */
+
+/**
+ * A fragment of the speech. `{…}` placeholders are filled by the assembler from the outcome and
+ * the game: titles from data, figures from the engine, never a number typed here.
+ */
+export const speechFragmentSchema = z.strictObject({
+  text: z.string().min(1),
+  sources: z.array(sourceRefSchema).default([]),
+});
+
+export const speechFileSchema = z.strictObject({
+  schemaVersion: z.literal(1),
+  /** Keyed by theme id, plus `default` for a Budget with no theme agreed. */
+  opening: z.record(z.string(), speechFragmentSchema),
+  /** One paragraph per funded flagship: {title}, {level}, {cost}, {targetYear}. */
+  flagship: speechFragmentSchema,
+  /** Spending measures that are not flagships: {measures}. */
+  spending: speechFragmentSchema,
+  /** Budgets cut: {measures}. */
+  cuts: speechFragmentSchema,
+  /** Revenue paragraphs by who pays: {measures}, {yield}. */
+  revenue: z.record(z.string(), speechFragmentSchema),
+  /** Tax cuts and reversals: {measures}. */
+  giveaways: speechFragmentSchema,
+  /** Said once if a promise made in Downing Street is broken: {promises}. */
+  lockBreak: speechFragmentSchema,
+  /** Said if anything was scaled back since the desk: {count}, {saving}. */
+  compromises: speechFragmentSchema,
+  /** Said per delayed measure: {title}, {year}. */
+  delay: speechFragmentSchema,
+  /** The closing flourish, by rabbit option id, `flagship`, or `keep`: {title}, {headroom}. */
+  rabbit: z.record(z.string(), speechFragmentSchema),
+  /** The last word, keyed `met`, `missed` or `breach`: {headroom}, {targetYear}. */
+  peroration: z.record(z.string(), speechFragmentSchema),
+});

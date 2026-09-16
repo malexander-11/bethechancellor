@@ -49,6 +49,8 @@ export interface GamePermalink {
   /** Stage 6: a lever code, 'flagship:<priority id>', or 'keep'. */
   rabbit?: string;
   breachAccepted: boolean;
+  /** Priorities agreed in Downing Street and given up at stage 5, so the close can say so. */
+  dropped: string[];
 }
 
 /** A fresh game around a seed, before any choice has been made. */
@@ -65,6 +67,7 @@ export function freshGame(seed: number): GamePermalink {
     delays: {},
     revealed: false,
     breachAccepted: false,
+    dropped: [],
   };
 }
 

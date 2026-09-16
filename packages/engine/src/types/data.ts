@@ -68,6 +68,11 @@ import type {
   compromiseFileSchema,
   rabbitFileSchema,
   rabbitOptionSchema,
+  householdsFileSchema,
+  householdSchema,
+  householdTouchSchema,
+  speechFileSchema,
+  speechFragmentSchema,
 } from '../schema/game.schema.js';
 import type {
   growthHeadSchema,
@@ -130,6 +135,11 @@ export type InterventionWhen = z.infer<typeof interventionWhenSchema>;
 export type CompromiseFile = z.infer<typeof compromiseFileSchema>;
 export type RabbitFile = z.infer<typeof rabbitFileSchema>;
 export type RabbitOption = z.infer<typeof rabbitOptionSchema>;
+export type HouseholdsFile = z.infer<typeof householdsFileSchema>;
+export type Household = z.infer<typeof householdSchema>;
+export type HouseholdTouch = z.infer<typeof householdTouchSchema>;
+export type SpeechFile = z.infer<typeof speechFileSchema>;
+export type SpeechFragment = z.infer<typeof speechFragmentSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "opening": {
+    "default": {
+      "text": "Madam Deputy Speaker, this Budget is built on the forecast the Office for Budget Responsibility published this morning and on the rules this government set itself. Every figure in it is theirs; every choice in it is mine.",
+      "sources": []
+    },
+    "cost-of-living": {
+      "text": "Madam Deputy Speaker, this is a Budget for the cost of living. Bills are rising again this winter, and the people who feel that first are the people this Budget is for.",
+      "sources": [
+        {
+          "sourceId": "govuk-vat-electricity-cut-2026"
+        },
+        {
+          "sourceId": "rf-policy-landscape-2026"
+        }
+      ]
+    },
+    "security": {
+      "text": "Madam Deputy Speaker, the first duty of any government is the security of its people: defence on the path our allies expect, prisons that hold, borders that work. This Budget funds that duty.",
+      "sources": [
+        {
+          "sourceId": "no10-commons-statement-2026-09-01"
+        }
+      ]
+    },
+    "public-services": {
+      "text": "Madam Deputy Speaker, this is a Budget for the services people rely on: a health service meeting its waiting-time promise, special needs provision councils can afford, and the first steps to a national care service.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-nhs"
+        },
+        {
+          "sourceId": "no10-social-care-speech-2026-07-29"
+        }
+      ]
+    },
+    "every-postcode": {
+      "text": "Madam Deputy Speaker, this Budget moves money and power out of Westminster and into every postcode in Britain. It is built on fiscal discipline, and it invests.",
+      "sources": [
+        {
+          "sourceId": "govuk-budget-2026-every-postcode"
+        }
+      ]
+    }
+  },
+  "flagship": {
+    "text": "We will deliver {title}: {level}, {cost} in {targetYear}. A commitment made, and a commitment funded.",
+    "sources": []
+  },
+  "spending": {
+    "text": "Alongside it, this Budget provides more for {measures}.",
+    "sources": []
+  },
+  "cuts": {
+    "text": "To pay for our priorities, {measures} will do more with less.",
+    "sources": []
+  },
+  "revenue": {
+    "broad": {
+      "text": "Everyone contributes: {measures}, raising {yield} in {targetYear}. I know what that means for working people, and I say so.",
+      "sources": []
+    },
+    "top": {
+      "text": "Those with the broadest shoulders bear the greatest burden: {measures}, raising {yield} in {targetYear}.",
+      "sources": []
+    },
+    "business": {
+      "text": "Business will contribute too: {measures}, raising {yield} in {targetYear}.",
+      "sources": []
+    },
+    "motorists": {
+      "text": "Motorists pay a little more: {measures}, raising {yield} in {targetYear}, after fifteen years without a rise in fuel duty.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "3.2"
+        }
+      ]
+    },
+    "duties": {
+      "text": "Duties rise: {measures}, raising {yield} in {targetYear}.",
+      "sources": []
+    },
+    "base": {
+      "text": "We broaden the base of VAT: {measures}, raising {yield} in {targetYear} on HMRC’s figures for the reliefs we end.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-2026-01"
+        }
+      ]
+    }
+  },
+  "giveaways": {
+    "text": "And we cut taxes where we can: {measures}.",
+    "sources": []
+  },
+  "lockBreak": {
+    "text": "I will be straight with the House. This Budget does not keep every promise this government made: {promises}. I chose that, and I will answer for it here.",
+    "sources": []
+  },
+  "compromises": {
+    "text": "Not everything we set out to do in September survives the forecast. {count} of our measures are scaled back or delayed, and I would rather say so than pretend otherwise.",
+    "sources": []
+  },
+  "delay": {
+    "text": "{title} will now begin in {year}.",
+    "sources": []
+  },
+  "rabbit": {
+    "penny-off": {
+      "text": "And one more thing. From next April, the basic rate of income tax will be cut by one penny in the pound. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "meals": {
+      "text": "And one more thing. From next September, every child in every state school in England gets a free school meal. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "fuel-cut": {
+      "text": "And one more thing. Fuel duty is cut by five per cent from next April. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "retraining": {
+      "text": "And one more thing. A national programme to retrain the workers whose jobs are changed by artificial intelligence. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "flagship": {
+      "text": "And I can go further than I promised on {title}. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "keep": {
+      "text": "There is no rabbit in this hat. The announcement is the margin itself: {headroom} of headroom against our rules, kept deliberately, because a thin margin costs more than a cheer.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-speech"
+        },
+        {
+          "sourceId": "ifg-healey-tax-budget-2026"
+        }
+      ]
+    }
+  },
+  "peroration": {
+    "met": {
+      "text": "The Office for Budget Responsibility confirms this Budget meets the fiscal rules, with {headroom} of headroom in {targetYear}. Stability first, then everything else. I commend this Budget to the House.",
+      "sources": []
+    },
+    "missed": {
+      "text": "The Office for Budget Responsibility will publish that this Budget misses a rule in {targetYear}, by {headroom}. I have heard its assessment and made my choice. I commend this Budget to the House.",
+      "sources": []
+    },
+    "breach": {
+      "text": "I say openly what the Office for Budget Responsibility will publish this afternoon: this Budget misses a rule in {targetYear}, by {headroom}. I have chosen to proceed, and I have written down why. I commend this Budget to the House.",
+      "sources": []
+    }
+  }
+}

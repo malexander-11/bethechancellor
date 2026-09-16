@@ -50,8 +50,9 @@ describe('journey routes', () => {
       </MemoryRouter>,
     );
     expect(screen.getByText('Step 7 · Budget day')).toBeInTheDocument();
-    // Beat 1: the workings behind the verdict, once you have read the room.
-    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    // The close, with the workings behind the verdict, is the fourth beat.
+    for (let i = 0; i < 3; i += 1)
+      fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     expect(screen.getByText('Your measures')).toBeInTheDocument();
     expect(screen.getAllByText('Rule met').length).toBeGreaterThanOrEqual(2);
   });
