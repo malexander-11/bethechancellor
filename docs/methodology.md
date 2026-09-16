@@ -467,3 +467,84 @@ moves them, and neither carries a badge: chrome must not borrow the vocabulary o
 One thing the desk costs: a closed folder's papers leave the document, so find-in-page no longer
 reaches every lever at once. The attribution list beside the folders names every lever you have
 moved, which is the question that was actually being asked.
+
+## 14. The game: from ambition to reaction (ADR-0011, ADR-0012)
+
+From Phase 8 the journey is seven stages: the outlook, the Prime Minister, the desk, the OBR's
+forecast, the compromises, the rabbit and Budget day. The budget still travels in the query string;
+the playthrough travels beside it as `g=` (seed, stage reached, outlook, headroom target, theme,
+priorities, promises, concessions, political capital, delays, whether the envelope is open, the
+rabbit, an acknowledged breach, dropped priorities) and `S=` (the package as it left the desk).
+Both are absent until a seed is minted, so every older link is byte for byte the same.
+
+### The fifth badge
+
+**Simulated** marks a judgement nobody published: what the Prime Minister wants, what a minister
+says at a cut, how a market or a household reads the Budget, the kind of Budget it was. A simulated
+line may quote a sourced fact and read an engine number and never produces a number of its own. It
+is badged per item, forbidden on levers and presets, and distinct from commentary, which is sourced
+words about a second-round effect. Roles only: no real person's words are invented.
+
+### The outlook and the target
+
+Stage 1 keeps the four forecast cards (§11) and adds a headroom target: £10bn, £20bn, £30bn or
+whatever the rules leave. The target is a plan the game measures the player against, never a rule
+it enforces. The £20bn threshold is stated as the advisers' rule of thumb, badged simulated, resting
+on sourced facts shown beside it (Budget 2025's £21.7bn, March's £23.6bn, the OBR's typical
+five-year receipts error of about £32bn, the Chancellor's letter to the Treasury Committee, the
+Bank's account of gilt volatility), because no document publishes it.
+
+### The Prime Minister
+
+Stage 2 is a conversation in data (`data/journey/pm.json`): what has already been done, a theme,
+two or three flagships from the theme plus two cross-cutting ones, and the promises that must
+survive. Every flagship is a lever and a target value whose cost is read live from the engine;
+every promise is a detector over lever values (or, for the fiscal rules, over the verdicts) with
+its source. The player may push back on two; the PM refuses or concedes on terms, and a concession
+is a narrower promise in its own right. `ambitionStatus` reports each priority funded, part-funded,
+unfunded or delayed and each promise kept or broken, with the lever named.
+
+### The desk, staffed
+
+Every spending and welfare lever has a minister (`ministers.json`): asking while it is untouched,
+saying what stops happening at a cut, making the case for more. Advisers intervene from a closed
+list of predicates (`interventions.json`): a promise broken, a priority unfunded, headroom below the
+target, a rule missed. Promised flagships are pinned to their folder; the despatch box keeps score;
+the Political Adviser's press summary plants the clue the seed chose. Leaving the desk snapshots the
+package.
+
+### The forecast
+
+Stage 4 is the seeded draw of ADR-0012: five outcomes weighted to the centre, each a choice among
+published candidates for the sliders, with re-scoring keyed to sourced uncertainty. The page takes
+the move apart in three engine runs so economy plus costings equals the whole, shows the re-scored
+measures beside their original badges, and says which ambitions are now at risk. `M=` becomes the
+OBR's; the outlook step becomes history; the scorecard grows an "OBR in October" reading.
+
+### The compromises and the rabbit
+
+Stage 5 offers six routes, all of them levers: the Director of Tax's suggestions (every tax one
+notch up, ranked by the engine, flagged where they break a promise in force), the package's own
+spending measures with a later start year (`Settings.implementationYearByCode`), narrowing a
+flagship to half the distance, going back to the Prime Minister at one political capital a time,
+lowering the target, and acknowledging a breach with the Permanent Secretary's reading of the
+Charter's escape clause. Stage 6 prices four prepared announcements, going further on a flagship,
+or keeping the headroom, each as the headroom it would leave.
+
+### Budget day
+
+The speech is assembled from fragments (`speech.json`) with every figure read from the outcome and
+every title from data; a test checks each pound sign. Reactions gain groups and phases: Parliament
+as marginal seats, the left, ministers, No. 10 and the whips; the markets on the target, the
+credibility of the costings, price-raising measures and an acknowledged breach; the electorate as
+five households touched by stated levers. The morning after reassesses fiscal drag, contested
+costings, pencilled-in efficiencies, financing, start dates and delivery. Every reaction names the
+decisions behind its reading. The close totals the engine's figures by incidence tag, ranks the
+compromises against the snapshot, re-runs the final package under all five draws, and names the
+kind of Budget from a closed list of badged judgements.
+
+### What is still not modelled
+
+Growth effects of the player's choices, market reactions as numbers, and anything a real Prime
+Minister or minister said that was not fetched and registered. The game has views now; it has no
+more numbers than it had before.

@@ -4,28 +4,32 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 7 (four forecasts)**. You are appointed Chancellor with a Budget to deliver on
-28 October 2026, and the whole thing happens on a desk. Paper on green leather, manila folders
-with treasury tags, rubber-stamped verdicts, a countdown to Budget day. Each step hands you
-something before it gives you the working surface: read it, then continue.
+Status: **Phase 8 (the whole Budget, from ambition to reaction)**. You are appointed Chancellor
+in a Labour government with a Budget to deliver on 28 October 2026, and the whole thing happens on
+a desk: paper on green leather, manila folders with treasury tags, rubber-stamped verdicts, a
+countdown to Budget day. A first playthrough takes about ten minutes and eleven Continues.
 
-Step 1 is a single choice: which forecast do you budget on? Keep the OBR's March baseline, take
-your Chief Economic Adviser's reading of today's markets, or take the most optimistic or the most
-pessimistic view any of the sixteen forecasters in the Treasury's comparison publishes. Each card
-shows the headroom it leaves you with, which is how you find out that a Chancellor can buy
-headroom by picking a forecast. Step 2 is a drawer of files, one open at a time, where
-every control shows the level it moves to and departmental budgets show real growth a year against
-their own history. Step 3 is the policies your colleagues in Parliament are campaigning for,
-each costed with its workings on the card. Step 4 is Budget day, read back as feedback from four
-audiences: your own rules, the markets, Parliament and the public.
+Seven stages. **The outlook**: which forecast do you budget on, and how much headroom do you mean
+to keep? **The Prime Minister**: agree a theme, two or three priorities and the promises that must
+survive, or push back and take the terms. **The desk**: three folders of levers with a minister on
+every spending line, advisers who remember what you agreed, and a press summary that hints at what
+is coming. **The forecast**: the OBR's envelope, fixed by a seeded draw the day you chose your
+outlook, taken apart into what the economy did and what the OBR made of your costings. **The
+compromises**: six ways through the gap, including going back to Downing Street and proceeding with
+a breach you have written down. **The rabbit**: something for the speech, priced as the headroom it
+leaves. **Budget day**: the speech built from your choices, the afternoon and the morning after from
+Parliament, the markets and five households, and a close that says which ambitions survived, who
+paid, which compromises mattered, how the package fares under every forecast you might have drawn,
+and what kind of Budget it was. Share the link; replay the same seed with a fresh Budget.
 
 Under the hood: the OBR March 2026 baseline, 31 tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options,
 inheritance tax up to abolition), 19 spending levers (Spending Review 2025 settlements, OBR welfare
-lines, Budget 2025 spending decisions) with milestones from PESA, 11 campaign policies costed from
-published statistics by a stated method, four sets of economic assumptions derived from HM
-Treasury's comparison of independent forecasts, and five adviser roles whose every sentence cites
-a public document. Next: the rebase to the 28 October 2026 forecast.
+lines, Budget 2025 spending decisions) with milestones from PESA, 13 campaign policies costed from
+published statistics by a stated method, four sets of economic assumptions and five forecast
+outcomes derived from HM Treasury's comparison of independent forecasts, and about two hundred
+simulated lines in the voices of roles, every one badged and every fact in them sourced. Next: the
+rebase to the 28 October 2026 forecast.
 
 ## Principles
 
@@ -35,6 +39,11 @@ a public document. Next: the rebase to the 28 October 2026 forecast.
 - **Second-round effects are words, not numbers.** Behavioural and macroeconomic knock-on
   effects are described qualitatively with sources. The interface labels every figure as a
   direct costing, a mechanical consequence, an assumption, or commentary.
+- **The game may judge, and says so.** What the Prime Minister wants, what a minister says at a
+  cut, how a market or a household reads the Budget: these are judgements nobody published, badged
+  **simulated** wherever they appear. A simulated line may quote a sourced fact and read an engine
+  number; it never produces a number of its own. Roles, not people. The one place a judgement moves
+  the arithmetic is the seeded forecast draw, which only chooses among published figures.
 - **Where nobody has published a costing, the arithmetic is ours and the workings are on the
   card.** The policies MPs campaign for have no certified costing. Each states its method,
   its published inputs and its assumptions, is badged an assumption rather than a direct costing,
@@ -57,6 +66,7 @@ apps/web            Vite + React front end (deployed on Vercel)
 packages/engine     pure TypeScript fiscal engine, schemas and tests
 packages/pipeline   scripts that fetch, extract and validate source data
 data/               sourced JSON: vintages, rules, levers, context readings, adviser briefings,
+                    the Prime Minister, ministers, the forecast draws, the speech, households,
                     Budget day reaction bands, raw source files
 docs/               methodology and architecture decision records
 ```

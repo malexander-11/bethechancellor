@@ -14,6 +14,18 @@ context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the late
                           suggestion rules, published forecast ranges and the assumption scenarios
 journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/briefings.json    sourced adviser briefings per step and lever group
+journey/calendar.json     the in-game date of each stage
+journey/pm.json           the Prime Minister: themes, flagships, promises, push-backs, reactions
+journey/ministers.json    a minister's lines for every spending and welfare lever
+journey/interventions.json adviser lines with a closed predicate over the ambitions
+journey/draws.json        the five forecast outcomes the seed chooses among (ADR-0012)
+journey/compromise.json   the advisers' lines beside each route out of a gap
+journey/rabbit.json       the prepared announcements for the speech
+journey/speech.json       the speech fragments the assembler fills
+journey/households.json   five household archetypes and the levers that touch them
+journey/incidence.json    who each lever falls on, for the close
+journey/verdicts.json     the kinds of Budget the close chooses between
+journey/reactions.json    Budget day reaction bands, by audience, group and phase
 raw/<source-id>/          committed copies of small source files, with sha256 in the registry
 derived/                  pipeline outputs (regenerated in CI and compared with the commit)
 ```
@@ -151,3 +163,22 @@ every rendered headline and detail is one of these.
 
 Market bands describe what commentators watch and cite the evidence (the OBR's interest-rate
 sensitivity, the gilt yield in the context file). They never predict a market move.
+
+### Simulated content (`data/journey/*.json`, ADR-0011)
+
+Everything a role says is a `SimulatedLine`: `{ text, sources, badge: "simulated" }`, badged per
+item so no line inherits honesty from its file. Rules for authoring one:
+
+- **Never type a number the engine or a document did not produce.** A line may quote a published
+  figure (with the source beside it) and the page may print an engine figure next to the line; the
+  line itself never invents one. A test fails a minister or a household that quotes a figure without
+  a source.
+- **Roles only.** "The Prime Minister", "the Justice Secretary", "MPs in marginal seats". No real
+  person's name, and no description that identifies one.
+- **Predicates are closed.** Interventions, verdict kinds and household touches choose from enums the
+  engine evaluates; a new condition needs code, not a string.
+- **Draws name candidates and considerations, never values.** An outcome says `rate: "adviser"` or
+  `rpi: "highest"` and the engine derives the figure; a re-scoring names a consideration id and the
+  validator refuses one that sits on a certified row.
+- The speech's `{…}` placeholders are filled from data and the outcome; a test checks every pound
+  sign in the assembled text against the engine.
