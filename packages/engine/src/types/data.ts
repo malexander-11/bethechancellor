@@ -73,6 +73,9 @@ import type {
   householdTouchSchema,
   speechFileSchema,
   speechFragmentSchema,
+  incidenceFileSchema,
+  verdictsFileSchema,
+  verdictKindSchema,
 } from '../schema/game.schema.js';
 import type {
   growthHeadSchema,
@@ -140,6 +143,9 @@ export type Household = z.infer<typeof householdSchema>;
 export type HouseholdTouch = z.infer<typeof householdTouchSchema>;
 export type SpeechFile = z.infer<typeof speechFileSchema>;
 export type SpeechFragment = z.infer<typeof speechFragmentSchema>;
+export type IncidenceFile = z.infer<typeof incidenceFileSchema>;
+export type VerdictsFile = z.infer<typeof verdictsFileSchema>;
+export type VerdictKind = z.infer<typeof verdictKindSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

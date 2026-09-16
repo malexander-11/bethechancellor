@@ -107,6 +107,26 @@ describe('Budget day: the speech, the afternoon, the morning after, the close', 
     expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.6/);
   });
 
+  it('closes with the verdict: the kind of Budget, the ambitions, who paid, and every other forecast', () => {
+    at(`${BASE}&${GAME}&L=moj.10_itbr.1&S=moj.10_dip47.1_itbr.1`);
+    next();
+    next();
+    next();
+    const close = screen.getByRole('region', { name: /A Budget|Half a programme|small moves/ });
+    expect(within(close).getByText(/Which ambitions survived/)).toBeInTheDocument();
+    expect(within(close).getByText(/A Justice uplift for prison capacity/)).toBeInTheDocument();
+    expect(within(close).getByText(/broken on the desk \(Basic rate\)/)).toBeInTheDocument();
+    expect(within(close).getByText(/Everyone who earns or spends/)).toBeInTheDocument();
+    expect(within(close).getByText(/Courts and prisons/)).toBeInTheDocument();
+    // The DIP gap was in the snapshot and is not in the package: a compromise that mattered.
+    expect(within(close).getByText(/Defence plan gap/)).toBeInTheDocument();
+    expect(within(close).getAllByText(/rules met|missed/).length).toBeGreaterThanOrEqual(5);
+    expect(within(close).getByText('what arrived')).toBeInTheDocument();
+    expect(
+      within(close).getByRole('link', { name: /Replay under the same conditions/ }),
+    ).toHaveAttribute('href', expect.stringContaining(`g=s.${ADVISER}`));
+  });
+
   it('the speech follows the choices: theme, funded flagship, broken promise and the rabbit', () => {
     at(`${BASE}&${GAME.replace('rb.keep', 'rb.penny-off')}&L=moj.10_itbr.-1`);
     const speech = screen.getByRole('article', { name: 'The Budget speech' });

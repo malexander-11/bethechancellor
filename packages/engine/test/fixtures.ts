@@ -14,6 +14,8 @@ import {
   parseRabbit,
   parseHouseholdsFile,
   parseSpeech,
+  parseIncidence,
+  parseVerdicts,
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
@@ -72,6 +74,8 @@ export function loadDataset(): Required<Dataset> {
     rabbit: parseRabbit(readJson('journey/rabbit.json')),
     electorate: parseHouseholdsFile(readJson('journey/households.json')),
     speech: parseSpeech(readJson('journey/speech.json')),
+    incidence: parseIncidence(readJson('journey/incidence.json')),
+    verdicts: parseVerdicts(readJson('journey/verdicts.json')),
   };
 }
 

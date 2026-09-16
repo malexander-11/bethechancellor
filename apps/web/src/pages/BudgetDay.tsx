@@ -1,13 +1,16 @@
 import {
   ambitionStatus,
   assembleSpeech,
+  budgetVerdict,
   computeOutcome,
   computeReactions,
   distributionalNotes,
   FINAL_STAGE,
   formatGbpBn,
   formatPct,
+  freshGame,
   householdReactions,
+  readings,
 } from '@btc/engine';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,12 +26,15 @@ import { ReactionPanel } from '../components/ReactionPanel';
 import { RulesStrip } from '../components/RulesStrip';
 import { Scorecard } from '../components/Scorecard';
 import { Speech } from '../components/Speech';
+import { Verdict } from '../components/Verdict';
 import { VerdictCard } from '../components/VerdictCard';
 import {
   briefingsFor,
   context,
+  draws,
   electorate,
   households,
+  incidence,
   levers,
   leversByCategory,
   pm,
@@ -36,12 +42,13 @@ import {
   reactions,
   rules,
   speech as speechFile,
+  verdicts,
   vintage,
 } from '../data';
 import { Beat, Beats, resetProgress } from '../journey/beats';
 import { StepLink } from '../journey/links';
 import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
-import { useBudget } from '../state/budget';
+import { permalinkQuery, useBudget } from '../state/budget';
 
 const ASSUMPTION_CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
@@ -159,6 +166,44 @@ export function BudgetDayPage() {
   const fundedFlagships = (status?.priorities ?? []).filter(
     (p) => p.status === 'funded' || p.status === 'delayed',
   );
+  // The close: what the playthrough came to, re-running the engine under every draw.
+  const verdict = useMemo(() => {
+    if (!game) return undefined;
+    const values = readings({
+      outcome,
+      levers,
+      reactions,
+      typicalErrorGbpm,
+      game,
+      ...(status ? { status } : {}),
+    });
+    return budgetVerdict({
+      vintage,
+      rules,
+      levers,
+      pm,
+      draws,
+      context,
+      incidence,
+      kinds: verdicts,
+      game,
+      outcome,
+      ...(state.snapshot ? { snapshot: state.snapshot } : {}),
+      macroCodes: MACRO_CODES,
+      typicalErrorGbpm,
+      credibilityShare: values.credibilityShare ?? 0,
+      rebellionRisk: values.rebellionRisk ?? 0,
+    });
+  }, [game, outcome, status, state.snapshot, typicalErrorGbpm]);
+  const replayHref = game
+    ? `/outlook?${permalinkQuery({
+        leverValues: {},
+        debtInterestFeedback: true,
+        assessAsOf: 'vintage',
+        warnings: [],
+        game: freshGame(game.seed),
+      })}`
+    : '/outlook';
 
   /** Reaching the close is the end of the story; a link shared from here opens everything. */
   const reachClose = () => {
@@ -255,6 +300,7 @@ export function BudgetDayPage() {
           ) : null}
         </Beat>
         <Beat title="The close">
+          {verdict ? <Verdict verdict={verdict} replayHref={replayHref} /> : null}
           <details className="panel" aria-labelledby="verdicts-heading">
             <summary className="group__head">
               <span className="group__line">

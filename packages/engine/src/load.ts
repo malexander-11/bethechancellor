@@ -12,6 +12,8 @@ import {
   rabbitFileSchema,
   householdsFileSchema,
   speechFileSchema,
+  incidenceFileSchema,
+  verdictsFileSchema,
   reactionsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -39,6 +41,8 @@ import type {
   RabbitFile,
   HouseholdsFile,
   SpeechFile,
+  IncidenceFile,
+  VerdictsFile,
   ReactionsFile,
   ContextFile,
   HmrcExtract,
@@ -180,6 +184,14 @@ export function parseSpeech(json: unknown): SpeechFile {
   return parseWith(speechFileSchema, json, 'the speech');
 }
 
+export function parseIncidence(json: unknown): IncidenceFile {
+  return parseWith(incidenceFileSchema, json, 'incidence tags');
+}
+
+export function parseVerdicts(json: unknown): VerdictsFile {
+  return parseWith(verdictsFileSchema, json, 'kinds of Budget');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -200,6 +212,8 @@ export interface Dataset {
   rabbit?: RabbitFile;
   electorate?: HouseholdsFile;
   speech?: SpeechFile;
+  incidence?: IncidenceFile;
+  verdicts?: VerdictsFile;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -235,6 +249,8 @@ export function validateDataset(ds: Dataset): string[] {
       ds.rabbit ?? null,
       ds.electorate ?? null,
       ds.speech ?? null,
+      ds.incidence ?? null,
+      ds.verdicts ?? null,
     ],
     referenced,
   );
@@ -536,6 +552,35 @@ export function validateDataset(ds: Dataset): string[] {
         problems.push(`rabbit ${option.id} sets ${option.value}, outside the lever's range`);
       } else if (option.value === lever.control.default) {
         problems.push(`rabbit ${option.id} leaves the lever where it is`);
+      }
+    }
+  }
+  if (ds.incidence) {
+    // Every lever that moves money has someone it falls on; a tag for a lever that does not exist
+    // is a typo waiting to hide a real one.
+    for (const lever of ds.levers) {
+      if (lever.deprecated || lever.category === 'macro') continue;
+      const group = ds.incidence.levers[lever.code];
+      if (!group) {
+        problems.push(`no incidence tag for ${lever.code}`);
+        continue;
+      }
+      const side = ds.incidence.groups[group]?.side;
+      const expected = lever.classification?.side === 'receipts' ? 'pays' : 'benefits';
+      if (side && side !== expected) {
+        problems.push(
+          `incidence tag ${group} on ${lever.code} is a ${side} group for a ${expected} lever`,
+        );
+      }
+    }
+    for (const code of Object.keys(ds.incidence.levers)) {
+      if (!codes.has(code)) problems.push(`incidence tag for unknown lever "${code}"`);
+    }
+  }
+  if (ds.verdicts) {
+    for (const kind of ds.verdicts.kinds) {
+      if (kind.when.themeIs && !(ds.pm?.themes ?? []).some((t) => t.id === kind.when.themeIs)) {
+        problems.push(`kind of Budget ${kind.id} names unknown theme ${kind.when.themeIs}`);
       }
     }
   }

@@ -12,6 +12,8 @@ import {
   parseRabbit,
   parseHouseholdsFile,
   parseSpeech,
+  parseIncidence,
+  parseVerdicts,
   parseHouseholds,
   parseLever,
   parsePresets,
@@ -66,6 +68,8 @@ export function loadDataset(
     readJson(path.join(DATA_DIR, 'journey', 'households.json')),
   );
   const speech = parseSpeech(readJson(path.join(DATA_DIR, 'journey', 'speech.json')));
+  const incidence = parseIncidence(readJson(path.join(DATA_DIR, 'journey', 'incidence.json')));
+  const verdicts = parseVerdicts(readJson(path.join(DATA_DIR, 'journey', 'verdicts.json')));
   const vintage = vintages.find((v) => v.id === defaultVintageId);
   const rules = ruleSets.find((r) => r.id === defaultRulesId);
   if (!vintage) throw new Error(`default vintage ${defaultVintageId} not found`);
@@ -89,6 +93,8 @@ export function loadDataset(
     rabbit,
     electorate,
     speech,
+    incidence,
+    verdicts,
     vintages,
     ruleSets,
   };

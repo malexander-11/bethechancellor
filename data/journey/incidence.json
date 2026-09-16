@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "groups": {
+    "broad-base": {
+      "label": "Everyone who earns or spends",
+      "side": "pays"
+    },
+    "top": {
+      "label": "The best-off",
+      "side": "pays"
+    },
+    "business": {
+      "label": "Business",
+      "side": "pays"
+    },
+    "motorists": {
+      "label": "Motorists",
+      "side": "pays"
+    },
+    "savers-owners": {
+      "label": "Savers, investors and homeowners",
+      "side": "pays"
+    },
+    "duties": {
+      "label": "Drinkers and gamblers",
+      "side": "pays"
+    },
+    "nhs": {
+      "label": "Patients and the NHS",
+      "side": "benefits"
+    },
+    "schools": {
+      "label": "Schools and children",
+      "side": "benefits"
+    },
+    "defence": {
+      "label": "Defence",
+      "side": "benefits"
+    },
+    "justice": {
+      "label": "Courts and prisons",
+      "side": "benefits"
+    },
+    "policing-borders": {
+      "label": "Policing and borders",
+      "side": "benefits"
+    },
+    "councils-care": {
+      "label": "Councils and social care",
+      "side": "benefits"
+    },
+    "aid": {
+      "label": "Aid recipients abroad",
+      "side": "benefits"
+    },
+    "transport": {
+      "label": "Transport users",
+      "side": "benefits"
+    },
+    "whitehall": {
+      "label": "Other departments and the devolved grants",
+      "side": "benefits"
+    },
+    "investment": {
+      "label": "Public investment",
+      "side": "benefits"
+    },
+    "families-on-benefits": {
+      "label": "Families on universal credit",
+      "side": "benefits"
+    },
+    "disabled-people": {
+      "label": "Disabled people",
+      "side": "benefits"
+    },
+    "pensioners": {
+      "label": "Pensioners",
+      "side": "benefits"
+    },
+    "other-welfare": {
+      "label": "Other benefit recipients",
+      "side": "benefits"
+    },
+    "students": {
+      "label": "Students",
+      "side": "benefits"
+    },
+    "renters": {
+      "label": "Renters and social tenants",
+      "side": "benefits"
+    },
+    "water-customers": {
+      "label": "Water customers",
+      "side": "benefits"
+    },
+    "workers": {
+      "label": "Workers retraining",
+      "side": "benefits"
+    },
+    "foreign-nationals": {
+      "label": "Foreign nationals on benefits",
+      "side": "benefits"
+    }
+  },
+  "levers": {
+    "itbr": "broad-base",
+    "ithr": "broad-base",
+    "itbrl": "broad-base",
+    "itpa": "broad-base",
+    "nicm": "broad-base",
+    "nica": "broad-base",
+    "nicpt": "broad-base",
+    "vats": "broad-base",
+    "vatr": "broad-base",
+    "rvfrz": "broad-base",
+    "rvsal": "broad-base",
+    "vatfood": "broad-base",
+    "vatnrg": "broad-base",
+    "vatkids": "broad-base",
+    "vatbook": "broad-base",
+    "vattrn": "broad-base",
+    "vathome": "savers-owners",
+    "itar": "top",
+    "it50": "top",
+    "wealth": "top",
+    "cgth": "savers-owners",
+    "rvcgt": "savers-owners",
+    "iht": "savers-owners",
+    "sdlt5": "savers-owners",
+    "rvhrad": "savers-owners",
+    "rvinv": "savers-owners",
+    "ct": "business",
+    "nicer": "business",
+    "fuel": "motorists",
+    "rvfuel": "motorists",
+    "alc": "duties",
+    "rvgam": "duties",
+    "dhsc": "nhs",
+    "dfe": "schools",
+    "ufsm": "schools",
+    "freeuni": "students",
+    "mod": "defence",
+    "def5": "defence",
+    "dip47": "defence",
+    "moj": "justice",
+    "home": "policing-borders",
+    "mhclg": "councils-care",
+    "fcdo": "aid",
+    "aid07": "aid",
+    "dft": "transport",
+    "bus2": "transport",
+    "otherd": "whitehall",
+    "rveff": "whitehall",
+    "cdel": "investment",
+    "socrent": "renters",
+    "water": "water-customers",
+    "airet": "workers",
+    "wuc": "families-on-benefits",
+    "rv2ch": "families-on-benefits",
+    "nonuk": "foreign-nationals",
+    "wdis": "disabled-people",
+    "rvpip": "disabled-people",
+    "wpens": "pensioners",
+    "cpilock": "pensioners",
+    "rvwfp": "pensioners",
+    "woth": "other-welfare"
+  }
+}

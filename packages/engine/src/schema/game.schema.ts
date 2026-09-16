@@ -443,3 +443,68 @@ export const speechFileSchema = z.strictObject({
   /** The last word, keyed `met`, `missed` or `breach`: {headroom}, {targetYear}. */
   peroration: z.record(z.string(), speechFragmentSchema),
 });
+
+/* --------------------------------------------------------------- the close */
+
+/**
+ * Who a lever falls on (stage 7's "who paid, who benefited"). Every non-macro lever carries one
+ * group tag; a tax group is a payer, a spending group a beneficiary. Tags are words, so the close
+ * can total the engine's figures by them without adding a number of its own.
+ */
+export const incidenceGroupSchema = z.strictObject({
+  label: z.string().min(1),
+  side: z.enum(['pays', 'benefits']),
+});
+
+export const incidenceFileSchema = z
+  .strictObject({
+    schemaVersion: z.literal(1),
+    groups: z.record(slug, incidenceGroupSchema),
+    levers: z.record(z.string(), slug),
+  })
+  .superRefine((file, ctx) => {
+    for (const [code, group] of Object.entries(file.levers)) {
+      if (!file.groups[group])
+        ctx.addIssue({
+          code: 'custom',
+          message: `lever ${code} is tagged with unknown group ${group}`,
+          path: ['levers', code],
+        });
+    }
+  });
+
+/**
+ * A kind of Budget the close can name. Every condition present must hold; kinds are read in
+ * order and the first that fits is the verdict. The text is a game judgement; `{theme}` and
+ * `{headroom}` are filled from data and the engine.
+ */
+export const verdictKindSchema = z.strictObject({
+  id: slug,
+  title: z.string().min(1).max(120),
+  line: simulatedLineSchema,
+  when: z.strictObject({
+    themeIs: z.string().optional(),
+    rulesMet: z.boolean().optional(),
+    breachAccepted: z.boolean().optional(),
+    promisesAllKept: z.boolean().optional(),
+    prioritiesAllFunded: z.boolean().optional(),
+    prioritiesNoneFunded: z.boolean().optional(),
+    headroomAtLeastTarget: z.boolean().optional(),
+    headroomThin: z.boolean().optional(),
+    rabbitKept: z.boolean().optional(),
+    certified: z.boolean().optional(),
+    restive: z.boolean().optional(),
+  }),
+});
+
+export const verdictsFileSchema = z
+  .strictObject({
+    schemaVersion: z.literal(1),
+    kinds: z.array(verdictKindSchema).min(2),
+    /** The kind used when none fits; must be one of the kinds. */
+    fallback: slug,
+  })
+  .superRefine((file, ctx) => {
+    if (!file.kinds.some((k) => k.id === file.fallback))
+      ctx.addIssue({ code: 'custom', message: 'fallback names no kind', path: ['fallback'] });
+  });
