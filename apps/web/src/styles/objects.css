@@ -376,9 +376,11 @@
 
 /* The way out of the ceremony, for a second play or a reader who wants the whole file at once. */
 .ceremony {
-  margin: 4px 0 0;
-  font-size: 0.86rem;
-  color: var(--desk-ink-2);
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--ink-2);
 }
 
 .ceremony label {
@@ -462,4 +464,66 @@
 
 .beat--past-summary[open] > summary {
   margin-bottom: 10px;
+}
+
+/* The dateline sits on the leather, above the index tabs. */
+.journey > .dateline {
+  margin: 0 0 10px;
+  color: var(--desk-ink-2);
+}
+
+.journey > .dateline .dateline__rule {
+  background: rgba(255, 255, 255, 0.18);
+  max-width: 90px;
+}
+
+.dateline__countdown {
+  color: var(--gold);
+}
+
+/* ------------------------------------------------ the appointment letter */
+
+.letter {
+  max-width: 68ch;
+  margin-bottom: 16px;
+  padding-top: 16px;
+}
+
+.letter__from {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.letter__ref {
+  font-family: var(--font-label);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.letter .kicker {
+  color: var(--oxblood-text);
+}
+
+/* The brass nameplate on an adviser's door. */
+.nameplate {
+  border: 1px solid var(--manila-edge);
+  border-left: 3px solid var(--tag-brass);
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--surface-2) 0%, var(--paper) 100%);
+  padding: 11px 13px;
+}
+
+.nameplate strong {
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }

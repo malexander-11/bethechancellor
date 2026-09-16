@@ -10,8 +10,16 @@ export function StartPage() {
   const { ceremony, setCeremony } = useCeremony();
   return (
     <JourneyLayout step="start">
-      <section className="hero-start">
-        <p className="kicker">Be the Chancellor</p>
+      {/*
+        The appointment letter. It is openly the game's premise rather than a claim about anyone:
+        the sender is a role, as the advisers are, and nothing in it is a number the engine did
+        not compute.
+      */}
+      <section className="hero-start doc doc--ruled letter">
+        <p className="letter__from">
+          <span className="kicker">From the Prime Minister</span>
+          <span className="letter__ref">Appointment · Chancellor of the Exchequer</span>
+        </p>
         <h1 className="page-title">You have been appointed Chancellor.</h1>
         <p className="lede">
           Your Budget is on 28 October 2026. March left {formatGbpBn(headroom, 1)} of headroom
@@ -47,7 +55,7 @@ export function StartPage() {
         </p>
         <ul className="advisers">
           {advisers.advisers.map((a) => (
-            <li key={a.id}>
+            <li key={a.id} className="nameplate">
               <strong>{a.role}</strong>
               <span>{a.remit}</span>
             </li>

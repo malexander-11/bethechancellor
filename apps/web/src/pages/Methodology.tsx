@@ -162,6 +162,19 @@ export function MethodologyPage() {
         their own words.
       </p>
 
+      <h2>Why it looks like paperwork</h2>
+      <p>
+        The desk, the folders and the stamps are drawn in CSS; there are no images and no downloaded
+        fonts, so nothing here costs you a network request or hides behind a picture. The framing
+        stops where the evidence starts. Badges never become stamps: those four words are how you
+        tell a certified costing from our own arithmetic, and they stay plain. Stamps are only ever
+        the verdict on a fiscal rule, which the engine computes. Moving to the next part of a step
+        never removes what you have already read, so an adviser&rsquo;s citations stay on the page
+        behind you. The date at the top and the countdown to 28 October are the only things on
+        screen we did not calculate, and they carry no badge, because chrome must not borrow the
+        vocabulary of a costing.
+      </p>
+
       <h2>What is not modelled</h2>
       <p>
         Growth effects of your choices, what markets would actually do, Barnett consequentials

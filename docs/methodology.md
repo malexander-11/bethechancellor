@@ -382,3 +382,27 @@ chose the band is printed beside the text.
 
 The public panel is not a band: it carries the distributional considerations of the levers the
 player moved, in their own words and with their own citations, ordered by the size of the measure.
+
+## 13. The desk (ADR-0009)
+
+The interface is a desk in the Treasury: paper on green leather, manila folders, rubber-stamped
+verdicts, a countdown to 28 October. None of it is an image or a webfont; paper grain is two
+hairline gratings, folder tabs are clip-paths, punch holes are radial gradients.
+
+Three rules keep the framing from eating the sourcing.
+
+**Badges are never stamps.** The four badge words are the honesty contract's vocabulary. Stamps are
+for rule verdicts, which are the engine's own judgement on your Budget, and nowhere else.
+
+**Beats accumulate.** Each step hands you something before the working surface, but moving on never
+removes what you have read: source links inside a briefing stay in the document. A hand-off you
+have finished with folds to one line rather than disappearing. The beat you are on never reaches
+the URL, which means one thing only, a budget.
+
+**Only the date is new.** The dateline and the countdown are the only facts on screen the engine
+did not compute. Both derive from the Charter's next formal assessment date, so a data refresh
+moves them, and neither carries a badge: chrome must not borrow the vocabulary of a costing.
+
+One thing the desk costs: a closed folder's papers leave the document, so find-in-page no longer
+reaches every lever at once. The attribution list beside the folders names every lever you have
+moved, which is the question that was actually being asked.

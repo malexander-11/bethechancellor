@@ -1,5 +1,6 @@
 import type { JourneyStep } from '@btc/engine';
 import type { ReactNode } from 'react';
+import { Dateline } from './Dateline';
 import { StepLink } from '../journey/links';
 
 const STEPS: Array<{
@@ -24,6 +25,7 @@ export function JourneyLayout({ step, children }: { step: JourneyStep; children:
   const index = STEPS.findIndex((s) => s.id === current);
   return (
     <div className="journey">
+      <Dateline />
       <nav className="steps" aria-label="Budget steps">
         <ol>
           {STEPS.map((s, i) => (
