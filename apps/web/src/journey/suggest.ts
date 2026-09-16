@@ -8,19 +8,40 @@ export interface Suggestion {
 
 type ReadingValue = ContextReading['obr'];
 
+/** Mean difference over the years both series report, or null if they share none. */
+export function meanSeriesGap(
+  latest: Record<string, number>,
+  base: Record<string, number>,
+): number | null {
+  const years = Object.keys(base).filter((y) => latest[y] !== undefined);
+  if (years.length === 0) return null;
+  const total = years.reduce((acc, y) => acc + ((latest[y] ?? 0) - (base[y] ?? 0)), 0);
+  return total / years.length;
+}
+
+/**
+ * A raw gap in percentage points becomes a slider setting: rounded to the slider's step, then
+ * clamped to its range. Every card on the assumptions step goes through this, so the settings a
+ * player can reach are always ones the control can actually represent.
+ */
+export function toSliderValue(lever: Lever, gap: number): number {
+  const { min, max, step } = lever.control;
+  const rounded = Math.round(gap / step) * step;
+  return Number(Math.min(max, Math.max(min, rounded)).toFixed(6));
+}
+
+/** Whether rounding a gap to the step would have landed outside the slider. */
+export function wouldClamp(lever: Lever, gap: number): boolean {
+  const { min, max, step } = lever.control;
+  const rounded = Math.round(gap / step) * step;
+  return rounded < min || rounded > max;
+}
+
 /** Latest minus OBR: a scalar difference, or the mean difference over the years both sides report. */
 export function gapOf(reading: ContextReading): number | null {
   const { obr, latest } = reading;
   if (obr.value !== undefined && latest.value !== undefined) return latest.value - obr.value;
-  if (obr.series && latest.series) {
-    const years = Object.keys(obr.series).filter((y) => latest.series?.[y] !== undefined);
-    if (years.length === 0) return null;
-    const total = years.reduce(
-      (acc, y) => acc + ((latest.series?.[y] ?? 0) - (obr.series?.[y] ?? 0)),
-      0,
-    );
-    return total / years.length;
-  }
+  if (obr.series && latest.series) return meanSeriesGap(latest.series, obr.series);
   return null;
 }
 
@@ -48,11 +69,9 @@ export function suggestSetting(reading: ContextReading, lever: Lever): Suggestio
   }
   const gap = gapOf(reading);
   if (gap === null) return null;
-  const { min, max, step } = lever.control;
-  const rounded = Math.round(gap / step) * step;
-  const value = Number(Math.min(max, Math.max(min, rounded)).toFixed(6));
+  const value = toSliderValue(lever, gap);
   const averaged = reading.obr.series !== undefined;
-  const rationale = `${reading.latest.label}: ${summarise(reading.latest, reading.unit)}, against the OBR's ${summarise(reading.obr, reading.unit)}. ${averaged ? 'An average gap' : 'A gap'} of ${gap.toFixed(2)} points, rounded to the slider's ${step} step${value !== rounded ? ' and clamped to its range' : ''}.`;
+  const rationale = `${reading.latest.label}: ${summarise(reading.latest, reading.unit)}, against the OBR's ${summarise(reading.obr, reading.unit)}. ${averaged ? 'An average gap' : 'A gap'} of ${gap.toFixed(2)} points, rounded to the slider's ${lever.control.step} step${wouldClamp(lever, gap) ? ' and clamped to its range' : ''}.`;
   return { value, rationale, rule: 'gap' };
 }
 

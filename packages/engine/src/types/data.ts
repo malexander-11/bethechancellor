@@ -44,6 +44,8 @@ import type {
 import type {
   contextFileSchema,
   contextReadingSchema,
+  contextScenarioSchema,
+  scenarioKindSchema,
   suggestionRuleSchema,
 } from '../schema/context.schema.js';
 import type {
@@ -86,6 +88,8 @@ export type DwpBenefitExtract = z.infer<typeof dwpBenefitExtractSchema>;
 export type ContextFile = z.infer<typeof contextFileSchema>;
 export type ContextReading = z.infer<typeof contextReadingSchema>;
 export type SuggestionRule = z.infer<typeof suggestionRuleSchema>;
+export type ContextScenario = z.infer<typeof contextScenarioSchema>;
+export type ScenarioKind = z.infer<typeof scenarioKindSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

@@ -29,18 +29,18 @@ describe('journey routes', () => {
     expect(screen.getByText('Budget 2025 decisions')).toBeInTheDocument();
   });
 
-  it('shows the assumptions step with the advisers’ suggestions and Budget day with the verdicts', () => {
+  it('shows the assumptions step as a choice of forecasts, and Budget day with the verdicts', () => {
     const { unmount } = render(
       <MemoryRouter initialEntries={['/assumptions']}>
         <App />
       </MemoryRouter>,
     );
     expect(screen.getByText('Step 1 · Confirm the assumptions')).toBeInTheDocument();
-    // Beat 0 is the adviser arriving; the readings and the shortcuts are behind Continue.
-    expect(screen.queryByText(/Take the advisers/)).toBeNull();
+    // Beat 0 is the adviser arriving; the four forecasts you can budget on are behind Continue.
+    expect(screen.queryByRole('radiogroup', { name: 'Economic assumptions' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
-    expect(screen.getByText(/Take the advisers/)).toBeInTheDocument();
-    expect(screen.getAllByText(/Advisers suggest/).length).toBeGreaterThanOrEqual(3);
+    expect(screen.getAllByRole('radio')).toHaveLength(4);
+    expect(screen.getByRole('radio', { name: /Keep the March baseline/ })).toBeChecked();
     unmount();
     render(
       <MemoryRouter initialEntries={['/budget-day']}>

@@ -527,3 +527,183 @@
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
+
+/* ---------------------------------------------------------------------------
+   The four sets of assumptions, as papers clipped to the front of the file.
+   A radio group, so the keyboard and a screen reader both get "one of four"
+   without any extra wiring.
+   --------------------------------------------------------------------------- */
+
+.scenarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  /* Each card is its own height: opening one card's workings must not blow up its neighbours
+     into tall empty boxes. The headroom lines line up because the headlines are cut to a
+     length, not because the row is stretched. */
+  align-items: start;
+  gap: 12px;
+  margin: 12px 0 16px;
+}
+
+.scenario {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--manila-edge);
+  border-top: 3px solid var(--manila);
+  border-radius: 2px;
+  background: var(--paper);
+  background-image: var(--paper-grain);
+  box-shadow: var(--shadow);
+  transition:
+    box-shadow var(--t-base) var(--ease),
+    border-color var(--t-base) var(--ease),
+    transform var(--t-base) var(--ease);
+}
+
+.scenario--picked {
+  border-color: var(--oxblood);
+  border-top-color: var(--oxblood);
+  box-shadow: var(--shadow-lift);
+}
+
+.scenario__choose {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  padding: 12px 13px 10px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.scenario__choose input {
+  margin-top: 3px;
+  flex: none;
+  align-self: flex-start;
+  accent-color: var(--oxblood);
+}
+
+.scenario__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.scenario__title {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.scenario__headline {
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.scenario__settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin-top: 2px;
+}
+
+.scenario__chip {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--surface-2);
+  padding: 2px 6px;
+  font-size: 0.72rem;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.scenario__chip strong {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+/* The uncomfortable part of the step: four forecasts, four different headrooms. */
+.scenario__headroom {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.scenario__headroom small {
+  font-family: var(--font-label);
+  font-size: 0.62rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.scenario__headroom strong {
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.scenario__why {
+  border-top: 1px solid var(--border);
+  padding: 0 13px;
+}
+
+.scenario__why summary {
+  padding: 8px 0;
+  font-family: var(--font-label);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.scenario__why p {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.scenario__workings {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+}
+
+.scenario__workings dt {
+  font-family: var(--font-label);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.scenario__workings dd {
+  margin: 2px 0 0;
+  line-height: 1.5;
+}
+
+/* Where the published range is on a different footing from the reading above it. */
+.scenario__note {
+  color: var(--oxblood-text);
+}
+
+.scenario--own {
+  grid-column: 1 / -1;
+  padding: 12px 13px;
+  border-top-color: var(--oxblood);
+}
+
+.scenario--own p {
+  margin: 0 0 6px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scenario--picked {
+    transform: translateY(-2px);
+  }
+}

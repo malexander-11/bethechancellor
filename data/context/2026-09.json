@@ -31,6 +31,45 @@
       "suggestion": {
         "rule": "gap"
       },
+      "alternatives": {
+        "source": {
+          "sourceId": "hmt-forecasts-2026-08",
+          "table": "Table M4",
+          "page": "20",
+          "quote": "Medium-term forecasts for the official Bank rate, annual average, per cent."
+        },
+        "note": "These rows are for the official Bank Rate, not gilt yields. No forecaster in the comparison publishes a gilt yield, so the published range for this slider is a Bank Rate range, while your adviser reads the 10-year gilt yield above. The slider moves both together.",
+        "against": {
+          "label": "OBR March 2026, as printed by the Treasury alongside the forecasters",
+          "series": {
+            "2026": 3.45,
+            "2027": 3.41,
+            "2028": 3.59,
+            "2029": 3.74,
+            "2030": 3.89
+          }
+        },
+        "optimistic": {
+          "label": "Lowest of the forecasts in the comparison",
+          "series": {
+            "2026": 3.4,
+            "2027": 3.25,
+            "2028": 3.0,
+            "2029": 2.75,
+            "2030": 2.59
+          }
+        },
+        "pessimistic": {
+          "label": "Highest of the forecasts in the comparison",
+          "series": {
+            "2026": 3.9,
+            "2027": 4.0,
+            "2028": 4.0,
+            "2029": 3.9,
+            "2030": 3.8
+          }
+        }
+      },
       "text": "The OBR conditioned its March forecast on 10-year gilt yields of 4.5%. They have since risen to about 5.35%. The OBR's own sensitivity puts a sustained 1 percentage point rise in Bank Rate and gilt yields at about £15 billion of extra borrowing by 2030-31, so this is the largest single change since March."
     },
     {
@@ -119,7 +158,7 @@
           "2029": 2.1,
           "2030": 2.0
         },
-        "label": "Average of independent medium-term forecasts, August 2026",
+        "label": "Average of the forecasts the Treasury received in August 2026",
         "source": {
           "sourceId": "hmt-forecasts-2026-08"
         }
@@ -174,13 +213,52 @@
           "2029": 2.9,
           "2030": 2.8
         },
-        "label": "Average of independent medium-term forecasts, August 2026",
+        "label": "Average of the forecasts the Treasury received in August 2026",
         "source": {
           "sourceId": "hmt-forecasts-2026-08"
         }
       },
       "suggestion": {
         "rule": "gap"
+      },
+      "alternatives": {
+        "source": {
+          "sourceId": "hmt-forecasts-2026-08",
+          "table": "Table M3",
+          "page": "20",
+          "quote": "Medium-term forecasts for CPI and RPI inflation, annual average, per cent."
+        },
+        "note": "The Treasury prints the OBR’s own RPI row in this table year by year; the comparison above uses the OBR’s stated average for 2027 to 2029, so the two differ slightly for those years. The range is measured against the row printed beside it.",
+        "against": {
+          "label": "OBR March 2026, as printed by the Treasury alongside the forecasters",
+          "series": {
+            "2026": 3.1,
+            "2027": 3.0,
+            "2028": 2.8,
+            "2029": 2.9,
+            "2030": 2.3
+          }
+        },
+        "optimistic": {
+          "label": "Lowest of the forecasts in the comparison",
+          "series": {
+            "2026": 2.8,
+            "2027": 2.8,
+            "2028": 2.7,
+            "2029": 2.6,
+            "2030": 2.3
+          }
+        },
+        "pessimistic": {
+          "label": "Highest of the forecasts in the comparison",
+          "series": {
+            "2026": 4.7,
+            "2027": 4.8,
+            "2028": 3.8,
+            "2029": 3.5,
+            "2030": 3.0
+          }
+        }
       },
       "text": "RPI inflation sets the interest on index-linked gilts: the OBR's sensitivity puts 1 percentage point on RPI at about £11 billion of extra borrowing by 2030-31. Independent forecasters see RPI about half a point higher than the OBR over the next five years; the outturn was 3.2% in July 2026."
     },
@@ -236,6 +314,164 @@
         }
       },
       "text": "Borrowing in the first four months of 2026-27 was £56.7 billion, £2.3 billion above the OBR's profile, with a small surplus in July."
+    }
+  ],
+  "scenarios": [
+    {
+      "kind": "baseline",
+      "title": "Keep the March baseline",
+      "headline": "The OBR’s own central forecast, left exactly as it was. The figures your Budget will be judged on.",
+      "rationale": [
+        {
+          "text": "This is the forecast your Budget will be judged against until the OBR publishes a new one on 28 October. The OBR’s own warning about it: a central forecast is the middle of a range of possible outcomes, with a low probability of the outcome being very close to the central estimate.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "Box 6.1",
+              "page": "94"
+            }
+          ]
+        },
+        {
+          "text": "Six months of market moves and forecaster revisions sit outside it. The other three cards each apply one published rule to close part of that gap.",
+          "sources": []
+        }
+      ]
+    },
+    {
+      "kind": "adviser",
+      "title": "Your Chief Economic Adviser’s view",
+      "headline": "Today’s readings, not a forecast: each slider moved by the gap between the latest figure and the OBR’s.",
+      "rationale": [
+        {
+          "text": "Gilt yields are the large change. The OBR conditioned March on 10-year yields of 4.5%; they closed at 5.35% on 11 September. The OBR’s sensitivity puts a sustained point on rates at about £15 billion of borrowing by 2030-31.",
+          "sources": [
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 2.1",
+              "paragraph": "6.16"
+            }
+          ]
+        },
+        {
+          "text": "RPI runs about half a point above the OBR’s path on the average of independent forecasts, which is what sets the interest on index-linked gilts.",
+          "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table M3",
+              "page": "20"
+            }
+          ]
+        },
+        {
+          "text": "Growth stays on the OBR’s path: forecasters see weaker real growth but higher inflation, and receipts follow nominal GDP, where the two roughly cancel. The weaker real outlook is a risk your adviser leaves on the table rather than a number.",
+          "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table M1",
+              "page": "19"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "optimistic",
+      "title": "An optimistic analyst",
+      "headline": "The lowest figure any of the sixteen forecasters in the Treasury’s comparison publishes, table by table.",
+      "rationale": [
+        {
+          "text": "Rates do the work: the lowest Bank Rate path in the comparison runs about 0.6 points a year below the OBR’s, falling to 2.59% by 2030 where the OBR has 3.89%. Borrowing gets cheaper than the March forecast assumed.",
+          "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table M4",
+              "page": "20"
+            }
+          ]
+        },
+        {
+          "text": "But there is no optimistic case on inflation. The lowest published RPI path is within 0.2 points of the OBR’s, so the rule rounds it to nothing: not one forecaster in the comparison sees RPI materially below the OBR. On the quarterly basis the lowest 2026 forecast is above the OBR’s, not below.",
+          "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table M3",
+              "page": "20"
+            },
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table 2",
+              "page": "5"
+            }
+          ]
+        },
+        {
+          "text": "Growth stays on the OBR’s path. The comparison publishes no medium-term range for nominal GDP, and adding its highest real growth to its highest GDP deflator would splice together different institutions into a path nobody published.",
+          "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table M1",
+              "page": "19"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "pessimistic",
+      "title": "A pessimistic analyst",
+      "headline": "The highest any of the sixteen publishes, table by table. An envelope, not one forecaster’s view.",
+      "rationale": [
+        {
+          "text": "Inflation does the damage. The highest RPI path runs more than a point a year above the OBR’s, and the OBR’s sensitivity puts a point on RPI at about £11 billion of extra borrowing by 2030-31, mostly through index-linked gilts.",
+          "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table M3",
+              "page": "20"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "6.17"
+            }
+          ]
+        },
+        {
+          "text": "Interest rates land below your adviser’s figure here, not above, and that is the point worth taking. The forecasters’ range is for Bank Rate; your adviser is reading the 10-year gilt yield, which none of them forecasts and which is what actually drives debt interest.",
+          "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table M4",
+              "page": "20"
+            },
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            }
+          ]
+        },
+        {
+          "text": "Growth stays on the OBR’s path. The comparison publishes no medium-term range for nominal GDP, and adding its highest real growth to its highest GDP deflator would splice together different institutions into a path nobody published.",
+          "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table M1",
+              "page": "19"
+            }
+          ]
+        },
+        {
+          "text": "Each cell in the highest row can come from a different institution, so no one analyst holds this whole view. It is the outer edge of what was published, which is why it is a card and not a forecast.",
+          "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "page": "3"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

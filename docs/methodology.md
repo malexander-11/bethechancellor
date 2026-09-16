@@ -290,6 +290,52 @@ points on the rates slider (5.35% against 4.5%) and +0.5 on RPI (an average gap 
 higher inflation roughly cancel on nominal GDP. Suggestions are badged as assumptions; the OBR's
 own path is one click away.
 
+### Four sets of assumptions, one method (ADR-0010)
+
+From Phase 7 the step is a choice between four cards rather than three sliders. Each is one
+stated rule over published rows, run through the same rounding and clamping as the suggestion
+rule above; none of the four settings is authored, so tampering with a published figure moves
+the card.
+
+| Card                               | Rule                                                         | rates | growth | RPI  |
+| ---------------------------------- | ------------------------------------------------------------ | ----- | ------ | ---- |
+| Keep the March baseline            | The OBR's own forecast, unchanged                            | 0     | 0      | 0    |
+| Your Chief Economic Adviser's view | Latest reading − OBR (the `gap` rule)                        | +0.75 | 0      | +0.5 |
+| An optimistic analyst              | The **Lowest** row of HM Treasury's comparison − its OBR row | −0.5  | 0      | 0    |
+| A pessimistic analyst              | The **Highest** row − its OBR row                            | +0.25 | 0      | +1.0 |
+
+The two analysts read _Forecasts for the UK economy: a comparison of independent forecasts_
+(HM Treasury, August 2026), which prints a Highest row, a Lowest row and the OBR's own row in
+the same table: Table M4 for the official Bank Rate and Table M3 for RPI, both annual averages
+for 2026 to 2030. HM Treasury permits the averages and ranges to be reproduced if reproduced
+accurately and not in a misleading context; individual forecasters' rows are their copyright and
+are not used here.
+
+Three things about those figures are stated on the cards rather than smoothed over.
+
+1. **The pessimist's rates sit below the adviser's.** The rates slider moves Bank Rate and gilt
+   yields together. The adviser reads the 10-year gilt yield, because gilt yields drive debt
+   interest; the comparison publishes no gilt yield at all, so the analysts' range is a Bank Rate
+   range. Each published range therefore carries its own comparator row (`alternatives.against`)
+   and a note naming the basis, and the schema makes both mandatory.
+2. **There is no optimistic case on RPI.** The lowest published path is 0.18 points below the
+   OBR's on average, which rounds to nothing at the slider's half-point step: not one forecaster
+   in the comparison sees RPI materially below the OBR, and on the quarterly basis the lowest
+   2026 forecast is above it.
+3. **Growth stays on the OBR's path on every card.** The comparison publishes no medium-term
+   range for nominal GDP. Adding its highest real growth to its highest GDP deflator would splice
+   different institutions into a path nobody published, which is exactly the invention ADR-0002
+   forbids; its short-term nominal GDP range covers 2026 and 2027 only and exceeds the slider's
+   whole range several times over.
+
+A Highest or Lowest row is a per-cell maximum, so no single institution holds a card's whole
+view; the cards say "the highest figure any of the sixteen publishes", never "an analyst
+forecasts". Every card shows the headroom it would leave, which is how the step teaches that a
+Chancellor can buy headroom by picking the rosier forecast: £23.6bn on the March baseline,
+£31.1bn on the optimistic card, £8.8bn on the pessimistic one and £6.8bn on the adviser's.
+The three sliders remain behind a disclosure, with their readings and provenance drawers intact;
+a permalink whose settings match no card shows _your own figures_.
+
 ### The scorecard
 
 For the stability rule's target year: headroom (the big number, against the OBR's March

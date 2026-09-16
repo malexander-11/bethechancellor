@@ -10,7 +10,8 @@ rules/<id>.json           a Charter for Budget Responsibility rule set
 levers/<category>/*.json  policy levers (tax, spend, welfare) and assumption sliders (macro)
 reference/*.json          non-forecast reference numbers (e.g. UK households)
 presets/presets.json      named combinations of lever settings
-context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the latest figures, with suggestion rules
+context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the latest figures, with
+                          suggestion rules, published forecast ranges and the assumption scenarios
 journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/briefings.json    sourced adviser briefings per step and lever group
 raw/<source-id>/          committed copies of small source files, with sha256 in the registry
@@ -73,6 +74,17 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
 - **Briefings** need an existing adviser who speaks on the step, a real lever group for group
   briefings, and at least one source per paragraph. **Context readings** that name a
   `leverCode` need a `suggestion` rule (`gap` or `authored`).
+- **Published ranges** (`reading.alternatives`) carry the highest and lowest rows of a forecast
+  comparison, the comparator row from the same table (`against`) and a `note` saying what basis
+  they are on. `against` is mandatory and separate from the reading's own `obr` block because the
+  two can differ: the rates reading compares 10-year gilt yields, but the published range is for
+  Bank Rate, which the note has to say. All three rows must cover the same years, since the gap
+  rule averages over them. A range needs a `leverCode`; the validator checks all of this.
+- **Scenarios** (`context.scenarios`) carry a card's words only — title, headline and rationale
+  paragraphs with sources. Never author its slider settings: those are derived in
+  `apps/web/src/journey/scenarios.ts` from the rows above, so a tampered figure moves the card.
+  One scenario per `kind`; an `optimistic` or `pessimistic` card needs at least one reading with a
+  published range.
 
 ### Spending levers
 

@@ -10,10 +10,22 @@ import { LeverControl, formatLeverValue } from '../components/LeverControl';
 import { PathChart } from '../components/PathChart';
 import { PresetPicker } from '../components/PresetPicker';
 import { Scorecard } from '../components/Scorecard';
-import { briefingsFor, groupLevers, leversByCategory, rules, vintage } from '../data';
+import {
+  briefingsFor,
+  context,
+  groupLevers,
+  levers,
+  leversByCategory,
+  rules,
+  vintage,
+} from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { StepLink } from '../journey/links';
+import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { useBudget } from '../state/budget';
+
+const ASSUMPTION_CARDS = scenarioCards(context, levers);
+const MACRO_CODES = macroCodesOf(context.readings);
 
 const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDateString('en-GB', {
   day: 'numeric',
@@ -49,10 +61,14 @@ export function BudgetPage() {
   // Open on the first file you have touched, so a shared Budget does not look untouched.
   const defaultFolder =
     groups.find((g) => g.levers.some((l) => moved.has(l.code)))?.name ?? groups[0]?.name ?? '';
-  const macroSummary = leversByCategory.macro
-    .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
-    .filter((x) => x.value !== x.lever.control.default)
-    .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`);
+  // Name the card the player chose on step 1; fall back to the figures only if they set their own.
+  const macroSummary =
+    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES) ??
+    leversByCategory.macro
+      .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
+      .filter((x) => x.value !== x.lever.control.default)
+      .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
+      .join(' · ');
 
   async function copyLink() {
     const url = `${window.location.origin}/budget-day?${query}`;
@@ -95,9 +111,8 @@ export function BudgetPage() {
         <Beat title={step === 'taxes' ? 'Set the taxes' : 'Set the spending'}>
           <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
           <p className="assumptions-line">
-            Economic assumptions:{' '}
-            {macroSummary.length > 0 ? macroSummary.join(' · ') : "the OBR's March view"} ·{' '}
-            <StepLink to="/assumptions">change</StepLink>
+            Economic assumptions: {macroSummary.length > 0 ? macroSummary : "the OBR's March view"}{' '}
+            · <StepLink to="/assumptions">change</StepLink>
           </p>
           <nav className="tabs" aria-label="Taxes or spending">
             <StepLink

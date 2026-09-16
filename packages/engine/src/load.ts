@@ -289,6 +289,40 @@ export function validateDataset(ds: Dataset): string[] {
           `context ${context.id} reading ${reading.id} names a lever but has no suggestion rule`,
         );
       }
+      const alt = reading.alternatives;
+      if (alt) {
+        if (!reading.leverCode) {
+          problems.push(
+            `context ${context.id} reading ${reading.id} carries a published range but sets no lever`,
+          );
+        }
+        // The gap rule averages over the years both rows share, so a mismatch would silently
+        // change which years a scenario is built from.
+        const years = Object.keys(alt.against.series).sort().join(',');
+        for (const [role, row] of [
+          ['optimistic', alt.optimistic],
+          ['pessimistic', alt.pessimistic],
+        ] as const) {
+          if (Object.keys(row.series).sort().join(',') !== years) {
+            problems.push(
+              `context ${context.id} reading ${reading.id}: the ${role} row covers different years from its comparator`,
+            );
+          }
+        }
+      }
+    }
+    const kinds = new Set<string>();
+    for (const scenario of context.scenarios ?? []) {
+      if (kinds.has(scenario.kind)) {
+        problems.push(`context ${context.id} has two ${scenario.kind} scenarios`);
+      }
+      kinds.add(scenario.kind);
+      const needsRange = scenario.kind === 'optimistic' || scenario.kind === 'pessimistic';
+      if (needsRange && !context.readings.some((r) => r.alternatives)) {
+        problems.push(
+          `context ${context.id} offers a ${scenario.kind} scenario but no reading carries a published range`,
+        );
+      }
     }
   }
   return problems;

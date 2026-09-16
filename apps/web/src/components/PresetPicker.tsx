@@ -1,11 +1,6 @@
 import { presets } from '../data';
+import { sameValues } from '../journey/values';
 import { LabelBadge } from './LabelBadge';
-
-function sameValues(a: Record<string, number>, b: Record<string, number>): boolean {
-  const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
-  for (const k of keys) if ((a[k] ?? 0) !== (b[k] ?? 0)) return false;
-  return true;
-}
 
 export function PresetPicker({
   onApply,

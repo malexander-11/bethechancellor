@@ -47,6 +47,7 @@ body::before {
 .folder-body,
 .note,
 .cutting,
+.scenario,
 .scorecard,
 .briefing,
 .warnings,
@@ -59,6 +60,15 @@ body::before {
 
 a {
   color: var(--series-policy);
+}
+
+/* Secondary text sitting straight on the desk needs the desk's ink, not the paper's: --ink-2 is
+   a dark brown that all but vanishes on dark green. Direct children only, so the same classes
+   keep their paper colour inside a panel. */
+.journey > .lede,
+.journey > .source,
+.journey > .assumptions-line {
+  color: var(--desk-ink-2);
 }
 
 /* A link with no paper under it would be invisible in fountain-pen blue. */
@@ -1254,39 +1264,6 @@ details.table-view td:first-child {
 .reading__title {
   margin: 0 0 8px;
   font-size: 1.05rem;
-}
-
-.reading__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
-}
-
-.reading__label {
-  color: var(--muted);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.reading__value {
-  font-size: 1.4rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.reading__series {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  font-variant-numeric: tabular-nums;
-}
-
-.reading__year small {
-  color: var(--muted);
-}
-
-.reading__text {
-  margin: 8px 0 4px;
 }
 
 .reading__suggestion {

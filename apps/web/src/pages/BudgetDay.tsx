@@ -11,10 +11,22 @@ import { PathChart } from '../components/PathChart';
 import { ReactionPanel } from '../components/ReactionPanel';
 import { Scorecard } from '../components/Scorecard';
 import { VerdictCard } from '../components/VerdictCard';
-import { briefingsFor, households, levers, leversByCategory, reactions, vintage } from '../data';
+import {
+  briefingsFor,
+  context,
+  households,
+  levers,
+  leversByCategory,
+  reactions,
+  vintage,
+} from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { StepLink } from '../journey/links';
+import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { useBudget } from '../state/budget';
+
+const ASSUMPTION_CARDS = scenarioCards(context, levers);
+const MACRO_CODES = macroCodesOf(context.readings);
 
 export function BudgetDayPage() {
   const { state, dispatch, outcome, query } = useBudget();
@@ -28,9 +40,13 @@ export function BudgetDayPage() {
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
-  const macro = leversByCategory.macro
-    .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
-    .filter((x) => x.value !== x.lever.control.default);
+  const macroSummary =
+    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES) ??
+    leversByCategory.macro
+      .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
+      .filter((x) => x.value !== x.lever.control.default)
+      .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
+      .join(' · ');
   const met = outcome.verdicts.filter((v) => ['met', 'withinCap'].includes(v.status)).length;
   const signals = computeReactions({ outcome, levers, reactions, typicalErrorGbpm });
   const notes = distributionalNotes(outcome, levers, targetYear).slice(0, 3);
@@ -104,11 +120,7 @@ export function BudgetDayPage() {
             <MeasuresTable outcome={outcome} levers={levers} targetYear={targetYear} />
             <p className="source">
               Economic assumptions:{' '}
-              {macro.length > 0
-                ? macro
-                    .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
-                    .join(' · ')
-                : "the OBR's March view"}
+              {macroSummary.length > 0 ? macroSummary : "the OBR's March view"}
               {' · '}
               <StepLink to="/assumptions">change</StepLink>
             </p>

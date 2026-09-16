@@ -17,11 +17,11 @@ function at(path: string) {
 describe('a step arrives in beats', () => {
   it('does not put the next beat in the document until you continue', () => {
     at(`/assumptions?${BASE}`);
-    // Beat 0 is the adviser arriving; the readings themselves are not rendered at all, so the
-    // gate is real rather than something hidden with CSS.
-    expect(screen.queryByText(/Advisers suggest/)).toBeNull();
+    // Beat 0 is the adviser arriving; the four cards are not rendered at all, so the gate is
+    // real rather than something hidden with CSS.
+    expect(screen.queryByRole('radiogroup', { name: 'Economic assumptions' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
-    expect(screen.getAllByText(/Advisers suggest/).length).toBeGreaterThanOrEqual(3);
+    expect(screen.getAllByRole('radio')).toHaveLength(4);
   });
 
   it('keeps the earlier beat on the page, so its sources stay reachable', () => {
@@ -29,7 +29,7 @@ describe('a step arrives in beats', () => {
     const before = screen.getAllByRole('link').length;
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     // Accumulating rather than replacing: the adviser's briefing and its citations are still there.
-    expect(screen.getByText(/Take the advisers/)).toBeInTheDocument();
+    expect(screen.getByRole('radiogroup', { name: 'Economic assumptions' })).toBeInTheDocument();
     expect(screen.getAllByRole('link').length).toBeGreaterThan(before);
   });
 
@@ -51,7 +51,7 @@ describe('a step arrives in beats', () => {
   it('remembers how far you got in a step, but not in a step you have not opened', () => {
     const first = at(`/assumptions?${BASE}`);
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
-    expect(screen.getAllByText(/Advisers suggest/).length).toBeGreaterThanOrEqual(3);
+    expect(screen.getAllByRole('radio')).toHaveLength(4);
     first.unmount();
 
     // Coming back to a step you have worked resumes where you left off.

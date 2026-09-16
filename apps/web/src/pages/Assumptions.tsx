@@ -2,12 +2,16 @@ import { AdviserBriefing } from '../components/AdviserBriefing';
 import { AssumptionReading, ContextRow } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
+import { Scenarios } from '../components/Scenarios';
 import { Scorecard } from '../components/Scorecard';
 import { adviserById, briefingsFor, context, levers, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { StepLink } from '../journey/links';
-import { suggestedSettings } from '../journey/suggest';
+import { macroCodesOf, matchScenario, scenarioCards } from '../journey/scenarios';
 import { useBudget } from '../state/budget';
+
+const CARDS = scenarioCards(context, levers);
+const MACRO_CODES = macroCodesOf(context.readings);
 
 export function AssumptionsPage() {
   const { state, dispatch, outcome } = useBudget();
@@ -17,11 +21,7 @@ export function AssumptionsPage() {
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (outcome.paths.baseline.nominalGdpFy[lastYear] ?? 0);
-  const macroCodes = context.readings.map((r) => r.leverCode).filter((c): c is string => !!c);
-  const suggested = suggestedSettings(context.readings, levers);
-  const obrView = Object.fromEntries(
-    macroCodes.map((code) => [code, levers.find((l) => l.code === code)?.control.default ?? 0]),
-  );
+  const selected = matchScenario(CARDS, state.leverValues, MACRO_CODES);
   const adviser = adviserById.get(context.adviser);
   return (
     <JourneyLayout step="assumptions">
@@ -34,49 +34,51 @@ export function AssumptionsPage() {
       <Beats step="assumptions">
         <Beat
           title="Your Chief Economic Adviser brings the March forecast"
-          continueLabel="See the readings"
+          continueLabel="See what you could assume"
           foldWhenPast="The Chief Economic Adviser’s note"
         >
           {briefingsFor('assumptions').map((b) => (
             <AdviserBriefing key={b.id} briefing={b} />
           ))}
         </Beat>
-        <Beat title="The readings, and what you make of them">
-          <div className="toolbar">
-            <button
-              type="button"
-              className="btn btn--primary"
-              onClick={() => dispatch({ type: 'setLevers', values: suggested })}
-            >
-              Take the advisers&rsquo; view
-            </button>
-            <button
-              type="button"
-              className="btn"
-              onClick={() => dispatch({ type: 'setLevers', values: obrView })}
-            >
-              Keep the OBR&rsquo;s March view
-            </button>
-          </div>
-          <div className="readings">
-            {context.readings.map((reading) => {
-              const lever = reading.leverCode
-                ? levers.find((l) => l.code === reading.leverCode)
-                : undefined;
-              if (!lever) return null;
-              return (
-                <AssumptionReading
-                  key={reading.id}
-                  reading={reading}
-                  lever={lever}
-                  value={state.leverValues[lever.code] ?? lever.control.default}
-                  effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                  summaryYear={targetYear}
-                  onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-                />
-              );
-            })}
-          </div>
+        <Beat title="Choose the forecast you will budget on">
+          <Scenarios
+            cards={CARDS}
+            state={state}
+            selected={selected}
+            summaryYear={targetYear}
+            onPick={(values) => dispatch({ type: 'setLevers', values })}
+          />
+          <details className="panel">
+            <summary className="group__head">
+              <span className="group__line">
+                <span className="group__name">Set your own figures</span>
+                <span className="group__count">{MACRO_CODES.length}</span>
+              </span>
+              <span className="group__say">
+                The three sliders behind the cards, with the reading each one is set from.
+              </span>
+            </summary>
+            <div className="readings">
+              {context.readings.map((reading) => {
+                const lever = reading.leverCode
+                  ? levers.find((l) => l.code === reading.leverCode)
+                  : undefined;
+                if (!lever) return null;
+                return (
+                  <AssumptionReading
+                    key={reading.id}
+                    reading={reading}
+                    lever={lever}
+                    value={state.leverValues[lever.code] ?? lever.control.default}
+                    effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                    summaryYear={targetYear}
+                    onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
+                  />
+                );
+              })}
+            </div>
+          </details>
           <details className="panel">
             <summary className="group__head">
               <span className="group__line">

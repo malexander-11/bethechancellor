@@ -4,12 +4,16 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 6 (the desk)**. You are appointed Chancellor with a Budget to deliver on
+Status: **Phase 7 (four forecasts)**. You are appointed Chancellor with a Budget to deliver on
 28 October 2026, and the whole thing happens on a desk. Paper on green leather, manila folders
 with treasury tags, rubber-stamped verdicts, a countdown to Budget day. Each step hands you
 something before it gives you the working surface: read it, then continue.
 
-Step 1 confirms the economic assumptions. Step 2 is a drawer of files, one open at a time, where
+Step 1 is a single choice: which forecast do you budget on? Keep the OBR's March baseline, take
+your Chief Economic Adviser's reading of today's markets, or take the most optimistic or the most
+pessimistic view any of the sixteen forecasters in the Treasury's comparison publishes. Each card
+shows the headroom it leaves you with, which is how you find out that a Chancellor can buy
+headroom by picking a forecast. Step 2 is a drawer of files, one open at a time, where
 every control shows the level it moves to and departmental budgets show real growth a year against
 their own history. Step 3 is the eleven policies your colleagues in Parliament are campaigning for,
 each costed with its workings on the card. Step 4 is Budget day, read back as feedback from four
@@ -19,8 +23,9 @@ Under the hood: the OBR March 2026 baseline, 31 tax levers (HMRC ready reckoner,
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options,
 inheritance tax up to abolition), 19 spending levers (Spending Review 2025 settlements, OBR welfare
 lines, Budget 2025 spending decisions) with milestones from PESA, 11 campaign policies costed from
-published statistics by a stated method, and five adviser roles whose every sentence cites a public
-document. Next: the rebase to the 28 October 2026 forecast.
+published statistics by a stated method, four sets of economic assumptions derived from HM
+Treasury's comparison of independent forecasts, and five adviser roles whose every sentence cites
+a public document. Next: the rebase to the 28 October 2026 forecast.
 
 ## Principles
 
