@@ -144,6 +144,9 @@ interface BeatProps {
    */
   foldWhenPast?: string;
   children: ReactNode;
+  /** Hold the continue button until a choice is made, and say what is missing. */
+  continueDisabled?: boolean;
+  continueHint?: string;
   /* Supplied by <Beats>; never set these by hand. */
   index?: number;
   live?: boolean;
@@ -156,6 +159,8 @@ export function Beat({
   continueLabel,
   foldWhenPast,
   children,
+  continueDisabled = false,
+  continueHint,
   index = 0,
   live = false,
   advance,
@@ -201,9 +206,20 @@ export function Beat({
       {body}
       {live && advance ? (
         <p className="beat__continue">
-          <button type="button" className="btn btn--primary" onClick={advance}>
+          <button
+            type="button"
+            className="btn btn--primary"
+            onClick={advance}
+            disabled={continueDisabled}
+            aria-describedby={continueDisabled && continueHint ? `${headingId}-hint` : undefined}
+          >
             {continueLabel ? `${continueLabel} · Continue` : 'Continue'}
           </button>
+          {continueDisabled && continueHint ? (
+            <span id={`${headingId}-hint`} className="beat__hint">
+              {continueHint}
+            </span>
+          ) : null}
         </p>
       ) : null}
     </section>

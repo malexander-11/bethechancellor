@@ -21,6 +21,7 @@ export {
   parseReactions,
   parseDraws,
   parseCalendar,
+  parsePm,
   parseVintage,
   validateDataset,
   type Dataset,
@@ -52,6 +53,7 @@ export { interpolateLookup } from './costing/lookup.js';
 export { moreHarmful, psnbDirection } from './costing/sensitivity.js';
 export * from './game/scenarios.js';
 export * from './game/draw.js';
+export * from './game/ambitions.js';
 export { applyRevision } from './calc/spine.js';
 export { costLever } from './costing/index.js';
 export {

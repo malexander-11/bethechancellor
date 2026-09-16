@@ -24,6 +24,7 @@ export interface DecodedPermalink {
 
 const ITEM_SEPARATOR = '_';
 const LIST_SEPARATOR = '+';
+const LIST_SPLIT = /[+ ]/;
 const slugOk = (s: string) => /^[a-z0-9][a-z0-9:-]*$/.test(s);
 
 /**
@@ -77,8 +78,9 @@ export function decodeGame(raw: string, warnings: string[]): GamePermalink | und
     const v = Number(items.get(key));
     return Number.isInteger(v) ? v : fallback;
   };
+  // A `+` typed into a browser's address bar arrives here as a space, so both separate items.
   const list = (key: string) =>
-    (items.get(key) ?? '').split(LIST_SEPARATOR).filter((s) => s.length > 0 && slugOk(s));
+    (items.get(key) ?? '').split(LIST_SPLIT).filter((s) => s.length > 0 && slugOk(s));
   g.reached = int('st', g.reached);
   const pl = items.get('pl');
   if (pl && slugOk(pl)) g.planning = pl;

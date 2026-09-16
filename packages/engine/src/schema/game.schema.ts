@@ -81,3 +81,107 @@ export const calendarSchema = z.strictObject({
     )
     .min(1),
 });
+
+/* ------------------------------------------------------------------ the PM */
+
+/** A flagship the PM can offer: a lever and the value that delivers it, with its provenance. */
+export const flagshipSchema = z.strictObject({
+  id: slug,
+  title: z.string().min(1),
+  /** One line on what it is and why the PM wants it. */
+  headline: z.string().min(1).max(160),
+  /** The lever setting that delivers it. Cost is read live from the engine, never written here. */
+  target: z.strictObject({ code: z.string().min(1), value: z.number() }),
+  /** What buying it does and does not buy: places not meals, capacity not cash. Sourced. */
+  delivery: simulatedLineSchema,
+  /** Where the commitment comes from. */
+  sources: z.array(sourceRefSchema).min(1),
+});
+
+export const themeSchema = z.strictObject({
+  id: slug,
+  title: z.string().min(1),
+  purpose: z.string().min(1).max(160),
+  /** The PM's pitch for this theme, in the PM's voice. */
+  pitch: simulatedLineSchema,
+  flagships: z.array(slug).min(2),
+});
+
+/**
+ * A promise the PM asks the Chancellor to keep. `breaks` is a detector: the promise is broken
+ * when any listed lever is on the wrong side of its default (or on at all, for a toggle).
+ */
+const basePromiseSchema = z.strictObject({
+  id: slug,
+  title: z.string().min(1),
+  text: z.string().min(1),
+  sources: z.array(sourceRefSchema).min(1),
+  /** Empty for a promise the verdicts judge (the fiscal rules) rather than a lever. */
+  breaks: z.array(
+    z.strictObject({
+      code: z.string().min(1),
+      when: z.enum(['above', 'below', 'on']),
+    }),
+  ),
+});
+
+export const promiseSchema = basePromiseSchema.extend({
+  /** Whether the Chancellor may push back on this one, and what the PM says if they do. */
+  pushBack: z
+    .strictObject({
+      ask: z.string().min(1),
+      reply: simulatedLineSchema,
+      /** A narrower promise the PM extracts in return for releasing this one; absent = refusal. */
+      concession: basePromiseSchema.optional(),
+    })
+    .optional(),
+});
+
+export const pmFileSchema = z
+  .strictObject({
+    schemaVersion: z.literal(1),
+    /** What the PM has already done, said before asking for anything. Every fact sourced. */
+    opening: z.array(simulatedLineSchema).min(1),
+    themes: z.array(themeSchema).min(2),
+    flagships: z.array(flagshipSchema).min(4),
+    /** Flagships the PM offers whichever theme is chosen. */
+    crossCutting: z.array(slug).default([]),
+    promises: z.array(promiseSchema).min(1),
+    /** The PM's reaction to each flagship being chosen, in the PM's voice. */
+    reactions: z.record(slug, simulatedLineSchema),
+    /** Stage 5: what the PM says when asked to drop a priority or release a promise. */
+    renegotiation: z.strictObject({
+      dropPriority: simulatedLineSchema,
+      releasePromise: simulatedLineSchema,
+      refuse: simulatedLineSchema,
+    }),
+  })
+  .superRefine((file, ctx) => {
+    const flagships = new Set(file.flagships.map((f) => f.id));
+    file.themes.forEach((t, i) =>
+      t.flagships.forEach((id, j) => {
+        if (!flagships.has(id))
+          ctx.addIssue({
+            code: 'custom',
+            message: `theme ${t.id} offers unknown flagship ${id}`,
+            path: ['themes', i, 'flagships', j],
+          });
+      }),
+    );
+    file.crossCutting.forEach((id, j) => {
+      if (!flagships.has(id))
+        ctx.addIssue({
+          code: 'custom',
+          message: `unknown flagship ${id}`,
+          path: ['crossCutting', j],
+        });
+    });
+    for (const id of Object.keys(file.reactions)) {
+      if (!flagships.has(id))
+        ctx.addIssue({
+          code: 'custom',
+          message: `reaction for unknown flagship ${id}`,
+          path: ['reactions', id],
+        });
+    }
+  });

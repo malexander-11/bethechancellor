@@ -5,31 +5,32 @@ import { dateFor } from '../data';
 import { StepLink } from '../journey/links';
 
 const STEPS: Array<{
-  id: 'start' | 'assumptions' | 'budget' | 'recommendations' | 'budget-day';
+  id: 'start' | 'outlook' | 'pm' | 'budget' | 'recommendations' | 'budget-day';
   label: string;
   to: string;
 }> = [
   { id: 'start', label: 'Start', to: '/' },
-  { id: 'assumptions', label: '1 · Assumptions', to: '/assumptions' },
-  { id: 'budget', label: '2 · Taxes and spending', to: '/budget/taxes' },
-  { id: 'recommendations', label: '3 · Your colleagues', to: '/recommendations' },
-  { id: 'budget-day', label: '4 · Budget day', to: '/budget-day' },
+  { id: 'outlook', label: '1 · Outlook', to: '/outlook' },
+  { id: 'pm', label: '2 · The PM', to: '/pm' },
+  { id: 'budget', label: '3 · Taxes and spending', to: '/budget/taxes' },
+  { id: 'recommendations', label: '4 · Your colleagues', to: '/recommendations' },
+  { id: 'budget-day', label: '5 · Budget day', to: '/budget-day' },
 ];
 
 /**
- * Which tab a step lights up. The seven-stage strip lands with its pages over the next commits;
- * until then the new step ids fold into the nearest existing tab.
+ * Which tab a step lights up. The last stages' tabs land with their pages over the next commits;
+ * until then those step ids fold into Budget day.
  */
 function stepGroup(step: JourneyStep): (typeof STEPS)[number]['id'] {
   switch (step) {
     case 'start':
-    case 'assumptions':
+    case 'pm':
     case 'recommendations':
     case 'budget-day':
       return step;
     case 'outlook':
-    case 'pm':
-      return 'assumptions';
+    case 'assumptions':
+      return 'outlook';
     case 'policies':
       return 'recommendations';
     case 'forecast':

@@ -26,8 +26,8 @@ export function StartPage() {
           against the fiscal rules, and markets have moved since. Your advisers are waiting.
         </p>
         <p className="hero-start__actions">
-          <StepLink to="/assumptions" className="btn btn--primary">
-            Begin: confirm the assumptions
+          <StepLink to="/outlook" className="btn btn--primary">
+            Begin: read the economic briefing
           </StepLink>
           <StepLink to="/budget/taxes" className="btn">
             Skip to taxes and spending

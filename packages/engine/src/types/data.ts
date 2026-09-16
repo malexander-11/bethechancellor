@@ -53,8 +53,12 @@ import type {
   drawOutcomeSchema,
   drawRevisionSchema,
   drawsFileSchema,
+  flagshipSchema,
   macroCandidateSchema,
+  pmFileSchema,
+  promiseSchema,
   simulatedLineSchema,
+  themeSchema,
 } from '../schema/game.schema.js';
 import type {
   growthHeadSchema,
@@ -104,6 +108,10 @@ export type DrawRevision = z.infer<typeof drawRevisionSchema>;
 export type MacroCandidateName = z.infer<typeof macroCandidateSchema>;
 export type SimulatedLine = z.infer<typeof simulatedLineSchema>;
 export type Calendar = z.infer<typeof calendarSchema>;
+export type PmFile = z.infer<typeof pmFileSchema>;
+export type Flagship = z.infer<typeof flagshipSchema>;
+export type Theme = z.infer<typeof themeSchema>;
+export type Promise_ = z.infer<typeof promiseSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

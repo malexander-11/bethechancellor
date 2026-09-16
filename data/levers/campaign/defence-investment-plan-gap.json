@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "id": "defence-investment-plan-gap",
+  "code": "dip47",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 35,
+  "title": "Fund the Defence Investment Plan's remaining £4.7bn",
+  "shortTitle": "Defence plan gap, £4.7bn",
+  "headline": "The plan's own explainer says £4.7bn is still to be found at this Budget.",
+  "description": "The Defence Investment Plan is funded mainly by reallocating budgets across government, with £10.3bn identified when it was published. Its funding explainer says a further £4.7bn over four years will be confirmed at Budget 2026. This lever confirms it: £4.7bn spread evenly over the plan's four years, as new day-to-day and capital spending on defence rather than money taken from other departments. The department's own document is the source of the total; the even spread is our assumption.",
+  "baselinePolicy": {
+    "text": "The March forecast includes the Spending Review 2025 defence settlement and the OBR's path towards 3% of GDP by 2030-31. It does not include the £4.7bn the Defence Investment Plan's explainer says is still to be confirmed.",
+    "source": {
+      "sourceId": "govuk-dip-funding-explainer",
+      "quote": "A further £4.7 billion over four years will be confirmed at Budget 2026, in a fair and balanced way."
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "capitalShare": 0.43,
+    "delType": "RDEL",
+    "department": "Defence",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 1175,
+      "2027-28": 1175,
+      "2028-29": 1175,
+      "2029-30": 1175,
+      "2030-31": 0
+    },
+    "source": {
+      "sourceId": "govuk-dip-funding-explainer",
+      "quote": "It is funded primarily by reallocating budget from across government departments, with £10.3 billion identified now. A further £4.7 billion over four years will be confirmed at Budget 2026, in a fair and balanced way."
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "govuk-dip-funding-explainer",
+      "method": {
+        "name": "seriesProduct",
+        "terms": [
+          {
+            "label": "Funding still to be confirmed over the plan's four years",
+            "values": {
+              "2026-27": 4700,
+              "2027-28": 4700,
+              "2028-29": 4700,
+              "2029-30": 4700,
+              "2030-31": 0
+            },
+            "unit": "£ million",
+            "source": {
+              "sourceId": "govuk-dip-funding-explainer",
+              "quote": "A further £4.7 billion over four years will be confirmed at Budget 2026"
+            }
+          },
+          {
+            "label": "Share of the total in each year, spread evenly",
+            "values": {
+              "2026-27": 0.25,
+              "2027-28": 0.25,
+              "2028-29": 0.25,
+              "2029-30": 0.25,
+              "2030-31": 0.25
+            },
+            "unit": "share",
+            "source": {
+              "sourceId": "govuk-dip-funding-explainer",
+              "note": "The explainer gives a four-year total and no profile. An even spread is our assumption."
+            }
+          }
+        ]
+      },
+      "note": "The total is the department's own; the even profile is ours. Nothing is committed beyond the plan's four years, so 2030-31 is nought."
+    },
+    "caveats": [
+      "The explainer says the money will be found 'in a fair and balanced way', which in the plan means reallocation from other departments. This lever instead funds it as new spending, which is the choice a Chancellor makes when no other department will give it up.",
+      "An even spread over four years is our assumption. The plan publishes a total, not a profile.",
+      "The 43% capital share is the Spending Review's own split of the defence settlement, applied here because the plan is mostly equipment."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "already-committed",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The government has published the plan and told Parliament how much of it is funded. Refusing the remaining £4.7bn at this Budget does not cancel the commitments the plan makes; it leaves them to be found from other budgets.",
+      "sources": [
+        {
+          "sourceId": "govuk-dip-funding-explainer",
+          "quote": "with £10.3 billion identified now"
+        }
+      ]
+    },
+    {
+      "id": "nato-path",
+      "kind": "macro",
+      "direction": "costsMore",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The same explainer restates the NATO commitment to 3.5% of GDP by 2035 and the aim of 3% in the next Parliament. Filling this gap is a step on that path, not the path itself.",
+      "sources": [
+        {
+          "sourceId": "govuk-dip-funding-explainer",
+          "quote": "the UK has committed to reach 3.5% of GDP on defence spending by 2035"
+        }
+      ]
+    },
+    {
+      "id": "no-barnett",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "No Barnett consequentials: defence is a reserved matter and the Statement of Funding Policy gives the Ministry of Defence no comparability factor.",
+      "sources": [{ "sourceId": "hmt-statement-of-funding-policy-2025", "paragraph": "B.12" }]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-16"
+}

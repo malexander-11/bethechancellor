@@ -5,6 +5,7 @@ import {
   parseCalendar,
   parseContext,
   parseDraws,
+  parsePm,
   parseHouseholds,
   parseLever,
   parsePresets,
@@ -48,6 +49,7 @@ export function loadDataset(
   const briefings = parseBriefings(readJson(path.join(DATA_DIR, 'journey', 'briefings.json')));
   const draws = parseDraws(readJson(path.join(DATA_DIR, 'journey', 'draws.json')));
   const calendar = parseCalendar(readJson(path.join(DATA_DIR, 'journey', 'calendar.json')));
+  const pm = parsePm(readJson(path.join(DATA_DIR, 'journey', 'pm.json')));
   const vintage = vintages.find((v) => v.id === defaultVintageId);
   const rules = ruleSets.find((r) => r.id === defaultRulesId);
   if (!vintage) throw new Error(`default vintage ${defaultVintageId} not found`);
@@ -64,6 +66,7 @@ export function loadDataset(
     briefings,
     draws,
     calendar,
+    pm,
     vintages,
     ruleSets,
   };

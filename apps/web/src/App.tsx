@@ -2,10 +2,11 @@ import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import { BeatsProvider } from './journey/beats';
 import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
-import { AssumptionsPage } from './pages/Assumptions';
 import { BudgetPage } from './pages/Budget';
 import { BudgetDayPage } from './pages/BudgetDay';
 import { MethodologyPage } from './pages/Methodology';
+import { OutlookPage } from './pages/Outlook';
+import { PMPage } from './pages/PM';
 import { RecommendationsPage } from './pages/Recommendations';
 import { StartPage } from './pages/Start';
 import { Disclaimer } from './components/Disclaimer';
@@ -44,7 +45,9 @@ export function App() {
         <main className="page">
           <Routes>
             <Route path="/" element={<StartPage />} />
-            <Route path="/assumptions" element={<AssumptionsPage />} />
+            <Route path="/outlook" element={<OutlookPage />} />
+            <Route path="/assumptions" element={<RedirectKeepingQuery to="/outlook" />} />
+            <Route path="/pm" element={<PMPage />} />
             <Route path="/budget" element={<RedirectKeepingQuery to="/budget/taxes" />} />
             <Route path="/budget/:tab" element={<BudgetPage />} />
             <Route path="/recommendations" element={<RecommendationsPage />} />

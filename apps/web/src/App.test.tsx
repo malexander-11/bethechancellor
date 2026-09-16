@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from './App';
@@ -35,12 +35,13 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Step 1 · Confirm the assumptions')).toBeInTheDocument();
+    expect(screen.getByText('Step 1 · Choose what you will plan on')).toBeInTheDocument();
     // Beat 0 is the adviser arriving; the four forecasts you can budget on are behind Continue.
     expect(screen.queryByRole('radiogroup', { name: 'Economic assumptions' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
-    expect(screen.getAllByRole('radio')).toHaveLength(4);
-    expect(screen.getByRole('radio', { name: /Keep the March baseline/ })).toBeChecked();
+    const cards = screen.getByRole('radiogroup', { name: 'Economic assumptions' });
+    expect(within(cards).getAllByRole('radio')).toHaveLength(4);
+    expect(within(cards).getByRole('radio', { name: /Keep the March baseline/ })).toBeChecked();
     unmount();
     render(
       <MemoryRouter initialEntries={['/budget-day']}>

@@ -3,6 +3,7 @@ import {
   parseBriefings,
   parseCalendar,
   parseDraws,
+  parsePm,
   parseReactions,
   parseContext,
   parseHouseholds,
@@ -22,6 +23,7 @@ import advisersJson from '@data/journey/advisers.json';
 import briefingsJson from '@data/journey/briefings.json';
 import calendarJson from '@data/journey/calendar.json';
 import drawsJson from '@data/journey/draws.json';
+import pmJson from '@data/journey/pm.json';
 import reactionsJson from '@data/journey/reactions.json';
 import contextJson from '@data/context/2026-09.json';
 import householdsJson from '@data/reference/uk-households.json';
@@ -46,6 +48,7 @@ export const briefings = parseBriefings(briefingsJson);
 export const reactions = parseReactions(reactionsJson);
 export const draws = parseDraws(drawsJson);
 export const calendar = parseCalendar(calendarJson);
+export const pm = parsePm(pmJson);
 export const levers: Lever[] = Object.keys(leverModules)
   .sort()
   .map((key) => parseLever(leverModules[key]))
@@ -67,6 +70,7 @@ const problems = validateDataset({
   briefings,
   draws,
   calendar,
+  pm,
 });
 if (problems.length > 0) {
   throw new Error(`data set is inconsistent:\n - ${problems.join('\n - ')}`);

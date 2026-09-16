@@ -31,8 +31,9 @@ const headroom = (name: RegExp) => {
 describe('choosing the forecast you budget on', () => {
   it('offers four, with the March baseline chosen until you pick another', () => {
     step();
-    expect(screen.getAllByRole('radio')).toHaveLength(4);
-    expect(screen.getByRole('radio', { name: /Keep the March baseline/ })).toBeChecked();
+    const cards = screen.getByRole('radiogroup', { name: 'Economic assumptions' });
+    expect(within(cards).getAllByRole('radio')).toHaveLength(4);
+    expect(within(cards).getByRole('radio', { name: /Keep the March baseline/ })).toBeChecked();
     expect(screen.queryByText('Your own figures')).toBeNull();
   });
 
@@ -62,8 +63,11 @@ describe('choosing the forecast you budget on', () => {
 
   it('shows your own figures rather than pretending sliders set by hand are one of the four', () => {
     step('&M=rate.0.1');
+    const cards = screen.getByRole('radiogroup', { name: 'Economic assumptions' });
     expect(
-      screen.getAllByRole('radio').filter((r) => (r as HTMLInputElement).checked),
+      within(cards)
+        .getAllByRole('radio')
+        .filter((r) => (r as HTMLInputElement).checked),
     ).toHaveLength(0);
     expect(screen.getByText('Your own figures')).toBeInTheDocument();
   });

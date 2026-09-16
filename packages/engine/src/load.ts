@@ -5,6 +5,7 @@ import {
   briefingsFileSchema,
   calendarSchema,
   drawsFileSchema,
+  pmFileSchema,
   reactionsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -25,6 +26,7 @@ import type {
   BriefingsFile,
   Calendar,
   DrawsFile,
+  PmFile,
   ReactionsFile,
   ContextFile,
   HmrcExtract,
@@ -138,6 +140,10 @@ export function parseCalendar(json: unknown): Calendar {
   return parseWith(calendarSchema, json, 'journey calendar');
 }
 
+export function parsePm(json: unknown): PmFile {
+  return parseWith(pmFileSchema, json, 'the Prime Minister');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -151,6 +157,7 @@ export interface Dataset {
   briefings?: BriefingsFile;
   draws?: DrawsFile;
   calendar?: Calendar;
+  pm?: PmFile;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -179,6 +186,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.contexts ?? null,
       ds.briefings ?? null,
       ds.draws ?? null,
+      ds.pm ?? null,
     ],
     referenced,
   );
@@ -378,6 +386,37 @@ export function validateDataset(ds: Dataset): string[] {
           problems.push(
             `draw ${outcome.id} revises "${revision.considerationId}", which no lever carries`,
           );
+        }
+      }
+    }
+  }
+  if (ds.pm) {
+    // A flagship or a promise that names a lever the desk does not have would be a commitment
+    // the player could never keep or break; the PM may only talk about real levers.
+    for (const flagship of ds.pm.flagships) {
+      const lever = ds.levers.find((l) => l.code === flagship.target.code);
+      if (!lever) {
+        problems.push(`flagship ${flagship.id} targets unknown lever "${flagship.target.code}"`);
+      } else if (
+        flagship.target.value < lever.control.min ||
+        flagship.target.value > lever.control.max
+      ) {
+        problems.push(
+          `flagship ${flagship.id} targets ${flagship.target.value}, outside the lever's range`,
+        );
+      }
+      if (!ds.pm.reactions[flagship.id]) {
+        problems.push(`the PM has no reaction to flagship ${flagship.id}`);
+      }
+    }
+    const promises = ds.pm.promises.flatMap((p) => [
+      p,
+      ...(p.pushBack?.concession ? [p.pushBack.concession] : []),
+    ]);
+    for (const promise of promises) {
+      for (const rule of promise.breaks) {
+        if (!codes.has(rule.code)) {
+          problems.push(`promise ${promise.id} watches unknown lever "${rule.code}"`);
         }
       }
     }

@@ -707,3 +707,260 @@
     transform: translateY(-2px);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Conversations. A spoken line is a slip of paper with a kicker naming who is
+   talking and the simulated badge beside it; choices are cards the player
+   ticks. Nothing here is a costing and the badge is what says so.
+   --------------------------------------------------------------------------- */
+
+.spoken {
+  margin: 10px 0;
+  padding: 10px 14px 10px 16px;
+  border-left: 3px solid var(--oxblood);
+  background: var(--paper);
+  background-image: var(--paper-grain);
+  box-shadow: var(--shadow);
+  border-radius: 2px;
+}
+
+.spoken--minister {
+  border-left-color: var(--tag-brass);
+}
+
+.spoken--adviser {
+  border-left-color: var(--manila-edge);
+}
+
+.spoken--press {
+  border-left-color: var(--muted);
+  background: var(--newsprint);
+}
+
+.spoken__who {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+}
+
+.spoken__who .kicker {
+  color: var(--oxblood-text);
+}
+
+.spoken__text {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.spoken__sources {
+  margin: 6px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 0.78rem;
+}
+
+.section-label {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin: 14px 0 8px;
+}
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+  margin: 8px 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.choices--list {
+  grid-template-columns: 1fr;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--manila-edge);
+  border-top: 3px solid var(--manila);
+  border-radius: 2px;
+  background: var(--paper);
+  background-image: var(--paper-grain);
+  box-shadow: var(--shadow);
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.choice > label {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.choice--picked {
+  border-color: var(--oxblood);
+  border-top-color: var(--oxblood);
+  box-shadow: var(--shadow-lift);
+}
+
+.choice input {
+  margin-top: 3px;
+  flex: none;
+  accent-color: var(--oxblood);
+}
+
+.choice__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.choice__title {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.choice__line {
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.choice__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.choice__delivery {
+  font-size: 0.82rem;
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+
+.promises {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.promise {
+  border: 1px solid var(--manila-edge);
+  border-radius: 2px;
+  background: var(--paper);
+  background-image: var(--paper-grain);
+  box-shadow: var(--shadow);
+  padding: 10px 12px;
+}
+
+.promise--released {
+  opacity: 0.8;
+  border-style: dashed;
+}
+
+.promise__title {
+  margin: 0 0 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  font-family: var(--font-label);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.promise__text {
+  margin: 0 0 6px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.promise__you {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+
+.promise__you .kicker {
+  color: var(--muted);
+}
+
+.promise__refused {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.promise .btn {
+  margin-top: 6px;
+}
+
+/* The headroom target under the four cards. */
+.targets {
+  border: 0;
+  padding: 0;
+  margin: 6px 0 12px;
+}
+
+.targets__options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 8px;
+}
+
+.target {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--surface-2);
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.target--picked {
+  border-color: var(--oxblood);
+}
+
+.target input {
+  margin-top: 3px;
+  accent-color: var(--oxblood);
+}
+
+.target__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.note p {
+  margin: 0 0 6px;
+}
+
+.note p:last-child {
+  margin-bottom: 0;
+}
+
+.note .kicker {
+  color: var(--oxblood-text);
+}
+
+.beat__hint {
+  margin-left: 12px;
+  font-size: 0.85rem;
+  color: var(--desk-ink-2);
+}

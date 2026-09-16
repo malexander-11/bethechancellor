@@ -45,6 +45,7 @@ describe('every JSON file under data/ validates against its schema', () => {
       'journey/reactions.json',
       'journey/draws.json',
       'journey/calendar.json',
+      'journey/pm.json',
     ]);
     for (const file of listJsonFiles(DATA_DIR)) {
       const rel = path.relative(DATA_DIR, file);

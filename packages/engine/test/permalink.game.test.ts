@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  decodeGame,
   decodePermalink,
   encodeGame,
   encodePermalink,
@@ -76,5 +77,14 @@ describe('the playthrough in the link (g= and S=)', () => {
     const { state, warnings } = decodePermalink('v=1&S=itbr.2_zzz.1', ds.levers);
     expect(state.snapshot).toEqual({ itbr: 2 });
     expect(warnings.some((w) => /zzz/.test(w))).toBe(true);
+  });
+});
+
+describe('a list typed by hand', () => {
+  it('reads a space where a browser turned a plus into one', () => {
+    const warnings: string[] = [];
+    const g = decodeGame('s.7_st.1_th.security_pr.dip-gap prisons', warnings);
+    expect(g?.priorities).toEqual(['dip-gap', 'prisons']);
+    expect(warnings).toEqual([]);
   });
 });

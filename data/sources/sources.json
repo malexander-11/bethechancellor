@@ -713,6 +713,250 @@
       "retrievedOn": "2026-09-16",
       "licence": "OGL-3.0",
       "notes": "Fetched 2026-09-16. The Chancellor commissioned the OBR to \"prepare an economic and fiscal forecast for publication on 28 October 2026. This will be accompanied by the Budget.\" Also: \"Fiscal credibility is the bedrock of economic stability and national security. That is why we will abide by the fiscal rules, ensuring we retain a buffer to protect us against uncertainty and the impact of instability in the Middle East.\""
+    },
+    {
+      "id": "labour-manifesto-2024-strong-foundations",
+      "org": "Labour",
+      "title": "Change: Labour Party manifesto 2024, Strong foundations",
+      "edition": "June 2024",
+      "url": "https://labour.org.uk/change/strong-foundations/",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. The tax lock verbatim: \"Labour will not increase taxes on working people, which is why we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT.\" Also the two fiscal rules and the path to 2.5% of GDP on defence. Quoted briefly with attribution."
+    },
+    {
+      "id": "labour-manifesto-2024-growth",
+      "org": "Labour",
+      "title": "Change: Labour Party manifesto 2024, Kickstart economic growth",
+      "edition": "June 2024",
+      "url": "https://labour.org.uk/change/kickstart-economic-growth/",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. \"Labour will cap corporation tax at the current level of 25 per cent, the lowest in the G7, for the entire parliament.\" \"1.5 million new homes over the next parliament.\" National Wealth Fund £7.3bn. Quoted briefly with attribution."
+    },
+    {
+      "id": "labour-manifesto-2024-nhs",
+      "org": "Labour",
+      "title": "Change: Labour Party manifesto 2024, Build an NHS fit for the future",
+      "edition": "June 2024",
+      "url": "https://labour.org.uk/change/build-an-nhs-fit-for-the-future/",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. \"40,000 more appointments every week\"; \"patients should expect to wait no longer than 18 weeks from referral for consultant-led treatment\"; a \"National Care Service, underpinned by national standards\". Quoted briefly with attribution."
+    },
+    {
+      "id": "labour-manifesto-2024-opportunity",
+      "org": "Labour",
+      "title": "Change: Labour Party manifesto 2024, Break down barriers to opportunity",
+      "edition": "June 2024",
+      "url": "https://labour.org.uk/change/break-down-barriers-to-opportunity/",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. \"Recruit 6,500 new expert teachers in key subjects\"; \"3,000 new primary school-based nurseries\"; free breakfast clubs in every primary school; a child poverty strategy. Quoted briefly with attribution."
+    },
+    {
+      "id": "no10-first-speech-2026-07-20",
+      "org": "No10",
+      "title": "Andy Burnham's first speech as Prime Minister",
+      "url": "https://www.gov.uk/government/speeches/andy-burnhams-first-speech-as-prime-minister-20-july-2026",
+      "publishedOn": "2026-07-20",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"Put life's essentials back under stronger public control to make them affordable to you again.\" \"We will build more council homes. That is the fair and sustainable way to bring the welfare bill down.\" \"issue my first instruction: to end rough sleeping in our country.\" \"a more preventative state\". \"Later this year, I will bring forward a new plan for Britain, a 10-year plan\"."
+    },
+    {
+      "id": "no10-commons-statement-2026-09-01",
+      "org": "No10",
+      "title": "PM statement to the House of Commons, 1 September 2026",
+      "url": "https://www.gov.uk/government/speeches/pm-statement-to-the-house-of-commons-1-september-2026",
+      "publishedOn": "2026-09-01",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"We cut VAT on electricity bills and cut business rates for pubs, social clubs, and live music venues.\" \"the defence of our nation will always be my first priority.\" \"Our bedrock of our approach will be grounded in fiscal responsibility.\" Sentencing: \"anyone convicted of manslaughter, death by dangerous driving or indecent assault will not see change to their prison term.\""
+    },
+    {
+      "id": "no10-social-care-speech-2026-07-29",
+      "org": "No10",
+      "title": "Prime Minister's speech on social care, 29 July 2026",
+      "url": "https://www.gov.uk/government/speeches/prime-ministers-speech-on-social-care-29-july-2026",
+      "publishedOn": "2026-07-29",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"A national care service... that sits alongside the National Health Service\". \"The government has agreed a fair pay agreement for social care staff to come in financial year 2028-29\". \"Around 2 million adults have unmet care needs\". The Casey review brought forward to summer 2027. No new funding figures announced."
+    },
+    {
+      "id": "govuk-vat-electricity-cut-2026",
+      "org": "HMT",
+      "title": "New PM cuts tax on household electricity bills to give breathing space on cost of living",
+      "url": "https://www.gov.uk/government/news/new-pm-cuts-tax-on-household-electricity-bills-to-give-breathing-space-on-cost-of-living",
+      "publishedOn": "2026-07-21",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. VAT on domestic electricity cut from 5% to 0% from 1 October 2026; about £45 a year off a price-cap bill; costs about £850 million in 2026-27; funded by cancelling the Digital ID programme (£1.8bn over three years); reduces CPI by about 0.10 percentage points."
+    },
+    {
+      "id": "govuk-bus-fare-cap-2027",
+      "org": "HMT",
+      "title": "£2 bus fares from January 2027",
+      "url": "https://www.gov.uk/government/speeches/2-bus-fares-from-january-2027",
+      "publishedOn": "2026-07-22",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"single bus tickets will be capped at £2 in England outside London from 1 January until 31 December 2027\"; \"The new £2 cap is backed by £400 million of extra government funding\"; \"funded by savings from reprioritising the Department for Energy Security and Net Zero's budget, including by switching funding for international climate from grants to loans\"."
+    },
+    {
+      "id": "govuk-disabled-bus-travel-2026",
+      "org": "DWP",
+      "title": "Free bus travel 24/7 for disabled people as Prime Minister takes further action to ease cost of living",
+      "url": "https://www.gov.uk/government/news/free-bus-travel-247-for-disabled-people-as-prime-minister-takes-further-action-to-ease-cost-of-living",
+      "publishedOn": "2026-08-17",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. Time restrictions on disabled bus passes in England removed from 1 April 2027; £60 million (£40m DWP, £20m DfT)."
+    },
+    {
+      "id": "govuk-dip-funding-explainer",
+      "org": "MoD",
+      "title": "The Defence Investment Plan: funding explainer",
+      "url": "https://www.gov.uk/government/publications/the-defence-investment-plan/the-defence-investment-plan-funding-explainer",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"the UK will spend 2.7% of GDP on core NATO defence spending\"; \"the UK has committed to reach 3.5% of GDP on defence spending by 2035\"; 3% in the next Parliament; \"It is funded primarily by reallocating budget from across government departments, with £10.3 billion identified now. A further £4.7 billion over four years will be confirmed at Budget 2026, in a fair and balanced way.\" Total MoD budget £297.7bn over four years."
+    },
+    {
+      "id": "hmt-budget-2025-speech",
+      "org": "HMT",
+      "title": "Budget 2025 speech",
+      "url": "https://www.gov.uk/government/speeches/budget-2025-speech",
+      "publishedOn": "2025-11-26",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"I will not be increasing National Insurance, the basic, higher or additional rates of Income Tax or VAT\"; \"We are lifting 450,000 children out of poverty with the end of the two-child limit\"; \"I will more than double the headroom against our stability rule to £21.7 billion\"; \"I know that maintaining these thresholds is a decision that will affect working people.\""
+    },
+    {
+      "id": "hmt-budget-2025-document",
+      "org": "HMT",
+      "title": "Budget 2025",
+      "url": "https://www.gov.uk/government/publications/budget-2025-document/budget-2025-html",
+      "publishedOn": "2025-11-26",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. Two-child limit removed from April 2026, lifting 450,000 children out of poverty, rising to around 550,000 with other measures; stability rule met in 2029-30 by £21.7 billion and the investment rule by £24.4 billion; thresholds frozen for a further three years from April 2028 to April 2031."
+    },
+    {
+      "id": "nao-send-2024",
+      "org": "NAO",
+      "title": "Support for children and young people with special educational needs",
+      "url": "https://www.nao.org.uk/reports/support-for-children-and-young-people-with-special-educational-needs/",
+      "publishedOn": "2024-10-24",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. \"DfE estimates that some 43% of local authorities will have deficits exceeding or close to their reserves in March 2026\"; \"a cumulative deficit of between £4.3 billion and £4.9 billion when accounting arrangements that stop these deficits impacting local authority reserves are due to end\"; high-needs funding up 58% in real terms between 2014-15 and 2024-25 to £10.7 billion; \"the current system is not achieving value for money and is unsustainable\". NAO material reproduced under its terms with attribution."
+    },
+    {
+      "id": "dfe-ehcp-2026",
+      "org": "DfE",
+      "title": "Education, health and care plans: reporting year 2026",
+      "url": "https://explore-education-statistics.service.gov.uk/find-statistics/education-health-and-care-plans",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Published June 2026 (exact day not recorded). Fetched 2026-09-16. 718,838 children and young people with active EHC plans at 15 January 2026, 12.5% higher than at January 2025, the highest annual percentage increase since EHC plans were introduced in 2014."
+    },
+    {
+      "id": "nao-asylum-system-2025",
+      "org": "NAO",
+      "title": "An analysis of the asylum system",
+      "url": "https://www.nao.org.uk/reports/an-analysis-of-the-asylum-system/",
+      "publishedOn": "2025-12-10",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. \"the current direct cost of supporting people seeking asylum is disproportionately high (£4.0 billion in 2024-25)\". NAO material reproduced under its terms with attribution."
+    },
+    {
+      "id": "dwp-pip-statistics-2026-04",
+      "org": "DWP",
+      "title": "Personal Independence Payment: official statistics to April 2026",
+      "url": "https://www.gov.uk/government/statistics/personal-independence-payment-statistics-to-april-2026/personal-independence-payment-official-statistics-to-april-2026",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"4 million claimants entitled to PIP (caseload) in England and Wales\" at 30 April 2026, a 2% increase on 31 January 2026; psychiatric disorders 39% of claims; entitlement \"has increased steadily since the introduction of PIP in April 2013\"."
+    },
+    {
+      "id": "dwp-timms-review-evidence-pack",
+      "org": "DWP",
+      "title": "Timms review of Personal Independence Payment: interim report, Annex B, DWP evidence pack",
+      "url": "https://www.gov.uk/government/publications/timms-review-of-personal-independence-payment-interim-report/annex-b-dwp-evidence-pack",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"in FYE 2026, estimated DWP expenditure on working age people receiving these benefits was £25 billion – mostly PIP, covering 3.2 million people\"; \"PIP has been difficult to forecast since its introduction\"; \"even with quite large reductions in new awards to PIP, there would still be considerable growth in caseload and spending over the next few years\"."
+    },
+    {
+      "id": "ifg-healey-tax-budget-2026",
+      "org": "IfG",
+      "title": "John Healey, tax and Budget 2026",
+      "url": "https://www.instituteforgovernment.org.uk/publication/john-healey-tax-budget-2026",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. Notes \"Labour's manifesto commitments not to raise rates of income tax, national insurance or VAT\"; that the previous Chancellor \"left a wafer-thin amount of headroom against her fiscal rules which evaporated post-budget\"; and that \"The OBR's forecasts that will accompany the budget are likely to have deteriorated since March\". Quoted briefly with attribution."
+    },
+    {
+      "id": "govuk-chancellor-growth-speech-2026-09-07",
+      "org": "HMT",
+      "title": "Chancellor John Healey's growth speech, 7 September 2026",
+      "url": "https://www.gov.uk/government/speeches/chancellor-john-healeys-growth-speech-2026",
+      "publishedOn": "2026-09-07",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"The Prime Minister and I are in lockstep in our commitment to meeting the fiscal rules at the upcoming Budget.\" \"at the Budget I will set out a roadmap to fiscal devolution\". \"There's nothing progressive about the government spending £1 in every £10 on debt interest.\" \"Since 2022, we have been paying that trust penalty\". The speech does not mention headroom or the manifesto."
+    },
+    {
+      "id": "govuk-budget-2026-every-postcode",
+      "org": "HMT",
+      "title": "Budget to move power and money out of Westminster and into every postcode around Britain",
+      "url": "https://www.gov.uk/government/news/budget-to-move-power-and-money-out-of-westminster-and-into-every-postcode-around-britain",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"This will be a Budget that moves money and power out of Westminster, and into every postcode around Britain.\" \"It will be built on fiscal discipline.\" \"It will meet our fiscal rules.\""
+    },
+    {
+      "id": "govuk-elective-reform-plan-2025",
+      "org": "HMT",
+      "title": "PM sets out plan to end waiting list backlogs through millions more appointments",
+      "url": "https://www.gov.uk/government/news/pm-sets-out-plan-to-end-waiting-list-backlogs-through-millions-more-appointments",
+      "publishedOn": "2025-01-06",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. The Elective Reform Plan baseline: a waiting list of 7.5 million; 65% of patients treated within 18 weeks by the end of the following year as the interim target; 9 in 10 within 18 weeks by the end of the Parliament; 2 million extra appointments in the first year (40,000 a week)."
+    },
+    {
+      "id": "govuk-npr-2026-01",
+      "org": "HMT",
+      "title": "Northern Powerhouse Rail to drive biggest travel upgrade in the North in a generation",
+      "url": "https://www.gov.uk/government/news/northern-powerhouse-rail-to-drive-biggest-travel-upgrade-in-the-north-in-a-generation",
+      "publishedOn": "2026-01-14",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. £1.1 billion over the Spending Review period for planning, development and design; a £45 billion programme funding cap; £120 billion of capital investment for infrastructure this Parliament; benefits from the 2030s."
+    },
+    {
+      "id": "govuk-local-government-settlement-2025-26",
+      "org": "MHCLG",
+      "title": "Over £69 billion confirmed for council budgets",
+      "url": "https://www.gov.uk/government/news/over-69-billion-confirmed-for-council-budgets",
+      "publishedOn": "2025-02-03",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. \"Over £69 billion in funding for England's councils has been confirmed\" for 2025-26; a 6.8% cash-terms increase in Core Spending Power; up to £3.7 billion additional funding to social care authorities including an £880 million uplift to the Social Care Grant."
+    },
+    {
+      "id": "govuk-submarine-investment-2026-07-30",
+      "org": "MoD",
+      "title": "Burnham drives defence to deliver security and growth in every postcode with £8.4bn nuclear submarine investment",
+      "url": "https://www.gov.uk/government/news/burnham-drives-defence-to-deliver-security-and-growth-in-every-postcode-with-84bn-nuclear-submarine-investment-supporting-22000-apprenticeships",
+      "publishedOn": "2026-07-30",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. £8.4bn nuclear submarine investment; 22,000 apprenticeships by 2035. \"Keeping this country safe is the first responsibility of any government\"."
     }
   ]
 }
