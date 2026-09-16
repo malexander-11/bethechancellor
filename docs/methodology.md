@@ -6,14 +6,16 @@ methodology is wrong or the app is.
 
 ## 1. The honesty contract
 
-Every figure on screen wears one of four badges:
+Every figure on screen wears one of five badges (the fifth, for the game's own judgements, was
+added in Phase 8 under ADR-0011):
 
-| Badge                       | Meaning                                                                                                                                                           | Examples                                                                                                      |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| **Direct costing**          | An official estimate of the direct effect of a policy on receipts or spending, reproduced from HMRC, HM Treasury or the OBR, with the transformation steps shown. | HMRC ready reckoner: 1p on the basic rate of income tax; HMT Budget 2025 scorecard lines.                     |
-| **Mechanical**              | Arithmetic that follows from the direct costings and the baseline, with no behavioural judgement.                                                                 | Adding deltas to the OBR path; debt interest on extra borrowing; ratios to GDP.                               |
-| **Assumption**              | A number the player or the tool chooses, using published sensitivities where they exist.                                                                          | The interest-rate, growth and inflation sliders; the uprating of ready-reckoner figures beyond their horizon. |
-| **Second-round commentary** | Behavioural and macroeconomic effects described in words and direction only, with sources. Never a number of our own.                                             | "Large CGT rises can lose revenue because people delay disposals (HMRC)."                                     |
+| Badge                       | Meaning                                                                                                                                                                                                                              | Examples                                                                                                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| **Direct costing**          | An official estimate of the direct effect of a policy on receipts or spending, reproduced from HMRC, HM Treasury or the OBR, with the transformation steps shown.                                                                    | HMRC ready reckoner: 1p on the basic rate of income tax; HMT Budget 2025 scorecard lines.                     |
+| **Mechanical**              | Arithmetic that follows from the direct costings and the baseline, with no behavioural judgement.                                                                                                                                    | Adding deltas to the OBR path; debt interest on extra borrowing; ratios to GDP.                               |
+| **Assumption**              | A number the player or the tool chooses, using published sensitivities where they exist.                                                                                                                                             | The interest-rate, growth and inflation sliders; the uprating of ready-reckoner figures beyond their horizon. |
+| **Second-round commentary** | Behavioural and macroeconomic effects described in words and direction only, with sources. Never a number of our own.                                                                                                                | "Large CGT rises can lose revenue because people delay disposals (HMRC)."                                     |
+| **Simulated**               | A judgement nobody published, in a role's voice: what the Prime Minister wants, what a minister says at a cut, how a market or a household reads the Budget. May quote a sourced fact and read an engine number; never produces one. | "That is the tax lock, Chancellor." The kind of Budget named at the close.                                    |
 
 The engine never adds a behavioural or macroeconomic knock-on of its own. Where HMRC's
 direct costings already include a standard behavioural response (they do, for example, for
@@ -452,7 +454,7 @@ hairline gratings, folder tabs are clip-paths, punch holes are radial gradients.
 
 Three rules keep the framing from eating the sourcing.
 
-**Badges are never stamps.** The four badge words are the honesty contract's vocabulary. Stamps are
+**Badges are never stamps.** The five badge words are the honesty contract's vocabulary. Stamps are
 for rule verdicts, which are the engine's own judgement on your Budget, and nowhere else.
 
 **Beats accumulate.** Each step hands you something before the working surface, but moving on never

@@ -102,11 +102,13 @@ export function MethodologyPage() {
 
       <h2>The journey and the advisers</h2>
       <p>
-        The game walks through four steps: confirm the assumptions, set taxes, set spending, and
-        Budget day. The advisers are roles, not people; every paragraph they say cites a public
-        document and is labelled commentary. Their suggested slider settings follow a stated rule:
-        the latest market or independent reading minus the OBR&rsquo;s March assumption, rounded to
-        the slider&rsquo;s step. Controls show the level a setting moves to (20% to 21%, £12,570 to
+        The game walks through seven stages: the outlook, the Prime Minister, the desk, the
+        OBR&rsquo;s forecast, the compromises, the rabbit and Budget day. The advisers, the Prime
+        Minister and the ministers are roles, not people; a briefing that cites a public document is
+        labelled commentary, and a judgement nobody published is labelled simulated and never
+        produces a number. The advisers&rsquo; suggested slider settings follow a stated rule: the
+        latest market or independent reading minus the OBR&rsquo;s March assumption, rounded to the
+        slider&rsquo;s step. Controls show the level a setting moves to (20% to 21%, £12,570 to
         £13,070), but the engine costs the change, exactly as before: levels are display only. VAT
         base-broadening toggles use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not
         represent what abolishing a relief would raise; abolishing inheritance tax removes the

@@ -50,8 +50,8 @@ export function StartPage() {
       <section className="panel" aria-labelledby="advisers-heading">
         <h2 id="advisers-heading">Your advisers</h2>
         <p className="panel__hint">
-          Roles, not people. Everything they tell you cites a public document; their opinions are
-          labelled commentary and never change a number.
+          Roles, not people. Everything they tell you cites a public document; their briefings are
+          labelled commentary, their judgements simulated, and neither changes a number.
         </p>
         <ul className="advisers">
           {advisers.advisers.map((a) => (
