@@ -3,6 +3,8 @@ import { DataError } from './errors.js';
 import {
   advisersFileSchema,
   briefingsFileSchema,
+  calendarSchema,
+  drawsFileSchema,
   reactionsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -21,6 +23,8 @@ import {
 import type {
   AdvisersFile,
   BriefingsFile,
+  Calendar,
+  DrawsFile,
   ReactionsFile,
   ContextFile,
   HmrcExtract,
@@ -126,6 +130,14 @@ export function parseReactions(json: unknown): ReactionsFile {
   return parseWith(reactionsFileSchema, json, 'Budget day reactions');
 }
 
+export function parseDraws(json: unknown): DrawsFile {
+  return parseWith(drawsFileSchema, json, 'forecast draws');
+}
+
+export function parseCalendar(json: unknown): Calendar {
+  return parseWith(calendarSchema, json, 'journey calendar');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -137,6 +149,8 @@ export interface Dataset {
   contexts?: ContextFile[];
   advisers?: AdvisersFile;
   briefings?: BriefingsFile;
+  draws?: DrawsFile;
+  calendar?: Calendar;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -164,6 +178,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.households ?? null,
       ds.contexts ?? null,
       ds.briefings ?? null,
+      ds.draws ?? null,
     ],
     referenced,
   );
@@ -321,6 +336,58 @@ export function validateDataset(ds: Dataset): string[] {
       if (needsRange && !context.readings.some((r) => r.alternatives)) {
         problems.push(
           `context ${context.id} offers a ${scenario.kind} scenario but no reading carries a published range`,
+        );
+      }
+    }
+  }
+  if (ds.draws) {
+    const latest = ds.contexts?.[ds.contexts.length - 1];
+    const macro = new Map(ds.levers.filter((l) => l.category === 'macro').map((l) => [l.code, l]));
+    // Consideration ids that sit on certified rows: naming one would let a draw re-score an HMRC
+    // rate row or a Treasury scorecard line, which the honesty contract forbids (ADR-0012).
+    const certified = new Set(['hmrc-direct', 'hmrc-2026-deferred', 'hmt-costing']);
+    const allConsiderations = new Set(ds.levers.flatMap((l) => l.considerations.map((c) => c.id)));
+    for (const outcome of ds.draws.outcomes) {
+      for (const [code, name] of Object.entries(outcome.macro)) {
+        const lever = macro.get(code);
+        if (!lever) {
+          problems.push(`draw ${outcome.id} sets "${code}", which is not a macro lever`);
+          continue;
+        }
+        const reading = latest?.readings.find((r) => r.leverCode === code);
+        if (!reading) {
+          problems.push(`draw ${outcome.id} sets "${code}" but no context reading drives it`);
+          continue;
+        }
+        const has =
+          name === 'obr' ||
+          (name === 'adviser' && reading.suggestion !== undefined) ||
+          ((name === 'lowest' || name === 'highest') && reading.alternatives !== undefined);
+        if (!has) {
+          problems.push(
+            `draw ${outcome.id} names the ${name} figure for "${code}", which the ${reading.id} reading does not carry`,
+          );
+        }
+      }
+      for (const revision of outcome.revisions) {
+        if (certified.has(revision.considerationId)) {
+          problems.push(
+            `draw ${outcome.id} revises "${revision.considerationId}", a caveat that sits on certified rows`,
+          );
+        } else if (!allConsiderations.has(revision.considerationId)) {
+          problems.push(
+            `draw ${outcome.id} revises "${revision.considerationId}", which no lever carries`,
+          );
+        }
+      }
+    }
+  }
+  if (ds.calendar) {
+    const budgetDay = ds.rules.assessment.nextFormalAssessmentOn;
+    for (const stage of ds.calendar.stages) {
+      if (stage.on > budgetDay) {
+        problems.push(
+          `calendar puts ${stage.step} on ${stage.on}, after the Budget on ${budgetDay}`,
         );
       }
     }

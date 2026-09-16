@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "disclosure": "This forecast is a simulation. Its economic figures are published forecasts: which of them arrived was decided by a seeded draw weighted towards the centre, and the draw did not know which outlook you chose. The re-scoring of your measures is illustrative, applied only where a measure's own sourced caveat calls the figure uncertain. Growth stays on the OBR's path in every outcome, because no published range reaches the growth slider. The OBR's real forecast on 28 October is its own.",
+  "outcomes": [
+    {
+      "id": "kindest",
+      "title": "The kindest published view",
+      "weight": 10,
+      "macro": { "rate": "lowest", "ngdp": "obr", "rpi": "lowest" },
+      "story": {
+        "headline": "Yields fall back and inflation cools faster than the City expected.",
+        "text": "Gilt yields retreat towards the lowest Bank Rate path any forecaster in the Treasury's comparison publishes, and RPI comes in at the bottom of the published range. The Bank of England's own account of 2025 attributed the rise in long rates to term premia driven by global factors; in this outcome those factors ease. Interest on the debt falls; index-linked gilts cost less than March assumed.",
+        "sources": [
+          { "sourceId": "hmt-forecasts-2026-08", "table": "Table M4", "page": "20" },
+          { "sourceId": "hmt-forecasts-2026-08", "table": "Table M3", "page": "20" },
+          { "sourceId": "boe-insights-long-rates-2025" }
+        ],
+        "badge": "simulated"
+      },
+      "clue": {
+        "headline": "Gilt yields slip for a third week as tensions ease",
+        "text": "The Political Adviser's summary of the morning papers: ten-year yields have drifted lower all week, and two City forecasters have trimmed their inflation calls. Nothing decisive, but the direction is kind.",
+        "sources": [{ "sourceId": "boe-iadb-gilt-10y" }],
+        "badge": "simulated"
+      },
+      "revisions": []
+    },
+    {
+      "id": "yields-ease",
+      "title": "Yields ease",
+      "weight": 25,
+      "macro": { "rate": "highest", "ngdp": "obr", "rpi": "adviser" },
+      "story": {
+        "headline": "Gilt yields retreat towards the forecasters' Bank Rate view; inflation runs as the average expects.",
+        "text": "The OBR conditions its forecast on market yields in the weeks before publication. In this outcome they have come off their September highs and sit near the top of the Bank Rate range the Treasury's comparison publishes, rather than at today's gilt reading. RPI follows the average of independent forecasts, half a point above the OBR's March path.",
+        "sources": [
+          { "sourceId": "hmt-forecasts-2026-08", "table": "Table M4", "page": "20" },
+          { "sourceId": "hmt-forecasts-2026-08", "table": "Table M3", "page": "20" }
+        ],
+        "badge": "simulated"
+      },
+      "clue": {
+        "headline": "Yields drift lower; forecasters hold their inflation view",
+        "text": "The Political Adviser's summary: a quieter week in the gilt market, with yields edging down. The independent forecasters polled this month have not moved their inflation numbers.",
+        "sources": [{ "sourceId": "boe-iadb-gilt-10y" }, { "sourceId": "hmt-forecasts-2026-08" }],
+        "badge": "simulated"
+      },
+      "revisions": [
+        {
+          "considerationId": "avoidance-and-emigration",
+          "factor": 0.9,
+          "note": "The OBR applies a modest behavioural haircut where the measure's own caveat says the response is large and unknown."
+        },
+        {
+          "considerationId": "already-excluded",
+          "factor": 0.9,
+          "note": "The OBR trims a saving whose own caveat says part of the base is already excluded."
+        }
+      ]
+    },
+    {
+      "id": "adviser-right",
+      "title": "Your adviser was right",
+      "weight": 30,
+      "macro": { "rate": "adviser", "ngdp": "obr", "rpi": "adviser" },
+      "story": {
+        "headline": "Yields hold where they are, and the OBR conditions on them.",
+        "text": "Ten-year gilts are still close to 5.35% in the conditioning window, so the OBR's interest-rate assumption moves by the gap your adviser read in September. RPI runs at the average of independent forecasts. The Chancellor's own letter to the Treasury Committee spoke of retaining a buffer against instability in the Middle East; in this outcome the instability neither worsens nor lifts.",
+        "sources": [
+          { "sourceId": "boe-iadb-gilt-10y" },
+          { "sourceId": "hmt-forecasts-2026-08", "table": "Table M3", "page": "20" },
+          { "sourceId": "hmt-tsc-budget-2026-letter" }
+        ],
+        "badge": "simulated"
+      },
+      "clue": {
+        "headline": "Markets flat; ten-year gilts hold near 5.3%",
+        "text": "The Political Adviser's summary: nothing has moved. Yields are where they were when your adviser read them, and the forecasters' inflation numbers are unchanged.",
+        "sources": [{ "sourceId": "boe-iadb-gilt-10y" }],
+        "badge": "simulated"
+      },
+      "revisions": [
+        {
+          "considerationId": "avoidance-and-emigration",
+          "factor": 0.85,
+          "note": "The OBR applies a behavioural haircut where the measure's own caveat says the response is large and unknown."
+        },
+        {
+          "considerationId": "already-excluded",
+          "factor": 0.85,
+          "note": "The OBR trims a saving whose own caveat says part of the base is already excluded."
+        }
+      ]
+    },
+    {
+      "id": "sticky",
+      "title": "Sticky inflation",
+      "weight": 25,
+      "macro": { "rate": "adviser", "ngdp": "obr", "rpi": "highest" },
+      "story": {
+        "headline": "Yields hold, and RPI runs at the top of the published range.",
+        "text": "Energy bills are rising again this winter, as the Resolution Foundation noted in September, and RPI comes in at the highest path any forecaster in the Treasury's comparison publishes. The OBR's own sensitivity puts a point on RPI at about £11 billion of borrowing by 2030-31, mostly through the interest on index-linked gilts. Yields stay at today's level.",
+        "sources": [
+          { "sourceId": "rf-policy-landscape-2026" },
+          { "sourceId": "hmt-forecasts-2026-08", "table": "Table M3", "page": "20" },
+          { "sourceId": "obr-efo-2026-03", "paragraph": "6.17" }
+        ],
+        "badge": "simulated"
+      },
+      "clue": {
+        "headline": "Energy bills to rise again this winter; forecasters mark up inflation",
+        "text": "The Political Adviser's summary: the price cap is heading up in October, and the forecasters polled this month have raised their RPI numbers. Yields have not moved.",
+        "sources": [
+          { "sourceId": "rf-policy-landscape-2026" },
+          { "sourceId": "hmt-forecasts-2026-08" }
+        ],
+        "badge": "simulated"
+      },
+      "revisions": [
+        {
+          "considerationId": "static-not-yield",
+          "factor": 0.9,
+          "note": "HMRC's own caveat: the cost of a relief is not the yield from removing it. The OBR scores less than the static figure."
+        },
+        {
+          "considerationId": "cgt-behaviour",
+          "factor": 0.85,
+          "note": "HMRC's published yield for capital gains tax rises falls, and turns negative, as the increase grows. The OBR takes a cautious reading."
+        },
+        {
+          "considerationId": "avoidance-and-emigration",
+          "factor": 0.8,
+          "note": "The OBR applies a behavioural haircut where the measure's own caveat says the response is large and unknown."
+        },
+        {
+          "considerationId": "already-excluded",
+          "factor": 0.8,
+          "note": "The OBR trims a saving whose own caveat says part of the base is already excluded."
+        },
+        {
+          "considerationId": "eligibility-savings-shortfall",
+          "factor": 0.85,
+          "note": "The Department for Work and Pensions' own evidence says disability benefits have been difficult to forecast since PIP began; the OBR scores less of the saving."
+        }
+      ]
+    },
+    {
+      "id": "hard-line",
+      "title": "The OBR takes a harder line",
+      "weight": 10,
+      "macro": { "rate": "adviser", "ngdp": "obr", "rpi": "highest" },
+      "story": {
+        "headline": "Yields hold, inflation sticks, and the OBR scores your uncertain measures hard.",
+        "text": "The same economy as the sticky-inflation outcome: today's gilt yields, RPI at the top of the published range. The difference is the OBR's judgement of your measures. Where a measure's own sourced caveat calls its figure static, contested or hard to forecast, the OBR certifies well below the number you planned on. Nothing certified by HMRC or the Treasury is touched.",
+        "sources": [
+          { "sourceId": "boe-iadb-gilt-10y" },
+          { "sourceId": "hmt-forecasts-2026-08", "table": "Table M3", "page": "20" },
+          { "sourceId": "hmrc-tax-reliefs-quality-report" }
+        ],
+        "badge": "simulated"
+      },
+      "clue": {
+        "headline": "Commentators ask how much of the Budget will rest on contested costings",
+        "text": "The Political Adviser's summary: with yields stuck and the price cap rising, the weekend columns have turned to the costings. HMRC's own relief figures say the cost of a relief is not the yield from removing it, and every contested card on your desk says so too.",
+        "sources": [
+          { "sourceId": "hmrc-tax-reliefs-quality-report" },
+          { "sourceId": "boe-iadb-gilt-10y" }
+        ],
+        "badge": "simulated"
+      },
+      "revisions": [
+        {
+          "considerationId": "static-not-yield",
+          "factor": 0.8,
+          "note": "HMRC's own caveat: the cost of a relief is not the yield from removing it. The OBR scores well below the static figure."
+        },
+        {
+          "considerationId": "cgt-behaviour",
+          "factor": 0.7,
+          "note": "HMRC's published yield for capital gains tax rises falls, and turns negative, as the increase grows. The OBR takes a hard reading."
+        },
+        {
+          "considerationId": "avoidance-and-emigration",
+          "factor": 0.6,
+          "note": "The OBR applies a heavy behavioural haircut where the measure's own caveat says the response is large and unknown."
+        },
+        {
+          "considerationId": "already-excluded",
+          "factor": 0.6,
+          "note": "The OBR scores little of a saving whose own caveat says part of the base is already excluded."
+        },
+        {
+          "considerationId": "eligibility-savings-shortfall",
+          "factor": 0.7,
+          "note": "The Department for Work and Pensions' own evidence says disability benefits have been difficult to forecast since PIP began; the OBR scores much less of the saving."
+        }
+      ]
+    }
+  ]
+}

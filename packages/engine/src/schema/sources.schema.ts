@@ -3,6 +3,12 @@ import { isoDateSchema } from './provenance.schema.js';
 
 export const sourceOrgSchema = z.enum([
   'OBR',
+  'Labour',
+  'No10',
+  'MoD',
+  'MoJ',
+  'NAO',
+  'RF',
   'HMT',
   'HMRC',
   'ONS',

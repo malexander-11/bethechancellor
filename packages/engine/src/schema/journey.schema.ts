@@ -3,13 +3,23 @@ import { sourceRefSchema } from './provenance.schema.js';
 
 const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
 
-/** The steps of the guided Budget journey. */
+/**
+ * The steps of the guided Budget journey, in order. `assumptions` and `recommendations` are the
+ * Phase 4 names of what became `outlook` and the `policies` tab; they stay so that advisers and
+ * briefings authored against them keep validating, and the app routes them on.
+ */
 export const journeyStepSchema = z.enum([
   'start',
+  'outlook',
   'assumptions',
+  'pm',
   'taxes',
   'spending',
+  'policies',
   'recommendations',
+  'forecast',
+  'compromise',
+  'rabbit',
   'budget-day',
 ]);
 

@@ -2,7 +2,9 @@ import path from 'node:path';
 import {
   parseAdvisers,
   parseBriefings,
+  parseCalendar,
   parseContext,
+  parseDraws,
   parseHouseholds,
   parseLever,
   parsePresets,
@@ -44,6 +46,8 @@ export function loadDataset(
   );
   const advisers = parseAdvisers(readJson(path.join(DATA_DIR, 'journey', 'advisers.json')));
   const briefings = parseBriefings(readJson(path.join(DATA_DIR, 'journey', 'briefings.json')));
+  const draws = parseDraws(readJson(path.join(DATA_DIR, 'journey', 'draws.json')));
+  const calendar = parseCalendar(readJson(path.join(DATA_DIR, 'journey', 'calendar.json')));
   const vintage = vintages.find((v) => v.id === defaultVintageId);
   const rules = ruleSets.find((r) => r.id === defaultRulesId);
   if (!vintage) throw new Error(`default vintage ${defaultVintageId} not found`);
@@ -58,6 +62,8 @@ export function loadDataset(
     contexts,
     advisers,
     briefings,
+    draws,
+    calendar,
     vintages,
     ruleSets,
   };

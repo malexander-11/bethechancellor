@@ -2,6 +2,7 @@ export { DataError, EngineError } from './errors.js';
 export * from './schema/index.js';
 export type * from './types/data.js';
 export type * from './types/engine.js';
+export { freshGame } from './types/engine.js';
 export {
   parseHmrcExtract,
   parseHouseholds,
@@ -18,6 +19,8 @@ export {
   parseAdvisers,
   parseBriefings,
   parseReactions,
+  parseDraws,
+  parseCalendar,
   parseVintage,
   validateDataset,
   type Dataset,
@@ -47,6 +50,9 @@ export { compoundGrowthPerYear, deflatorIndex, realGrowthPerYear } from './costi
 export { uprateToForecast, type PublishedSeries, type UpratedSeries } from './costing/uprate.js';
 export { interpolateLookup } from './costing/lookup.js';
 export { moreHarmful, psnbDirection } from './costing/sensitivity.js';
+export * from './game/scenarios.js';
+export * from './game/draw.js';
+export { applyRevision } from './calc/spine.js';
 export { costLever } from './costing/index.js';
 export {
   computeOutcome,
@@ -89,6 +95,9 @@ export {
   encodePermalink,
   type DecodedPermalink,
   type PermalinkState,
+  encodeGame,
+  decodeGame,
 } from './permalink/codec.js';
 export { formatGbp, formatGbpBn, formatPct, perHousehold } from './format.js';
 export { describeLevelChange, formatLevel, levelValue } from './levels.js';
+export * from './game/stages.js';

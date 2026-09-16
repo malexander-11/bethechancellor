@@ -1,6 +1,8 @@
 import {
   parseAdvisers,
   parseBriefings,
+  parseCalendar,
+  parseDraws,
   parseReactions,
   parseContext,
   parseHouseholds,
@@ -18,6 +20,8 @@ import {
 } from '@btc/engine';
 import advisersJson from '@data/journey/advisers.json';
 import briefingsJson from '@data/journey/briefings.json';
+import calendarJson from '@data/journey/calendar.json';
+import drawsJson from '@data/journey/draws.json';
 import reactionsJson from '@data/journey/reactions.json';
 import contextJson from '@data/context/2026-09.json';
 import householdsJson from '@data/reference/uk-households.json';
@@ -40,6 +44,8 @@ export const context = parseContext(contextJson);
 export const advisers = parseAdvisers(advisersJson);
 export const briefings = parseBriefings(briefingsJson);
 export const reactions = parseReactions(reactionsJson);
+export const draws = parseDraws(drawsJson);
+export const calendar = parseCalendar(calendarJson);
 export const levers: Lever[] = Object.keys(leverModules)
   .sort()
   .map((key) => parseLever(leverModules[key]))
@@ -59,6 +65,8 @@ const problems = validateDataset({
   contexts: [context],
   advisers,
   briefings,
+  draws,
+  calendar,
 });
 if (problems.length > 0) {
   throw new Error(`data set is inconsistent:\n - ${problems.join('\n - ')}`);
@@ -67,6 +75,18 @@ if (problems.length > 0) {
 export const adviserById: ReadonlyMap<string, Adviser> = new Map(
   advisers.advisers.map((a) => [a.id, a] as const),
 );
+
+/**
+ * The in-game date a step is played on. Noon UTC, so the day survives any browser timezone. The
+ * Budget date itself comes from the Charter and is not repeated in the calendar.
+ */
+export function dateFor(step: JourneyStep): Date {
+  const on =
+    calendar.stages.find((s) => s.step === step)?.on ??
+    calendar.stages[0]?.on ??
+    rules.assessment.nextFormalAssessmentOn;
+  return new Date(`${on}T12:00:00Z`);
+}
 
 /** Briefings for a step: the step's overviews (no group) or the briefings for one lever group. */
 export function briefingsFor(step: JourneyStep, group?: string): Briefing[] {

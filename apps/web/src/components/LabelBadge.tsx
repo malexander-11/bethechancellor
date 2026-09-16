@@ -21,6 +21,11 @@ const LABELS: Record<Badge, { text: string; title: string }> = {
     title:
       'Behavioural or economic effects described in words and direction only, with sources. Never a number of our own.',
   },
+  simulated: {
+    text: 'Simulated',
+    title:
+      'A game judgement. Nobody published it; it quotes sources but produces no number of its own (ADR-0011).',
+  },
 };
 
 export function LabelBadge({ badge }: { badge: Badge }) {

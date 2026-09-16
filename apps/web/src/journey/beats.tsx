@@ -1,4 +1,4 @@
-import type { JourneyStep } from '@btc/engine';
+import { FINAL_STAGE, type JourneyStep } from '@btc/engine';
 import {
   Children,
   cloneElement,
@@ -59,13 +59,32 @@ const BeatsContext = createContext<BeatsValue | null>(null);
 const CEREMONY_KEY = 'btc.ceremony.v1';
 
 /**
- * A link that carries a budget opens everything at once. Someone sharing their Budget means
- * "look at this", not "sit through the introduction", and the copy-link buttons all point at
- * pages whose content would otherwise be two clicks away.
+ * A link that carries a *finished* Budget opens everything at once. Someone sharing it means
+ * "look at this", not "sit through the introduction".
+ *
+ * A game in progress is different: its URL carries levers from stage 1 onwards, and if that
+ * alone opened every beat, a reload after choosing an outlook would spoil the envelope and the
+ * reactions. So when the link carries a game (`g=`), only one that has reached the close opens
+ * all; otherwise beats follow the stored progress. A link with no game is a sandbox Budget and
+ * keeps the old rule.
  */
-function carriesABudget(search: string): boolean {
+export function opensEverything(search: string): boolean {
   const params = new URLSearchParams(search);
+  const game = params.get('g');
+  if (game !== null) {
+    const st = game.split('_').find((item) => item.startsWith('st.'));
+    return st !== undefined && Number(st.slice(3)) >= FINAL_STAGE;
+  }
   return params.has('L') || params.has('M') || params.has('o');
+}
+
+/** Forget how far every step got. "Start again" means from the top. */
+export function resetProgress(): void {
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Nothing stored, nothing to forget.
+  }
 }
 
 export function BeatsProvider({ children }: { children: ReactNode }) {
@@ -80,7 +99,7 @@ export function BeatsProvider({ children }: { children: ReactNode }) {
   });
   // Captured once: your own first edit adds levers to the URL, and that must not retro-skip
   // the beats of the step you are standing in.
-  const arrived = useRef(carriesABudget(search));
+  const arrived = useRef(opensEverything(search));
 
   const reach = useCallback((step: JourneyStep, beat: number) => {
     setProgress((prev) => {

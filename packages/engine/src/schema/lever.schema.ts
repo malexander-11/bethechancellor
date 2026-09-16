@@ -476,6 +476,13 @@ export const leverSchema = z
     reviewedOn: isoDateSchema.optional(),
   })
   .superRefine((lever, ctx) => {
+    if (lever.badge === 'simulated') {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'a lever is arithmetic; it cannot wear the simulated badge (ADR-0011)',
+        path: ['badge'],
+      });
+    }
     if (
       lever.costing.kind === 'schedule' &&
       lever.costing.once === true &&

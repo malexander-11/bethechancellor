@@ -305,6 +305,11 @@ select {
   color: var(--badge-commentary-fg);
 }
 
+.badge--simulated {
+  background: var(--badge-simulated-bg);
+  color: var(--badge-simulated-fg);
+}
+
 .lever {
   padding: 12px 0;
   border-top: 1px solid var(--grid);

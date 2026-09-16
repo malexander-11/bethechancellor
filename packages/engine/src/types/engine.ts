@@ -9,6 +9,71 @@ export interface Settings {
   implementationYear: string;
   debtInterestFeedback: boolean;
   assessAsOf: AssessAsOf;
+  /**
+   * A later start for particular levers, by code. Every costing reads the implementation year, so
+   * this is the one place a "delay this measure" decision can live (Phase 8, ADR-0012).
+   */
+  implementationYearByCode?: Record<string, string>;
+  /**
+   * The OBR's in-game re-scoring of the player's measures: a factor per lever code applied to the
+   * costed effect after costing, recorded as a `scale` step. Illustrative, badged simulated, and
+   * only ever applied to levers whose own sourced caveats call the figure uncertain.
+   */
+  revisions?: Record<string, LeverRevision>;
+}
+
+/**
+ * The story of one playthrough, as the permalink carries it (ADR-0011). Absent until the player
+ * confirms an outlook and a seed is minted, so a fresh link has no game in it. The engine owns the
+ * type because the codec encodes it; the web app is its only writer.
+ */
+export interface GamePermalink {
+  /** Which in-game OBR forecast this playthrough gets; 1–999. */
+  seed: number;
+  /** Furthest stage reached, as an index into GAME_STAGES. */
+  reached: number;
+  /** The outlook chosen at stage 1: a scenario kind, or 'own' for hand-set sliders. */
+  planning: string;
+  /** The headroom the player means to keep, £ billion; 0 means "whatever the rules leave". */
+  headroomTargetBn: number;
+  theme?: string;
+  priorities: string[];
+  protectedPromises: string[];
+  concessions: string[];
+  /** Political capital: 3 to begin with, one spent per renegotiation. */
+  capital: number;
+  /** Lever code → the later fiscal year the measure now starts in. */
+  delays: Record<string, string>;
+  /** The OBR update has been seen; the macro sliders are now its forecast, not the player's. */
+  revealed: boolean;
+  /** Stage 6: a lever code, 'flagship:<priority id>', or 'keep'. */
+  rabbit?: string;
+  breachAccepted: boolean;
+}
+
+/** A fresh game around a seed, before any choice has been made. */
+export function freshGame(seed: number): GamePermalink {
+  return {
+    seed,
+    reached: 0,
+    planning: 'baseline',
+    headroomTargetBn: 20,
+    priorities: [],
+    protectedPromises: [],
+    concessions: [],
+    capital: 3,
+    delays: {},
+    revealed: false,
+    breachAccepted: false,
+  };
+}
+
+/** Why a lever's costed effect was scaled, for the drawer and the badge beside it. */
+export interface LeverRevision {
+  factor: number;
+  /** The consideration on the lever whose caveat licenses the revision. */
+  considerationId: string;
+  note: string;
 }
 
 export type SettingsInput = Partial<Settings>;
@@ -44,6 +109,8 @@ export interface LeverEffect {
   warnings: string[];
   /** For the provenance drawer: raw published figure, factor and uprated value per target year. */
   detail?: CostingDetail;
+  /** Set when the in-game OBR re-scored this measure; the original badge stays, this sits beside it. */
+  revision?: LeverRevision;
 }
 
 export interface CostingDetail {

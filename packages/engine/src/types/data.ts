@@ -49,6 +49,14 @@ import type {
   suggestionRuleSchema,
 } from '../schema/context.schema.js';
 import type {
+  calendarSchema,
+  drawOutcomeSchema,
+  drawRevisionSchema,
+  drawsFileSchema,
+  macroCandidateSchema,
+  simulatedLineSchema,
+} from '../schema/game.schema.js';
+import type {
   growthHeadSchema,
   levelSchema,
   milestoneSchema,
@@ -90,6 +98,12 @@ export type ContextReading = z.infer<typeof contextReadingSchema>;
 export type SuggestionRule = z.infer<typeof suggestionRuleSchema>;
 export type ContextScenario = z.infer<typeof contextScenarioSchema>;
 export type ScenarioKind = z.infer<typeof scenarioKindSchema>;
+export type DrawsFile = z.infer<typeof drawsFileSchema>;
+export type DrawOutcome = z.infer<typeof drawOutcomeSchema>;
+export type DrawRevision = z.infer<typeof drawRevisionSchema>;
+export type MacroCandidateName = z.infer<typeof macroCandidateSchema>;
+export type SimulatedLine = z.infer<typeof simulatedLineSchema>;
+export type Calendar = z.infer<typeof calendarSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

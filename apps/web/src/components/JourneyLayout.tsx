@@ -1,6 +1,7 @@
 import type { JourneyStep } from '@btc/engine';
 import type { ReactNode } from 'react';
 import { Dateline } from './Dateline';
+import { dateFor } from '../data';
 import { StepLink } from '../journey/links';
 
 const STEPS: Array<{
@@ -15,8 +16,29 @@ const STEPS: Array<{
   { id: 'budget-day', label: '4 · Budget day', to: '/budget-day' },
 ];
 
+/**
+ * Which tab a step lights up. The seven-stage strip lands with its pages over the next commits;
+ * until then the new step ids fold into the nearest existing tab.
+ */
 function stepGroup(step: JourneyStep): (typeof STEPS)[number]['id'] {
-  return step === 'taxes' || step === 'spending' ? 'budget' : step;
+  switch (step) {
+    case 'start':
+    case 'assumptions':
+    case 'recommendations':
+    case 'budget-day':
+      return step;
+    case 'outlook':
+    case 'pm':
+      return 'assumptions';
+    case 'policies':
+      return 'recommendations';
+    case 'forecast':
+    case 'compromise':
+    case 'rabbit':
+      return 'budget-day';
+    default:
+      return 'budget';
+  }
 }
 
 /** The step navigation shared by every page of the journey. */
@@ -25,7 +47,7 @@ export function JourneyLayout({ step, children }: { step: JourneyStep; children:
   const index = STEPS.findIndex((s) => s.id === current);
   return (
     <div className="journey">
-      <Dateline />
+      <Dateline now={dateFor(step)} />
       <nav className="steps" aria-label="Budget steps">
         <ol>
           {STEPS.map((s, i) => (

@@ -4,7 +4,9 @@ import { fileURLToPath } from 'node:url';
 import {
   parseAdvisers,
   parseBriefings,
+  parseCalendar,
   parseContext,
+  parseDraws,
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
@@ -54,6 +56,8 @@ export function loadDataset(): Required<Dataset> {
     ),
     advisers: parseAdvisers(readJson('journey/advisers.json')),
     briefings: parseBriefings(readJson('journey/briefings.json')),
+    draws: parseDraws(readJson('journey/draws.json')),
+    calendar: parseCalendar(readJson('journey/calendar.json')),
   };
 }
 

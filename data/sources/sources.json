@@ -673,6 +673,46 @@
       "retrievedOn": "2026-09-15",
       "licence": "OGL-3.0",
       "notes": "The Cunliffe review. Water companies will spend £104bn on investment and operation over the five years to 2030, about £44bn of it enhancement. Footnote 569 gives the sector capital value as £103bn in 2024-25. Paragraph 684 records that the review was barred by its terms of reference from considering public ownership."
+    },
+    {
+      "id": "boe-fsr-2026-07",
+      "org": "BoE",
+      "title": "Financial Stability Report",
+      "edition": "July 2026",
+      "url": "https://www.bankofengland.co.uk/financial-stability-report/2026/july-2026",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. Quoted: moves in gilt yields were \"amplified by hedge fund deleveraging\" during the most volatile period after the onset of the Middle East conflict; global sovereign issuance at historically high levels with higher proportions at shorter maturities; \"any negative change in expectations could have wider consequences for sovereign debt markets\". Bank of England material; quoted briefly with attribution."
+    },
+    {
+      "id": "boe-insights-long-rates-2025",
+      "org": "BoE",
+      "title": "Bank Insights: What were the drivers of UK long-term interest rates in 2025?",
+      "edition": "2026",
+      "url": "https://www.bankofengland.co.uk/bank-insights/2026/what-were-the-drivers-of-uk-long-term-interest-rates-in-2025",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. Quoted: \"the primary driver of the increases in long rates was higher term premia\"; rises \"can largely be attributed to global factors, such as geopolitical uncertainty and concerns around fiscal sustainability\"; 30-year yields at their highest since the turn of the century. Bank of England material; quoted briefly with attribution."
+    },
+    {
+      "id": "rf-policy-landscape-2026",
+      "org": "RF",
+      "title": "The policy landscape 2026",
+      "edition": "8 September 2026",
+      "url": "https://www.resolutionfoundation.org/publications/policy-landscape-2026/",
+      "retrievedOn": "2026-09-16",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-16. Quoted: \"As John Healey puts together his first Budget, the backdrop of bond market turmoil limits the room for manoeuvre\"; \"£1 in every £12 of public spending now goes on debt interest\"; \"With energy bills rising again this winter, the cost-of-living crisis is back centre stage\". Resolution Foundation; quoted briefly with attribution."
+    },
+    {
+      "id": "hmt-tsc-budget-2026-letter",
+      "org": "HMT",
+      "title": "Chancellor letter to the Treasury Select Committee: Budget 2026 date",
+      "edition": "31 July 2026",
+      "url": "https://www.gov.uk/government/publications/chancellor-letter-to-the-treasury-select-committee-tsc-budget-2026-date/chancellor-letter-to-the-treasury-select-committee-tsc",
+      "retrievedOn": "2026-09-16",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-16. The Chancellor commissioned the OBR to \"prepare an economic and fiscal forecast for publication on 28 October 2026. This will be accompanied by the Budget.\" Also: \"Fiscal credibility is the bedrock of economic stability and national security. That is why we will abide by the fiscal rules, ensuring we retain a buffer to protect us against uncertainty and the impact of instability in the Middle East.\""
     }
   ]
 }

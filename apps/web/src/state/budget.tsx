@@ -2,7 +2,9 @@ import {
   computeOutcome,
   decodePermalink,
   encodePermalink,
+  freshGame,
   type AssessAsOf,
+  type GamePermalink,
   type Outcome,
 } from '@btc/engine';
 import { createContext, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react';
@@ -13,6 +15,10 @@ export interface BudgetState {
   debtInterestFeedback: boolean;
   assessAsOf: AssessAsOf;
   warnings: string[];
+  /** The playthrough (ADR-0011). Absent until the player confirms an outlook and a seed is minted. */
+  game?: GamePermalink;
+  /** The policy levers as they stood when the in-game OBR update arrived. */
+  snapshot?: Record<string, number>;
 }
 
 export type BudgetAction =
@@ -22,19 +28,25 @@ export type BudgetAction =
   | { type: 'reset' }
   | { type: 'setFeedback'; value: boolean }
   | { type: 'setAssessAsOf'; value: AssessAsOf }
-  | { type: 'dismissWarnings' };
+  | { type: 'dismissWarnings' }
+  | { type: 'startGame'; seed: number }
+  | { type: 'updateGame'; patch: Partial<GamePermalink> }
+  | { type: 'setSnapshot'; values: Record<string, number> };
 
 export const IMPLEMENTATION_YEAR =
   vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? vintage.years.inYear;
 
 export function initialStateFromLocation(search: string): BudgetState {
   const { state, warnings } = decodePermalink(search, levers);
-  return {
+  const out: BudgetState = {
     leverValues: state.leverValues,
     debtInterestFeedback: state.debtInterestFeedback ?? true,
     assessAsOf: state.assessAsOf ?? 'vintage',
     warnings,
   };
+  if (state.game) out.game = state.game;
+  if (state.snapshot) out.snapshot = state.snapshot;
+  return out;
 }
 
 export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
@@ -57,8 +69,23 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
       }
       return { ...state, leverValues };
     }
-    case 'reset':
-      return { ...state, leverValues: {}, debtInterestFeedback: true, assessAsOf: 'vintage' };
+    case 'reset': {
+      // A reset ends the game too: the seed, the snapshot and every choice go with the levers.
+      const next: BudgetState = {
+        leverValues: {},
+        debtInterestFeedback: true,
+        assessAsOf: 'vintage',
+        warnings: state.warnings,
+      };
+      return next;
+    }
+    case 'startGame':
+      // A game already under way keeps its seed: the draw must not change under the player.
+      return state.game ? state : { ...state, game: freshGame(action.seed) };
+    case 'updateGame':
+      return state.game ? { ...state, game: { ...state.game, ...action.patch } } : state;
+    case 'setSnapshot':
+      return { ...state, snapshot: { ...action.values } };
     case 'setFeedback':
       return { ...state, debtInterestFeedback: action.value };
     case 'setAssessAsOf':
@@ -82,6 +109,8 @@ export function permalinkQuery(state: BudgetState): string {
       leverValues: state.leverValues,
       debtInterestFeedback: state.debtInterestFeedback,
       assessAsOf: state.assessAsOf,
+      ...(state.game ? { game: state.game } : {}),
+      ...(state.snapshot ? { snapshot: state.snapshot } : {}),
     },
     levers,
   );
@@ -113,9 +142,12 @@ export function BudgetProvider({ children, search }: { children: ReactNode; sear
           implementationYear: IMPLEMENTATION_YEAR,
           debtInterestFeedback: state.debtInterestFeedback,
           assessAsOf: state.assessAsOf,
+          ...(state.game && Object.keys(state.game.delays).length > 0
+            ? { implementationYearByCode: state.game.delays }
+            : {}),
         },
       }),
-    [state.leverValues, state.debtInterestFeedback, state.assessAsOf],
+    [state.leverValues, state.debtInterestFeedback, state.assessAsOf, state.game],
   );
   const query = useMemo(() => permalinkQuery(state), [state]);
 

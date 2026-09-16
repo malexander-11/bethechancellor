@@ -68,6 +68,8 @@
   --badge-assumption-fg: #6f5210;
   --badge-commentary-bg: #e9e6dd;
   --badge-commentary-fg: #55514a;
+  --badge-simulated-bg: #ece3f0;
+  --badge-simulated-fg: #4b2d5e;
 
   --focus: #1f4f8f;
 
@@ -154,6 +156,8 @@
     --badge-assumption-fg: #e8c883;
     --badge-commentary-bg: #2c2a26;
     --badge-commentary-fg: #bcb5a3;
+    --badge-simulated-bg: #3a2b45;
+    --badge-simulated-fg: #dfd0e8;
 
     --focus: #6fa3e8;
 
