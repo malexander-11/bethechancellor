@@ -6,6 +6,8 @@ import {
   parseContext,
   parseDraws,
   parsePm,
+  parseMinisters,
+  parseInterventions,
   parseHouseholds,
   parseLever,
   parsePresets,
@@ -50,6 +52,10 @@ export function loadDataset(
   const draws = parseDraws(readJson(path.join(DATA_DIR, 'journey', 'draws.json')));
   const calendar = parseCalendar(readJson(path.join(DATA_DIR, 'journey', 'calendar.json')));
   const pm = parsePm(readJson(path.join(DATA_DIR, 'journey', 'pm.json')));
+  const ministers = parseMinisters(readJson(path.join(DATA_DIR, 'journey', 'ministers.json')));
+  const interventions = parseInterventions(
+    readJson(path.join(DATA_DIR, 'journey', 'interventions.json')),
+  );
   const vintage = vintages.find((v) => v.id === defaultVintageId);
   const rules = ruleSets.find((r) => r.id === defaultRulesId);
   if (!vintage) throw new Error(`default vintage ${defaultVintageId} not found`);
@@ -67,6 +73,8 @@ export function loadDataset(
     draws,
     calendar,
     pm,
+    ministers,
+    interventions,
     vintages,
     ruleSets,
   };

@@ -1,0 +1,914 @@
+{
+  "schemaVersion": 1,
+  "ministers": [
+    {
+      "code": "dhsc",
+      "role": "Health Secretary",
+      "asking": {
+        "text": "The plan is 40,000 more appointments a week and nine in ten patients seen within 18 weeks by the end of the Parliament, starting from a waiting list of 7.5 million. Hold the settlement and I can hold the plan.",
+        "sources": [
+          {
+            "sourceId": "govuk-elective-reform-plan-2025"
+          },
+          {
+            "sourceId": "labour-manifesto-2024-nhs",
+            "quote": "patients should expect to wait no longer than 18 weeks from referral for consultant-led treatment"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": -3
+          },
+          "line": {
+            "text": "A cut of this size is not an efficiency, it is appointments that do not happen. The OBR already counts resident doctors’ strikes at about £250 million for every five days, and the pay review bodies will not recommend less because you have.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.13"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "The settlement already assumes the efficiencies are found. Take money off the top and the 18-week target is the first thing to go.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.13"
+              },
+              {
+                "sourceId": "govuk-elective-reform-plan-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 3
+          },
+          "line": {
+            "text": "This buys the elective recovery outright and leaves something for social care, where the Prime Minister has agreed a fair pay agreement for 2028-29 with no money against it yet.",
+            "sources": [
+              {
+                "sourceId": "no10-social-care-speech-2026-07-29",
+                "quote": "The government has agreed a fair pay agreement for social care staff to come in financial year 2028-29"
+              },
+              {
+                "sourceId": "govuk-elective-reform-plan-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Every pound above the settlement goes on appointments. Two million extra in the first year was the down-payment; 65% seen within 18 weeks is the interim test.",
+            "sources": [
+              {
+                "sourceId": "govuk-elective-reform-plan-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "dfe",
+      "role": "Education Secretary",
+      "asking": {
+        "text": "High-needs funding is up 58% in real terms in a decade, to £10.7 billion, and the NAO still calls the system unsustainable. There are 718,838 children and young people with a plan, 12.5% more than a year ago. I need the settlement kept whole and the deficits faced.",
+        "sources": [
+          {
+            "sourceId": "nao-send-2024",
+            "quote": "the current system is not achieving value for money and is unsustainable"
+          },
+          {
+            "sourceId": "dfe-ehcp-2026"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": -3
+          },
+          "line": {
+            "text": "Councils’ special needs deficits reach £4.3 to £4.9 billion when the accounting override ends, and 43% of them will have deficits at or near their reserves. A cut on this scale is a decision to let councils fail.",
+            "sources": [
+              {
+                "sourceId": "nao-send-2024",
+                "quote": "a cumulative deficit of between £4.3 billion and £4.9 billion"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "The OBR’s own illustration already has schools flat per pupil in real terms. There is nothing left to trim that is not a classroom.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.15"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 3
+          },
+          "line": {
+            "text": "This is a special needs settlement rather than another year of the override: the difference between reforming the system and managing its collapse.",
+            "sources": [
+              {
+                "sourceId": "nao-send-2024"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "High needs first. The OBR counted a £6.3 billion pressure from bringing special needs spending inside the envelope from 2028-29, and it does not yet see how the reforms slow the plans down.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.13"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "mod",
+      "role": "Defence Secretary",
+      "asking": {
+        "text": "Core defence at 2.7% of GDP now, 3% in the next Parliament, 3.5% by 2035. The Defence Investment Plan is funded to £10.3 billion by reallocation, and its own explainer says a further £4.7 billion will be confirmed at this Budget. I am asking you to confirm it.",
+        "sources": [
+          {
+            "sourceId": "govuk-dip-funding-explainer",
+            "quote": "A further £4.7 billion over four years will be confirmed at Budget 2026, in a fair and balanced way."
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "The Prime Minister told the House that the defence of the nation will always be his first priority. A cut here is read in every allied capital before it is read in the Treasury.",
+            "sources": [
+              {
+                "sourceId": "no10-commons-statement-2026-09-01",
+                "quote": "the defence of our nation will always be my first priority"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "This is the straight line to 3.5%, not a favour. The OBR puts the gap between the Spending Review path and that line at about £6 billion in the last year of the review period.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.13"
+              },
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.15"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "home",
+      "role": "Home Secretary",
+      "asking": {
+        "text": "The direct cost of supporting people seeking asylum was £4.0 billion in 2024-25, and the NAO calls it disproportionately high. Bringing it down takes decisions and caseworkers, not a smaller budget.",
+        "sources": [
+          {
+            "sourceId": "nao-asylum-system-2025",
+            "quote": "the current direct cost of supporting people seeking asylum is disproportionately high (£4.0 billion in 2024-25)"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "The settlement already falls 1.7% a year in real terms, and the OBR counts asylum accommodation among the risks to it. This cut lands on policing, because that is what is left.",
+            "sources": [
+              {
+                "sourceId": "hmt-sr25-del-tables",
+                "table": "Table 5.3 RDELex"
+              },
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.13"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Money for processing comes back: every case decided is a hotel bill that stops. The NAO put the direct cost at £4.0 billion a year.",
+            "sources": [
+              {
+                "sourceId": "nao-asylum-system-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "moj",
+      "role": "Justice Secretary",
+      "asking": {
+        "text": "The Prime Minister has told the House that anyone convicted of manslaughter, death by dangerous driving or indecent assault will see no change to their prison term. Every sentence served needs a cell to serve it in. The settlement grows 1.8% a year in real terms; I am asking you to hold it.",
+        "sources": [
+          {
+            "sourceId": "no10-commons-statement-2026-09-01",
+            "quote": "anyone convicted of manslaughter, death by dangerous driving or indecent assault will not see change to their prison term"
+          },
+          {
+            "sourceId": "hmt-sr25-del-tables",
+            "table": "Table 5.3 RDELex"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "A cut to Justice is fewer prison places and longer waits for trial. The House has just been promised that sentences will not be shortened; you cannot cut the capacity that promise stands on.",
+            "sources": [
+              {
+                "sourceId": "no10-commons-statement-2026-09-01"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "This buys prison places and court sitting days, the two things the sentencing pledge needs.",
+            "sources": [
+              {
+                "sourceId": "no10-commons-statement-2026-09-01"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "mhclg",
+      "role": "Communities Secretary",
+      "asking": {
+        "text": "Councils had over £69 billion for 2025-26, a 6.8% cash rise, with up to £3.7 billion for social care. The Prime Minister wants a national care service and has agreed a fair pay agreement from 2028-29. Neither has new money against it yet.",
+        "sources": [
+          {
+            "sourceId": "govuk-local-government-settlement-2025-26"
+          },
+          {
+            "sourceId": "no10-social-care-speech-2026-07-29"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "Around 2 million adults already have unmet care needs. Cut the grant and councils cut care first, because it is the largest thing they buy.",
+            "sources": [
+              {
+                "sourceId": "no10-social-care-speech-2026-07-29",
+                "quote": "Around 2 million adults have unmet care needs"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "This is the down-payment on the national care service: something for the 2 million adults with unmet needs before the Casey review reports in summer 2027.",
+            "sources": [
+              {
+                "sourceId": "no10-social-care-speech-2026-07-29"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "fcdo",
+      "role": "Foreign Secretary",
+      "asking": {
+        "text": "Aid was 0.43% of national income last year, down from 0.50%, and falls to 0.3% by 2027. The settlement falls 6.9% a year in real terms. I am not asking for more; I am asking you not to go below the commitment.",
+        "sources": [
+          {
+            "sourceId": "fcdo-oda-2025"
+          },
+          {
+            "sourceId": "hmt-spending-review-2025"
+          },
+          {
+            "sourceId": "hmt-sr25-del-tables",
+            "table": "Table 5.3 RDELex"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "Below this the 0.3% commitment goes. Eighteen per cent of aid is already spent inside Britain on refugee and asylum costs, so the cut falls abroad twice over.",
+            "sources": [
+              {
+                "sourceId": "fcdo-oda-2025"
+              },
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.15"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Every pound restores a fraction of a budget that ran at 0.7% of national income from 2013 to 2020.",
+            "sources": [
+              {
+                "sourceId": "fcdo-oda-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "dft",
+      "role": "Transport Secretary",
+      "asking": {
+        "text": "The day-to-day budget falls 5% a year in real terms while the capital programme grows: £1.1 billion this Spending Review to develop Northern Powerhouse Rail, inside a £45 billion cap. I need the running costs to keep pace with the railway we are building.",
+        "sources": [
+          {
+            "sourceId": "govuk-npr-2026-01"
+          },
+          {
+            "sourceId": "hmt-sr25-del-tables",
+            "table": "Table 5.3 RDELex"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "The £2 bus cap was paid for out of another department’s budget. There is no such offset here: this cut is fewer services on the roads and buses people use today.",
+            "sources": [
+              {
+                "sourceId": "govuk-bus-fare-cap-2027",
+                "quote": "funded by savings from reprioritising the Department for Energy Security and Net Zero's budget"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "This keeps buses and roads running while the capital goes on rail. Northern Powerhouse Rail’s benefits arrive in the 2030s; people travel now.",
+            "sources": [
+              {
+                "sourceId": "govuk-npr-2026-01"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "otherd",
+      "role": "Chief Secretary to the Treasury",
+      "asking": {
+        "text": "About two-thirds of this line is the block grants to Scotland, Wales and Northern Ireland, set by the Barnett formula; the rest is the smaller departments and the Reserve. Nobody lobbies for it, which is exactly why it gets cut.",
+        "sources": [
+          {
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "paragraph": "3.15-3.16"
+          },
+          {
+            "sourceId": "hmt-sr25-del-tables",
+            "table": "Table 5.3 RDELex"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "The OBR already has unprotected budgets falling 4.4% a year in real terms after 2028-29. A cut here is on top of that, and it lands on the Reserve we use when something goes wrong.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.14-4.16"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "This is the honest fix for the squeeze after 2028-29: the OBR says spending would need to be £13.5 billion higher in 2030-31 to avoid real cuts to unprotected departments.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.16"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "cdel",
+      "role": "Chief Secretary to the Treasury",
+      "asking": {
+        "text": "Investment sits outside the stability rule and inside the investment rule. Departments surrendered only 0.2% of their capital budgets last year, against a post-pandemic average near 5%: the money is being spent.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.12"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "Cutting capital is the oldest trick on this desk. It costs nothing this year and everything later, and it barely helps the current budget, because only the interest moves.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.12"
+              },
+              {
+                "sourceId": "hmt-strong-fiscal-framework-2024-10"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "It adds to borrowing and debt, not to the current budget. The OBR assumes about £3.7 billion a year of underspending, so not all of it lands when planned.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.12"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "rveff",
+      "role": "Chief Secretary to the Treasury",
+      "asking": {
+        "text": "The settlements assume £14 billion of technical efficiencies from the Spending Review and more from Budget 2025 by 2028-29. The OBR lists them not being realised among the significant risks. Keeping them means we deliver them.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.13"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Dropping them buys the same output at a higher price, and it is honest: the OBR was never sure they would arrive.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.13"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "wdis",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "Four million people are entitled to PIP, up 2% in a quarter. The department’s own evidence says PIP has been difficult to forecast since it began, and that even large cuts to new awards leave the caseload growing for years.",
+        "sources": [
+          {
+            "sourceId": "dwp-pip-statistics-2026-04"
+          },
+          {
+            "sourceId": "dwp-timms-review-evidence-pack",
+            "quote": "PIP has been difficult to forecast since its introduction"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "The OBR notes that moving people from disability living allowance to PIP did not achieve the savings planned. A cut on this line is a cut on paper until someone finds the cases.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.13"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Working-age disability benefits cost £25 billion last year. This tracks the caseload instead of fighting it.",
+            "sources": [
+              {
+                "sourceId": "dwp-timms-review-evidence-pack"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "wuc",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "There are 8.4 million people on universal credit. The OBR moved this line by billions in March without a single policy changing, because unemployment rose and claims did not.",
+        "sources": [
+          {
+            "sourceId": "dwp-uc-statistics-2026-05"
+          },
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.24-4.25"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "A cut to universal credit reaches the families the end of the two-child limit was for. That decision took 450,000 children out of poverty on the Treasury’s figure.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2025-document"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Every pound here reaches the poorest households first. That is what a child poverty strategy costs.",
+            "sources": [
+              {
+                "sourceId": "labour-manifesto-2024-opportunity"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "wpens",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "About 850,000 people a year reach state pension age by 2030-31, up from 700,000 in 2022-23. This line moves with demography and the triple lock, not with anything on this desk.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.23"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "There is no way to take money off this line except uprating or eligibility, and both need legislation and a fight.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.23"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "This is generosity on top of the triple lock, and the lock is already what drives the line.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.23"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "woth",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "Carer’s allowance, housing support, statutory pay: the small lines nobody campaigns for. Northern Ireland’s social security is in here too, and the Executive sets most of that.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "table": "Table 4.6, footnote 4"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenCut": [
+        {
+          "appliesWhen": {
+            "below": 0
+          },
+          "line": {
+            "text": "These are the benefits that hold other things together. Cut carer’s allowance and the care it pays for turns up as a cost to the health service and to councils.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "table": "Table 4.6"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ],
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Small money, spread thin, across the lines that catch people between the big benefits.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "table": "Table 4.6"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "rvpip",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "The Spring Statement 2025 PIP changes were dropped at Budget 2025. Proceeding saves about £4.5 billion by 2029-30 on the Treasury’s costing, and rests on assessment capacity the department itself names as the main uncertainty.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 83"
+          },
+          {
+            "sourceId": "hmt-budget-2025-policy-costings",
+            "page": "83"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "You are taking PIP from people who qualify for it today. The department’s own evidence says even large reductions in new awards leave the caseload growing; the OBR says the last eligibility change did not deliver its savings.",
+            "sources": [
+              {
+                "sourceId": "dwp-timms-review-evidence-pack",
+                "quote": "even with quite large reductions in new awards to PIP, there would still be considerable growth in caseload and spending over the next few years"
+              },
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.13"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "rv2ch",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "Ending the two-child limit lifts 450,000 children out of poverty. It is the largest single thing this government has done on child poverty, and the Prime Minister has asked you to keep it.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-document"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Reinstating the limit puts 450,000 children back below the line on the Treasury’s own figure, for about £3 billion a year, concentrated on larger low-income families.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2025-document"
+              },
+              {
+                "sourceId": "hmt-budget-2025-table-4-1",
+                "table": "Table 4.1",
+                "note": "line 6"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "rvwfp",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "Winter fuel payments go to pensioners with incomes up to £35,000. Narrowing them to pension credit again saves about £1.3 billion a year on the Treasury’s costing, and it is the row this government reversed.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 84"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "You are re-running 2024. Scotland and Northern Ireland pay their own winter payments, so the saving here is England and Wales.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2025-policy-costings",
+                "page": "84"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    }
+  ]
+}

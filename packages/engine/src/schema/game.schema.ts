@@ -185,3 +185,120 @@ export const pmFileSchema = z
         });
     }
   });
+
+/* ------------------------------------------------------------ the desk */
+
+/**
+ * A minister's line at a setting. The band applies when the lever's value is above `above` or
+ * below `below` (both may be given). Bands are read in order; the first that applies wins, so a
+ * deeper cut's line goes before the general one.
+ */
+export const ministerBandSchema = z.strictObject({
+  appliesWhen: z
+    .strictObject({ above: z.number().optional(), below: z.number().optional() })
+    .refine((w) => w.above !== undefined || w.below !== undefined, {
+      message: 'a band must say above or below what',
+    }),
+  line: simulatedLineSchema,
+});
+
+/**
+ * The minister who speaks for one lever: what they ask for when it is untouched, what stops
+ * happening at a cut, the case they made for more. Every line is simulated; the facts inside it
+ * carry their sources. The role is a title, never a name.
+ */
+export const ministerSchema = z
+  .strictObject({
+    code: z.string().min(1),
+    role: z.string().min(1),
+    asking: simulatedLineSchema,
+    whenCut: z.array(ministerBandSchema).default([]),
+    whenRaised: z.array(ministerBandSchema).default([]),
+  })
+  .superRefine((m, ctx) => {
+    if (m.whenCut.length === 0 && m.whenRaised.length === 0) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `${m.code}: a minister who only asks has nothing to say when the lever moves`,
+        path: ['whenCut'],
+      });
+    }
+    m.whenCut.forEach((b, i) => {
+      if (b.appliesWhen.below === undefined)
+        ctx.addIssue({
+          code: 'custom',
+          message: 'a whenCut band must say below what',
+          path: ['whenCut', i, 'appliesWhen'],
+        });
+    });
+    m.whenRaised.forEach((b, i) => {
+      if (b.appliesWhen.above === undefined)
+        ctx.addIssue({
+          code: 'custom',
+          message: 'a whenRaised band must say above what',
+          path: ['whenRaised', i, 'appliesWhen'],
+        });
+    });
+  });
+
+export const ministersFileSchema = z
+  .strictObject({
+    schemaVersion: z.literal(1),
+    ministers: z.array(ministerSchema).min(1),
+  })
+  .superRefine((file, ctx) => {
+    const codes = new Set<string>();
+    file.ministers.forEach((m, i) => {
+      if (codes.has(m.code))
+        ctx.addIssue({
+          code: 'custom',
+          message: `two ministers speak for ${m.code}`,
+          path: ['ministers', i, 'code'],
+        });
+      codes.add(m.code);
+    });
+  });
+
+/**
+ * When an adviser speaks up on the desk. A closed list of predicates over the ambition status and
+ * the scorecard, not a language: each is evaluated by `interventionsFor`, and a new one needs code.
+ */
+export const interventionWhenSchema = z.enum([
+  'promise-broken',
+  'priority-unfunded',
+  'priority-part-funded',
+  'all-priorities-funded',
+  'headroom-below-target',
+  'headroom-above-target',
+  'rule-missed',
+]);
+
+/**
+ * An adviser's line on the desk, shown when its predicate holds. `{name}` in the text is filled
+ * with the title of the promise or flagship the predicate fired on: a title from data, never a
+ * number. The line's own sources are for any fact it states beyond that.
+ */
+export const interventionSchema = z.strictObject({
+  id: slug,
+  adviser: slug,
+  when: interventionWhenSchema,
+  line: simulatedLineSchema,
+});
+
+export const interventionsFileSchema = z
+  .strictObject({
+    schemaVersion: z.literal(1),
+    interventions: z.array(interventionSchema).min(1),
+  })
+  .superRefine((file, ctx) => {
+    const ids = new Set<string>();
+    file.interventions.forEach((x, i) => {
+      if (ids.has(x.id))
+        ctx.addIssue({
+          code: 'custom',
+          message: `duplicate id ${x.id}`,
+          path: ['interventions', i],
+        });
+      ids.add(x.id);
+    });
+  });

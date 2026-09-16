@@ -131,10 +131,10 @@ export function MethodologyPage() {
 
       <h2>Policies nobody has costed</h2>
       <p>
-        The eleven policies your colleagues in Parliament campaign for have no certified costing,
-        because none of them is government policy. Rather than print a slogan with no number, we do
-        the arithmetic and show it: each card names the method, the published figures it rests on
-        and what it assumes, and a test reproduces the figure from those inputs. They are badged as
+        The policies your colleagues in Parliament campaign for have no certified costing, because
+        none of them is government policy. Rather than print a slogan with no number, we do the
+        arithmetic and show it: each card names the method, the published figures it rests on and
+        what it assumes, and a test reproduces the figure from those inputs. They are badged as
         assumptions, never as direct costings. Where the base itself is contested, as with a tax on
         wealth above £10 million and with withdrawing benefits from foreign nationals, the card says
         so before it shows the number.

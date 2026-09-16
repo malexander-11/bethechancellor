@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "interventions": [
+    {
+      "id": "pa-promise-broken",
+      "adviser": "political-adviser",
+      "when": "promise-broken",
+      "line": {
+        "text": "That is {name}, Chancellor. The Prime Minister asked you to keep it, and the words are on the record.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "ps-rule-missed",
+      "adviser": "permanent-secretary",
+      "when": "rule-missed",
+      "line": {
+        "text": "On these numbers a rule is missed, and the OBR will say so on 28 October. The Charter’s escape clause is for an emergency or a significant shock, judged by the OBR, not for a choice.",
+        "sources": [
+          {
+            "sourceId": "hmt-charter-2025-autumn",
+            "paragraph": "3.9-3.10"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "dps-priority-unfunded",
+      "adviser": "director-of-public-spending",
+      "when": "priority-unfunded",
+      "line": {
+        "text": "{name} is on the list you brought back from Downing Street, and nothing on this desk funds it yet.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "dps-priority-part-funded",
+      "adviser": "director-of-public-spending",
+      "when": "priority-part-funded",
+      "line": {
+        "text": "{name} is part-funded: the lever has moved, but not as far as the Prime Minister’s target.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "ps-all-funded",
+      "adviser": "permanent-secretary",
+      "when": "all-priorities-funded",
+      "line": {
+        "text": "Every priority you agreed with the Prime Minister is funded. What remains is whether the rules and your headroom survive the October forecast.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "cea-headroom-below-target",
+      "adviser": "chief-economic-adviser",
+      "when": "headroom-below-target",
+      "line": {
+        "text": "Headroom is below the target you set yourself. Remember what it is: a forecast margin. The OBR’s typical five-year error on receipts alone is about £32bn, bigger than any target on that list.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "3.4"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "cea-headroom-above-target",
+      "adviser": "chief-economic-adviser",
+      "when": "headroom-above-target",
+      "line": {
+        "text": "You are inside your own target. It is still a forecast: the OBR’s typical error over five years is about £32bn, and October’s numbers will be the OBR’s, not ours.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "3.4"
+          }
+        ],
+        "badge": "simulated"
+      }
+    }
+  ]
+}

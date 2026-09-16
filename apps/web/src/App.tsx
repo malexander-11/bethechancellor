@@ -7,7 +7,6 @@ import { BudgetDayPage } from './pages/BudgetDay';
 import { MethodologyPage } from './pages/Methodology';
 import { OutlookPage } from './pages/Outlook';
 import { PMPage } from './pages/PM';
-import { RecommendationsPage } from './pages/Recommendations';
 import { StartPage } from './pages/Start';
 import { Disclaimer } from './components/Disclaimer';
 
@@ -50,7 +49,10 @@ export function App() {
             <Route path="/pm" element={<PMPage />} />
             <Route path="/budget" element={<RedirectKeepingQuery to="/budget/taxes" />} />
             <Route path="/budget/:tab" element={<BudgetPage />} />
-            <Route path="/recommendations" element={<RecommendationsPage />} />
+            <Route
+              path="/recommendations"
+              element={<RedirectKeepingQuery to="/budget/policies" />}
+            />
             <Route path="/budget-day" element={<BudgetDayPage />} />
             <Route path="/b" element={<RedirectKeepingQuery to="/budget/taxes" />} />
             <Route path="/methodology" element={<MethodologyPage />} />

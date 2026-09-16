@@ -16,15 +16,16 @@ describe('journey routes', () => {
     ).toBeGreaterThanOrEqual(1);
   });
 
-  it('redirects old /b links into the taxes step with the scorecard and both tabs', () => {
+  it('redirects old /b links into the desk with the scorecard and its three tabs', () => {
     render(
       <MemoryRouter initialEntries={['/b?v=1&f=obr2603&r=ch2602&i=2027&L=itbr.1']}>
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Step 2 · Set taxes and spending')).toBeInTheDocument();
+    expect(screen.getByText('Step 3 · Build the package')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Taxes' })).toHaveClass('tab--active');
     expect(screen.getByRole('link', { name: 'Spending' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Policies' })).toBeInTheDocument();
     expect(screen.getByText(/Headroom, 2029-30/)).toBeInTheDocument();
     expect(screen.getByText('Budget 2025 decisions')).toBeInTheDocument();
   });

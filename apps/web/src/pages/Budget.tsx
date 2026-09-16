@@ -1,21 +1,37 @@
-import { formatGbpBn, formatPct } from '@btc/engine';
+import {
+  ambitionStatus,
+  formatGbpBn,
+  formatPct,
+  interventionsFor,
+  pickOutcome,
+  stageIndex,
+  type JourneyStep,
+  type Lever,
+} from '@btc/engine';
 import { useMemo, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { AdviserBriefing } from '../components/AdviserBriefing';
 import { AttributionList } from '../components/AttributionList';
 import { Desk } from '../components/Desk';
+import { DespatchBox } from '../components/DespatchBox';
 import { InteractionsNotice } from '../components/InteractionsNotice';
+import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LeverControl, formatLeverValue } from '../components/LeverControl';
+import { MinisterLine } from '../components/MinisterLine';
 import { PathChart } from '../components/PathChart';
+import { PressSummary } from '../components/PressSummary';
 import { PresetPicker } from '../components/PresetPicker';
 import { Scorecard } from '../components/Scorecard';
 import {
   briefingsFor,
   context,
+  draws,
   groupLevers,
+  interventions,
   levers,
   leversByCategory,
+  pm,
   rules,
   vintage,
 } from '../data';
@@ -33,21 +49,97 @@ const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDat
   year: 'numeric',
 });
 
+type Tab = 'taxes' | 'spending' | 'policies';
+
+/** The three folders of the desk: what each is called, whose file it is, and where it leads. */
+const TABS: Record<
+  Tab,
+  {
+    label: string;
+    arrives: string;
+    open: string;
+    folded: string;
+    work: string;
+    /** Advisers and briefings were authored against the Phase 5 step names. */
+    briefingStep: JourneyStep;
+    next: { to: string; label: string };
+  }
+> = {
+  taxes: {
+    label: 'Taxes',
+    arrives: 'The Director of Tax hands you the tax file',
+    open: 'Open the file',
+    folded: 'The Director of Tax’s briefing',
+    work: 'Set the taxes',
+    briefingStep: 'taxes',
+    next: { to: '/budget/spending', label: 'Next: spending' },
+  },
+  spending: {
+    label: 'Spending',
+    arrives: 'The Director of Public Spending hands you the spending file',
+    open: 'Open the file',
+    folded: 'The Director of Public Spending’s briefing',
+    work: 'Set the spending',
+    briefingStep: 'spending',
+    next: { to: '/budget/policies', label: 'Next: what your colleagues want' },
+  },
+  policies: {
+    label: 'Policies',
+    arrives: 'A bundle of letters arrives from your colleagues',
+    open: 'Read the letters',
+    folded: 'What your advisers said about these letters',
+    work: 'The policies, and what each would cost',
+    briefingStep: 'recommendations',
+    next: { to: '/budget-day', label: 'Go to Budget day' },
+  },
+};
+
+function isTab(tab: string | undefined): tab is Tab {
+  return tab === 'taxes' || tab === 'spending' || tab === 'policies';
+}
+
+/** A lever's effect on borrowing in a year, £ million, positive = more borrowing. */
+function borrowingEffect(
+  outcome: ReturnType<typeof useBudget>['outcome'],
+  code: string,
+  year: string,
+): number {
+  const effect = outcome.leverEffects.find((e) => e.code === code);
+  if (!effect) return 0;
+  return (
+    (effect.currentSpending[year] ?? 0) +
+    (effect.capitalSpending[year] ?? 0) -
+    (effect.receipts[year] ?? 0)
+  );
+}
+
+/**
+ * Stage 3: the desk. Three folders of levers, and, when a game is under way, the people in the
+ * room with you: ministers on the spending folders, advisers who remember what you agreed in
+ * Downing Street, the despatch box keeping score, and the Political Adviser's press summary
+ * planting the clue the seeded draw chose.
+ */
 export function BudgetPage() {
   const { tab } = useParams();
   const { state, dispatch, outcome, query } = useBudget();
   const [copied, setCopied] = useState(false);
-  if (tab !== 'taxes' && tab !== 'spending') {
+  if (!isTab(tab)) {
     return (
       <Navigate to={{ pathname: '/budget/taxes', search: query ? `?${query}` : '' }} replace />
     );
   }
   const step = tab;
-  const items = step === 'taxes' ? leversByCategory.tax : leversByCategory.spend;
+  const spec = TABS[step];
+  const items =
+    step === 'taxes'
+      ? leversByCategory.tax
+      : step === 'spending'
+        ? leversByCategory.spend
+        : leversByCategory.campaign;
   const { paths } = outcome;
   const years = paths.years;
-  const targetYear =
-    outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '2029-30';
+  const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
+  const targetYear = stability?.targetYear ?? '2029-30';
   const lastYear = years[years.length - 1] ?? targetYear;
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
@@ -63,12 +155,55 @@ export function BudgetPage() {
     groups.find((g) => g.levers.some((l) => moved.has(l.code)))?.name ?? groups[0]?.name ?? '';
   // Name the card the player chose on step 1; fall back to the figures only if they set their own.
   const macroSummary =
-    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES) ??
+    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES, state.game?.revealed) ??
     leversByCategory.macro
       .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
       .filter((x) => x.value !== x.lever.control.default)
       .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
       .join(' · ');
+
+  // The game, when there is one: what was agreed with the PM, held against the package.
+  const game = state.game;
+  const status = game ? ambitionStatus(game, pm, outcome, levers) : null;
+  const headroomGbpm = stability?.headroomGbpm ?? 0;
+  const ruleMissed = outcome.verdicts.some(
+    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
+  );
+  const advice =
+    game && status
+      ? interventionsFor(interventions, status, {
+          headroomGbpm,
+          targetGbpm: game.headroomTargetBn * 1000,
+          ruleMissed,
+        })
+      : [];
+  const promised = new Map(
+    (status?.priorities ?? []).map((p) => [p.flagship.target.code, p.flagship] as const),
+  );
+  const clue = game && step === 'spending' ? pickOutcome(game.seed, draws.outcomes) : null;
+
+  const adopted = items.filter(
+    (l) =>
+      step === 'policies' && (state.leverValues[l.code] ?? l.control.default) !== l.control.default,
+  );
+  const adoptedTotal = adopted.reduce(
+    (sum, l) => sum + borrowingEffect(outcome, l.code, targetYear),
+    0,
+  );
+
+  /** Leaving the desk: remember the package as it stood before the OBR spoke. */
+  const leaveDesk = () => {
+    if (!game) return;
+    const policy: Record<string, number> = {};
+    for (const [code, value] of Object.entries(state.leverValues)) {
+      if (!MACRO_CODES.includes(code)) policy[code] = value;
+    }
+    dispatch({ type: 'setSnapshot', values: policy });
+    dispatch({
+      type: 'updateGame',
+      patch: { reached: Math.max(game.reached, stageIndex('forecast')) },
+    });
+  };
 
   async function copyLink() {
     const url = `${window.location.origin}/budget-day?${query}`;
@@ -84,50 +219,73 @@ export function BudgetPage() {
   const toBn = (values: Record<string, number>) => years.map((y) => (values[y] ?? 0) / 1000);
   const surplus = (values: Record<string, number>) => years.map((y) => -(values[y] ?? 0) / 1000);
 
+  /** Promised flagships go to the top of their folder, wearing a tag. */
+  const orderForDesk = (list: Lever[]): Lever[] => [
+    ...list.filter((l) => promised.has(l.code)),
+    ...list.filter((l) => !promised.has(l.code)),
+  ];
+
   return (
     <JourneyLayout step={step}>
-      <h1 className="page-title">Step 2 · Set taxes and spending</h1>
+      <h1 className="page-title">Step 3 · Build the package</h1>
       <p className="lede">
-        Each control shows what it moves to. Every number carries a badge saying where it came from.
+        Each control shows what it moves to. Every number carries a badge saying where it came from;
+        every minister’s line is a game judgement and says so.
       </p>
       <Beats step={step}>
-        <Beat
-          title={
-            step === 'taxes'
-              ? 'The Director of Tax hands you the tax file'
-              : 'The Director of Public Spending hands you the spending file'
-          }
-          continueLabel="Open the file"
-          foldWhenPast={
-            step === 'taxes'
-              ? 'The Director of Tax’s briefing'
-              : 'The Director of Public Spending’s briefing'
-          }
-        >
-          {briefingsFor(step).map((b) => (
-            <AdviserBriefing key={b.id} briefing={b} />
-          ))}
+        <Beat title={spec.arrives} continueLabel={spec.open} foldWhenPast={spec.folded}>
+          {step === 'policies' ? (
+            <div className="briefing-row">
+              {briefingsFor(spec.briefingStep).map((b) => (
+                <AdviserBriefing key={b.id} briefing={b} compact />
+              ))}
+            </div>
+          ) : (
+            briefingsFor(spec.briefingStep).map((b) => <AdviserBriefing key={b.id} briefing={b} />)
+          )}
         </Beat>
-        <Beat title={step === 'taxes' ? 'Set the taxes' : 'Set the spending'}>
+        <Beat title={spec.work}>
           <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
+          {game && status ? (
+            <DespatchBox
+              game={game}
+              status={status}
+              headroomGbpm={headroomGbpm}
+              targetYear={targetYear}
+            />
+          ) : null}
           <p className="assumptions-line">
             Economic assumptions: {macroSummary.length > 0 ? macroSummary : "the OBR's March view"}{' '}
-            · <StepLink to="/assumptions">change</StepLink>
+            · <StepLink to="/outlook">change</StepLink>
           </p>
-          <nav className="tabs" aria-label="Taxes or spending">
-            <StepLink
-              to="/budget/taxes"
-              className={({ isActive }) => `tab${isActive ? ' tab--active' : ''}`}
-            >
-              Taxes
-            </StepLink>
-            <StepLink
-              to="/budget/spending"
-              className={({ isActive }) => `tab${isActive ? ' tab--active' : ''}`}
-            >
-              Spending
-            </StepLink>
+          <Interventions items={advice} />
+          {clue ? <PressSummary outcome={clue} /> : null}
+          <nav className="tabs" aria-label="Taxes, spending or policies">
+            {(Object.keys(TABS) as Tab[]).map((t) => (
+              <StepLink
+                key={t}
+                to={`/budget/${t}`}
+                className={({ isActive }) => `tab${isActive ? ' tab--active' : ''}`}
+              >
+                {TABS[t].label}
+              </StepLink>
+            ))}
           </nav>
+          {step === 'policies' ? (
+            <>
+              <p className="panel__hint">
+                Policies your colleagues in Parliament are campaigning for. Adopt the ones you want.
+                Every cost here is our own arithmetic, not an official costing.
+              </p>
+              <p className="adopted-line" role="status">
+                {adopted.length === 0
+                  ? 'Nothing adopted yet. Adopting one is a toggle; the scorecard moves as you read.'
+                  : `${adopted.length} adopted · ${
+                      adoptedTotal >= 0 ? 'costing' : 'raising'
+                    } ${formatGbpBn(Math.abs(adoptedTotal), 1)} in ${targetYear}`}
+              </p>
+            </>
+          ) : null}
 
           <div className="layout">
             <aside>
@@ -141,34 +299,49 @@ export function BudgetPage() {
               >
                 {(group) => (
                   <>
-                    {briefingsFor(step, group.name).map((b) => (
+                    {briefingsFor(spec.briefingStep, group.name).map((b) => (
                       <AdviserBriefing key={b.id} briefing={b} compact variant="body" />
                     ))}
-                    {group.levers.map((lever) => (
-                      <LeverControl
-                        key={lever.id}
-                        lever={lever}
-                        value={state.leverValues[lever.code] ?? lever.control.default}
-                        effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                        summaryYear={targetYear}
-                        onChange={(value) =>
-                          dispatch({ type: 'setLever', code: lever.code, value })
-                        }
-                      />
-                    ))}
+                    {orderForDesk(group.levers).map((lever) => {
+                      const value = state.leverValues[lever.code] ?? lever.control.default;
+                      const flagship = promised.get(lever.code);
+                      const control = (
+                        <LeverControl
+                          lever={lever}
+                          value={value}
+                          effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                          summaryYear={targetYear}
+                          onChange={(next) =>
+                            dispatch({ type: 'setLever', code: lever.code, value: next })
+                          }
+                        />
+                      );
+                      return (
+                        <div key={lever.id} className={flagship ? 'pinned' : undefined}>
+                          {flagship ? (
+                            <p className="pinned__tag">
+                              <span className="tag--treasury">promised to the PM</span>{' '}
+                              <span className="pinned__what">
+                                {flagship.title}: {formatLeverValue(lever, flagship.target.value)}
+                              </span>
+                            </p>
+                          ) : null}
+                          {control}
+                          <MinisterLine lever={lever} value={value} />
+                        </div>
+                      );
+                    })}
                   </>
                 )}
               </Desk>
               <p className="hero-start__actions">
-                {step === 'taxes' ? (
-                  <StepLink to="/budget/spending" className="btn btn--primary">
-                    Next: spending
-                  </StepLink>
-                ) : (
-                  <StepLink to="/recommendations" className="btn btn--primary">
-                    Next: what your colleagues want
-                  </StepLink>
-                )}
+                <StepLink
+                  to={spec.next.to}
+                  className="btn btn--primary"
+                  onClick={step === 'policies' ? leaveDesk : undefined}
+                >
+                  {spec.next.label}
+                </StepLink>
               </p>
             </aside>
 
@@ -233,10 +406,7 @@ export function BudgetPage() {
                 </p>
                 <AttributionList
                   rows={outcome.attribution}
-                  baselineHeadroomGbpm={
-                    outcome.verdicts.find((v) => v.kind === 'currentBudget')?.baseline
-                      .headroomGbpm ?? 0
-                  }
+                  baselineHeadroomGbpm={stability?.baseline.headroomGbpm ?? 0}
                 />
               </section>
 

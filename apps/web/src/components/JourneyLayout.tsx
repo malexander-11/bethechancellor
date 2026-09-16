@@ -5,34 +5,31 @@ import { dateFor } from '../data';
 import { StepLink } from '../journey/links';
 
 const STEPS: Array<{
-  id: 'start' | 'outlook' | 'pm' | 'budget' | 'recommendations' | 'budget-day';
+  id: 'start' | 'outlook' | 'pm' | 'budget' | 'budget-day';
   label: string;
   to: string;
 }> = [
   { id: 'start', label: 'Start', to: '/' },
   { id: 'outlook', label: '1 · Outlook', to: '/outlook' },
   { id: 'pm', label: '2 · The PM', to: '/pm' },
-  { id: 'budget', label: '3 · Taxes and spending', to: '/budget/taxes' },
-  { id: 'recommendations', label: '4 · Your colleagues', to: '/recommendations' },
-  { id: 'budget-day', label: '5 · Budget day', to: '/budget-day' },
+  { id: 'budget', label: '3 · The desk', to: '/budget/taxes' },
+  { id: 'budget-day', label: '4 · Budget day', to: '/budget-day' },
 ];
 
 /**
- * Which tab a step lights up. The last stages' tabs land with their pages over the next commits;
- * until then those step ids fold into Budget day.
+ * Which tab a step lights up. The three folders of the desk are one stage; the forecast, the
+ * compromises and the rabbit land with their pages over the next commits, and until then those
+ * step ids fold into Budget day.
  */
 function stepGroup(step: JourneyStep): (typeof STEPS)[number]['id'] {
   switch (step) {
     case 'start':
     case 'pm':
-    case 'recommendations':
     case 'budget-day':
       return step;
     case 'outlook':
     case 'assumptions':
       return 'outlook';
-    case 'policies':
-      return 'recommendations';
     case 'forecast':
     case 'compromise':
     case 'rabbit':

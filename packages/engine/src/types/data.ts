@@ -59,6 +59,12 @@ import type {
   promiseSchema,
   simulatedLineSchema,
   themeSchema,
+  ministersFileSchema,
+  ministerSchema,
+  ministerBandSchema,
+  interventionsFileSchema,
+  interventionSchema,
+  interventionWhenSchema,
 } from '../schema/game.schema.js';
 import type {
   growthHeadSchema,
@@ -112,6 +118,12 @@ export type PmFile = z.infer<typeof pmFileSchema>;
 export type Flagship = z.infer<typeof flagshipSchema>;
 export type Theme = z.infer<typeof themeSchema>;
 export type Promise_ = z.infer<typeof promiseSchema>;
+export type MinistersFile = z.infer<typeof ministersFileSchema>;
+export type Minister = z.infer<typeof ministerSchema>;
+export type MinisterBand = z.infer<typeof ministerBandSchema>;
+export type InterventionsFile = z.infer<typeof interventionsFileSchema>;
+export type InterventionSpec = z.infer<typeof interventionSchema>;
+export type InterventionWhen = z.infer<typeof interventionWhenSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

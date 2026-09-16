@@ -6,6 +6,8 @@ import {
   calendarSchema,
   drawsFileSchema,
   pmFileSchema,
+  ministersFileSchema,
+  interventionsFileSchema,
   reactionsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -27,6 +29,8 @@ import type {
   Calendar,
   DrawsFile,
   PmFile,
+  MinistersFile,
+  InterventionsFile,
   ReactionsFile,
   ContextFile,
   HmrcExtract,
@@ -144,6 +148,14 @@ export function parsePm(json: unknown): PmFile {
   return parseWith(pmFileSchema, json, 'the Prime Minister');
 }
 
+export function parseMinisters(json: unknown): MinistersFile {
+  return parseWith(ministersFileSchema, json, 'the ministers');
+}
+
+export function parseInterventions(json: unknown): InterventionsFile {
+  return parseWith(interventionsFileSchema, json, 'adviser interventions');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -158,6 +170,8 @@ export interface Dataset {
   draws?: DrawsFile;
   calendar?: Calendar;
   pm?: PmFile;
+  ministers?: MinistersFile;
+  interventions?: InterventionsFile;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -187,6 +201,8 @@ export function validateDataset(ds: Dataset): string[] {
       ds.briefings ?? null,
       ds.draws ?? null,
       ds.pm ?? null,
+      ds.ministers ?? null,
+      ds.interventions ?? null,
     ],
     referenced,
   );
@@ -260,9 +276,8 @@ export function validateDataset(ds: Dataset): string[] {
         .filter((l) => l.category === 'spend' || l.category === 'welfare')
         .map((l) => l.group ?? ''),
     ),
-    recommendations: new Set(
-      ds.levers.filter((l) => l.category === 'campaign').map((l) => l.group ?? ''),
-    ),
+    // The campaign levers sit on the Policies tab; `recommendations` is its Phase 5 name.
+    policies: new Set(ds.levers.filter((l) => l.category === 'campaign').map((l) => l.group ?? '')),
   };
   const briefingIds = new Set<string>();
   for (const briefing of ds.briefings?.briefings ?? []) {
@@ -282,8 +297,8 @@ export function validateDataset(ds: Dataset): string[] {
           ? groupsByStep.taxes
           : briefing.step === 'spending'
             ? groupsByStep.spending
-            : briefing.step === 'recommendations'
-              ? groupsByStep.recommendations
+            : briefing.step === 'recommendations' || briefing.step === 'policies'
+              ? groupsByStep.policies
               : undefined;
       if (!groups || !groups.has(briefing.group)) {
         problems.push(
@@ -418,6 +433,65 @@ export function validateDataset(ds: Dataset): string[] {
         if (!codes.has(rule.code)) {
           problems.push(`promise ${promise.id} watches unknown lever "${rule.code}"`);
         }
+      }
+    }
+  }
+  if (ds.ministers) {
+    // Every spending and welfare lever has someone to speak for it, and nobody speaks for a lever
+    // the desk does not have. A band that never applies is a line the player can never hear.
+    const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
+    const spoken = new Set(ds.ministers.ministers.map((m) => m.code));
+    for (const lever of ds.levers) {
+      if (lever.deprecated) continue;
+      if ((lever.category === 'spend' || lever.category === 'welfare') && !spoken.has(lever.code)) {
+        problems.push(`no minister speaks for ${lever.code}`);
+      }
+    }
+    for (const minister of ds.ministers.ministers) {
+      const lever = byCode.get(minister.code);
+      if (!lever) {
+        problems.push(`minister for "${minister.code}" speaks for a lever the desk does not have`);
+        continue;
+      }
+      if (lever.category === 'macro' || lever.category === 'tax') {
+        problems.push(
+          `minister for ${minister.code}: ministers speak for spending, not for ${lever.category}`,
+        );
+      }
+      const base = lever.control.default;
+      if (
+        minister.whenCut.length > 0 &&
+        !minister.whenCut.some((b) => (b.appliesWhen.below ?? -Infinity) >= base)
+      ) {
+        problems.push(
+          `minister for ${minister.code}: no whenCut band applies to a cut of any size`,
+        );
+      }
+      if (
+        minister.whenRaised.length > 0 &&
+        !minister.whenRaised.some((b) => (b.appliesWhen.above ?? Infinity) <= base)
+      ) {
+        problems.push(
+          `minister for ${minister.code}: no whenRaised band applies to a rise of any size`,
+        );
+      }
+      if (lever.control.min < base && minister.whenCut.length === 0) {
+        problems.push(
+          `minister for ${minister.code} has nothing to say at a cut the slider allows`,
+        );
+      }
+      if (lever.control.max > base && minister.whenRaised.length === 0) {
+        problems.push(
+          `minister for ${minister.code} has nothing to say at a rise the slider allows`,
+        );
+      }
+    }
+  }
+  if (ds.interventions) {
+    const adviserIds = new Set((ds.advisers?.advisers ?? []).map((a) => a.id));
+    for (const x of ds.interventions.interventions) {
+      if (adviserIds.size > 0 && !adviserIds.has(x.adviser)) {
+        problems.push(`intervention ${x.id} names unknown adviser ${x.adviser}`);
       }
     }
   }

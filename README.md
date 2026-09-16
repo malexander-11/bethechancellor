@@ -15,7 +15,7 @@ pessimistic view any of the sixteen forecasters in the Treasury's comparison pub
 shows the headroom it leaves you with, which is how you find out that a Chancellor can buy
 headroom by picking a forecast. Step 2 is a drawer of files, one open at a time, where
 every control shows the level it moves to and departmental budgets show real growth a year against
-their own history. Step 3 is the eleven policies your colleagues in Parliament are campaigning for,
+their own history. Step 3 is the policies your colleagues in Parliament are campaigning for,
 each costed with its workings on the card. Step 4 is Budget day, read back as feedback from four
 audiences: your own rules, the markets, Parliament and the public.
 
@@ -36,7 +36,7 @@ a public document. Next: the rebase to the 28 October 2026 forecast.
   effects are described qualitatively with sources. The interface labels every figure as a
   direct costing, a mechanical consequence, an assumption, or commentary.
 - **Where nobody has published a costing, the arithmetic is ours and the workings are on the
-  card.** The eleven policies MPs campaign for have no certified costing. Each states its method,
+  card.** The policies MPs campaign for have no certified costing. Each states its method,
   its published inputs and its assumptions, is badged an assumption rather than a direct costing,
   and is reproduced from those inputs by a test. Where the base is contested, the card says so
   before it shows the number.

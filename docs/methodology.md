@@ -389,7 +389,7 @@ option, so a hand-edited link cannot land between options.
 
 ### Arithmetic we do ourselves
 
-Eleven policies your colleagues in Parliament campaign for have no certified costing, because
+The policies your colleagues in Parliament campaign for have no certified costing, because
 none of them is government policy. Rather than print a slogan with no number, the repository
 does the arithmetic and shows it. Each such lever carries a `derivedFromPublished` raw source
 naming the method and its published inputs, and `checkRawSourceConsistency` reproduces the

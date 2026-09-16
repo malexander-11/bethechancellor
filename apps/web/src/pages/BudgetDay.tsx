@@ -190,10 +190,7 @@ export function BudgetDayPage() {
               {copied ? 'Link copied' : 'Copy a link to this Budget'}
             </button>
             <StepLink to="/budget/taxes" className="btn">
-              Back to taxes and spending
-            </StepLink>
-            <StepLink to="/recommendations" className="btn">
-              Back to your colleagues
+              Back to the desk
             </StepLink>
             <button
               type="button"

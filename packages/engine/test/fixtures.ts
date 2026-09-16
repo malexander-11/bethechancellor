@@ -8,6 +8,8 @@ import {
   parseContext,
   parseDraws,
   parsePm,
+  parseMinisters,
+  parseInterventions,
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
@@ -60,6 +62,8 @@ export function loadDataset(): Required<Dataset> {
     draws: parseDraws(readJson('journey/draws.json')),
     calendar: parseCalendar(readJson('journey/calendar.json')),
     pm: parsePm(readJson('journey/pm.json')),
+    ministers: parseMinisters(readJson('journey/ministers.json')),
+    interventions: parseInterventions(readJson('journey/interventions.json')),
   };
 }
 

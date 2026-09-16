@@ -964,3 +964,61 @@
   font-size: 0.85rem;
   color: var(--desk-ink-2);
 }
+
+/* ---------------------------------------------------------- the desk, staffed */
+
+.despatch {
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.despatch__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+}
+
+.despatch__sub {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.interventions {
+  margin: 8px 0 4px;
+}
+
+.interventions .spoken {
+  margin: 6px 0;
+}
+
+.note--press {
+  margin: 12px 0 4px;
+  transform: rotate(0.4deg);
+}
+
+.minister .spoken {
+  margin: 4px 0 14px;
+  font-size: 0.95rem;
+}
+
+.pinned {
+  position: relative;
+  padding-top: 4px;
+  border-top: 2px solid var(--tag-brass);
+}
+
+.pinned__tag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+}
+
+.pinned__what {
+  color: var(--desk-ink-2);
+}
