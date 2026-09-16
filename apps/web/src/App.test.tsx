@@ -49,7 +49,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Step 4 · Budget day')).toBeInTheDocument();
+    expect(screen.getByText('Step 7 · Budget day')).toBeInTheDocument();
     // Beat 1: the workings behind the verdict, once you have read the room.
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     expect(screen.getByText('Your measures')).toBeInTheDocument();

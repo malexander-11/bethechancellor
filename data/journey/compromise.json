@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "routes": {
+    "revenue": {
+      "adviser": "director-of-tax",
+      "line": {
+        "text": "Every tax on the desk, one notch up, ranked by what HMRC’s figures say it raises. The ones that break a promise say so; whether that matters is yours to judge, not mine.",
+        "sources": [
+          {
+            "sourceId": "hmrc-trr-2025-06-bulletin"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    "spending": {
+      "adviser": "director-of-public-spending",
+      "line": {
+        "text": "Everything in your package that costs money, biggest first. A measure that starts a year later costs nothing in the years before it starts; the OBR scores what is in the forecast window and the department feels the wait.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.13"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    "narrow": {
+      "adviser": "director-of-public-spending",
+      "line": {
+        "text": "Half the distance to the target is still a real change to a real budget. It is also half a promise, and the Prime Minister will notice which half.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    "pm": {
+      "adviser": "political-adviser",
+      "line": {
+        "text": "Going back to Downing Street costs you something each time you do it. The Prime Minister will say yes, once or twice, and will remember every time.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    },
+    "target": {
+      "adviser": "chief-economic-adviser",
+      "line": {
+        "text": "Lowering the target costs nothing today. What it costs is room: Budget 2025 left £21.7bn and the OBR’s typical five-year error is about £32bn. The Bank found gilt moves this year amplified by hedge fund deleveraging; thin margins are noticed.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-speech"
+          },
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "3.4"
+          },
+          {
+            "sourceId": "boe-fsr-2026-07"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    "breach": {
+      "adviser": "permanent-secretary",
+      "line": {
+        "text": "The Charter lets a Chancellor suspend the rules in an emergency or a significant negative shock, and asks the OBR to judge how severe it is. A rule missed by choice is not that, and the OBR will publish that it is missed on 28 October. The Bank’s account of 2025 attributes higher long rates partly to concerns around fiscal sustainability. Nothing stops you. Write down that you know.",
+        "sources": [
+          {
+            "sourceId": "hmt-charter-2025-autumn",
+            "paragraph": "3.9-3.10"
+          },
+          {
+            "sourceId": "boe-insights-long-rates-2025"
+          },
+          {
+            "sourceId": "boe-fsr-2026-07"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "noBreach": {
+        "text": "No rule is missed on these numbers. Leaving the gap open is not a breach; it is less headroom than you meant to keep, and the target is yours to lower if you can live with that.",
+        "sources": [
+          {
+            "sourceId": "hmt-charter-2025-autumn",
+            "paragraph": "3.6-3.11"
+          }
+        ],
+        "badge": "simulated"
+      }
+    }
+  }
+}

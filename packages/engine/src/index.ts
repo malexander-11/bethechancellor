@@ -24,6 +24,7 @@ export {
   parsePm,
   parseMinisters,
   parseInterventions,
+  parseCompromise,
   parseVintage,
   validateDataset,
   type Dataset,
@@ -58,6 +59,8 @@ export * from './game/draw.js';
 export * from './game/ambitions.js';
 export * from './game/ministers.js';
 export * from './game/interventions.js';
+export * from './game/forecast.js';
+export * from './game/compromise.js';
 export { applyRevision } from './calc/spine.js';
 export { costLever } from './costing/index.js';
 export {

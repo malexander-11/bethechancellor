@@ -302,3 +302,27 @@ export const interventionsFileSchema = z
       ids.add(x.id);
     });
   });
+
+/* ------------------------------------------------------- the compromises */
+
+/**
+ * What the advisers say beside each route out of a gap (stage 5). One line per route, in the
+ * voice of the adviser named; the breach assessment is the Permanent Secretary's and quotes the
+ * Charter. Everything simulated, every fact sourced, no number authored.
+ */
+export const compromiseFileSchema = z.strictObject({
+  schemaVersion: z.literal(1),
+  routes: z.strictObject({
+    revenue: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    spending: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    narrow: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    pm: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    target: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    breach: z.strictObject({
+      adviser: slug,
+      line: simulatedLineSchema,
+      /** When no rule is missed: what leaving a gap means instead. */
+      noBreach: simulatedLineSchema,
+    }),
+  }),
+});

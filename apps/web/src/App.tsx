@@ -4,6 +4,8 @@ import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
 import { BudgetPage } from './pages/Budget';
 import { BudgetDayPage } from './pages/BudgetDay';
+import { CompromisePage } from './pages/Compromise';
+import { ForecastPage } from './pages/Forecast';
 import { MethodologyPage } from './pages/Methodology';
 import { OutlookPage } from './pages/Outlook';
 import { PMPage } from './pages/PM';
@@ -53,6 +55,8 @@ export function App() {
               path="/recommendations"
               element={<RedirectKeepingQuery to="/budget/policies" />}
             />
+            <Route path="/forecast" element={<ForecastPage />} />
+            <Route path="/compromise" element={<CompromisePage />} />
             <Route path="/budget-day" element={<BudgetDayPage />} />
             <Route path="/b" element={<RedirectKeepingQuery to="/budget/taxes" />} />
             <Route path="/methodology" element={<MethodologyPage />} />

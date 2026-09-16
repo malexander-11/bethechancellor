@@ -17,7 +17,7 @@ const CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
 
 /** The margins a Chancellor might set out to keep, £ billion; nought means whatever the rules leave. */
-const TARGETS: { bn: number; label: string; say: string }[] = [
+export const TARGETS: { bn: number; label: string; say: string }[] = [
   {
     bn: 10,
     label: '£10bn',

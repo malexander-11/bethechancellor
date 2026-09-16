@@ -191,19 +191,26 @@ export function BudgetPage() {
     0,
   );
 
-  /** Leaving the desk: remember the package as it stood before the OBR spoke. */
+  /**
+   * Leaving the desk for the first time: remember the package as it stood before the OBR spoke,
+   * assumptions included, so the forecast can be taken apart and the close can diff against it.
+   * Coming back afterwards changes the package, not the record of what it was.
+   */
   const leaveDesk = () => {
     if (!game) return;
-    const policy: Record<string, number> = {};
-    for (const [code, value] of Object.entries(state.leverValues)) {
-      if (!MACRO_CODES.includes(code)) policy[code] = value;
-    }
-    dispatch({ type: 'setSnapshot', values: policy });
+    if (!game.revealed) dispatch({ type: 'setSnapshot', values: { ...state.leverValues } });
     dispatch({
       type: 'updateGame',
       patch: { reached: Math.max(game.reached, stageIndex('forecast')) },
     });
   };
+  // Where the desk leads depends on how far the game has got: to the OBR's envelope, back to the
+  // compromises once it is open, or straight to Budget day for a sandbox with no game.
+  const onward = !game
+    ? { to: '/budget-day', label: 'Go to Budget day' }
+    : game.revealed
+      ? { to: '/compromise', label: 'Back to the compromises' }
+      : { to: '/forecast', label: 'Next: the OBR’s forecast' };
 
   async function copyLink() {
     const url = `${window.location.origin}/budget-day?${query}`;
@@ -336,11 +343,11 @@ export function BudgetPage() {
               </Desk>
               <p className="hero-start__actions">
                 <StepLink
-                  to={spec.next.to}
+                  to={step === 'policies' ? onward.to : spec.next.to}
                   className="btn btn--primary"
                   onClick={step === 'policies' ? leaveDesk : undefined}
                 >
-                  {spec.next.label}
+                  {step === 'policies' ? onward.label : spec.next.label}
                 </StepLink>
               </p>
             </aside>

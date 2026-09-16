@@ -8,6 +8,7 @@ import {
   pmFileSchema,
   ministersFileSchema,
   interventionsFileSchema,
+  compromiseFileSchema,
   reactionsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -31,6 +32,7 @@ import type {
   PmFile,
   MinistersFile,
   InterventionsFile,
+  CompromiseFile,
   ReactionsFile,
   ContextFile,
   HmrcExtract,
@@ -156,6 +158,10 @@ export function parseInterventions(json: unknown): InterventionsFile {
   return parseWith(interventionsFileSchema, json, 'adviser interventions');
 }
 
+export function parseCompromise(json: unknown): CompromiseFile {
+  return parseWith(compromiseFileSchema, json, 'the compromises');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -172,6 +178,7 @@ export interface Dataset {
   pm?: PmFile;
   ministers?: MinistersFile;
   interventions?: InterventionsFile;
+  compromise?: CompromiseFile;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -203,6 +210,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.pm ?? null,
       ds.ministers ?? null,
       ds.interventions ?? null,
+      ds.compromise ?? null,
     ],
     referenced,
   );
@@ -484,6 +492,14 @@ export function validateDataset(ds: Dataset): string[] {
         problems.push(
           `minister for ${minister.code} has nothing to say at a rise the slider allows`,
         );
+      }
+    }
+  }
+  if (ds.compromise) {
+    const adviserIds = new Set((ds.advisers?.advisers ?? []).map((a) => a.id));
+    for (const [route, spec] of Object.entries(ds.compromise.routes)) {
+      if (adviserIds.size > 0 && !adviserIds.has(spec.adviser)) {
+        problems.push(`compromise route ${route} names unknown adviser ${spec.adviser}`);
       }
     }
   }

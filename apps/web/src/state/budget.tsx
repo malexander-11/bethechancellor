@@ -1,6 +1,7 @@
 import {
   computeOutcome,
   decodePermalink,
+  drawForecast,
   encodePermalink,
   freshGame,
   type AssessAsOf,
@@ -8,7 +9,7 @@ import {
   type Outcome,
 } from '@btc/engine';
 import { createContext, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react';
-import { levers, rules, vintage } from '../data';
+import { context, draws, levers, rules, vintage } from '../data';
 
 export interface BudgetState {
   leverValues: Record<string, number>;
@@ -131,6 +132,15 @@ export function BudgetProvider({ children, search }: { children: ReactNode; sear
     search ?? (typeof window === 'undefined' ? '' : window.location.search),
     initialStateFromLocation,
   );
+  // Once the envelope is open the in-game OBR has re-scored the measures it doubts; the seed alone
+  // decides how (ADR-0012), so the revisions are a fact about the game, not about the levers.
+  const revisions = useMemo(
+    () =>
+      state.game?.revealed
+        ? drawForecast(state.game.seed, draws, context, levers, vintage).revisions
+        : undefined,
+    [state.game?.revealed, state.game?.seed],
+  );
   const outcome = useMemo(
     () =>
       computeOutcome({
@@ -145,9 +155,10 @@ export function BudgetProvider({ children, search }: { children: ReactNode; sear
           ...(state.game && Object.keys(state.game.delays).length > 0
             ? { implementationYearByCode: state.game.delays }
             : {}),
+          ...(revisions && Object.keys(revisions).length > 0 ? { revisions } : {}),
         },
       }),
-    [state.leverValues, state.debtInterestFeedback, state.assessAsOf, state.game],
+    [state.leverValues, state.debtInterestFeedback, state.assessAsOf, state.game, revisions],
   );
   const query = useMemo(() => permalinkQuery(state), [state]);
 

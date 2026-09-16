@@ -26,10 +26,16 @@ export function Scorecard({
   outcome,
   typicalErrorGbpm,
   sticky = false,
+  revealed = false,
 }: {
   outcome: Outcome;
   typicalErrorGbpm: number;
   sticky?: boolean;
+  /**
+   * The in-game OBR has spoken: the macro sliders are its October forecast, so the hero shows a
+   * third figure, March plus the economy's move, and "your changes" becomes the measures alone.
+   */
+  revealed?: boolean;
 }) {
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const year =
@@ -39,6 +45,11 @@ export function Scorecard({
   const headroom = stability?.headroomGbpm ?? 0;
   const baseHeadroom = stability?.baseline.headroomGbpm ?? 0;
   const delta = headroom - baseHeadroom;
+  // What the economy did on its own: the March baseline plus the macro sliders' attribution.
+  const macroMove = outcome.attribution
+    .filter((r) => r.kind === 'macro')
+    .reduce((acc, r) => acc + r.currentBudgetGbpm, 0);
+  const octoberHeadroom = baseHeadroom - macroMove;
   const cells = [
     {
       label: 'Budget balance',
@@ -82,7 +93,18 @@ export function Scorecard({
           {formatGbpBn(headroom, 1, headroom < 0)}
         </div>
         <div className="scorecard__from">
-          OBR in March {formatGbpBn(baseHeadroom, 1)} · your changes {formatGbpBn(delta, 1, true)}
+          {revealed ? (
+            <>
+              OBR in March {formatGbpBn(baseHeadroom, 1)} · OBR in October{' '}
+              {formatGbpBn(octoberHeadroom, 1, octoberHeadroom < 0)} · your measures{' '}
+              {formatGbpBn(headroom - octoberHeadroom, 1, true)}
+            </>
+          ) : (
+            <>
+              OBR in March {formatGbpBn(baseHeadroom, 1)} · your changes{' '}
+              {formatGbpBn(delta, 1, true)}
+            </>
+          )}
         </div>
         <HeadroomGauge
           headroomGbpm={headroom}

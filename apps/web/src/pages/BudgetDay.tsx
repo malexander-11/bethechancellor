@@ -41,7 +41,7 @@ export function BudgetDayPage() {
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
   const macroSummary =
-    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES) ??
+    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES, state.game?.revealed) ??
     leversByCategory.macro
       .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
       .filter((x) => x.value !== x.lever.control.default)
@@ -67,14 +67,18 @@ export function BudgetDayPage() {
 
   return (
     <JourneyLayout step="budget-day">
-      <h1 className="page-title">Step 4 · Budget day</h1>
+      <h1 className="page-title">Step 7 · Budget day</h1>
       <p className="lede">
         Wednesday 28 October 2026. {reactions.intro} {met} of {outcome.verdicts.length} tests pass
         on your figures.
       </p>
       <Beats step="budget-day">
         <Beat title="The box opens, and the room reacts" continueLabel="See the workings">
-          <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} />
+          <Scorecard
+            outcome={outcome}
+            typicalErrorGbpm={typicalErrorGbpm}
+            revealed={state.game?.revealed ?? false}
+          />
           <div className="reactions">
             <ReactionPanel audience="rules" signals={signals} />
             <ReactionPanel audience="markets" signals={signals} />
@@ -122,7 +126,7 @@ export function BudgetDayPage() {
               Economic assumptions:{' '}
               {macroSummary.length > 0 ? macroSummary : "the OBR's March view"}
               {' · '}
-              <StepLink to="/assumptions">change</StepLink>
+              <StepLink to="/outlook">change</StepLink>
             </p>
           </details>
           <details className="panel">

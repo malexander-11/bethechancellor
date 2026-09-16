@@ -147,6 +147,8 @@ interface BeatProps {
   /** Hold the continue button until a choice is made, and say what is missing. */
   continueDisabled?: boolean;
   continueHint?: string;
+  /** Something the continue itself does, before the next beat opens: opening the envelope. */
+  onAdvance?: () => void;
   /* Supplied by <Beats>; never set these by hand. */
   index?: number;
   live?: boolean;
@@ -161,6 +163,7 @@ export function Beat({
   children,
   continueDisabled = false,
   continueHint,
+  onAdvance,
   index = 0,
   live = false,
   advance,
@@ -209,7 +212,10 @@ export function Beat({
           <button
             type="button"
             className="btn btn--primary"
-            onClick={advance}
+            onClick={() => {
+              onAdvance?.();
+              advance();
+            }}
             disabled={continueDisabled}
             aria-describedby={continueDisabled && continueHint ? `${headingId}-hint` : undefined}
           >

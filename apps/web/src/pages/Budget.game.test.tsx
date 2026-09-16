@@ -80,7 +80,7 @@ describe('the desk, with a game under way', () => {
 
   it('takes a snapshot of the package on the way out, and moves the game on', async () => {
     at(`/budget/policies?${BASE}&${GAME}&L=moj.10_ufsm.1`);
-    fireEvent.click(screen.getByRole('link', { name: /Go to Budget day/ }));
+    fireEvent.click(screen.getByRole('link', { name: /the OBR’s forecast/ }));
     await waitFor(() => {
       const params = new URLSearchParams(window.location.search);
       expect(params.get('S')).toMatch(/moj\.10/);

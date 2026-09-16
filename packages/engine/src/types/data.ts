@@ -65,6 +65,7 @@ import type {
   interventionsFileSchema,
   interventionSchema,
   interventionWhenSchema,
+  compromiseFileSchema,
 } from '../schema/game.schema.js';
 import type {
   growthHeadSchema,
@@ -124,6 +125,7 @@ export type MinisterBand = z.infer<typeof ministerBandSchema>;
 export type InterventionsFile = z.infer<typeof interventionsFileSchema>;
 export type InterventionSpec = z.infer<typeof interventionSchema>;
 export type InterventionWhen = z.infer<typeof interventionWhenSchema>;
+export type CompromiseFile = z.infer<typeof compromiseFileSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;
