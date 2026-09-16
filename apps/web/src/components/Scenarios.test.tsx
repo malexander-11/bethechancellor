@@ -42,13 +42,13 @@ describe('choosing the forecast you budget on', () => {
     expect(screen.getByRole('radio', { name: /A pessimistic analyst/ })).toBeChecked();
     // One click, three sliders: the whole point of replacing the readings grid with cards.
     expect(screen.getAllByRole('slider').map((s) => (s as HTMLInputElement).value)).toEqual([
-      '0.25',
+      '0.75',
       '0',
       '1',
     ]);
     await waitFor(() => {
       const macro = new URLSearchParams(window.location.search).get('M') ?? '';
-      expect(macro).toMatch(/rate\.0\.25/);
+      expect(macro).toMatch(/rate\.0\.75/);
       expect(macro).toMatch(/rpi\.1/);
       // Growth stays on the OBR path, so it is a default and never reaches the query string.
       expect(macro).not.toMatch(/ngdp/);
@@ -61,7 +61,7 @@ describe('choosing the forecast you budget on', () => {
   });
 
   it('shows your own figures rather than pretending sliders set by hand are one of the four', () => {
-    step('&M=rate.0.25');
+    step('&M=rate.0.1');
     expect(
       screen.getAllByRole('radio').filter((r) => (r as HTMLInputElement).checked),
     ).toHaveLength(0);
@@ -75,15 +75,19 @@ describe('choosing the forecast you budget on', () => {
     expect(headroom(/An optimistic analyst/)).toBeGreaterThan(headroom(/Keep the March baseline/));
     expect(headroom(/A pessimistic analyst/)).toBeLessThan(headroom(/Keep the March baseline/));
     expect(headroom(/Chief Economic Adviser/)).toBeLessThan(headroom(/Keep the March baseline/));
+    // The thing this screen has to get right: a pessimist who leaves more headroom than your own
+    // adviser reads as broken, whatever the card says to explain it.
+    expect(headroom(/A pessimistic analyst/)).toBeLessThan(headroom(/Chief Economic Adviser/));
   });
 
-  it('says on the card that the pessimist’s rates are a Bank Rate range, not a gilt yield one', () => {
-    // The pessimist's rates sit below the adviser's. Without this line that reads as a bug.
+  it('says on the card that its gloomiest rates figure is a gilt yield, not a forecast', () => {
+    // The lesson that survived the reordering: gilt yields drive debt interest and nobody
+    // forecasts them, so the worst published rates figure is today's market, not an analyst.
     step();
     const why = within(card(/A pessimistic analyst/)).getByText(/Where these figures come from/);
     fireEvent.click(why);
     expect(
-      within(card(/A pessimistic analyst/)).getByText(/No forecaster in the comparison publishes/),
+      within(card(/A pessimistic analyst/)).getByText(/publishes a gilt yield/),
     ).toBeInTheDocument();
   });
 

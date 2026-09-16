@@ -46,6 +46,7 @@ export { baselinePath, type BaselinePath } from './costing/pctOfBaseline.js';
 export { compoundGrowthPerYear, deflatorIndex, realGrowthPerYear } from './costing/realTerms.js';
 export { uprateToForecast, type PublishedSeries, type UpratedSeries } from './costing/uprate.js';
 export { interpolateLookup } from './costing/lookup.js';
+export { moreHarmful, psnbDirection } from './costing/sensitivity.js';
 export { costLever } from './costing/index.js';
 export {
   computeOutcome,

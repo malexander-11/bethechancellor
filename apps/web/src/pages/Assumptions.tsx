@@ -10,7 +10,7 @@ import { StepLink } from '../journey/links';
 import { macroCodesOf, matchScenario, scenarioCards } from '../journey/scenarios';
 import { useBudget } from '../state/budget';
 
-const CARDS = scenarioCards(context, levers);
+const CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
 
 export function AssumptionsPage() {

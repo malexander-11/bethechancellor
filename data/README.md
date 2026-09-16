@@ -74,15 +74,20 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
 - **Briefings** need an existing adviser who speaks on the step, a real lever group for group
   briefings, and at least one source per paragraph. **Context readings** that name a
   `leverCode` need a `suggestion` rule (`gap` or `authored`).
-- **Published ranges** (`reading.alternatives`) carry the highest and lowest rows of a forecast
+- **Published ranges** (`reading.alternatives`) carry the `lowest` and `highest` rows of a forecast
   comparison, the comparator row from the same table (`against`) and a `note` saying what basis
-  they are on. `against` is mandatory and separate from the reading's own `obr` block because the
+  they are on. They are named for what they are, not for the cards they feed: which one is the
+  optimistic case depends on which way the slider moves borrowing, which is derived from the
+  lever's OBR sensitivity. `against` is mandatory and separate from the reading's own `obr` block because the
   two can differ: the rates reading compares 10-year gilt yields, but the published range is for
   Bank Rate, which the note has to say. All three rows must cover the same years, since the gap
   rule averages over them. A range needs a `leverCode`; the validator checks all of this.
 - **Scenarios** (`context.scenarios`) carry a card's words only — title, headline and rationale
   paragraphs with sources. Never author its slider settings: those are derived in
   `apps/web/src/journey/scenarios.ts` from the rows above, so a tampered figure moves the card.
+  The two analysts pick, per slider, the kindest and cruellest of every published candidate — the
+  OBR's own assumption, the adviser's reading, and both range rows — which is what keeps the four
+  cards ordered by headroom whatever a data refresh does.
   One scenario per `kind`; an `optimistic` or `pessimistic` card needs at least one reading with a
   published range.
 

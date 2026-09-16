@@ -24,7 +24,7 @@ import { StepLink } from '../journey/links';
 import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { useBudget } from '../state/budget';
 
-const ASSUMPTION_CARDS = scenarioCards(context, levers);
+const ASSUMPTION_CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
 
 const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDateString('en-GB', {

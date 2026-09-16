@@ -300,8 +300,8 @@ export function validateDataset(ds: Dataset): string[] {
         // change which years a scenario is built from.
         const years = Object.keys(alt.against.series).sort().join(',');
         for (const [role, row] of [
-          ['optimistic', alt.optimistic],
-          ['pessimistic', alt.pessimistic],
+          ['lowest', alt.lowest],
+          ['highest', alt.highest],
         ] as const) {
           if (Object.keys(row.series).sort().join(',') !== years) {
             problems.push(

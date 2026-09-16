@@ -1,6 +1,8 @@
 # ADR-0010: Four sets of assumptions, and where an optimist comes from
 
-**Status:** accepted, 2026-09-16
+**Status:** accepted, 2026-09-16; **revised the same day** — see _Revision_ at the foot. The
+original decision shipped a pessimistic card that left more headroom than the player's own
+adviser. The reasoning below is kept as written, because the mistake is instructive.
 
 ## Context
 
@@ -107,3 +109,88 @@ whole ±0.5 range several times over, so it carries no information at the slider
 - If a forward-looking gilt-yield range is ever committed — the Bank of England's Monetary Policy
   Report publishes market-implied rate paths and numeric fan-chart bands — the rates cards should
   move onto it, and the basis note in the data becomes unnecessary rather than merely honest.
+
+---
+
+## Revision, 2026-09-16: the cards have to come out ordered
+
+### What was wrong
+
+The decision above bound each card to **one row of one table**. That produced:
+
+| Card                               | rates | growth | RPI  | Headroom    |
+| ---------------------------------- | ----- | ------ | ---- | ----------- |
+| Keep the March baseline            | 0     | 0      | 0    | £23.60bn    |
+| Your Chief Economic Adviser's view | +0.75 | 0      | +0.5 | £6.85bn     |
+| An optimistic analyst              | −0.5  | 0      | 0    | £31.10bn    |
+| A pessimistic analyst              | +0.25 | 0      | +1.0 | **£8.80bn** |
+
+The pessimist left more headroom than the adviser, because the adviser's rates figure is the
+10-year gilt yield (+0.75) while the analysts' was the comparison's Bank Rate range, whose highest
+row is only +0.25 above the OBR's.
+
+Point 1 above treated that inversion as the most useful thing on the screen and wrote a line on the
+card explaining it. **That was the wrong call, and it is the error worth recording.** A player
+reading four cards expects them ordered. A "pessimistic" card cheerier than their own adviser's
+reads as a bug however well it is explained, and an explanation that has to work that hard is a
+sign the model underneath is wrong rather than merely surprising.
+
+### What replaced it
+
+A card is no longer bound to a row. It is bound to a **rule for choosing among the published
+figures**, and every candidate is still published. For each slider the candidates are:
+
+- the OBR's own assumption (the lever's default);
+- the adviser's reading (`suggestSetting` — today's gap, or the authored value);
+- the lowest published row of the comparison, against its own comparator;
+- the highest published row.
+
+The optimistic card takes the candidate least harmful to the public finances on each slider; the
+pessimistic card takes the most harmful. **Which direction is harmful is derived, not authored:**
+each macro lever names a `costing.sensitivityId`, and the sign of that sensitivity's
+`effectOnPsnbGbpm` in the vintage says whether turning the slider up raises borrowing. The new
+`psnbDirection(vintage, sensitivityId)` in `packages/engine/src/costing/sensitivity.ts` reads it,
+and `validateVintage` now rejects a sensitivity whose years disagree in sign, since such a slider
+has no direction to derive. Read the increase table only: `rpi1pp`'s `effectOnPsnbGbpmDecrease` is
+negative because it states the effect _of the decrease_, and taking the sign from there inverts the
+answer.
+
+| Card                               | rates     | growth | RPI  | Headroom    |
+| ---------------------------------- | --------- | ------ | ---- | ----------- |
+| Keep the March baseline            | 0         | 0      | 0    | £23.60bn    |
+| Your Chief Economic Adviser's view | +0.75     | 0      | +0.5 | £6.85bn     |
+| An optimistic analyst              | −0.5      | 0      | 0    | £31.10bn    |
+| A pessimistic analyst              | **+0.75** | 0      | +1.0 | **£1.35bn** |
+
+The optimist does not move: its figures were already the kindest available. The pessimist now
+matches the adviser on rates, because no published rates figure is gloomier than today's gilt
+yield, and beats it on inflation, so it is strictly worse.
+
+### Why the ordering is now structural
+
+The adviser's own setting and the OBR's default are in the candidate pool, so the pessimist is by
+construction at least as harmful as both on every slider and the optimist at most as harmful. The
+ordering therefore survives a data refresh rather than depending on one, and a property test
+asserts it instead of pinning four numbers. It is exact for the pessimist against the adviser,
+which is the case that failed, because those two now carry the same rates setting and RPI has no
+side channel. For the optimist it is first-order only: the rates sensitivity also moves the
+marginal rate on other levers' borrowing, so on a budget that cuts borrowing hard the comparison
+is not a strict identity. The test asserts it on the bare assumptions step, where the cards are
+read.
+
+### What the cards still say out loud
+
+The gilt-yield lesson survives, reframed, and is still the most interesting thing on the pessimist's
+card: **the gloomiest published figure for interest rates is not a forecast at all.** None of the
+sixteen forecasters publishes a gilt yield, their Bank Rate range tops out milder than the market,
+so the card takes today's 5.35% — and gilt yields, not Bank Rate, are what drive debt interest.
+Points 2 and 3 above are unchanged: there is no optimistic case on RPI, and growth stays on the
+OBR's path on every card because there is no published figure to move it to.
+
+### One consequence in the data
+
+`alternatives.optimistic` and `alternatives.pessimistic` were named after the cards but hold the
+lowest and highest published rows, which coincide only while the slider's harmful direction is up.
+They are now `alternatives.lowest` and `alternatives.highest`, and the derived direction decides
+which card each feeds. Had they kept the old names, a committed nominal-GDP range would have put
+the lowest growth row on the optimistic card, which is the wrong way round.

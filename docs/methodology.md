@@ -297,12 +297,27 @@ stated rule over published rows, run through the same rounding and clamping as t
 rule above; none of the four settings is authored, so tampering with a published figure moves
 the card.
 
-| Card                               | Rule                                                         | rates | growth | RPI  |
-| ---------------------------------- | ------------------------------------------------------------ | ----- | ------ | ---- |
-| Keep the March baseline            | The OBR's own forecast, unchanged                            | 0     | 0      | 0    |
-| Your Chief Economic Adviser's view | Latest reading − OBR (the `gap` rule)                        | +0.75 | 0      | +0.5 |
-| An optimistic analyst              | The **Lowest** row of HM Treasury's comparison − its OBR row | −0.5  | 0      | 0    |
-| A pessimistic analyst              | The **Highest** row − its OBR row                            | +0.25 | 0      | +1.0 |
+| Card                               | Rule                                              | rates | growth | RPI  | Headroom |
+| ---------------------------------- | ------------------------------------------------- | ----- | ------ | ---- | -------- |
+| Keep the March baseline            | The OBR's own forecast, unchanged                 | 0     | 0      | 0    | £23.60bn |
+| Your Chief Economic Adviser's view | Latest reading − OBR (the `gap` rule)             | +0.75 | 0      | +0.5 | £6.85bn  |
+| An optimistic analyst              | The least harmful published figure on each slider | −0.5  | 0      | 0    | £31.10bn |
+| A pessimistic analyst              | The most harmful                                  | +0.75 | 0      | +1.0 | £1.35bn  |
+
+The two analysts are not bound to one row of one table. For each slider the candidates are the
+OBR's own assumption, the adviser's reading, and the lowest and highest published rows of the
+comparison; the optimist takes the kindest of them and the pessimist the cruellest. **Which
+direction is harmful is derived, not authored:** each macro lever names a `costing.sensitivityId`,
+and the sign of that sensitivity's `effectOnPsnbGbpm` says whether turning the slider up raises
+borrowing (`psnbDirection` in `packages/engine/src/costing/sensitivity.ts`; `validateVintage`
+rejects a table whose years disagree in sign).
+
+Because the adviser's own setting and the OBR's default sit in that pool, the cards come out
+ordered by construction: the pessimist can never leave more headroom than the baseline or the
+adviser, and the optimist never less. An earlier version bound each analyst to a single published
+row and shipped a pessimist leaving £8.8bn against the adviser's £6.85bn, because the comparison's
+gloomiest Bank Rate figure is milder than today's gilt yield. ADR-0010 records why explaining that
+on the card was the wrong fix.
 
 The two analysts read _Forecasts for the UK economy: a comparison of independent forecasts_
 (HM Treasury, August 2026), which prints a Highest row, a Lowest row and the OBR's own row in
@@ -313,11 +328,12 @@ are not used here.
 
 Three things about those figures are stated on the cards rather than smoothed over.
 
-1. **The pessimist's rates sit below the adviser's.** The rates slider moves Bank Rate and gilt
-   yields together. The adviser reads the 10-year gilt yield, because gilt yields drive debt
-   interest; the comparison publishes no gilt yield at all, so the analysts' range is a Bank Rate
-   range. Each published range therefore carries its own comparator row (`alternatives.against`)
-   and a note naming the basis, and the schema makes both mandatory.
+1. **The gloomiest published figure for interest rates is not a forecast.** The rates slider moves
+   Bank Rate and gilt yields together. The adviser reads the 10-year gilt yield, because gilt
+   yields drive debt interest; the comparison publishes no gilt yield at all, and its Bank Rate
+   range tops out milder than the market, so the pessimistic card takes today's 5.35% reading.
+   Each published range therefore carries its own comparator row (`alternatives.against`) and a
+   note naming the basis, and the schema makes both mandatory.
 2. **There is no optimistic case on RPI.** The lowest published path is 0.18 points below the
    OBR's on average, which rounds to nothing at the slider's half-point step: not one forecaster
    in the comparison sees RPI materially below the OBR, and on the quarterly basis the lowest
@@ -328,13 +344,12 @@ Three things about those figures are stated on the cards rather than smoothed ov
    forbids; its short-term nominal GDP range covers 2026 and 2027 only and exceeds the slider's
    whole range several times over.
 
-A Highest or Lowest row is a per-cell maximum, so no single institution holds a card's whole
-view; the cards say "the highest figure any of the sixteen publishes", never "an analyst
-forecasts". Every card shows the headroom it would leave, which is how the step teaches that a
-Chancellor can buy headroom by picking the rosier forecast: £23.6bn on the March baseline,
-£31.1bn on the optimistic card, £8.8bn on the pessimistic one and £6.8bn on the adviser's.
-The three sliders remain behind a disclosure, with their readings and provenance drawers intact;
-a permalink whose settings match no card shows _your own figures_.
+A highest or lowest row is a per-cell extreme, so no single institution holds a card's whole view,
+and the pessimist's rates figure is a market reading rather than a forecast at all; the cards say
+so rather than claiming an analyst forecasts any of it. Every card shows the headroom it would
+leave, which is how the step teaches that a Chancellor can buy headroom by picking the rosier
+forecast. The three sliders remain behind a disclosure, with their readings and provenance drawers
+intact; a permalink whose settings match no card shows _your own figures_.
 
 ### The scorecard
 

@@ -49,7 +49,7 @@
             "2030": 3.89
           }
         },
-        "optimistic": {
+        "lowest": {
           "label": "Lowest of the forecasts in the comparison",
           "series": {
             "2026": 3.4,
@@ -59,7 +59,7 @@
             "2030": 2.59
           }
         },
-        "pessimistic": {
+        "highest": {
           "label": "Highest of the forecasts in the comparison",
           "series": {
             "2026": 3.9,
@@ -239,7 +239,7 @@
             "2030": 2.3
           }
         },
-        "optimistic": {
+        "lowest": {
           "label": "Lowest of the forecasts in the comparison",
           "series": {
             "2026": 2.8,
@@ -249,7 +249,7 @@
             "2030": 2.3
           }
         },
-        "pessimistic": {
+        "highest": {
           "label": "Highest of the forecasts in the comparison",
           "series": {
             "2026": 4.7,
@@ -333,7 +333,7 @@
           ]
         },
         {
-          "text": "Six months of market moves and forecaster revisions sit outside it. The other three cards each apply one published rule to close part of that gap.",
+          "text": "Six months of market moves and forecaster revisions sit outside it. The other three cards each apply one stated rule to published figures to close part of that gap.",
           "sources": []
         }
       ]
@@ -381,10 +381,10 @@
     {
       "kind": "optimistic",
       "title": "An optimistic analyst",
-      "headline": "The lowest figure any of the sixteen forecasters in the Treasury’s comparison publishes, table by table.",
+      "headline": "The kindest figure published anywhere for each assumption — whoever published it, and whichever table it sits in.",
       "rationale": [
         {
-          "text": "Rates do the work: the lowest Bank Rate path in the comparison runs about 0.6 points a year below the OBR’s, falling to 2.59% by 2030 where the OBR has 3.89%. Borrowing gets cheaper than the March forecast assumed.",
+          "text": "Rates do the work. The lowest Bank Rate path in the Treasury’s comparison runs about 0.6 points a year below the OBR’s, falling to 2.59% by 2030 where the OBR has 3.89%. Borrowing gets cheaper than the March forecast assumed, and nothing else published is kinder.",
           "sources": [
             {
               "sourceId": "hmt-forecasts-2026-08",
@@ -394,7 +394,7 @@
           ]
         },
         {
-          "text": "But there is no optimistic case on inflation. The lowest published RPI path is within 0.2 points of the OBR’s, so the rule rounds it to nothing: not one forecaster in the comparison sees RPI materially below the OBR. On the quarterly basis the lowest 2026 forecast is above the OBR’s, not below.",
+          "text": "But there is no optimistic case on inflation. The lowest published RPI path is within 0.2 points of the OBR’s, so the rule rounds it to nothing: not one forecaster in the comparison sees RPI materially below the OBR, and on the quarterly basis the lowest 2026 forecast sits above it, not below.",
           "sources": [
             {
               "sourceId": "hmt-forecasts-2026-08",
@@ -409,7 +409,7 @@
           ]
         },
         {
-          "text": "Growth stays on the OBR’s path. The comparison publishes no medium-term range for nominal GDP, and adding its highest real growth to its highest GDP deflator would splice together different institutions into a path nobody published.",
+          "text": "Growth stays on the OBR’s path, because there is no published figure to move it to. The comparison gives no medium-term range for nominal GDP, and adding its highest real growth to its highest GDP deflator would splice together different institutions into a path nobody published.",
           "sources": [
             {
               "sourceId": "hmt-forecasts-2026-08",
@@ -423,10 +423,23 @@
     {
       "kind": "pessimistic",
       "title": "A pessimistic analyst",
-      "headline": "The highest any of the sixteen publishes, table by table. An envelope, not one forecaster’s view.",
+      "headline": "The cruellest figure published anywhere for each assumption. An envelope, not one forecaster’s view.",
       "rationale": [
         {
-          "text": "Inflation does the damage. The highest RPI path runs more than a point a year above the OBR’s, and the OBR’s sensitivity puts a point on RPI at about £11 billion of extra borrowing by 2030-31, mostly through index-linked gilts.",
+          "text": "The gloomiest figure for interest rates is not a forecast at all. None of the sixteen forecasters in the comparison publishes a gilt yield — their range is for Bank Rate, and its top is milder than the market. So this card takes today’s 10-year gilt yield, 5.35% against the 4.5% the OBR assumed, the same figure your adviser reads. Gilt yields, not Bank Rate, are what drive debt interest.",
+          "sources": [
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            },
+            {
+              "sourceId": "hmt-forecasts-2026-08",
+              "table": "Table M4",
+              "page": "20"
+            }
+          ]
+        },
+        {
+          "text": "Inflation is where this parts company with your adviser. The highest published RPI path runs more than a point a year above the OBR’s, against the half point the average of forecasts gives, and the OBR’s own sensitivity puts a point on RPI at about £11 billion of extra borrowing by 2030-31, mostly through index-linked gilts.",
           "sources": [
             {
               "sourceId": "hmt-forecasts-2026-08",
@@ -440,20 +453,7 @@
           ]
         },
         {
-          "text": "Interest rates land below your adviser’s figure here, not above, and that is the point worth taking. The forecasters’ range is for Bank Rate; your adviser is reading the 10-year gilt yield, which none of them forecasts and which is what actually drives debt interest.",
-          "sources": [
-            {
-              "sourceId": "hmt-forecasts-2026-08",
-              "table": "Table M4",
-              "page": "20"
-            },
-            {
-              "sourceId": "boe-iadb-gilt-10y"
-            }
-          ]
-        },
-        {
-          "text": "Growth stays on the OBR’s path. The comparison publishes no medium-term range for nominal GDP, and adding its highest real growth to its highest GDP deflator would splice together different institutions into a path nobody published.",
+          "text": "Growth stays on the OBR’s path, because there is no published figure to move it to. The comparison gives no medium-term range for nominal GDP, and adding its highest real growth to its highest GDP deflator would splice together different institutions into a path nobody published.",
           "sources": [
             {
               "sourceId": "hmt-forecasts-2026-08",
@@ -463,7 +463,7 @@
           ]
         },
         {
-          "text": "Each cell in the highest row can come from a different institution, so no one analyst holds this whole view. It is the outer edge of what was published, which is why it is a card and not a forecast.",
+          "text": "No single analyst holds this whole view. Each cell in the comparison’s highest row can come from a different institution, and the rates figure is a market reading rather than a forecast. It is the outer edge of what has been published, which is why it is a card and not a forecast.",
           "sources": [
             {
               "sourceId": "hmt-forecasts-2026-08",

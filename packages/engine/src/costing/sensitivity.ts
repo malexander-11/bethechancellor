@@ -70,3 +70,40 @@ export function costSensitivityLever(
     warnings,
   };
 }
+
+/**
+ * Which way a macro slider moves borrowing: +1 if turning it up raises PSNB, −1 if it lowers it.
+ *
+ * Derived from the sign of the OBR's own sensitivity table, never authored. The vintage's
+ * convention is that `effectOnPsnbGbpm` is the effect of a `+perUnit` change and positive means
+ * more borrowing, so `Math.sign` over its values is the whole answer.
+ *
+ * Read the increase table only. `rpi1pp` carries an `effectOnPsnbGbpmDecrease` whose values are
+ * negative because they state the effect *of the decrease*; taking the sign from there would
+ * invert the answer. The asymmetry is one of magnitude (£11bn up against £10bn down), not
+ * direction.
+ */
+export function psnbDirection(vintage: Vintage, sensitivityId: string): 1 | -1 {
+  const sens = vintage.sensitivities.find((s) => s.id === sensitivityId);
+  if (!sens) {
+    throw new EngineError(`vintage ${vintage.id} has no sensitivity "${sensitivityId}"`);
+  }
+  const signs = new Set(
+    Object.values(sens.effectOnPsnbGbpm)
+      .filter((v) => v !== 0)
+      .map((v) => Math.sign(v)),
+  );
+  if (signs.size !== 1) {
+    // A table that helps in one year and hurts in another has no single direction, so a caller
+    // asking "is up good or bad" is asking a question the data cannot answer.
+    throw new EngineError(
+      `sensitivity ${sensitivityId} does not move borrowing one way: ${signs.size === 0 ? 'every year is zero' : 'its years disagree in sign'}`,
+    );
+  }
+  return signs.has(1) ? 1 : -1;
+}
+
+/** The setting that hurts the public finances more, given which way this slider cuts. */
+export function moreHarmful(direction: 1 | -1, a: number, b: number): number {
+  return direction * a >= direction * b ? a : b;
+}

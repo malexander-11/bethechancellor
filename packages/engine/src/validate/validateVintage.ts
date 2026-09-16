@@ -120,6 +120,16 @@ export function validateVintage(v: Vintage): string[] {
       if (!allYears.includes(y))
         problems.push(`sensitivity ${s.id} has effect for ${y}, outside the vintage`);
     }
+    // A slider has to move borrowing one way, or "which of these settings is the gloomier" has no
+    // answer and the assumption scenarios cannot be derived.
+    const signs = new Set(
+      Object.values(s.effectOnPsnbGbpm)
+        .filter((v) => v !== 0)
+        .map((v) => Math.sign(v)),
+    );
+    if (signs.size > 1) {
+      problems.push(`sensitivity ${s.id} changes sign across years, so it has no direction`);
+    }
   }
   return problems;
 }

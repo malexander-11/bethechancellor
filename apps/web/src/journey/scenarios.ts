@@ -1,9 +1,11 @@
-import type {
-  ContextFile,
-  ContextReading,
-  ContextScenario,
-  Lever,
-  ScenarioKind,
+import {
+  psnbDirection,
+  type ContextFile,
+  type ContextReading,
+  type ContextScenario,
+  type Lever,
+  type ScenarioKind,
+  type Vintage,
 } from '@btc/engine';
 import { formatReading, meanSeriesGap, suggestSetting, toSliderValue, wouldClamp } from './suggest';
 import { pick, sameValues } from './values';
@@ -42,56 +44,99 @@ function listSeries(series: Record<string, number>, unit: ContextReading['unit']
     .join(', ');
 }
 
+/** Every setting for one slider that the committed data can justify, with its workings. */
+function candidatesFor(reading: ContextReading, lever: Lever): ScenarioSetting[] {
+  const out: ScenarioSetting[] = [
+    {
+      leverCode: lever.code,
+      value: lever.control.default,
+      workings: 'The OBR’s own March assumption, left as it is.',
+    },
+  ];
+  const adviser = suggestSetting(reading, lever);
+  if (adviser) {
+    out.push({ leverCode: lever.code, value: adviser.value, workings: adviser.rationale });
+  }
+  const alt = reading.alternatives;
+  if (alt) {
+    for (const row of [alt.lowest, alt.highest]) {
+      const gap = meanSeriesGap(row.series, alt.against.series);
+      if (gap === null) continue;
+      out.push({
+        leverCode: lever.code,
+        value: toSliderValue(lever, gap),
+        workings: `${row.label}: ${listSeries(row.series, reading.unit)}, against ${alt.against.label} of ${listSeries(alt.against.series, reading.unit)}. An average gap of ${gap.toFixed(2)} points, rounded to the slider’s ${lever.control.step} step${wouldClamp(lever, gap) ? ' and clamped to its range' : ''}.`,
+        note: alt.note,
+      });
+    }
+  }
+  return out;
+}
+
 /**
- * One slider under one card. The optimistic and pessimistic cards read the highest and lowest
- * published rows; where a reading carries no range, the slider stays on the OBR's path and the
- * card says so rather than guessing.
+ * One slider under one card.
+ *
+ * The two analysts do not read one row of one table. They pick, out of every published figure this
+ * slider has, the one that is kindest or cruellest to the public finances — and the OBR's own
+ * assumption and the adviser's reading are both in that pool. That is what makes the cards come
+ * out ordered: the pessimist is by construction at least as harmful as the baseline and at least
+ * as harmful as the adviser on every slider, so it can never leave more headroom than either.
+ *
+ * Binding the analysts to the forecast comparison alone, as this first did, produced a pessimist
+ * cheerier than the player's own adviser, because the comparison's gloomiest interest-rate figure
+ * is milder than today's gilt yield. See ADR-0010.
+ *
+ * Which direction is harmful comes from the sign of the OBR's own sensitivity for the lever, so
+ * nothing about it is authored here.
  */
 function settingFor(
   reading: ContextReading,
   lever: Lever,
   kind: ScenarioKind,
+  direction: 1 | -1,
 ): ScenarioSetting | null {
-  if (kind === 'baseline') {
-    return {
-      leverCode: lever.code,
-      value: lever.control.default,
-      workings: 'The OBR’s own March assumption, left as it is.',
-    };
-  }
+  const candidates = candidatesFor(reading, lever);
+  if (kind === 'baseline') return candidates[0] ?? null;
   if (kind === 'adviser') {
     const s = suggestSetting(reading, lever);
     return s ? { leverCode: lever.code, value: s.value, workings: s.rationale } : null;
   }
-  const alt = reading.alternatives;
-  if (!alt) {
+  // `direction * value` rises with harm, so the gloomiest card is the largest and the sunniest the
+  // smallest. Where a slider has no published range, every candidate is the OBR's path or the
+  // adviser's, and the cards say so rather than guessing at one.
+  const worst = kind === 'pessimistic';
+  let best = candidates[0];
+  if (!best) return null;
+  for (const c of candidates) {
+    const better = worst
+      ? direction * c.value > direction * best.value
+      : direction * c.value < direction * best.value;
+    if (better) best = c;
+  }
+  if (best.value === lever.control.default && !reading.alternatives) {
     return {
-      leverCode: lever.code,
-      value: lever.control.default,
+      ...best,
       workings:
         'No published range in the comparison reaches this slider, so it stays on the OBR’s path.',
     };
   }
-  const row = alt[kind];
-  const gap = meanSeriesGap(row.series, alt.against.series);
-  if (gap === null) return null;
-  return {
-    leverCode: lever.code,
-    value: toSliderValue(lever, gap),
-    workings: `${row.label}: ${listSeries(row.series, reading.unit)}, against ${alt.against.label} of ${listSeries(alt.against.series, reading.unit)}. An average gap of ${gap.toFixed(2)} points, rounded to the slider’s ${lever.control.step} step${wouldClamp(lever, gap) ? ' and clamped to its range' : ''}.`,
-    note: alt.note,
-  };
+  return best;
 }
 
 /** The cards as authored, each with the settings its rule produces. */
-export function scenarioCards(context: ContextFile, levers: readonly Lever[]): ScenarioCard[] {
+export function scenarioCards(
+  context: ContextFile,
+  levers: readonly Lever[],
+  vintage: Vintage,
+): ScenarioCard[] {
   return (context.scenarios ?? []).map((scenario) => {
     const settings: ScenarioSetting[] = [];
     for (const reading of context.readings) {
       if (!reading.leverCode) continue;
       const lever = levers.find((l) => l.code === reading.leverCode);
-      if (!lever) continue;
-      const setting = settingFor(reading, lever, scenario.kind);
+      if (!lever || lever.costing.kind !== 'sensitivity') continue;
+      const direction = psnbDirection(vintage, lever.costing.sensitivityId);
+      const setting = settingFor(reading, lever, scenario.kind, direction);
       if (setting) settings.push(setting);
     }
     const values = Object.fromEntries(settings.map((s) => [s.leverCode, s.value]));

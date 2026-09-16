@@ -40,10 +40,14 @@ const alternativesSchema = z.strictObject({
   source: sourceRefSchema,
   note: z.string().min(1),
   against: rangeRowSchema,
-  /** The lowest figure any forecaster in the comparison publishes, year by year. */
-  optimistic: rangeRowSchema,
-  /** The highest. Per-cell maxima: an envelope, not any one forecaster's view. */
-  pessimistic: rangeRowSchema,
+  /**
+   * The lowest and highest figures any forecaster in the comparison publishes, year by year.
+   * Named for what they are rather than for the cards they feed: which of them is the optimistic
+   * case depends on which way the slider moves borrowing, and for a growth reading that is the
+   * other way round. Per-cell extremes, so each is an envelope rather than one forecaster's view.
+   */
+  lowest: rangeRowSchema,
+  highest: rangeRowSchema,
 });
 
 export const contextReadingSchema = z.strictObject({
