@@ -9,6 +9,7 @@ import {
   parseMinisters,
   parseInterventions,
   parseCompromise,
+  parseRabbit,
   parseHouseholds,
   parseLever,
   parsePresets,
@@ -58,6 +59,7 @@ export function loadDataset(
     readJson(path.join(DATA_DIR, 'journey', 'interventions.json')),
   );
   const compromise = parseCompromise(readJson(path.join(DATA_DIR, 'journey', 'compromise.json')));
+  const rabbit = parseRabbit(readJson(path.join(DATA_DIR, 'journey', 'rabbit.json')));
   const vintage = vintages.find((v) => v.id === defaultVintageId);
   const rules = ruleSets.find((r) => r.id === defaultRulesId);
   if (!vintage) throw new Error(`default vintage ${defaultVintageId} not found`);
@@ -78,6 +80,7 @@ export function loadDataset(
     ministers,
     interventions,
     compromise,
+    rabbit,
     vintages,
     ruleSets,
   };

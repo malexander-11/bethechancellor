@@ -9,6 +9,7 @@ import {
   ministersFileSchema,
   interventionsFileSchema,
   compromiseFileSchema,
+  rabbitFileSchema,
   reactionsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -33,6 +34,7 @@ import type {
   MinistersFile,
   InterventionsFile,
   CompromiseFile,
+  RabbitFile,
   ReactionsFile,
   ContextFile,
   HmrcExtract,
@@ -162,6 +164,10 @@ export function parseCompromise(json: unknown): CompromiseFile {
   return parseWith(compromiseFileSchema, json, 'the compromises');
 }
 
+export function parseRabbit(json: unknown): RabbitFile {
+  return parseWith(rabbitFileSchema, json, 'the rabbit');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -179,6 +185,7 @@ export interface Dataset {
   ministers?: MinistersFile;
   interventions?: InterventionsFile;
   compromise?: CompromiseFile;
+  rabbit?: RabbitFile;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -211,6 +218,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.ministers ?? null,
       ds.interventions ?? null,
       ds.compromise ?? null,
+      ds.rabbit ?? null,
     ],
     referenced,
   );
@@ -492,6 +500,26 @@ export function validateDataset(ds: Dataset): string[] {
         problems.push(
           `minister for ${minister.code} has nothing to say at a rise the slider allows`,
         );
+      }
+    }
+  }
+  if (ds.rabbit) {
+    // A rabbit is a lever setting; one that names a lever the desk lacks, or a setting the slider
+    // cannot reach, could never be pulled out of the hat.
+    const adviserIds = new Set((ds.advisers?.advisers ?? []).map((a) => a.id));
+    for (const spec of [ds.rabbit.intro, ds.rabbit.strengthen, ds.rabbit.keep]) {
+      if (adviserIds.size > 0 && !adviserIds.has(spec.adviser)) {
+        problems.push(`the rabbit names unknown adviser ${spec.adviser}`);
+      }
+    }
+    for (const option of ds.rabbit.options) {
+      const lever = ds.levers.find((l) => l.code === option.code);
+      if (!lever) {
+        problems.push(`rabbit ${option.id} names unknown lever "${option.code}"`);
+      } else if (option.value < lever.control.min || option.value > lever.control.max) {
+        problems.push(`rabbit ${option.id} sets ${option.value}, outside the lever's range`);
+      } else if (option.value === lever.control.default) {
+        problems.push(`rabbit ${option.id} leaves the lever where it is`);
       }
     }
   }

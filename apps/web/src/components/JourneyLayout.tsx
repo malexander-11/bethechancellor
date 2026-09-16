@@ -5,7 +5,7 @@ import { dateFor } from '../data';
 import { StepLink } from '../journey/links';
 
 const STEPS: Array<{
-  id: 'start' | 'outlook' | 'pm' | 'budget' | 'forecast' | 'compromise' | 'budget-day';
+  id: 'start' | 'outlook' | 'pm' | 'budget' | 'forecast' | 'compromise' | 'rabbit' | 'budget-day';
   label: string;
   to: string;
 }> = [
@@ -15,26 +15,23 @@ const STEPS: Array<{
   { id: 'budget', label: '3 · The desk', to: '/budget/taxes' },
   { id: 'forecast', label: '4 · The forecast', to: '/forecast' },
   { id: 'compromise', label: '5 · Compromises', to: '/compromise' },
+  { id: 'rabbit', label: '6 · The rabbit', to: '/rabbit' },
   { id: 'budget-day', label: '7 · Budget day', to: '/budget-day' },
 ];
 
-/**
- * Which tab a step lights up. The three folders of the desk are one stage; the rabbit lands with
- * its page in the next commit, and until then its step id folds into Budget day.
- */
+/** Which tab a step lights up. The three folders of the desk are one stage. */
 function stepGroup(step: JourneyStep): (typeof STEPS)[number]['id'] {
   switch (step) {
     case 'start':
     case 'pm':
     case 'forecast':
     case 'compromise':
+    case 'rabbit':
     case 'budget-day':
       return step;
     case 'outlook':
     case 'assumptions':
       return 'outlook';
-    case 'rabbit':
-      return 'budget-day';
     default:
       return 'budget';
   }

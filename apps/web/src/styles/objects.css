@@ -1230,3 +1230,7 @@
 .route--breach {
   border-left: 4px solid var(--stamp-bad);
 }
+
+.choice--taken {
+  opacity: 0.6;
+}

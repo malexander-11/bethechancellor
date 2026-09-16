@@ -66,6 +66,8 @@ import type {
   interventionSchema,
   interventionWhenSchema,
   compromiseFileSchema,
+  rabbitFileSchema,
+  rabbitOptionSchema,
 } from '../schema/game.schema.js';
 import type {
   growthHeadSchema,
@@ -126,6 +128,8 @@ export type InterventionsFile = z.infer<typeof interventionsFileSchema>;
 export type InterventionSpec = z.infer<typeof interventionSchema>;
 export type InterventionWhen = z.infer<typeof interventionWhenSchema>;
 export type CompromiseFile = z.infer<typeof compromiseFileSchema>;
+export type RabbitFile = z.infer<typeof rabbitFileSchema>;
+export type RabbitOption = z.infer<typeof rabbitOptionSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

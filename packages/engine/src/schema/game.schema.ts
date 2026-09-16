@@ -326,3 +326,38 @@ export const compromiseFileSchema = z.strictObject({
     }),
   }),
 });
+
+/* ------------------------------------------------------------- the rabbit */
+
+/**
+ * A prepared announcement for the speech (stage 6): a lever and the setting that is the
+ * announcement, with the Political Adviser's line on how it lands. Cost and headroom after are
+ * read from the engine on the page; nothing here carries a number.
+ */
+export const rabbitOptionSchema = z.strictObject({
+  id: slug,
+  title: z.string().min(1),
+  code: z.string().min(1),
+  value: z.number(),
+  line: simulatedLineSchema,
+});
+
+export const rabbitFileSchema = z
+  .strictObject({
+    schemaVersion: z.literal(1),
+    /** The Permanent Secretary sets the scene: what a rabbit is for, and what it costs. */
+    intro: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    options: z.array(rabbitOptionSchema).min(2),
+    /** Raise a priority one notch beyond what was agreed. */
+    strengthen: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    /** No rabbit: the headroom is the announcement. */
+    keep: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+  })
+  .superRefine((file, ctx) => {
+    const ids = new Set<string>();
+    file.options.forEach((o, i) => {
+      if (ids.has(o.id))
+        ctx.addIssue({ code: 'custom', message: `duplicate option ${o.id}`, path: ['options', i] });
+      ids.add(o.id);
+    });
+  });

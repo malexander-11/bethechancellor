@@ -1,8 +1,6 @@
 import {
   ambitionStatus,
-  computeOutcome,
   delayOptions,
-  drawForecast,
   formatGbpBn,
   narrowedValue,
   promisesInForce,
@@ -20,8 +18,9 @@ import { LabelBadge } from '../components/LabelBadge';
 import { formatLeverValue } from '../components/LeverControl';
 import { MinisterLine } from '../components/MinisterLine';
 import { Scorecard } from '../components/Scorecard';
-import { adviserById, compromise, context, draws, levers, pm, rules, vintage } from '../data';
+import { adviserById, compromise, context, levers, pm, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
+import { useHeadroomOf } from '../journey/headroom';
 import { StepLink } from '../journey/links';
 import { macroCodesOf } from '../journey/scenarios';
 import { IMPLEMENTATION_YEAR, useBudget } from '../state/budget';
@@ -44,31 +43,8 @@ export function CompromisePage() {
   const { search } = useLocation();
   const game = state.game;
   const [ask, setAsk] = useState<Ask>(null);
-  const seed = game?.seed ?? 0;
-  const revisions = useMemo(
-    () => (seed > 0 ? drawForecast(seed, draws, context, levers, vintage).revisions : {}),
-    [seed],
-  );
   const delays = game?.delays ?? {};
-  const headroomOf = useMemo(
-    () => (values: Record<string, number>, overrideDelays?: Record<string, string>) => {
-      const o = computeOutcome({
-        vintage,
-        rules,
-        levers,
-        settings: {
-          leverValues: values,
-          implementationYear: IMPLEMENTATION_YEAR,
-          debtInterestFeedback: state.debtInterestFeedback,
-          assessAsOf: state.assessAsOf,
-          implementationYearByCode: overrideDelays ?? delays,
-          ...(Object.keys(revisions).length > 0 ? { revisions } : {}),
-        },
-      });
-      return o.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;
-    },
-    [state.debtInterestFeedback, state.assessAsOf, delays, revisions],
-  );
+  const headroomOf = useHeadroomOf();
   const promises = useMemo(() => (game ? promisesInForce(game, pm) : []), [game]);
   const revenue = useMemo(
     () => revenueSuggestions(levers, state.leverValues, promises, headroomOf, 3),
@@ -566,11 +542,11 @@ export function CompromisePage() {
 
           <p className="hero-start__actions">
             <StepLink
-              to="/budget-day"
+              to="/rabbit"
               className="btn btn--primary"
               onClick={() => spend({ reached: Math.max(game.reached, stageIndex('rabbit')) })}
             >
-              Deliver it
+              Something for the speech
             </StepLink>
             <StepLink to="/forecast" className="btn">
               Back to the forecast

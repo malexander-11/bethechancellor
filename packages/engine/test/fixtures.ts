@@ -11,6 +11,7 @@ import {
   parseMinisters,
   parseInterventions,
   parseCompromise,
+  parseRabbit,
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
@@ -66,6 +67,7 @@ export function loadDataset(): Required<Dataset> {
     ministers: parseMinisters(readJson('journey/ministers.json')),
     interventions: parseInterventions(readJson('journey/interventions.json')),
     compromise: parseCompromise(readJson('journey/compromise.json')),
+    rabbit: parseRabbit(readJson('journey/rabbit.json')),
   };
 }
 

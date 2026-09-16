@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "intro": {
+    "adviser": "permanent-secretary",
+    "line": {
+      "text": "Every Chancellor wants one thing in the speech nobody saw coming. Each of these is already costed on the desk; the cost is the headroom it leaves you on the morning after. Keeping the headroom is an announcement too, and the markets hear it.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "3.4"
+        }
+      ],
+      "badge": "simulated"
+    }
+  },
+  "options": [
+    {
+      "id": "penny-off",
+      "title": "A penny off the basic rate of income tax",
+      "code": "itbr",
+      "value": -1,
+      "line": {
+        "text": "The classic. It reaches every basic-rate taxpayer and, on HMRC’s own figures, costs more than most of your package put together. Everyone in the chamber knows the trick and everyone cheers anyway.",
+        "sources": [
+          {
+            "sourceId": "hmrc-trr-2025-06"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "meals",
+      "title": "Free school meals for every child",
+      "code": "ufsm",
+      "value": 1,
+      "line": {
+        "text": "Visible in every primary school by next September, and the means test goes with it. The Department for Education already funds infant meals; this is the rest of the school.",
+        "sources": [
+          {
+            "sourceId": "dfe-uifsm-grant-2026-27"
+          },
+          {
+            "sourceId": "dfe-fsm-expansion-2026-27"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "fuel-cut",
+      "title": "Fuel duty cut by 5%",
+      "code": "fuel",
+      "value": -5,
+      "line": {
+        "text": "Fuel duty has not risen since 2011-12 and the last Budget kept the 5p cut going. A further cut is cheap per driver, dear in total, and the motoring lobby will bank it and ask again.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "3.2"
+          },
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 3"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "retraining",
+      "title": "An AI retraining programme",
+      "code": "airet",
+      "value": 1,
+      "line": {
+        "text": "A billion a year sounds like a plan for the future and costs less than a penny on anything. It is the kind of announcement that reads well and is hard to see on the ground.",
+        "sources": [],
+        "badge": "simulated"
+      }
+    }
+  ],
+  "strengthen": {
+    "adviser": "director-of-public-spending",
+    "line": {
+      "text": "Going one notch beyond what you agreed with the Prime Minister turns a promise kept into a promise exceeded. Ministers notice the difference; so does the department that has to spend it.",
+      "sources": [],
+      "badge": "simulated"
+    }
+  },
+  "keep": {
+    "adviser": "permanent-secretary",
+    "line": {
+      "text": "No rabbit. The headroom is the announcement, and the bond market is the audience that hears it. Budget 2025 made a virtue of more than doubling the margin; you can make the same speech.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-speech"
+        }
+      ],
+      "badge": "simulated"
+    }
+  }
+}

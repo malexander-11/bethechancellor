@@ -25,6 +25,7 @@ export {
   parseMinisters,
   parseInterventions,
   parseCompromise,
+  parseRabbit,
   parseVintage,
   validateDataset,
   type Dataset,

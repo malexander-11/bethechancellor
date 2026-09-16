@@ -5,7 +5,7 @@
       "id": "permanent-secretary",
       "role": "Permanent Secretary to the Treasury",
       "remit": "Runs the Budget process, explains the fiscal rules and the Office for Budget Responsibility's role, and delivers the verdict on Budget day.",
-      "steps": ["start", "recommendations", "budget-day", "forecast", "compromise"]
+      "steps": ["start", "recommendations", "budget-day", "forecast", "compromise", "rabbit"]
     },
     {
       "id": "chief-economic-adviser",
@@ -23,13 +23,21 @@
       "id": "director-of-public-spending",
       "role": "Director of Public Spending",
       "remit": "Briefs on departmental settlements, investment and welfare, and the pressures the OBR has flagged.",
-      "steps": ["spending", "budget-day", "compromise"]
+      "steps": ["spending", "budget-day", "compromise", "rabbit"]
     },
     {
       "id": "political-adviser",
       "role": "Political Adviser",
       "remit": "Flags what will be contested: who pays, what has not moved for years, what reaches Scotland, Wales and Northern Ireland, and what your predecessor decided last November.",
-      "steps": ["taxes", "spending", "recommendations", "budget-day", "policies", "compromise"]
+      "steps": [
+        "taxes",
+        "spending",
+        "recommendations",
+        "budget-day",
+        "policies",
+        "compromise",
+        "rabbit"
+      ]
     }
   ]
 }

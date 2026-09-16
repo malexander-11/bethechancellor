@@ -9,6 +9,7 @@ import { ForecastPage } from './pages/Forecast';
 import { MethodologyPage } from './pages/Methodology';
 import { OutlookPage } from './pages/Outlook';
 import { PMPage } from './pages/PM';
+import { RabbitPage } from './pages/Rabbit';
 import { StartPage } from './pages/Start';
 import { Disclaimer } from './components/Disclaimer';
 
@@ -57,6 +58,7 @@ export function App() {
             />
             <Route path="/forecast" element={<ForecastPage />} />
             <Route path="/compromise" element={<CompromisePage />} />
+            <Route path="/rabbit" element={<RabbitPage />} />
             <Route path="/budget-day" element={<BudgetDayPage />} />
             <Route path="/b" element={<RedirectKeepingQuery to="/budget/taxes" />} />
             <Route path="/methodology" element={<MethodologyPage />} />
