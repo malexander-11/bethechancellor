@@ -1,0 +1,375 @@
+/*
+ * The things on the desk.
+ *
+ * Every object here is drawn with gradients, clip-paths and borders. There are no image files
+ * and no webfonts: the look costs bytes in this stylesheet and nothing in the bundle.
+ */
+
+/* ---------------------------------------------------------------- the desk */
+
+.desk {
+  position: relative;
+  background-color: var(--desk);
+  background-image: var(--desk-grain);
+}
+
+/* The light in the room falls off towards the edges of the leather. */
+.desk::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 0%, transparent 40%, rgba(0, 0, 0, 0.35) 100%);
+  z-index: 0;
+}
+
+.desk > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------------------------------------------------- paper stock */
+
+.doc {
+  position: relative;
+  background-color: var(--paper);
+  background-image: var(--paper-grain);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+}
+
+/* The ledger margin: one hairline where a clerk would have ruled it. */
+.doc--ruled {
+  padding-left: 58px;
+}
+
+.doc--ruled::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 44px;
+  width: 1px;
+  background: var(--ink-margin);
+}
+
+@media (max-width: 560px) {
+  .doc--ruled {
+    padding-left: 20px;
+  }
+
+  .doc--ruled::before {
+    display: none;
+  }
+}
+
+/* Typed at the top of every official sheet. */
+.dateline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-family: var(--font-label);
+  font-size: 0.66rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dateline__rule {
+  flex: 1 1 40px;
+  align-self: center;
+  height: 1px;
+  min-width: 20px;
+  background: var(--border);
+}
+
+/* ----------------------------------------------------------------- folders */
+
+.folders {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  padding: 0 0 1px;
+  margin: 0;
+  list-style: none;
+}
+
+.folder-tab {
+  position: relative;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 108px;
+  max-width: 220px;
+  padding: 9px 16px 11px;
+  border: 1px solid var(--manila-edge);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, var(--manila) 0%, var(--manila-edge) 100%);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  /* The tab leans, the way a card index does. */
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 100%, 0 100%);
+  transition:
+    transform var(--t-fast) var(--ease),
+    filter var(--t-fast) var(--ease);
+}
+
+.folder-tab:hover {
+  filter: brightness(1.05);
+}
+
+.folder-tab[aria-selected='true'] {
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper) 100%);
+  border-color: var(--border);
+  transform: translateY(-2px);
+  z-index: 2;
+}
+
+.folder-tab__name {
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
+.folder-tab__count {
+  font-family: var(--font-label);
+  font-size: 0.64rem;
+  color: var(--ink-2);
+}
+
+/* The drawer the open folder sits in. */
+.drawer {
+  background-color: var(--paper);
+  background-image: var(--paper-grain);
+  border: 1px solid var(--border);
+  border-radius: 0 var(--radius) var(--radius) var(--radius);
+  box-shadow: var(--shadow-lift);
+  padding: 18px 20px 20px;
+  margin-top: -1px;
+}
+
+/* Punched for a treasury tag, two holes down the left edge. */
+.drawer--punched {
+  padding-left: 40px;
+  background-image:
+    radial-gradient(circle 5px at 18px 40px, var(--desk-deep) 0 5px, transparent 5px),
+    radial-gradient(circle 5px at 18px 96px, var(--desk-deep) 0 5px, transparent 5px),
+    var(--paper-grain);
+}
+
+@media (max-width: 700px) {
+  .drawer--punched {
+    padding-left: 20px;
+    background-image: var(--paper-grain);
+  }
+}
+
+/* The little brass-eyed label you tie to a file you have touched. */
+.tag--treasury {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 7px 1px 5px;
+  border: 1px solid var(--tag-brass);
+  border-radius: 2px 7px 7px 2px;
+  background: color-mix(in srgb, var(--tag-brass) 16%, transparent);
+  color: var(--tag-brass);
+  font-family: var(--font-label);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(-1.2deg);
+}
+
+.tag--treasury::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+}
+
+/* ------------------------------------------------------------------ stamps */
+
+/*
+ * The word stays sentence case in the DOM and is uppercased here, so screen readers say
+ * "Rule met" rather than spelling it out, and the tests keep passing.
+ */
+.stamp {
+  display: inline-block;
+  padding: 3px 11px 4px;
+  border: 3px solid currentColor;
+  border-radius: 4px;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.88;
+  transform: rotate(-4deg);
+}
+
+.stamp--good {
+  color: var(--stamp-good);
+}
+
+.stamp--warn {
+  color: var(--stamp-warn);
+}
+
+.stamp--bad {
+  color: var(--stamp-bad);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stamp--press {
+    animation: stamp-press var(--t-slow) var(--ease) both;
+  }
+
+  @keyframes stamp-press {
+    0% {
+      opacity: 0;
+      transform: rotate(-11deg) scale(1.45);
+    }
+
+    70% {
+      opacity: 0.95;
+      transform: rotate(-2.4deg) scale(0.97);
+    }
+
+    100% {
+      opacity: 0.88;
+      transform: rotate(-4deg) scale(1);
+    }
+  }
+}
+
+/* ------------------------------------------------------------ sticky notes */
+
+.note {
+  position: relative;
+  background: var(--sticky);
+  border-radius: 1px;
+  padding: 12px 14px;
+  color: var(--ink);
+  transform: rotate(-0.5deg);
+  box-shadow:
+    0 1px 1px rgba(20, 26, 21, 0.2),
+    0 10px 14px -10px rgba(20, 26, 21, 0.55);
+}
+
+/* --------------------------------------------------------- press cuttings */
+
+.cutting {
+  background: var(--newsprint);
+  border: 1px solid var(--border);
+  padding: 13px 15px 16px;
+  color: var(--ink);
+  /* Torn along the bottom edge. */
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 5px),
+    92% 100%,
+    84% calc(100% - 4px),
+    73% 100%,
+    61% calc(100% - 5px),
+    49% 100%,
+    38% calc(100% - 3px),
+    26% 100%,
+    14% calc(100% - 5px),
+    0 100%
+  );
+}
+
+/* ----------------------------------------------------------- despatch box */
+
+.despatch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--oxblood-deep);
+  background:
+    linear-gradient(180deg, var(--oxblood) 0%, var(--oxblood-deep) 100%), var(--desk-grain);
+  color: #f7ece2;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 45%, transparent),
+    var(--shadow);
+}
+
+.despatch__label {
+  font-family: var(--font-label);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--gold) 80%, #f7ece2);
+}
+
+.despatch__value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------ beats */
+
+.beat {
+  margin: 0 0 18px;
+}
+
+.beat__heading:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.beat__continue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .beat--entering {
+    animation: beat-in var(--t-base) var(--ease) both;
+  }
+
+  @keyframes beat-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+.stamp--muted {
+  color: var(--muted);
+}
+
+.stamp__icon {
+  margin-right: 6px;
+  font-weight: 700;
+}
+
+/* The stamp sits on the sheet at an angle, so it needs room around it. */
+.status {
+  margin: 2px 0 6px;
+  padding-left: 6px;
+}

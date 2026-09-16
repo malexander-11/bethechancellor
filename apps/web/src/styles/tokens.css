@@ -1,0 +1,172 @@
+/*
+ * Treasury Chambers: the palette and type of British government paperwork.
+ *
+ * The names are the ones the rest of the stylesheet already uses (--page, --surface, --ink),
+ * so changing what they hold changes the whole app. --page is now the desk you are sitting at
+ * and --surface is the paper lying on it.
+ *
+ * Every ink-on-ground pairing below is at or above 4.5:1 in both themes.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --desk: #2f3d33;
+  --desk-deep: #24302a;
+  --page: var(--desk);
+  --paper: #f6f2e8;
+  --surface: var(--paper);
+  --surface-2: #ece6d8;
+  --manila: #d9c48e;
+  --manila-edge: #c2ab74;
+  --newsprint: #e4e2dc;
+  /* Stencilled straight onto the leather, where there is no paper under the words. */
+  --desk-ink: #ece5d2;
+  --desk-ink-2: rgba(236, 229, 210, 0.85);
+
+  /* Ink */
+  --ink: #1f1d18;
+  --ink-2: #57534a;
+  --muted: #6f6a5d;
+  --ink-margin: rgba(168, 32, 26, 0.28);
+  --grid: #ddd6c4;
+  --axis: #b9b09a;
+  --border: rgba(31, 29, 24, 0.16);
+
+  /* Objects */
+  --oxblood: #8c1d23;
+  --oxblood-deep: #6d1319;
+  /* The red used for words rather than for surfaces; it has to carry on paper. */
+  --oxblood-text: #8c1d23;
+  --gold: #c8a44e;
+  --tag-brass: #8a6d2f;
+  --sticky: #f3e6a8;
+
+  /* Stamp inks, reused as the app's status colours */
+  --stamp-good: #1d6b3a;
+  --stamp-warn: #8a5a12;
+  --stamp-bad: #a8201a;
+  --good: var(--stamp-good);
+  --good-text: var(--stamp-good);
+  --warning: #d9a227;
+  --warning-text: var(--stamp-warn);
+  --critical: var(--stamp-bad);
+  --critical-text: var(--stamp-bad);
+
+  /* Charts: fountain pen against pencil */
+  --series-policy: #1f4f8f;
+  --series-baseline: #8d8778;
+  --series-policy-wash: rgba(31, 79, 143, 0.12);
+
+  /* Badges keep their meaning; the paper makes them quieter */
+  --badge-direct-bg: #dbe6f3;
+  --badge-direct-fg: #1b4a80;
+  --badge-mechanical-bg: #e6e3da;
+  --badge-mechanical-fg: #4a4740;
+  --badge-assumption-bg: #f2e3bf;
+  --badge-assumption-fg: #6f5210;
+  --badge-commentary-bg: #e9e6dd;
+  --badge-commentary-fg: #55514a;
+
+  --focus: #1f4f8f;
+
+  /* Paper is cut, not rounded */
+  --radius: 3px;
+  --radius-soft: 8px;
+
+  /*
+   * Two shadows: a tight contact edge where the paper touches the desk, and a wide soft one
+   * for the light in the room. Without the first, paper floats; without the second, it is flat.
+   */
+  --shadow: 0 1px 1px rgba(20, 26, 21, 0.28), 0 6px 16px -8px rgba(20, 26, 21, 0.45);
+  --shadow-lift: 0 2px 3px rgba(20, 26, 21, 0.3), 0 18px 34px -14px rgba(20, 26, 21, 0.55);
+
+  /*
+   * Woven stock, drawn rather than downloaded: two hairline gratings at different pitches read
+   * as fibre at any zoom and cost nothing to fetch.
+   */
+  --paper-grain:
+    repeating-linear-gradient(0deg, rgba(31, 29, 24, 0.016) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(31, 29, 24, 0.012) 0 1px, transparent 1px 4px);
+  --desk-grain: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.014) 0 2px,
+    transparent 2px 7px
+  );
+
+  /* Type: documents are set, labels are typed */
+  --font: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', 'Times New Roman', serif;
+  --font-label:
+    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Motion. Everything is short; nothing loops. */
+  --t-fast: 140ms;
+  --t-base: 190ms;
+  --t-slow: 260ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --desk: #17150f;
+    --desk-deep: #100f0a;
+    --paper: #22201b;
+    --surface-2: #2b2820;
+    --manila: #4a4029;
+    --manila-edge: #5d5133;
+    --newsprint: #2a2823;
+    --desk-ink: #d8d0bb;
+    --desk-ink-2: rgba(216, 208, 187, 0.7);
+
+    --ink: #e9e4d6;
+    --ink-2: #bcb5a3;
+    --muted: #918a78;
+    --ink-margin: rgba(255, 138, 130, 0.22);
+    --grid: #33302a;
+    --axis: #45413a;
+    --border: rgba(233, 228, 214, 0.14);
+
+    --oxblood: #7d1a20;
+    --oxblood-deep: #5c1115;
+    --oxblood-text: #e08a84;
+    --gold: #b9953f;
+    --tag-brass: #c2a15c;
+    --sticky: #4a4423;
+
+    --stamp-good: #5fbf7f;
+    --stamp-warn: #e0b45f;
+    --stamp-bad: #ff7a72;
+    --warning: #d9a227;
+
+    --series-policy: #6fa3e8;
+    --series-baseline: #8d8778;
+    --series-policy-wash: rgba(111, 163, 232, 0.16);
+
+    --badge-direct-bg: #17304d;
+    --badge-direct-fg: #a8c9f0;
+    --badge-mechanical-bg: #302d26;
+    --badge-mechanical-fg: #cac4b4;
+    --badge-assumption-bg: #453714;
+    --badge-assumption-fg: #e8c883;
+    --badge-commentary-bg: #2c2a26;
+    --badge-commentary-fg: #bcb5a3;
+
+    --focus: #6fa3e8;
+
+    --shadow: 0 1px 1px rgba(0, 0, 0, 0.55), 0 6px 16px -8px rgba(0, 0, 0, 0.7);
+    --shadow-lift: 0 2px 3px rgba(0, 0, 0, 0.6), 0 18px 34px -14px rgba(0, 0, 0, 0.75);
+
+    --paper-grain:
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.014) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.01) 0 1px, transparent 1px 4px);
+    --desk-grain: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.01) 0 2px,
+      transparent 2px 7px
+    );
+  }
+}
