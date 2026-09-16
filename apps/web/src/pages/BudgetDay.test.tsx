@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
@@ -53,8 +53,10 @@ describe('Budget day gives feedback from four audiences', () => {
     expect(within(pub as HTMLElement).getByText(/Triple lock to CPI/)).toBeInTheDocument();
   });
 
-  it('keeps the tables and charts behind a disclosure so the panels lead', () => {
+  it('keeps the tables and charts behind a second beat, so the panels lead', () => {
     at(BASE);
+    expect(screen.queryByText('The rules in full')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     expect(screen.getByText('Your measures')).toBeInTheDocument();
     expect(screen.getByText('The rules in full')).toBeInTheDocument();
     expect(screen.getByText('Five-year paths')).toBeInTheDocument();

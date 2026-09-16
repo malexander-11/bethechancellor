@@ -4,6 +4,7 @@ import { JourneyLayout } from '../components/JourneyLayout';
 import { LeverControl } from '../components/LeverControl';
 import { Scorecard } from '../components/Scorecard';
 import { briefingsFor, leversByCategory, vintage } from '../data';
+import { Beat, Beats } from '../journey/beats';
 import { StepLink } from '../journey/links';
 import { useBudget } from '../state/budget';
 
@@ -41,39 +42,48 @@ export function RecommendationsPage() {
         Eleven policies MPs are campaigning for. Adopt the ones you want. Every cost here is our own
         arithmetic, not an official costing.
       </p>
-      <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
-      <div className="briefing-row">
-        {briefingsFor('recommendations').map((b) => (
-          <AdviserBriefing key={b.id} briefing={b} compact />
-        ))}
-      </div>
-      <p className="adopted-line" role="status">
-        {adopted.length === 0
-          ? 'Nothing adopted yet. Adopting one is a toggle; the scorecard moves as you read.'
-          : `${adopted.length} adopted · ${
-              total >= 0 ? 'costing' : 'raising'
-            } ${formatGbpBn(Math.abs(total), 1)} in ${targetYear}`}
-      </p>
-      <div className="cards">
-        {items.map((lever) => (
-          <LeverControl
-            key={lever.id}
-            lever={lever}
-            value={state.leverValues[lever.code] ?? lever.control.default}
-            effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-            summaryYear={targetYear}
-            onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-          />
-        ))}
-      </div>
-      <p className="hero-start__actions">
-        <StepLink to="/budget/spending" className="btn">
-          Back to spending
-        </StepLink>
-        <StepLink to="/budget-day" className="btn btn--primary">
-          Go to Budget day
-        </StepLink>
-      </p>
+      <Beats step="recommendations">
+        <Beat
+          title="A bundle of letters arrives from your colleagues"
+          continueLabel="Read the letters"
+        >
+          <div className="briefing-row">
+            {briefingsFor('recommendations').map((b) => (
+              <AdviserBriefing key={b.id} briefing={b} compact />
+            ))}
+          </div>
+        </Beat>
+        <Beat title="The eleven policies, and what each would cost">
+          <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
+          <p className="adopted-line" role="status">
+            {adopted.length === 0
+              ? 'Nothing adopted yet. Adopting one is a toggle; the scorecard moves as you read.'
+              : `${adopted.length} adopted · ${
+                  total >= 0 ? 'costing' : 'raising'
+                } ${formatGbpBn(Math.abs(total), 1)} in ${targetYear}`}
+          </p>
+          <div className="cards">
+            {items.map((lever) => (
+              <LeverControl
+                key={lever.id}
+                lever={lever}
+                value={state.leverValues[lever.code] ?? lever.control.default}
+                effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                summaryYear={targetYear}
+                onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
+              />
+            ))}
+          </div>
+          <p className="hero-start__actions">
+            <StepLink to="/budget/spending" className="btn">
+              Back to spending
+            </StepLink>
+            <StepLink to="/budget-day" className="btn btn--primary">
+              Go to Budget day
+            </StepLink>
+          </p>
+        </Beat>
+      </Beats>
     </JourneyLayout>
   );
 }

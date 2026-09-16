@@ -4,6 +4,7 @@ import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { Scorecard } from '../components/Scorecard';
 import { adviserById, briefingsFor, context, levers, vintage } from '../data';
+import { Beat, Beats } from '../journey/beats';
 import { StepLink } from '../journey/links';
 import { suggestedSettings } from '../journey/suggest';
 import { useBudget } from '../state/budget';
@@ -30,80 +31,89 @@ export function AssumptionsPage() {
         {adviser?.role ?? context.adviser} · readings as of {context.asOf} ·{' '}
         <LabelBadge badge="assumption" />
       </p>
-      <div className="toolbar">
-        <button
-          type="button"
-          className="btn btn--primary"
-          onClick={() => dispatch({ type: 'setLevers', values: suggested })}
+      <Beats step="assumptions">
+        <Beat
+          title="Your Chief Economic Adviser brings the March forecast"
+          continueLabel="See the readings"
         >
-          Take the advisers&rsquo; view
-        </button>
-        <button
-          type="button"
-          className="btn"
-          onClick={() => dispatch({ type: 'setLevers', values: obrView })}
-        >
-          Keep the OBR&rsquo;s March view
-        </button>
-      </div>
-      <div className="readings">
-        {context.readings.map((reading) => {
-          const lever = reading.leverCode
-            ? levers.find((l) => l.code === reading.leverCode)
-            : undefined;
-          if (!lever) return null;
-          return (
-            <AssumptionReading
-              key={reading.id}
-              reading={reading}
-              lever={lever}
-              value={state.leverValues[lever.code] ?? lever.control.default}
-              effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-              summaryYear={targetYear}
-              onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-            />
-          );
-        })}
-      </div>
-      <details className="panel">
-        <summary className="group__head">
-          <span className="group__line">
-            <span className="group__name">Also changed since March</span>
-            <span className="group__count">
-              {context.readings.filter((r) => !r.leverCode).length}
-            </span>
-          </span>
-          <span className="group__say">No slider here: context for the numbers above.</span>
-        </summary>
-        <div className="table-scroll">
-          <table className="measures">
-            <thead>
-              <tr>
-                <th>Reading</th>
-                <th>OBR in March</th>
-                <th>Latest</th>
-                <th>Source</th>
-              </tr>
-            </thead>
-            <tbody>
-              {context.readings
-                .filter((r) => !r.leverCode)
-                .map((r) => (
-                  <ContextRow key={r.id} reading={r} />
-                ))}
-            </tbody>
-          </table>
-        </div>
-      </details>
-      {briefingsFor('assumptions').map((b) => (
-        <AdviserBriefing key={b.id} briefing={b} />
-      ))}
-      <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} />
-      <p className="hero-start__actions">
-        <StepLink to="/budget/taxes" className="btn btn--primary">
-          Confirm and go to taxes
-        </StepLink>
-      </p>
+          {briefingsFor('assumptions').map((b) => (
+            <AdviserBriefing key={b.id} briefing={b} />
+          ))}
+          <div className="toolbar">
+            <button
+              type="button"
+              className="btn btn--primary"
+              onClick={() => dispatch({ type: 'setLevers', values: suggested })}
+            >
+              Take the advisers&rsquo; view
+            </button>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => dispatch({ type: 'setLevers', values: obrView })}
+            >
+              Keep the OBR&rsquo;s March view
+            </button>
+          </div>
+        </Beat>
+        <Beat title="The readings, and what you make of them">
+          <div className="readings">
+            {context.readings.map((reading) => {
+              const lever = reading.leverCode
+                ? levers.find((l) => l.code === reading.leverCode)
+                : undefined;
+              if (!lever) return null;
+              return (
+                <AssumptionReading
+                  key={reading.id}
+                  reading={reading}
+                  lever={lever}
+                  value={state.leverValues[lever.code] ?? lever.control.default}
+                  effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                  summaryYear={targetYear}
+                  onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
+                />
+              );
+            })}
+          </div>
+          <details className="panel">
+            <summary className="group__head">
+              <span className="group__line">
+                <span className="group__name">Also changed since March</span>
+                <span className="group__count">
+                  {context.readings.filter((r) => !r.leverCode).length}
+                </span>
+              </span>
+              <span className="group__say">No slider here: context for the numbers above.</span>
+            </summary>
+            <div className="table-scroll">
+              <table className="measures">
+                <thead>
+                  <tr>
+                    <th>Reading</th>
+                    <th>OBR in March</th>
+                    <th>Latest</th>
+                    <th>Source</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {context.readings
+                    .filter((r) => !r.leverCode)
+                    .map((r) => (
+                      <ContextRow key={r.id} reading={r} />
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+          <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} />
+          <p className="hero-start__actions">
+            <StepLink to="/budget/taxes" className="btn btn--primary">
+              Confirm and go to taxes
+            </StepLink>
+          </p>
+        </Beat>
+      </Beats>
     </JourneyLayout>
   );
 }

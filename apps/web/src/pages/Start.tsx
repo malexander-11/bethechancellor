@@ -2,10 +2,12 @@ import { formatGbpBn } from '@btc/engine';
 import { AdviserBriefing } from '../components/AdviserBriefing';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { advisers, briefingsFor, vintage } from '../data';
+import { useCeremony } from '../journey/beats';
 import { StepLink } from '../journey/links';
 
 export function StartPage() {
   const headroom = vintage.context?.headroomAtPublicationGbpm ?? 0;
+  const { ceremony, setCeremony } = useCeremony();
   return (
     <JourneyLayout step="start">
       <section className="hero-start">
@@ -22,6 +24,16 @@ export function StartPage() {
           <StepLink to="/budget/taxes" className="btn">
             Skip to taxes and spending
           </StepLink>
+        </p>
+        <p className="ceremony">
+          <label>
+            <input
+              type="checkbox"
+              checked={!ceremony}
+              onChange={(e) => setCeremony(!e.target.checked)}
+            />
+            Show every step in full, without the advisers handing things over one at a time
+          </label>
         </p>
       </section>
       {briefingsFor('start').map((b) => (

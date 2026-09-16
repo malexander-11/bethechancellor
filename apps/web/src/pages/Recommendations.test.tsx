@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
@@ -10,6 +10,9 @@ function at(search = 'v=1&f=obr2603&r=ch2602&i=2027') {
       <App />
     </MemoryRouter>,
   );
+  // A link carrying levers arrives with every beat open and has no Continue to press.
+  const go = screen.queryByRole('button', { name: /Continue/ });
+  if (go) fireEvent.click(go);
 }
 
 describe('the recommendations step', () => {

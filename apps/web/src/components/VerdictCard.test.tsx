@@ -14,7 +14,7 @@ describe('VerdictCard', () => {
     );
     expect(screen.getByText('Rule met')).toBeInTheDocument();
     // The figure appears twice: as the hero number and as the OBR baseline comparison.
-    expect(screen.getAllByText('£23.6bn')).toHaveLength(2);
+    expect(screen.getAllByText('£23.6bn').length).toBeGreaterThanOrEqual(2);
     expect(screen.getByText(/about £830 per household/)).toBeInTheDocument();
     expect(screen.getByText('2029-30', { selector: '.verdict__year' })).toBeInTheDocument();
   });

@@ -1,0 +1,74 @@
+import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { describe, expect, it } from 'vitest';
+import { App } from '../App';
+
+const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+
+function at(path: string) {
+  window.history.replaceState(null, '', path);
+  return render(
+    <MemoryRouter initialEntries={[path]}>
+      <App />
+    </MemoryRouter>,
+  );
+}
+
+describe('a step arrives in beats', () => {
+  it('does not put the next beat in the document until you continue', () => {
+    at(`/assumptions?${BASE}`);
+    // Beat 0 is the adviser arriving; the readings themselves are not rendered at all, so the
+    // gate is real rather than something hidden with CSS.
+    expect(screen.queryByText(/Advisers suggest/)).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    expect(screen.getAllByText(/Advisers suggest/).length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('keeps the earlier beat on the page, so its sources stay reachable', () => {
+    at(`/assumptions?${BASE}`);
+    const before = screen.getAllByRole('link').length;
+    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    // Accumulating rather than replacing: the adviser's briefing and its citations are still there.
+    expect(screen.getByText(/Take the advisers/)).toBeInTheDocument();
+    expect(screen.getAllByRole('link').length).toBeGreaterThan(before);
+  });
+
+  it('leaves exactly one live continue button at a time, and none at the end', () => {
+    at(`/budget-day?${BASE}`);
+    expect(screen.getAllByRole('button', { name: /Continue/ })).toHaveLength(1);
+    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
+  });
+
+  it('opens every beat at once for a link that carries a budget', () => {
+    // Someone sharing their Budget means "look at this", not "sit through the introduction".
+    at(`/budget-day?${BASE}&L=itbr.2`);
+    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
+    expect(screen.getByText('The rules in full')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'The markets' })).toBeInTheDocument();
+  });
+
+  it('remembers how far you got in a step, but not in a step you have not opened', () => {
+    const first = at(`/assumptions?${BASE}`);
+    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    expect(screen.getAllByText(/Advisers suggest/).length).toBeGreaterThanOrEqual(3);
+    first.unmount();
+
+    // Coming back to a step you have worked resumes where you left off.
+    const second = at(`/assumptions?${BASE}`);
+    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
+    second.unmount();
+
+    // A step you have never opened still plays from the top.
+    at(`/recommendations?${BASE}`);
+    expect(screen.getByRole('button', { name: /Continue/ })).toBeInTheDocument();
+  });
+
+  it('never lets a beat reach the query string', () => {
+    at(`/assumptions?${BASE}`);
+    const before = window.location.search;
+    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    // The query string means one thing only: a budget.
+    expect(window.location.search).toBe(before);
+  });
+});

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from './App';
@@ -36,7 +36,9 @@ describe('journey routes', () => {
       </MemoryRouter>,
     );
     expect(screen.getByText('Step 1 · Confirm the assumptions')).toBeInTheDocument();
+    // Beat 0: the adviser arrives with the March forecast and the two ways of taking it.
     expect(screen.getByText(/Take the advisers/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     expect(screen.getAllByText(/Advisers suggest/).length).toBeGreaterThanOrEqual(3);
     unmount();
     render(
@@ -45,6 +47,8 @@ describe('journey routes', () => {
       </MemoryRouter>,
     );
     expect(screen.getByText('Step 4 · Budget day')).toBeInTheDocument();
+    // Beat 1: the workings behind the verdict, once you have read the room.
+    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     expect(screen.getByText('Your measures')).toBeInTheDocument();
     expect(screen.getAllByText('Rule met').length).toBeGreaterThanOrEqual(2);
   });

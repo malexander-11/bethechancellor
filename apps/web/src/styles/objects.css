@@ -373,3 +373,22 @@
   margin: 2px 0 6px;
   padding-left: 6px;
 }
+
+/* The way out of the ceremony, for a second play or a reader who wants the whole file at once. */
+.ceremony {
+  margin: 4px 0 0;
+  font-size: 0.86rem;
+  color: var(--desk-ink-2);
+}
+
+.ceremony label {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.beat__continue .btn {
+  min-width: 190px;
+  justify-content: center;
+}
