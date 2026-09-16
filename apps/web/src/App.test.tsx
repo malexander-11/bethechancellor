@@ -36,9 +36,10 @@ describe('journey routes', () => {
       </MemoryRouter>,
     );
     expect(screen.getByText('Step 1 · Confirm the assumptions')).toBeInTheDocument();
-    // Beat 0: the adviser arrives with the March forecast and the two ways of taking it.
-    expect(screen.getByText(/Take the advisers/)).toBeInTheDocument();
+    // Beat 0 is the adviser arriving; the readings and the shortcuts are behind Continue.
+    expect(screen.queryByText(/Take the advisers/)).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    expect(screen.getByText(/Take the advisers/)).toBeInTheDocument();
     expect(screen.getAllByText(/Advisers suggest/).length).toBeGreaterThanOrEqual(3);
     unmount();
     render(

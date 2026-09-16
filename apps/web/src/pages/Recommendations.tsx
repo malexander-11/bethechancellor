@@ -46,6 +46,7 @@ export function RecommendationsPage() {
         <Beat
           title="A bundle of letters arrives from your colleagues"
           continueLabel="Read the letters"
+          foldWhenPast="What your advisers said about these letters"
         >
           <div className="briefing-row">
             {briefingsFor('recommendations').map((b) => (

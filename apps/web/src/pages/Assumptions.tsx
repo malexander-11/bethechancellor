@@ -35,10 +35,13 @@ export function AssumptionsPage() {
         <Beat
           title="Your Chief Economic Adviser brings the March forecast"
           continueLabel="See the readings"
+          foldWhenPast="The Chief Economic Adviser’s note"
         >
           {briefingsFor('assumptions').map((b) => (
             <AdviserBriefing key={b.id} briefing={b} />
           ))}
+        </Beat>
+        <Beat title="The readings, and what you make of them">
           <div className="toolbar">
             <button
               type="button"
@@ -55,8 +58,6 @@ export function AssumptionsPage() {
               Keep the OBR&rsquo;s March view
             </button>
           </div>
-        </Beat>
-        <Beat title="The readings, and what you make of them">
           <div className="readings">
             {context.readings.map((reading) => {
               const lever = reading.leverCode

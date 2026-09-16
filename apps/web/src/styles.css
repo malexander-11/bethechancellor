@@ -44,6 +44,7 @@ body::before {
 .prose,
 .doc,
 .drawer,
+.folder-body,
 .note,
 .cutting,
 .scorecard,
@@ -211,7 +212,7 @@ select {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
   gap: 24px;
   align-items: start;
 }

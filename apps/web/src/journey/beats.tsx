@@ -119,6 +119,11 @@ interface BeatProps {
   title: string;
   /** What the button says. "Continue" is the default and the accessible name always contains it. */
   continueLabel?: string;
+  /**
+   * Fold this beat away once it is behind you. Its contents, and so its citations, stay in the
+   * document and one click away; they just stop burying the surface you are working on.
+   */
+  foldWhenPast?: string;
   children: ReactNode;
   /* Supplied by <Beats>; never set these by hand. */
   index?: number;
@@ -130,6 +135,7 @@ interface BeatProps {
 export function Beat({
   title,
   continueLabel,
+  foldWhenPast,
   children,
   index = 0,
   live = false,
@@ -153,6 +159,16 @@ export function Beat({
     node.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
   }, [autoFocus]);
 
+  const past = foldWhenPast !== undefined && !live && advance === undefined;
+  const body = past ? (
+    <details className="beat--past-summary">
+      <summary>{foldWhenPast}</summary>
+      {children}
+    </details>
+  ) : (
+    children
+  );
+
   return (
     <section
       ref={ref}
@@ -163,7 +179,7 @@ export function Beat({
       <h2 id={headingId} className="sr-only">
         {title}
       </h2>
-      {children}
+      {body}
       {live && advance ? (
         <p className="beat__continue">
           <button type="button" className="btn btn--primary" onClick={advance}>
@@ -201,7 +217,7 @@ export function Beats({ step, children }: { step: JourneyStep; children: ReactNo
           key: i,
           index: i,
           live: i === live && i < last,
-          advance,
+          advance: i === live ? advance : undefined,
           autoFocus: focusBeat === i,
         }),
       )}

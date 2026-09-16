@@ -1,8 +1,9 @@
 import { formatGbpBn, formatPct } from '@btc/engine';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { AdviserBriefing } from '../components/AdviserBriefing';
 import { AttributionList } from '../components/AttributionList';
+import { Desk } from '../components/Desk';
 import { InteractionsNotice } from '../components/InteractionsNotice';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LeverControl, formatLeverValue } from '../components/LeverControl';
@@ -40,6 +41,14 @@ export function BudgetPage() {
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
   const moved = new Set(outcome.leverEffects.map((e) => e.code));
+  const groups = useMemo(() => groupLevers(items), [items]);
+  // Which folder is open is a fact about the desk, not about the Budget, so it stays out of the
+  // URL. Keyed by tab, so coming back to taxes finds the file you left out.
+  const [folders, setFolders] = useState<Record<string, string>>({});
+  const openFolder = folders[step];
+  // Open on the first file you have touched, so a shared Budget does not look untouched.
+  const defaultFolder =
+    groups.find((g) => g.levers.some((l) => moved.has(l.code)))?.name ?? groups[0]?.name ?? '';
   const macroSummary = leversByCategory.macro
     .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
     .filter((x) => x.value !== x.lever.control.default)
@@ -73,6 +82,11 @@ export function BudgetPage() {
               : 'The Director of Public Spending hands you the spending file'
           }
           continueLabel="Open the file"
+          foldWhenPast={
+            step === 'taxes'
+              ? 'The Director of Tax’s briefing'
+              : 'The Director of Public Spending’s briefing'
+          }
         >
           {briefingsFor(step).map((b) => (
             <AdviserBriefing key={b.id} briefing={b} />
@@ -102,38 +116,34 @@ export function BudgetPage() {
 
           <div className="layout">
             <aside>
-              {groupLevers(items).map((group, index) => (
-                <details key={group.name} className="panel group" open={index === 0}>
-                  <summary className="group__head">
-                    <span className="group__line">
-                      <span className="group__name">{group.name}</span>
-                      <span className="group__count">
-                        {group.levers.filter((l) => moved.has(l.code)).length > 0
-                          ? `${group.levers.filter((l) => moved.has(l.code)).length} changed`
-                          : group.levers.length}
-                      </span>
-                    </span>
-                    {briefingsFor(step, group.name)[0] ? (
-                      <span className="group__say">
-                        {briefingsFor(step, group.name)[0]?.headline}
-                      </span>
-                    ) : null}
-                  </summary>
-                  {briefingsFor(step, group.name).map((b) => (
-                    <AdviserBriefing key={b.id} briefing={b} compact variant="body" />
-                  ))}
-                  {group.levers.map((lever) => (
-                    <LeverControl
-                      key={lever.id}
-                      lever={lever}
-                      value={state.leverValues[lever.code] ?? lever.control.default}
-                      effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                      summaryYear={targetYear}
-                      onChange={(value) => dispatch({ type: 'setLever', code: lever.code, value })}
-                    />
-                  ))}
-                </details>
-              ))}
+              <Desk
+                groups={groups}
+                moved={moved}
+                effects={outcome.leverEffects}
+                summaryYear={targetYear}
+                open={openFolder ?? defaultFolder}
+                onOpen={(name) => setFolders((f) => ({ ...f, [step]: name }))}
+              >
+                {(group) => (
+                  <>
+                    {briefingsFor(step, group.name).map((b) => (
+                      <AdviserBriefing key={b.id} briefing={b} compact variant="body" />
+                    ))}
+                    {group.levers.map((lever) => (
+                      <LeverControl
+                        key={lever.id}
+                        lever={lever}
+                        value={state.leverValues[lever.code] ?? lever.control.default}
+                        effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                        summaryYear={targetYear}
+                        onChange={(value) =>
+                          dispatch({ type: 'setLever', code: lever.code, value })
+                        }
+                      />
+                    ))}
+                  </>
+                )}
+              </Desk>
               <p className="hero-start__actions">
                 {step === 'taxes' ? (
                   <StepLink to="/budget/spending" className="btn btn--primary">
