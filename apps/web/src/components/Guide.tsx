@@ -33,16 +33,32 @@ function Marked({ text }: { text: string }) {
 /**
  * The guide strip at the top of every step: which step this is, what you are doing, why it
  * matters and what to do now, written for someone clever who does not follow politics. It is
- * chrome, like the dateline: no badge, and no figure that is not sourced (guide.test.ts).
+ * chrome, like the dateline: no badge, and no figure that is not sourced (guide.test.ts). A step
+ * with more than one screen says which one this is ("File 2 of 3: the spending").
  */
-export function Guide({ step }: { step: JourneyStep }) {
+export interface GuidePart {
+  /** "File" on the desk, "Part" for the forecast and the sums. */
+  noun: string;
+  index: number;
+  total: number;
+  label: string;
+}
+
+export function Guide({ step, part }: { step: JourneyStep; part?: GuidePart }) {
   const stage = guideFor(step);
   if (!stage) return null;
   const terms = termsFor(glossary, stage);
   return (
     <header className="guide doc">
       <p className="kicker guide__kicker">
-        Step {stage.number} of {STEP_COUNT}
+        <span>
+          Step {stage.number} of {STEP_COUNT}
+        </span>
+        {part ? (
+          <span className="guide__part">
+            {part.noun} {part.index} of {part.total}: {part.label}
+          </span>
+        ) : null}
       </p>
       <h1 className="page-title">{stage.title}</h1>
       <dl className="guide__lines">

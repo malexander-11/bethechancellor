@@ -95,7 +95,10 @@ export function CompromisePage() {
     .slice(0, 3);
 
   return (
-    <JourneyLayout step="compromise">
+    <JourneyLayout
+      step="compromise"
+      part={{ noun: 'Part', index: 2, total: 2, label: 'make it add up' }}
+    >
       <Beats step="compromise">
         <Beat title="The gap, and the routes through it">
           {workings ? (

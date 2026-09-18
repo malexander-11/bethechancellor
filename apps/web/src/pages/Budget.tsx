@@ -54,11 +54,19 @@ const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDat
 
 type Tab = 'taxes' | 'spending' | 'policies';
 
-/** The three folders of the desk: what each is called, whose file it is, and where it leads. */
+/** The three files of the desk, in the order they are handed over. */
+const DESK_ORDER: readonly Tab[] = ['taxes', 'spending', 'policies'];
+
+/**
+ * The three screens of the desk: what each is called, whose file it is, and where it leads. They
+ * come one after another, by the button at the foot of the page, with a way back but no tab bar:
+ * one road (ADR-0014).
+ */
 const TABS: Record<
   Tab,
   {
-    label: string;
+    /** How the guide's kicker names this screen: "File 1 of 3: the taxes". */
+    part: string;
     arrives: string;
     open: string;
     folded: string;
@@ -66,34 +74,37 @@ const TABS: Record<
     /** Advisers and briefings were authored against the Phase 5 step names. */
     briefingStep: JourneyStep;
     next: { to: string; label: string };
+    back?: { to: string; label: string };
   }
 > = {
   taxes: {
-    label: 'Taxes',
+    part: 'the taxes',
     arrives: 'The Director of Tax hands you the tax file',
     open: 'Open the file',
     folded: 'The Director of Tax’s briefing',
     work: 'Set the taxes',
     briefingStep: 'taxes',
-    next: { to: '/budget/spending', label: 'Next: spending' },
+    next: { to: '/budget/spending', label: 'Next: the spending file' },
   },
   spending: {
-    label: 'Spending',
+    part: 'the spending',
     arrives: 'The Director of Public Spending hands you the spending file',
     open: 'Open the file',
     folded: 'The Director of Public Spending’s briefing',
     work: 'Set the spending',
     briefingStep: 'spending',
-    next: { to: '/budget/policies', label: 'Next: what your colleagues want' },
+    next: { to: '/budget/policies', label: 'Next: your colleagues’ letters' },
+    back: { to: '/budget/taxes', label: 'Back to the taxes' },
   },
   policies: {
-    label: 'Policies',
+    part: 'your colleagues’ letters',
     arrives: 'A bundle of letters arrives from your colleagues',
     open: 'Read the letters',
     folded: 'What your advisers said about these letters',
     work: 'The policies, and what each would cost',
     briefingStep: 'recommendations',
     next: { to: '/budget-day', label: 'Go to Budget day' },
+    back: { to: '/budget/spending', label: 'Back to the spending' },
   },
 };
 
@@ -255,7 +266,10 @@ export function BudgetPage() {
   ];
 
   return (
-    <JourneyLayout step={step}>
+    <JourneyLayout
+      step={step}
+      part={{ noun: 'File', index: DESK_ORDER.indexOf(step) + 1, total: 3, label: spec.part }}
+    >
       <Beats step={step}>
         <Beat title={spec.arrives} continueLabel={spec.open} foldWhenPast={spec.folded}>
           {step === 'policies' ? (
@@ -284,17 +298,6 @@ export function BudgetPage() {
           </p>
           <Interventions items={advice} />
           {clue ? <PressSummary outcome={clue} /> : null}
-          <nav className="tabs" aria-label="Taxes, spending or policies">
-            {(Object.keys(TABS) as Tab[]).map((t) => (
-              <StepLink
-                key={t}
-                to={`/budget/${t}`}
-                className={({ isActive }) => `tab${isActive ? ' tab--active' : ''}`}
-              >
-                {TABS[t].label}
-              </StepLink>
-            ))}
-          </nav>
           {step === 'policies' ? (
             <>
               <p className="panel__hint">
@@ -365,6 +368,11 @@ export function BudgetPage() {
                 >
                   {step === 'policies' ? onward.label : spec.next.label}
                 </StepLink>
+                {spec.back ? (
+                  <StepLink to={spec.back.to} className="btn">
+                    {spec.back.label}
+                  </StepLink>
+                ) : null}
               </p>
             </aside>
 

@@ -1299,37 +1299,6 @@ details.table-view td:first-child {
   font-size: 0.9rem;
 }
 
-/* ---- Tabs ---- */
-.tabs {
-  display: flex;
-  gap: 4px;
-  margin: 0 0 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-.tab {
-  color: var(--desk-ink-2);
-  padding: 9px 18px;
-  border: 1px solid transparent;
-  border-bottom: 0;
-  border-radius: 4px 4px 0 0;
-  text-decoration: none;
-  font-family: var(--font-label);
-  font-size: 0.72rem;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.tab--active {
-  background-color: var(--paper);
-  background-image: var(--paper-grain);
-  border-color: var(--border);
-  color: var(--ink);
-  font-weight: 700;
-  margin-bottom: -1px;
-}
-
 /* ---- Briefings ---- */
 .briefing {
   padding: 13px 16px;

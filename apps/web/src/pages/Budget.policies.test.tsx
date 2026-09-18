@@ -17,12 +17,12 @@ function at(path: string, search = 'v=1&f=obr2603&r=ch2602&i=2027') {
 }
 
 describe('the Policies folder', () => {
-  it('is where the old recommendations step now lands, as a third tab of the desk', () => {
+  it('is where the old recommendations step now lands, as the third file of the desk', () => {
     at('/recommendations');
     expect(screen.getByText('Build the package')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Policies' })).toHaveClass('tab--active');
-    expect(screen.getByRole('link', { name: 'Taxes' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Spending' })).toBeInTheDocument();
+    expect(screen.getByText(/File 3 of 3/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to the spending' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Taxes' })).toBeNull();
   });
 
   it('lists every policy your colleagues are campaigning for as something you can adopt', () => {

@@ -114,7 +114,10 @@ export function ForecastPage() {
   })}`;
 
   return (
-    <JourneyLayout step="forecast">
+    <JourneyLayout
+      step="forecast"
+      part={{ noun: 'Part', index: 1, total: 2, label: 'the forecast' }}
+    >
       <Beats step="forecast">
         <Beat
           title="An envelope from the Office for Budget Responsibility"
