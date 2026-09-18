@@ -12,6 +12,7 @@ import {
 import { extractDwpBenefits } from './extract-dwp-benefits.js';
 import { extractHmrcReadyReckoner } from './extract-hmrc-trr.js';
 import { extractPesaFunctions } from './extract-pesa.js';
+import { extractPrivatePensions } from './extract-private-pensions.js';
 import { extractSr25DelTables } from './extract-sr25.js';
 import { extractTaxReliefs } from './extract-tax-reliefs.js';
 import { readJson, sha256, writeJson } from './lib/io.js';
@@ -28,6 +29,7 @@ export const AB2024_EXTRACT_FILE = 'hmt-autumn-budget-2024-table-5-1.raw.json';
 export const RELIEFS_EXTRACT_FILE = 'hmrc-tax-reliefs-2026-01.raw.json';
 export const PESA_EXTRACT_FILE = 'hmt-pesa-2025-functions.raw.json';
 export const DWP_EXTRACT_FILE = 'dwp-benefit-expenditure-2026-table-1a.raw.json';
+export const PENSIONS_EXTRACT_FILE = 'hmrc-private-pensions-2026-07.raw.json';
 
 export async function derive(options: DeriveOptions = {}): Promise<string[]> {
   const outDir = options.outDir ?? DERIVED_DIR;
@@ -77,6 +79,11 @@ export async function derive(options: DeriveOptions = {}): Promise<string[]> {
   writeJson(dwpPath, dwp);
   written.push(dwpPath);
 
+  const pensions = extractPrivatePensions();
+  const pensionsPath = path.join(outDir, PENSIONS_EXTRACT_FILE);
+  writeJson(pensionsPath, pensions);
+  written.push(pensionsPath);
+
   const manifest = {
     schemaVersion: 1,
     description:
@@ -90,6 +97,7 @@ export async function derive(options: DeriveOptions = {}): Promise<string[]> {
       RELIEFS_EXTRACT_FILE,
       PESA_EXTRACT_FILE,
       DWP_EXTRACT_FILE,
+      PENSIONS_EXTRACT_FILE,
     ],
   };
   const manifestPath = path.join(outDir, 'manifest.json');

@@ -8,6 +8,16 @@
       "sha256": "705fb8fb5ace47e37eafe0b3817d5a6de538ce8fb2a67746e8f92d15ecd616e6"
     },
     {
+      "sourceId": "hmrc-private-pensions-2026-07",
+      "localPath": "data/raw/hmrc-private-pensions-2026-07/Table_6.csv",
+      "sha256": "1a914e45fd2629a45fa48e7c90d6725276a15c5475e6761a44d09e4f2e3843a2"
+    },
+    {
+      "sourceId": "hmrc-private-pensions-2026-07-tidy",
+      "localPath": "data/raw/hmrc-private-pensions-2026-07/Tables_6_1_and_6_2.csv",
+      "sha256": "04e0dab6354b01c96d04f9e379f237ea2083476bd9e920c882a236cdcf88101d"
+    },
+    {
       "sourceId": "hmrc-tax-reliefs-2026-01",
       "localPath": "data/raw/hmrc-tax-reliefs-2026-01/tax_relief_statistics_january_2026.ods",
       "sha256": "fa94a61fe6b6a02c19b87a656154f27eaf5f00f35f0cce9339b8101b9ac8ee4a"
@@ -50,6 +60,7 @@
     "hmt-autumn-budget-2024-table-5-1.raw.json",
     "hmrc-tax-reliefs-2026-01.raw.json",
     "hmt-pesa-2025-functions.raw.json",
-    "dwp-benefit-expenditure-2026-table-1a.raw.json"
+    "dwp-benefit-expenditure-2026-table-1a.raw.json",
+    "hmrc-private-pensions-2026-07.raw.json"
   ]
 }

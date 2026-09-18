@@ -5,6 +5,7 @@ import {
 } from '../src/extract-budget-2025-scorecard.js';
 import { extractDwpBenefits } from '../src/extract-dwp-benefits.js';
 import { extractHmrcReadyReckoner, slugify } from '../src/extract-hmrc-trr.js';
+import { extractPrivatePensions } from '../src/extract-private-pensions.js';
 import { cleanSr25Label, extractSr25DelTables } from '../src/extract-sr25.js';
 import { extractTaxReliefs, parseReliefNumber } from '../src/extract-tax-reliefs.js';
 
@@ -221,5 +222,37 @@ describe("DWP's benefit expenditure tables", () => {
   it('carries DWP benefit-type markers without swallowing the label', () => {
     expect(extract.rows.find((r) => r.rowId === 'pension-credit')?.marker).toBe('(IR)');
     expect(extract.rows.find((r) => r.rowId === 'attendance-allowance')?.marker).toBe('(NC / NIR)');
+  });
+});
+
+describe('HMRC private pension statistics extraction', () => {
+  const extract = extractPrivatePensions();
+
+  it('reads Table 6 by tax year and names the employer NICs relief row a lever cites', () => {
+    expect(extract.years).toEqual([
+      '2019-20',
+      '2020-21',
+      '2021-22',
+      '2022-23',
+      '2023-24',
+      '2024-25',
+    ]);
+    const employer = extract.rows.find(
+      (r) => r.rowId === 'nics-employer-contributions-employer-relief',
+    );
+    expect(employer?.values['2024-25']).toBe(14300);
+    expect(employer?.values['2019-20']).toBe(12000);
+    expect(extract.rows.find((r) => r.rowId === 'total-net-relief')?.values['2024-25']).toBe(53800);
+  });
+
+  it('sums the five contribution types at each marginal rate, and says that it is a sum', () => {
+    const at = (rate: string) => extract.rows.find((r) => r.rowId === `it-relief-by-rate-${rate}`);
+    expect(at('basic-rate')?.values['2024-25']).toBe(16100);
+    expect(at('higher-rate')?.values['2024-25']).toBe(31700);
+    expect(at('additional-rate')?.values['2024-25']).toBe(8000);
+    expect(at('higher-rate')?.description).toMatch(/sum of published rows/i);
+    expect(
+      extract.rows.filter((r) => r.rowId.startsWith('it-relief-') && r.code === 'Table 6.1'),
+    ).toHaveLength(18);
   });
 });

@@ -74,7 +74,8 @@ describe('every JSON file under data/ validates against its schema', () => {
         if (rel.includes('hmrc-trr')) expect(() => parseHmrcExtract(parsed)).not.toThrow();
         if (rel.includes('table-4-1') || rel.includes('table-5-1'))
           expect(() => parseScorecardExtract(parsed)).not.toThrow();
-        if (rel.includes('tax-reliefs')) expect(() => parseReliefExtract(parsed)).not.toThrow();
+        if (rel.includes('tax-reliefs') || rel.includes('private-pensions'))
+          expect(() => parseReliefExtract(parsed)).not.toThrow();
         if (rel.includes('sr25')) expect(() => parseSr25Extract(parsed)).not.toThrow();
         if (rel.includes('dwp-benefit')) expect(() => parseDwpBenefitExtract(parsed)).not.toThrow();
         if (rel.includes('pesa')) expect(() => parsePesaExtract(parsed)).not.toThrow();

@@ -77,9 +77,11 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   The level never enters the costing; percentage-of-baseline levers need no level metadata.
 - **Selects.** `control.kind: "select"` with `labels` keyed by value ("-40": "Abolish (0%)");
   the engine snaps to the nearest offered option.
-- **Relief-cost toggles.** `rawSource.kind: "hmrcReliefCost"` cites rows of
-  `derived/hmrc-tax-reliefs-2026-01.raw.json`; `perUnit` is the published cost for the cited
-  year, uprated with the tax head. Quote HMRC's caveat in the caveats.
+- **Relief-cost toggles.** `rawSource.kind: "hmrcReliefCost"` cites rows of a relief-cost
+  extract by `sourceId`: `derived/hmrc-tax-reliefs-2026-01.raw.json` (HMRC's tax reliefs, Table 2)
+  or `derived/hmrc-private-pensions-2026-07.raw.json` (HMRC's pension statistics, Table 6, with
+  Tables 6.1 and 6.2 by marginal rate); `perUnit` is the published cost for the cited year,
+  uprated with the tax head. Quote HMRC's caveat in the caveats.
 - **Scorecard-backed toggles.** A `linearPerUnit` toggle may cite `hmtScorecard` lines from any
   extracted scorecard (Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is minus the
   summed lines for the cited years on the receipts side.
@@ -137,12 +139,13 @@ the arithmetic is ours and the card has to show it.
   says where the inputs come from and what the arithmetic assumes. `validate:data` reproduces
   the schedule from the method, so an edited figure fails.
 
-| Method          | Fields                                                                              | Reproduces                                                          |
-| --------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `gdpShareGap`   | `targetPctGdp`, `baselinePctGdp` by year                                            | (target − baseline) ÷ 100 × nominal GDP                             |
-| `upratingGap`   | `rowId`, `baseYear`, `currentSeries`, `replacementSeries`                           | the extract's row × the compounding ratio of the two vintage series |
-| `statedProduct` | `terms` (label, value, unit, source), `resultGbpm`, `baseYear`, optional `growWith` | the product of the terms, then flat in cash or grown with a head    |
-| `seriesProduct` | two or more `terms`, each with `values` by year                                     | the terms multiplied year by year                                   |
+| Method          | Fields                                                                                      | Reproduces                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `gdpShareGap`   | `targetPctGdp`, `baselinePctGdp` by year                                                    | (target − baseline) ÷ 100 × nominal GDP                                          |
+| `upratingGap`   | `rowId`, `baseYear`, `currentSeries`, `replacementSeries`                                   | the extract's row × the compounding ratio of the two vintage series              |
+| `statedProduct` | `terms` (label, value, unit, source), `resultGbpm`, `baseYear`, optional `growWith`         | the product of the terms, then flat in cash or grown with a head                 |
+| `seriesProduct` | two or more `terms`, each with `values` by year                                             | the terms multiplied year by year                                                |
+| `weightedSum`   | `terms` (label, value, factor, unit, source), `resultGbpm`, `baseYear`, optional `growWith` | the sum of value × factor over the terms, then flat in cash or grown with a head |
 
 - **One-off payments** set `costing.once: true` on the schedule with exactly one amount; it falls
   in the implementation year and nothing after.

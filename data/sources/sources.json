@@ -993,6 +993,34 @@
       "retrievedOn": "2026-09-18",
       "licence": "OGL-3.0",
       "notes": "Standard rate 12%; higher rate 20% on travel insurance, certain insurance sold with mechanical or electrical appliances and certain motor vehicle-related insurance."
+    },
+    {
+      "id": "hmrc-private-pensions-2026-07",
+      "org": "HMRC",
+      "title": "Private pension statistics: Table 6, estimated cost of pension income tax and National Insurance contribution relief",
+      "edition": "July 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6a673e0d5e87122783093900/Table_6.csv",
+      "landingUrl": "https://www.gov.uk/government/statistics/personal-and-stakeholder-pensions-statistics",
+      "publishedOn": "2026-07-30",
+      "retrievedOn": "2026-09-18",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmrc-private-pensions-2026-07/Table_6.csv",
+      "sha256": "1a914e45fd2629a45fa48e7c90d6725276a15c5475e6761a44d09e4f2e3843a2",
+      "notes": "£ million by tax year, 2019-20 to 2024-25. Gross income tax relief on contributions and fund investment income, National Insurance relief on employer contributions split by class (employer £14,300m and employee £4,800m in 2024-25, plus £3,400m and £1,000m on salary-sacrificed contributions), the tax charged on pensions in payment, and the net figure. Static costs of the reliefs as they stand, not the yield from removing them."
+    },
+    {
+      "id": "hmrc-private-pensions-2026-07-tidy",
+      "org": "HMRC",
+      "title": "Private pension statistics: Tables 6.1 and 6.2 (tidy format), cost of pension tax relief by sector, scheme type and marginal rate",
+      "edition": "July 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6a673e0e5e87122783093901/Tables_6_1_and_6_2.csv",
+      "landingUrl": "https://www.gov.uk/government/statistics/personal-and-stakeholder-pensions-statistics",
+      "publishedOn": "2026-07-30",
+      "retrievedOn": "2026-09-18",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmrc-private-pensions-2026-07/Tables_6_1_and_6_2.csv",
+      "sha256": "04e0dab6354b01c96d04f9e379f237ea2083476bd9e920c882a236cdcf88101d",
+      "notes": "2024-25 only. Income tax relief on pension contributions by contribution type and the taxpayer's marginal rate: basic rate £16,100m, higher rate £31,700m, additional rate £8,000m across the five contribution types (sector and scheme totals). Some NICs cells are suppressed ([z])."
     }
   ]
 }

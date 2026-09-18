@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "id": "flat-rate-pension-relief",
+  "code": "pens30",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 120,
+  "title": "Give pension tax relief at a flat 30% for everyone",
+  "shortTitle": "Flat-rate pension relief",
+  "headline": "Our arithmetic on HMRC's figures: about £2.5bn a year, before anyone reacts.",
+  "description": "Replace tax relief at your own marginal rate (20%, 40% or 45%) on pension contributions with a single 30% top-up for everyone. Basic-rate taxpayers gain, higher and additional-rate taxpayers lose. On HMRC's 2024-25 breakdown of relief by marginal rate the static saving is about £2.5bn: a quarter of the higher-rate relief and a third of the additional-rate relief, less half as much again on top of the basic-rate relief. Nobody has costed it officially, and the hard part is employer contributions.",
+  "baselinePolicy": {
+    "text": "Pension contributions attract income tax relief at the saver's marginal rate. In 2024-25 HMRC puts the relief on contributions at £16.1bn given at the basic rate, £31.7bn at the higher rate and £8.0bn at the additional rate, across individual, salary-sacrificed and employer contributions.",
+    "source": {
+      "sourceId": "hmrc-private-pensions-2026-07-tidy"
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "psnflTreatment": "standard",
+    "taxHead": "incomeTax"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 3189,
+      "2028-29": 3302,
+      "2029-30": 3449,
+      "2030-31": 3599
+    },
+    "source": {
+      "sourceId": "hmrc-private-pensions-2026-07-tidy"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "hmrc-private-pensions-2026-07",
+      "method": {
+        "name": "weightedSum",
+        "baseYear": "2024-25",
+        "resultGbpm": 2542,
+        "growWith": "incomeTax",
+        "terms": [
+          {
+            "label": "Relief given at the higher rate, scaled by (40 − 30) ÷ 40",
+            "value": 31700,
+            "factor": 0.25,
+            "unit": "£ million, 2024-25",
+            "source": {
+              "sourceId": "hmrc-private-pensions-2026-07-tidy",
+              "note": "row it-relief-by-rate-higher-rate of the extract: the five contribution types at the higher rate, sector and scheme totals"
+            }
+          },
+          {
+            "label": "Relief given at the additional rate, scaled by (45 − 30) ÷ 45",
+            "value": 8000,
+            "factor": 0.333333,
+            "unit": "£ million, 2024-25",
+            "source": {
+              "sourceId": "hmrc-private-pensions-2026-07-tidy",
+              "note": "row it-relief-by-rate-additional-rate of the extract"
+            }
+          },
+          {
+            "label": "Relief given at the basic rate, which rises by (30 − 20) ÷ 20",
+            "value": 16100,
+            "factor": -0.5,
+            "unit": "£ million, 2024-25",
+            "source": {
+              "sourceId": "hmrc-private-pensions-2026-07-tidy",
+              "note": "row it-relief-by-rate-basic-rate of the extract; negative because a flat 30% costs more than 20% relief"
+            }
+          }
+        ]
+      },
+      "note": "Static arithmetic on HMRC's 2024-25 relief by marginal rate: what each group's relief would have been at 30% instead of its own rate, added up, then grown with the OBR's income tax receipts forecast from 2024-25. It assumes contributions do not change, that every pound of relief at a rate is relieved at exactly that rate, and that employer contributions can be relieved at a personal flat rate, which today they cannot."
+    },
+    "caveats": [
+      "Static. Higher earners would contribute less once relief fell to 30%, and basic-rate savers more; the saving would shrink and might vanish. HMRC's figures are the cost of relief as claimed, not a forecast of behaviour.",
+      "Employer contributions (£34bn of the £55.8bn of relief) are not taxed as the employee's income at all, so there is no rate to change; a flat rate on them means a new charge on employers or on the employee's benefit, which is why no government has done it.",
+      "Scottish income tax rates (19% to 48%) are ignored; HMRC's split is UK-wide.",
+      "The sum uses HMRC's rounded rows, and the three factors assume every pound relieved at a rate is relieved at exactly that rate; taper and allowance effects are ignored."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "flat-rate-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Higher-rate savers would put less into pensions, or take pay in other forms, once relief fell from 40% to 30%; basic-rate savers might put in more. Both cut the saving. Nothing here builds that in.",
+      "sources": [
+        {
+          "sourceId": "hmrc-private-pensions-2026-07-tidy"
+        }
+      ]
+    },
+    {
+      "id": "flat-rate-employers",
+      "kind": "administrative",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Most relief is on employer contributions, which are simply not counted as the employee's income. Giving them relief at a flat rate would need a new charge on employers or on employees for the contributions made for them, and defined benefit schemes have no contribution to value for each member. This is the practical objection every review of the idea has met.",
+      "sources": [
+        {
+          "sourceId": "hmrc-private-pensions-2026-07",
+          "table": "Table 6"
+        }
+      ]
+    },
+    {
+      "id": "flat-rate-who-pays",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Basic-rate taxpayers gain a 30% top-up in place of 20%; higher and additional-rate taxpayers lose a quarter and a third of their relief. Nearly three quarters of the relief on contributions goes to higher and additional-rate taxpayers today.",
+      "sources": [
+        {
+          "sourceId": "hmrc-private-pensions-2026-07-tidy"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-18"
+}

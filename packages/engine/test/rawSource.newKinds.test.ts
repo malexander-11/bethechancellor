@@ -261,3 +261,76 @@ describe('inheritance tax with abolition: lookup points from HMRC rows and the O
     ).toThrow(DataError);
   });
 });
+
+describe("a second relief-cost extract: HMRC's pension statistics", () => {
+  const nicpen = lever('nicpen');
+
+  it('reproduces the employer NICs relief row and rejects a tampered figure or source', () => {
+    expect(checkRawSourceConsistency(nicpen, extracted, ds.vintage)).toEqual([]);
+    const tampered = structuredClone(nicpen);
+    if (tampered.costing.kind === 'linearPerUnit') tampered.costing.perUnit['2024-25'] = 17700;
+    expect(checkRawSourceConsistency(tampered, extracted, ds.vintage).length).toBeGreaterThan(0);
+    const wrongSource = structuredClone(nicpen);
+    if (
+      wrongSource.costing.kind === 'linearPerUnit' &&
+      wrongSource.costing.rawSource?.kind === 'hmrcReliefCost'
+    ) {
+      wrongSource.costing.rawSource.sourceId = 'hmrc-tax-reliefs-2026-01';
+    }
+    expect(checkRawSourceConsistency(wrongSource, extracted, ds.vintage).length).toBeGreaterThan(0);
+  });
+
+  it('costs the charge as the 2024-25 relief grown with National Insurance receipts', () => {
+    const nics = headSeries(ds.vintage, 'nics');
+    const o = computeOutcome({
+      vintage: ds.vintage,
+      rules: ds.rules,
+      levers: ds.levers,
+      settings: { leverValues: { nicpen: 1 } },
+    });
+    const e = o.leverEffects.find((x) => x.code === 'nicpen');
+    expect(e?.receipts['2026-27']).toBe(0);
+    expect(e?.receipts['2029-30']).toBeCloseTo(
+      14300 * ((nics['2029-30'] ?? 0) / (nics['2024-25'] ?? 1)),
+      6,
+    );
+    expect(e?.receipts['2029-30'] ?? 0).toBeGreaterThan(19000);
+  });
+});
+
+describe('a weighted sum of published figures backs a schedule', () => {
+  const pens30 = lever('pens30');
+
+  it('reproduces the flat-rate saving from the by-rate relief, grown with income tax receipts', () => {
+    expect(checkRawSourceConsistency(pens30, extracted, ds.vintage)).toEqual([]);
+    const incomeTax = headSeries(ds.vintage, 'incomeTax');
+    if (pens30.costing.kind !== 'schedule') throw new Error('schedule expected');
+    const grown = (2542 * (incomeTax['2029-30'] ?? 0)) / (incomeTax['2024-25'] ?? 1);
+    expect(Math.abs((pens30.costing.effect['2029-30'] ?? 0) - grown)).toBeLessThanOrEqual(1);
+  });
+
+  it('rejects a tampered factor, a wrong result and a tampered schedule', () => {
+    const factor = structuredClone(pens30);
+    if (
+      factor.costing.kind === 'schedule' &&
+      factor.costing.rawSource?.kind === 'derivedFromPublished' &&
+      factor.costing.rawSource.method.name === 'weightedSum'
+    ) {
+      const basic = factor.costing.rawSource.method.terms[2];
+      if (basic) basic.factor = -0.25;
+    }
+    expect(checkRawSourceConsistency(factor, extracted, ds.vintage).length).toBeGreaterThan(0);
+    const result = structuredClone(pens30);
+    if (
+      result.costing.kind === 'schedule' &&
+      result.costing.rawSource?.kind === 'derivedFromPublished' &&
+      result.costing.rawSource.method.name === 'weightedSum'
+    ) {
+      result.costing.rawSource.method.resultGbpm = 4000;
+    }
+    expect(checkRawSourceConsistency(result, extracted, ds.vintage).length).toBeGreaterThan(0);
+    const schedule = structuredClone(pens30);
+    if (schedule.costing.kind === 'schedule') schedule.costing.effect['2029-30'] = 5000;
+    expect(checkRawSourceConsistency(schedule, extracted, ds.vintage).length).toBeGreaterThan(0);
+  });
+});

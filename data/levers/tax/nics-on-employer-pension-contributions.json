@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "nics-on-employer-pension-contributions",
+  "code": "nicpen",
+  "category": "tax",
+  "badge": "direct",
+  "group": "National Insurance",
+  "order": 37,
+  "title": "Charge employer NICs on pension contributions",
+  "shortTitle": "NICs on pension contributions",
+  "headline": "Employers pay no NICs on pension contributions. HMRC's static cost: £14.3bn.",
+  "description": "Charge employer National Insurance, at the 15% rate, on the contributions employers pay into their staff's pensions, which are exempt today. HMRC puts the relief at £14.3bn in 2024-25, leaving aside salary-sacrificed contributions (£3.4bn) which Budget 2025 already caps from April 2029. That is the static cost of the relief with contributions as they are, not a forecast of what charging it would raise.",
+  "baselinePolicy": {
+    "text": "Payments by way of an employer's contribution towards a registered pension scheme are disregarded in the calculation of earnings for National Insurance. HMRC puts the employer (Class 1 secondary) relief at £14,300m in 2024-25 on ordinary employer contributions and £3,400m more on salary-sacrificed contributions; employees save a further £4,800m and £1,000m.",
+    "source": {
+      "sourceId": "hmrc-private-pensions-2026-07",
+      "table": "Table 6"
+    },
+    "alreadyIncludes": [
+      "Salary-sacrificed pension contributions above £2,000 a year lose their employee and employer NICs relief from 6 April 2029 (Budget 2025, Table 4.1 line 52)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "nics",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2024-25": 14300
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-private-pensions-2026-07",
+      "table": "Table 6"
+    },
+    "rawSource": {
+      "kind": "hmrcReliefCost",
+      "sourceId": "hmrc-private-pensions-2026-07",
+      "rows": [
+        {
+          "rowId": "nics-employer-contributions-employer-relief",
+          "name": "Employer NICs (Class 1 secondary) relief on employer pension contributions",
+          "values": {
+            "2024-25": 14300
+          }
+        }
+      ],
+      "note": "HMRC's estimate of the employer National Insurance not paid on employer pension contributions in 2024-25 (its latest year), carried forward with the OBR's National Insurance receipts path. Salary-sacrificed contributions are left out because the Budget 2025 cap on them is already in the baseline."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "nics",
+      "note": "The 2024-25 relief cost is applied from the start year and scaled by the OBR's National Insurance receipts forecast (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC's figure is the cost of the relief with contributions as they were in 2024-25, published alongside its tax relief statistics with the same warning: an estimate of relief granted, not of the gain to the exchequer from removing it. Employers would change what they pay in, and how, once contributions were charged.",
+      "Contributions to defined benefit schemes, including deficit reduction payments, are in the figure; roughly £6.5bn of the £14.3bn is on public sector schemes (the NHS, schools, councils, the civil service), so that part of the yield would come straight back as pressure on departmental budgets unless they were compensated.",
+      "Salary-sacrificed contributions (£3.4bn of employer relief) are not counted here: Budget 2025 already caps the relief on them from April 2029, and that is in the baseline."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The figure is the cost of the relief with today's contributions. Charging National Insurance on them would lead employers to pay less into pensions, to hold down pay, or both, and to move contributions into forms that stay relieved; HMRC's relief cost estimates do not build in such responses.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-quality-report",
+          "paragraph": "4"
+        },
+        {
+          "sourceId": "hmrc-private-pensions-2026-07",
+          "table": "Table 6"
+        }
+      ]
+    },
+    {
+      "id": "employer-nics-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "appliesWhen": {
+        "above": 0
+      },
+      "text": "The manifesto promised not to increase National Insurance. The government's reading, when it raised employer contributions in October 2024, was that the promise covered the National Insurance working people pay; critics read it the other way. The desk does not treat an employer-side charge as a red line, and the argument would be had again, loudly, over pensions.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations"
+        },
+        {
+          "sourceId": "hmt-autumn-budget-2024-table-5-1",
+          "table": "Table 5.1",
+          "note": "line 26"
+        }
+      ]
+    },
+    {
+      "id": "public-sector-share",
+      "kind": "distributional",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Almost half the relief is on public sector schemes: HMRC's breakdown gives £6.5bn of the £14.3bn to public sector occupational schemes. Charging those employers moves money from departmental budgets to receipts unless they are compensated, which would cancel that part of the gain.",
+      "sources": [
+        {
+          "sourceId": "hmrc-private-pensions-2026-07-tidy"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-18",
+  "interactions": [
+    {
+      "withLever": "reverse-salary-sacrifice-cap",
+      "text": "Salary-sacrificed contributions are left out of this figure because Budget 2025's £2,000 cap already withdraws relief on them from 2029; reversing the cap while charging ordinary contributions would leave salary sacrifice as the one relieved route.",
+      "severity": "info"
+    },
+    {
+      "withLever": "nics-employer-rate",
+      "text": "The charge is valued at the 15% employer rate; moving the rate changes what charging contributions would raise.",
+      "severity": "info"
+    }
+  ]
+}

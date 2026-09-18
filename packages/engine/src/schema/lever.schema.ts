@@ -276,6 +276,30 @@ export const rawSourceSchema = z.discriminatedUnion('kind', [
         /** Grow the result with this forecast series; omit to hold it flat in cash. */
         growWith: growthHeadSchema.optional(),
       }),
+      /**
+       * Published quantities each multiplied by a stated factor and added up: relief given at
+       * three marginal rates, each scaled to what a flat rate would leave. One figure in a base
+       * year, then flat in cash or grown with a forecast series.
+       */
+      z.strictObject({
+        name: z.literal('weightedSum'),
+        terms: z
+          .array(
+            z.strictObject({
+              label: z.string().min(1),
+              value: z.number(),
+              /** What the value is multiplied by; negative for a term that costs. */
+              factor: z.number(),
+              unit: z.string().min(1),
+              source: sourceRefSchema,
+            }),
+          )
+          .min(2),
+        /** £ million in `baseYear`, equal to the sum of value × factor over the terms. */
+        resultGbpm: z.number(),
+        baseYear: fiscalYearSchema,
+        growWith: growthHeadSchema.optional(),
+      }),
     ]),
     sourceId: z.string().min(1),
     /** Where the published inputs come from and what the arithmetic assumes. */

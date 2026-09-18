@@ -19,7 +19,8 @@ export interface ExtractedSources {
   /** Scorecards keyed by source id (Budget 2025, Autumn Budget 2024, …). */
   scorecards?: Record<string, ScorecardExtract>;
   sr25?: Sr25Extract;
-  reliefs?: ReliefExtract;
+  /** Relief-cost extracts keyed by source id: HMRC's tax reliefs table, its pension statistics. */
+  reliefs?: Record<string, ReliefExtract>;
   pesa?: PesaExtract;
   dwp?: DwpBenefitExtract;
 }
@@ -385,10 +386,9 @@ function checkReliefRows(
 ): string[] {
   const problems: string[] = [];
   const costing = lever.costing;
-  const extract = extracted.reliefs;
-  if (!extract) return [`${lever.id}: no tax relief extract available to check against`];
-  if (extract.sourceId !== raw.sourceId)
-    problems.push(`${lever.id}: rawSource cites ${raw.sourceId}, extract is ${extract.sourceId}`);
+  const extract = extracted.reliefs?.[raw.sourceId];
+  if (!extract)
+    return [`${lever.id}: no relief-cost extract for ${raw.sourceId} available to check against`];
   const byId = new Map(extract.rows.map((r) => [r.rowId, r] as const));
   const sum: YearValues = {};
   for (const row of raw.rows) {
@@ -560,11 +560,15 @@ function checkDerivedArithmetic(
       if (complete) expected[year] = product;
     }
   } else {
-    const product = method.terms.reduce((acc, t) => acc * t.value, 1);
+    // A stated product or a weighted sum: one figure in a base year, then flat or grown.
+    const combined =
+      method.name === 'weightedSum'
+        ? method.terms.reduce((acc, t) => acc + t.value * t.factor, 0)
+        : method.terms.reduce((acc, t) => acc * t.value, 1);
     const slack = Math.max(1, Math.abs(method.resultGbpm) * 0.01);
-    if (Math.abs(product - method.resultGbpm) > slack)
+    if (Math.abs(combined - method.resultGbpm) > slack)
       problems.push(
-        `${lever.id}: the stated terms multiply to ${Math.round(product)} but the result is ${method.resultGbpm}`,
+        `${lever.id}: the stated terms ${method.name === 'weightedSum' ? 'sum' : 'multiply'} to ${Math.round(combined)} but the result is ${method.resultGbpm}`,
       );
     if (!method.growWith) {
       for (const year of Object.keys(costing.effect)) expected[year] = method.resultGbpm;

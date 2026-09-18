@@ -95,7 +95,12 @@ export function loadExtracts(): ExtractedSources {
     scorecard: budget2025,
     scorecards: { [budget2025.sourceId]: budget2025, [autumn2024.sourceId]: autumn2024 },
     sr25: parseSr25Extract(readJson('derived/hmt-sr25-del.raw.json')),
-    reliefs: parseReliefExtract(readJson('derived/hmrc-tax-reliefs-2026-01.raw.json')),
+    reliefs: Object.fromEntries(
+      [
+        parseReliefExtract(readJson('derived/hmrc-tax-reliefs-2026-01.raw.json')),
+        parseReliefExtract(readJson('derived/hmrc-private-pensions-2026-07.raw.json')),
+      ].map((r) => [r.sourceId, r] as const),
+    ),
     pesa: parsePesaExtract(readJson('derived/hmt-pesa-2025-functions.raw.json')),
     dwp: parseDwpBenefitExtract(readJson('derived/dwp-benefit-expenditure-2026-table-1a.raw.json')),
   };

@@ -17,6 +17,7 @@ import {
   AB2024_EXTRACT_FILE,
   HMRC_EXTRACT_FILE,
   DWP_EXTRACT_FILE,
+  PENSIONS_EXTRACT_FILE,
   PESA_EXTRACT_FILE,
   RELIEFS_EXTRACT_FILE,
   SCORECARD_EXTRACT_FILE,
@@ -55,9 +56,16 @@ function main(): void {
     const scorecard = parseScorecardExtract(readJson(target));
     extracted.scorecards[scorecard.sourceId] = scorecard;
   }
-  const reliefsFile = path.join(DERIVED_DIR, RELIEFS_EXTRACT_FILE);
-  if (existsSync(reliefsFile)) extracted.reliefs = parseReliefExtract(readJson(reliefsFile));
-  else problems.push(`${RELIEFS_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
+  extracted.reliefs = {};
+  for (const file of [RELIEFS_EXTRACT_FILE, PENSIONS_EXTRACT_FILE]) {
+    const target = path.join(DERIVED_DIR, file);
+    if (!existsSync(target)) {
+      problems.push(`${file} is missing (run npm run derive -w @btc/pipeline)`);
+      continue;
+    }
+    const reliefs = parseReliefExtract(readJson(target));
+    extracted.reliefs[reliefs.sourceId] = reliefs;
+  }
   const pesaFile = path.join(DERIVED_DIR, PESA_EXTRACT_FILE);
   if (existsSync(pesaFile)) extracted.pesa = parsePesaExtract(readJson(pesaFile));
 
