@@ -38,17 +38,21 @@ export function stopFor(step: JourneyStep): Stop {
  * The road, drawn: seven numbered stops on a brass rail. A stop you have reached is a quiet link,
  * so you can go back to the desk; the one you are at is marked; the ones ahead are inert. It reads
  * the same `enterable` rule as the guard on every page, so it never offers a link that would only
- * bounce. Numbers stay visible at every width; labels other than the current one go at phone width.
+ * bounce. With no game the guard leaves the desk and Budget day open to a shared link, but the
+ * rail still offers nothing ahead of you: the sandbox has its own door on the appointment letter.
+ * Numbers stay visible at every width; labels other than the current one go at phone width.
  */
 export function ProgressRail({ step }: { step: JourneyStep }) {
   const { state } = useBudget();
   const current = stopFor(step);
+  const at = STOPS.findIndex((s) => s.id === current);
   return (
     <nav className="progress" aria-label="Budget steps">
       <ol className="progress__stops">
         {STOPS.map((s, i) => {
           const isCurrent = s.id === current;
-          const open = !isCurrent && enterable(s.step, state.game);
+          const open =
+            !isCurrent && enterable(s.step, state.game) && (state.game !== undefined || i < at);
           const state_ = isCurrent ? 'current' : open ? 'open' : 'ahead';
           const text = (
             <>

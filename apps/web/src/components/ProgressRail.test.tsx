@@ -32,6 +32,15 @@ describe('the progress rail', () => {
     expect(within(rail).getAllByRole('link')).toHaveLength(4);
   });
 
+  it('offers nothing ahead of you without a game, even where a shared link could go', () => {
+    at(`/?${BASE}`);
+    const rail = screen.getByRole('navigation', { name: 'Budget steps' });
+    expect(within(rail).queryAllByRole('link')).toHaveLength(0);
+    expect(
+      within(rail).getByText('The appointment').closest('[aria-current="step"]'),
+    ).not.toBeNull();
+  });
+
   it('carries the budget with every link it offers', () => {
     at(`/pm?${BASE}&g=s.417_st.1_pl.adviser_hr.20`);
     const rail = screen.getByRole('navigation', { name: 'Budget steps' });

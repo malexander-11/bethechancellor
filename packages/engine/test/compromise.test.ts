@@ -54,8 +54,10 @@ describe('the routes out of a gap', () => {
     // The colleagues' letters that raise money are in the list too, on their own arithmetic.
     expect(all.some((s) => s.lever.category === 'campaign')).toBe(true);
     expect(all.find((s) => s.lever.code === 'iinc2')?.yieldGbpm ?? 0).toBeGreaterThan(2000);
-    // What costs money never appears, whichever folder it is in.
+    // What costs money never appears, whichever folder it is in; nor does a spending saving,
+    // which is a cut for the spending route, not revenue.
     expect(all.some((s) => s.lever.code === 'ufsm' || s.lever.code === 'rvinv')).toBe(false);
+    expect(all.some((s) => s.lever.code === 'nonuk' || s.lever.code === 'cpilock')).toBe(false);
     const basic = all.find((s) => s.lever.code === 'itbr');
     expect(basic?.breaks.map((p) => p.id)).toEqual(['tax-lock']);
     const ct = all.find((s) => s.lever.code === 'ct');

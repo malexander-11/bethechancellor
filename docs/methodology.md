@@ -141,7 +141,15 @@ differs, so the numbers in the app cannot drift from the published ones.
   allowance, the higher-rate threshold), the lever uses HMRC's published points only, interpolates
   in a straight line between them and never goes beyond the largest published change.
 - **Schedule.** Dated effects by year, used for the Budget 2025 reversals; nothing applies before
-  the start year.
+  the start year. A scorecard-backed schedule reverses the published measure (minus the lines) or,
+  with `direction: "repeat"`, does it again (plus the lines); a repeat assumes the second round
+  raises what the Treasury costed for the first, is badged an assumption and lives in the
+  colleagues' letters folder (ADR-0015).
+- **Relief-cost toggles.** HMRC's static cost of a relief for its latest year, applied from the
+  start year and grown with the relevant receipts head, with HMRC's caveat that the cost of a
+  relief is not the yield from removing it. Two extracts back them: HMRC's tax relief statistics
+  (Table 2) and HMRC's private pension statistics (Table 6, with Tables 6.1 and 6.2 by marginal
+  rate); a lever cites one by source id and row id.
 
 ### Uprating (ADR-0004)
 
@@ -171,10 +179,12 @@ saving on lower borrowing. The receipts shares are published to 0.1% of GDP, so 
 about ±1% of rounding noise. The level of HMRC's baseline is not rebased to March 2026; that
 correction waits for the March 2025 receipts tables.
 
-Head used by tax: income tax levers and the threshold-freeze reversal → income tax; NICs → NICs;
-VAT → VAT; corporation tax → onshore corporation tax; capital gains, inheritance and stamp duty
-→ capital taxes; fuel duty → fuel duties; alcohol → alcohol and tobacco duties; insurance
-premium tax → other taxes.
+Head used by tax: income tax levers and the threshold-freeze reversal → income tax; NICs, the
+employer threshold and National Insurance on pension contributions → NICs; VAT → VAT; corporation
+tax → onshore corporation tax; capital gains, inheritance and stamp duty → capital taxes; fuel
+duty → fuel duties; alcohol → alcohol and tobacco duties; insurance premium tax → other taxes.
+Where the OBR publishes the tax's own line (Table A.5) the lever grows with it instead: vehicle
+excise duty, air passenger duty, tobacco duties, inheritance tax, capital gains tax.
 
 ### Interactions
 
@@ -604,3 +614,39 @@ thresholds lean on; the table is in ADR-0013. A test checks that every reason on
 in the file with its placeholders filled, that a band quoting a figure carries a source, that a
 broken manifesto pins the public at one whatever else happens, and, by property, that ratings stay
 in one to five over random points and caps and over random packages.
+
+## 16. One road, and the revenue menu (ADR-0014, ADR-0015)
+
+### The road
+
+`enterable(step, game)` in the engine says whether a stage may be opened: once the stage before it
+has been left, always backwards, Budget day from the rabbit, and with no game only the sandbox
+(the desk and Budget day). Every page calls `useStageGuard`, which redirects an early arrival to
+`furthestStep(game)` with the budget's query string; the progress rail at the top of every page
+reads the same rule, so a stop is a link only when the guard would let it through. The desk is
+three screens in sequence (taxes, spending, your colleagues' letters) with a button forward and a
+link back; the guide's kicker says which screen ("File 2 of 3"), as it does for the forecast and the
+sums. The beats are unchanged.
+
+### The revenue menu
+
+Every option is a published figure with its published caveat. In the tax folders, direct-badged:
+the employer NICs threshold, vehicle excise duty, air passenger duty, tobacco duties, the Business
+Asset Disposal Relief rate, abolishing the residence nil-rate band, insurance premium tax, and
+employer National Insurance on pension contributions from HMRC's private pension statistics
+(£14,300m in 2024-25, grown with National Insurance receipts). In the letters folder, badged
+assumption: a flat 30% rate of pension relief by the `weightedSum` method over HMRC's relief by
+marginal rate, and two repeats of certified Budget 2025 rises (investment income, gambling duties)
+by the `repeat` direction. Employer-side National Insurance is not a manifesto red line here, on
+the government's reading of the lock; the Political Adviser says on each such lever that the
+reading is contested. The Director of Tax's suggestions at the sums rank the taxes and the
+revenue-side letters together, each with its badge; a spending saving in the letters is a cut and
+belongs to the spending route.
+
+### The pension extract
+
+`packages/pipeline/src/extract-private-pensions.ts` reads HMRC's Table 6 CSV (every year, totals
+and breakdowns) and the tidy Tables 6.1 and 6.2 CSV (the latest year, by marginal rate) into the
+relief-extract shape. The three by-rate totals are sums of HMRC's five contribution-type rows and
+say so. The validator keys relief extracts by source id, so the tax relief table and the pension
+table can both be cited, and reproduces every relief toggle and every weighted sum from them.

@@ -36,10 +36,11 @@ export function nextNotch(lever: Lever, current: number): number | null {
 }
 
 /**
- * Every tax lever, and every campaign policy that raises money, one notch up, ranked by the
- * headroom it buys. `headroomOf` is the caller's engine call, so this stays a pure ranking over
- * whatever the engine says; a policy costed by our own arithmetic ranks on that arithmetic and
- * shows its assumption badge beside the figure.
+ * Every tax lever, and every revenue-side campaign policy that raises money, one notch up, ranked
+ * by the headroom it buys. `headroomOf` is the caller's engine call, so this stays a pure ranking
+ * over whatever the engine says; a policy costed by our own arithmetic ranks on that arithmetic
+ * and shows its assumption badge beside the figure. Spending savings in the letters are cuts, and
+ * belong to the spending route.
  */
 export function revenueSuggestions(
   levers: readonly Lever[],
@@ -56,7 +57,13 @@ export function revenueSuggestions(
   );
   const out: RevenueSuggestion[] = [];
   for (const lever of levers) {
-    if ((lever.category !== 'tax' && lever.category !== 'campaign') || lever.deprecated) continue;
+    if (lever.deprecated) continue;
+    // Taxes, and the letters that raise revenue; a spending saving in the letters is a cut, and the
+    // Director of Public Spending's route, not this one.
+    const isTax = lever.category === 'tax';
+    const isRevenuePolicy =
+      lever.category === 'campaign' && lever.classification?.side === 'receipts';
+    if (!isTax && !isRevenuePolicy) continue;
     const now = current[lever.code] ?? lever.control.default;
     const value = nextNotch(lever, now);
     if (value === null) continue;

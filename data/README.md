@@ -178,7 +178,7 @@ or a vote; they say what a judgement leans on.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
-One guide entry per screen: `step`, `number` (one to seven; the desk's three tabs and the two
+One guide entry per screen: `step`, `number` (one to seven; the desk's three screens and the two
 forecast screens share a number), `title` (the page's heading), and `doing`, `why`, `now`, at most
 sixty words together. A word in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary
 reference and must exist in `glossary.json`; `terms` lists more to show under "Words on this
