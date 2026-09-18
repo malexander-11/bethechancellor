@@ -17,8 +17,9 @@ function at(search: string) {
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 const next = () => fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
-const region = (name: string) =>
+const card = (name: string) =>
   screen.getByRole('heading', { name }).closest('section') as HTMLElement;
+const meter = (name: string) => within(card(name)).getByRole('img');
 
 function seedFor(id: string): number {
   for (let s = SEED_MIN; s <= SEED_MAX; s += 1)
@@ -28,7 +29,7 @@ function seedFor(id: string): number {
 const ADVISER = seedFor('adviser-right');
 const GAME = `g=s.${ADVISER}_st.5_pl.adviser_hr.20_th.security_pr.prisons+dip-gap_rv.1_rb.keep&M=rate.0.75_rpi.0.5`;
 
-describe('Budget day: the speech, the afternoon, the morning after, the close', () => {
+describe('Budget day: the speech, the reaction, the close', () => {
   it('opens with the speech, every sentence badged as a game judgement', () => {
     at(BASE);
     const speech = screen.getByRole('article', { name: 'The Budget speech' });
@@ -40,64 +41,71 @@ describe('Budget day: the speech, the afternoon, the morning after, the close', 
     expect(screen.queryByRole('heading', { name: 'The markets' })).toBeNull();
   });
 
-  it('then the room reacts: rules strip, three audiences and five households', () => {
+  it('then the room reacts: the rules line, three rated audiences and five households', () => {
     at(BASE);
     next();
-    expect(screen.getByRole('heading', { name: /Your own rules/ })).toBeInTheDocument();
-    for (const title of ['Parliament', 'The markets', 'The electorate']) {
+    expect(screen.getByText(/You meet both fiscal rules and the welfare cap/)).toBeInTheDocument();
+    for (const title of ['Your backbenchers', 'The markets', 'The public']) {
       expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
     }
-    expect(
-      screen.getByText(/You meet the rule with roughly the room your predecessor had/),
-    ).toBeInTheDocument();
+    // An empty Budget: the benches and the public shrug; the markets take March's headroom well.
+    expect(meter('Your backbenchers')).toHaveAccessibleName('3 of 5: Divided');
+    expect(meter('The public')).toHaveAccessibleName('3 of 5: Shrugging');
+    expect(meter('The markets')).toHaveAccessibleName('4 of 5: Reassured');
+    expect(within(card('The markets')).getAllByText(/inside the twenty billion/).length).toBe(2);
     expect(screen.getAllByText(/A family on universal credit/).length).toBeGreaterThan(0);
     expect(screen.getAllByText('untouched').length).toBe(5);
   });
 
-  it('prints the reading and the causes behind each band, so the judgement can be checked', () => {
+  it('gives the reasons and the decisions behind them, and shows its workings on request', () => {
     // A link carrying levers and no game opens every beat, so there is no Continue to press.
     at(`${BASE}&L=def5.1`);
-    const markets = region('The markets');
-    expect(within(markets).getByText(/Change in borrowing in the target year/)).toBeInTheDocument();
-    expect(within(markets).getByText(/A large unfunded increase in borrowing/)).toBeInTheDocument();
+    const markets = card('The markets');
+    expect(meter('The markets')).toHaveAccessibleName('1 of 5: Alarmed');
+    expect(within(markets).getAllByText(/The stability rule is missed/).length).toBe(2);
     expect(within(markets).getAllByText(/Defence to 5% of GDP/).length).toBeGreaterThan(0);
-    expect(screen.getByText(/You have missed your own stability rule/)).toBeInTheDocument();
+    expect(screen.getByText(/Missed on these numbers: Stability rule/)).toBeInTheDocument();
+    // Every rule, its points, its reading and its sources sit behind "Why this rating".
+    fireEvent.click(within(markets).getByText('Why this rating'));
+    expect(
+      within(markets).getByText(/Headroom against the stability rule: −£/),
+    ).toBeInTheDocument();
+    expect(within(markets).getAllByText(/Every audience starts at three/).length).toBe(1);
+    expect(within(markets).getAllByRole('link').length).toBeGreaterThan(0);
   });
 
-  it('gives Parliament its groups, and the electorate its households, once a game is under way', () => {
+  it('pins the public at Furious when a manifesto red line is crossed', () => {
     at(`${BASE}&${GAME}&L=moj.10_itbr.1`);
     next();
-    const parliament = region('Parliament');
-    expect(within(parliament).getByText('MPs in marginal seats')).toBeInTheDocument();
+    expect(meter('The public')).toHaveAccessibleName('1 of 5: Furious');
     expect(
-      within(parliament).getByText(/A promise made in Downing Street is broken/),
-    ).toBeInTheDocument();
-    expect(within(parliament).getByText(/The tax lock \(Basic rate\)/)).toBeInTheDocument();
-    expect(within(parliament).getByText('No. 10')).toBeInTheDocument();
+      within(card('The public')).getAllByText(/A manifesto promise has been broken/).length,
+    ).toBe(2);
     expect(
-      within(parliament).getByText(/One priority agreed in Downing Street is not funded/),
-    ).toBeInTheDocument();
+      within(card('Your backbenchers')).getAllByText(/manifesto red line is crossed/).length,
+    ).toBe(2);
+    expect(
+      within(card('Your backbenchers')).getAllByText(/Because of The tax lock \(Basic rate\)/)
+        .length,
+    ).toBeGreaterThan(0);
     const couple = screen.getByText(/A couple on median earnings/).closest('li') as HTMLElement;
     expect(within(couple).getByText(/A penny on the basic rate/)).toBeInTheDocument();
     expect(within(couple).getByText('worse off')).toBeInTheDocument();
   });
 
-  it('reassesses the next morning, and names the delivery constraints on what was funded', () => {
+  it('approves of a theme carried through, and names what the money does not buy', () => {
     at(`${BASE}&${GAME}&L=moj.10_dip47.1`);
     next();
-    next();
+    expect(meter('The public')).toHaveAccessibleName('4 of 5: Approving');
     expect(
-      screen.getByText(/The morning papers have done the sums on frozen thresholds/),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/£14bn of efficiencies are still pencilled in/)).toBeInTheDocument();
-    expect(screen.getByText(/Money is not delivery/)).toBeInTheDocument();
+      within(card('The public')).getAllByText(/One of the Budget’s themes shows up/).length,
+    ).toBe(2);
     expect(screen.getByText(/Prison places take years to build/)).toBeInTheDocument();
   });
 
   it('keeps the workings behind the close, and reaching it marks the game finished', async () => {
     at(`${BASE}&${GAME}&L=moj.10`);
     expect(screen.queryByText('The rules in full')).toBeNull();
-    next();
     next();
     next();
     expect(screen.getByText('Your measures')).toBeInTheDocument();
@@ -109,7 +117,6 @@ describe('Budget day: the speech, the afternoon, the morning after, the close', 
 
   it('closes with the verdict: the kind of Budget, the ambitions, who paid, and every other forecast', () => {
     at(`${BASE}&${GAME}&L=moj.10_itbr.1&S=moj.10_dip47.1_itbr.1`);
-    next();
     next();
     next();
     const close = screen.getByRole('region', { name: /A Budget|Half a programme|small moves/ });

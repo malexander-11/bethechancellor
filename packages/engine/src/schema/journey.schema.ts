@@ -69,18 +69,17 @@ export const briefingsFileSchema = z.strictObject({
   briefings: z.array(briefingSchema).min(1),
 });
 
-/** Which panel of the Budget day feedback a signal belongs to. */
-export const reactionAudienceSchema = z.enum(['rules', 'markets', 'parliament', 'public']);
-
 /**
- * What a signal reads off the outcome. Every one is a number so a band can be chosen
- * deterministically; statuses are encoded as 0 for the best case and upwards.
+ * What the Budget-day readings measure (Phase 5, extended in Phases 8 and 9). Every reading is a
+ * number the engine computes over the outcome, so a reception rule can compare it with an
+ * authored threshold deterministically; statuses are encoded as 0 for the best case and upwards.
  */
-export const reactionMeasureSchema = z.enum([
+export const readingMeasureSchema = z.enum([
   'stabilityHeadroomGbpm',
   'stabilityHeadroomVsTypicalError',
   'investmentRuleStatus',
   'welfareCapStatus',
+  'rulesMissed',
   'borrowingChangeGbpm',
   'cumulativeBorrowingChangeGbpm',
   'debtChangePp',
@@ -91,9 +90,15 @@ export const reactionMeasureSchema = z.enum([
   // The game's own readings (Phase 8): nought or the baseline value without a game.
   'headroomVsTargetGbpm',
   'promisesBroken',
+  'manifestoBroken',
   'prioritiesUnfunded',
   'prioritiesFunded',
+  'fundedFlagshipsGbpm',
+  'themesChosen',
+  'themesDelivered',
+  'clearThemeGbpm',
   'welfareReversals',
+  'welfareChangeGbpm',
   'departmentsCut',
   'rebellionRisk',
   'credibilityShare',
@@ -104,63 +109,11 @@ export const reactionMeasureSchema = z.enum([
   'delayedMeasures',
   'thresholdFreezeKept',
   'efficienciesKept',
+  // Spending, tax and who pays, in the target year (Phase 9).
+  'publicServiceSpendingGbpm',
+  'capitalChangeGbpm',
+  'taxRisesGbpm',
+  'taxCutsGbpm',
+  'netRevenueGbpm',
+  'progressiveBalanceGbpm',
 ]);
-
-/**
- * One band of a signal. Bands are read in order and the first whose `upTo` the reading does not
- * exceed wins; the last band carries no `upTo` and catches everything above.
- */
-export const reactionBandSchema = z.strictObject({
-  id: slug,
-  upTo: z.number().optional(),
-  level: z.enum(['good', 'mixed', 'bad', 'neutral']),
-  headline: z.string().min(1).max(140),
-  detail: z.string().min(1),
-  sources: z.array(sourceRefSchema).min(1),
-});
-
-export const reactionSignalSchema = z
-  .strictObject({
-    id: slug,
-    audience: reactionAudienceSchema,
-    /** Who within the audience is speaking: a backbench group, a desk in the City, a household. */
-    group: z.string().min(1).optional(),
-    /** Budget afternoon is the headline reaction; the morning after is the reassessment. */
-    phase: z.enum(['afternoon', 'morning']).default('afternoon'),
-    measure: reactionMeasureSchema,
-    /** How the reading is written out beside the text. */
-    reading: z.strictObject({
-      label: z.string().min(1),
-      unit: z.enum(['GBPm', 'pp', 'ratio', 'count', 'status']),
-    }),
-    bands: z.array(reactionBandSchema).min(2),
-  })
-  .superRefine((signal, ctx) => {
-    const last = signal.bands[signal.bands.length - 1];
-    if (last?.upTo !== undefined) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'the last band must have no upTo so every reading lands somewhere',
-        path: ['bands'],
-      });
-    }
-    let previous = -Infinity;
-    signal.bands.forEach((band, i) => {
-      if (band.upTo === undefined) return;
-      if (band.upTo <= previous) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'band thresholds must increase',
-          path: ['bands', i, 'upTo'],
-        });
-      }
-      previous = band.upTo;
-    });
-  });
-
-export const reactionsFileSchema = z.strictObject({
-  schemaVersion: z.literal(1),
-  /** The one line above the four panels. */
-  intro: z.string().min(1),
-  signals: z.array(reactionSignalSchema).min(1),
-});

@@ -16,7 +16,7 @@ import {
   verdictsFileSchema,
   guideFileSchema,
   glossaryFileSchema,
-  reactionsFileSchema,
+  receptionFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
   householdsReferenceSchema,
@@ -47,7 +47,7 @@ import type {
   VerdictsFile,
   GuideFile,
   GlossaryFile,
-  ReactionsFile,
+  ReceptionFile,
   ContextFile,
   HmrcExtract,
   HouseholdsReference,
@@ -149,8 +149,8 @@ export function parseBriefings(json: unknown): BriefingsFile {
   return parseWith(briefingsFileSchema, json, 'briefings');
 }
 
-export function parseReactions(json: unknown): ReactionsFile {
-  return parseWith(reactionsFileSchema, json, 'Budget day reactions');
+export function parseReception(json: unknown): ReceptionFile {
+  return parseWith(receptionFileSchema, json, 'the reception');
 }
 
 export function parseDraws(json: unknown): DrawsFile {
@@ -229,6 +229,7 @@ export interface Dataset {
   verdicts?: VerdictsFile;
   guide?: GuideFile;
   glossary?: GlossaryFile;
+  reception?: ReceptionFile;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -267,6 +268,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.incidence ?? null,
       ds.verdicts ?? null,
       ds.glossary ?? null,
+      ds.reception ?? null,
     ],
     referenced,
   );

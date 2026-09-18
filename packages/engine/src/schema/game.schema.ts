@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { journeyStepSchema } from './journey.schema.js';
+import { journeyStepSchema, readingMeasureSchema } from './journey.schema.js';
 import { isoDateSchema, sourceRefSchema } from './provenance.schema.js';
 
 /**
@@ -502,4 +502,100 @@ export const verdictsFileSchema = z
   .superRefine((file, ctx) => {
     if (!file.kinds.some((k) => k.id === file.fallback))
       ctx.addIssue({ code: 'custom', message: 'fallback names no kind', path: ['fallback'] });
+  });
+
+/* ----------------------------------------------------------- the reception */
+
+/**
+ * How Budget day reads to three audiences (Phase 9): the backbenchers, the markets and the public.
+ * Each audience rates the Budget one to five. A rule reads one engine figure, picks the first band
+ * whose `upTo` the figure does not exceed, and adds the band's points; the rating is three plus the
+ * points, clamped, then held under any fired band's `cap`. Every threshold, every point and every
+ * sentence is authored here and badged simulated: the engine compares figures with authored
+ * thresholds and picks authored sentences, and invents no number of its own (ADR-0013).
+ */
+export const receptionBandSchema = z.strictObject({
+  id: slug,
+  upTo: z.number().optional(),
+  points: z.number().int().min(-3).max(3),
+  /** A ceiling on the audience's rating while this band is in force: the public's manifesto floor. */
+  cap: z.number().int().min(1).max(5).optional(),
+  /** `{value}` is the reading, signed; `{abs}` its size. Titles from data; no number typed here. */
+  text: z.string().min(1).max(260),
+  sources: z.array(sourceRefSchema).default([]),
+  badge: simulatedBadgeSchema,
+});
+
+export const receptionRuleSchema = z
+  .strictObject({
+    id: slug,
+    measure: readingMeasureSchema,
+    reading: z.strictObject({
+      label: z.string().min(1),
+      unit: z.enum(['GBPm', 'pp', 'ratio', 'count', 'status']),
+    }),
+    /** The published anchor the thresholds lean on, for the "why this rating" disclosure. */
+    note: z.string().min(1),
+    bands: z.array(receptionBandSchema).min(2),
+  })
+  .superRefine((rule, ctx) => {
+    const last = rule.bands[rule.bands.length - 1];
+    if (last?.upTo !== undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'the last band must have no upTo so every reading lands somewhere',
+        path: ['bands'],
+      });
+    }
+    let previous = -Infinity;
+    rule.bands.forEach((band, i) => {
+      if (band.upTo === undefined) return;
+      if (band.upTo <= previous) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'band thresholds must increase',
+          path: ['bands', i],
+        });
+      }
+      previous = band.upTo;
+    });
+  });
+
+export const receptionAudienceIdSchema = z.enum(['backbenchers', 'markets', 'public']);
+
+export const receptionAudienceSchema = z.strictObject({
+  id: receptionAudienceIdSchema,
+  title: z.string().min(1),
+  /** The question this audience is asking of the Budget. */
+  question: z.string().min(1).max(120),
+  /** The five labels, worst first. */
+  labels: z.array(z.string().min(1)).length(5),
+  rules: z.array(receptionRuleSchema).min(1),
+});
+
+export const receptionFileSchema = z
+  .strictObject({
+    schemaVersion: z.literal(1),
+    /** The line above the three cards. */
+    intro: z.string().min(1),
+    audiences: z.array(receptionAudienceSchema).length(3),
+  })
+  .superRefine((file, ctx) => {
+    const ids = new Set(file.audiences.map((a) => a.id));
+    for (const id of receptionAudienceIdSchema.options) {
+      if (!ids.has(id))
+        ctx.addIssue({ code: 'custom', message: `no ${id} audience`, path: ['audiences'] });
+    }
+    const rules = new Set<string>();
+    file.audiences.forEach((a, i) =>
+      a.rules.forEach((r, j) => {
+        if (rules.has(r.id))
+          ctx.addIssue({
+            code: 'custom',
+            message: `duplicate rule ${r.id}`,
+            path: ['audiences', i, 'rules', j],
+          });
+        rules.add(r.id);
+      }),
+    );
   });

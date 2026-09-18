@@ -18,7 +18,7 @@ export {
   parseContext,
   parseAdvisers,
   parseBriefings,
-  parseReactions,
+  parseReception,
   parseDraws,
   parseCalendar,
   parsePm,
@@ -37,15 +37,14 @@ export {
   type Dataset,
 } from './load.js';
 export {
-  computeReactions,
   distributionalNotes,
   readings,
   readingsWithCauses,
   type DistributionalNote,
   type Readings,
-  type ReactionSignal,
-  type ReactionsInput,
+  type ReadingsInput,
 } from './reactions.js';
+export * from './game/reception.js';
 export { validateVintage } from './validate/validateVintage.js';
 export { checkRawSourceConsistency, type ExtractedSources } from './validate/rawSource.js';
 export {

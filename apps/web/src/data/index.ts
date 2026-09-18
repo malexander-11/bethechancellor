@@ -15,7 +15,7 @@ import {
   parseGuide,
   parseGlossary,
   guideFor as guideStageFor,
-  parseReactions,
+  parseReception,
   parseContext,
   parseHouseholds,
   parseLever,
@@ -45,7 +45,7 @@ import incidenceJson from '@data/journey/incidence.json';
 import verdictsJson from '@data/journey/verdicts.json';
 import guideJson from '@data/journey/guide.json';
 import glossaryJson from '@data/journey/glossary.json';
-import reactionsJson from '@data/journey/reactions.json';
+import receptionJson from '@data/journey/reception.json';
 import contextJson from '@data/context/2026-09.json';
 import householdsJson from '@data/reference/uk-households.json';
 import presetsJson from '@data/presets/presets.json';
@@ -66,7 +66,7 @@ export const households = parseHouseholds(householdsJson);
 export const context = parseContext(contextJson);
 export const advisers = parseAdvisers(advisersJson);
 export const briefings = parseBriefings(briefingsJson);
-export const reactions = parseReactions(reactionsJson);
+export const reception = parseReception(receptionJson);
 export const draws = parseDraws(drawsJson);
 export const calendar = parseCalendar(calendarJson);
 export const pm = parsePm(pmJson);
@@ -112,6 +112,7 @@ const problems = validateDataset({
   verdicts,
   guide,
   glossary,
+  reception,
 });
 if (problems.length > 0) {
   throw new Error(`data set is inconsistent:\n - ${problems.join('\n - ')}`);

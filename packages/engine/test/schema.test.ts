@@ -9,7 +9,7 @@ import {
   parseContext,
   parseLever,
   parsePesaExtract,
-  parseReactions,
+  parseReception,
   parseReliefExtract,
   parseScorecardExtract,
   parseSr25Extract,
@@ -28,9 +28,9 @@ describe('every JSON file under data/ validates against its schema', () => {
     expect(ds.levers.every((l) => l.status === 'reviewed')).toBe(true);
   });
 
-  it('parses the Budget day reaction bands', () => {
-    const file = path.join(DATA_DIR, 'journey/reactions.json');
-    expect(() => parseReactions(JSON.parse(readFileSync(file, 'utf8')))).not.toThrow();
+  it('parses the Budget day reception', () => {
+    const file = path.join(DATA_DIR, 'journey/reception.json');
+    expect(() => parseReception(JSON.parse(readFileSync(file, 'utf8')))).not.toThrow();
   });
 
   it('has no JSON file that is not covered by a parser', () => {
@@ -42,7 +42,7 @@ describe('every JSON file under data/ validates against its schema', () => {
       'reference/uk-households.json',
       'journey/advisers.json',
       'journey/briefings.json',
-      'journey/reactions.json',
+      'journey/reception.json',
       'journey/draws.json',
       'journey/calendar.json',
       'journey/pm.json',

@@ -18,6 +18,7 @@ import {
   parseVerdicts,
   parseGuide,
   parseGlossary,
+  parseReception,
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
@@ -80,6 +81,7 @@ export function loadDataset(): Required<Dataset> {
     verdicts: parseVerdicts(readJson('journey/verdicts.json')),
     guide: parseGuide(readJson('journey/guide.json')),
     glossary: parseGlossary(readJson('journey/glossary.json')),
+    reception: parseReception(readJson('journey/reception.json')),
   };
 }
 

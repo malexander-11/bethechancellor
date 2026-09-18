@@ -1241,68 +1241,177 @@
 
 /* ------------------------------------------------------------ budget day */
 
-.reactions--three {
+/* Three audiences, each rated out of five, each saying why. */
+.receptions {
+  display: grid;
+  gap: 12px;
   grid-template-columns: 1fr;
+  align-items: start;
+  margin: 12px 0;
 }
 
 @media (min-width: 1000px) {
-  .reactions--three {
+  .receptions {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
-.signal__group {
-  margin: 0 0 2px;
-  font-size: 0.66rem;
+.reception {
+  padding: 14px 16px 12px;
 }
 
-.signal__causes {
-  margin: 2px 0 3px;
-  font-size: 0.82rem;
+.reception--r1,
+.reception--r2 {
+  --meter: var(--stamp-bad);
 }
 
-.signal__because {
+.reception--r3 {
+  --meter: var(--stamp-warn);
+}
+
+.reception--r4,
+.reception--r5 {
+  --meter: var(--stamp-good);
+}
+
+.reception__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.reception__title {
+  margin: 0;
   font-family: var(--font-label);
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
-.rules-strip {
-  margin: 12px 0;
-  padding: 12px 16px;
+.reception__question {
+  margin: 4px 0 10px;
 }
 
-.rules-strip__head {
+/* The five-step meter: lit steps in the rating's ink. */
+.meter {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 22px;
-  margin-bottom: 8px;
+  gap: 4px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  color: var(--meter, var(--ink));
 }
 
-.rules-strip__head .reaction__title {
+.meter__step {
+  flex: 1;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--grid);
+}
+
+.meter__step--lit {
+  background: currentColor;
+}
+
+.reception__label {
+  margin: 0 0 12px;
+}
+
+.reasons {
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.rules-strip__headroom {
-  display: flex;
-  flex-direction: column;
+.reason {
+  display: grid;
+  grid-template-columns: 1.1em minmax(0, 1fr);
+  gap: 0 6px;
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+  line-height: 1.45;
 }
 
-.rules-strip__headroom strong {
-  font-size: 1.3rem;
+.reason__mark {
+  font-weight: 700;
+}
+
+.reason--up .reason__mark {
+  color: var(--stamp-good);
+}
+
+.reason--down .reason__mark {
+  color: var(--stamp-bad);
+}
+
+.reason--flat .reason__mark {
+  color: var(--muted);
+}
+
+.reason__causes {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
+.reception__why {
+  margin-top: 8px;
+  font-size: 0.88rem;
+}
+
+.reception__why summary {
+  cursor: pointer;
+  color: var(--ink-2);
+  font-family: var(--font-label);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.reception__why ul {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reception__why li {
+  margin: 0 0 8px;
+  padding-left: 10px;
+  border-left: 3px solid var(--grid);
+}
+
+.reception__why li.reason--up {
+  border-left-color: var(--stamp-good);
+}
+
+.reception__why li.reason--down {
+  border-left-color: var(--stamp-bad);
+}
+
+.reception__reading {
+  display: block;
+  color: var(--ink-2);
+  font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
 }
 
-.rules-strip__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 8px 14px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+.reception__notes-title {
+  margin: 10px 0 0;
+  font-weight: 700;
+}
+
+/* The rules, in one line above the cards: the one audience that is arithmetic. */
+.rules-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 4px;
+  color: var(--desk-ink);
+  font-weight: 600;
 }
 
 .households {

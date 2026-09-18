@@ -16,6 +16,7 @@ import {
   parseVerdicts,
   parseGuide,
   parseGlossary,
+  parseReception,
   parseHouseholds,
   parseLever,
   parsePresets,
@@ -74,6 +75,7 @@ export function loadDataset(
   const verdicts = parseVerdicts(readJson(path.join(DATA_DIR, 'journey', 'verdicts.json')));
   const guide = parseGuide(readJson(path.join(DATA_DIR, 'journey', 'guide.json')));
   const glossary = parseGlossary(readJson(path.join(DATA_DIR, 'journey', 'glossary.json')));
+  const reception = parseReception(readJson(path.join(DATA_DIR, 'journey', 'reception.json')));
   const vintage = vintages.find((v) => v.id === defaultVintageId);
   const rules = ruleSets.find((r) => r.id === defaultRulesId);
   if (!vintage) throw new Error(`default vintage ${defaultVintageId} not found`);
@@ -101,6 +103,7 @@ export function loadDataset(
     verdicts,
     guide,
     glossary,
+    reception,
     vintages,
     ruleSets,
   };

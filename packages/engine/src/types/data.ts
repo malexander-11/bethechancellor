@@ -36,9 +36,6 @@ import type {
   advisersFileSchema,
   briefingSchema,
   briefingsFileSchema,
-  reactionBandSchema,
-  reactionSignalSchema,
-  reactionsFileSchema,
   journeyStepSchema,
 } from '../schema/journey.schema.js';
 import type {
@@ -76,6 +73,10 @@ import type {
   incidenceFileSchema,
   verdictsFileSchema,
   verdictKindSchema,
+  receptionAudienceSchema,
+  receptionBandSchema,
+  receptionFileSchema,
+  receptionRuleSchema,
 } from '../schema/game.schema.js';
 import type {
   glossaryFileSchema,
@@ -161,9 +162,10 @@ export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;
 export type Briefing = z.infer<typeof briefingSchema>;
 export type BriefingsFile = z.infer<typeof briefingsFileSchema>;
-export type ReactionsFile = z.infer<typeof reactionsFileSchema>;
-export type ReactionSignalSpec = z.infer<typeof reactionSignalSchema>;
-export type ReactionBand = z.infer<typeof reactionBandSchema>;
+export type ReceptionFile = z.infer<typeof receptionFileSchema>;
+export type ReceptionAudience = z.infer<typeof receptionAudienceSchema>;
+export type ReceptionRule = z.infer<typeof receptionRuleSchema>;
+export type ReceptionBand = z.infer<typeof receptionBandSchema>;
 export type RawSource = z.infer<typeof rawSourceSchema>;
 export type TaxHead = z.infer<typeof taxHeadSchema>;
 export type SpendingHead = z.infer<typeof spendingHeadSchema>;

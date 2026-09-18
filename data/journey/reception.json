@@ -1,0 +1,841 @@
+{
+  "schemaVersion": 1,
+  "intro": "The Budget is out. Three audiences read it, and each says why.",
+  "audiences": [
+    {
+      "id": "backbenchers",
+      "title": "Your backbenchers",
+      "question": "Is this a Labour Budget?",
+      "labels": ["In revolt", "Grumbling", "Divided", "Onside", "Cheering"],
+      "rules": [
+        {
+          "id": "bb-public-services",
+          "measure": "publicServiceSpendingGbpm",
+          "reading": {
+            "label": "Change in public spending in the target year",
+            "unit": "GBPm"
+          },
+          "note": "A change of about a fifth of March’s £23.6bn headroom either way is the threshold: below that the benches do not feel it.",
+          "bands": [
+            {
+              "id": "cut",
+              "upTo": -5000,
+              "points": -1,
+              "text": "Public services lose {abs} against the Spending Review. Unprotected budgets were already set to fall in real terms after 2028-29, and a cut on top lands on a service a minister will name.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "paragraph": "4.16"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "steady",
+              "upTo": 5000,
+              "points": 0,
+              "text": "Public spending is about where the Spending Review left it ({value}). Nothing here to cheer, nothing to fight.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "more",
+              "points": 1,
+              "text": "Public services get {abs} more than the Spending Review planned. Funding them is what the party came in to do, and the benches can see it.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "bb-welfare-reversals",
+          "measure": "welfareReversals",
+          "reading": {
+            "label": "Welfare decisions of Budget 2025 reversed",
+            "unit": "count"
+          },
+          "note": "Any reversal counts; the two-child limit, the PIP changes and winter fuel were the three fights of last November.",
+          "bands": [
+            {
+              "id": "stand",
+              "upTo": 0,
+              "points": 0,
+              "text": "The welfare U-turns of last November stand. Ending the two-child limit was scored as lifting 450,000 children out of poverty, and the left of the party fought for it.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-document"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "one",
+              "upTo": 1,
+              "points": -1,
+              "text": "A welfare cut the party fought to reverse is back. The Treasury’s own scorecard describes the two-child limit’s removal as lifting 450,000 children out of poverty; the argument of last year runs backwards.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-document"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "several",
+              "points": -2,
+              "text": "More than one of last November’s welfare U-turns has been undone. The left of the party fought for each of them and will fight again.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-document"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "bb-welfare-cut",
+          "measure": "welfareChangeGbpm",
+          "reading": {
+            "label": "Change in working-age and pensioner benefits in the target year",
+            "unit": "GBPm"
+          },
+          "note": "A cut of more than about £2bn a year is felt in benefit rates; smaller moves are absorbed in uprating.",
+          "bands": [
+            {
+              "id": "cut",
+              "upTo": -2000,
+              "points": -1,
+              "text": "Benefits are cut by {abs} a year. Tackling inequality was the argument for this government; the benches will ask who this falls on.",
+              "sources": [
+                {
+                  "sourceId": "dwp-benefit-expenditure-2026"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "steady",
+              "points": 0,
+              "text": "Benefit spending is about where the forecast had it ({value}).",
+              "sources": [
+                {
+                  "sourceId": "dwp-benefit-expenditure-2026"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "bb-who-pays",
+          "measure": "progressiveBalanceGbpm",
+          "reading": {
+            "label": "Revenue from the top and business, less revenue from everyone else",
+            "unit": "GBPm"
+          },
+          "note": "The balance of new revenue: the best-off, savers and business on one side; everyone who earns or spends, motorists and duties on the other. Two billion either way is the threshold.",
+          "bands": [
+            {
+              "id": "broad",
+              "upTo": -2000,
+              "points": -1,
+              "text": "The new money comes mainly from everyone who earns or spends, from motorists and from duties, not from the top: {abs} net. The manifesto promised not to raise taxes on working people, and the benches remember.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "even",
+              "upTo": 2000,
+              "points": 0,
+              "text": "What is raised is spread between the broad base and the top ({value} net).",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "top",
+              "points": 1,
+              "text": "More is asked of the best-off, of wealth and of business than of everyone else: {abs} net. That is the Budget the benches wanted to see.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "bb-manifesto",
+          "measure": "manifestoBroken",
+          "reading": {
+            "label": "Manifesto red lines crossed",
+            "unit": "count"
+          },
+          "note": "The tax lock, the corporation tax cap, the two-child limit, the defence path and the triple lock, as the PM file lists them.",
+          "bands": [
+            {
+              "id": "kept",
+              "upTo": 0,
+              "points": 0,
+              "text": "Every manifesto red line holds. MPs in marginal seats have nothing to explain on the doorstep, which is the outcome they wanted most.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-speech"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "crossed",
+              "points": -1,
+              "text": "A manifesto red line is crossed, and the words are on the record. The MPs who won narrowly will be asked about it first.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-speech"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "bb-downing-street",
+          "measure": "prioritiesUnfunded",
+          "reading": {
+            "label": "Flagships agreed with the Prime Minister no longer funded",
+            "unit": "count"
+          },
+          "note": "Any flagship the desk pulled back from the target agreed in Downing Street.",
+          "bands": [
+            {
+              "id": "delivered",
+              "upTo": 0,
+              "points": 0,
+              "text": "Everything agreed in Downing Street is in the Budget.",
+              "sources": [
+                {
+                  "sourceId": "no10-first-speech-2026-07-20"
+                },
+                {
+                  "sourceId": "no10-commons-statement-2026-09-01"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "pulled",
+              "points": -1,
+              "text": "Something agreed in Downing Street has been pulled back. The programme was set out in public in July and September, and No. 10 will read that before anyone else does.",
+              "sources": [
+                {
+                  "sourceId": "no10-first-speech-2026-07-20"
+                },
+                {
+                  "sourceId": "no10-commons-statement-2026-09-01"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "markets",
+      "title": "The markets",
+      "question": "Is the headroom enough? What about growth and the tax burden?",
+      "labels": ["Alarmed", "Nervous", "Watchful", "Reassured", "Relaxed"],
+      "rules": [
+        {
+          "id": "mk-headroom",
+          "measure": "stabilityHeadroomGbpm",
+          "reading": {
+            "label": "Headroom against the stability rule",
+            "unit": "GBPm"
+          },
+          "note": "Ten billion is where commentators called the margin wafer-thin before the last Budget doubled it to £21.7bn; twenty is your advisers’ rule of thumb and about what March left.",
+          "bands": [
+            {
+              "id": "missed",
+              "upTo": -1,
+              "points": -2,
+              "cap": 2,
+              "text": "The stability rule is missed: the current budget is not in surplus in the target year, and the OBR will say so on Budget day. The Bank attributes part of 2025’s higher long rates to concerns about fiscal sustainability.",
+              "sources": [
+                {
+                  "sourceId": "hmt-charter-2025-autumn",
+                  "paragraph": "3.6-3.11"
+                },
+                {
+                  "sourceId": "boe-insights-long-rates-2025"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "thin",
+              "upTo": 10000,
+              "points": -1,
+              "text": "Headroom of {value} is below the ten billion that commentators called wafer-thin before the last Budget doubled it. The Bank found this year’s gilt moves amplified by hedge fund deleveraging: thin margins are noticed.",
+              "sources": [
+                {
+                  "sourceId": "ifg-healey-tax-budget-2026"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-speech"
+                },
+                {
+                  "sourceId": "boe-fsr-2026-07"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "modest",
+              "upTo": 20000,
+              "points": 0,
+              "text": "Headroom of {value}: less than March left, and smaller than the OBR’s typical five-year forecast error of about £32bn.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "paragraph": "3.4"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "ample",
+              "points": 1,
+              "text": "Headroom of {value}, inside the twenty billion your advisers call comfortable: about what March left, and more than the last Budget did. The Chancellor’s letter to the Treasury Committee promised a buffer; this is one.",
+              "sources": [
+                {
+                  "sourceId": "hmt-tsc-budget-2026-letter"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-speech"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "mk-borrowing",
+          "measure": "borrowingChangeGbpm",
+          "reading": {
+            "label": "Change in borrowing in the target year",
+            "unit": "GBPm"
+          },
+          "note": "Five billion less is a change in the financing remit the market notices; ten billion more is an issuance programme it prices.",
+          "bands": [
+            {
+              "id": "less",
+              "upTo": -5000,
+              "points": 1,
+              "text": "Borrowing in the target year is {abs} lower than the forecast assumed: fewer gilts to sell into a market where ten-year yields were 5.35% against the 4.5% the OBR assumed.",
+              "sources": [
+                {
+                  "sourceId": "boe-iadb-gilt-10y"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "flat",
+              "upTo": 10000,
+              "points": 0,
+              "text": "Borrowing is close to where the forecast had it ({value}). Yields at 5.35% against the OBR’s 4.5% assumption are a bigger fact than anything in this Budget.",
+              "sources": [
+                {
+                  "sourceId": "boe-iadb-gilt-10y"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "more",
+              "points": -1,
+              "text": "Borrowing is {abs} higher than the forecast assumed: more gilts to sell where yields were already 5.35% against 4.5%. The OBR puts a point on rates at about £15bn a year of borrowing by 2030-31.",
+              "sources": [
+                {
+                  "sourceId": "boe-iadb-gilt-10y"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "mk-tax-burden",
+          "measure": "taxTakeChangePp",
+          "reading": {
+            "label": "Change in the tax take as a share of the economy",
+            "unit": "pp"
+          },
+          "note": "Half a point of GDP on top of a tax take the OBR already calls a historic high.",
+          "bands": [
+            {
+              "id": "steady",
+              "upTo": 0.5,
+              "points": 0,
+              "text": "The tax take moves by {value}, against a forecast that already reaches 38.5% of GDP by 2030-31, which the OBR calls a historic high.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "higher",
+              "points": -1,
+              "text": "The tax take rises by {value} on top of a level the OBR already calls a historic high: 38.5% of GDP by 2030-31, from 34.5% in 2024-25. Growth is the worry the City writes about first.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "mk-investment",
+          "measure": "capitalChangeGbpm",
+          "reading": {
+            "label": "Change in public investment in the target year",
+            "unit": "GBPm"
+          },
+          "note": "A cut of more than about two billion a year to capital budgets.",
+          "bands": [
+            {
+              "id": "cut",
+              "upTo": -2000,
+              "points": -1,
+              "text": "Public investment is cut by {abs}. Investment scores against the debt rule, not the stability rule, and the framework was rewritten in 2024 so that it would not be the first thing cut to make a sum add up.",
+              "sources": [
+                {
+                  "sourceId": "hmt-strong-fiscal-framework-2024-10"
+                },
+                {
+                  "sourceId": "hmt-charter-2025-autumn",
+                  "paragraph": "3.33-3.44"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "kept",
+              "points": 0,
+              "text": "Public investment is {value} against the plan; the debt rule, not the stability rule, is where it counts.",
+              "sources": [
+                {
+                  "sourceId": "hmt-charter-2025-autumn",
+                  "paragraph": "3.33-3.44"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "mk-debt-rule",
+          "measure": "investmentRuleStatus",
+          "reading": {
+            "label": "The investment rule",
+            "unit": "status"
+          },
+          "note": "Met, or missed: net financial liabilities falling as a share of GDP in the target year.",
+          "bands": [
+            {
+              "id": "met",
+              "upTo": 1,
+              "points": 0,
+              "text": "Net financial liabilities still fall as a share of the economy: the investment rule is met.",
+              "sources": [
+                {
+                  "sourceId": "hmt-charter-2025-autumn",
+                  "paragraph": "3.33-3.44"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "missed",
+              "points": -1,
+              "text": "Debt no longer falls in the target year: the investment rule is missed. A falling debt ratio is what gilt investors watch over the medium term, whatever a single year’s deficit does.",
+              "sources": [
+                {
+                  "sourceId": "hmt-charter-2025-autumn",
+                  "paragraph": "3.33-3.44"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "mk-credibility",
+          "measure": "credibilityShare",
+          "reading": {
+            "label": "Share of the improvement resting on uncertified costings",
+            "unit": "ratio"
+          },
+          "note": "Two-fifths of the yield: beyond that the OBR’s re-scoring, not the Budget, sets the number.",
+          "bands": [
+            {
+              "id": "certified",
+              "upTo": 0.4,
+              "points": 0,
+              "text": "What improves the current budget rests mostly on HMRC rows and Treasury scorecard lines the OBR will certify without argument.",
+              "sources": [
+                {
+                  "sourceId": "osr-trr-review-2025-12"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "doubted",
+              "points": -1,
+              "text": "More than two-fifths of the yield rests on figures nobody certified: contested bases and static relief costs. HMRC says a relief’s cost is not the yield from removing it, and the OBR scores accordingly.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-tax-reliefs-quality-report"
+                },
+                {
+                  "sourceId": "osr-trr-review-2025-12"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "mk-breach",
+          "measure": "breachAccepted",
+          "reading": {
+            "label": "Breach acknowledged",
+            "unit": "status"
+          },
+          "note": "Whether the Chancellor wrote down that a rule would be missed.",
+          "bands": [
+            {
+              "id": "none",
+              "upTo": 0,
+              "points": 0,
+              "text": "No rule is knowingly missed; the Charter’s escape clause stays unused.",
+              "sources": [
+                {
+                  "sourceId": "hmt-charter-2025-autumn",
+                  "paragraph": "3.9-3.10"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "acknowledged",
+              "points": -1,
+              "text": "You have said openly that a rule will be missed. The Charter allows suspension in an emergency or a significant shock judged by the OBR; a choice is neither.",
+              "sources": [
+                {
+                  "sourceId": "hmt-charter-2025-autumn",
+                  "paragraph": "3.9-3.10"
+                },
+                {
+                  "sourceId": "boe-insights-long-rates-2025"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "public",
+      "title": "The public",
+      "question": "Did it make a difference to them?",
+      "labels": ["Furious", "Sceptical", "Shrugging", "Approving", "Delighted"],
+      "rules": [
+        {
+          "id": "pb-manifesto",
+          "measure": "manifestoBroken",
+          "reading": {
+            "label": "Manifesto promises broken",
+            "unit": "count"
+          },
+          "note": "One is enough. A broken promise on tax or welfare pins the rating at the floor whatever else the Budget does.",
+          "bands": [
+            {
+              "id": "kept",
+              "upTo": 0,
+              "points": 0,
+              "text": "Every manifesto promise on tax and welfare holds.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-speech"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "broken",
+              "points": -2,
+              "cap": 1,
+              "text": "A manifesto promise has been broken. “We will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT” was the pledge on the doorstep. Nothing else in this Budget will be heard over that.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-speech"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-themes",
+          "measure": "themesDelivered",
+          "reading": {
+            "label": "Themes with a funded flagship behind them",
+            "unit": "count"
+          },
+          "note": "A theme counts when at least one flagship it offered is funded in the package.",
+          "bands": [
+            {
+              "id": "none",
+              "upTo": 0,
+              "points": 0,
+              "text": "No theme was carried through to something people can point at.",
+              "sources": [
+                {
+                  "sourceId": "no10-first-speech-2026-07-20"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "one",
+              "upTo": 1,
+              "points": 1,
+              "text": "One of the Budget’s themes shows up in something people will notice.",
+              "sources": [
+                {
+                  "sourceId": "no10-first-speech-2026-07-20"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "all",
+              "points": 2,
+              "text": "Two or more of the Budget’s themes are backed by funded flagships: people can see what it was for.",
+              "sources": [
+                {
+                  "sourceId": "no10-first-speech-2026-07-20"
+                },
+                {
+                  "sourceId": "no10-commons-statement-2026-09-01"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-clear-theme",
+          "measure": "clearThemeGbpm",
+          "reading": {
+            "label": "Money behind a single, fully funded theme",
+            "unit": "GBPm"
+          },
+          "note": "One theme, every flagship ticked for it funded, and at least five billion a year behind it: a Budget people can describe in a sentence.",
+          "bands": [
+            {
+              "id": "no",
+              "upTo": 4999,
+              "points": 0,
+              "text": "There is no single story: more than one theme, a flagship pulled back, or too little money behind the one theme to be felt.",
+              "sources": [
+                {
+                  "sourceId": "no10-first-speech-2026-07-20"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "yes",
+              "points": 1,
+              "text": "One clear theme with {value} a year behind it: a Budget people can describe in a sentence.",
+              "sources": [
+                {
+                  "sourceId": "no10-first-speech-2026-07-20"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-tax-rises",
+          "measure": "taxRisesGbpm",
+          "reading": {
+            "label": "Tax rises in the target year",
+            "unit": "GBPm"
+          },
+          "note": "Five billion a year passes quietly; twenty is felt by most households before the target year.",
+          "bands": [
+            {
+              "id": "small",
+              "upTo": 5000,
+              "points": 0,
+              "text": "Tax rises of {value} a year: small enough to pass without a fight.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "felt",
+              "upTo": 20000,
+              "points": -1,
+              "text": "Tax rises of {value} a year, felt in pay packets and prices well before the target year.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "heavy",
+              "points": -2,
+              "text": "Tax rises of {value} a year, on top of a tax take the OBR already calls a historic high: 38.5% of GDP by 2030-31.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-tax-cuts",
+          "measure": "taxCutsGbpm",
+          "reading": {
+            "label": "Tax cuts in the target year",
+            "unit": "GBPm"
+          },
+          "note": "A billion a year is the least a cut can be and still be noticed.",
+          "bands": [
+            {
+              "id": "none",
+              "upTo": 1000,
+              "points": 0,
+              "text": "No tax cut to speak of.",
+              "sources": [],
+              "badge": "simulated"
+            },
+            {
+              "id": "some",
+              "points": 1,
+              "text": "Tax cuts worth {value} a year. Money back in pockets is noticed before anything else in a Budget.",
+              "sources": [],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-rabbit",
+          "measure": "rabbitGbpm",
+          "reading": {
+            "label": "What the rabbit costs in the target year",
+            "unit": "GBPm"
+          },
+          "note": "Any surprise announcement that costs money in the target year.",
+          "bands": [
+            {
+              "id": "pulled",
+              "upTo": -1,
+              "points": 1,
+              "text": "A surprise at the end of the speech, worth {abs} a year: the headline, at the cost of the headroom. The last Budget made headroom the headline instead.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-speech"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "none",
+              "points": 0,
+              "text": "No rabbit: the headroom is the announcement.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-speech"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -3,7 +3,6 @@ import {
   assembleSpeech,
   budgetVerdict,
   computeOutcome,
-  computeReactions,
   distributionalNotes,
   FINAL_STAGE,
   formatGbpBn,
@@ -11,6 +10,7 @@ import {
   freshGame,
   householdReactions,
   readings,
+  receptions,
 } from '@btc/engine';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,11 +19,11 @@ import { ClosingNotes } from '../components/ClosingNotes';
 import { Households } from '../components/Households';
 import { InteractionsNotice } from '../components/InteractionsNotice';
 import { JourneyLayout } from '../components/JourneyLayout';
+import { LabelBadge } from '../components/LabelBadge';
 import { formatLeverValue } from '../components/LeverControl';
 import { MeasuresTable } from '../components/MeasuresTable';
 import { PathChart } from '../components/PathChart';
-import { ReactionPanel } from '../components/ReactionPanel';
-import { RulesStrip } from '../components/RulesStrip';
+import { ReceptionCard } from '../components/ReceptionCard';
 import { Scorecard } from '../components/Scorecard';
 import { Speech } from '../components/Speech';
 import { Verdict } from '../components/Verdict';
@@ -39,7 +39,7 @@ import {
   leversByCategory,
   pm,
   rabbit,
-  reactions,
+  reception,
   rules,
   speech as speechFile,
   verdicts,
@@ -55,10 +55,10 @@ const ASSUMPTION_CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
 
 /**
- * Stage 7. Four beats: the speech, built from the actual choices; Budget afternoon, when
- * Parliament, the markets and the electorate react to the headlines; the morning after, when
- * they have read the detail; and the close. Every reaction is a game judgement that names the
- * decisions behind it and wears the badge; the rules are the one audience that is arithmetic.
+ * Step 7. Three beats: the speech, built from the actual choices; the reaction, when the
+ * backbenchers, the markets and the public each rate the Budget out of five and say why; and the
+ * close. Every rating is a game judgement from authored thresholds, names the decisions behind it
+ * and wears the badge; the rules line above the cards is the one thing here that is arithmetic.
  */
 export function BudgetDayPage() {
   const { state, dispatch, outcome, query } = useBudget();
@@ -113,13 +113,15 @@ export function BudgetDayPage() {
     const option = rabbit.options.find((o) => o.id === game.rabbit);
     return option ? { code: option.code, label: option.title } : undefined;
   }, [game]);
-  const signals = useMemo(
+  const room = useMemo(
     () =>
-      computeReactions({
+      receptions({
         outcome,
         levers,
-        reactions,
+        reception,
         typicalErrorGbpm,
+        pm,
+        incidence,
         ...(game ? { game } : {}),
         ...(status ? { status } : {}),
         ...(snapshotOutcome ? { snapshotOutcome } : {}),
@@ -128,9 +130,15 @@ export function BudgetDayPage() {
       }),
     [outcome, typicalErrorGbpm, game, status, snapshotOutcome, rabbitChoice],
   );
-  const afternoon = signals.filter((s) => s.phase === 'afternoon');
-  const morning = signals.filter((s) => s.phase === 'morning');
   const notes = distributionalNotes(outcome, levers, targetYear).slice(0, 3);
+  // The one audience that is arithmetic: the rules, in a line above the three cards.
+  const missedRules = outcome.verdicts.filter(
+    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
+  );
+  const rulesLine =
+    missedRules.length === 0
+      ? 'You meet both fiscal rules and the welfare cap on these numbers.'
+      : `Missed on these numbers: ${missedRules.map((v) => v.ruleName).join(' and ')}.`;
   const sizeOf = (code: string) => {
     const e = outcome.leverEffects.find((x) => x.code === code);
     if (!e) return 0;
@@ -172,7 +180,6 @@ export function BudgetDayPage() {
     const values = readings({
       outcome,
       levers,
-      reactions,
       typicalErrorGbpm,
       game,
       ...(status ? { status } : {}),
@@ -232,53 +239,26 @@ export function BudgetDayPage() {
         <Beat title="The speech" continueLabel="Sit down, and hear the room">
           <Speech speech={theSpeech} />
         </Beat>
-        <Beat title="Budget afternoon" continueLabel="Sleep on it">
+        <Beat title="The reaction" continueLabel="Read the verdict" onAdvance={reachClose}>
           <Scorecard
             outcome={outcome}
             typicalErrorGbpm={typicalErrorGbpm}
             revealed={game?.revealed ?? false}
           />
-          <RulesStrip outcome={outcome} signals={afternoon} typicalErrorGbpm={typicalErrorGbpm} />
-          <div className="reactions reactions--three">
-            <ReactionPanel audience="parliament" signals={afternoon} />
-            <ReactionPanel audience="markets" signals={afternoon} />
-            <ReactionPanel audience="public" signals={afternoon} notes={notes} />
+          <p className="rules-line">
+            <LabelBadge badge="mechanical" /> {rulesLine}
+          </p>
+          <div className="receptions">
+            {room.map((r) => (
+              <ReceptionCard
+                key={r.audience}
+                reception={r}
+                notes={r.audience === 'public' ? notes : undefined}
+              />
+            ))}
           </div>
           <h2 className="section-label">Five households</h2>
           <Households reactions={voters} />
-        </Beat>
-        <Beat title="The morning after" continueLabel="Read the verdict" onAdvance={reachClose}>
-          <p className="panel__hint">
-            Thursday morning. The detail has been read: the small print, the start dates, the
-            costings, the financing. Reactions harden or soften, and each says which decision did
-            it.
-          </p>
-          <div className="reactions reactions--three">
-            <ReactionPanel
-              audience="parliament"
-              signals={morning}
-              title="Parliament, the morning after"
-            />
-            <ReactionPanel
-              audience="markets"
-              signals={morning}
-              title="The markets, the morning after"
-            />
-            <ReactionPanel
-              audience="public"
-              signals={morning}
-              title="The electorate, the morning after"
-            />
-          </div>
-          {morning.some((s) => s.audience === 'rules') ? (
-            <div className="reactions">
-              <ReactionPanel
-                audience="rules"
-                signals={morning}
-                title="Your own rules, the morning after"
-              />
-            </div>
-          ) : null}
           {fundedFlagships.length > 0 ? (
             <section className="panel" aria-labelledby="delivery-heading">
               <h2 id="delivery-heading" className="section-label">

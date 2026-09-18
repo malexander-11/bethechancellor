@@ -1,33 +1,12 @@
 /**
- * Budget day feedback: how your Budget reads to four audiences, on the afternoon and the morning
- * after. Every signal is a rule over the outcome, and every word it shows is authored in
- * data/journey/reactions.json with its sources. Nothing here invents a mood or predicts a market
- * move: the bands describe what commentators watch, the reading that selected the band is always
- * shown beside the text, and each signal names the decisions that moved its reading.
+ * The readings of a Budget: every figure the reception (game/reception.ts) and the close can
+ * compare with an authored threshold, and the decisions behind each. Nothing here invents a mood
+ * or predicts a market move: a reading is arithmetic over the outcome, and the words about it
+ * live in data/journey/reception.json with their sources.
  */
-import type {
-  Lever,
-  ReactionBand,
-  ReactionSignalSpec,
-  ReactionsFile,
-  SourceRef,
-} from './types/data.js';
+import type { IncidenceFile, Lever, PmFile, SourceRef } from './types/data.js';
 import type { GamePermalink, Outcome } from './types/engine.js';
 import type { AmbitionStatus } from './game/ambitions.js';
-
-export interface ReactionSignal {
-  id: string;
-  audience: 'rules' | 'markets' | 'parliament' | 'public';
-  group?: string;
-  phase: 'afternoon' | 'morning';
-  level: 'good' | 'mixed' | 'bad' | 'neutral';
-  headline: string;
-  detail: string;
-  reading: { label: string; value: number; unit: 'GBPm' | 'pp' | 'ratio' | 'count' | 'status' };
-  sources: SourceRef[];
-  /** The decisions behind the reading, as the levers' own short titles. */
-  causes: string[];
-}
 
 /** A distributional note carried straight from a lever the player moved. */
 export interface DistributionalNote {
@@ -38,10 +17,9 @@ export interface DistributionalNote {
   sources: SourceRef[];
 }
 
-export interface ReactionsInput {
+export interface ReadingsInput {
   outcome: Outcome;
   levers: readonly Lever[];
-  reactions: ReactionsFile;
   /** The OBR's typical five-year receipts forecast error, £ million. */
   typicalErrorGbpm: number;
   /** The playthrough, when there is one (Phase 8). Without it the game readings sit at nought. */
@@ -53,6 +31,10 @@ export interface ReactionsInput {
   macroCodes?: readonly string[];
   /** The rabbit: the lever it moved, if any, and what to call it. */
   rabbit?: { code?: string; label: string };
+  /** The PM file, for which themes a funded flagship delivers. */
+  pm?: PmFile;
+  /** Who each lever falls on, for whether the revenue comes from the top or the broad base. */
+  incidence?: IncidenceFile;
 }
 
 const STATUS_ORDER: Record<string, number> = {
@@ -65,6 +47,9 @@ const STATUS_ORDER: Record<string, number> = {
 };
 
 const WELFARE_REVERSALS = new Set(['rv2ch', 'rvpip', 'rvwfp']);
+/** Incidence groups on the two sides of "who pays": the top and business, or everyone. */
+const PROGRESSIVE_GROUPS = new Set(['top', 'savers-owners', 'business']);
+const BROAD_GROUPS = new Set(['broad-base', 'motorists', 'duties']);
 const PRICE_RAISERS = new Set([
   'vatfood',
   'vatnrg',
@@ -88,7 +73,7 @@ export interface Readings {
 }
 
 /** Every reading the signals can use, and the decisions behind each, computed once. */
-export function readingsWithCauses(input: ReactionsInput): Readings {
+export function readingsWithCauses(input: ReadingsInput): Readings {
   const { outcome, levers, typicalErrorGbpm, game, status } = input;
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
   const title = (code: string) => byCode.get(code)?.shortTitle ?? code;
@@ -198,12 +183,59 @@ export function readingsWithCauses(input: ReactionsInput): Readings {
     .filter((v) => v.status === 'notMet' || v.status === 'aboveMargin')
     .map((v) => v.ruleName);
 
+  // Spending, tax and who pays, in the target year (Phase 9). Titles are the levers' own.
+  const policyEffects = outcome.leverEffects.filter((e) => e.category !== 'macro');
+  const spendOf = (e: (typeof policyEffects)[number]) =>
+    (e.currentSpending[year] ?? 0) + (e.capitalSpending[year] ?? 0);
+  const topBy = (
+    list: typeof policyEffects,
+    size: (e: (typeof policyEffects)[number]) => number,
+  ): string[] =>
+    [...list]
+      .filter((e) => size(e) !== 0)
+      .sort((a, b) => Math.abs(size(b)) - Math.abs(size(a)))
+      .slice(0, 3)
+      .map((e) => title(e.code));
+  const publicServiceSpending = policyEffects.reduce((acc, e) => acc + spendOf(e), 0);
+  const capitalChange = policyEffects.reduce((acc, e) => acc + (e.capitalSpending[year] ?? 0), 0);
+  const welfareEffects = policyEffects.filter((e) => e.category === 'welfare');
+  const welfareChange = welfareEffects.reduce((acc, e) => acc + (e.currentSpending[year] ?? 0), 0);
+  const rises = policyEffects.filter((e) => (e.receipts[year] ?? 0) > 0);
+  const cuts = policyEffects.filter((e) => (e.receipts[year] ?? 0) < 0);
+  const taxRises = rises.reduce((acc, e) => acc + (e.receipts[year] ?? 0), 0);
+  const taxCuts = cuts.reduce((acc, e) => acc - (e.receipts[year] ?? 0), 0);
+  let progressive = 0;
+  const progressiveCauses: string[] = [];
+  if (input.incidence) {
+    for (const e of rises) {
+      const group = input.incidence.levers[e.code];
+      if (!group) continue;
+      if (PROGRESSIVE_GROUPS.has(group)) progressive += e.receipts[year] ?? 0;
+      else if (BROAD_GROUPS.has(group)) progressive -= e.receipts[year] ?? 0;
+      else continue;
+      progressiveCauses.push(title(e.code));
+    }
+  }
+  // Themes: a ticked theme is delivered when a funded flagship it offers, or a cross-cutting
+  // one, is in the package; one theme with everything ticked funded is a clear story.
+  const themes = game?.themes ?? [];
+  const fundedIds = new Set(funded.map((p) => p.flagship.id));
+  const crossFunded = (input.pm?.crossCutting ?? []).some((id) => fundedIds.has(id));
+  const delivered = (input.pm?.themes ?? []).filter(
+    (t) => themes.includes(t.id) && (crossFunded || t.flagships.some((id) => fundedIds.has(id))),
+  );
+  const fundedFlagshipsGbpm = funded.reduce((acc, p) => acc + Math.abs(p.costGbpm), 0);
+  const clearThemeGbpm =
+    themes.length === 1 && funded.length > 0 && unfunded.length === 0 ? fundedFlagshipsGbpm : 0;
+  const manifestoBroken = broken.filter((p) => p.promise.breaks.length > 0);
+
   const out: Readings = {
     values: {
       stabilityHeadroomGbpm: headroom,
       stabilityHeadroomVsTypicalError: typicalErrorGbpm > 0 ? headroom / typicalErrorGbpm : 0,
       investmentRuleStatus: STATUS_ORDER[investment?.status ?? 'unavailable'] ?? 3,
       welfareCapStatus: STATUS_ORDER[welfare?.status ?? 'unavailable'] ?? 3,
+      rulesMissed: missedRules.length,
       borrowingChangeGbpm: borrowingChange,
       cumulativeBorrowingChangeGbpm: cumulativeBorrowing,
       debtChangePp: debtChange,
@@ -213,9 +245,15 @@ export function readingsWithCauses(input: ReactionsInput): Readings {
       budget2025Reversals: reversals.length,
       headroomVsTargetGbpm: headroom - target,
       promisesBroken: broken.length,
+      manifestoBroken: manifestoBroken.length,
       prioritiesUnfunded: unfunded.length,
       prioritiesFunded: funded.length,
+      fundedFlagshipsGbpm,
+      themesChosen: themes.length,
+      themesDelivered: delivered.length,
+      clearThemeGbpm,
       welfareReversals: welfareReversals.length,
+      welfareChangeGbpm: welfareChange,
       departmentsCut: cutDepartments.length,
       rebellionRisk: broken.length * 2 + unfunded.length + welfareReversals.length,
       credibilityShare: improving > 0 ? uncertified / improving : 0,
@@ -226,12 +264,19 @@ export function readingsWithCauses(input: ReactionsInput): Readings {
       delayedMeasures: delayed.length,
       thresholdFreezeKept: moved.has('rvfrz') ? 0 : 1,
       efficienciesKept: moved.has('rveff') ? 0 : 1,
+      publicServiceSpendingGbpm: publicServiceSpending,
+      capitalChangeGbpm: capitalChange,
+      taxRisesGbpm: taxRises,
+      taxCutsGbpm: taxCuts,
+      netRevenueGbpm: taxRises - taxCuts,
+      progressiveBalanceGbpm: progressive,
     },
     causes: {
       stabilityHeadroomGbpm: movers,
       stabilityHeadroomVsTypicalError: movers,
       investmentRuleStatus: movers,
       welfareCapStatus: welfareReversals.map((l) => l.shortTitle),
+      rulesMissed: missedRules,
       borrowingChangeGbpm: movers,
       cumulativeBorrowingChangeGbpm: movers,
       debtChangePp: movers,
@@ -244,9 +289,19 @@ export function readingsWithCauses(input: ReactionsInput): Readings {
         (p) =>
           `${p.promise.title}${p.brokenBy.length > 0 ? ` (${p.brokenBy.map((b) => title(b.code)).join(', ')})` : ''}`,
       ),
+      manifestoBroken: manifestoBroken.map(
+        (p) => `${p.promise.title} (${p.brokenBy.map((b) => title(b.code)).join(', ')})`,
+      ),
       prioritiesUnfunded: unfunded.map((p) => p.flagship.title),
       prioritiesFunded: funded.map((p) => p.flagship.title),
+      fundedFlagshipsGbpm: funded.map((p) => p.flagship.title),
+      themesChosen: (input.pm?.themes ?? [])
+        .filter((t) => themes.includes(t.id))
+        .map((t) => t.title),
+      themesDelivered: delivered.map((t) => t.title),
+      clearThemeGbpm: clearThemeGbpm > 0 ? funded.map((p) => p.flagship.title) : [],
       welfareReversals: welfareReversals.map((l) => l.shortTitle),
+      welfareChangeGbpm: topBy(welfareEffects, (e) => e.currentSpending[year] ?? 0),
       departmentsCut: cutDepartments.map((l) => l.shortTitle),
       rebellionRisk: [
         ...broken.map((p) => p.promise.title),
@@ -261,45 +316,20 @@ export function readingsWithCauses(input: ReactionsInput): Readings {
       delayedMeasures: delayed.map((code) => `${title(code)} → ${game?.delays[code] ?? ''}`),
       thresholdFreezeKept: moved.has('rvfrz') ? [title('rvfrz')] : [],
       efficienciesKept: moved.has('rveff') ? [title('rveff')] : [],
+      publicServiceSpendingGbpm: topBy(policyEffects, spendOf),
+      capitalChangeGbpm: topBy(policyEffects, (e) => e.capitalSpending[year] ?? 0),
+      taxRisesGbpm: topBy(rises, (e) => e.receipts[year] ?? 0),
+      taxCutsGbpm: topBy(cuts, (e) => e.receipts[year] ?? 0),
+      netRevenueGbpm: taxMovers,
+      progressiveBalanceGbpm: progressiveCauses.slice(0, 3),
     },
   };
   return out;
 }
 
-/** The readings alone, as the earlier tests and callers expect them. */
-export function readings(input: ReactionsInput): Record<string, number> {
+/** The readings alone. */
+export function readings(input: ReadingsInput): Record<string, number> {
   return readingsWithCauses(input).values;
-}
-
-function bandFor(spec: ReactionSignalSpec, value: number): ReactionBand {
-  for (const band of spec.bands) {
-    if (band.upTo === undefined || value <= band.upTo) return band;
-  }
-  // The schema requires a final band with no upTo, so this is unreachable in validated data.
-  const last = spec.bands[spec.bands.length - 1];
-  if (!last) throw new Error(`reaction signal ${spec.id} has no bands`);
-  return last;
-}
-
-/** Deterministic: the same outcome always produces the same signals, in the authored order. */
-export function computeReactions(input: ReactionsInput): ReactionSignal[] {
-  const { values, causes } = readingsWithCauses(input);
-  return input.reactions.signals.map((spec) => {
-    const value = values[spec.measure] ?? 0;
-    const band = bandFor(spec, value);
-    return {
-      id: spec.id,
-      audience: spec.audience,
-      ...(spec.group ? { group: spec.group } : {}),
-      phase: spec.phase,
-      level: band.level,
-      headline: band.headline,
-      detail: band.detail,
-      reading: { label: spec.reading.label, value, unit: spec.reading.unit },
-      sources: band.sources,
-      causes: causes[spec.measure] ?? [],
-    };
-  });
 }
 
 /**
