@@ -1,15 +1,37 @@
 import { formatGbpBn } from '@btc/engine';
 import { AdviserBriefing } from '../components/AdviserBriefing';
+import { summariseReading } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { advisers, briefingsFor, vintage } from '../data';
+import { SourceList } from '../components/SourceLink';
+import { briefingById, context, pm, rules, vintage } from '../data';
 import { useCeremony } from '../journey/beats';
 import { StepLink } from '../journey/links';
 import { useWorkingsSwitch } from '../journey/workings';
 
+const BUDGET_DAY = new Date(
+  `${rules.assessment.nextFormalAssessmentOn}T12:00:00Z`,
+).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+/** The three readings the economy card leads with: money, prices, borrowing. */
+const READINGS = ['gilt-10y', 'cpi-latest', 'psnb-ytd'];
+
+/**
+ * Step 1: the appointment. The letter is the premise; beneath it, three advisers brief the new
+ * Chancellor in one screen: the rules and why they matter, the state of the economy, and the
+ * politics. Every figure on the cards is a context reading or a sourced fact; the red lines are
+ * the PM's promises, read from the same file the desk's warnings use, so they can never drift.
+ */
 export function StartPage() {
   const headroom = vintage.context?.headroomAtPublicationGbpm ?? 0;
   const { ceremony, setCeremony } = useCeremony();
   const { workings, setWorkings } = useWorkingsSwitch();
+  const rulesBrief = briefingById.get('start-appointment');
+  const economyBrief = briefingById.get('start-economy');
+  const politicsBrief = briefingById.get('start-politics');
+  const readings = READINGS.flatMap((id) => {
+    const r = context.readings.find((x) => x.id === id);
+    return r ? [r] : [];
+  });
   return (
     <JourneyLayout step="start">
       {/*
@@ -23,12 +45,12 @@ export function StartPage() {
           <span className="letter__ref">Appointment · Chancellor of the Exchequer</span>
         </p>
         <p className="lede">
-          Your Budget is on 28 October 2026. March left {formatGbpBn(headroom, 1)} of headroom
-          against the fiscal rules, and markets have moved since. Your advisers are waiting.
+          Chancellor, your Budget is on {BUDGET_DAY}. March left {formatGbpBn(headroom, 1)} of
+          headroom and markets have moved since. Your advisers are waiting.
         </p>
         <p className="hero-start__actions">
           <StepLink to="/outlook" className="btn btn--primary">
-            Begin: read the economic briefing
+            Begin: choose what to plan on
           </StepLink>
           <StepLink to="/budget/taxes" className="btn">
             Skip to taxes and spending
@@ -53,24 +75,35 @@ export function StartPage() {
           </label>
         </p>
       </section>
-      {briefingsFor('start').map((b) => (
-        <AdviserBriefing key={b.id} briefing={b} />
-      ))}
-      <section className="panel" aria-labelledby="advisers-heading">
-        <h2 id="advisers-heading">Your advisers</h2>
-        <p className="panel__hint">
-          Roles, not people. Everything they tell you cites a public document; their briefings are
-          labelled commentary, their judgements simulated, and neither changes a number.
-        </p>
-        <ul className="advisers">
-          {advisers.advisers.map((a) => (
-            <li key={a.id} className="nameplate">
-              <strong>{a.role}</strong>
-              <span>{a.remit}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+
+      <div className="briefing-row briefing-row--three">
+        {rulesBrief ? <AdviserBriefing briefing={rulesBrief} compact /> : null}
+        {economyBrief ? (
+          <AdviserBriefing briefing={economyBrief} compact>
+            <ul className="chips" aria-label="Readings">
+              {readings.map((r) => (
+                <li key={r.id} className="chip">
+                  <span className="chip__value">{summariseReading(r.latest, r.unit)}</span>{' '}
+                  {r.title}
+                  <span className="chip__was"> · OBR {summariseReading(r.obr, r.unit)}</span>
+                </li>
+              ))}
+            </ul>
+          </AdviserBriefing>
+        ) : null}
+        {politicsBrief ? (
+          <AdviserBriefing briefing={politicsBrief} compact>
+            <ul className="redlines" aria-label="The manifesto red lines">
+              {pm.promises.map((p) => (
+                <li key={p.id}>
+                  <strong>{p.title}.</strong> {p.text}
+                  <SourceList as="span" className="briefing__sources" refs={p.sources} />
+                </li>
+              ))}
+            </ul>
+          </AdviserBriefing>
+        ) : null}
+      </div>
     </JourneyLayout>
   );
 }

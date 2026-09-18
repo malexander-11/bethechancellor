@@ -22,7 +22,6 @@ describe('choosing what to plan on', () => {
 
   it('asks for a headroom target and explains the £20bn rule of thumb as a judgement', () => {
     at(`/outlook?${BASE}`);
-    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     const targets = screen.getByRole('radiogroup', { name: 'Headroom target' });
     expect(within(targets).getAllByRole('radio')).toHaveLength(4);
     expect(within(targets).getByRole('radio', { name: /£20bn/ })).toBeChecked();
@@ -33,7 +32,6 @@ describe('choosing what to plan on', () => {
 
   it('mints a seed and carries the outlook and the target to Downing Street', async () => {
     at(`/outlook?${BASE}`);
-    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     fireEvent.click(screen.getByRole('radio', { name: /A pessimistic analyst/ }));
     fireEvent.click(screen.getByRole('radio', { name: /£30bn/ }));
     fireEvent.click(screen.getByRole('button', { name: /Confirm, and go to Downing Street/ }));
@@ -49,7 +47,6 @@ describe('choosing what to plan on', () => {
 
   it('keeps the same seed if the player comes back and confirms again', async () => {
     at(`/outlook?${BASE}&g=s.417_st.1_pl.adviser`);
-    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     fireEvent.click(screen.getByRole('button', { name: /Confirm, and go to Downing Street/ }));
     await waitFor(() => {
       const g = new URLSearchParams(window.location.search).get('g') ?? '';

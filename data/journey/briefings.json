@@ -5,11 +5,11 @@
       "id": "start-appointment",
       "step": "start",
       "adviser": "permanent-secretary",
-      "title": "Chancellor, welcome. The Budget is on 28 October.",
-      "headline": "Two rules and a cap. Miss them and the OBR says so on 28 October.",
+      "title": "The rules in full",
+      "headline": "Two rules and a cap. Miss them and the OBR says so on Budget day.",
       "paragraphs": [
         {
-          "text": "The Budget is on Wednesday 28 October 2026. The Office for Budget Responsibility publishes a new economic and fiscal forecast alongside it and, once a year at the autumn Budget, formally assesses whether the Government's plans meet the fiscal rules. That assessment is the test your Budget has to pass.",
+          "text": "Your Budget is on Wednesday 28 October 2026. The Office for Budget Responsibility publishes a new forecast alongside it and, once a year at the autumn Budget, formally judges whether the Government's plans meet the fiscal rules. That judgement is the test your Budget has to pass.",
           "sources": [
             {
               "sourceId": "press-investing-2026-09-11"
@@ -21,7 +21,7 @@
           ]
         },
         {
-          "text": "Two rules and a cap. The stability rule requires the current budget (day-to-day spending against revenue) to be in surplus in 2029-30; from this Budget, when 2029-30 becomes the third year of the forecast, it becomes a rolling rule allowing a deficit of up to 0.5% of GDP. The investment rule requires public sector net financial liabilities to be falling as a share of GDP in the same year. The welfare cap limits most working-age and child benefits to £194.5 billion plus a 5% margin in 2029-30.",
+          "text": "The stability rule: by 2029-30, day-to-day spending must be paid for out of revenue. From this Budget, when 2029-30 becomes the third year of the forecast, a deficit of up to 0.5% of GDP is allowed. The investment rule: net financial liabilities, the rules' measure of debt, must be falling as a share of GDP in the same year. The welfare cap: most working-age and child benefits must stay within £194.5 billion plus a 5% margin.",
           "sources": [
             {
               "sourceId": "hmt-charter-2025-autumn",
@@ -30,7 +30,7 @@
           ]
         },
         {
-          "text": "Your starting point is the OBR's March forecast: a current budget surplus of £23.6 billion in 2029-30, which is your headroom against the stability rule, and net financial liabilities falling by about 0.8% of GDP that year. Set against that, the OBR's typical five-year forecast error for receipts is 0.9% of GDP, about £33 billion, which is larger than the headroom.",
+          "text": "Headroom is the margin by which you pass. March left £23.6 billion against the stability rule. Set against that, the OBR's typical five-year forecast error for receipts is 0.9% of GDP, about £33 billion: the forecast can move by more than the whole margin, which is why a Chancellor keeps some in hand.",
           "sources": [
             {
               "sourceId": "obr-efo-2026-03",
@@ -42,27 +42,59 @@
             }
           ]
         }
+      ],
+      "facts": [
+        {
+          "label": "the tests your Budget must pass",
+          "value": "2 rules + a cap",
+          "source": {
+            "sourceId": "hmt-charter-2025-autumn",
+            "paragraph": "3.6-3.11"
+          }
+        },
+        {
+          "label": "the year they are judged in",
+          "value": "2029-30",
+          "source": {
+            "sourceId": "hmt-charter-2025-autumn",
+            "paragraph": "3.6"
+          }
+        },
+        {
+          "label": "headroom March left you",
+          "value": "£23.6bn",
+          "source": {
+            "sourceId": "obr-efo-2026-03",
+            "table": "Table 5.1"
+          }
+        },
+        {
+          "label": "the OBR's typical forecast error",
+          "value": "£33bn",
+          "source": {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "3.4"
+          }
+        }
       ]
     },
     {
-      "id": "assumptions-method",
-      "step": "assumptions",
+      "id": "start-economy",
+      "step": "start",
       "adviser": "chief-economic-adviser",
-      "title": "The forecast rests on assumptions that have moved",
-      "headline": "The OBR froze its assumptions in January. Markets have moved since.",
+      "title": "What has moved since March",
+      "headline": "Rates and inflation are above what the OBR assumed in March. Borrowing is running ahead of its path.",
       "paragraphs": [
         {
-          "text": "The OBR conditions its forecast on market expectations for interest rates taken in a window before publication (the 10 working days to 22 January 2026 for the March forecast) and on its own view of growth and inflation. When those move, the arithmetic moves even if policy does not.",
+          "text": "The OBR fixed its March assumptions in January: market interest rates from the ten working days to 22 January, and its own view of growth and inflation. The 10-year gilt yield it assumed was 4.5%; it is now about 5.35%. On the OBR's own reckoner a sustained 1 percentage point on rates adds about £15 billion to borrowing by 2030-31.",
           "sources": [
             {
               "sourceId": "obr-efo-2026-03",
               "paragraph": "2.5"
-            }
-          ]
-        },
-        {
-          "text": "The OBR publishes ready reckoners for how its forecast responds: a sustained 1 percentage point rise in Bank Rate and gilt yields adds about £15 billion to borrowing by 2030-31; 0.1 percentage point a year on nominal GDP growth is worth about £8 billion; 1 percentage point on RPI inflation adds about £11 billion. The sliders on this page use those figures and are labelled as assumptions, not forecasts.",
-          "sources": [
+            },
+            {
+              "sourceId": "boe-iadb-gilt-10y"
+            },
             {
               "sourceId": "obr-efo-2026-03",
               "paragraph": "1.21 and 6.16",
@@ -71,11 +103,52 @@
           ]
         },
         {
-          "text": "Confirming the OBR's March assumptions is a legitimate choice: the OBR itself will not update them until Budget day. The advisers' suggestions take the latest market and independent readings, subtract the OBR's March figure and round to the slider step; they are a rule, not a new forecast.",
+          "text": "Independent forecasters expect more inflation and more borrowing than the OBR did: CPI of 3.1% this year against the OBR's 2.3%, and borrowing £27 billion above the OBR's path in 2029-30. None of this is a forecast of mine. The next step asks whose figures you will plan on; the OBR will publish its own in October whatever you choose.",
           "sources": [
+            {
+              "sourceId": "hmt-forecasts-2026-08"
+            },
             {
               "sourceId": "obr-efo-2026-03",
               "paragraph": "3.4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "start-politics",
+      "step": "start",
+      "adviser": "political-adviser",
+      "title": "The politics in full",
+      "headline": "A new Prime Minister wants a Budget people notice. The manifesto says what you may not touch.",
+      "paragraphs": [
+        {
+          "text": "The Prime Minister took office in July and has moved fast: VAT off electricity bills from 1 October, bus fares capped at £2 for 2027, and a promise to put \"life's essentials back under stronger public control\". Downing Street wants this Budget to show the same energy, and will tell you what it is for.",
+          "sources": [
+            {
+              "sourceId": "no10-first-speech-2026-07-20",
+              "quote": "put life's essentials back under stronger public control"
+            },
+            {
+              "sourceId": "govuk-vat-electricity-cut-2026"
+            },
+            {
+              "sourceId": "govuk-bus-fare-cap-2027"
+            }
+          ]
+        },
+        {
+          "text": "The manifesto ties your hands: no rise in income tax rates, National Insurance or VAT, and corporation tax capped at 25% for the whole Parliament. Budget 2025 ended the two-child limit and repeated the tax lock. These are red lines, not preferences. The desk will warn you before you cross one, and the public will notice if you do.",
+          "sources": [
+            {
+              "sourceId": "labour-manifesto-2024-strong-foundations"
+            },
+            {
+              "sourceId": "labour-manifesto-2024-growth"
+            },
+            {
+              "sourceId": "hmt-budget-2025-speech"
             }
           ]
         }

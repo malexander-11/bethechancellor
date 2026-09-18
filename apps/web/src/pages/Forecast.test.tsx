@@ -81,7 +81,6 @@ describe('the OBR’s forecast', () => {
 
   it('locks the outlook step once the envelope is open', () => {
     at(`/outlook?${BASE}&g=s.${ADVISER}_st.3_pl.adviser_rv.1&M=rate.0.75_rpi.0.5`);
-    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     expect(screen.getByText(/The OBR’s October forecast has arrived/)).toBeInTheDocument();
     expect(screen.getByRole('radio', { name: /£20bn/ })).toBeDisabled();
   });

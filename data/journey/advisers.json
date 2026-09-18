@@ -11,7 +11,7 @@
       "id": "chief-economic-adviser",
       "role": "Chief Economic Adviser",
       "remit": "Owns the economic assumptions: what the OBR assumed in March, what markets and independent forecasters say now, and what that does to the arithmetic.",
-      "steps": ["assumptions", "budget-day", "outlook", "forecast", "compromise"]
+      "steps": ["start", "assumptions", "budget-day", "outlook", "forecast", "compromise"]
     },
     {
       "id": "director-of-tax",
@@ -30,6 +30,7 @@
       "role": "Political Adviser",
       "remit": "Flags what will be contested: who pays, what has not moved for years, what reaches Scotland, Wales and Northern Ireland, and what your predecessor decided last November.",
       "steps": [
+        "start",
         "taxes",
         "spending",
         "recommendations",

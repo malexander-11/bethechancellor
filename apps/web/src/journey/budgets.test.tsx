@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
@@ -41,6 +41,9 @@ function pressThrough(): number {
 }
 
 describe('the beat and word budgets', () => {
+  // The budgets are what a newcomer sees, and a newcomer sees the game with the workings off.
+  beforeEach(() => window.localStorage.removeItem('btc.workings.v1'));
+
   it('asks for at most twelve Continues across the whole journey', () => {
     const stages = [
       '/outlook',
@@ -64,10 +67,21 @@ describe('the beat and word budgets', () => {
   });
 
   it('opens every stage with a hand-off of at most 180 visible words', () => {
-    for (const path of ['/outlook', '/pm', '/budget/taxes', '/budget/spending', '/forecast']) {
+    for (const path of ['/pm', '/budget/taxes', '/budget/spending', '/forecast']) {
       const view = at(`${path}?${BASE}&${GAME}`);
       const n = liveBeatWords();
       expect(n, `${path} opens with ${n} words`).toBeLessThanOrEqual(180);
+      view.unmount();
+    }
+  });
+
+  it('keeps the one-screen decisions to at most 300 visible words', () => {
+    // The outlook has no hand-off: the screen is the decision, four cards, four targets and a
+    // note. Still a game, not a lecture.
+    for (const path of ['/outlook']) {
+      const view = at(`${path}?${BASE}&${GAME}`);
+      const n = liveBeatWords();
+      expect(n, `${path} shows ${n} words`).toBeLessThanOrEqual(300);
       view.unmount();
     }
   });

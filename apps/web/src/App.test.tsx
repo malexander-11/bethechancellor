@@ -37,9 +37,8 @@ describe('journey routes', () => {
       </MemoryRouter>,
     );
     expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
-    // Beat 0 is the adviser arriving; the four forecasts you can budget on are behind Continue.
-    expect(screen.queryByRole('radiogroup', { name: 'Economic assumptions' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    // One screen: the four forecasts you can budget on are on the page at once.
+    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     const cards = screen.getByRole('radiogroup', { name: 'Economic assumptions' });
     expect(within(cards).getAllByRole('radio')).toHaveLength(4);
     expect(within(cards).getByRole('radio', { name: /Keep the March baseline/ })).toBeChecked();

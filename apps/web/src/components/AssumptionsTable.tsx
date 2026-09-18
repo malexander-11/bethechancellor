@@ -8,7 +8,10 @@ import { SourceLink } from './SourceLink';
  * One figure for a reading: the scalar, or the average over its years. The average is what the
  * advisers' gap rule compares, so the card and the suggestion agree.
  */
-function summarise(value: ContextReading['obr'], unit: ContextReading['unit']): string {
+export function summariseReading(
+  value: ContextReading['obr'],
+  unit: ContextReading['unit'],
+): string {
   if (value.value !== undefined) return formatReading(value.value, unit);
   const years = Object.values(value.series ?? {});
   if (years.length === 0) return '';
@@ -26,14 +29,14 @@ function Compare({ reading }: { reading: ContextReading }) {
     <div className="reading__compare">
       <span className="reading__side">
         <small>OBR in March{isSeries(reading.obr) ? ', average' : ''}</small>
-        <strong>{summarise(reading.obr, reading.unit)}</strong>
+        <strong>{summariseReading(reading.obr, reading.unit)}</strong>
       </span>
       <span className="reading__arrow" aria-hidden="true">
         →
       </span>
       <span className="reading__side">
         <small>Latest{isSeries(reading.latest) ? ', average' : ''}</small>
-        <strong>{summarise(reading.latest, reading.unit)}</strong>
+        <strong>{summariseReading(reading.latest, reading.unit)}</strong>
       </span>
     </div>
   );
@@ -104,8 +107,8 @@ export function ContextRow({ reading }: { reading: ContextReading }) {
   return (
     <tr>
       <th scope="row">{reading.title}</th>
-      <td>{summarise(reading.obr, reading.unit)}</td>
-      <td>{summarise(reading.latest, reading.unit)}</td>
+      <td>{summariseReading(reading.obr, reading.unit)}</td>
+      <td>{summariseReading(reading.latest, reading.unit)}</td>
       <td className="source">
         <SourceLink ref={reading.latest.source} />
       </td>

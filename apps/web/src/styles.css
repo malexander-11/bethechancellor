@@ -1754,3 +1754,33 @@ details.table-view td:first-child {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Three advisers, one screen: the appointment briefing. */
+@media (min-width: 960px) {
+  .briefing-row--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.chip__was {
+  color: var(--ink-2);
+}
+
+/* The manifesto red lines, as the Political Adviser lists them. */
+.redlines {
+  margin: 4px 0 8px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.redlines li {
+  padding: 5px 0 5px 10px;
+  border-left: 3px solid var(--stamp-bad);
+}
+
+.redlines li + li {
+  margin-top: 4px;
+}

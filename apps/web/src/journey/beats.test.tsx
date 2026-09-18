@@ -16,24 +16,20 @@ function at(path: string) {
 
 describe('a step arrives in beats', () => {
   it('does not put the next beat in the document until you continue', () => {
-    at(`/assumptions?${BASE}`);
-    // Beat 0 is the adviser arriving; the four cards are not rendered at all, so the gate is
-    // real rather than something hidden with CSS.
-    expect(screen.queryByRole('radiogroup', { name: 'Economic assumptions' })).toBeNull();
+    at(`/budget/taxes?${BASE}`);
+    // Beat 0 is the Director of Tax handing over the file; the folders are not rendered at all,
+    // so the gate is real rather than something hidden with CSS.
+    expect(screen.queryByRole('tablist')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
-    expect(
-      within(screen.getByRole('radiogroup', { name: 'Economic assumptions' })).getAllByRole(
-        'radio',
-      ),
-    ).toHaveLength(4);
+    expect(within(screen.getByRole('tablist')).getAllByRole('tab').length).toBeGreaterThan(3);
   });
 
   it('keeps the earlier beat on the page, so its sources stay reachable', () => {
-    at(`/assumptions?${BASE}`);
+    at(`/budget/taxes?${BASE}`);
     const before = screen.getAllByRole('link').length;
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     // Accumulating rather than replacing: the adviser's briefing and its citations are still there.
-    expect(screen.getByRole('radiogroup', { name: 'Economic assumptions' })).toBeInTheDocument();
+    expect(screen.getByRole('tablist')).toBeInTheDocument();
     expect(screen.getAllByRole('link').length).toBeGreaterThan(before);
   });
 
@@ -56,17 +52,13 @@ describe('a step arrives in beats', () => {
   });
 
   it('remembers how far you got in a step, but not in a step you have not opened', () => {
-    const first = at(`/assumptions?${BASE}`);
+    const first = at(`/budget/taxes?${BASE}`);
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
-    expect(
-      within(screen.getByRole('radiogroup', { name: 'Economic assumptions' })).getAllByRole(
-        'radio',
-      ),
-    ).toHaveLength(4);
+    expect(screen.getByRole('tablist')).toBeInTheDocument();
     first.unmount();
 
     // Coming back to a step you have worked resumes where you left off.
-    const second = at(`/assumptions?${BASE}`);
+    const second = at(`/budget/taxes?${BASE}`);
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     second.unmount();
 
@@ -76,7 +68,7 @@ describe('a step arrives in beats', () => {
   });
 
   it('never lets a beat reach the query string', () => {
-    at(`/assumptions?${BASE}`);
+    at(`/budget/taxes?${BASE}`);
     const before = window.location.search;
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
     // The query string means one thing only: a budget.

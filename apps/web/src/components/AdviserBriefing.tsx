@@ -1,4 +1,5 @@
 import type { Briefing } from '@btc/engine';
+import type { ReactNode } from 'react';
 import { adviserById } from '../data';
 import { useWorkings } from '../journey/workings';
 import { LabelBadge } from './LabelBadge';
@@ -55,11 +56,14 @@ export function AdviserBriefing({
   briefing,
   compact = false,
   variant = 'full',
+  children,
 }: {
   briefing: Briefing;
   compact?: boolean;
   /** "body" drops the role and headline: the caller has already shown them. */
   variant?: 'full' | 'body';
+  /** Anything the page hangs beneath the facts: readings, the red lines. */
+  children?: ReactNode;
 }) {
   const adviser = adviserById.get(briefing.adviser);
   const workings = useWorkings();
@@ -75,6 +79,7 @@ export function AdviserBriefing({
         </>
       ) : null}
       {briefing.facts?.length ? <Facts facts={briefing.facts} /> : null}
+      {children}
       {workings ? (
         <details className="briefing__more">
           <summary>{briefing.title}</summary>

@@ -1,13 +1,12 @@
 import { freshGame, type GamePermalink } from '@btc/engine';
 import { useNavigate } from 'react-router-dom';
-import { AdviserBriefing } from '../components/AdviserBriefing';
 import { AssumptionReading, ContextRow } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { Scenarios } from '../components/Scenarios';
 import { Scorecard } from '../components/Scorecard';
 import { SourceList } from '../components/SourceLink';
-import { adviserById, briefingsFor, context, levers, vintage } from '../data';
+import { adviserById, context, levers, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { macroCodesOf, matchScenario, scenarioCards } from '../journey/scenarios';
 import { mintSeed } from '../journey/seed';
@@ -85,20 +84,13 @@ export function OutlookPage() {
 
   return (
     <JourneyLayout step="outlook">
-      <p className="source">
-        {adviser?.role ?? context.adviser} · readings as of {context.asOf} ·{' '}
-        <LabelBadge badge="assumption" />
-      </p>
+      {workings ? (
+        <p className="source">
+          {adviser?.role ?? context.adviser} · readings as of {context.asOf} ·{' '}
+          <LabelBadge badge="assumption" />
+        </p>
+      ) : null}
       <Beats step="outlook">
-        <Beat
-          title="Your Chief Economic Adviser brings the March forecast"
-          continueLabel="See what you could assume"
-          foldWhenPast="The Chief Economic Adviser’s note"
-        >
-          {briefingsFor('assumptions').map((b) => (
-            <AdviserBriefing key={b.id} briefing={b} />
-          ))}
-        </Beat>
         <Beat title="Choose the forecast you will budget on">
           {revealed ? (
             <p className="note" role="note">
@@ -142,12 +134,12 @@ export function OutlookPage() {
               <LabelBadge badge="simulated" />
             </p>
             <p>
-              Our rule of thumb is that gilt markets get nervous below about £20bn of headroom.
-              Nobody has published that number; it is a judgement. What it rests on: Budget 2025
-              “more than doubled” headroom to £21.7bn and March left £23.6bn; the OBR’s typical
-              five-year receipts error is about £32bn; you told the Treasury Committee we would
-              “retain a buffer”; and the Bank found gilt moves this year “amplified by hedge fund
-              deleveraging”. Whatever you pick, the OBR’s October forecast will not know it.
+              Our rule of thumb: gilt markets get nervous below about £20bn of headroom. Nobody has
+              published that number; it is a judgement resting on published facts. Budget 2025 “more
+              than doubled” headroom to £21.7bn; the OBR’s typical five-year forecast error is about
+              £32bn; you told the Treasury Committee we would “retain a buffer”; and the Bank found
+              this year’s gilt moves “amplified by hedge fund deleveraging”. Whatever you pick, the
+              OBR’s October forecast will not know it.
             </p>
             <SourceList
               refs={[

@@ -138,6 +138,10 @@ export function guideFor(step: JourneyStep) {
   return guideStageFor(guide, step);
 }
 
+export const briefingById: ReadonlyMap<string, Briefing> = new Map(
+  briefings.briefings.map((b) => [b.id, b] as const),
+);
+
 /** Briefings for a step: the step's overviews (no group) or the briefings for one lever group. */
 export function briefingsFor(step: JourneyStep, group?: string): Briefing[] {
   return briefings.briefings.filter((b) => b.step === step && (b.group ?? undefined) === group);
