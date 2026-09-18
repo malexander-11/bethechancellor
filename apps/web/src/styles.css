@@ -382,6 +382,33 @@ select {
   font-weight: 600;
 }
 
+/* The tags on the head of a lever: the red lines that watch it, the promise it delivers, the badge. */
+.lever__flags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.lever__flags .tag--warn {
+  margin-left: 0;
+}
+
+/* A red line not yet crossed: quiet, so the rule is learnt before it is tested. */
+.tag--manifesto {
+  padding: 1px 6px;
+  border: 1px dashed var(--border);
+  border-radius: 2px;
+  color: var(--muted);
+  font-family: var(--font-label);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: help;
+}
+
 .lever__value {
   font-variant-numeric: tabular-nums;
   color: var(--ink-2);

@@ -63,6 +63,66 @@ describe('LeverControl', () => {
     expect(scope.queryByText(/would also cut those block grants/)).toBeNull();
   });
 
+  it('wears the manifesto red line and the promise to the PM as tags', () => {
+    const itbr = levers.find((l) => l.code === 'itbr');
+    const moj = levers.find((l) => l.code === 'moj');
+    if (!itbr || !moj) throw new Error('missing levers');
+    const quiet = render(
+      <LeverControl
+        lever={itbr}
+        value={0}
+        onChange={() => undefined}
+        redLines={[{ promise: 'The tax lock', when: 'above', broken: false }]}
+      />,
+    );
+    expect(within(quiet.container).getByText('Manifesto: no rise')).toHaveAttribute(
+      'title',
+      'The tax lock',
+    );
+    quiet.unmount();
+    const crossed = render(
+      <LeverControl
+        lever={itbr}
+        value={1}
+        onChange={() => undefined}
+        redLines={[{ promise: 'The tax lock', when: 'above', broken: true }]}
+      />,
+    );
+    expect(within(crossed.container).getByText('Breaks the manifesto: The tax lock')).toHaveClass(
+      'tag--warn',
+    );
+    crossed.unmount();
+    const funded = render(
+      <LeverControl
+        lever={moj}
+        value={10}
+        onChange={() => undefined}
+        promised={{
+          title: 'A Justice uplift for prison capacity',
+          target: '+10%',
+          status: 'funded',
+        }}
+      />,
+    );
+    expect(within(funded.container).getByText('Promised to the PM')).toBeInTheDocument();
+    funded.unmount();
+    const pulled = render(
+      <LeverControl
+        lever={moj}
+        value={4}
+        onChange={() => undefined}
+        promised={{
+          title: 'A Justice uplift for prison capacity',
+          target: '+10%',
+          status: 'part-funded',
+        }}
+      />,
+    );
+    expect(within(pulled.container).getByText('Below what you promised the PM')).toHaveClass(
+      'tag--warn',
+    );
+  });
+
   it('formats pence, points, per cent and pounds', () => {
     const itbr = levers.find((l) => l.code === 'itbr');
     const nicm = levers.find((l) => l.code === 'nicm');

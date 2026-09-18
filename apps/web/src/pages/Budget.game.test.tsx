@@ -9,13 +9,14 @@ const GAME = 'g=s.7_st.2_pl.adviser_hr.20_th.security_pr.prisons+dip-gap';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
-  render(
+  const view = render(
     <MemoryRouter initialEntries={[path]}>
       <App />
     </MemoryRouter>,
   );
   const go = screen.queryByRole('button', { name: /Continue/ });
   if (go) fireEvent.click(go);
+  return view;
 }
 
 describe('the desk, with a game under way', () => {
@@ -27,17 +28,38 @@ describe('the desk, with a game under way', () => {
     expect(within(box).getByText('all 6 kept')).toBeInTheDocument();
   });
 
-  it('pins a promised flagship to the top of its folder with a tag', () => {
-    at(`/budget/spending?${BASE}&${GAME}`);
+  it('pins a promised flagship to the top of its folder, tagged with how it stands', () => {
+    // Un-funded on this desk, the flagship wears a red tag; funded, the brass one.
+    const first = at(`/budget/spending?${BASE}&${GAME}`);
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
-    const panel = screen.getByRole('tabpanel');
-    const tags = within(panel).getAllByText('promised to the PM');
-    expect(tags).toHaveLength(1);
-    expect(
-      within(panel).getByText(/A Justice uplift for prison capacity: \+10(\.0)?%/),
-    ).toBeInTheDocument();
+    let panel = screen.getByRole('tabpanel');
+    const below = within(panel).getAllByText('Below what you promised the PM');
+    expect(below).toHaveLength(1);
+    expect(below[0]).toHaveAttribute(
+      'title',
+      expect.stringMatching(/A Justice uplift for prison capacity: you agreed \+10(\.0)?%/),
+    );
     // The pinned lever is the first control in the folder, ahead of Health in the authored order.
     expect(within(panel).getAllByRole('slider')[0]).toHaveAccessibleName('Justice');
+    first.unmount();
+    at(`/budget/spending?${BASE}&${GAME}&L=moj.10`);
+    fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
+    panel = screen.getByRole('tabpanel');
+    expect(within(panel).getAllByText('Promised to the PM')).toHaveLength(1);
+    expect(within(panel).queryByText('Below what you promised the PM')).toBeNull();
+  });
+
+  it('wears the manifesto red lines on the levers they watch, red once crossed', () => {
+    at(`/budget/taxes?${BASE}&L=itbr.1`);
+    fireEvent.click(screen.getByRole('tab', { name: /Income tax/ }));
+    const panel = screen.getByRole('tabpanel');
+    // The basic rate has been raised: the tax lock is broken, and the lever says so in red.
+    expect(within(panel).getByText('Breaks the manifesto: The tax lock')).toBeInTheDocument();
+    // The higher and additional rates are untouched: they wear the quiet tag, so the line is
+    // learnt before it is crossed. The personal allowance is not in the lock and wears nothing.
+    expect(within(panel).getAllByText('Manifesto: no rise').length).toBeGreaterThanOrEqual(2);
+    const allowance = within(panel).getByRole('slider', { name: /Personal allowance/ });
+    expect(allowance.closest('.lever')?.textContent).not.toMatch(/Manifesto/);
   });
 
   it('puts a minister on every spending folder, asking until the lever moves', () => {
@@ -59,11 +81,11 @@ describe('the desk, with a game under way', () => {
     const notes = screen.getByRole('region', { name: 'Your advisers' });
     expect(within(notes).getByText(/That is The tax lock, Chancellor/)).toBeInTheDocument();
     expect(
-      within(notes).getByText(/A Justice uplift for prison capacity is on the list/),
+      within(notes).getByText(/A Justice uplift for prison capacity was funded when you left/),
     ).toBeInTheDocument();
     // The Political Adviser's warning outranks the Director's reminder.
     const texts = within(notes)
-      .getAllByText(/Chancellor|on the list/)
+      .getAllByText(/Chancellor|was funded when you left/)
       .map((e) => e.textContent);
     expect(texts[0]).toMatch(/tax lock/);
   });

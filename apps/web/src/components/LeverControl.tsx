@@ -10,6 +10,7 @@ import {
   realGrowthPerYear,
   type Lever,
   type LeverEffect,
+  type PriorityStatus,
   type YearValues,
 } from '@btc/engine';
 import { vintage } from '../data';
@@ -71,6 +72,63 @@ function tone(v: number): string {
 const POLICY_YEARS = policyYearsOf(vintage);
 const IMPLEMENTATION_YEAR = vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? '';
 const DEFLATOR = vintage.economy.gdpDeflator ? deflatorIndex(vintage) : null;
+
+/** A manifesto red line this lever is watched by, and whether the current setting crosses it. */
+export interface RedLine {
+  promise: string;
+  when: 'above' | 'below' | 'on';
+  broken: boolean;
+}
+
+/** A flagship promised to the PM that this lever delivers, and whether it still does. */
+export interface Promised {
+  title: string;
+  target: string;
+  status: PriorityStatus;
+}
+
+const RED_LINE_WORDS: Record<RedLine['when'], string> = {
+  above: 'no rise',
+  below: 'no cut',
+  on: 'do not switch on',
+};
+
+/**
+ * The warnings on the lever. A watched lever always wears a quiet tag naming the red line, so a
+ * newcomer learns it before touching the control; a crossed line turns red. A promised flagship
+ * wears its promise while it is funded and a red tag once the desk has pulled it below the target.
+ */
+function LeverFlags({ redLines, promised }: { redLines: RedLine[]; promised?: Promised }) {
+  return (
+    <>
+      {promised ? (
+        promised.status === 'funded' || promised.status === 'delayed' ? (
+          <span className="tag--treasury" title={`${promised.title}: ${promised.target}`}>
+            Promised to the PM
+          </span>
+        ) : (
+          <span
+            className="tag--treasury tag--warn"
+            title={`${promised.title}: you agreed ${promised.target} with the Prime Minister`}
+          >
+            Below what you promised the PM
+          </span>
+        )
+      ) : null}
+      {redLines.map((r) =>
+        r.broken ? (
+          <span key={r.promise} className="tag--treasury tag--warn" title={r.promise}>
+            Breaks the manifesto: {r.promise}
+          </span>
+        ) : (
+          <span key={r.promise} className="tag--manifesto" title={r.promise}>
+            Manifesto: {RED_LINE_WORDS[r.when]}
+          </span>
+        ),
+      )}
+    </>
+  );
+}
 
 export interface LevelChange {
   from: string;
@@ -157,12 +215,18 @@ export function LeverControl({
   effect,
   summaryYear,
   onChange,
+  redLines = [],
+  promised,
 }: {
   lever: Lever;
   value: number;
   effect?: LeverEffect;
   summaryYear?: string;
   onChange: (value: number) => void;
+  /** The manifesto red lines watching this lever (Phase 9): shown quietly, red when crossed. */
+  redLines?: RedLine[];
+  /** The flagship this lever delivers, if the player promised one to the PM. */
+  promised?: Promised;
 }) {
   const id = useId();
   const [open, setOpen] = useState(false);
@@ -209,7 +273,10 @@ export function LeverControl({
             {lever.title}
           </label>
         )}
-        <LabelBadge badge={lever.badge} />
+        <span className="lever__flags">
+          <LeverFlags redLines={redLines} promised={promised} />
+          <LabelBadge badge={lever.badge} />
+        </span>
       </div>
       {!isToggle ? (
         <>

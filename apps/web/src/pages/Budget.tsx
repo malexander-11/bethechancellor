@@ -4,6 +4,7 @@ import {
   formatPct,
   interventionsFor,
   pickOutcome,
+  promiseBreaks,
   stageIndex,
   type JourneyStep,
   type Lever,
@@ -17,7 +18,7 @@ import { DespatchBox } from '../components/DespatchBox';
 import { InteractionsNotice } from '../components/InteractionsNotice';
 import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { LeverControl, formatLeverValue } from '../components/LeverControl';
+import { LeverControl, formatLeverValue, type RedLine } from '../components/LeverControl';
 import { MinisterLine } from '../components/MinisterLine';
 import { PathChart } from '../components/PathChart';
 import { PressSummary } from '../components/PressSummary';
@@ -180,8 +181,23 @@ export function BudgetPage() {
         })
       : [];
   const promised = new Map(
-    (status?.priorities ?? []).map((p) => [p.flagship.target.code, p.flagship] as const),
+    (status?.priorities ?? []).map((p) => [p.flagship.target.code, p] as const),
   );
+  // The manifesto red lines, read from the same file the PM's promises come from, and whether the
+  // package as it stands crosses each. Pure arithmetic over the levers: it works without a game.
+  const breaks = promiseBreaks(state.leverValues, pm.promises, levers);
+  const redLinesFor = (code: string): RedLine[] =>
+    pm.promises.flatMap((p) =>
+      p.breaks
+        .filter((rule) => rule.code === code)
+        .map((rule) => ({
+          promise: p.title,
+          when: rule.when,
+          broken:
+            breaks.find((b) => b.promise.id === p.id)?.brokenBy.some((b) => b.code === code) ??
+            false,
+        })),
+    );
   const clue = game && step === 'spending' ? pickOutcome(game.seed, draws.outcomes) : null;
 
   const adopted = items.filter(
@@ -308,29 +324,28 @@ export function BudgetPage() {
                     ))}
                     {orderForDesk(group.levers).map((lever) => {
                       const value = state.leverValues[lever.code] ?? lever.control.default;
-                      const flagship = promised.get(lever.code);
-                      const control = (
-                        <LeverControl
-                          lever={lever}
-                          value={value}
-                          effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                          summaryYear={targetYear}
-                          onChange={(next) =>
-                            dispatch({ type: 'setLever', code: lever.code, value: next })
-                          }
-                        />
-                      );
+                      const report = promised.get(lever.code);
                       return (
-                        <div key={lever.id} className={flagship ? 'pinned' : undefined}>
-                          {flagship ? (
-                            <p className="pinned__tag">
-                              <span className="tag--treasury">promised to the PM</span>{' '}
-                              <span className="pinned__what">
-                                {flagship.title}: {formatLeverValue(lever, flagship.target.value)}
-                              </span>
-                            </p>
-                          ) : null}
-                          {control}
+                        <div key={lever.id} className={report ? 'pinned' : undefined}>
+                          <LeverControl
+                            lever={lever}
+                            value={value}
+                            effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                            summaryYear={targetYear}
+                            onChange={(next) =>
+                              dispatch({ type: 'setLever', code: lever.code, value: next })
+                            }
+                            redLines={redLinesFor(lever.code)}
+                            promised={
+                              report
+                                ? {
+                                    title: report.flagship.title,
+                                    target: formatLeverValue(lever, report.flagship.target.value),
+                                    status: report.status,
+                                  }
+                                : undefined
+                            }
+                          />
                           <MinisterLine lever={lever} value={value} />
                         </div>
                       );

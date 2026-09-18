@@ -6,7 +6,7 @@
       "adviser": "political-adviser",
       "when": "promise-broken",
       "line": {
-        "text": "That is {name}, Chancellor. The Prime Minister asked you to keep it, and the words are on the record.",
+        "text": "That is {name}, Chancellor: a manifesto red line, and the words are on the record. The desk will let you, and the public will notice.",
         "sources": [],
         "badge": "simulated"
       }
@@ -31,7 +31,7 @@
       "adviser": "director-of-public-spending",
       "when": "priority-unfunded",
       "line": {
-        "text": "{name} is on the list you brought back from Downing Street, and nothing on this desk funds it yet.",
+        "text": "{name} was funded when you left Downing Street. Nothing on this desk funds it now.",
         "sources": [],
         "badge": "simulated"
       }
@@ -41,7 +41,7 @@
       "adviser": "director-of-public-spending",
       "when": "priority-part-funded",
       "line": {
-        "text": "{name} is part-funded: the lever has moved, but not as far as the Prime Minister’s target.",
+        "text": "{name} is below what you promised the Prime Minister: the lever has come back from the target you agreed.",
         "sources": [],
         "badge": "simulated"
       }
@@ -51,7 +51,7 @@
       "adviser": "permanent-secretary",
       "when": "all-priorities-funded",
       "line": {
-        "text": "Every priority you agreed with the Prime Minister is funded. What remains is whether the rules and your headroom survive the October forecast.",
+        "text": "Every flagship you agreed with the Prime Minister is still funded. What remains is whether the rules and your headroom survive the October forecast.",
         "sources": [],
         "badge": "simulated"
       }
