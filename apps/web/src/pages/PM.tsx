@@ -7,7 +7,6 @@ import {
   type Theme,
 } from '@btc/engine';
 import { useMemo } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
 import { Spoken } from '../components/Conversation';
 import { DespatchBox } from '../components/DespatchBox';
 import { JourneyLayout } from '../components/JourneyLayout';
@@ -15,6 +14,7 @@ import { LabelBadge } from '../components/LabelBadge';
 import { SourceList } from '../components/SourceLink';
 import { levers, pm, rules, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
+import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { IMPLEMENTATION_YEAR, useBudget } from '../state/budget';
 
@@ -99,7 +99,6 @@ function FlagshipChoice({
  */
 export function PMPage() {
   const { state, dispatch, outcome } = useBudget();
-  const { search } = useLocation();
   const game = state.game;
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const targetYear = stability?.targetYear ?? '2029-30';
@@ -113,10 +112,9 @@ export function PMPage() {
     [game, outcome],
   );
 
-  if (!game) {
-    // No game in this link: the conversation has nothing to talk about. Start at the outlook.
-    return <Navigate to={{ pathname: '/outlook', search }} replace />;
-  }
+  // No game in this link, or a link ahead of its game: the guard sends it where the road is.
+  const guard = useStageGuard('pm');
+  if (guard || !game) return guard;
 
   const { themes, priorities } = game;
   const ticked = pm.themes.filter((t) => themes.includes(t.id));

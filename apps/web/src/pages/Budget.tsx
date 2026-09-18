@@ -37,6 +37,7 @@ import {
   vintage,
 } from '../data';
 import { Beat, Beats } from '../journey/beats';
+import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { useWorkings } from '../journey/workings';
@@ -126,6 +127,9 @@ export function BudgetPage() {
   const { state, dispatch, outcome, query } = useBudget();
   const [copied, setCopied] = useState(false);
   const workings = useWorkings();
+  // A game that has not yet left Downing Street is sent back there; a sandbox walks straight in.
+  const guard = useStageGuard(isTab(tab) ? tab : 'taxes');
+  if (guard) return guard;
   if (!isTab(tab)) {
     return (
       <Navigate to={{ pathname: '/budget/taxes', search: query ? `?${query}` : '' }} replace />

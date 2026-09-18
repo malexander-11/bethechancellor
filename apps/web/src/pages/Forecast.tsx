@@ -18,6 +18,7 @@ import { formatLeverValue } from '../components/LeverControl';
 import { SourceList } from '../components/SourceLink';
 import { context, draws, levers, leversByCategory, pm, rules, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
+import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { useWorkings } from '../journey/workings';
@@ -81,6 +82,8 @@ export function ForecastPage() {
     [draw, game, planningMacro, state.leverValues, state.debtInterestFeedback, state.assessAsOf],
   );
 
+  const guard = useStageGuard('forecast');
+  if (guard) return guard;
   if (!game || !draw) {
     return <Navigate to={{ pathname: '/outlook', search }} replace />;
   }

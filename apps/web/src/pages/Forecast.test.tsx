@@ -37,7 +37,7 @@ describe('the OBR’s forecast', () => {
   });
 
   it('opens the envelope: the sliders become the OBR’s, the package is remembered, the game moves on', async () => {
-    at(`/forecast?${BASE}&g=s.${ADVISER}_st.2_pl.baseline&L=ufsm.1`);
+    at(`/forecast?${BASE}&g=s.${ADVISER}_st.3_pl.baseline&L=ufsm.1`);
     expect(screen.queryByText(/What happened to the economy/)).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Open the envelope/ }));
     expect(screen.getByText(/1 · What happened to the economy/)).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('the OBR’s forecast', () => {
   });
 
   it('shows an economy line of nought when the plan matched what arrived, and the lines add up', () => {
-    at(`/forecast?${BASE}&g=s.${ADVISER}_st.2_pl.adviser&M=rate.0.75_rpi.0.5&L=ufsm.1_wealth.1`);
+    at(`/forecast?${BASE}&g=s.${ADVISER}_st.3_pl.adviser&M=rate.0.75_rpi.0.5&L=ufsm.1_wealth.1`);
     fireEvent.click(screen.getByRole('button', { name: /Open the envelope/ }));
     const economy = screen
       .getByText(/The economy moved, including what dearer money does/)
@@ -66,7 +66,7 @@ describe('the OBR’s forecast', () => {
   });
 
   it('lists the measures the OBR re-scored, with the factor and the original badge', () => {
-    at(`/forecast?${BASE}&g=s.${HARD}_st.2_pl.adviser&L=wealth.1_itbr.1`);
+    at(`/forecast?${BASE}&g=s.${HARD}_st.3_pl.adviser&L=wealth.1_itbr.1`);
     fireEvent.click(screen.getByRole('button', { name: /Open the envelope/ }));
     const row = screen.getByText(/Tax extreme wealth/).closest('tr') as HTMLElement;
     expect(within(row).getByText('re-scored ×0.6')).toBeInTheDocument();

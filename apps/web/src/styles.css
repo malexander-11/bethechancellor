@@ -63,8 +63,7 @@ body::before {
 .briefing,
 .warnings,
 .verdict,
-.folder-tab,
-.steps__item a {
+.folder-tab {
   color: var(--ink);
 }
 
@@ -1003,44 +1002,126 @@ details.table-view td:first-child {
   display: block;
 }
 
-.steps ol {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 3px;
+/* ---- The road: seven stops on a brass rail. A stop behind you is a quiet link, the one you are
+   at is marked, the ones ahead are inert (ADR-0014). ---- */
+.progress {
   margin: 0 0 14px;
-  padding: 0 0 1px;
-  list-style: none;
-  overflow-x: auto;
-  scrollbar-width: thin;
 }
 
-.steps__item a {
-  display: inline-block;
-  flex: 0 0 auto;
-  padding: 7px 15px 8px;
-  border: 1px solid var(--manila-edge);
-  border-bottom: none;
-  border-radius: 4px 4px 0 0;
-  color: var(--ink);
-  text-decoration: none;
-  white-space: nowrap;
+.progress__stops {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.progress__stop {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  padding-top: 12px;
+}
+
+/* The rail itself, a hairline of brass behind every stop; brighter along the road travelled. */
+.progress__stop::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: color-mix(in srgb, var(--gold) 38%, transparent);
+}
+
+.progress__stop--open::before,
+.progress__stop--current::before {
+  background: var(--gold);
+}
+
+.progress__stop > a,
+.progress__stop > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  overflow: hidden;
   font-family: var(--font-label);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  background: linear-gradient(180deg, var(--manila) 0%, var(--manila-edge) 100%);
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
+  text-decoration: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.steps__item--done a {
-  color: color-mix(in srgb, var(--ink) 70%, var(--stamp-good));
+.progress__number {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid color-mix(in srgb, var(--gold) 70%, transparent);
+  border-radius: 50%;
+  font-size: 0.62rem;
+  letter-spacing: 0;
+  color: var(--desk-ink);
 }
 
-.steps__item--current a {
-  background: var(--paper);
-  border-color: var(--border);
-  color: var(--ink);
+.progress__stop--open a {
+  color: color-mix(in srgb, var(--desk-ink) 80%, transparent);
+}
+
+.progress__stop--open .progress__number {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--desk-deep);
+}
+
+.progress__stop--open a:hover .progress__label,
+.progress__stop--open a:focus-visible .progress__label {
+  text-decoration: underline;
+}
+
+.progress__stop--current [aria-current] {
+  color: var(--desk-ink);
   font-weight: 700;
+}
+
+.progress__stop--current .progress__number {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 60%, transparent);
+}
+
+.progress__ahead {
+  color: color-mix(in srgb, var(--desk-ink) 48%, transparent);
+}
+
+.progress__stop--ahead .progress__number {
+  color: color-mix(in srgb, var(--desk-ink) 55%, transparent);
+}
+
+@media (max-width: 700px) {
+  /* Numbers for every stop, a label only for the one you are at. */
+  .progress__stop:not(.progress__stop--current) .progress__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .progress__stop:not(.progress__stop--current) {
+    flex: 0 0 auto;
+  }
+
+  .progress__stop--current {
+    flex: 1 1 auto;
+  }
 }
 
 .kicker {
@@ -1062,6 +1143,17 @@ details.table-view td:first-child {
 
 .hero-start__actions .btn {
   text-decoration: none;
+}
+
+.hero-start > .hero-start__skip {
+  margin: -6px 0 14px;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.hero-start > .hero-start__skip a {
+  color: var(--ink);
+  text-decoration: underline;
 }
 
 .advisers {

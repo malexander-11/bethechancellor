@@ -1,0 +1,20 @@
+import type { JourneyStep } from '@btc/engine';
+
+/**
+ * Where each step of the journey lives. The desk's three screens and the Phase 4 aliases all
+ * resolve to a route, so a redirect to "the furthest open stage" always has somewhere to go.
+ */
+export const STAGE_ROUTES: Record<JourneyStep, string> = {
+  start: '/',
+  outlook: '/outlook',
+  assumptions: '/outlook',
+  pm: '/pm',
+  taxes: '/budget/taxes',
+  spending: '/budget/spending',
+  policies: '/budget/policies',
+  recommendations: '/budget/policies',
+  forecast: '/forecast',
+  compromise: '/compromise',
+  rabbit: '/rabbit',
+  'budget-day': '/budget-day',
+};

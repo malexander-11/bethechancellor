@@ -19,6 +19,7 @@ import { MinisterLine } from '../components/MinisterLine';
 import { Scorecard } from '../components/Scorecard';
 import { adviserById, compromise, context, levers, pm, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
+import { useStageGuard } from '../journey/guard';
 import { useHeadroomOf } from '../journey/headroom';
 import { StepLink } from '../journey/links';
 import { macroCodesOf } from '../journey/scenarios';
@@ -48,7 +49,8 @@ export function CompromisePage() {
     [state.leverValues, headroomOf],
   );
 
-  if (!game) return <Navigate to={{ pathname: '/outlook', search }} replace />;
+  const guard = useStageGuard('compromise');
+  if (guard || !game) return guard;
   if (!game.revealed) return <Navigate to={{ pathname: '/forecast', search }} replace />;
 
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');

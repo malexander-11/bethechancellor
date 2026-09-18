@@ -46,6 +46,7 @@ import {
   vintage,
 } from '../data';
 import { Beat, Beats, resetProgress } from '../journey/beats';
+import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { WorkingsOnly } from '../journey/workings';
@@ -64,6 +65,7 @@ export function BudgetDayPage() {
   const { state, dispatch, outcome, query } = useBudget();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
+  const guard = useStageGuard('budget-day');
   const game = state.game;
   const { paths } = outcome;
   const years = paths.years;
@@ -202,6 +204,9 @@ export function BudgetDayPage() {
       rebellionRisk: values.rebellionRisk ?? 0,
     });
   }, [game, outcome, status, state.snapshot, typicalErrorGbpm]);
+  // A game in play that jumps to Budget day is sent back to where it is; a sandbox link and a
+  // finished, shared link both walk in.
+  if (guard) return guard;
   const replayHref = game
     ? `/outlook?${permalinkQuery({
         leverValues: {},

@@ -52,9 +52,9 @@ export function StartPage() {
           <StepLink to="/outlook" className="btn btn--primary">
             Begin: choose what to plan on
           </StepLink>
-          <StepLink to="/budget/taxes" className="btn">
-            Skip to taxes and spending
-          </StepLink>
+        </p>
+        <p className="hero-start__skip">
+          Just want the sandbox? <StepLink to="/budget/taxes">Skip to taxes and spending</StepLink>
         </p>
         <p className="ceremony">
           <label>

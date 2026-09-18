@@ -7,6 +7,7 @@ import { LabelBadge } from '../components/LabelBadge';
 import { formatLeverValue } from '../components/LeverControl';
 import { adviserById, levers, pm, rabbit } from '../data';
 import { Beat, Beats } from '../journey/beats';
+import { useStageGuard } from '../journey/guard';
 import { useHeadroomOf } from '../journey/headroom';
 import { StepLink } from '../journey/links';
 import { useBudget } from '../state/budget';
@@ -37,7 +38,8 @@ export function RabbitPage() {
   const { search } = useLocation();
   const headroomOf = useHeadroomOf();
   const game = state.game;
-  if (!game) return <Navigate to={{ pathname: '/outlook', search }} replace />;
+  const guard = useStageGuard('rabbit');
+  if (guard || !game) return guard;
   if (!game.revealed) return <Navigate to={{ pathname: '/forecast', search }} replace />;
 
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');

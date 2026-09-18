@@ -20,7 +20,11 @@ function RedirectKeepingQuery({ to }: { to: string }) {
   return <Navigate to={{ pathname: to, search }} replace />;
 }
 
-/** The brass plate: the name, the reference pages, and the switch that puts the workings on show. */
+/**
+ * The brass plate: the name (which is the way home), the two reference pages, and the switch that
+ * puts the workings on show. The journey itself is not in the header: one road, entered at the
+ * start and walked by the button at the foot of each page.
+ */
 function WorkingsSwitch() {
   const { workings, setWorkings, forced } = useWorkingsSwitch();
   return (
@@ -55,10 +59,6 @@ function Shell() {
             <small>UK fiscal trade-offs, every number sourced</small>
           </NavLink>
           <nav className="site-nav" aria-label="Main">
-            <NavLink to="/" end>
-              Start
-            </NavLink>
-            <NavLink to="/budget/taxes">Your Budget</NavLink>
             <NavLink to="/methodology">Methodology</NavLink>
             <NavLink to="/about">About &amp; sources</NavLink>
           </nav>

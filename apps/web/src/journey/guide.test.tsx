@@ -35,13 +35,17 @@ describe('the guide at the top of every step', () => {
     expect(within(list).getByText('Gilts')).toBeInTheDocument();
   });
 
-  it('follows the desk’s tabs and the seven-step strip', () => {
+  it('follows the desk’s screens and the seven-stop rail', () => {
     const first = at(`/budget/spending?${BASE}`);
     expect(screen.getByText('Step 4 of 7')).toBeInTheDocument();
     expect(screen.getByText(/Ministers will tell you/)).toBeInTheDocument();
-    const strip = screen.getByRole('navigation', { name: 'Budget steps' });
-    expect(within(strip).getAllByRole('link')).toHaveLength(7);
-    expect(within(strip).getByRole('link', { name: '4 · The desk' })).toBeInTheDocument();
+    const rail = screen.getByRole('navigation', { name: 'Budget steps' });
+    expect(within(rail).getAllByRole('listitem')).toHaveLength(7);
+    // The desk is where you are: marked, not a link. The outlook is behind you: a link. The
+    // forecast is ahead, and a sandbox has no forecast to go to: inert.
+    expect(within(rail).getByText('The desk').closest('[aria-current="step"]')).not.toBeNull();
+    expect(within(rail).getByRole('link', { name: /The outlook/ })).toBeInTheDocument();
+    expect(within(rail).queryByRole('link', { name: /The forecast/ })).toBeNull();
     first.unmount();
     at(`/?${BASE}`);
     expect(screen.getByText('Step 1 of 7')).toBeInTheDocument();
