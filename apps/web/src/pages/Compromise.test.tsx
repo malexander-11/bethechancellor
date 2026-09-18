@@ -30,10 +30,10 @@ const L = () => new URLSearchParams(window.location.search).get('L') ?? '';
 describe('making it add up', () => {
   it('sends a game that has not opened the envelope to the forecast, and no game to the outlook', () => {
     const first = at(`/compromise?${BASE}&g=s.${ADVISER}_st.2`);
-    expect(screen.getByText('Step 4 · The OBR’s forecast arrives')).toBeInTheDocument();
+    expect(screen.getByText('The OBR’s forecast arrives')).toBeInTheDocument();
     first.unmount();
     at(`/compromise?${BASE}`);
-    expect(screen.getByText('Step 1 · Choose what you will plan on')).toBeInTheDocument();
+    expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
   });
 
   it('states the gap against the target, and ranks the Director of Tax’s suggestions', async () => {

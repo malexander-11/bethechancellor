@@ -80,7 +80,6 @@ export function BudgetDayPage() {
       .filter((x) => x.value !== x.lever.control.default)
       .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
       .join(' · ');
-  const met = outcome.verdicts.filter((v) => ['met', 'withinCap'].includes(v.status)).length;
 
   // The game's readings: ambitions against the package, and the package as it left the desk.
   const status = useMemo(
@@ -229,11 +228,6 @@ export function BudgetDayPage() {
 
   return (
     <JourneyLayout step="budget-day">
-      <h1 className="page-title">Step 7 · Budget day</h1>
-      <p className="lede">
-        Wednesday 28 October 2026. {reactions.intro} {met} of {outcome.verdicts.length} tests pass
-        on your figures.
-      </p>
       <Beats step="budget-day">
         <Beat title="The speech" continueLabel="Sit down, and hear the room">
           <Speech speech={theSpeech} />

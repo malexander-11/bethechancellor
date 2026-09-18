@@ -1,20 +1,21 @@
 import type { JourneyStep } from '@btc/engine';
 import type { ReactNode } from 'react';
 import { Dateline } from './Dateline';
+import { Guide } from './Guide';
 import { dateFor } from '../data';
 import { StepLink } from '../journey/links';
 
+/** The seven steps as the strip shows them. The forecast and the sums are one step, two screens. */
 const STEPS: Array<{
-  id: 'start' | 'outlook' | 'pm' | 'budget' | 'forecast' | 'compromise' | 'rabbit' | 'budget-day';
+  id: 'start' | 'outlook' | 'pm' | 'budget' | 'forecast' | 'rabbit' | 'budget-day';
   label: string;
   to: string;
 }> = [
-  { id: 'start', label: 'Start', to: '/' },
-  { id: 'outlook', label: '1 · Outlook', to: '/outlook' },
-  { id: 'pm', label: '2 · The PM', to: '/pm' },
-  { id: 'budget', label: '3 · The desk', to: '/budget/taxes' },
-  { id: 'forecast', label: '4 · The forecast', to: '/forecast' },
-  { id: 'compromise', label: '5 · Compromises', to: '/compromise' },
+  { id: 'start', label: '1 · The appointment', to: '/' },
+  { id: 'outlook', label: '2 · The outlook', to: '/outlook' },
+  { id: 'pm', label: '3 · The PM', to: '/pm' },
+  { id: 'budget', label: '4 · The desk', to: '/budget/taxes' },
+  { id: 'forecast', label: '5 · The forecast', to: '/forecast' },
   { id: 'rabbit', label: '6 · The rabbit', to: '/rabbit' },
   { id: 'budget-day', label: '7 · Budget day', to: '/budget-day' },
 ];
@@ -25,10 +26,11 @@ function stepGroup(step: JourneyStep): (typeof STEPS)[number]['id'] {
     case 'start':
     case 'pm':
     case 'forecast':
-    case 'compromise':
     case 'rabbit':
     case 'budget-day':
       return step;
+    case 'compromise':
+      return 'forecast';
     case 'outlook':
     case 'assumptions':
       return 'outlook';
@@ -37,7 +39,7 @@ function stepGroup(step: JourneyStep): (typeof STEPS)[number]['id'] {
   }
 }
 
-/** The step navigation shared by every page of the journey. */
+/** The step navigation and the guide shared by every page of the journey. */
 export function JourneyLayout({ step, children }: { step: JourneyStep; children: ReactNode }) {
   const current = stepGroup(step);
   const index = STEPS.findIndex((s) => s.id === current);
@@ -59,6 +61,7 @@ export function JourneyLayout({ step, children }: { step: JourneyStep; children:
           ))}
         </ol>
       </nav>
+      <Guide step={step} />
       {children}
     </div>
   );

@@ -236,11 +236,6 @@ export function BudgetPage() {
 
   return (
     <JourneyLayout step={step}>
-      <h1 className="page-title">Step 3 · Build the package</h1>
-      <p className="lede">
-        Each control shows what it moves to. Every number carries a badge saying where it came from;
-        every minister’s line is a game judgement and says so.
-      </p>
       <Beats step={step}>
         <Beat title={spec.arrives} continueLabel={spec.open} foldWhenPast={spec.folded}>
           {step === 'policies' ? (

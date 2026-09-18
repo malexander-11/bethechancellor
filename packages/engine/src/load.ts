@@ -14,6 +14,8 @@ import {
   speechFileSchema,
   incidenceFileSchema,
   verdictsFileSchema,
+  guideFileSchema,
+  glossaryFileSchema,
   reactionsFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -43,6 +45,8 @@ import type {
   SpeechFile,
   IncidenceFile,
   VerdictsFile,
+  GuideFile,
+  GlossaryFile,
   ReactionsFile,
   ContextFile,
   HmrcExtract,
@@ -59,6 +63,7 @@ import type {
   Vintage,
 } from './types/data.js';
 import { hasHead } from './costing/taxHead.js';
+import { GUIDED_STEPS, stageTerms } from './game/guide.js';
 import { validateVintage } from './validate/validateVintage.js';
 
 function parseWith<T>(schema: ZodType<T>, json: unknown, label: string): T {
@@ -192,6 +197,14 @@ export function parseVerdicts(json: unknown): VerdictsFile {
   return parseWith(verdictsFileSchema, json, 'kinds of Budget');
 }
 
+export function parseGuide(json: unknown): GuideFile {
+  return parseWith(guideFileSchema, json, 'the guide');
+}
+
+export function parseGlossary(json: unknown): GlossaryFile {
+  return parseWith(glossaryFileSchema, json, 'the glossary');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -214,6 +227,8 @@ export interface Dataset {
   speech?: SpeechFile;
   incidence?: IncidenceFile;
   verdicts?: VerdictsFile;
+  guide?: GuideFile;
+  glossary?: GlossaryFile;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -251,6 +266,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.speech ?? null,
       ds.incidence ?? null,
       ds.verdicts ?? null,
+      ds.glossary ?? null,
     ],
     referenced,
   );
@@ -620,6 +636,26 @@ export function validateDataset(ds: Dataset): string[] {
     for (const x of ds.interventions.interventions) {
       if (adviserIds.size > 0 && !adviserIds.has(x.adviser)) {
         problems.push(`intervention ${x.id} names unknown adviser ${x.adviser}`);
+      }
+    }
+  }
+  if (ds.guide) {
+    // Every screen a player meets has its guide entry, and every bracketed word its definition:
+    // a missing entry would leave a step with no title, a missing term a hover with no answer.
+    const covered = new Set(ds.guide.stages.map((s) => s.step));
+    for (const step of GUIDED_STEPS) {
+      if (!covered.has(step)) problems.push(`the guide has no entry for ${step}`);
+    }
+    for (const stage of ds.guide.stages) {
+      if (!GUIDED_STEPS.includes(stage.step)) {
+        problems.push(`the guide has an entry for ${stage.step}, which is not a screen`);
+      }
+      if (ds.glossary) {
+        for (const id of stageTerms(stage)) {
+          if (!ds.glossary.terms[id]) {
+            problems.push(`guide ${stage.step} refers to unknown glossary term "${id}"`);
+          }
+        }
       }
     }
   }

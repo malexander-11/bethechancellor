@@ -17,7 +17,7 @@ function at(path: string) {
 describe('choosing what to plan on', () => {
   it('is where the old assumptions link now lands', () => {
     at(`/assumptions?${BASE}`);
-    expect(screen.getByText('Step 1 · Choose what you will plan on')).toBeInTheDocument();
+    expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
   });
 
   it('asks for a headroom target and explains the £20bn rule of thumb as a judgement', () => {
@@ -37,9 +37,7 @@ describe('choosing what to plan on', () => {
     fireEvent.click(screen.getByRole('radio', { name: /A pessimistic analyst/ }));
     fireEvent.click(screen.getByRole('radio', { name: /£30bn/ }));
     fireEvent.click(screen.getByRole('button', { name: /Confirm, and go to Downing Street/ }));
-    expect(
-      await screen.findByText('Step 2 · Agree the Budget with the Prime Minister'),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Agree the themes with the Prime Minister')).toBeInTheDocument();
     await waitFor(() => {
       const g = new URLSearchParams(window.location.search).get('g') ?? '';
       expect(g).toMatch(/^s\.\d+/);

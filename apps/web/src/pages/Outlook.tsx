@@ -85,8 +85,6 @@ export function OutlookPage() {
 
   return (
     <JourneyLayout step="outlook">
-      <h1 className="page-title">Step 1 · Choose what you will plan on</h1>
-      <p className="lede">{context.intro}</p>
       <p className="source">
         {adviser?.role ?? context.adviser} · readings as of {context.asOf} ·{' '}
         <LabelBadge badge="assumption" />

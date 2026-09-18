@@ -113,11 +113,6 @@ export function CompromisePage() {
 
   return (
     <JourneyLayout step="compromise">
-      <h1 className="page-title">Step 5 · Make it add up</h1>
-      <p className="lede">
-        A week to the Budget. Headroom against the target you set; six ways through, none of them
-        free. The desk is still open, and everything here moves the same levers.
-      </p>
       <Beats step="compromise">
         <Beat title="The gap, and the routes through it">
           {workings ? (

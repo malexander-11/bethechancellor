@@ -8,3 +8,4 @@ export * from './derived.schema.js';
 export * from './context.schema.js';
 export * from './journey.schema.js';
 export * from './game.schema.js';
+export * from './guide.schema.js';

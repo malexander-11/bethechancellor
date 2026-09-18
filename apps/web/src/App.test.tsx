@@ -22,7 +22,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Step 3 · Build the package')).toBeInTheDocument();
+    expect(screen.getByText('Build the package')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Taxes' })).toHaveClass('tab--active');
     expect(screen.getByRole('link', { name: 'Spending' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Policies' })).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Step 1 · Choose what you will plan on')).toBeInTheDocument();
+    expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
     // Beat 0 is the adviser arriving; the four forecasts you can budget on are behind Continue.
     expect(screen.queryByRole('radiogroup', { name: 'Economic assumptions' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
@@ -49,7 +49,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Step 7 · Budget day')).toBeInTheDocument();
+    expect(screen.getByText('Deliver the Budget')).toBeInTheDocument();
     // The close, with the workings behind the verdict, is the fourth beat.
     for (let i = 0; i < 3; i += 1)
       fireEvent.click(screen.getByRole('button', { name: /Continue/ }));

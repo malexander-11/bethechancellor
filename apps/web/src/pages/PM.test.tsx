@@ -19,7 +19,7 @@ const next = () => fireEvent.click(screen.getByRole('button', { name: /Continue/
 describe('the conversation with the Prime Minister', () => {
   it('sends a link with no game back to the outlook', () => {
     at(`/pm?${BASE}`);
-    expect(screen.getByText('Step 1 · Choose what you will plan on')).toBeInTheDocument();
+    expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
   });
 
   it('opens with what has been done, every line badged simulated and sourced', () => {

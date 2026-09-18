@@ -16,6 +16,8 @@ import {
   parseSpeech,
   parseIncidence,
   parseVerdicts,
+  parseGuide,
+  parseGlossary,
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
@@ -76,6 +78,8 @@ export function loadDataset(): Required<Dataset> {
     speech: parseSpeech(readJson('journey/speech.json')),
     incidence: parseIncidence(readJson('journey/incidence.json')),
     verdicts: parseVerdicts(readJson('journey/verdicts.json')),
+    guide: parseGuide(readJson('journey/guide.json')),
+    glossary: parseGlossary(readJson('journey/glossary.json')),
   };
 }
 

@@ -1487,3 +1487,90 @@
   border-top: 1px solid var(--border);
   font-size: 0.9rem;
 }
+
+/* ---------------------------------------------------------------- the guide */
+
+/*
+ * The strip at the top of every step: which step, what you are doing, why, what to do now. Paper,
+ * like a briefing note left on the desk; its words are chrome and carry no badge.
+ */
+.guide {
+  margin: 0 0 18px;
+  padding: 14px 18px 12px;
+}
+
+.guide__kicker {
+  margin-bottom: 4px;
+}
+
+.guide .page-title {
+  margin: 0 0 10px;
+}
+
+.guide__lines {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 22px;
+  margin: 0;
+}
+
+.guide__line dt {
+  margin: 0 0 3px;
+  font-family: var(--font-label);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.guide__line dd {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.guide__line--now dd {
+  font-weight: 600;
+}
+
+abbr.term {
+  text-decoration: underline dotted;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 2px;
+  cursor: help;
+}
+
+.guide__terms {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.guide__terms summary {
+  cursor: pointer;
+  color: var(--ink-2);
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.guide__terms dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px 20px;
+  margin: 8px 0 0;
+}
+
+.guide__terms dt {
+  font-weight: 700;
+}
+
+.guide__terms dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+@media (max-width: 720px) {
+  .guide__lines {
+    grid-template-columns: 1fr;
+  }
+}

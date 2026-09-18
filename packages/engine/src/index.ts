@@ -30,6 +30,8 @@ export {
   parseSpeech,
   parseIncidence,
   parseVerdicts,
+  parseGuide,
+  parseGlossary,
   parseVintage,
   validateDataset,
   type Dataset,
@@ -120,3 +122,4 @@ export {
 export { formatGbp, formatGbpBn, formatPct, perHousehold } from './format.js';
 export { describeLevelChange, formatLevel, levelValue } from './levels.js';
 export * from './game/stages.js';
+export * from './game/guide.js';

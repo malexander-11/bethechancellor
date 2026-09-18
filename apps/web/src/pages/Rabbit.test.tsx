@@ -30,7 +30,7 @@ const L = () => new URLSearchParams(window.location.search).get('L') ?? '';
 describe('something for the speech', () => {
   it('sends a game that has not opened the envelope to the forecast', () => {
     at(`/rabbit?${BASE}&g=s.${ADVISER}_st.2`);
-    expect(screen.getByText('Step 4 · The OBR’s forecast arrives')).toBeInTheDocument();
+    expect(screen.getByText('The OBR’s forecast arrives')).toBeInTheDocument();
   });
 
   it('prices every prepared announcement as the headroom it would leave', () => {

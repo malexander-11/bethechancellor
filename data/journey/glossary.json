@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "terms": {
+    "headroom": {
+      "term": "Headroom",
+      "short": "The gap between what the fiscal rules allow you to borrow and what you are forecast to borrow. Your safety margin, and the score the game keeps."
+    },
+    "fiscal-rules": {
+      "term": "The fiscal rules",
+      "short": "Two rules the government set itself: pay for day-to-day spending out of tax by the target year, and get debt falling as a share of the economy."
+    },
+    "obr": {
+      "term": "The OBR",
+      "short": "The Office for Budget Responsibility: the independent body that produces the official forecast and checks the Chancellor’s sums."
+    },
+    "manifesto": {
+      "term": "The manifesto",
+      "short": "The promises the party made at the election, such as not raising certain taxes. Breaking one is the fastest way to lose the public."
+    },
+    "flagship": {
+      "term": "A flagship",
+      "short": "A headline policy that shows what the Budget is for. Each one here is a lever on the desk with a price."
+    },
+    "current-budget": {
+      "term": "The current budget",
+      "short": "Day-to-day spending set against tax revenue, leaving investment out. The stability rule says it must balance."
+    },
+    "borrowing": {
+      "term": "Borrowing",
+      "short": "The gap between what the government spends in a year and what it raises, covered by selling gilts."
+    },
+    "debt": {
+      "term": "Debt",
+      "short": "Everything the government owes, built up from past borrowing. The rules use a measure called net financial liabilities."
+    },
+    "rpi": {
+      "term": "RPI",
+      "short": "The Retail Prices Index, an older measure of inflation. Some government debt pays interest linked to it, so higher RPI costs the Treasury money."
+    },
+    "gilts": {
+      "term": "Gilts",
+      "short": "UK government bonds: the IOUs the Treasury sells to borrow. When gilt yields rise, borrowing costs more."
+    },
+    "welfare-cap": {
+      "term": "The welfare cap",
+      "short": "A ceiling on spending on most working-age benefits, set by the Treasury and monitored by the OBR."
+    },
+    "fiscal-year": {
+      "term": "A fiscal year",
+      "short": "The government’s financial year, April to March. The year written 2029-30 runs from April 2029 to March 2030."
+    },
+    "barnett": {
+      "term": "Barnett",
+      "short": "The formula that changes the Scottish, Welsh and Northern Irish budgets when comparable English spending changes."
+    }
+  }
+}

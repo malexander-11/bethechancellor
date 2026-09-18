@@ -131,11 +131,6 @@ export function RabbitPage() {
 
   return (
     <JourneyLayout step="rabbit">
-      <h1 className="page-title">Step 6 · Something for the speech</h1>
-      <p className="lede">
-        Two days out. Each card is a lever already costed on the desk; the price is the headroom it
-        leaves. Keeping the headroom is a card too.
-      </p>
       <Beats step="rabbit">
         <Beat title="The rabbit">
           <DespatchBox

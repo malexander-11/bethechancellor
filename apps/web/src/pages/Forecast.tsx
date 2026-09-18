@@ -112,11 +112,6 @@ export function ForecastPage() {
 
   return (
     <JourneyLayout step="forecast">
-      <h1 className="page-title">Step 4 · The OBR’s forecast arrives</h1>
-      <p className="lede">
-        In confidence, two weeks before the Budget. The OBR does not know which outlook you planned
-        on; its forecast was fixed the day you did.
-      </p>
       <Beats step="forecast">
         <Beat
           title="An envelope from the Office for Budget Responsibility"

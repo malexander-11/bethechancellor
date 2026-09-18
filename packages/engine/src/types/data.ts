@@ -78,6 +78,12 @@ import type {
   verdictKindSchema,
 } from '../schema/game.schema.js';
 import type {
+  glossaryFileSchema,
+  glossaryTermSchema,
+  guideFileSchema,
+  guideStageSchema,
+} from '../schema/guide.schema.js';
+import type {
   growthHeadSchema,
   levelSchema,
   milestoneSchema,
@@ -146,6 +152,10 @@ export type SpeechFragment = z.infer<typeof speechFragmentSchema>;
 export type IncidenceFile = z.infer<typeof incidenceFileSchema>;
 export type VerdictsFile = z.infer<typeof verdictsFileSchema>;
 export type VerdictKind = z.infer<typeof verdictKindSchema>;
+export type GuideFile = z.infer<typeof guideFileSchema>;
+export type GuideStage = z.infer<typeof guideStageSchema>;
+export type GlossaryFile = z.infer<typeof glossaryFileSchema>;
+export type GlossaryTerm = z.infer<typeof glossaryTermSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

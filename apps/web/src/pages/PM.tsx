@@ -119,11 +119,6 @@ export function PMPage() {
 
   return (
     <JourneyLayout step="pm">
-      <h1 className="page-title">Step 2 · Agree the Budget with the Prime Minister</h1>
-      <p className="lede">
-        Downing Street. The Prime Minister is a role, not a person; every line is a game judgement
-        and says so. Every commitment it names carries its source.
-      </p>
       <Beats step="pm">
         <Beat
           title="What the Prime Minister has already done"

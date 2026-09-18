@@ -22,7 +22,6 @@ export function StartPage() {
           <span className="kicker">From the Prime Minister</span>
           <span className="letter__ref">Appointment · Chancellor of the Exchequer</span>
         </p>
-        <h1 className="page-title">You have been appointed Chancellor.</h1>
         <p className="lede">
           Your Budget is on 28 October 2026. March left {formatGbpBn(headroom, 1)} of headroom
           against the fiscal rules, and markets have moved since. Your advisers are waiting.

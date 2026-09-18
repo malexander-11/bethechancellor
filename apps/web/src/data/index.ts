@@ -12,6 +12,9 @@ import {
   parseSpeech,
   parseIncidence,
   parseVerdicts,
+  parseGuide,
+  parseGlossary,
+  guideFor as guideStageFor,
   parseReactions,
   parseContext,
   parseHouseholds,
@@ -40,6 +43,8 @@ import electorateJson from '@data/journey/households.json';
 import speechJson from '@data/journey/speech.json';
 import incidenceJson from '@data/journey/incidence.json';
 import verdictsJson from '@data/journey/verdicts.json';
+import guideJson from '@data/journey/guide.json';
+import glossaryJson from '@data/journey/glossary.json';
 import reactionsJson from '@data/journey/reactions.json';
 import contextJson from '@data/context/2026-09.json';
 import householdsJson from '@data/reference/uk-households.json';
@@ -73,6 +78,8 @@ export const electorate = parseHouseholdsFile(electorateJson);
 export const speech = parseSpeech(speechJson);
 export const incidence = parseIncidence(incidenceJson);
 export const verdicts = parseVerdicts(verdictsJson);
+export const guide = parseGuide(guideJson);
+export const glossary = parseGlossary(glossaryJson);
 export const levers: Lever[] = Object.keys(leverModules)
   .sort()
   .map((key) => parseLever(leverModules[key]))
@@ -103,6 +110,8 @@ const problems = validateDataset({
   speech,
   incidence,
   verdicts,
+  guide,
+  glossary,
 });
 if (problems.length > 0) {
   throw new Error(`data set is inconsistent:\n - ${problems.join('\n - ')}`);
@@ -122,6 +131,11 @@ export function dateFor(step: JourneyStep): Date {
     calendar.stages[0]?.on ??
     rules.assessment.nextFormalAssessmentOn;
   return new Date(`${on}T12:00:00Z`);
+}
+
+/** The guide entry for a screen; the old step names find their screen. */
+export function guideFor(step: JourneyStep) {
+  return guideStageFor(guide, step);
 }
 
 /** Briefings for a step: the step's overviews (no group) or the briefings for one lever group. */
