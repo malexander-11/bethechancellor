@@ -135,10 +135,7 @@ describe('Budget day reads back as feedback, not a table', () => {
       ...freshGame(7),
       headroomTargetBn: 30,
       priorities: ['prisons', 'dip-gap'],
-      protectedPromises: ['tax-lock', 'ct-cap'],
       breachAccepted: true,
-      capital: 2,
-      dropped: ['borders'],
     };
     const outcome = run({ itbr: 1, moj: 10 });
     const status = ambitionStatus(game, ds.pm, outcome, ds.levers);
@@ -153,10 +150,9 @@ describe('Budget day reads back as feedback, not a table', () => {
     expect(values.promisesBroken).toBe(1);
     expect(values.prioritiesUnfunded).toBe(1);
     expect(values.prioritiesFunded).toBe(1);
-    expect(values.capitalSpent).toBe(1);
     expect(values.breachAccepted).toBe(1);
     expect(values.headroomVsTargetGbpm).toBeCloseTo((values.stabilityHeadroomGbpm ?? 0) - 30000, 6);
-    expect(values.rebellionRisk).toBe(2 + 1 + 0 + 1);
+    expect(values.rebellionRisk).toBe(2 + 1 + 0);
     const signals = computeReactions({
       outcome,
       levers: ds.levers,

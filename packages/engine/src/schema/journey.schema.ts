@@ -101,7 +101,6 @@ export const reactionMeasureSchema = z.enum([
   'compromisesGbpm',
   'rabbitGbpm',
   'breachAccepted',
-  'capitalSpent',
   'delayedMeasures',
   'thresholdFreezeKept',
   'efficienciesKept',

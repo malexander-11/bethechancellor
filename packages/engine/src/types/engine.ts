@@ -36,12 +36,10 @@ export interface GamePermalink {
   planning: string;
   /** The headroom the player means to keep, £ billion; 0 means "whatever the rules leave". */
   headroomTargetBn: number;
-  theme?: string;
+  /** The themes agreed with the Prime Minister, in the order ticked; empty until Downing Street. */
+  themes: string[];
+  /** The flagships ticked with the PM. Each is funded the moment it is ticked (Phase 9). */
   priorities: string[];
-  protectedPromises: string[];
-  concessions: string[];
-  /** Political capital: 3 to begin with, one spent per renegotiation. */
-  capital: number;
   /** Lever code → the later fiscal year the measure now starts in. */
   delays: Record<string, string>;
   /** The OBR update has been seen; the macro sliders are now its forecast, not the player's. */
@@ -49,8 +47,6 @@ export interface GamePermalink {
   /** Stage 6: a lever code, 'flagship:<priority id>', or 'keep'. */
   rabbit?: string;
   breachAccepted: boolean;
-  /** Priorities agreed in Downing Street and given up at stage 5, so the close can say so. */
-  dropped: string[];
 }
 
 /** A fresh game around a seed, before any choice has been made. */
@@ -60,14 +56,11 @@ export function freshGame(seed: number): GamePermalink {
     reached: 0,
     planning: 'baseline',
     headroomTargetBn: 20,
+    themes: [],
     priorities: [],
-    protectedPromises: [],
-    concessions: [],
-    capital: 3,
     delays: {},
     revealed: false,
     breachAccepted: false,
-    dropped: [],
   };
 }
 

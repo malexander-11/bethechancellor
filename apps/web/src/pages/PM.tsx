@@ -1,18 +1,22 @@
-import { computeOutcome, formatGbpBn, type Flagship, type Promise_ } from '@btc/engine';
-import { useMemo, useState } from 'react';
+import {
+  ambitionStatus,
+  computeOutcome,
+  formatGbpBn,
+  stageIndex,
+  type Flagship,
+  type Theme,
+} from '@btc/engine';
+import { useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Spoken } from '../components/Conversation';
+import { DespatchBox } from '../components/DespatchBox';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
-import { SourceLink } from '../components/SourceLink';
+import { SourceList } from '../components/SourceLink';
 import { levers, pm, rules, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { StepLink } from '../journey/links';
 import { IMPLEMENTATION_YEAR, useBudget } from '../state/budget';
-
-const MAX_PRIORITIES = 3;
-const MIN_PRIORITIES = 2;
-const MAX_PUSHBACKS = 2;
 
 /** What one flagship would do to borrowing in the target year, on its own, £ million. */
 function flagshipCost(flagship: Flagship, targetYear: string): number {
@@ -34,32 +38,79 @@ function flagshipCost(flagship: Flagship, targetYear: string): number {
   );
 }
 
+const FLAGSHIPS_BY_ID = new Map(pm.flagships.map((f) => [f.id, f] as const));
+const LEVERS_BY_CODE = new Map(levers.map((l) => [l.code, l] as const));
+
+/** The flagships a set of themes puts on the table: each theme's own, then the cross-cutting ones. */
+function offeredBy(themeIds: readonly string[]): Set<string> {
+  const ids = new Set<string>();
+  for (const t of pm.themes) {
+    if (themeIds.includes(t.id)) for (const id of t.flagships) ids.add(id);
+  }
+  for (const id of pm.crossCutting) ids.add(id);
+  return ids;
+}
+
+function FlagshipChoice({
+  flagship,
+  picked,
+  costGbpm,
+  onToggle,
+}: {
+  flagship: Flagship;
+  picked: boolean;
+  costGbpm: number;
+  onToggle: () => void;
+}) {
+  const reaction = pm.reactions[flagship.id];
+  return (
+    <li className={`choice${picked ? ' choice--picked' : ''}`}>
+      <label>
+        <input type="checkbox" checked={picked} onChange={onToggle} />
+        <span className="choice__body">
+          <span className="choice__title">{flagship.title}</span>
+          <span className="choice__line">{flagship.headline}</span>
+          <span className="choice__meta">
+            <span className="tag--treasury">
+              {costGbpm >= 0 ? 'costs ' : 'raises '}
+              {formatGbpBn(Math.abs(costGbpm), 1)} a year
+            </span>{' '}
+            <SourceList as="span" className="briefing__sources" refs={flagship.sources} />
+          </span>
+          {picked ? (
+            <span className="choice__delivery">
+              <LabelBadge badge={flagship.delivery.badge} /> {flagship.delivery.text}
+            </span>
+          ) : null}
+        </span>
+      </label>
+      {picked && reaction ? <Spoken line={reaction} who="The Prime Minister" /> : null}
+    </li>
+  );
+}
+
 /**
- * Stage 2. A conversation in four beats: what the PM has done, what this Budget is for, which two
- * or three things it must deliver, and which promises must survive. Every PM line is simulated and
- * says so; every commitment it names carries its source. The choices are stored on the game and
- * shape everything after.
+ * Step 3. Three beats: what the PM has done; what this Budget is for, ticking every theme that
+ * applies; and the flagship schemes under each. A flagship is funded the moment it is ticked: its
+ * lever moves on the desk and the headroom in the despatch box falls at once, so the choice costs
+ * what it costs while the PM is watching. The manifesto is not up for negotiation here or
+ * anywhere: its red lines were explained on the first screen, the desk warns before one is
+ * crossed, and Budget day judges it. Every PM line is simulated and says so.
  */
 export function PMPage() {
   const { state, dispatch, outcome } = useBudget();
   const { search } = useLocation();
   const game = state.game;
-  const [pushedBack, setPushedBack] = useState<string[]>([]);
-  const targetYear =
-    outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '2029-30';
-
-  const theme = pm.themes.find((t) => t.id === game?.theme);
-  const offered = useMemo(() => {
-    const ids = [...(theme?.flagships ?? []), ...pm.crossCutting];
-    const seen = new Set<string>();
-    return ids
-      .filter((id) => (seen.has(id) ? false : (seen.add(id), true)))
-      .map((id) => pm.flagships.find((f) => f.id === id))
-      .filter((f): f is Flagship => f !== undefined);
-  }, [theme]);
+  const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
+  const targetYear = stability?.targetYear ?? '2029-30';
+  const headroomGbpm = stability?.headroomGbpm ?? 0;
   const costs = useMemo(
-    () => new Map(offered.map((f) => [f.id, flagshipCost(f, targetYear)] as const)),
-    [offered, targetYear],
+    () => new Map(pm.flagships.map((f) => [f.id, flagshipCost(f, targetYear)] as const)),
+    [targetYear],
+  );
+  const status = useMemo(
+    () => (game ? ambitionStatus(game, pm, outcome, levers) : null),
+    [game, outcome],
   );
 
   if (!game) {
@@ -67,55 +118,76 @@ export function PMPage() {
     return <Navigate to={{ pathname: '/outlook', search }} replace />;
   }
 
-  const priorities = game.priorities;
-  const protectedIds = new Set(
-    game.protectedPromises.length > 0 ? game.protectedPromises : pm.promises.map((p) => p.id),
-  );
+  const { themes, priorities } = game;
+  const ticked = pm.themes.filter((t) => themes.includes(t.id));
 
-  const chooseTheme = (id: string) => {
-    // A new theme empties the priorities that belonged to the old one.
-    dispatch({ type: 'updateGame', patch: { theme: id, priorities: [] } });
+  /** Move a flagship's lever to its target, or put it back where the OBR had it. */
+  const fund = (flagship: Flagship, on: boolean) => {
+    const lever = LEVERS_BY_CODE.get(flagship.target.code);
+    dispatch({
+      type: 'setLever',
+      code: flagship.target.code,
+      value: on ? flagship.target.value : (lever?.control.default ?? 0),
+    });
   };
 
-  const togglePriority = (id: string) => {
-    const next = priorities.includes(id)
-      ? priorities.filter((p) => p !== id)
-      : priorities.length < MAX_PRIORITIES
-        ? [...priorities, id]
-        : priorities;
-    dispatch({ type: 'updateGame', patch: { priorities: next } });
-  };
-
-  const ensurePromises = () => {
-    if (game.protectedPromises.length === 0) {
-      dispatch({ type: 'updateGame', patch: { protectedPromises: pm.promises.map((p) => p.id) } });
+  const toggleTheme = (id: string) => {
+    const next = themes.includes(id) ? themes.filter((t) => t !== id) : [...themes, id];
+    // A theme taken off the table takes its flagships with it, and their money comes back.
+    const stillOffered = offeredBy(next);
+    for (const p of priorities) {
+      const flagship = FLAGSHIPS_BY_ID.get(p);
+      if (flagship && !stillOffered.has(p)) fund(flagship, false);
     }
+    dispatch({
+      type: 'updateGame',
+      patch: { themes: next, priorities: priorities.filter((p) => stillOffered.has(p)) },
+    });
   };
 
-  const pushBack = (promise: Promise_) => {
-    if (pushedBack.length >= MAX_PUSHBACKS || pushedBack.includes(promise.id)) return;
-    setPushedBack([...pushedBack, promise.id]);
-  };
-
-  const accept = (promise: Promise_) => {
-    const concession = promise.pushBack?.concession;
-    if (!concession) return;
-    const kept = [...protectedIds].filter((id) => id !== promise.id);
-    if (!kept.includes(concession.id)) kept.push(concession.id);
+  const toggleFlagship = (flagship: Flagship) => {
+    const on = !priorities.includes(flagship.id);
+    fund(flagship, on);
     dispatch({
       type: 'updateGame',
       patch: {
-        protectedPromises: kept,
-        concessions: game.concessions.includes(concession.id)
-          ? game.concessions
-          : [...game.concessions, concession.id],
+        priorities: on ? [...priorities, flagship.id] : priorities.filter((p) => p !== flagship.id),
       },
     });
   };
 
   const agree = () => {
-    dispatch({ type: 'updateGame', patch: { reached: Math.max(game.reached, 2) } });
+    dispatch({
+      type: 'updateGame',
+      patch: { reached: Math.max(game.reached, stageIndex('taxes')) },
+    });
   };
+
+  // Each flagship is listed once, under the first ticked theme that offers it.
+  const seen = new Set<string>();
+  const take = (ids: readonly string[]): Flagship[] =>
+    ids
+      .filter((id) => (seen.has(id) ? false : (seen.add(id), true)))
+      .map((id) => FLAGSHIPS_BY_ID.get(id))
+      .filter((f): f is Flagship => f !== undefined);
+  const groups: { theme: Theme; flagships: Flagship[] }[] = ticked
+    .map((theme) => ({ theme, flagships: take(theme.flagships) }))
+    .filter((g) => g.flagships.length > 0);
+  const crossCutting = take(pm.crossCutting);
+
+  const list = (flagships: Flagship[]) => (
+    <ul className="choices choices--list">
+      {flagships.map((f) => (
+        <FlagshipChoice
+          key={f.id}
+          flagship={f}
+          picked={priorities.includes(f.id)}
+          costGbpm={costs.get(f.id) ?? 0}
+          onToggle={() => toggleFlagship(f)}
+        />
+      ))}
+    </ul>
+  );
 
   return (
     <JourneyLayout step="pm">
@@ -129,156 +201,62 @@ export function PMPage() {
           ))}
         </Beat>
         <Beat
-          title="What kind of Budget this is"
-          continueLabel="Choose the priorities"
-          continueDisabled={!theme}
-          continueHint="Pick a theme to go on."
+          title="What is this Budget for?"
+          continueLabel="Choose the flagships"
+          continueDisabled={themes.length === 0}
+          continueHint="Tick at least one theme."
         >
-          <h2 className="section-label">What is this Budget for?</h2>
-          <div className="choices" role="radiogroup" aria-label="The Budget’s theme">
-            {pm.themes.map((t) => (
-              <label key={t.id} className={`choice${theme?.id === t.id ? ' choice--picked' : ''}`}>
-                <input
-                  type="radio"
-                  name="theme"
-                  value={t.id}
-                  checked={theme?.id === t.id}
-                  onChange={() => chooseTheme(t.id)}
-                />
-                <span className="choice__body">
-                  <span className="choice__title">{t.title}</span>
-                  <span className="choice__line">{t.purpose}</span>
-                </span>
-              </label>
-            ))}
+          <h2 className="section-label">What is this Budget for? Tick all that apply.</h2>
+          <div className="choices" role="group" aria-label="The Budget’s themes">
+            {pm.themes.map((t) => {
+              const picked = themes.includes(t.id);
+              return (
+                <label key={t.id} className={`choice${picked ? ' choice--picked' : ''}`}>
+                  <input type="checkbox" checked={picked} onChange={() => toggleTheme(t.id)} />
+                  <span className="choice__body">
+                    <span className="choice__title">{t.title}</span>
+                    <span className="choice__line">{t.purpose}</span>
+                  </span>
+                </label>
+              );
+            })}
           </div>
-          {theme ? <Spoken line={theme.pitch} who="The Prime Minister" /> : null}
+          {ticked.map((t) => (
+            <Spoken key={t.id} line={t.pitch} who="The Prime Minister" />
+          ))}
         </Beat>
-        <Beat
-          title="The Budget’s priorities"
-          continueLabel="Now the promises"
-          continueDisabled={priorities.length < MIN_PRIORITIES}
-          continueHint={`Choose ${MIN_PRIORITIES} or ${MAX_PRIORITIES} priorities to go on.`}
-        >
-          <h2 className="section-label">
-            Which two or three things must this Budget deliver?{' '}
-            <span className="group__count">
-              {priorities.length}/{MAX_PRIORITIES}
-            </span>
-          </h2>
+        <Beat title="Your flagship schemes">
+          {status ? (
+            <DespatchBox
+              game={game}
+              status={status}
+              headroomGbpm={headroomGbpm}
+              targetYear={targetYear}
+            />
+          ) : null}
           <p className="panel__hint">
-            Choosing one does not fund it. You do that on the desk, and the gap between promised and
-            funded is what the rest of the Budget turns on. Costs are the engine’s, in {targetYear}.
+            Each flagship you tick is funded on the spot: its lever moves on the desk and the
+            headroom above falls. Un-tick it and the money comes back. Costs are the engine’s, in{' '}
+            {targetYear}.
           </p>
-          <ul className="choices choices--list">
-            {offered.map((f) => {
-              const picked = priorities.includes(f.id);
-              const disabled = !picked && priorities.length >= MAX_PRIORITIES;
-              const cost = costs.get(f.id) ?? 0;
-              return (
-                <li key={f.id} className={`choice${picked ? ' choice--picked' : ''}`}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={picked}
-                      disabled={disabled}
-                      onChange={() => togglePriority(f.id)}
-                    />
-                    <span className="choice__body">
-                      <span className="choice__title">{f.title}</span>
-                      <span className="choice__line">{f.headline}</span>
-                      <span className="choice__meta">
-                        <span className="tag--treasury">
-                          {cost >= 0 ? 'costs ' : 'raises '}
-                          {formatGbpBn(Math.abs(cost), 1)} a year
-                        </span>{' '}
-                        {f.sources.map((s, i) => (
-                          <SourceLink key={i} ref={s} />
-                        ))}
-                      </span>
-                      <span className="choice__delivery">
-                        <LabelBadge badge={f.delivery.badge} /> {f.delivery.text}
-                      </span>
-                    </span>
-                  </label>
-                  {picked && pm.reactions[f.id] ? (
-                    <Spoken line={pm.reactions[f.id]!} who="The Prime Minister" />
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
-        </Beat>
-        <Beat title="The promises that must survive">
-          <h2 className="section-label">What the Prime Minister asks you to protect</h2>
+          {groups.map(({ theme, flagships }) => (
+            <fieldset key={theme.id} className="flagships">
+              <legend className="section-label">{theme.title}</legend>
+              {list(flagships)}
+            </fieldset>
+          ))}
+          {crossCutting.length > 0 ? (
+            <fieldset className="flagships">
+              <legend className="section-label">Whichever theme you pick</legend>
+              {list(crossCutting)}
+            </fieldset>
+          ) : null}
           <p className="panel__hint">
-            You may push back on up to {MAX_PUSHBACKS}. The PM will refuse, or concede on terms.
+            The manifesto red lines from step 1 still apply. The desk will warn you before you cross
+            one.
           </p>
-          <ul className="promises">
-            {pm.promises.map((p) => {
-              const asked = protectedIds.has(p.id);
-              const replied = pushedBack.includes(p.id);
-              const concession = p.pushBack?.concession;
-              const conceded = concession ? protectedIds.has(concession.id) : false;
-              return (
-                <li key={p.id} className={`promise${asked ? '' : ' promise--released'}`}>
-                  <p className="promise__title">
-                    <strong>{asked ? p.title : `${p.title} — released`}</strong>
-                    {conceded && concession ? (
-                      <span className="tag--treasury">now: {concession.title}</span>
-                    ) : null}
-                  </p>
-                  <p className="promise__text">
-                    {conceded && concession ? concession.text : p.text}
-                  </p>
-                  <p className="spoken__sources">
-                    {(conceded && concession ? concession.sources : p.sources).map((s, i) => (
-                      <SourceLink key={i} ref={s} />
-                    ))}
-                  </p>
-                  {p.pushBack && asked && !replied && pushedBack.length < MAX_PUSHBACKS ? (
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={() => {
-                        ensurePromises();
-                        pushBack(p);
-                      }}
-                    >
-                      Push back: “{p.pushBack.ask}”
-                    </button>
-                  ) : null}
-                  {p.pushBack && replied ? (
-                    <>
-                      <p className="promise__you">
-                        <span className="kicker">You</span> “{p.pushBack.ask}”
-                      </p>
-                      <Spoken line={p.pushBack.reply} who="The Prime Minister" />
-                      {concession && !conceded ? (
-                        <button
-                          type="button"
-                          className="btn btn--primary"
-                          onClick={() => accept(p)}
-                        >
-                          Accept the terms: {concession.title}
-                        </button>
-                      ) : null}
-                      {!concession ? <p className="promise__refused">The promise stands.</p> : null}
-                    </>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
           <p className="hero-start__actions">
-            <StepLink
-              to="/budget/taxes"
-              className="btn btn--primary"
-              onClick={() => {
-                ensurePromises();
-                agree();
-              }}
-            >
+            <StepLink to="/budget/taxes" className="btn btn--primary" onClick={agree}>
               Agreed. To the desk
             </StepLink>
           </p>

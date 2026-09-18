@@ -488,11 +488,7 @@ export function validateDataset(ds: Dataset): string[] {
         problems.push(`the PM has no reaction to flagship ${flagship.id}`);
       }
     }
-    const promises = ds.pm.promises.flatMap((p) => [
-      p,
-      ...(p.pushBack?.concession ? [p.pushBack.concession] : []),
-    ]);
-    for (const promise of promises) {
+    for (const promise of ds.pm.promises) {
       for (const rule of promise.breaks) {
         if (!codes.has(rule.code)) {
           problems.push(`promise ${promise.id} watches unknown lever "${rule.code}"`);
@@ -612,6 +608,7 @@ export function validateDataset(ds: Dataset): string[] {
   }
   if (ds.speech) {
     if (!ds.speech.opening.default) problems.push('the speech has no default opening');
+    if (!ds.speech.opening.several) problems.push('the speech has no opening for several themes');
     for (const theme of ds.pm?.themes ?? []) {
       if (!ds.speech.opening[theme.id])
         problems.push(`the speech has no opening for theme ${theme.id}`);

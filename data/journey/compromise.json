@@ -34,14 +34,6 @@
         "badge": "simulated"
       }
     },
-    "pm": {
-      "adviser": "political-adviser",
-      "line": {
-        "text": "Going back to Downing Street costs you something each time you do it. The Prime Minister will say yes, once or twice, and will remember every time.",
-        "sources": [],
-        "badge": "simulated"
-      }
-    },
     "target": {
       "adviser": "chief-economic-adviser",
       "line": {

@@ -5,7 +5,6 @@ import {
   deliversTarget,
   freshGame,
   promiseBreaks,
-  promisesInForce,
   type GamePermalink,
 } from '../src/index.js';
 import { loadDataset } from './fixtures.js';
@@ -45,9 +44,12 @@ describe('what the Chancellor promised the Prime Minister', () => {
   });
 
   it('judges the fiscal-rules promise by the verdicts, since no lever names it', () => {
-    const game = { ...freshGame(1), protectedPromises: ['fiscal-rules'] };
-    const kept = ambitionStatus(game, pm, run({}), ds.levers);
-    expect(kept.promises[0]?.kept).toBe(true);
+    const game = freshGame(1);
+    const rulesPromise = (values: Record<string, number>) =>
+      ambitionStatus(game, pm, run(values), ds.levers).promises.find(
+        (p) => p.promise.id === 'fiscal-rules',
+      );
+    expect(rulesPromise({})?.kept).toBe(true);
     // Everything expensive at once misses the stability rule.
     const broken = ambitionStatus(
       game,
@@ -55,23 +57,16 @@ describe('what the Chancellor promised the Prime Minister', () => {
       run({ def5: 1, freeuni: 1, ufsm: 1, socrent: 1, airet: 1 }),
       ds.levers,
     );
-    expect(broken.promises[0]?.kept).toBe(false);
+    expect(broken.promises.find((p) => p.promise.id === 'fiscal-rules')?.kept).toBe(false);
     expect(broken.broken).toBe(1);
   });
 
-  it('treats a concession as a promise of its own, in force once accepted', () => {
-    const game = { ...freshGame(1), protectedPromises: ['tax-lock-narrowed', 'ct-cap'] };
-    const inForce = promisesInForce(game, pm).map((p) => p.id);
-    expect(inForce).toEqual(['tax-lock-narrowed', 'ct-cap']);
-    // The narrowed lock releases the additional rate and nothing else.
-    const status = ambitionStatus(game, pm, run({ itar: 5 }), ds.levers);
-    expect(status.promises.find((p) => p.promise.id === 'tax-lock-narrowed')?.kept).toBe(true);
-    const basic = ambitionStatus(game, pm, run({ itbr: 1 }), ds.levers);
-    expect(basic.promises.find((p) => p.promise.id === 'tax-lock-narrowed')?.kept).toBe(false);
-  });
-
-  it('holds every promise in force until the conversation has happened', () => {
-    expect(promisesInForce(freshGame(1), pm)).toHaveLength(pm.promises.length);
+  it('holds every manifesto promise in force from the first screen to the last', () => {
+    const status = ambitionStatus(freshGame(1), pm, run({}), ds.levers);
+    expect(status.promises.map((p) => p.promise.id)).toEqual(pm.promises.map((p) => p.id));
+    expect(status.broken).toBe(0);
+    // A red line cannot be negotiated away: the data carries no push-backs or concessions.
+    expect(pm.promises.every((p) => !('pushBack' in p))).toBe(true);
   });
 
   it('reports a priority funded, part-funded, unfunded or delayed against its target', () => {

@@ -30,6 +30,11 @@ const slugOk = (s: string) => /^[a-z0-9][a-z0-9:-]*$/.test(s);
 /**
  * `g=` holds the story of a playthrough as `key.value` items. Only what differs from a fresh game
  * is written, so a link stays readable: `g=s.417_st.6_pl.adviser_hr.20_th.cost_pr.ufsm+dip47`.
+ *
+ * Retired keys, never to be reused: `pp` (protected promises), `cn` (concessions), `cp`
+ * (political capital) and `dp` (dropped priorities) carried the Phase 8 negotiation with the PM.
+ * The manifesto is now a fixed set of red lines, so a link that carries them decodes without
+ * them and without a warning; a Budget that had negotiated away the tax lock now shows it broken.
  */
 export function encodeGame(g: GamePermalink): string {
   const fresh = freshGame(g.seed);
@@ -37,11 +42,8 @@ export function encodeGame(g: GamePermalink): string {
   if (g.reached !== fresh.reached) items.push(`st.${g.reached}`);
   if (g.planning !== fresh.planning) items.push(`pl.${g.planning}`);
   if (g.headroomTargetBn !== fresh.headroomTargetBn) items.push(`hr.${g.headroomTargetBn}`);
-  if (g.theme) items.push(`th.${g.theme}`);
+  if (g.themes.length > 0) items.push(`th.${g.themes.join(LIST_SEPARATOR)}`);
   if (g.priorities.length > 0) items.push(`pr.${g.priorities.join(LIST_SEPARATOR)}`);
-  if (g.protectedPromises.length > 0) items.push(`pp.${g.protectedPromises.join(LIST_SEPARATOR)}`);
-  if (g.concessions.length > 0) items.push(`cn.${g.concessions.join(LIST_SEPARATOR)}`);
-  if (g.capital !== fresh.capital) items.push(`cp.${g.capital}`);
   const delays = Object.entries(g.delays).sort(([a], [b]) => a.localeCompare(b));
   if (delays.length > 0) {
     items.push(
@@ -51,7 +53,6 @@ export function encodeGame(g: GamePermalink): string {
   if (g.revealed) items.push('rv.1');
   if (g.rabbit) items.push(`rb.${g.rabbit}`);
   if (g.breachAccepted) items.push('br.1');
-  if (g.dropped.length > 0) items.push(`dp.${g.dropped.join(LIST_SEPARATOR)}`);
   return items.join(ITEM_SEPARATOR);
 }
 
@@ -86,12 +87,9 @@ export function decodeGame(raw: string, warnings: string[]): GamePermalink | und
   const pl = items.get('pl');
   if (pl && slugOk(pl)) g.planning = pl;
   g.headroomTargetBn = int('hr', g.headroomTargetBn);
-  const th = items.get('th');
-  if (th && slugOk(th)) g.theme = th;
+  // A Phase 8 link carried one theme; it reads as a list of one.
+  g.themes = list('th');
   g.priorities = list('pr');
-  g.protectedPromises = list('pp');
-  g.concessions = list('cn');
-  g.capital = int('cp', g.capital);
   for (const d of list('dl')) {
     const dash = d.lastIndexOf('-');
     const year = toFiscalYear(d.slice(dash + 1));
@@ -101,7 +99,6 @@ export function decodeGame(raw: string, warnings: string[]): GamePermalink | und
   const rb = items.get('rb');
   if (rb && slugOk(rb)) g.rabbit = rb;
   g.breachAccepted = items.get('br') === '1';
-  g.dropped = list('dp');
   return g;
 }
 

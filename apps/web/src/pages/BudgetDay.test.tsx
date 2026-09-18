@@ -26,7 +26,7 @@ function seedFor(id: string): number {
   throw new Error(`no seed lands on ${id}`);
 }
 const ADVISER = seedFor('adviser-right');
-const GAME = `g=s.${ADVISER}_st.5_pl.adviser_hr.20_th.security_pr.prisons+dip-gap_pp.tax-lock+ct-cap+two-child_rv.1_rb.keep&M=rate.0.75_rpi.0.5`;
+const GAME = `g=s.${ADVISER}_st.5_pl.adviser_hr.20_th.security_pr.prisons+dip-gap_rv.1_rb.keep&M=rate.0.75_rpi.0.5`;
 
 describe('Budget day: the speech, the afternoon, the morning after, the close', () => {
   it('opens with the speech, every sentence badged as a game judgement', () => {

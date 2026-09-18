@@ -59,35 +59,11 @@ describe('making it add up', () => {
 
   it('narrows a funded flagship to half the distance', async () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1`);
-    const route = screen.getByRole('region', { name: /Narrow a flagship/ });
+    const route = screen.getByRole('region', { name: /Scale back a promise to the PM/ });
     fireEvent.click(within(route).getByRole('button', { name: 'Narrow it' }));
     await waitFor(() => expect(L()).toMatch(/moj\.5/));
     // A toggle cannot be halved; the page says so and offers to switch it off.
     expect(within(route).getByRole('button', { name: 'Switch it off' })).toBeInTheDocument();
-  });
-
-  it('goes back to the Prime Minister, who says yes at a price and then says no', async () => {
-    at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1`);
-    const route = screen.getByRole('region', { name: /Go back to the Prime Minister/ });
-    expect(within(route).getByText(/Political capital: 3 of 3/)).toBeInTheDocument();
-    fireEvent.click(within(route).getAllByRole('button', { name: 'Ask to drop it' })[0]!);
-    expect(within(route).getByText(/You agreed this in my study/)).toBeInTheDocument();
-    fireEvent.click(within(route).getByRole('button', { name: /Drop it, and own it/ }));
-    await waitFor(() => {
-      expect(g()).toMatch(/cp\.2/);
-      // Out of the priorities, and into the record of what was dropped.
-      expect(g()).toMatch(/pr\.dip-gap(_|$)/);
-      expect(g()).toMatch(/dp\.prisons/);
-    });
-    expect(within(route).getByText(/Political capital: 2 of 3/)).toBeInTheDocument();
-  });
-
-  it('refuses once the political capital is spent', () => {
-    at(`/compromise?${BASE}&g=${G}_cp.0&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1`);
-    const route = screen.getByRole('region', { name: /Go back to the Prime Minister/ });
-    fireEvent.click(within(route).getAllByRole('button', { name: 'Ask to be released' })[0]!);
-    expect(within(route).getByText('No. Find another way.')).toBeInTheDocument();
-    expect(within(route).queryByRole('button', { name: /in my own name/ })).toBeNull();
   });
 
   it('lets the Chancellor lower the target, and says what that costs', async () => {
@@ -109,10 +85,14 @@ describe('making it add up', () => {
     await waitFor(() => expect(g()).toMatch(/br\.1/));
   });
 
-  it('says there is no breach to acknowledge when the rules are met', () => {
+  it('offers no borrowing route when the rules are met, only a line saying so', () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10`);
-    const route = screen.getByRole('region', { name: /Borrow, and say so/ });
-    expect(within(route).queryByRole('checkbox')).toBeNull();
-    expect(within(route).getByText(/No rule is missed on these numbers/)).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: /Borrow, and say so/ })).toBeNull();
+    expect(screen.getByText(/No rule is missed on these numbers/)).toBeInTheDocument();
+    // The manifesto is not a route either: there is no going back to the Prime Minister.
+    expect(screen.queryByRole('region', { name: /Prime Minister/ })).toBeNull();
+    expect(
+      screen.getByRole('region', { name: /Scale back a promise to the PM/ }),
+    ).toBeInTheDocument();
   });
 });

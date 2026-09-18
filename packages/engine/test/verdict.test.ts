@@ -68,25 +68,20 @@ describe('the close', () => {
   it('says how each ambition fared, and how each promise was lost', () => {
     const game: GamePermalink = {
       ...freshGame(seedFor('adviser-right')),
-      theme: 'security',
+      themes: ['security'],
       priorities: ['prisons', 'borders'],
-      dropped: ['dip-gap'],
-      protectedPromises: ['tax-lock'],
       delays: { moj: '2028-29' },
     };
     const v = close(game, { moj: 10, home: 2, itbr: 1 });
     const fates = Object.fromEntries(v.ambitions.priorities.map((p) => [p.title, p.fate]));
     expect(fates['A Justice uplift for prison capacity']).toBe('delayed');
     expect(fates['A Home Office uplift']).toBe('narrowed');
-    expect(
-      fates['Fund the Defence Investment Plan’s gap'] ??
-        fates["Fund the Defence Investment Plan's gap"],
-    ).toBe('dropped');
     const lock = v.ambitions.promises.find((p) => p.title === 'The tax lock');
     expect(lock?.fate).toBe('broken-by-choice');
     expect(lock?.by).toEqual(['Basic rate']);
-    // Promises the PM asked for and the Chancellor was released from are named as such.
-    expect(v.ambitions.promises.filter((p) => p.fate === 'released').length).toBe(
+    // Every manifesto promise is judged; the rest were kept.
+    expect(v.ambitions.promises).toHaveLength(ds.pm.promises.length);
+    expect(v.ambitions.promises.filter((p) => p.fate === 'kept')).toHaveLength(
       ds.pm.promises.length - 1,
     );
   });
@@ -145,18 +140,22 @@ describe('the close', () => {
       { itbr: 1 },
     );
     expect(cautious.kind.id).toBe('cautious');
+    // Paid for by broadening the VAT base, which the tax lock does not name.
     const delivered = close(
-      {
-        ...freshGame(seed),
-        theme: 'security',
-        priorities: ['prisons'],
-        protectedPromises: ['ct-cap'],
-      },
-      { moj: 10, itbr: 2, vats: 1 },
+      { ...freshGame(seed), themes: ['security'], priorities: ['prisons'] },
+      { moj: 10, vatfood: 1 },
     );
     expect(delivered.kind.id).toBe('delivered-and-paid');
     expect(delivered.kind.title).toBe(
       'A security Budget that delivered what it promised and paid for it',
+    );
+    // Two themes read as one phrase.
+    const both = close(
+      { ...freshGame(seed), themes: ['security', 'cost-of-living'], priorities: ['prisons'] },
+      { moj: 10, vatfood: 1 },
+    );
+    expect(both.kind.title).toBe(
+      'A security and cost of living Budget that delivered what it promised and paid for it',
     );
     const quiet = close({ ...freshGame(seed) }, {});
     expect(quiet.kind.id).toBe('small-moves');

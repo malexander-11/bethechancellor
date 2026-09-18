@@ -4,9 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
-/** A game that has been to Downing Street: security theme, two priorities, every promise asked. */
-const GAME =
-  'g=s.7_st.2_pl.adviser_hr.20_th.security_pr.prisons+dip-gap_pp.tax-lock+ct-cap+two-child';
+/** A game that has been to Downing Street: security theme, two priorities; every red line binds. */
+const GAME = 'g=s.7_st.2_pl.adviser_hr.20_th.security_pr.prisons+dip-gap';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -25,7 +24,7 @@ describe('the desk, with a game under way', () => {
     const box = screen.getByRole('status', { name: 'The despatch box' });
     expect(within(box).getByText(/against your £20bn target/)).toBeInTheDocument();
     expect(within(box).getByText('0 of 2 funded')).toBeInTheDocument();
-    expect(within(box).getByText('all 3 kept')).toBeInTheDocument();
+    expect(within(box).getByText('all 6 kept')).toBeInTheDocument();
   });
 
   it('pins a promised flagship to the top of its folder with a tag', () => {

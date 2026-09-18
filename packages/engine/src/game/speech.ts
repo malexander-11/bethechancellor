@@ -3,6 +3,7 @@ import { describeLevelChange } from '../levels.js';
 import type { Lever, PmFile, SourceRef, SpeechFile, SpeechFragment } from '../types/data.js';
 import type { GamePermalink, Outcome } from '../types/engine.js';
 import type { AmbitionStatus } from './ambitions.js';
+import { themesInWords } from './verdict.js';
 
 /**
  * The speech (stage 7), assembled from authored fragments. Every figure in it is read from the
@@ -138,9 +139,12 @@ export function assembleSpeech(input: SpeechInput): Speech {
     };
   };
 
-  // Opening, keyed to the theme agreed with the Prime Minister.
-  say('opening', speech.opening[game?.theme ?? 'default'] ?? speech.opening.default, {
+  // Opening, keyed to the theme agreed with the Prime Minister; two or more share one opening.
+  const themes = game?.themes ?? [];
+  const openingKey = themes.length === 0 ? 'default' : themes.length === 1 ? themes[0]! : 'several';
+  say('opening', speech.opening[openingKey] ?? speech.opening.default, {
     targetYear: year,
+    themes: input.pm ? themesInWords(input.pm, themes) : '',
   });
 
   // One paragraph per funded flagship, biggest first.

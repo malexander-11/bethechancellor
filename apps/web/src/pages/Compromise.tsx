@@ -3,13 +3,12 @@ import {
   delayOptions,
   formatGbpBn,
   narrowedValue,
-  promisesInForce,
   revenueSuggestions,
   spendingMeasures,
   stageIndex,
   type Lever,
 } from '@btc/engine';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Spoken } from '../components/Conversation';
 import { DespatchBox } from '../components/DespatchBox';
@@ -28,29 +27,25 @@ import { IMPLEMENTATION_YEAR, useBudget } from '../state/budget';
 import { TARGETS } from './Outlook';
 
 const MACRO_CODES = macroCodesOf(context.readings);
-const MAX_CAPITAL = 3;
-
-type Ask = { kind: 'priority' | 'promise'; id: string } | null;
 
 /**
- * Stage 5. The gap between the headroom the OBR's forecast leaves and the margin the player meant
- * to keep, and six ways through it: raise more, spend less or later, narrow a flagship, go back
- * to the Prime Minister, accept less headroom, or proceed with a rule missed and say so. Every
- * figure on the routes is the engine's, re-run for the move in question; every word beside them
- * is an adviser's and wears the badge.
+ * Step 5, second screen. The gap between the headroom the OBR's forecast leaves and the margin
+ * the player meant to keep, and the ways through it: raise more, spend less or later, scale back
+ * a promise to the PM, accept less headroom, and, only when a rule is missed, borrow and say so.
+ * The manifesto is not a route: its red lines are fixed. Every figure on the routes is the
+ * engine's, re-run for the move in question; every word beside them is an adviser's and wears
+ * the badge.
  */
 export function CompromisePage() {
   const { state, dispatch, outcome } = useBudget();
   const { search } = useLocation();
   const game = state.game;
-  const [ask, setAsk] = useState<Ask>(null);
   const delays = game?.delays ?? {};
   const headroomOf = useHeadroomOf();
   const workings = useWorkings();
-  const promises = useMemo(() => (game ? promisesInForce(game, pm) : []), [game]);
   const revenue = useMemo(
-    () => revenueSuggestions(levers, state.leverValues, promises, headroomOf, 3),
-    [state.leverValues, promises, headroomOf],
+    () => revenueSuggestions(levers, state.leverValues, pm.promises, headroomOf, 3),
+    [state.leverValues, headroomOf],
   );
 
   if (!game) return <Navigate to={{ pathname: '/outlook', search }} replace />;
@@ -86,20 +81,6 @@ export function CompromisePage() {
     else next[code] = year;
     spend({ delays: next });
   };
-  const dropPriority = (id: string) => {
-    spend({
-      priorities: game.priorities.filter((p) => p !== id),
-      dropped: [...game.dropped, id],
-      capital: game.capital - 1,
-    });
-    setAsk(null);
-  };
-  const releasePromise = (id: string) => {
-    const inForce = promises.map((p) => p.id).filter((p) => p !== id);
-    spend({ protectedPromises: inForce, capital: game.capital - 1 });
-    setAsk(null);
-  };
-
   // Who feels it: the spending measures cut back since the package left the desk.
   const felt = Object.entries(state.snapshot ?? {})
     .filter(([code, was]) => {
@@ -277,7 +258,7 @@ export function CompromisePage() {
 
             <section className="route doc" aria-labelledby="route-narrow">
               <h2 id="route-narrow" className="section-label">
-                3 · Narrow a flagship
+                3 · Scale back a promise to the PM
               </h2>
               <Spoken
                 line={compromise.routes.narrow.line}
@@ -355,105 +336,9 @@ export function CompromisePage() {
               )}
             </section>
 
-            <section className="route doc" aria-labelledby="route-pm">
-              <h2 id="route-pm" className="section-label">
-                4 · Go back to the Prime Minister
-              </h2>
-              <Spoken
-                line={compromise.routes.pm.line}
-                who={role(compromise.routes.pm.adviser)}
-                tone="adviser"
-              />
-              <p className="panel__hint">
-                Political capital: {game.capital} of {MAX_CAPITAL}.
-              </p>
-              <ul className="suggestions">
-                {status.priorities.map((p) => (
-                  <li key={p.flagship.id} className="suggestion suggestion--stack">
-                    <div>
-                      <strong>{p.flagship.title}</strong>
-                      {ask?.kind === 'priority' && ask.id === p.flagship.id ? null : (
-                        <button
-                          type="button"
-                          className="btn"
-                          onClick={() => setAsk({ kind: 'priority', id: p.flagship.id })}
-                        >
-                          Ask to drop it
-                        </button>
-                      )}
-                    </div>
-                    {ask?.kind === 'priority' && ask.id === p.flagship.id ? (
-                      <div>
-                        <Spoken
-                          line={
-                            game.capital > 0
-                              ? pm.renegotiation.dropPriority
-                              : pm.renegotiation.refuse
-                          }
-                          who="The Prime Minister"
-                        />
-                        {game.capital > 0 ? (
-                          <button
-                            type="button"
-                            className="btn btn--primary"
-                            onClick={() => dropPriority(p.flagship.id)}
-                          >
-                            Drop it, and own it
-                          </button>
-                        ) : null}
-                        <button type="button" className="linklike" onClick={() => setAsk(null)}>
-                          Leave it
-                        </button>
-                      </div>
-                    ) : null}
-                  </li>
-                ))}
-                {promises.map((p) => (
-                  <li key={p.id} className="suggestion suggestion--stack">
-                    <div>
-                      <strong>{p.title}</strong>
-                      {ask?.kind === 'promise' && ask.id === p.id ? null : (
-                        <button
-                          type="button"
-                          className="btn"
-                          onClick={() => setAsk({ kind: 'promise', id: p.id })}
-                        >
-                          Ask to be released
-                        </button>
-                      )}
-                    </div>
-                    {ask?.kind === 'promise' && ask.id === p.id ? (
-                      <div>
-                        <Spoken
-                          line={
-                            game.capital > 0
-                              ? pm.renegotiation.releasePromise
-                              : pm.renegotiation.refuse
-                          }
-                          who="The Prime Minister"
-                        />
-                        {game.capital > 0 ? (
-                          <button
-                            type="button"
-                            className="btn btn--primary"
-                            onClick={() => releasePromise(p.id)}
-                          >
-                            Break it in my own name
-                          </button>
-                        ) : null}
-                        <button type="button" className="linklike" onClick={() => setAsk(null)}>
-                          Leave it
-                        </button>
-                      </div>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </section>
-
             <section className="route doc" aria-labelledby="route-target">
               <h2 id="route-target" className="section-label">
-                5 · Accept less headroom
+                4 · Accept less headroom
               </h2>
               <Spoken
                 line={compromise.routes.target.line}
@@ -482,54 +367,52 @@ export function CompromisePage() {
               </div>
             </section>
 
-            <section className="route doc route--breach" aria-labelledby="route-breach">
-              <h2 id="route-breach" className="section-label">
-                6 · Borrow, and say so
-              </h2>
-              {missed.length > 0 ? (
-                <>
-                  <Spoken
-                    line={compromise.routes.breach.line}
-                    who={role(compromise.routes.breach.adviser)}
-                    tone="adviser"
+            {missed.length > 0 ? (
+              <section className="route doc route--breach" aria-labelledby="route-breach">
+                <h2 id="route-breach" className="section-label">
+                  5 · Borrow, and say so
+                </h2>
+                <Spoken
+                  line={compromise.routes.breach.line}
+                  who={role(compromise.routes.breach.adviser)}
+                  tone="adviser"
+                />
+                <label className="breach">
+                  <input
+                    type="checkbox"
+                    checked={game.breachAccepted}
+                    onChange={(e) => spend({ breachAccepted: e.target.checked })}
                   />
-                  <label className="breach">
-                    <input
-                      type="checkbox"
-                      checked={game.breachAccepted}
-                      onChange={(e) => spend({ breachAccepted: e.target.checked })}
-                    />
-                    <span>
-                      I understand that{' '}
-                      {missed
-                        .map(
-                          (v) =>
-                            `the ${v.ruleName.toLowerCase()} will be missed by ${formatGbpBn(Math.abs(v.headroomGbpm), 1)}`,
-                        )
-                        .join(' and ')}{' '}
-                      on these numbers, and I am choosing to proceed.
-                    </span>
-                  </label>
-                </>
-              ) : (
-                <>
-                  <Spoken
-                    line={compromise.routes.breach.noBreach}
-                    who={role(compromise.routes.breach.adviser)}
-                    tone="adviser"
-                  />
-                  {game.breachAccepted ? (
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={() => spend({ breachAccepted: false })}
-                    >
-                      Withdraw the acknowledgement
-                    </button>
-                  ) : null}
-                </>
-              )}
-            </section>
+                  <span>
+                    I understand that{' '}
+                    {missed
+                      .map(
+                        (v) =>
+                          `the ${v.ruleName.toLowerCase()} will be missed by ${formatGbpBn(Math.abs(v.headroomGbpm), 1)}`,
+                      )
+                      .join(' and ')}{' '}
+                    on these numbers, and I am choosing to proceed.
+                  </span>
+                </label>
+              </section>
+            ) : (
+              <aside className="route doc route--quiet" aria-label="No rule is missed">
+                <Spoken
+                  line={compromise.routes.breach.noBreach}
+                  who={role(compromise.routes.breach.adviser)}
+                  tone="adviser"
+                />
+                {game.breachAccepted ? (
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => spend({ breachAccepted: false })}
+                  >
+                    Withdraw the acknowledgement
+                  </button>
+                ) : null}
+              </aside>
+            )}
           </div>
 
           {felt.length > 0 ? (

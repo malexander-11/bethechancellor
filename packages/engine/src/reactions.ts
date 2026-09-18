@@ -78,8 +78,6 @@ const PRICE_RAISERS = new Set([
   'alc',
   'rvfuel',
 ]);
-const MAX_CAPITAL = 3;
-
 function at(values: Record<string, number>, year: string): number {
   return values[year] ?? 0;
 }
@@ -171,7 +169,6 @@ export function readingsWithCauses(input: ReactionsInput): Readings {
     status?.priorities.filter((p) => p.status !== 'funded' && p.status !== 'delayed') ?? [];
   const funded =
     status?.priorities.filter((p) => p.status === 'funded' || p.status === 'delayed') ?? [];
-  const capitalSpent = game ? MAX_CAPITAL - game.capital : 0;
   const delayed = Object.keys(game?.delays ?? {}).filter((code) => moved.has(code));
   let compromises = 0;
   const compromised: string[] = [];
@@ -220,13 +217,12 @@ export function readingsWithCauses(input: ReactionsInput): Readings {
       prioritiesFunded: funded.length,
       welfareReversals: welfareReversals.length,
       departmentsCut: cutDepartments.length,
-      rebellionRisk: broken.length * 2 + unfunded.length + welfareReversals.length + capitalSpent,
+      rebellionRisk: broken.length * 2 + unfunded.length + welfareReversals.length,
       credibilityShare: improving > 0 ? uncertified / improving : 0,
       priceRaisingMeasures: priceRaisers.length,
       compromisesGbpm: compromises,
       rabbitGbpm,
       breachAccepted: game?.breachAccepted ? 1 : 0,
-      capitalSpent,
       delayedMeasures: delayed.length,
       thresholdFreezeKept: moved.has('rvfrz') ? 0 : 1,
       efficienciesKept: moved.has('rveff') ? 0 : 1,
@@ -256,14 +252,12 @@ export function readingsWithCauses(input: ReactionsInput): Readings {
         ...broken.map((p) => p.promise.title),
         ...unfunded.map((p) => p.flagship.title),
         ...welfareReversals.map((l) => l.shortTitle),
-        ...(game?.dropped ?? []).map((id) => `dropped: ${id}`),
       ],
       credibilityShare: uncertifiedTitles,
       priceRaisingMeasures: priceRaisers.map((l) => l.shortTitle),
       compromisesGbpm: compromised,
       rabbitGbpm: input.rabbit ? [input.rabbit.label] : [],
       breachAccepted: missedRules,
-      capitalSpent: (game?.dropped ?? []).map((id) => `dropped: ${id}`),
       delayedMeasures: delayed.map((code) => `${title(code)} → ${game?.delays[code] ?? ''}`),
       thresholdFreezeKept: moved.has('rvfrz') ? [title('rvfrz')] : [],
       efficienciesKept: moved.has('rveff') ? [title('rveff')] : [],

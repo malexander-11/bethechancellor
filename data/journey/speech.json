@@ -42,6 +42,10 @@
           "sourceId": "govuk-budget-2026-every-postcode"
         }
       ]
+    },
+    "several": {
+      "text": "Madam Deputy Speaker, this Budget has more than one purpose, and I will not pretend otherwise: {themes}. Each is paid for within the rules this House has set itself, on the forecast the Office for Budget Responsibility published this morning.",
+      "sources": []
     }
   },
   "flagship": {

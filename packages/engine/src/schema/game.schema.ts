@@ -108,10 +108,11 @@ export const themeSchema = z.strictObject({
 });
 
 /**
- * A promise the PM asks the Chancellor to keep. `breaks` is a detector: the promise is broken
- * when any listed lever is on the wrong side of its default (or on at all, for a toggle).
+ * A manifesto red line. `breaks` is a detector: the promise is broken when any listed lever is
+ * on the wrong side of its default (or on at all, for a toggle). The red lines are fixed: there
+ * is no negotiating them away (Phase 9), only crossing them and being judged for it.
  */
-const basePromiseSchema = z.strictObject({
+export const promiseSchema = z.strictObject({
   id: slug,
   title: z.string().min(1),
   text: z.string().min(1),
@@ -123,18 +124,6 @@ const basePromiseSchema = z.strictObject({
       when: z.enum(['above', 'below', 'on']),
     }),
   ),
-});
-
-export const promiseSchema = basePromiseSchema.extend({
-  /** Whether the Chancellor may push back on this one, and what the PM says if they do. */
-  pushBack: z
-    .strictObject({
-      ask: z.string().min(1),
-      reply: simulatedLineSchema,
-      /** A narrower promise the PM extracts in return for releasing this one; absent = refusal. */
-      concession: basePromiseSchema.optional(),
-    })
-    .optional(),
 });
 
 export const pmFileSchema = z
@@ -149,15 +138,21 @@ export const pmFileSchema = z
     promises: z.array(promiseSchema).min(1),
     /** The PM's reaction to each flagship being chosen, in the PM's voice. */
     reactions: z.record(slug, simulatedLineSchema),
-    /** Stage 5: what the PM says when asked to drop a priority or release a promise. */
-    renegotiation: z.strictObject({
-      dropPriority: simulatedLineSchema,
-      releasePromise: simulatedLineSchema,
-      refuse: simulatedLineSchema,
-    }),
   })
   .superRefine((file, ctx) => {
     const flagships = new Set(file.flagships.map((f) => f.id));
+    // Ticking a flagship moves its lever and un-ticking restores the default, so two flagships on
+    // one lever would fight over it.
+    const codes = new Set<string>();
+    file.flagships.forEach((f, i) => {
+      if (codes.has(f.target.code))
+        ctx.addIssue({
+          code: 'custom',
+          message: `two flagships move lever ${f.target.code}`,
+          path: ['flagships', i, 'target', 'code'],
+        });
+      codes.add(f.target.code);
+    });
     file.themes.forEach((t, i) =>
       t.flagships.forEach((id, j) => {
         if (!flagships.has(id))
@@ -306,9 +301,10 @@ export const interventionsFileSchema = z
 /* ------------------------------------------------------- the compromises */
 
 /**
- * What the advisers say beside each route out of a gap (stage 5). One line per route, in the
- * voice of the adviser named; the breach assessment is the Permanent Secretary's and quotes the
- * Charter. Everything simulated, every fact sourced, no number authored.
+ * What the advisers say beside each route out of a gap (stage 5): raise more, spend less or
+ * later, scale back a promise to the PM, accept less headroom, or borrow and say so. One line per
+ * route, in the voice of the adviser named; the breach assessment is the Permanent Secretary's and
+ * quotes the Charter. Everything simulated, every fact sourced, no number authored.
  */
 export const compromiseFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
@@ -316,7 +312,6 @@ export const compromiseFileSchema = z.strictObject({
     revenue: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     spending: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     narrow: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    pm: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     target: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     breach: z.strictObject({
       adviser: slug,
@@ -420,7 +415,7 @@ export const speechFragmentSchema = z.strictObject({
 
 export const speechFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
-  /** Keyed by theme id, plus `default` for a Budget with no theme agreed. */
+  /** Keyed by theme id, plus `default` for no theme and `several` for more than one: {themes}. */
   opening: z.record(z.string(), speechFragmentSchema),
   /** One paragraph per funded flagship: {title}, {level}, {cost}, {targetYear}. */
   flagship: speechFragmentSchema,

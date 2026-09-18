@@ -1574,3 +1574,15 @@ abbr.term {
     grid-template-columns: 1fr;
   }
 }
+
+/* One fieldset of flagships per ticked theme, on the PM's page. */
+.flagships {
+  margin: 12px 0 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.flagships > legend {
+  padding: 0;
+}

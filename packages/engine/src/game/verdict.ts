@@ -25,8 +25,8 @@ import { drawSettings, pickOutcome, revisionsFor } from './draw.js';
  * and badged as one. Nothing here adds a number: it totals, ranks and re-runs the engine.
  */
 
-export type PriorityFate = 'delivered' | 'narrowed' | 'delayed' | 'unfunded' | 'dropped';
-export type PromiseFate = 'kept' | 'broken-by-choice' | 'broken-by-arithmetic' | 'released';
+export type PriorityFate = 'delivered' | 'narrowed' | 'delayed' | 'unfunded';
+export type PromiseFate = 'kept' | 'broken-by-choice' | 'broken-by-arithmetic';
 
 export interface AmbitionVerdict {
   priorities: { title: string; fate: PriorityFate; costGbpm: number }[];
@@ -101,22 +101,13 @@ function priorityFate(p: PriorityReport): PriorityFate {
 }
 
 /** Which ambitions survived, and how each promise fared and why. */
-export function ambitionVerdict(
-  game: GamePermalink,
-  pm: PmFile,
-  status: AmbitionStatus,
-  levers: readonly Lever[],
-): AmbitionVerdict {
+export function ambitionVerdict(status: AmbitionStatus, levers: readonly Lever[]): AmbitionVerdict {
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
   const priorities = status.priorities.map((p) => ({
     title: p.flagship.title,
     fate: priorityFate(p),
     costGbpm: p.costGbpm,
   }));
-  for (const id of game.dropped) {
-    const flagship = pm.flagships.find((f) => f.id === id);
-    if (flagship) priorities.push({ title: flagship.title, fate: 'dropped', costGbpm: 0 });
-  }
   const promises: AmbitionVerdict['promises'] = status.promises.map((p) => ({
     title: p.promise.title,
     fate: p.kept
@@ -128,19 +119,6 @@ export function ambitionVerdict(
       ? { by: p.brokenBy.map((b) => byCode.get(b.code)?.shortTitle ?? b.code) }
       : {}),
   }));
-  // A promise the PM asked for that is no longer in force was released in Downing Street.
-  if (game.protectedPromises.length > 0) {
-    const inForce = new Set(status.promises.map((p) => p.promise.id));
-    const concessions = new Set(
-      pm.promises.flatMap((p) => (p.pushBack?.concession ? [p.pushBack.concession.id] : [])),
-    );
-    for (const p of pm.promises) {
-      const swapped = p.pushBack?.concession && inForce.has(p.pushBack.concession.id);
-      if (!inForce.has(p.id) && !swapped && !concessions.has(p.id)) {
-        promises.push({ title: p.title, fate: 'released' });
-      }
-    }
-  }
   return { priorities, promises };
 }
 
@@ -261,12 +239,31 @@ export function resilienceRows(
   });
 }
 
-function fits(kind: VerdictKind, facts: Record<string, boolean | string>): boolean {
+function fits(
+  kind: VerdictKind,
+  facts: Record<string, boolean>,
+  themes: readonly string[],
+): boolean {
   for (const [key, want] of Object.entries(kind.when)) {
     if (want === undefined) continue;
+    // A kind keyed to a theme fits a Budget that ticked that theme, among others or alone.
+    if (key === 'themeIs') {
+      if (!themes.includes(String(want))) return false;
+      continue;
+    }
     if (facts[key] !== want) return false;
   }
   return true;
+}
+
+/** "cost of living", "security and cost of living", "a, b and c": the ticked themes as words. */
+export function themesInWords(pm: PmFile, themes: readonly string[]): string {
+  const titles = themes
+    .map((id) => pm.themes.find((t) => t.id === id)?.title)
+    .filter((t): t is string => t !== undefined)
+    .map((t) => t.charAt(0).toLowerCase() + t.slice(1));
+  if (titles.length <= 1) return titles[0] ?? '';
+  return `${titles.slice(0, -1).join(', ')} and ${titles[titles.length - 1]}`;
 }
 
 export function budgetVerdict(input: VerdictInput): BudgetVerdict {
@@ -275,7 +272,7 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
   const year = stability?.targetYear ?? '';
   const headroom = stability?.headroomGbpm ?? 0;
   const status = ambitionStatus(game, pm, outcome, levers);
-  const ambitions = ambitionVerdict(game, pm, status, levers);
+  const ambitions = ambitionVerdict(status, levers);
   const { paid, benefited } = incidenceRows(outcome, levers, input.incidence, year);
   const compromises = compromiseRows(input, year);
   const resilience = resilienceRows(input);
@@ -287,8 +284,7 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
   const funded = status.priorities.filter(
     (p) => p.status === 'funded' || p.status === 'delayed',
   ).length;
-  const facts: Record<string, boolean | string> = {
-    themeIs: game.theme ?? '',
+  const facts: Record<string, boolean> = {
     rulesMet,
     breachAccepted: game.breachAccepted,
     promisesAllKept: status.broken === 0,
@@ -301,16 +297,13 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
     restive: input.rebellionRisk >= 3,
   };
   const chosen =
-    input.kinds.kinds.find((k) => fits(k, facts)) ??
+    input.kinds.kinds.find((k) => fits(k, facts, game.themes)) ??
     input.kinds.kinds.find((k) => k.id === input.kinds.fallback) ??
     input.kinds.kinds[0]!;
-  const themeTitle = pm.themes.find((t) => t.id === game.theme)?.title ?? '';
+  const themeWords = themesInWords(pm, game.themes);
   const fillText = (s: string) =>
     s
-      .replace(
-        /\{theme\}/g,
-        themeTitle ? themeTitle.charAt(0).toLowerCase() + themeTitle.slice(1) : '',
-      )
+      .replace(/\{theme\}/g, themeWords)
       .replace(/\{headroom\}/g, formatGbpBn(headroom, 1, headroom < 0))
       .replace(/\s+,/g, ',')
       .replace(/\s{2,}/g, ' ');

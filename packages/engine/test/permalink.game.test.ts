@@ -34,16 +34,12 @@ describe('the playthrough in the link (g= and S=)', () => {
       reached: 5,
       planning: 'adviser',
       headroomTargetBn: 30,
-      theme: 'cost-of-living',
+      themes: ['cost-of-living', 'security'],
       priorities: ['ufsm', 'dip47'],
-      protectedPromises: ['tax-lock', 'ct-cap'],
-      concessions: ['income-tax-on-the-table'],
-      capital: 1,
       delays: { ufsm: '2028-29', dhsc: '2029-30' },
       revealed: true,
       rabbit: 'flagship:ufsm',
       breachAccepted: true,
-      dropped: ['prisons'],
     };
     const q = encodePermalink(
       { ...base, leverValues: { itbr: 1, rate: 0.75 }, game, snapshot: { itbr: 2, ufsm: 1 } },
@@ -59,6 +55,21 @@ describe('the playthrough in the link (g= and S=)', () => {
   it('writes only what differs from a fresh game', () => {
     expect(encodeGame(freshGame(7))).toBe('s.7');
     expect(encodeGame({ ...freshGame(7), revealed: true, reached: 3 })).toBe('s.7_st.3_rv.1');
+    expect(encodeGame({ ...freshGame(7), themes: ['security', 'cost-of-living'] })).toBe(
+      's.7_th.security+cost-of-living',
+    );
+  });
+
+  it('opens a Phase 8 link: one theme reads as a list of one, and the negotiation keys are ignored', () => {
+    const { state, warnings } = decodePermalink(
+      'v=1&g=s.9_st.2_th.security_pr.prisons_pp.tax-lock+ct-cap_cn.tax-lock-narrowed_cp.2_dp.dip-gap',
+      ds.levers,
+    );
+    expect(warnings).toEqual([]);
+    expect(state.game?.themes).toEqual(['security']);
+    expect(state.game?.priorities).toEqual(['prisons']);
+    // The retired fields are gone from the type, so nothing of the negotiation survives decoding.
+    expect(Object.keys(state.game ?? {}).sort()).toEqual(Object.keys(freshGame(9)).sort());
   });
 
   it('treats a link without a usable seed as a link without a game', () => {

@@ -146,7 +146,7 @@ export function BudgetDayPage() {
     levers,
     sizeOf,
     status ?? null,
-    Boolean(game?.theme),
+    (game?.themes.length ?? 0) > 0,
   );
   const theSpeech = useMemo(
     () =>

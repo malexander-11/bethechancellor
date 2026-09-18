@@ -35,7 +35,7 @@ function advice(game: GamePermalink, leverValues: Record<string, number>) {
 
 describe('advisers who remember', () => {
   it('names the promise a lever breaks, and carries the promise’s own sources', () => {
-    const game = { ...freshGame(7), protectedPromises: ['tax-lock', 'ct-cap'] };
+    const game = freshGame(7);
     const items = advice(game, { itbr: 1 });
     const broken = items.find((x) => x.when === 'promise-broken');
     expect(broken?.text).toBe(
@@ -50,7 +50,7 @@ describe('advisers who remember', () => {
   });
 
   it('flags a priority nothing funds yet, then stops once the target is met', () => {
-    const game = { ...freshGame(7), theme: 'security', priorities: ['prisons', 'dip-gap'] };
+    const game = { ...freshGame(7), themes: ['security'], priorities: ['prisons', 'dip-gap'] };
     const before = advice(game, {});
     expect(before.filter((x) => x.when === 'priority-unfunded').map((x) => x.about)).toEqual([
       'prisons',

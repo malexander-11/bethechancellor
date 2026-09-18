@@ -41,7 +41,7 @@ describe('the speech', () => {
   it('is deterministic, stays inside its word budget, and repeats no fragment', () => {
     const game: GamePermalink = {
       ...freshGame(3),
-      theme: 'public-services',
+      themes: ['public-services'],
       priorities: ['nhs-above-sr', 'send-settlement', 'care-downpayment'],
       rabbit: 'meals',
     };
@@ -66,7 +66,7 @@ describe('the speech', () => {
   });
 
   it('quotes only figures the engine produced, formatted as the scorecard formats them', () => {
-    const game: GamePermalink = { ...freshGame(3), theme: 'security', priorities: ['prisons'] };
+    const game: GamePermalink = { ...freshGame(3), themes: ['security'], priorities: ['prisons'] };
     const s = speak({ moj: 10, itbr: 2, vats: 1 }, game);
     const figures = new Set(s.paragraphs.flatMap((p) => p.figures));
     for (const p of s.paragraphs) {
@@ -80,9 +80,8 @@ describe('the speech', () => {
   it('follows the choices: theme, flagships, who pays, a broken promise and the rabbit', () => {
     const game: GamePermalink = {
       ...freshGame(3),
-      theme: 'cost-of-living',
+      themes: ['cost-of-living'],
       priorities: ['ufsm-all', 'bus-cap'],
-      protectedPromises: ['tax-lock', 'ct-cap'],
       rabbit: 'penny-off',
     };
     const s = speak({ ufsm: 1, bus2: 1, itbr: -1, ct: 1, it50: 1 }, game);
@@ -101,6 +100,17 @@ describe('the speech', () => {
     );
     expect(s.paragraphs.find((p) => p.kind === 'rabbit')?.text).toMatch(/one penny in the pound/);
     expect(kinds[kinds.length - 1]).toBe('peroration');
+  });
+
+  it('opens on every theme agreed when there is more than one', () => {
+    const game: GamePermalink = {
+      ...freshGame(3),
+      themes: ['security', 'cost-of-living'],
+      priorities: ['prisons'],
+    };
+    const s = speak({ moj: 10 }, game);
+    expect(s.paragraphs[0]?.kind).toBe('opening');
+    expect(s.paragraphs[0]?.text).toMatch(/security and cost of living/);
   });
 
   it('owns a missed rule, and says so differently when the breach was chosen', () => {

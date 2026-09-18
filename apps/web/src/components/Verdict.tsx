@@ -8,14 +8,12 @@ const PRIORITY: Record<BudgetVerdict['ambitions']['priorities'][number]['fate'],
   narrowed: 'narrowed',
   delayed: 'delayed',
   unfunded: 'not funded',
-  dropped: 'dropped in Downing Street',
 };
 
 const PROMISE: Record<BudgetVerdict['ambitions']['promises'][number]['fate'], string> = {
   kept: 'kept',
   'broken-by-choice': 'broken on the desk',
   'broken-by-arithmetic': 'broken by the arithmetic',
-  released: 'released by the Prime Minister',
 };
 
 /**

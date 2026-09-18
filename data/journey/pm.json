@@ -502,51 +502,7 @@
           "code": "vats",
           "when": "above"
         }
-      ],
-      "pushBack": {
-        "ask": "I need income tax on the table.",
-        "reply": {
-          "text": "Not the basic rate, not National Insurance, not VAT. Those were the words on the doorstep. If you must, the additional rate: the people who can bear it. And you fund something everyone else can see with it.",
-          "sources": [
-            {
-              "sourceId": "labour-manifesto-2024-strong-foundations"
-            }
-          ],
-          "badge": "simulated"
-        },
-        "concession": {
-          "id": "tax-lock-narrowed",
-          "title": "The tax lock, narrowed",
-          "text": "No rise in the basic or higher rates of income tax, National Insurance or VAT. The additional rate is released, on the PM's condition that it pays for something visible.",
-          "sources": [
-            {
-              "sourceId": "labour-manifesto-2024-strong-foundations"
-            }
-          ],
-          "breaks": [
-            {
-              "code": "itbr",
-              "when": "above"
-            },
-            {
-              "code": "ithr",
-              "when": "above"
-            },
-            {
-              "code": "nicm",
-              "when": "above"
-            },
-            {
-              "code": "nica",
-              "when": "above"
-            },
-            {
-              "code": "vats",
-              "when": "above"
-            }
-          ]
-        }
-      }
+      ]
     },
     {
       "id": "ct-cap",
@@ -563,19 +519,7 @@
           "code": "ct",
           "when": "above"
         }
-      ],
-      "pushBack": {
-        "ask": "Business can pay more.",
-        "reply": {
-          "text": "The cap is for the whole parliament and every boardroom in the country has planned on it. No.",
-          "sources": [
-            {
-              "sourceId": "labour-manifesto-2024-growth"
-            }
-          ],
-          "badge": "simulated"
-        }
-      }
+      ]
     },
     {
       "id": "two-child",
@@ -595,19 +539,7 @@
           "code": "rv2ch",
           "when": "on"
         }
-      ],
-      "pushBack": {
-        "ask": "It is £3bn a year.",
-        "reply": {
-          "text": "Four hundred and fifty thousand children. Find it somewhere else.",
-          "sources": [
-            {
-              "sourceId": "hmt-budget-2025-speech"
-            }
-          ],
-          "badge": "simulated"
-        }
-      }
+      ]
     },
     {
       "id": "fiscal-rules",
@@ -622,19 +554,7 @@
           "sourceId": "govuk-chancellor-growth-speech-2026-09-07"
         }
       ],
-      "breaks": [],
-      "pushBack": {
-        "ask": "The rules may have to give.",
-        "reply": {
-          "text": "We are in lockstep on the rules; you said so yourself a fortnight ago. Since 2022 this country has paid a trust penalty for one Budget that ignored them. If you miss them, you will say so to the House in your own words, and you will explain why.",
-          "sources": [
-            {
-              "sourceId": "govuk-chancellor-growth-speech-2026-09-07"
-            }
-          ],
-          "badge": "simulated"
-        }
-      }
+      "breaks": []
     },
     {
       "id": "defence-path",
@@ -654,35 +574,7 @@
           "code": "mod",
           "when": "below"
         }
-      ],
-      "pushBack": {
-        "ask": "The plan's £4.7bn could wait a year.",
-        "reply": {
-          "text": "The budget does not fall. But the plan's remaining money is a Budget decision, and a Budget can phase it. Phase it if you must. Do not cut it.",
-          "sources": [
-            {
-              "sourceId": "govuk-dip-funding-explainer"
-            }
-          ],
-          "badge": "simulated"
-        },
-        "concession": {
-          "id": "dip-may-be-phased",
-          "title": "The Defence Investment Plan gap may be phased",
-          "text": "The defence budget is not cut. The plan's remaining £4.7bn may start a year later than the plan assumed.",
-          "sources": [
-            {
-              "sourceId": "govuk-dip-funding-explainer"
-            }
-          ],
-          "breaks": [
-            {
-              "code": "mod",
-              "when": "below"
-            }
-          ]
-        }
-      }
+      ]
     },
     {
       "id": "triple-lock",
@@ -699,19 +591,7 @@
           "code": "cpilock",
           "when": "on"
         }
-      ],
-      "pushBack": {
-        "ask": "Move the pension to CPI.",
-        "reply": {
-          "text": "Thirteen million people, every one of them permanently worse off, by more each year. No.",
-          "sources": [
-            {
-              "sourceId": "obr-efo-2026-03"
-            }
-          ],
-          "badge": "simulated"
-        }
-      }
+      ]
     }
   ],
   "reactions": {
@@ -848,23 +728,6 @@
           "sourceId": "govuk-budget-2026-every-postcode"
         }
       ],
-      "badge": "simulated"
-    }
-  },
-  "renegotiation": {
-    "dropPriority": {
-      "text": "You agreed this in my study three weeks ago. If it goes, it is your decision and I will say so. Which one, and what do the people who were promised it get instead?",
-      "sources": [],
-      "badge": "simulated"
-    },
-    "releasePromise": {
-      "text": "I gave my word on this. If you break it, you break it in your own name at the despatch box, and the party will remember who asked.",
-      "sources": [],
-      "badge": "simulated"
-    },
-    "refuse": {
-      "text": "No. Find another way.",
-      "sources": [],
       "badge": "simulated"
     }
   }

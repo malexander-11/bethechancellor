@@ -33,7 +33,7 @@ export interface PromiseReport {
 export interface AmbitionStatus {
   priorities: PriorityReport[];
   promises: PromiseReport[];
-  /** Kept promises plus the concessions granted along the way, all of which now bind. */
+  /** Priorities funded or delayed, and manifesto promises broken. */
   funded: number;
   broken: number;
 }
@@ -75,20 +75,6 @@ export function chosenFlagships(game: GamePermalink, pm: PmFile): Flagship[] {
   return game.priorities.map((id) => byId.get(id)).filter((f): f is Flagship => f !== undefined);
 }
 
-/** The promises in force: those the PM asked for, plus any concession the Chancellor accepted. */
-export function promisesInForce(game: GamePermalink, pm: PmFile): Promise_[] {
-  const byId = new Map<string, Promise_>();
-  for (const p of pm.promises) {
-    byId.set(p.id, p);
-    // A concession is a narrower promise the PM extracted in return for releasing another.
-    if (p.pushBack?.concession) byId.set(p.pushBack.concession.id, p.pushBack.concession);
-  }
-  // Until the conversation has happened, every promise the PM would ask for is in force.
-  const ids =
-    game.protectedPromises.length > 0 ? game.protectedPromises : pm.promises.map((p) => p.id);
-  return ids.map((id) => byId.get(id)).filter((p): p is Promise_ => p !== undefined);
-}
-
 export function ambitionStatus(
   game: GamePermalink,
   pm: PmFile,
@@ -119,7 +105,8 @@ export function ambitionStatus(
     else status = 'part-funded';
     return { flagship, status, current, target, delayedTo, costGbpm };
   });
-  const promises = promiseBreaks(values, promisesInForce(game, pm), levers).map((report) => {
+  // The manifesto is fixed: every promise is in force from the first screen to the last.
+  const promises = promiseBreaks(values, pm.promises, levers).map((report) => {
     // A promise with no lever detector is judged by the rules themselves.
     if (report.promise.breaks.length > 0) return report;
     const missed = outcome.verdicts.some(
