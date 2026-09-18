@@ -4,23 +4,28 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 8 (the whole Budget, from ambition to reaction)**. You are appointed Chancellor
-in a Labour government with a Budget to deliver on 28 October 2026, and the whole thing happens on
-a desk: paper on green leather, manila folders with treasury tags, rubber-stamped verdicts, a
-countdown to Budget day. A first playthrough takes about ten minutes and eleven Continues.
+Status: **Phase 9 (a rigid, guided seven-step game)**. You are appointed Chancellor in a Labour
+government with a Budget to deliver on 28 October 2026, and the whole thing happens on a desk:
+paper on green leather, manila folders with treasury tags, rubber-stamped verdicts, a countdown to
+Budget day. Every screen opens with a guide in plain English: which step this is, what you are
+doing, why it matters, what to do now. The sources and breakdowns sit behind a "Show workings"
+switch, off by default; the badges that say what kind of number something is never go away. A
+first playthrough takes about ten minutes and eight Continues.
 
-Seven stages. **The outlook**: which forecast do you budget on, and how much headroom do you mean
-to keep? **The Prime Minister**: agree a theme, two or three priorities and the promises that must
-survive, or push back and take the terms. **The desk**: three folders of levers with a minister on
-every spending line, advisers who remember what you agreed, and a press summary that hints at what
-is coming. **The forecast**: the OBR's envelope, fixed by a seeded draw the day you chose your
-outlook, taken apart into what the economy did and what the OBR made of your costings. **The
-compromises**: six ways through the gap, including going back to Downing Street and proceeding with
-a breach you have written down. **The rabbit**: something for the speech, priced as the headroom it
-leaves. **Budget day**: the speech built from your choices, the afternoon and the morning after from
-Parliament, the markets and five households, and a close that says which ambitions survived, who
-paid, which compromises mattered, how the package fares under every forecast you might have drawn,
-and what kind of Budget it was. Share the link; replay the same seed with a fresh Budget.
+Seven steps. **The appointment**: three advisers brief you on the rules and why they matter, the
+economy since March, and a new Prime Minister who wants a Budget people notice while the manifesto
+ties your hands. **The outlook**: which forecast do you plan on, and how much headroom do you keep?
+**The Prime Minister**: tick the themes this Budget is for, then the flagships under each; every
+flagship you tick is funded on the spot and the headroom falls as you choose. **The desk**: three
+folders of levers, each wearing the manifesto red line that watches it, with a minister on every
+spending line and advisers who remember what you agreed. **The forecast**: the OBR's envelope,
+fixed by a seeded draw the day you chose your outlook, taken apart into what the economy did and
+what the OBR made of your costings, then the routes through the gap it leaves. **The rabbit**:
+something for the speech, priced as the headroom it leaves. **Budget day**: the speech built from
+your choices; your backbenchers, the markets and the public each rating the Budget out of five and
+saying why; and a close that says which ambitions survived, who paid, which compromises mattered,
+how the package fares under every forecast you might have drawn, and what kind of Budget it was.
+Share the link; replay the same seed with a fresh Budget.
 
 Under the hood: the OBR March 2026 baseline, 31 tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options,

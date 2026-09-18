@@ -3,7 +3,7 @@
   "intro": {
     "adviser": "permanent-secretary",
     "line": {
-      "text": "Every Chancellor wants one thing in the speech nobody saw coming. Each of these is already costed on the desk; the cost is the headroom it leaves you on the morning after. Keeping the headroom is an announcement too, and the markets hear it.",
+      "text": "One surprise for the speech. Each card is already costed on the desk, and its price is the headroom left the morning after. Keeping the headroom is an announcement too.",
       "sources": [
         {
           "sourceId": "obr-efo-2026-03",
@@ -20,7 +20,7 @@
       "code": "itbr",
       "value": -1,
       "line": {
-        "text": "The classic. It reaches every basic-rate taxpayer and, on HMRC’s own figures, costs more than most of your package put together. Everyone in the chamber knows the trick and everyone cheers anyway.",
+        "text": "The classic. Every basic-rate taxpayer feels it, and on HMRC’s figures it costs more than most packages put together. Everyone cheers anyway.",
         "sources": [
           {
             "sourceId": "hmrc-trr-2025-06"
@@ -35,7 +35,7 @@
       "code": "ufsm",
       "value": 1,
       "line": {
-        "text": "Visible in every primary school by next September, and the means test goes with it. The Department for Education already funds infant meals; this is the rest of the school.",
+        "text": "Visible in every primary school by September, and the means test goes with it. Infant meals are already funded; this is the rest of the school.",
         "sources": [
           {
             "sourceId": "dfe-uifsm-grant-2026-27"
@@ -53,7 +53,7 @@
       "code": "fuel",
       "value": -5,
       "line": {
-        "text": "Fuel duty has not risen since 2011-12 and the last Budget kept the 5p cut going. A further cut is cheap per driver, dear in total, and the motoring lobby will bank it and ask again.",
+        "text": "Fuel duty has not risen since 2011-12 and the last Budget kept the 5p cut. Cheap per driver, dear in total, and the lobby will ask again.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",
@@ -74,7 +74,7 @@
       "code": "airet",
       "value": 1,
       "line": {
-        "text": "A billion a year sounds like a plan for the future and costs less than a penny on anything. It is the kind of announcement that reads well and is hard to see on the ground.",
+        "text": "It sounds like a plan for the future and costs less than a penny on anything. It reads well and is hard to see on the ground.",
         "sources": [],
         "badge": "simulated"
       }
@@ -83,7 +83,7 @@
   "strengthen": {
     "adviser": "director-of-public-spending",
     "line": {
-      "text": "Going one notch beyond what you agreed with the Prime Minister turns a promise kept into a promise exceeded. Ministers notice the difference; so does the department that has to spend it.",
+      "text": "One notch beyond what you agreed turns a promise kept into a promise exceeded. Ministers notice; so does the department that must spend it.",
       "sources": [],
       "badge": "simulated"
     }
@@ -91,7 +91,7 @@
   "keep": {
     "adviser": "permanent-secretary",
     "line": {
-      "text": "No rabbit. The headroom is the announcement, and the bond market is the audience that hears it. Budget 2025 made a virtue of more than doubling the margin; you can make the same speech.",
+      "text": "No rabbit: the headroom is the announcement, and the bond market is the audience. Budget 2025 made a virtue of more than doubling the margin; you can make the same speech.",
       "sources": [
         {
           "sourceId": "hmt-budget-2025-speech"

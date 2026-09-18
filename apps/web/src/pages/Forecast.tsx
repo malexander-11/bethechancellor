@@ -124,9 +124,9 @@ export function ForecastPage() {
               <span className="letter__ref">Pre-measures forecast · in confidence</span>
             </p>
             <p>
-              The forecast the OBR will judge your Budget against. It replaces the assumptions you
-              planned on; whatever you assumed at the outlook step now becomes a matter of record,
-              and the sliders become the OBR’s.
+              This is the forecast your Budget will be judged against. It was fixed the day you
+              chose your assumptions, and it does not know what you chose. Open it, and the sliders
+              become the OBR’s.
             </p>
             <p className="source">
               Seed {game.seed} of 999 · <LabelBadge badge="simulated" /> which published forecast is

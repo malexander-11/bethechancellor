@@ -49,7 +49,7 @@
     }
   },
   "flagship": {
-    "text": "We will deliver {title}: {level}, {cost} in {targetYear}. A commitment made, and a commitment funded.",
+    "text": "{title}: {detail} in {targetYear}. A commitment made in Downing Street, and a commitment funded.",
     "sources": []
   },
   "spending": {

@@ -11,10 +11,11 @@ export function Disclaimer() {
         </p>
       ) : null}
       <p>
-        This tool does not model the growth effects of your choices or how markets might react to
-        them. Direct costings are official estimates; the year-by-year paths of the economic sliders
-        are assumptions; the rest is arithmetic. Forecasts are uncertain: the OBR&rsquo;s typical
-        five-year error for receipts is 0.9% of GDP, larger than any recent headroom.
+        This game does not model how your choices change growth, or how markets would actually move.
+        Costings are official estimates; the economic sliders are assumptions; the rest is
+        arithmetic; the reactions are judgements, and say so. Forecasts are uncertain: the
+        OBR&rsquo;s typical five-year error on receipts is 0.9% of GDP, more than any recent
+        headroom.
       </p>
       <p>
         Contains public sector information licensed under the Open Government Licence v3.0. Not

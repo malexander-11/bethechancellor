@@ -140,7 +140,9 @@ describe('Budget day: the speech, the reaction, the close', () => {
     expect(
       within(speech).getByText(/first duty of any government is the security/),
     ).toBeInTheDocument();
-    expect(within(speech).getByText(/a Justice uplift for prison capacity/)).toBeInTheDocument();
+    expect(
+      within(speech).getByText(/A Justice uplift for prison capacity: £1\.4bn in 2029-30/),
+    ).toBeInTheDocument();
     expect(
       within(speech).getByText(/basic rate of income tax will be cut by one penny/),
     ).toBeInTheDocument();

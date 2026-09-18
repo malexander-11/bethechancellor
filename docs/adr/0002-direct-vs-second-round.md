@@ -35,3 +35,11 @@ therefore reads: direct costing, mechanical, assumption, second-round commentary
 rule that second-round effects never change a number is unchanged; the one place a game judgement
 moves the arithmetic is the seeded forecast draw, which only chooses among published figures
 (ADR-0012).
+
+## Revision, 2026-09-18 (ADR-0013)
+
+The sources and derivations are now shown only when a "Show workings" switch is on; off is the
+default. This changes how the contract is presented, not the contract: every figure is still the
+engine's or a document's, every badge stays on show whatever the switch says, and the sources are
+one click away on every page. A page that offered no way to reach a source with the switch on would
+break this decision. The reference pages force the switch on, because they are the workings.

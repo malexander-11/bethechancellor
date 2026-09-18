@@ -15,7 +15,7 @@ context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the late
 journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/briefings.json    sourced adviser briefings per step and lever group
 journey/calendar.json     the in-game date of each stage
-journey/pm.json           the Prime Minister: themes, flagships, promises, push-backs, reactions
+journey/pm.json           the Prime Minister: themes, flagships, the manifesto red lines, reactions
 journey/ministers.json    a minister's lines for every spending and welfare lever
 journey/interventions.json adviser lines with a closed predicate over the ambitions
 journey/draws.json        the five forecast outcomes the seed chooses among (ADR-0012)
@@ -25,7 +25,9 @@ journey/speech.json       the speech fragments the assembler fills
 journey/households.json   five household archetypes and the levers that touch them
 journey/incidence.json    who each lever falls on, for the close
 journey/verdicts.json     the kinds of Budget the close chooses between
-journey/reactions.json    Budget day reaction bands, by audience, group and phase
+journey/reception.json    Budget day: three audiences, their rules, bands, points and caps (ADR-0013)
+journey/guide.json        the guide at the head of every screen: step, title, doing, why, now
+journey/glossary.json     the words a newcomer will not know, defined in words
 raw/<source-id>/          committed copies of small source files, with sha256 in the registry
 derived/                  pipeline outputs (regenerated in CI and compared with the commit)
 ```
@@ -153,16 +155,29 @@ the arithmetic is ours and the card has to show it.
   `legal`, `behavioural` or `administrative` consideration, cited. State the alternative
   published figure in the caveats where there is one.
 
-### Budget day reactions (`data/journey/reactions.json`)
+### Budget day reception (`data/journey/reception.json`, ADR-0013)
 
-One `intro` and a list of signals. Each signal names an `audience`, a `measure` the engine reads
-off the outcome, a `reading` label and unit for display, and `bands` in ascending order of `upTo`
-with the last band carrying none. A band holds a `level`, a `headline` of at most 140 characters,
-a `detail` and at least one source. No reaction text may live anywhere else: a test asserts that
-every rendered headline and detail is one of these.
+One `intro` and three `audiences` (`backbenchers`, `markets`, `public`), each with a `title`, the
+`question` it asks, five `labels` worst first, and `rules`. A rule names a `measure` the engine
+reads off the outcome (the closed list in `readingMeasureSchema`), a `reading` label and unit, a
+`note` naming the published anchor its thresholds lean on, and `bands` in ascending order of `upTo`
+with the last carrying none. A band holds `points` (−3 to +3), an optional `cap` on the audience's
+rating, a `text` with `{value}` (the reading, signed) and `{abs}` (its size) placeholders, its
+sources and `badge: "simulated"`. The rating is three plus the points, clamped to one to five, then
+held under any fired cap. A band that quotes a figure must carry a source; a test checks it, and
+that every reason on screen is one of these bands with its placeholders filled.
 
-Market bands describe what commentators watch and cite the evidence (the OBR's interest-rate
-sensitivity, the gilt yield in the context file). They never predict a market move.
+Bands describe what an audience watches and cite the evidence. They never predict a market move
+or a vote; they say what a judgement leans on.
+
+### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
+
+One guide entry per screen: `step`, `number` (one to seven; the desk's three tabs and the two
+forecast screens share a number), `title` (the page's heading), and `doing`, `why`, `now`, at most
+sixty words together. A word in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary
+reference and must exist in `glossary.json`; `terms` lists more to show under "Words on this
+page". Guide and glossary are chrome: no badge, and no figure unless the glossary entry carries a
+source.
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 

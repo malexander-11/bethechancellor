@@ -76,9 +76,9 @@ describe('the beat and word budgets', () => {
   });
 
   it('keeps the one-screen decisions to at most 300 visible words', () => {
-    // The outlook has no hand-off: the screen is the decision, four cards, four targets and a
-    // note. Still a game, not a lecture.
-    for (const path of ['/outlook']) {
+    // The outlook and the rabbit have no hand-off: the screen is the decision, a handful of cards
+    // and a note. Still a game, not a lecture.
+    for (const path of ['/outlook', '/rabbit']) {
       const view = at(`${path}?${BASE}&${GAME}`);
       const n = liveBeatWords();
       expect(n, `${path} shows ${n} words`).toBeLessThanOrEqual(300);

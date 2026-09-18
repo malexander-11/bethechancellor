@@ -118,11 +118,15 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   );
 
   // The biggest movers of borrowing in the target year, macro rows included as one cause.
-  const movers = [...outcome.attribution]
-    .filter((r) => r.kind !== 'debtInterest')
-    .sort((a, b) => Math.abs(b.psnbGbpm) - Math.abs(a.psnbGbpm))
-    .slice(0, 3)
-    .map((r) => (r.kind === 'macro' ? 'the OBR’s forecast' : r.code ? title(r.code) : r.label));
+  const movers = [
+    ...new Set(
+      [...outcome.attribution]
+        .filter((r) => r.kind !== 'debtInterest')
+        .sort((a, b) => Math.abs(b.psnbGbpm) - Math.abs(a.psnbGbpm))
+        .slice(0, 4)
+        .map((r) => (r.kind === 'macro' ? 'the OBR’s forecast' : r.code ? title(r.code) : r.label)),
+    ),
+  ].slice(0, 3);
   const taxMovers = outcome.leverEffects
     .filter((e) => e.category === 'tax' || (e.receipts[year] ?? 0) !== 0)
     .sort((a, b) => Math.abs(b.receipts[year] ?? 0) - Math.abs(a.receipts[year] ?? 0))

@@ -155,12 +155,13 @@ export function assembleSpeech(input: SpeechInput): Speech {
   const flagshipCodes = new Set(funded.map((p) => p.flagship.target.code));
   for (const p of funded) {
     const lever = byCode.get(p.flagship.target.code);
-    const level = lever ? (describeLevelChange(lever, p.current) ?? '') : '';
+    // Rates and thresholds have a level to state ("20% → 21%"); a spending line has only its cost.
+    const level = lever ? describeLevelChange(lever, p.current) : null;
     const cost = money(Math.abs(p.costGbpm));
     say(
       'flagship',
       speech.flagship,
-      { title: lower(p.flagship.title), level, cost, targetYear: year },
+      { title: p.flagship.title, detail: level ? `${level}, ${cost}` : cost, targetYear: year },
       [cost],
     );
   }
@@ -228,9 +229,10 @@ export function assembleSpeech(input: SpeechInput): Speech {
     say('delay', speech.delay, { title: lower(lever.title), year: toYear });
   }
 
-  // The rabbit, if there is one, and the last word.
+  // The rabbit, if there is one, and the last word. Keeping the headroom is only an announcement
+  // while there is headroom to keep; with none, the peroration says what there is to say.
   const rabbit = game?.rabbit;
-  if (rabbit) {
+  if (rabbit && !(rabbit === 'keep' && headroom <= 0)) {
     const key = rabbit.startsWith('flagship:') ? 'flagship' : rabbit;
     const flagshipId = rabbit.startsWith('flagship:') ? rabbit.slice('flagship:'.length) : '';
     const title = rabbit.startsWith('flagship:')
@@ -246,7 +248,10 @@ export function assembleSpeech(input: SpeechInput): Speech {
   }
   const missed = outcome.verdicts.some((v) => v.status === 'notMet' || v.status === 'aboveMargin');
   const perorationKey = game?.breachAccepted && missed ? 'breach' : missed ? 'missed' : 'met';
-  const headroomText = formatGbpBn(headroom, 1, headroom < 0);
+  // A rule met is stated with its headroom; a rule missed is stated by how much, as a size.
+  const headroomText = missed
+    ? formatGbpBn(Math.abs(headroom), 1)
+    : formatGbpBn(headroom, 1, headroom < 0);
   say(
     'peroration',
     speech.peroration[perorationKey] ?? speech.peroration.met,

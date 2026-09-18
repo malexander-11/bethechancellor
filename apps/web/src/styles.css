@@ -77,13 +77,15 @@ a {
    keep their paper colour inside a panel. */
 .journey > .lede,
 .journey > .source,
-.journey > .assumptions-line {
+.journey > .assumptions-line,
+.beat > .assumptions-line {
   color: var(--desk-ink-2);
 }
 
 /* A link with no paper under it would be invisible in fountain-pen blue. */
 .footer-note a,
 .journey > .assumptions-line a,
+.beat > .assumptions-line a,
 .journey > .source a,
 .hero-start > p a {
   color: var(--gold);

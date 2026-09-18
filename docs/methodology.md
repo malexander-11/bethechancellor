@@ -433,18 +433,19 @@ programme. A spending classification may carry a `capitalShare`, because a defen
 all day-to-day money: the Spending Review's own settlement is 43% capital, and capital does not
 count against the stability rule.
 
-### Budget day signals
+### Budget day readings
 
-`computeReactions` is a pure function from the outcome and the lever set. Each signal reads one
-number (headroom, headroom against the OBR's typical forecast error, the change in borrowing, the
-change in the debt path, the change in the tax take, how many recommendations were adopted, how
-many Budget 2025 decisions were reversed, the two rule statuses) and picks the first band whose
-threshold the reading does not exceed. Every word shown lives in `data/journey/reactions.json`
-with its sources, and a test asserts that no signal text exists outside it. The reading that
-chose the band is printed beside the text.
+Budget day reads the outcome into a set of figures (`readingsWithCauses` in
+`packages/engine/src/reactions.ts`): headroom and headroom against the OBR's typical forecast
+error, the change in borrowing, the debt path, the tax take, how many recommendations were adopted
+and how many Budget 2025 decisions reversed, the two rule statuses, and, from Phase 9, public
+spending, capital, tax rises and cuts, the balance of new revenue between the top and the broad
+base by incidence tag, themes chosen and delivered, manifesto red lines crossed and rules missed.
+Each reading carries the decisions behind it, as the levers' own short titles. The Phase 5 reaction
+bands that read these figures were replaced in Phase 9 by the reception (§15).
 
-The public panel is not a band: it carries the distributional considerations of the levers the
-player moved, in their own words and with their own citations, ordered by the size of the measure.
+The public's card also carries the distributional considerations of the levers the player moved,
+in their own words and with their own citations, ordered by the size of the measure.
 
 ## 13. The desk (ADR-0009)
 
@@ -472,12 +473,15 @@ moved, which is the question that was actually being asked.
 
 ## 14. The game: from ambition to reaction (ADR-0011, ADR-0012)
 
-From Phase 8 the journey is seven stages: the outlook, the Prime Minister, the desk, the OBR's
-forecast, the compromises, the rabbit and Budget day. The budget still travels in the query string;
-the playthrough travels beside it as `g=` (seed, stage reached, outlook, headroom target, theme,
-priorities, promises, concessions, political capital, delays, whether the envelope is open, the
-rabbit, an acknowledged breach, dropped priorities) and `S=` (the package as it left the desk).
-Both are absent until a seed is minted, so every older link is byte for byte the same.
+From Phase 8 the journey is a game in seven steps; Phase 9 (§15) renumbered them so that the
+appointment is step 1: the appointment, the outlook, the Prime Minister, the desk, the OBR's
+forecast and the sums, the rabbit and Budget day. The budget still travels in the query string; the
+playthrough travels beside it as `g=` (seed, stage reached, outlook, headroom target, themes,
+priorities, delays, whether the envelope is open, the rabbit, an acknowledged breach) and `S=` (the
+package as it left the desk). Both are absent until a seed is minted, so every older link is byte
+for byte the same. The Phase 8 keys for protected promises, concessions, political capital and
+dropped priorities (`pp`, `cn`, `cp`, `dp`) are retired: a link that carries them decodes without
+them (ADR-0013).
 
 ### The fifth badge
 
@@ -498,13 +502,15 @@ Bank's account of gilt volatility), because no document publishes it.
 
 ### The Prime Minister
 
-Stage 2 is a conversation in data (`data/journey/pm.json`): what has already been done, a theme,
-two or three flagships from the theme plus two cross-cutting ones, and the promises that must
-survive. Every flagship is a lever and a target value whose cost is read live from the engine;
-every promise is a detector over lever values (or, for the fiscal rules, over the verdicts) with
-its source. The player may push back on two; the PM refuses or concedes on terms, and a concession
-is a narrower promise in its own right. `ambitionStatus` reports each priority funded, part-funded,
-unfunded or delayed and each promise kept or broken, with the lever named.
+Step 3 is a conversation in data (`data/journey/pm.json`): what has already been done, the themes
+this Budget is for (tick all that apply), and the flagships under each theme plus two cross-cutting
+ones. Every flagship is a lever and a target value whose cost is read live from the engine, and
+from Phase 9 ticking one funds it on the spot: the lever moves and the despatch box's headroom
+falls; un-ticking restores the default, which is why a validator forbids two flagships on one
+lever. The manifesto's promises are detectors over lever values (or, for the fiscal rules, over the
+verdicts) with their sources, and they are fixed: every one binds from the first screen to the
+last. `ambitionStatus` reports each priority funded, part-funded, unfunded or delayed and each
+promise kept or broken, with the lever named.
 
 ### The desk, staffed
 
@@ -525,28 +531,76 @@ OBR's; the outlook step becomes history; the scorecard grows an "OBR in October"
 
 ### The compromises and the rabbit
 
-Stage 5 offers six routes, all of them levers: the Director of Tax's suggestions (every tax one
-notch up, ranked by the engine, flagged where they break a promise in force), the package's own
-spending measures with a later start year (`Settings.implementationYearByCode`), narrowing a
-flagship to half the distance, going back to the Prime Minister at one political capital a time,
-lowering the target, and acknowledging a breach with the Permanent Secretary's reading of the
-Charter's escape clause. Stage 6 prices four prepared announcements, going further on a flagship,
-or keeping the headroom, each as the headroom it would leave.
+The second screen of step 5 offers four routes, all of them levers, and a fifth only when a rule
+is missed: the Director of Tax's three suggestions (every tax one notch up, ranked by the engine,
+red-tagged where they break a manifesto red line), the package's own three biggest spending
+measures with a later start year (`Settings.implementationYearByCode`), scaling a flagship back to
+half the distance, lowering the target, and acknowledging a breach with the Permanent Secretary's
+reading of the Charter's escape clause. Step 6 prices four prepared announcements, going further
+on a flagship, or keeping the headroom, each as the headroom it would leave.
 
 ### Budget day
 
 The speech is assembled from fragments (`speech.json`) with every figure read from the outcome and
-every title from data; a test checks each pound sign. Reactions gain groups and phases: Parliament
-as marginal seats, the left, ministers, No. 10 and the whips; the markets on the target, the
-credibility of the costings, price-raising measures and an acknowledged breach; the electorate as
-five households touched by stated levers. The morning after reassesses fiscal drag, contested
-costings, pencilled-in efficiencies, financing, start dates and delivery. Every reaction names the
-decisions behind its reading. The close totals the engine's figures by incidence tag, ranks the
-compromises against the snapshot, re-runs the final package under all five draws, and names the
-kind of Budget from a closed list of badged judgements.
+every title from data; a test checks each pound sign; two or more themes share one opening. The
+reaction is the reception of §15: three audiences, each rated out of five with its reasons, plus
+five households touched by stated levers. The close totals the engine's figures by incidence tag,
+ranks the compromises against the snapshot, re-runs the final package under all five draws, and
+names the kind of Budget from a closed list of badged judgements, with `{theme}` filled by every
+ticked theme.
 
 ### What is still not modelled
 
 Growth effects of the player's choices, market reactions as numbers, and anything a real Prime
 Minister or minister said that was not fetched and registered. The game has views now; it has no
 more numbers than it had before.
+
+## 15. The guided game: plain English, hidden workings, three audiences (ADR-0013)
+
+### The workings switch
+
+Every source link, provenance drawer, breakdown table, expert switch and ready-made Budget sits
+behind one "Show workings" switch in the header, off by default and remembered in the browser under
+`btc.workings.v1`. The badges stay on show whatever the switch says; the footer says where the
+sources went; the methodology and sources pages force the switch on. The contract of §1 is
+unchanged: nothing is removed, and the tests run with the switch on so every assertion about a
+source still holds.
+
+### The guide and the glossary
+
+`data/journey/guide.json` gives every screen a step number, a title (the page's heading), and three
+plain sentences: what you are doing, why it matters, what to do now, at most sixty words in all.
+Words in square brackets are glossary references (`data/journey/glossary.json`), rendered with their
+definition to hand and listed under "Words on this page". Both are chrome and carry no badge; a test
+forbids a figure in either unless it is sourced.
+
+### The appointment
+
+Step 1 briefs the new Chancellor on one screen: the Permanent Secretary on the rules and why they
+matter, with headroom and the OBR's typical error as facts; the Chief Economic Adviser on what has
+moved since March, with reading chips built from the context file's own figures by the same
+`summariseReading` the assumptions table uses; the Political Adviser on a Prime Minister who wants a
+Budget people notice and a manifesto that ties your hands, with the red lines listed from
+`pm.json`, so the briefing, the desk's warnings and Budget day's judgement can never disagree.
+
+### The warnings on the lever
+
+A lever a red line watches wears a quiet "Manifesto: no rise" (or "no cut", "do not switch on")
+so the line is learnt before it is tested; a crossed line turns the tag red. A flagship promised to
+the PM wears "Promised to the PM" while the desk funds it and "Below what you promised the PM" once
+it is pulled back. Both are read through `promiseBreaks` and `ambitionStatus`, pure arithmetic over
+the package.
+
+### The reception
+
+`receptions` in `packages/engine/src/game/reception.ts` rates the Budget for three audiences. For
+each rule of an audience it reads one figure from §12's readings, picks the first authored band
+whose `upTo` the figure does not exceed, and takes the band's points; the rating is
+`clamp(3 + Σ points, 1, 5)`, then held under any fired band's `cap`. The two or three reasons with
+the most points are shown; every rule, with its points, its reading, the decisions behind it and
+its sources, sits behind "Why this rating". Every threshold, point and sentence is authored in
+`data/journey/reception.json`, badged simulated, and each rule names the published anchor its
+thresholds lean on; the table is in ADR-0013. A test checks that every reason on screen is a band
+in the file with its placeholders filled, that a band quoting a figure carries a source, that a
+broken manifesto pins the public at one whatever else happens, and, by property, that ratings stay
+in one to five over random points and caps and over random packages.

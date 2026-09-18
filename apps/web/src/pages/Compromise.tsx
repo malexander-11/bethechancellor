@@ -64,7 +64,7 @@ export function CompromisePage() {
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (outcome.paths.baseline.nominalGdpFy[lastYear] ?? 0);
-  const spending = spendingMeasures(levers, outcome, targetYear).slice(0, 5);
+  const spending = spendingMeasures(levers, outcome, targetYear).slice(0, 3);
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
   const value = (lever: Lever) => state.leverValues[lever.code] ?? lever.control.default;
   const role = (id: string) => adviserById.get(id)?.role ?? id;

@@ -102,18 +102,21 @@ export function MethodologyPage() {
 
       <h2>The journey and the advisers</h2>
       <p>
-        The game walks through seven stages: the outlook, the Prime Minister, the desk, the
-        OBR&rsquo;s forecast, the compromises, the rabbit and Budget day. The advisers, the Prime
-        Minister and the ministers are roles, not people; a briefing that cites a public document is
-        labelled commentary, and a judgement nobody published is labelled simulated and never
-        produces a number. The advisers&rsquo; suggested slider settings follow a stated rule: the
-        latest market or independent reading minus the OBR&rsquo;s March assumption, rounded to the
-        slider&rsquo;s step. Controls show the level a setting moves to (20% to 21%, £12,570 to
-        £13,070), but the engine costs the change, exactly as before: levels are display only. VAT
-        base-broadening toggles use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not
-        represent what abolishing a relief would raise; abolishing inheritance tax removes the
-        OBR&rsquo;s whole receipts line; reversing the October 2024 capital gains tax rise uses the
-        Treasury&rsquo;s own costing of the package.
+        The game walks through seven steps: the appointment, the outlook, the Prime Minister, the
+        desk, the OBR&rsquo;s forecast and the sums, the rabbit and Budget day. Every screen opens
+        with a guide in plain English (which step, what you are doing, why it matters, what to do
+        now) and a glossary of the words a newcomer will not know; both are chrome, carry no badge
+        and quote no figure that is not sourced. The advisers, the Prime Minister and the ministers
+        are roles, not people; a briefing that cites a public document is labelled commentary, and a
+        judgement nobody published is labelled simulated and never produces a number. The
+        advisers&rsquo; suggested slider settings follow a stated rule: the latest market or
+        independent reading minus the OBR&rsquo;s March assumption, rounded to the slider&rsquo;s
+        step. Controls show the level a setting moves to (20% to 21%, £12,570 to £13,070), but the
+        engine costs the change, exactly as before: levels are display only. VAT base-broadening
+        toggles use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not represent what
+        abolishing a relief would raise; abolishing inheritance tax removes the OBR&rsquo;s whole
+        receipts line; reversing the October 2024 capital gains tax rise uses the Treasury&rsquo;s
+        own costing of the package.
       </p>
 
       <h2>Spending levers</h2>
@@ -153,15 +156,26 @@ export function MethodologyPage() {
         rules actually measure.
       </p>
 
+      <h2>Show workings</h2>
+      <p>
+        The sources, the provenance drawers and the breakdown tables sit behind one switch at the
+        top of the page, off by default and remembered in your browser. Nothing is removed: every
+        figure is still an official number or arithmetic on one, the badges that say which never go
+        away, and the sources are one click away on every page. This page and the sources page keep
+        the switch on, because they are the workings.
+      </p>
+
       <h2>Budget day</h2>
       <p>
-        Four panels: your own rules, the markets, Parliament and the public. Each signal is a rule
-        over your Budget, and the reading that selected it is printed beside the words so you can
-        check the judgement. Every sentence is authored with its sources; nothing is generated. The
-        market panel describes what commentators watch, citing the OBR&rsquo;s own interest-rate
-        sensitivity and the gilt yield at the time this was built. It does not predict what markets
-        would do. The public panel carries the distributional notes of the levers you moved, in
-        their own words.
+        Three audiences rate the Budget out of five and say why: your backbenchers ask whether this
+        is a Labour Budget, the markets whether the headroom is enough and what it does to growth
+        and the tax burden, the public whether it made a difference to them. Each rating is three
+        plus the points of authored rules, clamped to one to five, and a manifesto promise broken
+        pins the public at one whatever else happens. Every threshold, point and sentence is written
+        in the data and labelled simulated; &ldquo;Why this rating&rdquo; on each card lists every
+        rule with its points, the figure it read, the decisions behind it and, with the workings on,
+        its sources. Nothing predicts what a market or a voter would actually do: the cards say what
+        a judgement leans on, and the thresholds are the game&rsquo;s own, written down in ADR-0013.
       </p>
 
       <h2>Why it looks like paperwork</h2>
