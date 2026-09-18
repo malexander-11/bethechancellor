@@ -17,12 +17,16 @@
       "label": "Motorists",
       "side": "pays"
     },
+    "flyers": {
+      "label": "Air passengers",
+      "side": "pays"
+    },
     "savers-owners": {
       "label": "Savers, investors and homeowners",
       "side": "pays"
     },
     "duties": {
-      "label": "Drinkers and gamblers",
+      "label": "Drinkers, smokers and gamblers",
       "side": "pays"
     },
     "nhs": {
@@ -125,16 +129,23 @@
     "wealth": "top",
     "cgth": "savers-owners",
     "rvcgt": "savers-owners",
+    "badr": "savers-owners",
     "iht": "savers-owners",
+    "rnrb": "savers-owners",
     "sdlt5": "savers-owners",
     "rvhrad": "savers-owners",
     "rvinv": "savers-owners",
     "ct": "business",
     "nicer": "business",
+    "nicst": "business",
     "fuel": "motorists",
     "rvfuel": "motorists",
     "alc": "duties",
     "rvgam": "duties",
+    "tob": "duties",
+    "ved": "motorists",
+    "apd": "flyers",
+    "ipt": "broad-base",
     "dhsc": "nhs",
     "dfe": "schools",
     "ufsm": "schools",

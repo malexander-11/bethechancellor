@@ -467,6 +467,24 @@
               "paragraph": "3.2"
             }
           ]
+        },
+        {
+          "text": "The employer side is where the last two Budgets found money: the rate went from 13.8% to 15% and the threshold from £9,100 to £5,000 in April 2025, raising about £24bn a year. HMRC costs a further £2 a week off the threshold at about £0.45bn; employer contributions to pensions, on which no National Insurance is paid at all, are a relief worth £14.3bn a year.",
+          "sources": [
+            {
+              "sourceId": "hmt-autumn-budget-2024-table-5-1",
+              "table": "Table 5.1",
+              "note": "line 26"
+            },
+            {
+              "sourceId": "hmrc-trr-2025-06"
+            },
+            {
+              "sourceId": "hmrc-tax-reliefs-2026-01",
+              "table": "Table 2",
+              "note": "row NIC - NS4"
+            }
+          ]
         }
       ]
     },
@@ -590,8 +608,8 @@
       "step": "taxes",
       "group": "Duties",
       "adviser": "director-of-tax",
-      "title": "Duties: fuel and alcohol",
-      "headline": "Fuel duty has not risen since 2011-12, and electric cars are eroding it.",
+      "title": "Duties: fuel, alcohol, tobacco, vehicles and flights",
+      "headline": "Fuel duty has not risen since 2011-12; the smaller duties are where Chancellors usually look.",
       "paragraphs": [
         {
           "text": "Fuel duty on petrol and diesel has been 52.95p a litre since the 5p cut of March 2022, and the OBR notes the rate has not been increased since 2011-12. Budget 2025 planned to unwind the cut in three stages (1p in September 2026, 2p in December 2026, 2p in March 2027) and to uprate with RPI from April 2027. Receipts are £24.2bn in 2025-26, peaking at about £27 billion in 2028-29 before electric vehicles erode the base.",
@@ -619,6 +637,26 @@
             {
               "sourceId": "obr-efo-2026-03",
               "table": "Table A.5"
+            }
+          ]
+        },
+        {
+          "text": "The smaller duties are raised most Budgets. Vehicle excise duty is £200 a year for most cars after their first year; air passenger duty on an economy ticket is £8 within the UK and £15 to £106 abroad from April 2026, rising with inflation in 2027; cigarettes carry £353.50 per 1,000 plus 16.5% of the price since November 2025; and insurance premium tax has been 12% since 2017. HMRC publishes what a small change to each would raise.",
+          "sources": [
+            {
+              "sourceId": "govuk-ved-rate-tables"
+            },
+            {
+              "sourceId": "govuk-apd-rates"
+            },
+            {
+              "sourceId": "govuk-tobacco-duty-rates"
+            },
+            {
+              "sourceId": "govuk-ipt-guidance"
+            },
+            {
+              "sourceId": "hmrc-trr-2025-06"
             }
           ]
         }

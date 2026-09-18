@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "id": "tobacco-duties",
+  "code": "tob",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Duties",
+  "order": 22,
+  "title": "Tobacco duties",
+  "shortTitle": "Tobacco duties",
+  "headline": "Already RPI plus 2% a year. Going further raises little: smokers switch or stop.",
+  "description": "Change the duty on cigarettes, hand-rolling tobacco and other tobacco products together, as a percentage of current rates, on top of the escalator already in the forecast. HMRC expects only a small yield from a rise, because higher duty means fewer legal sales.",
+  "baselinePolicy": {
+    "text": "Cigarettes carry £353.50 per 1,000 plus 16.5% of the retail price, with a minimum excise duty of £471.93 per 1,000, since 26 November 2025. Autumn Budget 2024 set the escalator at RPI plus 2% a year (plus 10% on hand-rolling tobacco); tobacco duties raise about £8bn a year.",
+    "source": {
+      "sourceId": "govuk-tobacco-duty-rates"
+    },
+    "alreadyIncludes": [
+      "Duty rates rise by RPI plus 2% each year, with a further 10% on hand-rolling tobacco in 2024 (Autumn Budget 2024, Table 5.1 line 36).",
+      "A duty on vaping products of £2.20 per 10ml from October 2026, with a matching one-off rise in tobacco duty (Autumn Budget 2024, Table 5.1 lines 35 and 36)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -10,
+    "max": 20,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "change in duty rates, on top of the escalator"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "alcoholAndTobaccoDuties",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 5,
+      "2027-28": 10,
+      "2028-29": 15
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "1-pct-change-in-various-duties--tobacco-duties",
+          "label": "Tobacco Duties",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 5,
+            "2027-28": 10,
+            "2028-29": 15
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "receiptsByTax.tobaccoDuties",
+      "note": "Shifted to the start year and scaled by the OBR's tobacco duty receipts forecast (Table A.5) (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC's row is for a 1% change in duty; larger changes are scaled linearly. The published yield is small relative to the £8bn the duty raises because HMRC's estimate includes the fall in legal sales as prices rise.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "tobacco-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's estimate builds in a large behavioural response: when duty rises, smokers cut down, quit, switch to cheaper products or buy from the illicit market, so most of the mechanical yield does not arrive. That is already in the published figure.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "large"
+    },
+    {
+      "id": "tobacco-regressive",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "Smoking is more common on lower incomes, so tobacco duty takes a larger share of income from poorer households than from richer ones; the health case for the duty is the usual answer, and it is the reason the escalator is already in the baseline.",
+      "sources": [
+        {
+          "sourceId": "govuk-tobacco-duty-rates"
+        }
+      ],
+      "magnitudeWords": "moderate"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-18"
+}

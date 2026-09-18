@@ -8,14 +8,16 @@
   "order": 30,
   "title": "Insurance premium tax",
   "shortTitle": "Insurance premium tax",
-  "headline": "Retired from this Budget. Old links still work.",
-  "description": "Change the 12% standard rate of insurance premium tax on most general insurance, in percentage points.",
+  "headline": "12% on most general insurance. Each point raises about £0.65bn.",
+  "description": "Change the 12% standard rate of insurance premium tax, paid on most home, motor, pet and health insurance, in percentage points. The rate has been raised four times since 2011, from 5% to 12%; a two-point rise raises about £1.3bn a year.",
   "baselinePolicy": {
-    "text": "Standard rate 12%; higher rate 20% on travel insurance and some vehicle and appliance insurance.",
+    "text": "Standard rate 12% on most general insurance; higher rate 20% on travel insurance and some insurance sold with vehicles and appliances. Budget 2025 extended the standard rate to insurance on Motability vehicle leases from July 2026 (Table 4.1 line 14).",
     "source": {
-      "sourceId": "hmrc-trr-2025-06-bulletin"
+      "sourceId": "govuk-ipt-guidance"
     },
-    "alreadyIncludes": []
+    "alreadyIncludes": [
+      "Insurance premium tax at the standard rate on insurance related to Motability and similar vehicle leases from 1 July 2026 (Budget 2025, Table 4.1 line 14)."
+    ]
   },
   "control": {
     "kind": "slider",
@@ -24,7 +26,18 @@
     "max": 8,
     "step": 1,
     "default": 0,
-    "formatLabel": "percentage points"
+    "formatLabel": "percentage points",
+    "level": {
+      "baseline": 12,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Standard rate of insurance premium tax",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-ipt-guidance"
+      },
+      "note": "12% standard rate; 20% higher rate on travel and some vehicle and appliance insurance."
+    }
   },
   "appliesFrom": "implementationYear",
   "classification": {
@@ -90,6 +103,20 @@
       "magnitudeWords": "unknown"
     },
     {
+      "id": "ipt-passed-on",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "Insurers pass the tax on in premiums, so it falls on anyone who insures a home, a car or a pet; the OBR classes it among the smaller taxes, at about £8bn a year.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table A.5"
+        }
+      ],
+      "magnitudeWords": "moderate"
+    },
+    {
       "id": "hmrc-2026-deferred",
       "kind": "administrative",
       "direction": "ambiguous",
@@ -107,6 +134,5 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-15",
-  "deprecated": true
+  "reviewedOn": "2026-09-18"
 }

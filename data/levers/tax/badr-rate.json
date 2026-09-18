@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "id": "badr-rate",
+  "code": "badr",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital taxes",
+  "order": 15,
+  "title": "Business Asset Disposal Relief rate",
+  "shortTitle": "BADR rate",
+  "headline": "Business owners pay 18% on selling up, not 24%. Closing the gap raises £0.8bn.",
+  "description": "Raise the special capital gains tax rate on the first £1 million of gains when someone sells all or part of their business (Business Asset Disposal Relief, formerly Entrepreneurs' Relief), in percentage points. HMRC publishes +1 and +5 points; the relief cost £0.8bn in 2025-26.",
+  "baselinePolicy": {
+    "text": "Qualifying gains are charged at 14% from April 2025 and 18% from April 2026, against a main higher rate of 24%, subject to a £1 million lifetime limit; HMRC puts the relief's cost at £800m in 2025-26.",
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "table": "Table 2",
+      "note": "row CGT - NS2"
+    },
+    "alreadyIncludes": [
+      "Autumn Budget 2024 raised the relief's rate from 10% to 14% (April 2025) and 18% (April 2026) alongside the main-rate rise (Table 5.1 line 27)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": 0,
+    "max": 5,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "percentage points on the relief rate",
+    "level": {
+      "baseline": 18,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Rate on gains qualifying for Business Asset Disposal Relief",
+      "decimals": 0,
+      "source": {
+        "sourceId": "hmrc-tax-reliefs-2026-01",
+        "table": "Table 2",
+        "note": "row CGT - NS2"
+      },
+      "note": "18% from April 2026; the main higher rate of capital gains tax is 24%."
+    }
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "lookupTable",
+    "input": "pp",
+    "points": [
+      {
+        "input": 0,
+        "effect": {
+          "2026-27": 0,
+          "2027-28": 0,
+          "2028-29": 0
+        }
+      },
+      {
+        "input": 1,
+        "effect": {
+          "2026-27": 10,
+          "2027-28": 135,
+          "2028-29": 180
+        },
+        "from": {
+          "rowIds": [
+            "capital-gains-tax--increase-business-asset-disposal-relief-rate-by-1-percentage-point"
+          ],
+          "multiplier": 1
+        }
+      },
+      {
+        "input": 5,
+        "effect": {
+          "2026-27": 40,
+          "2027-28": 635,
+          "2028-29": 840
+        },
+        "from": {
+          "rowIds": [
+            "capital-gains-tax--increase-business-asset-disposal-relief-rate-by-5-percentage-points"
+          ],
+          "multiplier": 1
+        }
+      }
+    ],
+    "interpolation": "linear",
+    "extrapolation": "forbid",
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "capital-gains-tax--increase-business-asset-disposal-relief-rate-by-1-percentage-point",
+          "label": "Increase Business Asset Disposal Relief rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 10,
+            "2027-28": 135,
+            "2028-29": 180
+          }
+        },
+        {
+          "rowId": "capital-gains-tax--increase-business-asset-disposal-relief-rate-by-5-percentage-points",
+          "label": "Increase Business Asset Disposal Relief rate by 5 percentage points",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 40,
+            "2027-28": 635,
+            "2028-29": 840
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "capitalTaxes",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: capital gains tax changes are non-linear and asymmetrical; only HMRC's published points (+1 and +5) are used, with straight lines between them. The first year is small because gains are taxed the year after they are made.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "cgt-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's estimates build in a behavioural response: owners can choose when, and whether, to sell. Unlike the main higher rate, HMRC still expects a rise in this relief's rate to raise money at every published point, because the relief rate stays below the main rate.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "moderate"
+    },
+    {
+      "id": "badr-who-pays",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "The relief goes to people selling a business or shares in one they work for, within a £1 million lifetime limit; HMRC's cost estimate includes Investors' Relief, which it cannot separate in the data.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-2026-01",
+          "table": "Table 2",
+          "note": "row CGT - NS2"
+        }
+      ],
+      "magnitudeWords": "small"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-18",
+  "interactions": [
+    {
+      "withLever": "cgt-higher-rate",
+      "text": "The relief's value is the gap between its rate and the main higher rate; raising the main rate widens the gap this lever narrows.",
+      "severity": "info"
+    }
+  ]
+}

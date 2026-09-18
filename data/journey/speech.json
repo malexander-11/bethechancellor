@@ -74,13 +74,8 @@
       "sources": []
     },
     "motorists": {
-      "text": "Motorists pay a little more: {measures}, raising {yield} in {targetYear}, after fifteen years without a rise in fuel duty.",
-      "sources": [
-        {
-          "sourceId": "obr-efo-2026-03",
-          "paragraph": "3.2"
-        }
-      ]
+      "text": "Motorists pay a little more: {measures}, raising {yield} in {targetYear}.",
+      "sources": []
     },
     "duties": {
       "text": "Duties rise: {measures}, raising {yield} in {targetYear}.",

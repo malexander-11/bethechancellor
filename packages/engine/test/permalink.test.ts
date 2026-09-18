@@ -88,13 +88,13 @@ describe('permalink codec', () => {
   });
 
   it('keeps a deprecated lever setting from an old link and says so', () => {
-    const ipt = allLevers.find((l) => l.code === 'ipt');
-    expect(ipt?.deprecated).toBe(true);
-    const { state, warnings } = decodePermalink('v=1&f=obr2603&r=ch2602&i=2027&L=ipt.2', allLevers);
-    expect(state.leverValues.ipt).toBe(2);
+    const chb = allLevers.find((l) => l.code === 'chb');
+    expect(chb?.deprecated).toBe(true);
+    const { state, warnings } = decodePermalink('v=1&f=obr2603&r=ch2602&i=2027&L=chb.2', allLevers);
+    expect(state.leverValues.chb).toBe(2);
     expect(warnings.some((w) => /deprecated/.test(w))).toBe(true);
-    const hidden = decodePermalink('v=1&L=ipt.2', levers);
-    expect(hidden.state.leverValues.ipt).toBeUndefined();
+    const hidden = decodePermalink('v=1&L=chb.2', levers);
+    expect(hidden.state.leverValues.chb).toBeUndefined();
     expect(hidden.warnings.some((w) => /unknown lever code/.test(w))).toBe(true);
   });
 });

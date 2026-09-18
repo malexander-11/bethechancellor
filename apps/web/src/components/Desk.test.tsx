@@ -35,7 +35,7 @@ describe('the desk of folders', () => {
     const tab = screen.getByRole('tab', { name: /Income tax/ });
     expect(tab).toHaveAccessibleName(/1 changed/);
     expect(tab).toHaveAccessibleName(/to borrowing in 2029-30/);
-    expect(screen.getByRole('tab', { name: /Duties/ })).toHaveAccessibleName(/2 papers/);
+    expect(screen.getByRole('tab', { name: /Duties/ })).toHaveAccessibleName(/6 papers/);
   });
 
   it('moves focus with the arrow keys without opening anything', () => {

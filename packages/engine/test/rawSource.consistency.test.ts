@@ -9,7 +9,7 @@ describe('every direct costing reproduces from the extracted published tables', 
   const taxLevers = ds.levers.filter((l) => l.category === 'tax');
 
   it('covers the planned core set', () => {
-    expect(taxLevers.length).toBe(31);
+    expect(taxLevers.length).toBe(37);
     expect(taxLevers.every((l) => l.badge === 'direct' && l.group)).toBe(true);
   });
 

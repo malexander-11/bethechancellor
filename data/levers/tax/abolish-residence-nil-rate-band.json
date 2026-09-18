@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "id": "abolish-residence-nil-rate-band",
+  "code": "rnrb",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital taxes",
+  "order": 25,
+  "title": "Abolish the residence nil-rate band",
+  "shortTitle": "Residence nil-rate band",
+  "headline": "The extra £175,000 for a family home costs £2.4bn. Static cost, not a forecast.",
+  "description": "End the extra inheritance tax allowance of up to £175,000 for a home left to children or grandchildren, so estates rely on the ordinary £325,000 nil-rate band alone. HMRC puts the cost of the relief at £2.4bn in 2025-26; that is the static cost, not what abolishing it would raise.",
+  "baselinePolicy": {
+    "text": "The residence nil-rate band is an additional threshold of up to £175,000 when a residence passes to direct descendants, tapered away above £2 million of estate, frozen alongside the £325,000 nil-rate band until April 2031; HMRC costs the relief at £2,440m in 2025-26.",
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "table": "Table 2",
+      "note": "row IHT - S1"
+    },
+    "alreadyIncludes": [
+      "Nil-rate band and residence nil-rate band frozen until April 2030 (Autumn Budget 2024, Table 5.1 line 30) and for a further year to April 2031 (Budget 2025, Table 4.1 line 55).",
+      "Unused pension funds brought into estates from April 2027 (Autumn Budget 2024, Table 5.1 line 28)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2025-26": 2440
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "table": "Table 2"
+    },
+    "rawSource": {
+      "kind": "hmrcReliefCost",
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "rows": [
+        {
+          "rowId": "iht-s1",
+          "name": "Residence Nil Rate Band",
+          "values": {
+            "2025-26": 2440
+          }
+        }
+      ],
+      "note": "HMRC's estimate of the cost of the relief in 2025-26 (its latest year), carried forward with the OBR's inheritance tax receipts path."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "receiptsByTax.inheritanceTax",
+      "note": "The 2025-26 relief cost is applied from the start year and scaled by the OBR's inheritance tax receipts forecast (Table A.5) (ADR-0004). That forecast also carries measures that do not bear on this relief, such as pensions coming into estates from 2027, so the later years are an upper bound."
+    },
+    "caveats": [
+      "HMRC: \"These figures should be interpreted as estimates of the amount of relief which is claimed and subsequently granted each year. These estimates do not represent the gain to the exchequer should a relief be abolished.\" The toggle shows that static cost as revenue; the true yield would be lower once estates are planned around the change.",
+      "HMRC's description of the relief: an additional threshold when a residence is being passed on to a direct descendant."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The figure is the cost of the relief with today's estates. Ending it would change how people plan: more lifetime gifts, more use of the spouse exemption, more estates arranged to stay under £325,000. HMRC's relief cost estimates do not build in such responses.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-quality-report",
+          "paragraph": "4"
+        }
+      ]
+    },
+    {
+      "id": "rnrb-who-pays",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The relief goes only to estates with a home and children or grandchildren to leave it to, and is worth most to estates between £325,000 and £2 million; renters, the childless and the very largest estates get nothing from it. Abolition therefore falls on middle-sized estates, mostly in the South of England where house prices are highest.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-2026-01",
+          "table": "Table 2",
+          "note": "row IHT - S1"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-18",
+  "interactions": [
+    {
+      "withLever": "inheritance-tax-rate",
+      "text": "The relief's cost is valued at today's 40% rate; changing the rate changes what ending it would raise.",
+      "severity": "info"
+    }
+  ]
+}

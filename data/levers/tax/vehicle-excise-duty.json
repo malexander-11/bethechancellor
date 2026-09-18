@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "id": "vehicle-excise-duty",
+  "code": "ved",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Duties",
+  "order": 25,
+  "title": "Vehicle excise duty",
+  "shortTitle": "Vehicle excise duty",
+  "headline": "£200 a year for most cars. Each £5 on every vehicle raises about £0.2bn.",
+  "description": "Add to the annual road tax on every vehicle, in steps of £5 for cars, vans and other vehicles (£1 for motorbikes), the unit HMRC publishes. The standard rate for cars registered since April 2017 is £200 a year after the first year; electric cars have paid it since April 2025.",
+  "baselinePolicy": {
+    "text": "Standard rate £200 a year for cars registered on or after 1 April 2017, after a first-year rate set by emissions; an expensive car supplement adds £440 a year for five years. Rates rise with RPI each April in the forecast, and Budget 2025 adds a mileage supplement for electric and plug-in hybrid cars from April 2028 (Table 4.1 line 71).",
+    "source": {
+      "sourceId": "govuk-ved-rate-tables"
+    },
+    "alreadyIncludes": [
+      "Vehicle excise duty rates uprated with RPI each April in the OBR's forecast.",
+      "A new mileage-based supplement for electric and plug-in hybrid cars from 1 April 2028 (Budget 2025, Table 4.1 line 71)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "GBP",
+    "min": 0,
+    "max": 50,
+    "step": 5,
+    "default": 0,
+    "formatLabel": "a year on every car and van (£1 in every £5 on motorbikes)",
+    "level": {
+      "baseline": 200,
+      "unit": "GBP",
+      "apply": "add",
+      "label": "Standard rate of vehicle excise duty (a year)",
+      "source": {
+        "sourceId": "govuk-ved-rate-tables"
+      },
+      "note": "£200 a year for cars registered since April 2017, after the first year; other vehicles move by the same amount, motorbikes by a fifth of it."
+    }
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 5,
+    "perUnit": {
+      "2026-27": 205,
+      "2027-28": 210,
+      "2028-29": 215
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "vehicle-excise-duty--increase-rates-by-gbp-1-for-motorbikes-and-gbp-5-for-all-other-vehicles",
+          "label": "Increase rates by £1 for motorbikes and £5 for all other vehicles",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 205,
+            "2027-28": 210,
+            "2028-29": 215
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "receiptsByTax.vehicleExciseDuties",
+      "note": "Shifted to the start year and scaled by the OBR's vehicle excise duty receipts forecast (Table A.5) (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC publishes the effect of £5 on every vehicle (£1 on motorbikes); larger changes are scaled linearly here, which for a flat-rate duty is close to exact. HMRC publishes an increase only, so the slider only rises.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmrc-direct",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's figure is a direct effect on this tax and closely related tax bases. It includes HMRC's standard behavioural response, but not wider effects on the economy, which HMRC says are usually captured in the OBR's economy forecast instead.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    },
+    {
+      "id": "ved-flat-rate",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "A flat amount on every vehicle is the same £5 for a small hatchback as for a large SUV, so it weighs more on lower-income drivers as a share of income; the first-year and expensive-car rates, which this lever does not touch, are where the duty is graduated.",
+      "sources": [
+        {
+          "sourceId": "govuk-ved-rate-tables"
+        }
+      ],
+      "magnitudeWords": "moderate"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-18"
+}

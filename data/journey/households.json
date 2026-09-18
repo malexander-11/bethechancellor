@@ -483,6 +483,16 @@
             ],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "ved",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Road tax is up on the van and on the car. It is not a lot, but it is every year, and it is on top of the diesel.",
+            "sources": [],
+            "badge": "simulated"
+          }
         }
       ],
       "untouched": {
@@ -639,6 +649,16 @@
                 "sourceId": "wtc-final-report-2020"
               }
             ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "rnrb",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The extra allowance for leaving the house to the children has gone. The house is most of what there is.",
+            "sources": [],
             "badge": "simulated"
           }
         }

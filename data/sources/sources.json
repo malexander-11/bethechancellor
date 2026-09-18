@@ -957,6 +957,42 @@
       "retrievedOn": "2026-09-16",
       "licence": "OGL-3.0",
       "notes": "Fetched 2026-09-16. £8.4bn nuclear submarine investment; 22,000 apprenticeships by 2035. \"Keeping this country safe is the first responsibility of any government\"."
+    },
+    {
+      "id": "govuk-ved-rate-tables",
+      "org": "HMRC",
+      "title": "Vehicle tax rate tables",
+      "url": "https://www.gov.uk/vehicle-tax-rate-tables",
+      "retrievedOn": "2026-09-18",
+      "licence": "OGL-3.0",
+      "notes": "Cars registered on or after 1 April 2017: standard annual rate £200 (single 12 month payment) after the first year; expensive car supplement an extra £440 a year for five years. Published by DVLA on GOV.UK."
+    },
+    {
+      "id": "govuk-apd-rates",
+      "org": "HMRC",
+      "title": "Rates and allowances for Air Passenger Duty",
+      "url": "https://www.gov.uk/guidance/rates-and-allowances-for-air-passenger-duty",
+      "retrievedOn": "2026-09-18",
+      "licence": "OGL-3.0",
+      "notes": "Page updated 1 April 2026. Reduced (economy) rates from 1 April 2026: domestic £8, band A £15, band B £102, band C £106; from 1 April 2027: £8.26, £15.49, £105.33, £109.46."
+    },
+    {
+      "id": "govuk-tobacco-duty-rates",
+      "org": "HMRC",
+      "title": "Excise Duty: tobacco duty rates",
+      "url": "https://www.gov.uk/government/publications/rates-and-allowances-excise-duty-tobacco-duty/excise-duty-tobacco-duty-rates",
+      "retrievedOn": "2026-09-18",
+      "licence": "OGL-3.0",
+      "notes": "From 6pm on 26 November 2025: cigarettes £353.50 per 1,000 plus 16.5% of retail price, minimum excise duty £471.93 per 1,000 (about 57p more on a packet of 20)."
+    },
+    {
+      "id": "govuk-ipt-guidance",
+      "org": "HMRC",
+      "title": "Insurance Premium Tax: guidance",
+      "url": "https://www.gov.uk/guidance/insurance-premium-tax",
+      "retrievedOn": "2026-09-18",
+      "licence": "OGL-3.0",
+      "notes": "Standard rate 12%; higher rate 20% on travel insurance, certain insurance sold with mechanical or electrical appliances and certain motor vehicle-related insurance."
     }
   ]
 }
