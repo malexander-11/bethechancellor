@@ -4,7 +4,8 @@ import { promiseBreaks } from './ambitions.js';
 
 /**
  * The routes out of a gap (stage 5). Nothing here is a judgement: the Director of Tax's
- * suggestions are every tax lever moved one notch, ranked by what the engine says it raises; the
+ * suggestions are every tax lever, and every money-raising policy in the colleagues' letters,
+ * moved one notch and ranked by what the engine says it raises (each wears its own badge); the
  * spending list is the package's own measures ranked by what they cost; a delay is a later start
  * year; a narrowing is half the distance to the target. The words about them come from data.
  */
@@ -35,8 +36,10 @@ export function nextNotch(lever: Lever, current: number): number | null {
 }
 
 /**
- * Every tax lever one notch up, ranked by the headroom it buys. `headroomOf` is the caller's
- * engine call, so this stays a pure ranking over whatever the engine says.
+ * Every tax lever, and every campaign policy that raises money, one notch up, ranked by the
+ * headroom it buys. `headroomOf` is the caller's engine call, so this stays a pure ranking over
+ * whatever the engine says; a policy costed by our own arithmetic ranks on that arithmetic and
+ * shows its assumption badge beside the figure.
  */
 export function revenueSuggestions(
   levers: readonly Lever[],
@@ -53,7 +56,7 @@ export function revenueSuggestions(
   );
   const out: RevenueSuggestion[] = [];
   for (const lever of levers) {
-    if (lever.category !== 'tax' || lever.deprecated) continue;
+    if ((lever.category !== 'tax' && lever.category !== 'campaign') || lever.deprecated) continue;
     const now = current[lever.code] ?? lever.control.default;
     const value = nextNotch(lever, now);
     if (value === null) continue;

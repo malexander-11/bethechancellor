@@ -47,10 +47,15 @@ describe('the routes out of a gap', () => {
       expect(out[i - 1]!.yieldGbpm).toBeGreaterThanOrEqual(out[i]!.yieldGbpm);
     }
     for (const s of out) {
-      expect(s.lever.category).toBe('tax');
+      expect(['tax', 'campaign']).toContain(s.lever.category);
       expect(s.yieldGbpm).toBeGreaterThan(0);
     }
     const all = revenueSuggestions(ds.levers, {}, ds.pm.promises, headroomOf, 100);
+    // The colleagues' letters that raise money are in the list too, on their own arithmetic.
+    expect(all.some((s) => s.lever.category === 'campaign')).toBe(true);
+    expect(all.find((s) => s.lever.code === 'iinc2')?.yieldGbpm ?? 0).toBeGreaterThan(2000);
+    // What costs money never appears, whichever folder it is in.
+    expect(all.some((s) => s.lever.code === 'ufsm' || s.lever.code === 'rvinv')).toBe(false);
     const basic = all.find((s) => s.lever.code === 'itbr');
     expect(basic?.breaks.map((p) => p.id)).toEqual(['tax-lock']);
     const ct = all.find((s) => s.lever.code === 'ct');

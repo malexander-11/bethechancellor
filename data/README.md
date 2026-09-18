@@ -84,7 +84,10 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   uprated with the tax head. Quote HMRC's caveat in the caveats.
 - **Scorecard-backed toggles.** A `linearPerUnit` toggle may cite `hmtScorecard` lines from any
   extracted scorecard (Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is minus the
-  summed lines for the cited years on the receipts side.
+  summed lines for the cited years on the receipts side. `direction: "repeat"` makes it plus the
+  lines: the measure done again, on the assumption that the second round raises what the Treasury
+  costed for the first. A repeat is an assumption, so it lives in `data/levers/campaign/` with
+  `badge: "assumption"` and says so in its caveats.
 - **Vintage-series lookup points.** `points[].from.vintageSeries` ("receiptsByTax.inheritanceTax")
   with a `multiplier`; checked against the vintage.
 - **Briefings** need an existing adviser who speaks on the step, a real lever group for group

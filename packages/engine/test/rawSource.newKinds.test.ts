@@ -334,3 +334,32 @@ describe('a weighted sum of published figures backs a schedule', () => {
     expect(checkRawSourceConsistency(schedule, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 });
+
+describe('a repeated scorecard measure is plus the lines, and says it is an assumption', () => {
+  const iinc2 = lever('iinc2');
+
+  it('reproduces the Budget 2025 lines with their published sign', () => {
+    expect(iinc2.badge).toBe('assumption');
+    expect(iinc2.category).toBe('campaign');
+    expect(checkRawSourceConsistency(iinc2, extracted, ds.vintage)).toEqual([]);
+    if (iinc2.costing.kind !== 'schedule') throw new Error('schedule expected');
+    expect(iinc2.costing.effect['2029-30']).toBe(435 + 1325 + 470);
+  });
+
+  it('rejects a repeat authored with the reversal sign, and defaults to reverse when unsaid', () => {
+    const flipped = structuredClone(iinc2);
+    if (flipped.costing.kind === 'schedule') flipped.costing.effect['2029-30'] = -2230;
+    expect(checkRawSourceConsistency(flipped, extracted, ds.vintage).length).toBeGreaterThan(0);
+    const rvinv = lever('rvinv');
+    expect(
+      rvinv.costing.kind === 'schedule' && rvinv.costing.rawSource?.kind === 'hmtScorecard'
+        ? rvinv.costing.rawSource.direction
+        : null,
+    ).toBe('reverse');
+    // A reversal stated as a repeat fails: the same lines, the other sign.
+    const asRepeat = structuredClone(rvinv);
+    if (asRepeat.costing.kind === 'schedule' && asRepeat.costing.rawSource?.kind === 'hmtScorecard')
+      asRepeat.costing.rawSource.direction = 'repeat';
+    expect(checkRawSourceConsistency(asRepeat, extracted, ds.vintage).length).toBeGreaterThan(0);
+  });
+});

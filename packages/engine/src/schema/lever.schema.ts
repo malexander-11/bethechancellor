@@ -188,6 +188,12 @@ export const rawSourceSchema = z.discriminatedUnion('kind', [
       )
       .min(1),
     signConvention: z.literal('positiveReducesBorrowing'),
+    /**
+     * `reverse` (the default) undoes the published measure: its effect is minus the lines.
+     * `repeat` does it again, assuming the second round raises what the Treasury costed for the
+     * first: plus the lines. A repeat is an assumption and is badged as one.
+     */
+    direction: z.enum(['reverse', 'repeat']).default('reverse'),
     note: z.string().optional(),
   }),
   z.strictObject({

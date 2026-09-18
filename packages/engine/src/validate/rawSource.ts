@@ -345,7 +345,8 @@ function checkScorecardLines(
       sum[y] = (sum[y] ?? 0) + published;
     }
   }
-  const sign = reversalSign(side);
+  // Reversing a measure gives minus the lines; repeating it (an assumption) gives plus the lines.
+  const sign = raw.direction === 'repeat' ? -reversalSign(side) : reversalSign(side);
   if (costing.kind === 'schedule') {
     for (const [y, v] of Object.entries(costing.effect)) {
       if (!extract.years.includes(y)) {
@@ -355,7 +356,7 @@ function checkScorecardLines(
       const want = sign * (sum[y] ?? 0);
       if (!close(v, want))
         problems.push(
-          `${lever.id}: schedule ${y} = ${v} but the cited lines (${side} side) give ${want}`,
+          `${lever.id}: schedule ${y} = ${v} but the cited lines (${side} side, ${raw.direction}) give ${want}`,
         );
     }
   }

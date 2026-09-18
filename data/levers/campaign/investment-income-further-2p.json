@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "investment-income-further-2p",
+  "code": "iinc2",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 130,
+  "title": "Another 2p on dividend, savings and property income",
+  "shortTitle": "Investment income: another 2p",
+  "headline": "Another 2p, repeating Budget 2025. If it raises what the first did: £2.2bn.",
+  "description": "Budget 2025 put 2 points on the tax rates for dividends (from April 2026) and for savings and property income (from April 2027). Do it again: a further 2 points on each. The Treasury certified what the first round raises; this assumes the second round raises the same, year by year, which nobody has costed.",
+  "baselinePolicy": {
+    "text": "Dividend rates +2 points from April 2026 (ordinary 10.75%, upper 35.75%); savings income +2 points at every rate and separate property income rates of 22%, 42% and 47% from April 2027 (Table 4.1 lines 49 to 51). Together they raise £2.2bn in 2029-30.",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "lines 49, 50, 51"
+    },
+    "alreadyIncludes": [
+      "Dividend, savings and property income tax rises (Budget 2025, Table 4.1 lines 49, 50, 51)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 0,
+      "2026-27": 285,
+      "2027-28": 1045,
+      "2028-29": 2275,
+      "2029-30": 2230,
+      "2030-31": 2340
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "direction": "repeat",
+      "lines": [
+        {
+          "number": 49,
+          "title": "Property Income: Introduce separate tax rates for property income at 22% for the property basic rate, 42% for the property higher rate and 47% for the property additional rate, from 6 April 2027",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 0,
+            "2027-28": 5,
+            "2028-29": 590,
+            "2029-30": 435,
+            "2030-31": 445
+          }
+        },
+        {
+          "number": 50,
+          "title": "Dividend Income: Increase tax rates on dividend income by 2ppts at the ordinary and upper rate from 6 April 2026",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 280,
+            "2027-28": 985,
+            "2028-29": 1160,
+            "2029-30": 1325,
+            "2030-31": 1390
+          }
+        },
+        {
+          "number": 51,
+          "title": "Savings Income: Increase tax rates on savings income by 2ppts at the basic, higher and additional rate from 6 April 2027 and maintain the Starting Rate of Savings limit at £5000 from April 2026 to April 2031",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 5,
+            "2027-28": 55,
+            "2028-29": 525,
+            "2029-30": 470,
+            "2030-31": 505
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Repeat: the Treasury's certified costing for the first 2 points, taken as the yield of a second 2 points, year by year. Positive scorecard values reduce borrowing; here receipts positive means more revenue. Effects before the start year are not applied."
+    },
+    "caveats": [
+      "Nobody has costed a second 2 points. This assumes it raises exactly what the Treasury costed for the first; in practice a higher rate brings a larger behavioural response (more incorporation, more use of ISAs and pensions, more dividends deferred), so the true yield would be somewhat lower.",
+      "The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here; the difference is small relative to the figures."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "repeat-assumption",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The first 2 points came with the Treasury's and OBR's agreed behavioural response built in; a second 2 points on top would meet a larger one, because the gap to the rates on earnings and to tax-free wrappers widens. The figure here is the first round repeated, not a costing of the second.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-investment-income",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Falls on people with dividends outside ISAs and pensions (company owner-managers above all), savers with interest above the personal savings allowance, and landlords. It does not touch earnings, so it stays outside the manifesto's tax lock as written.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-document"
+        },
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-18",
+  "interactions": [
+    {
+      "withLever": "reverse-investment-income-rises",
+      "text": "Reversing the first 2 points and adding a second makes no sense together; the two cancel.",
+      "severity": "warn"
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "id": "gambling-duties-further-rise",
+  "code": "gam2",
+  "category": "campaign",
+  "badge": "assumption",
+  "group": "Recommendations from Parliament",
+  "order": 140,
+  "title": "A second round of the gambling duty rise",
+  "shortTitle": "Gambling duties: go further",
+  "headline": "Do the Budget 2025 online gambling rise again. If it raises the same: £1.1bn.",
+  "description": "Budget 2025 raised Remote Gaming Duty from 21% to 40% and introduced a 25% Remote Betting Rate. Campaigners want more from online gambling. This does the same again: a further rise of the same size on the same duties, assumed to raise what the Treasury certified for the first round, year by year. Nobody has costed it.",
+  "baselinePolicy": {
+    "text": "Remote Gaming Duty 40% from April 2026; Remote Betting Rate 25% from April 2027; bingo duty abolished (Table 4.1 line 60). The package raises £1.1bn in 2029-30.",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 60"
+    },
+    "alreadyIncludes": ["Gambling duty changes (Budget 2025, Table 4.1 line 60)."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 0,
+      "2026-27": 810,
+      "2027-28": 1065,
+      "2028-29": 1100,
+      "2029-30": 1135,
+      "2030-31": 1155
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "direction": "repeat",
+      "lines": [
+        {
+          "number": 60,
+          "title": "Gambling Duty: Increase Remote Gaming Duty to 40% from 1 April 2026, introduce a new Remote Betting Rate at 25% (excluding Self-Service Betting Terminals, spread betting, pool betting & UK horseracing) from 1 April 2027, and abolish Bingo Duty from 1 April 2026",
+          "values": {
+            "2025-26": 0,
+            "2026-27": 810,
+            "2027-28": 1065,
+            "2028-29": 1100,
+            "2029-30": 1135,
+            "2030-31": 1155
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Repeat: the Treasury's certified costing for the Budget 2025 package, taken as the yield of doing it again, year by year. Positive scorecard values reduce borrowing; here receipts positive means more revenue. Effects before the start year are not applied."
+    },
+    "caveats": [
+      "Nobody has costed a second round. The first took Remote Gaming Duty from 21% to 40%; a second of the same size would take it towards 60%, where operators' own margins and the black market start to matter far more, so the true yield would be lower and could be much lower.",
+      "The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here; the difference is small relative to the figures."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "repeat-assumption",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The Treasury's costing for the first round already allows for operators passing the duty on in worse odds and some players moving to unlicensed sites. A second round of the same size starts from a duty rate almost double the old one, so both responses would be larger. The figure here is the first round repeated, not a costing of the second.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-gambling",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The duty is paid by online operators on their gross profits and reaches players through worse odds and fewer offers; heavy online gamblers are more often men on lower incomes, which is the campaigners' case for the tax and the reason its yield is uncertain.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-document"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-18",
+  "interactions": [
+    {
+      "withLever": "reverse-gambling-duty-rise",
+      "text": "Reversing the first round and adding a second makes no sense together; the two cancel.",
+      "severity": "warn"
+    }
+  ]
+}

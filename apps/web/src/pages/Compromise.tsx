@@ -189,7 +189,8 @@ export function CompromisePage() {
                 ))}
               </ul>
               <p className="panel__hint">
-                <StepLink to="/budget/taxes">Every tax, on the desk</StepLink>
+                <StepLink to="/budget/taxes">Every tax, on the desk</StepLink> ·{' '}
+                <StepLink to="/budget/policies">Your colleagues’ letters</StepLink>
               </p>
             </section>
 
