@@ -2,10 +2,11 @@ import { computeOutcome, formatGbpBn, type Lever, type ScenarioKind } from '@btc
 import { useId, useMemo } from 'react';
 import { levers, rules, vintage } from '../data';
 import type { ScenarioCard, ScenarioSetting } from '../journey/scenarios';
+import { useWorkings } from '../journey/workings';
 import { IMPLEMENTATION_YEAR, type BudgetState } from '../state/budget';
 import { LabelBadge } from './LabelBadge';
 import { formatLeverValue } from './LeverControl';
-import { SourceLink } from './SourceLink';
+import { SourceList } from './SourceLink';
 
 /**
  * The assumptions step, as four folders on the desk rather than three sliders.
@@ -54,13 +55,7 @@ function Workings({ card }: { card: ScenarioCard }) {
       {card.rationale.map((line, i) => (
         <p key={i}>
           {line.text}
-          {line.sources.length > 0 ? (
-            <span className="briefing__sources">
-              {line.sources.map((s, j) => (
-                <SourceLink key={j} ref={s} />
-              ))}
-            </span>
-          ) : null}
+          <SourceList as="span" className="briefing__sources" refs={line.sources} />
         </p>
       ))}
       <dl className="scenario__workings">
@@ -97,6 +92,7 @@ export function Scenarios({
   onPick: (values: Record<string, number>) => void;
 }) {
   const name = useId();
+  const workings = useWorkings();
   const headrooms = useMemo(
     () => cards.map((card) => headroomOf(state, card.values)),
     // Only the budget behind the cards matters here, not the cards themselves, which are static.
@@ -131,7 +127,7 @@ export function Scenarios({
               </span>
             </span>
           </label>
-          <Workings card={card} />
+          {workings ? <Workings card={card} /> : null}
         </article>
       ))}
       {selected === null ? (

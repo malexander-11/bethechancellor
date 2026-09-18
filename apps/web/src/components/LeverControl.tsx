@@ -17,6 +17,7 @@ import { Milestones } from './Milestones';
 import { useId, useState } from 'react';
 import { LabelBadge } from './LabelBadge';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
+import { useWorkings } from '../journey/workings';
 
 const MINUS = '−';
 
@@ -165,6 +166,7 @@ export function LeverControl({
 }) {
   const id = useId();
   const [open, setOpen] = useState(false);
+  const workings = useWorkings();
   const { min, max, step } = lever.control;
   const isToggle = lever.control.kind === 'toggle';
   const isSelect = lever.control.kind === 'select';
@@ -283,7 +285,7 @@ export function LeverControl({
         </>
       ) : null}
       <p className="lever__desc">{lever.headline ?? lever.description}</p>
-      {lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
+      {workings && lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
       {lookupPoints || barnett ? (
         <p className="lever__tags">
           {lookupPoints ? (
@@ -326,26 +328,30 @@ export function LeverControl({
           ) : null}
         </p>
       ) : null}
-      <div className="lever__actions">
-        <button
-          type="button"
-          className="linklike"
-          onClick={() => setOpen((o) => !o)}
-          aria-expanded={open}
-        >
-          {open ? 'Hide detail' : 'Detail and sources'}
-        </button>
-        {!isDefault ? (
-          <button
-            type="button"
-            className="linklike"
-            onClick={() => onChange(lever.control.default)}
-          >
-            Back to OBR
-          </button>
-        ) : null}
-      </div>
-      {open ? <ProvenanceDrawer lever={lever} effect={effect} /> : null}
+      {workings || !isDefault ? (
+        <div className="lever__actions">
+          {workings ? (
+            <button
+              type="button"
+              className="linklike"
+              onClick={() => setOpen((o) => !o)}
+              aria-expanded={open}
+            >
+              {open ? 'Hide detail' : 'Detail and sources'}
+            </button>
+          ) : null}
+          {!isDefault ? (
+            <button
+              type="button"
+              className="linklike"
+              onClick={() => onChange(lever.control.default)}
+            >
+              Back to OBR
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+      {open && workings ? <ProvenanceDrawer lever={lever} effect={effect} /> : null}
     </div>
   );
 }

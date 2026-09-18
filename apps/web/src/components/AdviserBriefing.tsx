@@ -1,7 +1,8 @@
 import type { Briefing } from '@btc/engine';
 import { adviserById } from '../data';
+import { useWorkings } from '../journey/workings';
 import { LabelBadge } from './LabelBadge';
-import { SourceLink } from './SourceLink';
+import { SourceList } from './SourceLink';
 
 function numberOf(value: string): number {
   const m = /([\d,.]+)/.exec(value);
@@ -61,6 +62,7 @@ export function AdviserBriefing({
   variant?: 'full' | 'body';
 }) {
   const adviser = adviserById.get(briefing.adviser);
+  const workings = useWorkings();
   return (
     <article className={`briefing${compact ? ' briefing--compact' : ''}`}>
       {variant === 'full' ? (
@@ -73,19 +75,17 @@ export function AdviserBriefing({
         </>
       ) : null}
       {briefing.facts?.length ? <Facts facts={briefing.facts} /> : null}
-      <details className="briefing__more">
-        <summary>{briefing.title}</summary>
-        {briefing.paragraphs.map((p, i) => (
-          <div key={i} className="briefing__para">
-            <p>{p.text}</p>
-            <div className="briefing__sources">
-              {p.sources.map((s, j) => (
-                <SourceLink key={j} ref={s} />
-              ))}
+      {workings ? (
+        <details className="briefing__more">
+          <summary>{briefing.title}</summary>
+          {briefing.paragraphs.map((p, i) => (
+            <div key={i} className="briefing__para">
+              <p>{p.text}</p>
+              <SourceList as="div" className="briefing__sources" refs={p.sources} />
             </div>
-          </div>
-        ))}
-      </details>
+          ))}
+        </details>
+      ) : null}
     </article>
   );
 }

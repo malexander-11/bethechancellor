@@ -4,10 +4,12 @@ import { JourneyLayout } from '../components/JourneyLayout';
 import { advisers, briefingsFor, vintage } from '../data';
 import { useCeremony } from '../journey/beats';
 import { StepLink } from '../journey/links';
+import { useWorkingsSwitch } from '../journey/workings';
 
 export function StartPage() {
   const headroom = vintage.context?.headroomAtPublicationGbpm ?? 0;
   const { ceremony, setCeremony } = useCeremony();
+  const { workings, setWorkings } = useWorkingsSwitch();
   return (
     <JourneyLayout step="start">
       {/*
@@ -41,6 +43,14 @@ export function StartPage() {
               onChange={(e) => setCeremony(!e.target.checked)}
             />
             Show every step in full, without the advisers handing things over one at a time
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={workings}
+              onChange={(e) => setWorkings(e.target.checked)}
+            />
+            Every number here comes from an official document. Show the workings as you play?
           </label>
         </p>
       </section>

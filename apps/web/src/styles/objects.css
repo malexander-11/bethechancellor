@@ -384,10 +384,14 @@
 }
 
 .ceremony label {
-  display: inline-flex;
+  display: flex;
   align-items: flex-start;
   gap: 8px;
   cursor: pointer;
+}
+
+.ceremony label + label {
+  margin-top: 8px;
 }
 
 .beat__continue .btn {

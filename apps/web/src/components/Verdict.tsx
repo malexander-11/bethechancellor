@@ -1,7 +1,7 @@
 import { formatGbpBn, type BudgetVerdict } from '@btc/engine';
 import { formatLeverValue } from './LeverControl';
 import { LabelBadge } from './LabelBadge';
-import { SourceLink } from './SourceLink';
+import { SourceList } from './SourceLink';
 
 const PRIORITY: Record<BudgetVerdict['ambitions']['priorities'][number]['fate'], string> = {
   delivered: 'delivered',
@@ -39,13 +39,7 @@ export function Verdict({ verdict, replayHref }: { verdict: BudgetVerdict; repla
         {kind.title} <LabelBadge badge={kind.line.badge} />
       </h2>
       <p className="verdict-close__line">{kind.line.text}</p>
-      {kind.line.sources.length > 0 ? (
-        <p className="spoken__sources">
-          {kind.line.sources.map((s, i) => (
-            <SourceLink key={i} ref={s} />
-          ))}
-        </p>
-      ) : null}
+      <SourceList refs={kind.line.sources} />
 
       <div className="verdict-close__grid">
         <section aria-labelledby="ambitions-heading">

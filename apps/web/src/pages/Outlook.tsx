@@ -6,11 +6,12 @@ import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { Scenarios } from '../components/Scenarios';
 import { Scorecard } from '../components/Scorecard';
-import { SourceLink } from '../components/SourceLink';
+import { SourceList } from '../components/SourceLink';
 import { adviserById, briefingsFor, context, levers, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { macroCodesOf, matchScenario, scenarioCards } from '../journey/scenarios';
 import { mintSeed } from '../journey/seed';
+import { useWorkings } from '../journey/workings';
 import { permalinkQuery, useBudget } from '../state/budget';
 
 const CARDS = scenarioCards(context, levers, vintage);
@@ -56,6 +57,7 @@ export function OutlookPage() {
   const game = state.game;
   const revealed = game?.revealed ?? false;
   const targetBn = game?.headroomTargetBn ?? 20;
+  const workings = useWorkings();
 
   const setTarget = (bn: number) => {
     if (!game) {
@@ -149,77 +151,83 @@ export function OutlookPage() {
               “retain a buffer”; and the Bank found gilt moves this year “amplified by hedge fund
               deleveraging”. Whatever you pick, the OBR’s October forecast will not know it.
             </p>
-            <p className="spoken__sources">
-              <SourceLink ref={{ sourceId: 'hmt-budget-2025-speech' }} />
-              <SourceLink ref={{ sourceId: 'obr-efo-2026-03', paragraph: '3.4' }} />
-              <SourceLink ref={{ sourceId: 'hmt-tsc-budget-2026-letter' }} />
-              <SourceLink ref={{ sourceId: 'boe-fsr-2026-07' }} />
-              <SourceLink ref={{ sourceId: 'rf-policy-landscape-2026' }} />
-            </p>
+            <SourceList
+              refs={[
+                { sourceId: 'hmt-budget-2025-speech' },
+                { sourceId: 'obr-efo-2026-03', paragraph: '3.4' },
+                { sourceId: 'hmt-tsc-budget-2026-letter' },
+                { sourceId: 'boe-fsr-2026-07' },
+                { sourceId: 'rf-policy-landscape-2026' },
+              ]}
+            />
           </aside>
-          <details className="panel">
-            <summary className="group__head">
-              <span className="group__line">
-                <span className="group__name">Set your own figures</span>
-                <span className="group__count">{MACRO_CODES.length}</span>
-              </span>
-              <span className="group__say">
-                The three sliders behind the cards, with the reading each one is set from.
-              </span>
-            </summary>
-            <div className="readings">
-              {context.readings.map((reading) => {
-                const lever = reading.leverCode
-                  ? levers.find((l) => l.code === reading.leverCode)
-                  : undefined;
-                if (!lever) return null;
-                return (
-                  <AssumptionReading
-                    key={reading.id}
-                    reading={reading}
-                    lever={lever}
-                    value={state.leverValues[lever.code] ?? lever.control.default}
-                    effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                    summaryYear={targetYear}
-                    onChange={(value) => {
-                      if (!revealed) dispatch({ type: 'setLever', code: lever.code, value });
-                    }}
-                  />
-                );
-              })}
-            </div>
-          </details>
-          <details className="panel">
-            <summary className="group__head">
-              <span className="group__line">
-                <span className="group__name">Also changed since March</span>
-                <span className="group__count">
-                  {context.readings.filter((r) => !r.leverCode).length}
-                </span>
-              </span>
-              <span className="group__say">No slider here: context for the numbers above.</span>
-            </summary>
-            <div className="table-scroll">
-              <table className="measures">
-                <thead>
-                  <tr>
-                    <th>Reading</th>
-                    <th>OBR in March</th>
-                    <th>Latest</th>
-                    <th>Source</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {context.readings
-                    .filter((r) => !r.leverCode)
-                    .map((r) => (
-                      <ContextRow key={r.id} reading={r} />
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </details>
-          <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} />
+          {workings ? (
+            <>
+              <details className="panel">
+                <summary className="group__head">
+                  <span className="group__line">
+                    <span className="group__name">Set your own figures</span>
+                    <span className="group__count">{MACRO_CODES.length}</span>
+                  </span>
+                  <span className="group__say">
+                    The three sliders behind the cards, with the reading each one is set from.
+                  </span>
+                </summary>
+                <div className="readings">
+                  {context.readings.map((reading) => {
+                    const lever = reading.leverCode
+                      ? levers.find((l) => l.code === reading.leverCode)
+                      : undefined;
+                    if (!lever) return null;
+                    return (
+                      <AssumptionReading
+                        key={reading.id}
+                        reading={reading}
+                        lever={lever}
+                        value={state.leverValues[lever.code] ?? lever.control.default}
+                        effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                        summaryYear={targetYear}
+                        onChange={(value) => {
+                          if (!revealed) dispatch({ type: 'setLever', code: lever.code, value });
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              </details>
+              <details className="panel">
+                <summary className="group__head">
+                  <span className="group__line">
+                    <span className="group__name">Also changed since March</span>
+                    <span className="group__count">
+                      {context.readings.filter((r) => !r.leverCode).length}
+                    </span>
+                  </span>
+                  <span className="group__say">No slider here: context for the numbers above.</span>
+                </summary>
+                <div className="table-scroll">
+                  <table className="measures">
+                    <thead>
+                      <tr>
+                        <th>Reading</th>
+                        <th>OBR in March</th>
+                        <th>Latest</th>
+                        <th>Source</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {context.readings
+                        .filter((r) => !r.leverCode)
+                        .map((r) => (
+                          <ContextRow key={r.id} reading={r} />
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </details>
+              <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} />
+            </>
+          ) : null}
           <p className="hero-start__actions">
             <button type="button" className="btn btn--primary" onClick={confirm}>
               Confirm, and go to Downing Street

@@ -23,6 +23,7 @@ import { Beat, Beats } from '../journey/beats';
 import { useHeadroomOf } from '../journey/headroom';
 import { StepLink } from '../journey/links';
 import { macroCodesOf } from '../journey/scenarios';
+import { useWorkings } from '../journey/workings';
 import { IMPLEMENTATION_YEAR, useBudget } from '../state/budget';
 import { TARGETS } from './Outlook';
 
@@ -45,6 +46,7 @@ export function CompromisePage() {
   const [ask, setAsk] = useState<Ask>(null);
   const delays = game?.delays ?? {};
   const headroomOf = useHeadroomOf();
+  const workings = useWorkings();
   const promises = useMemo(() => (game ? promisesInForce(game, pm) : []), [game]);
   const revenue = useMemo(
     () => revenueSuggestions(levers, state.leverValues, promises, headroomOf, 3),
@@ -118,7 +120,9 @@ export function CompromisePage() {
       </p>
       <Beats step="compromise">
         <Beat title="The gap, and the routes through it">
-          <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky revealed />
+          {workings ? (
+            <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky revealed />
+          ) : null}
           <DespatchBox
             game={game}
             status={status}

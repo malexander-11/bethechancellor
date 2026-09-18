@@ -1,6 +1,6 @@
 import type { DrawOutcome } from '@btc/engine';
 import { LabelBadge } from './LabelBadge';
-import { SourceLink } from './SourceLink';
+import { SourceList } from './SourceLink';
 
 /**
  * The Political Adviser's summary of the morning papers: the clue the seeded draw plants in stage
@@ -19,13 +19,7 @@ export function PressSummary({ outcome }: { outcome: DrawOutcome }) {
         <strong>{clue.headline}</strong>
       </p>
       <p>{clue.text}</p>
-      {clue.sources.length > 0 ? (
-        <p className="spoken__sources">
-          {clue.sources.map((s, i) => (
-            <SourceLink key={i} ref={s} />
-          ))}
-        </p>
-      ) : null}
+      <SourceList refs={clue.sources} />
     </aside>
   );
 }

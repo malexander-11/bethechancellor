@@ -15,11 +15,12 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { formatLeverValue } from '../components/LeverControl';
-import { SourceLink } from '../components/SourceLink';
+import { SourceList } from '../components/SourceLink';
 import { context, draws, levers, leversByCategory, pm, rules, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { StepLink } from '../journey/links';
 import { macroCodesOf, scenarioCards } from '../journey/scenarios';
+import { useWorkings } from '../journey/workings';
 import { IMPLEMENTATION_YEAR, permalinkQuery, useBudget } from '../state/budget';
 
 const CARDS = scenarioCards(context, levers, vintage);
@@ -182,6 +183,7 @@ function ForecastReveal({
   replay: string;
   onward: () => void;
 }) {
+  const workings = useWorkings();
   const d = decomposition;
   const year = d.targetYear;
   const revised = revisedMeasures(d.revised, year);
@@ -208,11 +210,7 @@ function ForecastReveal({
           <LabelBadge badge={draw.outcome.story.badge} />
         </p>
         <p>{draw.outcome.story.text}</p>
-        <p className="spoken__sources">
-          {draw.outcome.story.sources.map((s, i) => (
-            <SourceLink key={i} ref={s} />
-          ))}
-        </p>
+        <SourceList refs={draw.outcome.story.sources} />
         <div className="table-scroll">
           <table className="measures decomp">
             <thead>
@@ -230,7 +228,9 @@ function ForecastReveal({
                   <tr key={lever.code}>
                     <td>
                       {lever.shortTitle}
-                      {setting ? <span className="source"> {setting.workings}</span> : null}
+                      {workings && setting ? (
+                        <span className="source"> {setting.workings}</span>
+                      ) : null}
                     </td>
                     <td>as forecast</td>
                     <td>
@@ -280,7 +280,7 @@ function ForecastReveal({
                   <th>Measure</th>
                   <th>As you scored it, {year}</th>
                   <th>As the OBR scores it</th>
-                  <th>Why</th>
+                  {workings ? <th>Why</th> : null}
                 </tr>
               </thead>
               <tbody>
@@ -294,11 +294,13 @@ function ForecastReveal({
                     <td className="amount">
                       <strong>{formatGbpBn(r.revisedGbpm, 1, true)}</strong>
                     </td>
-                    <td>
-                      <span className="source">
-                        <LabelBadge badge="simulated" /> {r.revision.note}
-                      </span>
-                    </td>
+                    {workings ? (
+                      <td>
+                        <span className="source">
+                          <LabelBadge badge="simulated" /> {r.revision.note}
+                        </span>
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>

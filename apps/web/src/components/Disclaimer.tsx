@@ -1,6 +1,15 @@
+import { useWorkings } from '../journey/workings';
+
 export function Disclaimer() {
+  const workings = useWorkings();
   return (
     <footer className="footer-note">
+      {!workings ? (
+        <p className="footer-note__workings">
+          Every figure is sourced. Turn on <strong>Show workings</strong>, at the top of the page,
+          to see where each one comes from.
+        </p>
+      ) : null}
       <p>
         This tool does not model the growth effects of your choices or how markets might react to
         them. Direct costings are official estimates; the year-by-year paths of the economic sliders

@@ -1,6 +1,6 @@
 import type { Speech as SpeechText } from '@btc/engine';
 import { LabelBadge } from './LabelBadge';
-import { SourceLink } from './SourceLink';
+import { SourceList } from './SourceLink';
 
 /**
  * The speech as delivered: authored fragments filled with the engine's figures. Every paragraph
@@ -17,16 +17,7 @@ export function Speech({ speech }: { speech: SpeechText }) {
       {speech.paragraphs.map((p, i) => (
         <p key={`${p.kind}-${i}`} className={`speech__para speech__para--${p.kind}`}>
           {p.text}
-          {p.sources.length > 0 ? (
-            <span className="speech__sources">
-              {p.sources.map((s, j) => (
-                <span key={j}>
-                  {' '}
-                  <SourceLink ref={s} />
-                </span>
-              ))}
-            </span>
-          ) : null}
+          <SourceList as="span" className="speech__sources" refs={p.sources} />
         </p>
       ))}
       <p className="speech__strip">

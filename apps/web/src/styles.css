@@ -159,6 +159,47 @@ select {
   border-bottom-color: var(--gold);
 }
 
+/* The switch that puts the workings on show. The sources are never gone, only one click away. */
+.workings-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  color: color-mix(in srgb, #f3ecda 84%, transparent);
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.workings-switch input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.workings-switch input:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.workings-switch:has(input:checked) {
+  color: #f9f4e6;
+}
+
+/* With the workings put away the badges stay, smaller: they are the contract, not the detail. */
+.page[data-workings='off'] .badge {
+  padding: 1px 5px;
+  font-size: 0.56rem;
+}
+
+.footer-note__workings {
+  color: var(--gold);
+}
+
 .page {
   max-width: 1200px;
   margin: 0 auto;

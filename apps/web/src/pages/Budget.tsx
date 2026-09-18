@@ -38,6 +38,7 @@ import {
 import { Beat, Beats } from '../journey/beats';
 import { StepLink } from '../journey/links';
 import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
+import { useWorkings } from '../journey/workings';
 import { useBudget } from '../state/budget';
 
 const ASSUMPTION_CARDS = scenarioCards(context, levers, vintage);
@@ -123,6 +124,7 @@ export function BudgetPage() {
   const { tab } = useParams();
   const { state, dispatch, outcome, query } = useBudget();
   const [copied, setCopied] = useState(false);
+  const workings = useWorkings();
   if (!isTab(tab)) {
     return (
       <Navigate to={{ pathname: '/budget/taxes', search: query ? `?${query}` : '' }} replace />
@@ -354,28 +356,32 @@ export function BudgetPage() {
 
             <div>
               <div className="toolbar">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={state.debtInterestFeedback}
-                    onChange={(e) => dispatch({ type: 'setFeedback', value: e.target.checked })}
-                  />
-                  Charge interest on extra borrowing (mechanical)
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={state.assessAsOf === 'nextBudget'}
-                    onChange={(e) =>
-                      dispatch({
-                        type: 'setAssessAsOf',
-                        value: e.target.checked ? 'nextBudget' : 'vintage',
-                      })
-                    }
-                  />
-                  Judge by the rules as they will apply from the{' '}
-                  {nextBudget.split(' ').slice(-2).join(' ')} Budget (rolling target)
-                </label>
+                {workings ? (
+                  <>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={state.debtInterestFeedback}
+                        onChange={(e) => dispatch({ type: 'setFeedback', value: e.target.checked })}
+                      />
+                      Charge interest on extra borrowing (mechanical)
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={state.assessAsOf === 'nextBudget'}
+                        onChange={(e) =>
+                          dispatch({
+                            type: 'setAssessAsOf',
+                            value: e.target.checked ? 'nextBudget' : 'vintage',
+                          })
+                        }
+                      />
+                      Judge by the rules as they will apply from the{' '}
+                      {nextBudget.split(' ').slice(-2).join(' ')} Budget (rolling target)
+                    </label>
+                  </>
+                ) : null}
                 <button type="button" className="btn" onClick={() => dispatch({ type: 'reset' })}>
                   Reset to OBR
                 </button>
@@ -403,13 +409,11 @@ export function BudgetPage() {
               )}
 
               <section className="panel" aria-labelledby="attribution-heading">
-                <h2 id="attribution-heading">
-                  What moved the {targetYear} current budget and borrowing
-                </h2>
+                <h2 id="attribution-heading">What you’ve changed</h2>
                 <p className="panel__hint">
-                  Each line is the effect in the stability rule&rsquo;s target year on the current
-                  budget (day-to-day borrowing) and on total borrowing, which adds investment.
-                  Positive means the position gets worse.
+                  What each change does in {targetYear} to the current budget (day-to-day borrowing)
+                  and to total borrowing, which adds investment. Positive means the position gets
+                  worse.
                 </p>
                 <AttributionList
                   rows={outcome.attribution}
@@ -417,75 +421,79 @@ export function BudgetPage() {
                 />
               </section>
 
-              <InteractionsNotice interactions={outcome.interactions} />
+              {workings ? (
+                <>
+                  <InteractionsNotice interactions={outcome.interactions} />
 
-              {outcome.warnings.length > 0 && (
-                <div className="warnings" role="note">
-                  Assumptions in play:
-                  <ul>
-                    {outcome.warnings.map((w) => (
-                      <li key={w}>{w}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                  {outcome.warnings.length > 0 && (
+                    <div className="warnings" role="note">
+                      Assumptions in play:
+                      <ul>
+                        {outcome.warnings.map((w) => (
+                          <li key={w}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
-              <section className="panel" aria-labelledby="presets-heading">
-                <h2 id="presets-heading">Try a ready-made Budget</h2>
-                <PresetPicker
-                  onApply={(leverValues) => dispatch({ type: 'applyPreset', leverValues })}
-                  current={state.leverValues}
-                />
-              </section>
+                  <section className="panel" aria-labelledby="presets-heading">
+                    <h2 id="presets-heading">Try a ready-made Budget</h2>
+                    <PresetPicker
+                      onApply={(leverValues) => dispatch({ type: 'applyPreset', leverValues })}
+                      current={state.leverValues}
+                    />
+                  </section>
 
-              <details className="panel details">
-                <summary>
-                  <h2>Five-year paths</h2>
-                </summary>
-                <div className="charts">
-                  <PathChart
-                    title="Current budget surplus"
-                    subtitle="£ billion; negative means day-to-day spending exceeds revenue"
-                    years={years}
-                    baseline={surplus(paths.baseline.currentBudgetDeficit)}
-                    policy={surplus(paths.policy.currentBudgetDeficit)}
-                    format={(v) => formatGbpBn(v * 1000, 1, true)}
-                    tickFormat={(v) => formatGbpBn(v * 1000, 0, true)}
-                    highlightYear={targetYear}
-                    zeroLine
-                  />
-                  <PathChart
-                    title="Borrowing (PSNB)"
-                    subtitle="£ billion a year"
-                    years={years}
-                    baseline={toBn(paths.baseline.psnb)}
-                    policy={toBn(paths.policy.psnb)}
-                    format={(v) => formatGbpBn(v * 1000, 1)}
-                    tickFormat={(v) => formatGbpBn(v * 1000, 0)}
-                    highlightYear={targetYear}
-                    zeroLine
-                  />
-                  <PathChart
-                    title="Net financial liabilities"
-                    subtitle="% of GDP (the investment rule's debt measure)"
-                    years={years}
-                    baseline={years.map((y) => paths.baseline.psnflPctGdp[y] ?? 0)}
-                    policy={years.map((y) => paths.policy.psnflPctGdp[y] ?? 0)}
-                    format={(v) => formatPct(v, 1)}
-                    highlightYear={targetYear}
-                  />
-                  <PathChart
-                    title="Borrowing as a share of GDP"
-                    subtitle="% of GDP"
-                    years={years}
-                    baseline={years.map((y) => paths.baseline.psnbPctGdp[y] ?? 0)}
-                    policy={years.map((y) => paths.policy.psnbPctGdp[y] ?? 0)}
-                    format={(v) => formatPct(v, 1)}
-                    highlightYear={targetYear}
-                    zeroLine
-                  />
-                </div>
-              </details>
+                  <details className="panel details">
+                    <summary>
+                      <h2>Five-year paths</h2>
+                    </summary>
+                    <div className="charts">
+                      <PathChart
+                        title="Current budget surplus"
+                        subtitle="£ billion; negative means day-to-day spending exceeds revenue"
+                        years={years}
+                        baseline={surplus(paths.baseline.currentBudgetDeficit)}
+                        policy={surplus(paths.policy.currentBudgetDeficit)}
+                        format={(v) => formatGbpBn(v * 1000, 1, true)}
+                        tickFormat={(v) => formatGbpBn(v * 1000, 0, true)}
+                        highlightYear={targetYear}
+                        zeroLine
+                      />
+                      <PathChart
+                        title="Borrowing (PSNB)"
+                        subtitle="£ billion a year"
+                        years={years}
+                        baseline={toBn(paths.baseline.psnb)}
+                        policy={toBn(paths.policy.psnb)}
+                        format={(v) => formatGbpBn(v * 1000, 1)}
+                        tickFormat={(v) => formatGbpBn(v * 1000, 0)}
+                        highlightYear={targetYear}
+                        zeroLine
+                      />
+                      <PathChart
+                        title="Net financial liabilities"
+                        subtitle="% of GDP (the investment rule's debt measure)"
+                        years={years}
+                        baseline={years.map((y) => paths.baseline.psnflPctGdp[y] ?? 0)}
+                        policy={years.map((y) => paths.policy.psnflPctGdp[y] ?? 0)}
+                        format={(v) => formatPct(v, 1)}
+                        highlightYear={targetYear}
+                      />
+                      <PathChart
+                        title="Borrowing as a share of GDP"
+                        subtitle="% of GDP"
+                        years={years}
+                        baseline={years.map((y) => paths.baseline.psnbPctGdp[y] ?? 0)}
+                        policy={years.map((y) => paths.policy.psnbPctGdp[y] ?? 0)}
+                        format={(v) => formatPct(v, 1)}
+                        highlightYear={targetYear}
+                        zeroLine
+                      />
+                    </div>
+                  </details>
+                </>
+              ) : null}
             </div>
           </div>
         </Beat>

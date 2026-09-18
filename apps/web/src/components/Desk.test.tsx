@@ -64,7 +64,9 @@ describe('the desk of folders', () => {
     desk('itbr.1_vatfood.1');
     fireEvent.click(screen.getByRole('tab', { name: /Duties/ }));
     expect(within(screen.getByRole('tabpanel')).queryByText('Basic rate of income tax')).toBeNull();
-    const attribution = screen.getByRole('heading', { name: /What moved the/ }).closest('section');
+    const attribution = screen
+      .getByRole('heading', { name: /What you’ve changed/ })
+      .closest('section');
     expect(
       within(attribution as HTMLElement).getByText(/Basic rate of income tax/),
     ).toBeInTheDocument();

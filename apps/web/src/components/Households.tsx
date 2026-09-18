@@ -1,4 +1,5 @@
 import type { HouseholdReaction } from '@btc/engine';
+import { useWorkings } from '../journey/workings';
 import { LabelBadge } from './LabelBadge';
 import { SourceLink } from './SourceLink';
 
@@ -15,6 +16,7 @@ const NET: Record<HouseholdReaction['net'], string> = {
  * one fact each carries has its source, and nothing here is a number the engine did not compute.
  */
 export function Households({ reactions }: { reactions: HouseholdReaction[] }) {
+  const workings = useWorkings();
   return (
     <ul className="households">
       {reactions.map((r) => (
@@ -35,12 +37,14 @@ export function Households({ reactions }: { reactions: HouseholdReaction[] }) {
                 <span className="source">
                   {' '}
                   {lever.shortTitle}
-                  {touch.line.sources.map((s, i) => (
-                    <span key={i}>
-                      {' · '}
-                      <SourceLink ref={s} />
-                    </span>
-                  ))}
+                  {workings
+                    ? touch.line.sources.map((s, i) => (
+                        <span key={i}>
+                          {' · '}
+                          <SourceLink ref={s} />
+                        </span>
+                      ))
+                    : null}
                 </span>
               </p>
             ))
@@ -48,12 +52,14 @@ export function Households({ reactions }: { reactions: HouseholdReaction[] }) {
           <p className="household__line household__line--verdict">“{r.line.text}”</p>
           <p className="source household__fact">
             {r.household.fact.text}{' '}
-            {r.household.fact.sources.map((s, i) => (
-              <span key={i}>
-                {i > 0 ? ' · ' : ''}
-                <SourceLink ref={s} />
-              </span>
-            ))}
+            {workings
+              ? r.household.fact.sources.map((s, i) => (
+                  <span key={i}>
+                    {i > 0 ? ' · ' : ''}
+                    <SourceLink ref={s} />
+                  </span>
+                ))
+              : null}
           </p>
         </li>
       ))}
