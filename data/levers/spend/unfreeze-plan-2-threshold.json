@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "unfreeze-plan-2-threshold",
+  "code": "rvplan2",
+  "category": "spend",
+  "badge": "direct",
+  "group": "Budget 2025 and Spending Review decisions",
+  "order": 50,
+  "title": "Unfreeze the Plan 2 student loan repayment threshold",
+  "shortTitle": "Unfreeze Plan 2 threshold",
+  "headline": "Unfreeze the Plan 2 repayment threshold from April 2027. Costs £0.4bn in 2029-30.",
+  "description": "Budget 2025 froze the repayment threshold for Plan 2 student loans (undergraduates from 2012 to 2022) at its 2026-27 level for three years from April 2027, so graduates start repaying at a lower real income and repay more. The Treasury scored the freeze at £5.9 billion in 2026-27, when the loan book was revalued, then £255 million to £380 million a year. Switch this on to let the threshold rise again from April 2027, giving up the Treasury's costing from that year; the 2026-27 revaluation falls before your Budget and is not undone.",
+  "baselinePolicy": {
+    "text": "The Plan 2 repayment threshold is held at its 2026-27 level until April 2030, when it rises with inflation again; the freeze is scored at £285m, £5,915m, £255m, £290m, £355m and £380m from 2025-26 to 2030-31 (Budget 2025, Table 4.1 line 48).",
+    "source": {
+      "sourceId": "hmt-budget-2025-policy-costings",
+      "page": "43",
+      "quote": "This measure maintains the repayment threshold for plan 2 student loans at its financial year 26-27 level until April 2030, when it will increase annually by inflation."
+    },
+    "alreadyIncludes": [
+      "The Plan 2 threshold freeze from 6 April 2027 for three years (Budget 2025, Table 4.1 line 48)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "department": "Education",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 285,
+      "2026-27": 5915,
+      "2027-28": 255,
+      "2028-29": 290,
+      "2029-30": 355,
+      "2030-31": 380
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "direction": "reverse",
+      "lines": [
+        {
+          "number": 48,
+          "title": "Student Loans: Freeze Plan 2 repayment threshold for three years from 6 April 2027",
+          "values": {
+            "2025-26": 285,
+            "2026-27": 5915,
+            "2027-28": 255,
+            "2028-29": 290,
+            "2029-30": 355,
+            "2030-31": 380
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury's costing with the sign kept (the freeze reduced borrowing; ending it costs the same amount). Student loan repayments score as spending in the public finances, which is why the scorecard types the line as Spend."
+    },
+    "caveats": [
+      "The £5.9 billion in 2026-27 is the one-off effect of revaluing the loan book when the freeze was announced; it falls before the earliest start year here and is not applied, so what you see is the running cost of a higher threshold from 2027-28.",
+      "The Treasury names student loan repayment forecasts as inherently uncertain: borrower earnings, inflation and household income all move them. The costing is on the OBR November 2025 forecast, not the March 2026 baseline used here.",
+      "The scorecard line is the freeze from April 2027; the pre-freeze uprating rule the threshold returns to is the one in the Treasury's pre-measure baseline, which the costing note does not spell out."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified costing, estimated by applying the pre- and post-measure thresholds to Plan 2 borrowers' predicted earnings from Student Loans Company and HMRC data, uprated with the OBR's earnings forecast.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "43"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1",
+          "note": "line 48"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-plan-2",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The freeze falls on undergraduates who studied between 2012 and 2022 and earn above the threshold or are expected to by 2027-28 to 2029-30: graduates in their late twenties and thirties, who repay 9% of income above it. Unfreezing gives that back, most to those just above the threshold.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "43"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}

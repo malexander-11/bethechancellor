@@ -104,6 +104,10 @@
     "foreign-nationals": {
       "label": "Foreign nationals on benefits",
       "side": "benefits"
+    },
+    "tax-gap": {
+      "label": "People and firms not paying what they owe",
+      "side": "pays"
     }
   },
   "levers": {
@@ -179,6 +183,16 @@
     "cpilock": "pensioners",
     "rvwfp": "pensioners",
     "woth": "other-welfare",
-    "brates": "business"
+    "brates": "business",
+    "cgtdth": "savers-owners",
+    "hvcts15": "savers-owners",
+    "rvapr": "savers-owners",
+    "bank5": "business",
+    "epl2": "business",
+    "nic4": "broad-base",
+    "vatgas": "broad-base",
+    "hmrc2": "tax-gap",
+    "rvplan2": "students",
+    "def3": "defence"
   }
 }

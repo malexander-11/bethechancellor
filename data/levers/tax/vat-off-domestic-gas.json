@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "id": "vat-off-domestic-gas",
+  "code": "vatgas",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "VAT",
+  "order": 25,
+  "title": "Take VAT off domestic gas as well as electricity",
+  "shortTitle": "VAT off gas",
+  "headline": "Gas to 0%, as electricity already is. Costs about £0.8bn a year.",
+  "description": "Domestic fuel and power pay the 5% reduced rate; the government took electricity to 0% from 1 October 2026 and said that costs about £850 million in 2026-27, a half year. This card takes gas and the other domestic fuels to 0% as well. HMRC costs the whole 5% relief against 20% at £7.0bn in 2025-26, so the last five points on all domestic fuel and power are a third of that; taking off the electricity part, at twice the government's half-year figure, leaves £633 million in 2025-26, grown with the OBR's VAT forecast: about £0.8bn a year.",
+  "baselinePolicy": {
+    "text": "Domestic fuel and power pay the 5% reduced rate in the March 2026 baseline; electricity was cut to 0% from 1 October 2026, after the forecast, at a cost the government put at about £850 million in 2026-27.",
+    "source": {
+      "sourceId": "govuk-vat-electricity-cut-2026"
+    },
+    "alreadyIncludes": [
+      "The 5% reduced rate on domestic fuel and power, costed by HMRC at £7.0bn in 2025-26 against the 20% standard rate (Estimated cost of tax reliefs, Table 2, row VAT NS4)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "vat",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": -689,
+      "2028-29": -726,
+      "2029-30": -752,
+      "2030-31": -790
+    },
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "table": "Table 2"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "method": {
+        "name": "weightedSum",
+        "baseYear": "2025-26",
+        "resultGbpm": -633,
+        "growWith": "vat",
+        "terms": [
+          {
+            "label": "HMRC's cost of the 5% rate on all domestic fuel and power against 20%; the last five points are a third of the fifteen",
+            "value": 7000,
+            "factor": -0.333333,
+            "unit": "£ million, 2025-26",
+            "source": {
+              "sourceId": "hmrc-tax-reliefs-2026-01",
+              "table": "Table 2",
+              "note": "row vat-ns4, Domestic fuel and power"
+            }
+          },
+          {
+            "label": "Less the electricity cut already made: the government's half-year figure for 2026-27, doubled to a full year",
+            "value": 850,
+            "factor": 2,
+            "unit": "£ million, 2026-27 half year",
+            "source": {
+              "sourceId": "govuk-vat-electricity-cut-2026"
+            }
+          }
+        ]
+      },
+      "note": "Static arithmetic. A third of HMRC's relief cost is what the last five points on all domestic fuel and power are worth; the electricity share is removed at twice the government's stated half-year cost, because the Treasury has published no full-year figure yet. The remainder is gas and other fuels, grown with the OBR's VAT receipts from 2025-26."
+    },
+    "caveats": [
+      "Annualising the £850 million is ours: the government's figure is for the six months from 1 October 2026 and the Treasury promised a full-year costing at the Budget. If the true full-year electricity cost differs, this figure moves pound for pound the other way.",
+      "Static: cheaper gas means a little more gas used, and HMRC's relief figures carry no behavioural response. The 2025-26 relief cost is HMRC's projection, not an outturn.",
+      "Gas, heating oil, coal and other domestic fuels are treated together, because HMRC costs the relief as one line."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-cost",
+      "kind": "behavioural",
+      "direction": "costsMore",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "The figure is the cost of the last five points at today's spending. A lower price means slightly more gas bought, so the true cost would be a little higher; HMRC's relief estimates do not model such responses.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-quality-report",
+          "paragraph": "4"
+        }
+      ]
+    },
+    {
+      "id": "who-benefits-gas",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Every household on mains gas gains, by more the more they burn; the government said the electricity cut took about £45 a year off a price-cap bill. Homes heated by electricity, heat pumps or district heating gain nothing from this one, and the relief is worth most to large, old, gas-heated homes.",
+      "sources": [
+        {
+          "sourceId": "govuk-vat-electricity-cut-2026"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "vat-on-domestic-energy",
+      "text": "They pull opposite ways: this takes gas to 0%, that takes all domestic fuel and power to 20%. Switch on one or the other.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "vat-reduced-rate",
+      "text": "The reduced rate lever changes the 5% that gas pays; this lever takes gas out of the reduced rate altogether, so the two overlap.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}

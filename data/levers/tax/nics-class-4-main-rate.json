@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "id": "nics-class-4-main-rate",
+  "code": "nic4",
+  "category": "tax",
+  "badge": "direct",
+  "group": "National Insurance",
+  "order": 15,
+  "title": "Self-employed National Insurance main rate (Class 4)",
+  "shortTitle": "Self-employed NICs rate",
+  "headline": "Class 4 is 6%; employees pay 8%. Each point raises about £0.5bn.",
+  "description": "Change the Class 4 main rate that the self-employed pay on profits between £12,570 and £50,270, from April 2027. It is 6% today against the 8% employees pay on the same earnings, so the slider runs up to 4 points to close the gap. HMRC publishes the yield of a 1 point change (£440m, £525m and £445m in 2026-27 to 2028-29); larger changes are scaled linearly and the figures are carried forward with the OBR's National Insurance forecast.",
+  "baselinePolicy": {
+    "text": "Class 4 main rate 6% on profits between £12,570 and £50,270 and 2% above; employee Class 1 main rate 8%; thresholds frozen until April 2031.",
+    "source": {
+      "sourceId": "govuk-nics-rates"
+    },
+    "alreadyIncludes": [
+      "Income tax personal allowance, higher-rate threshold and equivalent National Insurance thresholds frozen until April 2031 (Budget 2025, Table 4.1 line 46)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": 0,
+    "max": 4,
+    "step": 0.5,
+    "default": 0,
+    "formatLabel": "percentage points",
+    "level": {
+      "baseline": 6,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Self-employed National Insurance main rate (Class 4)",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-nics-rates"
+      },
+      "note": "6% on profits between £12,570 and £50,270; 2% above. Employees pay 8% on the same band."
+    }
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "nics",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 440,
+      "2027-28": 525,
+      "2028-29": 445
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "national-insurance-contributions-rates--change-class-4-main-rate-by-1-percentage-point",
+          "label": "Change Class 4 main rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 440,
+            "2027-28": 525,
+            "2028-29": 445
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "nics",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC publishes the effect of a 1 point change; larger changes are scaled linearly here, which HMRC says is about right for rates.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions.",
+      "The employee main-rate slider moves Class 4 with Class 1; this slider moves Class 4 alone, to close the gap between the two."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmrc-direct",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's figure is a direct effect on this tax and closely related tax bases. It includes HMRC's standard behavioural response (for personal taxes, through taxable income elasticities and tax-motivated incorporation), but not wider effects on the economy such as inflation or investment, which HMRC says are usually captured in the OBR's economy forecast instead.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ]
+    },
+    {
+      "id": "class-4-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "appliesWhen": {
+        "above": 0
+      },
+      "text": "The manifesto promised not to increase National Insurance. Class 4 is National Insurance paid by working people on their own profits, so a rise here breaks the tax lock as plainly as a rise in the employee rate would, and the card is marked accordingly. The argument that the self-employed are under-taxed relative to employees does not change the words of the promise.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations",
+          "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+        }
+      ]
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "nics-employee-main-rate",
+      "text": "Both move the Class 4 main rate: the employee slider carries Class 4 with Class 1, and this one moves Class 4 on its own, so the two add up.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}

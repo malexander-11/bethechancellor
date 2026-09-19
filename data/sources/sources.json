@@ -234,7 +234,7 @@
       "licence": "OGL-3.0",
       "localPath": "data/raw/hmt-autumn-budget-2024/Table_5.1_-_Autumn_Budget_2024_Policy_Decisions.xlsx",
       "sha256": "6249ec5be2634b738be2da1b15fa45fc59afd239ad5ec8c221960428d30d6a37",
-      "notes": "Certified costings of Autumn Budget 2024 measures, £ million 2024-25 to 2029-30, positive reduces borrowing. Lines used: 25 (additional-dwellings stamp duty surcharge 3% to 5%), 27 (capital gains tax main rates to 18% and 24% with BADR and IR changes), 30 (inheritance tax thresholds frozen to April 2030)."
+      "notes": "Certified costings of Autumn Budget 2024 measures, £ million 2024-25 to 2029-30, positive reduces borrowing. Lines used: 24 (energy profits levy package: rate to 38%, investment allowance abolished, sunset to March 2030), 25 (additional-dwellings stamp duty surcharge 3% to 5%), 27 (capital gains tax main rates to 18% and 24% with BADR and IR changes), 29 (agricultural and business property relief reform from April 2026), 30 (inheritance tax thresholds frozen to April 2030)."
     },
     {
       "id": "hmt-forecasts-2026-08",
@@ -1021,6 +1021,40 @@
       "localPath": "data/raw/hmrc-private-pensions-2026-07/Tables_6_1_and_6_2.csv",
       "sha256": "04e0dab6354b01c96d04f9e379f237ea2083476bd9e920c882a236cdcf88101d",
       "notes": "2024-25 only. Income tax relief on pension contributions by contribution type and the taxpayer's marginal rate: basic rate £16,100m, higher rate £31,700m, additional rate £8,000m across the five contribution types (sector and scheme totals). Some NICs cells are suppressed ([z])."
+    },
+    {
+      "id": "rf-call-of-duties-2025",
+      "org": "RF",
+      "title": "Call of duties",
+      "edition": "23 September 2025",
+      "url": "https://www.resolutionfoundation.org/publications/call-of-duties/",
+      "publishedOn": "2025-09-23",
+      "retrievedOn": "2026-09-19",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-19. On capital gains tax: \"when assets are held until death, any built-up gains are written off for tax purposes. This creates perverse incentives to avoid realising gains, and is a particularly valuable tax concession to those with very large business wealth. Instead, full tax should be paid whenever beneficiaries later realise gains.\" And, of ending the death write-off together with a settling-up charge on emigrants: \"The combination of these two measures would raise an estimated £4 billion a year\". The Foundation publishes no split between the two. Resolution Foundation; quoted briefly with attribution."
+    },
+    {
+      "id": "hmrc-banking-sector-receipts-2025",
+      "org": "HMRC",
+      "title": "PAYE and corporate tax receipts from the banking sector: 2025",
+      "edition": "25 September 2025",
+      "url": "https://assets.publishing.service.gov.uk/media/68cada082fe4b313286ca00b/PAYE__Corporation_Tax__Bank_Payroll_Tax__Bank_Levy_and_Bank_Surcharge_receipts__2025_.ods",
+      "landingUrl": "https://www.gov.uk/government/statistics/paye-and-corporate-tax-receipts-from-the-banking-sector-2025",
+      "publishedOn": "2025-09-25",
+      "retrievedOn": "2026-09-19",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmrc-banking-sector-receipts-2025/PAYE__Corporation_Tax__Bank_Payroll_Tax__Bank_Levy_and_Bank_Surcharge_receipts__2025_.ods",
+      "sha256": "1f2afb7c2290e68fed075e88da4f31c32852d9870e2cf4c130aa2c4413c8a886",
+      "notes": "Table 1, £ billion by financial year. Bank Surcharge receipts: 2016-17 1.1, 2017-18 1.8, 2018-19 1.9, 2019-20 2.0, 2020-21 1.4, 2021-22 2.3, 2022-23 2.6, 2023-24 1.4, 2024-25 1.0. The commentary: \"Bank Surcharge receipts were £1.0 billion in financial year 2024 to 2025, a decrease of £0.5 billion (32.6%) on the previous year, which mostly reflects the full effects of the reduction in the Bank Surcharge rate from 8% to 3% in April 2023 and lower UK banking sector profits\". A 2026 edition was not published at 19 September 2026; check the landing page on or after 25 September 2026."
+    },
+    {
+      "id": "legislation-cta-2010-s269de",
+      "org": "Parliament",
+      "title": "Corporation Tax Act 2010, section 269DE: surcharge allowance",
+      "url": "https://www.legislation.gov.uk/ukpga/2010/4/section/269DE",
+      "retrievedOn": "2026-09-19",
+      "licence": "OGL-3.0",
+      "notes": "The bank surcharge allowance is £100,000,000 for accounting periods beginning on or after 1 April 2023, substituted for £25,000,000 by Finance Act 2022 section 6; the surcharge is charged on a banking company's profits above the allowance."
     }
   ]
 }

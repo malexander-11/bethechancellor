@@ -183,6 +183,7 @@ export function groupLevers(items: Lever[]): LeverGroup[] {
     'Capital taxes',
     'Duties',
     'Budget 2025 and Spending Review decisions',
+    'Flagship programmes',
     'Day-to-day departmental budgets',
     'Public investment',
     'Welfare',

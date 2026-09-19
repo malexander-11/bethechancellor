@@ -499,6 +499,10 @@
           "when": "above"
         },
         {
+          "code": "nic4",
+          "when": "above"
+        },
+        {
           "code": "vats",
           "when": "above"
         }

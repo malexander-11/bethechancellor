@@ -88,6 +88,16 @@
           "sourceId": "hmrc-tax-reliefs-2026-01"
         }
       ]
+    },
+    "compliance": {
+      "text": "We will collect what is already owed: {measures}, raising {yield} in {targetYear} if the next compliance package yields what the last one did.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1",
+          "note": "line 59"
+        }
+      ]
     }
   },
   "giveaways": {

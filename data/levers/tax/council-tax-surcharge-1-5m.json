@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "id": "council-tax-surcharge-1-5m",
+  "code": "hvcts15",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Capital taxes",
+  "order": 35,
+  "title": "Extend the high value council tax surcharge to homes over £1.5m",
+  "shortTitle": "Surcharge from £1.5m",
+  "headline": "A £1.5m band, assumed to raise what the £2m band does: £0.4bn.",
+  "description": "Budget 2025 introduced an annual surcharge on owners of homes in England valued over £2 million from April 2028, costed at £400 million in 2028-29 rising to £435 million. This card adds a lower band from £1.5 million and assumes it raises exactly what the Treasury costed for the £2 million bands, year by year, set-up costs included. That is an assumption, not a costing: nobody has published how many homes sit between £1.5 million and £2 million or what they would be charged.",
+  "baselinePolicy": {
+    "text": "A surcharge on owners of residential properties valued over £2 million in England from 1 April 2028, based on a Valuation Office revaluation at 2026 values, on an estimated 165,000 properties in 2028-29; costed at −£60m, −£120m and −£155m of set-up cost in 2025-26 to 2027-28, then £400m, £430m and £435m (Budget 2025, Table 4.1 line 54).",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 54"
+    },
+    "alreadyIncludes": [
+      "The £2 million surcharge itself, with the Treasury's allowance for price capitalisation, bunching below the thresholds, appeals, non-payment and a support scheme (Budget 2025 policy costings, pages 51-52)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": -60,
+      "2026-27": -120,
+      "2027-28": -155,
+      "2028-29": 400,
+      "2029-30": 430,
+      "2030-31": 435
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "direction": "repeat",
+      "lines": [
+        {
+          "number": 54,
+          "title": "High Value Council Tax Surcharge: Introduce a surcharge on owners of residential properties valued over £2m in England from 1 April 2028",
+          "values": {
+            "2025-26": -60,
+            "2026-27": -120,
+            "2027-28": -155,
+            "2028-29": 400,
+            "2029-30": 430,
+            "2030-31": 435
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Repeat: the Treasury's certified costing of the £2 million surcharge, taken as the yield of a further band from £1.5 million, year by year, set-up costs included. Positive scorecard values reduce borrowing; here receipts positive means more revenue. Effects before the start year are not applied."
+    },
+    "caveats": [
+      "Equal yield is our assumption. The Treasury's costing rests on about 165,000 homes over £2 million with banded charges; there are more homes between £1.5 million and £2 million, but a lower band would carry a lower charge, and nobody has published either number. The real figure could be well above or below.",
+      "England only, as the surcharge itself is; council tax is devolved elsewhere. The surcharge is scored as an Exchequer receipt, not council revenue.",
+      "The set-up costs in 2027-28 are kept: a new band needs valuing too. The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "banding-and-valuation",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The Treasury assumes the surcharge is fully capitalised into prices over three years and that buyers bunch below each threshold; it also allows for appeals, non-payment and a support scheme for owners who cannot pay. A lower threshold catches more homes, more of them owned by people with high housing wealth and modest incomes, so those allowances would bite harder.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "51-52"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-surcharge",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Owners of homes worth £1.5 million to £2 million in England, concentrated in London and the South East. The Treasury's own tax base for the £2 million surcharge is 165,000 properties; the Wealth and Assets Survey is used to judge how many could not pay.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "51-52"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}

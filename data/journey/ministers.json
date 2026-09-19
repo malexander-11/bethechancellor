@@ -909,6 +909,87 @@
           }
         }
       ]
+    },
+    {
+      "code": "rvplan2",
+      "role": "Education Secretary",
+      "asking": {
+        "text": "Budget 2025 froze the Plan 2 repayment threshold at its 2026-27 level for three years from April 2027, so graduates in their twenties and thirties start repaying at a lower real income. The Treasury scored the running cost of undoing it at about £0.3 to £0.4 billion a year. I am asking you to let the threshold rise again.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-policy-costings",
+            "page": "43",
+            "quote": "This measure maintains the repayment threshold for plan 2 student loans at its financial year 26-27 level until April 2030"
+          },
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 48"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Thank you. A frozen threshold is a tax rise on graduates and nobody else, and the Treasury's own note calls the repayment forecasts inherently uncertain. Letting it rise again costs £355 million in 2029-30 on the Treasury's figures.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2025-policy-costings",
+                "page": "43"
+              },
+              {
+                "sourceId": "hmt-budget-2025-table-4-1",
+                "table": "Table 4.1",
+                "note": "line 48"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "def3",
+      "role": "Defence Secretary",
+      "asking": {
+        "text": "The Defence Investment Plan's explainer commits us to 3% of GDP in the next Parliament and the OBR's path reaches it only in 2030-31. Bring it forward to April 2027 and the cost is the years in between: about £4.2 billion in 2029-30, falling to nothing by 2030-31. I am asking you to get there first, not last.",
+        "sources": [
+          {
+            "sourceId": "govuk-dip-funding-explainer",
+            "note": "3% in the next Parliament; 3.5% of GDP by 2035"
+          },
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.15",
+            "quote": "spending on defence rises from 2.4 per cent in 2025-26 to 3.0 per cent by the end of the forecast"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Three per cent now rather than at the end of the forecast: that is the difference between a plan and a promise, and every allied capital will read it. The bill front-loads and falls away as the OBR's own path catches up.",
+            "sources": [
+              {
+                "sourceId": "govuk-dip-funding-explainer"
+              },
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.15"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
     }
   ]
 }

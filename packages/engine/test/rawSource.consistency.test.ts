@@ -9,15 +9,22 @@ describe('every direct costing reproduces from the extracted published tables', 
   const taxLevers = ds.levers.filter((l) => l.category === 'tax');
 
   it('covers the planned core set', () => {
-    expect(taxLevers.length).toBe(39);
+    expect(taxLevers.length).toBe(47);
     expect(taxLevers.every((l) => l.group)).toBe(true);
-    // A share of an OBR receipts line is mechanical arithmetic; everything else is a certified row.
+    // A share of an OBR receipts line is mechanical arithmetic; a certified row is direct; our own
+    // arithmetic on published figures is an assumption and says so on the card (ADR-0017).
     const mechanical = taxLevers.filter((l) => l.badge === 'mechanical').map((l) => l.code);
     expect(mechanical.sort()).toEqual(['brates']);
     for (const l of taxLevers) {
       expect(l.badge === 'mechanical', `${l.code}`).toBe(l.costing.kind === 'pctOfBaseline');
     }
-    expect(taxLevers.filter((l) => l.badge === 'direct')).toHaveLength(38);
+    expect(taxLevers.filter((l) => l.badge === 'direct')).toHaveLength(40);
+    expect(
+      taxLevers
+        .filter((l) => l.badge === 'assumption')
+        .map((l) => l.code)
+        .sort(),
+    ).toEqual(['bank5', 'cgtdth', 'epl2', 'hmrc2', 'hvcts15', 'vatgas']);
   });
 
   it.each(taxLevers.map((l) => [l.id, l] as const))(
@@ -32,7 +39,7 @@ describe('every direct costing reproduces from the extracted published tables', 
   );
 
   it('covers the planned spending set', () => {
-    expect(spendingLevers.length).toBe(19);
+    expect(spendingLevers.length).toBe(21);
     expect(spendingLevers.every((l) => l.group && l.classification?.side === 'spending')).toBe(
       true,
     );
@@ -41,7 +48,7 @@ describe('every direct costing reproduces from the extracted published tables', 
         .filter((l) => l.badge === 'direct')
         .map((l) => l.code)
         .sort(),
-    ).toEqual(['chb', 'rv2ch', 'rveff', 'rvpip', 'rvwfp']);
+    ).toEqual(['chb', 'rv2ch', 'rveff', 'rvpip', 'rvplan2', 'rvwfp']);
   });
 
   it.each(spendingLevers.map((l) => [l.id, l] as const))(

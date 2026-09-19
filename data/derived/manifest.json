@@ -8,6 +8,11 @@
       "sha256": "705fb8fb5ace47e37eafe0b3817d5a6de538ce8fb2a67746e8f92d15ecd616e6"
     },
     {
+      "sourceId": "hmrc-banking-sector-receipts-2025",
+      "localPath": "data/raw/hmrc-banking-sector-receipts-2025/PAYE__Corporation_Tax__Bank_Payroll_Tax__Bank_Levy_and_Bank_Surcharge_receipts__2025_.ods",
+      "sha256": "1f2afb7c2290e68fed075e88da4f31c32852d9870e2cf4c130aa2c4413c8a886"
+    },
+    {
       "sourceId": "hmrc-private-pensions-2026-07",
       "localPath": "data/raw/hmrc-private-pensions-2026-07/Table_6.csv",
       "sha256": "1a914e45fd2629a45fa48e7c90d6725276a15c5475e6761a44d09e4f2e3843a2"

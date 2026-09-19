@@ -11,7 +11,7 @@
   "headline": "Domestic energy pays 5%, not 20%. The gap costs £7.0bn.",
   "description": "Charge the standard 20% rate of VAT on domestic fuel and power, which currently pay the 5% reduced rate. HMRC puts the cost of the current relief at £7.0bn in 2025-26; that is the static cost of the relief, not a forecast of what charging VAT would raise.",
   "baselinePolicy": {
-    "text": "Domestic fuel and power pay the 5% reduced rate.",
+    "text": "Domestic fuel and power pay the 5% reduced rate in the March 2026 baseline. Electricity was cut to 0% from 1 October 2026, after the forecast, so HMRC's £7.0bn for the relief still counts electricity at 5%.",
     "source": {
       "sourceId": "govuk-vat-goods-rates"
     }
@@ -64,7 +64,8 @@
     },
     "caveats": [
       "HMRC: \"These figures should be interpreted as estimates of the amount of relief which is claimed and subsequently granted each year. These estimates do not represent the gain to the exchequer should a relief be abolished.\" The toggle shows that static cost as revenue; the true yield would be lower once buyers respond and would depend on transitional arrangements.",
-      "HMRC's description of the relief: Reduced rate of VAT on supplies of domestic fuel and power."
+      "HMRC's description of the relief: Reduced rate of VAT on supplies of domestic fuel and power.",
+      "Electricity has paid 0% since 1 October 2026, a decision taken after the March 2026 forecast. HMRC's 2025-26 relief cost still has it at 5%, so charging 20% on all domestic fuel and power from here would raise more than this line shows for electricity; the government put the extra five points on electricity at about £850 million for the half year from October 2026."
     ]
   },
   "considerations": [
@@ -107,6 +108,11 @@
       "withLever": "vat-standard-rate",
       "text": "The relief cost is valued at today's 20% standard rate; changing the standard rate changes what these toggles would raise.",
       "severity": "info"
+    },
+    {
+      "withLever": "vat-off-domestic-gas",
+      "text": "They pull opposite ways: this takes all domestic fuel and power to 20%, that takes gas to 0%. Switch on one or the other.",
+      "severity": "warn"
     }
   ]
 }

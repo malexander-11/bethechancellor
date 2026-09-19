@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "id": "energy-profits-levy-again",
+  "code": "epl2",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Business",
+  "order": 40,
+  "title": "Repeat the 2024 energy profits levy package",
+  "shortTitle": "Energy levy again",
+  "headline": "Repeat the 2024 energy profits levy package. If it raises the same: £1.0bn.",
+  "description": "Autumn Budget 2024 raised the energy profits levy on oil and gas producers to 38%, abolished its investment allowance except for decarbonisation and extended it to March 2030, costed at £50m in 2027-28, £410m in 2028-29 and £955m in 2029-30. This card assumes a second package of the same size raises the same again, year by year, and holds the 2029-30 figure flat in cash for 2030-31. It is an assumption about a tax whose yield moves with oil and gas prices; nobody has costed a second round.",
+  "baselinePolicy": {
+    "text": "Energy profits levy at 38% from 1 November 2024, investment allowance abolished except for decarbonisation expenditure, sunset extended from 31 March 2029 to 31 March 2030 (Autumn Budget 2024, Table 5.1 line 24).",
+    "source": {
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "table": "Table 5.1",
+      "note": "line 24"
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2027-28": 50,
+      "2028-29": 410,
+      "2029-30": 955
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "table": "Table 5.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "direction": "repeat",
+      "lines": [
+        {
+          "number": 24,
+          "title": "Energy Profits Levy (EPL): Increase the rate to 38%; abolish the EPL investment allowance except for decarbonisation expenditure and cut rate of decarbonisation allowance to 66% from 1 November 2024; sunset date extension from 31 March 2029 to 31 March 2030 as well as the introduction of tax relief for payments made into a Decommissioning Fund in relation to oil and gas assets transferred for use in Carbon Capture Usage and Storage",
+          "values": {
+            "2024-25": 195,
+            "2025-26": 470,
+            "2026-27": 220,
+            "2027-28": 50,
+            "2028-29": 410,
+            "2029-30": 955
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Repeat: the Treasury's certified costing of the 2024 package, taken as the yield of doing the same again from 2027-28. The extract ends in 2029-30, so 2030-31 holds the 2029-30 figure flat in cash. Positive scorecard values reduce borrowing; here receipts positive means more revenue."
+    },
+    "uprating": {
+      "method": "flatCash",
+      "note": "The scorecard ends in 2029-30; 2030-31 carries the 2029-30 figure unchanged. Oil and gas receipts do not follow any OBR head closely enough to grow with."
+    },
+    "caveats": [
+      "Nobody has costed a second package. The profile is lumpy because the 2024 costing mixes a rate rise, the loss of an allowance and a longer sunset; a repeat would not reproduce it exactly, and the biggest year, 2029-30, is the one the current levy would otherwise have ended in.",
+      "The yield of any profits levy moves with oil and gas prices, which are outside the OBR's control and this tool's. The Treasury's costing is on the OBR October 2024 forecast.",
+      "The levy already runs to March 2030 at 38%; a second package means a higher rate, a longer life or both, and producers have said investment would fall further."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "repeat-assumption",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The 2024 costing already allowed for less investment and production in response; a second round bites on a smaller base with less left to give up, so it would raise less than the first, not the same.",
+      "sources": [
+        {
+          "sourceId": "hmt-autumn-budget-2024-table-5-1",
+          "table": "Table 5.1",
+          "note": "line 24"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-epl",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Falls on North Sea oil and gas producers and, through them, on their workers and suppliers in Scotland and the North East; it does not reach household bills directly.",
+      "sources": [
+        {
+          "sourceId": "hmt-autumn-budget-2024-table-5-1",
+          "table": "Table 5.1",
+          "note": "line 24"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}

@@ -24,7 +24,7 @@
     "kind": "slider",
     "unit": "GBP",
     "min": -1040,
-    "max": 520,
+    "max": 1040,
     "step": 104,
     "default": 0,
     "formatLabel": "a year, on the threshold",
@@ -84,7 +84,7 @@
       "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
     },
     "caveats": [
-      "HMRC publishes the effect of a £2 a week (£104 a year) change; larger changes are scaled linearly here, which HMRC warns is only approximate for thresholds. The range is kept to ten steps down for that reason.",
+      "HMRC publishes the effect of a £2 a week (£104 a year) change; larger changes are scaled linearly here, which HMRC warns is only approximate for thresholds. The range is kept to ten steps either way for that reason: £1,040 down, or up to the £6,000 a year being floated for this Budget.",
       "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
     ]
   },

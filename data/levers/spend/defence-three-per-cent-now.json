@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "defence-three-per-cent-now",
+  "code": "def3",
+  "category": "spend",
+  "badge": "assumption",
+  "group": "Flagship programmes",
+  "order": 20,
+  "title": "Defence at 3% of GDP from April 2027",
+  "shortTitle": "Defence 3% now",
+  "headline": "Bring the 3% forward from 2030-31. About £4.2bn in 2029-30, falling.",
+  "description": "The government has committed to 3% of GDP on defence in the next Parliament and 3.5% by 2035, and the OBR's forecast already has defence rising from 2.4% of GDP in 2025-26 to 3.0% by 2030-31. This card gets there from April 2027 instead. The cost is the gap between 3% and the OBR's path, multiplied by nominal GDP: about £11.8bn in 2027-28, £8.1bn in 2028-29, £4.2bn in 2029-30 and nothing in 2030-31, when the path arrives on its own. The years between the OBR's two published points are filled in by straight line, which is our assumption.",
+  "baselinePolicy": {
+    "text": "The OBR assumes defence spending rises from 2.4% of GDP in 2025-26 to 3.0% by 2030-31, on the way to the Government's commitment of 3.5% by 2035; the Defence Investment Plan's explainer says 3% in the next Parliament.",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Paragraph 4.15",
+      "page": "65",
+      "quote": "spending on defence rises from 2.4 per cent in 2025-26 to 3.0 per cent by the end of the forecast"
+    },
+    "alreadyIncludes": [
+      "Defence RDEL of £42.0bn and CDEL of £31.5bn in 2028-29 (Spending Review 2025, Tables 5.3 and 5.4).",
+      "The 3.5%-by-2035 commitment and 3% in the next Parliament (Defence Investment Plan funding explainer)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "capitalShare": 0.43,
+    "delType": "RDEL",
+    "department": "Defence",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 15192,
+      "2027-28": 11786,
+      "2028-29": 8135,
+      "2029-30": 4213,
+      "2030-31": 0
+    },
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Paragraph 4.15 and the nominal GDP forecast",
+      "page": "65"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "obr-efo-2026-03",
+      "method": {
+        "name": "gdpShareGap",
+        "targetPctGdp": 3,
+        "baselinePctGdp": {
+          "2026-27": 2.52,
+          "2027-28": 2.64,
+          "2028-29": 2.76,
+          "2029-30": 2.88,
+          "2030-31": 3.0
+        }
+      },
+      "note": "The OBR publishes the two ends of the path, 2.4% in 2025-26 and 3.0% in 2030-31, not the years between. Those are filled in by straight-line interpolation, which is our assumption, not the OBR's. The cost is then (3% − that share) × nominal GDP, which reaches nought in 2030-31 because the forecast gets there anyway."
+    },
+    "caveats": [
+      "The OBR's path reaches 3% in 2030-31 on its own, so this buys the earlier years and nothing after: a front-loaded cost that falls to nought, not a permanent uplift.",
+      "The share is split 43% capital and 57% day-to-day, the split in the Spending Review's own defence settlement for 2028-29 (£31.5bn capital, £42.0bn resource). Capital spending does not count against the stability rule, so the split matters as much as the total.",
+      "Nobody has costed this timetable. The arithmetic is ours: a target share of GDP against a straight line between the OBR's two published points."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "already-on-the-path",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The forecast already climbs to 3% by 2030-31 and the Defence Investment Plan says 3% in the next Parliament; bringing it forward is a question of years, not of the destination. The Spending Review counts NATO-qualifying spending, which reaches 2.6% of GDP by 2027 and includes part of the intelligence budget; the OBR counts defence spending, 2.4% in 2025-26; the two are not the same measure.",
+      "sources": [
+        {
+          "sourceId": "govuk-dip-funding-explainer",
+          "note": "3% in the next Parliament; 3.5% of GDP by 2035"
+        },
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Paragraph 4.15",
+          "page": "65"
+        },
+        {
+          "sourceId": "hmt-spending-review-2025"
+        }
+      ]
+    },
+    {
+      "id": "crowds-out",
+      "kind": "interaction",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The OBR already notes that meeting existing commitments leaves unprotected day-to-day spending falling 4.4% a year in real terms at the end of the forecast. Extra defence spending inside a fixed envelope would have to come from somewhere else, or from borrowing.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Paragraph 4.16",
+          "page": "66",
+          "quote": "falling by 4.4 per cent a year in real terms in the final two years of the forecast"
+        }
+      ]
+    },
+    {
+      "id": "money-not-capability",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Whether defence could spend an extra £11.8bn well in 2027-28 is a question about industry, procurement and recruitment, not the public finances; the Defence Investment Plan's own funding is set over four years for that reason.",
+      "sources": [
+        {
+          "sourceId": "govuk-dip-funding-explainer"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "defence",
+      "text": "Both raise defence: the day-to-day slider moves the Spending Review settlement, this one buys the path to 3% of GDP, and the two add up.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "defence-investment-plan-gap",
+      "text": "The £4.7bn the plan's explainer still has to find is part of getting to 3%; funding both counts some of the same money twice.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}

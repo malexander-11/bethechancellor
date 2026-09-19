@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "id": "hmrc-compliance-again",
+  "code": "hmrc2",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Budget 2025 decisions",
+  "order": 60,
+  "title": "Another HMRC package to close the tax gap",
+  "shortTitle": "Compliance again",
+  "headline": "Another compliance package, assumed to yield what the last did: £2.4bn.",
+  "description": "Budget 2025 scored a package of HMRC measures to close the tax gap at £695 million in 2027-28 rising to £2.4 billion in 2029-30 and £2.6 billion in 2030-31: more third-party data, more compliance staff, faster debt collection. This card assumes a second package of the same size raises the same again, year by year. Nobody has costed one, and the easy gains go first, so this is the assumption most likely to disappoint.",
+  "baselinePolicy": {
+    "text": "HMRC: further measures to close the tax gap, costed at £75m, £435m, £695m, £1,250m, £2,415m and £2,590m from 2025-26 to 2030-31 (Budget 2025, Table 4.1 line 59), on top of the compliance packages of Autumn Budget 2024 and Spring Statement 2025.",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1",
+      "note": "line 59"
+    },
+    "alreadyIncludes": [
+      "The Budget 2025 closing-the-tax-gap measures: third-party data on interest and card sales from April 2028, and the rest of the package set out in the policy costings (pages 97 onwards)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2025-26": 75,
+      "2026-27": 435,
+      "2027-28": 695,
+      "2028-29": 1250,
+      "2029-30": 2415,
+      "2030-31": 2590
+    },
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "table": "Table 4.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "direction": "repeat",
+      "lines": [
+        {
+          "number": 59,
+          "title": "HMRC: Further measures to close the tax gap5",
+          "values": {
+            "2025-26": 75,
+            "2026-27": 435,
+            "2027-28": 695,
+            "2028-29": 1250,
+            "2029-30": 2415,
+            "2030-31": 2590
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Repeat: the Treasury's certified costing of the Budget 2025 compliance package, taken as the yield of a further package of the same size, year by year. The published title carries a footnote marker (\"tax gap5\") and is cited as extracted. Positive scorecard values reduce borrowing; here receipts positive means more revenue. Effects before the start year are not applied."
+    },
+    "caveats": [
+      "Nobody has costed a further round. The Budget 2025 package was itself the third in a year, and each costing names the size of the tax base and the behavioural response as its main uncertainties; a fourth package would be working on what three have already left.",
+      "Compliance yield arrives late and is hard to audit: HMRC's own figures for what it collects are estimates of what would otherwise have gone unpaid. The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here.",
+      "The receipts are spread across every tax, so the card books them to other taxes rather than to any one head."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "diminishing-compliance-returns",
+      "kind": "administrative",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Each Budget 2025 compliance measure is costed on a share of a tax base HMRC estimates from its own data, with a behavioural response and, for the third-party data measure, an assumed 90% matching rate and two thirds of returns pre-populated by 2030-31. The measures that are cheapest and surest are taken first; a further package works the harder cases and its yield per pound spent falls.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "97"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-tax-gap",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Falls on people and firms not paying what the law already says they owe: unreported interest and card sales, late payment, error and evasion. It asks nothing new of anyone who is compliant, which is why every Chancellor reaches for it.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-policy-costings",
+          "page": "97"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}

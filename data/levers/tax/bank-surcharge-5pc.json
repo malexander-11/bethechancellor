@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "id": "bank-surcharge-5pc",
+  "code": "bank5",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Business",
+  "order": 30,
+  "title": "Raise the bank surcharge from 3% to 5%",
+  "shortTitle": "Bank surcharge 5%",
+  "headline": "Two points on the bank surcharge. Static, on HMRC's receipts: about £0.9bn.",
+  "description": "Banks pay a surcharge on top of corporation tax on profits above a £100 million allowance: 3% since April 2023, when it was cut from 8%. HMRC's statistics put the surcharge's receipts at £1.0 billion in 2024-25. Two more points on a 3% surcharge is two thirds more, so the card takes two thirds of that £1.0 billion, £667 million in 2024-25, and grows it with the OBR's onshore corporation tax forecast: about £0.9bn by 2029-30. No behavioural response is allowed for.",
+  "baselinePolicy": {
+    "text": "Bank surcharge at 3% on banking profits above a £100 million allowance since 1 April 2023 (8% and £25 million before); receipts £1.0 billion in 2024-25.",
+    "source": {
+      "sourceId": "hmrc-banking-sector-receipts-2025",
+      "quote": "Bank Surcharge receipts were £1.0 billion in financial year 2024 to 2025, a decrease of £0.5 billion (32.6%) on the previous year, which mostly reflects the full effects of the reduction in the Bank Surcharge rate from 8% to 3% in April 2023 and lower UK banking sector profits"
+    },
+    "alreadyIncludes": ["Corporation tax main rate 25% (Rates and allowances: Corporation Tax)."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "onshoreCorporationTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 792,
+      "2028-29": 820,
+      "2029-30": 875,
+      "2030-31": 905
+    },
+    "source": {
+      "sourceId": "hmrc-banking-sector-receipts-2025",
+      "table": "Table 1"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "hmrc-banking-sector-receipts-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2024-25",
+        "resultGbpm": 667,
+        "growWith": "onshoreCorporationTax",
+        "terms": [
+          {
+            "label": "Bank surcharge receipts in 2024-25, the first full year at 3%",
+            "value": 1000,
+            "unit": "£ million",
+            "source": {
+              "sourceId": "hmrc-banking-sector-receipts-2025",
+              "table": "Table 1",
+              "quote": "Bank Surcharge receipts were £1.0 billion in financial year 2024 to 2025"
+            }
+          },
+          {
+            "label": "Two more points on a 3% rate: 2 ÷ 3",
+            "value": 0.666667,
+            "unit": "factor",
+            "source": {
+              "sourceId": "hmrc-banking-sector-receipts-2025",
+              "quote": "the reduction in the Bank Surcharge rate from 8% to 3% in April 2023"
+            }
+          }
+        ]
+      },
+      "note": "Static arithmetic: receipts at 3% scaled up to 5%, then grown with the OBR's onshore corporation tax receipts from 2024-25. HMRC publishes the receipts to £0.1 billion, so the base itself is rounded to within about 10%."
+    },
+    "caveats": [
+      "Static. Banks would shift profits, capital and activity in response; at 8% the surcharge raised £2.0bn to £2.6bn a year, which is not simply 8 ÷ 3 of today's figure. Nobody has certified this number.",
+      "HMRC publishes the 2024-25 receipts to £0.1 billion, so the base is rounded to within about 10%; the 2026 edition of the statistics, due in late September 2026, would update it.",
+      "The allowance of £100 million (Corporation Tax Act 2010, section 269DE) means only the largest banks pay; the card holds the allowance where it is."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "bank-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "Receipts fell from £2.6bn in 2022-23 to £1.0bn in 2024-25 as the rate went from 8% to 3% and profits fell, which is roughly, but not exactly, in proportion. A rise would recover part of that; how much depends on where banks book profits and hold capital, which HMRC's receipts figure cannot say.",
+      "sources": [
+        {
+          "sourceId": "hmrc-banking-sector-receipts-2025",
+          "table": "Table 1"
+        }
+      ]
+    },
+    {
+      "id": "surcharge-allowance",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "The surcharge applies only to a banking company's profits above its allowance, £100 million since April 2023 (£25 million before). Smaller banks and building societies pay nothing, so the change falls on a few large groups.",
+      "sources": [
+        {
+          "sourceId": "legislation-cta-2010-s269de"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "corporation-tax-rate",
+      "text": "Banks pay both: a change to the main rate moves the same profits, and the surcharge figure here is on HMRC's receipts at a 25% main rate.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}

@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "id": "reverse-apr-bpr-reform",
+  "code": "rvapr",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital taxes",
+  "order": 27,
+  "title": "Reverse the 2026 farm and family-business inheritance tax changes",
+  "shortTitle": "Reverse APR/BPR reform",
+  "headline": "Undo the 2026 farm and family-business relief cuts. Costs £0.5bn.",
+  "description": "Autumn Budget 2024 cut agricultural property relief and business property relief from April 2026: 100% relief on the first £1 million of combined assets and 50% above it, with 50% relief for unlisted shares on recognised exchanges. Switch this on to restore full relief from April 2027, giving up the Treasury's costing of the reform (£495m in 2027-28 and £520m a year after, carried to 2030-31 with the OBR's inheritance tax forecast).",
+  "baselinePolicy": {
+    "text": "Agricultural and business property relief reformed from 6 April 2026: 100% relief for the first £1m of combined assets and 50% thereafter, and 50% relief for unlisted shares (Autumn Budget 2024, Table 5.1 line 29).",
+    "source": {
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "table": "Table 5.1",
+      "note": "line 29"
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2027-28": -495,
+      "2028-29": -520,
+      "2029-30": -520
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "table": "Table 5.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-autumn-budget-2024-table-5-1",
+      "lines": [
+        {
+          "number": 29,
+          "title": "Inheritance Tax: Reform agricultural property relief and business property relief from 6 April 2026 by maintaining 100% relief for the first £1m of combined assets and 50% relief thereafter, and 50% relief for “not listed” shares on the markets of a recognised stock exchange",
+          "values": {
+            "2024-25": 0,
+            "2025-26": 0,
+            "2026-27": 230,
+            "2027-28": 495,
+            "2028-29": 520,
+            "2029-30": 520
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury's costing with its sign reversed for 2027-28 to 2029-30; 2030-31 carries the 2029-30 figure forward with the OBR's inheritance tax receipts path."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "receiptsByTax.inheritanceTax",
+      "note": "Applied in the years the scorecard covers and extended to 2030-31 with the OBR's inheritance tax receipts (ADR-0004)."
+    },
+    "caveats": [
+      "The Treasury's line bundles agricultural relief, business relief and the change for unlisted shares; the parts cannot be separated from published figures. The costing is on the OBR's October 2024 forecast; the level is not rebased.",
+      "The OBR's inheritance tax line more than doubles over the forecast as pensions come into estates from 2027; carrying the 2029-30 figure with that line for 2030-31 may overstate a relief that has nothing to do with pensions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury's scorecard figure is the certified costing of the October 2024 reform, including the behavioural response the Treasury and OBR agreed at the time: more lifetime giving and restructuring of estates.",
+      "sources": [
+        {
+          "sourceId": "hmt-autumn-budget-2024-table-5-1",
+          "table": "Table 5.1"
+        }
+      ]
+    },
+    {
+      "id": "iht-reliefs-uncertain",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The OBR's inheritance tax forecast has been revised repeatedly as the reliefs, thresholds and the treatment of pensions changed; receipts are forecast to rise from £8.7bn in 2025-26 to £14.7bn in 2030-31. A small relief's cost sits inside a line that is itself moving fast.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "3.28-3.30"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "inheritance-tax-rate",
+      "text": "Both change inheritance tax: the reform's costing was at a 40% rate, so a different rate changes what restoring the reliefs costs.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "abolish-residence-nil-rate-band",
+      "text": "Both move inheritance tax reliefs; each is costed on its own and the combination is approximate.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}
