@@ -178,6 +178,7 @@
     "wpens": "pensioners",
     "cpilock": "pensioners",
     "rvwfp": "pensioners",
-    "woth": "other-welfare"
+    "woth": "other-welfare",
+    "brates": "business"
   }
 }

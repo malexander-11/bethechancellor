@@ -50,7 +50,7 @@ export function baselinePath(
     }
     steps.push({
       op: 'manual',
-      formula: `Baseline: the OBR forecast line "${baseline.series}" (${vintage.event}), £ million by year.`,
+      formula: `Baseline: the OBR forecast line for ${describeHead(baseline.series)} (${vintage.event}), £ million by year.`,
       source: { sourceId: vintage.primarySource.sourceId, table: headSourceTable(baseline.series) },
     });
     return { values, sourceYearFor, steps, warnings };

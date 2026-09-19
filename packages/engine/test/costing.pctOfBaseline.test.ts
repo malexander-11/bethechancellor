@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { baselinePath, computeOutcome, headSeries, policyYearsOf } from '../src/index.js';
+import {
+  baselinePath,
+  computeOutcome,
+  headSeries,
+  parseLever,
+  policyYearsOf,
+} from '../src/index.js';
 import { loadDataset } from './fixtures.js';
 
 const ds = loadDataset();
@@ -101,6 +107,56 @@ describe('percentage-of-baseline levers', () => {
     expect(row?.currentBudgetGbpm).toBeCloseTo(0, 6);
     expect(row?.psnbGbpm).toBeCloseTo(13420, 6);
     expect(withFeedback.attribution.some((r) => r.kind === 'debtInterest')).toBe(true);
+  });
+
+  it('a receipts line scales into receipts, in cash, with nothing on the spending side', () => {
+    const path = baselinePath(lever('brates'), ds.vintage, policyYears);
+    const line = ds.vintage.fiscal.receiptsByTax?.businessRates?.values ?? {};
+    expect(path.values['2029-30']).toBe(line['2029-30']);
+    expect(path.values['2029-30']).toBe(42100);
+    expect(path.extendedFrom).toBeUndefined();
+    expect(path.steps[0]?.formula).toContain('businessRates receipts');
+
+    const e = run({ brates: 10 }).leverEffects.find((x) => x.code === 'brates');
+    expect(e?.badge).toBe('mechanical');
+    expect(e?.receipts['2026-27']).toBe(0);
+    expect(e?.receipts['2027-28']).toBeCloseTo(3790, 6);
+    expect(e?.receipts['2029-30']).toBeCloseTo(4210, 6);
+    expect(e?.receipts['2030-31']).toBeCloseTo(4210, 6);
+    expect(Object.values(e?.currentSpending ?? {}).every((v) => v === 0)).toBe(true);
+    expect(Object.values(e?.capitalSpending ?? {}).every((v) => v === 0)).toBe(true);
+    expect(Object.values(e?.welfareInCap ?? {}).every((v) => v === 0)).toBe(true);
+    expect(e?.detail?.baseline?.['2029-30']).toBe(42100);
+    const cut = run({ brates: -5 }).leverEffects.find((x) => x.code === 'brates');
+    expect(cut?.receipts['2029-30']).toBeCloseTo(-2105, 6);
+    // A receipts lever cuts the current budget deficit by its receipts, before interest.
+    const noFeedback = run({ brates: 10 }, { debtInterestFeedback: false });
+    expect(noFeedback.paths.deltas.currentBudget['2029-30']).toBeCloseTo(-4210, 6);
+    expect(noFeedback.paths.deltas.borrowing['2029-30']).toBeCloseTo(-4210, 6);
+  });
+
+  it('the schema ties the baseline line to the side of the lever', () => {
+    const raw = JSON.parse(JSON.stringify(lever('brates'))) as Record<string, unknown>;
+    expect(() => parseLever(raw)).not.toThrow();
+    const wrongSide = structuredClone(raw) as {
+      classification: { side: string; taxHead?: string };
+    };
+    wrongSide.classification.side = 'spending';
+    delete wrongSide.classification.taxHead;
+    expect(() => parseLever(wrongSide)).toThrow(/receipts line/);
+    const spendingLine = structuredClone(raw) as { costing: { baseline: { series: string } } };
+    spendingLine.costing.baseline.series = 'cdel';
+    expect(() => parseLever(spendingLine)).toThrow(/spending line/);
+    const cdel = JSON.parse(JSON.stringify(lever('cdel'))) as {
+      classification: { side: string };
+    };
+    cdel.classification.side = 'receipts';
+    expect(() => parseLever(cdel)).toThrow(/spending line/);
+    const health = JSON.parse(JSON.stringify(lever('dhsc'))) as {
+      classification: { side: string };
+    };
+    health.classification.side = 'receipts';
+    expect(() => parseLever(health)).toThrow(/published plan is a spending baseline/);
   });
 
   it('welfare lines scale the OBR forecast and only inside-cap lines move the cap metric', () => {

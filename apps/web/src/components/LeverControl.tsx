@@ -175,9 +175,11 @@ export function levelChange(lever: Lever, value: number, summaryYear?: string): 
       to: formatGbpBn(base * (1 + value / 100), 1),
       note: `in ${year}`,
     };
-    // Real growth runs from the last year your Budget cannot touch to the year shown above.
+    // Real growth runs from the last year your Budget cannot touch to the year shown above. It is
+    // how settlements are argued about; a receipts line (business rates) is read in cash.
     const fromYear = POLICY_YEARS.filter((y) => fyStart(y) < fyStart(IMPLEMENTATION_YEAR)).at(-1);
-    if (DEFLATOR && fromYear && fyStart(year) > fyStart(fromYear)) {
+    const isSpending = lever.classification?.side !== 'receipts';
+    if (DEFLATOR && fromYear && isSpending && fyStart(year) > fyStart(fromYear)) {
       try {
         const before = realGrowthPerYear(path.values, DEFLATOR, fromYear, year);
         const after = realGrowthPerYear(policyValues(path.values, value), DEFLATOR, fromYear, year);

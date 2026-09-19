@@ -77,6 +77,7 @@ const REVENUE_CLASS: Record<string, string> = {
   nicer: 'business',
   nicst: 'business',
   nicpen: 'business',
+  brates: 'business',
   badr: 'top',
   rnrb: 'top',
   fuel: 'motorists',

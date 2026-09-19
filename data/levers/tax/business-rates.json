@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "id": "business-rates",
+  "code": "brates",
+  "category": "tax",
+  "badge": "mechanical",
+  "group": "Business",
+  "order": 20,
+  "title": "Business rates",
+  "shortTitle": "Business rates",
+  "headline": "Scale every business rates bill. Each 1% moves about £0.4bn.",
+  "description": "Change business rates by a percentage from April 2027, applied to the OBR's forecast of what they raise: £37.9bn in 2027-28 rising to £42.1bn in 2029-30 (EFO Table A.5). Bills are assumed to move in proportion to receipts, so a 1% change is about £0.4bn a year. No behavioural response is added, and the OBR's line covers the whole United Kingdom, although the devolved governments set their own rates.",
+  "baselinePolicy": {
+    "text": "Business rates receipts of £33.7bn in 2025-26, £37.1bn in 2026-27, £37.9bn in 2027-28, £38.8bn in 2028-29 and £42.1bn in 2029-30 on the OBR's March 2026 forecast (Table A.5).",
+    "value": 42100,
+    "unit": "GBPm",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table A.5: Current receipts",
+      "page": "112"
+    },
+    "alreadyIncludes": [
+      "Budget 2025's three-year transitional relief scheme for the 2026 revaluation, partly funded by a 1p supplement in 2026-27, and the Supporting Small Business scheme (Table 4.1 line 18: costs £2.1bn in 2026-27, £1.4bn in 2027-28 and £0.9bn in 2028-29).",
+      "Budget 2025's two lower multipliers for retail, hospitality and leisure properties, funded by a higher multiplier on high-value properties from April 2026 (Table 4.1 line 19)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pct",
+    "min": -10,
+    "max": 10,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "on business rates bills"
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "businessRates",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "pctOfBaseline",
+    "baseline": {
+      "from": "vintage",
+      "series": "receiptsByTax.businessRates"
+    },
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table A.5: Current receipts",
+      "page": "112"
+    },
+    "caveats": [
+      "Bills are assumed to move in proportion to receipts: a 1% change to every bill changes receipts by 1%. Nothing is allowed for appeals, empty-property behaviour, reliefs or the transitional arrangements that phase revaluation changes in, so this is a share of an OBR line, not a costing of any particular multiplier change.",
+      "The OBR's line is for the whole United Kingdom and includes the non-domestic rates that the Scottish Government, Welsh Government and Northern Ireland Executive set and keep. A Westminster change reaches England's bills only, so the whole-line figure overstates what one government could move.",
+      "The OBR publishes the line to £0.1bn; in the March 2026 vintage the 2029-30 and 2030-31 figures are both £42.1bn."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "share-of-a-line",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "This is arithmetic on the OBR's forecast line, not a Treasury or HMRC costing. Budget 2025's own business rates measures were costed with behavioural responses and transitional arrangements the scorecard shows: the lower retail, hospitality and leisure multipliers, funded by a high-value multiplier, net to a few tens of millions a year, while the transitional relief scheme costs £2.1bn in 2026-27 and falls away by 2029-30. A real multiplier change would be costed the same way and would not scale bills evenly.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1",
+          "note": "lines 18 and 19"
+        }
+      ]
+    },
+    {
+      "id": "devolved-rates",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Each devolved government has full control of the structure and level of non-domestic rates within its jurisdiction, sets its own policy and retains all the revenue (Statement of Funding Policy, paragraph 3.27). Business rates are the only England-only revenue stream returned to the Exchequer, so a change here is an English change: the devolved nations' share of the OBR's UK line would move only if their governments chose to follow, and spending funded from English business rates generates no Barnett consequentials (paragraphs 3.28-3.29).",
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "3.27-3.29",
+          "note": "footnote 13 on page 18: business rates the only England-only revenue stream"
+        }
+      ]
+    },
+    {
+      "id": "rhl-cuts-already-made",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "appliesWhen": {
+        "below": 0
+      },
+      "alreadyInDirectCosting": false,
+      "text": "The government has already cut business rates for pubs, social clubs and live music venues, as the Prime Minister told the Commons on 1 September 2026. A further across-the-board cut here comes on top of the lower retail, hospitality and leisure multipliers that Budget 2025 introduced from April 2026.",
+      "sources": [
+        {
+          "sourceId": "no10-commons-statement-2026-09-01"
+        },
+        {
+          "sourceId": "hmt-budget-2025-table-4-1",
+          "table": "Table 4.1",
+          "note": "line 19"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-19"
+}

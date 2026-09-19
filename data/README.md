@@ -122,7 +122,10 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   in £ million, `extendWith` (the vintage series that carries the last plan year forward) and a
   `rawSource` of kind `hmtSr25` citing rows of `derived/hmt-sr25-del.raw.json` by `rowId`, label
   and values. Rows with `role: "subtract"` build a residual; memo rows ("of which", "Memo:") are
-  rejected.
+  rejected. A receipts line can be scaled the same way: `baseline.from: "vintage"` with a
+  `receiptsByTax.*` series on a `side: "receipts"` lever (business rates, `brates`). The schema
+  ties the line to the side, a published plan is always a spending baseline, and the badge stays
+  `mechanical`: a share of an OBR line is arithmetic, whichever side it sits on.
 - **Welfare cap.** Set `insideWelfareCap: true` on current spending levers whose line is inside
   the cap and state the by-line approximation in the caveats.
 - **Barnett.** Set `classification.barnettConsequential: true` on comparable departments and add

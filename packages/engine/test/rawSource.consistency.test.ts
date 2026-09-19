@@ -9,8 +9,15 @@ describe('every direct costing reproduces from the extracted published tables', 
   const taxLevers = ds.levers.filter((l) => l.category === 'tax');
 
   it('covers the planned core set', () => {
-    expect(taxLevers.length).toBe(38);
-    expect(taxLevers.every((l) => l.badge === 'direct' && l.group)).toBe(true);
+    expect(taxLevers.length).toBe(39);
+    expect(taxLevers.every((l) => l.group)).toBe(true);
+    // A share of an OBR receipts line is mechanical arithmetic; everything else is a certified row.
+    const mechanical = taxLevers.filter((l) => l.badge === 'mechanical').map((l) => l.code);
+    expect(mechanical.sort()).toEqual(['brates']);
+    for (const l of taxLevers) {
+      expect(l.badge === 'mechanical', `${l.code}`).toBe(l.costing.kind === 'pctOfBaseline');
+    }
+    expect(taxLevers.filter((l) => l.badge === 'direct')).toHaveLength(38);
   });
 
   it.each(taxLevers.map((l) => [l.id, l] as const))(

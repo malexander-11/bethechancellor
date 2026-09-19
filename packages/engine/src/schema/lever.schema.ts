@@ -395,7 +395,11 @@ export const costingSchema = z.discriminatedUnion('kind', [
     kind: z.literal('pctOfBaseline'),
     /** The £ million path the percentage applies to from the implementation year. */
     baseline: z.discriminatedUnion('from', [
-      z.strictObject({ from: z.literal('vintage'), series: spendingHeadSchema }),
+      z.strictObject({
+        from: z.literal('vintage'),
+        /** A spending line, or a receipts line ("receiptsByTax.businessRates") on a receipts-side lever. */
+        series: z.union([spendingHeadSchema, receiptsByTaxHeadSchema]),
+      }),
       z.strictObject({
         from: z.literal('published'),
         years: z.array(fiscalYearSchema).min(1),
@@ -595,7 +599,28 @@ export const leverSchema = z
         });
       }
       const baseline = lever.costing.baseline;
+      const receiptsSide = lever.classification?.side === 'receipts';
+      if (baseline.from === 'vintage') {
+        const receiptsLine = baseline.series.startsWith('receiptsByTax.');
+        if (receiptsLine !== receiptsSide) {
+          ctx.addIssue({
+            code: 'custom',
+            message: receiptsLine
+              ? 'a receipts line (receiptsByTax.*) can only be scaled by a receipts-side lever'
+              : 'a spending line can only be scaled by a spending-side lever',
+            path: ['costing', 'baseline', 'series'],
+          });
+        }
+      }
       if (baseline.from === 'published') {
+        if (receiptsSide) {
+          ctx.addIssue({
+            code: 'custom',
+            message:
+              'a published plan is a spending baseline; receipts levers scale a vintage line',
+            path: ['costing', 'baseline'],
+          });
+        }
         if (baseline.rawSource.kind !== 'hmtSr25') {
           ctx.addIssue({
             code: 'custom',
