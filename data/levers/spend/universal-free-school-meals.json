@@ -2,17 +2,19 @@
   "schemaVersion": 1,
   "id": "universal-free-school-meals",
   "code": "ufsm",
-  "category": "campaign",
+  "category": "spend",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
-  "order": 60,
+  "group": "Flagship programmes",
+  "order": 30,
   "title": "Universal free school meals",
   "shortTitle": "Free school meals for all",
   "headline": "A free lunch for every pupil. About £2.2bn a year.",
   "description": "Extend free school meals to every pupil in a state-funded school in England. Most of the way there already: infants get a free meal automatically, and from September 2026 every child in a household on universal credit qualifies. The cost here is the pupils who are still left out, about 4.4 million of them, funded at the department's own rate of £505 a pupil a year.",
   "baselinePolicy": {
     "text": "Free school meals in England were extended from the 2026/27 academic year to every child in a household on universal credit, funded with over £1bn across the Spending Review period. Infants already get a free meal under universal infant free school meals.",
-    "source": { "sourceId": "dfe-fsm-expansion-2026-27" },
+    "source": {
+      "sourceId": "dfe-fsm-expansion-2026-27"
+    },
     "alreadyIncludes": [
       "Free school meals for all children in households receiving universal credit from September 2026 (over £1bn across 2026 to 2029).",
       "Universal infant free school meals for reception, year 1 and year 2."
@@ -92,7 +94,11 @@
       "magnitudeWords": "moderate",
       "alreadyInDirectCosting": false,
       "text": "A universal entitlement removes the means test, and with it the registration gap: a fifth of pupils already entitled to a free meal did not take one on census day.",
-      "sources": [{ "sourceId": "dfe-school-pupils-2025-26" }]
+      "sources": [
+        {
+          "sourceId": "dfe-school-pupils-2025-26"
+        }
+      ]
     },
     {
       "id": "reaches-every-family",
@@ -101,7 +107,11 @@
       "magnitudeWords": "large",
       "alreadyInDirectCosting": false,
       "text": "This reaches 4.4 million families who currently pay for lunch, most of them above the universal credit line but not wealthy. It also pays for the lunches of the well off, which is the usual objection to universality.",
-      "sources": [{ "sourceId": "dfe-school-pupils-2025-26" }]
+      "sources": [
+        {
+          "sourceId": "dfe-school-pupils-2025-26"
+        }
+      ]
     },
     {
       "id": "barnett",
@@ -110,7 +120,12 @@
       "magnitudeWords": "moderate",
       "alreadyInDirectCosting": false,
       "text": "These are English pupils. Scotland, Wales and Northern Ireland set their own school meal policies and would receive Barnett consequentials on top of the figure shown.",
-      "sources": [{ "sourceId": "hmt-statement-of-funding-policy-2025", "paragraph": "3.9-3.18" }]
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "3.9-3.18"
+        }
+      ]
     }
   ],
   "status": "reviewed",

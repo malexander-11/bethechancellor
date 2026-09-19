@@ -47,17 +47,19 @@ describe('the routes out of a gap', () => {
       expect(out[i - 1]!.yieldGbpm).toBeGreaterThanOrEqual(out[i]!.yieldGbpm);
     }
     for (const s of out) {
-      expect(['tax', 'campaign']).toContain(s.lever.category);
+      expect(s.lever.category).toBe('tax');
       expect(s.yieldGbpm).toBeGreaterThan(0);
     }
     const all = revenueSuggestions(ds.levers, {}, ds.pm.promises, headroomOf, 100);
-    // The colleagues' letters that raise money are in the list too, on their own arithmetic.
-    expect(all.some((s) => s.lever.category === 'campaign')).toBe(true);
+    // Our own arithmetic is in the list too, badged as such, beside the certified rows.
+    expect(all.some((s) => s.lever.badge === 'assumption')).toBe(true);
+    expect(all.some((s) => s.lever.code === 'cgtdth')).toBe(true);
+    expect(all.some((s) => s.lever.code === 'pens30')).toBe(true);
     expect(all.find((s) => s.lever.code === 'iinc2')?.yieldGbpm ?? 0).toBeGreaterThan(2000);
     // What costs money never appears, whichever folder it is in; nor does a spending saving,
     // which is a cut for the spending route, not revenue.
     expect(all.some((s) => s.lever.code === 'ufsm' || s.lever.code === 'rvinv')).toBe(false);
-    expect(all.some((s) => s.lever.code === 'nonuk' || s.lever.code === 'cpilock')).toBe(false);
+    expect(all.some((s) => s.lever.code === 'rv2ch' || s.lever.code === 'cpilock')).toBe(false);
     const basic = all.find((s) => s.lever.code === 'itbr');
     expect(basic?.breaks.map((p) => p.id)).toEqual(['tax-lock']);
     const ct = all.find((s) => s.lever.code === 'ct');

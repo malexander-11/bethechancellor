@@ -2,17 +2,20 @@
   "schemaVersion": 1,
   "id": "stop-benefits-foreign-nationals",
   "code": "nonuk",
-  "category": "campaign",
+  "category": "welfare",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
-  "order": 110,
+  "group": "Shelved",
+  "order": 900,
   "title": "Stop benefits to foreign nationals",
   "shortTitle": "Stop benefits to foreign nationals",
-  "headline": "Contested. Most of the people it names are already settled here.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Withdraw universal credit from claimants who are not British or Irish. Read the composition before the number. Of the 8.4 million people on universal credit in May 2026, 84.5% are British, Irish or have a right of abode. Add those with settled status under the EU Settlement Scheme and those with indefinite leave to remain and the three groups are 96.2% of the caseload. People subject to immigration control already have no recourse to public funds and cannot claim. So this is not a policy about people claiming without a right to: it is a policy about withdrawing that right from settled residents and refugees.",
   "baselinePolicy": {
     "text": "To claim universal credit a person must be British or Irish, have a right of abode, or hold an immigration status that permits recourse to public funds. 15.5% of the caseload is outside the Common Travel Area group, and most of those hold settled status, indefinite leave to remain or refugee status.",
-    "source": { "sourceId": "dwp-uc-statistics-2026-05", "table": "Table 1" },
+    "source": {
+      "sourceId": "dwp-uc-statistics-2026-05",
+      "table": "Table 1"
+    },
     "alreadyIncludes": [
       "The no recourse to public funds condition, which already bars most benefits to people subject to immigration control."
     ]
@@ -131,7 +134,12 @@
       "magnitudeWords": "large",
       "alreadyInDirectCosting": false,
       "text": "130,618 claimants have refugee status and 52,499 humanitarian protection. Refugees have the lowest employment rate of any group on universal credit, 29.9%, so withdrawal would fall hardest on people the UK has agreed to protect.",
-      "sources": [{ "sourceId": "dwp-uc-statistics-2026-05", "table": "Table 1" }]
+      "sources": [
+        {
+          "sourceId": "dwp-uc-statistics-2026-05",
+          "table": "Table 1"
+        }
+      ]
     },
     {
       "id": "nationality-is-not-status",
@@ -149,5 +157,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-15"
+  "reviewedOn": "2026-09-15",
+  "deprecated": true
 }

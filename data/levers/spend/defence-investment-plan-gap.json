@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "defence-investment-plan-gap",
   "code": "dip47",
-  "category": "campaign",
+  "category": "spend",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
-  "order": 35,
+  "group": "Flagship programmes",
+  "order": 10,
   "title": "Fund the Defence Investment Plan's remaining £4.7bn",
   "shortTitle": "Defence plan gap, £4.7bn",
   "headline": "The plan's own explainer says £4.7bn is still to be found at this Budget.",
@@ -129,7 +129,12 @@
       "magnitudeWords": "unknown",
       "alreadyInDirectCosting": false,
       "text": "No Barnett consequentials: defence is a reserved matter and the Statement of Funding Policy gives the Ministry of Defence no comparability factor.",
-      "sources": [{ "sourceId": "hmt-statement-of-funding-policy-2025", "paragraph": "B.12" }]
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "B.12"
+        }
+      ]
     }
   ],
   "status": "reviewed",

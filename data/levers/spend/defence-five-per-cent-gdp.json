@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "id": "defence-five-per-cent-gdp",
   "code": "def5",
-  "category": "campaign",
+  "category": "spend",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
-  "order": 30,
+  "group": "Shelved",
+  "order": 900,
   "title": "Immediately raise core defence spending to 5% of GDP",
   "shortTitle": "Defence to 5% of GDP",
-  "headline": "The single most expensive thing on this page: £74bn a year.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "NATO members agreed in June 2025 to spend 5% of GDP on defence and security by 2035, of which 3.5% is core defence and 1.5% is resilience and infrastructure. This recommendation asks for 5% on core defence alone, now. The OBR's forecast already has core defence rising from 2.4% of GDP in 2025-26 to 3.0% by 2030-31 to meet the 3.5%-by-2035 commitment. The cost here is the gap between 5% and that path, multiplied by nominal GDP. It is larger than the entire education budget.",
   "baselinePolicy": {
     "text": "The OBR assumes defence spending rises from 2.4% of GDP in 2025-26 to 3.0% by 2030-31, on the way to the Government's commitment of 3.5% by 2035.",
@@ -126,5 +126,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-15"
+  "reviewedOn": "2026-09-15",
+  "deprecated": true
 }

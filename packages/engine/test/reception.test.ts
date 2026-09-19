@@ -48,7 +48,7 @@ const SECURITY: GamePermalink = {
 
 describe('three audiences, five steps', () => {
   it('rates each audience one to five, deterministically, with a label from the data', () => {
-    const budget = { dhsc: 3, itbr: 1, water: 1 };
+    const budget = { dhsc: 3, itbr: 1, socrent: 1 };
     const a = room(budget);
     expect(a).toEqual(room(budget));
     expect(a.map((r) => r.audience)).toEqual(['backbenchers', 'markets', 'public']);
@@ -162,7 +162,7 @@ describe('three audiences, five steps', () => {
       ),
     );
     // And over real packages: a handful of levers at random settings.
-    const codes = ['itbr', 'dhsc', 'cdel', 'rv2ch', 'def5', 'fuel', 'wealth'];
+    const codes = ['itbr', 'dhsc', 'cdel', 'rv2ch', 'def3', 'fuel', 'wealth'];
     fc.assert(
       fc.property(
         fc.array(fc.integer({ min: -2, max: 2 }), { minLength: 7, maxLength: 7 }),

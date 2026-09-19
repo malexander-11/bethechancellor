@@ -1,17 +1,55 @@
 {
   "schemaVersion": 1,
   "stages": [
-    { "step": "start", "on": "2026-09-16", "label": "The appointment" },
-    { "step": "outlook", "on": "2026-09-16", "label": "The economic briefing" },
-    { "step": "assumptions", "on": "2026-09-16", "label": "The economic briefing" },
-    { "step": "pm", "on": "2026-09-23", "label": "Downing Street" },
-    { "step": "taxes", "on": "2026-10-02", "label": "The package" },
-    { "step": "spending", "on": "2026-10-02", "label": "The package" },
-    { "step": "policies", "on": "2026-10-02", "label": "The package" },
-    { "step": "recommendations", "on": "2026-10-02", "label": "The package" },
-    { "step": "forecast", "on": "2026-10-14", "label": "The OBR's forecast, in confidence" },
-    { "step": "compromise", "on": "2026-10-21", "label": "Making it add up" },
-    { "step": "rabbit", "on": "2026-10-26", "label": "Something for the speech" },
-    { "step": "budget-day", "on": "2026-10-28", "label": "Budget day" }
+    {
+      "step": "start",
+      "on": "2026-09-16",
+      "label": "The appointment"
+    },
+    {
+      "step": "outlook",
+      "on": "2026-09-16",
+      "label": "The economic briefing"
+    },
+    {
+      "step": "assumptions",
+      "on": "2026-09-16",
+      "label": "The economic briefing"
+    },
+    {
+      "step": "pm",
+      "on": "2026-09-23",
+      "label": "Downing Street"
+    },
+    {
+      "step": "taxes",
+      "on": "2026-10-02",
+      "label": "The package"
+    },
+    {
+      "step": "spending",
+      "on": "2026-10-02",
+      "label": "The package"
+    },
+    {
+      "step": "forecast",
+      "on": "2026-10-14",
+      "label": "The OBR's forecast, in confidence"
+    },
+    {
+      "step": "compromise",
+      "on": "2026-10-21",
+      "label": "Making it add up"
+    },
+    {
+      "step": "rabbit",
+      "on": "2026-10-26",
+      "label": "Something for the speech"
+    },
+    {
+      "step": "budget-day",
+      "on": "2026-10-28",
+      "label": "Budget day"
+    }
   ]
 }

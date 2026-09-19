@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "id": "ai-retraining-programme",
   "code": "airet",
-  "category": "campaign",
+  "category": "spend",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
+  "group": "Flagship programmes",
   "order": 50,
   "title": "An artificial intelligence retraining programme",
   "shortTitle": "AI retraining, £1bn",
@@ -76,7 +76,12 @@
       "magnitudeWords": "moderate",
       "alreadyInDirectCosting": false,
       "text": "Skills policy is devolved, so an English programme of this kind would generate Barnett consequentials for Scotland, Wales and Northern Ireland on top of the figure shown.",
-      "sources": [{ "sourceId": "hmt-statement-of-funding-policy-2025", "paragraph": "3.9-3.18" }]
+      "sources": [
+        {
+          "sourceId": "hmt-statement-of-funding-policy-2025",
+          "paragraph": "3.9-3.18"
+        }
+      ]
     }
   ],
   "status": "reviewed",

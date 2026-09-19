@@ -86,23 +86,15 @@
       "side": "benefits"
     },
     "students": {
-      "label": "Students",
+      "label": "Students and graduates",
       "side": "benefits"
     },
     "renters": {
       "label": "Renters and social tenants",
       "side": "benefits"
     },
-    "water-customers": {
-      "label": "Water customers",
-      "side": "benefits"
-    },
     "workers": {
       "label": "Workers retraining",
-      "side": "benefits"
-    },
-    "foreign-nationals": {
-      "label": "Foreign nationals on benefits",
       "side": "benefits"
     },
     "tax-gap": {
@@ -157,26 +149,21 @@
     "dhsc": "nhs",
     "dfe": "schools",
     "ufsm": "schools",
-    "freeuni": "students",
     "mod": "defence",
-    "def5": "defence",
     "dip47": "defence",
     "moj": "justice",
     "home": "policing-borders",
     "mhclg": "councils-care",
     "fcdo": "aid",
-    "aid07": "aid",
     "dft": "transport",
     "bus2": "transport",
     "otherd": "whitehall",
     "rveff": "whitehall",
     "cdel": "investment",
     "socrent": "renters",
-    "water": "water-customers",
     "airet": "workers",
     "wuc": "families-on-benefits",
     "rv2ch": "families-on-benefits",
-    "nonuk": "foreign-nationals",
     "wdis": "disabled-people",
     "rvpip": "disabled-people",
     "wpens": "pensioners",

@@ -50,7 +50,6 @@ describe('the beat and word budgets', () => {
       '/pm',
       '/budget/taxes',
       '/budget/spending',
-      '/budget/policies',
       '/forecast',
       '/compromise',
       '/rabbit',
@@ -63,7 +62,7 @@ describe('the beat and word budgets', () => {
       view.unmount();
     }
     expect(total).toBeLessThanOrEqual(12);
-    expect(total).toBeGreaterThanOrEqual(8);
+    expect(total).toBeGreaterThanOrEqual(7);
   });
 
   it('opens every stage with a hand-off of at most 180 visible words', () => {

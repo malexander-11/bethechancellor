@@ -152,7 +152,6 @@ export const leversByCategory = {
   tax: levers.filter((l) => l.category === 'tax'),
   spend: levers.filter((l) => l.category === 'spend' || l.category === 'welfare'),
   macro: levers.filter((l) => l.category === 'macro'),
-  campaign: levers.filter((l) => l.category === 'campaign'),
 };
 
 export interface LeverGroup {
@@ -187,7 +186,6 @@ export function groupLevers(items: Lever[]): LeverGroup[] {
     'Day-to-day departmental budgets',
     'Public investment',
     'Welfare',
-    'Recommendations from Parliament',
   ];
   return groups.sort((a, b) => {
     const ia = GROUP_ORDER.indexOf(a.name);

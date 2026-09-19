@@ -63,7 +63,7 @@ describe('a step arrives in beats', () => {
     second.unmount();
 
     // A step you have never opened still plays from the top.
-    at(`/recommendations?${BASE}`);
+    at(`/budget/spending?${BASE}`);
     expect(screen.getByRole('button', { name: /Continue/ })).toBeInTheDocument();
   });
 

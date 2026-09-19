@@ -34,7 +34,7 @@ function Marked({ text }: { text: string }) {
  * The guide strip at the top of every step: which step this is, what you are doing, why it
  * matters and what to do now, written for someone clever who does not follow politics. It is
  * chrome, like the dateline: no badge, and no figure that is not sourced (guide.test.ts). A step
- * with more than one screen says which one this is ("File 2 of 3: the spending").
+ * with more than one screen says which one this is ("Part 2 of 2: the spending").
  */
 export interface GuidePart {
   /** "Part", on every step that has more than one screen. */

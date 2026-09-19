@@ -59,11 +59,12 @@ describe('Budget day: the speech, the reaction, the close', () => {
 
   it('gives the reasons and the decisions behind them, and shows its workings on request', () => {
     // A link carrying levers and no game opens every beat, so there is no Continue to press.
-    at(`${BASE}&L=def5.1`);
+    // Health, schools and prisons all up a tenth: about £35bn a year against £23.6bn of headroom.
+    at(`${BASE}&L=dhsc.10_dfe.10_moj.10`);
     const markets = card('The markets');
     expect(meter('The markets')).toHaveAccessibleName('1 of 5: Alarmed');
     expect(within(markets).getAllByText(/The stability rule is missed/).length).toBe(2);
-    expect(within(markets).getAllByText(/Defence to 5% of GDP/).length).toBeGreaterThan(0);
+    expect(within(markets).getAllByText(/Health and Social Care/).length).toBeGreaterThan(0);
     expect(screen.getByText(/Missed on these numbers: Stability rule/)).toBeInTheDocument();
     // Every rule, its points, its reading and its sources sit behind "Why this rating".
     fireEvent.click(within(markets).getByText('Why this rating'));

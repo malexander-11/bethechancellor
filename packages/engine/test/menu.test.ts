@@ -31,6 +31,7 @@ const effectOf = (values: Record<string, number>, code: string, year: string) =>
     receipts: e.receipts[year] ?? 0,
     current: e.currentSpending[year] ?? 0,
     capital: e.capitalSpending[year] ?? 0,
+    financial: e.financialTransactions[year] ?? 0,
   };
 };
 const gdp = (year: string) => ds.vintage.economy.nominalGdpFy.values[year] ?? Number.NaN;
@@ -221,5 +222,194 @@ describe('the Budget 2026 menu', () => {
     const def = structuredClone(lever('def3'));
     if (def.costing.kind === 'schedule') def.costing.effect['2029-30'] = 5000;
     fails(def);
+  });
+});
+
+/**
+ * The policies that came in the post (ADR-0008). The letters' screen has gone: the eleven a
+ * Chancellor might weigh sit on the two screens by side, and five are kept for the record on no
+ * screen at all. Codes and costings are unchanged, so old links still open (ADR-0017).
+ */
+describe('the policies that came in the post', () => {
+  const POST = [
+    'it50',
+    'cpilock',
+    'def5',
+    'dip47',
+    'aid07',
+    'airet',
+    'ufsm',
+    'bus2',
+    'freeuni',
+    'water',
+    'socrent',
+    'wealth',
+    'nonuk',
+    'pens30',
+    'iinc2',
+    'gam2',
+  ];
+  const SHELVED = ['def5', 'aid07', 'freeuni', 'water', 'nonuk'];
+  const REHOMED = POST.filter((c) => !SHELVED.includes(c));
+  const byCode = new Map(POST.map((c) => [c, lever(c)] as const));
+
+  it('are all still in the data, all toggles, and none in a folder of their own', () => {
+    for (const code of POST) {
+      const l = lever(code);
+      expect(l.control.kind, code).toBe('toggle');
+      expect(['tax', 'spend', 'welfare'], code).toContain(l.category);
+      expect(l.group, code).not.toBe('Recommendations from Parliament');
+      expect(l.headline && l.description.length > l.headline.length, code).toBe(true);
+      expect(l.status, code).toBe('reviewed');
+    }
+    for (const code of SHELVED) {
+      const l = lever(code);
+      expect(l.deprecated, code).toBe(true);
+      expect(l.group, code).toBe('Shelved');
+      expect(l.headline, code).toMatch(/Kept for the record/);
+    }
+    for (const code of REHOMED) {
+      const l = lever(code);
+      expect(l.deprecated, code).toBeFalsy();
+      expect(l.group, code).not.toBe('Shelved');
+    }
+    // Only the 50% rate reuses an official costing; everything else is our own arithmetic.
+    expect(POST.filter((c) => lever(c).badge === 'direct')).toEqual(['it50']);
+    // Every re-homed spending policy has a minister to speak for it.
+    const spoken = new Set(ds.ministers.ministers.map((m) => m.code));
+    for (const code of REHOMED) {
+      const l = lever(code);
+      if (l.category !== 'tax') expect(spoken.has(code), code).toBe(true);
+    }
+  });
+
+  it.each(POST.map((code) => [code, lever(code)] as const))(
+    '%s still reproduces from its sources',
+    (_code, l) => {
+      expect(checkRawSourceConsistency(l, extracted, ds.vintage)).toEqual([]);
+    },
+  );
+
+  it('every one states its assumptions and cites a source for each', () => {
+    for (const code of POST) {
+      const l = lever(code);
+      expect(l.costing.kind === 'schedule' || l.costing.kind === 'linearPerUnit').toBe(true);
+      if (l.costing.kind === 'schedule' || l.costing.kind === 'linearPerUnit') {
+        expect(l.costing.caveats.length).toBeGreaterThan(0);
+      }
+      expect(l.considerations.length).toBeGreaterThan(0);
+      expect(l.considerations.every((c) => c.sources.length > 0)).toBe(true);
+    }
+  });
+
+  it('defence at 5% of GDP is the gap to the forecast share times nominal GDP', () => {
+    const expected = ((5 - 2.88) / 100) * gdp('2029-30');
+    const e = effectOf({ def5: 1 }, 'def5', '2029-30');
+    expect(e.current + e.capital).toBeCloseTo(expected, 0);
+    expect(e.capital / (e.current + e.capital)).toBeCloseTo(0.43, 6);
+  });
+
+  it('aid at 0.7% of national income is 0.4% of GDP, and starts when the 0.3% plan bites', () => {
+    expect(effectOf({ aid07: 1 }, 'aid07', '2029-30').current).toBeCloseTo(
+      (0.4 / 100) * gdp('2029-30'),
+      0,
+    );
+    expect(effectOf({ aid07: 1 }, 'aid07', '2026-27').current).toBe(0);
+  });
+
+  it('the 50% rate equals the additional-rate slider at +5p', () => {
+    const viaToggle = run({ it50: 1 }).leverEffects.find((e) => e.code === 'it50');
+    const viaSlider = run({ itar: 5 }).leverEffects.find((e) => e.code === 'itar');
+    expect(viaToggle?.receipts['2029-30']).toBeCloseTo(viaSlider?.receipts['2029-30'] ?? 0, 6);
+  });
+
+  it('replacing the triple lock with CPI saves more every year as the gap compounds', () => {
+    const years = ['2027-28', '2028-29', '2029-30', '2030-31'];
+    const saving = years.map((y) => -effectOf({ cpilock: 1 }, 'cpilock', y).current);
+    expect(saving[0]).toBeCloseTo(930, 0);
+    expect(saving[2]).toBeCloseTo(2674, 0);
+    for (let i = 1; i < saving.length; i += 1)
+      expect(saving[i] ?? 0).toBeGreaterThan(saving[i - 1] ?? 0);
+    // The state pension is outside the welfare cap, so the cap verdict must not move.
+    const base = run({});
+    const withIt = run({ cpilock: 1 });
+    expect(withIt.verdicts.find((v) => v.kind === 'welfareCap')?.status).toBe(
+      base.verdicts.find((v) => v.kind === 'welfareCap')?.status,
+    );
+  });
+
+  it('buying the water companies moves debt far more than it moves borrowing', () => {
+    const outcome = run({ water: 1 });
+    const e = effectOf({ water: 1 }, 'water', '2027-28');
+    expect(e.financial).toBe(100000);
+    expect(e.current + e.capital).toBe(0);
+    // A one-off: nothing in the years after the purchase.
+    expect(effectOf({ water: 1 }, 'water', '2028-29').financial).toBe(0);
+    const year = '2029-30';
+    const borrowing =
+      (outcome.paths.policy.psnb[year] ?? 0) - (outcome.paths.baseline.psnb[year] ?? 0);
+    expect(outcome.paths.deltas.financialTransactions['2027-28'] ?? 0).toBe(100000);
+    // Only the interest on the money borrowed reaches the deficit: a few billion, not a hundred.
+    expect(borrowing).toBeGreaterThan(3000);
+    expect(borrowing).toBeLessThan(8000);
+  });
+
+  it('free tuition moves the current budget much more than it moves investment', () => {
+    const e = effectOf({ freeuni: 1 }, 'freeuni', '2029-30');
+    expect(e.current).toBeCloseTo(8405, 0);
+    expect(e.capital).toBe(0);
+    // A third of the fee-loan outlay already scores as spending, so the change is not the headline.
+    expect(e.current).toBeLessThan(12360);
+  });
+
+  it('social rent is capital, so it leaves the stability rule alone', () => {
+    const e = effectOf({ socrent: 1 }, 'socrent', '2029-30');
+    expect(e.capital).toBeCloseTo(3900, 6);
+    expect(e.current).toBe(0);
+    const base = run({});
+    const withIt = run({ socrent: 1 });
+    const cb = (o: typeof base) =>
+      o.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;
+    // Capital spending only reaches the current budget through the interest it accrues.
+    expect(cb(base) - cb(withIt)).toBeLessThan(1500);
+  });
+
+  it('the two contested policies say so before they show a number', () => {
+    const wealth = byCode.get('wealth');
+    expect(wealth?.headline?.toLowerCase()).toContain('contested');
+    expect(wealth?.considerations.some((c) => c.kind === 'legal' || c.kind === 'behavioural')).toBe(
+      true,
+    );
+    expect(wealth?.costing.kind === 'schedule').toBe(true);
+    expect(effectOf({ wealth: 1 }, 'wealth', '2029-30').receipts).toBeCloseTo(7768, 0);
+    // Shelved, but the arithmetic is kept so the record can be checked.
+    expect(effectOf({ nonuk: 1 }, 'nonuk', '2029-30').current).toBeCloseTo(-14285, 0);
+  });
+
+  it('adopting everything expensive misses the stability rule', () => {
+    const outcome = run({ def5: 1, freeuni: 1, ufsm: 1, socrent: 1, airet: 1 });
+    expect(outcome.verdicts.find((v) => v.kind === 'currentBudget')?.status).toBe('notMet');
+  });
+
+  it('detects a tampered figure in the policies that came in the post', () => {
+    const def = structuredClone(byCode.get('def5'));
+    if (!def || def.costing.kind !== 'schedule') throw new Error('missing def5');
+    def.costing.effect['2029-30'] = 74000;
+    expect(checkRawSourceConsistency(def, extracted, ds.vintage).length).toBeGreaterThan(0);
+    const pension = structuredClone(byCode.get('cpilock'));
+    if (!pension || pension.costing.kind !== 'schedule') throw new Error('missing cpilock');
+    pension.costing.effect['2029-30'] = -5000;
+    expect(checkRawSourceConsistency(pension, extracted, ds.vintage).length).toBeGreaterThan(0);
+    const tuition = structuredClone(byCode.get('freeuni'));
+    if (
+      !tuition ||
+      tuition.costing.kind !== 'schedule' ||
+      tuition.costing.rawSource?.kind !== 'derivedFromPublished' ||
+      tuition.costing.rawSource.method.name !== 'seriesProduct'
+    )
+      throw new Error('missing freeuni');
+    const term = tuition.costing.rawSource.method.terms[0];
+    if (term) term.values['2029-30'] = 20000;
+    expect(checkRawSourceConsistency(tuition, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 });

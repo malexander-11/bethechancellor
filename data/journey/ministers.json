@@ -990,6 +990,205 @@
           }
         }
       ]
+    },
+    {
+      "code": "dip47",
+      "role": "Defence Secretary",
+      "asking": {
+        "text": "The Defence Investment Plan's own explainer says £4.7 billion over four years is still to be confirmed at this Budget. It is published, it is promised, and it is not yet paid for. I am asking you to confirm it.",
+        "sources": [
+          {
+            "sourceId": "govuk-dip-funding-explainer",
+            "quote": "A further £4.7 billion over four years will be confirmed at Budget 2026, in a fair and balanced way."
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Confirmed. The plan is funded to £10.3 billion by reallocation and this closes the rest. What it does not do is take us to 3% of GDP any faster.",
+            "sources": [
+              {
+                "sourceId": "govuk-dip-funding-explainer",
+                "quote": "A further £4.7 billion over four years will be confirmed at Budget 2026, in a fair and balanced way."
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "ufsm",
+      "role": "Education Secretary",
+      "asking": {
+        "text": "Every child in a universal credit household gets a free meal from this September, funded with over £1 billion across the Spending Review. A fifth of the pupils already entitled did not take one on census day. A meal for every pupil ends the means test and the gap, and it costs about £2.2 billion a year.",
+        "sources": [
+          {
+            "sourceId": "dfe-fsm-expansion-2026-27"
+          },
+          {
+            "sourceId": "dfe-school-pupils-2025-26"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Thank you. Universal means universal: 4.4 million families who pay for lunch today stop paying, and the registration gap closes because there is nothing left to register for.",
+            "sources": [
+              {
+                "sourceId": "dfe-school-pupils-2025-26"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "bus2",
+      "role": "Transport Secretary",
+      "asking": {
+        "text": "The £2 cap runs to 31 December 2027 and is paid for out of the energy department's budget. Nothing funds it after that. Keeping it is £400 million a year; letting it lapse is a fare rise in an election year.",
+        "sources": [
+          {
+            "sourceId": "govuk-bus-fare-cap-2027",
+            "quote": "single bus tickets will be capped at £2 in England outside London from 1 January until 31 December 2027"
+          },
+          {
+            "sourceId": "govuk-bus-fare-cap-2027",
+            "quote": "The new £2 cap is backed by £400 million of extra government funding."
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Kept. The government's own figure for the 2027 cap is £400 million of extra funding, and that is what this carries forward, year on year, as new spending with no offset written down.",
+            "sources": [
+              {
+                "sourceId": "govuk-bus-fare-cap-2027",
+                "quote": "The new £2 cap is backed by £400 million of extra government funding."
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "airet",
+      "role": "Education Secretary",
+      "asking": {
+        "text": "Budget 2025 put about £0.5 billion a year into jobs and skills programmes, falling to £0.1 billion by 2029-30. Nothing in the plans is a retraining programme for people whose work automates. I am asking for £1 billion a year, held flat in cash.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 24"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Thank you. Flat in cash means it buys less each year: about £940 million in today's prices by 2030-31 on the OBR's deflator. It is a start, not a settlement.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "table": "Table 2.2"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "socrent",
+      "role": "Communities Secretary",
+      "asking": {
+        "text": "The Spending Review's £39 billion for social and affordable homes reaches £4 billion a year by 2029-30 and could deliver around 300,000 homes, about 180,000 of them for social rent. Doubling it is £3.9 billion of capital a year. It is investment, so it tests the debt rule, not the day-to-day one.",
+        "sources": [
+          {
+            "sourceId": "hmt-spending-review-2025"
+          },
+          {
+            "sourceId": "mhclg-sahp-2026-2036"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Thank you. Every social home lets a family out of the private rented sector, and the housing support that saves comes back to you over years. It is not counted in the figure.",
+            "sources": [
+              {
+                "sourceId": "mhclg-sahp-2026-2036"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "cpilock",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "The triple lock gives pensioners 2.5% a year from 2027-28 on the OBR's forecast, above prices at 2.0% and earnings at 2.1% to 2.4%. Uprating by prices alone saves £2.7 billion by 2029-30, and takes it from every one of roughly 13 million pensioners, permanently. The earnings element is in statute: this needs an Act, not a Budget line.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "table": "Table A.3: Determinants of the fiscal forecast",
+            "page": "110"
+          },
+          {
+            "sourceId": "dwp-benefit-expenditure-2026",
+            "table": "Table 1a"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "You have chosen it. The saving exists only because the OBR expects inflation and earnings below 2.5%; if either comes in higher, the lock would have paid the same as prices and the saving vanishes. The pensioners' loss compounds either way.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "table": "Table A.3: Determinants of the fiscal forecast",
+                "page": "110"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
     }
   ]
 }

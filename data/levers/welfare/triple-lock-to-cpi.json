@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "triple-lock-to-cpi",
   "code": "cpilock",
-  "category": "campaign",
+  "category": "welfare",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
-  "order": 20,
+  "group": "Welfare",
+  "order": 15,
   "title": "Replace the triple lock with CPI inflation only",
   "shortTitle": "Triple lock to CPI",
   "headline": "Uprate the state pension by prices alone. Saves £2.7bn by 2029-30.",
@@ -104,7 +104,11 @@
       "magnitudeWords": "unknown",
       "alreadyInDirectCosting": false,
       "text": "The earnings element of the uprating is set in statute, so replacing the triple lock needs primary legislation, not a Budget decision alone.",
-      "sources": [{ "sourceId": "dwp-benefit-expenditure-2026" }]
+      "sources": [
+        {
+          "sourceId": "dwp-benefit-expenditure-2026"
+        }
+      ]
     }
   ],
   "status": "reviewed",

@@ -2,17 +2,19 @@
   "schemaVersion": 1,
   "id": "new-higher-income-tax-rate",
   "code": "it50",
-  "category": "campaign",
+  "category": "tax",
   "badge": "direct",
-  "group": "Recommendations from Parliament",
-  "order": 10,
+  "group": "Income tax",
+  "order": 35,
   "title": "A new higher rate of income tax: 50% above £125,140",
   "shortTitle": "50% income tax rate",
   "headline": "Take the top rate back to 50%. Raises about £1.2bn.",
   "description": "Raise the additional rate of income tax from 45% to 50% on income above £125,140, the rate that applied in 2010-11 to 2012-13. This is five times HMRC's published effect of a 1p change in the additional rate, so it carries HMRC's own behavioural response. That response is why the yield is so small relative to the rate: HMRC assumes a large part of the income moves, is deferred or is converted into other forms. The same arithmetic is available on the taxes step as the additional-rate slider at +5p; adopting it here sets the same policy.",
   "baselinePolicy": {
     "text": "The additional rate has been 45% since 2013-14 (Finance Act 2012, section 1); it was 50% from 2010-11 to 2012-13. The £125,140 threshold is frozen to April 2031.",
-    "source": { "sourceId": "govuk-income-tax-rates" },
+    "source": {
+      "sourceId": "govuk-income-tax-rates"
+    },
     "alreadyIncludes": [
       "Income tax thresholds frozen to April 2031 (Budget 2025, Table 4.1 line 46)."
     ]
@@ -35,10 +37,17 @@
   "costing": {
     "kind": "linearPerUnit",
     "unitDelta": 0.2,
-    "perUnit": { "2026-27": 145, "2027-28": 265, "2028-29": 230 },
+    "perUnit": {
+      "2026-27": 145,
+      "2027-28": 265,
+      "2028-29": 230
+    },
     "basis": "accruals",
     "symmetric": false,
-    "source": { "sourceId": "hmrc-trr-2025-06", "table": "Publication_Format" },
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
     "rawSource": {
       "kind": "hmrcReadyReckoner",
       "sourceId": "hmrc-trr-2025-06",
@@ -49,7 +58,11 @@
           "label": "Increase additional rate by 1p (yield)",
           "hmrcSign": "yield",
           "role": "increase",
-          "values": { "2026-27": 145, "2027-28": 265, "2028-29": 230 }
+          "values": {
+            "2026-27": 145,
+            "2027-28": 265,
+            "2028-29": 230
+          }
         }
       ],
       "note": "Adopting this policy is five one-penny steps, so the unit is 0.2 of the toggle."
@@ -72,7 +85,11 @@
       "magnitudeWords": "large",
       "alreadyInDirectCosting": true,
       "text": "HMRC's figure is already net of the behavioural response, and for this group the response is the dominant term: the 2010 to 2013 experience of a 50% rate is the reason HMRC's published yield for a penny on the additional rate is a fraction of the mechanical amount.",
-      "sources": [{ "sourceId": "hmrc-trr-2025-06-bulletin" }]
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ]
     },
     {
       "id": "devolution-scotland",
@@ -81,7 +98,11 @@
       "magnitudeWords": "small",
       "alreadyInDirectCosting": true,
       "text": "Scotland sets its own rates on earned income, so a UK additional-rate change applies to taxpayers in England, Wales and Northern Ireland and to savings and dividend income everywhere.",
-      "sources": [{ "sourceId": "govuk-income-tax-rates" }]
+      "sources": [
+        {
+          "sourceId": "govuk-income-tax-rates"
+        }
+      ]
     }
   ],
   "interactions": [

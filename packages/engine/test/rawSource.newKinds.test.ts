@@ -340,7 +340,7 @@ describe('a repeated scorecard measure is plus the lines, and says it is an assu
 
   it('reproduces the Budget 2025 lines with their published sign', () => {
     expect(iinc2.badge).toBe('assumption');
-    expect(iinc2.category).toBe('campaign');
+    expect(iinc2.category).toBe('tax');
     expect(checkRawSourceConsistency(iinc2, extracted, ds.vintage)).toEqual([]);
     if (iinc2.costing.kind !== 'schedule') throw new Error('schedule expected');
     expect(iinc2.costing.effect['2029-30']).toBe(435 + 1325 + 470);

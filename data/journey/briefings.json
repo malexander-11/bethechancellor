@@ -944,14 +944,14 @@
       ]
     },
     {
-      "id": "recommendations-method",
-      "step": "recommendations",
-      "adviser": "permanent-secretary",
-      "title": "Read these numbers differently",
-      "headline": "None of these has an official costing. The figures here are ours, and we show the workings.",
+      "id": "spending-flagships",
+      "step": "spending",
+      "adviser": "director-of-public-spending",
+      "title": "The Prime Minister's schemes",
+      "headline": "These are the Prime Minister's schemes. Nobody has certified their cost; each card shows our arithmetic.",
       "paragraphs": [
         {
-          "text": "Everywhere else in this Budget the numbers come from HMRC, the Treasury or the OBR. Here they do not, because nobody has certified a costing for policies that are not government policy. Each card states the method, the published figures it rests on and what it assumes. Open one and you can check the arithmetic.",
+          "text": "Everywhere else on this screen the baseline is a Spending Review settlement or an OBR line. These programmes are not government policy yet, so nobody has certified a costing. Each card states the method, the published figures it rests on and what it assumes, and wears the assumption badge for it. Open one and you can check the arithmetic.",
           "sources": [
             {
               "sourceId": "obr-efo-2026-03",
@@ -961,7 +961,7 @@
           ]
         },
         {
-          "text": "Two of these move debt far more than they move borrowing, and that is the point of having two rules. Buying an asset is a financial transaction: it adds to what we owe without adding to the deficit. Converting a loan into a grant does the opposite.",
+          "text": "Two kinds of money sit side by side here. Capital grants for homes score in the capital budget and test the investment rule; a free lunch, a bus cap or a retraining programme is day-to-day spending and tests the stability rule. The Charter treats them differently, and so does your headroom.",
           "sources": [
             {
               "sourceId": "hmt-charter-2025-autumn",
@@ -969,35 +969,8 @@
             }
           ]
         }
-      ]
-    },
-    {
-      "id": "recommendations-politics",
-      "step": "recommendations",
-      "adviser": "political-adviser",
-      "title": "What adopting these costs you",
-      "headline": "Colleagues will judge you by what you refuse as much as by what you adopt.",
-      "paragraphs": [
-        {
-          "text": "These are the policies with organised support behind them. Adopting one buys goodwill; the cost lands on your headroom. Refusing all of them is a choice too, and a visible one.",
-          "sources": [
-            {
-              "sourceId": "hmt-charter-2025-autumn",
-              "paragraph": "3.6-3.11"
-            }
-          ]
-        },
-        {
-          "text": "The two most contested figures on this page, a tax on wealth above £10m and withdrawing benefits from foreign nationals, are contested because the base is uncertain, not because the arithmetic is hard. Their cards say so before they show a number.",
-          "sources": [
-            {
-              "sourceId": "obr-efo-2026-03",
-              "table": "Paragraph 3.4",
-              "page": "41"
-            }
-          ]
-        }
-      ]
+      ],
+      "group": "Flagship programmes"
     }
   ]
 }

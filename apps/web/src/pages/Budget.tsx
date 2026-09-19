@@ -52,28 +52,29 @@ const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDat
   year: 'numeric',
 });
 
-type Tab = 'taxes' | 'spending' | 'policies';
+type Tab = 'taxes' | 'spending';
 
-/** The three parts of the package, in the order they are handed over. */
-const DESK_ORDER: readonly Tab[] = ['taxes', 'spending', 'policies'];
+/** The two parts of the package, in the order they are handed over. */
+const DESK_ORDER: readonly Tab[] = ['taxes', 'spending'];
 
 /**
- * The three screens of the package: what each is called, whose briefing opens it, and where it
+ * The two screens of the package: what each is called, whose briefing opens it, and where it
  * leads. They come one after another, by the button at the foot of the page, with a way back but
- * no tab bar: one road (ADR-0014).
+ * no tab bar: one road (ADR-0014). The letters' screen has gone; its levers sit here by side
+ * (ADR-0017).
  */
 const TABS: Record<
   Tab,
   {
-    /** How the guide's kicker names this screen: "Part 1 of 3: the taxes". */
+    /** How the guide's kicker names this screen: "Part 1 of 2: the taxes". */
     part: string;
     arrives: string;
     open: string;
     folded: string;
     work: string;
-    /** Advisers and briefings were authored against the Phase 5 step names. */
     briefingStep: JourneyStep;
-    next: { to: string; label: string };
+    /** The next screen of the package; the last screen leads onward, wherever the game has got to. */
+    next?: { to: string; label: string };
     back?: { to: string; label: string };
   }
 > = {
@@ -93,42 +94,16 @@ const TABS: Record<
     folded: 'The Director of Public Spending’s briefing',
     work: 'Set the spending',
     briefingStep: 'spending',
-    next: { to: '/budget/policies', label: 'Next: your colleagues’ letters' },
     back: { to: '/budget/taxes', label: 'Back to the taxes' },
-  },
-  policies: {
-    part: 'your colleagues’ letters',
-    arrives: 'A bundle of letters arrives from your colleagues',
-    open: 'Read the letters',
-    folded: 'What your advisers said about these letters',
-    work: 'The policies, and what each would cost',
-    briefingStep: 'recommendations',
-    next: { to: '/budget-day', label: 'Go to Budget day' },
-    back: { to: '/budget/spending', label: 'Back to the spending' },
   },
 };
 
 function isTab(tab: string | undefined): tab is Tab {
-  return tab === 'taxes' || tab === 'spending' || tab === 'policies';
-}
-
-/** A lever's effect on borrowing in a year, £ million, positive = more borrowing. */
-function borrowingEffect(
-  outcome: ReturnType<typeof useBudget>['outcome'],
-  code: string,
-  year: string,
-): number {
-  const effect = outcome.leverEffects.find((e) => e.code === code);
-  if (!effect) return 0;
-  return (
-    (effect.currentSpending[year] ?? 0) +
-    (effect.capitalSpending[year] ?? 0) -
-    (effect.receipts[year] ?? 0)
-  );
+  return tab === 'taxes' || tab === 'spending';
 }
 
 /**
- * Stage 3: the package. Three screens of lever groups, and, when a game is under way, the people
+ * Stage 3: the package. Two screens of lever groups, and, when a game is under way, the people
  * in the room with you: ministers on the spending groups, advisers who remember what you agreed in
  * Downing Street, the summary strip keeping score, and the Political Adviser's press summary
  * planting the clue the seeded draw chose.
@@ -137,23 +112,26 @@ export function BudgetPage() {
   const { tab } = useParams();
   const { state, dispatch, outcome, query } = useBudget();
   const [copied, setCopied] = useState(false);
+  // Which group is open is a fact about the screen, not about the Budget, so it stays out of the
+  // URL. Keyed by tab, so coming back to taxes finds the group you left open.
+  const [openGroups, setOpenGroups] = useState<Record<string, string>>({});
   const workings = useWorkings();
+  // Every hook runs before any early return: a redirect from one tab to another re-renders this
+  // same component, and the hook order has to hold across it.
+  const step: Tab = isTab(tab) ? tab : 'taxes';
+  const items = step === 'taxes' ? leversByCategory.tax : leversByCategory.spend;
+  const groups = useMemo(() => groupLevers(items), [items]);
   // A game that has not yet left Downing Street is sent back there; a sandbox walks straight in.
-  const guard = useStageGuard(isTab(tab) ? tab : 'taxes');
+  const guard = useStageGuard(step);
   if (guard) return guard;
   if (!isTab(tab)) {
-    return (
-      <Navigate to={{ pathname: '/budget/taxes', search: query ? `?${query}` : '' }} replace />
-    );
+    // The old third screen, and the Phase 5 step it replaced, land on the spending with the query
+    // intact: the levers that were there are there.
+    const home =
+      tab === 'policies' || tab === 'recommendations' ? '/budget/spending' : '/budget/taxes';
+    return <Navigate to={{ pathname: home, search: query ? `?${query}` : '' }} replace />;
   }
-  const step = tab;
   const spec = TABS[step];
-  const items =
-    step === 'taxes'
-      ? leversByCategory.tax
-      : step === 'spending'
-        ? leversByCategory.spend
-        : leversByCategory.campaign;
   const { paths } = outcome;
   const years = paths.years;
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
@@ -163,10 +141,6 @@ export function BudgetPage() {
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
   const moved = new Set(outcome.leverEffects.map((e) => e.code));
-  const groups = useMemo(() => groupLevers(items), [items]);
-  // Which group is open is a fact about the screen, not about the Budget, so it stays out of the
-  // URL. Keyed by tab, so coming back to taxes finds the group you left open.
-  const [openGroups, setOpenGroups] = useState<Record<string, string>>({});
   const openGroup = openGroups[step];
   // Open on the first group you have touched, so a shared Budget does not look untouched.
   const defaultGroup =
@@ -215,15 +189,6 @@ export function BudgetPage() {
     );
   const clue = game && step === 'spending' ? pickOutcome(game.seed, draws.outcomes) : null;
 
-  const adopted = items.filter(
-    (l) =>
-      step === 'policies' && (state.leverValues[l.code] ?? l.control.default) !== l.control.default,
-  );
-  const adoptedTotal = adopted.reduce(
-    (sum, l) => sum + borrowingEffect(outcome, l.code, targetYear),
-    0,
-  );
-
   /**
    * Leaving the package for the first time: remember it as it stood before the OBR spoke,
    * assumptions included, so the forecast can be taken apart and the close can diff against it.
@@ -268,19 +233,18 @@ export function BudgetPage() {
   return (
     <JourneyLayout
       step={step}
-      part={{ noun: 'Part', index: DESK_ORDER.indexOf(step) + 1, total: 3, label: spec.part }}
+      part={{
+        noun: 'Part',
+        index: DESK_ORDER.indexOf(step) + 1,
+        total: DESK_ORDER.length,
+        label: spec.part,
+      }}
     >
       <Beats step={step}>
         <Beat title={spec.arrives} continueLabel={spec.open} foldWhenPast={spec.folded}>
-          {step === 'policies' ? (
-            <div className="briefing-row">
-              {briefingsFor(spec.briefingStep).map((b) => (
-                <AdviserBriefing key={b.id} briefing={b} compact />
-              ))}
-            </div>
-          ) : (
-            briefingsFor(spec.briefingStep).map((b) => <AdviserBriefing key={b.id} briefing={b} />)
-          )}
+          {briefingsFor(spec.briefingStep).map((b) => (
+            <AdviserBriefing key={b.id} briefing={b} />
+          ))}
         </Beat>
         <Beat title={spec.work}>
           <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
@@ -298,21 +262,6 @@ export function BudgetPage() {
           </p>
           <Interventions items={advice} />
           {clue ? <PressSummary outcome={clue} /> : null}
-          {step === 'policies' ? (
-            <>
-              <p className="panel__hint">
-                Policies your colleagues in Parliament are campaigning for. Adopt the ones you want.
-                Every cost here is our own arithmetic, not an official costing.
-              </p>
-              <p className="adopted-line" role="status">
-                {adopted.length === 0
-                  ? 'Nothing adopted yet. Adopting one is a toggle; the scorecard moves as you read.'
-                  : `${adopted.length} adopted · ${
-                      adoptedTotal >= 0 ? 'costing' : 'raising'
-                    } ${formatGbpBn(Math.abs(adoptedTotal), 1)} in ${targetYear}`}
-              </p>
-            </>
-          ) : null}
 
           <div className="layout">
             <aside>
@@ -362,11 +311,11 @@ export function BudgetPage() {
               </Desk>
               <p className="hero-start__actions">
                 <StepLink
-                  to={step === 'policies' ? onward.to : spec.next.to}
+                  to={spec.next?.to ?? onward.to}
                   className="btn btn--primary"
-                  onClick={step === 'policies' ? leaveDesk : undefined}
+                  onClick={spec.next ? undefined : leaveDesk}
                 >
-                  {step === 'policies' ? onward.label : spec.next.label}
+                  {spec.next?.label ?? onward.label}
                 </StepLink>
                 {spec.back ? (
                   <StepLink to={spec.back.to} className="btn">

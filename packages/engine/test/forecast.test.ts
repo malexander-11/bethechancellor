@@ -74,9 +74,9 @@ describe('taking the OBR’s forecast apart (ADR-0012)', () => {
   });
 
   it('lists what was re-scored with the figure before and after', () => {
-    const { d } = decompose(seedFor('hard-line'), 'adviser', { wealth: 1, itbr: 1, nonuk: 1 });
+    const { d } = decompose(seedFor('hard-line'), 'adviser', { wealth: 1, itbr: 1, cgtdth: 1 });
     const rows = revisedMeasures(d.revised, d.targetYear);
-    expect(rows.map((r) => r.effect.code).sort()).toEqual(['nonuk', 'wealth']);
+    expect(rows.map((r) => r.effect.code).sort()).toEqual(['cgtdth', 'wealth']);
     for (const r of rows) {
       expect(r.revisedGbpm).toBeCloseTo(r.asScoredGbpm * r.revision.factor, 6);
       expect(r.effect.badge).toBe('assumption');

@@ -7,8 +7,8 @@ import type {
 } from '../types/data.js';
 
 /**
- * The guide: one entry per screen a player meets, in the order they meet them. The package's three
- * tabs and the two forecast screens are separate entries that share a step number.
+ * The guide: one entry per screen a player meets, in the order they meet them. The package's two
+ * screens and the two forecast screens are separate entries that share a step number.
  */
 export const GUIDED_STEPS: readonly JourneyStep[] = [
   'start',
@@ -16,7 +16,6 @@ export const GUIDED_STEPS: readonly JourneyStep[] = [
   'pm',
   'taxes',
   'spending',
-  'policies',
   'forecast',
   'compromise',
   'rabbit',
@@ -26,9 +25,11 @@ export const GUIDED_STEPS: readonly JourneyStep[] = [
 /** How many steps the kicker counts to: "Step 3 of 7". */
 export const STEP_COUNT = 7;
 
+/** The old names find a screen: the letters' screen has gone, and its levers sit on the spending. */
 const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   assumptions: 'outlook',
-  recommendations: 'policies',
+  recommendations: 'spending',
+  policies: 'spending',
 };
 
 export function guideFor(guide: GuideFile, step: JourneyStep): GuideStage | undefined {

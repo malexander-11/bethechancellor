@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "id": "water-public-ownership",
   "code": "water",
-  "category": "campaign",
+  "category": "spend",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
-  "order": 80,
+  "group": "Shelved",
+  "order": 900,
   "title": "Bring water into public ownership",
   "shortTitle": "Water in public ownership",
-  "headline": "£100bn of borrowing that barely touches the deficit.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Buy the water and sewerage companies of England and Wales. The Environment Department has published its own costing: about £100bn, the capital value of the sector, covering the equity and the debt. Almost none of that scores as borrowing, because buying an asset is a swap, not spending. What you do pay is interest on the £100bn of gilts you issue, about £5bn a year. This is the sharpest illustration of the two rules on the page: the stability rule barely moves and the money still has to be found.",
   "baselinePolicy": {
     "text": "The water and sewerage companies are privately owned. Their regulatory capital value was £106.7bn in 2025. Defra estimates nationalisation at about £100bn, covering equity and assumed debt with no discount or premium.",
@@ -116,5 +116,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-15"
+  "reviewedOn": "2026-09-15",
+  "deprecated": true
 }

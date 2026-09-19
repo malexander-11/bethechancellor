@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "id": "aid-zero-point-seven-gni",
   "code": "aid07",
-  "category": "campaign",
+  "category": "spend",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
-  "order": 40,
+  "group": "Shelved",
+  "order": 900,
   "title": "Restore foreign aid to 0.7% of gross national income",
   "shortTitle": "Aid back to 0.7%",
-  "headline": "Back to the old target from 0.3%. Costs about £14bn a year.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Official development assistance was cut to 0.3% of gross national income from 2027 to help pay for defence. Restoring the 0.7% target, which was law from 2015 until it was suspended, means finding another 0.4% of national income. The OBR's forecast already assumes the 0.3% commitment, so the cost here is the difference between the two shares.",
   "baselinePolicy": {
     "text": "The OBR assumes aid grows in line with gross national income after 2028-29, in line with the Government's commitment to spend 0.3% of GNI on aid by 2027.",
@@ -101,5 +101,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-15"
+  "reviewedOn": "2026-09-15",
+  "deprecated": true
 }

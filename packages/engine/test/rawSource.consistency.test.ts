@@ -9,7 +9,7 @@ describe('every direct costing reproduces from the extracted published tables', 
   const taxLevers = ds.levers.filter((l) => l.category === 'tax');
 
   it('covers the planned core set', () => {
-    expect(taxLevers.length).toBe(47);
+    expect(taxLevers.length).toBe(52);
     expect(taxLevers.every((l) => l.group)).toBe(true);
     // A share of an OBR receipts line is mechanical arithmetic; a certified row is direct; our own
     // arithmetic on published figures is an assumption and says so on the card (ADR-0017).
@@ -18,13 +18,24 @@ describe('every direct costing reproduces from the extracted published tables', 
     for (const l of taxLevers) {
       expect(l.badge === 'mechanical', `${l.code}`).toBe(l.costing.kind === 'pctOfBaseline');
     }
-    expect(taxLevers.filter((l) => l.badge === 'direct')).toHaveLength(40);
+    expect(taxLevers.filter((l) => l.badge === 'direct')).toHaveLength(41);
     expect(
       taxLevers
         .filter((l) => l.badge === 'assumption')
         .map((l) => l.code)
         .sort(),
-    ).toEqual(['bank5', 'cgtdth', 'epl2', 'hmrc2', 'hvcts15', 'vatgas']);
+    ).toEqual([
+      'bank5',
+      'cgtdth',
+      'epl2',
+      'gam2',
+      'hmrc2',
+      'hvcts15',
+      'iinc2',
+      'pens30',
+      'vatgas',
+      'wealth',
+    ]);
   });
 
   it.each(taxLevers.map((l) => [l.id, l] as const))(
@@ -39,8 +50,18 @@ describe('every direct costing reproduces from the extracted published tables', 
   );
 
   it('covers the planned spending set', () => {
-    expect(spendingLevers.length).toBe(21);
+    // Every file in the two folders, the five kept for the record included (ADR-0017).
+    expect(spendingLevers.length).toBe(32);
     expect(spendingLevers.every((l) => l.group && l.classification?.side === 'spending')).toBe(
+      true,
+    );
+    expect(
+      spendingLevers
+        .filter((l) => l.deprecated)
+        .map((l) => l.code)
+        .sort(),
+    ).toEqual(['aid07', 'chb', 'def5', 'freeuni', 'nonuk', 'water']);
+    expect(spendingLevers.filter((l) => l.group === 'Shelved').every((l) => l.deprecated)).toBe(
       true,
     );
     expect(

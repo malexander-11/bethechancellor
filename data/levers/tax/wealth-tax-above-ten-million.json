@@ -2,17 +2,20 @@
   "schemaVersion": 1,
   "id": "wealth-tax-above-ten-million",
   "code": "wealth",
-  "category": "campaign",
+  "category": "tax",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
-  "order": 100,
+  "group": "Capital taxes",
+  "order": 50,
   "title": "Tax extreme wealth: 1% a year on net wealth above £10m",
   "shortTitle": "1% wealth tax above £10m",
   "headline": "Contested. About £7.8bn from roughly 22,000 people, if they stay.",
   "description": "An annual charge of 1% on the part of an individual's net wealth above £10m. Read this figure carefully. It rests on the Wealth Tax Commission's 2020 modelling, which is the only serious published estimate, and the Commission itself says its work \"has been constrained by a lack of reliable data on individuals with total wealth above £10 million\". The Office for National Statistics publishes nothing above the top 1% threshold of £3.1m, and had the accreditation of its wealth survey suspended in 2025. The number below is the Commission's own high-avoidance estimate, scaled from the 1.12% rate they modelled. The low-avoidance figure is £8.8bn.",
   "baselinePolicy": {
     "text": "The United Kingdom has no annual tax on net wealth. Wealth is taxed on transactions and at death: 220 estates above £10m paid £1.04bn of inheritance tax in 2023-24, at an average effective rate of 18%.",
-    "source": { "sourceId": "hmrc-iht-liabilities-2023-24", "table": "Table 12.1a" }
+    "source": {
+      "sourceId": "hmrc-iht-liabilities-2023-24",
+      "table": "Table 12.1a"
+    }
   },
   "control": {
     "kind": "toggle",
@@ -37,7 +40,10 @@
       "2029-30": 7768,
       "2030-31": 7768
     },
-    "source": { "sourceId": "wtc-final-report-2020", "table": "Table 8" },
+    "source": {
+      "sourceId": "wtc-final-report-2020",
+      "table": "Table 8"
+    },
     "rawSource": {
       "kind": "derivedFromPublished",
       "sourceId": "wtc-final-report-2020",
@@ -85,7 +91,12 @@
       "magnitudeWords": "large",
       "alreadyInDirectCosting": true,
       "text": "Every asset has to be valued annually, including unlisted companies and land. The Commission budgets about £245m for property revaluation alone and about £2,500 per audit, and assumes a new HM Revenue and Customs system on the scale of the Customs Declaration Service.",
-      "sources": [{ "sourceId": "wtc-revenue-modelling-2020", "note": "section 3.1" }]
+      "sources": [
+        {
+          "sourceId": "wtc-revenue-modelling-2020",
+          "note": "section 3.1"
+        }
+      ]
     },
     {
       "id": "avoidance-and-emigration",
@@ -94,7 +105,12 @@
       "magnitudeWords": "large",
       "alreadyInDirectCosting": true,
       "text": "The Commission's 7% to 17% range covers restructuring, relocation of assets and people leaving. It is drawn from countries that have run annual wealth taxes, most of which have since abolished them. Nobody knows how 22,000 people with a choice of jurisdiction would respond here.",
-      "sources": [{ "sourceId": "wtc-revenue-modelling-2020", "note": "section 3.1" }]
+      "sources": [
+        {
+          "sourceId": "wtc-revenue-modelling-2020",
+          "note": "section 3.1"
+        }
+      ]
     },
     {
       "id": "no-official-base",
@@ -103,7 +119,11 @@
       "magnitudeWords": "large",
       "alreadyInDirectCosting": false,
       "text": "The Office for National Statistics publishes nothing about wealth above the top 1% threshold of £3.1m, says the wealthiest households are under-represented in its survey, and had the survey's accreditation suspended in June 2025. There is no official measurement of the tax base this policy would use.",
-      "sources": [{ "sourceId": "ons-wealth-and-assets-2020-22" }]
+      "sources": [
+        {
+          "sourceId": "ons-wealth-and-assets-2020-22"
+        }
+      ]
     },
     {
       "id": "who-pays",
@@ -113,8 +133,14 @@
       "alreadyInDirectCosting": false,
       "text": "About 22,000 people, a comparable number to the estates that pay inheritance tax each year. Inheritance tax already reaches this group, and reaches it unevenly: estates above £10m pay an average effective rate of 18%, below the 25% paid by estates between £3m and £7.5m.",
       "sources": [
-        { "sourceId": "wtc-final-report-2020", "table": "Table 8" },
-        { "sourceId": "hmrc-iht-liabilities-2023-24", "table": "Table 12.1a" }
+        {
+          "sourceId": "wtc-final-report-2020",
+          "table": "Table 8"
+        },
+        {
+          "sourceId": "hmrc-iht-liabilities-2023-24",
+          "table": "Table 12.1a"
+        }
       ]
     }
   ],

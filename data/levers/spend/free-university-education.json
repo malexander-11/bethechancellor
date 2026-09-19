@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "id": "free-university-education",
   "code": "freeuni",
-  "category": "campaign",
+  "category": "spend",
   "badge": "assumption",
-  "group": "Recommendations from Parliament",
-  "order": 70,
+  "group": "Shelved",
+  "order": 900,
   "title": "Free university education: abolish undergraduate tuition fees",
   "shortTitle": "Free university education",
-  "headline": "Pay universities directly instead of lending. £8.4bn by 2029-30.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Abolish the £9,790 tuition fee and fund teaching by grant. Students borrow £12.4bn in fee loans in 2029-30, but a third of that already scores as government spending, because the national accounts treat the part of a loan nobody expects to be repaid as expenditure the day it is issued. Only the rest changes, so the cost is £8.4bn rather than the headline. This is the clearest lesson on the page about how the rules work: converting a loan into a grant moves money from a financial transaction, which does not count as borrowing, into spending, which does.",
   "baselinePolicy": {
     "text": "Full-time undergraduates borrow £11.5bn a year in fee loans, rising to £12.8bn by 2030-31. About a third of each year's outlay is already recorded as government expenditure through the transfer proportion; the rest is a loan asset.",
@@ -142,5 +142,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-15"
+  "reviewedOn": "2026-09-15",
+  "deprecated": true
 }

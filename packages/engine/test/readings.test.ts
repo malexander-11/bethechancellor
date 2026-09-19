@@ -48,9 +48,8 @@ describe('the readings of a Budget', () => {
     expect(base.welfareCapStatus).toBe(1);
   });
 
-  it('counts what you adopted and what you reversed', () => {
-    const r = read({ def5: 1, airet: 1, rvfrz: 1, rv2ch: 1 });
-    expect(r.recommendationsAdopted).toBe(2);
+  it('counts what you reversed', () => {
+    const r = read({ def3: 1, airet: 1, rvfrz: 1, rv2ch: 1 });
     expect(r.budget2025Reversals).toBe(2);
     expect(r.welfareReversals).toBe(1);
   });
