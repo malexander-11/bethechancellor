@@ -92,9 +92,9 @@ function FlagshipChoice({
 /**
  * Step 3. Three beats: what the PM has done; what this Budget is for, ticking every theme that
  * applies; and the flagship schemes under each. A flagship is funded the moment it is ticked: its
- * lever moves on the desk and the headroom in the summary strip falls at once, so the choice costs
+ * lever moves in the package and the headroom in the summary strip falls at once, so the choice costs
  * what it costs while the PM is watching. The manifesto is not up for negotiation here or
- * anywhere: its red lines were explained on the first screen, the desk warns before one is
+ * anywhere: its red lines were explained on the first screen, the lever warns before one is
  * crossed, and Budget day judges it. Every PM line is simulated and says so.
  */
 export function PMPage() {
@@ -233,7 +233,7 @@ export function PMPage() {
             />
           ) : null}
           <p className="panel__hint">
-            Each flagship you tick is funded on the spot: its lever moves on the desk and the
+            Each flagship you tick is funded on the spot: its lever moves in the package and the
             headroom above falls. Un-tick it and the money comes back. Costs are the engine’s, in{' '}
             {targetYear}.
           </p>
@@ -250,12 +250,12 @@ export function PMPage() {
             </fieldset>
           ) : null}
           <p className="panel__hint">
-            The manifesto red lines from step 1 still apply. The desk will warn you before you cross
-            one.
+            The manifesto red lines from step 1 still apply. Each lever will warn you before you
+            cross one.
           </p>
           <p className="hero-start__actions">
             <StepLink to="/budget/taxes" className="btn btn--primary" onClick={agree}>
-              Agreed. To the desk
+              Agreed. Build the package
             </StepLink>
           </p>
         </Beat>

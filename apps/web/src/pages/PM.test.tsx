@@ -69,7 +69,7 @@ describe('the conversation with the Prime Minister', () => {
     const box = screen.getByRole('status', { name: 'Your Budget so far' });
     expect(within(box).getByText('none agreed yet')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('checkbox', { name: /Fund the Defence Investment Plan/ }));
-    // The lever moves on the desk at once, and the PM reacts.
+    // The lever moves in the package at once, and the PM reacts.
     await waitFor(() => expect(param('L')).toMatch(/dip47\.1/));
     expect(param('g')).toMatch(/pr\.dip-gap/);
     expect(within(box).getByText('1 of 1 funded')).toBeInTheDocument();
@@ -98,7 +98,7 @@ describe('the conversation with the Prime Minister', () => {
     next();
     expect(screen.queryByRole('button', { name: /Push back/ })).toBeNull();
     expect(screen.getByText(/red lines from step 1 still apply/)).toBeInTheDocument();
-    const link = screen.getByRole('link', { name: /Agreed. To the desk/ });
+    const link = screen.getByRole('link', { name: /Agreed. Build the package/ });
     expect(link).toHaveAttribute('href', expect.stringContaining('/budget/taxes'));
     fireEvent.click(link);
     await waitFor(() => {

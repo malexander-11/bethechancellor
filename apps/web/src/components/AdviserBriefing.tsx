@@ -67,6 +67,8 @@ export function AdviserBriefing({
 }) {
   const adviser = adviserById.get(briefing.adviser);
   const workings = useWorkings();
+  // A body-only briefing with the workings off has nothing to say; an empty card would only be a box.
+  if (variant === 'body' && !briefing.facts?.length && children == null && !workings) return null;
   return (
     <article className={`briefing${compact ? ' briefing--compact' : ''}`}>
       {variant === 'full' ? (

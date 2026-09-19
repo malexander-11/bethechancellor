@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { LeverGroup } from '../data';
 
 /**
- * A drawer of files: a row of manila tabs, and the one open folder below them.
+ * The lever groups: a row of tabs, and the one open group below them.
  *
  * This is a real tablist rather than a set of disclosures. With fifty levers, an accordion makes
  * a screen-reader user pass seven collapsed headers to reach any content, and buries "three
@@ -21,7 +21,7 @@ export function folderId(name: string): string {
 
 interface DeskProps {
   groups: LeverGroup[];
-  /** The lever codes the player has moved, so a touched folder can wear its tag. */
+  /** The lever codes the player has moved, so a touched group can show its effect. */
   moved: Set<string>;
   effects: LeverEffect[];
   summaryYear: string;
@@ -30,7 +30,7 @@ interface DeskProps {
   children: (group: LeverGroup) => React.ReactNode;
 }
 
-/** What this folder has done to borrowing in the target year, for the tag on its tab. */
+/** What this group has done to borrowing in the target year, for the tag on its tab. */
 function groupEffect(group: LeverGroup, effects: LeverEffect[], year: string): number {
   let total = 0;
   for (const lever of group.levers) {
@@ -62,7 +62,7 @@ export function Desk({ groups, moved, effects, summaryYear, open, onOpen, childr
       setFocused(next);
       const el = strip.current?.querySelector<HTMLButtonElement>(`#${CSS.escape(folderId(next))}`);
       el?.focus();
-      // Arrow-keying must never leave focus off the end of a scrolling drawer.
+      // Arrow-keying must never leave focus off the end of a row that has wrapped.
       el?.scrollIntoView?.({ inline: 'nearest', block: 'nearest' });
     },
     [focused, names],
@@ -80,11 +80,11 @@ export function Desk({ groups, moved, effects, summaryYear, open, onOpen, childr
   const openGroup = groups.find((g) => g.name === current);
 
   return (
-    <div className="desk-drawer">
+    <div className="lever-groups">
       <div
-        className="folders"
+        className="group-tabs"
         role="tablist"
-        aria-label="Files on your desk"
+        aria-label="Lever groups"
         ref={strip}
         onKeyDown={onKeyDown}
       >
@@ -101,16 +101,16 @@ export function Desk({ groups, moved, effects, summaryYear, open, onOpen, childr
               aria-selected={selected}
               aria-controls={`${folderId(group.name)}-panel`}
               tabIndex={selected ? 0 : -1}
-              className="folder-tab"
+              className="group-tab"
               onClick={() => onOpen(group.name)}
               onFocus={() => setFocused(group.name)}
             >
-              <span className="folder-tab__name">{group.name}</span>
+              <span className="group-tab__name">{group.name}</span>
               {/* Visible text, so the changed count is already in the tab's accessible name. */}
-              <span className="folder-tab__count">
+              <span className="group-tab__count">
                 {changed > 0
                   ? `${changed} changed`
-                  : `${group.levers.length} ${group.levers.length === 1 ? 'paper' : 'papers'}`}
+                  : `${group.levers.length} ${group.levers.length === 1 ? 'lever' : 'levers'}`}
               </span>
               {changed > 0 ? (
                 <span className="tag--treasury">
@@ -125,7 +125,7 @@ export function Desk({ groups, moved, effects, summaryYear, open, onOpen, childr
       </div>
       {openGroup ? (
         <div
-          className="folder-body folder-body--punched"
+          className="group-panel"
           role="tabpanel"
           id={`${folderId(openGroup.name)}-panel`}
           aria-labelledby={folderId(openGroup.name)}

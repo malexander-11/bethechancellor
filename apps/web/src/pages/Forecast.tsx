@@ -375,7 +375,8 @@ function ForecastReveal({
             {status.broken > nowBroken.length ? (
               <li className="ambitions__broken">
                 {status.broken - nowBroken.length} promise
-                {status.broken - nowBroken.length === 1 ? '' : 's'} already broken on the desk.
+                {status.broken - nowBroken.length === 1 ? '' : 's'} already broken before the
+                forecast.
               </li>
             ) : null}
             {d.totalGbpm > 0 ? (
@@ -401,7 +402,7 @@ function ForecastReveal({
           Make it add up
         </StepLink>
         <StepLink to="/budget/taxes" className="btn">
-          Back to the desk
+          Back to the package
         </StepLink>
       </p>
     </>

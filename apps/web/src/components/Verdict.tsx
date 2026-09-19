@@ -12,7 +12,7 @@ const PRIORITY: Record<BudgetVerdict['ambitions']['priorities'][number]['fate'],
 
 const PROMISE: Record<BudgetVerdict['ambitions']['promises'][number]['fate'], string> = {
   kept: 'kept',
-  'broken-by-choice': 'broken on the desk',
+  'broken-by-choice': 'broken by choice',
   'broken-by-arithmetic': 'broken by the arithmetic',
 };
 
@@ -111,7 +111,9 @@ export function Verdict({ verdict, replayHref }: { verdict: BudgetVerdict; repla
             The compromises that mattered <LabelBadge badge="mechanical" />
           </h3>
           {compromises.length === 0 ? (
-            <p className="panel__hint">The package that left the desk is the package in the box.</p>
+            <p className="panel__hint">
+              Nothing moved after the forecast: the package you delivered is the one the OBR saw.
+            </p>
           ) : (
             <ul className="fates">
               {compromises.slice(0, 6).map((c) => (

@@ -54,18 +54,18 @@ const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDat
 
 type Tab = 'taxes' | 'spending' | 'policies';
 
-/** The three files of the desk, in the order they are handed over. */
+/** The three parts of the package, in the order they are handed over. */
 const DESK_ORDER: readonly Tab[] = ['taxes', 'spending', 'policies'];
 
 /**
- * The three screens of the desk: what each is called, whose file it is, and where it leads. They
- * come one after another, by the button at the foot of the page, with a way back but no tab bar:
- * one road (ADR-0014).
+ * The three screens of the package: what each is called, whose briefing opens it, and where it
+ * leads. They come one after another, by the button at the foot of the page, with a way back but
+ * no tab bar: one road (ADR-0014).
  */
 const TABS: Record<
   Tab,
   {
-    /** How the guide's kicker names this screen: "File 1 of 3: the taxes". */
+    /** How the guide's kicker names this screen: "Part 1 of 3: the taxes". */
     part: string;
     arrives: string;
     open: string;
@@ -79,17 +79,17 @@ const TABS: Record<
 > = {
   taxes: {
     part: 'the taxes',
-    arrives: 'The Director of Tax hands you the tax file',
-    open: 'Open the file',
+    arrives: 'The Director of Tax’s briefing',
+    open: 'To the taxes',
     folded: 'The Director of Tax’s briefing',
     work: 'Set the taxes',
     briefingStep: 'taxes',
-    next: { to: '/budget/spending', label: 'Next: the spending file' },
+    next: { to: '/budget/spending', label: 'Next: the spending' },
   },
   spending: {
     part: 'the spending',
-    arrives: 'The Director of Public Spending hands you the spending file',
-    open: 'Open the file',
+    arrives: 'The Director of Public Spending’s briefing',
+    open: 'To the spending',
     folded: 'The Director of Public Spending’s briefing',
     work: 'Set the spending',
     briefingStep: 'spending',
@@ -128,8 +128,8 @@ function borrowingEffect(
 }
 
 /**
- * Stage 3: the desk. Three folders of levers, and, when a game is under way, the people in the
- * room with you: ministers on the spending folders, advisers who remember what you agreed in
+ * Stage 3: the package. Three screens of lever groups, and, when a game is under way, the people
+ * in the room with you: ministers on the spending groups, advisers who remember what you agreed in
  * Downing Street, the summary strip keeping score, and the Political Adviser's press summary
  * planting the clue the seeded draw chose.
  */
@@ -164,12 +164,12 @@ export function BudgetPage() {
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
   const moved = new Set(outcome.leverEffects.map((e) => e.code));
   const groups = useMemo(() => groupLevers(items), [items]);
-  // Which folder is open is a fact about the desk, not about the Budget, so it stays out of the
-  // URL. Keyed by tab, so coming back to taxes finds the file you left out.
-  const [folders, setFolders] = useState<Record<string, string>>({});
-  const openFolder = folders[step];
-  // Open on the first file you have touched, so a shared Budget does not look untouched.
-  const defaultFolder =
+  // Which group is open is a fact about the screen, not about the Budget, so it stays out of the
+  // URL. Keyed by tab, so coming back to taxes finds the group you left open.
+  const [openGroups, setOpenGroups] = useState<Record<string, string>>({});
+  const openGroup = openGroups[step];
+  // Open on the first group you have touched, so a shared Budget does not look untouched.
+  const defaultGroup =
     groups.find((g) => g.levers.some((l) => moved.has(l.code)))?.name ?? groups[0]?.name ?? '';
   // Name the card the player chose on step 1; fall back to the figures only if they set their own.
   const macroSummary =
@@ -225,7 +225,7 @@ export function BudgetPage() {
   );
 
   /**
-   * Leaving the desk for the first time: remember the package as it stood before the OBR spoke,
+   * Leaving the package for the first time: remember it as it stood before the OBR spoke,
    * assumptions included, so the forecast can be taken apart and the close can diff against it.
    * Coming back afterwards changes the package, not the record of what it was.
    */
@@ -237,7 +237,7 @@ export function BudgetPage() {
       patch: { reached: Math.max(game.reached, stageIndex('forecast')) },
     });
   };
-  // Where the desk leads depends on how far the game has got: to the OBR's envelope, back to the
+  // Where the package leads depends on how far the game has got: to the OBR's envelope, back to the
   // compromises once it is open, or straight to Budget day for a sandbox with no game.
   const onward = !game
     ? { to: '/budget-day', label: 'Go to Budget day' }
@@ -259,7 +259,7 @@ export function BudgetPage() {
   const toBn = (values: Record<string, number>) => years.map((y) => (values[y] ?? 0) / 1000);
   const surplus = (values: Record<string, number>) => years.map((y) => -(values[y] ?? 0) / 1000);
 
-  /** Promised flagships go to the top of their folder, wearing a tag. */
+  /** Promised flagships go to the top of their group, wearing a tag. */
   const orderForDesk = (list: Lever[]): Lever[] => [
     ...list.filter((l) => promised.has(l.code)),
     ...list.filter((l) => !promised.has(l.code)),
@@ -268,7 +268,7 @@ export function BudgetPage() {
   return (
     <JourneyLayout
       step={step}
-      part={{ noun: 'File', index: DESK_ORDER.indexOf(step) + 1, total: 3, label: spec.part }}
+      part={{ noun: 'Part', index: DESK_ORDER.indexOf(step) + 1, total: 3, label: spec.part }}
     >
       <Beats step={step}>
         <Beat title={spec.arrives} continueLabel={spec.open} foldWhenPast={spec.folded}>
@@ -321,8 +321,8 @@ export function BudgetPage() {
                 moved={moved}
                 effects={outcome.leverEffects}
                 summaryYear={targetYear}
-                open={openFolder ?? defaultFolder}
-                onOpen={(name) => setFolders((f) => ({ ...f, [step]: name }))}
+                open={openGroup ?? defaultGroup}
+                onOpen={(name) => setOpenGroups((f) => ({ ...f, [step]: name }))}
               >
                 {(group) => (
                   <>

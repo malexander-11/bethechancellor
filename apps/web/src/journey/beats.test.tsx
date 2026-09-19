@@ -17,7 +17,7 @@ function at(path: string) {
 describe('a step arrives in beats', () => {
   it('does not put the next beat in the document until you continue', () => {
     at(`/budget/taxes?${BASE}`);
-    // Beat 0 is the Director of Tax handing over the file; the folders are not rendered at all,
+    // Beat 0 is the Director of Tax’s briefing; the lever groups are not rendered at all,
     // so the gate is real rather than something hidden with CSS.
     expect(screen.queryByRole('tablist')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Continue/ }));

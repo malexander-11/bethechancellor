@@ -12,7 +12,7 @@ export function PresetPicker({
   const selected = presets.presets.find((p) => sameValues(p.leverValues, current))?.id ?? 'custom';
   const chosen = presets.presets.find((p) => p.id === selected);
   return (
-    <div className="lever" style={{ borderTop: 0, paddingTop: 0 }}>
+    <div className="lever lever--flush">
       <label className="lever__title" htmlFor="preset-picker">
         Scenario
       </label>
@@ -23,7 +23,7 @@ export function PresetPicker({
           const preset = presets.presets.find((p) => p.id === e.target.value);
           if (preset) onApply(preset.leverValues);
         }}
-        style={{ display: 'block', width: '100%', marginTop: 6, padding: '6px 8px' }}
+        className="lever__select"
       >
         {presets.presets.map((p) => (
           <option key={p.id} value={p.id}>

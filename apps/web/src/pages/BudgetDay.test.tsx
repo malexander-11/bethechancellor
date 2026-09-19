@@ -122,7 +122,7 @@ describe('Budget day: the speech, the reaction, the close', () => {
     const close = screen.getByRole('region', { name: /A Budget|Half a programme|small moves/ });
     expect(within(close).getByText(/Which ambitions survived/)).toBeInTheDocument();
     expect(within(close).getByText(/A Justice uplift for prison capacity/)).toBeInTheDocument();
-    expect(within(close).getByText(/broken on the desk \(Basic rate\)/)).toBeInTheDocument();
+    expect(within(close).getByText(/broken by choice \(Basic rate\)/)).toBeInTheDocument();
     expect(within(close).getByText(/Everyone who earns or spends/)).toBeInTheDocument();
     expect(within(close).getByText(/Courts and prisons/)).toBeInTheDocument();
     // The DIP gap was in the snapshot and is not in the package: a compromise that mattered.

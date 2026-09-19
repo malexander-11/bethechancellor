@@ -32,16 +32,16 @@
       "step": "taxes",
       "number": 4,
       "title": "Build the package",
-      "doing": "Set taxes and spending across the whole of government, one folder at a time.",
+      "doing": "Set taxes and spending across the whole of government, one group at a time.",
       "why": "This is where the money comes from and where it goes. A lever that breaks a [manifesto] promise shows a red warning.",
-      "now": "Open the tax folders and move what you want. Then the spending, then the policies.",
+      "now": "Work through the tax groups and move what you want. Then the spending, then the policies.",
       "terms": ["headroom", "current-budget", "borrowing"]
     },
     {
       "step": "spending",
       "number": 4,
       "title": "Build the package",
-      "doing": "Set taxes and spending across the whole of government, one folder at a time.",
+      "doing": "Set taxes and spending across the whole of government, one group at a time.",
       "why": "This is where the money comes from and where it goes. A lever that breaks a [manifesto] promise shows a red warning.",
       "now": "Set the departments, investment and welfare. Ministers will tell you what each change means.",
       "terms": ["headroom", "welfare-cap", "barnett"]
@@ -50,7 +50,7 @@
       "step": "policies",
       "number": 4,
       "title": "Build the package",
-      "doing": "Set taxes and spending across the whole of government, one folder at a time.",
+      "doing": "Set taxes and spending across the whole of government, one group at a time.",
       "why": "This is where the money comes from and where it goes. A lever that breaks a [manifesto] promise shows a red warning.",
       "now": "Adopt or refuse the policies your colleagues are campaigning for. Each one has a price.",
       "terms": ["headroom", "borrowing"]

@@ -37,7 +37,7 @@ function Marked({ text }: { text: string }) {
  * with more than one screen says which one this is ("File 2 of 3: the spending").
  */
 export interface GuidePart {
-  /** "File" on the desk, "Part" for the forecast and the sums. */
+  /** "Part", on every step that has more than one screen. */
   noun: string;
   index: number;
   total: number;

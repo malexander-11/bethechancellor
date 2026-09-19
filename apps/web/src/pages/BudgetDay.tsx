@@ -83,7 +83,7 @@ export function BudgetDayPage() {
       .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
       .join(' · ');
 
-  // The game's readings: ambitions against the package, and the package as it left the desk.
+  // The game's readings: ambitions against the package, and the package as the OBR saw it.
   const status = useMemo(
     () => (game ? ambitionStatus(game, pm, outcome, levers) : undefined),
     [game, outcome],
@@ -390,7 +390,7 @@ export function BudgetDayPage() {
               {copied ? 'Link copied' : 'Copy a link to this Budget'}
             </button>
             <StepLink to="/budget/taxes" className="btn">
-              Back to the desk
+              Back to the package
             </StepLink>
             <button
               type="button"

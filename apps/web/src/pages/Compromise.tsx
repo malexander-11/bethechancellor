@@ -83,7 +83,7 @@ export function CompromisePage() {
     else next[code] = year;
     spend({ delays: next });
   };
-  // Who feels it: the spending measures cut back since the package left the desk.
+  // Who feels it: the spending measures cut back since the forecast.
   const felt = Object.entries(state.snapshot ?? {})
     .filter(([code, was]) => {
       const lever = byCode.get(code);
@@ -189,7 +189,7 @@ export function CompromisePage() {
                 ))}
               </ul>
               <p className="panel__hint">
-                <StepLink to="/budget/taxes">Every tax, on the desk</StepLink> ·{' '}
+                <StepLink to="/budget/taxes">Every tax</StepLink> ·{' '}
                 <StepLink to="/budget/policies">Your colleagues’ letters</StepLink>
               </p>
             </section>
@@ -258,7 +258,7 @@ export function CompromisePage() {
                 </ul>
               )}
               <p className="panel__hint">
-                <StepLink to="/budget/spending">Every budget, on the desk</StepLink>
+                <StepLink to="/budget/spending">Every budget</StepLink>
               </p>
             </section>
 

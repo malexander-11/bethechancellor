@@ -373,11 +373,11 @@ abbr.term {
 
 /* ------------------------------------------------------- the lever groups */
 
-.desk-drawer {
+.lever-groups {
   margin-bottom: 16px;
 }
 
-.folders {
+.group-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 0 4px;
@@ -387,7 +387,7 @@ abbr.term {
   list-style: none;
 }
 
-.folder-tab {
+.group-tab {
   position: relative;
   display: inline-flex;
   flex: 0 1 auto;
@@ -405,36 +405,36 @@ abbr.term {
   cursor: pointer;
 }
 
-.folder-tab:hover {
+.group-tab:hover {
   background: var(--surface-2);
   color: var(--ink);
 }
 
-.folder-tab[aria-selected='true'] {
+.group-tab[aria-selected='true'] {
   border-bottom-color: var(--accent);
   color: var(--ink);
 }
 
-.folder-tab__name {
+.group-tab__name {
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.25;
 }
 
-.folder-tab[aria-selected='true'] .folder-tab__name {
+.group-tab[aria-selected='true'] .group-tab__name {
   color: var(--accent);
 }
 
-.folder-tab__count {
+.group-tab__count {
   color: var(--muted);
   font-size: 0.875rem;
 }
 
-.folder-tab .tag--treasury {
+.group-tab .tag--treasury {
   align-self: center;
 }
 
-.folder-body {
+.group-panel {
   padding: 16px 20px 20px;
   border: 1px solid var(--border);
   border-top: 0;
@@ -442,12 +442,12 @@ abbr.term {
   background: var(--surface);
 }
 
-.folder-body > .lever:first-of-type {
+.group-panel > .lever:first-of-type {
   padding-top: 4px;
   border-top: 0;
 }
 
-.folder-body > .briefing {
+.group-panel > .briefing {
   margin-bottom: 16px;
 }
 

@@ -16,17 +16,17 @@ describe('journey routes', () => {
     ).toBeGreaterThanOrEqual(1);
   });
 
-  it('redirects old /b links into the desk with the scorecard, on the first of its three files', () => {
+  it('redirects old /b links into the package with the scorecard, on the first of its three parts', () => {
     render(
       <MemoryRouter initialEntries={['/b?v=1&f=obr2603&r=ch2602&i=2027&L=itbr.1']}>
         <App />
       </MemoryRouter>,
     );
     expect(screen.getByText('Build the package')).toBeInTheDocument();
-    // No tab bar: one road. The kicker says which file this is, the button says what is next.
+    // No tab bar: one road. The kicker says which part this is, the button says what is next.
     expect(screen.queryByRole('link', { name: 'Taxes' })).toBeNull();
-    expect(screen.getByText(/File 1 of 3/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Next: the spending file' })).toBeInTheDocument();
+    expect(screen.getByText(/Part 1 of 3/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Next: the spending' })).toBeInTheDocument();
     expect(screen.getByText(/Headroom, 2029-30/)).toBeInTheDocument();
     expect(screen.getByText('Budget 2025 decisions')).toBeInTheDocument();
   });

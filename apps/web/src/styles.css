@@ -563,6 +563,11 @@ hr {
   border-top: 0;
 }
 
+.lever--flush {
+  padding-top: 0;
+  border-top: 0;
+}
+
 .lever__head {
   display: flex;
   flex-wrap: wrap;
@@ -1350,10 +1355,6 @@ details.table-view td:first-child {
 .briefing--compact {
   padding: 12px 16px;
   font-size: 0.9375rem;
-}
-
-.briefing:empty {
-  display: none;
 }
 
 .briefing__head {
