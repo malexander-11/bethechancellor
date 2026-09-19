@@ -47,7 +47,7 @@ export interface SpeechInput {
   game?: GamePermalink;
   pm?: PmFile;
   status?: AmbitionStatus;
-  /** The package as it left the desk, for the compromises paragraph. */
+  /** The package as the OBR saw it, for the compromises paragraph. */
   snapshot?: Record<string, number>;
   macroCodes: readonly string[];
   /** Titles of the rabbit options, by id. */
@@ -215,7 +215,7 @@ export function assembleSpeech(input: SpeechInput): Speech {
   }
   if (giveaways.length > 0) say('giveaways', speech.giveaways, { measures: list(giveaways) });
 
-  // Promises broken on the desk are owned, once.
+  // Promises broken by choice are owned, once.
   const broken = (status?.promises ?? []).filter((p) => !p.kept && p.promise.breaks.length > 0);
   if (broken.length > 0) {
     say('lock-break', speech.lockBreak, {
@@ -223,7 +223,7 @@ export function assembleSpeech(input: SpeechInput): Speech {
     });
   }
 
-  // What was scaled back since the desk, and what starts later.
+  // What was scaled back since the forecast, and what starts later.
   if (input.snapshot) {
     let count = 0;
     for (const [code, was] of Object.entries(input.snapshot)) {

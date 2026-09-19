@@ -27,7 +27,7 @@ const effectOf = (code: string, year: string) => {
   };
 };
 
-describe('the policies your colleagues and the PM put on the desk', () => {
+describe('the policies your colleagues and the PM put in front of you', () => {
   it('are all present, all toggles and all badged honestly', () => {
     expect(campaign.length).toBe(16);
     expect(campaign.every((l) => l.control.kind === 'toggle')).toBe(true);

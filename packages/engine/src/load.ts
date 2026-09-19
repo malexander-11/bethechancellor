@@ -472,7 +472,7 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   if (ds.pm) {
-    // A flagship or a promise that names a lever the desk does not have would be a commitment
+    // A flagship or a promise that names a lever the game does not have would be a commitment
     // the player could never keep or break; the PM may only talk about real levers.
     for (const flagship of ds.pm.flagships) {
       const lever = ds.levers.find((l) => l.code === flagship.target.code);
@@ -500,7 +500,7 @@ export function validateDataset(ds: Dataset): string[] {
   }
   if (ds.ministers) {
     // Every spending and welfare lever has someone to speak for it, and nobody speaks for a lever
-    // the desk does not have. A band that never applies is a line the player can never hear.
+    // the game does not have. A band that never applies is a line the player can never hear.
     const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
     const spoken = new Set(ds.ministers.ministers.map((m) => m.code));
     for (const lever of ds.levers) {
@@ -512,7 +512,7 @@ export function validateDataset(ds: Dataset): string[] {
     for (const minister of ds.ministers.ministers) {
       const lever = byCode.get(minister.code);
       if (!lever) {
-        problems.push(`minister for "${minister.code}" speaks for a lever the desk does not have`);
+        problems.push(`minister for "${minister.code}" speaks for a lever the game does not have`);
         continue;
       }
       if (lever.category === 'macro' || lever.category === 'tax') {
@@ -550,7 +550,7 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   if (ds.rabbit) {
-    // A rabbit is a lever setting; one that names a lever the desk lacks, or a setting the slider
+    // A rabbit is a lever setting; one that names a lever the game lacks, or a setting the slider
     // cannot reach, could never be pulled out of the hat.
     const adviserIds = new Set((ds.advisers?.advisers ?? []).map((a) => a.id));
     for (const spec of [ds.rabbit.intro, ds.rabbit.strengthen, ds.rabbit.keep]) {
@@ -599,7 +599,7 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   if (ds.electorate) {
-    // A household touched by a lever the desk does not have would never feel anything.
+    // A household touched by a lever the game does not have would never feel anything.
     for (const household of ds.electorate.households) {
       for (const touch of household.touches) {
         if (!codes.has(touch.code)) {

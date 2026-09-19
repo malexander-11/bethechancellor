@@ -181,7 +181,7 @@ export const pmFileSchema = z
     }
   });
 
-/* ------------------------------------------------------------ the desk */
+/* ------------------------------------------------------------ the package */
 
 /**
  * A minister's line at a setting. The band applies when the lever's value is above `above` or
@@ -255,7 +255,7 @@ export const ministersFileSchema = z
   });
 
 /**
- * When an adviser speaks up on the desk. A closed list of predicates over the ambition status and
+ * When an adviser speaks up on the package screens. A closed list of predicates over the ambition status and
  * the scorecard, not a language: each is evaluated by `interventionsFor`, and a new one needs code.
  */
 export const interventionWhenSchema = z.enum([
@@ -269,7 +269,7 @@ export const interventionWhenSchema = z.enum([
 ]);
 
 /**
- * An adviser's line on the desk, shown when its predicate holds. `{name}` in the text is filled
+ * An adviser's line on the package screens, shown when its predicate holds. `{name}` in the text is filled
  * with the title of the promise or flagship the predicate fired on: a title from data, never a
  * number. The line's own sources are for any fact it states beyond that.
  */
@@ -429,7 +429,7 @@ export const speechFileSchema = z.strictObject({
   giveaways: speechFragmentSchema,
   /** Said once if a promise made in Downing Street is broken: {promises}. */
   lockBreak: speechFragmentSchema,
-  /** Said if anything was scaled back since the desk: {count}, {saving}. */
+  /** Said if anything was scaled back since the forecast: {count}, {saving}. */
   compromises: speechFragmentSchema,
   /** Said per delayed measure: {title}, {year}. */
   delay: speechFragmentSchema,

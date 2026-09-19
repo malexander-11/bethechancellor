@@ -103,33 +103,33 @@ export function MethodologyPage() {
       <h2>The journey and the advisers</h2>
       <p>
         The game walks through seven steps: the appointment, the outlook, the Prime Minister, the
-        desk, the OBR&rsquo;s forecast and the sums, the rabbit and Budget day. The road runs one
+        package, the OBR&rsquo;s forecast and the sums, the rabbit and Budget day. The road runs one
         way: a stage opens once the one before it has been left, going back is always allowed, and a
         link that jumps ahead is sent back to where the game has got. The progress rail at the top
-        of every page and the guard on every page read the same rule. The desk is three files in
-        sequence (the taxes, the spending, your colleagues&rsquo; letters) with a button forward and
-        a link back; the guide&rsquo;s kicker says which file you are on. Every screen opens with a
-        guide in plain English (which step, what you are doing, why it matters, what to do now) and
-        a glossary of the words a newcomer will not know; both are chrome, carry no badge and quote
-        no figure that is not sourced. The advisers, the Prime Minister and the ministers are roles,
-        not people; a briefing that cites a public document is labelled commentary, and a judgement
-        nobody published is labelled simulated and never produces a number. The advisers&rsquo;
-        suggested slider settings follow a stated rule: the latest market or independent reading
-        minus the OBR&rsquo;s March assumption, rounded to the slider&rsquo;s step. Controls show
-        the level a setting moves to (20% to 21%, £12,570 to £13,070), but the engine costs the
-        change, exactly as before: levels are display only. VAT base-broadening toggles use
-        HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not represent what abolishing a
-        relief would raise; abolishing inheritance tax removes the OBR&rsquo;s whole receipts line;
-        reversing the October 2024 capital gains tax rise uses the Treasury&rsquo;s own costing of
-        the package. The revenue menu a Chancellor actually weighs is on the desk too, each option a
-        published figure: the employer National Insurance threshold, vehicle excise duty, air
-        passenger duty, tobacco duties, the Business Asset Disposal Relief rate, the residence
-        nil-rate band, insurance premium tax, and employer National Insurance on pension
-        contributions from HMRC&rsquo;s private pension statistics (£14.3 billion in 2024-25, a
-        static cost, with HMRC&rsquo;s caveat and the public sector&rsquo;s share on the card).
-        Employer-side National Insurance is not a manifesto red line here, on the government&rsquo;s
-        own reading of the lock; the Political Adviser says on each such lever that the reading is
-        contested.
+        of every page and the guard on every page read the same rule. The package is three screens
+        in sequence (the taxes, the spending, your colleagues&rsquo; letters) with a button forward
+        and a link back; the guide&rsquo;s kicker says which part you are on. Every screen opens
+        with a guide in plain English (which step, what you are doing, why it matters, what to do
+        now) and a glossary of the words a newcomer will not know; both are chrome, carry no badge
+        and quote no figure that is not sourced. The advisers, the Prime Minister and the ministers
+        are roles, not people; a briefing that cites a public document is labelled commentary, and a
+        judgement nobody published is labelled simulated and never produces a number. The
+        advisers&rsquo; suggested slider settings follow a stated rule: the latest market or
+        independent reading minus the OBR&rsquo;s March assumption, rounded to the slider&rsquo;s
+        step. Controls show the level a setting moves to (20% to 21%, £12,570 to £13,070), but the
+        engine costs the change, exactly as before: levels are display only. VAT base-broadening
+        toggles use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not represent what
+        abolishing a relief would raise; abolishing inheritance tax removes the OBR&rsquo;s whole
+        receipts line; reversing the October 2024 capital gains tax rise uses the Treasury&rsquo;s
+        own costing of the package. The revenue menu a Chancellor actually weighs is in the package
+        too, each option a published figure: the employer National Insurance threshold, vehicle
+        excise duty, air passenger duty, tobacco duties, the Business Asset Disposal Relief rate,
+        the residence nil-rate band, insurance premium tax, and employer National Insurance on
+        pension contributions from HMRC&rsquo;s private pension statistics (£14.3 billion in
+        2024-25, a static cost, with HMRC&rsquo;s caveat and the public sector&rsquo;s share on the
+        card). Employer-side National Insurance is not a manifesto red line here, on the
+        government&rsquo;s own reading of the lock; the Political Adviser says on each such lever
+        that the reading is contested.
       </p>
 
       <h2>Spending levers</h2>
@@ -196,17 +196,18 @@ export function MethodologyPage() {
         a judgement leans on, and the thresholds are the game&rsquo;s own, written down in ADR-0013.
       </p>
 
-      <h2>Why it looks like paperwork</h2>
+      <h2>Why it looks plain</h2>
       <p>
-        The desk, the folders and the stamps are drawn in CSS; there are no images and no downloaded
-        fonts, so nothing here costs you a network request or hides behind a picture. The framing
-        stops where the evidence starts. Badges never become stamps: those four words are how you
-        tell a certified costing from our own arithmetic, and they stay plain. Stamps are only ever
-        the verdict on a fiscal rule, which the engine computes. Moving to the next part of a step
-        never removes what you have already read, so an adviser&rsquo;s citations stay on the page
-        behind you. The date at the top and the countdown to 28 October are the only things on
-        screen we did not calculate, and they carry no badge, because chrome must not borrow the
-        vocabulary of a costing.
+        One page colour, one accent, one type family and nothing smaller than 14px: the page is
+        built to be read the way a news article is, not learnt like a game. There are no images and
+        no downloaded fonts, so nothing here costs you a network request or hides behind a picture.
+        Badges never become status marks: those five words are how you tell a certified costing from
+        our own arithmetic, and they stay plain. A rule&rsquo;s verdict is an icon beside a word,
+        which the engine computes; nowhere does colour carry a judgement on its own. Moving to the
+        next part of a step never removes what you have already read, so an adviser&rsquo;s
+        citations stay on the page behind you. The date at the top and the countdown to 28 October
+        are the only things on screen we did not calculate, and they carry no badge, because chrome
+        must not borrow the vocabulary of a costing.
       </p>
 
       <h2>What is not modelled</h2>

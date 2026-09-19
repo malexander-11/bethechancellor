@@ -100,3 +100,17 @@ Four rules, enforced by review and by tests:
 - One collision cost a build: `.drawer` already belonged to the provenance drawer, so the open
   folder is `.folder-body`. Worth recording, because the symptom was styling that silently did
   nothing rather than an error.
+
+## Revision, 2026-09-19: the furniture goes (ADR-0016)
+
+The desk lasted five phases. Played after Phase 10 the verdict was that it should be "much more
+simple… like BBC or FT", and the inventory bore that out: two thirds of the stylesheet was
+decoration, thirty-four selectors set 9px to 13px uppercase type, and every label asked the reader
+to learn a metaphor before reading a number. ADR-0016 replaces the skin with a plain editorial one.
+
+What this decision got right survives it: the beats and their accumulate-don't-replace rule, the
+tablist with manual activation, the folded hand-offs, the ceremony switch, and the rule that badges
+are never decoration. What it got wrong was the premise that a sense of place had to be drawn: the
+stepper, the summary strip and the status words carry the game's pace and score without any
+furniture. The stylesheets named above (`tokens.css` and `objects.css`) became `tokens.css`,
+`styles.css` and `components.css`; the open group is `.group-panel`.

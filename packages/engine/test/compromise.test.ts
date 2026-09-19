@@ -62,7 +62,7 @@ describe('the routes out of a gap', () => {
     expect(basic?.breaks.map((p) => p.id)).toEqual(['tax-lock']);
     const ct = all.find((s) => s.lever.code === 'ct');
     expect(ct?.breaks.map((p) => p.id)).toEqual(['ct-cap']);
-    // A promise already broken on the desk is not counted against the next notch.
+    // A promise already broken by choice is not counted against the next notch.
     const again = revenueSuggestions(ds.levers, { itbr: 1 }, ds.pm.promises, headroomOf, 100);
     expect(again.find((s) => s.lever.code === 'itbr')?.breaks).toEqual([]);
   });

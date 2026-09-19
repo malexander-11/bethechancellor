@@ -9,7 +9,7 @@ import { formatLeverValue } from './LeverControl';
 import { SourceList } from './SourceLink';
 
 /**
- * The assumptions step, as four folders on the desk rather than three sliders.
+ * The assumptions step, as four cards rather than three sliders.
  *
  * Every card is one stated rule over published rows, and each shows the headroom it would leave
  * you with. That last part is the uncomfortable lesson the step exists to teach: a Chancellor can

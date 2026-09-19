@@ -19,7 +19,7 @@ function at(path: string) {
   return view;
 }
 
-describe('the desk, with a game under way', () => {
+describe('the package, with a game under way', () => {
   it('keeps score in the summary strip: headroom against the target, priorities, promises', () => {
     at(`/budget/spending?${BASE}&${GAME}`);
     const box = screen.getByRole('status', { name: 'Your Budget so far' });
@@ -28,8 +28,8 @@ describe('the desk, with a game under way', () => {
     expect(within(box).getByText('all 6 kept')).toBeInTheDocument();
   });
 
-  it('pins a promised flagship to the top of its folder, tagged with how it stands', () => {
-    // Un-funded on this desk, the flagship wears a red tag; funded, the brass one.
+  it('pins a promised flagship to the top of its group, tagged with how it stands', () => {
+    // Un-funded in the package, the flagship wears a red tag; funded, the accent one.
     const first = at(`/budget/spending?${BASE}&${GAME}`);
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
     let panel = screen.getByRole('tabpanel');
@@ -39,7 +39,7 @@ describe('the desk, with a game under way', () => {
       'title',
       expect.stringMatching(/A Justice uplift for prison capacity: you agreed \+10(\.0)?%/),
     );
-    // The pinned lever is the first control in the folder, ahead of Health in the authored order.
+    // The pinned lever is the first control in the group, ahead of Health in the authored order.
     expect(within(panel).getAllByRole('slider')[0]).toHaveAccessibleName('Justice');
     first.unmount();
     at(`/budget/spending?${BASE}&${GAME}&L=moj.10`);
@@ -62,7 +62,7 @@ describe('the desk, with a game under way', () => {
     expect(allowance.closest('.lever')?.textContent).not.toMatch(/Manifesto/);
   });
 
-  it('puts a minister on every spending folder, asking until the lever moves', () => {
+  it('puts a minister on every spending lever, asking until the lever moves', () => {
     at(`/budget/spending?${BASE}&${GAME}&L=dfe.-2`);
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
     const panel = screen.getByRole('tabpanel');
@@ -115,7 +115,7 @@ describe('the desk, with a game under way', () => {
     expect(screen.queryByRole('status', { name: 'Your Budget so far' })).toBeNull();
     expect(screen.queryByRole('region', { name: 'Your advisers' })).toBeNull();
     expect(screen.queryByRole('complementary', { name: /press summary/ })).toBeNull();
-    // The ministers stay: they belong to the desk, not to the game.
+    // The ministers stay: they belong to the package, not to the game.
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
     expect(screen.getAllByText('Education Secretary').length).toBeGreaterThan(0);
   });

@@ -96,7 +96,7 @@ const RED_LINE_WORDS: Record<RedLine['when'], string> = {
 /**
  * The warnings on the lever. A watched lever always wears a quiet tag naming the red line, so a
  * newcomer learns it before touching the control; a crossed line turns red. A promised flagship
- * wears its promise while it is funded and a red tag once the desk has pulled it below the target.
+ * wears its promise while it is funded and a red tag once the package has pulled it below the target.
  */
 function LeverFlags({ redLines, promised }: { redLines: RedLine[]; promised?: Promised }) {
   return (

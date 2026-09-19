@@ -3,7 +3,7 @@ import { ministers } from '../data';
 import { Spoken } from './Conversation';
 
 /**
- * The minister on a folder. Untouched, they ask; cut, they say what stops happening; raised, they
+ * The minister on a spending lever. Untouched, they ask; cut, they say what stops happening; raised, they
  * make the case. A game judgement in a role's voice, with the facts inside it sourced.
  */
 export function MinisterLine({ lever, value }: { lever: Lever; value: number }) {

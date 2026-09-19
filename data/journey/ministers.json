@@ -546,7 +546,7 @@
             "below": 0
           },
           "line": {
-            "text": "Cutting capital is the oldest trick on this desk. It costs nothing this year and everything later, and it barely helps the current budget, because only the interest moves.",
+            "text": "Cutting capital is the oldest trick in the Treasury. It costs nothing this year and everything later, and it barely helps the current budget, because only the interest moves.",
             "sources": [
               {
                 "sourceId": "obr-efo-2026-03",
@@ -712,7 +712,7 @@
       "code": "wpens",
       "role": "Work and Pensions Secretary",
       "asking": {
-        "text": "About 850,000 people a year reach state pension age by 2030-31, up from 700,000 in 2022-23. This line moves with demography and the triple lock, not with anything on this desk.",
+        "text": "About 850,000 people a year reach state pension age by 2030-31, up from 700,000 in 2022-23. This line moves with demography and the triple lock, not with anything in this Budget.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",

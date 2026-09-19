@@ -18,7 +18,7 @@ function at(path: string) {
 
 describe('the road runs one way', () => {
   it('sends a game that jumps ahead back to the furthest open stage', () => {
-    // Agreed with the PM (st.2), so the desk is open and the rabbit is not.
+    // Agreed with the PM (st.2), so the package is open and the rabbit is not.
     const early = at(`/rabbit?${BASE}&g=${G}_st.2`);
     expect(screen.getByText('Build the package')).toBeInTheDocument();
     early.unmount();
@@ -37,7 +37,7 @@ describe('the road runs one way', () => {
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
   });
 
-  it('keeps a sandbox link open to the desk and Budget day, and sends its story pages to the outlook', () => {
+  it('keeps a sandbox link open to the package and Budget day, and sends its story pages to the outlook', () => {
     const desk = at(`/budget/spending?${BASE}&L=itbr.1`);
     expect(screen.getByText('Build the package')).toBeInTheDocument();
     desk.unmount();
@@ -48,7 +48,7 @@ describe('the road runs one way', () => {
     expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
   });
 
-  it('always lets you go back: a game at the sums can reopen the desk and the PM', () => {
+  it('always lets you go back: a game at the sums can reopen the package and the PM', () => {
     const desk = at(`/budget/taxes?${BASE}&g=${G}_st.4_rv.1`);
     expect(screen.getByText('Build the package')).toBeInTheDocument();
     desk.unmount();

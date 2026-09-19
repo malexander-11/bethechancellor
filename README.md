@@ -4,10 +4,10 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 10 (one road through the game, and a real revenue menu)**. You are appointed
-Chancellor in a Labour government with a Budget to deliver on 28 October 2026, and the whole thing
-happens on a desk: paper on green leather, manila folders with treasury tags, rubber-stamped
-verdicts, a countdown to Budget day. Every screen opens with a guide in plain English: which step
+Status: **Phase 11 (a plain, editorial skin)**. You are appointed Chancellor in a Labour
+government with a Budget to deliver on 28 October 2026. The page is plain: one accent, one type
+family, white cards on an off-white page, nothing smaller than 14px, a dark theme that follows your
+system, and a countdown to Budget day. Every screen opens with a guide in plain English: which step
 this is, what you are doing, why it matters, what to do now. The road runs one way: a progress
 rail of seven stops, a button forward at the foot of every page, a way back but never a way to
 jump ahead. The sources and breakdowns sit behind a "Show workings" switch, off by default; the
@@ -18,8 +18,8 @@ Seven steps. **The appointment**: three advisers brief you on the rules and why 
 economy since March, and a new Prime Minister who wants a Budget people notice while the manifesto
 ties your hands. **The outlook**: which forecast do you plan on, and how much headroom do you keep?
 **The Prime Minister**: tick the themes this Budget is for, then the flagships under each; every
-flagship you tick is funded on the spot and the headroom falls as you choose. **The desk**: three
-files in sequence (the taxes, the spending, your colleagues' letters), every lever wearing the
+flagship you tick is funded on the spot and the headroom falls as you choose. **The package**:
+three screens in sequence (the taxes, the spending, your colleagues' letters), every lever wearing the
 manifesto red line that watches it, with a minister on every spending line and advisers who
 remember what you agreed, and a revenue menu a Chancellor actually weighs: employer National
 Insurance, pensions, the smaller duties, capital-tax reliefs, going further on recent rises. **The forecast**: the OBR's envelope,
@@ -59,10 +59,11 @@ rebase to the 28 October 2026 forecast.
   its published inputs and its assumptions, is badged an assumption rather than a direct costing,
   and is reproduced from those inputs by a test. Where the base is contested, the card says so
   before it shows the number.
-- **The game is paperwork, and the paperwork is honest.** The desk, the folders and the stamps are
-  drawn in CSS and inline SVG; there are no images and no webfonts. The badges never become
-  decoration, the provenance drawer never loses a table, and the only facts on screen that the
-  engine did not compute are the date and the countdown, which carry no badge.
+- **The page is plain, and the plainness is honest.** One accent, one type family, nothing under
+  14px, every text colour checked for contrast in both themes; there are no images and no webfonts.
+  The badges never become decoration, a verdict is always a word beside an icon and never a colour
+  alone, the provenance drawer never loses a table, and the only facts on screen that the engine
+  did not compute are the date and the countdown, which carry no badge.
 - **Rebasing is a data refresh.** The baseline forecast is a versioned "vintage". When the OBR
   publishes a new forecast (next: Budget, 28 October 2026) the data is regenerated and the app
   re-reads it.

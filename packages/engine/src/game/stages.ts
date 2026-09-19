@@ -3,7 +3,7 @@ import type { GamePermalink } from '../types/engine.js';
 
 /**
  * The seven stages of a playthrough, in order. Taxes, spending and policies are one stage with
- * three tabs, so the desk's three step ids map to one index. `assumptions` and `recommendations`
+ * three tabs, so the package's three step ids map to one index. `assumptions` and `recommendations`
  * are the Phase 4 names that still appear in authored data.
  */
 export const GAME_STAGES: readonly JourneyStep[] = [
@@ -30,12 +30,12 @@ export function stageIndex(step: JourneyStep): number {
   return GAME_STAGES.indexOf(ALIASES[step] ?? step);
 }
 
-/** The canonical stage a step belongs to: the desk's three screens are `taxes`, and so on. */
+/** The canonical stage a step belongs to: the package's three screens are `taxes`, and so on. */
 function canonical(step: JourneyStep): JourneyStep {
   return ALIASES[step] ?? step;
 }
 
-/** With no game the desk and Budget day are a sandbox; the stages that tell the story are not. */
+/** With no game the package and Budget day are a sandbox; the stages that tell the story are not. */
 const SANDBOX_OPEN: ReadonlySet<JourneyStep> = new Set(['outlook', 'taxes', 'budget-day']);
 
 /**

@@ -20,14 +20,14 @@ interface Card {
   /** What choosing this does to headroom in the target year, £ million; nought for keeping it. */
   changeGbpm: number;
   headroomAfterGbpm: number;
-  /** Already moved on the desk for its own sake: not a surprise, so not on offer. */
+  /** Already moved in the package for its own sake: not a surprise, so not on offer. */
   taken: boolean;
   line: { text: string; sources: { sourceId: string }[]; badge: 'simulated' };
   who: string;
 }
 
 /**
- * Stage 6. A short menu of prepared announcements, each already a lever on the desk, each priced
+ * Stage 6. A short menu of prepared announcements, each already a lever in the package, each priced
  * by the engine as the headroom it would leave. Two more cards: raise a priority one notch past
  * what was agreed, or keep the headroom and make that the announcement. Whatever is chosen is a
  * lever value, so the final forecast includes it before anything is said; the surprise is only

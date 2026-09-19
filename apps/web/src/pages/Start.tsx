@@ -19,7 +19,7 @@ const READINGS = ['gilt-10y', 'cpi-latest', 'psnb-ytd'];
  * Step 1: the appointment. The letter is the premise; beneath it, three advisers brief the new
  * Chancellor in one screen: the rules and why they matter, the state of the economy, and the
  * politics. Every figure on the cards is a context reading or a sourced fact; the red lines are
- * the PM's promises, read from the same file the desk's warnings use, so they can never drift.
+ * the PM's promises, read from the same file the levers' warnings use, so they can never drift.
  */
 export function StartPage() {
   const headroom = vintage.context?.headroomAtPublicationGbpm ?? 0;

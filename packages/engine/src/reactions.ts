@@ -26,7 +26,7 @@ export interface ReadingsInput {
   game?: GamePermalink;
   /** Ambitions against the package, computed by the caller from the same outcome. */
   status?: AmbitionStatus;
-  /** The package as it left the desk, re-run under today's conditions, for the compromises line. */
+  /** The package as the OBR saw it, re-run under today's conditions, for the compromises line. */
   snapshotOutcome?: Outcome;
   macroCodes?: readonly string[];
   /** The rabbit: the lever it moved, if any, and what to call it. */

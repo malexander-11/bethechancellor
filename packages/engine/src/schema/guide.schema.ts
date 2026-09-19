@@ -25,7 +25,7 @@ export const glossaryFileSchema = z.strictObject({
 
 export const guideStageSchema = z.strictObject({
   step: journeyStepSchema,
-  /** Which of the seven steps this screen belongs to; the desk's three tabs share one. */
+  /** Which of the seven steps this screen belongs to; the package's three screens share one. */
   number: z.number().int().min(1).max(7),
   title: z.string().min(1).max(60),
   doing: z.string().min(1).max(200),

@@ -16,8 +16,8 @@ function at(path: string, search = 'v=1&f=obr2603&r=ch2602&i=2027') {
   if (go) fireEvent.click(go);
 }
 
-describe('the Policies folder', () => {
-  it('is where the old recommendations step now lands, as the third file of the desk', () => {
+describe('the policies screen', () => {
+  it('is where the old recommendations step now lands, as the third part of the package', () => {
     at('/recommendations');
     expect(screen.getByText('Build the package')).toBeInTheDocument();
     expect(screen.getByText(/Part 3 of 3/)).toBeInTheDocument();

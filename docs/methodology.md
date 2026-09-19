@@ -144,7 +144,7 @@ differs, so the numbers in the app cannot drift from the published ones.
   the start year. A scorecard-backed schedule reverses the published measure (minus the lines) or,
   with `direction: "repeat"`, does it again (plus the lines); a repeat assumes the second round
   raises what the Treasury costed for the first, is badged an assumption and lives in the
-  colleagues' letters folder (ADR-0015).
+  colleagues' letters group (ADR-0015).
 - **Relief-cost toggles.** HMRC's static cost of a relief for its latest year, applied from the
   start year and grown with the relevant receipts head, with HMRC's caveat that the cost of a
   relief is not the yield from removing it. Two extracts back them: HMRC's tax relief statistics
@@ -457,16 +457,17 @@ bands that read these figures were replaced in Phase 9 by the reception (§15).
 The public's card also carries the distributional considerations of the levers the player moved,
 in their own words and with their own citations, ordered by the size of the measure.
 
-## 13. The desk (ADR-0009)
+## 13. The look (ADR-0009, ADR-0016)
 
-The interface is a desk in the Treasury: paper on green leather, manila folders, rubber-stamped
-verdicts, a countdown to 28 October. None of it is an image or a webfont; paper grain is two
-hairline gratings, folder tabs are clip-paths, punch holes are radial gradients.
+The interface is plain: an off-white page, white cards with hairline rules, one teal accent, the
+reader's own sans-serif at 16px with nothing under 14px, and a dark theme that follows the system.
+Phase 6 dressed the game as paperwork on a Treasury desk (ADR-0009); Phase 11 took the furniture
+away because it stood between the reader and the numbers (ADR-0016). Three rules from the desk
+survive it.
 
-Three rules keep the framing from eating the sourcing.
-
-**Badges are never stamps.** The five badge words are the honesty contract's vocabulary. Stamps are
-for rule verdicts, which are the engine's own judgement on your Budget, and nowhere else.
+**Badges are never status marks.** The five badge words are the honesty contract's vocabulary. A
+rule's verdict is an icon beside a word in a status colour, which the engine computes, and nowhere
+else does colour carry a judgement on its own.
 
 **Beats accumulate.** Each step hands you something before the working surface, but moving on never
 removes what you have read: source links inside a briefing stay in the document. A hand-off you
@@ -477,18 +478,18 @@ the URL, which means one thing only, a budget.
 did not compute. Both derive from the Charter's next formal assessment date, so a data refresh
 moves them, and neither carries a badge: chrome must not borrow the vocabulary of a costing.
 
-One thing the desk costs: a closed folder's papers leave the document, so find-in-page no longer
-reaches every lever at once. The attribution list beside the folders names every lever you have
+One thing the tab bar costs: a closed group's levers leave the document, so find-in-page no longer
+reaches every lever at once. The attribution list beside the groups names every lever you have
 moved, which is the question that was actually being asked.
 
 ## 14. The game: from ambition to reaction (ADR-0011, ADR-0012)
 
 From Phase 8 the journey is a game in seven steps; Phase 9 (§15) renumbered them so that the
-appointment is step 1: the appointment, the outlook, the Prime Minister, the desk, the OBR's
+appointment is step 1: the appointment, the outlook, the Prime Minister, the package, the OBR's
 forecast and the sums, the rabbit and Budget day. The budget still travels in the query string; the
 playthrough travels beside it as `g=` (seed, stage reached, outlook, headroom target, themes,
 priorities, delays, whether the envelope is open, the rabbit, an acknowledged breach) and `S=` (the
-package as it left the desk). Both are absent until a seed is minted, so every older link is byte
+package as the OBR saw it). Both are absent until a seed is minted, so every older link is byte
 for byte the same. The Phase 8 keys for protected promises, concessions, political capital and
 dropped priorities (`pp`, `cn`, `cp`, `dp`) are retired: a link that carries them decodes without
 them (ADR-0013).
@@ -515,20 +516,20 @@ Bank's account of gilt volatility), because no document publishes it.
 Step 3 is a conversation in data (`data/journey/pm.json`): what has already been done, the themes
 this Budget is for (tick all that apply), and the flagships under each theme plus two cross-cutting
 ones. Every flagship is a lever and a target value whose cost is read live from the engine, and
-from Phase 9 ticking one funds it on the spot: the lever moves and the despatch box's headroom
+from Phase 9 ticking one funds it on the spot: the lever moves and the summary strip's headroom
 falls; un-ticking restores the default, which is why a validator forbids two flagships on one
 lever. The manifesto's promises are detectors over lever values (or, for the fiscal rules, over the
 verdicts) with their sources, and they are fixed: every one binds from the first screen to the
 last. `ambitionStatus` reports each priority funded, part-funded, unfunded or delayed and each
 promise kept or broken, with the lever named.
 
-### The desk, staffed
+### The package, staffed
 
 Every spending and welfare lever has a minister (`ministers.json`): asking while it is untouched,
 saying what stops happening at a cut, making the case for more. Advisers intervene from a closed
 list of predicates (`interventions.json`): a promise broken, a priority unfunded, headroom below the
-target, a rule missed. Promised flagships are pinned to their folder; the despatch box keeps score;
-the Political Adviser's press summary plants the clue the seed chose. Leaving the desk snapshots the
+target, a rule missed. Promised flagships are pinned to the top of their group; the summary strip keeps score;
+the Political Adviser's press summary plants the clue the seed chose. Leaving the package snapshots the
 package.
 
 ### The forecast
@@ -591,13 +592,13 @@ matter, with headroom and the OBR's typical error as facts; the Chief Economic A
 moved since March, with reading chips built from the context file's own figures by the same
 `summariseReading` the assumptions table uses; the Political Adviser on a Prime Minister who wants a
 Budget people notice and a manifesto that ties your hands, with the red lines listed from
-`pm.json`, so the briefing, the desk's warnings and Budget day's judgement can never disagree.
+`pm.json`, so the briefing, the levers' warnings and Budget day's judgement can never disagree.
 
 ### The warnings on the lever
 
 A lever a red line watches wears a quiet "Manifesto: no rise" (or "no cut", "do not switch on")
 so the line is learnt before it is tested; a crossed line turns the tag red. A flagship promised to
-the PM wears "Promised to the PM" while the desk funds it and "Below what you promised the PM" once
+the PM wears "Promised to the PM" while the package funds it and "Below what you promised the PM" once
 it is pulled back. Both are read through `promiseBreaks` and `ambitionStatus`, pure arithmetic over
 the package.
 
@@ -621,20 +622,20 @@ in one to five over random points and caps and over random packages.
 
 `enterable(step, game)` in the engine says whether a stage may be opened: once the stage before it
 has been left, always backwards, Budget day from the rabbit, and with no game only the sandbox
-(the desk and Budget day). Every page calls `useStageGuard`, which redirects an early arrival to
+(the package and Budget day). Every page calls `useStageGuard`, which redirects an early arrival to
 `furthestStep(game)` with the budget's query string; the progress rail at the top of every page
-reads the same rule, so a stop is a link only when the guard would let it through. The desk is
+reads the same rule, so a stop is a link only when the guard would let it through. The package is
 three screens in sequence (taxes, spending, your colleagues' letters) with a button forward and a
 link back; the guide's kicker says which screen ("File 2 of 3"), as it does for the forecast and the
 sums. The beats are unchanged.
 
 ### The revenue menu
 
-Every option is a published figure with its published caveat. In the tax folders, direct-badged:
+Every option is a published figure with its published caveat. In the tax groups, direct-badged:
 the employer NICs threshold, vehicle excise duty, air passenger duty, tobacco duties, the Business
 Asset Disposal Relief rate, abolishing the residence nil-rate band, insurance premium tax, and
 employer National Insurance on pension contributions from HMRC's private pension statistics
-(£14,300m in 2024-25, grown with National Insurance receipts). In the letters folder, badged
+(£14,300m in 2024-25, grown with National Insurance receipts). In the letters group, badged
 assumption: a flat 30% rate of pension relief by the `weightedSum` method over HMRC's relief by
 marginal rate, and two repeats of certified Budget 2025 rises (investment income, gambling duties)
 by the `repeat` direction. Employer-side National Insurance is not a manifesto red line here, on

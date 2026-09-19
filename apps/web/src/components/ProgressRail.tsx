@@ -38,7 +38,7 @@ export function stopFor(step: JourneyStep): Stop {
  * The road, drawn: seven numbered stops on one line. A stop you have reached is a link, so you can
  * go back to the package; the one you are at is marked; the ones ahead are inert. It reads
  * the same `enterable` rule as the guard on every page, so it never offers a link that would only
- * bounce. With no game the guard leaves the desk and Budget day open to a shared link, but the
+ * bounce. With no game the guard leaves the package and Budget day open to a shared link, but the
  * rail still offers nothing ahead of you: the sandbox has its own door on the appointment letter.
  * Numbers stay visible at every width; labels other than the current one go at phone width.
  */

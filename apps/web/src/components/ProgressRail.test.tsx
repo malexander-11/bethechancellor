@@ -19,7 +19,7 @@ describe('the progress rail', () => {
     at(`/compromise?${BASE}&g=s.417_st.4_pl.adviser_hr.20_rv.1`);
     const rail = screen.getByRole('navigation', { name: 'Budget steps' });
     expect(within(rail).getAllByRole('listitem')).toHaveLength(7);
-    // Behind: the appointment, the outlook, the PM and the desk are links.
+    // Behind: the appointment, the outlook, the PM and the package are links.
     expect(within(rail).getByRole('link', { name: /The appointment/ })).toBeInTheDocument();
     expect(within(rail).getByRole('link', { name: /The PM/ })).toBeInTheDocument();
     expect(within(rail).getByRole('link', { name: /The package/ })).toBeInTheDocument();

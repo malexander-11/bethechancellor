@@ -1,7 +1,7 @@
 import type { Lever, Minister, MinisterBand, MinistersFile, SimulatedLine } from '../types/data.js';
 
 /**
- * Ministers on the folders. Each spending lever has a role who speaks for it: what they are
+ * Ministers on the spending levers. Each spending lever has a role who speaks for it: what they are
  * asking for while the lever is untouched, what stops happening at a cut, the case they made for
  * more. The line is a game judgement and wears the badge; the fact inside it carries its source.
  * Nothing here produces a number: the bands are read against the lever's value, that is all.

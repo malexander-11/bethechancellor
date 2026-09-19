@@ -92,7 +92,7 @@ describe('the conversation with the Prime Minister', () => {
     expect(screen.queryByRole('group', { name: 'Cost of living' })).toBeNull();
   });
 
-  it('has nothing to negotiate: the red lines are fixed, and agreeing goes to the desk', async () => {
+  it('has nothing to negotiate: the red lines are fixed, and agreeing goes to the package', async () => {
     at(`/pm?${BASE}&g=s.7_st.1_th.cost-of-living_pr.ufsm-all+bus-cap&L=ufsm.1_bus2.1`);
     next();
     next();

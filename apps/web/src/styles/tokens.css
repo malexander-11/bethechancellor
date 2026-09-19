@@ -25,14 +25,15 @@
 
   /* The accent: links, buttons, focus, the current step */
   --accent: #0b6e76;
+  --accent-hover: #085a61;
   --accent-ink: #ffffff;
   --accent-wash: rgba(11, 110, 118, 0.1);
 
   /* Status, always beside an icon or a word */
-  --good: #1d7f3a;
+  --good: #1a7736;
   --warning: #8a5a00;
   --critical: #b3261e;
-  --good-wash: rgba(29, 127, 58, 0.1);
+  --good-wash: rgba(26, 119, 54, 0.1);
   --warning-wash: rgba(138, 90, 0, 0.1);
   --critical-wash: rgba(179, 38, 30, 0.1);
 
@@ -81,9 +82,10 @@
     --grid: #333230;
     --axis: #6b6862;
 
-    --accent: #2fa3ae;
+    --accent: #34adb8;
+    --accent-hover: #4dbcc6;
     --accent-ink: #0f1211;
-    --accent-wash: rgba(47, 163, 174, 0.16);
+    --accent-wash: rgba(52, 173, 184, 0.12);
 
     --good: #6ccf8a;
     --warning: #e0b45f;

@@ -1,7 +1,7 @@
 import type { JourneyStep } from '@btc/engine';
 
 /**
- * Where each step of the journey lives. The desk's three screens and the Phase 4 aliases all
+ * Where each step of the journey lives. The package's three screens and the Phase 4 aliases all
  * resolve to a route, so a redirect to "the furthest open stage" always has somewhere to go.
  */
 export const STAGE_ROUTES: Record<JourneyStep, string> = {

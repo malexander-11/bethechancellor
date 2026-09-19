@@ -6,7 +6,7 @@
       "adviser": "political-adviser",
       "when": "promise-broken",
       "line": {
-        "text": "That is {name}, Chancellor: a manifesto red line, and the words are on the record. The desk will let you, and the public will notice.",
+        "text": "That is {name}, Chancellor: a manifesto red line, and the words are on the record. Nothing here will stop you, and the public will notice.",
         "sources": [],
         "badge": "simulated"
       }
@@ -31,7 +31,7 @@
       "adviser": "director-of-public-spending",
       "when": "priority-unfunded",
       "line": {
-        "text": "{name} was funded when you left Downing Street. Nothing on this desk funds it now.",
+        "text": "{name} was funded when you left Downing Street. Nothing in your Budget funds it now.",
         "sources": [],
         "badge": "simulated"
       }

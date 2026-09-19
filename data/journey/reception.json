@@ -240,7 +240,7 @@
             "label": "Flagships agreed with the Prime Minister no longer funded",
             "unit": "count"
           },
-          "note": "Any flagship the desk pulled back from the target agreed in Downing Street.",
+          "note": "Any flagship pulled back from the target agreed in Downing Street.",
           "bands": [
             {
               "id": "delivered",

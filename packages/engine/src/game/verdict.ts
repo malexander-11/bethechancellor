@@ -154,7 +154,7 @@ export function incidenceRows(
   };
 }
 
-/** What changed between the desk and the box, ranked by what it did to borrowing. */
+/** What changed between the forecast and Budget day, ranked by what it did to borrowing. */
 export function compromiseRows(
   input: Pick<VerdictInput, 'vintage' | 'rules' | 'levers' | 'outcome' | 'snapshot' | 'macroCodes'>,
   year: string,

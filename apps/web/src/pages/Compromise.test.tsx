@@ -46,7 +46,7 @@ describe('making it add up', () => {
     expect(buttons).toHaveLength(3);
     expect(within(route).getAllByText(/breaks The tax lock/).length).toBeGreaterThan(0);
     fireEvent.click(buttons[0]!);
-    // The biggest yield on the desk is applied, whichever tax it is; the package grows by one.
+    // The biggest yield in the package is applied, whichever tax it is; the package grows by one.
     await waitFor(() => expect(L().split('_')).toHaveLength(6));
   });
 
