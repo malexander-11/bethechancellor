@@ -1,0 +1,1447 @@
+/*
+ * The journey: the dateline, the stepper, the guide, the beats, and the cards each step is made
+ * of. Plain cards on a plain page; the score stays visible through the stepper, the summary
+ * strip, the status words and the reception bars, not through furniture (ADR-0016).
+ */
+
+.journey {
+  display: block;
+}
+
+/* ----------------------------------------------------------- the dateline */
+
+.dateline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin: 0 0 12px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.dateline__rule {
+  display: none;
+}
+
+.dateline__countdown {
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------ the stepper */
+
+/*
+ * Seven stops. A stop behind you is a link, the one you are at is filled, the ones ahead are
+ * inert (ADR-0014). A hairline joins the discs; on a phone only the current stop keeps its label.
+ */
+.progress {
+  margin: 0 0 20px;
+}
+
+.progress__stops {
+  display: flex;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.progress__stop {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 4px;
+}
+
+.progress__stop::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+.progress__stop:first-child::before {
+  left: 50%;
+}
+
+.progress__stop:last-child::before {
+  right: 50%;
+}
+
+.progress__stop--open::before,
+.progress__stop--current::before {
+  background: var(--accent);
+}
+
+.progress__stop > a,
+.progress__stop > span {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+}
+
+.progress__number {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.progress__label {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.progress__stop--open .progress__number {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.progress__stop--open a:hover .progress__label,
+.progress__stop--open a:focus-visible .progress__label {
+  text-decoration: underline;
+}
+
+.progress__stop--current [aria-current] {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.progress__stop--current .progress__number {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.progress__ahead {
+  color: var(--muted);
+}
+
+@media (max-width: 639px) {
+  .progress__stop:not(.progress__stop--current) .progress__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .progress__stop:not(.progress__stop--current) {
+    flex: 0 0 auto;
+  }
+
+  .progress__stop--current {
+    flex: 1 1 auto;
+  }
+}
+
+/* -------------------------------------------------------------- the guide */
+
+.guide {
+  margin: 0 0 20px;
+}
+
+.guide__kicker {
+  margin-bottom: 6px;
+}
+
+/* Which screen of a two- or three-screen step this is: "· Part 2 of 3: the spending". */
+.guide__part {
+  margin-left: 6px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.guide__part::before {
+  content: '· ';
+}
+
+.guide .page-title {
+  margin: 0 0 12px;
+}
+
+.guide__lines {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 24px;
+  margin: 0;
+}
+
+.guide__line dt {
+  margin: 0 0 4px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.guide__line dd {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.guide__line--now dd {
+  font-weight: 600;
+}
+
+abbr.term {
+  text-decoration: underline dotted;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 2px;
+  cursor: help;
+}
+
+.guide__terms {
+  margin-top: 12px;
+  font-size: 0.9375rem;
+}
+
+.guide__terms summary {
+  padding: 6px 0;
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.guide__terms dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px 20px;
+  margin: 8px 0 0;
+}
+
+.guide__terms dt {
+  font-weight: 700;
+}
+
+.guide__terms dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+@media (max-width: 639px) {
+  .guide__lines {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -------------------------------------------------------------- the beats */
+
+.beat {
+  margin: 0 0 24px;
+}
+
+.beat__continue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.beat__continue .btn {
+  min-width: 200px;
+}
+
+.beat__hint {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+/* A hand-off you have already read folds away, so the working surface is not buried under it. */
+.beat--past-summary {
+  display: block;
+  margin: 0 0 16px;
+}
+
+.beat--past-summary > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  list-style: none;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.beat--past-summary > summary::-webkit-details-marker {
+  display: none;
+}
+
+.beat--past-summary > summary::before {
+  content: '\25b8';
+  color: var(--muted);
+}
+
+.beat--past-summary[open] > summary::before {
+  content: '\25be';
+}
+
+.beat--past-summary[open] > summary {
+  margin-bottom: 12px;
+}
+
+/* The way out of the ceremony, for a second play or a reader who wants the whole file at once. */
+.ceremony {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.ceremony label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.ceremony input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+}
+
+/* ------------------------------------------------------- the appointment */
+
+.hero-start {
+  margin-bottom: 16px;
+}
+
+.hero-start .lede {
+  color: var(--ink);
+  font-size: 1.25rem;
+}
+
+.hero-start__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0 8px;
+}
+
+.hero-start__skip {
+  margin: 0 0 12px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+/* The line at the head of a document: who it is from, and what it is. */
+.letter__from {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin: 0 0 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.letter__ref {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* ------------------------------------------------------- the lever groups */
+
+.desk-drawer {
+  margin-bottom: 16px;
+}
+
+.folders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 4px;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--border);
+  list-style: none;
+}
+
+.folder-tab {
+  position: relative;
+  display: inline-flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--ink-2);
+  text-align: left;
+  cursor: pointer;
+}
+
+.folder-tab:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.folder-tab[aria-selected='true'] {
+  border-bottom-color: var(--accent);
+  color: var(--ink);
+}
+
+.folder-tab__name {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.folder-tab[aria-selected='true'] .folder-tab__name {
+  color: var(--accent);
+}
+
+.folder-tab__count {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.folder-tab .tag--treasury {
+  align-self: center;
+}
+
+.folder-body {
+  padding: 16px 20px 20px;
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--surface);
+}
+
+.folder-body > .lever:first-of-type {
+  padding-top: 4px;
+  border-top: 0;
+}
+
+.folder-body > .briefing {
+  margin-bottom: 16px;
+}
+
+.pinned {
+  padding-top: 4px;
+  border-top: 2px solid var(--accent);
+}
+
+.interventions {
+  margin: 8px 0 4px;
+}
+
+.interventions .spoken {
+  margin: 8px 0;
+}
+
+.minister .spoken {
+  margin: 4px 0 16px;
+  font-size: 0.9375rem;
+}
+
+/* ----------------------------------------------------- the summary strip */
+
+.despatch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin: 12px 0;
+  padding: 12px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.despatch__cell {
+  display: flex;
+  flex: 1 1 140px;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+}
+
+.despatch__label {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.despatch__value {
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.despatch__sub {
+  display: block;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+/* --------------------------------------------------------------- a note */
+
+.note {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--ink-2);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.note p {
+  margin: 0 0 6px;
+}
+
+.note p:last-child {
+  margin-bottom: 0;
+}
+
+.note .kicker {
+  color: var(--ink-2);
+}
+
+.note--press {
+  margin: 12px 0 4px;
+}
+
+/* --------------------------------------------------- the four assumptions */
+
+.scenarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
+  gap: 12px;
+  margin: 12px 0 16px;
+}
+
+.scenario {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition:
+    border-color var(--t-base) var(--ease),
+    background-color var(--t-base) var(--ease);
+}
+
+.scenario--picked {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.scenario__choose {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.scenario__choose input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+}
+
+.scenario__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.scenario__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.scenario__headline {
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.scenario__settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin-top: 2px;
+}
+
+.scenario__chip {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.scenario__chip strong {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The uncomfortable part of the step: four forecasts, four different headrooms. */
+.scenario__headroom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.scenario__headroom small {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.scenario__headroom strong {
+  font-size: 1.375rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.scenario__why {
+  padding: 0 16px;
+  border-top: 1px solid var(--border);
+}
+
+.scenario__why summary {
+  padding: 10px 0;
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.scenario__why p {
+  margin: 0 0 8px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.scenario__workings {
+  margin: 0 0 12px;
+  font-size: 0.875rem;
+}
+
+.scenario__workings dt {
+  margin-top: 8px;
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+.scenario__workings dd {
+  margin: 2px 0 0;
+  line-height: 1.5;
+}
+
+/* Where the published range is on a different footing from the reading above it. */
+.scenario__note {
+  color: var(--warning);
+}
+
+.scenario--own {
+  grid-column: 1 / -1;
+  padding: 16px;
+}
+
+.scenario--own p {
+  margin: 0 0 6px;
+}
+
+/* ---------------------------------------------------------- conversation */
+
+/* A spoken line: a card with a coloured edge naming who is talking, and the badge that says it
+   is a game judgement. The PM's edge is red, a minister's grey, an adviser's the accent. */
+.spoken {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--critical);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.spoken--minister {
+  border-left-color: var(--ink-2);
+}
+
+.spoken--adviser {
+  border-left-color: var(--accent);
+}
+
+.spoken--press {
+  border-left-color: var(--muted);
+  background: var(--surface-2);
+}
+
+.spoken__who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin: 0 0 4px;
+  font-size: 0.875rem;
+}
+
+.spoken__who .kicker {
+  color: var(--ink-2);
+}
+
+.spoken--adviser .spoken__who .kicker {
+  color: var(--accent);
+}
+
+.spoken__text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.spoken__sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+}
+
+/* ------------------------------------------------------------- choices */
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 8px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.choices--list {
+  grid-template-columns: 1fr;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    border-color var(--t-base) var(--ease),
+    background-color var(--t-base) var(--ease);
+}
+
+label.choice {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.choice > label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.choice--picked {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.choice input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+}
+
+.choice__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.choice__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.choice__line {
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.choice__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 0.875rem;
+}
+
+.choice__delivery {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.choice--taken {
+  opacity: 0.6;
+}
+
+/* One fieldset of flagships per ticked theme, on the PM's page. */
+.flagships {
+  min-width: 0;
+  margin: 16px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.flagships > legend {
+  padding: 0;
+}
+
+/* The headroom target under the four cards. */
+.targets {
+  min-width: 0;
+  margin: 8px 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.targets__options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 8px;
+}
+
+.target {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.target--picked {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.target input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+}
+
+.target__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ------------------------------------------------- the envelope and the gap */
+
+.envelope p {
+  margin: 0 0 8px;
+}
+
+.reveal__headline {
+  margin: 6px 0 8px;
+  font-size: 1.125rem;
+}
+
+.reveal__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+  margin: 12px 0 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.reveal__label {
+  flex: 1 1 260px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.reveal__line strong {
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.reveal__line--total strong {
+  font-size: 1.75rem;
+}
+
+.reveal__delta {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.bottom-line {
+  border-left: 3px solid var(--accent);
+}
+
+.decomp td .source {
+  display: block;
+}
+
+.stamps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stamps li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ambitions {
+  margin: 4px 0 0;
+  padding-left: 20px;
+}
+
+.ambitions li {
+  margin: 4px 0;
+}
+
+.ambitions__broken {
+  color: var(--critical);
+}
+
+.gap {
+  margin: 12px 0;
+}
+
+.gap__line {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+.gap__line .amount {
+  font-size: 1.375rem;
+  font-weight: 700;
+}
+
+.gap__missed {
+  display: block;
+  margin-top: 6px;
+  color: var(--critical);
+  font-size: 1rem;
+}
+
+.routes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin: 12px 0;
+}
+
+.route .section-label {
+  margin-top: 0;
+}
+
+.route .spoken {
+  margin: 4px 0 12px;
+}
+
+.route--breach {
+  border-left: 3px solid var(--critical);
+}
+
+.route--quiet {
+  color: var(--ink-2);
+}
+
+.suggestions {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+
+.suggestion > div:first-child {
+  flex: 1 1 200px;
+}
+
+.suggestion .source {
+  display: block;
+}
+
+.suggestion__act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.suggestion__act .amount {
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.suggestion__delay select {
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--axis);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.9375rem;
+}
+
+.breach {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 8px 0 0;
+  padding: 12px 14px;
+  border: 2px solid var(--critical);
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.breach input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--critical);
+}
+
+/* ------------------------------------------------------------ budget day */
+
+/* The rules, in one line above the cards: the one audience that is arithmetic. */
+.rules-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 4px;
+  font-weight: 600;
+}
+
+/* Three audiences, each rated out of five, each saying why. */
+.receptions {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+@media (min-width: 900px) {
+  .receptions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.reception--r1,
+.reception--r2 {
+  --meter: var(--critical);
+}
+
+.reception--r3 {
+  --meter: var(--warning);
+}
+
+.reception--r4,
+.reception--r5 {
+  --meter: var(--good);
+}
+
+.reception__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.reception__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.reception__question {
+  margin: 4px 0 12px;
+  color: var(--ink-2);
+  font-weight: 400;
+}
+
+/* The five-step meter: lit steps in the rating's colour, the label in words beside it. */
+.meter {
+  display: flex;
+  gap: 4px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  color: var(--meter, var(--ink));
+}
+
+.meter__step {
+  flex: 1;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.meter__step--lit {
+  background: currentColor;
+}
+
+.reception__label {
+  margin: 0 0 12px;
+  color: var(--meter, var(--ink));
+  font-weight: 600;
+}
+
+.reasons {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reason {
+  display: grid;
+  grid-template-columns: 1.2em minmax(0, 1fr);
+  gap: 0 6px;
+  margin: 0 0 8px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.reason__mark {
+  font-weight: 700;
+}
+
+.reason--up .reason__mark {
+  color: var(--good);
+}
+
+.reason--down .reason__mark {
+  color: var(--critical);
+}
+
+.reason--flat .reason__mark {
+  color: var(--muted);
+}
+
+.reason__causes {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.reception__why {
+  margin-top: 8px;
+  font-size: 0.9375rem;
+}
+
+.reception__why summary {
+  padding: 6px 0;
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.reception__why ul {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reception__why li {
+  margin: 0 0 8px;
+  padding-left: 12px;
+  border-left: 3px solid var(--border);
+}
+
+.reception__why li.reason--up {
+  border-left-color: var(--good);
+}
+
+.reception__why li.reason--down {
+  border-left-color: var(--critical);
+}
+
+.reception__reading {
+  display: block;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.reception__notes-title {
+  margin: 12px 0 0;
+  font-weight: 700;
+}
+
+.households {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 8px 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.household {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.household--gains {
+  border-top-color: var(--good);
+}
+
+.household--pays {
+  border-top-color: var(--critical);
+}
+
+.household--mixed {
+  border-top-color: var(--warning);
+}
+
+.household__who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin: 0 0 8px;
+}
+
+.household__who .kicker {
+  color: var(--ink);
+  font-size: 1.125rem;
+}
+
+.household__net--gains {
+  border-color: var(--good);
+  background: var(--good-wash);
+  color: var(--good);
+}
+
+.household__net--pays {
+  border-color: var(--critical);
+  background: var(--critical-wash);
+  color: var(--critical);
+}
+
+.household__net--mixed {
+  border-color: var(--warning);
+  background: var(--warning-wash);
+  color: var(--warning);
+}
+
+.household__line {
+  margin: 0 0 8px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.household__line .source {
+  display: block;
+}
+
+.household__line--verdict {
+  font-style: italic;
+}
+
+.household__fact {
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.speech {
+  max-width: 68ch;
+  margin: 8px 0 12px;
+  font-size: 1.0625rem;
+}
+
+.speech__para {
+  margin: 0 0 14px;
+  line-height: 1.6;
+}
+
+.speech__para--peroration {
+  font-weight: 600;
+}
+
+.speech__sources {
+  font-size: 0.875rem;
+}
+
+.speech__strip {
+  margin: 16px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.delivery {
+  margin: 4px 0 0;
+  padding-left: 20px;
+}
+
+.delivery li {
+  margin: 4px 0;
+}
+
+/* -------------------------------------------------------------- the close */
+
+.verdict-close {
+  margin: 8px 0 16px;
+}
+
+.verdict-close__kind {
+  margin: 4px 0 8px;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.verdict-close__line {
+  max-width: 68ch;
+  margin: 0 0 8px;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+.verdict-close__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px 24px;
+  margin-top: 12px;
+}
+
+.fates {
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.fates li {
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.9375rem;
+}
+
+.fate--unfunded,
+.fate--dropped,
+.fate--broken-by-choice,
+.fate--broken-by-arithmetic {
+  color: var(--critical);
+}
+
+.fate--delivered,
+.fate--kept {
+  color: var(--good);
+}
+
+.fate--narrowed,
+.fate--delayed,
+.fate--released {
+  color: var(--warning);
+}
+
+.resilience--drawn {
+  background: var(--accent-wash);
+}
+
+.incidence td:last-child {
+  white-space: nowrap;
+}
+
+.verdict-close__replay {
+  margin: 12px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 0.9375rem;
+}
