@@ -26,10 +26,10 @@ export function Verdict({ verdict, replayHref }: { verdict: BudgetVerdict; repla
   const worst = [...resilience].sort((a, b) => a.headroomGbpm - b.headroomGbpm)[0];
   const best = [...resilience].sort((a, b) => b.headroomGbpm - a.headroomGbpm)[0];
   return (
-    <section className="verdict-close doc doc--ruled" aria-labelledby="verdict-heading">
-      <p className="letter__from">
+    <section className="verdict-close doc" aria-labelledby="verdict-heading">
+      <p className="doc__head">
         <span className="kicker">The close</span>
-        <span className="letter__ref">
+        <span className="doc__ref">
           Headroom, {targetYear}: {formatGbpBn(verdict.headroomGbpm, 1, verdict.headroomGbpm < 0)}
         </span>
       </p>

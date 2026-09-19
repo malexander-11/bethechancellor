@@ -9,10 +9,10 @@ import { SourceList } from './SourceLink';
  */
 export function Speech({ speech }: { speech: SpeechText }) {
   return (
-    <article className="speech doc doc--ruled" aria-label="The Budget speech">
-      <p className="letter__from">
+    <article className="speech doc" aria-label="The Budget speech">
+      <p className="doc__head">
         <span className="kicker">The Chancellor of the Exchequer · House of Commons</span>
-        <span className="letter__ref">Budget statement · {speech.words} words</span>
+        <span className="doc__ref">Budget statement · {speech.words} words</span>
       </p>
       {speech.paragraphs.map((p, i) => (
         <p key={`${p.kind}-${i}`} className={`speech__para speech__para--${p.kind}`}>

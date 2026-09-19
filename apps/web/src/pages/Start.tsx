@@ -39,10 +39,10 @@ export function StartPage() {
         the sender is a role, as the advisers are, and nothing in it is a number the engine did
         not compute.
       */}
-      <section className="hero-start doc doc--ruled letter">
-        <p className="letter__from">
+      <section className="hero-start doc">
+        <p className="doc__head">
           <span className="kicker">From the Prime Minister</span>
-          <span className="letter__ref">Appointment · Chancellor of the Exchequer</span>
+          <span className="doc__ref">Appointment · Chancellor of the Exchequer</span>
         </p>
         <p className="lede">
           Chancellor, your Budget is on {BUDGET_DAY}. March left {formatGbpBn(headroom, 1)} of

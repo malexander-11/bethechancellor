@@ -124,10 +124,10 @@ export function ForecastPage() {
           continueLabel="Open the envelope"
           onAdvance={reveal}
         >
-          <div className="envelope doc doc--ruled" aria-label="A sealed envelope">
-            <p className="letter__from">
+          <div className="envelope doc" aria-label="A sealed envelope">
+            <p className="doc__head">
               <span className="kicker">Office for Budget Responsibility</span>
-              <span className="letter__ref">Pre-measures forecast · in confidence</span>
+              <span className="doc__ref">Pre-measures forecast · in confidence</span>
             </p>
             <p>
               This is the forecast your Budget will be judged against. It was fixed the day you

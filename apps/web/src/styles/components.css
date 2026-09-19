@@ -355,7 +355,7 @@ abbr.term {
 }
 
 /* The line at the head of a document: who it is from, and what it is. */
-.letter__from {
+.doc__head {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -366,7 +366,7 @@ abbr.term {
   border-bottom: 1px solid var(--border);
 }
 
-.letter__ref {
+.doc__ref {
   color: var(--muted);
   font-size: 0.875rem;
 }

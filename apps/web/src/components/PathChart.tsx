@@ -26,9 +26,10 @@ function niceTicks(min: number, max: number, count = 4): number[] {
 }
 
 /**
- * Two-series line chart: OBR baseline (de-emphasised) against this budget (accent). 2px lines,
- * 8px end markers with a surface ring, hairline gridlines, direct end labels, crosshair tooltip and a
- * table view. Follows the dataviz "emphasis" form.
+ * Two-series line chart: OBR baseline (de-emphasised) against this budget (the series colour). 2px
+ * lines, 8px end markers with a surface ring, hairline gridlines, direct end labels at 12px,
+ * crosshair tooltip and a table view. Follows the dataviz "emphasis" form; the series colour is
+ * for marks only, so every word on the chart is in ink.
  */
 export function PathChart({
   title,
@@ -103,9 +104,9 @@ export function PathChart({
             />
             <text
               x={margin.left - 8}
-              y={y(t) + 3}
-              fontSize={10}
-              fill="var(--muted)"
+              y={y(t) + 4}
+              fontSize={12}
+              fill="var(--ink-2)"
               textAnchor="end"
               style={{ fontVariantNumeric: 'tabular-nums' }}
             >
@@ -118,8 +119,8 @@ export function PathChart({
             key={yr}
             x={x(i)}
             y={height - 8}
-            fontSize={10}
-            fill={i === highlightIndex ? 'var(--ink)' : 'var(--muted)'}
+            fontSize={12}
+            fill={i === highlightIndex ? 'var(--ink)' : 'var(--ink-2)'}
             fontWeight={i === highlightIndex ? 600 : 400}
             textAnchor="middle"
           >
@@ -156,7 +157,7 @@ export function PathChart({
         <circle
           cx={x(last)}
           cy={y(baseline[last] ?? 0)}
-          r={5}
+          r={4}
           fill="var(--series-baseline)"
           stroke="var(--surface)"
           strokeWidth={2}
@@ -165,7 +166,7 @@ export function PathChart({
           <circle
             cx={x(last)}
             cy={y(policy[last] ?? 0)}
-            r={5}
+            r={4}
             fill="var(--series-policy)"
             stroke="var(--surface)"
             strokeWidth={2}
@@ -177,7 +178,7 @@ export function PathChart({
             y(baseline[last] ?? 0) +
             (differs && (policy[last] ?? 0) > (baseline[last] ?? 0) ? 12 : -6)
           }
-          fontSize={11}
+          fontSize={12}
           fill="var(--ink-2)"
           style={{ fontVariantNumeric: 'tabular-nums' }}
         >
@@ -188,7 +189,7 @@ export function PathChart({
           <text
             x={x(last) + 9}
             y={y(policy[last] ?? 0) + ((policy[last] ?? 0) > (baseline[last] ?? 0) ? -6 : 12)}
-            fontSize={11}
+            fontSize={12}
             fontWeight={600}
             fill="var(--ink)"
             style={{ fontVariantNumeric: 'tabular-nums' }}
