@@ -86,8 +86,8 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   extracted scorecard (Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is minus the
   summed lines for the cited years on the receipts side. `direction: "repeat"` makes it plus the
   lines: the measure done again, on the assumption that the second round raises what the Treasury
-  costed for the first. A repeat is an assumption, so it lives in `data/levers/campaign/` with
-  `badge: "assumption"` and says so in its caveats.
+  costed for the first. A repeat is an assumption, so it wears `badge: "assumption"`, says so in
+  its caveats and sits in its tax group beside the certified rows (ADR-0017).
 - **Vintage-series lookup points.** `points[].from.vintageSeries` ("receiptsByTax.inheritanceTax")
   with a `multiplier`; checked against the vintage.
 - **Briefings** need an existing adviser who speaks on the step, a real lever group for group
@@ -132,15 +132,19 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   `devolution` considerations (with `appliesWhen` above/below 0) citing the Statement of Funding
   Policy; never add a numeric knock-on.
 
-### Campaign policies (`data/levers/campaign/`)
+### Our own arithmetic (any folder)
 
-These are the policies colleagues in Parliament campaign for. None has a certified costing, so
-the arithmetic is ours and the card has to show it.
+Where nobody has published a costing, the arithmetic is ours and the card has to show it. Such a
+lever lives in the folder of its real category and the group of the screen it belongs to
+(`tax` · `Capital taxes`, `spend` · `Flagship programmes`); the badge, not the folder, keeps it apart
+from the certified rows beside it (ADR-0017).
 
-- **Category and group.** `category: "campaign"`, `group: "Recommendations from Parliament"`,
-  `control.kind: "toggle"`. They render on the `recommendations` step, in `order`.
+- **Category and group.** The lever's real `category` and the `group` of the tab it sits in,
+  ordered by `order`; `control.kind: "toggle"` unless a published line supports a scale (business
+  rates scales the OBR's line and is `mechanical`, see the spending notes above).
 - **Badge.** `assumption`, never `direct`, unless the costing reuses a published row verbatim
-  (only `it50` does, five one-penny steps of HMRC's additional-rate row).
+  (only `it50` does, five one-penny steps of HMRC's additional-rate row). A `repeat` of a scorecard
+  line, a `statedProduct`, a `weightedSum` and a `gdpShareGap` are all assumptions.
 - **Raw source.** `kind: "derivedFromPublished"` with a `method`, a `sourceId` and a `note` that
   says where the inputs come from and what the arithmetic assumes. `validate:data` reproduces
   the schedule from the method, so an edited figure fails.
@@ -163,6 +167,13 @@ the arithmetic is ours and the card has to show it.
 - **Contested figures** open the `headline` with the word "contested" and carry the reason as a
   `legal`, `behavioural` or `administrative` consideration, cited. State the alternative
   published figure in the caveats where there is one.
+- **Shelving.** A lever nobody is considering stays in the data with `deprecated: true`,
+  `group: "Shelved"`, `order: 900` and the headline "Kept for the record; not on offer at this
+  Budget. Old links still work." Its costing, raw source and considerations stay, so
+  `validate:data` and the engine tests keep reproducing it; the app filters it out at load, the
+  incidence, minister and suggestion checks skip it, and an old link decodes it as an unknown
+  code with a warning. Nothing live may name it: no incidence tag, no draw revision, no flagship,
+  no rabbit card, no household touch.
 
 ### Budget day reception (`data/journey/reception.json`, ADR-0013)
 

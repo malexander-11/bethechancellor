@@ -1,6 +1,8 @@
 # ADR-0015: The revenue menu
 
-**Status:** accepted, 2026-09-18
+**Status:** accepted, 2026-09-18. Revised by ADR-0017 (2026-09-19): decision 1's folder rule is
+withdrawn. A lever costed by our own arithmetic sits in the tax group its subject belongs to,
+beside the certified rows, and the assumption badge does the quarantining.
 
 ## Context
 

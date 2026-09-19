@@ -143,8 +143,8 @@ differs, so the numbers in the app cannot drift from the published ones.
 - **Schedule.** Dated effects by year, used for the Budget 2025 reversals; nothing applies before
   the start year. A scorecard-backed schedule reverses the published measure (minus the lines) or,
   with `direction: "repeat"`, does it again (plus the lines); a repeat assumes the second round
-  raises what the Treasury costed for the first, is badged an assumption and lives in the
-  colleagues' letters group (ADR-0015).
+  raises what the Treasury costed for the first, is badged an assumption and sits in its tax group
+  beside the certified rows (ADR-0015, ADR-0017).
 - **Relief-cost toggles.** HMRC's static cost of a relief for its latest year, applied from the
   start year and grown with the relevant receipts head, with HMRC's caveat that the cost of a
   relief is not the yield from removing it. Two extracts back them: HMRC's tax relief statistics
@@ -397,34 +397,48 @@ option, so a hand-edited link cannot land between options.
 - **Insurance premium tax** is retired: its code stays reserved and old links decode with a
   warning.
 
-## 12. Policies nobody has costed, and Budget day (ADR-0008)
+## 12. Where nobody has published a costing, and Budget day (ADR-0008, ADR-0017)
 
 ### Arithmetic we do ourselves
 
-The policies your colleagues in Parliament campaign for have no certified costing, because
-none of them is government policy. Rather than print a slogan with no number, the repository
-does the arithmetic and shows it. Each such lever carries a `derivedFromPublished` raw source
-naming the method and its published inputs, and `checkRawSourceConsistency` reproduces the
-schedule from them: an edited figure fails exactly as a tampered HMRC row does.
+Some of what a Chancellor weighs has no certified costing: the Prime Minister's schemes, a
+measure the reporting says is on the table, a tax nobody has legislated. Rather than print a
+slogan with no number, the repository does the arithmetic and shows it, on the same screen as the
+certified rows. Each such lever carries a `derivedFromPublished` raw source naming the method and
+its published inputs, or a scorecard line with `direction: "repeat"`, and
+`checkRawSourceConsistency` reproduces the schedule from them: an edited figure fails exactly as a
+tampered HMRC row does.
 
-| Method          | Arithmetic                                                | Example                                                                  |
-| --------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `gdpShareGap`   | (target share − forecast share) × nominal GDP             | Defence at 5% of GDP: (5% − 2.88%) × £3,510.6bn = £74.4bn in 2029-30     |
-| `upratingGap`   | benefit line × compounding ratio of two uprating paths    | Triple lock to CPI: caseload growth is in both paths, so it cancels      |
-| `statedProduct` | published quantities multiplied out, each with its source | Free school meals: 4.44m pupils × £505 a pupil                           |
-| `seriesProduct` | published year series multiplied year by year             | Free tuition: fee-loan outlay × the share not already scored as spending |
+| Method           | Arithmetic                                                | Example                                                                                                            |
+| ---------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `gdpShareGap`    | (target share − forecast share) × nominal GDP             | Defence at 3% from 2027: (3% − 2.88%) × £3,510.6bn = £4.2bn in 2029-30, nought in 2030-31                          |
+| `upratingGap`    | benefit line × compounding ratio of two uprating paths    | Triple lock to CPI: caseload growth is in both paths, so it cancels                                                |
+| `statedProduct`  | published quantities multiplied out, each with its source | The bank surcharge: £1,000m of receipts at 3% × 2 ÷ 3, grown with onshore corporation tax                          |
+| `seriesProduct`  | published year series multiplied year by year             | The Defence Investment Plan's £4.7bn spread evenly over four years                                                 |
+| `weightedSum`    | published quantities each times a stated factor, added    | VAT off gas: a third of HMRC's £7,000m relief cost, less twice the government's £850m half-year electricity figure |
+| scorecard repeat | plus the certified lines                                  | Another compliance package (Budget 2025 line 59); a £1.5m council tax surcharge band (line 54)                     |
 
-All of these are badged **assumption**, never direct. The one exception is the 50% income tax
-rate, which is five one-penny steps of HMRC's own additional-rate row and keeps its direct badge.
+All of these are badged **assumption**, never direct, and the badge is the quarantine (ADR-0017):
+an assumption sits in the tax or spending group its subject belongs to, beside the HMRC row or
+Treasury line it resembles, so the reader sees both badges side by side. Two exceptions keep a
+different badge for a stated reason: the 50% income tax rate is five one-penny steps of HMRC's own
+additional-rate row and is direct; business rates is a percentage of the OBR's own receipts line
+and is mechanical (§6).
+
+**Kept for the record.** Five policies nobody is considering at this Budget (defence at 5% of
+GDP, aid at 0.7%, free tuition, buying the water companies, withdrawing benefits from foreign
+nationals) stay in the data with `deprecated: true`, the group "Shelved" and a headline that says
+so. Their arithmetic still reproduces in the engine tests; the app offers them on no screen, and an
+old link to one decodes with a warning and opens.
 
 Two figures rest on a contested base. Their cards say so, in the headline, before the number:
-the wealth tax, because the Wealth Tax Commission says its own work "has been constrained by a
-lack of reliable data on individuals with total wealth above £10 million" and because the Office
-for National Statistics publishes nothing above the top 1% threshold of £3.1m and had that
-survey's accreditation suspended in 2025; withdrawing benefits from foreign nationals, because
-96.2% of the universal credit caseload is settled here, protected by the withdrawal agreement or
-holding indefinite leave, and people subject to immigration control already have no recourse to
-public funds.
+the wealth tax (live, under Capital taxes), because the Wealth Tax Commission says its own work
+"has been constrained by a lack of reliable data on individuals with total wealth above £10
+million" and because the Office for National Statistics publishes nothing above the top 1%
+threshold of £3.1m and had that survey's accreditation suspended in 2025; withdrawing benefits
+from foreign nationals (kept for the record), because 96.2% of the universal credit caseload is
+settled here, protected by the withdrawal agreement or holding indefinite leave, and people subject
+to immigration control already have no recourse to public funds.
 
 ### Financial transactions
 
@@ -436,7 +450,8 @@ enters the debt-interest base and nothing else, so neither borrowing nor net fin
 liabilities move. Buying the water companies at Defra's own £100bn therefore costs £100bn of
 gilts and about £5bn a year of interest, and leaves the stability rule almost untouched. Free
 tuition is the mirror: it converts a loan into a grant, moving money out of a financial
-transaction and into spending.
+transaction and into spending. Both are kept for the record rather than offered (ADR-0017); the
+arithmetic stays because the lesson does.
 
 A schedule may be `once`, paid in the implementation year only, for a purchase rather than a
 programme. A spending classification may carry a `capitalShare`, because a defence uplift is not
@@ -447,8 +462,8 @@ count against the stability rule.
 
 Budget day reads the outcome into a set of figures (`readingsWithCauses` in
 `packages/engine/src/reactions.ts`): headroom and headroom against the OBR's typical forecast
-error, the change in borrowing, the debt path, the tax take, how many recommendations were adopted
-and how many Budget 2025 decisions reversed, the two rule statuses, and, from Phase 9, public
+error, the change in borrowing, the debt path, the tax take, how many Budget 2025 and Autumn
+Budget 2024 decisions were reversed, the two rule statuses, and, from Phase 9, public
 spending, capital, tax rises and cuts, the balance of new revenue between the top and the broad
 base by incidence tag, themes chosen and delivered, manifesto red lines crossed and rules missed.
 Each reading carries the decisions behind it, as the levers' own short titles. The Phase 5 reaction
@@ -526,7 +541,9 @@ promise kept or broken, with the lever named.
 ### The package, staffed
 
 Every spending and welfare lever has a minister (`ministers.json`): asking while it is untouched,
-saying what stops happening at a cut, making the case for more. Advisers intervene from a closed
+saying what stops happening at a cut, making the case for more. The Prime Minister's schemes sit in
+a Flagship programmes group on the spending screen, each with a minister of its own (ADR-0017).
+Advisers intervene from a closed
 list of predicates (`interventions.json`): a promise broken, a priority unfunded, headroom below the
 target, a rule missed. Promised flagships are pinned to the top of their group; the summary strip keeps score;
 the Political Adviser's press summary plants the clue the seed chose. Leaving the package snapshots the
@@ -625,9 +642,10 @@ has been left, always backwards, Budget day from the rabbit, and with no game on
 (the package and Budget day). Every page calls `useStageGuard`, which redirects an early arrival to
 `furthestStep(game)` with the budget's query string; the progress rail at the top of every page
 reads the same rule, so a stop is a link only when the guard would let it through. The package is
-three screens in sequence (taxes, spending, your colleagues' letters) with a button forward and a
-link back; the guide's kicker says which screen ("File 2 of 3"), as it does for the forecast and the
-sums. The beats are unchanged.
+two screens in sequence (taxes, spending) with a button forward and a link back; the guide's kicker
+says which screen ("Part 2 of 2"), as it does for the forecast and the sums. The third screen of
+Phase 10, the colleagues' letters, was retired in Phase 12 (ADR-0017); the journey asks seven
+Continues.
 
 ### The revenue menu
 
@@ -635,14 +653,14 @@ Every option is a published figure with its published caveat. In the tax groups,
 the employer NICs threshold, vehicle excise duty, air passenger duty, tobacco duties, the Business
 Asset Disposal Relief rate, abolishing the residence nil-rate band, insurance premium tax, and
 employer National Insurance on pension contributions from HMRC's private pension statistics
-(£14,300m in 2024-25, grown with National Insurance receipts). In the letters group, badged
-assumption: a flat 30% rate of pension relief by the `weightedSum` method over HMRC's relief by
-marginal rate, and two repeats of certified Budget 2025 rises (investment income, gambling duties)
-by the `repeat` direction. Employer-side National Insurance is not a manifesto red line here, on
-the government's reading of the lock; the Political Adviser says on each such lever that the
-reading is contested. The Director of Tax's suggestions at the sums rank the taxes and the
-revenue-side letters together, each with its badge; a spending saving in the letters is a cut and
-belongs to the spending route.
+(£14,300m in 2024-25, grown with National Insurance receipts). Beside them, badged assumption
+(ADR-0017 moved them from the letters' group into the tax groups): a flat 30% rate of pension
+relief by the `weightedSum` method over HMRC's relief by marginal rate, and two repeats of
+certified Budget 2025 rises (investment income, gambling duties) by the `repeat` direction.
+Employer-side National Insurance is not a manifesto red line here, on the government's reading of
+the lock; the Political Adviser says on each such lever that the reading is contested. The Director
+of Tax's suggestions at the sums rank every tax lever that is not shelved, each with its badge; a
+spending saving is a cut and belongs to the spending route.
 
 ### The pension extract
 
@@ -651,3 +669,29 @@ and breakdowns) and the tidy Tables 6.1 and 6.2 CSV (the latest year, by margina
 relief-extract shape. The three by-rate totals are sums of HMRC's five contribution-type rows and
 say so. The validator keys relief extracts by source id, so the tax relief table and the pension
 table can both be cited, and reproduces every relief toggle and every weighted sum from them.
+
+## 17. The Budget 2026 menu (ADR-0017)
+
+Phase 12 set the levers against what the reporting ahead of 28 October 2026 says is on the table
+and added what was missing, wherever a published figure could carry it. Every addition is a
+certified row, an HMRC statistic or a stated calculation on one, and the card says which.
+
+| Code      | Group                     | Badge      | Built from                                                                                                 |
+| --------- | ------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------- |
+| `brates`  | Business                  | mechanical | The OBR's business rates line (Table A.5), scaled by a percentage; UK-wide although the rates are devolved |
+| `cgtdth`  | Capital taxes             | assumption | The Resolution Foundation's £4bn a year for ending the death write-off with an exit charge: an upper bound |
+| `hvcts15` | Capital taxes             | assumption | Budget 2025 line 54 repeated as a £1.5m band, set-up costs included                                        |
+| `rvapr`   | Capital taxes             | direct     | Autumn Budget 2024 line 29 reversed, grown with the inheritance tax line for 2030-31                       |
+| `bank5`   | Business                  | assumption | HMRC's £1.0bn of surcharge receipts at 3%, two thirds more for two points, grown with corporation tax      |
+| `epl2`    | Business                  | assumption | Autumn Budget 2024 line 24 repeated, flat in cash for 2030-31                                              |
+| `nic4`    | National Insurance        | direct     | HMRC's Class 4 main rate row; the tax lock watches it                                                      |
+| `vatgas`  | VAT                       | assumption | A third of HMRC's relief cost less the annualised electricity cut, grown with VAT                          |
+| `hmrc2`   | Budget 2025 decisions     | assumption | Budget 2025 line 59 repeated                                                                               |
+| `rvplan2` | Spending Review decisions | direct     | Budget 2025 line 48 reversed on the spending side                                                          |
+| `def3`    | Flagship programmes       | assumption | (3% − the OBR's defence share) × nominal GDP, nought once the OBR's path reaches 3% in 2030-31             |
+
+The employer threshold slider reaches the £6,000 being floated. The measures the reporting names
+that no reachable document costs (a pension lump-sum cap, a social care levy, an ISA cap, holiday
+lets into council tax, machine games duty) are not levers, under §1. The letters' screen and its
+vocabulary are gone; eleven of its policies sit on the two screens and five are kept for the record
+(§12).

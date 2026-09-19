@@ -1,6 +1,9 @@
 # ADR-0008: Costing policies nobody has costed, and Budget day as feedback
 
-**Status:** accepted, 2026-09-15
+**Status:** accepted, 2026-09-15. Revised by ADR-0017 (2026-09-19): the third screen and the
+`campaign` category are gone; eleven of the sixteen policies sit on the tax and spending screens
+under their own groups, five are kept for the record on no screen, and our arithmetic is quarantined
+by its badge rather than by a folder.
 
 ## Context
 

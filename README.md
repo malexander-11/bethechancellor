@@ -4,25 +4,31 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 11 (a plain, editorial skin)**. You are appointed Chancellor in a Labour
-government with a Budget to deliver on 28 October 2026. The page is plain: one accent, one type
-family, white cards on an off-white page, nothing smaller than 14px, a dark theme that follows your
-system, and a countdown to Budget day. Every screen opens with a guide in plain English: which step
-this is, what you are doing, why it matters, what to do now. The road runs one way: a progress
+Status: **Phase 12 (the Budget 2026 menu, and no more letters)**. You are appointed Chancellor
+in a Labour government with a Budget to deliver on 28 October 2026. The package holds the menu the
+reporting says is on the table, each option a published row or a stated calculation on one, badged
+for what it is; the third screen of colleagues' letters is gone, its plausible policies sit in the
+tax and spending groups and the rest are kept for the record. The page is plain: one accent, one
+type family, white cards on an off-white page, nothing smaller than 14px, a dark theme that follows
+your system, and a countdown to Budget day. Every screen opens with a guide in plain English: which
+step this is, what you are doing, why it matters, what to do now. The road runs one way: a progress
 rail of seven stops, a button forward at the foot of every page, a way back but never a way to
 jump ahead. The sources and breakdowns sit behind a "Show workings" switch, off by default; the
 badges that say what kind of number something is never go away. A first playthrough takes about
-ten minutes and eight Continues.
+ten minutes and seven Continues.
 
 Seven steps. **The appointment**: three advisers brief you on the rules and why they matter, the
 economy since March, and a new Prime Minister who wants a Budget people notice while the manifesto
 ties your hands. **The outlook**: which forecast do you plan on, and how much headroom do you keep?
 **The Prime Minister**: tick the themes this Budget is for, then the flagships under each; every
 flagship you tick is funded on the spot and the headroom falls as you choose. **The package**:
-three screens in sequence (the taxes, the spending, your colleagues' letters), every lever wearing the
-manifesto red line that watches it, with a minister on every spending line and advisers who
-remember what you agreed, and a revenue menu a Chancellor actually weighs: employer National
-Insurance, pensions, the smaller duties, capital-tax reliefs, going further on recent rises. **The forecast**: the OBR's envelope,
+two screens in sequence (the taxes, the spending), every lever wearing the manifesto red line that
+watches it, with a minister on every spending line and advisers who remember what you agreed, and
+the menu a Chancellor actually weighs: employer National Insurance, pensions, the smaller duties,
+capital-tax reliefs, going further on recent rises, capital gains at death, a lower council tax
+surcharge band, the bank surcharge, the energy profits levy again, the self-employed rate, VAT off
+gas, another compliance package, business rates, the Prime Minister's schemes and defence at 3%
+sooner. **The forecast**: the OBR's envelope,
 fixed by a seeded draw the day you chose your outlook, taken apart into what the economy did and
 what the OBR made of your costings, then the routes through the gap it leaves. **The rabbit**:
 something for the speech, priced as the headroom it leaves. **Budget day**: the speech built from
@@ -31,15 +37,17 @@ saying why; and a close that says which ambitions survived, who paid, which comp
 how the package fares under every forecast you might have drawn, and what kind of Budget it was.
 Share the link; replay the same seed with a fresh Budget.
 
-Under the hood: the OBR March 2026 baseline, 38 tax levers (HMRC ready reckoner, Budget 2025 and
+Under the hood: the OBR March 2026 baseline, 52 tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options
 and the residence nil-rate band, HMRC's pension statistics for National Insurance on employer
-pension contributions, inheritance tax up to abolition), 19 spending levers (Spending Review 2025
-settlements, OBR welfare lines, Budget 2025 spending decisions) with milestones from PESA, 16
-campaign policies costed from published statistics by a stated method, four sets of economic assumptions and five forecast
-outcomes derived from HM Treasury's comparison of independent forecasts, and about two hundred
-simulated lines in the voices of roles, every one badged and every fact in them sourced. Next: the
-rebase to the 28 October 2026 forecast.
+pension contributions, HMRC's banking-sector receipts, inheritance tax up to abolition, a share of
+the OBR's business rates line, and our own stated arithmetic where nobody has published a costing,
+badged as such), 26 spending levers (Spending Review 2025 settlements, OBR welfare lines, Budget
+2025 spending decisions, the Prime Minister's schemes) with milestones from PESA, six more levers
+kept for the record on no screen, four sets of economic assumptions and five forecast outcomes
+derived from HM Treasury's comparison of independent forecasts, and about two hundred simulated
+lines in the voices of roles, every one badged and every fact in them sourced. Next: the rebase to
+the 28 October 2026 forecast.
 
 ## Principles
 
@@ -55,10 +63,11 @@ rebase to the 28 October 2026 forecast.
   number; it never produces a number of its own. Roles, not people. The one place a judgement moves
   the arithmetic is the seeded forecast draw, which only chooses among published figures.
 - **Where nobody has published a costing, the arithmetic is ours and the workings are on the
-  card.** The policies MPs campaign for have no certified costing. Each states its method,
-  its published inputs and its assumptions, is badged an assumption rather than a direct costing,
-  and is reproduced from those inputs by a test. Where the base is contested, the card says so
-  before it shows the number.
+  card.** Not everything a Chancellor weighs has a certified costing. Each such lever states its
+  method, its published inputs and its assumptions, sits in the same group as the certified rows it
+  resembles, is badged an assumption rather than a direct costing, and is reproduced from those
+  inputs by a test. Where the base is contested, the card says so before it shows the number; where
+  no published figure exists at all, there is no lever.
 - **The page is plain, and the plainness is honest.** One accent, one type family, nothing under
   14px, every text colour checked for contrast in both themes; there are no images and no webfonts.
   The badges never become decoration, a verdict is always a word beside an icon and never a colour
