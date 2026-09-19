@@ -463,7 +463,7 @@ export const leverSchema = z
     id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
     /** Short stable code used in permalinks. Never reused. */
     code: z.string().regex(/^[a-z][a-z0-9]{1,7}$/),
-    category: z.enum(['tax', 'spend', 'welfare', 'macro', 'campaign']),
+    category: z.enum(['tax', 'spend', 'welfare', 'macro']),
     badge: badgeSchema,
     /** UI grouping within a category, e.g. "Income tax"; ordered by `order`. */
     group: z.string().min(1).optional(),

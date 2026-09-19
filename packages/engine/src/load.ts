@@ -342,8 +342,6 @@ export function validateDataset(ds: Dataset): string[] {
         .filter((l) => l.category === 'spend' || l.category === 'welfare')
         .map((l) => l.group ?? ''),
     ),
-    // The campaign levers sit on the Policies tab; `recommendations` is its Phase 5 name.
-    policies: new Set(ds.levers.filter((l) => l.category === 'campaign').map((l) => l.group ?? '')),
   };
   const briefingIds = new Set<string>();
   for (const briefing of ds.briefings?.briefings ?? []) {
@@ -363,9 +361,7 @@ export function validateDataset(ds: Dataset): string[] {
           ? groupsByStep.taxes
           : briefing.step === 'spending'
             ? groupsByStep.spending
-            : briefing.step === 'recommendations' || briefing.step === 'policies'
-              ? groupsByStep.policies
-              : undefined;
+            : undefined;
       if (!groups || !groups.has(briefing.group)) {
         problems.push(
           `briefing ${briefing.id}: no lever group "${briefing.group}" on step ${briefing.step}`,

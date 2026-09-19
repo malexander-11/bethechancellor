@@ -9,7 +9,6 @@ describe('the road through the game', () => {
     expect(enterable('pm', game(1))).toBe(true);
     expect(enterable('taxes', game(1))).toBe(false);
     expect(enterable('spending', game(2))).toBe(true);
-    expect(enterable('policies', game(2))).toBe(true);
     expect(enterable('forecast', game(2))).toBe(false);
     expect(enterable('forecast', game(3))).toBe(true);
     expect(enterable('compromise', game(3))).toBe(false);
@@ -35,7 +34,7 @@ describe('the road through the game', () => {
   });
 
   it('treats a link with no game as a sandbox: the desk and Budget day open, the story shut', () => {
-    for (const step of ['outlook', 'taxes', 'spending', 'policies', 'budget-day'] as const) {
+    for (const step of ['outlook', 'taxes', 'spending', 'budget-day'] as const) {
       expect(enterable(step, undefined), step).toBe(true);
     }
     for (const step of ['pm', 'forecast', 'compromise', 'rabbit'] as const) {

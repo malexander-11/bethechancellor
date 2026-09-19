@@ -24,8 +24,6 @@ describe('the guide and the glossary', () => {
     }
     // The old step names still find their screen.
     expect(guideFor(ds.guide, 'assumptions')?.step).toBe('outlook');
-    expect(guideFor(ds.guide, 'recommendations')?.step).toBe('spending');
-    expect(guideFor(ds.guide, 'policies')?.step).toBe('spending');
     expect(validateDataset(ds).filter((p) => /guide|glossary/.test(p))).toEqual([]);
   });
 

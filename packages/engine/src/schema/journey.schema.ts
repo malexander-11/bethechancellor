@@ -4,9 +4,10 @@ import { sourceRefSchema } from './provenance.schema.js';
 const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
 
 /**
- * The steps of the guided Budget journey, in order. `assumptions` and `recommendations` are the
- * Phase 4 names of what became `outlook` and the `policies` tab; they stay so that advisers and
- * briefings authored against them keep validating, and the app routes them on.
+ * The steps of the guided Budget journey, in order. `assumptions` is the Phase 4 name of what
+ * became `outlook`; it stays so that advisers authored against it keep validating, and the app
+ * routes it on. The package's third screen (`policies`, once `recommendations`) was retired in
+ * Phase 12: its levers sit on `taxes` and `spending` (ADR-0017).
  */
 export const journeyStepSchema = z.enum([
   'start',
@@ -15,8 +16,6 @@ export const journeyStepSchema = z.enum([
   'pm',
   'taxes',
   'spending',
-  'policies',
-  'recommendations',
   'forecast',
   'compromise',
   'rabbit',
@@ -85,7 +84,6 @@ export const readingMeasureSchema = z.enum([
   'debtChangePp',
   'debtFallingPp',
   'taxTakeChangePp',
-  'recommendationsAdopted',
   'budget2025Reversals',
   // The game's own readings (Phase 8): nought or the baseline value without a game.
   'headroomVsTargetGbpm',

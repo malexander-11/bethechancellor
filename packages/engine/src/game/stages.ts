@@ -2,9 +2,9 @@ import type { JourneyStep } from '../types/data.js';
 import type { GamePermalink } from '../types/engine.js';
 
 /**
- * The seven stages of a playthrough, in order. Taxes, spending and policies are one stage with
- * three tabs, so the package's three step ids map to one index. `assumptions` and `recommendations`
- * are the Phase 4 names that still appear in authored data.
+ * The seven stages of a playthrough, in order. Taxes and spending are one stage with two screens,
+ * so the package's two step ids map to one index. `assumptions` is the Phase 4 name that still
+ * appears in authored data.
  */
 export const GAME_STAGES: readonly JourneyStep[] = [
   'outlook',
@@ -21,8 +21,6 @@ export const FINAL_STAGE = GAME_STAGES.length - 1;
 const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   assumptions: 'outlook',
   spending: 'taxes',
-  policies: 'taxes',
-  recommendations: 'taxes',
 };
 
 /** Where a step sits in the playthrough; the start page is before everything, at −1. */
@@ -30,7 +28,7 @@ export function stageIndex(step: JourneyStep): number {
   return GAME_STAGES.indexOf(ALIASES[step] ?? step);
 }
 
-/** The canonical stage a step belongs to: the package's three screens are `taxes`, and so on. */
+/** The canonical stage a step belongs to: the package's two screens are `taxes`, and so on. */
 function canonical(step: JourneyStep): JourneyStep {
   return ALIASES[step] ?? step;
 }

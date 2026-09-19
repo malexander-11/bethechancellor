@@ -102,10 +102,8 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   const moved = new Set(outcome.leverEffects.map((e) => e.code));
   const values = outcome.settings.leverValues;
   const valueOf = (code: string) => values[code] ?? byCode.get(code)?.control.default ?? 0;
-  const adopted = levers.filter((l) => l.category === 'campaign' && moved.has(l.code));
-  const reversals = levers.filter(
-    (l) => moved.has(l.code) && /^rv/.test(l.code) && l.category !== 'campaign',
-  );
+  // Every reversal of a Budget 2025 or Autumn Budget 2024 decision, whichever screen it sits on.
+  const reversals = levers.filter((l) => moved.has(l.code) && /^rv/.test(l.code));
   const welfareReversals = levers.filter((l) => moved.has(l.code) && WELFARE_REVERSALS.has(l.code));
   const cutDepartments = levers.filter(
     (l) =>
@@ -245,7 +243,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       debtChangePp: debtChange,
       debtFallingPp: debtFalling,
       taxTakeChangePp: taxTakeChange,
-      recommendationsAdopted: adopted.length,
       budget2025Reversals: reversals.length,
       headroomVsTargetGbpm: headroom - target,
       promisesBroken: broken.length,
@@ -286,7 +283,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       debtChangePp: movers,
       debtFallingPp: movers,
       taxTakeChangePp: taxMovers,
-      recommendationsAdopted: adopted.map((l) => l.shortTitle),
       budget2025Reversals: reversals.map((l) => l.shortTitle),
       headroomVsTargetGbpm: movers,
       promisesBroken: broken.map(

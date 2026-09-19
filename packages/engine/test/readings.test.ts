@@ -38,7 +38,6 @@ describe('the readings of a Budget', () => {
     const base = read({});
     expect(base.stabilityHeadroomGbpm).toBeCloseTo(23600, -2);
     expect(base.borrowingChangeGbpm).toBeCloseTo(0, 6);
-    expect(base.recommendationsAdopted).toBe(0);
     expect(base.budget2025Reversals).toBe(0);
     expect(base.publicServiceSpendingGbpm).toBe(0);
     expect(base.taxRisesGbpm).toBe(0);

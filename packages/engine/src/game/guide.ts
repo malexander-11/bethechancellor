@@ -25,11 +25,9 @@ export const GUIDED_STEPS: readonly JourneyStep[] = [
 /** How many steps the kicker counts to: "Step 3 of 7". */
 export const STEP_COUNT = 7;
 
-/** The old names find a screen: the letters' screen has gone, and its levers sit on the spending. */
+/** The old name finds its screen. */
 const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   assumptions: 'outlook',
-  recommendations: 'spending',
-  policies: 'spending',
 };
 
 export function guideFor(guide: GuideFile, step: JourneyStep): GuideStage | undefined {
