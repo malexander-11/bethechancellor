@@ -1,7 +1,7 @@
 import { ambitionStatus, formatGbpBn, nextNotch, type Lever } from '@btc/engine';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Spoken } from '../components/Conversation';
-import { DespatchBox } from '../components/DespatchBox';
+import { BudgetSummary } from '../components/BudgetSummary';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { formatLeverValue } from '../components/LeverControl';
@@ -135,7 +135,7 @@ export function RabbitPage() {
     <JourneyLayout step="rabbit">
       <Beats step="rabbit">
         <Beat title="The rabbit">
-          <DespatchBox
+          <BudgetSummary
             game={game}
             status={status}
             headroomGbpm={headroom}

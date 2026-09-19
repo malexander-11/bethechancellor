@@ -5,14 +5,6 @@ import { LabelBadge } from './LabelBadge';
 
 type Tone = 'good' | 'warning' | 'critical' | 'muted';
 
-/** Stamp inks, one per tone. A rule nobody can assess gets no stamp at all. */
-const STAMP: Record<Tone, string> = {
-  good: 'stamp--good',
-  warning: 'stamp--warn',
-  critical: 'stamp--bad',
-  muted: 'stamp--muted',
-};
-
 const STATUS: Record<RuleVerdict['status'], { text: string; tone: Tone; icon: string }> = {
   met: { text: 'Rule met', tone: 'good', icon: '✓' },
   notMet: { text: 'Rule not met', tone: 'critical', icon: '✕' },
@@ -49,17 +41,12 @@ export function VerdictCard({
           {verdict.rolling ? ', rolling' : ''}
         </span>
       </h3>
+      {/* Never colour alone: the icon and the words carry the verdict, the colour repeats it. */}
       <p className={`status status--${status.tone}`}>
-        {/*
-          Keyed on the text so a changed verdict remounts and the ink lands again. The words stay
-          sentence case in the DOM and are uppercased in CSS, so this still reads as "Rule met".
-        */}
-        <span key={status.text} className={`stamp ${STAMP[status.tone]} stamp--press`}>
-          <span className="stamp__icon" aria-hidden="true">
-            {status.icon}
-          </span>
-          {status.text}
+        <span className="status__icon" aria-hidden="true">
+          {status.icon}
         </span>
+        {status.text}
       </p>
       {Number.isFinite(verdict.headroomGbpm) ? (
         <>

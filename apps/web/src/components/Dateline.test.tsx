@@ -21,9 +21,9 @@ describe('the dateline counts down to the Budget', () => {
     expect(countdownText(on('2026-10-28'))).toBe('Budget day');
   });
 
-  it('says where you are and what the date is', () => {
+  it('says what the date is and how long is left', () => {
     render(<Dateline now={on('2026-09-16')} />);
-    expect(screen.getByText('Treasury Chambers')).toBeInTheDocument();
     expect(screen.getByText('16 September 2026')).toBeInTheDocument();
+    expect(screen.getByText('42 days to the Budget')).toBeInTheDocument();
   });
 });

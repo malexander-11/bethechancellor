@@ -1,9 +1,9 @@
 import { rules } from '../data';
 
 /**
- * Typed across the top of every sheet in the building: where you are, what the date is, and how
- * long you have got. The Budget date comes from the Charter's own next formal assessment, so a
- * data refresh moves it and nothing here needs editing.
+ * One line above the stepper: the in-game date and how long you have got. The Budget date comes
+ * from the Charter's own next formal assessment, so a data refresh moves it and nothing here needs
+ * editing.
  *
  * This is chrome, not a costing. It carries no badge, because badging it would put a fact the
  * engine did not compute into the same vocabulary as one it did.
@@ -33,10 +33,7 @@ export function countdownText(now: Date): string {
 export function Dateline({ now = new Date() }: { now?: Date }) {
   return (
     <p className="dateline">
-      <span>Treasury Chambers</span>
-      <span aria-hidden="true" className="dateline__rule" />
-      <span>{LONG.format(now)}</span>
-      <span aria-hidden="true" className="dateline__rule" />
+      <time dateTime={now.toISOString().slice(0, 10)}>{LONG.format(now)}</time>
       <span className="dateline__countdown">{countdownText(now)}</span>
     </p>
   );

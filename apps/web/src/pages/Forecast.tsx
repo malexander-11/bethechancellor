@@ -27,13 +27,13 @@ import { IMPLEMENTATION_YEAR, permalinkQuery, useBudget } from '../state/budget'
 const CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
 
-const STAMP: Record<RuleVerdict['status'], { text: string; tone: string }> = {
-  met: { text: 'Rule met', tone: 'stamp--good' },
-  notMet: { text: 'Rule not met', tone: 'stamp--bad' },
-  withinCap: { text: 'Within the cap', tone: 'stamp--good' },
-  aboveCapWithinMargin: { text: 'Above cap, within margin', tone: 'stamp--warn' },
-  aboveMargin: { text: 'Cap breached', tone: 'stamp--bad' },
-  unavailable: { text: 'Not assessable', tone: 'stamp--muted' },
+const STATUS: Record<RuleVerdict['status'], { text: string; tone: string; icon: string }> = {
+  met: { text: 'Rule met', tone: 'good', icon: '✓' },
+  notMet: { text: 'Rule not met', tone: 'critical', icon: '✕' },
+  withinCap: { text: 'Within the cap', tone: 'good', icon: '✓' },
+  aboveCapWithinMargin: { text: 'Above cap, within margin', tone: 'warning', icon: '!' },
+  aboveMargin: { text: 'Cap breached', tone: 'critical', icon: '✕' },
+  unavailable: { text: 'Not assessable', tone: 'muted', icon: '?' },
 };
 
 /**
@@ -338,10 +338,15 @@ function ForecastReveal({
               : `${formatGbpBn(target - d.headroom.revised, 1)} short of the ${formatGbpBn(target, 0)} target you set yourself.`
             : 'You set no target beyond the rules themselves.'}
         </p>
-        <ul className="stamps">
+        <ul className="rule-list">
           {d.revised.verdicts.map((v) => (
             <li key={v.ruleId}>
-              <span className={`stamp ${STAMP[v.status].tone}`}>{STAMP[v.status].text}</span>{' '}
+              <span className={`status status--${STATUS[v.status].tone}`}>
+                <span className="status__icon" aria-hidden="true">
+                  {STATUS[v.status].icon}
+                </span>
+                {STATUS[v.status].text}
+              </span>{' '}
               <span className="source">
                 {v.ruleName}: {formatGbpBn(v.headroomGbpm, 1, v.headroomGbpm < 0)}
               </span>

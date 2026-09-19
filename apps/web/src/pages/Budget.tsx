@@ -14,7 +14,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { AdviserBriefing } from '../components/AdviserBriefing';
 import { AttributionList } from '../components/AttributionList';
 import { Desk } from '../components/Desk';
-import { DespatchBox } from '../components/DespatchBox';
+import { BudgetSummary } from '../components/BudgetSummary';
 import { InteractionsNotice } from '../components/InteractionsNotice';
 import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
@@ -130,7 +130,7 @@ function borrowingEffect(
 /**
  * Stage 3: the desk. Three folders of levers, and, when a game is under way, the people in the
  * room with you: ministers on the spending folders, advisers who remember what you agreed in
- * Downing Street, the despatch box keeping score, and the Political Adviser's press summary
+ * Downing Street, the summary strip keeping score, and the Political Adviser's press summary
  * planting the clue the seeded draw chose.
  */
 export function BudgetPage() {
@@ -285,7 +285,7 @@ export function BudgetPage() {
         <Beat title={spec.work}>
           <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
           {game && status ? (
-            <DespatchBox
+            <BudgetSummary
               game={game}
               status={status}
               headroomGbpm={headroomGbpm}

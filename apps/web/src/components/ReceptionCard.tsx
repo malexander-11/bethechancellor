@@ -9,7 +9,7 @@ function points(r: Reason): string {
 }
 
 /**
- * One audience's reception: a five-step meter, the rubber-stamped label, the two or three reasons
+ * One audience's reception: a five-step meter, the label in words, the two or three reasons
  * that moved it most, and a "why this rating" disclosure listing every rule with its points, its
  * reading, the decisions behind it and, with the workings on, its sources. Every sentence is a game
  * judgement from data and wears the badge.
@@ -23,7 +23,6 @@ export function ReceptionCard({
   notes?: DistributionalNote[];
 }) {
   const { audience, title, question, rating, label, reasons, all } = reception;
-  const tone = rating <= 2 ? 'stamp--bad' : rating === 3 ? 'stamp--warn' : 'stamp--good';
   const id = `reception-${audience}`;
   return (
     <section
@@ -42,7 +41,9 @@ export function ReceptionCard({
           <li key={step} className={`meter__step${step <= rating ? ' meter__step--lit' : ''}`} />
         ))}
       </ol>
-      <p className={`reception__label stamp ${tone}`}>{label}</p>
+      <p className="reception__label">
+        {label} <span className="reception__score">{rating} of 5</span>
+      </p>
       {reasons.length === 0 ? (
         <p className="panel__hint">Nothing in this Budget moved them either way.</p>
       ) : (

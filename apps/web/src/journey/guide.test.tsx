@@ -43,7 +43,7 @@ describe('the guide at the top of every step', () => {
     expect(within(rail).getAllByRole('listitem')).toHaveLength(7);
     // The desk is where you are: marked, not a link. The outlook is behind you: a link. The
     // forecast is ahead, and a sandbox has no forecast to go to: inert.
-    expect(within(rail).getByText('The desk').closest('[aria-current="step"]')).not.toBeNull();
+    expect(within(rail).getByText('The package').closest('[aria-current="step"]')).not.toBeNull();
     expect(within(rail).getByRole('link', { name: /The outlook/ })).toBeInTheDocument();
     expect(within(rail).queryByRole('link', { name: /The forecast/ })).toBeNull();
     first.unmount();

@@ -22,7 +22,7 @@ describe('the progress rail', () => {
     // Behind: the appointment, the outlook, the PM and the desk are links.
     expect(within(rail).getByRole('link', { name: /The appointment/ })).toBeInTheDocument();
     expect(within(rail).getByRole('link', { name: /The PM/ })).toBeInTheDocument();
-    expect(within(rail).getByRole('link', { name: /The desk/ })).toBeInTheDocument();
+    expect(within(rail).getByRole('link', { name: /The package/ })).toBeInTheDocument();
     // Here: the sums are the second screen of the forecast stop, marked and not a link.
     expect(within(rail).getByText('The forecast').closest('[aria-current="step"]')).not.toBeNull();
     expect(within(rail).queryByRole('link', { name: /The forecast/ })).toBeNull();

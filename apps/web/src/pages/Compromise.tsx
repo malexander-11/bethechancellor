@@ -11,7 +11,7 @@ import {
 import { useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Spoken } from '../components/Conversation';
-import { DespatchBox } from '../components/DespatchBox';
+import { BudgetSummary } from '../components/BudgetSummary';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { formatLeverValue } from '../components/LeverControl';
@@ -104,7 +104,7 @@ export function CompromisePage() {
           {workings ? (
             <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky revealed />
           ) : null}
-          <DespatchBox
+          <BudgetSummary
             game={game}
             status={status}
             headroomGbpm={headroom}

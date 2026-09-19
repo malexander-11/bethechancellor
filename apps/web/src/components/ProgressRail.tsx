@@ -4,12 +4,12 @@ import { useBudget } from '../state/budget';
 
 type Stop = 'start' | 'outlook' | 'pm' | 'budget' | 'forecast' | 'rabbit' | 'budget-day';
 
-/** The seven stops, in order. The desk is one stop with three screens; so are the forecast and the sums. */
+/** The seven stops, in order. The package is one stop with three screens; so are the forecast and the sums. */
 const STOPS: ReadonlyArray<{ id: Stop; label: string; to: string; step: JourneyStep }> = [
   { id: 'start', label: 'The appointment', to: '/', step: 'start' },
   { id: 'outlook', label: 'The outlook', to: '/outlook', step: 'outlook' },
   { id: 'pm', label: 'The PM', to: '/pm', step: 'pm' },
-  { id: 'budget', label: 'The desk', to: '/budget/taxes', step: 'taxes' },
+  { id: 'budget', label: 'The package', to: '/budget/taxes', step: 'taxes' },
   { id: 'forecast', label: 'The forecast', to: '/forecast', step: 'forecast' },
   { id: 'rabbit', label: 'The rabbit', to: '/rabbit', step: 'rabbit' },
   { id: 'budget-day', label: 'Budget day', to: '/budget-day', step: 'budget-day' },
@@ -35,8 +35,8 @@ export function stopFor(step: JourneyStep): Stop {
 }
 
 /**
- * The road, drawn: seven numbered stops on a brass rail. A stop you have reached is a quiet link,
- * so you can go back to the desk; the one you are at is marked; the ones ahead are inert. It reads
+ * The road, drawn: seven numbered stops on one line. A stop you have reached is a link, so you can
+ * go back to the package; the one you are at is marked; the ones ahead are inert. It reads
  * the same `enterable` rule as the guard on every page, so it never offers a link that would only
  * bounce. With no game the guard leaves the desk and Budget day open to a shared link, but the
  * rail still offers nothing ahead of you: the sandbox has its own door on the appointment letter.

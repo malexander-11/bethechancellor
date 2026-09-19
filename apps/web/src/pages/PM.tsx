@@ -8,7 +8,7 @@ import {
 } from '@btc/engine';
 import { useMemo } from 'react';
 import { Spoken } from '../components/Conversation';
-import { DespatchBox } from '../components/DespatchBox';
+import { BudgetSummary } from '../components/BudgetSummary';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { SourceList } from '../components/SourceLink';
@@ -92,7 +92,7 @@ function FlagshipChoice({
 /**
  * Step 3. Three beats: what the PM has done; what this Budget is for, ticking every theme that
  * applies; and the flagship schemes under each. A flagship is funded the moment it is ticked: its
- * lever moves on the desk and the headroom in the despatch box falls at once, so the choice costs
+ * lever moves on the desk and the headroom in the summary strip falls at once, so the choice costs
  * what it costs while the PM is watching. The manifesto is not up for negotiation here or
  * anywhere: its red lines were explained on the first screen, the desk warns before one is
  * crossed, and Budget day judges it. Every PM line is simulated and says so.
@@ -225,7 +225,7 @@ export function PMPage() {
         </Beat>
         <Beat title="Your flagship schemes">
           {status ? (
-            <DespatchBox
+            <BudgetSummary
               game={game}
               status={status}
               headroomGbpm={headroomGbpm}

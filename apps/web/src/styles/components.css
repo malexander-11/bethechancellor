@@ -20,12 +20,14 @@
   font-size: 0.875rem;
 }
 
-.dateline__rule {
-  display: none;
-}
-
 .dateline__countdown {
   font-weight: 600;
+}
+
+.dateline__countdown::before {
+  content: '·';
+  margin-right: 12px;
+  font-weight: 400;
 }
 
 /* ------------------------------------------------------------ the stepper */
@@ -469,7 +471,7 @@ abbr.term {
 
 /* ----------------------------------------------------- the summary strip */
 
-.despatch {
+.summary {
   display: flex;
   flex-wrap: wrap;
   gap: 12px 24px;
@@ -480,7 +482,7 @@ abbr.term {
   background: var(--surface);
 }
 
-.despatch__cell {
+.summary__cell {
   display: flex;
   flex: 1 1 140px;
   flex-direction: column;
@@ -488,19 +490,19 @@ abbr.term {
   min-width: 140px;
 }
 
-.despatch__label {
+.summary__label {
   color: var(--ink-2);
   font-size: 0.875rem;
   font-weight: 600;
 }
 
-.despatch__value {
+.summary__value {
   font-size: 1.375rem;
   font-weight: 700;
   line-height: 1.2;
 }
 
-.despatch__sub {
+.summary__sub {
   display: block;
   color: var(--muted);
   font-size: 0.875rem;
@@ -948,7 +950,7 @@ label.choice {
   display: block;
 }
 
-.stamps {
+.rule-list {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -958,10 +960,15 @@ label.choice {
   list-style: none;
 }
 
-.stamps li {
+.rule-list li {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 4px 8px;
+}
+
+.rule-list .status {
+  margin: 0;
 }
 
 .ambitions {
@@ -1175,6 +1182,12 @@ label.choice {
   margin: 0 0 12px;
   color: var(--meter, var(--ink));
   font-weight: 600;
+}
+
+.reception__score {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 400;
 }
 
 .reasons {

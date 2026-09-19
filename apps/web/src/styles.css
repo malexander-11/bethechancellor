@@ -500,8 +500,7 @@ hr {
   font-weight: 600;
 }
 
-.status__icon,
-.stamp__icon {
+.status__icon {
   display: inline-grid;
   place-items: center;
   width: 22px;
@@ -541,45 +540,6 @@ hr {
 }
 
 .status--muted .status__icon {
-  background: var(--axis);
-}
-
-.stamp {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-}
-
-.stamp--good {
-  color: var(--good);
-}
-
-.stamp--good .stamp__icon {
-  background: var(--good);
-}
-
-.stamp--warn {
-  color: var(--warning);
-}
-
-.stamp--warn .stamp__icon {
-  background: var(--warning);
-}
-
-.stamp--bad {
-  color: var(--critical);
-}
-
-.stamp--bad .stamp__icon {
-  background: var(--critical);
-}
-
-.stamp--muted {
-  color: var(--muted);
-}
-
-.stamp--muted .stamp__icon {
   background: var(--axis);
 }
 
