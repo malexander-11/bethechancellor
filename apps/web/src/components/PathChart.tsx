@@ -27,7 +27,7 @@ function niceTicks(min: number, max: number, count = 4): number[] {
 
 /**
  * Two-series line chart: OBR baseline (de-emphasised) against this budget (the series colour). 2px
- * lines, 8px end markers with a surface ring, hairline gridlines, direct end labels at 12px,
+ * lines, 8px end markers with a surface ring, hairline gridlines, direct end labels at 14px,
  * crosshair tooltip and a table view. Follows the dataviz "emphasis" form; the series colour is
  * for marks only, so every word on the chart is in ink.
  */
@@ -45,9 +45,9 @@ export function PathChart({
   const formatTick = tickFormat ?? format;
   const id = useId();
   const [hover, setHover] = useState<number | null>(null);
-  const width = 560;
+  const width = 520;
   const height = 260;
-  const margin = { top: 16, right: 84, bottom: 28, left: 48 };
+  const margin = { top: 16, right: 100, bottom: 30, left: 56 };
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
 
@@ -105,7 +105,7 @@ export function PathChart({
             <text
               x={margin.left - 8}
               y={y(t) + 4}
-              fontSize={12}
+              fontSize={14}
               fill="var(--ink-2)"
               textAnchor="end"
               style={{ fontVariantNumeric: 'tabular-nums' }}
@@ -119,7 +119,7 @@ export function PathChart({
             key={yr}
             x={x(i)}
             y={height - 8}
-            fontSize={12}
+            fontSize={14}
             fill={i === highlightIndex ? 'var(--ink)' : 'var(--ink-2)'}
             fontWeight={i === highlightIndex ? 600 : 400}
             textAnchor="middle"
@@ -141,6 +141,7 @@ export function PathChart({
           fill="none"
           stroke="var(--series-baseline)"
           strokeWidth={2}
+          strokeDasharray="6 4"
           strokeLinejoin="round"
           strokeLinecap="round"
         />
@@ -178,7 +179,7 @@ export function PathChart({
             y(baseline[last] ?? 0) +
             (differs && (policy[last] ?? 0) > (baseline[last] ?? 0) ? 12 : -6)
           }
-          fontSize={12}
+          fontSize={14}
           fill="var(--ink-2)"
           style={{ fontVariantNumeric: 'tabular-nums' }}
         >
@@ -189,7 +190,7 @@ export function PathChart({
           <text
             x={x(last) + 9}
             y={y(policy[last] ?? 0) + ((policy[last] ?? 0) > (baseline[last] ?? 0) ? -6 : 12)}
-            fontSize={12}
+            fontSize={14}
             fontWeight={600}
             fill="var(--ink)"
             style={{ fontVariantNumeric: 'tabular-nums' }}

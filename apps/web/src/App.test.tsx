@@ -31,6 +31,39 @@ describe('journey routes', () => {
     expect(screen.getByText('Budget 2025 decisions')).toBeInTheDocument();
   });
 
+  it('names each screen in the tab title and puts a skip link first in the tab order', () => {
+    const { unmount } = render(
+      <MemoryRouter initialEntries={['/outlook']}>
+        <App />
+      </MemoryRouter>,
+    );
+    expect(document.title).toBe('Choose what to plan on · Step 2 of 7 · Be the Chancellor');
+    const skip = screen.getByRole('link', { name: 'Skip to the step' });
+    expect(skip).toHaveAttribute('href', '#main');
+    expect(document.body.querySelector('a, button, input, [tabindex]')).toBe(skip);
+    expect(document.getElementById('main')).toHaveAttribute('tabindex', '-1');
+    unmount();
+    render(
+      <MemoryRouter initialEntries={['/budget/taxes']}>
+        <App />
+      </MemoryRouter>,
+    );
+    expect(document.title).toBe('Build the package (the taxes) · Step 4 of 7 · Be the Chancellor');
+  });
+
+  it('moves focus to the new screen when a step link is followed', () => {
+    render(
+      <MemoryRouter initialEntries={['/budget/taxes?v=1&f=obr2603&r=ch2602&i=2027&L=itbr.1']}>
+        <App />
+      </MemoryRouter>,
+    );
+    fireEvent.click(screen.getByRole('link', { name: 'Next: the spending' }));
+    expect(document.title).toBe(
+      'Build the package (the spending) · Step 4 of 7 · Be the Chancellor',
+    );
+    expect(document.activeElement).toBe(document.getElementById('main'));
+  });
+
   it('shows the assumptions step as a choice of forecasts, and Budget day with the verdicts', () => {
     const { unmount } = render(
       <MemoryRouter initialEntries={['/assumptions']}>

@@ -71,7 +71,10 @@ export function ProgressRail({ step }: { step: JourneyStep }) {
                   {text}
                 </StepLink>
               ) : (
-                <span className="progress__ahead">{text}</span>
+                <span className="progress__ahead">
+                  {text}
+                  <span className="sr-only"> (not yet open)</span>
+                </span>
               )}
             </li>
           );

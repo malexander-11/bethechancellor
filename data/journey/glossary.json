@@ -52,6 +52,10 @@
     "barnett": {
       "term": "Barnett",
       "short": "The formula that changes the Scottish, Welsh and Northern Irish budgets when comparable English spending changes."
+    },
+    "hmrc-points": {
+      "term": "HMRC points only",
+      "short": "HMRC publishes what a tax change would raise at a few set sizes of change. Between those points the game draws a straight line, so a setting in between is an estimate."
     }
   }
 }

@@ -1,6 +1,8 @@
 import { LabelBadge } from '../components/LabelBadge';
+import { usePageTitle } from '../journey/title';
 
 export function MethodologyPage() {
+  usePageTitle('How the numbers work');
   return (
     <article className="prose">
       <h1>How the numbers work</h1>

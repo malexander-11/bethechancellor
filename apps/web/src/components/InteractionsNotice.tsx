@@ -15,6 +15,7 @@ export function InteractionsNotice({ interactions }: { interactions: Interaction
             className={i.severity === 'warn' ? 'interactions__warn' : ''}
           >
             <strong>
+              {i.severity === 'warn' ? 'Warning: ' : ''}
               {i.titles[0]} and {i.titles[1]}:
             </strong>{' '}
             {i.text}

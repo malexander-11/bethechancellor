@@ -66,7 +66,7 @@ describe('the conversation with the Prime Minister', () => {
     at(`/pm?${BASE}&g=s.7_st.1_th.security`);
     next();
     next();
-    const box = screen.getByRole('status', { name: 'Your Budget so far' });
+    const box = screen.getByRole('region', { name: 'Your Budget so far' });
     expect(within(box).getByText('none agreed yet')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('checkbox', { name: /Fund the Defence Investment Plan/ }));
     // The lever moves in the package at once, and the PM reacts.

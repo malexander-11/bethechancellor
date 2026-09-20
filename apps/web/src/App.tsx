@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { BeatsProvider } from './journey/beats';
 import { WorkingsProvider, useWorkingsSwitch } from './journey/workings';
@@ -21,30 +22,53 @@ function RedirectKeepingQuery({ to }: { to: string }) {
 }
 
 /**
+ * A screen change in a single-page app moves nothing by itself: the reader is left wherever they
+ * were scrolled, and a screen reader hears nothing at all. So on every change of path the page
+ * goes back to the top and focus lands on the main region, whose new title the guide has just
+ * set. Not on first paint: the browser has placed focus already, and taking it would be rude.
+ */
+function RouteFocus() {
+  const { pathname } = useLocation();
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    document.documentElement.scrollTop = 0;
+    document.getElementById('main')?.focus({ preventScroll: true });
+  }, [pathname]);
+  return null;
+}
+
+/**
  * The brass plate: the name (which is the way home), the two reference pages, and the switch that
  * puts the workings on show. The journey itself is not in the header: one road, entered at the
  * start and walked by the button at the foot of each page.
  */
 function WorkingsSwitch() {
   const { workings, setWorkings, forced } = useWorkingsSwitch();
+  const explanation = forced
+    ? 'This page is the workings.'
+    : 'Show where every number comes from: sources, derivations and breakdowns.';
+  // The explanation sits outside the label, so it describes the switch without renaming it.
   return (
-    <label
-      className="workings-switch"
-      title={
-        forced
-          ? 'This page is the workings.'
-          : 'Show where every number comes from: sources, derivations and breakdowns.'
-      }
-    >
-      <input
-        type="checkbox"
-        role="switch"
-        checked={workings}
-        disabled={forced}
-        onChange={(e) => setWorkings(e.target.checked)}
-      />
-      <span>Show workings</span>
-    </label>
+    <>
+      <label className="workings-switch" title={explanation}>
+        <input
+          type="checkbox"
+          role="switch"
+          checked={workings}
+          disabled={forced}
+          aria-describedby="workings-switch-note"
+          onChange={(e) => setWorkings(e.target.checked)}
+        />
+        <span>Show workings</span>
+      </label>
+      <span id="workings-switch-note" className="sr-only">
+        {explanation}
+      </span>
+    </>
   );
 }
 
@@ -52,6 +76,10 @@ function Shell() {
   const { workings } = useWorkingsSwitch();
   return (
     <>
+      <a href="#main" className="skip-link">
+        Skip to the step
+      </a>
+      <RouteFocus />
       <header className="site-header">
         <div className="site-header__inner">
           <NavLink to="/" className="brand">
@@ -65,7 +93,7 @@ function Shell() {
           <WorkingsSwitch />
         </div>
       </header>
-      <main className="page" data-workings={workings ? 'on' : 'off'}>
+      <main id="main" tabIndex={-1} className="page" data-workings={workings ? 'on' : 'off'}>
         <Routes>
           <Route path="/" element={<StartPage />} />
           <Route path="/outlook" element={<OutlookPage />} />

@@ -18,8 +18,10 @@ describe('Scorecard', () => {
     for (const label of ['Budget balance', 'Borrowing', 'Debt', 'Deficit']) {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
-    expect(screen.getByText(/Stability/)).toBeInTheDocument();
-    expect(screen.getByText(/Welfare cap/)).toBeInTheDocument();
+    // Met or missed is text on the pill, not a colour and a tooltip.
+    expect(screen.getByText(/Stability: met/)).toBeInTheDocument();
+    expect(screen.getByText(/Investment: met/)).toBeInTheDocument();
+    expect(screen.getByText(/Welfare cap: within cap/)).toBeInTheDocument();
     // March borrowing in 2029-30 was £63.4bn; investment adds to it.
     expect(screen.getByText('March: £63.4bn')).toBeInTheDocument();
     const borrowingCell = screen.getByText('Borrowing').closest('.scorecard__cell');

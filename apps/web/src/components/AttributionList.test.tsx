@@ -36,10 +36,11 @@ describe('AttributionList', () => {
     );
     expect(screen.getByText('Current budget')).toBeInTheDocument();
     expect(screen.getByText('Borrowing')).toBeInTheDocument();
-    const investment = screen.getByText('Public investment').closest('li');
+    const investment = screen.getByText('Public investment').closest('tr');
     expect(investment?.textContent).toMatch(/0\.0bn/);
     expect(investment?.textContent).toMatch(/13\.4bn/);
-    const items = screen.getAllByRole('listitem');
+    expect(screen.getAllByRole('columnheader')).toHaveLength(3);
+    const items = screen.getAllByRole('row');
     expect(items[1]?.textContent).toContain('Public investment');
     expect(items[items.length - 2]?.textContent).toContain('Debt interest');
     expect(items[items.length - 1]?.textContent).toMatch(/Total/);

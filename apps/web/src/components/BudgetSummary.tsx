@@ -19,7 +19,7 @@ export function BudgetSummary({
   const target = game.headroomTargetBn * 1000;
   const kept = status.promises.length - status.broken;
   return (
-    <div className="summary" role="status" aria-label="Your Budget so far">
+    <section className="summary" aria-label="Your Budget so far">
       <div className="summary__cell">
         <span className="summary__label">Headroom, {targetYear}</span>
         <span className="summary__value">
@@ -49,6 +49,6 @@ export function BudgetSummary({
               : `${status.broken} broken, ${kept} kept`}
         </span>
       </div>
-    </div>
+    </section>
   );
 }

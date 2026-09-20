@@ -80,15 +80,17 @@ export function AssumptionReading({
       <h3 className="reading__title">{reading.title}</h3>
       <Compare reading={reading} />
       {suggestion ? (
-        <p className="reading__suggestion">
-          <LabelBadge badge="assumption" /> Advisers suggest{' '}
-          <strong>{formatLeverValue(lever, suggestion.value)}</strong>
-          {suggestion.value === lever.control.default ? ' (keep the OBR path)' : ''}
-          <span className="reading__rationale" title={suggestion.rationale}>
-            {' '}
-            why?
-          </span>
-        </p>
+        <div className="reading__suggestion">
+          <p>
+            <LabelBadge badge="assumption" /> Advisers suggest{' '}
+            <strong>{formatLeverValue(lever, suggestion.value)}</strong>
+            {suggestion.value === lever.control.default ? ' (keep the OBR path)' : ''}
+          </p>
+          <details className="reading__rationale">
+            <summary>Why this figure</summary>
+            <p>{suggestion.rationale}</p>
+          </details>
+        </div>
       ) : null}
       <LeverControl
         lever={lever}

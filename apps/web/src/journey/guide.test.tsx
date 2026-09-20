@@ -33,6 +33,11 @@ describe('the guide at the top of every step', () => {
     expect(within(list).getByText('Headroom')).toBeInTheDocument();
     expect(within(list).getByText('The OBR')).toBeInTheDocument();
     expect(within(list).getByText('Gilts')).toBeInTheDocument();
+    // The five badges too, so what "Direct costing" means is never only a tooltip.
+    fireEvent.click(screen.getByText('What the badges mean'));
+    const badges = screen.getByText('What the badges mean').closest('details') as HTMLElement;
+    expect(within(badges).getByText('Simulated')).toBeInTheDocument();
+    expect(within(badges).getByText(/A game judgement/)).toBeInTheDocument();
   });
 
   it('follows the package’s screens and the seven-stop rail', () => {

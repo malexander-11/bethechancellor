@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AssumptionReading, ContextRow } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
+import { TableScroll } from '../components/TableScroll';
 import { Scenarios } from '../components/Scenarios';
 import { Scorecard } from '../components/Scorecard';
 import { SourceList } from '../components/SourceLink';
@@ -195,7 +196,7 @@ export function OutlookPage() {
                   </span>
                   <span className="group__say">No slider here: context for the numbers above.</span>
                 </summary>
-                <div className="table-scroll">
+                <TableScroll label="Also changed since March">
                   <table className="measures">
                     <thead>
                       <tr>
@@ -213,7 +214,7 @@ export function OutlookPage() {
                         ))}
                     </tbody>
                   </table>
-                </div>
+                </TableScroll>
               </details>
               <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} />
             </>

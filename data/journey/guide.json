@@ -35,7 +35,7 @@
       "doing": "Set taxes and spending across the whole of government, one group at a time.",
       "why": "This is where the money comes from and where it goes. A lever that breaks a [manifesto] promise shows a red warning.",
       "now": "Work through the tax groups and move what you want. Then the spending.",
-      "terms": ["headroom", "current-budget", "borrowing"]
+      "terms": ["headroom", "current-budget", "borrowing", "hmrc-points"]
     },
     {
       "step": "spending",

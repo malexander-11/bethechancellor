@@ -75,9 +75,8 @@ describe('LeverControl', () => {
         redLines={[{ promise: 'The tax lock', when: 'above', broken: false }]}
       />,
     );
-    expect(within(quiet.container).getByText('Manifesto: no rise')).toHaveAttribute(
-      'title',
-      'The tax lock',
+    expect(within(quiet.container).getByText('Manifesto: no rise').textContent).toMatch(
+      /The tax lock/,
     );
     quiet.unmount();
     const crossed = render(

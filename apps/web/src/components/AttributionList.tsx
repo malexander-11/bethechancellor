@@ -29,34 +29,44 @@ export function AttributionList({
   const totalCurrent = rows.reduce((acc, r) => acc + r.currentBudgetGbpm, 0);
   const totalBorrowing = rows.reduce((acc, r) => acc + r.psnbGbpm, 0);
   return (
-    <ul className="attribution attribution--columns">
-      <li className="attribution__header">
-        <span>Change</span>
-        <span>Current budget</span>
-        <span>Borrowing</span>
-      </li>
-      {[...levers, ...interest].map((row) => (
-        <li key={`${row.kind}-${row.code ?? row.label}`}>
-          <span>
-            {row.label} <LabelBadge badge={row.badge} />
-          </span>
-          <span className={`amount ${tone(row.currentBudgetGbpm)}`}>
-            {formatGbpBn(row.currentBudgetGbpm, 1, true)}
-          </span>
-          <span className={`amount ${tone(row.psnbGbpm)}`}>
-            {formatGbpBn(row.psnbGbpm, 1, true)}
-          </span>
-        </li>
-      ))}
-      <li>
-        <strong>Total (positive = worse)</strong>
-        <strong className={`amount ${tone(totalCurrent)}`}>
-          {formatGbpBn(totalCurrent, 1, true)}
-        </strong>
-        <strong className={`amount ${tone(totalBorrowing)}`}>
-          {formatGbpBn(totalBorrowing, 1, true)}
-        </strong>
-      </li>
-    </ul>
+    <table className="attribution">
+      <thead>
+        <tr>
+          <th scope="col">Change</th>
+          <th scope="col" className="attribution__num">
+            Current budget
+          </th>
+          <th scope="col" className="attribution__num">
+            Borrowing
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {[...levers, ...interest].map((row) => (
+          <tr key={`${row.kind}-${row.code ?? row.label}`}>
+            <th scope="row">
+              {row.label} <LabelBadge badge={row.badge} />
+            </th>
+            <td className={`attribution__num amount ${tone(row.currentBudgetGbpm)}`}>
+              {formatGbpBn(row.currentBudgetGbpm, 1, true)}
+            </td>
+            <td className={`attribution__num amount ${tone(row.psnbGbpm)}`}>
+              {formatGbpBn(row.psnbGbpm, 1, true)}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row">Total (positive = worse)</th>
+          <td className={`attribution__num amount ${tone(totalCurrent)}`}>
+            {formatGbpBn(totalCurrent, 1, true)}
+          </td>
+          <td className={`attribution__num amount ${tone(totalBorrowing)}`}>
+            {formatGbpBn(totalBorrowing, 1, true)}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
   );
 }

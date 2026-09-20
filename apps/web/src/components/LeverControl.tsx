@@ -18,6 +18,7 @@ import { Milestones } from './Milestones';
 import { useId, useState } from 'react';
 import { LabelBadge } from './LabelBadge';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
+import { Term } from './Term';
 import { useWorkings } from '../journey/workings';
 
 const MINUS = '−';
@@ -97,32 +98,38 @@ const RED_LINE_WORDS: Record<RedLine['when'], string> = {
  * The warnings on the lever. A watched lever always wears a quiet tag naming the red line, so a
  * newcomer learns it before touching the control; a crossed line turns red. A promised flagship
  * wears its promise while it is funded and a red tag once the package has pulled it below the target.
+ * Which promise, and what was agreed, is in the tag's text for a screen reader; a tooltip would
+ * reach only a mouse.
  */
 function LeverFlags({ redLines, promised }: { redLines: RedLine[]; promised?: Promised }) {
   return (
     <>
       {promised ? (
         promised.status === 'funded' || promised.status === 'delayed' ? (
-          <span className="tag--treasury" title={`${promised.title}: ${promised.target}`}>
+          <span className="tag--treasury">
             Promised to the PM
+            <span className="sr-only">
+              : {promised.title}, {promised.target}
+            </span>
           </span>
         ) : (
-          <span
-            className="tag--treasury tag--warn"
-            title={`${promised.title}: you agreed ${promised.target} with the Prime Minister`}
-          >
+          <span className="tag--treasury tag--warn">
             Below what you promised the PM
+            <span className="sr-only">
+              : {promised.title}, you agreed {promised.target} with the Prime Minister
+            </span>
           </span>
         )
       ) : null}
       {redLines.map((r) =>
         r.broken ? (
-          <span key={r.promise} className="tag--treasury tag--warn" title={r.promise}>
+          <span key={r.promise} className="tag--treasury tag--warn">
             Breaks the manifesto: {r.promise}
           </span>
         ) : (
-          <span key={r.promise} className="tag--manifesto" title={r.promise}>
+          <span key={r.promise} className="tag--manifesto">
             Manifesto: {RED_LINE_WORDS[r.when]}
+            <span className="sr-only"> ({r.promise})</span>
           </span>
         ),
       )}
@@ -257,23 +264,37 @@ export function LeverControl({
           .filter((p) => p !== 0)
           .map((p) => formatLeverValue(lever, p))
       : null;
+  // The control is described by the one-line headline and, once it has moved, by what it does.
+  const hasEffectLine =
+    (improvement !== null && summaryYear !== undefined) ||
+    (isFinancialTransaction && cashOut !== 0);
+  const describedBy = [`${id}-desc`, hasEffectLine ? `${id}-effect` : null]
+    .filter(Boolean)
+    .join(' ');
   return (
-    <div className={`lever${isToggle ? ' lever--toggle' : ''}`}>
+    <div
+      className={`lever${isToggle ? ' lever--toggle' : ''}`}
+      role="group"
+      aria-labelledby={`${id}-title`}
+    >
       <div className="lever__head">
         {isToggle ? (
-          <label htmlFor={id} className="lever__title lever__toggle-label">
-            <input
-              id={id}
-              type="checkbox"
-              checked={value === 1}
-              onChange={(e) => onChange(e.target.checked ? 1 : 0)}
-            />
-            {lever.title}
-          </label>
+          <h3 className="lever__title" id={`${id}-title`}>
+            <label htmlFor={id} className="lever__toggle-label">
+              <input
+                id={id}
+                type="checkbox"
+                checked={value === 1}
+                aria-describedby={describedBy}
+                onChange={(e) => onChange(e.target.checked ? 1 : 0)}
+              />
+              {lever.title}
+            </label>
+          </h3>
         ) : (
-          <label htmlFor={id} className="lever__title">
-            {lever.title}
-          </label>
+          <h3 className="lever__title" id={`${id}-title`}>
+            <label htmlFor={id}>{lever.title}</label>
+          </h3>
         )}
         <span className="lever__flags">
           <LeverFlags redLines={redLines} promised={promised} />
@@ -318,6 +339,7 @@ export function LeverControl({
               id={id}
               className="lever__select"
               value={nearestOption(lever, value)}
+              aria-describedby={describedBy}
               onChange={(e) => onChange(Number(e.target.value))}
             >
               {Object.entries(lever.control.labels ?? {})
@@ -338,6 +360,7 @@ export function LeverControl({
                 step={step}
                 value={value}
                 onChange={(e) => onChange(Number(e.target.value))}
+                aria-describedby={describedBy}
                 aria-valuetext={
                   change
                     ? `${change.to} (${formatLeverValue(lever, value)})`
@@ -353,30 +376,34 @@ export function LeverControl({
           )}
         </>
       ) : null}
-      <p className="lever__desc">{lever.headline ?? lever.description}</p>
+      <p className="lever__desc" id={`${id}-desc`}>
+        {lever.headline ?? lever.description}
+      </p>
       {workings && lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
       {lookupPoints || barnett ? (
         <p className="lever__tags">
           {lookupPoints ? (
-            <span
-              className="tag"
-              title={`HMRC publishes estimates at ${lookupPoints.join(', ')}; values in between are interpolated in a straight line.`}
-            >
-              HMRC points only
+            <span className="tag">
+              <Term id="hmrc-points">HMRC points only</Term>
+              <span className="sr-only">
+                : HMRC publishes estimates at {lookupPoints.join(', ')}; between them the game draws
+                a straight line.
+              </span>
             </span>
           ) : null}
           {barnett ? (
-            <span
-              className="tag"
-              title="A change here also moves the Scottish, Welsh and Northern Ireland block grants. That knock-on is described in the sources, not counted in the number."
-            >
-              Barnett applies
+            <span className="tag">
+              <Term id="barnett">Barnett applies</Term>
+              <span className="sr-only">
+                : a change here also moves the Scottish, Welsh and Northern Irish block grants,
+                described in the sources and not counted in the number.
+              </span>
             </span>
           ) : null}
         </p>
       ) : null}
       {isFinancialTransaction && cashOut !== 0 ? (
-        <p className="lever__effect">
+        <p className="lever__effect" id={`${id}-effect`}>
           Cash to borrow: {formatGbpBn(Math.abs(cashOut), 1)}
           <span className="lever__effect-note">
             {' '}
@@ -386,7 +413,7 @@ export function LeverControl({
         </p>
       ) : null}
       {improvement !== null && summaryYear ? (
-        <p className={`lever__effect ${tone(improvement)}`}>
+        <p className={`lever__effect ${tone(improvement)}`} id={`${id}-effect`}>
           {isCapital ? 'Borrowing' : 'Current budget'} in {summaryYear}:{' '}
           {formatGbpBn(improvement, 1, true)}
           {isCapital ? (
@@ -407,6 +434,7 @@ export function LeverControl({
               aria-expanded={open}
             >
               {open ? 'Hide detail' : 'Detail and sources'}
+              <span className="sr-only"> for {lever.shortTitle}</span>
             </button>
           ) : null}
           {!isDefault ? (
@@ -416,6 +444,7 @@ export function LeverControl({
               onClick={() => onChange(lever.control.default)}
             >
               Back to OBR
+              <span className="sr-only"> for {lever.shortTitle}</span>
             </button>
           ) : null}
         </div>

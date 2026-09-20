@@ -1,6 +1,8 @@
 import { sources, vintage } from '../data';
+import { usePageTitle } from '../journey/title';
 
 export function AboutPage() {
+  usePageTitle('About and sources');
   return (
     <article className="prose">
       <h1>About this project</h1>

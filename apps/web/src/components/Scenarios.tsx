@@ -99,39 +99,41 @@ export function Scenarios({
     [cards, state],
   );
   return (
-    <div className="scenarios" role="radiogroup" aria-label="Economic assumptions">
-      {cards.map((card, i) => (
-        <article
-          key={card.kind}
-          className={`scenario${card.kind === selected ? ' scenario--picked' : ''}`}
-        >
-          <label className="scenario__choose">
-            <input
-              type="radio"
-              name={name}
-              value={card.kind}
-              checked={card.kind === selected}
-              onChange={() => onPick(card.values)}
-            />
-            <span className="scenario__body">
-              <span className="scenario__title">{card.title}</span>
-              <span className="scenario__headline">{card.headline}</span>
-              <span className="scenario__settings">
-                {card.settings.map((s) => (
-                  <Setting key={s.leverCode} setting={s} />
-                ))}
+    <>
+      <div className="scenarios" role="radiogroup" aria-label="Economic assumptions">
+        {cards.map((card, i) => (
+          <article
+            key={card.kind}
+            className={`scenario${card.kind === selected ? ' scenario--picked' : ''}`}
+          >
+            <label className="scenario__choose">
+              <input
+                type="radio"
+                name={name}
+                value={card.kind}
+                checked={card.kind === selected}
+                onChange={() => onPick(card.values)}
+              />
+              <span className="scenario__body">
+                <span className="scenario__title">{card.title}</span>
+                <span className="scenario__headline">{card.headline}</span>
+                <span className="scenario__settings">
+                  {card.settings.map((s) => (
+                    <Setting key={s.leverCode} setting={s} />
+                  ))}
+                </span>
+                <span className="scenario__headroom">
+                  <small>Headroom in {summaryYear}</small>
+                  <strong>{formatGbpBn(headrooms[i] ?? 0, 1, true)}</strong>
+                </span>
               </span>
-              <span className="scenario__headroom">
-                <small>Headroom in {summaryYear}</small>
-                <strong>{formatGbpBn(headrooms[i] ?? 0, 1, true)}</strong>
-              </span>
-            </span>
-          </label>
-          {workings ? <Workings card={card} /> : null}
-        </article>
-      ))}
+            </label>
+            {workings ? <Workings card={card} /> : null}
+          </article>
+        ))}
+      </div>
       {selected === null ? (
-        <article className="scenario scenario--picked scenario--own">
+        <article className="scenario scenario--picked scenario--own" aria-label="Your own figures">
           <p className="scenario__title">Your own figures</p>
           <p className="scenario__headline">
             These sliders match none of the four. <LabelBadge badge="assumption" /> Your settings
@@ -143,6 +145,6 @@ export function Scenarios({
           </span>
         </article>
       ) : null}
-    </div>
+    </>
   );
 }

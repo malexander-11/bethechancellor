@@ -11,8 +11,8 @@ export function HeadroomGauge({
   baselineGbpm: number;
   typicalErrorGbpm: number;
 }) {
-  const width = 320;
-  const height = 44;
+  const width = 200;
+  const height = 48;
   const pad = 8;
   const span = Math.max(typicalErrorGbpm, Math.abs(headroomGbpm), Math.abs(baselineGbpm)) * 1.1;
   const x = (v: number) => pad + ((v + span) / (2 * span)) * (width - 2 * pad);
@@ -29,7 +29,7 @@ export function HeadroomGauge({
     >
       <rect
         x={x(-typicalErrorGbpm)}
-        y={18}
+        y={20}
         width={x(typicalErrorGbpm) - x(-typicalErrorGbpm)}
         height={8}
         rx={4}
@@ -38,16 +38,16 @@ export function HeadroomGauge({
       />
       <rect
         x={Math.min(zero, here)}
-        y={18}
+        y={20}
         width={Math.max(2, Math.abs(here - zero))}
         height={8}
         rx={4}
         fill={positive ? 'var(--series-policy)' : 'var(--critical)'}
       />
-      <line x1={zero} x2={zero} y1={13} y2={31} stroke="var(--axis)" strokeWidth={1} />
+      <line x1={zero} x2={zero} y1={15} y2={33} stroke="var(--axis)" strokeWidth={1} />
       <circle
         cx={base}
-        cy={22}
+        cy={24}
         r={4.5}
         fill="var(--surface)"
         stroke="var(--series-baseline)"
@@ -55,19 +55,19 @@ export function HeadroomGauge({
       />
       <circle
         cx={here}
-        cy={22}
+        cy={24}
         r={5}
         fill={positive ? 'var(--series-policy)' : 'var(--critical)'}
         stroke="var(--surface)"
         strokeWidth={2}
       />
-      <text x={x(-typicalErrorGbpm)} y={42} fontSize={12} fill="var(--ink-2)">
+      <text x={x(-typicalErrorGbpm)} y={45} fontSize={14} fill="var(--ink-2)">
         −£{(typicalErrorGbpm / 1000).toFixed(0)}bn
       </text>
-      <text x={x(typicalErrorGbpm)} y={42} fontSize={12} fill="var(--ink-2)" textAnchor="end">
+      <text x={x(typicalErrorGbpm)} y={45} fontSize={14} fill="var(--ink-2)" textAnchor="end">
         +£{(typicalErrorGbpm / 1000).toFixed(0)}bn
       </text>
-      <text x={zero} y={10} fontSize={12} fill="var(--ink-2)" textAnchor="middle">
+      <text x={zero} y={12} fontSize={14} fill="var(--ink-2)" textAnchor="middle">
         0
       </text>
     </svg>

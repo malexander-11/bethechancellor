@@ -229,7 +229,7 @@ export function BudgetDayPage() {
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+      window.setTimeout(() => setCopied(false), 4000);
     } catch {
       window.prompt('Copy this link', url);
     }
@@ -282,7 +282,7 @@ export function BudgetDayPage() {
         <Beat title="The close">
           {verdict ? <Verdict verdict={verdict} replayHref={replayHref} /> : null}
           <WorkingsOnly>
-            <details className="panel" aria-labelledby="verdicts-heading">
+            <details className="panel">
               <summary className="group__head">
                 <span className="group__line">
                   <span className="group__name">The rules in full</span>
@@ -338,7 +338,7 @@ export function BudgetDayPage() {
             <InteractionsNotice interactions={outcome.interactions} />
             <details className="panel details">
               <summary>
-                <h2>Five-year paths</h2>
+                <span className="details__title">Five-year paths</span>
               </summary>
               <div className="charts">
                 <PathChart
@@ -387,8 +387,11 @@ export function BudgetDayPage() {
           </WorkingsOnly>
           <div className="toolbar">
             <button type="button" className="btn btn--primary" onClick={copyLink}>
-              {copied ? 'Link copied' : 'Copy a link to this Budget'}
+              Copy a link to this Budget
             </button>
+            <span role="status" className="toolbar__note">
+              {copied ? 'Link copied' : ''}
+            </span>
             <StepLink to="/budget/taxes" className="btn">
               Back to the package
             </StepLink>

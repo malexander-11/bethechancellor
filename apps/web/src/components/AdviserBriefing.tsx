@@ -1,5 +1,5 @@
 import type { Briefing } from '@btc/engine';
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { adviserById } from '../data';
 import { useWorkings } from '../journey/workings';
 import { LabelBadge } from './LabelBadge';
@@ -67,14 +67,20 @@ export function AdviserBriefing({
 }) {
   const adviser = adviserById.get(briefing.adviser);
   const workings = useWorkings();
+  const roleId = useId();
   // A body-only briefing with the workings off has nothing to say; an empty card would only be a box.
   if (variant === 'body' && !briefing.facts?.length && children == null && !workings) return null;
   return (
-    <article className={`briefing${compact ? ' briefing--compact' : ''}`}>
+    <article
+      className={`briefing${compact ? ' briefing--compact' : ''}`}
+      aria-labelledby={variant === 'full' ? roleId : undefined}
+    >
       {variant === 'full' ? (
         <>
           <header className="briefing__head">
-            <span className="briefing__role">{adviser?.role ?? briefing.adviser}</span>
+            <h3 className="briefing__role" id={roleId}>
+              {adviser?.role ?? briefing.adviser}
+            </h3>
             <LabelBadge badge="commentary" />
           </header>
           <p className="briefing__headline">{briefing.headline}</p>

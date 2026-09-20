@@ -1,6 +1,7 @@
 import { formatGbpBn, type BudgetVerdict } from '@btc/engine';
 import { formatLeverValue } from './LeverControl';
 import { LabelBadge } from './LabelBadge';
+import { TableScroll } from './TableScroll';
 import { SourceList } from './SourceLink';
 
 const PRIORITY: Record<BudgetVerdict['ambitions']['priorities'][number]['fate'], string> = {
@@ -75,7 +76,7 @@ export function Verdict({ verdict, replayHref }: { verdict: BudgetVerdict; repla
           {paid.length === 0 && benefited.length === 0 ? (
             <p className="panel__hint">Nothing moved money in {targetYear}.</p>
           ) : (
-            <div className="table-scroll">
+            <TableScroll label="Who paid, who benefited">
               <table className="measures incidence">
                 <tbody>
                   {paid.map((r) => (
@@ -102,7 +103,7 @@ export function Verdict({ verdict, replayHref }: { verdict: BudgetVerdict; repla
                   ))}
                 </tbody>
               </table>
-            </div>
+            </TableScroll>
           )}
         </section>
 

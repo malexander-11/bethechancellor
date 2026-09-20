@@ -22,7 +22,7 @@ function at(path: string) {
 describe('the package, with a game under way', () => {
   it('keeps score in the summary strip: headroom against the target, priorities, promises', () => {
     at(`/budget/spending?${BASE}&${GAME}`);
-    const box = screen.getByRole('status', { name: 'Your Budget so far' });
+    const box = screen.getByRole('region', { name: 'Your Budget so far' });
     expect(within(box).getByText(/against your £20bn target/)).toBeInTheDocument();
     expect(within(box).getByText('0 of 2 funded')).toBeInTheDocument();
     expect(within(box).getByText('all 6 kept')).toBeInTheDocument();
@@ -35,9 +35,9 @@ describe('the package, with a game under way', () => {
     let panel = screen.getByRole('tabpanel');
     const below = within(panel).getAllByText('Below what you promised the PM');
     expect(below).toHaveLength(1);
-    expect(below[0]).toHaveAttribute(
-      'title',
-      expect.stringMatching(/A Justice uplift for prison capacity: you agreed \+10(\.0)?%/),
+    // Which promise, and what was agreed, is in the tag's text, where a screen reader finds it.
+    expect(below[0]?.textContent).toMatch(
+      /A Justice uplift for prison capacity, you agreed \+10(\.0)?% with the Prime Minister/,
     );
     // The pinned lever is the first control in the group, ahead of Health in the authored order.
     expect(within(panel).getAllByRole('slider')[0]).toHaveAccessibleName('Justice');
@@ -112,7 +112,7 @@ describe('the package, with a game under way', () => {
 
   it('shows none of this on a sandbox Budget with no game', () => {
     at(`/budget/spending?${BASE}&L=dfe.-2`);
-    expect(screen.queryByRole('status', { name: 'Your Budget so far' })).toBeNull();
+    expect(screen.queryByRole('region', { name: 'Your Budget so far' })).toBeNull();
     expect(screen.queryByRole('region', { name: 'Your advisers' })).toBeNull();
     expect(screen.queryByRole('complementary', { name: /press summary/ })).toBeNull();
     // The ministers stay: they belong to the package, not to the game.

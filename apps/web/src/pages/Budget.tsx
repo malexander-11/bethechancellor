@@ -215,7 +215,7 @@ export function BudgetPage() {
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+      window.setTimeout(() => setCopied(false), 4000);
     } catch {
       window.prompt('Copy this link', url);
     }
@@ -264,7 +264,7 @@ export function BudgetPage() {
           {clue ? <PressSummary outcome={clue} /> : null}
 
           <div className="layout">
-            <aside>
+            <div className="desk-column">
               <Desk
                 groups={groups}
                 moved={moved}
@@ -323,9 +323,9 @@ export function BudgetPage() {
                   </StepLink>
                 ) : null}
               </p>
-            </aside>
+            </div>
 
-            <div>
+            <aside className="working-notes" aria-label="Working notes">
               <div className="toolbar">
                 {workings ? (
                   <>
@@ -357,12 +357,15 @@ export function BudgetPage() {
                   Reset to OBR
                 </button>
                 <button type="button" className="btn btn--primary" onClick={copyLink}>
-                  {copied ? 'Link copied' : 'Copy link to this budget'}
+                  Copy link to this budget
                 </button>
+                <span role="status" className="toolbar__note">
+                  {copied ? 'Link copied' : ''}
+                </span>
               </div>
 
               {state.warnings.length > 0 && (
-                <div className="warnings" role="status">
+                <div className="warnings warnings--link" role="status">
                   This link could not be read completely:
                   <ul>
                     {state.warnings.map((w) => (
@@ -417,7 +420,7 @@ export function BudgetPage() {
 
                   <details className="panel details">
                     <summary>
-                      <h2>Five-year paths</h2>
+                      <span className="details__title">Five-year paths</span>
                     </summary>
                     <div className="charts">
                       <PathChart
@@ -465,7 +468,7 @@ export function BudgetPage() {
                   </details>
                 </>
               ) : null}
-            </div>
+            </aside>
           </div>
         </Beat>
       </Beats>

@@ -118,12 +118,8 @@ export function Scorecard({
           {outcome.verdicts.map((v) => {
             const s = STATUS[v.status];
             return (
-              <li
-                key={v.ruleId}
-                className={`pill pill--${s.tone}`}
-                title={`${v.ruleName}: ${s.text}`}
-              >
-                <span aria-hidden="true">{s.icon}</span> {SHORT[v.kind]}
+              <li key={v.ruleId} className={`pill pill--${s.tone}`}>
+                <span aria-hidden="true">{s.icon}</span> {SHORT[v.kind]}: {s.text}
               </li>
             );
           })}

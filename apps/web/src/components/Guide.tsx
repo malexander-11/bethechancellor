@@ -1,18 +1,12 @@
-import { STEP_COUNT, segments, termsFor, type JourneyStep } from '@btc/engine';
+import { STEP_COUNT, segments, termsFor, type Badge, type JourneyStep } from '@btc/engine';
 import { Fragment } from 'react';
 import { glossary, guideFor } from '../data';
+import { usePageTitle } from '../journey/title';
+import { BADGE_LABELS, LabelBadge } from './LabelBadge';
 import { SourceList } from './SourceLink';
+import { Term } from './Term';
 
-/** A glossary word in running text: the definition on hover, and listed beneath for touch. */
-function Term({ id, children }: { id: string; children: string }) {
-  const def = glossary.terms[id];
-  if (!def) return <>{children}</>;
-  return (
-    <abbr className="term" title={def.short}>
-      {children}
-    </abbr>
-  );
-}
+const BADGES = Object.keys(BADGE_LABELS) as Badge[];
 
 function Marked({ text }: { text: string }) {
   return (
@@ -46,6 +40,11 @@ export interface GuidePart {
 
 export function Guide({ step, part }: { step: JourneyStep; part?: GuidePart }) {
   const stage = guideFor(step);
+  usePageTitle(
+    stage
+      ? `${stage.title.replace(/\.$/, '')}${part ? ` (${part.label})` : ''} · Step ${stage.number} of ${STEP_COUNT}`
+      : undefined,
+  );
   if (!stage) return null;
   const terms = termsFor(glossary, stage);
   return (
@@ -97,6 +96,19 @@ export function Guide({ step, part }: { step: JourneyStep; part?: GuidePart }) {
           </dl>
         </details>
       ) : null}
+      <details className="guide__terms">
+        <summary>What the badges mean</summary>
+        <dl>
+          {BADGES.map((badge) => (
+            <div key={badge}>
+              <dt>
+                <LabelBadge badge={badge} />
+              </dt>
+              <dd>{BADGE_LABELS[badge].title}</dd>
+            </div>
+          ))}
+        </dl>
+      </details>
     </header>
   );
 }

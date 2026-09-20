@@ -14,6 +14,7 @@ import { useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
+import { TableScroll } from '../components/TableScroll';
 import { formatLeverValue } from '../components/LeverControl';
 import { SourceList } from '../components/SourceLink';
 import { context, draws, levers, leversByCategory, pm, rules, vintage } from '../data';
@@ -124,7 +125,7 @@ export function ForecastPage() {
           continueLabel="Open the envelope"
           onAdvance={reveal}
         >
-          <div className="envelope doc" aria-label="A sealed envelope">
+          <section className="envelope doc" aria-label="A sealed envelope">
             <p className="doc__head">
               <span className="kicker">Office for Budget Responsibility</span>
               <span className="doc__ref">Pre-measures forecast · in confidence</span>
@@ -138,7 +139,7 @@ export function ForecastPage() {
               Seed {game.seed} of 999 · <LabelBadge badge="simulated" /> which published forecast is
               inside was decided by a draw weighted to the centre.
             </p>
-          </div>
+          </section>
         </Beat>
         <Beat title="What the forecast says">
           {!game.revealed || !decomposition ? (
@@ -212,7 +213,7 @@ function ForecastReveal({
         </p>
         <p>{draw.outcome.story.text}</p>
         <SourceList refs={draw.outcome.story.sources} />
-        <div className="table-scroll">
+        <TableScroll label="What happened to the economy">
           <table className="measures decomp">
             <thead>
               <tr>
@@ -247,7 +248,7 @@ function ForecastReveal({
               })}
             </tbody>
           </table>
-        </div>
+        </TableScroll>
         <p className="reveal__line">
           <span className="reveal__label">
             The economy moved, including what dearer money does to your own borrowing
@@ -274,7 +275,7 @@ function ForecastReveal({
             caveat this outcome doubts.
           </p>
         ) : (
-          <div className="table-scroll">
+          <TableScroll label="What happened to your measures">
             <table className="measures decomp">
               <thead>
                 <tr>
@@ -306,7 +307,7 @@ function ForecastReveal({
                 ))}
               </tbody>
             </table>
-          </div>
+          </TableScroll>
         )}
         <p className="reveal__line">
           <span className="reveal__label">The OBR re-scored your measures</span>

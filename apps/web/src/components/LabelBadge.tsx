@@ -1,6 +1,7 @@
 import type { Badge } from '@btc/engine';
 
-const LABELS: Record<Badge, { text: string; title: string }> = {
+/** The five badges and what each means; the guide lists them on every screen. */
+export const BADGE_LABELS: Record<Badge, { text: string; title: string }> = {
   direct: {
     text: 'Direct costing',
     title:
@@ -29,7 +30,7 @@ const LABELS: Record<Badge, { text: string; title: string }> = {
 };
 
 export function LabelBadge({ badge }: { badge: Badge }) {
-  const { text, title } = LABELS[badge];
+  const { text, title } = BADGE_LABELS[badge];
   return (
     <span className={`badge badge--${badge}`} title={title}>
       {text}

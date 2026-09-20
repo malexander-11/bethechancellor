@@ -8,6 +8,7 @@ import {
 } from '@btc/engine';
 import { applicableConsiderations } from './considerations';
 import { LabelBadge } from './LabelBadge';
+import { TableScroll } from './TableScroll';
 import { SourceLink } from './SourceLink';
 
 const DIRECTION: Record<string, string> = {
@@ -47,7 +48,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
         <h4>
           Published figures <LabelBadge badge="direct" />
         </h4>
-        <div className="table-scroll">
+        <TableScroll label="Published figures">
           <table className="detail-table">
             <thead>
               <tr>
@@ -71,7 +72,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
               ))}
             </tbody>
           </table>
-        </div>
+        </TableScroll>
         {source ? (
           <p>
             <SourceLink ref={source} />
@@ -88,7 +89,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
         <h4>
           HMRC cost of the relief <LabelBadge badge="direct" />
         </h4>
-        <div className="table-scroll">
+        <TableScroll label="HMRC cost of the relief">
           <table className="detail-table">
             <thead>
               <tr>
@@ -109,7 +110,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
               ))}
             </tbody>
           </table>
-        </div>
+        </TableScroll>
         {source ? (
           <p>
             <SourceLink ref={source} />
@@ -126,7 +127,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
         <h4>
           Spending Review 2025 rows <LabelBadge badge="direct" />
         </h4>
-        <div className="table-scroll">
+        <TableScroll label="Spending Review 2025 rows">
           <table className="detail-table">
             <thead>
               <tr>
@@ -151,7 +152,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
               ))}
             </tbody>
           </table>
-        </div>
+        </TableScroll>
         {source ? (
           <p>
             <SourceLink ref={source} />
@@ -169,7 +170,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
           Our own arithmetic on published figures <LabelBadge badge="assumption" />
         </h4>
         {method.name === 'gdpShareGap' ? (
-          <div className="table-scroll">
+          <TableScroll label="Our own arithmetic on published figures">
             <table className="detail-table">
               <thead>
                 <tr>
@@ -200,7 +201,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
                 </tr>
               </tbody>
             </table>
-          </div>
+          </TableScroll>
         ) : null}
         {method.name === 'upratingGap' ? (
           <p>
@@ -300,7 +301,7 @@ function BaselineTable({ lever, effect }: { lever: Lever; effect: LeverEffect })
       <h4>
         From the baseline to this budget <LabelBadge badge="mechanical" />
       </h4>
-      <div className="table-scroll">
+      <TableScroll label="From the baseline to this budget">
         <table className="detail-table">
           <thead>
             <tr>
@@ -328,7 +329,7 @@ function BaselineTable({ lever, effect }: { lever: Lever; effect: LeverEffect })
             ))}
           </tbody>
         </table>
-      </div>
+      </TableScroll>
       {extendedFrom ? (
         <p className="source">
           From {extendedFrom} the Spending Review has no departmental plans, so the last settlement
@@ -352,7 +353,7 @@ function UpratingTable({ lever, effect }: { lever: Lever; effect: LeverEffect })
         From the published figure to this budget{' '}
         <LabelBadge badge={isSchedule ? 'direct' : 'assumption'} />
       </h4>
-      <div className="table-scroll">
+      <TableScroll label="From the published figure to this budget">
         <table className="detail-table">
           <thead>
             <tr>
@@ -382,7 +383,7 @@ function UpratingTable({ lever, effect }: { lever: Lever; effect: LeverEffect })
             ))}
           </tbody>
         </table>
-      </div>
+      </TableScroll>
       <Caveats caveats={detail.caveats} />
     </>
   );

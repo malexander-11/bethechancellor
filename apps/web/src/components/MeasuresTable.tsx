@@ -1,5 +1,6 @@
 import { formatGbpBn, type Lever, type Outcome } from '@btc/engine';
 import { LabelBadge } from './LabelBadge';
+import { TableScroll } from './TableScroll';
 import { formatLeverValue, levelChange } from './LeverControl';
 
 function tone(v: number): string {
@@ -29,7 +30,7 @@ export function MeasuresTable({
   const totalCurrent = outcome.attribution.reduce((acc, r) => acc + r.currentBudgetGbpm, 0);
   const totalBorrowing = outcome.attribution.reduce((acc, r) => acc + r.psnbGbpm, 0);
   return (
-    <div className="table-scroll">
+    <TableScroll label="Your measures">
       <table className="measures">
         <thead>
           <tr>
@@ -93,6 +94,6 @@ export function MeasuresTable({
           </tr>
         </tfoot>
       </table>
-    </div>
+    </TableScroll>
   );
 }

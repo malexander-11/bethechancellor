@@ -44,10 +44,11 @@ describe('the package in two parts', () => {
     at('/budget/taxes');
     fireEvent.click(screen.getByRole('tab', { name: /Business/ }));
     const business = screen.getByRole('tabpanel');
-    expect(within(business).getByLabelText('Business rates')).toBeInTheDocument();
+    // A lever is a named group now, so it is found by its title whatever control it holds.
+    expect(within(business).getByRole('group', { name: 'Business rates' })).toBeInTheDocument();
     expect(within(business).getByText('Mechanical')).toBeInTheDocument();
     expect(
-      within(business).getByLabelText('Raise the bank surcharge from 3% to 5%'),
+      within(business).getByRole('group', { name: 'Raise the bank surcharge from 3% to 5%' }),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByRole('tab', { name: /Capital taxes/ }));
     const capital = screen.getByRole('tabpanel');
@@ -55,7 +56,9 @@ describe('the package in two parts', () => {
     expect(within(capital).getAllByText('Direct costing').length).toBeGreaterThan(0);
     expect(within(capital).getAllByText('Assumption').length).toBeGreaterThan(0);
     expect(
-      within(capital).getByLabelText('Tax extreme wealth: 1% a year on net wealth above £10m'),
+      within(capital).getByRole('group', {
+        name: 'Tax extreme wealth: 1% a year on net wealth above £10m',
+      }),
     ).toBeInTheDocument();
     expect(within(capital).getByText(/upper bound/)).toBeInTheDocument();
   });
@@ -68,7 +71,7 @@ describe('the package in two parts', () => {
     const flagships = leversByCategory.spend.filter((l) => l.group === 'Flagship programmes');
     expect(flagships.length).toBeGreaterThanOrEqual(6);
     for (const lever of flagships) {
-      expect(within(panel).getByLabelText(lever.title)).toBeInTheDocument();
+      expect(within(panel).getByRole('group', { name: lever.title })).toBeInTheDocument();
     }
     expect(within(panel).getAllByText('Defence Secretary').length).toBeGreaterThanOrEqual(2);
     expect(within(panel).getAllByText('Education Secretary').length).toBeGreaterThanOrEqual(2);
@@ -83,7 +86,7 @@ describe('the package in two parts', () => {
   it('keeps the shelved policies off every screen, and an old link to one still opens', () => {
     at('/budget/spending', `${BASE}&L=water.1_dfe.-2`);
     expect(screen.getByText(/Ignored unknown lever code/)).toBeInTheDocument();
-    expect(screen.queryByLabelText('Bring water into public ownership')).toBeNull();
+    expect(screen.queryByRole('group', { name: 'Bring water into public ownership' })).toBeNull();
     expect(screen.queryByRole('tab', { name: /Shelved/ })).toBeNull();
     // The rest of the link is intact.
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));

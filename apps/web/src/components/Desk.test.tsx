@@ -58,6 +58,25 @@ describe('the lever groups', () => {
     expect(within(panel).queryByText('Basic rate of income tax')).toBeNull();
   });
 
+  it('gives every lever a heading, a group and a described control, and buttons that say which lever', () => {
+    desk('itbr.1');
+    const panel = screen.getByRole('tabpanel');
+    const card = within(panel).getByRole('group', { name: 'Basic rate of income tax' });
+    expect(within(card).getByRole('heading', { level: 3 })).toHaveTextContent(
+      'Basic rate of income tax',
+    );
+    // The slider is described by the lever's one line and, once moved, by what it does.
+    expect(within(card).getByRole('slider')).toHaveAccessibleDescription(
+      /Current budget in 2029-30/,
+    );
+    expect(within(card).getByRole('button', { name: /Back to OBR for/ })).toBeInTheDocument();
+    // Five "Detail and sources" buttons in a group would otherwise be five identical names.
+    const names = screen
+      .getAllByRole('button', { name: /Detail and sources/ })
+      .map((b) => b.textContent);
+    expect(new Set(names).size).toBe(names.length);
+  });
+
   it('keeps every lever reachable through the attribution list, not only the open group', () => {
     // Closing a group takes its levers out of the document, so the running list of what you
     // changed is the only place that still names them all.
