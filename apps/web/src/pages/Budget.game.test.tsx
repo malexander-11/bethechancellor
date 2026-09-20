@@ -30,6 +30,22 @@ describe('the package, with a game under way', () => {
     expect(within(box).getByText('all 6 kept')).toBeInTheDocument();
   });
 
+  it('shows who pays and who benefits, interactions, and a published package for scale', () => {
+    at(`/budget/spending?${BASE}&${GAME}&L=moj.10_dip47.1`);
+    const who = screen.getByRole('region', { name: 'Who pays · who benefits' });
+    expect(within(who).getByText('Courts and prisons')).toBeInTheDocument();
+    expect(within(who).getByText(/receives £1\.4bn/)).toBeInTheDocument();
+    expect(within(who).getByText('Defence')).toBeInTheDocument();
+    // The running total is set against what a whole Budget's measures came to.
+    const attribution = screen
+      .getByRole('heading', { name: /What you’ve changed/ })
+      .closest('section');
+    expect(
+      within(attribution as HTMLElement).getByText(/Budget 2025’s measures/),
+    ).toBeInTheDocument();
+    expect(within(attribution as HTMLElement).getByText(/20\.5bn better/)).toBeInTheDocument();
+  });
+
   it('pins a promised flagship to the top of its group, tagged with how it stands', () => {
     // Un-funded in the package, the flagship wears a red tag; funded, the accent one.
     const first = at(`/budget/spending?${BASE}&${GAME}`);

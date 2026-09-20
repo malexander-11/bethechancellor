@@ -18,6 +18,8 @@ describe('Scorecard', () => {
     for (const label of ['Budget balance', 'Borrowing', 'Debt', 'Deficit']) {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
+    // The gauge says what it is drawn against.
+    expect(screen.getByText(/Typical forecast error over five years/)).toBeInTheDocument();
     // Met or missed is text on the pill, not a colour and a tooltip.
     expect(screen.getByText(/Stability: met/)).toBeInTheDocument();
     expect(screen.getByText(/Investment: met/)).toBeInTheDocument();

@@ -41,6 +41,11 @@ describe('making it add up', () => {
     // list reaches the rate rises the manifesto lock covers.
     at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1_vatfood.1_nicpen.1_vathome.1`);
     expect(screen.getByText(/you set out to keep/)).toBeInTheDocument();
+    // The stress test: the package under every forecast the draw could have produced.
+    fireEvent.click(screen.getByText(/hold up under the other forecasts/));
+    const stress = screen.getByText(/hold up under the other forecasts/).closest('details');
+    expect(within(stress as HTMLElement).getAllByRole('listitem')).toHaveLength(5);
+    expect(within(stress as HTMLElement).getByText('what arrived')).toBeInTheDocument();
     const route = screen.getByRole('region', { name: /Raise more revenue/ });
     const buttons = within(route).getAllByRole('button', { name: 'Do it' });
     expect(buttons).toHaveLength(3);

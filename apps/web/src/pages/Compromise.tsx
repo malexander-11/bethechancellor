@@ -3,6 +3,7 @@ import {
   delayOptions,
   formatGbpBn,
   narrowedValue,
+  resilienceRows,
   revenueSuggestions,
   spendingMeasures,
   stageIndex,
@@ -18,7 +19,7 @@ import { formatLeverValue } from '../components/LeverControl';
 import { MinisterLine } from '../components/MinisterLine';
 import { Scorecard } from '../components/Scorecard';
 import { SourceList } from '../components/SourceLink';
-import { adviserById, compromise, context, levers, pm, rules, vintage } from '../data';
+import { adviserById, compromise, context, draws, levers, pm, rules, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
 import { useHeadroomOf } from '../journey/headroom';
@@ -46,6 +47,23 @@ export function CompromisePage() {
   const revenue = useMemo(
     () => revenueSuggestions(levers, state.leverValues, pm.promises, headroomOf, 3),
     [state.leverValues, headroomOf],
+  );
+  // The package as it stands, re-run under every forecast the draw could have produced.
+  const stress = useMemo(
+    () =>
+      game
+        ? resilienceRows({
+            vintage,
+            rules,
+            levers,
+            draws,
+            context,
+            outcome,
+            macroCodes: MACRO_CODES,
+            game,
+          })
+        : [],
+    [game, outcome],
   );
 
   const guard = useStageGuard('compromise');
@@ -441,6 +459,34 @@ export function CompromisePage() {
               ))}
             </section>
           ) : null}
+
+          <details className="panel details">
+            <summary>
+              <span className="details__title">
+                How would this hold up under the other forecasts?
+              </span>
+            </summary>
+            <p className="panel__hint">
+              Your package as it stands, re-run under every outcome the draw could have produced.
+              The one that arrived is marked. <LabelBadge badge="mechanical" />
+            </p>
+            <ul className="fates resilience">
+              {stress.map((r) => (
+                <li key={r.outcome.id} className={r.drawn ? 'resilience--drawn' : undefined}>
+                  <strong>{r.outcome.title}</strong>
+                  {r.drawn ? <span className="tag--treasury">what arrived</span> : null} ·{' '}
+                  <span className={`amount ${r.headroomGbpm < 0 ? 'amount--worse' : ''}`}>
+                    {formatGbpBn(r.headroomGbpm, 1, r.headroomGbpm < 0)}
+                  </span>
+                  {r.rulesMissed.length > 0 ? (
+                    <span className="source"> · {r.rulesMissed.join(' and ')} missed</span>
+                  ) : (
+                    <span className="source"> · rules met</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </details>
 
           <p className="hero-start__actions">
             <StepLink

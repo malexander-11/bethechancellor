@@ -16,6 +16,7 @@
             "unit": "GBPm"
           },
           "note": "A change of about a fifth of March’s £23.6bn headroom either way is the threshold: below that the benches do not feel it.",
+          "nudge": "{gap} more for public services would have moved the backbenchers up a band.",
           "bands": [
             {
               "id": "cut",
@@ -121,6 +122,7 @@
             "unit": "GBPm"
           },
           "note": "A cut of more than about £2bn a year is felt in benefit rates; smaller moves are absorbed in uprating.",
+          "nudge": "{gap} less off benefits would have moved this up a band.",
           "bands": [
             {
               "id": "cut",
@@ -155,6 +157,7 @@
             "unit": "GBPm"
           },
           "note": "The balance of new revenue: the best-off, savers and business on one side; everyone who earns or spends, motorists and duties on the other. Two billion either way is the threshold.",
+          "nudge": "{gap} more from the best-off and business, rather than the broad base, would have moved this up.",
           "bands": [
             {
               "id": "broad",
@@ -289,6 +292,7 @@
             "unit": "GBPm"
           },
           "note": "Ten billion is where commentators called the margin wafer-thin before the last Budget doubled it to £21.7bn; twenty is your advisers’ rule of thumb and about what March left.",
+          "nudge": "{gap} more headroom would have moved the markets up a band.",
           "bands": [
             {
               "id": "missed",
@@ -362,6 +366,7 @@
             "unit": "GBPm"
           },
           "note": "Five billion less is a change in the financing remit the market notices; ten billion more is an issuance programme it prices.",
+          "nudge": "{gap} less borrowing in the target year would have moved this up a band.",
           "bands": [
             {
               "id": "less",
@@ -417,6 +422,7 @@
             "unit": "pp"
           },
           "note": "Half a point of GDP on top of a tax take the OBR already calls a historic high.",
+          "nudge": "{gap} less on the tax take would have kept the markets neutral on it.",
           "bands": [
             {
               "id": "steady",
@@ -703,6 +709,7 @@
             "unit": "GBPm"
           },
           "note": "One theme, every flagship ticked for it funded, and at least five billion a year behind it: a Budget people can describe in a sentence.",
+          "nudge": "{gap} more behind a single theme would have made it a story people can describe.",
           "bands": [
             {
               "id": "no",
@@ -737,6 +744,7 @@
             "unit": "GBPm"
           },
           "note": "Five billion a year passes quietly; twenty is felt by most households before the target year.",
+          "nudge": "{gap} less in tax rises would have moved this by a point.",
           "bands": [
             {
               "id": "small",

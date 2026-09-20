@@ -70,6 +70,18 @@ function tone(v: number): string {
   return v > 0.5 ? 'amount--better' : v < -0.5 ? 'amount--worse' : '';
 }
 
+/**
+ * The effect as a verb, not a sign: a tax raises or costs, spending saves or costs, and investment
+ * puts borrowing up or down. One convention for the reader, whatever the engine's sign is.
+ */
+export function effectWords(improvement: number, capital: boolean, receipts: boolean): string {
+  const size = formatGbpBn(Math.abs(improvement), 1);
+  if (Math.abs(improvement) < 50) return 'unchanged';
+  if (capital) return `${improvement > 0 ? 'down' : 'up'} ${size}`;
+  if (improvement > 0) return `${receipts ? 'raises' : 'saves'} ${size}`;
+  return `costs ${size}`;
+}
+
 const POLICY_YEARS = policyYearsOf(vintage);
 const IMPLEMENTATION_YEAR = vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? '';
 const DEFLATOR = vintage.economy.gdpDeflator ? deflatorIndex(vintage) : null;
@@ -388,7 +400,7 @@ export function LeverControl({
       <p className="lever__desc" id={`${id}-desc`}>
         {lever.headline ?? lever.description}
       </p>
-      {workings && lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
+      {lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
       {lookupPoints || barnett || commitment || notOnTheTable ? (
         <p className="lever__tags">
           {notOnTheTable ? <span className="tag tag--quiet">Not on the table</span> : null}
@@ -443,7 +455,7 @@ export function LeverControl({
       {improvement !== null && summaryYear ? (
         <p className={`lever__effect ${tone(improvement)}`} id={`${id}-effect`}>
           {isCapital ? 'Borrowing' : 'Current budget'} in {summaryYear}:{' '}
-          {formatGbpBn(improvement, 1, true)}
+          {effectWords(improvement, isCapital, lever.classification?.side === 'receipts')}
           {isCapital ? (
             <span className="lever__effect-note">
               {' '}

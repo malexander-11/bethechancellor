@@ -18,6 +18,12 @@ const SHORT: Record<RuleVerdict['kind'], string> = {
   welfareCap: 'Welfare cap',
 };
 
+/** A change in headroom said the way a reader thinks: "£9.5bn more", "£0.7bn less", "no change". */
+function moreOrLess(delta: number): string {
+  if (Math.abs(delta) < 50) return 'no change';
+  return `${formatGbpBn(Math.abs(delta), 1)} ${delta > 0 ? 'more' : 'less'}`;
+}
+
 /**
  * The running score: headroom against the stability rule as the big number, the three rule
  * verdicts and four fiscal aggregates in the rules' target year, each as OBR March → yours.
@@ -107,12 +113,11 @@ export function Scorecard({
             <>
               OBR in March {formatGbpBn(baseHeadroom, 1)} · OBR in October{' '}
               {formatGbpBn(octoberHeadroom, 1, octoberHeadroom < 0)} · your measures{' '}
-              {formatGbpBn(headroom - octoberHeadroom, 1, true)}
+              {moreOrLess(headroom - octoberHeadroom)}
             </>
           ) : (
             <>
-              OBR in March {formatGbpBn(baseHeadroom, 1)} · your changes{' '}
-              {formatGbpBn(delta, 1, true)}
+              OBR in March {formatGbpBn(baseHeadroom, 1)} · your changes {moreOrLess(delta)}
             </>
           )}
         </div>
@@ -121,6 +126,9 @@ export function Scorecard({
           baselineGbpm={baseHeadroom}
           typicalErrorGbpm={typicalErrorGbpm}
         />
+        <p className="scorecard__caption">
+          Typical forecast error over five years: ±{formatGbpBn(typicalErrorGbpm, 0)}.
+        </p>
       </div>
       <div className="scorecard__cell scorecard__rules">
         <div className="scorecard__label">Fiscal rules</div>

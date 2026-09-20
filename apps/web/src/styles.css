@@ -830,10 +830,21 @@ hr {
 }
 
 .milestones {
+  margin: 4px 0 0;
+  font-size: 0.9375rem;
+}
+
+.milestones summary {
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.milestones__list {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin: 8px 0 0;
+  margin: 0 0 6px;
   padding: 0;
   list-style: none;
 }
@@ -857,6 +868,48 @@ hr {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.milestone__note {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* Who pays, who benefits: the engine's figures by the group each lever is tagged with. */
+.who-pays {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.who-pays li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.9375rem;
+}
+
+.who-pays li:first-child {
+  border-top: 0;
+}
+
+.who-pays .amount {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.attribution__comparator th,
+.attribution__comparator td {
+  color: var(--ink-2);
+  font-weight: 400;
+}
+
+.reception__nudge {
+  color: var(--ink);
+  font-style: italic;
 }
 
 /* ------------------------------------------------------- the workings drawer */
@@ -1343,6 +1396,12 @@ details.table-view td:first-child {
   color: var(--ink-2);
   font-size: 0.9375rem;
   font-weight: 600;
+}
+
+.scorecard__caption {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
 }
 
 .scorecard__label {

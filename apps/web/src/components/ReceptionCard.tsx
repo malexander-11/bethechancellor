@@ -83,6 +83,9 @@ export function ReceptionCard({
               {r.causes.length > 0 ? (
                 <span className="reception__reading">Because of {r.causes.join(' · ')}</span>
               ) : null}
+              {r.nudge ? (
+                <span className="reception__reading reception__nudge">{r.nudge}</span>
+              ) : null}
               <span className="reception__reading">{r.note}</span>
               <SourceList as="span" className="briefing__sources" refs={r.sources} />
             </li>

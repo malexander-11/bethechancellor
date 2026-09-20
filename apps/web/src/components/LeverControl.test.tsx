@@ -37,7 +37,7 @@ describe('LeverControl', () => {
       />,
     );
     const borrowing = screen.getByText(/Borrowing in 2029-30/);
-    expect(borrowing.textContent).toMatch(/13\.4bn/);
+    expect(borrowing.textContent).toMatch(/up £13\.4bn/);
     expect(borrowing.textContent).toMatch(/current budget unchanged/);
     expect(screen.queryByText(/Barnett formula/)).toBeNull();
     unmount();
@@ -54,7 +54,7 @@ describe('LeverControl', () => {
     const scope = within(container);
     expect(scope.getByText('Barnett applies')).toBeInTheDocument();
     const current = scope.getByText(/Current budget in 2029-30/);
-    expect(current.textContent).toMatch(/2\.4bn/);
+    expect(current.textContent).toMatch(/costs £2\.4bn/);
     fireEvent.click(scope.getByRole('button', { name: /Detail and sources/ }));
     expect(scope.getByText(/Spending Review 2025 rows/)).toBeInTheDocument();
     expect(scope.getAllByText(/extended from 2028-29/)).toHaveLength(2);
@@ -165,8 +165,10 @@ describe('LeverControl', () => {
     expect(third.container.querySelector('.lever__cash')?.textContent).toMatch(
       /£232\.0bn → £236\.6bn in 2028-29/,
     );
-    // The Spending Review's own figure and the 2010s record sit beside the control.
+    // The Spending Review's own figure and the 2010s record sit beside the control, one click
+    // away whatever the workings switch says.
     const milestones = third.container.querySelector('.milestones')?.textContent ?? '';
+    expect(milestones).toMatch(/For comparison/);
     expect(milestones).toMatch(/This Spending Review\+2\.8% a year/);
     expect(milestones).toMatch(/2010-11 to 2019-20\+1\.8% a year/);
   });

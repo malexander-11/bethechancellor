@@ -77,11 +77,9 @@ function FlagshipChoice({
             </span>{' '}
             <SourceList as="span" className="briefing__sources" refs={flagship.sources} />
           </span>
-          {picked ? (
-            <span className="choice__delivery">
-              <LabelBadge badge={flagship.delivery.badge} /> {flagship.delivery.text}
-            </span>
-          ) : null}
+          <span className="choice__delivery">
+            <LabelBadge badge={flagship.delivery.badge} /> {flagship.delivery.text}
+          </span>
         </span>
       </label>
       {picked && reaction ? <Spoken line={reaction} who="The Prime Minister" /> : null}

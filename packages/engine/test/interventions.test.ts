@@ -39,7 +39,7 @@ describe('advisers who remember', () => {
     const items = advice(game, { itbr: 1 });
     const broken = items.find((x) => x.when === 'promise-broken');
     expect(broken?.text).toBe(
-      'That is The tax lock, Chancellor: a manifesto red line, and the words are on the record. Nothing here will stop you, and the public will notice.',
+      'That is The tax lock, Chancellor: a manifesto red line, and the words are on the record. Nothing here will stop you. On Budget day the public’s rating starts at the floor, whatever else you do.',
     );
     expect(broken?.about).toBe('tax-lock');
     expect(

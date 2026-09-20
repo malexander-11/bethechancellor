@@ -2,6 +2,7 @@ import {
   ambitionStatus,
   formatGbpBn,
   formatPct,
+  incidenceRows,
   interventionsFor,
   pickOutcome,
   promiseBreaks,
@@ -18,6 +19,7 @@ import { BudgetSummary } from '../components/BudgetSummary';
 import { InteractionsNotice } from '../components/InteractionsNotice';
 import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
+import { LabelBadge } from '../components/LabelBadge';
 import { LeverControl, formatLeverValue, type RedLine } from '../components/LeverControl';
 import { MinisterLine } from '../components/MinisterLine';
 import { PathChart } from '../components/PathChart';
@@ -26,9 +28,11 @@ import { PresetPicker } from '../components/PresetPicker';
 import { Scorecard } from '../components/Scorecard';
 import {
   briefingsFor,
+  budget2025NetGbpm,
   context,
   draws,
   groupLevers,
+  incidence,
   interventions,
   levers,
   leversByCategory,
@@ -188,6 +192,8 @@ export function BudgetPage() {
         })),
     );
   const clue = game && step === 'spending' ? pickOutcome(game.seed, draws.outcomes) : null;
+  // Who pays and who benefits, by the tags each lever carries, in the target year.
+  const { paid, benefited } = incidenceRows(outcome, levers, incidence, targetYear);
 
   /**
    * Leaving the package for the first time: remember it as it stood before the OBR spoke,
@@ -391,20 +397,57 @@ export function BudgetPage() {
               <section className="panel" aria-labelledby="attribution-heading">
                 <h2 id="attribution-heading">What you’ve changed</h2>
                 <p className="panel__hint">
-                  What each change does in {targetYear} to the current budget (day-to-day borrowing)
-                  and to total borrowing, which adds investment. Positive means the position gets
-                  worse.
+                  What each change does in {targetYear} to the current budget (day-to-day) and to
+                  total borrowing, which adds investment. Better means less borrowing.
                 </p>
                 <AttributionList
                   rows={outcome.attribution}
                   baselineHeadroomGbpm={stability?.baseline.headroomGbpm ?? 0}
+                  comparator={{
+                    label: 'Budget 2025’s measures, for scale',
+                    psnbGbpm: -budget2025NetGbpm(targetYear),
+                  }}
                 />
               </section>
 
+              {paid.length > 0 || benefited.length > 0 ? (
+                <section className="panel" aria-labelledby="who-pays-heading">
+                  <h2 id="who-pays-heading">Who pays · who benefits</h2>
+                  <ul className="who-pays">
+                    {paid.slice(0, 3).map((r) => (
+                      <li key={r.group}>
+                        <span>{r.label}</span>
+                        <span
+                          className={`amount ${r.gbpm >= 0 ? 'amount--worse' : 'amount--better'}`}
+                        >
+                          {r.gbpm >= 0 ? 'pays ' : 'gains '}
+                          {formatGbpBn(Math.abs(r.gbpm), 1)}
+                        </span>
+                      </li>
+                    ))}
+                    {benefited.slice(0, 3).map((r) => (
+                      <li key={r.group}>
+                        <span>{r.label}</span>
+                        <span
+                          className={`amount ${r.gbpm >= 0 ? 'amount--better' : 'amount--worse'}`}
+                        >
+                          {r.gbpm >= 0 ? 'receives ' : 'loses '}
+                          {formatGbpBn(Math.abs(r.gbpm), 1)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="panel__hint">
+                    The engine’s figures in {targetYear}, totalled by the group each lever is tagged
+                    with. <LabelBadge badge="mechanical" />
+                  </p>
+                </section>
+              ) : null}
+
+              <InteractionsNotice interactions={outcome.interactions} />
+
               {workings ? (
                 <>
-                  <InteractionsNotice interactions={outcome.interactions} />
-
                   {outcome.warnings.length > 0 && (
                     <div className="warnings" role="note">
                       Assumptions in play:

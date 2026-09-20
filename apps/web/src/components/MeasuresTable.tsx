@@ -1,4 +1,5 @@
-import { formatGbpBn, type Lever, type Outcome } from '@btc/engine';
+import type { Lever, Outcome } from '@btc/engine';
+import { betterOrWorse } from './AttributionList';
 import { LabelBadge } from './LabelBadge';
 import { TableScroll } from './TableScroll';
 import { formatLeverValue, levelChange } from './LeverControl';
@@ -60,11 +61,9 @@ export function MeasuresTable({
                 </td>
                 <td>{setting}</td>
                 <td className={`amount ${tone(row.currentBudgetGbpm)}`}>
-                  {formatGbpBn(row.currentBudgetGbpm, 1, true)}
+                  {betterOrWorse(row.currentBudgetGbpm)}
                 </td>
-                <td className={`amount ${tone(row.psnbGbpm)}`}>
-                  {formatGbpBn(row.psnbGbpm, 1, true)}
-                </td>
+                <td className={`amount ${tone(row.psnbGbpm)}`}>{betterOrWorse(row.psnbGbpm)}</td>
               </tr>
             );
           })}
@@ -75,22 +74,20 @@ export function MeasuresTable({
               </td>
               <td />
               <td className={`amount ${tone(interest.currentBudgetGbpm)}`}>
-                {formatGbpBn(interest.currentBudgetGbpm, 1, true)}
+                {betterOrWorse(interest.currentBudgetGbpm)}
               </td>
               <td className={`amount ${tone(interest.psnbGbpm)}`}>
-                {formatGbpBn(interest.psnbGbpm, 1, true)}
+                {betterOrWorse(interest.psnbGbpm)}
               </td>
             </tr>
           ) : null}
         </tbody>
         <tfoot>
           <tr>
-            <th>Total (positive = worse)</th>
+            <th>Total</th>
             <td />
-            <td className={`amount ${tone(totalCurrent)}`}>{formatGbpBn(totalCurrent, 1, true)}</td>
-            <td className={`amount ${tone(totalBorrowing)}`}>
-              {formatGbpBn(totalBorrowing, 1, true)}
-            </td>
+            <td className={`amount ${tone(totalCurrent)}`}>{betterOrWorse(totalCurrent)}</td>
+            <td className={`amount ${tone(totalBorrowing)}`}>{betterOrWorse(totalBorrowing)}</td>
           </tr>
         </tfoot>
       </table>

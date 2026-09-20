@@ -28,6 +28,8 @@ export interface Reason {
   sources: SourceRef[];
   /** The published anchor the rule's thresholds lean on. */
   note: string;
+  /** What would have moved this rule up a band, when the rule says and a better band is next door. */
+  nudge?: string;
   badge: 'simulated';
 }
 
@@ -82,6 +84,29 @@ function bandFor(rule: ReceptionRule, value: number): ReceptionBand {
   return last;
 }
 
+/**
+ * "£1.2bn less in tax rises would have moved this by a point": the distance from the reading to
+ * the nearest neighbouring band with more points, in the reading's own unit, dropped into the
+ * rule's authored sentence. Only for money and percentage-point readings, only when the rule
+ * carries a nudge, and never for the best band there is.
+ */
+function nudgeFor(rule: ReceptionRule, band: ReceptionBand, value: number): string | undefined {
+  const unit = rule.reading.unit;
+  if (!rule.nudge || (unit !== 'GBPm' && unit !== 'pp')) return undefined;
+  const i = rule.bands.indexOf(band);
+  const gaps: number[] = [];
+  const below = rule.bands[i - 1];
+  if (below && below.points > band.points && below.upTo !== undefined)
+    gaps.push(value - below.upTo);
+  const above = rule.bands[i + 1];
+  if (above && above.points > band.points && band.upTo !== undefined) gaps.push(band.upTo - value);
+  const gap = gaps.filter((g) => g >= 0).sort((a, b) => a - b)[0];
+  if (gap === undefined) return undefined;
+  // Written to the resolution the reading is written in, so the sentence never says "£0.0bn".
+  const shown = unit === 'GBPm' ? Math.max(100, Math.ceil(gap / 100) * 100) : Math.max(0.01, gap);
+  return rule.nudge.replace(/\{gap\}/g, sizeOf(shown, unit));
+}
+
 export function clampRating(n: number): Rating {
   return Math.max(1, Math.min(5, Math.round(n))) as Rating;
 }
@@ -115,6 +140,9 @@ export function receptions(input: ReceptionInput): Reception[] {
         causes: causes[rule.measure] ?? [],
         sources: band.sources,
         note: rule.note,
+        ...(nudgeFor(rule, band, value) !== undefined
+          ? { nudge: nudgeFor(rule, band, value) }
+          : {}),
         badge: 'simulated',
       };
     });

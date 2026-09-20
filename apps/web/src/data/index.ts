@@ -21,6 +21,7 @@ import {
   parseLever,
   parsePresets,
   parseRules,
+  parseScorecardExtract,
   parseSources,
   parseVintage,
   validateDataset,
@@ -47,6 +48,7 @@ import guideJson from '@data/journey/guide.json';
 import glossaryJson from '@data/journey/glossary.json';
 import receptionJson from '@data/journey/reception.json';
 import contextJson from '@data/context/2026-09.json';
+import budget2025Json from '@data/derived/hmt-budget-2025-table-4-1.raw.json';
 import householdsJson from '@data/reference/uk-households.json';
 import presetsJson from '@data/presets/presets.json';
 import rulesJson from '@data/rules/charter-2026-02.json';
@@ -80,6 +82,13 @@ export const incidence = parseIncidence(incidenceJson);
 export const verdicts = parseVerdicts(verdictsJson);
 export const guide = parseGuide(guideJson);
 export const glossary = parseGlossary(glossaryJson);
+/** HM Treasury's Budget 2025 scorecard, for scale: what a whole Budget's measures came to. */
+export const budget2025 = parseScorecardExtract(budget2025Json);
+
+/** The net of Budget 2025's measures in a year, £ million; positive reduces borrowing. */
+export function budget2025NetGbpm(year: string): number {
+  return budget2025.measures.reduce((acc, m) => acc + (m.values[year] ?? 0), 0);
+}
 export const levers: Lever[] = Object.keys(leverModules)
   .sort()
   .map((key) => parseLever(leverModules[key]))

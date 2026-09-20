@@ -46,6 +46,25 @@ const SECURITY: GamePermalink = {
   priorities: ['prisons', 'dip-gap'],
 };
 
+describe('what would have moved a rating', () => {
+  it('says how far the reading was from the next better band, in the reading’s own unit', () => {
+    // Employer NICs on pension contributions: a large tax rise that breaks no red line.
+    const pub = by(room({ nicpen: 1 }), 'public');
+    const rises = pub.all.find((r) => r.rule === 'pb-tax-rises');
+    expect(rises?.points).toBeLessThan(0);
+    expect(rises?.nudge).toMatch(
+      /^£\d+\.\dbn less in tax rises would have moved this by a point\.$/,
+    );
+    // The best band has nowhere better to go, so it says nothing.
+    const small = by(room({ ved: 10 }), 'public').all.find((r) => r.rule === 'pb-tax-rises');
+    expect(small?.points).toBe(0);
+    expect(small?.nudge).toBeUndefined();
+    // A rule with no authored nudge never gets one, whatever the band.
+    const kept = pub.all.find((r) => r.rule === 'pb-manifesto');
+    expect(kept?.nudge).toBeUndefined();
+  });
+});
+
 describe('three audiences, five steps', () => {
   it('rates each audience one to five, deterministically, with a label from the data', () => {
     const budget = { dhsc: 3, itbr: 1, socrent: 1 };

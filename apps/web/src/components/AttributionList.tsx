@@ -5,6 +5,12 @@ function tone(v: number): string {
   return v > 0.5 ? 'amount--worse' : v < -0.5 ? 'amount--better' : '';
 }
 
+/** The engine's positive-is-worse figure, said the way a reader thinks: "£8.4bn worse". */
+export function betterOrWorse(v: number): string {
+  const size = formatGbpBn(Math.abs(v), 1);
+  return v > 0.5 ? `${size} worse` : v < -0.5 ? `${size} better` : size;
+}
+
 function size(row: AttributionRow): number {
   return Math.max(Math.abs(row.currentBudgetGbpm), Math.abs(row.psnbGbpm));
 }
@@ -12,9 +18,12 @@ function size(row: AttributionRow): number {
 export function AttributionList({
   rows,
   baselineHeadroomGbpm,
+  comparator,
 }: {
   rows: AttributionRow[];
   baselineHeadroomGbpm: number;
+  /** A published package to set the total against: what Budget 2025 did to borrowing in the year. */
+  comparator?: { label: string; psnbGbpm: number };
 }) {
   if (rows.length === 0) {
     return (
@@ -48,24 +57,33 @@ export function AttributionList({
               {row.label} <LabelBadge badge={row.badge} />
             </th>
             <td className={`attribution__num amount ${tone(row.currentBudgetGbpm)}`}>
-              {formatGbpBn(row.currentBudgetGbpm, 1, true)}
+              {betterOrWorse(row.currentBudgetGbpm)}
             </td>
             <td className={`attribution__num amount ${tone(row.psnbGbpm)}`}>
-              {formatGbpBn(row.psnbGbpm, 1, true)}
+              {betterOrWorse(row.psnbGbpm)}
             </td>
           </tr>
         ))}
       </tbody>
       <tfoot>
         <tr>
-          <th scope="row">Total (positive = worse)</th>
+          <th scope="row">Total</th>
           <td className={`attribution__num amount ${tone(totalCurrent)}`}>
-            {formatGbpBn(totalCurrent, 1, true)}
+            {betterOrWorse(totalCurrent)}
           </td>
           <td className={`attribution__num amount ${tone(totalBorrowing)}`}>
-            {formatGbpBn(totalBorrowing, 1, true)}
+            {betterOrWorse(totalBorrowing)}
           </td>
         </tr>
+        {comparator ? (
+          <tr className="attribution__comparator">
+            <th scope="row">{comparator.label}</th>
+            <td />
+            <td className={`attribution__num amount ${tone(comparator.psnbGbpm)}`}>
+              {betterOrWorse(comparator.psnbGbpm)}
+            </td>
+          </tr>
+        ) : null}
       </tfoot>
     </table>
   );

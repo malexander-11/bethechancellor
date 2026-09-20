@@ -6,7 +6,7 @@
       "adviser": "political-adviser",
       "when": "promise-broken",
       "line": {
-        "text": "That is {name}, Chancellor: a manifesto red line, and the words are on the record. Nothing here will stop you, and the public will notice.",
+        "text": "That is {name}, Chancellor: a manifesto red line, and the words are on the record. Nothing here will stop you. On Budget day the public’s rating starts at the floor, whatever else you do.",
         "sources": [],
         "badge": "simulated"
       }

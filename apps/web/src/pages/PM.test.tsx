@@ -56,6 +56,8 @@ describe('the conversation with the Prime Minister', () => {
     next();
     // Four security flagships plus the cross-cutting ones; the Defence plan gap is both, once.
     expect(flagshipBoxes()).toHaveLength(5);
+    // What the money buys, and when, is on every card before it is ticked.
+    expect(document.querySelectorAll('.choice__delivery')).toHaveLength(5);
     expect(screen.getByRole('group', { name: 'Security' })).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Whichever theme you pick' })).toBeInTheDocument();
     expect(screen.getByText(/End the threshold freeze early/)).toBeInTheDocument();

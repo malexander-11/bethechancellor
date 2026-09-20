@@ -541,6 +541,11 @@ export const receptionRuleSchema = z
     }),
     /** The published anchor the thresholds lean on, for the "why this rating" disclosure. */
     note: z.string().min(1),
+    /**
+     * What would have moved this rule up a band, with `{gap}` for the distance to the next better
+     * band in the reading's own unit. The engine fills the gap; it invents no threshold.
+     */
+    nudge: z.string().min(1).max(160).optional(),
     bands: z.array(receptionBandSchema).min(2),
   })
   .superRefine((rule, ctx) => {
