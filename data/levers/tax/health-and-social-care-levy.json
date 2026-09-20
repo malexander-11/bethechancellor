@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "id": "health-and-social-care-levy",
+  "code": "hscl",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "National Insurance",
+  "order": 38,
+  "title": "A health and social care levy: 1.25% on employers and employees",
+  "shortTitle": "Health and social care levy",
+  "headline": "Bring back the 2021 levy. HM Treasury’s own figure then: about £12bn a year.",
+  "description": "Reintroduce the Health and Social Care Levy legislated in 2021 and repealed before it took effect as a separate tax: 1.25% on employers, employees and the self-employed on the National Insurance base, with the money for health and social care. HM Treasury said the levy, together with the dividend tax rise announced beside it, would make available around £12 billion a year on average over 2022-23 to 2024-25. The card takes that £12 billion as a 2024-25 figure and grows it with the OBR’s National Insurance forecast. A higher rate has been reported since; no costing of one has been published, so the card scores the legislated rate only.",
+  "baselinePolicy": {
+    "text": "No levy. Employee NICs 8% and 2%, employer NICs 15% above a frozen secondary threshold; the 2021 levy was repealed before its first separate year.",
+    "source": {
+      "sourceId": "govuk-nics-rates"
+    },
+    "alreadyIncludes": [
+      "Employer NICs at 15% with the secondary threshold frozen (Budget 2025, Table 4.1 line 47)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "nics",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 15459,
+      "2028-29": 16005,
+      "2029-30": 16825,
+      "2030-31": 17408
+    },
+    "source": {
+      "sourceId": "hmt-build-back-better-2021"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "hmt-build-back-better-2021",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2024-25",
+        "resultGbpm": 12000,
+        "growWith": "nics",
+        "terms": [
+          {
+            "label": "HM Treasury’s figure for the 1.25% levy with the dividend rise, £ million a year on average, 2022-23 to 2024-25",
+            "value": 12000,
+            "unit": "£ million",
+            "source": {
+              "sourceId": "hmt-build-back-better-2021",
+              "quote": "Together with the increase to the rates of dividend tax, the Levy will make available around an additional £12 billion per year on average for health and social care across the UK"
+            }
+          }
+        ]
+      },
+      "note": "HM Treasury’s 2021 figure, taken as 2024-25 and grown with the OBR’s National Insurance receipts. The average over three years understates the final year, and the figure includes the dividend rise announced beside the levy."
+    },
+    "caveats": [
+      "HM Treasury’s £12 billion includes the dividend tax rise announced beside the levy, so the levy alone raised less; the split was not published.",
+      "An average over 2022-23 to 2024-25 is taken as a 2024-25 figure, which understates it; the card grows it with the OBR’s National Insurance forecast.",
+      "Static: no behavioural response is allowed for. Nobody has certified this number for 2027-28 onward.",
+      "A higher rate than 1.25% has been reported; no costing of one has been published, so the card scores the legislated rate only.",
+      "The manifesto rules out increasing National Insurance. A levy on the National Insurance base is National Insurance by another name to most readers; whether it counts is contested."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "levy-static",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "HM Treasury’s 2021 figure was a Treasury estimate for the levy as legislated, before any certified outturn. Employers and employees would respond to a 2.5 point rise in the combined rate on pay, and part of the employer share would show up as lower pay and profits over time.",
+      "sources": [
+        {
+          "sourceId": "hmt-build-back-better-2021"
+        }
+      ]
+    },
+    {
+      "id": "levy-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "The manifesto promises not to increase National Insurance. The 2021 levy was a separate tax on the National Insurance base; whether reviving it keeps the letter of the promise while breaking its spirit is a political judgement the card cannot make for you.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations"
+        },
+        {
+          "sourceId": "hmt-build-back-better-2021"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "nics-employee-main-rate",
+      "text": "Both fall on the same pay: the levy is 1.25 points on the employee side on top of any change here.",
+      "severity": "info"
+    },
+    {
+      "withLever": "nics-employer-rate",
+      "text": "Both fall on the same payroll: the levy is 1.25 points on the employer side on top of any change here.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-20"
+}

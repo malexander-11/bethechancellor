@@ -3,13 +3,13 @@
   "id": "new-higher-income-tax-rate",
   "code": "it50",
   "category": "tax",
-  "badge": "direct",
+  "badge": "assumption",
   "group": "Income tax",
   "order": 35,
   "title": "A new higher rate of income tax: 50% above £125,140",
   "shortTitle": "50% income tax rate",
-  "headline": "Take the top rate back to 50%. Raises about £1.2bn.",
-  "description": "Raise the additional rate of income tax from 45% to 50% on income above £125,140, the rate that applied in 2010-11 to 2012-13. This is five times HMRC's published effect of a 1p change in the additional rate, so it carries HMRC's own behavioural response. That response is why the yield is so small relative to the rate: HMRC assumes a large part of the income moves, is deferred or is converted into other forms. The same arithmetic is available on the taxes step as the additional-rate slider at +5p; adopting it here sets the same policy.",
+  "headline": "Take the top rate back to 50%. Five times HMRC’s 1p row: about £1.2bn.",
+  "description": "Raise the additional rate of income tax from 45% to 50% on income above £125,140, the rate that applied in 2010-11 to 2012-13. HMRC publishes the effect of a 1p change; this card takes five times that row, which is our extrapolation, not HMRC’s figure: HMRC says its ready reckoner is approximate beyond small changes, and the behavioural response embedded in the 1p row is the dominant term for this group. The same arithmetic is available on the taxes step as the additional-rate slider at +5p; adopting it here sets the same policy.",
   "baselinePolicy": {
     "text": "The additional rate has been 45% since 2013-14 (Finance Act 2012, section 1); it was 50% from 2010-11 to 2012-13. The £125,140 threshold is frozen to April 2031.",
     "source": {
@@ -73,11 +73,24 @@
       "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
     },
     "caveats": [
-      "HMRC publishes the effect of a 1p change and warns that its ready reckoner should not be scaled far: a 5p change is at the edge of what a linear reading supports.",
-      "HMRC's estimate is for taxpayers on UK rates; income tax rates on non-savings, non-dividend income are devolved to Scotland."
+      "Five times HMRC’s published 1p row. HMRC says its ready reckoner is approximate beyond small changes, so this is our extrapolation and wears the assumption badge; nobody has certified a 50% rate.",
+      "HMRC’s estimate is for taxpayers on UK rates; income tax rates on non-savings, non-dividend income are devolved to Scotland."
     ]
   },
   "considerations": [
+    {
+      "id": "additional-rate-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The 1p row already carries HMRC’s behavioural response for this group, but HMRC warns the reckoner is approximate beyond small changes, and the 2010 to 2013 experience of a 50% rate is why the yield of a penny at the top is a fraction of the mechanical amount. A five-penny rise may raise less than five times a penny.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ]
+    },
     {
       "id": "taxable-income-elasticity",
       "kind": "behavioural",

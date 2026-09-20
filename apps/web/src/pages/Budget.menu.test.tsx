@@ -60,7 +60,42 @@ describe('the package in two parts', () => {
         name: 'Tax extreme wealth: 1% a year on net wealth above £10m',
       }),
     ).toBeInTheDocument();
-    expect(within(capital).getByText(/upper bound/)).toBeInTheDocument();
+    expect(within(capital).getAllByText(/upper bound/).length).toBeGreaterThan(0);
+  });
+
+  it('tags the options nobody proposes, sorts them to the foot, and says what each card assumes', () => {
+    at('/budget/taxes');
+    fireEvent.click(screen.getByRole('tab', { name: /VAT/ }));
+    const panel = screen.getByRole('tabpanel');
+    const groups = within(panel).getAllByRole('group');
+    const names = groups
+      .map((g) => g.getAttribute('aria-labelledby'))
+      .map((id) => (id ? document.getElementById(id)?.textContent : ''));
+    // The two live VAT rates first; the six base toggles, tagged, at the foot.
+    expect(names.slice(0, 2)).toEqual(
+      expect.arrayContaining([expect.stringMatching(/standard rate/i)]),
+    );
+    expect(within(panel).getAllByText('Not on the table')).toHaveLength(6);
+    const food = within(panel).getByRole('group', { name: 'Charge VAT on food' });
+    fireEvent.click(within(food).getByText('What this assumes'));
+    expect(within(food).getByText(/No party proposes VAT on food/)).toBeInTheDocument();
+    // The 50p rate is our extrapolation now, and the levy sits with National Insurance.
+    fireEvent.click(screen.getByRole('tab', { name: /Income tax/ }));
+    const income = screen.getByRole('tabpanel');
+    const fifty = within(income).getByRole('group', { name: /50% above £125,140/ });
+    expect(within(fifty).getByText('Assumption')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('tab', { name: /National Insurance/ }));
+    expect(
+      within(screen.getByRole('tabpanel')).getByRole('group', {
+        name: /health and social care levy/,
+      }),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('tab', { name: /Capital taxes/ }));
+    expect(
+      within(screen.getByRole('tabpanel')).getByRole('option', {
+        name: 'Abolish (0%) · not on the table',
+      }),
+    ).toBeInTheDocument();
   });
 
   it('puts the flagship programmes on the spending screen with a minister under each', () => {

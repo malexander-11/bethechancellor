@@ -79,6 +79,7 @@ const REVENUE_CLASS: Record<string, string> = {
   nicpen: 'business',
   brates: 'business',
   bank5: 'business',
+  hscl: 'broad',
   epl2: 'business',
   cgtdth: 'top',
   hvcts15: 'top',

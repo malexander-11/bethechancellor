@@ -31,6 +31,17 @@
     "taxHead": "vat",
     "psnflTreatment": "standard"
   },
+  "notOnTheTable": {
+    "note": "No party proposes VAT on fares. The option is here to show what the zero rate costs.",
+    "sources": [
+      {
+        "sourceId": "labour-manifesto-2024-strong-foundations"
+      },
+      {
+        "sourceId": "hmrc-tax-reliefs-2026-01"
+      }
+    ]
+  },
   "costing": {
     "kind": "linearPerUnit",
     "unitDelta": 1,

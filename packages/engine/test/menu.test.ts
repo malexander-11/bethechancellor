@@ -39,7 +39,7 @@ const gdp = (year: string) => ds.vintage.economy.nominalGdpFy.values[year] ?? Nu
 /** The ways the Budget 2026 reporting says are on the table, each built from a published row. */
 const MENU = {
   direct: ['nic4', 'rvapr', 'rvplan2'],
-  assumption: ['bank5', 'cgtdth', 'def3', 'epl2', 'hmrc2', 'hvcts15', 'vatgas'],
+  assumption: ['bank5', 'cgtdth', 'def3', 'epl2', 'hmrc2', 'hscl', 'hvcts15', 'vatgas'],
   mechanical: ['brates'],
 };
 const ALL = [...MENU.direct, ...MENU.assumption, ...MENU.mechanical];
@@ -117,6 +117,23 @@ describe('the Budget 2026 menu', () => {
     expect(effectOf({ bank5: 1 }, 'bank5', '2029-30').receipts).toBeCloseTo(want, -1);
     expect(effectOf({ bank5: 1 }, 'bank5', '2029-30').receipts).toBeGreaterThan(800);
     expect(effectOf({ bank5: 1 }, 'bank5', '2029-30').receipts).toBeLessThan(950);
+  });
+
+  it('the 2021 levy is HM Treasury’s £12 billion, taken as 2024-25 and grown with National Insurance', () => {
+    const nics = headSeries(ds.vintage, 'nics');
+    const want = (12000 * (nics['2029-30'] ?? 0)) / (nics['2024-25'] ?? 1);
+    expect(effectOf({ hscl: 1 }, 'hscl', '2029-30').receipts).toBeCloseTo(want, -1);
+    expect(effectOf({ hscl: 1 }, 'hscl', '2026-27').receipts).toBe(0);
+    // The published rate only: the card scores 1.25%, and says a higher rate has no costing.
+    const levy = lever('hscl');
+    expect(levy.badge).toBe('assumption');
+    if (levy.costing.kind !== 'schedule') throw new Error('the levy is a schedule');
+    expect(levy.costing.caveats.some((c) => /legislated rate only/.test(c))).toBe(true);
+    // Not a red line, but the lock is on the card as a consideration.
+    expect(levy.considerations.some((c) => c.kind === 'legal')).toBe(true);
+    expect(
+      promiseBreaks({ hscl: 1 }, ds.pm.promises, ds.levers).every((b) => b.brokenBy.length === 0),
+    ).toBe(true);
   });
 
   it('repeating the energy profits levy package is plus the 2024 lines, then flat in cash', () => {
@@ -273,8 +290,9 @@ describe('the policies that came in the post', () => {
       expect(l.deprecated, code).toBeFalsy();
       expect(l.group, code).not.toBe('Shelved');
     }
-    // Only the 50% rate reuses an official costing; everything else is our own arithmetic.
-    expect(POST.filter((c) => lever(c).badge === 'direct')).toEqual(['it50']);
+    // Every one of these is our own arithmetic: the 50% rate is five times an HMRC row, which
+    // HMRC calls approximate beyond small changes, so it wears the assumption badge too.
+    expect(POST.filter((c) => lever(c).badge === 'direct')).toEqual([]);
     // Every re-homed spending policy has a minister to speak for it.
     const spoken = new Set(ds.ministers.ministers.map((m) => m.code));
     for (const code of REHOMED) {

@@ -151,7 +151,7 @@ describe('LeverControl', () => {
     const select = within(second.container).getByRole('combobox');
     expect(select).toHaveValue('-40');
     expect(
-      within(second.container).getByRole('option', { name: 'Abolish (0%)' }),
+      within(second.container).getByRole('option', { name: 'Abolish (0%) · not on the table' }),
     ).toBeInTheDocument();
     expect(within(second.container).getByText('0%')).toBeInTheDocument();
     second.unmount();

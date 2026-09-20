@@ -168,9 +168,11 @@ export function groupLevers(items: Lever[]): LeverGroup[] {
     list.push(lever);
     byGroup.set(name, list);
   }
+  // Within a group, authored order; the options nobody proposes go to the foot, whatever their order.
+  const foot = (l: Lever) => (l.notOnTheTable ? 1 : 0);
   const groups = [...byGroup.entries()].map(([name, levers]) => ({
     name,
-    levers: [...levers].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+    levers: [...levers].sort((a, b) => foot(a) - foot(b) || (a.order ?? 0) - (b.order ?? 0)),
   }));
   const rank = (g: LeverGroup) => Math.min(...g.levers.map((l) => l.order ?? 0));
   const GROUP_ORDER = [

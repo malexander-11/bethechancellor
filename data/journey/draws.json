@@ -211,6 +211,11 @@
           "considerationId": "eligibility-savings-shortfall",
           "factor": 0.85,
           "note": "The Department for Work and Pensions' own evidence says disability benefits have been difficult to forecast since PIP began; the OBR scores less of the saving."
+        },
+        {
+          "considerationId": "additional-rate-behaviour",
+          "factor": 0.7,
+          "note": "Five times HMRC’s one-penny row is an extrapolation HMRC itself calls approximate; the OBR scores the top-rate rise cautiously."
         }
       ]
     },
@@ -279,6 +284,11 @@
           "considerationId": "eligibility-savings-shortfall",
           "factor": 0.7,
           "note": "The Department for Work and Pensions' own evidence says disability benefits have been difficult to forecast since PIP began; the OBR scores much less of the saving."
+        },
+        {
+          "considerationId": "additional-rate-behaviour",
+          "factor": 0.5,
+          "note": "Five times HMRC’s one-penny row is an extrapolation HMRC itself calls approximate; the OBR halves the top-rate yield."
         }
       ]
     }

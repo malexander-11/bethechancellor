@@ -795,6 +795,16 @@
       "notes": "Fetched 2026-09-16. VAT on domestic electricity cut from 5% to 0% from 1 October 2026; about £45 a year off a price-cap bill; costs about £850 million in 2026-27; funded by cancelling the Digital ID programme (£1.8bn over three years); reduces CPI by about 0.10 percentage points."
     },
     {
+      "id": "hmt-build-back-better-2021",
+      "org": "HMT",
+      "title": "Build Back Better: Our Plan for Health and Social Care",
+      "url": "https://www.gov.uk/government/publications/build-back-better-our-plan-for-health-and-social-care/build-back-better-our-plan-for-health-and-social-care",
+      "publishedOn": "2021-09-07",
+      "retrievedOn": "2026-09-20",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-20. The 2021 plan for a levy: \"a UK-wide 1.25 per cent Health and Social Care Levy based on National Insurance contributions\"; \"Together with the increase to the rates of dividend tax, the Levy will make available around an additional £12 billion per year on average for health and social care across the UK\". The levy was legislated in 2021 and repealed before it took effect as a separate tax; the £12 billion is HM Treasury's own figure for it, averaged over 2022-23 to 2024-25 and inclusive of the dividend rise."
+    },
+    {
       "id": "govuk-bus-fare-cap-2027",
       "org": "HMT",
       "title": "£2 bus fares from January 2027",

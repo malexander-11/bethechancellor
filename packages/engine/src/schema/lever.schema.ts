@@ -496,6 +496,16 @@ export const leverSchema = z
     /** Reference points shown beside the control: history, targets, what a commitment costs. */
     milestones: z.array(milestoneSchema).optional(),
     /**
+     * A teaching option: live and costed, but proposed by nobody. The card wears a quiet tag, sorts
+     * to the foot of its group and says why it is here, with the source for "nobody".
+     */
+    notOnTheTable: z
+      .strictObject({
+        note: z.string().min(1).max(240),
+        sources: z.array(sourceRefSchema).min(1),
+      })
+      .optional(),
+    /**
      * Whether the OBR's forecast holds this department to its settlement after the Spending Review
      * years (protected) or has it taking the squeeze (unprotected), with the paragraph that says so.
      */

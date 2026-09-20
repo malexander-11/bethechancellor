@@ -251,6 +251,14 @@ export function LeverControl({
     : 0;
   const barnett = lever.classification?.barnettConsequential === true;
   const commitment = lever.commitment;
+  const notOnTheTable = lever.notOnTheTable;
+  // What the number rests on: the costing's own caveats, plus why a teaching option is here and
+  // where a department stands in the OBR's forecast. One click, no words on the surface.
+  const assumes = [
+    ...(notOnTheTable ? [notOnTheTable.note] : []),
+    ...(commitment ? [commitment.text] : []),
+    ...('caveats' in lever.costing ? lever.costing.caveats : []),
+  ];
   const isDefault = value === lever.control.default;
   const improvement =
     effect && summaryYear && !isFinancialTransaction
@@ -381,8 +389,9 @@ export function LeverControl({
         {lever.headline ?? lever.description}
       </p>
       {workings && lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
-      {lookupPoints || barnett || commitment ? (
+      {lookupPoints || barnett || commitment || notOnTheTable ? (
         <p className="lever__tags">
+          {notOnTheTable ? <span className="tag tag--quiet">Not on the table</span> : null}
           {commitment ? (
             <span className="tag">
               <Term id={commitment.kind}>
@@ -410,6 +419,16 @@ export function LeverControl({
             </span>
           ) : null}
         </p>
+      ) : null}
+      {assumes.length > 0 ? (
+        <details className="lever__assumes">
+          <summary>What this assumes</summary>
+          <ul>
+            {assumes.map((text) => (
+              <li key={text}>{text}</li>
+            ))}
+          </ul>
+        </details>
       ) : null}
       {isFinancialTransaction && cashOut !== 0 ? (
         <p className="lever__effect" id={`${id}-effect`}>

@@ -511,6 +511,32 @@ hr {
   line-height: 1.3;
 }
 
+.tag--quiet {
+  color: var(--muted);
+  border-style: dashed;
+}
+
+.lever__assumes {
+  margin: 4px 0 0;
+  font-size: 0.9375rem;
+}
+
+.lever__assumes summary {
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.lever__assumes ul {
+  margin: 0 0 6px;
+  padding-left: 20px;
+  color: var(--ink-2);
+}
+
+.lever__assumes li + li {
+  margin-top: 4px;
+}
+
 .tag--treasury {
   display: inline-flex;
   align-items: center;
