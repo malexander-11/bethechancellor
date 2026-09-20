@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { briefings, levers } from '../data';
+import { briefings, compromise, glossary, guide, levers, ministers, reception } from '../data';
 
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 
@@ -25,6 +25,45 @@ describe('word budgets: one line visible, the rest a click away', () => {
       expect(b.paragraphs.length).toBeGreaterThan(0);
       for (const p of b.paragraphs) expect(p.sources.length).toBeGreaterThan(0);
     }
+  });
+
+  it('gives every minister a line of at most eighteen words, with the rest one click away', () => {
+    for (const m of ministers.ministers) {
+      const lines = [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)];
+      expect(m.asking.short, `${m.code} asks in ${words(m.asking.text)} words`).toBeTruthy();
+      for (const line of lines) {
+        const read = line.short ?? line.text;
+        expect(words(read), `${m.code}: "${read}"`).toBeLessThanOrEqual(18);
+        // A short line is a shorter version of the long one, not a second speech.
+        if (line.short) expect(words(line.short)).toBeLessThan(words(line.text));
+      }
+    }
+  });
+
+  it('keeps every compromise route to one paragraph of at most forty words', () => {
+    const lines = [
+      ...Object.values(compromise.routes).map((r) => r.line.text),
+      compromise.routes.breach.noBreach.text,
+    ];
+    for (const text of lines) expect(words(text), text).toBeLessThanOrEqual(40);
+  });
+
+  it('never uses Treasury shorthand in the lines a newcomer reads', () => {
+    const JARGON = /\b(RDEL|CDEL|PSNFL|PSNB|AME|accruals?|forestalling)\b/;
+    const read: string[] = [
+      ...guide.stages.flatMap((s) => [s.doing, s.why, s.now]),
+      ...Object.values(glossary.terms).map((t) => t.short),
+      ...briefings.briefings.map((b) => b.headline),
+      ...ministers.ministers.flatMap((m) =>
+        [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)].map(
+          (l) => l.short ?? l.text,
+        ),
+      ),
+      ...Object.values(compromise.routes).map((r) => r.line.text),
+      ...reception.audiences.flatMap((a) => a.rules.flatMap((r) => r.bands.map((b) => b.text))),
+    ];
+    expect(read.length).toBeGreaterThan(100);
+    for (const text of read) expect(text, text).not.toMatch(JARGON);
   });
 
   it('a step reads as a briefing, not a report', () => {

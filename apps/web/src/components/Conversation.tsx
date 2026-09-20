@@ -11,17 +11,26 @@ export function Spoken({
   line,
   who,
   tone = 'pm',
+  moreLabel = 'More',
 }: {
   line: SimulatedLine;
   who: string;
   tone?: 'pm' | 'minister' | 'adviser' | 'press';
+  /** What the disclosure holding the full line is called, when the line has a short form. */
+  moreLabel?: string;
 }) {
   return (
     <blockquote className={`spoken spoken--${tone}`}>
       <p className="spoken__who">
         <span className="kicker">{who}</span> <LabelBadge badge={line.badge} />
       </p>
-      <p className="spoken__text">{line.text}</p>
+      <p className="spoken__text">{line.short ?? line.text}</p>
+      {line.short ? (
+        <details className="spoken__more">
+          <summary>{moreLabel}</summary>
+          <p>{line.text}</p>
+        </details>
+      ) : null}
       <SourceList refs={line.sources} />
     </blockquote>
   );

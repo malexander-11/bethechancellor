@@ -50,7 +50,16 @@ export function AboutPage() {
       <p>
         Code is MIT licensed. Public sector data is reproduced under the Open Government Licence
         v3.0; see <code>DATA-LICENCE.md</code> in the repository. Commentary from other
-        organisations is cited by link and never enters the arithmetic.
+        organisations is cited by link and never enters the arithmetic. Not affiliated with HM
+        Treasury, the OBR, HMRC, the IFS or Nesta.
+      </p>
+      <h2>What the game does not do</h2>
+      <p>
+        It does not model how your choices change growth, or how markets would actually move.
+        Costings are official estimates; the economic sliders are assumptions; the rest is
+        arithmetic; the reactions are judgements, and say so. Forecasts are uncertain: the
+        OBR&rsquo;s typical five-year error on receipts is 0.9% of GDP, more than any recent
+        headroom.
       </p>
     </article>
   );

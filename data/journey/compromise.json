@@ -4,7 +4,7 @@
     "revenue": {
       "adviser": "director-of-tax",
       "line": {
-        "text": "Every tax in your Budget, one notch up, ranked by what the figures say it raises. HMRC’s and the Treasury’s figures where they exist; our own arithmetic, badged as such, where they do not. The ones that break a promise say so; whether that matters is yours to judge, not mine.",
+        "text": "Every tax in your Budget, one notch up, ranked by what the figures say it raises. HMRC’s and the Treasury’s figures where they exist; our own arithmetic, badged, where they do not. The ones that break a promise say so.",
         "sources": [
           {
             "sourceId": "hmrc-trr-2025-06-bulletin"
@@ -56,17 +56,11 @@
     "breach": {
       "adviser": "permanent-secretary",
       "line": {
-        "text": "The Charter lets a Chancellor suspend the rules in an emergency or a significant negative shock, and asks the OBR to judge how severe it is. A rule missed by choice is not that, and the OBR will publish that it is missed on 28 October. The Bank’s account of 2025 attributes higher long rates partly to concerns around fiscal sustainability. Nothing stops you. Write down that you know.",
+        "text": "The Charter lets a Chancellor suspend the rules in a significant shock, judged by the OBR. A rule missed by choice is not that; the OBR will say so on Budget day. Nothing stops you. Write down that you know.",
         "sources": [
           {
             "sourceId": "hmt-charter-2025-autumn",
             "paragraph": "3.9-3.10"
-          },
-          {
-            "sourceId": "boe-insights-long-rates-2025"
-          },
-          {
-            "sourceId": "boe-fsr-2026-07"
           }
         ],
         "badge": "simulated"

@@ -12,7 +12,12 @@ export function MinisterLine({ lever, value }: { lever: Lever; value: number }) 
   const say = ministerLine(minister, lever, value);
   return (
     <div className={`minister minister--${say.mood}`}>
-      <Spoken line={say.line} who={minister.role} tone="minister" />
+      <Spoken
+        line={say.line}
+        who={minister.role}
+        tone="minister"
+        moreLabel="More from the minister"
+      />
     </div>
   );
 }

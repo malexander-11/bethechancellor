@@ -8,7 +8,7 @@
       "doing": "You are about to write a Budget: the taxes and the spending for the next few years.",
       "why": "The [fiscal rules] limit how much you can borrow, and the [OBR](obr) checks your sums.",
       "now": "Read what your three advisers have to tell you, then begin.",
-      "terms": ["headroom", "manifesto"]
+      "terms": ["headroom", "manifesto", "gdp"]
     },
     {
       "step": "outlook",
@@ -17,7 +17,7 @@
       "doing": "Pick the economic forecast you will build your Budget on, and how much [headroom] to keep in reserve.",
       "why": "A rosier forecast gives you more to spend now. The [OBR](obr) will publish its own forecast later, and it will not care what you assumed.",
       "now": "Choose one of the four cards and a headroom target, then confirm.",
-      "terms": ["fiscal-rules", "gilts"]
+      "terms": ["fiscal-rules", "gilts", "gdp"]
     },
     {
       "step": "pm",
@@ -26,25 +26,38 @@
       "doing": "Tell the Prime Minister what this Budget is for, and pick the [flagship] schemes that will show it.",
       "why": "Every flagship you tick is paid for at once, so your [headroom] falls as you choose. The [manifesto] red lines still apply.",
       "now": "Tick the themes that apply, then the flagships you want. Watch the headroom.",
-      "terms": []
+      "terms": ["certified"]
     },
     {
       "step": "taxes",
       "number": 4,
       "title": "Build the package",
-      "doing": "Set taxes and spending across the whole of government, one group at a time.",
-      "why": "This is where the money comes from and where it goes. A lever that breaks a [manifesto] promise shows a red warning.",
+      "doing": "Set the taxes: where the money comes from, one group at a time.",
+      "why": "Three taxes raise most of it, and the [manifesto] fences them off. A lever that breaks a promise shows a red warning.",
       "now": "Work through the tax groups and move what you want. Then the spending.",
-      "terms": ["headroom", "current-budget", "borrowing", "hmrc-points"]
+      "terms": ["headroom", "current-budget", "borrowing", "hmrc-points", "certified", "uprating"]
     },
     {
       "step": "spending",
       "number": 4,
       "title": "Build the package",
-      "doing": "Set taxes and spending across the whole of government, one group at a time.",
-      "why": "This is where the money comes from and where it goes. A lever that breaks a [manifesto] promise shows a red warning.",
+      "doing": "Set the spending: where the money goes, department by department.",
+      "why": "Day-to-day budgets are already set for the next three years. Investment counts against the debt rule, not the day-to-day one.",
       "now": "Set the departments, the [flagship] programmes, investment and welfare. Ministers will tell you what each change means.",
-      "terms": ["headroom", "welfare-cap", "barnett"]
+      "terms": [
+        "headroom",
+        "welfare-cap",
+        "barnett",
+        "spending-review",
+        "settlement",
+        "real-terms",
+        "unprotected",
+        "reserve",
+        "triple-lock",
+        "pip",
+        "nao",
+        "uprating"
+      ]
     },
     {
       "step": "forecast",
@@ -53,7 +66,7 @@
       "doing": "The [OBR](obr) hands you the forecast your Budget will be judged against.",
       "why": "It was fixed the day you chose your assumptions, and it may not match them. Your [headroom] can rise or fall.",
       "now": "Open the envelope and see what it does to your plans.",
-      "terms": ["gilts", "rpi"]
+      "terms": ["gilts", "rpi", "certified"]
     },
     {
       "step": "compromise",
@@ -62,7 +75,7 @@
       "doing": "Close the gap between the [headroom] you have and the headroom you wanted.",
       "why": "Every route costs something: more tax, less spending, a smaller promise, or a thinner safety margin.",
       "now": "Take the routes you can live with, then move on to the speech.",
-      "terms": ["fiscal-rules", "borrowing"]
+      "terms": ["fiscal-rules", "borrowing", "escape-clause", "certified"]
     },
     {
       "step": "rabbit",
@@ -71,7 +84,7 @@
       "doing": "Decide whether to add one surprise announcement, or to keep your [headroom].",
       "why": "A rabbit gets the headlines. It is also money you no longer have in reserve.",
       "now": "Pick a card. Keeping the headroom is a choice too.",
-      "terms": []
+      "terms": ["headroom"]
     },
     {
       "step": "budget-day",
@@ -80,7 +93,7 @@
       "doing": "Give the speech and see how your backbenchers, the markets and the public react.",
       "why": "Each reaction follows from what you chose, and says which choices caused it.",
       "now": "Read the speech, hear the reactions, then read the verdict.",
-      "terms": ["headroom", "gilts", "manifesto"]
+      "terms": ["headroom", "gilts", "manifesto", "gdp"]
     }
   ]
 }

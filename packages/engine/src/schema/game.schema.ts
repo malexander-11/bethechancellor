@@ -13,9 +13,14 @@ const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
 
 export const simulatedBadgeSchema = z.literal('simulated');
 
-/** A line of simulated speech: what it says, and the published facts it leans on. */
+/**
+ * A line of simulated speech: what it says, and the published facts it leans on. `short` is the
+ * same line in at most eighteen words, shown first; the full text sits one click behind it. A
+ * figure in the short line is a figure in the full line, so the sources cover both.
+ */
 export const simulatedLineSchema = z.strictObject({
   text: z.string().min(1),
+  short: z.string().min(1).max(140).optional(),
   sources: z.array(sourceRefSchema).default([]),
   badge: simulatedBadgeSchema,
 });

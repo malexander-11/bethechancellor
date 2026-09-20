@@ -1459,3 +1459,19 @@ label.choice {
   border-top: 1px solid var(--border);
   font-size: 0.9375rem;
 }
+
+/* The full line behind a shortened one: one click, no words on the surface. */
+.spoken__more {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.spoken__more summary {
+  color: var(--accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.spoken__more p {
+  margin: 0 0 6px;
+}

@@ -74,6 +74,27 @@ describe('the beat and word budgets', () => {
     }
   });
 
+  it('keeps the working screens of the package inside a budget, whichever group is open', () => {
+    // The scorecard, the strip, the tabs, the open group with its ministers, the running list:
+    // everything a player sees while they work, before any disclosure is opened.
+    const limits = { '/budget/taxes': 500, '/budget/spending': 700 } as const;
+    for (const [path, limit] of Object.entries(limits)) {
+      const view = at(`${path}?${BASE}&${GAME}`);
+      pressThrough();
+      let widest = 0;
+      for (const tab of screen.getAllByRole('tab')) {
+        fireEvent.click(tab);
+        const n = liveBeatWords();
+        widest = Math.max(widest, n);
+        expect(n, `${path} shows ${n} words with ${tab.textContent} open`).toBeLessThanOrEqual(
+          limit,
+        );
+      }
+      expect(widest).toBeGreaterThan(100);
+      view.unmount();
+    }
+  });
+
   it('keeps the one-screen decisions to at most 300 visible words', () => {
     // The outlook and the rabbit have no hand-off: the screen is the decision, a handful of cards
     // and a note. Still a game, not a lecture.

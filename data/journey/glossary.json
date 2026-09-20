@@ -56,6 +56,54 @@
     "hmrc-points": {
       "term": "HMRC points only",
       "short": "HMRC publishes what a tax change would raise at a few set sizes of change. Between those points the game draws a straight line, so a setting in between is an estimate."
+    },
+    "spending-review": {
+      "term": "The Spending Review",
+      "short": "The exercise that fixed each department’s day-to-day budget for the next three years and its investment budget for four. This Budget starts from those settlements."
+    },
+    "real-terms": {
+      "term": "Real terms",
+      "short": "After inflation. A budget that rises in cash but buys less because prices rose faster has fallen in real terms."
+    },
+    "settlement": {
+      "term": "A settlement",
+      "short": "The budget a department was given at the Spending Review: how much it has to spend each year, in cash, for the years the review covers."
+    },
+    "certified": {
+      "term": "Certified",
+      "short": "A costing the OBR has checked and signed off as reasonable. The Treasury’s and HMRC’s published figures are certified; this game’s own arithmetic is not, and is badged as an assumption."
+    },
+    "gdp": {
+      "term": "GDP",
+      "short": "Gross domestic product: the size of the whole economy in a year. Debt and borrowing are judged as a share of it, because a bigger economy can carry more."
+    },
+    "triple-lock": {
+      "term": "The triple lock",
+      "short": "The state pension rises each April by the highest of prices, average earnings or a fixed minimum. The fixed minimum is what usually costs money."
+    },
+    "pip": {
+      "term": "PIP",
+      "short": "Personal Independence Payment: the main benefit for the extra costs of disability, paid whether or not someone works. Its caseload has grown fast and is hard to forecast."
+    },
+    "nao": {
+      "term": "The NAO",
+      "short": "The National Audit Office: Parliament’s auditor, which reports on whether departments spend money well. Several ministers here quote its findings."
+    },
+    "reserve": {
+      "term": "The Reserve",
+      "short": "Money the Treasury holds back each year for things no department budgeted for. Spend it early and the next emergency has nothing to draw on."
+    },
+    "uprating": {
+      "term": "Uprating",
+      "short": "Raising a benefit, a tax threshold or a duty each year, usually in line with prices or earnings. Freezing something instead is a quiet way of cutting it."
+    },
+    "unprotected": {
+      "term": "Unprotected",
+      "short": "A department whose budget has no promise attached. When the totals are squeezed, the unprotected departments take the cut, because health, defence and schools cannot."
+    },
+    "escape-clause": {
+      "term": "The escape clause",
+      "short": "The Charter lets a Chancellor suspend the fiscal rules in a significant shock. The OBR judges how severe the shock is; missing a rule by choice does not qualify."
     }
   }
 }

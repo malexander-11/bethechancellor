@@ -23,7 +23,6 @@ import { useStageGuard } from '../journey/guard';
 import { useHeadroomOf } from '../journey/headroom';
 import { StepLink } from '../journey/links';
 import { macroCodesOf } from '../journey/scenarios';
-import { useWorkings } from '../journey/workings';
 import { IMPLEMENTATION_YEAR, useBudget } from '../state/budget';
 import { TARGETS } from './Outlook';
 
@@ -43,7 +42,6 @@ export function CompromisePage() {
   const game = state.game;
   const delays = game?.delays ?? {};
   const headroomOf = useHeadroomOf();
-  const workings = useWorkings();
   const revenue = useMemo(
     () => revenueSuggestions(levers, state.leverValues, pm.promises, headroomOf, 3),
     [state.leverValues, headroomOf],
@@ -101,14 +99,19 @@ export function CompromisePage() {
     >
       <Beats step="compromise">
         <Beat title="The gap, and the routes through it">
-          {workings ? (
-            <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky revealed />
-          ) : null}
+          <Scorecard
+            outcome={outcome}
+            typicalErrorGbpm={typicalErrorGbpm}
+            sticky
+            revealed
+            target={target}
+          />
           <BudgetSummary
             game={game}
             status={status}
             headroomGbpm={headroom}
             targetYear={targetYear}
+            showHeadroom={false}
           />
           <section className="gap doc" aria-label="The gap">
             <p className="gap__line">

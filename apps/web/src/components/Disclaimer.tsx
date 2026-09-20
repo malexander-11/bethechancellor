@@ -1,25 +1,24 @@
+import { Link } from 'react-router-dom';
 import { useWorkings } from '../journey/workings';
 
+/**
+ * One line at the foot of every screen: what kind of numbers these are, and where the rest is
+ * written down. The paragraphs it used to carry live on the About and Methodology pages.
+ */
 export function Disclaimer() {
   const workings = useWorkings();
   return (
     <footer className="footer-note">
-      {!workings ? (
-        <p className="footer-note__workings">
-          Every figure is sourced. Turn on <strong>Show workings</strong>, at the top of the page,
-          to see where each one comes from.
-        </p>
-      ) : null}
       <p>
-        This game does not model how your choices change growth, or how markets would actually move.
-        Costings are official estimates; the economic sliders are assumptions; the rest is
-        arithmetic; the reactions are judgements, and say so. Forecasts are uncertain: the
-        OBR&rsquo;s typical five-year error on receipts is 0.9% of GDP, more than any recent
-        headroom.
-      </p>
-      <p>
-        Contains public sector information licensed under the Open Government Licence v3.0. Not
-        affiliated with HM Treasury, the OBR, HMRC, the IFS or Nesta.
+        {!workings ? (
+          <>
+            Every figure is sourced: turn on <strong>Show workings</strong>, at the top of the page,
+            to see where.{' '}
+          </>
+        ) : null}
+        Costings are official estimates; the sliders are assumptions; the reactions are judgements,
+        and say so. Growth and market effects are not modelled.{' '}
+        <Link to="/about">Licence and sources</Link>.
       </p>
     </footer>
   );

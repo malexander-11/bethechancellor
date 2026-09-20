@@ -10,27 +10,32 @@ export function BudgetSummary({
   status,
   headroomGbpm,
   targetYear,
+  showHeadroom = true,
 }: {
   game: GamePermalink;
   status: AmbitionStatus;
   headroomGbpm: number;
   targetYear: string;
+  /** Off where a scorecard on the same screen already carries headroom against the target. */
+  showHeadroom?: boolean;
 }) {
   const target = game.headroomTargetBn * 1000;
   const kept = status.promises.length - status.broken;
   return (
     <section className="summary" aria-label="Your Budget so far">
-      <div className="summary__cell">
-        <span className="summary__label">Headroom, {targetYear}</span>
-        <span className="summary__value">
-          {formatGbpBn(headroomGbpm, 1, true)}
-          <span className="summary__sub">
-            {target > 0
-              ? ` against your ${formatGbpBn(target, 0)} target`
-              : ' · target: whatever the rules leave'}
+      {showHeadroom ? (
+        <div className="summary__cell">
+          <span className="summary__label">Headroom, {targetYear}</span>
+          <span className="summary__value">
+            {formatGbpBn(headroomGbpm, 1, true)}
+            <span className="summary__sub">
+              {target > 0
+                ? ` against your ${formatGbpBn(target, 0)} target`
+                : ' · target: whatever the rules leave'}
+            </span>
           </span>
-        </span>
-      </div>
+        </div>
+      ) : null}
       <div className="summary__cell">
         <span className="summary__label">Priorities</span>
         <span className="summary__value">

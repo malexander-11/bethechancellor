@@ -47,11 +47,13 @@ describe('ministers on the folders', () => {
       const lines = [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)];
       for (const line of lines) {
         expect(line.badge).toBe('simulated');
-        if (/[£%]|\d{2,}/.test(line.text)) {
-          expect(
-            line.sources.length,
-            `${m.code}: "${line.text}" quotes a figure without a source`,
-          ).toBeGreaterThan(0);
+        for (const text of [line.text, line.short]) {
+          if (text !== undefined && /[£%]|\d{2,}/.test(text)) {
+            expect(
+              line.sources.length,
+              `${m.code}: "${text}" quotes a figure without a source`,
+            ).toBeGreaterThan(0);
+          }
         }
       }
     }

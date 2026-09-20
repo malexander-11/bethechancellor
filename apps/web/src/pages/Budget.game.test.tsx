@@ -23,7 +23,9 @@ describe('the package, with a game under way', () => {
   it('keeps score in the summary strip: headroom against the target, priorities, promises', () => {
     at(`/budget/spending?${BASE}&${GAME}`);
     const box = screen.getByRole('region', { name: 'Your Budget so far' });
-    expect(within(box).getByText(/against your £20bn target/)).toBeInTheDocument();
+    // Headroom against the target is said once, on the scorecard; the strip keeps the rest.
+    expect(screen.getByText(/against your £20bn target/)).toBeInTheDocument();
+    expect(within(box).queryByText(/Headroom/)).toBeNull();
     expect(within(box).getByText('0 of 2 funded')).toBeInTheDocument();
     expect(within(box).getByText('all 6 kept')).toBeInTheDocument();
   });

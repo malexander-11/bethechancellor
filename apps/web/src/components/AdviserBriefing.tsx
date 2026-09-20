@@ -68,8 +68,6 @@ export function AdviserBriefing({
   const adviser = adviserById.get(briefing.adviser);
   const workings = useWorkings();
   const roleId = useId();
-  // A body-only briefing with the workings off has nothing to say; an empty card would only be a box.
-  if (variant === 'body' && !briefing.facts?.length && children == null && !workings) return null;
   return (
     <article
       className={`briefing${compact ? ' briefing--compact' : ''}`}
@@ -85,7 +83,10 @@ export function AdviserBriefing({
           </header>
           <p className="briefing__headline">{briefing.headline}</p>
         </>
-      ) : null}
+      ) : (
+        // The caller has shown who is speaking; the one-line headline still orients a newcomer.
+        <p className="briefing__headline">{briefing.headline}</p>
+      )}
       {briefing.facts?.length ? <Facts facts={briefing.facts} /> : null}
       {children}
       {workings ? (

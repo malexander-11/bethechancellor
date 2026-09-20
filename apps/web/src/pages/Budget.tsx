@@ -247,13 +247,19 @@ export function BudgetPage() {
           ))}
         </Beat>
         <Beat title={spec.work}>
-          <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky />
+          <Scorecard
+            outcome={outcome}
+            typicalErrorGbpm={typicalErrorGbpm}
+            sticky
+            target={game ? game.headroomTargetBn * 1000 : undefined}
+          />
           {game && status ? (
             <BudgetSummary
               game={game}
               status={status}
               headroomGbpm={headroomGbpm}
               targetYear={targetYear}
+              showHeadroom={false}
             />
           ) : null}
           <p className="assumptions-line">
