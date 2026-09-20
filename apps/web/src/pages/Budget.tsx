@@ -466,59 +466,61 @@ export function BudgetPage() {
                       current={state.leverValues}
                     />
                   </section>
-
-                  <details className="panel details">
-                    <summary>
-                      <span className="details__title">Five-year paths</span>
-                    </summary>
-                    <div className="charts">
-                      <PathChart
-                        title="Current budget surplus"
-                        subtitle="£ billion; negative means day-to-day spending exceeds revenue"
-                        years={years}
-                        baseline={surplus(paths.baseline.currentBudgetDeficit)}
-                        policy={surplus(paths.policy.currentBudgetDeficit)}
-                        format={(v) => formatGbpBn(v * 1000, 1, true)}
-                        tickFormat={(v) => formatGbpBn(v * 1000, 0, true)}
-                        highlightYear={targetYear}
-                        zeroLine
-                      />
-                      <PathChart
-                        title="Borrowing (PSNB)"
-                        subtitle="£ billion a year"
-                        years={years}
-                        baseline={toBn(paths.baseline.psnb)}
-                        policy={toBn(paths.policy.psnb)}
-                        format={(v) => formatGbpBn(v * 1000, 1)}
-                        tickFormat={(v) => formatGbpBn(v * 1000, 0)}
-                        highlightYear={targetYear}
-                        zeroLine
-                      />
-                      <PathChart
-                        title="Net financial liabilities"
-                        subtitle="% of GDP (the investment rule's debt measure)"
-                        years={years}
-                        baseline={years.map((y) => paths.baseline.psnflPctGdp[y] ?? 0)}
-                        policy={years.map((y) => paths.policy.psnflPctGdp[y] ?? 0)}
-                        format={(v) => formatPct(v, 1)}
-                        highlightYear={targetYear}
-                      />
-                      <PathChart
-                        title="Borrowing as a share of GDP"
-                        subtitle="% of GDP"
-                        years={years}
-                        baseline={years.map((y) => paths.baseline.psnbPctGdp[y] ?? 0)}
-                        policy={years.map((y) => paths.policy.psnbPctGdp[y] ?? 0)}
-                        format={(v) => formatPct(v, 1)}
-                        highlightYear={targetYear}
-                        zeroLine
-                      />
-                    </div>
-                  </details>
                 </>
               ) : null}
             </aside>
           </div>
+          {/* The charts want the full width: in the working notes their labels drew too small. */}
+          {workings ? (
+            <details className="panel details">
+              <summary>
+                <span className="details__title">Five-year paths</span>
+              </summary>
+              <div className="charts">
+                <PathChart
+                  title="Current budget surplus"
+                  subtitle="£ billion; negative means day-to-day spending exceeds revenue"
+                  years={years}
+                  baseline={surplus(paths.baseline.currentBudgetDeficit)}
+                  policy={surplus(paths.policy.currentBudgetDeficit)}
+                  format={(v) => formatGbpBn(v * 1000, 1, true)}
+                  tickFormat={(v) => formatGbpBn(v * 1000, 0, true)}
+                  highlightYear={targetYear}
+                  zeroLine
+                />
+                <PathChart
+                  title="Borrowing (PSNB)"
+                  subtitle="£ billion a year"
+                  years={years}
+                  baseline={toBn(paths.baseline.psnb)}
+                  policy={toBn(paths.policy.psnb)}
+                  format={(v) => formatGbpBn(v * 1000, 1)}
+                  tickFormat={(v) => formatGbpBn(v * 1000, 0)}
+                  highlightYear={targetYear}
+                  zeroLine
+                />
+                <PathChart
+                  title="Net financial liabilities"
+                  subtitle="% of GDP (the investment rule's debt measure)"
+                  years={years}
+                  baseline={years.map((y) => paths.baseline.psnflPctGdp[y] ?? 0)}
+                  policy={years.map((y) => paths.policy.psnflPctGdp[y] ?? 0)}
+                  format={(v) => formatPct(v, 1)}
+                  highlightYear={targetYear}
+                />
+                <PathChart
+                  title="Borrowing as a share of GDP"
+                  subtitle="% of GDP"
+                  years={years}
+                  baseline={years.map((y) => paths.baseline.psnbPctGdp[y] ?? 0)}
+                  policy={years.map((y) => paths.policy.psnbPctGdp[y] ?? 0)}
+                  format={(v) => formatPct(v, 1)}
+                  highlightYear={targetYear}
+                  zeroLine
+                />
+              </div>
+            </details>
+          ) : null}
         </Beat>
       </Beats>
     </JourneyLayout>

@@ -1088,7 +1088,6 @@ hr {
   min-width: 5.5em;
   padding-left: 12px;
   text-align: right;
-  white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1218,7 +1217,6 @@ details.charter blockquote {
 .chart svg {
   display: block;
   width: 100%;
-  max-width: 640px;
   height: auto;
   overflow: visible;
 }

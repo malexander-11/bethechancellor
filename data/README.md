@@ -142,9 +142,15 @@ from the certified rows beside it (ADR-0017).
 - **Category and group.** The lever's real `category` and the `group` of the tab it sits in,
   ordered by `order`; `control.kind: "toggle"` unless a published line supports a scale (business
   rates scales the OBR's line and is `mechanical`, see the spending notes above).
-- **Badge.** `assumption`, never `direct`, unless the costing reuses a published row verbatim
-  (only `it50` does, five one-penny steps of HMRC's additional-rate row). A `repeat` of a scorecard
-  line, a `statedProduct`, a `weightedSum` and a `gdpShareGap` are all assumptions.
+- **Badge.** `assumption`, never `direct`. A `repeat` of a scorecard line, a `statedProduct`, a
+  `weightedSum`, a `gdpShareGap`, and a multiple of an HMRC row beyond the small change HMRC
+  publishes (`it50`, five one-penny steps) are all assumptions (ADR-0018).
+- **Not on the table.** A live, costed option nobody proposes (the VAT base toggles) carries
+  `notOnTheTable: { note, sources }`. It wears a quiet tag, sorts to the foot of its group, and the
+  note says why it is here; the sources say who has not proposed it.
+- **Protected or unprotected.** A department lever carries `commitment: { kind, text, sources }`,
+  `protected` or `unprotected`, sourced to the paragraph of the OBR's forecast that says so. The
+  card wears the word as a glossary tag and the text under "What this assumes".
 - **Raw source.** `kind: "derivedFromPublished"` with a `method`, a `sourceId` and a `note` that
   says where the inputs come from and what the arithmetic assumes. `validate:data` reproduces
   the schedule from the method, so an edited figure fails.
@@ -190,6 +196,19 @@ that every reason on screen is one of these bands with its placeholders filled.
 Bands describe what an audience watches and cite the evidence. They never predict a market move
 or a vote; they say what a judgement leans on.
 
+A rule whose reading is money or percentage points may carry a `nudge`: one sentence with `{gap}`
+for the distance from the reading to the nearest neighbouring band with more points, in the
+reading's own unit. The engine fills the gap and shows the sentence under "Why this rating"; it
+invents no threshold, and says nothing for the best band there is (ADR-0018).
+
+### Decisions since the forecast (`data/context/*.json`)
+
+`decisionsSinceForecast` lists what the government has decided since the vintage was published:
+`{ id, title, amountGbpm, year, paidFor, sources }`, the amount on the government's own figure
+(negative costs money), the year or period as the source states it, and what paid for it. Context,
+not levers: none of it enters the arithmetic, the OBR has not certified any of it, and the outlook
+says so above the table.
+
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
 One guide entry per screen: `step`, `number` (one to seven; the package's three screens and the two
@@ -201,8 +220,11 @@ source.
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 
-Everything a role says is a `SimulatedLine`: `{ text, sources, badge: "simulated" }`, badged per
-item so no line inherits honesty from its file. Rules for authoring one:
+Everything a role says is a `SimulatedLine`: `{ text, short?, sources, badge: "simulated" }`,
+badged per item so no line inherits honesty from its file. `short` is the same line in at most
+eighteen words, shown first with the full `text` one click behind; every minister's asking line
+has one, and any band over eighteen words. A figure in the short line must be a figure in the long
+one, so the sources cover both (a test checks it). Rules for authoring one:
 
 - **Never type a number the engine or a document did not produce.** A line may quote a published
   figure (with the source beside it) and the page may print an engine figure next to the line; the

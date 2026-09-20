@@ -4,7 +4,7 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 12 (the Budget 2026 menu, and no more letters)**. You are appointed Chancellor
+Status: **Phase 13 (accessible, brief, and in the order the Budget happens)**. You are appointed Chancellor
 in a Labour government with a Budget to deliver on 28 October 2026. The package holds the menu the
 reporting says is on the table, each option a published row or a stated calculation on one, badged
 for what it is; the third screen of colleagues' letters is gone, its plausible policies sit in the
@@ -15,7 +15,11 @@ step this is, what you are doing, why it matters, what to do now. The road runs 
 rail of seven stops, a button forward at the foot of every page, a way back but never a way to
 jump ahead. The sources and breakdowns sit behind a "Show workings" switch, off by default; the
 badges that say what kind of number something is never go away. A first playthrough takes about
-ten minutes and seven Continues.
+ten minutes and eight Continues. Every screen names itself, can be reached by keyboard and screen
+reader, and says met or missed in words; the lines a newcomer reads fit eighteen words with the
+rest one click behind; the OBR's forecast arrives in two rounds; what the government has decided
+since March is on the outlook; every card says what it assumes, and who pays sits beside the
+running list.
 
 Seven steps. **The appointment**: three advisers brief you on the rules and why they matter, the
 economy since March, and a new Prime Minister who wants a Budget people notice while the manifesto
@@ -37,12 +41,12 @@ saying why; and a close that says which ambitions survived, who paid, which comp
 how the package fares under every forecast you might have drawn, and what kind of Budget it was.
 Share the link; replay the same seed with a fresh Budget.
 
-Under the hood: the OBR March 2026 baseline, 52 tax levers (HMRC ready reckoner, Budget 2025 and
+Under the hood: the OBR March 2026 baseline, 53 tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options
 and the residence nil-rate band, HMRC's pension statistics for National Insurance on employer
 pension contributions, HMRC's banking-sector receipts, inheritance tax up to abolition, a share of
-the OBR's business rates line, and our own stated arithmetic where nobody has published a costing,
-badged as such), 26 spending levers (Spending Review 2025 settlements, OBR welfare lines, Budget
+the OBR's business rates line, HM Treasury's 2021 costing of the health and social care levy, and
+our own stated arithmetic where nobody has published a costing, badged as such), 26 spending levers (Spending Review 2025 settlements, OBR welfare lines, Budget
 2025 spending decisions, the Prime Minister's schemes) with milestones from PESA, six more levers
 kept for the record on no screen, four sets of economic assumptions and five forecast outcomes
 derived from HM Treasury's comparison of independent forecasts, and about two hundred simulated

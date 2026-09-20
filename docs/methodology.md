@@ -695,3 +695,39 @@ that no reachable document costs (a pension lump-sum cap, a social care levy, an
 lets into council tax, machine games duty) are not levers, under §1. The letters' screen and its
 vocabulary are gone; eleven of its policies sit on the two screens and five are kept for the record
 (§12).
+
+## 18. Accessible, brief, and in order (ADR-0018)
+
+Phase 13 reviewed the game against five tests, accessible for all, not too wordy, the Budget
+process, realistic options and visible trade-offs, and built the top items under each. Nothing in
+the arithmetic changed; what changed is who can reach it and how much they must read to do so.
+
+- **Every screen can be reached.** Titles per screen, focus on the main region after a change of
+  screen, a skip link first in the tab order, rule status in words, badges explained on every screen,
+  levers as named groups with headings and described controls, the running list as a table, every
+  scrolling table a named region, no meaning that lives only in a tooltip, 44px disclosures, chart
+  labels 14px at the size they are drawn.
+- **Fewer words.** A `SimulatedLine` may carry `short` (at most eighteen words), shown first with
+  the full line one click behind; the footer is one line; headroom against the target is said once
+  per screen; the compromise routes fit forty words; the glossary has twenty-six terms. Tests hold
+  the widest tax tab to 500 visible words and the widest spending tab to 700, every minister line a
+  newcomer reads to eighteen words, and Treasury shorthand (RDEL, CDEL, PSNFL, PSNB, AME, accruals,
+  forestalling) out of the lines a newcomer reads.
+- **The process, in order.** The OBR's forecast arrives in two rounds (the pre-measures forecast,
+  then the measures scored); the context file's `decisionsSinceForecast` lists what the government
+  has decided since March on its own figures; Budget day names Table 4.1, the forecast and the
+  costings; the breach route quotes the Charter's escape clause; the nine department levers carry a
+  `commitment`, protected or unprotected, sourced to EFO paragraphs 4.15 to 4.16.
+- **Realistic options.** The 50p rate (`it50`) is an assumption: five times HMRC's one-penny row,
+  which HMRC calls approximate beyond small changes, so the harder forecast outcomes revise it. A
+  lever may be `notOnTheTable`, worn as a quiet tag and sorted to the foot of its group (the six VAT
+  base toggles); every card has "What this assumes". The health and social care levy (`hscl`) is a
+  `statedProduct` on HM Treasury's 2021 figure for the legislated 1.25% levy, £12 billion a year
+  taken as 2024-25 and grown with National Insurance receipts; it scores the published rate only,
+  because no registered source costs a higher one.
+- **Trade-offs in view.** Effects are verbs (raises, costs, saves; borrowing up or down); tables say
+  worse or better; the package shows who pays and who benefits by the incidence tags, the
+  interactions, milestones one click away, and Budget 2025's measures for scale (the net of the
+  extracted Table 4.1 in the target year); the compromise screen re-runs the package under every
+  forecast the draw could have produced; a reception rule may carry a `nudge`, the distance to the
+  next better band in the reading's own unit, filled by the engine from an authored sentence.

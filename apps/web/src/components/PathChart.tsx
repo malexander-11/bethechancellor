@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 interface PathChartProps {
   title: string;
@@ -30,6 +30,9 @@ function niceTicks(min: number, max: number, count = 4): number[] {
  * lines, 8px end markers with a surface ring, hairline gridlines, direct end labels at 14px,
  * crosshair tooltip and a table view. Follows the dataviz "emphasis" form; the series colour is
  * for marks only, so every word on the chart is in ink.
+ *
+ * The chart is laid out at the width its container gives it, so the SVG is drawn one to one and
+ * its text is 14px on screen whatever column it sits in; a narrow chart shows every other year.
  */
 export function PathChart({
   title,
@@ -45,7 +48,18 @@ export function PathChart({
   const formatTick = tickFormat ?? format;
   const id = useId();
   const [hover, setHover] = useState<number | null>(null);
-  const width = 520;
+  const frame = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(520);
+  useEffect(() => {
+    const el = frame.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver((entries) => {
+      const w = entries[0]?.contentRect.width;
+      if (w && w > 0) setWidth(Math.max(300, Math.round(w)));
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
   const height = 260;
   const margin = { top: 16, right: 100, bottom: 30, left: 56 };
   const innerW = width - margin.left - margin.right;
@@ -67,6 +81,8 @@ export function PathChart({
   const line = (values: number[]) =>
     values.map((v, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
   const last = years.length - 1;
+  // Year labels need about 56px each; a narrow chart shows every other one, and always the last.
+  const labelEvery = innerW / Math.max(1, years.length) < 56 ? 2 : 1;
   const differs = policy.some((v, i) => Math.abs(v - (baseline[i] ?? v)) > 1e-9);
   const highlightIndex = highlightYear ? years.indexOf(highlightYear) : -1;
 
@@ -81,7 +97,7 @@ export function PathChart({
   const tooltipLeft = hover !== null ? `${(hoverX / width) * 100}%` : '0';
 
   return (
-    <div className="panel chart">
+    <div className="panel chart" ref={frame}>
       <h3 className="chart__title" id={`${id}-title`}>
         {title}
       </h3>
@@ -114,19 +130,21 @@ export function PathChart({
             </text>
           </g>
         ))}
-        {years.map((yr, i) => (
-          <text
-            key={yr}
-            x={x(i)}
-            y={height - 8}
-            fontSize={14}
-            fill={i === highlightIndex ? 'var(--ink)' : 'var(--ink-2)'}
-            fontWeight={i === highlightIndex ? 600 : 400}
-            textAnchor="middle"
-          >
-            {yr}
-          </text>
-        ))}
+        {years.map((yr, i) =>
+          i % labelEvery === 0 || i === last || i === highlightIndex ? (
+            <text
+              key={yr}
+              x={x(i)}
+              y={height - 8}
+              fontSize={14}
+              fill={i === highlightIndex ? 'var(--ink)' : 'var(--ink-2)'}
+              fontWeight={i === highlightIndex ? 600 : 400}
+              textAnchor="middle"
+            >
+              {yr}
+            </text>
+          ) : null,
+        )}
         {highlightIndex >= 0 ? (
           <rect
             x={x(highlightIndex) - 14}
