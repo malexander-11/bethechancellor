@@ -808,7 +808,7 @@
       "group": "Day-to-day departmental budgets",
       "adviser": "director-of-public-spending",
       "title": "The Spending Review settlements",
-      "headline": "Settlements run to 2028-29. Beyond that we extend them, and say so.",
+      "headline": "Health, defence and schools are protected; the rest fall 4.4% a year in real terms after 2028-29.",
       "paragraphs": [
         {
           "text": "The June 2025 Spending Review fixed day-to-day budgets to 2028-29. Average real growth a year from 2025-26: Health and Social Care 2.8% (NHS England 3.0%), Education 0.7%, Justice 1.8%, local government grant 1.1%, Defence 0.7%, Home Office -1.7%, Transport -5.0% and the Foreign, Commonwealth and Development Office -6.9%. Total resource DEL excluding depreciation grows 1.2% a year.",
@@ -816,6 +816,15 @@
             {
               "sourceId": "hmt-sr25-del-tables",
               "table": "Table 5.3 RDELex"
+            }
+          ]
+        },
+        {
+          "text": "The OBR’s forecast holds health, defence and schools to their settlements after 2028-29. The rest, just over a quarter of day-to-day spending, fall 4.4% a year in real terms; avoiding that would need spending £13.5 billion higher in 2030-31.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "4.15-4.16"
             }
           ]
         },

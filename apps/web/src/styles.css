@@ -924,6 +924,14 @@ hr {
   overflow-x: auto;
 }
 
+.measures caption {
+  padding: 0 0 8px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  text-align: left;
+  caption-side: top;
+}
+
 .detail-table,
 .measures {
   width: 100%;

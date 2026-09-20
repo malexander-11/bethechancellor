@@ -86,7 +86,7 @@ describe('journey routes', () => {
     // The close, with the workings behind the verdict, is the third beat.
     for (let i = 0; i < 2; i += 1)
       fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
-    expect(screen.getByText('Your measures')).toBeInTheDocument();
+    expect(screen.getByText('Table 4.1: your policy decisions')).toBeInTheDocument();
     expect(screen.getAllByText('Rule met').length).toBeGreaterThanOrEqual(2);
   });
 });

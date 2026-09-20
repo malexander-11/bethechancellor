@@ -39,6 +39,16 @@
     "psnflTreatment": "standard",
     "barnettConsequential": true
   },
+  "commitment": {
+    "kind": "protected",
+    "text": "Schools, the bulk of this budget, are held to their settlement in the OBR’s forecast after 2028-29; the squeeze falls elsewhere.",
+    "sources": [
+      {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "4.15-4.16"
+      }
+    ]
+  },
   "costing": {
     "kind": "pctOfBaseline",
     "baseline": {

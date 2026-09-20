@@ -38,6 +38,16 @@
     "psnflTreatment": "standard",
     "barnettConsequential": false
   },
+  "commitment": {
+    "kind": "unprotected",
+    "text": "Unprotected in the OBR’s forecast: budgets like this one fall 4.4% a year in real terms after 2028-29 unless the totals rise.",
+    "sources": [
+      {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "4.15-4.16"
+      }
+    ]
+  },
   "costing": {
     "kind": "pctOfBaseline",
     "baseline": {

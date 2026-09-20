@@ -73,12 +73,14 @@ describe('the "Show workings" switch', () => {
 
   it('hides the close’s tables on Budget day until it is switched on', () => {
     at(`/budget-day?${BASE}&L=itbr.1`);
-    // A sandbox link opens every beat, so the close is on the page at once.
-    expect(screen.queryByText('Your measures')).toBeNull();
+    // A sandbox link opens every beat, so the close is on the page at once. The Red Book's
+    // table of decisions is part of the story and stays; the rules in full and the charts wait.
+    expect(screen.getByText('Table 4.1: your policy decisions')).toBeInTheDocument();
+    expect(screen.queryByText('The rules in full')).toBeNull();
     expect(screen.queryByText('Five-year paths')).toBeNull();
     expect(screen.getByRole('button', { name: /Copy a link/ })).toBeInTheDocument();
     fireEvent.click(theSwitch());
-    expect(screen.getByText('Your measures')).toBeInTheDocument();
+    expect(screen.getByText('The rules in full')).toBeInTheDocument();
     expect(screen.getByText('Five-year paths')).toBeInTheDocument();
   });
 

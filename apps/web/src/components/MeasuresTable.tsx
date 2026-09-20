@@ -30,7 +30,7 @@ export function MeasuresTable({
   const totalCurrent = outcome.attribution.reduce((acc, r) => acc + r.currentBudgetGbpm, 0);
   const totalBorrowing = outcome.attribution.reduce((acc, r) => acc + r.psnbGbpm, 0);
   return (
-    <TableScroll label="Your measures">
+    <TableScroll label="Table 4.1: your policy decisions">
       <table className="measures">
         <thead>
           <tr>

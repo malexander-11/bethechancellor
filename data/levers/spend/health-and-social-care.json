@@ -38,6 +38,16 @@
     "psnflTreatment": "standard",
     "barnettConsequential": true
   },
+  "commitment": {
+    "kind": "protected",
+    "text": "Health is one of the budgets the OBR’s forecast holds to its settlement after 2028-29; the squeeze falls on the unprotected departments.",
+    "sources": [
+      {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "4.15-4.16"
+      }
+    ]
+  },
   "costing": {
     "kind": "pctOfBaseline",
     "baseline": {

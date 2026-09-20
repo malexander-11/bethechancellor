@@ -473,5 +473,43 @@
         }
       ]
     }
+  ],
+  "decisionsSinceForecast": [
+    {
+      "id": "vat-off-electricity",
+      "title": "VAT taken off domestic electricity from 1 October 2026",
+      "amountGbpm": -850,
+      "year": "2026-27, part year",
+      "paidFor": "Cancelling the Digital ID programme",
+      "sources": [
+        {
+          "sourceId": "govuk-vat-electricity-cut-2026"
+        }
+      ]
+    },
+    {
+      "id": "bus-fare-cap-2027",
+      "title": "The £2 bus fare cap kept for all of 2027",
+      "amountGbpm": -400,
+      "year": "2027",
+      "paidFor": "Reallocation inside the energy department’s budget",
+      "sources": [
+        {
+          "sourceId": "govuk-bus-fare-cap-2027"
+        }
+      ]
+    },
+    {
+      "id": "disabled-bus-travel",
+      "title": "Free bus travel for disabled people at any hour",
+      "amountGbpm": -60,
+      "year": "from April 2027",
+      "paidFor": "£40 million from Work and Pensions and £20 million from Transport",
+      "sources": [
+        {
+          "sourceId": "govuk-disabled-bus-travel-2026"
+        }
+      ]
+    }
   ]
 }

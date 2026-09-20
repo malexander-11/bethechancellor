@@ -281,6 +281,40 @@ export function BudgetDayPage() {
         </Beat>
         <Beat title="The close">
           {verdict ? <Verdict verdict={verdict} replayHref={replayHref} /> : null}
+          <section className="panel" aria-labelledby="documents-heading">
+            <h2 id="documents-heading" className="section-label">
+              Budget documents
+            </h2>
+            <p className="panel__hint">
+              What the Treasury publishes as the Chancellor sits down: the Red Book with its table
+              of policy decisions, the OBR’s forecast beside it, and a costing note for every
+              measure.
+            </p>
+            <h3 className="section-label">Table 4.1: your policy decisions</h3>
+            <MeasuresTable outcome={outcome} levers={levers} targetYear={targetYear} />
+            <p className="source">
+              Economic assumptions:{' '}
+              {macroSummary.length > 0 ? macroSummary : "the OBR's March view"}
+              {' · '}
+              <StepLink to="/outlook">change</StepLink>
+            </p>
+            <ul className="documents">
+              <li>
+                <strong>Economic and fiscal outlook.</strong> The OBR’s forecast, published beside
+                the Budget:{' '}
+                {game?.revealed ? (
+                  <StepLink to="/forecast">the one you opened</StepLink>
+                ) : (
+                  'the March forecast, as it stands'
+                )}
+                .
+              </li>
+              <li>
+                <strong>Policy costings.</strong> One note per measure with the method behind it:
+                the detail and sources under each lever, with the workings on.
+              </li>
+            </ul>
+          </section>
           <WorkingsOnly>
             <details className="panel">
               <summary className="group__head">
@@ -306,24 +340,6 @@ export function BudgetDayPage() {
             {briefingsFor('budget-day').map((b) => (
               <AdviserBriefing key={b.id} briefing={b} compact />
             ))}
-            <details className="panel">
-              <summary className="group__head">
-                <span className="group__line">
-                  <span className="group__name">Your measures</span>
-                  <span className="group__count">{outcome.leverEffects.length}</span>
-                </span>
-                <span className="group__say">
-                  Every lever you moved, and what it does in {targetYear}.
-                </span>
-              </summary>
-              <MeasuresTable outcome={outcome} levers={levers} targetYear={targetYear} />
-              <p className="source">
-                Economic assumptions:{' '}
-                {macroSummary.length > 0 ? macroSummary : "the OBR's March view"}
-                {' · '}
-                <StepLink to="/outlook">change</StepLink>
-              </p>
-            </details>
             <details className="panel">
               <summary className="group__head">
                 <span className="group__line">

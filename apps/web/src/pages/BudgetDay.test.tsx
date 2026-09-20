@@ -109,7 +109,7 @@ describe('Budget day: the speech, the reaction, the close', () => {
     expect(screen.queryByText('The rules in full')).toBeNull();
     next();
     next();
-    expect(screen.getByText('Your measures')).toBeInTheDocument();
+    expect(screen.getByText('Table 4.1: your policy decisions')).toBeInTheDocument();
     expect(screen.getByText('The rules in full')).toBeInTheDocument();
     expect(screen.getByText('Five-year paths')).toBeInTheDocument();
     await new Promise((r) => setTimeout(r, 200));

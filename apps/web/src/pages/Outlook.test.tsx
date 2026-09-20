@@ -28,6 +28,13 @@ describe('choosing what to plan on', () => {
     const note = screen.getByRole('complementary', { name: /rule of thumb/ });
     expect(within(note).getByText('Simulated')).toBeInTheDocument();
     expect(within(note).getByText(/Nobody has published that number/)).toBeInTheDocument();
+    // What the government has already decided since March, on its own figures, in the open.
+    const since = screen.getByRole('region', { name: 'Decided since March' });
+    expect(within(since).getByText(/VAT taken off domestic electricity/)).toBeInTheDocument();
+    expect(within(since).getByText(/£2 bus fare cap/)).toBeInTheDocument();
+    expect(within(since).getByText(/Free bus travel for disabled people/)).toBeInTheDocument();
+    expect(within(since).getAllByRole('row')).toHaveLength(4);
+    expect(within(since).getByText(/none used March’s headroom/)).toBeInTheDocument();
   });
 
   it('mints a seed and carries the outlook and the target to Downing Street', async () => {

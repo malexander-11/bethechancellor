@@ -17,7 +17,8 @@ import { LabelBadge } from '../components/LabelBadge';
 import { formatLeverValue } from '../components/LeverControl';
 import { MinisterLine } from '../components/MinisterLine';
 import { Scorecard } from '../components/Scorecard';
-import { adviserById, compromise, context, levers, pm, vintage } from '../data';
+import { SourceList } from '../components/SourceLink';
+import { adviserById, compromise, context, levers, pm, rules, vintage } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
 import { useHeadroomOf } from '../journey/headroom';
@@ -385,6 +386,13 @@ export function CompromisePage() {
                   who={role(compromise.routes.breach.adviser)}
                   tone="adviser"
                 />
+                <details className="charter">
+                  <summary>What the Charter says</summary>
+                  <blockquote>
+                    <p>{rules.escapeClause.text}</p>
+                    <SourceList refs={[rules.escapeClause.source]} />
+                  </blockquote>
+                </details>
                 <label className="breach">
                   <input
                     type="checkbox"

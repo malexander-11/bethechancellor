@@ -141,15 +141,29 @@ export function ForecastPage() {
             </p>
           </section>
         </Beat>
-        <Beat title="What the forecast says">
+        <Beat title="The pre-measures forecast" continueLabel="Send your measures to the OBR">
           {!game.revealed || !decomposition ? (
-            <p className="hero-start__actions">
-              <button type="button" className="btn btn--primary" onClick={reveal}>
-                Open the envelope
-              </button>
-            </p>
+            <OpenIt reveal={reveal} />
           ) : (
             <ForecastReveal
+              part="economy"
+              decomposition={decomposition}
+              draw={draw}
+              planning={planning}
+              planningMacro={planningMacro}
+              game={game}
+              odds={odds}
+              replay={replay}
+              onward={onward}
+            />
+          )}
+        </Beat>
+        <Beat title="Your measures, scored">
+          {!game.revealed || !decomposition ? (
+            <OpenIt reveal={reveal} />
+          ) : (
+            <ForecastReveal
+              part="measures"
               decomposition={decomposition}
               draw={draw}
               planning={planning}
@@ -166,7 +180,24 @@ export function ForecastPage() {
   );
 }
 
+/** A link that lands here with the beats open but the envelope shut: open it first. */
+function OpenIt({ reveal }: { reveal: () => void }) {
+  return (
+    <p className="hero-start__actions">
+      <button type="button" className="btn btn--primary" onClick={reveal}>
+        Open the envelope
+      </button>
+    </p>
+  );
+}
+
+/**
+ * The forecast in the two rounds the real one comes in. First the pre-measures forecast: the
+ * economy and the public finances before any decision in this Budget. Then the measures go to
+ * the OBR and come back scored, and the bottom line is what the two together leave.
+ */
 function ForecastReveal({
+  part,
   decomposition,
   draw,
   planning,
@@ -176,6 +207,7 @@ function ForecastReveal({
   replay,
   onward,
 }: {
+  part: 'economy' | 'measures';
   decomposition: ReturnType<typeof decomposeForecast>;
   draw: ReturnType<typeof drawForecast>;
   planning: string;
@@ -201,12 +233,16 @@ function ForecastReveal({
   const nowBroken = status.promises.filter(
     (p) => !p.kept && before.promises.find((q) => q.promise.id === p.promise.id)?.kept,
   );
-  return (
-    <>
+  if (part === 'economy') {
+    return (
       <section className="panel doc" aria-labelledby="economy-heading">
         <h2 id="economy-heading" className="section-label">
           1 · What happened to the economy
         </h2>
+        <p className="panel__hint">
+          The OBR sends the Treasury the economy first, before any decision in this Budget is
+          counted. Your measures go in next, and come back scored.
+        </p>
         <p className="reveal__headline">
           <strong>{draw.outcome.title}.</strong> {draw.outcome.story.headline}{' '}
           <LabelBadge badge={draw.outcome.story.badge} />
@@ -264,7 +300,10 @@ function ForecastReveal({
           {formatGbpBn(d.headroom.economy, 1, d.headroom.economy < 0)}.
         </p>
       </section>
-
+    );
+  }
+  return (
+    <>
       <section className="panel doc" aria-labelledby="costings-heading">
         <h2 id="costings-heading" className="section-label">
           2 · What happened to your measures

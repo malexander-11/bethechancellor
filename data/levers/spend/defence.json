@@ -38,6 +38,16 @@
     "psnflTreatment": "standard",
     "barnettConsequential": false
   },
+  "commitment": {
+    "kind": "protected",
+    "text": "Defence is on a rising path the OBR’s forecast carries forward after 2028-29; the squeeze falls on the unprotected departments.",
+    "sources": [
+      {
+        "sourceId": "obr-efo-2026-03",
+        "paragraph": "4.15-4.16"
+      }
+    ]
+  },
   "costing": {
     "kind": "pctOfBaseline",
     "baseline": {

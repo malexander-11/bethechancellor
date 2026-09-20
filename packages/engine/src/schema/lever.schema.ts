@@ -495,6 +495,17 @@ export const leverSchema = z
       .optional(),
     /** Reference points shown beside the control: history, targets, what a commitment costs. */
     milestones: z.array(milestoneSchema).optional(),
+    /**
+     * Whether the OBR's forecast holds this department to its settlement after the Spending Review
+     * years (protected) or has it taking the squeeze (unprotected), with the paragraph that says so.
+     */
+    commitment: z
+      .strictObject({
+        kind: z.enum(['protected', 'unprotected']),
+        text: z.string().min(1).max(220),
+        sources: z.array(sourceRefSchema).min(1),
+      })
+      .optional(),
     considerations: z.array(considerationSchema),
     interactions: z
       .array(

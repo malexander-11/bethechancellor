@@ -250,6 +250,7 @@ export function LeverControl({
     ? Object.values(effect.financialTransactions).reduce((a, b) => a + b, 0)
     : 0;
   const barnett = lever.classification?.barnettConsequential === true;
+  const commitment = lever.commitment;
   const isDefault = value === lever.control.default;
   const improvement =
     effect && summaryYear && !isFinancialTransaction
@@ -380,8 +381,16 @@ export function LeverControl({
         {lever.headline ?? lever.description}
       </p>
       {workings && lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
-      {lookupPoints || barnett ? (
+      {lookupPoints || barnett || commitment ? (
         <p className="lever__tags">
+          {commitment ? (
+            <span className="tag">
+              <Term id={commitment.kind}>
+                {commitment.kind === 'protected' ? 'Protected' : 'Unprotected'}
+              </Term>
+              <span className="sr-only">: {commitment.text}</span>
+            </span>
+          ) : null}
           {lookupPoints ? (
             <span className="tag">
               <Term id="hmrc-points">HMRC points only</Term>

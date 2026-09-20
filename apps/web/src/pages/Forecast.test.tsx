@@ -53,6 +53,9 @@ describe('the OBR’s forecast', () => {
   it('shows an economy line of nought when the plan matched what arrived, and the lines add up', () => {
     at(`/forecast?${BASE}&g=s.${ADVISER}_st.3_pl.adviser&M=rate.0.75_rpi.0.5&L=ufsm.1_wealth.1`);
     fireEvent.click(screen.getByRole('button', { name: /Open the envelope/ }));
+    // Round one is the economy alone; the measures come back scored in round two.
+    expect(screen.queryByText('The OBR re-scored your measures')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /Send your measures to the OBR/ }));
     const economy = screen
       .getByText(/The economy moved, including what dearer money does/)
       .closest('p');
@@ -68,6 +71,7 @@ describe('the OBR’s forecast', () => {
   it('lists the measures the OBR re-scored, with the factor and the original badge', () => {
     at(`/forecast?${BASE}&g=s.${HARD}_st.3_pl.adviser&L=wealth.1_itbr.1`);
     fireEvent.click(screen.getByRole('button', { name: /Open the envelope/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Send your measures to the OBR/ }));
     const row = screen.getByText(/Tax extreme wealth/).closest('tr') as HTMLElement;
     expect(within(row).getByText('re-scored ×0.6')).toBeInTheDocument();
     expect(within(row).getByText('Assumption')).toBeInTheDocument();

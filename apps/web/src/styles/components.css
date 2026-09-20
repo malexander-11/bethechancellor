@@ -1475,3 +1475,14 @@ label.choice {
 .spoken__more p {
   margin: 0 0 6px;
 }
+
+/* The Red Book, named: the documents Budget day produces. */
+.documents {
+  margin: 12px 0 0;
+  padding-left: 20px;
+  font-size: 0.9375rem;
+}
+
+.documents li + li {
+  margin-top: 6px;
+}

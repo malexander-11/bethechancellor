@@ -104,6 +104,10 @@
     "escape-clause": {
       "term": "The escape clause",
       "short": "The Charter lets a Chancellor suspend the fiscal rules in a significant shock. The OBR judges how severe the shock is; missing a rule by choice does not qualify."
+    },
+    "protected": {
+      "term": "Protected",
+      "short": "A department the OBR’s forecast holds to its settlement after the Spending Review years: health, defence and schools. When the totals are squeezed, the cut falls elsewhere."
     }
   }
 }

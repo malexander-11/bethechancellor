@@ -1,4 +1,4 @@
-import { freshGame, type GamePermalink } from '@btc/engine';
+import { formatGbpBn, freshGame, type GamePermalink } from '@btc/engine';
 import { useNavigate } from 'react-router-dom';
 import { AssumptionReading, ContextRow } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
@@ -152,6 +152,42 @@ export function OutlookPage() {
               ]}
             />
           </aside>
+          {context.decisionsSinceForecast.length > 0 ? (
+            <section className="panel" aria-labelledby="since-heading">
+              <h2 id="since-heading" className="section-label">
+                Decided since March
+              </h2>
+              <TableScroll label="Decisions since March">
+                <table className="measures">
+                  <caption>
+                    On the government’s own figures, not yet certified by the OBR. Each was paid for
+                    by moving money; none used March’s headroom.
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Decision</th>
+                      <th scope="col">Cost</th>
+                      <th scope="col">Paid for by</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {context.decisionsSinceForecast.map((d) => (
+                      <tr key={d.id}>
+                        <th scope="row">{d.title}</th>
+                        <td className="amount">
+                          {formatGbpBn(Math.abs(d.amountGbpm), 1)}
+                          <span className="source"> {d.year}</span>
+                        </td>
+                        <td>
+                          {d.paidFor} <SourceList as="span" refs={d.sources} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </TableScroll>
+            </section>
+          ) : null}
           {workings ? (
             <>
               <details className="panel">

@@ -85,6 +85,22 @@ export const contextScenarioSchema = z.strictObject({
     .min(1),
 });
 
+/**
+ * A decision the government has already taken since the forecast was published: what it costs on
+ * the government's own figure, and what paid for it. Context, not a lever: none of it is in the
+ * player's Budget, and the OBR has not yet certified any of it.
+ */
+export const decisionSinceForecastSchema = z.strictObject({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
+  title: z.string().min(1).max(90),
+  /** £ million; negative costs money. */
+  amountGbpm: z.number(),
+  /** The year or period the figure is for, as the source states it. */
+  year: z.string().min(1).max(24),
+  paidFor: z.string().min(1).max(120),
+  sources: z.array(sourceRefSchema).min(1),
+});
+
 /** "What has changed since the forecast": dated readings compared with the vintage's assumptions. */
 export const contextFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
@@ -96,4 +112,5 @@ export const contextFileSchema = z.strictObject({
   intro: z.string().min(1),
   readings: z.array(contextReadingSchema).min(1),
   scenarios: z.array(contextScenarioSchema).optional(),
+  decisionsSinceForecast: z.array(decisionSinceForecastSchema).default([]),
 });
