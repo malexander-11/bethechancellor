@@ -38,8 +38,19 @@ const gdp = (year: string) => ds.vintage.economy.nominalGdpFy.values[year] ?? Nu
 
 /** The ways the Budget 2026 reporting says are on the table, each built from a published row. */
 const MENU = {
-  direct: ['nic4', 'rvapr', 'rvplan2'],
-  assumption: ['bank5', 'cgtdth', 'def3', 'epl2', 'hmrc2', 'hscl', 'hvcts15', 'vatgas'],
+  direct: ['nic4', 'nicspa', 'rvapr', 'rvplan2'],
+  assumption: [
+    'bank5',
+    'cgtdth',
+    'def3',
+    'epl2',
+    'hmrc2',
+    'hscl',
+    'hvcts15',
+    'nicllp',
+    'vatelec',
+    'vatgas',
+  ],
   mechanical: ['brates'],
 };
 const ALL = [...MENU.direct, ...MENU.assumption, ...MENU.mechanical];
@@ -169,6 +180,43 @@ describe('the Budget 2026 menu', () => {
     expect(got).toBeLessThan(0);
     expect(got).toBeCloseTo(want, -1);
     expect(effectOf({ vatgas: 1 }, 'vatgas', '2026-27').receipts).toBe(0);
+  });
+
+  it('keeping VAT off electricity is twice the government’s six-month figure, grown with VAT', () => {
+    const vat = headSeries(ds.vintage, 'vat');
+    const want = (-1700 * (vat['2029-30'] ?? 0)) / (vat['2026-27'] ?? 1);
+    const got = effectOf({ vatelec: 1 }, 'vatelec', '2029-30').receipts;
+    expect(got).toBeLessThan(0);
+    expect(got).toBeCloseTo(want, -1);
+    expect(effectOf({ vatelec: 1 }, 'vatelec', '2026-27').receipts).toBe(0);
+    // The zero rate is temporary, and the card says whose arithmetic the full year is.
+    const elec = lever('vatelec');
+    expect(elec.baselinePolicy.text).toMatch(/31 March 2027/);
+    if (elec.costing.kind !== 'schedule') throw new Error('the electricity card is a schedule');
+    expect(elec.costing.caveats.some((c) => /six-month figure is ours/.test(c))).toBe(true);
+  });
+
+  it('National Insurance for working pensioners is HMRC’s static relief cost, and breaks the tax lock', () => {
+    const nics = headSeries(ds.vintage, 'nics');
+    const want = (1200 * (nics['2029-30'] ?? 0)) / (nics['2025-26'] ?? 1);
+    expect(effectOf({ nicspa: 1 }, 'nicspa', '2029-30').receipts).toBeCloseTo(want, -1);
+    expect(effectOf({ nicspa: 1 }, 'nicspa', '2026-27').receipts).toBe(0);
+    const lock = promiseBreaks({ nicspa: 1 }, ds.pm.promises, ds.levers).find(
+      (p) => p.promise.id === 'tax-lock',
+    );
+    expect(lock?.kept).toBe(false);
+    expect(lever('nicspa').badge).toBe('direct');
+  });
+
+  it('Partnership NICs is CenTax’s £1.9 billion grown with National Insurance, and not a red line', () => {
+    const nics = headSeries(ds.vintage, 'nics');
+    const want = (1900 * (nics['2029-30'] ?? 0)) / (nics['2026-27'] ?? 1);
+    expect(effectOf({ nicllp: 1 }, 'nicllp', '2029-30').receipts).toBeCloseTo(want, -1);
+    expect(effectOf({ nicllp: 1 }, 'nicllp', '2026-27').receipts).toBe(0);
+    expect(
+      promiseBreaks({ nicllp: 1 }, ds.pm.promises, ds.levers).every((b) => b.brokenBy.length === 0),
+    ).toBe(true);
+    expect(lever('nicllp').considerations.some((c) => c.kind === 'legal')).toBe(true);
   });
 
   it('unfreezing the Plan 2 threshold is spending from 2027-28, and the 2026-27 revaluation is not applied', () => {

@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "id": "nics-on-partnership-profits",
+  "code": "nicllp",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "National Insurance",
+  "order": 39,
+  "title": "National Insurance on partnership profits",
+  "shortTitle": "Partnership NICs",
+  "headline": "Partners in LLPs pay no employer NICs. CenTax’s equivalent charge: £1.9bn.",
+  "description": "A partner in a law, accountancy or medical partnership pays Class 4 National Insurance on their profits, but no equivalent of the 15% employer charge that falls on an employee’s pay. The Centre for the Analysis of Taxation calls this an accident of history and models a charge equivalent to employer National Insurance on partnership profits, with a partnership allowance matching the £10,500 employment allowance. It puts the yield at £1.9 billion in 2026-27 after behavioural responses, down from a static £2.4 billion. This card takes that figure and grows it with the OBR’s National Insurance forecast.",
+  "baselinePolicy": {
+    "text": "Partners pay Class 4 National Insurance at 6% on profits between £12,570 and £50,270 and 2% above; no equivalent of the 15% employer charge falls on partnership profits.",
+    "source": {
+      "sourceId": "centax-partnership-nics-2025",
+      "quote": "partnership does not pay any equivalent of Employer NICs"
+    },
+    "alreadyIncludes": [
+      "Employer National Insurance at 15% from April 2025 (Autumn Budget 2024, Table 5.1 line 26)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "nics",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 1965,
+      "2028-29": 2035,
+      "2029-30": 2139,
+      "2030-31": 2213
+    },
+    "source": {
+      "sourceId": "centax-partnership-nics-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "centax-partnership-nics-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2026-27",
+        "resultGbpm": 1900,
+        "growWith": "nics",
+        "terms": [
+          {
+            "label": "CenTax’s estimate for Partnership NICs at the employer rate with a £10,500 partnership allowance, after behaviour",
+            "value": 1900,
+            "unit": "£ million, 2026-27",
+            "source": {
+              "sourceId": "centax-partnership-nics-2025",
+              "quote": "Levying ‘Partnership NICs’ would raise an estimated £1.9 billion in 2026-27, after accounting for behavioural responses and interactions with other taxes"
+            }
+          }
+        ]
+      },
+      "note": "CenTax’s 2026-27 figure, grown with the OBR’s National Insurance receipts to the other years. The design is the researchers’: an employer-rate charge on partnership profits with a partnership allowance equal to the employment allowance."
+    },
+    "caveats": [
+      "CenTax’s central figure takes a fifth off a static £2.4 billion for behaviour; at a higher elasticity the yield falls further. Nobody in government has adopted the design or certified the number.",
+      "Grown with the OBR’s National Insurance forecast from 2026-27, which is our step.",
+      "Employer-side, so outside the manifesto lock on the government’s 2024 reading; a partner would call it a rise in their National Insurance, and the reading is contested."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "partnership-nics-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": true,
+      "text": "CenTax reduces the static yield by 20% for partners who incorporate, retire, move or restructure their pay; that response is inside the £1.9 billion, and a larger one would take more.",
+      "sources": [
+        {
+          "sourceId": "centax-partnership-nics-2025",
+          "quote": "after accounting for behavioural responses and interactions with other taxes"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-partnership-nics",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Almost half the revenue would come from partners in the top 0.1% of earners, and only about a third of partners would pay anything because of the allowance.",
+      "sources": [
+        {
+          "sourceId": "centax-partnership-nics-2025",
+          "quote": "Almost half the revenue raised from introducing Partnership NICs would be raised from partners in the top 0.1%"
+        }
+      ]
+    },
+    {
+      "id": "partnership-nics-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The 2024 Budget treated employer National Insurance as outside the manifesto’s promise not to increase National Insurance. A charge equivalent to it on partnership profits follows that reading, and the reading is contested.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations",
+          "quote": "we will not increase National Insurance"
+        },
+        {
+          "sourceId": "hmt-autumn-budget-2024-table-5-1",
+          "table": "Table 5.1",
+          "note": "line 26"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "nics-employer-rate",
+      "text": "CenTax’s charge mirrors the 15% employer rate; the £1.9 billion is at that rate, and moving the employer rate would move this too.",
+      "severity": "info"
+    },
+    {
+      "withLever": "nics-class-4-main-rate",
+      "text": "Class 4 is what partners pay today. Raising it and adding Partnership NICs stacks two charges on the same profits.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-22"
+}

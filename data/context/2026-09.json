@@ -54,7 +54,7 @@
           "series": {
             "2026": 3.4,
             "2027": 3.25,
-            "2028": 3.0,
+            "2028": 3,
             "2029": 2.75,
             "2030": 2.59
           }
@@ -63,8 +63,8 @@
           "label": "Highest of the forecasts in the comparison",
           "series": {
             "2026": 3.9,
-            "2027": 4.0,
-            "2028": 4.0,
+            "2027": 4,
+            "2028": 4,
             "2029": 3.9,
             "2030": 3.8
           }
@@ -139,10 +139,10 @@
       "obr": {
         "series": {
           "2026": 2.3,
-          "2027": 2.0,
-          "2028": 2.0,
-          "2029": 2.0,
-          "2030": 2.0
+          "2027": 2,
+          "2028": 2,
+          "2029": 2,
+          "2030": 2
         },
         "label": "OBR March 2026",
         "source": {
@@ -156,7 +156,7 @@
           "2027": 2.7,
           "2028": 2.2,
           "2029": 2.1,
-          "2030": 2.0
+          "2030": 2
         },
         "label": "Average of the forecasts the Treasury received in August 2026",
         "source": {
@@ -233,7 +233,7 @@
           "label": "OBR March 2026, as printed by the Treasury alongside the forecasters",
           "series": {
             "2026": 3.1,
-            "2027": 3.0,
+            "2027": 3,
             "2028": 2.8,
             "2029": 2.9,
             "2030": 2.3
@@ -256,7 +256,7 @@
             "2027": 4.8,
             "2028": 3.8,
             "2029": 3.5,
-            "2030": 3.0
+            "2030": 3
           }
         }
       },
@@ -270,9 +270,9 @@
         "series": {
           "2026-27": 115.5,
           "2027-28": 96.5,
-          "2028-29": 86.0,
+          "2028-29": 86,
           "2029-30": 63.4,
-          "2030-31": 59.0
+          "2030-31": 59
         },
         "label": "OBR March 2026",
         "source": {
@@ -477,13 +477,16 @@
   "decisionsSinceForecast": [
     {
       "id": "vat-off-electricity",
-      "title": "VAT taken off domestic electricity from 1 October 2026",
+      "title": "VAT taken off domestic electricity from 1 October 2026 to 31 March 2027",
       "amountGbpm": -850,
       "year": "2026-27, part year",
       "paidFor": "Cancelling the Digital ID programme",
       "sources": [
         {
           "sourceId": "govuk-vat-electricity-cut-2026"
+        },
+        {
+          "sourceId": "hmrc-vat-notice-701-19"
         }
       ]
     },

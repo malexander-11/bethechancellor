@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "id": "nics-over-state-pension-age",
+  "code": "nicspa",
+  "category": "tax",
+  "badge": "direct",
+  "group": "National Insurance",
+  "order": 36,
+  "title": "Charge National Insurance to workers over state pension age",
+  "shortTitle": "NICs over pension age",
+  "headline": "Working pensioners pay no NICs. HMRC’s static cost of that: £1.2bn.",
+  "description": "Employees and the self-employed stop paying National Insurance when they reach state pension age, although their employers keep paying on their wages. HMRC counts the exemption as a relief and costs it at £1,200 million in 2025-26. This card charges working pensioners the main rates everyone else pays, at HMRC’s static cost of the relief carried forward with the OBR’s National Insurance forecast. HMRC’s row also covers non-UK residents, so the figure is a ceiling, and a lower rate for pensioners, which has been floated, would raise less.",
+  "baselinePolicy": {
+    "text": "Class 1, 2 and 4 National Insurance stop at state pension age; employer contributions continue. HMRC costs the exemption at £1,200m in 2025-26.",
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "table": "Table 2",
+      "note": "row NIC - S2"
+    },
+    "alreadyIncludes": [
+      "Employee main rate 8% and employer rate 15% (Autumn Budget 2024, Table 5.1 line 26)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "nics",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2025-26": 1200
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "table": "Table 2"
+    },
+    "rawSource": {
+      "kind": "hmrcReliefCost",
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "rows": [
+        {
+          "rowId": "nic-s2",
+          "name": "Exemption for individuals over State Pension Age",
+          "values": {
+            "2025-26": 1200
+          }
+        }
+      ],
+      "note": "HMRC’s estimate of the cost of the exemption in 2025-26 (its latest year), carried forward with the OBR’s National Insurance receipts path."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "nics",
+      "note": "The 2025-26 relief cost is applied from the start year and scaled by the OBR’s National Insurance receipts forecast (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: \"These figures should be interpreted as estimates of the amount of relief which is claimed and subsequently granted each year. These estimates do not represent the gain to the exchequer should a relief be abolished.\" The toggle shows that static cost as revenue; some people would work less or stop, and the cost of collecting it is not in the figure.",
+      "HMRC’s row exempts non-UK residents as well as people over state pension age, so it overstates what working pensioners alone would pay.",
+      "A lower rate for pensioners has been floated; nobody has costed one, so the card charges the full rates, a ceiling.",
+      "Employer National Insurance is already due on pensioners’ wages; only the employee and self-employed sides change."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC’s figure is the relief claimed, not the yield from ending it. Some over-66s would work fewer hours or retire, and the self-employed among them could bring forward or reshape their income.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-quality-report"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-working-pensioners",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Falls on people who keep working past state pension age, whose earnings are often part-time and sit alongside a state pension that is not charged. Their employers already pay the employer side.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-2026-01",
+          "table": "Table 2",
+          "note": "row NIC - S2"
+        },
+        {
+          "sourceId": "govuk-nics-rates"
+        }
+      ]
+    },
+    {
+      "id": "nics-lock-pensioners",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The manifesto promises not to increase National Insurance. Charging it to a group that pays none is an increase for them, so the game treats this switch as breaking the tax lock.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations",
+          "quote": "we will not increase National Insurance"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "nics-employee-main-rate",
+      "text": "The main-rate slider moves the rate everyone under pension age pays; this card brings working pensioners in at that rate, so a higher rate raises what it collects too.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-22"
+}

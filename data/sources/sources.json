@@ -1065,6 +1065,40 @@
       "retrievedOn": "2026-09-19",
       "licence": "OGL-3.0",
       "notes": "The bank surcharge allowance is £100,000,000 for accounting periods beginning on or after 1 April 2023, substituted for £25,000,000 by Finance Act 2022 section 6; the surcharge is charged on a banking company's profits above the allowance."
+    },
+    {
+      "id": "hmrc-vat-notice-701-19",
+      "org": "HMRC",
+      "title": "VAT on fuel and power (VAT Notice 701/19)",
+      "edition": "Updated 8 September 2026",
+      "url": "https://www.gov.uk/guidance/vat-on-fuel-and-power-notice-70119",
+      "publishedOn": "2026-09-08",
+      "retrievedOn": "2026-09-22",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-22. \"On 21 July 2026, the government announced a temporary zero rate of VAT for Great Britain (England, Scotland and Wales) for domestic supplies of electricity and other supplies of qualifying use. The temporary zero rate applies from 1 October 2026 to 31 March 2027.\" Northern Ireland stays at 5%."
+    },
+    {
+      "id": "hmrc-vat-electricity-zero-rate-2026",
+      "org": "HMRC",
+      "title": "Temporary zero rate of VAT for domestic electricity in Great Britain",
+      "edition": "Policy paper, 8 September 2026",
+      "url": "https://www.gov.uk/government/publications/temporary-zero-rate-of-vat-for-domestic-electricity-in-great-britain",
+      "publishedOn": "2026-09-08",
+      "retrievedOn": "2026-09-22",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-22. \"This measure introduces a temporary zero rate of VAT for qualifying supplies of domestic electricity in Great Britain, for the period 1 October 2026 to 31 March 2027. The rate will remain 5% on all other types of domestic fuel UK-wide.\" Revenue and Customs Brief 10 (2026) accompanies it."
+    },
+    {
+      "id": "centax-partnership-nics-2025",
+      "org": "Other",
+      "title": "Equalising National Insurance on partnership income: revenue and distributional effects",
+      "edition": "Advani, Gazmuri-Barker, Lonsdale and Summers, 4 September 2025",
+      "url": "https://centax.org.uk/wp-content/uploads/2025/09/AdvaniGazmuribarkerLonsdaleSummers2025_PartnershipNICs.pdf",
+      "landingUrl": "https://centax.org.uk/news-release-scrapping-the-national-insurance-tax-break-for-partnerships-would-raise-1-9bn-while-improving-productivity/",
+      "publishedOn": "2025-09-04",
+      "retrievedOn": "2026-09-22",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-22. Centre for the Analysis of Taxation. \"Levying ‘Partnership NICs’ would raise an estimated £1.9 billion in 2026-27, after accounting for behavioural responses and interactions with other taxes\"; static yield £2.4bn at a zero elasticity, £1.9bn at 0.25; \"Almost half the revenue raised from introducing Partnership NICs would be raised from partners in the top 0.1%\"; \"Only impact one third (34%) of current partners\"; the design is an equivalent of employer NICs on partnership profits with a Partnership Allowance equal to the £10,500 Employment Allowance. Quoted briefly with attribution."
     }
   ]
 }

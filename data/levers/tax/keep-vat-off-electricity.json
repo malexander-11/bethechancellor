@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "id": "keep-vat-off-electricity",
+  "code": "vatelec",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "VAT",
+  "order": 27,
+  "title": "Keep VAT off electricity after March 2027",
+  "shortTitle": "VAT off electricity",
+  "headline": "HMRC’s zero rate ends in March 2027. Keeping it costs about £1.9bn a year.",
+  "description": "The government took VAT off domestic electricity in Great Britain from 1 October 2026 and put the cost at about £850 million for 2026-27, paid for by cancelling the Digital ID programme. HMRC’s notice says the zero rate is temporary and ends on 31 March 2027, so electricity goes back to 5% in April unless the Budget extends it. This card keeps the rate at 0%: twice the government’s six-month figure, which is our arithmetic, grown with the OBR’s VAT forecast from 2026-27. The Treasury has promised updated costs at the Budget; when they are published they replace this term.",
+  "baselinePolicy": {
+    "text": "Domestic fuel and power pay the 5% reduced rate in the March 2026 forecast. The temporary zero rate for electricity in Great Britain runs from 1 October 2026 to 31 March 2027 and is not in the baseline; the game lists it among the decisions taken since March.",
+    "source": {
+      "sourceId": "hmrc-vat-notice-701-19",
+      "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027."
+    },
+    "alreadyIncludes": []
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "vat",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": -1758,
+      "2028-29": -1851,
+      "2029-30": -1917,
+      "2030-31": -2016
+    },
+    "source": {
+      "sourceId": "govuk-vat-electricity-cut-2026"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "govuk-vat-electricity-cut-2026",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2026-27",
+        "resultGbpm": -1700,
+        "growWith": "vat",
+        "terms": [
+          {
+            "label": "The government’s cost of the zero rate for the six months from 1 October 2026",
+            "value": 850,
+            "unit": "£ million, October 2026 to March 2027",
+            "source": {
+              "sourceId": "govuk-vat-electricity-cut-2026",
+              "quote": "This action is estimated to cost around £850 million in 2026-27 on the basis of estimated electricity prices. Updated costs will be set out at Budget."
+            }
+          },
+          {
+            "label": "Two half-years in a full year, negative because receipts fall",
+            "value": -2,
+            "unit": "half-years",
+            "source": {
+              "sourceId": "hmrc-vat-notice-701-19",
+              "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027."
+            }
+          }
+        ]
+      },
+      "note": "The government published one figure, about £850 million for the six months to March 2027. A full year is taken as twice that, which is our arithmetic, and grown with the OBR’s VAT receipts from 2026-27. Effects before the start year are not applied."
+    },
+    "caveats": [
+      "Annualising the six-month figure is ours. October to March is the high-use half of the year, so twice the winter cost probably overstates a full year; the Treasury has said updated costs will be set out at the Budget, and they replace this term when published.",
+      "Great Britain only, as the zero rate is; Northern Ireland stays at 5% under the Windsor Framework arrangements HMRC describes.",
+      "Static: no change in electricity use is allowed for, and HMRC’s relief figures carry no behavioural response."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "electricity-static",
+      "kind": "behavioural",
+      "direction": "costsMore",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "Cheaper electricity means a little more of it is used, and the shift from gas to heat pumps and electric cars raises the base the relief sits on year by year; the card grows with VAT receipts overall, not with electricity demand.",
+      "sources": [
+        {
+          "sourceId": "govuk-vat-electricity-cut-2026"
+        }
+      ]
+    },
+    {
+      "id": "who-benefits-electricity",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The government put the saving at about £45 a year on a price-cap bill. It is a flat share of every bill, so it is worth more in cash to bigger users and more as a share of income to poorer households.",
+      "sources": [
+        {
+          "sourceId": "govuk-vat-electricity-cut-2026"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "vat-off-domestic-gas",
+      "text": "The gas card’s arithmetic treats electricity as zero-rated for good. Without this card, electricity returns to 5% in April 2027 while gas stays at 0%.",
+      "severity": "info"
+    },
+    {
+      "withLever": "vat-reduced-rate",
+      "text": "The reduced-rate slider moves the 5% rate on all domestic fuel and power; with electricity at 0% it reaches gas and other fuels only, so the two together overstate.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-22"
+}

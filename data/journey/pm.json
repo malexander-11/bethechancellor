@@ -505,6 +505,10 @@
         {
           "code": "vats",
           "when": "above"
+        },
+        {
+          "code": "nicspa",
+          "when": "on"
         }
       ]
     },
