@@ -136,7 +136,7 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
 
 Where nobody has published a costing, the arithmetic is ours and the card has to show it. Such a
 lever lives in the folder of its real category and the group of the screen it belongs to
-(`tax` · `Capital taxes`, `spend` · `Flagship programmes`); the badge, not the folder, keeps it apart
+(`tax` · `Capital gains`, `spend` · `Flagship programmes`); the badge, not the folder, keeps it apart
 from the certified rows beside it (ADR-0017).
 
 - **Category and group.** The lever's real `category` and the `group` of the tab it sits in,

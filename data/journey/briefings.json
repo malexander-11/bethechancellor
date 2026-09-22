@@ -552,10 +552,10 @@
     {
       "id": "taxes-capital",
       "step": "taxes",
-      "group": "Capital taxes",
+      "group": "Capital gains",
       "adviser": "director-of-tax",
-      "title": "Capital taxes: small today, growing fast",
-      "headline": "Small taxes growing fast: capital gains receipts are up about 60% this year.",
+      "title": "Capital gains: small today, growing fast",
+      "headline": "Capital gains receipts are up about 60% this year as sales were rushed ahead of the rate rise.",
       "paragraphs": [
         {
           "text": "Capital gains tax: main rates 18% and 24% since 30 October 2024. Receipts are £21.8bn in 2025-26, about 60% up on the year because disposals were brought forward ahead of the rate rise, and are forecast to reach £34.9bn in 2030-31 on rising equity prices.",
@@ -573,7 +573,17 @@
               "paragraph": "3.24"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "taxes-wealth-property",
+      "step": "taxes",
+      "group": "Wealth and property",
+      "adviser": "director-of-tax",
+      "title": "Wealth and property: inheritance tax, stamp duty and the surcharge",
+      "headline": "Inheritance tax rises from £8.7bn to £14.7bn by 2030-31; stamp duty raises about twice that.",
+      "paragraphs": [
         {
           "text": "Inheritance tax: 40% on the part of an estate above the £325,000 nil-rate band, unchanged since 2009 and frozen to 2031. Receipts rise from £8.7bn in 2025-26 to £14.7bn in 2030-31 on rising asset prices, more estates above the threshold and the October 2024 changes to pensions and reliefs.",
           "sources": [

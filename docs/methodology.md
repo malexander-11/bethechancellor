@@ -432,7 +432,7 @@ so. Their arithmetic still reproduces in the engine tests; the app offers them o
 old link to one decodes with a warning and opens.
 
 Two figures rest on a contested base. Their cards say so, in the headline, before the number:
-the wealth tax (live, under Capital taxes), because the Wealth Tax Commission says its own work
+the wealth tax (live, under Wealth and property), because the Wealth Tax Commission says its own work
 "has been constrained by a lack of reliable data on individuals with total wealth above £10
 million" and because the Office for National Statistics publishes nothing above the top 1%
 threshold of £3.1m and had that survey's accreditation suspended in 2025; withdrawing benefits
@@ -679,9 +679,9 @@ certified row, an HMRC statistic or a stated calculation on one, and the card sa
 | Code      | Group                     | Badge      | Built from                                                                                                 |
 | --------- | ------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------- |
 | `brates`  | Business                  | mechanical | The OBR's business rates line (Table A.5), scaled by a percentage; UK-wide although the rates are devolved |
-| `cgtdth`  | Capital taxes             | assumption | The Resolution Foundation's £4bn a year for ending the death write-off with an exit charge: an upper bound |
-| `hvcts15` | Capital taxes             | assumption | Budget 2025 line 54 repeated as a £1.5m band, set-up costs included                                        |
-| `rvapr`   | Capital taxes             | direct     | Autumn Budget 2024 line 29 reversed, grown with the inheritance tax line for 2030-31                       |
+| `cgtdth`  | Capital gains             | assumption | The Resolution Foundation's £4bn a year for ending the death write-off with an exit charge: an upper bound |
+| `hvcts15` | Wealth and property       | assumption | Budget 2025 line 54 repeated as a £1.5m band, set-up costs included                                        |
+| `rvapr`   | Wealth and property       | direct     | Autumn Budget 2024 line 29 reversed, grown with the inheritance tax line for 2030-31                       |
 | `bank5`   | Business                  | assumption | HMRC's £1.0bn of surcharge receipts at 3%, two thirds more for two points, grown with corporation tax      |
 | `epl2`    | Business                  | assumption | Autumn Budget 2024 line 24 repeated, flat in cash for 2030-31                                              |
 | `nic4`    | National Insurance        | direct     | HMRC's Class 4 main rate row; the tax lock watches it                                                      |

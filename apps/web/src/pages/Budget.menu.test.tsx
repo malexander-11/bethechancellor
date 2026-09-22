@@ -50,17 +50,19 @@ describe('the package in two parts', () => {
     expect(
       within(business).getByRole('group', { name: 'Raise the bank surcharge from 3% to 5%' }),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('tab', { name: /Capital taxes/ }));
+    fireEvent.click(screen.getByRole('tab', { name: /Capital gains/ }));
     const capital = screen.getByRole('tabpanel');
     // Certified rows and our own arithmetic sit side by side; the badge does the quarantining.
     expect(within(capital).getAllByText('Direct costing').length).toBeGreaterThan(0);
     expect(within(capital).getAllByText('Assumption').length).toBeGreaterThan(0);
+    expect(within(capital).getAllByText(/upper bound/).length).toBeGreaterThan(0);
+    // Wealth and property is the second half of what was one crowded tab.
+    fireEvent.click(screen.getByRole('tab', { name: /Wealth and property/ }));
     expect(
-      within(capital).getByRole('group', {
+      within(screen.getByRole('tabpanel')).getByRole('group', {
         name: 'Tax extreme wealth: 1% a year on net wealth above £10m',
       }),
     ).toBeInTheDocument();
-    expect(within(capital).getAllByText(/upper bound/).length).toBeGreaterThan(0);
   });
 
   it('tags the options nobody proposes, sorts them to the foot, and says what each card assumes', () => {
@@ -90,7 +92,7 @@ describe('the package in two parts', () => {
         name: /health and social care levy/,
       }),
     ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('tab', { name: /Capital taxes/ }));
+    fireEvent.click(screen.getByRole('tab', { name: /Wealth and property/ }));
     expect(
       within(screen.getByRole('tabpanel')).getByRole('option', {
         name: 'Abolish (0%) · not on the table',

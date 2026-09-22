@@ -19,7 +19,7 @@ function desk(levers = 'itbr.1') {
 describe('the lever groups', () => {
   it('is a row of tabs with exactly one group open', () => {
     desk();
-    expect(screen.getAllByRole('tab').length).toBe(7);
+    expect(screen.getAllByRole('tab').length).toBe(8);
     expect(screen.getAllByRole('tabpanel')).toHaveLength(1);
     expect(screen.getAllByRole('tab', { selected: true })).toHaveLength(1);
   });
@@ -50,8 +50,8 @@ describe('the lever groups', () => {
 
   it('opens the group you click, and only that one', () => {
     desk();
-    fireEvent.click(screen.getByRole('tab', { name: /Capital taxes/ }));
-    expect(screen.getByRole('tab', { selected: true })).toHaveAccessibleName(/Capital taxes/);
+    fireEvent.click(screen.getByRole('tab', { name: /Wealth and property/ }));
+    expect(screen.getByRole('tab', { selected: true })).toHaveAccessibleName(/Wealth and property/);
     const panel = screen.getByRole('tabpanel');
     expect(within(panel).getByText('Inheritance tax rate')).toBeInTheDocument();
     // The levers of the group you closed are out of the document, not merely hidden.
