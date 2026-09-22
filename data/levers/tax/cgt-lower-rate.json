@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "id": "cgt-lower-rate",
+  "code": "cgtl",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital gains",
+  "order": 12,
+  "title": "Capital gains tax lower rate",
+  "shortTitle": "CGT lower rate",
+  "headline": "18% for basic-rate taxpayers. HMRC scores a rise at almost nothing.",
+  "description": "Basic-rate taxpayers pay capital gains tax at 18% since 30 October 2024, 10% before. HMRC publishes the direct effect of raising that rate by 1, 5 and 10 percentage points, and every one of them is close to nothing or negative: the people who pay the lower rate are few, and higher rates change when and whether gains are realised. Aligning the lower rate with the basic rate of income tax, at 20%, is two points on this slider.",
+  "baselinePolicy": {
+    "text": "The lower rate of capital gains tax is 18% for gains within the basic rate band, 10% before 30 October 2024; the higher rate is 24%.",
+    "source": {
+      "sourceId": "govuk-cgt-rates"
+    },
+    "alreadyIncludes": [
+      "The October 2024 rise in the main rates to 18% and 24% (Autumn Budget 2024, Table 5.1 line 27)."
+    ]
+  },
+  "control": {
+    "kind": "slider",
+    "unit": "pp",
+    "min": 0,
+    "max": 10,
+    "step": 1,
+    "default": 0,
+    "formatLabel": "percentage points on the lower rate",
+    "level": {
+      "baseline": 18,
+      "unit": "pct",
+      "apply": "add",
+      "label": "Lower rate of capital gains tax",
+      "decimals": 0,
+      "source": {
+        "sourceId": "govuk-cgt-rates"
+      },
+      "note": "18% for basic rate taxpayers since 30 October 2024; 10% before."
+    }
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "lookupTable",
+    "input": "pp",
+    "points": [
+      {
+        "input": 0,
+        "effect": {
+          "2026-27": 0,
+          "2027-28": 0,
+          "2028-29": 0
+        }
+      },
+      {
+        "input": 1,
+        "effect": {
+          "2026-27": -5,
+          "2027-28": 10,
+          "2028-29": 5
+        },
+        "from": {
+          "rowIds": [
+            "capital-gains-tax--increase-lower-capital-gains-tax-rate-by-1-percentage-point"
+          ],
+          "multiplier": 1
+        }
+      },
+      {
+        "input": 5,
+        "effect": {
+          "2026-27": -40,
+          "2027-28": 20,
+          "2028-29": -10
+        },
+        "from": {
+          "rowIds": [
+            "capital-gains-tax--increase-lower-capital-gains-tax-rate-by-5-percentage-points"
+          ],
+          "multiplier": 1
+        }
+      },
+      {
+        "input": 10,
+        "effect": {
+          "2026-27": -130,
+          "2027-28": -55,
+          "2028-29": -135
+        },
+        "from": {
+          "rowIds": [
+            "capital-gains-tax--increase-lower-capital-gains-tax-rate-by-10-percentage-points"
+          ],
+          "multiplier": 1
+        }
+      }
+    ],
+    "interpolation": "linear",
+    "extrapolation": "forbid",
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "capital-gains-tax--increase-lower-capital-gains-tax-rate-by-1-percentage-point",
+          "label": "Increase lower Capital Gains Tax rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": -5,
+            "2027-28": 10,
+            "2028-29": 5
+          }
+        },
+        {
+          "rowId": "capital-gains-tax--increase-lower-capital-gains-tax-rate-by-5-percentage-points",
+          "label": "Increase lower Capital Gains Tax rate by 5 percentage points",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": -40,
+            "2027-28": 20,
+            "2028-29": -10
+          }
+        },
+        {
+          "rowId": "capital-gains-tax--increase-lower-capital-gains-tax-rate-by-10-percentage-points",
+          "label": "Increase lower Capital Gains Tax rate by 10 percentage points",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": -130,
+            "2027-28": -55,
+            "2028-29": -135
+          }
+        }
+      ]
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "capitalTaxes",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: capital gains tax changes are non-linear and asymmetrical, and large increases can reduce the yield because of behavioural responses; only HMRC's published points are used.",
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "cgt-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC’s published yield for a rise in the lower rate is close to nothing in every year and negative at ten points: its behavioural response, which is inside the figure, swamps the mechanical gain. A rise for basic-rate taxpayers is a signal more than a revenue measure.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "large"
+    },
+    {
+      "id": "hmrc-2026-deferred",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC postponed the 2026 edition of these estimates (due 7 July 2026) to complete a review of the key assumptions behind some of them, after the Office for Statistics Regulation asked for more transparency about pre- and post-behavioural estimates. The figures here are HMRC's June 2025 estimates.",
+      "sources": [
+        {
+          "sourceId": "hmrc-stats-schedule"
+        },
+        {
+          "sourceId": "osr-trr-review-2025-12"
+        }
+      ],
+      "magnitudeWords": "unknown"
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "cgt-higher-rate",
+      "text": "The two rates move separately; HMRC publishes a row for each and neither allows for the other moving.",
+      "severity": "info"
+    },
+    {
+      "withLever": "align-cgt-with-income-tax",
+      "text": "The alignment package already takes the lower rate to 20%; stacking a rise here double counts.",
+      "severity": "warn"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-22"
+}

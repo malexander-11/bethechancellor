@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "cgt-exit-charge",
+  "code": "cgtexit",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Capital gains",
+  "order": 24,
+  "title": "Charge capital gains tax on people who leave the UK",
+  "shortTitle": "CGT exit charge",
+  "headline": "Leavers’ unrealised gains go untaxed. CenTax: at least £0.5bn a year, a floor.",
+  "description": "Someone who leaves the UK before selling an asset pays no British capital gains tax on the gain built up while they lived here, and most go to countries where they can realise it tax free. The Centre for the Analysis of Taxation read the Companies House records of business owners who emigrated and put the CGT forgone at £500 million a year at the least, calling the true figure likely to be much higher. This card charges gains when people leave, at that floor, held flat in cash. It is a personal charge on leavers, not the corporate exit tax the business department has ruled out, and the government has not ruled it out.",
+  "baselinePolicy": {
+    "text": "No capital gains tax is charged on gains built up in the UK when the owner emigrates before selling; the OBR forecast carries no such charge.",
+    "source": {
+      "sourceId": "centax-business-owners-emigrate-2024",
+      "quote": "The UK is an international outlier in not charging Capital Gains Tax (CGT) on people who leave the country."
+    },
+    "alreadyIncludes": []
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 500,
+      "2028-29": 500,
+      "2029-30": 500,
+      "2030-31": 500
+    },
+    "source": {
+      "sourceId": "centax-business-owners-emigrate-2024"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "centax-business-owners-emigrate-2024",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 500,
+        "terms": [
+          {
+            "label": "CenTax’s lower bound for the capital gains tax forgone each year on business owners who emigrate",
+            "value": 500,
+            "unit": "£ million a year",
+            "source": {
+              "sourceId": "centax-business-owners-emigrate-2024",
+              "quote": "This is costing the UK at least £500 million per year in foregone CGT, although the true figure is likely to be much higher"
+            }
+          }
+        ]
+      },
+      "note": "CenTax’s floor taken as a steady-state figure and held flat in cash from the start year; the tax forgone is a measure of what a charge could reach, not a costing of one, and the study covers UK nationals’ business shareholdings only."
+    },
+    "caveats": [
+      "A floor: CenTax says the true figure is likely to be much higher, and its study covers only UK nationals’ shareholdings in companies, not property, funds or other assets.",
+      "Lumpy: in the year studied almost three-quarters of the gains came from ten people, so a real year could be far above or below the average.",
+      "A personal charge on leavers is distinct from the corporate exit tax the business department has ruled out; the government has not ruled this out, but has not proposed it either. Nobody has certified the figure."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "exit-charge-concentration",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The gains are concentrated in a handful of people a year, so the timing of a few departures decides the yield; a charge could also deter some from leaving and bring others’ departures forward before it starts.",
+      "sources": [
+        {
+          "sourceId": "centax-business-owners-emigrate-2024",
+          "quote": "almost three-quarters came from just 10 people"
+        }
+      ]
+    },
+    {
+      "id": "exit-charge-timing",
+      "kind": "administrative",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Other countries charge unrealised gains on departure but let the tax be deferred until a sale; collecting from people who have left is slower and less certain than the arithmetic suggests.",
+      "sources": [
+        {
+          "sourceId": "centax-business-owners-emigrate-2024"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "cgt-on-death",
+      "text": "The Resolution Foundation’s £4bn on that card already includes a charge on leavers, so the two together count it twice.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "align-cgt-with-income-tax",
+      "text": "CenTax’s alignment package already includes a charge on leavers.",
+      "severity": "warn"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-22"
+}

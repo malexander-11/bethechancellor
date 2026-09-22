@@ -60,6 +60,9 @@ describe('the routes out of a gap', () => {
     // which is a cut for the spending route, not revenue.
     expect(all.some((s) => s.lever.code === 'ufsm' || s.lever.code === 'rvinv')).toBe(false);
     expect(all.some((s) => s.lever.code === 'rv2ch' || s.lever.code === 'cpilock')).toBe(false);
+    // Nor an option nobody proposes: the relief toggles are on the desk to teach, not to advise.
+    expect(all.some((s) => s.lever.notOnTheTable !== undefined)).toBe(false);
+    expect(all.some((s) => s.lever.code === 'vatfood' || s.lever.code === 'cgtprr')).toBe(false);
     const basic = all.find((s) => s.lever.code === 'itbr');
     expect(basic?.breaks.map((p) => p.id)).toEqual(['tax-lock']);
     const ct = all.find((s) => s.lever.code === 'ct');

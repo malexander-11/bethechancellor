@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "id": "cgt-on-main-homes",
+  "code": "cgtprr",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital gains",
+  "order": 90,
+  "title": "Charge capital gains tax on main homes",
+  "shortTitle": "CGT on main homes",
+  "headline": "The biggest CGT relief: £32.9bn static. Nobody proposes all of it.",
+  "description": "The gain on a home you have lived in as your main residence is exempt from capital gains tax. HMRC counts private residence relief as the largest relief in the tax and costs it at £32.9 billion in 2025-26. What has been floated is a cap on the relief for homes above a value nobody has published; this card charges the whole relief at HMRC’s static cost, carried forward with the OBR’s capital taxes forecast, to show the ceiling any cap would sit under. Nobody proposes the whole of it.",
+  "notOnTheTable": {
+    "note": "What is floated is a cap on the relief above a home value nobody has published. This card is the whole relief, a ceiling; no party proposes it.",
+    "sources": [
+      {
+        "sourceId": "hmrc-tax-reliefs-2026-01"
+      },
+      {
+        "sourceId": "hmrc-tax-reliefs-quality-report"
+      }
+    ]
+  },
+  "baselinePolicy": {
+    "text": "Gains on a person’s only or main residence are exempt from capital gains tax for the period it was their home; HMRC costs the relief at £32,900m in 2025-26.",
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "table": "Table 2",
+      "note": "row CGT - NS1"
+    },
+    "alreadyIncludes": []
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2025-26": 32900
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "table": "Table 2"
+    },
+    "rawSource": {
+      "kind": "hmrcReliefCost",
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "rows": [
+        {
+          "rowId": "cgt-ns1",
+          "name": "Private residence relief",
+          "values": {
+            "2025-26": 32900
+          }
+        }
+      ],
+      "note": "HMRC’s estimate of the cost of the relief in 2025-26 (its latest year), carried forward with the OBR’s capital taxes receipts path."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "capitalTaxes",
+      "note": "The 2025-26 relief cost is applied from the start year and scaled by the OBR’s capital taxes receipts forecast (ADR-0004)."
+    },
+    "caveats": [
+      "HMRC: \"These figures should be interpreted as estimates of the amount of relief which is claimed and subsequently granted each year. These estimates do not represent the gain to the exchequer should a relief be abolished.\" The toggle shows that static cost as revenue; taxing every home sale would change when and whether people move, and the yield would be far lower.",
+      "A cap above a value threshold, which is what is floated, would raise a fraction of this; nobody has published the threshold or a costing.",
+      "HMRC’s description: \"Gains on the disposal of a residence is exempt from CGT to the extent it has been used as the person's only or main residence.\""
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC’s figure is the relief claimed, not the yield from ending it: people would move less, hold on longer and restructure how homes are owned, and the gain since purchase is the base, so the yield depends on house prices.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-quality-report"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-main-homes",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Falls on owner-occupiers when they sell, most heavily where prices have risen most and on people who have owned longest; a cap by value would confine it to the most expensive homes.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-2026-01",
+          "table": "Table 2",
+          "note": "row CGT - NS1"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "align-cgt-with-income-tax",
+      "text": "CenTax’s package leaves main homes exempt; charging them at income tax rates would raise more than either card shows.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-22"
+}

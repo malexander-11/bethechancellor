@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "id": "align-cgt-with-income-tax",
+  "code": "cgtalign",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Capital gains",
+  "order": 26,
+  "title": "Tax capital gains like income: 20%, 40% and 45%",
+  "shortTitle": "CGT aligned with income tax",
+  "headline": "CenTax’s package, after behaviour: £14.3bn, less the £2.5bn the 2024 rise took.",
+  "description": "The reported front-runner for this Budget is to charge capital gains at income tax rates, phased in. The Centre for the Analysis of Taxation costed a package that does that in October 2024: rates of 20%, 40% and 45%, an investment allowance so that only real returns above a normal rate are taxed, the write-off of gains at death removed, a charge on people who leave the country, Business Asset Disposal Relief and Investors’ Relief abolished and losses reformed. It put the yield at £14.3 billion a year on the 2025-26 base after behavioural responses, with a worst case of £9.7 billion. That was costed from the old rates of 10% and 20%; the Treasury has since raised them to 18% and 24% and scored that at £2.5 billion in 2029-30, so this card nets it off and holds the rest flat in cash: about £11.8 billion a year, most of it from people with large gains, part of it arriving as income tax.",
+  "baselinePolicy": {
+    "text": "Capital gains are taxed at 18% and 24% (residential property and carried interest apart), with gains written off at death, no charge on leaving the country, and Business Asset Disposal Relief at 18% from April 2026. CGT receipts are forecast at £32.0bn in 2029-30.",
+    "source": {
+      "sourceId": "govuk-cgt-rates"
+    },
+    "alreadyIncludes": [
+      "The October 2024 rise in the main rates to 18% and 24% and the BADR and Investors’ Relief changes (Autumn Budget 2024, Table 5.1 line 27)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 11810,
+      "2028-29": 11810,
+      "2029-30": 11810,
+      "2030-31": 11810
+    },
+    "source": {
+      "sourceId": "centax-cgt-reform-2024"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "centax-cgt-reform-2024",
+      "method": {
+        "name": "weightedSum",
+        "baseYear": "2029-30",
+        "resultGbpm": 11810,
+        "terms": [
+          {
+            "label": "CenTax’s central estimate for its package on the 2025-26 tax base, after behavioural responses",
+            "value": 14300,
+            "factor": 1,
+            "unit": "£ million, 2025-26",
+            "source": {
+              "sourceId": "centax-cgt-reform-2024",
+              "table": "Table 5",
+              "quote": "Rate of return allowance: dynamic tax revenue £30.6bn, additional revenue £14.3bn, 88%"
+            }
+          },
+          {
+            "label": "Less the Treasury’s costing of the October 2024 rise to 18% and 24%, which CenTax’s baseline predates, at its 2029-30 value",
+            "value": 2490,
+            "factor": -1,
+            "unit": "£ million, 2029-30",
+            "source": {
+              "sourceId": "hmt-autumn-budget-2024-table-5-1",
+              "table": "Table 5.1",
+              "note": "line 27"
+            }
+          }
+        ]
+      },
+      "note": "Our arithmetic on two published figures: CenTax’s medium-term estimate for the whole package, less the certified yield of the rate rise that has happened since it was written, held flat in cash from the start year. Effects before the start year are not applied."
+    },
+    "caveats": [
+      "A package, not a rate change. CenTax’s £14.3 billion assumes an investment allowance, the death write-off removed, a charge on leavers, BADR and Investors’ Relief abolished and losses reformed. Rates alone would raise far less: HMRC’s own reckoner scores a ten-point rise in the higher rate as losing money.",
+      "Netting off the 2024 rise is ours: CenTax costed from 10% and 20%, and the Treasury scored the move to 18% and 24% at £2.5 billion in 2029-30. The remainder is held flat in cash; CenTax calls its figure a medium-term one and says forestalling would cut the first years.",
+      "CenTax’s worst case, with the largest behavioural response, is £9.7 billion; trusts and non-residents are excluded; a substantial share would arrive as income tax rather than CGT as people stop turning income into gains. Nobody has certified any of it."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "cgt-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": true,
+      "text": "CenTax’s figure already allows for people realising fewer gains, holding assets longer and leaving; without the charge on leavers it says the migration response could push revenue below its worst case. The OBR would take its own view of all of that.",
+      "sources": [
+        {
+          "sourceId": "centax-cgt-reform-2024",
+          "quote": "Our estimate accounts for behavioural responses, but these are uncertain and sensitive to policy design"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-cgt-alignment",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Capital gains are concentrated among a small number of people with large gains, and the package taxes them at their income tax rate; the investment allowance means smaller, ordinary returns would pay less than today.",
+      "sources": [
+        {
+          "sourceId": "centax-cgt-reform-2024"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "cgt-higher-rate",
+      "text": "The package already sets the rates at 20%, 40% and 45%; a further rise on top of it is not what CenTax costed.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "cgt-lower-rate",
+      "text": "The package already takes the lower rate to 20%; stacking a rise here double counts.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "cgt-on-death",
+      "text": "CenTax’s package already removes the write-off at death; that card’s £4bn would be counted twice.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "cgt-exit-charge",
+      "text": "CenTax’s package already charges people who leave; that card’s £0.5bn would be counted twice.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "reverse-cgt-rate-rise",
+      "text": "Reversing the 2024 rise while aligning rates is contradictory: the £2.5bn netted off here would come back.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "badr-rate",
+      "text": "The package abolishes Business Asset Disposal Relief; moving its rate as well adds nothing CenTax costed.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-22"
+}

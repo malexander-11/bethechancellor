@@ -57,8 +57,9 @@ export function revenueSuggestions(
   const out: RevenueSuggestion[] = [];
   for (const lever of levers) {
     // A shelved lever is kept for the record, not offered; a spending saving is the Director of
-    // Public Spending's route, not this one.
-    if (lever.deprecated || lever.category !== 'tax') continue;
+    // Public Spending's route, not this one; and an option nobody proposes, costed only to show
+    // what a relief is worth, is not advice the Director of Tax would give.
+    if (lever.deprecated || lever.category !== 'tax' || lever.notOnTheTable) continue;
     const now = current[lever.code] ?? lever.control.default;
     const value = nextNotch(lever, now);
     if (value === null) continue;

@@ -1099,6 +1099,30 @@
       "retrievedOn": "2026-09-22",
       "licence": "Other",
       "notes": "Fetched 2026-09-22. Centre for the Analysis of Taxation. \"Levying ‘Partnership NICs’ would raise an estimated £1.9 billion in 2026-27, after accounting for behavioural responses and interactions with other taxes\"; static yield £2.4bn at a zero elasticity, £1.9bn at 0.25; \"Almost half the revenue raised from introducing Partnership NICs would be raised from partners in the top 0.1%\"; \"Only impact one third (34%) of current partners\"; the design is an equivalent of employer NICs on partnership profits with a Partnership Allowance equal to the £10,500 Employment Allowance. Quoted briefly with attribution."
+    },
+    {
+      "id": "centax-cgt-reform-2024",
+      "org": "Other",
+      "title": "Reforming Capital Gains Tax: Revenue and Distributional Effects",
+      "edition": "Advani, Lonsdale and Summers, 11 October 2024",
+      "url": "https://centax.org.uk/wp-content/uploads/2024/10/AdvaniLonsdaleSummers2024_CGTReform.pdf",
+      "landingUrl": "https://centax.org.uk/reform-capital-gains-tax-to-make-it-fairer-and-more-efficient-and-raise-14bn/",
+      "publishedOn": "2024-10-11",
+      "retrievedOn": "2026-09-22",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-22. Centre for the Analysis of Taxation. The package: equalise CGT rates with income tax, a rate-of-return investment allowance, remove the uplift at death, charge CGT on emigration, abolish BADR and Investors’ Relief, reform losses. \"We estimate that if our policy package is implemented in full it would raise an additional £14bn per year in total revenues across CGT and Income Tax. This is our central estimate\"; \"best thought of as a medium-term effect using the 2025/26 static tax base\"; Table 5, rate of return allowance: dynamic tax revenue £30.6bn, additional revenue £14.3bn (88%); \"Under our worst-case scenario (largest behavioural response) we estimate an additional £9.7bn\"; \"These estimates do not account for CGT from trusts and non-resident individuals.\" Written before the 30 October 2024 rise of the main rates to 18% and 24%. Quoted briefly with attribution."
+    },
+    {
+      "id": "centax-business-owners-emigrate-2024",
+      "org": "Other",
+      "title": "Business Owners who Emigrate: Evidence from Companies House records",
+      "edition": "Advani, Poux and Summers, 8 October 2024",
+      "url": "https://centax.org.uk/wp-content/uploads/2024/10/AdvaniPouxSummers2024_BusinessOwnersWhoEmigrate.pdf",
+      "landingUrl": "https://centax.org.uk/news-release-uk-should-have-a-capital-gains-exit-tax/",
+      "publishedOn": "2024-10-08",
+      "retrievedOn": "2026-09-22",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-22. Centre for the Analysis of Taxation. \"The UK is an international outlier in not charging Capital Gains Tax (CGT) on people who leave the country. Just among UK nationals, the business shareholdings of leavers are worth more than £5 billion. This is costing the UK at least £500 million per year in foregone CGT, although the true figure is likely to be much higher\"; \"in the year we studied, almost three-quarters came from just 10 people\". Quoted briefly with attribution."
     }
   ]
 }

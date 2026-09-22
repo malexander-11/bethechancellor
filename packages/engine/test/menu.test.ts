@@ -38,7 +38,7 @@ const gdp = (year: string) => ds.vintage.economy.nominalGdpFy.values[year] ?? Nu
 
 /** The ways the Budget 2026 reporting says are on the table, each built from a published row. */
 const MENU = {
-  direct: ['nic4', 'nicspa', 'rvapr', 'rvplan2'],
+  direct: ['cgtl', 'cgtprr', 'nic4', 'nicspa', 'rvapr', 'rvplan2'],
   assumption: [
     'bank5',
     'cgtdth',
@@ -217,6 +217,67 @@ describe('the Budget 2026 menu', () => {
       promiseBreaks({ nicllp: 1 }, ds.pm.promises, ds.levers).every((b) => b.brokenBy.length === 0),
     ).toBe(true);
     expect(lever('nicllp').considerations.some((c) => c.kind === 'legal')).toBe(true);
+  });
+
+  it('aligning CGT with income tax is CenTax’s £14.3 billion less the 2024 rise, held flat', () => {
+    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2029-30').receipts).toBeCloseTo(14300 - 2490, 6);
+    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2027-28').receipts).toBeCloseTo(11810, 6);
+    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2026-27').receipts).toBe(0);
+    const align = lever('cgtalign');
+    if (align.costing.kind !== 'schedule') throw new Error('alignment is a schedule');
+    expect(align.costing.caveats.some((c) => /package, not a rate change/.test(c))).toBe(true);
+    // Every overlapping CGT card warns, so the package is never counted twice by accident.
+    const warned = align.interactions.filter((i) => i.severity === 'warn').map((i) => i.withLever);
+    expect(warned).toEqual(
+      expect.arrayContaining(['cgt-on-death', 'cgt-exit-charge', 'reverse-cgt-rate-rise']),
+    );
+    // The OBR draw may re-score it: its caveat is one the harsher outcomes name.
+    expect(align.considerations.some((c) => c.id === 'cgt-behaviour')).toBe(true);
+  });
+
+  it('the lower CGT rate reproduces HMRC’s rows, which score a ten-point rise as a loss', () => {
+    const early = (v: number) =>
+      run({ cgtl: v }, { implementationYear: '2026-27' }).leverEffects.find(
+        (e) => e.code === 'cgtl',
+      );
+    expect(early(1)?.receipts['2026-27']).toBeCloseTo(-5, 6);
+    expect(early(1)?.receipts['2027-28']).toBeCloseTo(10, 6);
+    expect(early(10)?.receipts['2028-29']).toBeCloseTo(-135, 6);
+    expect(effectOf({ cgtl: 10 }, 'cgtl', '2029-30').receipts).toBeLessThan(0);
+    expect(lever('cgtl').control.min).toBe(0);
+    expect(lever('cgtl').control.level?.baseline).toBe(18);
+  });
+
+  it('a charge on leavers is CenTax’s floor of £0.5 billion, flat, and warns against the death card', () => {
+    expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2029-30').receipts).toBeCloseTo(500, 6);
+    expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2026-27').receipts).toBe(0);
+    expect(lever('cgtexit').interactions.some((i) => i.withLever === 'cgt-on-death')).toBe(true);
+    expect(lever('cgtdth').interactions.some((i) => i.withLever === 'cgt-exit-charge')).toBe(true);
+  });
+
+  it('CGT on main homes is the whole relief, uprated, and tagged as not on the table', () => {
+    const capital = headSeries(ds.vintage, 'capitalTaxes');
+    const want = (32900 * (capital['2029-30'] ?? 0)) / (capital['2025-26'] ?? 1);
+    expect(effectOf({ cgtprr: 1 }, 'cgtprr', '2029-30').receipts).toBeCloseTo(want, -1);
+    const homes = lever('cgtprr');
+    expect(homes.notOnTheTable).toBeDefined();
+    const group = ds.levers.filter((l) => l.group === 'Capital gains' && !l.deprecated);
+    expect(Math.max(...group.map((l) => l.order ?? 0))).toBe(homes.order);
+  });
+
+  it('a tampered term in the alignment package fails the consistency check', () => {
+    const align = structuredClone(lever('cgtalign'));
+    if (
+      align.costing.kind !== 'schedule' ||
+      align.costing.rawSource?.kind !== 'derivedFromPublished'
+    )
+      throw new Error('alignment is derived');
+    const method = align.costing.rawSource.method;
+    if (method.name !== 'weightedSum') throw new Error('alignment is a weighted sum');
+    const term = method.terms[1];
+    if (!term) throw new Error('two terms');
+    term.factor = 1;
+    expect(checkRawSourceConsistency(align, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 
   it('unfreezing the Plan 2 threshold is spending from 2027-28, and the 2026-27 revaluation is not applied', () => {

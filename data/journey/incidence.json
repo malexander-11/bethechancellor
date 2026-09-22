@@ -188,6 +188,10 @@
     "def3": "defence",
     "vatelec": "broad-base",
     "nicspa": "working-pensioners",
-    "nicllp": "top"
+    "nicllp": "top",
+    "cgtalign": "top",
+    "cgtl": "savers-owners",
+    "cgtexit": "top",
+    "cgtprr": "savers-owners"
   }
 }
