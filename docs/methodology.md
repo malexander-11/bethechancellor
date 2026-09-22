@@ -731,3 +731,31 @@ the arithmetic changed; what changed is who can reach it and how much they must 
   extracted Table 4.1 in the target year); the compromise screen re-runs the package under every
   forecast the draw could have produced; a reception rule may carry a `nudge`, the distance to the
   next better band in the reading's own unit, filled by the engine from an authored sentence.
+
+## 19. The menu against the reporting, again (ADR-0019)
+
+Phase 14 read the Budget reporting of 21 September 2026 against the menu and the unused published
+rows in `data/derived/`, and built what could be built honestly.
+
+- **Seven levers.** Keep VAT off electricity after March 2027 (`vatelec`, a `statedProduct` of the
+  government's six-month £850 million and a factor of −2, grown with VAT, badged assumption; HMRC
+  Notice 701/19 makes the zero rate temporary). National Insurance for workers over state pension
+  age (`nicspa`, HMRC relief row `nic-s2`, £1.2 billion static, direct; breaks the tax lock).
+  Partnership NICs (`nicllp`, CenTax's £1.9 billion in 2026-27 after behaviour, grown with
+  National Insurance, assumption). Aligning capital gains with income tax (`cgtalign`, a
+  `weightedSum` of CenTax's £14.3 billion on the 2025-26 base and minus the £2.5 billion the
+  Treasury scored for the October 2024 rise, held flat in cash, assumption; every overlapping CGT
+  card warns). The CGT lower rate (`cgtl`, three HMRC rows, direct, which score a ten-point rise as
+  a loss). A charge on people who leave (`cgtexit`, CenTax's floor of £500 million, flat,
+  assumption). Charging main homes (`cgtprr`, HMRC's £32.9 billion static relief cost, direct,
+  tagged not on the table because what is floated is a cap above a value nobody has published).
+- **Two tabs.** Capital taxes is now Capital gains and Wealth and property, so the widest tab stays
+  under the 500-word budget.
+- **Words only.** The £1.5m band's reported home counts, the warehouse rates surcharge and online
+  sales levy, the flat 10% estate levy and the pension lump-sum cap are named on the cards and in
+  the briefings from registered press entries that say they carry words, not numbers. Machine
+  games duty is reported and uncosted and appears nowhere but the decision record.
+- **The Director of Tax** never suggests a `notOnTheTable` lever.
+- **Readings as of 22 September 2026**: the 10-year gilt at 5.29%, borrowing to August £77.3
+  billion against a £69.2 billion profile, the Resolution Foundation's £10 billion headroom estimate
+  quoted beside the advisers' rule of thumb.

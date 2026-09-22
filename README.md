@@ -4,7 +4,7 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 13 (accessible, brief, and in the order the Budget happens)**. You are appointed Chancellor
+Status: **Phase 14 (the menu against the reporting, again)**. You are appointed Chancellor
 in a Labour government with a Budget to deliver on 28 October 2026. The package holds the menu the
 reporting says is on the table, each option a published row or a stated calculation on one, badged
 for what it is; the third screen of colleagues' letters is gone, its plausible policies sit in the
@@ -39,13 +39,19 @@ something for the speech, priced as the headroom it leaves. **Budget day**: the 
 your choices; your backbenchers, the markets and the public each rating the Budget out of five and
 saying why; and a close that says which ambitions survived, who paid, which compromises mattered,
 how the package fares under every forecast you might have drawn, and what kind of Budget it was.
-Share the link; replay the same seed with a fresh Budget.
+Share the link; replay the same seed with a fresh Budget. The menu was read against the Budget
+reporting again on 21 September 2026: the electricity VAT zero rate that HMRC says ends in March
+2027, National Insurance for working pensioners and for LLP partners, and CenTax's package for
+taxing gains like income joined it; what has no published costing is named in words instead.
 
-Under the hood: the OBR March 2026 baseline, 53 tax levers (HMRC ready reckoner, Budget 2025 and
+Under the hood: the OBR March 2026 baseline, 60 tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options
 and the residence nil-rate band, HMRC's pension statistics for National Insurance on employer
 pension contributions, HMRC's banking-sector receipts, inheritance tax up to abolition, a share of
-the OBR's business rates line, HM Treasury's 2021 costing of the health and social care levy, and
+the OBR's business rates line, HM Treasury's 2021 costing of the health and social care levy,
+CenTax's estimates for aligning capital gains with income tax, an exit charge and partnership
+National Insurance, HMRC's cost of the National Insurance exemption over pension age and of
+private residence relief, the government's six-month figure for the electricity zero rate, and
 our own stated arithmetic where nobody has published a costing, badged as such), 26 spending levers (Spending Review 2025 settlements, OBR welfare lines, Budget
 2025 spending decisions, the Prime Minister's schemes) with milestones from PESA, six more levers
 kept for the record on no screen, four sets of economic assumptions and five forecast outcomes

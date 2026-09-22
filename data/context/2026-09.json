@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "2026-09",
   "title": "What has changed since the OBR's March 2026 forecast",
-  "asOf": "2026-09-15",
+  "asOf": "2026-09-22",
   "vintageId": "obr-2026-03",
   "adviser": "chief-economic-adviser",
   "intro": "The OBR's March forecast is your baseline. Six months on, markets and forecasters have moved. Confirm its assumptions or replace them with your own.",
@@ -22,8 +22,8 @@
         }
       },
       "latest": {
-        "value": 5.35,
-        "label": "Close on 11 September 2026",
+        "value": 5.29,
+        "label": "Close on 18 September 2026",
         "source": {
           "sourceId": "boe-iadb-gilt-10y"
         }
@@ -70,7 +70,7 @@
           }
         }
       },
-      "text": "The OBR conditioned its March forecast on 10-year gilt yields of 4.5%. They have since risen to about 5.35%. The OBR's own sensitivity puts a sustained 1 percentage point rise in Bank Rate and gilt yields at about £15 billion of extra borrowing by 2030-31, so this is the largest single change since March."
+      "text": "The OBR conditioned its March forecast on 10-year gilt yields of 4.5%. They have since risen to about 5.3%: 5.29% at the close on 18 September. The OBR's own sensitivity puts a sustained 1 percentage point rise in Bank Rate and gilt yields at about £15 billion of extra borrowing by 2030-31, so this is the largest single change since March."
     },
     {
       "id": "bank-rate",
@@ -300,20 +300,20 @@
       "title": "Borrowing so far in 2026-27",
       "unit": "GBPbn",
       "obr": {
-        "value": 54.4,
-        "label": "OBR March 2026 monthly profile, April to July (outturn less the £2.3 billion overshoot reported by the ONS)",
+        "value": 69.2,
+        "label": "OBR March 2026 monthly profile, April to August (outturn less the £8.1 billion overshoot reported by the ONS)",
         "source": {
-          "sourceId": "ons-psf-2026-07"
+          "sourceId": "ons-psf-2026-08"
         }
       },
       "latest": {
-        "value": 56.7,
-        "label": "ONS outturn, April to July 2026",
+        "value": 77.3,
+        "label": "ONS outturn, April to August 2026",
         "source": {
-          "sourceId": "ons-psf-2026-07"
+          "sourceId": "ons-psf-2026-08"
         }
       },
-      "text": "Borrowing in the first four months of 2026-27 was £56.7 billion, £2.3 billion above the OBR's profile, with a small surplus in July."
+      "text": "Borrowing in the first five months of 2026-27 was £77.3 billion, £8.1 billion above the OBR’s profile; August alone was £18.3 billion, £3.5 billion above."
     }
   ],
   "scenarios": [
@@ -344,7 +344,7 @@
       "headline": "Today’s readings, not a forecast: each slider moved by the gap between the latest figure and the OBR’s.",
       "rationale": [
         {
-          "text": "Gilt yields are the large change. The OBR conditioned March on 10-year yields of 4.5%; they closed at 5.35% on 11 September. The OBR’s sensitivity puts a sustained point on rates at about £15 billion of borrowing by 2030-31.",
+          "text": "Gilt yields are the large change. The OBR conditioned March on 10-year yields of 4.5%; they closed at 5.29% on 18 September. The OBR’s sensitivity puts a sustained point on rates at about £15 billion of borrowing by 2030-31.",
           "sources": [
             {
               "sourceId": "boe-iadb-gilt-10y"
@@ -426,7 +426,7 @@
       "headline": "The cruellest figure published anywhere for each assumption. An envelope, not one forecaster’s view.",
       "rationale": [
         {
-          "text": "The gloomiest figure for interest rates is not a forecast at all. None of the sixteen forecasters in the comparison publishes a gilt yield — their range is for Bank Rate, and its top is milder than the market. So this card takes today’s 10-year gilt yield, 5.35% against the 4.5% the OBR assumed, the same figure your adviser reads. Gilt yields, not Bank Rate, are what drive debt interest.",
+          "text": "The gloomiest figure for interest rates is not a forecast at all. None of the sixteen forecasters in the comparison publishes a gilt yield — their range is for Bank Rate, and its top is milder than the market. So this card takes today’s 10-year gilt yield, 5.29% against the 4.5% the OBR assumed, the same figure your adviser reads. Gilt yields, not Bank Rate, are what drive debt interest.",
           "sources": [
             {
               "sourceId": "boe-iadb-gilt-10y"

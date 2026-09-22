@@ -145,9 +145,19 @@ from the certified rows beside it (ADR-0017).
 - **Badge.** `assumption`, never `direct`. A `repeat` of a scorecard line, a `statedProduct`, a
   `weightedSum`, a `gdpShareGap`, and a multiple of an HMRC row beyond the small change HMRC
   publishes (`it50`, five one-penny steps) are all assumptions (ADR-0018).
-- **Not on the table.** A live, costed option nobody proposes (the VAT base toggles) carries
-  `notOnTheTable: { note, sources }`. It wears a quiet tag, sorts to the foot of its group, and the
-  note says why it is here; the sources say who has not proposed it.
+- **Not on the table.** A live, costed option nobody proposes (the VAT base toggles, capital gains
+  on main homes) carries `notOnTheTable: { note, sources }`. It wears a quiet tag, sorts to the foot
+  of its group, and the note says why it is here; the sources say who has not proposed it. The
+  Director of Tax's suggestions on the compromise step never name one.
+- **A cost as a product.** A `statedProduct` term may be negative: the electricity card multiplies
+  the government's six-month £850 million by −2, so the result is a cost to receipts and the
+  validator still reproduces it.
+- **Netting a certified line.** A `weightedSum` may carry a published scorecard value with a
+  factor of −1 where a think tank's figure predates a change the Treasury has since scored (the
+  alignment card nets Autumn Budget 2024 line 27 off CenTax's £14.3 billion); the note says whose
+  step that is.
+- **Press for words only.** A press or professional-firm page may be registered (org `Other`)
+  to source a sentence on a card or in a briefing, never a figure in a costing; its `notes` say so.
 - **Protected or unprotected.** A department lever carries `commitment: { kind, text, sources }`,
   `protected` or `unprotected`, sourced to the paragraph of the OBR's forecast that says so. The
   card wears the word as a glossary tag and the text under "What this assumes".

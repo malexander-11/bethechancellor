@@ -138,15 +138,17 @@ export function OutlookPage() {
               Our rule of thumb: gilt markets get nervous below about £20bn of headroom. Nobody has
               published that number; it is a judgement resting on published facts. Budget 2025 “more
               than doubled” headroom to £21.7bn; the OBR’s typical five-year forecast error is about
-              £32bn; you told the Treasury Committee we would “retain a buffer”; and the Bank found
-              this year’s gilt moves “amplified by hedge fund deleveraging”. Whatever you pick, the
-              OBR’s October forecast will not know it.
+              £32bn; you told the Treasury Committee we would “retain a buffer”; the Resolution
+              Foundation put headroom near £10bn in July; and the Bank found this year’s gilt moves
+              “amplified by hedge fund deleveraging”. Whatever you pick, the OBR’s October forecast
+              will not know it.
             </p>
             <SourceList
               refs={[
                 { sourceId: 'hmt-budget-2025-speech' },
                 { sourceId: 'obr-efo-2026-03', paragraph: '3.4' },
                 { sourceId: 'hmt-tsc-budget-2026-letter' },
+                { sourceId: 'rf-headroom-2026-07-21' },
                 { sourceId: 'boe-fsr-2026-07' },
                 { sourceId: 'rf-policy-landscape-2026' },
               ]}

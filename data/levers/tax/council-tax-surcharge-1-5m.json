@@ -72,7 +72,7 @@
       "note": "Repeat: the Treasury's certified costing of the £2 million surcharge, taken as the yield of a further band from £1.5 million, year by year, set-up costs included. Positive scorecard values reduce borrowing; here receipts positive means more revenue. Effects before the start year are not applied."
     },
     "caveats": [
-      "Equal yield is our assumption. The Treasury's costing rests on about 165,000 homes over £2 million with banded charges; there are more homes between £1.5 million and £2 million, but a lower band would carry a lower charge, and nobody has published either number. The real figure could be well above or below.",
+      "Equal yield is our assumption. The Treasury’s costing rests on about 165,000 homes over £2 million with banded charges; government sources called a £1.5 million threshold a live discussion in September 2026 and put the homes caught at about 271,000 on current values, so equal yield means a much lower charge per home, and nobody has published the charge. The real figure could be well above or below.",
       "England only, as the surcharge itself is; council tax is devolved elsewhere. The surcharge is scored as an Exchequer receipt, not council revenue.",
       "The set-up costs in 2027-28 are kept: a new band needs valuing too. The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here."
     ]
@@ -89,6 +89,9 @@
         {
           "sourceId": "hmt-budget-2025-policy-costings",
           "page": "51-52"
+        },
+        {
+          "sourceId": "press-cityam-2026-09-20"
         }
       ]
     },

@@ -431,6 +431,14 @@
               "sourceId": "hmrc-trr-2025-06-bulletin"
             }
           ]
+        },
+        {
+          "text": "A cap on the pension tax-free lump sum is reported again for this Budget. No costing has been published, so it is not on this desk.",
+          "sources": [
+            {
+              "sourceId": "press-cityam-budget-2026-taxes"
+            }
+          ]
         }
       ]
     },
@@ -509,6 +517,14 @@
             {
               "sourceId": "obr-efo-2026-03",
               "table": "Table 3.1"
+            }
+          ]
+        },
+        {
+          "text": "Reported for this Budget and uncosted: a business-rates surcharge on large warehouses and an online sales levy, both put off to the Budget when the pub rates cut was announced in July. Nobody has published a yield for either, so neither is on this desk; the business rates slider is the honest proxy.",
+          "sources": [
+            {
+              "sourceId": "press-cityam-budget-2026-taxes"
             }
           ]
         }
@@ -608,6 +624,14 @@
             {
               "sourceId": "obr-efo-2026-03",
               "paragraph": "3.26"
+            }
+          ]
+        },
+        {
+          "text": "Also reported: a flat 10% levy on every estate, reliefs and thresholds gone, to fund the National Care Service. The government says it has no plans; nobody has costed it, so it is not on this desk.",
+          "sources": [
+            {
+              "sourceId": "press-evelyn-death-and-taxes-2026-08"
             }
           ]
         }

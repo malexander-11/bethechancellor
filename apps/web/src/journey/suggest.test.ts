@@ -14,12 +14,12 @@ const lever = (code: string) => {
 };
 
 describe('advisers’ suggested settings', () => {
-  it('turns the gilt yield gap into +0.75pp on the rates slider (0.85 rounded to a 0.25 step)', () => {
-    expect(gapOf(reading('gilt-10y'))).toBeCloseTo(0.85, 6);
+  it('turns the gilt yield gap into +0.75pp on the rates slider (0.79 rounded to a 0.25 step)', () => {
+    expect(gapOf(reading('gilt-10y'))).toBeCloseTo(0.79, 6);
     const s = suggestSetting(reading('gilt-10y'), lever('rate'));
     expect(s?.value).toBe(0.75);
     expect(s?.rule).toBe('gap');
-    expect(s?.rationale).toMatch(/5\.35%/);
+    expect(s?.rationale).toMatch(/5\.29%/);
     expect(s?.rationale).toMatch(/4\.5%/);
   });
 

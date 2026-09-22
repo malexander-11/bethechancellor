@@ -389,9 +389,9 @@
       "org": "BoE",
       "title": "Bank of England Interactive Statistical Database: 10-year nominal par gilt yield (IUDMNZC)",
       "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2026&Dateto=now&SeriesCodes=IUDMNZC,IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-      "retrievedOn": "2026-09-15",
+      "retrievedOn": "2026-09-22",
       "licence": "Other",
-      "notes": "Daily series. 4.63% on 2 January 2026; 5.35% on 11 September 2026 (with Bank Rate 3.75%)."
+      "notes": "Daily series. 4.63% on 2 January 2026; 5.35% on 11 September 2026; 5.29% on 18 September 2026 (with Bank Rate 3.75%)."
     },
     {
       "id": "ons-timeseries-d7g7",
@@ -1123,6 +1123,57 @@
       "retrievedOn": "2026-09-22",
       "licence": "Other",
       "notes": "Fetched 2026-09-22. Centre for the Analysis of Taxation. \"The UK is an international outlier in not charging Capital Gains Tax (CGT) on people who leave the country. Just among UK nationals, the business shareholdings of leavers are worth more than £5 billion. This is costing the UK at least £500 million per year in foregone CGT, although the true figure is likely to be much higher\"; \"in the year we studied, almost three-quarters came from just 10 people\". Quoted briefly with attribution."
+    },
+    {
+      "id": "ons-psf-2026-08",
+      "org": "ONS",
+      "title": "Public sector finances, UK: August 2026",
+      "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/august2026",
+      "publishedOn": "2026-09-22",
+      "retrievedOn": "2026-09-22",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-22. \"Borrowing ... was £18.3 billion in August 2026; this was £2.9 billion (19.0%) more than in August 2025 and £3.5 billion above the Office for Budget Responsibility (OBR) forecast. Borrowing was £77.3 billion in the financial year (FY) to August 2026; this was £2.2 billion (2.7%) less than in the same period last year but £8.1 billion above the OBR forecast.\" Public sector net debt provisionally £2,985.5 billion at the end of August 2026."
+    },
+    {
+      "id": "rf-headroom-2026-07-21",
+      "org": "RF",
+      "title": "New Chancellor faces £10 billion headroom headache as public sector finances remain on a knife-edge",
+      "edition": "Press release, 21 July 2026",
+      "url": "https://www.resolutionfoundation.org/press-releases/new-chancellor-faces-10-billion-headroom-headache-as-public-sector-finances-remain-on-a-knife-edge/",
+      "publishedOn": "2026-07-21",
+      "retrievedOn": "2026-09-22",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-22. The Foundation’s estimate that the energy shock had cut the March headroom of £23.6 billion to about £10 billion. Resolution Foundation; quoted briefly with attribution, for context only."
+    },
+    {
+      "id": "press-cityam-2026-09-20",
+      "org": "Other",
+      "title": "Labour mansion tax raid to hit homes worth £1.5m (City AM)",
+      "url": "https://www.cityam.com/labour-mansion-tax-raid-to-hit-homes-worth-1-5m/",
+      "publishedOn": "2026-09-20",
+      "retrievedOn": "2026-09-22",
+      "licence": "Other",
+      "notes": "Press coverage used only as qualitative context. Reports The Times: government sources called lowering the surcharge threshold to £1.5 million a \"live discussion\" in the Treasury; the number of homes caught \"would reach 271,000 based on current values\", \"nearly 300,000 homes\" in the headline figure."
+    },
+    {
+      "id": "press-cityam-budget-2026-taxes",
+      "org": "Other",
+      "title": "Budget 2026: which taxes will Burnham and Healey hike? (City AM)",
+      "url": "https://www.cityam.com/budget-2026-which-taxes-will-burnham-and-healey-hike/",
+      "publishedOn": "2026-08-25",
+      "retrievedOn": "2026-09-22",
+      "licence": "Other",
+      "notes": "Press coverage used only as qualitative context. Names the Centre for the Analysis of Taxation as the source of the £14bn for aligning capital gains tax with income tax; lists \"vape shops crackdown, online sales levy and warehouse business rates tax\" as measures the July business-rates announcement deferred to the Budget; reports the pension tax-free lump sum and a bank surcharge rise as under discussion."
+    },
+    {
+      "id": "press-evelyn-death-and-taxes-2026-08",
+      "org": "Other",
+      "title": "Death and taxes: the Autumn Budget and reform of inheritance tax (Evelyn Partners)",
+      "url": "https://www.swgroup.com/insights-events/insights/death-and-taxes-the-autumn-budget-and-reform-of-inheritance-tax/",
+      "publishedOn": "2026-08-13",
+      "retrievedOn": "2026-09-22",
+      "licence": "Other",
+      "notes": "Professional-firm commentary used only as qualitative context. \"One option the government has been widely reported to be considering is a 10% “death tax” that would replace the inheritance tax regime\", with the National Care Service \"estimated to require additional spending of £18.5 billion annually and rising\"; the government has said it has no plans. No costing of the levy is published."
     }
   ]
 }
