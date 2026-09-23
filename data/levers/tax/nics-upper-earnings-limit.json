@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "id": "nics-upper-earnings-limit",
+  "code": "nicuel",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "National Insurance",
+  "order": 42,
+  "title": "Abolish the NICs upper earnings limit",
+  "shortTitle": "NICs upper earnings limit",
+  "headline": "Abolish the NICs upper earnings limit: 8% all the way up. IFS, £14.1bn, static.",
+  "description": "Employees pay 8% National Insurance on earnings up to £50,270 and 2% above it; the self-employed pay 6% and 2%. Abolishing the upper earnings and upper profits limits charges the main rate on every pound: the IFS Green Budget scores it at £14.1 billion a year by 2029-30, mostly from the highest-income tenth of households, and warns that behavioural responses would be likely to reduce that significantly. Held flat in cash. It is a six-point rise in the rate paid on earnings above £50,270 and, on the game’s reading, breaks the tax lock.",
+  "baselinePolicy": {
+    "text": "Employee NICs are 8% between the primary threshold and the upper earnings limit of £50,270 and 2% above it; Class 4 is 6% and 2%. The limits are frozen with the income tax thresholds.",
+    "source": {
+      "sourceId": "govuk-nics-rates"
+    },
+    "alreadyIncludes": [
+      "The freeze in the upper earnings limit to April 2031 with the income tax thresholds (Budget 2025 line 46)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "nics",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 14100,
+      "2028-29": 14100,
+      "2029-30": 14100,
+      "2030-31": 14100
+    },
+    "source": {
+      "sourceId": "ifs-green-budget-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "ifs-green-budget-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 14100,
+        "terms": [
+          {
+            "label": "The IFS Green Budget’s static yield from abolishing the upper earnings limit and upper profits limit",
+            "value": 14100,
+            "unit": "£ million, 2029-30, static",
+            "source": {
+              "sourceId": "ifs-green-budget-2025",
+              "quote": "Abolish upper earnings limit and upper profits limit £14.1billion"
+            }
+          }
+        ]
+      },
+      "note": "The IFS’s Table 9.3 figure for 2029-30, held flat in cash from the start year. Static, and the IFS says behaviour would cut it significantly."
+    },
+    "caveats": [
+      "Static. The IFS says \"Behavioural responses would be likely to reduce this yield significantly\": the marginal rate on earnings above £50,270 rises six points, and above £100,000 the combined rate already reaches 62%.",
+      "The 2% additional rate slider on this tab is a smaller version of the same thing; do not stack them.",
+      "A NICs rate rise for everyone earning over £50,270, which the game treats as breaking the manifesto lock."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The IFS’s £14.1 billion is a static figure and it says so: with a six-point rise in the marginal rate on high earnings, incorporation, pension contributions and reduced hours would take a significant share of the yield.",
+      "sources": [
+        {
+          "sourceId": "ifs-green-budget-2025",
+          "quote": "Behavioural responses would be likely to reduce this yield significantly, however."
+        }
+      ]
+    },
+    {
+      "id": "who-pays-uel",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Employees and the self-employed earning over £50,270; the IFS says the yield comes mostly from the highest-income tenth of households, and it is akin to a six-point rise in the higher and additional rates of income tax.",
+      "sources": [
+        {
+          "sourceId": "ifs-green-budget-2025",
+          "quote": "mostly from the highest-income tenth of households"
+        }
+      ]
+    },
+    {
+      "id": "uel-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The manifesto promises not to increase National Insurance. Charging 8% instead of 2% above £50,270 is a rise in the rate for everyone above it, so the game treats this switch as breaking the tax lock.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations",
+          "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "nics-employee-additional-rate",
+      "text": "Abolishing the upper earnings limit replaces the 2% additional rate altogether; raising that rate as well double counts.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "nics-employee-main-rate",
+      "text": "With no upper limit, every point on the main rate applies to all earnings, so the two compound.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

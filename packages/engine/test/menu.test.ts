@@ -44,6 +44,8 @@ const MENU = {
     'carried',
     'cgtdth',
     'csjmh',
+    'cta',
+    'ctgh',
     'def3',
     'dlakids',
     'epl2',
@@ -53,14 +55,19 @@ const MENU = {
     'lha30',
     'nicllp',
     'nicrent',
+    'nicuel',
     'pens20',
     'pensmth',
+    'pslump',
     'qelevy',
+    'sdltabol',
     'sugsalt',
     'ucfloor',
     'uitime',
+    'vat1z',
     'vatelec',
     'vatgas',
+    'vatmot',
     'vatthr',
     'wealth2',
   ],
@@ -441,6 +448,73 @@ describe('the Budget 2026 menu', () => {
     for (const code of ['lha30', 'ucfloor', 'uitime', 'pensmth', 'csjmh', 'dlakids']) {
       expect(ds.ministers.ministers.some((m) => m.code === code)).toBe(true);
     }
+  });
+
+  it('the IFS, Demos and centre-right options are stated figures held flat, save the one that grows with property taxes', () => {
+    for (const [code, want] of [
+      ['ctgh', 4400],
+      ['nicuel', 14100],
+      ['vat1z', 4200],
+      ['pslump', 2000],
+      ['cta', -4800],
+    ] as const) {
+      expect(effectOf({ [code]: 1 }, code, '2029-30').receipts).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, '2027-28').receipts).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, '2026-27').receipts).toBe(0);
+    }
+    const ptt = headSeries(ds.vintage, 'receiptsByTax.propertyTransactionTaxes');
+    const grown = (-9200 * (ptt['2029-30'] ?? 0)) / (ptt['2027-28'] ?? 1);
+    expect(effectOf({ sdltabol: 1 }, 'sdltabol', '2027-28').receipts).toBeCloseTo(-9200, 6);
+    expect(effectOf({ sdltabol: 1 }, 'sdltabol', '2029-30').receipts).toBeCloseTo(grown, -1);
+    // Motability: HMRC's relief row less what Budget 2025 already takes from the scheme.
+    expect(effectOf({ vatmot: 1 }, 'vatmot', '2029-30').receipts).toBeCloseTo(1490 - 280, 6);
+  });
+
+  it('abolishing the upper earnings limit and a 1% rate on zero-rated goods break the lock; the council tax surcharge and the lump-sum cap do not', () => {
+    const lock = (values: Record<string, number>) =>
+      promiseBreaks(values, ds.pm.promises, ds.levers).find((p) => p.promise.id === 'tax-lock');
+    expect(lock({ nicuel: 1 })?.kept).toBe(false);
+    expect(lock({ vat1z: 1 })?.kept).toBe(false);
+    expect(lock({ ctgh: 1 })?.kept).toBe(true);
+    expect(lock({ pslump: 1 })?.kept).toBe(true);
+    expect(lock({ cta: 1 })?.kept).toBe(true);
+  });
+
+  it('the overlapping designs warn each other and the static figures are drawn on by the OBR draw', () => {
+    const warns = (code: string) =>
+      lever(code)
+        .interactions.filter((i) => i.severity === 'warn')
+        .map((i) => i.withLever);
+    expect(warns('vat1z')).toEqual(
+      expect.arrayContaining([
+        lever('vatfood').id,
+        lever('vathome').id,
+        lever('vatkids').id,
+        lever('vatbook').id,
+        lever('vattrn').id,
+      ]),
+    );
+    expect(warns('ctgh')).toContain(lever('hvcts15').id);
+    expect(warns('nicuel')).toContain(lever('nica').id);
+    expect(warns('sdltabol')).toContain(lever('sdlt5').id);
+    for (const code of ['ctgh', 'nicuel', 'vat1z', 'vatmot']) {
+      expect(
+        lever(code).considerations.some((c) => c.id === 'static-not-yield'),
+        code,
+      ).toBe(true);
+    }
+  });
+
+  it('a tampered Motability term fails the consistency check', () => {
+    const mot = structuredClone(lever('vatmot'));
+    if (mot.costing.kind !== 'schedule' || mot.costing.rawSource?.kind !== 'derivedFromPublished')
+      throw new Error('Motability is derived');
+    const method = mot.costing.rawSource.method;
+    if (method.name !== 'weightedSum') throw new Error('Motability is a weighted sum');
+    const term = method.terms[1];
+    if (!term) throw new Error('two terms');
+    term.factor = 1;
+    expect(checkRawSourceConsistency(mot, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 
   it('unfreezing the Plan 2 threshold is spending from 2027-28, and the 2026-27 revaluation is not applied', () => {

@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "id": "council-tax-top-bands",
+  "code": "ctgh",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Wealth and property",
+  "order": 37,
+  "title": "Double council tax on bands G and H",
+  "shortTitle": "Council tax bands G and H",
+  "headline": "Double council tax on bands G and H as a national surcharge: IFS, £4.4bn.",
+  "description": "Council tax is still based on 1991 values and the top band pays only three times the bottom. The IFS Green Budget shows what doubling the two top bands in England would raise: £4.2 billion in 2029-30 if councils kept it, or £4.4 billion as a new national surcharge that goes to the Exchequer, which is the figure here. About 4% of homes are in bands G and H; the extra bill would be around £3,800 a year in G and £4,560 in H at the average band D rate. The IFS offers it as an illustration, not a recommendation. Static and held flat in cash.",
+  "baselinePolicy": {
+    "text": "Council tax in England is charged on 1991 valuation bands; band H pays three times band D. Budget 2025 added a surcharge on homes worth over £2 million from April 2028, which the £1.5m card extends.",
+    "source": {
+      "sourceId": "ifs-green-budget-2025",
+      "quote": "doubling the top two rates of council tax in England (those applying to bands G and H, around 4% of properties) would raise £4.2 billion in 2029–30"
+    },
+    "alreadyIncludes": [
+      "Budget 2025 line 54: the high value council tax surcharge on homes over £2 million from April 2028."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 4400,
+      "2028-29": 4400,
+      "2029-30": 4400,
+      "2030-31": 4400
+    },
+    "source": {
+      "sourceId": "ifs-green-budget-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "ifs-green-budget-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 4400,
+        "terms": [
+          {
+            "label": "The IFS’s figure for a national council tax surcharge doubling band G and H bills in England",
+            "value": 4400,
+            "unit": "£ million, 2029-30, static",
+            "source": {
+              "sourceId": "ifs-green-budget-2025",
+              "quote": "introduced a new council tax surcharge that acted to double council tax rates on band G and H properties (£4.4 billion)"
+            }
+          }
+        ]
+      },
+      "note": "The IFS Green Budget’s illustrative figure for a national surcharge, held flat in cash from the start year. The IFS’s alternative, doubling the bands with councils keeping the money, is £4.2 billion. Static."
+    },
+    "caveats": [
+      "The IFS calls this \"an illustration (but not a recommendation)\". Static: no allowance for appeals, revaluations or people moving; the OBR would score less.",
+      "England only, and a surcharge for the Exchequer rather than a council tax rise, because council tax revenue flows to local authorities. About 4% of homes pay: around £3,800 more a year in band G and £4,560 in band H.",
+      "Stacks with the £1.5m and £2m surcharges on the same homes; the cards warn each other."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The IFS’s figure is static. Doubling the top bands would bring appeals against 1991 bandings and some capitalisation into house prices; HMRC has not costed it and the OBR would allow for behaviour.",
+      "sources": [
+        {
+          "sourceId": "ifs-green-budget-2025",
+          "quote": "As an illustration (but not a recommendation)"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-bands-g-h",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Owners and tenants of the 4% of English homes in bands G and H: the IFS puts the extra bill at £3,800 and £4,560 a year, taking total bills to £7,600 and £9,120 at the average band D rate. Council tax is paid by the occupier, so some renters pay it.",
+      "sources": [
+        {
+          "sourceId": "ifs-green-budget-2025",
+          "quote": "band G and H properties would attract an additional £3,800 and £4,560 a year respectively in council tax"
+        }
+      ]
+    },
+    {
+      "id": "council-tax-devolved",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "Council tax is devolved: Scotland and Wales set their own bands and multipliers (Scotland raised its top bands in 2017), so an England-only surcharge has no Barnett consequence but leaves the other nations’ systems as they are.",
+      "sources": [
+        {
+          "sourceId": "ifs-green-budget-2025",
+          "quote": "copying Scotland’s 2017 reform in England would raise about £1.9 billion in 2029–30"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "council-tax-surcharge-1-5m",
+      "text": "Three charges on the same expensive homes: the £2m surcharge already in the baseline, the £1.5m extension and a doubling of bands G and H. Nobody has costed them together.",
+      "severity": "warn"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

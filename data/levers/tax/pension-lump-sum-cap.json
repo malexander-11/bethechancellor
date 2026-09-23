@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "id": "pension-lump-sum-cap",
+  "code": "pslump",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Income tax",
+  "order": 64,
+  "title": "Cap the tax-free pension lump sum",
+  "shortTitle": "Pension lump-sum cap",
+  "headline": "Cap the withdrawals that earn tax-free lump-sum relief at £400,000: Demos, £2bn.",
+  "description": "A quarter of pension withdrawals can be taken tax-free, up to £1,073,100 of withdrawals, so up to £268,275 escapes income tax. Demos proposes limiting the withdrawals that qualify to £400,000, a tax-free lump sum of at most £100,000, and puts the yield at £2 billion. Only a fifth of pensioners have pots above £400,000, and the relief is worth most to those who would otherwise pay 40% or 45%. Reported as under consideration for this Budget; held flat in cash here.",
+  "baselinePolicy": {
+    "text": "Up to 25% of a pension can be taken tax-free, capped at £268,275 (a quarter of £1,073,100).",
+    "source": {
+      "sourceId": "demos-solving-the-tax-puzzle-2025",
+      "quote": "up to £1,073,100 of withdrawals (meaning income tax is not applied to up to £268,275)"
+    },
+    "alreadyIncludes": ["The lump sum allowance at £268,275 since April 2024."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 2000,
+      "2028-29": 2000,
+      "2029-30": 2000,
+      "2030-31": 2000
+    },
+    "source": {
+      "sourceId": "demos-solving-the-tax-puzzle-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "demos-solving-the-tax-puzzle-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 2000,
+        "terms": [
+          {
+            "label": "Demos’s yield from limiting the withdrawals that qualify for lump-sum relief to £400,000",
+            "value": 2000,
+            "unit": "£ million a year",
+            "source": {
+              "sourceId": "demos-solving-the-tax-puzzle-2025",
+              "quote": "if the government limited the amount of withdrawals that benefit from lump sum pension relief from £1,073,100 to £400,000, they would raise £2 billion for the government"
+            }
+          }
+        ]
+      },
+      "note": "Demos’s figure held flat in cash from the start year; Demos does not give a year or say whether it is static. Nobody in government has costed it."
+    },
+    "caveats": [
+      "A think-tank figure with no stated year and no stated behavioural allowance; the timing of pension withdrawals is easy to move, and a cap announced in advance brings withdrawals forward.",
+      "People would take smaller lump sums and larger taxed incomes instead, which spreads the yield over years rather than losing it; savers already over £400,000 would press for protection of rights built up.",
+      "Overlaps the two pension-relief cards on this tab, which change the relief on the way in; this one changes it on the way out."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "lump-sum-forestalling",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "A cap announced for a future date invites savers to take their lump sums first, so the early years can raise little; the OBR would score transitional protection and forestalling.",
+      "sources": [
+        {
+          "sourceId": "demos-solving-the-tax-puzzle-2025",
+          "quote": "they would raise £2 billion for the government"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-lump-sum-cap",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "People with pension pots above £400,000, a fifth of pensioners on Demos’s figures, and mainly those who would pay 40% or 45% on the withdrawals.",
+      "sources": [
+        {
+          "sourceId": "demos-solving-the-tax-puzzle-2025",
+          "quote": "only 20% of pensioners have pensions pots over £400,000"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "basic-rate-pension-relief",
+      "text": "Relief on the way in and on the way out: the two cards change different ends of the same pension.",
+      "severity": "info"
+    },
+    {
+      "withLever": "flat-rate-pension-relief",
+      "text": "Relief on the way in and on the way out: the two cards change different ends of the same pension.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

@@ -9,7 +9,7 @@ describe('every direct costing reproduces from the extracted published tables', 
   const taxLevers = ds.levers.filter((l) => l.category === 'tax');
 
   it('covers the planned core set', () => {
-    expect(taxLevers.length).toBe(68);
+    expect(taxLevers.length).toBe(75);
     expect(taxLevers.every((l) => l.group)).toBe(true);
     // A share of an OBR receipts line is mechanical arithmetic; a certified row is direct; our own
     // arithmetic on published figures is an assumption and says so on the card (ADR-0017).
@@ -31,6 +31,8 @@ describe('every direct costing reproduces from the extracted published tables', 
       'cgtalign',
       'cgtdth',
       'cgtexit',
+      'cta',
+      'ctgh',
       'epl2',
       'gam2',
       'hmrc2',
@@ -40,12 +42,17 @@ describe('every direct costing reproduces from the extracted published tables', 
       'it50',
       'nicllp',
       'nicrent',
+      'nicuel',
       'pens20',
       'pens30',
+      'pslump',
       'qelevy',
+      'sdltabol',
       'sugsalt',
+      'vat1z',
       'vatelec',
       'vatgas',
+      'vatmot',
       'vatthr',
       'wealth',
       'wealth2',

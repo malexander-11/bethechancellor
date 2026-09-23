@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "id": "vat-on-motability-cars",
+  "code": "vatmot",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "VAT",
+  "order": 82,
+  "title": "End the VAT relief on Motability cars",
+  "shortTitle": "VAT on Motability cars",
+  "headline": "End the Motability VAT relief: HMRC’s £1.5bn, less what Budget 2025 took: £1.2bn.",
+  "description": "Cars leased to disabled people through the Motability scheme are zero-rated for VAT. HMRC costs that relief at £1.49 billion in 2025-26. Budget 2025 already charged VAT on advance payments and insurance premium tax on the leases’ insurance, worth £280 million by 2029-30, so ending the rest of the relief is worth about £1.2 billion, the figure Onward and the Adam Smith Institute quote. Static, and held flat in cash.",
+  "baselinePolicy": {
+    "text": "Vehicles supplied to disabled people under the Motability scheme are zero-rated for VAT; from July 2026 VAT is charged on advance payments and insurance premium tax on the related insurance.",
+    "source": {
+      "sourceId": "hmt-budget-2025-table-4-1",
+      "quote": "Motability: Introduce VAT at the standard rate on Advance Payments paid to Motability or equivalent schemes, and Insurance Premium Tax at the standard rate on insurance related to vehicle leases, from 1 July 2026"
+    },
+    "alreadyIncludes": [
+      "Budget 2025 line 14: VAT on advance payments and IPT on lease insurance from 1 July 2026 (£280 million in 2029-30)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "vat",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 1210,
+      "2028-29": 1210,
+      "2029-30": 1210,
+      "2030-31": 1210
+    },
+    "source": {
+      "sourceId": "hmrc-tax-reliefs-2026-01"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "hmrc-tax-reliefs-2026-01",
+      "method": {
+        "name": "weightedSum",
+        "baseYear": "2029-30",
+        "resultGbpm": 1210,
+        "terms": [
+          {
+            "label": "HMRC’s cost of the VAT zero rate on vehicles for disabled people, 2025-26",
+            "value": 1490,
+            "factor": 1,
+            "unit": "£ million, 2025-26",
+            "source": {
+              "sourceId": "hmrc-tax-reliefs-2026-01",
+              "note": "row vat-ns15 of the extract: \"Vehicles and other supplies to disabled people [vehicles only]\""
+            }
+          },
+          {
+            "label": "What Budget 2025 already takes from the same scheme in 2029-30, netted off",
+            "value": 280,
+            "factor": -1,
+            "unit": "£ million, 2029-30",
+            "source": {
+              "sourceId": "hmt-budget-2025-table-4-1",
+              "quote": "Motability: Introduce VAT at the standard rate on Advance Payments paid to Motability or equivalent schemes, and Insurance Premium Tax at the standard rate on insurance related to vehicle leases, from 1 July 2026"
+            }
+          }
+        ]
+      },
+      "note": "HMRC’s 2025-26 relief cost less the Budget 2025 line already scored on the scheme, held flat in cash from the start year. The netting is approximate: HMRC’s row is the whole zero rate on vehicles and the scorecard line includes insurance premium tax."
+    },
+    "caveats": [
+      "Static: HMRC says the cost of a relief is not the yield from removing it. Fewer people would lease through the scheme, and cheaper cars would be chosen.",
+      "The netting is approximate: HMRC’s row covers vehicles supplied to disabled people generally, and the Budget 2025 line includes insurance premium tax as well as VAT. Onward and the Adam Smith Institute quote the £1.2 billion.",
+      "The relief is a benefit to disabled people in kind; ending it raises the cost of a Motability lease by a fifth."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC’s relief cost is not the yield from ending it: with VAT at 20%, some of the 800,000-odd scheme customers would lease cheaper cars or leave the scheme, and the yield would fall short of the static figure.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-2026-01",
+          "quote": "VAT registration threshold"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-motability",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Disabled people who lease a car with the mobility part of their PIP or DLA; Onward argues the scheme’s bespoke reliefs cost taxpayers £1.2 billion a year and should go.",
+      "sources": [
+        {
+          "sourceId": "onward-budget-response-2025",
+          "quote": "the Chancellor should have removed Motability’s bespoke tax reliefs, which cost taxpayers £1.2 billion per year"
+        }
+      ]
+    }
+  ],
+  "interactions": [],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "id": "vat-one-per-cent-zero-rated",
+  "code": "vat1z",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "VAT",
+  "order": 29,
+  "title": "Charge 1% VAT on everything now zero-rated",
+  "shortTitle": "1% VAT on zero-rated goods",
+  "headline": "Charge 1% VAT on everything now zero-rated: IFS, £4.2bn.",
+  "description": "Most food, children’s clothes, books, domestic passenger transport, new homes and prescriptions carry VAT at 0%. The IFS Green Budget scores a 1% rate on all of it at £4.2 billion in 2029-30, an alternative to the 20% toggles on this tab, which take one category at a time. Static and held flat in cash. A new positive rate on zero-rated goods is a VAT increase for the people who buy them, so the game treats it as breaking the tax lock.",
+  "baselinePolicy": {
+    "text": "Zero-rated goods and services carry VAT at 0% with input tax recoverable; the IFS puts the forgone revenue on food alone at £30.6 billion in 2029-30 and on new homes at £19.0 billion.",
+    "source": {
+      "sourceId": "ifs-green-budget-2025",
+      "quote": "Most food, for example, is zero-rated (representing an estimated £30.6 billion of forgone annual revenue in 2029–30)"
+    },
+    "alreadyIncludes": [
+      "The zero rates as they stand, and the temporary zero rate on domestic electricity to March 2027."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "vat",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 4200,
+      "2028-29": 4200,
+      "2029-30": 4200,
+      "2030-31": 4200
+    },
+    "source": {
+      "sourceId": "ifs-green-budget-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "ifs-green-budget-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 4200,
+        "terms": [
+          {
+            "label": "The IFS Green Budget’s yield from charging 1% VAT on all zero-rated products",
+            "value": 4200,
+            "unit": "£ million, 2029-30, static",
+            "source": {
+              "sourceId": "ifs-green-budget-2025",
+              "quote": "Charge 1% VAT on all zero-rated products £4.2 billion"
+            }
+          }
+        ]
+      },
+      "note": "The IFS’s Table 9.3 figure for 2029-30, held flat in cash from the start year. Static."
+    },
+    "caveats": [
+      "Static, from the IFS’s ready-reckoner table; a small rate changes behaviour little, but the compliance cost of a new rate on food, books and children’s clothes is real.",
+      "Overlaps every zero-rate toggle on this tab: charging 20% on food and 1% on all zero-rated goods counts the same food twice. The cards warn each other.",
+      "A new rate on goods that carry none today is a VAT increase; the game treats it as breaking the manifesto lock."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The IFS’s £4.2 billion is a static figure from its table of options; at 1% the behavioural response is small, but retailers and HMRC would carry a new rate across the whole zero-rated base.",
+      "sources": [
+        {
+          "sourceId": "ifs-green-budget-2025",
+          "quote": "Charge 1% VAT on all zero-rated products £4.2 billion"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-vat-1pc",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Everyone who buys food, children’s clothes, books or a new home pays a little; the zero rates are worth most in cash to richer households but most as a share of spending to poorer ones.",
+      "sources": [
+        {
+          "sourceId": "ifs-green-budget-2025",
+          "quote": "By international standards, the UK VAT makes plentiful use of zero-rating"
+        }
+      ]
+    },
+    {
+      "id": "vat-1pc-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The manifesto promises not to increase VAT. A new 1% rate on goods that carry none today is an increase for the people who buy them, so the game treats this switch as breaking the tax lock.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations",
+          "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "vat-on-food",
+      "text": "The 1% rate already covers this category; charging 20% on it as well counts the same goods twice.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "vat-on-new-homes",
+      "text": "The 1% rate already covers this category; charging 20% on it as well counts the same goods twice.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "vat-on-childrens-clothing",
+      "text": "The 1% rate already covers this category; charging 20% on it as well counts the same goods twice.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "vat-on-books-and-newspapers",
+      "text": "The 1% rate already covers this category; charging 20% on it as well counts the same goods twice.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "vat-on-passenger-transport",
+      "text": "The 1% rate already covers this category; charging 20% on it as well counts the same goods twice.",
+      "severity": "warn"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

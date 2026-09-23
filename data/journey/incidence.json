@@ -104,6 +104,10 @@
     "working-pensioners": {
       "label": "Working pensioners",
       "side": "pays"
+    },
+    "disabled-motorists": {
+      "label": "Disabled people leasing a car",
+      "side": "pays"
     }
   },
   "levers": {
@@ -206,6 +210,13 @@
     "pensmth": "pensioners",
     "uitime": "other-welfare",
     "csjmh": "disabled-people",
-    "dlakids": "disabled-people"
+    "dlakids": "disabled-people",
+    "ctgh": "savers-owners",
+    "nicuel": "top",
+    "vat1z": "broad-base",
+    "pslump": "top",
+    "sdltabol": "savers-owners",
+    "cta": "broad-base",
+    "vatmot": "disabled-motorists"
   }
 }

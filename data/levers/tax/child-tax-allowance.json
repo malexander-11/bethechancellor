@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "id": "child-tax-allowance",
+  "code": "cta",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Income tax",
+  "order": 66,
+  "title": "A child tax allowance",
+  "shortTitle": "Child tax allowance",
+  "headline": "A child tax allowance for families: Onward, costs £4.8bn a year.",
+  "description": "Onward proposes a basic-rate child tax allowance: £10,000 of income free of basic-rate tax for a child under five, £20,000 for two and £30,000 for three or more, which parents can split between them. It costs £4.8 billion a year on Onward’s estimate, assuming every couple splits it in the most tax-efficient way. Onward frames it as family support in place of the triple lock’s generosity to pensioners. Held flat in cash.",
+  "baselinePolicy": {
+    "text": "Income tax is charged individually with no allowance for children; support for families comes through child benefit and universal credit.",
+    "source": {
+      "sourceId": "onward-family-support-2026",
+      "quote": "the structure of taxation itself remains almost entirely individualised"
+    },
+    "alreadyIncludes": ["Child benefit at £27.05 and £17.90 a week and its high-income charge."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": -4800,
+      "2028-29": -4800,
+      "2029-30": -4800,
+      "2030-31": -4800
+    },
+    "source": {
+      "sourceId": "onward-family-support-2026"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "onward-family-support-2026",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": -4800,
+        "terms": [
+          {
+            "label": "Onward’s cost of a basic-rate child tax allowance for children under five, as a cost",
+            "value": -4800,
+            "unit": "£ million a year",
+            "source": {
+              "sourceId": "onward-family-support-2026",
+              "quote": "We estimate this policy would cost £4.8 billion a year, assuming that every two-parent household opts to split the Allowance between them in a tax efficient manner."
+            }
+          }
+        ]
+      },
+      "note": "Onward’s figure held flat in cash from the start year; the child population and the tax base would move it. Nobody in government has costed it."
+    },
+    "caveats": [
+      "Onward’s own estimate, with no stated year; it assumes every couple uses the allowance in the most tax-efficient way, which is the upper end of the cost.",
+      "Under-fives only, at the basic rate: a family with no basic-rate liability gets nothing from it, so the poorest families gain least.",
+      "A tax cut for families with young children rather than a rise; it widens the gap the rest of this Budget has to close."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "who-benefits-child-allowance",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Working parents of under-fives who pay basic-rate tax, up to £2,000 a year for one child; families below the personal allowance gain nothing, and Onward pairs it with reform of the triple lock.",
+      "sources": [
+        {
+          "sourceId": "onward-family-support-2026",
+          "quote": "We propose a basic rate Child Tax Allowance of £10,000 per child aged under five"
+        }
+      ]
+    },
+    {
+      "id": "child-allowance-administration",
+      "kind": "administrative",
+      "direction": "costsMore",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "A transferable allowance needs HMRC to know who the children live with and how the couple has split it, machinery the marriage allowance already runs on a smaller scale.",
+      "sources": [
+        {
+          "sourceId": "onward-family-support-2026",
+          "quote": "Parents or primary caregivers would be able to choose to split the Allowance between themselves or have it applied to one income only."
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "income-tax-personal-allowance",
+      "text": "Both move the amount of income a parent can earn before basic-rate tax.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

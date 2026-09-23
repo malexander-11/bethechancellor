@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "id": "abolish-sdlt-main-homes",
+  "code": "sdltabol",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Wealth and property",
+  "order": 33,
+  "title": "Abolish stamp duty on main homes",
+  "shortTitle": "Abolish stamp duty on main homes",
+  "headline": "Abolish stamp duty on main homes: ASI, costs £9.2bn static, £5.1bn after more moves.",
+  "description": "The Adam Smith Institute would abolish stamp duty land tax on every purchase of a home the buyer will live in, keeping it on second homes, landlords and companies. Its model puts the static cost at £9.2 billion a year on average over the parliament, 63% of the OBR’s forecast SDLT, and the net cost at £5.1 billion once the extra moves, building and wages it expects are counted. The static figure is used here, grown with the OBR’s property transaction taxes line, because the OBR would score only part of the dynamic offset. Conservative policy since 2025; the Treasury has ruled it out for this Budget.",
+  "baselinePolicy": {
+    "text": "Stamp duty land tax is charged at 0%, 2%, 5%, 10% and 12% on residential purchases in England and Northern Ireland, with a 5% surcharge on additional dwellings; the OBR forecasts property transaction taxes of £26.3bn in 2029-30.",
+    "source": {
+      "sourceId": "govuk-sdlt-rates"
+    },
+    "alreadyIncludes": [
+      "The 2024 surcharge rise to 5% and the end of the temporary thresholds in April 2025."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": -9200,
+      "2028-29": -10208,
+      "2029-30": -11048,
+      "2030-31": -11805
+    },
+    "source": {
+      "sourceId": "asi-stamped-out-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "asi-stamped-out-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2027-28",
+        "resultGbpm": -9200,
+        "growWith": "receiptsByTax.propertyTransactionTaxes",
+        "terms": [
+          {
+            "label": "The Adam Smith Institute’s static cost of abolishing SDLT on primary residences, as a cost",
+            "value": -9200,
+            "unit": "£ million a year, average 2025-26 to 2028-29, static",
+            "source": {
+              "sourceId": "asi-stamped-out-2025",
+              "quote": "the abolition of stamp duty on primary residences would cost £9.2bn annually in forgone revenue on a static basis"
+            }
+          }
+        ]
+      },
+      "note": "ASI’s average static cost placed in 2027-28, the middle of its window, and grown with the OBR’s property transaction taxes line. ASI’s £5.1bn net figure counts wider effects the OBR would only partly score, so it is named, not used."
+    },
+    "caveats": [
+      "ASI’s own model: 63% of the OBR’s forecast SDLT is assumed to be main homes, from the English Housing Survey’s share of transactions. Placing the four-year average in 2027-28 and growing it with the OBR line is our step.",
+      "The £5.1 billion net cost assumes 349,000 more transactions a year, 38,000 more homes built and higher wages from mobility; the OBR would score some extra transactions but not the rest. The card shows the static cost.",
+      "England and Northern Ireland only: Scotland and Wales have their own transaction taxes, which sit inside the same OBR line, so growing with that line slightly overstates the growth."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "sdlt-abolition-transactions",
+      "kind": "behavioural",
+      "direction": "costsLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Abolition would bring more moves, and ASI counts the tax and wider benefits that follow to get from £9.2 billion to £5.1 billion; the OBR would allow for more transactions but not the growth effects.",
+      "sources": [
+        {
+          "sourceId": "asi-stamped-out-2025",
+          "quote": "the net fiscal cost of such a change would be £5.1bn per year on average over the remainder of the Parliament"
+        }
+      ]
+    },
+    {
+      "id": "who-benefits-sdlt-abolition",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Home buyers, most of all in London and the South East where bills are largest; economists expect part of the saving to go into higher prices, so sellers gain too.",
+      "sources": [
+        {
+          "sourceId": "asi-stamped-out-2025",
+          "quote": "holds back homeownership for Britain’s youngest, traps older people in homes that they do not want to stay in"
+        }
+      ]
+    },
+    {
+      "id": "sdlt-devolved",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "Stamp duty land tax applies in England and Northern Ireland; Scotland and Wales run their own transaction taxes and their block grants adjust for devolved taxes.",
+      "sources": [
+        {
+          "sourceId": "govuk-sdlt-rates"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "sdlt-residential-5pc-band",
+      "text": "With stamp duty gone on main homes, the 5% band slider only reaches second homes and landlords.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "reverse-sdlt-surcharge-rise",
+      "text": "Both change stamp duty; the surcharge card affects only additional dwellings, which this card keeps taxed.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}
