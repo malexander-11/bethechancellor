@@ -54,12 +54,13 @@ export function MeasuresTable({
                   ? `${change.from} → ${change.to}${change.note ? ` ${change.note}` : ''}`
                   : formatLeverValue(lever, value)
               : '';
+            const settingText = row.fromYear ? `${setting} · from ${row.fromYear}` : setting;
             return (
               <tr key={row.code ?? row.label}>
                 <td>
                   {row.label} <LabelBadge badge={row.badge} />
                 </td>
-                <td>{setting}</td>
+                <td>{settingText}</td>
                 <td className={`amount ${tone(row.currentBudgetGbpm)}`}>
                   {betterOrWorse(row.currentBudgetGbpm)}
                 </td>

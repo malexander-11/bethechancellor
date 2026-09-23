@@ -264,11 +264,13 @@ export function LeverControl({
   const barnett = lever.classification?.barnettConsequential === true;
   const commitment = lever.commitment;
   const notOnTheTable = lever.notOnTheTable;
+  const earliest = lever.earliestStart;
   // What the number rests on: the costing's own caveats, plus why a teaching option is here and
   // where a department stands in the OBR's forecast. One click, no words on the surface.
   const assumes = [
     ...(notOnTheTable ? [notOnTheTable.note] : []),
     ...(commitment ? [commitment.text] : []),
+    ...(earliest ? [earliest.text] : []),
     ...('caveats' in lever.costing ? lever.costing.caveats : []),
   ];
   const isDefault = value === lever.control.default;
@@ -278,6 +280,16 @@ export function LeverControl({
         ? borrowingImprovement(effect, summaryYear)
         : currentBudgetImprovement(effect, summaryYear)
       : null;
+  // A card that cannot start before the summary year says so, and names the first year it moves
+  // money (ADR-0021).
+  const improve = (e: LeverEffect, y: string) =>
+    isCapital ? borrowingImprovement(e, y) : currentBudgetImprovement(e, y);
+  const laterStart =
+    effect && summaryYear && improvement !== null && Math.abs(improvement) < 50
+      ? POLICY_YEARS.find(
+          (y) => fyStart(y) > fyStart(summaryYear) && Math.abs(improve(effect, y)) >= 50,
+        )
+      : undefined;
   const lookupPoints =
     lever.costing.kind === 'lookupTable'
       ? lever.costing.points
@@ -401,9 +413,15 @@ export function LeverControl({
         {lever.headline ?? lever.description}
       </p>
       {lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
-      {lookupPoints || barnett || commitment || notOnTheTable ? (
+      {lookupPoints || barnett || commitment || notOnTheTable || earliest ? (
         <p className="lever__tags">
           {notOnTheTable ? <span className="tag tag--quiet">Not on the table</span> : null}
+          {earliest ? (
+            <span className="tag tag--quiet">
+              <Term id="earliest-start">Earliest start</Term> April {earliest.year.slice(0, 4)}
+              <span className="sr-only">: {earliest.text}</span>
+            </span>
+          ) : null}
           {commitment ? (
             <span className="tag">
               <Term id={commitment.kind}>
@@ -455,7 +473,18 @@ export function LeverControl({
       {improvement !== null && summaryYear ? (
         <p className={`lever__effect ${tone(improvement)}`} id={`${id}-effect`}>
           {isCapital ? 'Borrowing' : 'Current budget'} in {summaryYear}:{' '}
-          {effectWords(improvement, isCapital, lever.classification?.side === 'receipts')}
+          {laterStart && effect ? (
+            <>
+              nothing yet; from {laterStart}{' '}
+              {effectWords(
+                improve(effect, laterStart),
+                isCapital,
+                lever.classification?.side === 'receipts',
+              )}
+            </>
+          ) : (
+            effectWords(improvement, isCapital, lever.classification?.side === 'receipts')
+          )}
           {isCapital ? (
             <span className="lever__effect-note">
               {' '}

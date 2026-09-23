@@ -172,4 +172,36 @@ describe('LeverControl', () => {
     expect(milestones).toMatch(/This Spending Review\+2\.8% a year/);
     expect(milestones).toMatch(/2010-11 to 2019-20\+1\.8% a year/);
   });
+
+  it('a card that cannot start before the target year wears its earliest start and says when it begins', () => {
+    const wealth2 = levers.find((l) => l.code === 'wealth2');
+    if (!wealth2) throw new Error('missing wealth2');
+    const outcome = computeOutcome({
+      vintage,
+      rules,
+      levers,
+      settings: { leverValues: { wealth2: 1 } },
+    });
+    const { container } = render(
+      <LeverControl
+        lever={wealth2}
+        value={1}
+        effect={outcome.leverEffects.find((e) => e.code === 'wealth2')}
+        summaryYear="2029-30"
+        onChange={() => undefined}
+      />,
+    );
+    const scope = within(container);
+    const tag = scope.getByText('Earliest start').closest('.tag');
+    expect(tag).toHaveClass('tag--quiet');
+    expect(tag?.textContent).toMatch(/April 2030/);
+    expect(tag?.textContent).toMatch(/January 2031/);
+    const line = scope.getByText(/Current budget in 2029-30/);
+    expect(line.textContent).toMatch(/nothing yet; from 2030-31 raises £18\.5bn/);
+    fireEvent.click(scope.getByText('What this assumes'));
+    // The reason appears twice on purpose: read aloud inside the tag, and listed under the disclosure.
+    expect(
+      scope.getAllByText(/Tax Policy Associates expects it to apply first in 2029-30/),
+    ).toHaveLength(2);
+  });
 });

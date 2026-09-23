@@ -55,6 +55,7 @@ export function AttributionList({
           <tr key={`${row.kind}-${row.code ?? row.label}`}>
             <th scope="row">
               {row.label} <LabelBadge badge={row.badge} />
+              {row.fromYear ? <span className="source"> from {row.fromYear}</span> : null}
             </th>
             <td className={`attribution__num amount ${tone(row.currentBudgetGbpm)}`}>
               {betterOrWorse(row.currentBudgetGbpm)}

@@ -108,6 +108,10 @@
     "protected": {
       "term": "Protected",
       "short": "A department the OBR’s forecast holds to its settlement after the Spending Review years: health, defence and schools. When the totals are squeezed, the cut falls elsewhere."
+    },
+    "earliest-start": {
+      "term": "Earliest start",
+      "short": "The first tax year a measure could take effect on its own source’s timetable: legislation, systems, valuations or transitional protection. Nothing is counted before it, whatever start year the game uses."
     }
   }
 }

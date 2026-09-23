@@ -1,6 +1,7 @@
 import {
   ambitionStatus,
   delayOptions,
+  effectiveStartYear,
   formatGbpBn,
   narrowedValue,
   resilienceRows,
@@ -229,8 +230,15 @@ export function CompromisePage() {
               ) : (
                 <ul className="suggestions">
                   {spending.map((m) => {
-                    const start = delays[m.lever.code] ?? IMPLEMENTATION_YEAR;
-                    const options = delayOptions(outcome.paths.policyYears, IMPLEMENTATION_YEAR);
+                    // The floor is the lever's own earliest start; a delay can only push past it.
+                    const floor = effectiveStartYear(m.lever, {
+                      implementationYear: IMPLEMENTATION_YEAR,
+                    });
+                    const start = effectiveStartYear(m.lever, {
+                      implementationYear: IMPLEMENTATION_YEAR,
+                      implementationYearByCode: delays,
+                    });
+                    const options = delayOptions(outcome.paths.policyYears, floor);
                     const next = delayOptions(outcome.paths.policyYears, start)[0];
                     const nextSaving = next
                       ? effectOf(state.leverValues, { ...delays, [m.lever.code]: next })
@@ -252,7 +260,7 @@ export function CompromisePage() {
                               value={delays[m.lever.code] ?? ''}
                               onChange={(e) => setDelay(m.lever.code, e.target.value)}
                             >
-                              <option value="">Starts {IMPLEMENTATION_YEAR}</option>
+                              <option value="">Starts {floor}</option>
                               {options.map((y) => (
                                 <option key={y} value={y}>
                                   Delay to {y}
