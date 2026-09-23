@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "id": "wealth-tax-two-per-cent",
+  "code": "wealth2",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Wealth and property",
+  "order": 52,
+  "title": "A 2% annual wealth tax above £10 million",
+  "shortTitle": "2% wealth tax above £10m",
+  "headline": "Contested. Two per cent above £10m: up to £24bn, or £18.5bn with more avoidance.",
+  "description": "The campaign proposal backed by Tax Justice UK and Patriotic Millionaires: 2% a year on net wealth above £10 million, paid by about 0.03% of people. Its \"up to £24 billion\" rests on the Wealth Tax Commission’s low-avoidance assumption, that reported wealth falls 14% for each point of tax. Tax Policy Associates re-ran it on the Commission’s high-avoidance case, 34%, and got £18.5 billion; that is the figure scored here, held flat in cash. Nobody in government has costed it, and the two sides disagree about whether the people would stay.",
+  "baselinePolicy": {
+    "text": "The UK has no annual wealth tax. Wealth is taxed when it changes hands (capital gains tax, inheritance tax, stamp duties) and through council tax on homes.",
+    "source": {
+      "sourceId": "govuk-iht-thresholds"
+    },
+    "alreadyIncludes": ["Nothing: no annual wealth tax exists or is planned."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 18500,
+      "2028-29": 18500,
+      "2029-30": 18500,
+      "2030-31": 18500
+    },
+    "source": {
+      "sourceId": "tpa-wealth-tax-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "tpa-wealth-tax-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 18500,
+        "terms": [
+          {
+            "label": "Tax Policy Associates’ re-run of the 2% above £10m proposal on the Wealth Tax Commission’s high-avoidance (34%) case",
+            "value": 18500,
+            "unit": "£ million a year",
+            "source": {
+              "sourceId": "tpa-wealth-tax-2025",
+              "quote": "if the 34% figure was used then the revenue raised would be significantly less – £18.5bn"
+            }
+          }
+        ]
+      },
+      "note": "The cautious published figure: TPA’s £18.5bn on the high-avoidance case, held flat in cash from the start year. The campaign’s £24bn (low-avoidance case, Advani) is named on the card and not scored."
+    },
+    "caveats": [
+      "Two published figures for one tax: up to £24 billion with a 14% behavioural response, £18.5 billion with 34%. Both come from the same Wealth Tax Commission machinery and neither has been certified; the OBR would form its own view. This card takes the lower one.",
+      "Annual, on about 32,000 people, and concentrated: TPA says 80% of the yield comes from about 5,000 people and about 15% from ten. A handful leaving or revaluing removes billions.",
+      "Valuation of private businesses, land and art is the administrative problem; the Commission itself recommended a one-off tax rather than an annual one."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "avoidance-and-emigration",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": true,
+      "text": "The whole argument is here. The campaign assumes 14% of wealth disappears from the base per point of tax; TPA says 34% is plausible and the yield falls to £18.5 billion, with £500 billion of wealth leaving or moving into hard-to-value assets. This card already takes the harsher case; the OBR could go further.",
+      "sources": [
+        {
+          "sourceId": "tpa-wealth-tax-2025",
+          "quote": "The proponents use the 14% figure without any justification"
+        },
+        {
+          "sourceId": "tjuk-ten-tax-reforms-2026",
+          "quote": "This figure includes behavioural response, calculated by Arun Advani."
+        }
+      ]
+    },
+    {
+      "id": "who-pays-two-per-cent",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Only people with more than £10 million of net wealth pay, 0.03% of the population by Tax Justice UK’s count; polling it cites finds three quarters of the public in favour.",
+      "sources": [
+        {
+          "sourceId": "tjuk-ten-tax-reforms-2026",
+          "quote": "just 0.03%"
+        }
+      ]
+    },
+    {
+      "id": "no-official-base-two-per-cent",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "text": "Neither HMRC nor the ONS publishes a wealth base above £10 million. TPA notes HMRC would need returns from perhaps 16,000 more people with wealth near the threshold to police it.",
+      "sources": [
+        {
+          "sourceId": "tpa-wealth-tax-2025",
+          "quote": "around 32,000 taxpayers would pay the tax"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "wealth-tax-above-ten-million",
+      "text": "Two wealth taxes on the same £10 million threshold. Pick one design: 1% on the Commission’s figures or 2% on the campaign’s.",
+      "severity": "warn"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

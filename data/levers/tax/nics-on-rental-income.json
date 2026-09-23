@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "id": "nics-on-rental-income",
+  "code": "nicrent",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "National Insurance",
+  "order": 41,
+  "title": "National Insurance on rental income",
+  "shortTitle": "NICs on rental income",
+  "headline": "NICs on landlords’ rental income, as employees pay. CenTax: up to £3bn, static.",
+  "description": "Employees pay National Insurance on their wages; landlords pay none on their rents. The Centre for the Analysis of Taxation costs an equivalent of Class 1 NICs on profits from rental income, savings income outside ISAs and other non-dividend investment income: up to £3 billion, £0.6 billion and £0.4 billion respectively in 2029-30, on a static basis. Only the rental figure is built here, at CenTax’s ceiling, held flat in cash. The Resolution Foundation, Demos and IPPR have each proposed the same charge in different words.",
+  "baselinePolicy": {
+    "text": "National Insurance is charged on earnings from employment and self-employment. Rental income bears income tax only, at up to 45%, with the property income rates two points higher than the main rates from April 2027.",
+    "source": {
+      "sourceId": "govuk-nics-rates"
+    },
+    "alreadyIncludes": [
+      "Budget 2025 raised the property income rates by two percentage points from April 2027 (Table 4.1 line 51)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "nics",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 3000,
+      "2028-29": 3000,
+      "2029-30": 3000,
+      "2030-31": 3000
+    },
+    "source": {
+      "sourceId": "centax-taxes-at-the-top-2026"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "centax-taxes-at-the-top-2026",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 3000,
+        "terms": [
+          {
+            "label": "CenTax’s static ceiling for an equivalent of Class 1 NICs on profits from rental income in 2029-30",
+            "value": 3000,
+            "unit": "£ million, 2029-30, static",
+            "source": {
+              "sourceId": "centax-taxes-at-the-top-2026",
+              "quote": "we estimate this would raise up to £3 billion, £0.6 billion and £0.4 billion respectively in 2030"
+            }
+          }
+        ]
+      },
+      "note": "CenTax’s static \"up to\" figure for rental income alone, held flat in cash from the start year. The savings and other investment income figures are named on the card and not built. Effects before the start year are not applied."
+    },
+    "caveats": [
+      "Static and a ceiling: CenTax says \"up to £3 billion\" before behavioural responses, and makes no adjustment for reintroducing a mortgage interest deduction, which some proposals would pair with the charge. The yield would be lower.",
+      "Rental income only. CenTax costs the same charge on savings income (£0.6 billion) and other non-dividend investment income (£0.4 billion); neither is built here.",
+      "Whose NICs: an employee-equivalent charge at 8% and 2%. The government reads the manifesto lock as covering the rates working people pay; a new NICs charge on a group that pays none is treated here as breaking it. Contested."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "static-not-yield",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "A static figure. Landlords would incorporate, sell or raise rents in response; CenTax gives the pre-behaviour ceiling and the OBR would score less.",
+      "sources": [
+        {
+          "sourceId": "centax-taxes-at-the-top-2026",
+          "quote": "On a static basis, so before accounting for behavioural responses"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-rental-nics",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Landlords with taxable rental profits pay; most rental income is received by people in the top half of the income distribution, and part of a new charge would reach tenants through rents.",
+      "sources": [
+        {
+          "sourceId": "centax-taxes-at-the-top-2026"
+        }
+      ]
+    },
+    {
+      "id": "rental-nics-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The manifesto promises not to increase National Insurance. Charging it on income that bears none today is an increase for the people who pay it, so the game treats this switch as breaking the tax lock; the think tanks proposing it argue it is a new charge on unearned income rather than a rise in the rates working people pay.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations",
+          "quote": "we will not increase National Insurance"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "investment-income-further-2p",
+      "text": "Another two points on property income and a NICs charge on the same rents stack on the same landlords.",
+      "severity": "info"
+    },
+    {
+      "withLever": "nics-on-partnership-profits",
+      "text": "Both cards extend National Insurance to income it does not reach today; CenTax costs them separately.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

@@ -41,6 +41,7 @@ const MENU = {
   direct: ['cgtl', 'cgtprr', 'nic4', 'nicspa', 'rvapr', 'rvplan2'],
   assumption: [
     'bank5',
+    'carried',
     'cgtdth',
     'def3',
     'epl2',
@@ -48,9 +49,14 @@ const MENU = {
     'hscl',
     'hvcts15',
     'nicllp',
+    'nicrent',
     'pens20',
+    'qelevy',
+    'sugsalt',
     'vatelec',
     'vatgas',
+    'vatthr',
+    'wealth2',
   ],
   mechanical: ['brates'],
 };
@@ -317,6 +323,58 @@ describe('the Budget 2026 menu', () => {
         c.sources.some((s) => s.sourceId === 'tpa-mansion-tax-1-5m-2026'),
       ),
     ).toBe(true);
+  });
+
+  it('the progressive think-tank asks are each one stated figure, held flat in cash', () => {
+    const cases: Array<[string, number]> = [
+      ['nicrent', 3000],
+      ['qelevy', 5000],
+      ['carried', 510],
+      ['wealth2', 18500],
+      ['sugsalt', 3500],
+      ['vatthr', 2000],
+    ];
+    for (const [code, want] of cases) {
+      expect(effectOf({ [code]: 1 }, code, '2029-30').receipts).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, '2027-28').receipts).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, '2026-27').receipts).toBe(0);
+      expect(lever(code).badge).toBe('assumption');
+    }
+  });
+
+  it('NICs on rental income breaks the tax lock; the reserves levy and carried interest do not', () => {
+    const lock = (values: Record<string, number>) =>
+      promiseBreaks(values, ds.pm.promises, ds.levers).find((p) => p.promise.id === 'tax-lock');
+    expect(lock({ nicrent: 1 })?.kept).toBe(false);
+    expect(lock({ qelevy: 1 })?.kept).toBe(true);
+    expect(lock({ carried: 1 })?.kept).toBe(true);
+    expect(lock({ wealth2: 1 })?.kept).toBe(true);
+  });
+
+  it('the two wealth-tax designs warn against each other and the 2% card is drawn on by the OBR draw', () => {
+    const two = lever('wealth2');
+    const one = lever('wealth');
+    expect(two.interactions.some((i) => i.withLever === one.id && i.severity === 'warn')).toBe(
+      true,
+    );
+    expect(one.interactions.some((i) => i.withLever === two.id && i.severity === 'warn')).toBe(
+      true,
+    );
+    expect(two.considerations.some((c) => c.id === 'avoidance-and-emigration')).toBe(true);
+    expect(two.headline.startsWith('Contested.')).toBe(true);
+    expect(lever('nicrent').considerations.some((c) => c.id === 'static-not-yield')).toBe(true);
+  });
+
+  it('a tampered think-tank figure fails the consistency check', () => {
+    const levy = structuredClone(lever('qelevy'));
+    if (levy.costing.kind !== 'schedule' || levy.costing.rawSource?.kind !== 'derivedFromPublished')
+      throw new Error('levy is derived');
+    const method = levy.costing.rawSource.method;
+    if (method.name !== 'statedProduct') throw new Error('levy is a stated product');
+    const term = method.terms[0];
+    if (!term) throw new Error('one term');
+    term.value = 7000;
+    expect(checkRawSourceConsistency(levy, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 
   it('unfreezing the Plan 2 threshold is spending from 2027-28, and the 2026-27 revaluation is not applied', () => {

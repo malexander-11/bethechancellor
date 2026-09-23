@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "id": "sugar-and-salt-tax",
+  "code": "sugsalt",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Duties",
+  "order": 35,
+  "title": "A sugar and salt reformulation tax",
+  "shortTitle": "Sugar and salt tax",
+  "headline": "A sugar and salt reformulation tax: RF’s £3.5bn, net of the soft drinks levy.",
+  "description": "The National Food Strategy’s design, taken up by the Resolution Foundation: £4 a kilogram on sugar and £8 a kilogram on salt sold for use in processed food, charged to manufacturers, replacing the Soft Drinks Industry Levy. RF puts the yield at around £3.5 billion by 2029-30 net of abolishing the levy. The point of the tax is to change recipes, so a yield that holds is a sign it has not worked; the figure is held flat in cash here.",
+  "baselinePolicy": {
+    "text": "The Soft Drinks Industry Levy charges 18p or 24p a litre on sugary drinks; there is no tax on sugar or salt in other food. The government has consulted on extending the levy to milk-based drinks.",
+    "source": {
+      "sourceId": "rf-call-of-duties-2025",
+      "quote": "An expected slight broadening of the SDIL will not raise as much money as that"
+    },
+    "alreadyIncludes": ["The Soft Drinks Industry Levy at its current rates and scope."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 3500,
+      "2028-29": 3500,
+      "2029-30": 3500,
+      "2030-31": 3500
+    },
+    "source": {
+      "sourceId": "rf-call-of-duties-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "rf-call-of-duties-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 3500,
+        "terms": [
+          {
+            "label": "The Resolution Foundation’s yield for a Sugar and Salt Reformulation Tax at £4/kg and £8/kg, net of the soft drinks levy",
+            "value": 3500,
+            "unit": "£ million, 2029-30, net of abolishing the Soft Drinks Industry Levy",
+            "source": {
+              "sourceId": "rf-call-of-duties-2025",
+              "quote": "this would raise around £3.5 billion by 2029-30 – net of abolishing the SDIL"
+            }
+          }
+        ]
+      },
+      "note": "RF’s 2029-30 figure held flat in cash from the start year. It is net of the soft drinks levy it replaces."
+    },
+    "caveats": [
+      "A think-tank figure on the National Food Strategy’s design; nobody in government has costed it. Net of the soft drinks levy, which it would replace.",
+      "Meant to shrink: the tax is designed to make manufacturers cut sugar and salt, so RF’s yield falls over time if it works. Held flat here.",
+      "Regressive in cash: a tax on everyday processed food takes a larger share of a poorer household’s spending, which RF weighs against the health case."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "reformulation-response",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The soft drinks levy cut sugar in drinks sharply before it raised much money; the same response here is the policy’s purpose and would erode the yield.",
+      "sources": [
+        {
+          "sourceId": "rf-call-of-duties-2025"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-sugar-salt",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Charged to manufacturers and passed into food prices; every household pays a little, poorer households a larger share of their budgets, at a time RF says food-price inflation is a live concern.",
+      "sources": [
+        {
+          "sourceId": "rf-call-of-duties-2025",
+          "quote": "It is right to be concerned about recent food-price inflation and living standards"
+        }
+      ]
+    }
+  ],
+  "interactions": [],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

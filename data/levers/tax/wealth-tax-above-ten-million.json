@@ -80,7 +80,8 @@
       "The evidence base runs out above £10m. The Commission relied on the Wealth and Assets Survey merged with a rich list and a statistical adjustment for the missing top, because no official source measures wealth at this level. It calls its own estimate for this group \"conservative\" and \"a lower bound\".",
       "The modelling is from 2020 and is not uprated here. Asset prices and the number of people above the threshold have both moved since.",
       "Revenue is stated before administration costs. The Commission puts the one-off cost to government of setting up an annual wealth tax at about £0.6bn, and the running cost at about £3m a year, with £0.7bn of compliance cost falling on taxpayers.",
-      "This is a stock tax on assets, not a flow tax on income, so valuation is the whole problem: private companies, land, art and pensions all have to be valued every year."
+      "This is a stock tax on assets, not a flow tax on income, so valuation is the whole problem: private companies, land, art and pensions all have to be valued every year.",
+      "The campaign version is 2% above £10 million: \"up to £24 billion\" on a low-avoidance assumption, £18.5 billion on the Wealth Tax Commission’s high-avoidance case. That design is a separate card in this group."
     ]
   },
   "considerations": [
@@ -145,5 +146,12 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-15"
+  "reviewedOn": "2026-09-15",
+  "interactions": [
+    {
+      "withLever": "wealth-tax-two-per-cent",
+      "text": "Two wealth taxes on the same £10 million threshold. Pick one design: 1% on the Commission’s figures or 2% on the campaign’s.",
+      "severity": "warn"
+    }
+  ]
 }

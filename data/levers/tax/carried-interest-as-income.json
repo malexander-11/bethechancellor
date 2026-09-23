@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "id": "carried-interest-as-income",
+  "code": "carried",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Capital gains",
+  "order": 28,
+  "title": "Tax carried interest fully as income",
+  "shortTitle": "Carried interest as income",
+  "headline": "Tax fund managers’ carried interest as income at 45%: CenTax’s central case, £0.5bn.",
+  "description": "Carried interest is the share of a fund’s profits paid to private equity and hedge fund managers. Since April 2026 it is charged to income tax, but on a reduced basis rather than at the full 45% other income bears. Tax Justice UK, citing CenTax’s central post-behavioural estimate on the 2025-26 tax base, puts the yield from equalising it fully with the top rate of income tax at £510 million a year, after the 2024 Budget changes. Held flat in cash here; it arrives as income tax.",
+  "baselinePolicy": {
+    "text": "The October 2024 Budget removed carried interest from the capital gains tax base and moved it into income tax from April 2026, on a reduced basis. CenTax’s 2026 re-costing of its CGT package therefore excludes it.",
+    "source": {
+      "sourceId": "centax-taxes-at-the-top-2026",
+      "quote": "removed carried interest from the CGT base"
+    },
+    "alreadyIncludes": [
+      "The 2024 Budget’s move of carried interest into income tax from April 2026."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 510,
+      "2028-29": 510,
+      "2029-30": 510,
+      "2030-31": 510
+    },
+    "source": {
+      "sourceId": "tjuk-ten-tax-reforms-2026"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "tjuk-ten-tax-reforms-2026",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 510,
+        "terms": [
+          {
+            "label": "CenTax’s central post-behavioural estimate for equalising carried interest with the top rate of income tax, as cited by Tax Justice UK",
+            "value": 510,
+            "unit": "£ million a year, 2025-26 tax base",
+            "source": {
+              "sourceId": "tjuk-ten-tax-reforms-2026",
+              "quote": "to raise an additional £510 million per year"
+            }
+          }
+        ]
+      },
+      "note": "Tax Justice UK’s figure, which it attributes to CenTax’s central case on the 2025-26 static tax base after the 2024 Budget changes; held flat in cash from the start year. CenTax’s own carried-interest paper is not registered here."
+    },
+    "caveats": [
+      "A campaign group’s citation of CenTax’s central case, on the 2025-26 base and after the 2024 Budget changes; CenTax’s own paper is quoted second-hand. Small, and concentrated on a few thousand people.",
+      "Held flat in cash: fund performance moves carried interest a great deal from year to year."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "carried-interest-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": true,
+      "text": "CenTax’s central case already includes a behavioural response; fund managers are mobile, and a harsher response would cut the figure further.",
+      "sources": [
+        {
+          "sourceId": "tjuk-ten-tax-reforms-2026",
+          "quote": "post-behavioural revenue estimates ‘central’ case scenarios"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-carried-interest",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "A very small number of very well-paid fund managers pay; Tax Justice UK puts them at about 0.01% of the population.",
+      "sources": [
+        {
+          "sourceId": "tjuk-ten-tax-reforms-2026",
+          "quote": "a tiny fraction of society (0.01%)"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "align-cgt-with-income-tax",
+      "text": "CenTax’s 2026 package excludes carried interest, so the two cards do not overlap.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

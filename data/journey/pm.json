@@ -509,6 +509,10 @@
         {
           "code": "nicspa",
           "when": "on"
+        },
+        {
+          "code": "nicrent",
+          "when": "on"
         }
       ]
     },

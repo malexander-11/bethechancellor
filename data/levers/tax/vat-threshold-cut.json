@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "id": "vat-threshold-cut",
+  "code": "vatthr",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "VAT",
+  "order": 28,
+  "title": "Cut the VAT registration threshold to £30,000",
+  "shortTitle": "VAT threshold to £30,000",
+  "headline": "Cut the VAT threshold from £90,000 to £30,000 over four years: RF’s £2bn.",
+  "description": "Businesses register for VAT once their turnover passes £90,000, about double the OECD average. Firms bunch just below it and hold back growth to stay there. The Resolution Foundation proposes cutting the threshold to £30,000 over four years and puts the yield at £2 billion. HMRC costs the whole threshold, the relief for everyone below it, at £3.1 billion in 2025-26, so RF’s figure for most of the way down is in proportion. Held flat in cash here, which overstates the early years of a four-year phase-in.",
+  "baselinePolicy": {
+    "text": "Businesses must register for VAT if their taxable turnover is more than £90,000; HMRC costs the threshold at £3.1 billion in 2025-26.",
+    "source": {
+      "sourceId": "govuk-vat-registration-thresholds",
+      "quote": "Businesses have to register for VAT if their VAT taxable turnover is more than £90,000"
+    },
+    "alreadyIncludes": ["The threshold at £90,000 since April 2024."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "vat",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 2000,
+      "2028-29": 2000,
+      "2029-30": 2000,
+      "2030-31": 2000
+    },
+    "source": {
+      "sourceId": "rf-call-of-duties-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "rf-call-of-duties-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 2000,
+        "terms": [
+          {
+            "label": "The Resolution Foundation’s yield from cutting the VAT registration threshold to £30,000 over four years",
+            "value": 2000,
+            "unit": "£ million a year once the cut is complete",
+            "source": {
+              "sourceId": "rf-call-of-duties-2025",
+              "quote": "reducing the threshold to £30,000 over the next four years, raising £2 billion"
+            }
+          }
+        ]
+      },
+      "note": "RF’s end-state figure held flat in cash from the start year. RF phases the cut over four years, so the early years would raise less; HMRC’s £3.1bn cost of the whole threshold (relief row vat-ns14) is the scale check."
+    },
+    "caveats": [
+      "RF’s figure for the full cut, applied from the start year; RF would phase it over four years, so 2027-28 would raise much less than shown.",
+      "A scale check, not a certification: HMRC’s static cost of the whole threshold is £3.1 billion in 2025-26 (relief row vat-ns14), and RF’s £2 billion for cutting it two thirds of the way is consistent with that. Nobody in government has costed the cut.",
+      "Compliance, not just yield: over a million more traders would register, file and charge VAT; the OBR has written about the bunching the threshold causes."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "threshold-cut-behaviour",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Some newly registered firms would pass VAT on to customers, some would absorb it, and the bunching just below £90,000 would move down to £30,000; RF’s figure is a central estimate on a static base.",
+      "sources": [
+        {
+          "sourceId": "rf-call-of-duties-2025",
+          "quote": "observable ‘bunching’ below the threshold"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-threshold-cut",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Small traders with turnover between £30,000 and £90,000 and their customers pay: sole traders, small shops and services that are outside VAT today.",
+      "sources": [
+        {
+          "sourceId": "rf-call-of-duties-2025"
+        }
+      ]
+    },
+    {
+      "id": "threshold-cut-administration",
+      "kind": "administrative",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "HMRC would take on more than a million new VAT registrations; the cost of collecting from very small firms is high relative to the tax.",
+      "sources": [
+        {
+          "sourceId": "hmrc-tax-reliefs-2026-01",
+          "quote": "VAT registration threshold"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "vat-standard-rate",
+      "text": "A higher standard rate raises what every newly registered trader charges; the two compound.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

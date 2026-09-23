@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "id": "bank-reserves-levy",
+  "code": "qelevy",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Business",
+  "order": 37,
+  "title": "A levy on banks’ reserve returns above 2%",
+  "shortTitle": "Bank reserves levy",
+  "headline": "A levy on banks’ Bank of England reserves above 2%: IPPR’s £5bn floor.",
+  "description": "The Bank of England pays Bank Rate on the reserves it created when it bought gilts. IPPR proposes taxing the return on those reserves above 2%, only on banks with more than £25 billion of assets, so that the windfall from higher rates goes to the Treasury rather than to bank shareholders. IPPR puts the gain to current-budget headroom at £5 billion to £7 billion by the end of the parliament, depending on how fast the Bank runs down its gilt holdings. The lower figure is scored here, held flat in cash. The levy fades to nothing as the gilts leave the Bank’s balance sheet or if Bank Rate falls to 2%.",
+  "baselinePolicy": {
+    "text": "Banks pay corporation tax at 25%, a 3% surcharge on profits above £100 million and the bank levy on their balance sheets. Reserves at the Bank of England earn Bank Rate in full, currently 3.75%.",
+    "source": {
+      "sourceId": "hmrc-banking-sector-receipts-2025"
+    },
+    "alreadyIncludes": ["Budget 2025 left the bank surcharge and the bank levy unchanged."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "onshoreCorporationTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 5000,
+      "2028-29": 5000,
+      "2029-30": 5000,
+      "2030-31": 5000
+    },
+    "source": {
+      "sourceId": "ippr-fixing-the-leak-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "ippr-fixing-the-leak-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 5000,
+        "terms": [
+          {
+            "label": "IPPR’s lower estimate of the gain to current-budget headroom from taxing reserve returns above 2%",
+            "value": 5000,
+            "unit": "£ million a year by the end of the parliament",
+            "source": {
+              "sourceId": "ippr-fixing-the-leak-2025",
+              "quote": "This would boost fiscal headroom against the current budget by £5 billion to £7 billion by the end of this parliament"
+            }
+          }
+        ]
+      },
+      "note": "IPPR’s lower figure, held flat in cash from the start year. IPPR gives a range that depends on the speed of quantitative tightening; the upper figure is named on the card."
+    },
+    "caveats": [
+      "IPPR’s own estimate, not HMRC’s: £5 billion to £7 billion by the end of the parliament, \"depending on the speed of quantitative tightening\". The floor is scored; a flat path is our simplification of a yield that falls as gilts leave the Bank’s balance sheet.",
+      "Temporary by design: IPPR says receipts fall to zero once the QE gilts are gone or when Bank Rate reaches 2%. Holding the figure flat to 2030-31 overstates the later years.",
+      "Banks with under £25 billion of assets are exempt in IPPR’s design; the levy would sit on top of the surcharge and the bank levy already on the desk."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "reserves-levy-depends-on-rates",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The base is the gap between Bank Rate and 2% on a shrinking stock of reserves. Faster gilt sales or lower rates cut the yield; the harsher forecast outcomes in this game move rates the other way.",
+      "sources": [
+        {
+          "sourceId": "ippr-fixing-the-leak-2025",
+          "quote": "depending on the speed of quantitative tightening"
+        }
+      ]
+    },
+    {
+      "id": "reserves-levy-pass-through",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Banks could pass a levy on to depositors and borrowers; IPPR argues exempting smaller banks keeps competitive pressure on the big four not to.",
+      "sources": [
+        {
+          "sourceId": "ippr-fixing-the-leak-2025",
+          "quote": "competitive pressure on larger banks to not merely pass on the levy to their customers"
+        }
+      ]
+    },
+    {
+      "id": "who-pays-reserves-levy",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "The largest UK banks pay; IPPR says the reserve interest \"mostly accrues to bank shareholders as windfall profits\".",
+      "sources": [
+        {
+          "sourceId": "ippr-fixing-the-leak-2025",
+          "quote": "mostly accrues to bank shareholders as windfall profits"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "bank-surcharge-5pc",
+      "text": "Three bank taxes at once: the surcharge on profits, the levy on balance sheets and this levy on reserves.",
+      "severity": "info"
+    },
+    {
+      "withLever": "bank-levy-double",
+      "text": "Three bank taxes at once: the surcharge on profits, the levy on balance sheets and this levy on reserves.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

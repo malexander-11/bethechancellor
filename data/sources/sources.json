@@ -1208,6 +1208,49 @@
       "retrievedOn": "2026-09-23",
       "licence": "Other",
       "notes": "Fetched 2026-09-23. \"To reach 300,000 homes for social rent (the number of affordable homes the SAHP currently aims to deliver), we estimate that another £800 million would be needed each year over the programme’s 10-year lifespan.\" Resolution Foundation; quoted briefly with attribution."
+    },
+    {
+      "id": "ippr-fixing-the-leak-2025",
+      "org": "Other",
+      "title": "Fixing the leak: how to end the £22 billion annual taxpayer losses at the Bank of England",
+      "edition": "IPPR, 7 August 2025",
+      "url": "https://files.ippr.org/production/Downloads/Fixing-the-leak-Aug-25.pdf",
+      "landingUrl": "https://www.ippr.org/",
+      "publishedOn": "2025-08-07",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. Institute for Public Policy Research. \"we recommend targeting only the ‘windfall profits element’ (taxing reserve returns in excess of 2 per cent). We estimate that this could prevent between £35 billion and £40 billion of taxpayer losses over the course of this parliament. This would boost fiscal headroom against the current budget by £5 billion to £7 billion by the end of this parliament (depending on the speed of quantitative tightening).\" \"Tax receipts will fall to zero once all QE-related gilts are off the Bank of England’s balance sheet (through sales or redemptions), or when the bank rate reaches 2 per cent. This is thus not a permanent tax.\" \"We propose exempting smaller banks, with assets below £25 billion, from the tax.\" IPPR’s own estimate; quoted briefly with attribution."
+    },
+    {
+      "id": "tjuk-ten-tax-reforms-2026",
+      "org": "Other",
+      "title": "Ten tax reforms to raise over £50 billion a year for UK public services",
+      "edition": "Tax Justice UK, 3 March 2026",
+      "url": "https://taxjustice.uk/blog/how-to-raise-50-billion-for-public-services-our-ten-tax-reforms/",
+      "publishedOn": "2026-03-03",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. \"Apply a 2% tax on assets over £10 million, to raise up to £24 billion a year\"; footnote: \"This figure includes behavioural response, calculated by Arun Advani.\" \"Close the carried interest loophole so private equity bosses pay their fair share, to raise an additional £510 million per year\"; footnote: \"CenTax estimate that fully equalising the tax rate on carried interest with the top rate of Income Tax would raise around £0.5 billion when the changes introduced in the 2024 budget are taken into account. This figure is calculated based on CenTax’s post-behavioural revenue estimates ‘central’ case scenarios, using 2025/26 static tax base.\" Also cites CenTax’s 2024 CGT package \"minus £2.5bn\". Campaign figures; quoted briefly with attribution."
+    },
+    {
+      "id": "tpa-wealth-tax-2025",
+      "org": "Other",
+      "title": "UK wealth tax: high risk and anti-growth",
+      "edition": "Tax Policy Associates, 22 July 2025",
+      "url": "https://taxpolicy.org.uk/2025/07/22/uk-wealth-tax-anti-growth/",
+      "publishedOn": "2025-07-22",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. On the Tax Justice Network’s 2% above £10m: \"The Tax Justice Network claim of £24bn of revenue from their wealth tax assume a ‘taxpayer behavioural response’, i.e. migration and other avoidance, of 14%.\" The Wealth Tax Commission’s papers give a range \"from 14% (in a ‘low avoidance scenario’) to 34% (in a ‘high avoidance scenario’). The proponents use the 14% figure without any justification. But if the 34% figure was used then the revenue raised would be significantly less – £18.5bn.\" \"80% of projected yield comes from ~5,000 people; ~15% from ten people.\" \"if the threshold is net wealth of £10m, around 32,000 taxpayers would pay the tax.\" Quoted briefly with attribution."
+    },
+    {
+      "id": "govuk-vat-registration-thresholds",
+      "org": "HMRC",
+      "title": "VAT registration thresholds",
+      "url": "https://www.gov.uk/vat-registration-thresholds",
+      "retrievedOn": "2026-09-23",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-23. \"Businesses have to register for VAT if their VAT taxable turnover is more than £90,000.\""
     }
   ]
 }
