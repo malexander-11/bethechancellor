@@ -163,6 +163,14 @@ from the certified rows beside it (ADR-0017).
   words, carries `static-not-yield` or the matching draw consideration where the figure is static,
   and names any step of ours (growing, placing, netting). Party documents are context, never a
   card. A figure quoted second-hand says so.
+- **Earliest start.** A card whose measure cannot take effect from the game's first year carries
+  `earliestStart: { year, text, sources }`: the first fiscal year it can start on its source's own
+  timetable (legislation, systems, valuation, transitional protection), the sentence that says why,
+  and the sources that say so. The effect map stays as the method reproduces it; the engine zeroes
+  the earlier years at run time and a player's delay can only push the start later. The year must
+  be one the vintage covers (`validate:data`), a macro slider may not carry one, and the headline
+  names the year. A `linearPerUnit` or `lookupTable` costing with a floor would shift its published
+  profile to the floor year rather than zero it; none carries one today.
 - **Press for words only.** A press or professional-firm page may be registered (org `Other`)
   to source a sentence on a card or in a briefing, never a figure in a costing; its `notes` say so.
 - **Protected or unprotected.** A department lever carries `commitment: { kind, text, sources }`,

@@ -793,3 +793,25 @@ nineteen cards, every one a stated figure from the primary source, badged assump
   with the OBR's universal credit line, the Adam Smith Institute's four-year average placed in
   2027-28 and grown with property transaction taxes, HMRC's Motability relief row less the Budget
   2025 line on the same scheme.
+
+## 21. Nothing before it can start (ADR-0021)
+
+A measure that needs a new Act, a valuation regime, HMRC systems or the expiry of transitional
+protections cannot take effect from the first April after the Budget, however the game's start year
+is set. A lever may therefore carry `earliestStart: { year, text, sources }`, and the engine's start
+year for that lever is the latest of the game's start year, the player's delay and that floor.
+Nothing is counted before it; a player can delay a measure past its floor, never bring it forward.
+
+- **The year is the source's, scored cautiously.** Tax Policy Associates expects an annual wealth
+  tax announced at this Budget to apply first in 2029-30 and be paid in January 2031, so the wealth
+  cards start in 2030-31, the year the cash arrives, as the OBR scores taxes paid the January after
+  their tax year. The soft drinks levy (Budget 2016 to April 2018) and the digital services tax
+  (Budget 2018 to April 2020) are the registered precedents for a new tax; the proposers' own
+  dates ("by 2029/30", "in the long run, after any transitional protections are exhausted") set
+  the welfare cards.
+- **The arithmetic is untouched.** The effect map stays as the method reproduces it and the early
+  years are zeroed at run time. Set-up costs stay in words.
+- **The card says so**: an "Earliest start" tag, the reason under "What this assumes", the year in
+  the headline, and "nothing yet; from 2030-31 raises £18.5bn" where the target year sees nothing.
+  The running list and the Budget-day table add "from 2030-31" beside the £0.0bn; the Director of
+  Tax and the OBR's re-scored table leave such a measure out.
