@@ -4,7 +4,7 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 14 (the menu against the reporting, again)**. You are appointed Chancellor
+Status: **Phase 16 (the think tanks' lists)**. You are appointed Chancellor
 in a Labour government with a Budget to deliver on 28 October 2026. The package holds the menu the
 reporting says is on the table, each option a published row or a stated calculation on one, badged
 for what it is; the third screen of colleagues' letters is gone, its plausible policies sit in the
@@ -42,9 +42,15 @@ how the package fares under every forecast you might have drawn, and what kind o
 Share the link; replay the same seed with a fresh Budget. The menu was read against the Budget
 reporting again on 21 September 2026: the electricity VAT zero rate that HMRC says ends in March
 2027, National Insurance for working pensioners and for LLP partners, and CenTax's package for
-taxing gains like income joined it; what has no published costing is named in words instead.
+taxing gains like income joined it; what has no published costing is named in words instead. On
+23 September 2026 the think tanks' own lists were read and nineteen more cards built from their
+documents, each a stated figure badged for what it is: a levy on banks' reserves, National
+Insurance on rents, a 2% wealth tax, a sugar and salt tax, council tax on the top bands, the NICs
+upper earnings limit, 1% VAT on zero-rated goods, a pension lump-sum cap, stamp duty abolished on
+main homes, a child tax allowance, and six welfare cards from housing support relinked to rents to
+the Centre for Social Justice's benefit reset, on two welfare tabs.
 
-Under the hood: the OBR March 2026 baseline, 62 tax levers (HMRC ready reckoner, Budget 2025 and
+Under the hood: the OBR March 2026 baseline, 75 tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options
 and the residence nil-rate band, HMRC's pension statistics for National Insurance on employer
 pension contributions, HMRC's banking-sector receipts, inheritance tax up to abolition, a share of
@@ -53,8 +59,11 @@ CenTax's estimates for aligning capital gains with income tax, an exit charge an
 National Insurance, HMRC's cost of the National Insurance exemption over pension age and of
 private residence relief, HMRC's pension relief by marginal rate for relief at a flat 30% or the
 basic rate, HMRC's bank levy receipts, the government's six-month figure for the electricity zero
-rate, and our own stated arithmetic where nobody has published a costing, badged as such), 26 spending levers (Spending Review 2025 settlements, OBR welfare lines, Budget
-2025 spending decisions, the Prime Minister's schemes) with milestones from PESA, six more levers
+rate, the think tanks' own figures for their proposals (the Resolution Foundation, IPPR,
+CenTax, Tax Justice UK, the IFS Green Budget, Demos, the Adam Smith Institute, Onward), and our
+own stated arithmetic where nobody has published a costing, badged as such), 32 spending levers
+(Spending Review 2025 settlements, OBR welfare lines, Budget 2025 spending decisions, the Prime
+Minister's schemes, six welfare cards from the think tanks) with milestones from PESA, six more levers
 kept for the record on no screen, four sets of economic assumptions and five forecast outcomes
 derived from HM Treasury's comparison of independent forecasts, and about two hundred simulated
 lines in the voices of roles, every one badged and every fact in them sourced. Next: the rebase to

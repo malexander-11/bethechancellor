@@ -766,3 +766,30 @@ five ninths of the additional-rate relief in HMRC's 2024-25 breakdown, grown wit
 doubled bank levy (`banklevy`, HMRC's £1.3 billion of 2024-25 receipts once more, grown with
 corporation tax), both static and badged assumption; the £1.5m surcharge card now quotes Tax Policy
 Associates' yield for the threshold beside its own equal-yield assumption.
+
+## 20. The think tanks' lists (ADR-0020)
+
+Phase 16 read the think tanks' proposals for the 28 October Budget (the Resolution Foundation,
+IPPR, CenTax, the Joseph Rowntree Foundation, Tax Justice UK, the IFS Green Budget, Demos, the
+Centre for Social Justice, the Adam Smith Institute, Onward) from their own documents and built
+nineteen cards, every one a stated figure from the primary source, badged assumption.
+
+- **One method for all of them.** Each card is a `statedProduct` (one published figure) or a
+  `weightedSum` (a gross figure less what the same document reinvests, or less a certified line
+  already scored), held flat in cash from the start year unless the card says what it grows with.
+  `validate:data` reproduces every effect from the quoted term; a tampered figure fails.
+- **Cautious where the source hedges.** An "up to" figure is scored at the lower published number
+  (the 2% wealth tax at Tax Policy Associates' £18.5 billion, the reserves levy at IPPR's £5 billion
+  floor, the child DLA assessment at the CSJ's lower bound) and the ceiling is named in words.
+  Static figures say so and carry `static-not-yield`, which the harsher forecast outcomes revise.
+- **The alignment card re-costed.** CenTax's September 2026 figure, £19.7 billion in 2029-30 after
+  behaviour on the OBR's current forecast, replaces the 2024 estimate net of the 2024 rise.
+- **The lock.** Rental NICs, abolishing the upper earnings limit and a 1% rate on zero-rated goods
+  break the tax lock on the game's reading; a smoothed earnings link breaks the triple lock. The
+  legal consideration on each card says the proposers read it the other way.
+- **Two welfare tabs.** Working-age benefits and Pensioners and disability, so six more welfare
+  cards fit inside the 700-word budget; every card has a minister whose figures are sourced.
+- **Grown, netted, placed.** Where a step is ours it is on the card: JRF's first-year cost grown
+  with the OBR's universal credit line, the Adam Smith Institute's four-year average placed in
+  2027-28 and grown with property transaction taxes, HMRC's Motability relief row less the Budget
+  2025 line on the same scheme.

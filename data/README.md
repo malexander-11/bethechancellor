@@ -153,9 +153,16 @@ from the certified rows beside it (ADR-0017).
   the government's six-month £850 million by −2, so the result is a cost to receipts and the
   validator still reproduces it.
 - **Netting a certified line.** A `weightedSum` may carry a published scorecard value with a
-  factor of −1 where a think tank's figure predates a change the Treasury has since scored (the
-  alignment card nets Autumn Budget 2024 line 27 off CenTax's £14.3 billion); the note says whose
-  step that is.
+  factor of −1 where a published figure overlaps a change the Treasury has since scored (the
+  Motability card nets Budget 2025 line 14 off HMRC's relief row); the note says whose step that is.
+  When the source re-costs on the new baseline, the netting goes (the alignment card, ADR-0020).
+- **Think-tank figures.** A think tank's costing may be a card when its own document is fetched,
+  registered (org `Other`, or `RF`; licence `Other`) with the sentence quoted in its `notes`, and
+  cited as the `statedProduct` or `weightedSum` term. The card is badged `assumption`, says static
+  or after behaviour, scores an "up to" range at the cautious published figure with the ceiling in
+  words, carries `static-not-yield` or the matching draw consideration where the figure is static,
+  and names any step of ours (growing, placing, netting). Party documents are context, never a
+  card. A figure quoted second-hand says so.
 - **Press for words only.** A press or professional-firm page may be registered (org `Other`)
   to source a sentence on a card or in a briefing, never a figure in a costing; its `notes` say so.
 - **Protected or unprotected.** A department lever carries `commitment: { kind, text, sources }`,
