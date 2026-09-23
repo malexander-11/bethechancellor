@@ -73,7 +73,7 @@ export * from './game/households.js';
 export * from './game/speech.js';
 export * from './game/verdict.js';
 export { applyRevision } from './calc/spine.js';
-export { costLever } from './costing/index.js';
+export { costLever, effectiveStartYear } from './costing/index.js';
 export {
   computeOutcome,
   normaliseLeverValue,

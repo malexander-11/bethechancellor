@@ -8,7 +8,7 @@
   "order": 35,
   "title": "Withdraw PIP and UC health for milder mental-health conditions",
   "shortTitle": "CSJ mental-health reset",
-  "headline": "Withdraw PIP and UC health for milder mental-health conditions: CSJ, saves £6.4bn net.",
+  "headline": "Withdraw PIP and UC health for milder mental health: CSJ, £6.4bn net by 2029-30.",
   "description": "The Centre for Social Justice’s proposal: withdraw personal independence payment and the universal credit health element from people whose primary condition is milder anxiety, depression or ADHD, about 1.1 million people, and reset the remaining awards to £103 a week. CSJ puts the saving at £7.4 billion by 2029-30 and says at least £1 billion of it should go into NHS talking therapies, social prescribing and employment support. The net £6.4 billion is scored here, flat in cash. The department’s own evidence to the Timms review says PIP has been hard to forecast and that earlier eligibility reforms did not deliver their planned savings.",
   "baselinePolicy": {
     "text": "PIP and the universal credit health element are paid on functional need, not diagnosis; the government dropped its Spring 2025 PIP changes and the Timms review is under way. The OBR forecasts disability benefits of £61.1bn in 2029-30.",
@@ -29,6 +29,16 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2029-30",
+    "text": "An Act, a reassessment programme and a wait for the Timms review: CSJ’s own figure is the saving \"by 2029/30\", so nothing is counted before that year.",
+    "sources": [
+      {
+        "sourceId": "csj-benefits-budget-2025",
+        "quote": "This would save £7.4bn by 2029/30"
+      }
+    ]
+  },
   "classification": {
     "side": "spending",
     "currentOrCapital": "current",
@@ -76,10 +86,10 @@
           }
         ]
       },
-      "note": "CSJ’s gross saving less the minimum reinvestment it proposes, held flat in cash from the start year. A static figure from a think tank; the department has not costed it."
+      "note": "CSJ’s gross saving less the minimum reinvestment it proposes, held flat in cash from the start year. A static figure from a think tank; the department has not costed it. Nothing is counted before 2029-30: see earliestStart."
     },
     "caveats": [
-      "A think-tank figure, static and \"by 2029/30\": the saving would build up as awards were reassessed, so the early years are overstated, and CSJ’s £1 billion reinvestment is a minimum.",
+      "A think-tank figure, static and \"by 2029/30\": the saving would build up as awards were reassessed, so nothing is counted before 2029-30, and CSJ’s £1 billion reinvestment is a minimum.",
       "The OBR and DWP both say disability eligibility reforms have under-delivered before: the move from DLA to PIP did not achieve its planned savings, and the OBR calls incapacity caseload growth highly uncertain.",
       "Inside the welfare cap, so this moves the cap verdict; it also reverses the direction of the government’s 2025 decision not to proceed with its own PIP changes."
     ]

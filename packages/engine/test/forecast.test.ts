@@ -65,7 +65,8 @@ describe('taking the OBR’s forecast apart (ADR-0012)', () => {
   });
 
   it('puts a re-scoring on the costings line and nowhere else', () => {
-    const { d, draw } = decompose(seedFor('hard-line'), 'adviser', { wealth: 1, itbr: 1 });
+    const { d, draw } = decompose(seedFor('hard-line'), 'adviser', { cgtdth: 1, itbr: 1 });
+    expect(draw.revisions.cgtdth?.factor).toBe(0.6);
     expect(draw.revisions.wealth?.factor).toBe(0.6);
     expect(d.costingsGbpm).toBeLessThan(0);
     // A package the OBR has nothing to doubt gets no costings line at all.
@@ -74,9 +75,12 @@ describe('taking the OBR’s forecast apart (ADR-0012)', () => {
   });
 
   it('lists what was re-scored with the figure before and after', () => {
-    const { d } = decompose(seedFor('hard-line'), 'adviser', { wealth: 1, itbr: 1, cgtdth: 1 });
+    const { d } = decompose(seedFor('hard-line'), 'adviser', { cgtalign: 1, itbr: 1, cgtdth: 1 });
     const rows = revisedMeasures(d.revised, d.targetYear);
-    expect(rows.map((r) => r.effect.code).sort()).toEqual(['cgtdth', 'wealth']);
+    expect(rows.map((r) => r.effect.code).sort()).toEqual(['cgtalign', 'cgtdth']);
+    // A measure with nothing in the target year is not listed, however hard it is re-scored.
+    const late = decompose(seedFor('hard-line'), 'adviser', { wealth: 1 }).d;
+    expect(revisedMeasures(late.revised, late.targetYear)).toEqual([]);
     for (const r of rows) {
       expect(r.revisedGbpm).toBeCloseTo(r.asScoredGbpm * r.revision.factor, 6);
       expect(r.effect.badge).toBe('assumption');

@@ -8,7 +8,7 @@
   "order": 35,
   "title": "A sugar and salt reformulation tax",
   "shortTitle": "Sugar and salt tax",
-  "headline": "A sugar and salt reformulation tax: RF’s £3.5bn, net of the soft drinks levy.",
+  "headline": "A sugar and salt tax from 2029-30: RF’s £3.5bn, net of the drinks levy.",
   "description": "The National Food Strategy’s design, taken up by the Resolution Foundation: £4 a kilogram on sugar and £8 a kilogram on salt sold for use in processed food, charged to manufacturers, replacing the Soft Drinks Industry Levy. RF puts the yield at around £3.5 billion by 2029-30 net of abolishing the levy. The point of the tax is to change recipes, so a yield that holds is a sign it has not worked; the figure is held flat in cash here.",
   "baselinePolicy": {
     "text": "The Soft Drinks Industry Levy charges 18p or 24p a litre on sugary drinks; there is no tax on sugar or salt in other food. The government has consulted on extending the levy to milk-based drinks.",
@@ -27,6 +27,20 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2029-30",
+    "text": "A new tax on manufacturers: the soft drinks levy ran from Budget 2016 to April 2018, and RF says this one would take several years to design and roll out. RF’s £3.5bn is itself a 2029-30 figure.",
+    "sources": [
+      {
+        "sourceId": "hmrc-sdil-policy-paper-2016",
+        "quote": "The levy will take effect from April 2018."
+      },
+      {
+        "sourceId": "rf-call-of-duties-2025",
+        "quote": "change would take several years to design and roll out"
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -63,7 +77,7 @@
           }
         ]
       },
-      "note": "RF’s 2029-30 figure held flat in cash from the start year. It is net of the soft drinks levy it replaces."
+      "note": "RF’s 2029-30 figure held flat in cash from the start year. It is net of the soft drinks levy it replaces. Nothing is counted before 2029-30: see earliestStart."
     },
     "caveats": [
       "A think-tank figure on the National Food Strategy’s design; nobody in government has costed it. Net of the soft drinks levy, which it would replace.",

@@ -8,7 +8,7 @@
   "order": 50,
   "title": "Tax extreme wealth: 1% a year on net wealth above £10m",
   "shortTitle": "1% wealth tax above £10m",
-  "headline": "Contested. About £7.8bn from roughly 22,000 people, if they stay.",
+  "headline": "Contested. About £7.8bn a year from 22,000 people, nothing before 2030-31.",
   "description": "An annual charge of 1% on the part of an individual's net wealth above £10m. Read this figure carefully. It rests on the Wealth Tax Commission's 2020 modelling, which is the only serious published estimate, and the Commission itself says its work \"has been constrained by a lack of reliable data on individuals with total wealth above £10 million\". The Office for National Statistics publishes nothing above the top 1% threshold of £3.1m, and had the accreditation of its wealth survey suspended in 2025. The number below is the Commission's own high-avoidance estimate, scaled from the 1.12% rate they modelled. The low-avoidance figure is £8.8bn.",
   "baselinePolicy": {
     "text": "The United Kingdom has no annual tax on net wealth. Wealth is taxed on transactions and at death: 220 estates above £10m paid £1.04bn of inheritance tax in 2023-24, at an average effective rate of 18%.",
@@ -26,6 +26,20 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2030-31",
+    "text": "An annual wealth tax needs its own Act, a valuation regime and new HMRC systems, and is paid the January after the tax year. Tax Policy Associates expects it to apply first in 2029-30 and pay in January 2031: nothing before 2030-31.",
+    "sources": [
+      {
+        "sourceId": "tpa-wealth-tax-2025",
+        "quote": "the tax would first apply in the 2029/30 tax year, with the first revenue received in January 2031"
+      },
+      {
+        "sourceId": "wtc-final-report-2020",
+        "quote": "could take a total of four years from inception to full operation"
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -73,7 +87,7 @@
           }
         ]
       },
-      "note": "The Commission's published annual-tax estimate above £10m, scaled to a 1% rate. Scaling is only approximate: the Commission's own chart shows revenue is not linear in the rate once avoidance is applied."
+      "note": "The Commission's published annual-tax estimate above £10m, scaled to a 1% rate. Scaling is only approximate: the Commission's own chart shows revenue is not linear in the rate once avoidance is applied. Nothing is counted before 2030-31: see earliestStart."
     },
     "caveats": [
       "This is the most uncertain number in the whole tool. The Commission assumes avoidance cuts the base by 7% to 17% at a 1% rate, and separately that 10% of the tax goes uncollected. The figure here uses the 17% end. At the 7% end it is £8.8bn.",

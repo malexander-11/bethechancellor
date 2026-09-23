@@ -8,7 +8,7 @@
   "order": 36,
   "title": "An in-person assessment for child Disability Living Allowance",
   "shortTitle": "Child DLA assessment",
-  "headline": "An in-person assessment for child DLA: CSJ, £0.3bn to £0.8bn net.",
+  "headline": "An in-person assessment for child DLA: CSJ, £0.3bn to £0.8bn net from 2030-31.",
   "description": "Child Disability Living Allowance is awarded on paper evidence. The Centre for Social Justice proposes a functional assessment for new claims where the primary condition is autism or ADHD, estimating that half to three quarters would not meet a properly administered threshold: 151,000 to 227,000 fewer cases by 2030 and £980 million to £1.47 billion a year saved, with children who have severe or complex needs protected. CSJ would reinvest £500 million in an early intervention fund and £160 million in the highest-rate care component. The lower bound less that reinvestment, £320 million, is scored here.",
   "baselinePolicy": {
     "text": "Child DLA is awarded on written evidence without a face-to-face assessment; the OBR forecasts disability benefits, which include it, at £61.1bn in 2029-30.",
@@ -26,6 +26,16 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2030-31",
+    "text": "An assessment for new claims builds up as claims arrive; CSJ gives the saving as annual \"by 2030\", read cautiously here as 2030-31.",
+    "sources": [
+      {
+        "sourceId": "csj-change-the-prescription-2026",
+        "quote": "annual savings of between £980 million and £1.47 billion annually by 2030"
+      }
+    ]
+  },
   "classification": {
     "side": "spending",
     "currentOrCapital": "current",
@@ -73,10 +83,10 @@
           }
         ]
       },
-      "note": "CSJ’s lower-bound saving less the reinvestment it proposes, held flat in cash from the start year. The upper bound would net £810 million. A think-tank estimate; the department has not costed it."
+      "note": "CSJ’s lower-bound saving less the reinvestment it proposes, held flat in cash from the start year. The upper bound would net £810 million. A think-tank estimate; the department has not costed it. Nothing is counted before 2030-31: see earliestStart."
     },
     "caveats": [
-      "The cautious end of CSJ’s range: £980 million gross against an upper bound of £1.47 billion, less £660 million of reinvestment. Static, \"by 2030\", and building up over several years of new claims.",
+      "The cautious end of CSJ’s range: £980 million gross against an upper bound of £1.47 billion, less £660 million of reinvestment. Static, \"by 2030\", and building up over several years of new claims; nothing is counted before 2030-31.",
       "CSJ’s £500 million fund is capital spending in its design; this card treats the whole reinvestment as current, so the current-budget saving shown is the smaller one.",
       "Inside the welfare cap. Assessment reforms have missed their savings before, as the OBR notes of the move from DLA to PIP."
     ]

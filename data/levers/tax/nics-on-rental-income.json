@@ -8,7 +8,7 @@
   "order": 41,
   "title": "National Insurance on rental income",
   "shortTitle": "NICs on rental income",
-  "headline": "NICs on landlords’ rental income, as employees pay. CenTax: up to £3bn, static.",
+  "headline": "NICs on landlords’ rents from 2028-29, as employees pay. CenTax: up to £3bn, static.",
   "description": "Employees pay National Insurance on their wages; landlords pay none on their rents. The Centre for the Analysis of Taxation costs an equivalent of Class 1 NICs on profits from rental income, savings income outside ISAs and other non-dividend investment income: up to £3 billion, £0.6 billion and £0.4 billion respectively in 2029-30, on a static basis. Only the rental figure is built here, at CenTax’s ceiling, held flat in cash. The Resolution Foundation, Demos and IPPR have each proposed the same charge in different words.",
   "baselinePolicy": {
     "text": "National Insurance is charged on earnings from employment and self-employment. Rental income bears income tax only, at up to 45%, with the property income rates two points higher than the main rates from April 2027.",
@@ -28,6 +28,16 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2028-29",
+    "text": "A new National Insurance charge needs its own Act and self-assessment changes; the usual timetable is sixteen months from a Budget to legislation applying from the next tax year, so April 2028 at the earliest.",
+    "sources": [
+      {
+        "sourceId": "tpa-wealth-tax-2025",
+        "quote": "The usual Budget timetable is sixteen months between a Budget announcement and legislation applying from the start of the next tax year"
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -64,7 +74,7 @@
           }
         ]
       },
-      "note": "CenTax’s static \"up to\" figure for rental income alone, held flat in cash from the start year. The savings and other investment income figures are named on the card and not built. Effects before the start year are not applied."
+      "note": "CenTax’s static \"up to\" figure for rental income alone, held flat in cash from the start year. The savings and other investment income figures are named on the card and not built. Effects before the start year are not applied. Nothing is counted before 2028-29: see earliestStart."
     },
     "caveats": [
       "Static and a ceiling: CenTax says \"up to £3 billion\" before behavioural responses, and makes no adjustment for reintroducing a mortgage interest deduction, which some proposals would pair with the charge. The yield would be lower.",

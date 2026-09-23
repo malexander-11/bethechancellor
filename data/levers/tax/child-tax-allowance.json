@@ -8,7 +8,7 @@
   "order": 66,
   "title": "A child tax allowance",
   "shortTitle": "Child tax allowance",
-  "headline": "A child tax allowance for families: Onward, costs £4.8bn a year.",
+  "headline": "A child tax allowance from 2028-29: Onward, costs £4.8bn a year.",
   "description": "Onward proposes a basic-rate child tax allowance: £10,000 of income free of basic-rate tax for a child under five, £20,000 for two and £30,000 for three or more, which parents can split between them. It costs £4.8 billion a year on Onward’s estimate, assuming every couple splits it in the most tax-efficient way. Onward frames it as family support in place of the triple lock’s generosity to pensioners. Held flat in cash.",
   "baselinePolicy": {
     "text": "Income tax is charged individually with no allowance for children; support for families comes through child benefit and universal credit.",
@@ -27,6 +27,20 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2028-29",
+    "text": "A new allowance needs Finance Bill legislation and PAYE and self-assessment systems; on the usual sixteen-month Budget timetable a measure announced in October 2026 first applies in 2028-29.",
+    "sources": [
+      {
+        "sourceId": "tpa-wealth-tax-2025",
+        "quote": "The usual Budget timetable is sixteen months between a Budget announcement and legislation applying from the start of the next tax year"
+      },
+      {
+        "sourceId": "onward-family-support-2026",
+        "quote": "We propose a basic rate Child Tax Allowance of £10,000 per child aged under five"
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -63,7 +77,7 @@
           }
         ]
       },
-      "note": "Onward’s figure held flat in cash from the start year; the child population and the tax base would move it. Nobody in government has costed it."
+      "note": "Onward’s figure held flat in cash from the start year; the child population and the tax base would move it. Nobody in government has costed it. Nothing is counted before 2028-29: see earliestStart."
     },
     "caveats": [
       "Onward’s own estimate, with no stated year; it assumes every couple uses the allowance in the most tax-efficient way, which is the upper end of the cost.",

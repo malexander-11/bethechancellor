@@ -121,8 +121,11 @@ describe('the readings of a Budget', () => {
 
   it('measures credibility as the share of the improvement that rests on uncertified figures', () => {
     expect(read({ itbr: 2 }).credibilityShare).toBe(0);
-    expect(read({ wealth: 1 }).credibilityShare).toBe(1);
-    const mixed = read({ wealth: 1, itbr: 2 }).credibilityShare ?? 0;
+    expect(read({ cgtalign: 1 }).credibilityShare).toBe(1);
+    // A wealth tax that cannot start before 2030-31 improves nothing in 2029-30, so it is not
+    // uncertified improvement either (ADR-0021).
+    expect(read({ wealth: 1 }).credibilityShare).toBe(0);
+    const mixed = read({ cgtalign: 1, itbr: 2 }).credibilityShare ?? 0;
     expect(mixed).toBeGreaterThan(0);
     expect(mixed).toBeLessThan(1);
   });

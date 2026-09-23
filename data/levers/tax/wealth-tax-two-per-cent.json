@@ -8,7 +8,7 @@
   "order": 52,
   "title": "A 2% annual wealth tax above £10 million",
   "shortTitle": "2% wealth tax above £10m",
-  "headline": "Contested. Two per cent above £10m: up to £24bn, or £18.5bn with more avoidance.",
+  "headline": "Contested. 2% above £10m from 2030-31: up to £24bn, or £18.5bn with more avoidance.",
   "description": "The campaign proposal backed by Tax Justice UK and Patriotic Millionaires: 2% a year on net wealth above £10 million, paid by about 0.03% of people. Its \"up to £24 billion\" rests on the Wealth Tax Commission’s low-avoidance assumption, that reported wealth falls 14% for each point of tax. Tax Policy Associates re-ran it on the Commission’s high-avoidance case, 34%, and got £18.5 billion; that is the figure scored here, held flat in cash. Nobody in government has costed it, and the two sides disagree about whether the people would stay.",
   "baselinePolicy": {
     "text": "The UK has no annual wealth tax. Wealth is taxed when it changes hands (capital gains tax, inheritance tax, stamp duties) and through council tax on homes.",
@@ -26,6 +26,20 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2030-31",
+    "text": "An annual wealth tax needs its own Act, a valuation regime and new HMRC systems, and is paid the January after the tax year. Tax Policy Associates expects it to apply first in 2029-30 and pay in January 2031: nothing before 2030-31.",
+    "sources": [
+      {
+        "sourceId": "tpa-wealth-tax-2025",
+        "quote": "the tax would first apply in the 2029/30 tax year, with the first revenue received in January 2031"
+      },
+      {
+        "sourceId": "wtc-final-report-2020",
+        "quote": "could take a total of four years from inception to full operation"
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -62,7 +76,7 @@
           }
         ]
       },
-      "note": "The cautious published figure: TPA’s £18.5bn on the high-avoidance case, held flat in cash from the start year. The campaign’s £24bn (low-avoidance case, Advani) is named on the card and not scored."
+      "note": "The cautious published figure: TPA’s £18.5bn on the high-avoidance case, held flat in cash from the start year. The campaign’s £24bn (low-avoidance case, Advani) is named on the card and not scored. Nothing is counted before 2030-31: see earliestStart."
     },
     "caveats": [
       "Two published figures for one tax: up to £24 billion with a 14% behavioural response, £18.5 billion with 34%. Both come from the same Wealth Tax Commission machinery and neither has been certified; the OBR would form its own view. This card takes the lower one.",

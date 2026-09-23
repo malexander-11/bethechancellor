@@ -8,7 +8,7 @@
   "order": 70,
   "title": "Time-limit the new unemployment insurance to six months",
   "shortTitle": "Unemployment insurance limit",
-  "headline": "Time-limit the new unemployment insurance to six months: IFS, saves £1.4bn a year.",
+  "headline": "Time-limit the new unemployment insurance to six months: IFS, £1.4bn a year from 2030-31.",
   "description": "The government proposes to replace new-style jobseeker’s allowance and new-style employment and support allowance with a single contributory unemployment insurance, paid at a higher rate but for a limited time. The IFS Green Budget costs the time limit: once transitional protections expire, twelve months saves around £0.6 billion a year and six months around £1.4 billion. The six-month version is scored here, flat in cash. The people who lose are those with long-term health conditions who would have stayed on the old benefit for longer.",
   "baselinePolicy": {
     "text": "New-style jobseeker’s allowance and new-style employment and support allowance are contributory benefits with no time limit on the health-related element; the government has proposed a single time-limited unemployment insurance to replace them.",
@@ -27,6 +27,16 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2030-31",
+    "text": "The new benefit is a proposal without legislation, and the IFS gives its saving \"in the long run, after any transitional protections are exhausted\": nothing is counted before 2030-31.",
+    "sources": [
+      {
+        "sourceId": "ifs-green-budget-2025",
+        "quote": "in the long run, after any transitional protections are exhausted"
+      }
+    ]
+  },
   "classification": {
     "side": "spending",
     "currentOrCapital": "current",
@@ -63,10 +73,10 @@
           }
         ]
       },
-      "note": "The IFS’s steady-state figure entered as a negative spending effect and held flat from the start year. The IFS says the saving arrives after transitional protections expire, so the early years would be smaller."
+      "note": "The IFS’s steady-state figure entered as a negative spending effect and held flat from the start year. The IFS says the saving arrives after transitional protections expire, so the early years would be smaller. Nothing is counted before 2030-31: see earliestStart."
     },
     "caveats": [
-      "A steady-state saving: the IFS says it arrives \"after any transitional protections had expired\", so applying it from 2027-28 overstates the first years.",
+      "A steady-state saving: the IFS says it arrives \"after any transitional protections had expired\", so nothing is counted before 2030-31, and even the first counted year may be overstated.",
       "The IFS’s own arithmetic on a benefit that does not yet exist; the twelve-month version saves around £0.6 billion. Nobody in government has costed the time limit.",
       "Whether the new benefit sits inside or outside the welfare cap depends on how it is classified; jobseeker’s allowance is outside the cap today and contributory employment and support allowance is inside. This card treats the saving as outside the cap."
     ]

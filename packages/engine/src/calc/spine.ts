@@ -13,6 +13,7 @@ import { costLever } from '../costing/index.js';
 import { evaluateRules } from '../rules/verdicts.js';
 import { aggregateEffects } from './aggregate.js';
 import { policyYearsOf, runFiscalArithmetic } from './arithmetic.js';
+import { fyStart } from './years.js';
 
 export interface ComputeInput {
   vintage: Vintage;
@@ -128,21 +129,35 @@ export function computeOutcome(input: ComputeInput): Outcome {
   const stability = verdicts.find((v) => v.kind === 'currentBudget');
   const targetYear =
     stability?.targetYear ?? vintage.years.forecast[3] ?? policyYears[policyYears.length - 1] ?? '';
-  const attribution: AttributionRow[] = effects.map((e) => ({
-    kind: e.category === 'macro' ? 'macro' : 'lever',
-    code: e.code,
-    label: e.title,
-    badge: e.badge,
-    currentBudgetGbpm:
-      (e.currentSpending[targetYear] ?? 0) -
-      (e.receipts[targetYear] ?? 0) +
-      (e.macroCurrent[targetYear] ?? 0),
-    psnbGbpm:
-      (e.currentSpending[targetYear] ?? 0) +
-      (e.capitalSpending[targetYear] ?? 0) -
-      (e.receipts[targetYear] ?? 0) +
-      (e.macroPsnb[targetYear] ?? 0),
-  }));
+  // A measure that does nothing in the target year but starts later names its first year.
+  const size = (e: LeverEffect, y: string) =>
+    Math.abs(e.receipts[y] ?? 0) +
+    Math.abs(e.currentSpending[y] ?? 0) +
+    Math.abs(e.capitalSpending[y] ?? 0) +
+    Math.abs(e.macroPsnb[y] ?? 0);
+  const startsAfterTarget = (e: LeverEffect): string | undefined =>
+    size(e, targetYear) >= 0.5
+      ? undefined
+      : policyYears.find((y) => fyStart(y) > fyStart(targetYear) && size(e, y) >= 0.5);
+  const attribution: AttributionRow[] = effects.map((e) => {
+    const fromYear = startsAfterTarget(e);
+    return {
+      kind: e.category === 'macro' ? 'macro' : 'lever',
+      code: e.code,
+      label: e.title,
+      badge: e.badge,
+      currentBudgetGbpm:
+        (e.currentSpending[targetYear] ?? 0) -
+        (e.receipts[targetYear] ?? 0) +
+        (e.macroCurrent[targetYear] ?? 0),
+      psnbGbpm:
+        (e.currentSpending[targetYear] ?? 0) +
+        (e.capitalSpending[targetYear] ?? 0) -
+        (e.receipts[targetYear] ?? 0) +
+        (e.macroPsnb[targetYear] ?? 0),
+      ...(fromYear ? { fromYear } : {}),
+    };
+  });
   const interest = paths.deltas.debtInterest[targetYear] ?? 0;
   if (Math.abs(interest) > 0.5) {
     attribution.push({

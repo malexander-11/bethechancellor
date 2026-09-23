@@ -8,7 +8,7 @@
   "order": 37,
   "title": "Double council tax on bands G and H",
   "shortTitle": "Council tax bands G and H",
-  "headline": "Double council tax on bands G and H as a national surcharge: IFS, £4.4bn.",
+  "headline": "Double council tax on bands G and H from 2029-30: IFS, £4.4bn surcharge.",
   "description": "Council tax is still based on 1991 values and the top band pays only three times the bottom. The IFS Green Budget shows what doubling the two top bands in England would raise: £4.2 billion in 2029-30 if councils kept it, or £4.4 billion as a new national surcharge that goes to the Exchequer, which is the figure here. About 4% of homes are in bands G and H; the extra bill would be around £3,800 a year in G and £4,560 in H at the average band D rate. The IFS offers it as an illustration, not a recommendation. Static and held flat in cash.",
   "baselinePolicy": {
     "text": "Council tax in England is charged on 1991 valuation bands; band H pays three times band D. Budget 2025 added a surcharge on homes worth over £2 million from April 2028, which the £1.5m card extends.",
@@ -29,6 +29,20 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2029-30",
+    "text": "A surcharge on council tax bands needs valuation and billing changes: Budget 2025 announced the £2m surcharge for 1 April 2028, 28 months on, with set-up costs before it. The IFS figure is for 2029-30.",
+    "sources": [
+      {
+        "sourceId": "hmt-budget-2025-table-4-1",
+        "quote": "Introduce a surcharge on owners of residential properties valued over £2m in England from 1 April 2028"
+      },
+      {
+        "sourceId": "ifs-green-budget-2025",
+        "quote": "would raise £4.2 billion in 2029–30"
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -65,7 +79,7 @@
           }
         ]
       },
-      "note": "The IFS Green Budget’s illustrative figure for a national surcharge, held flat in cash from the start year. The IFS’s alternative, doubling the bands with councils keeping the money, is £4.2 billion. Static."
+      "note": "The IFS Green Budget’s illustrative figure for a national surcharge, held flat in cash from the start year. The IFS’s alternative, doubling the bands with councils keeping the money, is £4.2 billion. Static. Nothing is counted before 2029-30: see earliestStart."
     },
     "caveats": [
       "The IFS calls this \"an illustration (but not a recommendation)\". Static: no allowance for appeals, revaluations or people moving; the OBR would score less.",

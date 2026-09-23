@@ -3,6 +3,7 @@ import {
   checkRawSourceConsistency,
   computeOutcome,
   headSeries,
+  prevFy,
   promiseBreaks,
 } from '../src/index.js';
 import { loadDataset, loadExtracts } from './fixtures.js';
@@ -344,19 +345,20 @@ describe('the Budget 2026 menu', () => {
     ).toBe(true);
   });
 
-  it('the progressive think-tank asks are each one stated figure, held flat in cash', () => {
-    const cases: Array<[string, number]> = [
-      ['nicrent', 3000],
-      ['qelevy', 5000],
-      ['carried', 510],
-      ['wealth2', 18500],
-      ['sugsalt', 3500],
-      ['vatthr', 2000],
+  it('the progressive think-tank asks are each one stated figure, held flat from the year they can start', () => {
+    const cases: Array<[string, number, string]> = [
+      ['nicrent', 3000, '2028-29'],
+      ['qelevy', 5000, '2028-29'],
+      ['carried', 510, '2027-28'],
+      ['wealth2', 18500, '2030-31'],
+      ['sugsalt', 3500, '2029-30'],
+      ['vatthr', 2000, '2027-28'],
     ];
-    for (const [code, want] of cases) {
-      expect(effectOf({ [code]: 1 }, code, '2029-30').receipts).toBeCloseTo(want, 6);
-      expect(effectOf({ [code]: 1 }, code, '2027-28').receipts).toBeCloseTo(want, 6);
-      expect(effectOf({ [code]: 1 }, code, '2026-27').receipts).toBe(0);
+    for (const [code, want, start] of cases) {
+      expect(effectOf({ [code]: 1 }, code, start).receipts, code).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, '2030-31').receipts, code).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, prevFy(start)).receipts, code).toBe(0);
+      expect(lever(code).earliestStart?.year, code).toBe(start === '2027-28' ? undefined : start);
       expect(lever(code).badge).toBe('assumption');
     }
   });
@@ -396,15 +398,15 @@ describe('the Budget 2026 menu', () => {
     expect(checkRawSourceConsistency(levy, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 
-  it('the welfare asks are stated figures: flat costs and savings, one grown with universal credit', () => {
-    for (const [code, want] of [
-      ['lha30', 2000],
-      ['pensmth', -650],
-      ['uitime', -1400],
+  it('the welfare asks are stated figures from the year they can start, one grown with universal credit', () => {
+    for (const [code, want, start] of [
+      ['lha30', 2000, '2027-28'],
+      ['pensmth', -650, '2027-28'],
+      ['uitime', -1400, '2030-31'],
     ] as const) {
-      expect(effectOf({ [code]: 1 }, code, '2029-30').current).toBeCloseTo(want, 6);
-      expect(effectOf({ [code]: 1 }, code, '2027-28').current).toBeCloseTo(want, 6);
-      expect(effectOf({ [code]: 1 }, code, '2026-27').current).toBe(0);
+      expect(effectOf({ [code]: 1 }, code, start).current, code).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, '2030-31').current, code).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, prevFy(start)).current, code).toBe(0);
     }
     const uc = headSeries(ds.vintage, 'universalCreditAndLegacy');
     const grown = (680 * (uc['2029-30'] ?? 0)) / (uc['2027-28'] ?? 1);
@@ -415,9 +417,11 @@ describe('the Budget 2026 menu', () => {
     expect(grown).toBeGreaterThan(680);
   });
 
-  it('the CSJ cards net a gross saving against the reinvestment they propose', () => {
+  it('the CSJ cards net a gross saving against the reinvestment they propose, from the years CSJ gives', () => {
     expect(effectOf({ csjmh: 1 }, 'csjmh', '2029-30').current).toBeCloseTo(-7400 + 1000, 6);
-    expect(effectOf({ dlakids: 1 }, 'dlakids', '2029-30').current).toBeCloseTo(-980 + 660, 6);
+    expect(effectOf({ csjmh: 1 }, 'csjmh', '2028-29').current).toBe(0);
+    expect(effectOf({ dlakids: 1 }, 'dlakids', '2030-31').current).toBeCloseTo(-980 + 660, 6);
+    expect(effectOf({ dlakids: 1 }, 'dlakids', '2029-30').current).toBe(0);
     const inCap = run({ csjmh: 1 }).leverEffects.find((x) => x.code === 'csjmh')?.welfareInCap[
       '2029-30'
     ];
@@ -458,17 +462,17 @@ describe('the Budget 2026 menu', () => {
     }
   });
 
-  it('the IFS, Demos and centre-right options are stated figures held flat, save the one that grows with property taxes', () => {
-    for (const [code, want] of [
-      ['ctgh', 4400],
-      ['nicuel', 14100],
-      ['vat1z', 4200],
-      ['pslump', 2000],
-      ['cta', -4800],
+  it('the IFS, Demos and centre-right options are stated figures from the year they can start, save the one that grows with property taxes', () => {
+    for (const [code, want, start] of [
+      ['ctgh', 4400, '2029-30'],
+      ['nicuel', 14100, '2027-28'],
+      ['vat1z', 4200, '2027-28'],
+      ['pslump', 2000, '2027-28'],
+      ['cta', -4800, '2028-29'],
     ] as const) {
-      expect(effectOf({ [code]: 1 }, code, '2029-30').receipts).toBeCloseTo(want, 6);
-      expect(effectOf({ [code]: 1 }, code, '2027-28').receipts).toBeCloseTo(want, 6);
-      expect(effectOf({ [code]: 1 }, code, '2026-27').receipts).toBe(0);
+      expect(effectOf({ [code]: 1 }, code, start).receipts, code).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, '2030-31').receipts, code).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, prevFy(start)).receipts, code).toBe(0);
     }
     const ptt = headSeries(ds.vintage, 'receiptsByTax.propertyTransactionTaxes');
     const grown = (-9200 * (ptt['2029-30'] ?? 0)) / (ptt['2027-28'] ?? 1);
@@ -751,7 +755,9 @@ describe('the policies that came in the post', () => {
       true,
     );
     expect(wealth?.costing.kind === 'schedule').toBe(true);
-    expect(effectOf({ wealth: 1 }, 'wealth', '2029-30').receipts).toBeCloseTo(7768, 0);
+    // It cannot start before 2030-31 (ADR-0021), so the rules' target year sees nothing of it.
+    expect(effectOf({ wealth: 1 }, 'wealth', '2029-30').receipts).toBe(0);
+    expect(effectOf({ wealth: 1 }, 'wealth', '2030-31').receipts).toBeCloseTo(7768, 0);
     // Shelved, but the arithmetic is kept so the record can be checked.
     expect(effectOf({ nonuk: 1 }, 'nonuk', '2029-30').current).toBeCloseTo(-14285, 0);
   });

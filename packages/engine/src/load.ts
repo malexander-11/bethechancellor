@@ -62,6 +62,7 @@ import type {
   Sr25Extract,
   Vintage,
 } from './types/data.js';
+import { policyYearsOf } from './calc/arithmetic.js';
 import { hasHead } from './costing/taxHead.js';
 import { GUIDED_STEPS, stageTerms } from './game/guide.js';
 import { validateVintage } from './validate/validateVintage.js';
@@ -286,6 +287,14 @@ export function validateDataset(ds: Dataset): string[] {
       problems.push(
         `lever ${lever.id} cites tax head "${lever.classification.taxHead}" missing from vintage ${ds.vintage.id}`,
       );
+    }
+    if (lever.earliestStart) {
+      const years = policyYearsOf(ds.vintage);
+      if (!years.includes(lever.earliestStart.year)) {
+        problems.push(
+          `lever ${lever.id} cannot start in ${lever.earliestStart.year}: vintage ${ds.vintage.id} runs ${years[0] ?? '?'} to ${years[years.length - 1] ?? '?'}`,
+        );
+      }
     }
     if (
       (lever.costing.kind === 'linearPerUnit' || lever.costing.kind === 'lookupTable') &&

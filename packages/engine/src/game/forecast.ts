@@ -112,6 +112,8 @@ export function revisedMeasures(outcome: Outcome, targetYear: string): RevisedMe
       (effect.capitalSpending[targetYear] ?? 0) -
       (effect.receipts[targetYear] ?? 0);
     const asScoredGbpm = effect.revision.factor === 0 ? 0 : revisedGbpm / effect.revision.factor;
+    // A measure with nothing in the target year has nothing the re-scoring can move there.
+    if (Math.abs(asScoredGbpm) < 0.5) continue;
     out.push({ effect, revision: effect.revision, asScoredGbpm, revisedGbpm });
   }
   return out.sort(

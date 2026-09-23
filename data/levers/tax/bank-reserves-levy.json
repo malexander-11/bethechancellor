@@ -8,7 +8,7 @@
   "order": 37,
   "title": "A levy on banks’ reserve returns above 2%",
   "shortTitle": "Bank reserves levy",
-  "headline": "A levy on banks’ Bank of England reserves above 2%: IPPR’s £5bn floor.",
+  "headline": "A levy on banks’ reserve returns above 2% from 2028-29: IPPR’s £5bn floor.",
   "description": "The Bank of England pays Bank Rate on the reserves it created when it bought gilts. IPPR proposes taxing the return on those reserves above 2%, only on banks with more than £25 billion of assets, so that the windfall from higher rates goes to the Treasury rather than to bank shareholders. IPPR puts the gain to current-budget headroom at £5 billion to £7 billion by the end of the parliament, depending on how fast the Bank runs down its gilt holdings. The lower figure is scored here, held flat in cash. The levy fades to nothing as the gilts leave the Bank’s balance sheet or if Bank Rate falls to 2%.",
   "baselinePolicy": {
     "text": "Banks pay corporation tax at 25%, a 3% surcharge on profits above £100 million and the bank levy on their balance sheets. Reserves at the Bank of England earn Bank Rate in full, currently 3.75%.",
@@ -26,6 +26,20 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2028-29",
+    "text": "A new levy needs its own legislation: the digital services tax, another standalone tax on a few large payers, ran from Budget 2018 to 1 April 2020. IPPR calls this one relatively straightforward to implement.",
+    "sources": [
+      {
+        "sourceId": "hmrc-dst-policy-paper-2020",
+        "quote": "The Digital Services Tax will apply to revenue earned from 1 April 2020."
+      },
+      {
+        "sourceId": "ippr-fixing-the-leak-2025",
+        "quote": "It would be relatively straightforward to implement."
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -62,7 +76,7 @@
           }
         ]
       },
-      "note": "IPPR’s lower figure, held flat in cash from the start year. IPPR gives a range that depends on the speed of quantitative tightening; the upper figure is named on the card."
+      "note": "IPPR’s lower figure, held flat in cash from the start year. IPPR gives a range that depends on the speed of quantitative tightening; the upper figure is named on the card. Nothing is counted before 2028-29: see earliestStart."
     },
     "caveats": [
       "IPPR’s own estimate, not HMRC’s: £5 billion to £7 billion by the end of the parliament, \"depending on the speed of quantitative tightening\". The floor is scored; a flat path is our simplification of a yield that falls as gilts leave the Bank’s balance sheet.",

@@ -226,6 +226,11 @@ export interface AttributionRow {
   currentBudgetGbpm: number;
   /** Effect on borrowing in the stability target year (positive = worse). */
   psnbGbpm: number;
+  /**
+   * Set when the measure does nothing in the target year but starts later: the first year it
+   * moves money, so a running list can say "from 2030-31" beside an honest nought (ADR-0021).
+   */
+  fromYear?: string;
 }
 
 export interface Outcome {

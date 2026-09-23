@@ -482,7 +482,18 @@ export const leverSchema = z
       alreadyIncludes: z.array(z.string()).optional(),
     }),
     control: controlSchema,
-    earliestImplementation: fiscalYearSchema.optional(),
+    /**
+     * The first fiscal year the measure can take effect, on its source's own timetable
+     * (legislation, systems, valuation, transitional protection). The engine counts nothing before
+     * it, whatever the game's start year or a player's delay (ADR-0021).
+     */
+    earliestStart: z
+      .strictObject({
+        year: fiscalYearSchema,
+        text: z.string().min(1).max(240),
+        sources: z.array(sourceRefSchema).min(1),
+      })
+      .optional(),
     appliesFrom: z.enum(['firstForecastYear', 'implementationYear']).optional(),
     classification: classificationSchema.optional(),
     costing: costingSchema,
@@ -550,6 +561,13 @@ export const leverSchema = z
       });
     }
     if (lever.category === 'macro') {
+      if (lever.earliestStart) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'a macro slider has no start year to wait for',
+          path: ['earliestStart'],
+        });
+      }
       if (lever.costing.kind !== 'sensitivity') {
         ctx.addIssue({
           code: 'custom',
