@@ -37,10 +37,10 @@ describe('making it add up', () => {
   });
 
   it('states the gap against the target, and ranks the Director of Tax’s suggestions', async () => {
-    // The one costed relief that out-yields every rate rise and is on the table is already on, so
+    // The two costed reliefs that out-yield every rate rise and are on the table are already on, so
     // the Director's list reaches the rate rises the manifesto lock covers; the options nobody
     // proposes are never suggested.
-    at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1_nicpen.1`);
+    at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1_nicpen.1_pens20.1`);
     expect(screen.getByText(/you set out to keep/)).toBeInTheDocument();
     // The stress test: the package under every forecast the draw could have produced.
     fireEvent.click(screen.getByText(/hold up under the other forecasts/));
@@ -53,7 +53,7 @@ describe('making it add up', () => {
     expect(within(route).getAllByText(/breaks The tax lock/).length).toBeGreaterThan(0);
     fireEvent.click(buttons[0]!);
     // The biggest yield in the package is applied, whichever tax it is; the package grows by one.
-    await waitFor(() => expect(L().split('_')).toHaveLength(4));
+    await waitFor(() => expect(L().split('_')).toHaveLength(5));
   });
 
   it('delays a measure to a later year and writes the delay into the link', async () => {

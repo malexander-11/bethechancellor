@@ -9,7 +9,7 @@
   "title": "Extend the high value council tax surcharge to homes over £1.5m",
   "shortTitle": "Surcharge from £1.5m",
   "headline": "A £1.5m band, assumed to raise what the £2m band does: £0.4bn.",
-  "description": "Budget 2025 introduced an annual surcharge on owners of homes in England valued over £2 million from April 2028, costed at £400 million in 2028-29 rising to £435 million. This card adds a lower band from £1.5 million and assumes it raises exactly what the Treasury costed for the £2 million bands, year by year, set-up costs included. That is an assumption, not a costing: nobody has published how many homes sit between £1.5 million and £2 million or what they would be charged.",
+  "description": "Budget 2025 introduced an annual surcharge on owners of homes in England valued over £2 million from April 2028, costed at £400 million in 2028-29 rising to £435 million. This card adds a lower band from £1.5 million and assumes it raises exactly what the Treasury costed for the £2 million bands, year by year, set-up costs included. That is an assumption, not a costing: nobody has published how many homes sit between £1.5 million and £2 million or what they would be charged. Tax Policy Associates’ analysis, updated in September 2026, puts the extension at about 160,000 extra homes and, in its base case with every band’s charge raised, about £400 million a year more after behaviour, close to this card’s assumption.",
   "baselinePolicy": {
     "text": "A surcharge on owners of residential properties valued over £2 million in England from 1 April 2028, based on a Valuation Office revaluation at 2026 values, on an estimated 165,000 properties in 2028-29; costed at −£60m, −£120m and −£155m of set-up cost in 2025-26 to 2027-28, then £400m, £430m and £435m (Budget 2025, Table 4.1 line 54).",
     "source": {
@@ -72,7 +72,7 @@
       "note": "Repeat: the Treasury's certified costing of the £2 million surcharge, taken as the yield of a further band from £1.5 million, year by year, set-up costs included. Positive scorecard values reduce borrowing; here receipts positive means more revenue. Effects before the start year are not applied."
     },
     "caveats": [
-      "Equal yield is our assumption. The Treasury’s costing rests on about 165,000 homes over £2 million with banded charges; government sources called a £1.5 million threshold a live discussion in September 2026 and put the homes caught at about 271,000 on current values, so equal yield means a much lower charge per home, and nobody has published the charge. The real figure could be well above or below.",
+      "Equal yield is our assumption, and it needs the charges to rise. Tax Policy Associates’ base case, a £2,500 band from £1.5 million with every other band pushed up to a new £10,000 top rate, roughly doubles the yield to about £800 million a year after behaviour, close to what this card adds; a plain new band at £1,500 would add only around £120 million net once valuation costs are paid. TPA counts about 160,000 extra homes, nearly doubling those in scope, and calls its figures an illustrative extrapolation, not an OBR forecast.",
       "England only, as the surcharge itself is; council tax is devolved elsewhere. The surcharge is scored as an Exchequer receipt, not council revenue.",
       "The set-up costs in 2027-28 are kept: a new band needs valuing too. The Treasury's costing is on the OBR November 2025 forecast, not the March 2026 baseline used here."
     ]
@@ -92,6 +92,9 @@
         },
         {
           "sourceId": "press-cityam-2026-09-20"
+        },
+        {
+          "sourceId": "tpa-mansion-tax-1-5m-2026"
         }
       ]
     },

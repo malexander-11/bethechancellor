@@ -48,6 +48,7 @@ const MENU = {
     'hscl',
     'hvcts15',
     'nicllp',
+    'pens20',
     'vatelec',
     'vatgas',
   ],
@@ -278,6 +279,44 @@ describe('the Budget 2026 menu', () => {
     if (!term) throw new Error('two terms');
     term.factor = 1;
     expect(checkRawSourceConsistency(align, extracted, ds.vintage).length).toBeGreaterThan(0);
+  });
+
+  it('relief at the basic rate is half the higher-rate relief and five ninths of the additional, grown with income tax', () => {
+    const it = headSeries(ds.vintage, 'incomeTax');
+    const base = 31700 * 0.5 + 8000 * (25 / 45);
+    const want = (base * (it['2029-30'] ?? 0)) / (it['2024-25'] ?? 1);
+    const got = effectOf({ pens20: 1 }, 'pens20', '2029-30').receipts;
+    expect(got).toBeCloseTo(want, -1);
+    expect(got).toBeGreaterThan(effectOf({ pens30: 1 }, 'pens30', '2029-30').receipts * 5);
+    expect(effectOf({ pens20: 1 }, 'pens20', '2026-27').receipts).toBe(0);
+    // Two designs for one relief: each warns against the other.
+    expect(
+      lever('pens20').interactions.some((i) => i.withLever === 'flat-rate-pension-relief'),
+    ).toBe(true);
+    expect(
+      lever('pens30').interactions.some((i) => i.withLever === 'basic-rate-pension-relief'),
+    ).toBe(true);
+  });
+
+  it('doubling the bank levy is HMRC’s 2024-25 receipts once more, grown with corporation tax', () => {
+    const ct = headSeries(ds.vintage, 'onshoreCorporationTax');
+    const want = (1300 * (ct['2029-30'] ?? 0)) / (ct['2024-25'] ?? 1);
+    expect(effectOf({ banklevy: 1 }, 'banklevy', '2029-30').receipts).toBeCloseTo(want, -1);
+    expect(effectOf({ banklevy: 1 }, 'banklevy', '2026-27').receipts).toBe(0);
+    expect(lever('banklevy').badge).toBe('assumption');
+  });
+
+  it('the £1.5m band names Tax Policy Associates’ two scenarios beside its equal-yield assumption', () => {
+    const band = lever('hvcts15');
+    if (band.costing.kind !== 'schedule') throw new Error('the band is a schedule');
+    expect(
+      band.costing.caveats.some((c) => /Tax Policy Associates/.test(c) && /160,000/.test(c)),
+    ).toBe(true);
+    expect(
+      band.considerations.some((c) =>
+        c.sources.some((s) => s.sourceId === 'tpa-mansion-tax-1-5m-2026'),
+      ),
+    ).toBe(true);
   });
 
   it('unfreezing the Plan 2 threshold is spending from 2027-28, and the 2026-27 revaluation is not applied', () => {

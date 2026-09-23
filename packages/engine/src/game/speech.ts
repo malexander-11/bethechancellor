@@ -93,6 +93,8 @@ const REVENUE_CLASS: Record<string, string> = {
   cgtl: 'top',
   cgtexit: 'top',
   cgtprr: 'top',
+  pens20: 'top',
+  banklevy: 'business',
   hmrc2: 'compliance',
   badr: 'top',
   rnrb: 'top',

@@ -1055,7 +1055,7 @@
       "licence": "OGL-3.0",
       "localPath": "data/raw/hmrc-banking-sector-receipts-2025/PAYE__Corporation_Tax__Bank_Payroll_Tax__Bank_Levy_and_Bank_Surcharge_receipts__2025_.ods",
       "sha256": "1f2afb7c2290e68fed075e88da4f31c32852d9870e2cf4c130aa2c4413c8a886",
-      "notes": "Table 1, £ billion by financial year. Bank Surcharge receipts: 2016-17 1.1, 2017-18 1.8, 2018-19 1.9, 2019-20 2.0, 2020-21 1.4, 2021-22 2.3, 2022-23 2.6, 2023-24 1.4, 2024-25 1.0. The commentary: \"Bank Surcharge receipts were £1.0 billion in financial year 2024 to 2025, a decrease of £0.5 billion (32.6%) on the previous year, which mostly reflects the full effects of the reduction in the Bank Surcharge rate from 8% to 3% in April 2023 and lower UK banking sector profits\". A 2026 edition was not published at 19 September 2026; check the landing page on or after 25 September 2026."
+      "notes": "Table 1, £ billion by financial year. Bank Levy receipts: 2016-17 3.0, 2017-18 2.8, 2018-19 2.6, 2019-20 2.5, 2020-21 2.3, 2021-22 1.5, 2022-23 1.3, 2023-24 1.4, 2024-25 1.3. Bank Surcharge receipts: 2016-17 1.1, 2017-18 1.8, 2018-19 1.9, 2019-20 2.0, 2020-21 1.4, 2021-22 2.3, 2022-23 2.6, 2023-24 1.4, 2024-25 1.0. The commentary: \"Bank Surcharge receipts were £1.0 billion in financial year 2024 to 2025, a decrease of £0.5 billion (32.6%) on the previous year, which mostly reflects the full effects of the reduction in the Bank Surcharge rate from 8% to 3% in April 2023 and lower UK banking sector profits\". A 2026 edition was not published at 19 September 2026; check the landing page on or after 25 September 2026."
     },
     {
       "id": "legislation-cta-2010-s269de",
@@ -1174,6 +1174,17 @@
       "retrievedOn": "2026-09-22",
       "licence": "Other",
       "notes": "Professional-firm commentary used only as qualitative context. \"One option the government has been widely reported to be considering is a 10% “death tax” that would replace the inheritance tax regime\", with the National Care Service \"estimated to require additional spending of £18.5 billion annually and rising\"; the government has said it has no plans. No costing of the levy is published."
+    },
+    {
+      "id": "tpa-mansion-tax-1-5m-2026",
+      "org": "Other",
+      "title": "What if Andy Burnham lowered the mansion tax threshold to £1.5m?",
+      "edition": "Tax Policy Associates analysis, 7 July 2026, updated 19 September 2026",
+      "url": "https://taxpolicy.org.uk/2026/07/07/mansion-tax-1-5m-burnham/",
+      "publishedOn": "2026-07-07",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. \"Our estimate: a £1.5m threshold would tax around 160,000 additional homes on an OBR-scaled basis, almost doubling the number of properties in scope.\" Static revenue in 2028-29: £605m for the announced £2m tax, £850m with a £1.5m band at £1,500 and other bands unchanged, £1,270m with a £1.5m band at £2,500 and every other band pushed up (TPA’s base case); after the OBR’s retention ratio (£400m ÷ £605m) and £40m a year of valuation and administration costs the base case \"could roughly double the net revenue, to about £800m\". \"This is our illustrative extrapolation, not an OBR forecast for a £1.5m tax.\" Quoted briefly with attribution."
     }
   ]
 }

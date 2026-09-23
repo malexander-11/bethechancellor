@@ -75,3 +75,33 @@ arrives on Budget day.
   re-scores the package. Nothing stops them, as with every other card.
 - When the Budget publishes a full-year electricity cost, a rate for the levy, or a costing for any
   item in decision 8, the card or the gap changes: a data change, not a rewrite.
+
+## Revision, 2026-09-23: the FT's list
+
+The user asked whether the menu held everything in an FT survey of the plausible tax-raising
+options (23 September 2026), supplied as screenshots because FT blocks every route from here.
+Read in full: the capital gains section (a rise, alignment, HMRC's finding that ten points on the
+higher rate lose £3.6bn in 2028-29, the Resolution Foundation's £4bn), the corporation tax cap,
+windfall taxes, the tax gap, the salary-sacrifice cap, the triple lock, the £1.5m surcharge band,
+stamp duty and gambling duties were all on the menu already. Two were not, and one card could be
+sharpened:
+
+- **Pension tax relief at the basic rate** (`pens20`): the article's largest uncovered option, reported
+  with an IFS estimate of "as much as £22bn" that no reachable document carries. The card is our
+  arithmetic on HMRC's relief by marginal rate, half of the higher-rate relief and five ninths of the
+  additional-rate relief, about £20bn in 2024-25 grown with income tax, badged assumption, warning
+  against the flat 30% card, with the employer-contribution objection on it.
+- **Doubling the bank levy** (`banklevy`): the article names the levy beside the surcharge. HMRC's
+  banking-sector table gives levy receipts of £1.3bn in 2024-25, down from £3.0bn as the rate was
+  halved; the card adds that once more, grown with corporation tax, static, badged assumption.
+- **The £1.5m band** (`hvcts15`): Tax Policy Associates' analysis (updated 19 September) is the first
+  published yield for the threshold: about 160,000 extra homes; about £800m a year after behaviour
+  if a £2,500 band is added and every other band's charge rises, which adds about the £400m this
+  card already assumes; only around £120m net for a plain £1,500 band. The card keeps the certified
+  line as its arithmetic and quotes TPA in words.
+
+Not built: a cut to the pension lump sum and higher fees for passports and driving licences, which
+have no published costing; the fiscal devolution roadmap and mayoral overnight-stay levies, which
+move money between tiers rather than raise it. The FT article is not registered as a source; every
+figure on the new cards comes from HMRC's tables or TPA's page. Counts after the revision: 62 tax
+levers (43 direct, 18 assumption, 1 mechanical), 97 lever files, 116 sources.

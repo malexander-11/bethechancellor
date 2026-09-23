@@ -759,3 +759,10 @@ rows in `data/derived/`, and built what could be built honestly.
 - **Readings as of 22 September 2026**: the 10-year gilt at 5.29%, borrowing to August £77.3
   billion against a £69.2 billion profile, the Resolution Foundation's £10 billion headroom estimate
   quoted beside the advisers' rule of thumb.
+
+The 23 September revision (ADR-0019) read an FT survey of the options in full and added relief at
+the basic rate on pension contributions (`pens20`, a `weightedSum` of half the higher-rate relief and
+five ninths of the additional-rate relief in HMRC's 2024-25 breakdown, grown with income tax) and a
+doubled bank levy (`banklevy`, HMRC's £1.3 billion of 2024-25 receipts once more, grown with
+corporation tax), both static and badged assumption; the £1.5m surcharge card now quotes Tax Policy
+Associates' yield for the threshold beside its own equal-yield assumption.

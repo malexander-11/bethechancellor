@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "id": "basic-rate-pension-relief",
+  "code": "pens20",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Income tax",
+  "order": 62,
+  "title": "Give pension tax relief at the basic rate only",
+  "shortTitle": "Basic-rate pension relief",
+  "headline": "Relief at 20% for everyone. Our arithmetic on HMRC’s figures: about £20bn, static.",
+  "description": "Pension contributions are relieved at the saver’s own marginal rate: 20%, 40% or 45%. This card gives everyone relief at the basic rate only, so higher and additional-rate taxpayers lose half and more than half of theirs and basic-rate savers are unchanged. On HMRC’s 2024-25 breakdown of relief by marginal rate the static saving is about £20bn: half of the £31.7bn given at the higher rate and five ninths of the £8.0bn given at the additional rate, grown with the OBR’s income tax forecast. Nobody has costed it officially; the hard part, as with the flat 30% card, is employer contributions, which are not taxed as the employee’s income at all.",
+  "baselinePolicy": {
+    "text": "Pension contributions attract income tax relief at the saver’s marginal rate. In 2024-25 HMRC puts the relief on contributions at £16.1bn given at the basic rate, £31.7bn at the higher rate and £8.0bn at the additional rate, across individual, salary-sacrificed and employer contributions.",
+    "source": {
+      "sourceId": "hmrc-private-pensions-2026-07-tidy"
+    }
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 25461,
+      "2028-29": 26361,
+      "2029-30": 27536,
+      "2030-31": 28732
+    },
+    "source": {
+      "sourceId": "hmrc-private-pensions-2026-07-tidy"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "hmrc-private-pensions-2026-07-tidy",
+      "method": {
+        "name": "weightedSum",
+        "baseYear": "2024-25",
+        "resultGbpm": 20294,
+        "growWith": "incomeTax",
+        "terms": [
+          {
+            "label": "Relief given at the higher rate, scaled by (40 − 20) ÷ 40",
+            "value": 31700,
+            "factor": 0.5,
+            "unit": "£ million, 2024-25",
+            "source": {
+              "sourceId": "hmrc-private-pensions-2026-07-tidy",
+              "note": "row it-relief-by-rate-higher-rate of the extract: the five contribution types at the higher rate, sector and scheme totals"
+            }
+          },
+          {
+            "label": "Relief given at the additional rate, scaled by (45 − 20) ÷ 45",
+            "value": 8000,
+            "factor": 0.555556,
+            "unit": "£ million, 2024-25",
+            "source": {
+              "sourceId": "hmrc-private-pensions-2026-07-tidy",
+              "note": "row it-relief-by-rate-additional-rate of the extract"
+            }
+          }
+        ]
+      },
+      "note": "Our arithmetic on HMRC’s relief by marginal rate: the share of higher and additional-rate relief that a 20% rate would not give, in 2024-25, grown with the OBR’s income tax receipts. Basic-rate relief is unchanged and drops out of the sum. Effects before the start year are not applied."
+    },
+    "caveats": [
+      "Static. Higher and additional-rate savers would put less into pensions, or take pay in other forms, once relief fell to 20%; the saving would shrink, perhaps a great deal. HMRC’s figures are the cost of relief as claimed, not a forecast of behaviour.",
+      "Employer contributions (£34bn of the £55.8bn of relief) are not taxed as the employee’s income at all, so there is no rate to cut; relief at 20% on them means a new charge on employers or on the employee’s benefit, which is why no government has done it.",
+      "Scottish income tax rates (19% to 48%) are ignored; HMRC’s split is UK-wide.",
+      "The sum uses HMRC’s rounded rows, and the two factors assume every pound relieved at a rate is relieved at exactly that rate; taper and allowance effects are ignored. Nobody has certified the number."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "basic-rate-relief-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Higher-rate savers would put less into pensions, or take pay in other forms, once relief fell from 40% or 45% to 20%: a bigger cut than the flat 30% card makes, so a bigger response. Nothing here builds that in.",
+      "sources": [
+        {
+          "sourceId": "hmrc-private-pensions-2026-07-tidy"
+        }
+      ]
+    },
+    {
+      "id": "basic-rate-relief-employers",
+      "kind": "administrative",
+      "direction": "raisesLess",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Most relief is on employer contributions, which are simply not counted as the employee’s income. Restricting them to basic-rate relief would need a new charge on employers or on employees for the contributions made for them, and defined benefit schemes have no contribution to value for each member. This is the practical objection every review of the idea has met.",
+      "sources": [
+        {
+          "sourceId": "hmrc-private-pensions-2026-07",
+          "table": "Table 6"
+        }
+      ]
+    },
+    {
+      "id": "basic-rate-relief-who-pays",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Basic-rate taxpayers are unchanged; higher-rate taxpayers lose half their relief and additional-rate taxpayers more than half. Nearly three quarters of the relief on contributions goes to higher and additional-rate taxpayers today.",
+      "sources": [
+        {
+          "sourceId": "hmrc-private-pensions-2026-07-tidy"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "flat-rate-pension-relief",
+      "text": "Two designs for the same relief: a flat 30% or the basic rate for everyone. Pick one; both together count the same relief twice.",
+      "severity": "warn"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

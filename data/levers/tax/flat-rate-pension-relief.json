@@ -135,5 +135,12 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-18"
+  "reviewedOn": "2026-09-18",
+  "interactions": [
+    {
+      "withLever": "basic-rate-pension-relief",
+      "text": "Two designs for the same relief: a flat 30% or the basic rate for everyone. Pick one; both together count the same relief twice.",
+      "severity": "warn"
+    }
+  ]
 }

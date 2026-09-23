@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "id": "bank-levy-double",
+  "code": "banklevy",
+  "category": "tax",
+  "badge": "assumption",
+  "group": "Business",
+  "order": 35,
+  "title": "Double the bank levy",
+  "shortTitle": "Bank levy",
+  "headline": "Double the bank levy. Static, on HMRC’s 2024-25 receipts: about £1.3bn.",
+  "description": "The bank levy is a charge on the balance sheets of the largest banks, created after the 2008 crisis. Its rate was halved in steps between 2015 and 2021, and receipts fell from £3.0 billion in 2016-17 to £1.3 billion in 2024-25. This card doubles the levy at HMRC’s 2024-25 receipts, so it raises what the levy raises today, grown with the OBR’s onshore corporation tax forecast. It is static: banks would shrink the chargeable balance sheet as they did when the rate fell. The bank surcharge, on profits, has its own card.",
+  "baselinePolicy": {
+    "text": "Bank levy receipts were £1.3 billion in 2024-25, down from £3.0 billion in 2016-17 as the rate was cut from 0.21% to 0.10% of chargeable equity and liabilities; the bank surcharge raised a further £1.0 billion.",
+    "source": {
+      "sourceId": "hmrc-banking-sector-receipts-2025",
+      "table": "Table 1"
+    },
+    "alreadyIncludes": ["Corporation tax main rate 25% (Rates and allowances: Corporation Tax)."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "onshoreCorporationTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 1543,
+      "2028-29": 1598,
+      "2029-30": 1705,
+      "2030-31": 1764
+    },
+    "source": {
+      "sourceId": "hmrc-banking-sector-receipts-2025",
+      "table": "Table 1"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "hmrc-banking-sector-receipts-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2024-25",
+        "resultGbpm": 1300,
+        "growWith": "onshoreCorporationTax",
+        "terms": [
+          {
+            "label": "Bank levy receipts in 2024-25: a second levy of the same size",
+            "value": 1300,
+            "unit": "£ million",
+            "source": {
+              "sourceId": "hmrc-banking-sector-receipts-2025",
+              "table": "Table 1"
+            }
+          }
+        ]
+      },
+      "note": "Static arithmetic: doubling the levy adds today’s receipts once more, grown with the OBR’s onshore corporation tax receipts from 2024-25. HMRC publishes the receipts to £0.1 billion, so the base is rounded to within about 10%."
+    },
+    "caveats": [
+      "Static. Banks shrink the chargeable balance sheet when the levy rises, and shift it abroad; receipts fell from £3.0bn to £1.3bn as the rate was halved, a fall that is more than the rate alone explains. Nobody has certified this number.",
+      "The levy falls on balance sheets and the surcharge on profits; they are separate taxes and this card leaves the surcharge where it is. HMRC publishes receipts to £0.1 billion; the 2026 edition of the statistics, due in late September 2026, would update the base.",
+      "Only banks and building societies with chargeable equity and liabilities above £20 billion pay, so the change falls on a few large groups."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "bank-levy-behaviour",
+      "kind": "behavioural",
+      "direction": "raisesLess",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Receipts fell from £3.0bn in 2016-17 to £1.3bn in 2024-25 while the rate was cut from 0.21% to 0.10%, a fall of more than half for a rate cut of a little over half: banks also trimmed the liabilities the levy reaches. A doubling would recover part of that, not all of it.",
+      "sources": [
+        {
+          "sourceId": "hmrc-banking-sector-receipts-2025",
+          "table": "Table 1"
+        }
+      ]
+    },
+    {
+      "id": "bank-levy-who-pays",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "A charge on the largest banks’ balance sheets is borne by their shareholders, their customers through wider margins, or their staff, in shares nobody has measured; the OBR treats bank taxes as business taxes.",
+      "sources": [
+        {
+          "sourceId": "hmrc-banking-sector-receipts-2025",
+          "table": "Table 1"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "bank-surcharge-5pc",
+      "text": "The two bank taxes stack: the surcharge on profits, the levy on balance sheets. Together they raise about £2.3bn today.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}
