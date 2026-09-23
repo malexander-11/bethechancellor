@@ -418,7 +418,10 @@ export function LeverControl({
           {notOnTheTable ? <span className="tag tag--quiet">Not on the table</span> : null}
           {earliest ? (
             <span className="tag tag--quiet">
-              <Term id="earliest-start">Earliest start</Term> April {earliest.year.slice(0, 4)}
+              {/* One flex item, so the space before the month survives the inline-flex tag. */}
+              <span>
+                <Term id="earliest-start">Earliest start</Term> April {earliest.year.slice(0, 4)}
+              </span>
               <span className="sr-only">: {earliest.text}</span>
             </span>
           ) : null}
