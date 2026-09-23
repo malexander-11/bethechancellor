@@ -247,7 +247,9 @@ describe('the Budget 2026 menu', () => {
     if (align.costing.kind !== 'schedule') throw new Error('alignment is a schedule');
     expect(align.costing.caveats.some((c) => /package, not a rate change/.test(c))).toBe(true);
     // Every overlapping CGT card warns, so the package is never counted twice by accident.
-    const warned = align.interactions.filter((i) => i.severity === 'warn').map((i) => i.withLever);
+    const warned = (align.interactions ?? [])
+      .filter((i) => i.severity === 'warn')
+      .map((i) => i.withLever);
     expect(warned).toEqual(
       expect.arrayContaining(['cgt-on-death', 'cgt-exit-charge', 'reverse-cgt-rate-rise']),
     );
@@ -271,8 +273,12 @@ describe('the Budget 2026 menu', () => {
   it('a charge on leavers is CenTax’s floor of £0.5 billion, flat, and warns against the death card', () => {
     expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2029-30').receipts).toBeCloseTo(500, 6);
     expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2026-27').receipts).toBe(0);
-    expect(lever('cgtexit').interactions.some((i) => i.withLever === 'cgt-on-death')).toBe(true);
-    expect(lever('cgtdth').interactions.some((i) => i.withLever === 'cgt-exit-charge')).toBe(true);
+    expect((lever('cgtexit').interactions ?? []).some((i) => i.withLever === 'cgt-on-death')).toBe(
+      true,
+    );
+    expect(
+      (lever('cgtdth').interactions ?? []).some((i) => i.withLever === 'cgt-exit-charge'),
+    ).toBe(true);
   });
 
   it('CGT on main homes is the whole relief, uprated, and tagged as not on the table', () => {
@@ -310,10 +316,10 @@ describe('the Budget 2026 menu', () => {
     expect(effectOf({ pens20: 1 }, 'pens20', '2026-27').receipts).toBe(0);
     // Two designs for one relief: each warns against the other.
     expect(
-      lever('pens20').interactions.some((i) => i.withLever === 'flat-rate-pension-relief'),
+      (lever('pens20').interactions ?? []).some((i) => i.withLever === 'flat-rate-pension-relief'),
     ).toBe(true);
     expect(
-      lever('pens30').interactions.some((i) => i.withLever === 'basic-rate-pension-relief'),
+      (lever('pens30').interactions ?? []).some((i) => i.withLever === 'basic-rate-pension-relief'),
     ).toBe(true);
   });
 
@@ -367,14 +373,14 @@ describe('the Budget 2026 menu', () => {
   it('the two wealth-tax designs warn against each other and the 2% card is drawn on by the OBR draw', () => {
     const two = lever('wealth2');
     const one = lever('wealth');
-    expect(two.interactions.some((i) => i.withLever === one.id && i.severity === 'warn')).toBe(
-      true,
-    );
-    expect(one.interactions.some((i) => i.withLever === two.id && i.severity === 'warn')).toBe(
-      true,
-    );
+    expect(
+      (two.interactions ?? []).some((i) => i.withLever === one.id && i.severity === 'warn'),
+    ).toBe(true);
+    expect(
+      (one.interactions ?? []).some((i) => i.withLever === two.id && i.severity === 'warn'),
+    ).toBe(true);
     expect(two.considerations.some((c) => c.id === 'avoidance-and-emigration')).toBe(true);
-    expect(two.headline.startsWith('Contested.')).toBe(true);
+    expect(two.headline).toMatch(/^Contested\./);
     expect(lever('nicrent').considerations.some((c) => c.id === 'static-not-yield')).toBe(true);
   });
 
@@ -419,7 +425,9 @@ describe('the Budget 2026 menu', () => {
     expect(
       lever('csjmh').considerations.some((c) => c.id === 'eligibility-savings-shortfall'),
     ).toBe(true);
-    expect(lever('csjmh').interactions.some((i) => i.withLever === lever('rvpip').id)).toBe(true);
+    expect((lever('csjmh').interactions ?? []).some((i) => i.withLever === lever('rvpip').id)).toBe(
+      true,
+    );
   });
 
   it('a smoothed earnings link breaks the triple-lock promise and warns against prices-only uprating', () => {
@@ -428,12 +436,12 @@ describe('the Budget 2026 menu', () => {
     );
     expect(lock?.kept).toBe(false);
     expect(
-      lever('pensmth').interactions.some(
+      (lever('pensmth').interactions ?? []).some(
         (i) => i.withLever === lever('cpilock').id && i.severity === 'warn',
       ),
     ).toBe(true);
-    expect(lever('pensmth').classification.insideWelfareCap).toBe(false);
-    expect(lever('lha30').classification.insideWelfareCap).toBe(true);
+    expect(lever('pensmth').classification?.insideWelfareCap).toBe(false);
+    expect(lever('lha30').classification?.insideWelfareCap).toBe(true);
   });
 
   it('the welfare tab is two groups, each with a minister on every card', () => {
@@ -482,9 +490,7 @@ describe('the Budget 2026 menu', () => {
 
   it('the overlapping designs warn each other and the static figures are drawn on by the OBR draw', () => {
     const warns = (code: string) =>
-      lever(code)
-        .interactions.filter((i) => i.severity === 'warn')
-        .map((i) => i.withLever);
+      (lever(code).interactions ?? []).filter((i) => i.severity === 'warn').map((i) => i.withLever);
     expect(warns('vat1z')).toEqual(
       expect.arrayContaining([
         lever('vatfood').id,
