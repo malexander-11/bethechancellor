@@ -906,15 +906,52 @@
       ]
     },
     {
-      "id": "spending-welfare",
+      "id": "spending-working-age",
       "step": "spending",
-      "group": "Welfare",
+      "group": "Working-age benefits",
       "adviser": "director-of-public-spending",
-      "title": "Welfare",
-      "headline": "Half of welfare sits inside the cap, and it is already above it.",
+      "title": "Working-age benefits",
+      "headline": "Universal credit is £103bn in 2029-30, inside a cap the forecast already breaks.",
       "paragraphs": [
         {
-          "text": "In 2029-30 the OBR forecasts pensioner spending of £188bn, universal credit and legacy benefits £103bn, disability benefits £61.1bn, child benefit £13.9bn and other welfare £24.3bn. Spending inside the welfare cap is £199bn against a cap of £194.5 billion: above the cap but inside its 5% margin.",
+          "text": "In 2029-30 the OBR forecasts universal credit and legacy benefits of £103bn, child benefit £13.9bn and other welfare £24.3bn, all inside the welfare cap. Spending inside the cap is £199bn against a cap of £194.5 billion: above the cap but inside its 5% margin.",
+          "sources": [
+            {
+              "sourceId": "obr-efo-2026-03",
+              "table": "Table 4.6"
+            },
+            {
+              "sourceId": "hmt-charter-2025-autumn",
+              "paragraph": "3.33-3.44"
+            }
+          ]
+        },
+        {
+          "text": "The think tanks pull both ways here: the Resolution Foundation and the Joseph Rowntree Foundation ask for housing support relinked to rents and a floor under deductions; the IFS shows a time limit on the new unemployment insurance saving money.",
+          "sources": [
+            {
+              "sourceId": "rf-saving-private-renters-2026"
+            },
+            {
+              "sourceId": "jrf-uc-floor-2026"
+            },
+            {
+              "sourceId": "ifs-green-budget-2025"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spending-pensioners-disability",
+      "step": "spending",
+      "group": "Pensioners and disability",
+      "adviser": "director-of-public-spending",
+      "title": "Pensioners and disability",
+      "headline": "The state pension is outside the cap; disability benefits are inside it, and it is already breached.",
+      "paragraphs": [
+        {
+          "text": "In 2029-30 the OBR forecasts pensioner spending of £188bn (outside the welfare cap) and disability benefits of £61.1bn (inside it). Spending inside the cap is £199bn against a cap of £194.5 billion: above the cap but inside its 5% margin.",
           "sources": [
             {
               "sourceId": "obr-efo-2026-03",

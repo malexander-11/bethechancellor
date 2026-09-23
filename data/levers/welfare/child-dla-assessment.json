@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "id": "child-dla-assessment",
+  "code": "dlakids",
+  "category": "welfare",
+  "badge": "assumption",
+  "group": "Pensioners and disability",
+  "order": 36,
+  "title": "An in-person assessment for child Disability Living Allowance",
+  "shortTitle": "Child DLA assessment",
+  "headline": "An in-person assessment for child DLA: CSJ, £0.3bn to £0.8bn net.",
+  "description": "Child Disability Living Allowance is awarded on paper evidence. The Centre for Social Justice proposes a functional assessment for new claims where the primary condition is autism or ADHD, estimating that half to three quarters would not meet a properly administered threshold: 151,000 to 227,000 fewer cases by 2030 and £980 million to £1.47 billion a year saved, with children who have severe or complex needs protected. CSJ would reinvest £500 million in an early intervention fund and £160 million in the highest-rate care component. The lower bound less that reinvestment, £320 million, is scored here.",
+  "baselinePolicy": {
+    "text": "Child DLA is awarded on written evidence without a face-to-face assessment; the OBR forecasts disability benefits, which include it, at £61.1bn in 2029-30.",
+    "source": {
+      "sourceId": "csj-change-the-prescription-2026"
+    },
+    "alreadyIncludes": ["Nothing: no change to child DLA assessment is planned."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": true,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": -320,
+      "2028-29": -320,
+      "2029-30": -320,
+      "2030-31": -320
+    },
+    "source": {
+      "sourceId": "csj-change-the-prescription-2026"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "csj-change-the-prescription-2026",
+      "method": {
+        "name": "weightedSum",
+        "baseYear": "2029-30",
+        "resultGbpm": -320,
+        "terms": [
+          {
+            "label": "CSJ’s lower-bound gross saving by 2030, as a saving",
+            "value": 980,
+            "factor": -1,
+            "unit": "£ million a year by 2030",
+            "source": {
+              "sourceId": "csj-change-the-prescription-2026",
+              "quote": "Of the £980 million to £1.47 billion savings this reform would produce annually by 2030"
+            }
+          },
+          {
+            "label": "CSJ’s reinvestment: a £500 million early intervention fund and £160 million on the highest-rate care component, as spending",
+            "value": 660,
+            "factor": 1,
+            "unit": "£ million a year",
+            "source": {
+              "sourceId": "csj-change-the-prescription-2026",
+              "quote": "a £500 million Early Intervention Capital Fund should be ring-fenced and reinvested"
+            }
+          }
+        ]
+      },
+      "note": "CSJ’s lower-bound saving less the reinvestment it proposes, held flat in cash from the start year. The upper bound would net £810 million. A think-tank estimate; the department has not costed it."
+    },
+    "caveats": [
+      "The cautious end of CSJ’s range: £980 million gross against an upper bound of £1.47 billion, less £660 million of reinvestment. Static, \"by 2030\", and building up over several years of new claims.",
+      "CSJ’s £500 million fund is capital spending in its design; this card treats the whole reinvestment as current, so the current-budget saving shown is the smaller one.",
+      "Inside the welfare cap. Assessment reforms have missed their savings before, as the OBR notes of the move from DLA to PIP."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "dla-assessment-shortfall",
+      "kind": "behavioural",
+      "direction": "costsMore",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "CSJ’s range rests on an assumption that half to three quarters of new autism and ADHD claims would fail a functional test; a smaller share, or successful appeals, cuts the saving.",
+      "sources": [
+        {
+          "sourceId": "csj-change-the-prescription-2026",
+          "quote": "between 50 and 75 per cent of new claims in this category would not meet a properly administered functional needs threshold"
+        }
+      ]
+    },
+    {
+      "id": "who-loses-child-dla",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Families of children newly diagnosed with autism or ADHD whose claims would not pass a functional assessment; CSJ says children with severe or complex needs would keep their awards, and the highest-rate care component would rise 10% above inflation.",
+      "sources": [
+        {
+          "sourceId": "csj-change-the-prescription-2026",
+          "quote": "children with severe or complex needs would be fully protected at their current award rate"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "disability-benefits",
+      "text": "Both move the disability benefits line inside the cap.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

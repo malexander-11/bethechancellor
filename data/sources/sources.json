@@ -1251,6 +1251,72 @@
       "retrievedOn": "2026-09-23",
       "licence": "OGL-3.0",
       "notes": "Fetched 2026-09-23. \"Businesses have to register for VAT if their VAT taxable turnover is more than £90,000.\""
+    },
+    {
+      "id": "rf-saving-private-renters-2026",
+      "org": "RF",
+      "title": "Saving private renters",
+      "edition": "19 September 2026",
+      "url": "https://www.resolutionfoundation.org/publications/saving-private-renters/",
+      "publishedOn": "2026-09-19",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. \"the Government should commit to relinking LHA to the 30th percentile of local rents on an annual basis at the Autumn Budget. This comes with a cost of £2 billion a year by the end of the Parliament but, if necessary, could be funded by increasing the Universal Credit taper.\" \"We estimate that relinking LHA to the 30th percentile in April 2027 and maintaining the link thereafter would cost £2 billion a year (in current prices) by 2029-30, compared to the (entirely unsustainable) assumption of no nominal change.\" \"in May 2026, 58 per cent of UC households receiving housing support paid rent above their LHA rate\". The offset: \"raise the taper rate in Universal Credit from 55 to 58 per cent\". Quoted briefly with attribution."
+    },
+    {
+      "id": "jrf-uc-floor-2026",
+      "org": "Other",
+      "title": "A protected minimum floor in Universal Credit to cut deep child poverty",
+      "edition": "Joseph Rowntree Foundation briefing, 11 September 2026 (replacing the October 2025 version)",
+      "url": "https://www.jrf.org.uk/social-security/a-protected-minimum-floor-in-universal-credit-to-cut-deep-child-poverty",
+      "publishedOn": "2026-09-11",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. \"Creating a protected minimum floor would build on the Government’s recent Fair Repayment Rate for debt deductions, extending the principle to the benefit cap. Doing this would lift 130,000 people out of very deep poverty in 2027/28, including 100,000 children, at an annual cost of around £680 million.\" \"This policy would cost £680 million in 2027/28. The cost rises to £760 million in 2029/30, with 160,000 people protected from very deep poverty, including 120,000 children.\" The floor is 15% below the UC standard allowance; a single person aged 25 or over \"currently receives a headline UC standard allowance of £98 a week\". Quoted briefly with attribution."
+    },
+    {
+      "id": "rf-what-a-ratchet-2026",
+      "org": "RF",
+      "title": "What a ratchet! Why it’s time to stop being polite about the triple lock",
+      "edition": "10 June 2026",
+      "url": "https://www.resolutionfoundation.org/publications/what-a-ratchet/",
+      "publishedOn": "2026-06-10",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. \"The best option would be a ‘smoothed’ earnings link, which tracks earnings growth but protects the value of the State Pension from temporary price shocks.\" \"Under current economic forecasts, implementing a smoothed earnings link from 2027-28 onwards would leave the value of the BSP at £199.65 per week in 2029-30, compared to £200.95 with triple lock uprating. This would save around £650 million in 2029-30 (net of increased spending on means-tested benefits and lower income tax receipts) compared with maintaining the triple lock, a sum which would continue to grow over time\". \"The triple lock means the State Pension bill is now £12.6 billion higher than it would have been under a smoothed earnings link since 2012\". Quoted briefly with attribution."
+    },
+    {
+      "id": "ifs-green-budget-2025",
+      "org": "Other",
+      "title": "The IFS Green Budget: October 2025",
+      "edition": "Institute for Fiscal Studies, in association with Citi and the Nuffield Foundation; full report as hosted by its co-publisher Barclays",
+      "url": "https://www.ib.barclays/content/dam/barclaysmicrosites/ibpublic/documents/IFS2025/Final_The_IFS_Green_Budget_2025_full_report_amended%202.pdf",
+      "landingUrl": "https://ifs.org.uk/publications/ifs-green-budget-2025",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23 (the IFS site is unreachable from the build environment; the co-publisher’s copy was read). Council tax: \"doubling the top two rates of council tax in England (those applying to bands G and H, around 4% of properties) would raise £4.2 billion in 2029–30\"; and in the illustrative £20 billion package, \"As an illustration (but not a recommendation), she could raise £20 billion if she: introduced a new council tax surcharge that acted to double council tax rates on band G and H properties (£4.4 billion)\". NICs: \"Abolish upper earnings limit and upper profits limit £14.1billion\" (Table 9.3); \"This would raise £14 billion a year by 2029–30 – mostly from the highest-income tenth of households. Behavioural responses would be likely to reduce this yield significantly, however.\" VAT: \"Charge 1% VAT on all zero-rated products £4.2 billion\". Unemployment insurance: \"after any transitional protections had expired, time-limiting the benefit to 12 months would save around £0.6 billion a year. Restricting it to 6 months would save around £1.4 billion a year.\" Pensions: \"capping relief at the basic rate of 20% could raise as much as £22 billion in 2029–30 (this is before accounting for behavioural responses\". Quoted briefly with attribution."
+    },
+    {
+      "id": "csj-benefits-budget-2025",
+      "org": "Other",
+      "title": "The Benefits Budget: the need to repair broken Britain",
+      "edition": "Centre for Social Justice, November 2025",
+      "url": "https://www.centreforsocialjustice.org.uk/wp-content/uploads/2025/11/CSJ-Benefits_Budget.pdf",
+      "landingUrl": "https://www.centreforsocialjustice.org.uk/",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. \"Withdraw UC health and PIP from those with milder anxiety, depression or ADHD – equivalent to around 1.1 million people – and reset remaining awards to £103 per week. This would save £7.4bn by 2029/30, of which at least £1 billion should be reinvested in radically expanded NHS Talking Therapies, social prescribing and employment support.\" Quoted briefly with attribution."
+    },
+    {
+      "id": "csj-change-the-prescription-2026",
+      "org": "Other",
+      "title": "Change the Prescription: Update",
+      "edition": "Centre for Social Justice, June 2026",
+      "url": "https://www.centreforsocialjustice.org.uk/wp-content/uploads/2026/06/CSJ-Change_the_Prescription-Update.pdf",
+      "landingUrl": "https://www.centreforsocialjustice.org.uk/",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. On child Disability Living Allowance: \"we estimate conservatively that between 50 and 75 per cent of new claims in this category would not meet a properly administered functional needs threshold. This would see around 151,000 to 227,000 fewer cases by 2030, while children with severe or complex needs would be fully protected at their current award rate.\" \"Of the £980 million to £1.47 billion savings this reform would produce annually by 2030, a £500 million Early Intervention Capital Fund should be ring-fenced and reinvested\"; \"A portion of those savings – approximately £160 million annually – should fund a meaningful real-terms uplift in the highest-rate care component\". Quoted briefly with attribution."
     }
   ]
 }

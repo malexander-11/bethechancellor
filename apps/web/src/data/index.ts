@@ -197,7 +197,8 @@ export function groupLevers(items: Lever[]): LeverGroup[] {
     'Flagship programmes',
     'Day-to-day departmental budgets',
     'Public investment',
-    'Welfare',
+    'Working-age benefits',
+    'Pensioners and disability',
   ];
   return groups.sort((a, b) => {
     const ia = GROUP_ORDER.indexOf(a.name);

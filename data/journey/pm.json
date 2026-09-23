@@ -602,6 +602,10 @@
         {
           "code": "cpilock",
           "when": "on"
+        },
+        {
+          "code": "pensmth",
+          "when": "on"
         }
       ]
     }

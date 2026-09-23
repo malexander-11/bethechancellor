@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "id": "universal-credit-floor",
+  "code": "ucfloor",
+  "category": "welfare",
+  "badge": "assumption",
+  "group": "Working-age benefits",
+  "order": 60,
+  "title": "A protected minimum floor in universal credit",
+  "shortTitle": "Universal credit floor",
+  "headline": "A protected floor in Universal Credit, 15% below the standard allowance: JRF, £0.7bn.",
+  "description": "Debt deductions and the benefit cap can take a universal credit payment well below its standard allowance; the Joseph Rowntree Foundation gives the example of a single adult left with £28 a week after rent. The Fair Repayment Rate already limits debt deductions to 15% of the allowance. JRF proposes a floor 15% below the standard allowance that applies to deductions and the benefit cap combined, at £680 million in 2027-28 rising to £760 million in 2029-30, lifting 100,000 children out of very deep poverty. JRF’s first-year figure is grown here with the OBR’s universal credit line, which lands a little below JRF’s own 2029-30 number.",
+  "baselinePolicy": {
+    "text": "The Fair Repayment Rate caps debt deductions at 15% of the universal credit standard allowance from April 2025; the benefit cap is not limited in the same way. A single adult aged 25 or over receives a standard allowance of £98 a week.",
+    "source": {
+      "sourceId": "jrf-uc-floor-2026",
+      "quote": "currently receives a headline UC standard allowance of £98 a week"
+    },
+    "alreadyIncludes": [
+      "The Fair Repayment Rate from April 2025 and the removal of the two-child limit from April 2026."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": true,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 680,
+      "2028-29": 690,
+      "2029-30": 709,
+      "2030-31": 730
+    },
+    "source": {
+      "sourceId": "jrf-uc-floor-2026"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "jrf-uc-floor-2026",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2027-28",
+        "resultGbpm": 680,
+        "growWith": "universalCreditAndLegacy",
+        "terms": [
+          {
+            "label": "JRF’s cost of a protected minimum floor 15% below the standard allowance in its first year",
+            "value": 680,
+            "unit": "£ million, 2027-28",
+            "source": {
+              "sourceId": "jrf-uc-floor-2026",
+              "quote": "This policy would cost £680 million in 2027/28."
+            }
+          }
+        ]
+      },
+      "note": "JRF’s 2027-28 figure grown with the OBR’s universal credit and legacy benefits line: about £709 million in 2029-30 against JRF’s own £760 million, so this understates JRF slightly. Nobody in government has costed it."
+    },
+    "caveats": [
+      "JRF’s own modelling, on IPPR’s tax-benefit model, not DWP’s. Its 2029-30 figure is £760 million; growing the first-year figure with the OBR’s universal credit line gives about £710 million, so this card is a little under JRF.",
+      "The saving to the people affected is the Exchequer’s cost: money not recovered from benefit debts and not withheld by the benefit cap. Some of the debt is owed to the Exchequer itself and would be recovered more slowly rather than never.",
+      "Inside the welfare cap."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "who-benefits-uc-floor",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "JRF counts 130,000 people lifted out of very deep poverty in 2027-28, including 100,000 children, rising to 160,000 and 120,000 by 2029-30; the households are those facing the benefit cap and debt deductions together.",
+      "sources": [
+        {
+          "sourceId": "jrf-uc-floor-2026",
+          "quote": "lift 130,000 people out of very deep poverty in 2027/28, including 100,000 children"
+        }
+      ]
+    },
+    {
+      "id": "uc-floor-administration",
+      "kind": "administrative",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "Extends a limit that already exists for debt deductions to the benefit cap, so it runs on universal credit’s existing machinery.",
+      "sources": [
+        {
+          "sourceId": "jrf-uc-floor-2026",
+          "quote": "build on the Government’s recent Fair Repayment Rate"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "universal-credit",
+      "text": "Both move universal credit spending inside the welfare cap.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

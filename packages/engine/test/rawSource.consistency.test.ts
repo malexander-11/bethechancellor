@@ -65,7 +65,7 @@ describe('every direct costing reproduces from the extracted published tables', 
 
   it('covers the planned spending set', () => {
     // Every file in the two folders, the five kept for the record included (ADR-0017).
-    expect(spendingLevers.length).toBe(32);
+    expect(spendingLevers.length).toBe(38);
     expect(spendingLevers.every((l) => l.group && l.classification?.side === 'spending')).toBe(
       true,
     );

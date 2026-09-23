@@ -1254,6 +1254,208 @@
           }
         }
       ]
+    },
+    {
+      "code": "lha30",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "Local Housing Allowance has been frozen since April 2024. By May 2026, 58% of universal credit households with housing support paid rent above their allowance and made up the gap from money meant for food and bills. The Resolution Foundation costs a relink to the cheapest 30% of local rents at £2 billion a year by 2029-30, and offers a taper rise to pay for it.",
+        "short": "Housing allowance is frozen; 58% of claimants pay rent above it. Relinking costs £2 billion a year.",
+        "sources": [
+          {
+            "sourceId": "rf-saving-private-renters-2026",
+            "quote": "58 per cent of UC households receiving housing support paid rent above their LHA rate"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "You have relinked it. The £2 billion is the Resolution Foundation’s 2029-30 figure; the true cost starts lower and keeps rising with rents, and some of it reaches landlords. It sits inside the welfare cap.",
+            "short": "Relinked. The cost starts lower, rises with rents, and some reaches landlords. Inside the cap.",
+            "sources": [
+              {
+                "sourceId": "rf-saving-private-renters-2026",
+                "quote": "only a small part leaks into higher rents"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "ucfloor",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "Deductions and the benefit cap together can take a universal credit payment far below its standard allowance; the Joseph Rowntree Foundation gives the case of a single adult left with £28 a week after rent. A floor 15% below the allowance costs £680 million in 2027-28 and lifts 100,000 children out of very deep poverty.",
+        "short": "Deductions can leave a claimant £28 a week after rent. A floor costs £680 million, protects 100,000 children.",
+        "sources": [
+          {
+            "sourceId": "jrf-uc-floor-2026",
+            "quote": "lift 130,000 people out of very deep poverty in 2027/28, including 100,000 children"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "You have set the floor. JRF puts the cost at £680 million rising to £760 million by 2029-30; the card grows the first year with the OBR’s universal credit line and lands a little under that. Inside the welfare cap.",
+            "short": "The floor is set. JRF says £680 million rising to £760 million; the card lands under it.",
+            "sources": [
+              {
+                "sourceId": "jrf-uc-floor-2026",
+                "quote": "The cost rises to £760 million in 2029/30"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "pensmth",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "The Resolution Foundation’s alternative to the triple lock is a smoothed earnings link: pensions rise with pay, protected from a temporary price shock, with no 2.5% floor. It saves around £650 million net in 2029-30 and more every year after, and leaves the basic pension at £199.65 a week against £200.95. It breaks the manifesto promise and needs an Act.",
+        "short": "A smoothed earnings link saves £650 million net by 2029-30, growing after. It breaks the promise.",
+        "sources": [
+          {
+            "sourceId": "rf-what-a-ratchet-2026",
+            "quote": "This would save around £650 million in 2029-30"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "You have replaced the triple lock. The saving is the Resolution Foundation’s and depends on earnings growth staying below 2.5%; it is net of the extra means-tested benefits and lower income tax that follow. Every pensioner is a little worse off each year, and the promise is broken.",
+            "short": "The lock is replaced. The saving needs earnings below 2.5%. Every pensioner loses a little each year.",
+            "sources": [
+              {
+                "sourceId": "rf-what-a-ratchet-2026",
+                "quote": "£199.65 per week in 2029-30, compared to £200.95 with triple lock uprating"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "uitime",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "The new unemployment insurance replaces new-style jobseeker’s allowance and new-style employment and support allowance with one higher, time-limited payment. The IFS costs the limit: six months saves around £1.4 billion a year once transitional protections expire, twelve months £0.6 billion. The losers are people with long-term health conditions who would have stayed on the old benefit.",
+        "short": "A six-month limit on the new unemployment insurance saves £1.4 billion a year. The sick lose.",
+        "sources": [
+          {
+            "sourceId": "ifs-green-budget-2025",
+            "quote": "Restricting it to 6 months would save around £1.4 billion a year."
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "You have set the limit at six months. The IFS’s £1.4 billion is a steady-state figure after transitional protections expire, so the first years save less, and some of those timed out will claim universal credit instead. Whether it counts inside the welfare cap depends on how the benefit is classified.",
+            "short": "Six months it is. The £1.4 billion arrives after transitional protections; some claim universal credit instead.",
+            "sources": [
+              {
+                "sourceId": "ifs-green-budget-2025",
+                "quote": "after any transitional protections had expired"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "csjmh",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "The Centre for Social Justice would withdraw PIP and the universal credit health element from about 1.1 million people with milder anxiety, depression or ADHD, reset the rest to £103 a week and save £7.4 billion by 2029-30, reinvesting at least £1 billion in talking therapies and employment support. My department’s own evidence says PIP has been difficult to forecast since it began, and the last eligibility reform did not deliver its savings.",
+        "short": "CSJ would remove PIP from 1.1 million people and save £7.4 billion. The last reform missed its savings.",
+        "sources": [
+          {
+            "sourceId": "csj-benefits-budget-2025",
+            "quote": "equivalent to around 1.1 million people"
+          },
+          {
+            "sourceId": "dwp-timms-review-evidence-pack",
+            "quote": "PIP has been difficult to forecast since its introduction"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "You have taken the CSJ route. The £6.4 billion net is a think tank’s static figure for 2029-30; it needs an Act, a reassessment programme and a wait for the Timms review, and the savings from the last eligibility reform did not arrive. The OBR would score it down, and this game’s harsher forecasts do.",
+            "short": "Taken. A static think-tank figure needing an Act and reassessments; the last such reform missed its savings.",
+            "sources": [
+              {
+                "sourceId": "obr-efo-2026-03",
+                "paragraph": "4.13"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "dlakids",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "Child Disability Living Allowance is awarded on paper. The Centre for Social Justice proposes a functional assessment for new autism and ADHD claims and estimates 151,000 to 227,000 fewer cases by 2030, saving £980 million to £1.47 billion a year, with £660 million reinvested in early intervention and the highest-rate care component. Children with severe or complex needs would keep their awards.",
+        "short": "An assessment for new child DLA claims saves £980 million to £1.47 billion, with £660 million reinvested.",
+        "sources": [
+          {
+            "sourceId": "csj-change-the-prescription-2026",
+            "quote": "around 151,000 to 227,000 fewer cases by 2030"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "You have introduced the assessment. The card takes CSJ’s lower bound less its reinvestment, £320 million net; the upper bound would net £810 million. The saving builds up over several years of new claims, and rests on half to three quarters of those claims failing the test.",
+            "short": "Introduced. The card nets CSJ’s lower bound, £320 million. It builds slowly and needs most new claims failing.",
+            "sources": [
+              {
+                "sourceId": "csj-change-the-prescription-2026",
+                "quote": "between 50 and 75 per cent of new claims in this category would not meet a properly administered functional needs threshold"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
     }
   ]
 }

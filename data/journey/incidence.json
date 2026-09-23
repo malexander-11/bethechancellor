@@ -200,6 +200,12 @@
     "carried": "top",
     "wealth2": "top",
     "sugsalt": "broad-base",
-    "vatthr": "business"
+    "vatthr": "business",
+    "lha30": "renters",
+    "ucfloor": "families-on-benefits",
+    "pensmth": "pensioners",
+    "uitime": "other-welfare",
+    "csjmh": "disabled-people",
+    "dlakids": "disabled-people"
   }
 }

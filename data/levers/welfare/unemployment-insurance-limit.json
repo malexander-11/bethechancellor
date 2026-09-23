@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "id": "unemployment-insurance-limit",
+  "code": "uitime",
+  "category": "welfare",
+  "badge": "assumption",
+  "group": "Working-age benefits",
+  "order": 70,
+  "title": "Time-limit the new unemployment insurance to six months",
+  "shortTitle": "Unemployment insurance limit",
+  "headline": "Time-limit the new unemployment insurance to six months: IFS, saves £1.4bn a year.",
+  "description": "The government proposes to replace new-style jobseeker’s allowance and new-style employment and support allowance with a single contributory unemployment insurance, paid at a higher rate but for a limited time. The IFS Green Budget costs the time limit: once transitional protections expire, twelve months saves around £0.6 billion a year and six months around £1.4 billion. The six-month version is scored here, flat in cash. The people who lose are those with long-term health conditions who would have stayed on the old benefit for longer.",
+  "baselinePolicy": {
+    "text": "New-style jobseeker’s allowance and new-style employment and support allowance are contributory benefits with no time limit on the health-related element; the government has proposed a single time-limited unemployment insurance to replace them.",
+    "source": {
+      "sourceId": "ifs-green-budget-2025",
+      "quote": "the government’s proposal to replace new style jobseeker’s allowance (NS JSA) and new style employment & support allowance (NS ESA) with a single new ‘unemployment insurance’ (UI) benefit"
+    },
+    "alreadyIncludes": ["Nothing: the OBR forecast does not yet score the new benefit."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": false,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": -1400,
+      "2028-29": -1400,
+      "2029-30": -1400,
+      "2030-31": -1400
+    },
+    "source": {
+      "sourceId": "ifs-green-budget-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "ifs-green-budget-2025",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": -1400,
+        "terms": [
+          {
+            "label": "The IFS’s steady-state saving from limiting the new unemployment insurance to six months, as a saving",
+            "value": -1400,
+            "unit": "£ million a year, after transitional protections",
+            "source": {
+              "sourceId": "ifs-green-budget-2025",
+              "quote": "Restricting it to 6 months would save around £1.4 billion a year."
+            }
+          }
+        ]
+      },
+      "note": "The IFS’s steady-state figure entered as a negative spending effect and held flat from the start year. The IFS says the saving arrives after transitional protections expire, so the early years would be smaller."
+    },
+    "caveats": [
+      "A steady-state saving: the IFS says it arrives \"after any transitional protections had expired\", so applying it from 2027-28 overstates the first years.",
+      "The IFS’s own arithmetic on a benefit that does not yet exist; the twelve-month version saves around £0.6 billion. Nobody in government has costed the time limit.",
+      "Whether the new benefit sits inside or outside the welfare cap depends on how it is classified; jobseeker’s allowance is outside the cap today and contributory employment and support allowance is inside. This card treats the saving as outside the cap."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "who-loses-ui-limit",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "People with long-term health conditions who would have received new-style employment and support allowance for longer than six months lose; jobseekers gain from the higher rate.",
+      "sources": [
+        {
+          "sourceId": "ifs-green-budget-2025",
+          "quote": "redistribute away from those with long-term health conditions who would have been eligible for the previous benefit for longer than 6 months"
+        }
+      ]
+    },
+    {
+      "id": "ui-limit-and-universal-credit",
+      "kind": "interaction",
+      "direction": "costsMore",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "Some of those timed out would qualify for means-tested universal credit instead, which claws back part of the saving; the IFS’s figure is a net one.",
+      "sources": [
+        {
+          "sourceId": "ifs-green-budget-2025"
+        }
+      ]
+    }
+  ],
+  "interactions": [],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

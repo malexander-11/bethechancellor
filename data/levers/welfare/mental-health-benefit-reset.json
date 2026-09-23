@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "id": "mental-health-benefit-reset",
+  "code": "csjmh",
+  "category": "welfare",
+  "badge": "assumption",
+  "group": "Pensioners and disability",
+  "order": 35,
+  "title": "Withdraw PIP and UC health for milder mental-health conditions",
+  "shortTitle": "CSJ mental-health reset",
+  "headline": "Withdraw PIP and UC health for milder mental-health conditions: CSJ, saves £6.4bn net.",
+  "description": "The Centre for Social Justice’s proposal: withdraw personal independence payment and the universal credit health element from people whose primary condition is milder anxiety, depression or ADHD, about 1.1 million people, and reset the remaining awards to £103 a week. CSJ puts the saving at £7.4 billion by 2029-30 and says at least £1 billion of it should go into NHS talking therapies, social prescribing and employment support. The net £6.4 billion is scored here, flat in cash. The department’s own evidence to the Timms review says PIP has been hard to forecast and that earlier eligibility reforms did not deliver their planned savings.",
+  "baselinePolicy": {
+    "text": "PIP and the universal credit health element are paid on functional need, not diagnosis; the government dropped its Spring 2025 PIP changes and the Timms review is under way. The OBR forecasts disability benefits of £61.1bn in 2029-30.",
+    "source": {
+      "sourceId": "dwp-timms-review-evidence-pack",
+      "quote": "PIP has been difficult to forecast since its introduction"
+    },
+    "alreadyIncludes": [
+      "Budget 2025 line 83: the Spring Statement 2025 PIP changes not proceeding."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": true,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": -6400,
+      "2028-29": -6400,
+      "2029-30": -6400,
+      "2030-31": -6400
+    },
+    "source": {
+      "sourceId": "csj-benefits-budget-2025"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "csj-benefits-budget-2025",
+      "method": {
+        "name": "weightedSum",
+        "baseYear": "2029-30",
+        "resultGbpm": -6400,
+        "terms": [
+          {
+            "label": "CSJ’s gross saving by 2029-30, as a saving",
+            "value": 7400,
+            "factor": -1,
+            "unit": "£ million, 2029-30",
+            "source": {
+              "sourceId": "csj-benefits-budget-2025",
+              "quote": "This would save £7.4bn by 2029/30"
+            }
+          },
+          {
+            "label": "The reinvestment CSJ asks for, as spending",
+            "value": 1000,
+            "factor": 1,
+            "unit": "£ million a year",
+            "source": {
+              "sourceId": "csj-benefits-budget-2025",
+              "quote": "of which at least £1 billion should be reinvested in radically expanded NHS Talking Therapies, social prescribing and employment support"
+            }
+          }
+        ]
+      },
+      "note": "CSJ’s gross saving less the minimum reinvestment it proposes, held flat in cash from the start year. A static figure from a think tank; the department has not costed it."
+    },
+    "caveats": [
+      "A think-tank figure, static and \"by 2029/30\": the saving would build up as awards were reassessed, so the early years are overstated, and CSJ’s £1 billion reinvestment is a minimum.",
+      "The OBR and DWP both say disability eligibility reforms have under-delivered before: the move from DLA to PIP did not achieve its planned savings, and the OBR calls incapacity caseload growth highly uncertain.",
+      "Inside the welfare cap, so this moves the cap verdict; it also reverses the direction of the government’s 2025 decision not to proceed with its own PIP changes."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "eligibility-savings-shortfall",
+      "kind": "behavioural",
+      "direction": "costsMore",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Tightening eligibility has saved less than planned before: the department’s own evidence pack says PIP has been difficult to forecast since its introduction, and the OBR notes the DLA-to-PIP reform did not deliver its planned savings. The harsher forecast outcomes in this game score the saving down.",
+      "sources": [
+        {
+          "sourceId": "dwp-timms-review-evidence-pack",
+          "quote": "PIP has been difficult to forecast since its introduction"
+        },
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.13"
+        }
+      ]
+    },
+    {
+      "id": "who-loses-csj-reset",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "About 1.1 million people with anxiety, depression or ADHD as their primary condition lose their awards, and the remaining awards are reset to £103 a week; CSJ’s case is that treatment and work serve them better than the payment.",
+      "sources": [
+        {
+          "sourceId": "csj-benefits-budget-2025",
+          "quote": "equivalent to around 1.1 million people"
+        }
+      ]
+    },
+    {
+      "id": "csj-reset-legislation",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Redefining eligibility by condition needs primary legislation and a reassessment programme; the government has said it will wait for the Timms review before changing PIP.",
+      "sources": [
+        {
+          "sourceId": "dwp-timms-review-evidence-pack"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "proceed-with-pip-changes",
+      "text": "Two PIP reforms on the same caseload; the CSJ package includes the people the Spring 2025 changes would have affected.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "disability-benefits",
+      "text": "Both move the disability benefits line inside the cap.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

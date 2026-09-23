@@ -43,16 +43,22 @@ const MENU = {
     'bank5',
     'carried',
     'cgtdth',
+    'csjmh',
     'def3',
+    'dlakids',
     'epl2',
     'hmrc2',
     'hscl',
     'hvcts15',
+    'lha30',
     'nicllp',
     'nicrent',
     'pens20',
+    'pensmth',
     'qelevy',
     'sugsalt',
+    'ucfloor',
+    'uitime',
     'vatelec',
     'vatgas',
     'vatthr',
@@ -375,6 +381,66 @@ describe('the Budget 2026 menu', () => {
     if (!term) throw new Error('one term');
     term.value = 7000;
     expect(checkRawSourceConsistency(levy, extracted, ds.vintage).length).toBeGreaterThan(0);
+  });
+
+  it('the welfare asks are stated figures: flat costs and savings, one grown with universal credit', () => {
+    for (const [code, want] of [
+      ['lha30', 2000],
+      ['pensmth', -650],
+      ['uitime', -1400],
+    ] as const) {
+      expect(effectOf({ [code]: 1 }, code, '2029-30').current).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, '2027-28').current).toBeCloseTo(want, 6);
+      expect(effectOf({ [code]: 1 }, code, '2026-27').current).toBe(0);
+    }
+    const uc = headSeries(ds.vintage, 'universalCreditAndLegacy');
+    const grown = (680 * (uc['2029-30'] ?? 0)) / (uc['2027-28'] ?? 1);
+    expect(effectOf({ ucfloor: 1 }, 'ucfloor', '2029-30').current).toBeCloseTo(grown, -1);
+    expect(effectOf({ ucfloor: 1 }, 'ucfloor', '2027-28').current).toBeCloseTo(680, 6);
+    // JRF's own 2029-30 figure is £760m; growing with the OBR line lands a little under it.
+    expect(grown).toBeLessThan(760);
+    expect(grown).toBeGreaterThan(680);
+  });
+
+  it('the CSJ cards net a gross saving against the reinvestment they propose', () => {
+    expect(effectOf({ csjmh: 1 }, 'csjmh', '2029-30').current).toBeCloseTo(-7400 + 1000, 6);
+    expect(effectOf({ dlakids: 1 }, 'dlakids', '2029-30').current).toBeCloseTo(-980 + 660, 6);
+    const inCap = run({ csjmh: 1 }).leverEffects.find((x) => x.code === 'csjmh')?.welfareInCap[
+      '2029-30'
+    ];
+    expect(inCap).toBeCloseTo(-6400, 6);
+    expect(
+      lever('csjmh').considerations.some((c) => c.id === 'eligibility-savings-shortfall'),
+    ).toBe(true);
+    expect(lever('csjmh').interactions.some((i) => i.withLever === lever('rvpip').id)).toBe(true);
+  });
+
+  it('a smoothed earnings link breaks the triple-lock promise and warns against prices-only uprating', () => {
+    const lock = promiseBreaks({ pensmth: 1 }, ds.pm.promises, ds.levers).find(
+      (p) => p.promise.id === 'triple-lock',
+    );
+    expect(lock?.kept).toBe(false);
+    expect(
+      lever('pensmth').interactions.some(
+        (i) => i.withLever === lever('cpilock').id && i.severity === 'warn',
+      ),
+    ).toBe(true);
+    expect(lever('pensmth').classification.insideWelfareCap).toBe(false);
+    expect(lever('lha30').classification.insideWelfareCap).toBe(true);
+  });
+
+  it('the welfare tab is two groups, each with a minister on every card', () => {
+    const groups = new Set(
+      ds.levers.filter((l) => l.category === 'welfare' && !l.deprecated).map((l) => l.group),
+    );
+    expect([...groups].sort()).toEqual([
+      'Budget 2025 and Spending Review decisions',
+      'Pensioners and disability',
+      'Working-age benefits',
+    ]);
+    for (const code of ['lha30', 'ucfloor', 'uitime', 'pensmth', 'csjmh', 'dlakids']) {
+      expect(ds.ministers.ministers.some((m) => m.code === code)).toBe(true);
+    }
   });
 
   it('unfreezing the Plan 2 threshold is spending from 2027-28, and the 2026-27 revaluation is not applied', () => {

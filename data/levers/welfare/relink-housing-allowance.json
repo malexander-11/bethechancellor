@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "id": "relink-housing-allowance",
+  "code": "lha30",
+  "category": "welfare",
+  "badge": "assumption",
+  "group": "Working-age benefits",
+  "order": 50,
+  "title": "Relink housing support to local rents",
+  "shortTitle": "Housing allowance relinked",
+  "headline": "Relink housing support to the cheapest 30% of local rents: RF, £2bn a year.",
+  "description": "Local Housing Allowance sets the most a private renter on universal credit can get towards rent. It was reset to the 30th percentile of local rents in April 2024 and frozen since; by May 2026, 58% of universal credit households with housing support paid rent above their allowance. The Resolution Foundation asks for the link to be restored in April 2027 and kept every year, at £2 billion a year by 2029-30 against the forecast’s assumption of no change. RF offers an offset, raising the universal credit taper from 55% to 58%, which is not built here.",
+  "baselinePolicy": {
+    "text": "Local Housing Allowance rates were set at the 30th percentile of local rents in April 2024 and have been frozen in cash since; the OBR forecast assumes no further uprating.",
+    "source": {
+      "sourceId": "rf-saving-private-renters-2026",
+      "quote": "compared to the (entirely unsustainable) assumption of no nominal change"
+    },
+    "alreadyIncludes": ["The freeze in Local Housing Allowance rates since April 2024."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": true,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": 2000,
+      "2028-29": 2000,
+      "2029-30": 2000,
+      "2030-31": 2000
+    },
+    "source": {
+      "sourceId": "rf-saving-private-renters-2026"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "rf-saving-private-renters-2026",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": 2000,
+        "terms": [
+          {
+            "label": "The Resolution Foundation’s cost of relinking Local Housing Allowance to the 30th percentile from April 2027 and keeping the link",
+            "value": 2000,
+            "unit": "£ million a year by 2029-30, current prices",
+            "source": {
+              "sourceId": "rf-saving-private-renters-2026",
+              "quote": "would cost £2 billion a year (in current prices) by 2029-30"
+            }
+          }
+        ]
+      },
+      "note": "RF’s 2029-30 figure held flat in cash from the start year; RF’s own profile would be lower in 2027-28 and grow with rents. Nobody in government has costed it."
+    },
+    "caveats": [
+      "RF’s figure for 2029-30, applied every year: the true path starts lower and rises with rents, and keeps rising after 2030-31 because the link is permanent.",
+      "RF names an offset, the universal credit taper from 55% to 58%, that would pay for it from within the working-age budget. That is not built here; the card is the cost alone.",
+      "Some of the money reaches landlords through rents. RF’s reading of the 2024 reset is that most of it stayed with tenants, and DWP research on the 2011 cut found about 90% fell on tenants."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "lha-leakage-to-rents",
+      "kind": "behavioural",
+      "direction": "costsMore",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "If landlords raise rents towards the new allowance, the Exchequer pays more and tenants gain less; RF finds only a small leak after the 2024 reset.",
+      "sources": [
+        {
+          "sourceId": "rf-saving-private-renters-2026",
+          "quote": "only a small part leaks into higher rents"
+        }
+      ]
+    },
+    {
+      "id": "who-benefits-lha",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "Low-income private renters on universal credit: in May 2026, 58% of them paid rent above their allowance and made up the gap from money meant for essentials.",
+      "sources": [
+        {
+          "sourceId": "rf-saving-private-renters-2026",
+          "quote": "58 per cent of UC households receiving housing support paid rent above their LHA rate"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "universal-credit",
+      "text": "Both move universal credit spending inside the welfare cap; a percentage cut to the line would take back part of the relink.",
+      "severity": "info"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}

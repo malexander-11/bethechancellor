@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "id": "smoothed-earnings-link",
+  "code": "pensmth",
+  "category": "welfare",
+  "badge": "assumption",
+  "group": "Pensioners and disability",
+  "order": 17,
+  "title": "Replace the triple lock with a smoothed earnings link",
+  "shortTitle": "Smoothed earnings link",
+  "headline": "Replace the triple lock with a smoothed earnings link: RF, saves £0.65bn by 2029-30.",
+  "description": "The Resolution Foundation’s alternative to the triple lock: uprate the state pension with earnings, smoothed so that a temporary burst of inflation does not cut its real value, and no 2.5% floor. RF puts the net saving at around £650 million in 2029-30, after the extra means-tested benefits and lower income tax that follow, and growing every year after. It leaves the basic state pension at £199.65 a week in 2029-30 against £200.95 under the triple lock. A different design from uprating by prices alone, and a smaller saving; breaking the manifesto promise all the same.",
+  "baselinePolicy": {
+    "text": "The triple lock raises the state pension by the highest of CPI inflation, average earnings growth and 2.5%; on the OBR’s forecast the 2.5% floor binds from 2027-28.",
+    "source": {
+      "sourceId": "obr-efo-2026-03",
+      "table": "Table A.3: Determinants of the fiscal forecast",
+      "page": "110"
+    },
+    "alreadyIncludes": ["State pension expenditure rising on the triple lock (DWP Table 1a)."]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": false,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2027-28": -650,
+      "2028-29": -650,
+      "2029-30": -650,
+      "2030-31": -650
+    },
+    "source": {
+      "sourceId": "rf-what-a-ratchet-2026"
+    },
+    "rawSource": {
+      "kind": "derivedFromPublished",
+      "sourceId": "rf-what-a-ratchet-2026",
+      "method": {
+        "name": "statedProduct",
+        "baseYear": "2029-30",
+        "resultGbpm": -650,
+        "terms": [
+          {
+            "label": "The Resolution Foundation’s net saving from a smoothed earnings link in place of the triple lock from 2027-28, as a saving",
+            "value": -650,
+            "unit": "£ million, 2029-30, net of means-tested benefits and income tax",
+            "source": {
+              "sourceId": "rf-what-a-ratchet-2026",
+              "quote": "This would save around £650 million in 2029-30 (net of increased spending on means-tested benefits and lower income tax receipts)"
+            }
+          }
+        ]
+      },
+      "note": "RF’s 2029-30 net saving held flat in cash from the start year, entered as a negative spending effect. RF says the saving is smaller before 2029-30 and grows after it. Nobody in government has costed it."
+    },
+    "caveats": [
+      "RF’s figure is net of higher means-tested benefits and lower income tax; the gross saving on the state pension line is larger. Held flat here, although RF says it grows every year and would be smaller in the first years.",
+      "The saving depends on the forecast: with earnings growth above 2.5%, a smoothed earnings link and the triple lock pay much the same and the saving shrinks.",
+      "Outside the welfare cap, and a manifesto promise: the government has committed to the triple lock for this parliament."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "smoothing-and-the-forecast",
+      "kind": "macro",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "RF’s saving comes from dropping the 2.5% floor when earnings grow more slowly than that; a price shock would be smoothed rather than banked, which is the design’s point and also why the saving moves with the forecast.",
+      "sources": [
+        {
+          "sourceId": "rf-what-a-ratchet-2026",
+          "quote": "protects the value of the State Pension from temporary price shocks"
+        }
+      ]
+    },
+    {
+      "id": "pensioner-incomes-smoothed",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "magnitudeWords": "moderate",
+      "alreadyInDirectCosting": false,
+      "text": "Every state pensioner: £1.30 a week less on the basic state pension by 2029-30 on RF’s figures, and more each year after.",
+      "sources": [
+        {
+          "sourceId": "rf-what-a-ratchet-2026",
+          "quote": "£199.65 per week in 2029-30, compared to £200.95 with triple lock uprating"
+        }
+      ]
+    },
+    {
+      "id": "triple-lock-promise-smoothed",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "large",
+      "alreadyInDirectCosting": false,
+      "text": "The manifesto promised to keep the triple lock; any replacement breaks it, and the earnings element is in statute, so this needs an Act.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "triple-lock-to-cpi",
+      "text": "Two replacements for the triple lock. Pick one: prices alone saves more; a smoothed earnings link keeps pensions rising with pay.",
+      "severity": "warn"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-23"
+}
