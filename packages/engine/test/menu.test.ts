@@ -113,10 +113,12 @@ describe('the Budget 2026 menu', () => {
   it('ending the CGT write-off at death carries the Resolution Foundation figure with CGT receipts', () => {
     const cgt = headSeries(ds.vintage, 'receiptsByTax.capitalGainsTax');
     expect(effectOf({ cgtdth: 1 }, 'cgtdth', '2029-30').receipts).toBe(4000);
-    const y2027 = (4000 * (cgt['2027-28'] ?? 0)) / (cgt['2029-30'] ?? 1);
+    // Paid the January after the tax year, so nothing in 2027-28: the floor is 2028-29.
+    expect(effectOf({ cgtdth: 1 }, 'cgtdth', '2027-28').receipts).toBe(0);
+    const y2028 = (4000 * (cgt['2028-29'] ?? 0)) / (cgt['2029-30'] ?? 1);
     // Authored to the nearest £ million; the validator allows the same half a million.
     expect(
-      Math.abs(effectOf({ cgtdth: 1 }, 'cgtdth', '2027-28').receipts - y2027),
+      Math.abs(effectOf({ cgtdth: 1 }, 'cgtdth', '2028-29').receipts - y2028),
     ).toBeLessThanOrEqual(0.5);
     expect(effectOf({ cgtdth: 1 }, 'cgtdth', '2030-31').receipts).toBeGreaterThan(4000);
     expect(lever('cgtdth').headline).toMatch(/upper bound/);
@@ -242,7 +244,9 @@ describe('the Budget 2026 menu', () => {
 
   it('aligning CGT with income tax is CenTax’s 2026 figure on today’s baseline, held flat', () => {
     expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2029-30').receipts).toBeCloseTo(19700, 6);
-    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2027-28').receipts).toBeCloseTo(19700, 6);
+    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2028-29').receipts).toBeCloseTo(19700, 6);
+    // Collected the January after the tax year: nothing in 2027-28 (ADR-0021 revision).
+    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2027-28').receipts).toBe(0);
     expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2026-27').receipts).toBe(0);
     const align = lever('cgtalign');
     if (align.costing.kind !== 'schedule') throw new Error('alignment is a schedule');
@@ -273,6 +277,8 @@ describe('the Budget 2026 menu', () => {
 
   it('a charge on leavers is CenTax’s floor of £0.5 billion, flat, and warns against the death card', () => {
     expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2029-30').receipts).toBeCloseTo(500, 6);
+    expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2028-29').receipts).toBeCloseTo(500, 6);
+    expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2027-28').receipts).toBe(0);
     expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2026-27').receipts).toBe(0);
     expect((lever('cgtexit').interactions ?? []).some((i) => i.withLever === 'cgt-on-death')).toBe(
       true,

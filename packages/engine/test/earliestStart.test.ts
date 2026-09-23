@@ -45,6 +45,9 @@ const EARLIEST: Record<string, string> = {
   csjmh: '2029-30',
   dlakids: '2030-31',
   uitime: '2030-31',
+  cgtalign: '2028-29',
+  cgtdth: '2028-29',
+  cgtexit: '2028-29',
 };
 
 describe('nothing before it can start (ADR-0021)', () => {

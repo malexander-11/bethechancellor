@@ -234,7 +234,7 @@
       "licence": "OGL-3.0",
       "localPath": "data/raw/hmt-autumn-budget-2024/Table_5.1_-_Autumn_Budget_2024_Policy_Decisions.xlsx",
       "sha256": "6249ec5be2634b738be2da1b15fa45fc59afd239ad5ec8c221960428d30d6a37",
-      "notes": "Certified costings of Autumn Budget 2024 measures, £ million 2024-25 to 2029-30, positive reduces borrowing. Lines used: 24 (energy profits levy package: rate to 38%, investment allowance abolished, sunset to March 2030), 25 (additional-dwellings stamp duty surcharge 3% to 5%), 27 (capital gains tax main rates to 18% and 24% with BADR and IR changes), 29 (agricultural and business property relief reform from April 2026), 30 (inheritance tax thresholds frozen to April 2030)."
+      "notes": "Certified costings of Autumn Budget 2024 measures, £ million 2024-25 to 2029-30, positive reduces borrowing. Lines used: 24 (energy profits levy package: rate to 38%, investment allowance abolished, sunset to March 2030), 25 (additional-dwellings stamp duty surcharge 3% to 5%), 27 (capital gains tax main rates to 18% and 24% with BADR and IR changes), 29 (agricultural and business property relief reform from April 2026), 30 (inheritance tax thresholds frozen to April 2030). Line 27's first two years, 90 in 2024-25 and 1,440 in 2025-26 for a rise from 30 October 2024, show the payment lag: capital gains tax on a year's gains is paid the January after the tax year, so the OBR scores it in the fiscal year the cash arrives."
     },
     {
       "id": "hmt-forecasts-2026-08",
@@ -1384,6 +1384,15 @@
       "retrievedOn": "2026-09-23",
       "licence": "OGL-3.0",
       "notes": "Fetched 2026-09-23. \"At Budget 2016 the government announced the introduction of a new levy on soft drinks that contain added sugar to help tackle childhood obesity.\" \"The levy will take effect from April 2018.\" \"Legislation will be introduced in the Finance Bill 2017\". Budget 2016 was 16 March 2016: twenty-five months from announcement to charge, the precedent for a reformulation tax on manufacturers."
+    },
+    {
+      "id": "govuk-cgt-report-and-pay",
+      "org": "HMRC",
+      "title": "Report and pay your Capital Gains Tax: if you have other capital gains to report",
+      "url": "https://www.gov.uk/report-and-pay-your-capital-gains-tax/if-you-have-other-capital-gains-to-report",
+      "retrievedOn": "2026-09-23",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-23. \"You must report by 31 December in the tax year after you made your gain and pay by 31 January. For example, if you made a gain in the 2025 to 2026 tax year, you need to report it by 31 December 2026 and pay by 31 January 2027.\" The collection lag that puts a change from April 2027 into 2028-29 receipts, which is why the think-tank capital gains cards start there."
     }
   ]
 }

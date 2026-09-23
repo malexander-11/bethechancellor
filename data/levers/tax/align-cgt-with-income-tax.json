@@ -8,7 +8,7 @@
   "order": 26,
   "title": "Tax capital gains like income: 20%, 40% and 45%",
   "shortTitle": "CGT aligned with income tax",
-  "headline": "CenTax’s package on today’s baseline, after behaviour: £19.7bn a year.",
+  "headline": "CenTax’s package on today’s baseline, after behaviour: £19.7bn a year from 2028-29.",
   "description": "The reported front-runner for this Budget is to charge capital gains at income tax rates, phased in. The Centre for the Analysis of Taxation costs a package that does that: rates of 20%, 40% and 45%, an investment allowance so that only real returns above a normal rate are taxed, the write-off of gains at death removed, a charge on people who leave the country, Business Asset Disposal Relief and Investors’ Relief abolished and losses reformed. In September 2026 it re-costed the package on the OBR’s current forecast, after the October 2024 rate rise and the move of carried interest into income tax: a 62% rise in CGT revenue, down from the 88% it estimated in 2024, but £19.7 billion in 2029-30 because the OBR now expects twice the CGT it did then. That is CenTax’s central estimate after behavioural responses, held flat in cash here; most of it comes from people with large gains, and part of it arrives as income tax.",
   "baselinePolicy": {
     "text": "Capital gains are taxed at 18% and 24% (residential property and carried interest apart), with gains written off at death, no charge on leaving the country, and Business Asset Disposal Relief at 18% from April 2026. CGT receipts are forecast at £32.0bn in 2029-30.",
@@ -28,6 +28,20 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2028-29",
+    "text": "Capital gains tax on a year’s gains is paid by 31 January after the tax year, so a change from April 2027 shows almost entirely from 2028-29: the October 2024 rate rise scored £90m in 2024-25 and £1.4bn in 2025-26.",
+    "sources": [
+      {
+        "sourceId": "govuk-cgt-report-and-pay",
+        "quote": "You must report by 31 December in the tax year after you made your gain and pay by 31 January."
+      },
+      {
+        "sourceId": "hmt-autumn-budget-2024-table-5-1",
+        "quote": "Increase the main rates of CGT to 18% and 24% from 30 October 2024"
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -64,7 +78,7 @@
           }
         ]
       },
-      "note": "CenTax’s September 2026 figure for the whole package, on the OBR’s March 2026 forecast for capital gains tax, held flat in cash from the start year. It supersedes the 2024 estimate of £14 billion, which was costed from the old 10% and 20% rates and needed the 2024 rise netting off; this one does not. Effects before the start year are not applied."
+      "note": "CenTax’s September 2026 figure for the whole package, on the OBR’s March 2026 forecast for capital gains tax, held flat in cash from the start year. It supersedes the 2024 estimate of £14 billion, which was costed from the old 10% and 20% rates and needed the 2024 rise netting off; this one does not. Effects before the start year are not applied. Nothing is counted before 2028-29: see earliestStart."
     },
     "caveats": [
       "A package, not a rate change. CenTax’s £19.7 billion assumes an investment allowance, the death write-off removed, a charge on leavers, BADR and Investors’ Relief abolished and losses reformed. Rates alone would raise far less: HMRC’s own reckoner scores a ten-point rise in the higher rate as losing money, and CenTax advises against equalising rates without the base reforms.",

@@ -809,6 +809,12 @@ Nothing is counted before it; a player can delay a measure past its floor, never
   (Budget 2018 to April 2020) are the registered precedents for a new tax; the proposers' own
   dates ("by 2029/30", "in the long run, after any transitional protections are exhausted") set
   the welfare cards.
+- **Payment timing counts too.** Capital gains tax on a year's gains is paid by 31 January after
+  the tax year, and the OBR scores the cash when it arrives: Autumn Budget 2024 Table 5.1 line 27
+  scored the October 2024 rate rise at £90m in 2024-25 and £1,440m in 2025-26. The three think-tank
+  capital gains cards (alignment with income tax, the charge at death, the charge on leavers) start
+  in 2028-29 for that reason; HMRC's ready-reckoner rows on the two certified capital gains cards
+  already carry the lag inside their published years and need nothing.
 - **The arithmetic is untouched.** The effect map stays as the method reproduces it and the early
   years are zeroed at run time. Set-up costs stay in words.
 - **The card says so**: an "Earliest start" tag, the reason under "What this assumes", the year in

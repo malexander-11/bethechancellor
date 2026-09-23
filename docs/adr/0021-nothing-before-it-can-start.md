@@ -68,29 +68,51 @@ take effect on its source's own timetable, the sentence that says why, and the s
   nothing in the target year; the OBR's re-scored table skips one; the speech, which speaks of the
   target year, says nothing about it (a "starts later" fragment is a follow-up, not built here).
 
-The ten cards:
+The cards, ten at acceptance and three more after the revision below:
 
-| Code                | Earliest start | Anchor                                                                        |
-| ------------------- | -------------- | ----------------------------------------------------------------------------- |
-| `wealth`, `wealth2` | 2030-31        | TPA's expected case; the Commission's four years                              |
-| `sugsalt`           | 2029-30        | The soft drinks levy's 25 months; RF's "several years" and 2029-30 figure     |
-| `ctgh`              | 2029-30        | The £2m surcharge's 28 months and set-up costs; the IFS figure is for 2029-30 |
-| `qelevy`            | 2028-29        | The digital services tax's 17 months; IPPR's "relatively straightforward"     |
-| `nicrent`, `cta`    | 2028-29        | TPA's usual sixteen-month timetable                                           |
-| `csjmh`             | 2029-30        | CSJ's "by 2029/30"                                                            |
-| `dlakids`           | 2030-31        | CSJ's "annually by 2030", read cautiously                                     |
-| `uitime`            | 2030-31        | The IFS's "in the long run, after any transitional protections are exhausted" |
+| Code                            | Earliest start | Anchor                                                                                          |
+| ------------------------------- | -------------- | ----------------------------------------------------------------------------------------------- |
+| `wealth`, `wealth2`             | 2030-31        | TPA's expected case; the Commission's four years                                                |
+| `sugsalt`                       | 2029-30        | The soft drinks levy's 25 months; RF's "several years" and 2029-30 figure                       |
+| `ctgh`                          | 2029-30        | The £2m surcharge's 28 months and set-up costs; the IFS figure is for 2029-30                   |
+| `qelevy`                        | 2028-29        | The digital services tax's 17 months; IPPR's "relatively straightforward"                       |
+| `nicrent`, `cta`                | 2028-29        | TPA's usual sixteen-month timetable                                                             |
+| `csjmh`                         | 2029-30        | CSJ's "by 2029/30"                                                                              |
+| `dlakids`                       | 2030-31        | CSJ's "annually by 2030", read cautiously                                                       |
+| `uitime`                        | 2030-31        | The IFS's "in the long run, after any transitional protections are exhausted"                   |
+| `cgtalign`, `cgtdth`, `cgtexit` | 2028-29        | Paid the January after the tax year: Autumn Budget 2024 line 27's £90m, then £1,440m (revision) |
 
 ## Consequences
 
 - The two wealth taxes raise nothing in the year the rules test. A Chancellor can announce one and
   cannot book it against the target, which is the lesson the user asked for.
-- Counts: 116 lever files, 134 sources; 75 tax and 32 spending levers on offer, unchanged.
+- Counts: 116 lever files and, after the revision below, 135 sources; 75 tax and 32 spending
+  levers on offer, unchanged.
 - The Director of Tax's list opens with the alignment package and the pension reliefs again; the
   credibility rule (ADR-0013) no longer counts a wealth tax that improves nothing.
 - Tests that needed a re-scored measure yielding in 2029-30 use the death write-off card, which
-  carries the same draw factors as the wealth cards; a new suite pins the ten floors, the
+  carries the same draw factors as the wealth cards; a new suite pins every floor, the
   max-of-three rule and the refusals.
 - The compromise step's delay control counts from a lever's floor; no card on offer reaches it
   today (tax cards and savings never get the control), so the change is for correctness.
 - `appliesFrom` remains set on every lever and read by nothing; left alone.
+
+## Revision (2026-09-23, evening): the payment lag
+
+The user then pointed at the alignment card, "Tax capital gains like income: 20%, 40% and 45%",
+and asked "What about this one?" Its problem is not legislation but collection. Capital gains tax on
+a year's gains is paid the following January: gov.uk (`govuk-cgt-report-and-pay`, now registered),
+"You must report by 31 December in the tax year after you made your gain and pay by 31 January. For
+example, if you made a gain in the 2025 to 2026 tax year, you need to report it by 31 December 2026
+and pay by 31 January 2027." The OBR scores the cash when it arrives: Autumn Budget 2024 Table 5.1
+line 27, the rate rise "from 30 October 2024", scores £90m in 2024-25 and £1,440m in 2025-26. A
+package taking effect in April 2027 therefore shows almost entirely from 2028-29 (the small in-year
+amount is gains on UK residential property, which gov.uk says must not wait for the next tax year),
+and CenTax's own £19.7bn is a figure for 2030.
+
+Decision: the three think-tank capital gains cards, `cgtalign`, `cgtdth` and `cgtexit`, carry
+`earliestStart` 2028-29 with that reason and both sources; their 2027-28 yield goes and their
+headlines name the year. HMRC's ready-reckoner rows on the two certified capital gains cards
+(`cgth`, `cgtl`) already carry the lag inside their published years and need nothing. The death
+card's timing caveat now says the steady-state figure applies from 2028-29, the first year in which
+tax on 2027-28 disposals is paid. Thirteen cards carry a floor; 135 sources.

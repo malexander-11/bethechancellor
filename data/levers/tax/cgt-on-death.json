@@ -8,7 +8,7 @@
   "order": 22,
   "title": "End the capital gains write-off at death",
   "shortTitle": "CGT at death",
-  "headline": "End the CGT write-off at death. RF's £4bn includes an exit charge: upper bound.",
+  "headline": "End the CGT write-off at death from 2028-29. RF’s £4bn, an upper bound.",
   "description": "Today any gain built up on an asset is wiped out for capital gains tax when its owner dies: the heir inherits it at its value at death and pays nothing on the gain that came before. The Resolution Foundation proposes that the full gain should be taxed when the heir eventually sells, and puts that together with a settling-up charge on people who leave the country at £4 billion a year. It publishes no split between the two, so this card carries the whole £4bn against the death write-off alone. The business department has ruled out a corporate exit tax; a personal charge on people who leave has not been ruled out, and the Centre for the Analysis of Taxation puts the gains tax forgone on business owners who emigrate at £0.5 billion a year or more, which the exit charge card carries on its own. It is grown with the OBR's capital gains tax forecast from 2029-30.",
   "baselinePolicy": {
     "text": "Gains are rebased to market value on death and the built-up gain is never charged to capital gains tax; the estate may pay inheritance tax instead. Capital gains tax receipts are forecast at £32.0bn in 2029-30.",
@@ -29,6 +29,20 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2028-29",
+    "text": "Capital gains tax on a year’s gains is paid by 31 January after the tax year, so a change from April 2027 shows almost entirely from 2028-29: the October 2024 rate rise scored £90m in 2024-25 and £1.4bn in 2025-26.",
+    "sources": [
+      {
+        "sourceId": "govuk-cgt-report-and-pay",
+        "quote": "You must report by 31 December in the tax year after you made your gain and pay by 31 January."
+      },
+      {
+        "sourceId": "hmt-autumn-budget-2024-table-5-1",
+        "quote": "Increase the main rates of CGT to 18% and 24% from 30 October 2024"
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -66,11 +80,11 @@
           }
         ]
       },
-      "note": "The Foundation's £4bn a year is taken as a 2029-30 steady-state figure and moved with the OBR's capital gains tax receipts to the other years. It covers two measures and the exit charge is not separated, so the figure is an upper bound for the death write-off on its own."
+      "note": "The Foundation's £4bn a year is taken as a 2029-30 steady-state figure and moved with the OBR's capital gains tax receipts to the other years. It covers two measures and the exit charge is not separated, so the figure is an upper bound for the death write-off on its own. Nothing is counted before 2028-29: see earliestStart."
     },
     "caveats": [
       "An upper bound by construction: the Resolution Foundation costs the death write-off and an exit charge together and publishes no split. Nobody has certified either figure.",
-      "Timing: the Foundation's proposal taxes the gain when the heir eventually sells, so revenue would build up over years, not arrive in full from April 2027. The card applies the steady-state figure from the first year.",
+      "Timing: the Foundation's proposal taxes the gain when the heir eventually sells, so revenue would build up over years, not arrive in full at once. The card applies the steady-state figure from 2028-29, the first year in which tax on 2027-28 disposals is paid.",
       "Static: people would hold, gift or restructure assets differently once gains at death were taxed, and would bring disposals forward before the change, as they did before the October 2024 rate rise."
     ]
   },

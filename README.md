@@ -49,7 +49,8 @@ Insurance on rents, a 2% wealth tax, a sugar and salt tax, council tax on the to
 upper earnings limit, 1% VAT on zero-rated goods, a pension lump-sum cap, stamp duty abolished on
 main homes, a child tax allowance, and six welfare cards from housing support relinked to rents to
 the Centre for Social Justice's benefit reset, on two welfare tabs. Ten of those cards cannot
-take effect from April 2027, the wealth taxes among them, so each wears a sourced earliest start
+take effect from April 2027, the wealth taxes among them, and the three think-tank capital gains
+cards cannot be collected until 2028-29, so each of the thirteen wears a sourced earliest start
 and counts nothing before it.
 
 Under the hood: the OBR March 2026 baseline, 75 tax levers (HMRC ready reckoner, Budget 2025 and

@@ -8,7 +8,7 @@
   "order": 24,
   "title": "Charge capital gains tax on people who leave the UK",
   "shortTitle": "CGT exit charge",
-  "headline": "Leavers’ unrealised gains go untaxed. CenTax: at least £0.5bn a year, a floor.",
+  "headline": "Leavers’ unrealised gains go untaxed. CenTax: at least £0.5bn a year from 2028-29.",
   "description": "Someone who leaves the UK before selling an asset pays no British capital gains tax on the gain built up while they lived here, and most go to countries where they can realise it tax free. The Centre for the Analysis of Taxation read the Companies House records of business owners who emigrated and put the CGT forgone at £500 million a year at the least, calling the true figure likely to be much higher. This card charges gains when people leave, at that floor, held flat in cash. It is a personal charge on leavers, not the corporate exit tax the business department has ruled out, and the government has not ruled it out.",
   "baselinePolicy": {
     "text": "No capital gains tax is charged on gains built up in the UK when the owner emigrates before selling; the OBR forecast carries no such charge.",
@@ -27,6 +27,20 @@
     "default": 0
   },
   "appliesFrom": "implementationYear",
+  "earliestStart": {
+    "year": "2028-29",
+    "text": "Capital gains tax on a year’s gains is paid by 31 January after the tax year, so a change from April 2027 shows almost entirely from 2028-29: the October 2024 rate rise scored £90m in 2024-25 and £1.4bn in 2025-26.",
+    "sources": [
+      {
+        "sourceId": "govuk-cgt-report-and-pay",
+        "quote": "You must report by 31 December in the tax year after you made your gain and pay by 31 January."
+      },
+      {
+        "sourceId": "hmt-autumn-budget-2024-table-5-1",
+        "quote": "Increase the main rates of CGT to 18% and 24% from 30 October 2024"
+      }
+    ]
+  },
   "classification": {
     "side": "receipts",
     "currentOrCapital": "current",
@@ -63,7 +77,7 @@
           }
         ]
       },
-      "note": "CenTax’s floor taken as a steady-state figure and held flat in cash from the start year; the tax forgone is a measure of what a charge could reach, not a costing of one, and the study covers UK nationals’ business shareholdings only."
+      "note": "CenTax’s floor taken as a steady-state figure and held flat in cash from the start year; the tax forgone is a measure of what a charge could reach, not a costing of one, and the study covers UK nationals’ business shareholdings only. Nothing is counted before 2028-29: see earliestStart."
     },
     "caveats": [
       "A floor: CenTax says the true figure is likely to be much higher, and its study covers only UK nationals’ shareholdings in companies, not property, funds or other assets.",
