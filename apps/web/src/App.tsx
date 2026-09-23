@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { BeatsProvider } from './journey/beats';
 import { WorkingsProvider, useWorkingsSwitch } from './journey/workings';
 import { BudgetProvider } from './state/budget';
@@ -129,6 +130,7 @@ export function App() {
       <BeatsProvider>
         <WorkingsProvider>
           <Shell />
+          <Analytics />
         </WorkingsProvider>
       </BeatsProvider>
     </BudgetProvider>
