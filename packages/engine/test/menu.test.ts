@@ -220,9 +220,9 @@ describe('the Budget 2026 menu', () => {
     expect(lever('nicllp').considerations.some((c) => c.kind === 'legal')).toBe(true);
   });
 
-  it('aligning CGT with income tax is CenTax’s £14.3 billion less the 2024 rise, held flat', () => {
-    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2029-30').receipts).toBeCloseTo(14300 - 2490, 6);
-    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2027-28').receipts).toBeCloseTo(11810, 6);
+  it('aligning CGT with income tax is CenTax’s 2026 figure on today’s baseline, held flat', () => {
+    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2029-30').receipts).toBeCloseTo(19700, 6);
+    expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2027-28').receipts).toBeCloseTo(19700, 6);
     expect(effectOf({ cgtalign: 1 }, 'cgtalign', '2026-27').receipts).toBe(0);
     const align = lever('cgtalign');
     if (align.costing.kind !== 'schedule') throw new Error('alignment is a schedule');
@@ -266,7 +266,7 @@ describe('the Budget 2026 menu', () => {
     expect(Math.max(...group.map((l) => l.order ?? 0))).toBe(homes.order);
   });
 
-  it('a tampered term in the alignment package fails the consistency check', () => {
+  it('a tampered figure in the alignment package fails the consistency check', () => {
     const align = structuredClone(lever('cgtalign'));
     if (
       align.costing.kind !== 'schedule' ||
@@ -274,10 +274,10 @@ describe('the Budget 2026 menu', () => {
     )
       throw new Error('alignment is derived');
     const method = align.costing.rawSource.method;
-    if (method.name !== 'weightedSum') throw new Error('alignment is a weighted sum');
-    const term = method.terms[1];
-    if (!term) throw new Error('two terms');
-    term.factor = 1;
+    if (method.name !== 'statedProduct') throw new Error('alignment is a stated product');
+    const term = method.terms[0];
+    if (!term) throw new Error('one term');
+    term.value = 14300;
     expect(checkRawSourceConsistency(align, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 

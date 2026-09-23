@@ -99,7 +99,8 @@
     },
     "caveats": [
       "Sum of HMRC's petrol and diesel rows for a 1% change in duty; larger changes are scaled linearly.",
-      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions.",
+      "The Resolution Foundation puts the cost of continued freezes at over £5 billion a year by 2029-30: the yield of this slider’s planned rises is what a freeze forgoes."
     ]
   },
   "considerations": [
@@ -128,6 +129,10 @@
         },
         {
           "sourceId": "osr-trr-review-2025-12"
+        },
+        {
+          "sourceId": "rf-call-of-duties-2025",
+          "quote": "by 2029-30 the cost of continued freezes would be over £5 billion annually"
         }
       ],
       "magnitudeWords": "unknown"

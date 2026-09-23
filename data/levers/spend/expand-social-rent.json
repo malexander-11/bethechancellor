@@ -82,7 +82,8 @@
     "caveats": [
       "The department does not publish grant rates: \"we are not publishing standard grant rates\". Social rent homes cost more grant per home than shared ownership, so a programme weighted to social rent buys fewer homes than the average implies.",
       "Grant is not the only constraint. Land, planning consent and building capacity all bind, and the existing programme is already a step change in output.",
-      "Capital grant scores in borrowing and in public sector net investment. It does not count against the stability rule, which is about day-to-day spending."
+      "Capital grant scores in borrowing and in public sector net investment. It does not count against the stability rule, which is about day-to-day spending.",
+      "The Resolution Foundation puts the extra needed to reach 300,000 homes for social rent at another £800 million a year over the programme’s ten years, a scale check on this card’s figure."
     ]
   },
   "considerations": [
@@ -127,6 +128,10 @@
         {
           "sourceId": "hmt-statement-of-funding-policy-2025",
           "paragraph": "3.9-3.18"
+        },
+        {
+          "sourceId": "rf-housing-outlook-q3-2026",
+          "quote": "another £800 million would be needed each year over the programme’s 10-year lifespan"
         }
       ]
     }

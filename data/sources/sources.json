@@ -1041,7 +1041,7 @@
       "publishedOn": "2025-09-23",
       "retrievedOn": "2026-09-19",
       "licence": "Other",
-      "notes": "Fetched 2026-09-19. On capital gains tax: \"when assets are held until death, any built-up gains are written off for tax purposes. This creates perverse incentives to avoid realising gains, and is a particularly valuable tax concession to those with very large business wealth. Instead, full tax should be paid whenever beneficiaries later realise gains.\" And, of ending the death write-off together with a settling-up charge on emigrants: \"The combination of these two measures would raise an estimated £4 billion a year\". The Foundation publishes no split between the two. Resolution Foundation; quoted briefly with attribution."
+      "notes": "Fetched 2026-09-19. On capital gains tax: \"when assets are held until death, any built-up gains are written off for tax purposes. This creates perverse incentives to avoid realising gains, and is a particularly valuable tax concession to those with very large business wealth. Instead, full tax should be paid whenever beneficiaries later realise gains.\" And, of ending the death write-off together with a settling-up charge on emigrants: \"The combination of these two measures would raise an estimated £4 billion a year\". The Foundation publishes no split between the two. Resolution Foundation; quoted briefly with attribution. Also, from the same report: on fuel duty, \"by 2029-30 the cost of continued freezes would be over £5 billion annually\"; a Sugar and Salt Reformulation Tax at £4 per kilogram of sugar and £8 per kilogram of salt \"would raise around £3.5 billion by 2029-30 – net of abolishing the Soft Drinks Industry Levy\"; the VAT registration threshold reduced to \"£30,000 over the next four years, raising £2 billion\"."
     },
     {
       "id": "hmrc-banking-sector-receipts-2025",
@@ -1185,6 +1185,29 @@
       "retrievedOn": "2026-09-23",
       "licence": "Other",
       "notes": "Fetched 2026-09-23. \"Our estimate: a £1.5m threshold would tax around 160,000 additional homes on an OBR-scaled basis, almost doubling the number of properties in scope.\" Static revenue in 2028-29: £605m for the announced £2m tax, £850m with a £1.5m band at £1,500 and other bands unchanged, £1,270m with a £1.5m band at £2,500 and every other band pushed up (TPA’s base case); after the OBR’s retention ratio (£400m ÷ £605m) and £40m a year of valuation and administration costs the base case \"could roughly double the net revenue, to about £800m\". \"This is our illustrative extrapolation, not an OBR forecast for a £1.5m tax.\" Quoted briefly with attribution."
+    },
+    {
+      "id": "centax-taxes-at-the-top-2026",
+      "org": "Other",
+      "title": "Taxes at the top: understanding what high earners pay and options for reform",
+      "edition": "Advani, Hughson and Summers, September 2026",
+      "url": "https://centax.org.uk/wp-content/uploads/2026/09/AdvaniHughsonSummers2026_Taxes-at-the-top.pdf",
+      "landingUrl": "https://centax.org.uk/",
+      "publishedOn": "2026-09-23",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. Centre for the Analysis of Taxation. On its capital gains package: \"This reform would result in a 62% increase in revenue. This is down from the 88% increase we estimated in Advani, Lonsdale and Summers (2024), reflecting recent increases in CGT rates, and the removal of carried interest from the CGT base. It equates to £19.7 billion of additional revenue in 2030 given the current Office for Budget Responsibility (OBR) baseline forecast of £32 billion for CGT.\" A central estimate with behavioural responses. Partnership NICs: \"would raise £2.1 billion in 2030. 98% of this revenue would come from the top\". Investment income: \"On a static basis, so before accounting for behavioural responses, we estimate this would raise up to £3 billion, £0.6 billion and £0.4 billion respectively in 2030\" for rental, savings and other non-dividend investment income; \"we do not include any adjustment for reintroducing a mortgage interest deduction\". Childcare cliff-edge: \"would cost £640 million in 2030\". \"2030\" is the 2029-30 tax year. Quoted briefly with attribution."
+    },
+    {
+      "id": "rf-housing-outlook-q3-2026",
+      "org": "RF",
+      "title": "Housing Outlook Q3 2026",
+      "edition": "24 July 2026",
+      "url": "https://www.resolutionfoundation.org/publications/housing-outlook-q3-2026/",
+      "publishedOn": "2026-07-24",
+      "retrievedOn": "2026-09-23",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-23. \"To reach 300,000 homes for social rent (the number of affordable homes the SAHP currently aims to deliver), we estimate that another £800 million would be needed each year over the programme’s 10-year lifespan.\" Resolution Foundation; quoted briefly with attribution."
     }
   ]
 }

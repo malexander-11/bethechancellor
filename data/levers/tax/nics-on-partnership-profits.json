@@ -71,7 +71,8 @@
     "caveats": [
       "CenTax’s central figure takes a fifth off a static £2.4 billion for behaviour; at a higher elasticity the yield falls further. Nobody in government has adopted the design or certified the number.",
       "Grown with the OBR’s National Insurance forecast from 2026-27, which is our step.",
-      "Employer-side, so outside the manifesto lock on the government’s 2024 reading; a partner would call it a rise in their National Insurance, and the reading is contested."
+      "Employer-side, so outside the manifesto lock on the government’s 2024 reading; a partner would call it a rise in their National Insurance, and the reading is contested.",
+      "CenTax’s September 2026 re-costing puts the charge at £2.1 billion in 2029-30, with 98% of it from the top of the distribution; this card’s grown 2026-27 figure lands within £50 million of that."
     ]
   },
   "considerations": [
@@ -100,6 +101,10 @@
         {
           "sourceId": "centax-partnership-nics-2025",
           "quote": "Almost half the revenue raised from introducing Partnership NICs would be raised from partners in the top 0.1%"
+        },
+        {
+          "sourceId": "centax-taxes-at-the-top-2026",
+          "quote": "98% of this revenue would come from the top"
         }
       ]
     },
