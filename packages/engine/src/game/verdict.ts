@@ -6,6 +6,7 @@ import type {
   DrawsFile,
   IncidenceFile,
   Lever,
+  OptionsFile,
   PmFile,
   RuleSet,
   SimulatedLine,
@@ -73,6 +74,7 @@ export interface VerdictInput {
   rules: RuleSet;
   levers: readonly Lever[];
   pm: PmFile;
+  options: OptionsFile;
   draws: DrawsFile;
   context: ContextFile;
   incidence: IncidenceFile;
@@ -94,9 +96,10 @@ function effectOnBorrowing(outcome: Outcome, code: string, year: string): number
 }
 
 function priorityFate(p: PriorityReport): PriorityFate {
-  if (p.status === 'delayed') return 'delayed';
-  if (p.status === 'funded') return 'delivered';
-  if (p.status === 'part-funded') return 'narrowed';
+  if (p.status === 'delivered') {
+    return p.options.some((o) => o.state === 'on' && o.delayedTo) ? 'delayed' : 'delivered';
+  }
+  if (p.status === 'part') return 'narrowed';
   return 'unfunded';
 }
 
@@ -104,7 +107,7 @@ function priorityFate(p: PriorityReport): PriorityFate {
 export function ambitionVerdict(status: AmbitionStatus, levers: readonly Lever[]): AmbitionVerdict {
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
   const priorities = status.priorities.map((p) => ({
-    title: p.flagship.title,
+    title: p.priority.title,
     fate: priorityFate(p),
     costGbpm: p.costGbpm,
   }));
@@ -239,31 +242,21 @@ export function resilienceRows(
   });
 }
 
-function fits(
-  kind: VerdictKind,
-  facts: Record<string, boolean>,
-  themes: readonly string[],
-): boolean {
+function fits(kind: VerdictKind, facts: Record<string, boolean>): boolean {
   for (const [key, want] of Object.entries(kind.when)) {
     if (want === undefined) continue;
-    // A kind keyed to a theme fits a Budget that ticked that theme, among others or alone.
-    if (key === 'themeIs') {
-      if (!themes.includes(String(want))) return false;
-      continue;
-    }
     if (facts[key] !== want) return false;
   }
   return true;
 }
 
-/** "cost of living", "security and cost of living", "a, b and c": the ticked themes as words. */
-export function themesInWords(pm: PmFile, themes: readonly string[]): string {
-  const titles = themes
-    .map((id) => pm.themes.find((t) => t.id === id)?.title)
-    .filter((t): t is string => t !== undefined)
-    .map((t) => t.charAt(0).toLowerCase() + t.slice(1));
-  if (titles.length <= 1) return titles[0] ?? '';
-  return `${titles.slice(0, -1).join(', ')} and ${titles[titles.length - 1]}`;
+/** "the cost of living", "defence and the NHS", "a, b and c": the ranked priorities as words. */
+export function prioritiesInWords(pm: PmFile, ids: readonly string[]): string {
+  const nouns = ids
+    .map((id) => pm.priorities.find((p) => p.id === id)?.noun)
+    .filter((n): n is string => n !== undefined);
+  if (nouns.length <= 1) return nouns[0] ?? '';
+  return `${nouns.slice(0, -1).join(', ')} and ${nouns[nouns.length - 1]}`;
 }
 
 export function budgetVerdict(input: VerdictInput): BudgetVerdict {
@@ -271,7 +264,7 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const year = stability?.targetYear ?? '';
   const headroom = stability?.headroomGbpm ?? 0;
-  const status = ambitionStatus(game, pm, outcome, levers);
+  const status = ambitionStatus(game, pm, input.options, outcome, levers);
   const ambitions = ambitionVerdict(status, levers);
   const { paid, benefited } = incidenceRows(outcome, levers, input.incidence, year);
   const compromises = compromiseRows(input, year);
@@ -281,29 +274,28 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
   );
   const target = game.headroomTargetBn * 1000;
-  const funded = status.priorities.filter(
-    (p) => p.status === 'funded' || p.status === 'delayed',
-  ).length;
+  const delivered = status.delivered;
   const facts: Record<string, boolean> = {
     rulesMet,
     breachAccepted: game.breachAccepted,
     promisesAllKept: status.broken === 0,
-    prioritiesAllFunded: status.priorities.length > 0 && funded === status.priorities.length,
-    prioritiesNoneFunded: funded === 0,
+    prioritiesAllFunded: status.priorities.length > 0 && delivered === status.priorities.length,
+    prioritiesNoneFunded: delivered === 0,
     headroomAtLeastTarget: headroom >= target,
     headroomThin: headroom < input.typicalErrorGbpm / 2,
-    rabbitKept: game.rabbit === 'keep',
+    rabbitKept: game.rabbit.length === 1 && game.rabbit[0] === 'keep',
     certified: input.credibilityShare <= 0.1,
     restive: input.rebellionRisk >= 3,
   };
   const chosen =
-    input.kinds.kinds.find((k) => fits(k, facts, game.themes)) ??
+    input.kinds.kinds.find((k) => fits(k, facts)) ??
     input.kinds.kinds.find((k) => k.id === input.kinds.fallback) ??
     input.kinds.kinds[0]!;
-  const themeWords = themesInWords(pm, game.themes);
+  // The first priority ranked names the Budget: "A cost-of-living Budget that…".
+  const priorityWords = prioritiesInWords(pm, game.priorities.slice(0, 1));
   const fillText = (s: string) =>
     s
-      .replace(/\{theme\}/g, themeWords)
+      .replace(/\{priority\}/g, priorityWords)
       .replace(/\{headroom\}/g, formatGbpBn(headroom, 1, headroom < 0))
       .replace(/\s+,/g, ',')
       .replace(/\s{2,}/g, ' ');

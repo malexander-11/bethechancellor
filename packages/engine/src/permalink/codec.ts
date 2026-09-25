@@ -1,5 +1,6 @@
 import type { Lever } from '../types/data.js';
 import { freshGame, type AssessAsOf, type GamePermalink } from '../types/engine.js';
+import { LEGACY_THEME_PRIORITY } from '../game/options.js';
 import { SEED_MAX, SEED_MIN } from '../game/draw.js';
 
 export const PERMALINK_VERSION = 1;
@@ -35,6 +36,8 @@ const slugOk = (s: string) => /^[a-z0-9][a-z0-9:-]*$/.test(s);
  * (political capital) and `dp` (dropped priorities) carried the Phase 8 negotiation with the PM.
  * The manifesto is now a fixed set of red lines, so a link that carries them decodes without
  * them and without a warning; a Budget that had negotiated away the tax lock now shows it broken.
+ * `th` (the Phase 9 themes) is retired too: on the way in each theme reads as the priority that
+ * took its place (Phase 18), so an old link still opens with a ranking.
  */
 export function encodeGame(g: GamePermalink): string {
   const fresh = freshGame(g.seed);
@@ -42,7 +45,6 @@ export function encodeGame(g: GamePermalink): string {
   if (g.reached !== fresh.reached) items.push(`st.${g.reached}`);
   if (g.planning !== fresh.planning) items.push(`pl.${g.planning}`);
   if (g.headroomTargetBn !== fresh.headroomTargetBn) items.push(`hr.${g.headroomTargetBn}`);
-  if (g.themes.length > 0) items.push(`th.${g.themes.join(LIST_SEPARATOR)}`);
   if (g.priorities.length > 0) items.push(`pr.${g.priorities.join(LIST_SEPARATOR)}`);
   const delays = Object.entries(g.delays).sort(([a], [b]) => a.localeCompare(b));
   if (delays.length > 0) {
@@ -51,7 +53,7 @@ export function encodeGame(g: GamePermalink): string {
     );
   }
   if (g.revealed) items.push('rv.1');
-  if (g.rabbit) items.push(`rb.${g.rabbit}`);
+  if (g.rabbit.length > 0) items.push(`rb.${g.rabbit.join(LIST_SEPARATOR)}`);
   if (g.breachAccepted) items.push('br.1');
   return items.join(ITEM_SEPARATOR);
 }
@@ -87,17 +89,26 @@ export function decodeGame(raw: string, warnings: string[]): GamePermalink | und
   const pl = items.get('pl');
   if (pl && slugOk(pl)) g.planning = pl;
   g.headroomTargetBn = int('hr', g.headroomTargetBn);
-  // A Phase 8 link carried one theme; it reads as a list of one.
-  g.themes = list('th');
-  g.priorities = list('pr');
+  // A Phase 9 link ranked themes; each reads as the priority that took its place, ahead of any
+  // priorities the link also names. An id the data no longer knows is kept here and dropped by
+  // rankedPriorities, so the codec needs no data.
+  const legacy = list('th')
+    .map((t) => LEGACY_THEME_PRIORITY[t])
+    .filter((p): p is string => p !== undefined);
+  g.priorities = [...new Set([...legacy, ...list('pr')])];
   for (const d of list('dl')) {
     const dash = d.lastIndexOf('-');
     const year = toFiscalYear(d.slice(dash + 1));
     if (dash > 0 && year) g.delays[d.slice(0, dash)] = year;
   }
   g.revealed = items.get('rv') === '1';
-  const rb = items.get('rb');
-  if (rb && slugOk(rb)) g.rabbit = rb;
+  // A Phase 9 link carried one rabbit; it reads as a list of one. Its `flagship:` cards belonged
+  // to the flagships, which the priorities replaced, so they are dropped and said so.
+  const rabbit = list('rb');
+  const stale = rabbit.filter((r) => r.startsWith('flagship:'));
+  if (stale.length > 0)
+    warnings.push(`Ignored ${stale.join(', ')} in this link: the flagships have been retired.`);
+  g.rabbit = rabbit.filter((r) => !r.startsWith('flagship:'));
   g.breachAccepted = items.get('br') === '1';
   return g;
 }

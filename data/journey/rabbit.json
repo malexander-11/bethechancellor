@@ -3,7 +3,7 @@
   "intro": {
     "adviser": "permanent-secretary",
     "line": {
-      "text": "One surprise for the speech. Each card is already costed, and its price is the headroom left the morning after. Keeping the headroom is an announcement too.",
+      "text": "A few small things for the speech, up to three. Each card is already costed, and its price is the headroom left the morning after. Keeping the headroom is an announcement too.",
       "sources": [
         {
           "sourceId": "obr-efo-2026-03",
@@ -13,77 +13,10 @@
       "badge": "simulated"
     }
   },
-  "options": [
-    {
-      "id": "penny-off",
-      "title": "A penny off the basic rate of income tax",
-      "code": "itbr",
-      "value": -1,
-      "line": {
-        "text": "The classic. Every basic-rate taxpayer feels it, and on HMRC’s figures it costs more than most packages put together. Everyone cheers anyway.",
-        "sources": [
-          {
-            "sourceId": "hmrc-trr-2025-06"
-          }
-        ],
-        "badge": "simulated"
-      }
-    },
-    {
-      "id": "meals",
-      "title": "Free school meals for every child",
-      "code": "ufsm",
-      "value": 1,
-      "line": {
-        "text": "Visible in every primary school by September, and the means test goes with it. Infant meals are already funded; this is the rest of the school.",
-        "sources": [
-          {
-            "sourceId": "dfe-uifsm-grant-2026-27"
-          },
-          {
-            "sourceId": "dfe-fsm-expansion-2026-27"
-          }
-        ],
-        "badge": "simulated"
-      }
-    },
-    {
-      "id": "fuel-cut",
-      "title": "Fuel duty cut by 5%",
-      "code": "fuel",
-      "value": -5,
-      "line": {
-        "text": "Fuel duty has not risen since 2011-12 and the last Budget kept the 5p cut. Cheap per driver, dear in total, and the lobby will ask again.",
-        "sources": [
-          {
-            "sourceId": "obr-efo-2026-03",
-            "paragraph": "3.2"
-          },
-          {
-            "sourceId": "hmt-budget-2025-table-4-1",
-            "table": "Table 4.1",
-            "note": "line 3"
-          }
-        ],
-        "badge": "simulated"
-      }
-    },
-    {
-      "id": "retraining",
-      "title": "An AI retraining programme",
-      "code": "airet",
-      "value": 1,
-      "line": {
-        "text": "It sounds like a plan for the future and costs less than a penny on anything. It reads well and is hard to see on the ground.",
-        "sources": [],
-        "badge": "simulated"
-      }
-    }
-  ],
-  "strengthen": {
+  "further": {
     "adviser": "director-of-public-spending",
     "line": {
-      "text": "One notch beyond what you agreed turns a promise kept into a promise exceeded. Ministers notice; so does the department that must spend it.",
+      "text": "One notch beyond what you chose turns a promise kept into a promise exceeded. Ministers notice; so does the department that must spend it.",
       "sources": [],
       "badge": "simulated"
     }

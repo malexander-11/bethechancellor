@@ -35,10 +35,11 @@
       "badge": "simulated"
     }
   ],
-  "themes": [
+  "priorities": [
     {
       "id": "cost-of-living",
-      "title": "Cost of living",
+      "title": "Cut the cost of living",
+      "noun": "the cost of living",
       "purpose": "Breathing space on bills, visibly, this winter.",
       "pitch": {
         "text": "Energy bills are rising again this winter. People need to feel this Budget in their pockets before Christmas, not read about it in a forecast.",
@@ -49,14 +50,88 @@
         ],
         "badge": "simulated"
       },
-      "flagships": ["rvfrz-early", "ufsm-all", "bus-cap", "fuel-cut"]
+      "reaction": {
+        "text": "Good. That is the one thing people will feel before Christmas. I will want to know what pays for it.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "lead": "Political Adviser",
+      "brief": {
+        "text": "Bills first: pick what people notice before Christmas. The freeze costs the most and lands the latest; the bus cap is the smallest and the most visible.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-document"
+          },
+          {
+            "sourceId": "govuk-bus-fare-cap-2027"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "sources": [
+        {
+          "sourceId": "rf-policy-landscape-2026"
+        },
+        {
+          "sourceId": "govuk-vat-electricity-cut-2026"
+        }
+      ]
     },
     {
-      "id": "security",
-      "title": "Security",
-      "purpose": "Defence on the NATO path; prisons that hold; borders that work.",
+      "id": "nhs",
+      "title": "Bring down NHS waiting lists",
+      "noun": "the NHS",
+      "purpose": "The 18-week promise, and the care that keeps beds free.",
       "pitch": {
-        "text": "The defence of our nation will always be my first priority. The Defence Investment Plan is published and £4.7 billion of it is waiting for you. I have also told the House that the worst offenders will serve their full terms, and that needs prison places.",
+        "text": "The waiting list is falling and the 18-week target is within reach. And I have promised a national care service without yet finding the money for it.",
+        "sources": [
+          {
+            "sourceId": "govuk-elective-reform-plan-2025"
+          },
+          {
+            "sourceId": "no10-social-care-speech-2026-07-29"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "reaction": {
+        "text": "Eighteen weeks is the promise people remember. Protect it.",
+        "sources": [
+          {
+            "sourceId": "labour-manifesto-2024-nhs"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "lead": "Health Secretary",
+      "brief": {
+        "text": "Every pound above the settlement goes on appointments, and care money frees beds. Neither works quickly, and the efficiency savings are the whole government’s, not mine.",
+        "sources": [
+          {
+            "sourceId": "govuk-elective-reform-plan-2025"
+          },
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-nhs"
+        },
+        {
+          "sourceId": "govuk-elective-reform-plan-2025"
+        }
+      ]
+    },
+    {
+      "id": "defence",
+      "title": "Defence on the NATO path",
+      "noun": "defence",
+      "purpose": "The Defence Investment Plan funded, and 3% of GDP in sight.",
+      "pitch": {
+        "text": "The defence of our nation will always be my first priority. The Defence Investment Plan is published and £4.7 billion of it is waiting for you.",
         "sources": [
           {
             "sourceId": "no10-commons-statement-2026-09-01"
@@ -67,152 +142,18 @@
         ],
         "badge": "simulated"
       },
-      "flagships": ["dip-gap", "defence-uplift", "prisons", "borders"]
-    },
-    {
-      "id": "public-services",
-      "title": "Rebuilding public services",
-      "purpose": "The NHS target, special needs, social care.",
-      "pitch": {
-        "text": "The waiting list is falling and the 18-week target is within reach. Special needs deficits are about to hit council reserves. And I have promised a national care service without yet finding the money for it. Choose what we rebuild first.",
+      "reaction": {
+        "text": "That is not a favour to the Defence Secretary. It is a commitment we have published.",
         "sources": [
           {
-            "sourceId": "govuk-elective-reform-plan-2025"
-          },
-          {
-            "sourceId": "nao-send-2024"
-          },
-          {
-            "sourceId": "no10-social-care-speech-2026-07-29"
+            "sourceId": "govuk-dip-funding-explainer"
           }
         ],
         "badge": "simulated"
       },
-      "flagships": ["nhs-above-sr", "send-settlement", "care-downpayment"]
-    },
-    {
-      "id": "every-postcode",
-      "title": "Growth in every postcode",
-      "purpose": "Build, and be seen to build, outside London.",
-      "pitch": {
-        "text": "This will be a Budget that moves money and power out of Westminster. Council homes are the fair way to bring the welfare bill down. Show the country that re-industrialising Britain is real.",
-        "sources": [
-          {
-            "sourceId": "govuk-budget-2026-every-postcode"
-          },
-          {
-            "sourceId": "no10-first-speech-2026-07-20"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "flagships": ["invest-push", "council-homes", "ai-retraining", "devolution-downpayment"]
-    }
-  ],
-  "crossCutting": ["rvfrz-early", "dip-gap"],
-  "flagships": [
-    {
-      "id": "rvfrz-early",
-      "title": "End the threshold freeze early",
-      "headline": "Let income tax and National Insurance thresholds rise with prices from April 2028, three years before the plan.",
-      "target": {
-        "code": "rvfrz",
-        "value": 1
-      },
-      "delivery": {
-        "text": "A tax cut for every basic-rate payer, but one nobody sees on a payslip until 2028: the freeze it undoes has not happened yet.",
-        "sources": [
-          {
-            "sourceId": "hmt-budget-2025-speech"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "sources": [
-        {
-          "sourceId": "hmt-budget-2025-document"
-        }
-      ]
-    },
-    {
-      "id": "ufsm-all",
-      "title": "Free school meals for every child",
-      "headline": "Every pupil in a state school gets a free lunch, not only those whose families are on universal credit.",
-      "target": {
-        "code": "ufsm",
-        "value": 1
-      },
-      "delivery": {
-        "text": "It funds a place, not a meal eaten: a fifth of pupils already entitled did not take one on census day. England only; consequentials follow.",
-        "sources": [
-          {
-            "sourceId": "dfe-school-pupils-2025-26"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "sources": [
-        {
-          "sourceId": "dfe-fsm-expansion-2026-27"
-        }
-      ]
-    },
-    {
-      "id": "bus-cap",
-      "title": "Keep the £2 bus fare cap running",
-      "headline": "The cap ends with 2027 unless this Budget extends it.",
-      "target": {
-        "code": "bus2",
-        "value": 1
-      },
-      "delivery": {
-        "text": "£400m buys a year of the cap at today's fare gap, outside London only, and the operators' costs keep rising.",
-        "sources": [
-          {
-            "sourceId": "govuk-bus-fare-cap-2027"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "sources": [
-        {
-          "sourceId": "govuk-bus-fare-cap-2027"
-        }
-      ]
-    },
-    {
-      "id": "fuel-cut",
-      "title": "Cut fuel duty by 10%",
-      "headline": "About five pence a litre off, for every driver, from next April.",
-      "target": {
-        "code": "fuel",
-        "value": -10
-      },
-      "delivery": {
-        "text": "Fuel duty has not risen since 2011. A cut is felt at the pump within days, and it is paid for every year after.",
-        "sources": [
-          {
-            "sourceId": "govuk-fuel-duty-rates"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "sources": [
-        {
-          "sourceId": "hmt-budget-2025-table-4-1"
-        }
-      ]
-    },
-    {
-      "id": "dip-gap",
-      "title": "Fund the Defence Investment Plan's gap",
-      "headline": "The plan's own explainer says £4.7bn is still to be confirmed at this Budget.",
-      "target": {
-        "code": "dip47",
-        "value": 1
-      },
-      "delivery": {
-        "text": "Money is not capability: equipment programmes take years, and the plan is mostly equipment. But the commitment is already published.",
+      "lead": "Defence Secretary",
+      "brief": {
+        "text": "Confirm the plan’s gap first: it is already published. Reaching 3% sooner is the expensive choice, and every allied capital will read it.",
         "sources": [
           {
             "sourceId": "govuk-dip-funding-explainer"
@@ -223,111 +164,41 @@
       "sources": [
         {
           "sourceId": "govuk-dip-funding-explainer"
+        },
+        {
+          "sourceId": "no10-commons-statement-2026-09-01"
         }
       ]
     },
     {
-      "id": "defence-uplift",
-      "title": "Defence day-to-day budget up 5%",
-      "headline": "About £2bn a year more for the Ministry of Defence's running costs.",
-      "target": {
-        "code": "mod",
-        "value": 5
-      },
-      "delivery": {
-        "text": "Day-to-day money pays people and keeps kit running; it does not buy the submarines, which are capital.",
+      "id": "schools-send",
+      "title": "Fix special needs and schools",
+      "noun": "schools",
+      "purpose": "Council deficits closed, and the rise in plans faced.",
+      "pitch": {
+        "text": "Special needs deficits are about to hit council reserves. Councils are about to hit the wall on this, and the plans keep rising.",
         "sources": [
           {
-            "sourceId": "govuk-submarine-investment-2026-07-30"
+            "sourceId": "nao-send-2024"
+          },
+          {
+            "sourceId": "dfe-ehcp-2026"
           }
         ],
         "badge": "simulated"
       },
-      "sources": [
-        {
-          "sourceId": "hmt-sr25-del-tables"
-        }
-      ]
-    },
-    {
-      "id": "prisons",
-      "title": "A Justice uplift for prison capacity",
-      "headline": "About £1.3bn a year more for courts, prisons and probation.",
-      "target": {
-        "code": "moj",
-        "value": 10
-      },
-      "delivery": {
-        "text": "Prison places take years to build. Money now buys staff, maintenance and the running cost of the sentencing changes the PM has already announced.",
+      "reaction": {
+        "text": "Councils are about to hit the wall on this. Yes, and quickly.",
         "sources": [
           {
-            "sourceId": "no10-commons-statement-2026-09-01"
+            "sourceId": "nao-send-2024"
           }
         ],
         "badge": "simulated"
       },
-      "sources": [
-        {
-          "sourceId": "hmt-sr25-del-tables"
-        }
-      ]
-    },
-    {
-      "id": "borders",
-      "title": "A Home Office uplift",
-      "headline": "About £1bn a year more for policing, borders and asylum.",
-      "target": {
-        "code": "home",
-        "value": 5
-      },
-      "delivery": {
-        "text": "Supporting asylum seekers cost £4.0bn in 2024-25; a settlement that falls in real terms leaves that bill to be met from elsewhere in the department.",
-        "sources": [
-          {
-            "sourceId": "nao-asylum-system-2025"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "sources": [
-        {
-          "sourceId": "hmt-sr25-del-tables"
-        }
-      ]
-    },
-    {
-      "id": "nhs-above-sr",
-      "title": "Health above the Spending Review path",
-      "headline": "About £7bn a year on top of a settlement already growing 2.8% a year in real terms.",
-      "target": {
-        "code": "dhsc",
-        "value": 3
-      },
-      "delivery": {
-        "text": "Waiting lists fall with appointments, and appointments need staff who take years to train; money reaches the list slowly.",
-        "sources": [
-          {
-            "sourceId": "govuk-elective-reform-plan-2025"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "sources": [
-        {
-          "sourceId": "labour-manifesto-2024-nhs"
-        }
-      ]
-    },
-    {
-      "id": "send-settlement",
-      "title": "A special needs settlement",
-      "headline": "About £5bn a year against council deficits the NAO puts at £4.3bn to £4.9bn.",
-      "target": {
-        "code": "dfe",
-        "value": 5
-      },
-      "delivery": {
-        "text": "43% of councils face deficits near or beyond their reserves by March 2026. Money closes the deficit; it does not slow the 12.5% a year rise in plans.",
+      "lead": "Education Secretary",
+      "brief": {
+        "text": "High needs first: the deficits are real and dated. The rest is smaller and slower, and none of it slows the rise in plans.",
         "sources": [
           {
             "sourceId": "nao-send-2024"
@@ -345,62 +216,38 @@
       ]
     },
     {
-      "id": "care-downpayment",
-      "title": "A down-payment on the National Care Service",
-      "headline": "About £0.8bn a year towards the fair pay agreement due in 2028-29.",
-      "target": {
-        "code": "mhclg",
-        "value": 5
-      },
-      "delivery": {
-        "text": "Two million adults have unmet care needs. A down-payment funds pay before the Casey review reports; it is not yet a service.",
+      "id": "homes-growth",
+      "title": "Homes and growth outside London",
+      "noun": "homes and growth",
+      "purpose": "Build, and be seen to build, outside London.",
+      "pitch": {
+        "text": "This will be a Budget that moves money and power out of Westminster. Council homes are the fair way to bring the welfare bill down. Show the country that re-industrialising Britain is real.",
         "sources": [
           {
-            "sourceId": "no10-social-care-speech-2026-07-29"
+            "sourceId": "govuk-budget-2026-every-postcode"
+          },
+          {
+            "sourceId": "no10-first-speech-2026-07-20"
           }
         ],
         "badge": "simulated"
       },
-      "sources": [
-        {
-          "sourceId": "labour-manifesto-2024-nhs"
-        }
-      ]
-    },
-    {
-      "id": "invest-push",
-      "title": "Investment push",
-      "headline": "Public investment up 10%: about £13bn a year more capital.",
-      "target": {
-        "code": "cdel",
-        "value": 10
-      },
-      "delivery": {
-        "text": "Capital scores against the debt rule, not the stability rule, and departments underspent their capital budgets by £9.7bn last year.",
+      "reaction": {
+        "text": "Power and money out of Westminster. That is the whole point of us.",
         "sources": [
           {
-            "sourceId": "obr-efo-2026-03"
+            "sourceId": "govuk-budget-2026-every-postcode"
           }
         ],
         "badge": "simulated"
       },
-      "sources": [
-        {
-          "sourceId": "govuk-npr-2026-01"
-        }
-      ]
-    },
-    {
-      "id": "council-homes",
-      "title": "More council and social rent homes",
-      "headline": "£3.9bn a year of capital grant for social rent.",
-      "target": {
-        "code": "socrent",
-        "value": 1
-      },
-      "delivery": {
-        "text": "Land, planning and builder capacity bind before money does; the programme's own homes arrive over a decade.",
+      "lead": "Communities Secretary",
+      "brief": {
+        "text": "Capital counts against the debt rule, not the day-to-day one, so investment costs less against the stability rule than it looks. The homes arrive over a decade.",
         "sources": [
+          {
+            "sourceId": "hmt-charter-2025-autumn"
+          },
           {
             "sourceId": "mhclg-sahp-2026-2036"
           }
@@ -409,23 +256,128 @@
       },
       "sources": [
         {
-          "sourceId": "no10-first-speech-2026-07-20"
+          "sourceId": "govuk-budget-2026-every-postcode"
         },
         {
-          "sourceId": "labour-manifesto-2024-growth"
+          "sourceId": "no10-first-speech-2026-07-20"
         }
       ]
     },
     {
-      "id": "ai-retraining",
-      "title": "AI retraining programme",
-      "headline": "£1bn a year to retrain people whose work automates.",
-      "target": {
-        "code": "airet",
-        "value": 1
+      "id": "families",
+      "title": "Families and child poverty",
+      "noun": "families",
+      "purpose": "Fewer children below the line, and rents that housing support meets.",
+      "pitch": {
+        "text": "Ending the two-child limit lifted 450,000 children out of poverty. I want this Budget to go further for families, not back.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-document"
+          }
+        ],
+        "badge": "simulated"
       },
-      "delivery": {
-        "text": "A budget, not a costing: whether £1bn buys a programme that works is a delivery question, not a fiscal one.",
+      "reaction": {
+        "text": "Families first. The party will like that a great deal, and so will I.",
+        "sources": [],
+        "badge": "simulated"
+      },
+      "lead": "Work and Pensions Secretary",
+      "brief": {
+        "text": "Every pound here reaches the poorest households first. The floor and the housing link are cheap; the allowance is not, and it starts late.",
+        "sources": [
+          {
+            "sourceId": "jrf-uc-floor-2026"
+          },
+          {
+            "sourceId": "rf-saving-private-renters-2026"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-document"
+        },
+        {
+          "sourceId": "labour-manifesto-2024-opportunity"
+        }
+      ]
+    },
+    {
+      "id": "safer-streets",
+      "title": "Safer streets: prisons, police, borders",
+      "noun": "safer streets",
+      "purpose": "Cells for the sentences promised, and an asylum bill brought down.",
+      "pitch": {
+        "text": "I have told the House that the worst offenders will serve their full terms, and that needs prison places. Bring the asylum bill down and the whole department breathes.",
+        "sources": [
+          {
+            "sourceId": "no10-commons-statement-2026-09-01"
+          },
+          {
+            "sourceId": "nao-asylum-system-2025"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "reaction": {
+        "text": "That promise needs cells. Yes.",
+        "sources": [
+          {
+            "sourceId": "no10-commons-statement-2026-09-01"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "lead": "Justice Secretary",
+      "brief": {
+        "text": "Two levers, and only two: Justice buys places and sitting days, the Home Office buys caseworkers. Neither is large.",
+        "sources": [
+          {
+            "sourceId": "no10-commons-statement-2026-09-01"
+          },
+          {
+            "sourceId": "nao-asylum-system-2025"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "sources": [
+        {
+          "sourceId": "no10-commons-statement-2026-09-01"
+        },
+        {
+          "sourceId": "nao-asylum-system-2025"
+        }
+      ]
+    },
+    {
+      "id": "welfare-bill",
+      "title": "Get the welfare bill down",
+      "noun": "welfare",
+      "purpose": "A smaller bill by the end of the Parliament, honestly scored.",
+      "pitch": {
+        "text": "Council homes are the fair way to bring the welfare bill down. If you want to go faster than that, be honest about who loses.",
+        "sources": [
+          {
+            "sourceId": "no10-first-speech-2026-07-20"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "reaction": {
+        "text": "Careful. The last reform missed its savings, and the party will read every line.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "lead": "Chief Secretary to the Treasury",
+      "brief": {
+        "text": "Every option here is a static saving, the Treasury’s or a think tank’s. The OBR scored the last eligibility change down, and this game’s harsher forecasts do the same.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03"
@@ -435,30 +387,10 @@
       },
       "sources": [
         {
-          "sourceId": "no10-first-speech-2026-07-20"
-        }
-      ]
-    },
-    {
-      "id": "devolution-downpayment",
-      "title": "A fiscal-devolution down-payment",
-      "headline": "2% more across the other day-to-day budgets, which is where the block grants sit.",
-      "target": {
-        "code": "otherd",
-        "value": 2
-      },
-      "delivery": {
-        "text": "Two-thirds of this line is the devolved block grants; a down-payment here reaches Scotland, Wales and Northern Ireland as well as the English regions.",
-        "sources": [
-          {
-            "sourceId": "hmt-sr25-del-tables"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "sources": [
+          "sourceId": "obr-efo-2026-03"
+        },
         {
-          "sourceId": "govuk-chancellor-growth-speech-2026-09-07"
+          "sourceId": "csj-benefits-budget-2025"
         }
       ]
     }
@@ -617,142 +549,5 @@
         }
       ]
     }
-  ],
-  "reactions": {
-    "rvfrz-early": {
-      "text": "Good. It is the one thing in the last Budget people still feel. But it is £8bn a year by 2029-30, so I will want to know what pays for it.",
-      "sources": [
-        {
-          "sourceId": "hmt-budget-2025-document"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "ufsm-all": {
-      "text": "Every child. I like that a great deal, and so will the party.",
-      "sources": [
-        {
-          "sourceId": "dfe-fsm-expansion-2026-27"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "bus-cap": {
-      "text": "People in Bolton and Bury will notice that more than anything else in the Red Book.",
-      "sources": [
-        {
-          "sourceId": "govuk-bus-fare-cap-2027"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "fuel-cut": {
-      "text": "Drivers will thank you and the Treasury will not. Fuel duty has not gone up since 2011; be sure you can afford to keep it that way.",
-      "sources": [
-        {
-          "sourceId": "govuk-fuel-duty-rates"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "dip-gap": {
-      "text": "That is not a favour to the Defence Secretary. It is a commitment we have published.",
-      "sources": [
-        {
-          "sourceId": "govuk-dip-funding-explainer"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "defence-uplift": {
-      "text": "Day-to-day money for defence is people. Yes.",
-      "sources": [
-        {
-          "sourceId": "hmt-sr25-del-tables"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "prisons": {
-      "text": "I have told the House the worst offenders will serve their full terms. That promise needs cells.",
-      "sources": [
-        {
-          "sourceId": "no10-commons-statement-2026-09-01"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "borders": {
-      "text": "Bring the asylum bill down and the whole department breathes.",
-      "sources": [
-        {
-          "sourceId": "nao-asylum-system-2025"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "nhs-above-sr": {
-      "text": "Eighteen weeks is the promise people remember. Protect it.",
-      "sources": [
-        {
-          "sourceId": "labour-manifesto-2024-nhs"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "send-settlement": {
-      "text": "Councils are about to hit the wall on this. Yes, and quickly.",
-      "sources": [
-        {
-          "sourceId": "nao-send-2024"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "care-downpayment": {
-      "text": "I have waited twenty years to hear a Chancellor say that.",
-      "sources": [
-        {
-          "sourceId": "no10-social-care-speech-2026-07-29"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "invest-push": {
-      "text": "Build. But remember the debt rule watches investment even when the stability rule does not.",
-      "sources": [
-        {
-          "sourceId": "hmt-charter-2025-autumn"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "council-homes": {
-      "text": "Council homes bring the welfare bill down. That is the argument; make it.",
-      "sources": [
-        {
-          "sourceId": "no10-first-speech-2026-07-20"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "ai-retraining": {
-      "text": "Good. Make sure the North sees it, not just the Treasury.",
-      "sources": [
-        {
-          "sourceId": "no10-first-speech-2026-07-20"
-        }
-      ],
-      "badge": "simulated"
-    },
-    "devolution-downpayment": {
-      "text": "Power and money out of Westminster. That is the whole point of us.",
-      "sources": [
-        {
-          "sourceId": "govuk-budget-2026-every-postcode"
-        }
-      ],
-      "badge": "simulated"
-    }
-  }
+  ]
 }

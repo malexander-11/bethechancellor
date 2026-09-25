@@ -59,7 +59,7 @@
     },
     {
       "id": "kept-everything-thin",
-      "title": "A {theme} Budget that kept every promise and little headroom",
+      "title": "A {priority} Budget that kept every promise and little headroom",
       "when": {
         "rulesMet": true,
         "promisesAllKept": true,
@@ -79,7 +79,7 @@
     },
     {
       "id": "delivered-and-paid",
-      "title": "A {theme} Budget that delivered what it promised and paid for it",
+      "title": "A {priority} Budget that delivered what it promised and paid for it",
       "when": {
         "rulesMet": true,
         "promisesAllKept": true,

@@ -1,9 +1,9 @@
 import { formatGbpBn } from '../format.js';
-import { describeLevelChange } from '../levels.js';
 import type { Lever, PmFile, SourceRef, SpeechFile, SpeechFragment } from '../types/data.js';
 import type { GamePermalink, Outcome } from '../types/engine.js';
 import type { AmbitionStatus } from './ambitions.js';
-import { themesInWords } from './verdict.js';
+import { rankedPriorities } from './options.js';
+import { prioritiesInWords } from './verdict.js';
 
 /**
  * The speech (stage 7), assembled from authored fragments. Every figure in it is read from the
@@ -15,7 +15,7 @@ import { themesInWords } from './verdict.js';
 
 export type SpeechParagraphKind =
   | 'opening'
-  | 'flagship'
+  | 'priority'
   | 'spending'
   | 'cuts'
   | 'revenue'
@@ -50,7 +50,7 @@ export interface SpeechInput {
   /** The package as the OBR saw it, for the compromises paragraph. */
   snapshot?: Record<string, number>;
   macroCodes: readonly string[];
-  /** Titles of the rabbit options, by id. */
+  /** Titles of the add-ons, by id. */
   rabbitTitles?: Record<string, string>;
 }
 
@@ -128,7 +128,7 @@ const REVENUE_CLASS: Record<string, string> = {
   vathome: 'base',
 };
 
-const MAX_FLAGSHIPS = 3;
+const MAX_PRIORITIES_SAID = 3;
 const MAX_LIST = 3;
 
 function fill(fragment: SpeechFragment, values: Record<string, string>): string {
@@ -182,29 +182,35 @@ export function assembleSpeech(input: SpeechInput): Speech {
     };
   };
 
-  // Opening, keyed to the theme agreed with the Prime Minister; two or more share one opening.
-  const themes = game?.themes ?? [];
-  const openingKey = themes.length === 0 ? 'default' : themes.length === 1 ? themes[0]! : 'several';
-  say('opening', speech.opening[openingKey] ?? speech.opening.default, {
+  // Opening, keyed to the first priority ranked with the Prime Minister.
+  const ranked = game && input.pm ? rankedPriorities(game, input.pm) : [];
+  const first = ranked[0];
+  say('opening', (first && speech.opening[first.id]) ?? speech.opening.default, {
     targetYear: year,
-    themes: input.pm ? themesInWords(input.pm, themes) : '',
+    priorities: input.pm ? prioritiesInWords(input.pm, game?.priorities ?? []) : '',
   });
 
-  // One paragraph per funded flagship, biggest first.
-  const funded = (status?.priorities ?? [])
-    .filter((p) => p.status === 'funded' || p.status === 'delayed')
-    .sort((a, b) => b.costGbpm - a.costGbpm)
-    .slice(0, MAX_FLAGSHIPS);
-  const flagshipCodes = new Set(funded.map((p) => p.flagship.target.code));
-  for (const p of funded) {
-    const lever = byCode.get(p.flagship.target.code);
-    // Rates and thresholds have a level to state ("20% → 21%"); a spending line has only its cost.
-    const level = lever ? describeLevelChange(lever, p.current) : null;
-    const cost = money(Math.abs(p.costGbpm));
+  // One paragraph per priority delivered, in rank order, naming the options that deliver it.
+  const delivered = (status?.priorities ?? [])
+    .filter((p) => p.status === 'delivered')
+    .slice(0, MAX_PRIORITIES_SAID);
+  const deliveredCodes = new Set(
+    delivered.flatMap((p) =>
+      p.options.filter((o) => o.state === 'on').flatMap((o) => Object.keys(o.option.values)),
+    ),
+  );
+  for (const p of delivered) {
+    const on = p.options.filter((o) => o.state === 'on');
+    const cost = money(Math.abs(on.reduce((acc, o) => acc + o.costGbpm, 0)));
     say(
-      'flagship',
-      speech.flagship,
-      { title: p.flagship.title, detail: level ? `${level}, ${cost}` : cost, targetYear: year },
+      'priority',
+      speech.priority,
+      {
+        title: p.priority.title,
+        options: list(on.map((o) => lower(o.option.title))),
+        cost,
+        targetYear: year,
+      },
       [cost],
     );
   }
@@ -217,7 +223,7 @@ export function assembleSpeech(input: SpeechInput): Speech {
   for (const effect of outcome.leverEffects) {
     const lever = byCode.get(effect.code);
     if (!lever || lever.category === 'macro' || macroCodes.includes(lever.code)) continue;
-    if (flagshipCodes.has(lever.code)) continue;
+    if (deliveredCodes.has(lever.code)) continue;
     const { cost, receipts } = effectOf(lever.code);
     if (lever.category === 'tax' || receipts !== 0) {
       if (receipts > 0) {
@@ -272,34 +278,45 @@ export function assembleSpeech(input: SpeechInput): Speech {
     say('delay', speech.delay, { title: lower(lever.title), year: toYear });
   }
 
-  // The rabbit, if there is one, and the last word. Keeping the headroom is only an announcement
-  // while there is headroom to keep; with none, the peroration says what there is to say.
-  const rabbit = game?.rabbit;
-  if (rabbit && !(rabbit === 'keep' && headroom <= 0)) {
-    const key = rabbit.startsWith('flagship:') ? 'flagship' : rabbit;
-    const flagshipId = rabbit.startsWith('flagship:') ? rabbit.slice('flagship:'.length) : '';
-    const title = rabbit.startsWith('flagship:')
-      ? (input.pm?.flagships.find((f) => f.id === flagshipId)?.title ?? '')
-      : (input.rabbitTitles?.[rabbit] ?? '');
-    const headroomText = money(headroom);
+  // The add-ons, if any, and the last word. Keeping the headroom is only an announcement while
+  // there is headroom to keep; with none, the peroration says what there is to say.
+  const addOns = (game?.rabbit ?? []).filter((r) => r !== 'keep');
+  const keep = (game?.rabbit ?? []).includes('keep') && addOns.length === 0;
+  const titleOf = (id: string) =>
+    id.startsWith('further:')
+      ? (input.pm?.priorities.find((p) => p.id === id.slice('further:'.length))?.title ?? '')
+      : (input.rabbitTitles?.[id] ?? '');
+  const headroomText = money(headroom);
+  if (addOns.length === 1) {
+    const id = addOns[0]!;
+    const key = id.startsWith('further:') ? 'further' : id;
     say(
       'rabbit',
-      speech.rabbit[key] ?? speech.rabbit.keep,
-      { title: lower(title), headroom: headroomText },
+      speech.rabbit[key] ?? speech.rabbit.several,
+      { title: lower(titleOf(id)), titles: lower(titleOf(id)), headroom: headroomText },
       [headroomText],
     );
+  } else if (addOns.length > 1) {
+    say(
+      'rabbit',
+      speech.rabbit.several,
+      { titles: list(addOns.map((id) => lower(titleOf(id)))), headroom: headroomText },
+      [headroomText],
+    );
+  } else if (keep && headroom > 0) {
+    say('rabbit', speech.rabbit.keep, { headroom: headroomText }, [headroomText]);
   }
   const missed = outcome.verdicts.some((v) => v.status === 'notMet' || v.status === 'aboveMargin');
   const perorationKey = game?.breachAccepted && missed ? 'breach' : missed ? 'missed' : 'met';
   // A rule met is stated with its headroom; a rule missed is stated by how much, as a size.
-  const headroomText = missed
+  const closing = missed
     ? formatGbpBn(Math.abs(headroom), 1)
     : formatGbpBn(headroom, 1, headroom < 0);
   say(
     'peroration',
     speech.peroration[perorationKey] ?? speech.peroration.met,
-    { headroom: headroomText, targetYear: year },
-    [headroomText],
+    { headroom: closing, targetYear: year },
+    [closing],
   );
 
   const words = paragraphs.reduce((acc, p) => acc + p.text.split(/\s+/).filter(Boolean).length, 0);

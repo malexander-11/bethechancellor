@@ -243,13 +243,13 @@
             "label": "Flagships agreed with the Prime Minister no longer funded",
             "unit": "count"
           },
-          "note": "Any flagship pulled back from the target agreed in Downing Street.",
+          "note": "Any priority agreed in Downing Street with nothing behind it.",
           "bands": [
             {
               "id": "delivered",
               "upTo": 0,
               "points": 0,
-              "text": "Everything agreed in Downing Street is in the Budget.",
+              "text": "Everything agreed in Downing Street has something behind it in the Budget.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
@@ -263,7 +263,7 @@
             {
               "id": "pulled",
               "points": -1,
-              "text": "Something agreed in Downing Street has been pulled back. The programme was set out in public in July and September, and No. 10 will read that before anyone else does.",
+              "text": "A priority agreed in Downing Street has nothing behind it. The programme was set out in public in July and September, and No. 10 will read that before anyone else does.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
@@ -653,19 +653,19 @@
           ]
         },
         {
-          "id": "pb-themes",
-          "measure": "themesDelivered",
+          "id": "pb-priorities",
+          "measure": "prioritiesFunded",
           "reading": {
             "label": "Themes with a funded flagship behind them",
             "unit": "count"
           },
-          "note": "A theme counts when at least one flagship it offered is funded in the package.",
+          "note": "A priority counts when at least one way to deliver it is on in the package.",
           "bands": [
             {
               "id": "none",
               "upTo": 0,
               "points": 0,
-              "text": "No theme was carried through to something people can point at.",
+              "text": "No priority was carried through to something people can point at.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
@@ -677,7 +677,7 @@
               "id": "one",
               "upTo": 1,
               "points": 1,
-              "text": "One of the Budget’s themes shows up in something people will notice.",
+              "text": "One of the Budget’s priorities shows up in something people will notice.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
@@ -688,7 +688,7 @@
             {
               "id": "all",
               "points": 2,
-              "text": "Two or more of the Budget’s themes are backed by funded flagships: people can see what it was for.",
+              "text": "Two or more of the Budget’s priorities are backed by funded options: people can see what it was for.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
@@ -702,20 +702,20 @@
           ]
         },
         {
-          "id": "pb-clear-theme",
-          "measure": "clearThemeGbpm",
+          "id": "pb-clear-priority",
+          "measure": "clearPriorityGbpm",
           "reading": {
             "label": "Money behind a single, fully funded theme",
             "unit": "GBPm"
           },
-          "note": "One theme, every flagship ticked for it funded, and at least five billion a year behind it: a Budget people can describe in a sentence.",
-          "nudge": "{gap} more behind a single theme would have made it a story people can describe.",
+          "note": "One priority ranked, delivered, and at least five billion a year behind it: a Budget people can describe in a sentence.",
+          "nudge": "{gap} more behind a single priority would have made it a story people can describe.",
           "bands": [
             {
               "id": "no",
               "upTo": 4999,
               "points": 0,
-              "text": "There is no single story: more than one theme, a flagship pulled back, or too little money behind the one theme to be felt.",
+              "text": "There is no single story: more than one priority, an option adjusted back, or too little money behind the one priority.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
@@ -726,7 +726,7 @@
             {
               "id": "yes",
               "points": 1,
-              "text": "One clear theme with {value} a year behind it: a Budget people can describe in a sentence.",
+              "text": "One clear priority with {value} a year behind it: a Budget people can describe in a sentence.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"

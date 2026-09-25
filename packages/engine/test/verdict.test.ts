@@ -50,6 +50,7 @@ function close(
     rules: ds.rules,
     levers: ds.levers,
     pm: ds.pm,
+    options: ds.options,
     draws: ds.draws,
     context: context!,
     incidence: ds.incidence,
@@ -68,14 +69,14 @@ describe('the close', () => {
   it('says how each ambition fared, and how each promise was lost', () => {
     const game: GamePermalink = {
       ...freshGame(seedFor('adviser-right')),
-      themes: ['security'],
-      priorities: ['prisons', 'borders'],
+      priorities: ['safer-streets', 'nhs'],
       delays: { moj: '2028-29' },
     };
-    const v = close(game, { moj: 10, home: 2, itbr: 1 });
+    const v = close(game, { moj: 10, dhsc: 1, itbr: 1 });
     const fates = Object.fromEntries(v.ambitions.priorities.map((p) => [p.title, p.fate]));
-    expect(fates['A Justice uplift for prison capacity']).toBe('delayed');
-    expect(fates['A Home Office uplift']).toBe('narrowed');
+    // Prisons are on but pushed back a year; health has moved without getting there.
+    expect(fates['Safer streets: prisons, police, borders']).toBe('delayed');
+    expect(fates['Bring down NHS waiting lists']).toBe('narrowed');
     const lock = v.ambitions.promises.find((p) => p.title === 'The tax lock');
     expect(lock?.fate).toBe('broken-by-choice');
     expect(lock?.by).toEqual(['Basic rate']);
@@ -105,7 +106,7 @@ describe('the close', () => {
   it('ranks the compromises since the desk by what they did to borrowing', () => {
     const game = {
       ...freshGame(seedFor('adviser-right')),
-      priorities: ['nhs-above-sr', 'send-settlement'],
+      priorities: ['nhs', 'schools-send'],
     };
     const v = close(game, { dhsc: 1.5, dfe: 5, ufsm: 0 }, { dhsc: 3, dfe: 5, ufsm: 1 });
     expect(v.compromises.map((c) => c.lever.code)).toEqual(['dhsc', 'ufsm']);
@@ -136,26 +137,26 @@ describe('the close', () => {
     const missed = close({ ...freshGame(seed) }, { def5: 1 });
     expect(missed.kind.id).toBe('rules-missed');
     const cautious = close(
-      { ...freshGame(seed), headroomTargetBn: 0, priorities: ['prisons'] },
+      { ...freshGame(seed), headroomTargetBn: 0, priorities: ['safer-streets'] },
       { itbr: 1 },
     );
     expect(cautious.kind.id).toBe('cautious');
     // Paid for by broadening the VAT base, which the tax lock does not name.
     const delivered = close(
-      { ...freshGame(seed), themes: ['security'], priorities: ['prisons'] },
+      { ...freshGame(seed), priorities: ['safer-streets'] },
       { moj: 10, vatfood: 1 },
     );
     expect(delivered.kind.id).toBe('delivered-and-paid');
     expect(delivered.kind.title).toBe(
-      'A security Budget that delivered what it promised and paid for it',
+      'A safer streets Budget that delivered what it promised and paid for it',
     );
-    // Two themes read as one phrase.
+    // The first priority ranked names the Budget.
     const both = close(
-      { ...freshGame(seed), themes: ['security', 'cost-of-living'], priorities: ['prisons'] },
-      { moj: 10, vatfood: 1 },
+      { ...freshGame(seed), priorities: ['defence', 'safer-streets'] },
+      { moj: 10, dip47: 1, vatfood: 1 },
     );
     expect(both.kind.title).toBe(
-      'A security and cost of living Budget that delivered what it promised and paid for it',
+      'A defence Budget that delivered what it promised and paid for it',
     );
     const quiet = close({ ...freshGame(seed) }, {});
     expect(quiet.kind.id).toBe('small-moves');

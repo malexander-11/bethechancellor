@@ -486,22 +486,33 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   if (ds.pm) {
-    // A flagship or a promise that names a lever the game does not have would be a commitment
-    // the player could never keep or break; the PM may only talk about real levers.
-    for (const flagship of ds.pm.flagships) {
-      const lever = ds.levers.find((l) => l.code === flagship.target.code);
-      if (!lever) {
-        problems.push(`flagship ${flagship.id} targets unknown lever "${flagship.target.code}"`);
-      } else if (
-        flagship.target.value < lever.control.min ||
-        flagship.target.value > lever.control.max
-      ) {
-        problems.push(
-          `flagship ${flagship.id} targets ${flagship.target.value}, outside the lever's range`,
-        );
+    // A priority is led by a role the game has a voice for; a promise that names a lever the game
+    // does not have would be a commitment the player could never keep or break.
+    const roles = new Set([
+      ...(ds.advisers?.advisers ?? []).map((a) => a.role),
+      ...(ds.ministers?.ministers ?? []).map((m) => m.role),
+    ]);
+    if (roles.size > 0) {
+      for (const priority of ds.pm.priorities) {
+        if (!roles.has(priority.lead)) {
+          problems.push(
+            `priority ${priority.id} is led by "${priority.lead}", a role nobody holds`,
+          );
+        }
       }
-      if (!ds.pm.reactions[flagship.id]) {
-        problems.push(`the PM has no reaction to flagship ${flagship.id}`);
+    }
+    if (ds.options) {
+      const ids = new Set(ds.pm.priorities.map((p) => p.id));
+      for (const o of ds.options.deliver) {
+        if (!ids.has(o.priority)) {
+          problems.push(`deliver option ${o.id} delivers unknown priority ${o.priority}`);
+        }
+      }
+      for (const priority of ds.pm.priorities) {
+        const n = ds.options.deliver.filter((o) => o.priority === priority.id).length;
+        if (n < 2 || n > 5) {
+          problems.push(`priority ${priority.id} has ${n} ways to deliver it; 2 to 5 expected`);
+        }
       }
     }
     for (const promise of ds.pm.promises) {
@@ -564,22 +575,10 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   if (ds.rabbit) {
-    // A rabbit is a lever setting; one that names a lever the game lacks, or a setting the slider
-    // cannot reach, could never be pulled out of the hat.
     const adviserIds = new Set((ds.advisers?.advisers ?? []).map((a) => a.id));
-    for (const spec of [ds.rabbit.intro, ds.rabbit.strengthen, ds.rabbit.keep]) {
+    for (const spec of [ds.rabbit.intro, ds.rabbit.further, ds.rabbit.keep]) {
       if (adviserIds.size > 0 && !adviserIds.has(spec.adviser)) {
-        problems.push(`the rabbit names unknown adviser ${spec.adviser}`);
-      }
-    }
-    for (const option of ds.rabbit.options) {
-      const lever = ds.levers.find((l) => l.code === option.code);
-      if (!lever) {
-        problems.push(`rabbit ${option.id} names unknown lever "${option.code}"`);
-      } else if (option.value < lever.control.min || option.value > lever.control.max) {
-        problems.push(`rabbit ${option.id} sets ${option.value}, outside the lever's range`);
-      } else if (option.value === lever.control.default) {
-        problems.push(`rabbit ${option.id} leaves the lever where it is`);
+        problems.push(`the add-ons name unknown adviser ${spec.adviser}`);
       }
     }
   }
@@ -663,13 +662,6 @@ export function validateDataset(ds: Dataset): string[] {
       if (!codes.has(code)) problems.push(`incidence tag for unknown lever "${code}"`);
     }
   }
-  if (ds.verdicts) {
-    for (const kind of ds.verdicts.kinds) {
-      if (kind.when.themeIs && !(ds.pm?.themes ?? []).some((t) => t.id === kind.when.themeIs)) {
-        problems.push(`kind of Budget ${kind.id} names unknown theme ${kind.when.themeIs}`);
-      }
-    }
-  }
   if (ds.electorate) {
     // A household touched by a lever the game does not have would never feel anything.
     for (const household of ds.electorate.households) {
@@ -682,16 +674,20 @@ export function validateDataset(ds: Dataset): string[] {
   }
   if (ds.speech) {
     if (!ds.speech.opening.default) problems.push('the speech has no default opening');
-    if (!ds.speech.opening.several) problems.push('the speech has no opening for several themes');
-    for (const theme of ds.pm?.themes ?? []) {
-      if (!ds.speech.opening[theme.id])
-        problems.push(`the speech has no opening for theme ${theme.id}`);
+    for (const priority of ds.pm?.priorities ?? []) {
+      if (!ds.speech.opening[priority.id])
+        problems.push(`the speech has no opening for priority ${priority.id}`);
     }
     for (const key of ['met', 'missed', 'breach']) {
       if (!ds.speech.peroration[key]) problems.push(`the speech has no ${key} peroration`);
     }
-    for (const key of ['keep', 'flagship', ...(ds.rabbit?.options.map((o) => o.id) ?? [])]) {
-      if (!ds.speech.rabbit[key]) problems.push(`the speech has no flourish for rabbit ${key}`);
+    for (const key of [
+      'keep',
+      'further',
+      'several',
+      ...(ds.options?.addOns.map((o) => o.id) ?? []),
+    ]) {
+      if (!ds.speech.rabbit[key]) problems.push(`the speech has no flourish for add-on ${key}`);
     }
   }
   if (ds.compromise) {

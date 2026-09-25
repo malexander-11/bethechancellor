@@ -45,10 +45,10 @@ export function householdReactions(
   levers: readonly Lever[],
   sizeOf: (code: string) => number,
   status: AmbitionStatus | null,
-  themed: boolean,
+  hasPriorities: boolean,
 ): HouseholdReaction[] {
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
-  const understood = themed && (status?.funded ?? 0) > 0;
+  const understood = hasPriorities && (status?.delivered ?? 0) > 0;
   return file.households.map((household) => {
     const said = household.touches
       .map((touch) => ({ touch, lever: byCode.get(touch.code) }))

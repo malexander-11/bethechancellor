@@ -29,11 +29,11 @@ function speak(
     speech: ds.speech,
     outcome,
     levers: ds.levers,
-    ...(game ? { game, status: ambitionStatus(game, ds.pm, outcome, ds.levers) } : {}),
+    ...(game ? { game, status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers) } : {}),
     pm: ds.pm,
     ...(snapshot ? { snapshot } : {}),
     macroCodes: MACRO,
-    rabbitTitles: Object.fromEntries(ds.rabbit.options.map((o) => [o.id, o.title])),
+    rabbitTitles: Object.fromEntries(ds.options.addOns.map((o) => [o.id, o.title])),
   });
 }
 
@@ -41,9 +41,8 @@ describe('the speech', () => {
   it('is deterministic, stays inside its word budget, and repeats no fragment', () => {
     const game: GamePermalink = {
       ...freshGame(3),
-      themes: ['public-services'],
-      priorities: ['nhs-above-sr', 'send-settlement', 'care-downpayment'],
-      rabbit: 'meals',
+      priorities: ['nhs', 'schools-send'],
+      rabbit: ['meals'],
     };
     const values = {
       dhsc: 3,
@@ -66,7 +65,7 @@ describe('the speech', () => {
   });
 
   it('quotes only figures the engine produced, formatted as the scorecard formats them', () => {
-    const game: GamePermalink = { ...freshGame(3), themes: ['security'], priorities: ['prisons'] };
+    const game: GamePermalink = { ...freshGame(3), priorities: ['safer-streets'] };
     const s = speak({ moj: 10, itbr: 2, vats: 1 }, game);
     const figures = new Set(s.paragraphs.flatMap((p) => p.figures));
     for (const p of s.paragraphs) {
@@ -77,18 +76,21 @@ describe('the speech', () => {
     expect(figures.size).toBeGreaterThan(0);
   });
 
-  it('follows the choices: theme, flagships, who pays, a broken promise and the rabbit', () => {
+  it('follows the choices: the priority, its options, who pays, a broken promise and the add-on', () => {
     const game: GamePermalink = {
       ...freshGame(3),
-      themes: ['cost-of-living'],
-      priorities: ['ufsm-all', 'bus-cap'],
-      rabbit: 'penny-off',
+      priorities: ['cost-of-living'],
+      rabbit: ['fuel-cut'],
     };
-    const s = speak({ ufsm: 1, bus2: 1, itbr: -1, ct: 1, it50: 1 }, game);
+    const s = speak({ ufsm: 1, bus2: 1, fuel: -5, ct: 1, it50: 1 }, game);
     const kinds = s.paragraphs.map((p) => p.kind);
     expect(kinds[0]).toBe('opening');
     expect(s.paragraphs[0]?.text).toMatch(/cost of living/);
-    expect(kinds.filter((k) => k === 'flagship')).toHaveLength(2);
+    const priority = s.paragraphs.filter((p) => p.kind === 'priority');
+    expect(priority).toHaveLength(1);
+    expect(priority[0]?.text).toMatch(
+      /free school meals for every child and keep the £2 bus fare cap running/,
+    );
     expect(
       s.paragraphs.some((p) => p.kind === 'revenue' && /broadest shoulders/.test(p.text)),
     ).toBe(true);
@@ -98,19 +100,24 @@ describe('the speech', () => {
     expect(s.paragraphs.find((p) => p.kind === 'lock-break')?.text).toMatch(
       /corporation tax capped/i,
     );
-    expect(s.paragraphs.find((p) => p.kind === 'rabbit')?.text).toMatch(/one penny in the pound/);
+    expect(s.paragraphs.find((p) => p.kind === 'rabbit')?.text).toMatch(/cut by five per cent/);
     expect(kinds[kinds.length - 1]).toBe('peroration');
   });
 
-  it('opens on every theme agreed when there is more than one', () => {
+  it('opens on the first priority ranked, and names several add-ons in one flourish', () => {
     const game: GamePermalink = {
       ...freshGame(3),
-      themes: ['security', 'cost-of-living'],
-      priorities: ['prisons'],
+      priorities: ['defence', 'cost-of-living'],
+      rabbit: ['meals', 'fuel-cut'],
     };
-    const s = speak({ moj: 10 }, game);
+    const s = speak({ dip47: 1, ufsm: 1, fuel: -5 }, game);
     expect(s.paragraphs[0]?.kind).toBe('opening');
-    expect(s.paragraphs[0]?.text).toMatch(/security and cost of living/);
+    expect(s.paragraphs[0]?.text).toMatch(/security of its people/);
+    const flourish = s.paragraphs.find((p) => p.kind === 'rabbit')?.text ?? '';
+    expect(flourish).toMatch(/free school meals for every child and fuel duty cut by 5%/);
+    // Keeping the headroom is an announcement only while there is headroom to keep.
+    const kept = speak({ dip47: 1 }, { ...game, rabbit: ['keep'] });
+    expect(kept.paragraphs.find((p) => p.kind === 'rabbit')?.text).toMatch(/no rabbit in this hat/);
   });
 
   it('owns a missed rule, and says so differently when the breach was chosen', () => {

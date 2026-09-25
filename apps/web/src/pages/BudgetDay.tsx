@@ -38,12 +38,12 @@ import {
   levers,
   leversByCategory,
   pm,
-  rabbit,
   reception,
   rules,
   speech as speechFile,
   verdicts,
   vintage,
+  options,
 } from '../data';
 import { Beat, Beats, resetProgress } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
@@ -85,7 +85,7 @@ export function BudgetDayPage() {
 
   // The game's readings: ambitions against the package, and the package as the OBR saw it.
   const status = useMemo(
-    () => (game ? ambitionStatus(game, pm, outcome, levers) : undefined),
+    () => (game ? ambitionStatus(game, pm, options, outcome, levers) : undefined),
     [game, outcome],
   );
   const snapshotOutcome = useMemo(() => {
@@ -104,16 +104,27 @@ export function BudgetDayPage() {
       settings: { ...outcome.settings, leverValues: policy },
     });
   }, [game, state.snapshot, state.leverValues, outcome.settings]);
+  // The add-ons: the levers they moved, and what to call them together.
   const rabbitChoice = useMemo(() => {
-    if (!game?.rabbit) return undefined;
-    if (game.rabbit === 'keep') return { label: 'keeping the headroom' };
-    if (game.rabbit.startsWith('flagship:')) {
-      const id = game.rabbit.slice('flagship:'.length);
-      const flagship = pm.flagships.find((f) => f.id === id);
-      return { label: `going further on ${flagship?.title ?? id}` };
+    if (!game || game.rabbit.length === 0) return undefined;
+    if (game.rabbit.length === 1 && game.rabbit[0] === 'keep') {
+      return { codes: [], label: 'keeping the headroom' };
     }
-    const option = rabbit.options.find((o) => o.id === game.rabbit);
-    return option ? { code: option.code, label: option.title } : undefined;
+    const codes: string[] = [];
+    const labels: string[] = [];
+    for (const id of game.rabbit) {
+      if (id === 'keep') continue;
+      if (id.startsWith('further:')) {
+        const pid = id.slice('further:'.length);
+        labels.push(`going further on ${pm.priorities.find((p) => p.id === pid)?.title ?? pid}`);
+        continue;
+      }
+      const addOn = options.addOns.find((o) => o.id === id);
+      if (!addOn) continue;
+      codes.push(...Object.keys(addOn.values));
+      labels.push(addOn.title);
+    }
+    return labels.length > 0 ? { codes, label: labels.join(', ') } : undefined;
   }, [game]);
   const room = useMemo(
     () =>
@@ -156,7 +167,7 @@ export function BudgetDayPage() {
     levers,
     sizeOf,
     status ?? null,
-    (game?.themes.length ?? 0) > 0,
+    (game?.priorities.length ?? 0) > 0,
   );
   const theSpeech = useMemo(
     () =>
@@ -169,12 +180,13 @@ export function BudgetDayPage() {
         ...(status ? { status } : {}),
         ...(state.snapshot ? { snapshot: state.snapshot } : {}),
         macroCodes: MACRO_CODES,
-        rabbitTitles: Object.fromEntries(rabbit.options.map((o) => [o.id, o.title])),
+        rabbitTitles: Object.fromEntries(options.addOns.map((o) => [o.id, o.title])),
       }),
     [outcome, game, status, state.snapshot],
   );
-  const fundedFlagships = (status?.priorities ?? []).filter(
-    (p) => p.status === 'funded' || p.status === 'delayed',
+  // The options on in the package, for what the money does and does not buy.
+  const deliveredOptions = (status?.priorities ?? []).flatMap((p) =>
+    p.options.filter((o) => o.state === 'on'),
   );
   // The close: what the playthrough came to, re-running the engine under every draw.
   const verdict = useMemo(() => {
@@ -191,6 +203,7 @@ export function BudgetDayPage() {
       rules,
       levers,
       pm,
+      options,
       draws,
       context,
       incidence,
@@ -264,15 +277,15 @@ export function BudgetDayPage() {
           </div>
           <h2 className="section-label">Five households</h2>
           <Households reactions={voters} />
-          {fundedFlagships.length > 0 ? (
+          {deliveredOptions.length > 0 ? (
             <section className="panel" aria-labelledby="delivery-heading">
               <h2 id="delivery-heading" className="section-label">
                 What the money does and does not buy
               </h2>
               <ul className="delivery">
-                {fundedFlagships.map((p) => (
-                  <li key={p.flagship.id}>
-                    <strong>{p.flagship.title}.</strong> {p.flagship.delivery.text}
+                {deliveredOptions.map((o) => (
+                  <li key={o.option.id}>
+                    <strong>{o.option.title}.</strong> {o.option.line.text}
                   </li>
                 ))}
               </ul>

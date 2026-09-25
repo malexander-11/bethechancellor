@@ -31,7 +31,7 @@ function room(leverValues: Record<string, number>, game?: GamePermalink): Recept
     typicalErrorGbpm,
     pm: ds.pm,
     incidence: ds.incidence,
-    ...(game ? { game, status: ambitionStatus(game, ds.pm, outcome, ds.levers) } : {}),
+    ...(game ? { game, status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers) } : {}),
   });
 }
 const by = (list: Reception[], id: Reception['audience']) => {
@@ -42,8 +42,7 @@ const by = (list: Reception[], id: Reception['audience']) => {
 const FIGURE = /£\d|\d{3},\d{3}|\d+%/;
 const SECURITY: GamePermalink = {
   ...freshGame(7),
-  themes: ['security'],
-  priorities: ['prisons', 'dip-gap'],
+  priorities: ['defence', 'safer-streets'],
 };
 
 describe('what would have moved a rating', () => {
@@ -95,7 +94,7 @@ describe('three audiences, five steps', () => {
     // The same Budget paid for without crossing a line is liked.
     const base = by(room({ moj: 10, dip47: 1, iht: 10, fuel: -10 }, SECURITY), 'public');
     expect(base.rating).toBeGreaterThan(3);
-    expect(base.reasons.some((r) => /One of the Budget’s themes/.test(r.text))).toBe(true);
+    expect(base.reasons.some((r) => /of the Budget’s priorities/.test(r.text))).toBe(true);
     // Missing a rule by arithmetic is not a manifesto break: no floor.
     expect(by(room({ def5: 1 }, SECURITY), 'public').rating).toBeGreaterThan(1);
   });

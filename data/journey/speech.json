@@ -16,16 +16,8 @@
         }
       ]
     },
-    "security": {
-      "text": "Madam Deputy Speaker, the first duty of any government is the security of its people: defence on the path our allies expect, prisons that hold, borders that work. This Budget funds that duty.",
-      "sources": [
-        {
-          "sourceId": "no10-commons-statement-2026-09-01"
-        }
-      ]
-    },
-    "public-services": {
-      "text": "Madam Deputy Speaker, this is a Budget for the services people rely on: a health service meeting its waiting-time promise, special needs provision councils can afford, and the first steps to a national care service.",
+    "nhs": {
+      "text": "Madam Deputy Speaker, this is a Budget for the health service people rely on: a waiting-time promise kept, and the first steps to a national care service.",
       "sources": [
         {
           "sourceId": "labour-manifesto-2024-nhs"
@@ -35,7 +27,23 @@
         }
       ]
     },
-    "every-postcode": {
+    "defence": {
+      "text": "Madam Deputy Speaker, the first duty of any government is the security of its people: defence on the path our allies expect. This Budget funds that duty.",
+      "sources": [
+        {
+          "sourceId": "no10-commons-statement-2026-09-01"
+        }
+      ]
+    },
+    "schools-send": {
+      "text": "Madam Deputy Speaker, this is a Budget for the children the system has let down: special needs provision councils can afford, and schools that can plan.",
+      "sources": [
+        {
+          "sourceId": "nao-send-2024"
+        }
+      ]
+    },
+    "homes-growth": {
       "text": "Madam Deputy Speaker, this Budget moves money and power out of Westminster and into every postcode in Britain. It is built on fiscal discipline, and it invests.",
       "sources": [
         {
@@ -43,13 +51,33 @@
         }
       ]
     },
-    "several": {
-      "text": "Madam Deputy Speaker, this Budget has more than one purpose, and I will not pretend otherwise: {themes}. Each is paid for within the rules this House has set itself, on the forecast the Office for Budget Responsibility published this morning.",
-      "sources": []
+    "families": {
+      "text": "Madam Deputy Speaker, this is a Budget for families: for the children we lifted out of poverty last year, and for the ones we have not yet reached.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2025-document"
+        }
+      ]
+    },
+    "safer-streets": {
+      "text": "Madam Deputy Speaker, the first duty of any government is the safety of its people: prisons that hold, and borders that work. This Budget funds that duty.",
+      "sources": [
+        {
+          "sourceId": "no10-commons-statement-2026-09-01"
+        }
+      ]
+    },
+    "welfare-bill": {
+      "text": "Madam Deputy Speaker, this is a Budget that faces the welfare bill honestly: what it costs, who it reaches, and what we will change.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03"
+        }
+      ]
     }
   },
-  "flagship": {
-    "text": "{title}: {detail} in {targetYear}. A commitment made in Downing Street, and a commitment funded.",
+  "priority": {
+    "text": "{title}: {options}, {cost} in {targetYear}. A priority agreed in Downing Street, and a priority delivered.",
     "sources": []
   },
   "spending": {
@@ -117,10 +145,6 @@
     "sources": []
   },
   "rabbit": {
-    "penny-off": {
-      "text": "And one more thing. From next April, the basic rate of income tax will be cut by one penny in the pound. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
     "meals": {
       "text": "And one more thing. From next September, every child in every state school in England gets a free school meal. Headroom after this Budget: {headroom}.",
       "sources": []
@@ -133,8 +157,32 @@
       "text": "And one more thing. A national programme to retrain the workers whose jobs are changed by artificial intelligence. Headroom after this Budget: {headroom}.",
       "sources": []
     },
-    "flagship": {
-      "text": "And I can go further than I promised on {title}. Headroom after this Budget: {headroom}.",
+    "keep-bus-cap": {
+      "text": "And one more thing. The £2 bus fare cap runs on past 2027. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "plan2": {
+      "text": "And one more thing. The student loan repayment threshold rises again with earnings from next April. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "vat-gas": {
+      "text": "And one more thing. VAT comes off domestic gas, as it has come off electricity. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "benefit-floor": {
+      "text": "And one more thing. No family on universal credit will be pushed below a protected floor by deductions. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "pubs": {
+      "text": "And one more thing. Alcohol duty is cut by five per cent from next April. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "further": {
+      "text": "And I can go further than I agreed on {title}. Headroom after this Budget: {headroom}.",
+      "sources": []
+    },
+    "several": {
+      "text": "And a few smaller things, each already costed: {titles}. Headroom after this Budget: {headroom}.",
       "sources": []
     },
     "keep": {

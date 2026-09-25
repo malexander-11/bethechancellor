@@ -31,7 +31,7 @@
       "adviser": "director-of-public-spending",
       "when": "priority-unfunded",
       "line": {
-        "text": "{name} was funded when you left Downing Street. Nothing in your Budget funds it now.",
+        "text": "{name} is a priority you agreed with the Prime Minister. Nothing in your Budget delivers it yet.",
         "sources": [],
         "badge": "simulated"
       }
@@ -41,7 +41,7 @@
       "adviser": "director-of-public-spending",
       "when": "priority-part-funded",
       "line": {
-        "text": "{name} is below what you promised the Prime Minister: the lever has come back from the target you agreed.",
+        "text": "{name} is only partly delivered: an option has been adjusted on the desk below what it needs.",
         "sources": [],
         "badge": "simulated"
       }
@@ -51,7 +51,7 @@
       "adviser": "permanent-secretary",
       "when": "all-priorities-funded",
       "line": {
-        "text": "Every flagship you agreed with the Prime Minister is still funded. What remains is whether the rules and your headroom survive the October forecast.",
+        "text": "Every priority you agreed with the Prime Minister has something behind it. What remains is whether the rules and your headroom survive the October forecast.",
         "sources": [],
         "badge": "simulated"
       }

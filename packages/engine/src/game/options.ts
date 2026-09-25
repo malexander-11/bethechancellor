@@ -5,9 +5,12 @@ import type {
   DeliverOption,
   IncidenceFile,
   OptionsFile,
+  PmFile,
+  Priority,
   Promise_,
 } from '../types/data.js';
-import { deliversTarget, promiseBreaks } from './ambitions.js';
+import type { GamePermalink } from '../types/engine.js';
+import { deliversTarget, promiseBreaks } from './promises.js';
 
 /**
  * The options (Phase 18, ADR-0022): bundles of lever settings that advisers propose and the
@@ -60,6 +63,32 @@ export function optionOff(option: Bundle, levers: readonly Lever[]): Record<stri
     Object.keys(option.values).map((code) => [code, byCode.get(code)?.control.default ?? 0]),
   );
 }
+
+/** How many priorities a Chancellor may rank with the Prime Minister. */
+export const MAX_PRIORITIES = 3;
+
+/**
+ * The priorities the game has ranked, in rank order, first three only; an id the data no longer
+ * carries (a Phase 9 flagship id in an old link) is dropped.
+ */
+export function rankedPriorities(game: GamePermalink, pm: PmFile): Priority[] {
+  const byId = new Map(pm.priorities.map((p) => [p.id, p] as const));
+  return game.priorities
+    .map((id) => byId.get(id))
+    .filter((p): p is Priority => p !== undefined)
+    .slice(0, MAX_PRIORITIES);
+}
+
+/**
+ * A Phase 9 link ranked themes rather than priorities (`th=`). Each reads as the priority that
+ * took its place, so an old link opens with a sensible ranking.
+ */
+export const LEGACY_THEME_PRIORITY: Record<string, string> = {
+  'cost-of-living': 'cost-of-living',
+  security: 'defence',
+  'public-services': 'nhs',
+  'every-postcode': 'homes-growth',
+};
 
 /** The ways to deliver one priority, in the file's order. */
 export function deliverOptionsFor(priorityId: string, options: OptionsFile): DeliverOption[] {

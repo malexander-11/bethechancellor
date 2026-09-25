@@ -41,7 +41,7 @@ export function BudgetSummary({
         <span className="summary__value">
           {status.priorities.length === 0
             ? 'none agreed yet'
-            : `${status.funded} of ${status.priorities.length} funded`}
+            : `${status.delivered} of ${status.priorities.length} delivered`}
         </span>
       </div>
       <div className="summary__cell">

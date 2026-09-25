@@ -39,6 +39,7 @@ import {
   pm,
   rules,
   vintage,
+  options,
 } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
@@ -160,7 +161,7 @@ export function BudgetPage() {
 
   // The game, when there is one: what was agreed with the PM, held against the package.
   const game = state.game;
-  const status = game ? ambitionStatus(game, pm, outcome, levers) : null;
+  const status = game ? ambitionStatus(game, pm, options, outcome, levers) : null;
   const headroomGbpm = stability?.headroomGbpm ?? 0;
   const ruleMissed = outcome.verdicts.some(
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
@@ -173,8 +174,12 @@ export function BudgetPage() {
           ruleMissed,
         })
       : [];
-  const promised = new Map(
-    (status?.priorities ?? []).map((p) => [p.flagship.target.code, p] as const),
+  // The options the player chose, by the levers they move, so the desk can pin and tag them.
+  const chosen = new Map(
+    (status?.priorities ?? [])
+      .flatMap((p) => p.options)
+      .filter((o) => o.state !== 'off')
+      .flatMap((o) => Object.keys(o.option.values).map((code) => [code, o] as const)),
   );
   // The manifesto red lines, read from the same file the PM's promises come from, and whether the
   // package as it stands crosses each. Pure arithmetic over the levers: it works without a game.
@@ -230,10 +235,10 @@ export function BudgetPage() {
   const toBn = (values: Record<string, number>) => years.map((y) => (values[y] ?? 0) / 1000);
   const surplus = (values: Record<string, number>) => years.map((y) => -(values[y] ?? 0) / 1000);
 
-  /** Promised flagships go to the top of their group, wearing a tag. */
+  /** Levers inside a chosen option go to the top of their group, wearing a tag. */
   const orderForDesk = (list: Lever[]): Lever[] => [
-    ...list.filter((l) => promised.has(l.code)),
-    ...list.filter((l) => !promised.has(l.code)),
+    ...list.filter((l) => chosen.has(l.code)),
+    ...list.filter((l) => !chosen.has(l.code)),
   ];
 
   return (
@@ -292,7 +297,7 @@ export function BudgetPage() {
                     ))}
                     {orderForDesk(group.levers).map((lever) => {
                       const value = state.leverValues[lever.code] ?? lever.control.default;
-                      const report = promised.get(lever.code);
+                      const report = chosen.get(lever.code);
                       return (
                         <div key={lever.id} className={report ? 'pinned' : undefined}>
                           <LeverControl
@@ -304,13 +309,9 @@ export function BudgetPage() {
                               dispatch({ type: 'setLever', code: lever.code, value: next })
                             }
                             redLines={redLinesFor(lever.code)}
-                            promised={
+                            chosen={
                               report
-                                ? {
-                                    title: report.flagship.title,
-                                    target: formatLeverValue(lever, report.flagship.target.value),
-                                    status: report.status,
-                                  }
+                                ? { title: report.option.title, state: report.state }
                                 : undefined
                             }
                           />

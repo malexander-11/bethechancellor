@@ -5,6 +5,7 @@ import {
   deliversTarget,
   freshGame,
   promiseBreaks,
+  rankedPriorities,
   type GamePermalink,
 } from '../src/index.js';
 import { loadDataset } from './fixtures.js';
@@ -22,8 +23,10 @@ const run = (leverValues: Record<string, number>, game?: Partial<GamePermalink>)
     },
   });
 const lever = (code: string) => ds.levers.find((l) => l.code === code);
+const status = (game: GamePermalink, values: Record<string, number>) =>
+  ambitionStatus(game, pm, ds.options, run(values, game), ds.levers);
 
-describe('what the Chancellor promised the Prime Minister', () => {
+describe('what the Chancellor agreed with the Prime Minister', () => {
   it('breaks the tax lock on exactly the levers the manifesto names', () => {
     const lock = pm.promises.find((p) => p.id === 'tax-lock');
     if (!lock) throw new Error('no tax lock');
@@ -46,57 +49,69 @@ describe('what the Chancellor promised the Prime Minister', () => {
   it('judges the fiscal-rules promise by the verdicts, since no lever names it', () => {
     const game = freshGame(1);
     const rulesPromise = (values: Record<string, number>) =>
-      ambitionStatus(game, pm, run(values), ds.levers).promises.find(
-        (p) => p.promise.id === 'fiscal-rules',
-      );
+      status(game, values).promises.find((p) => p.promise.id === 'fiscal-rules');
     expect(rulesPromise({})?.kept).toBe(true);
     // Everything expensive at once misses the stability rule.
-    const broken = ambitionStatus(
-      game,
-      pm,
-      run({ def5: 1, freeuni: 1, ufsm: 1, socrent: 1, airet: 1 }),
-      ds.levers,
-    );
+    const broken = status(game, { def5: 1, freeuni: 1, ufsm: 1, socrent: 1, airet: 1 });
     expect(broken.promises.find((p) => p.promise.id === 'fiscal-rules')?.kept).toBe(false);
     expect(broken.broken).toBe(1);
   });
 
   it('holds every manifesto promise in force from the first screen to the last', () => {
-    const status = ambitionStatus(freshGame(1), pm, run({}), ds.levers);
-    expect(status.promises.map((p) => p.promise.id)).toEqual(pm.promises.map((p) => p.id));
-    expect(status.broken).toBe(0);
+    const s = status(freshGame(1), {});
+    expect(s.promises.map((p) => p.promise.id)).toEqual(pm.promises.map((p) => p.id));
+    expect(s.broken).toBe(0);
     // A red line cannot be negotiated away: the data carries no push-backs or concessions.
     expect(pm.promises.every((p) => !('pushBack' in p))).toBe(true);
   });
 
-  it('reports a priority funded, part-funded, unfunded or delayed against its target', () => {
-    const game = { ...freshGame(1), priorities: ['nhs-above-sr', 'ufsm-all', 'send-settlement'] };
-    const status = ambitionStatus(game, pm, run({ dhsc: 3, dfe: 2 }), ds.levers);
-    const by = new Map(status.priorities.map((p) => [p.flagship.id, p] as const));
-    expect(by.get('nhs-above-sr')?.status).toBe('funded');
-    expect(by.get('send-settlement')?.status).toBe('part-funded');
-    expect(by.get('ufsm-all')?.status).toBe('unfunded');
-    expect(status.funded).toBe(1);
-    // Overshooting the target still counts as delivering it.
+  it('ranks only priorities the data knows, first three, in the order given', () => {
+    const game = {
+      ...freshGame(1),
+      priorities: ['nhs', 'prisons', 'defence', 'families', 'schools-send'],
+    };
+    expect(rankedPriorities(game, pm).map((p) => p.id)).toEqual(['nhs', 'defence', 'families']);
+    expect(status(game, {}).priorities.map((p) => p.rank)).toEqual([1, 2, 3]);
+  });
+
+  it('reads a priority delivered, part or undelivered from the state of its options', () => {
+    const game = { ...freshGame(1), priorities: ['nhs', 'schools-send', 'families'] };
+    const s = status(game, { dhsc: 3, dfe: 2 });
+    const by = new Map(s.priorities.map((p) => [p.priority.id, p] as const));
+    expect(by.get('nhs')?.status).toBe('delivered');
+    expect(by.get('schools-send')?.status).toBe('part');
+    expect(by.get('families')?.status).toBe('undelivered');
+    expect(s.delivered).toBe(1);
+    const health = by.get('nhs')?.options.find((o) => o.option.id === 'health-above-sr');
+    expect(health?.state).toBe('on');
+    const send = by.get('schools-send')?.options.find((o) => o.option.id === 'send-settlement');
+    expect(send?.state).toBe('adjusted');
+    // Overshooting the value still counts as delivering it.
     expect(deliversTarget(lever('dhsc'), 4, 3)).toBe(true);
     // A cut is delivered by going at least as far down.
     expect(deliversTarget(lever('fuel'), -10, -10)).toBe(true);
     expect(deliversTarget(lever('fuel'), -5, -10)).toBe(false);
   });
 
-  it('marks a funded priority delayed when its start has been pushed back', () => {
-    const game = { ...freshGame(1), priorities: ['ufsm-all'], delays: { ufsm: '2028-29' } };
-    const status = ambitionStatus(game, pm, run({ ufsm: 1 }, game), ds.levers);
-    expect(status.priorities[0]?.status).toBe('delayed');
-    expect(status.priorities[0]?.delayedTo).toBe('2028-29');
-    expect(status.funded).toBe(1);
+  it('records a delay on the option whose lever was pushed back', () => {
+    const game = { ...freshGame(1), priorities: ['cost-of-living'], delays: { ufsm: '2028-29' } };
+    const s = status(game, { ufsm: 1 });
+    const meals = s.priorities[0]?.options.find((o) => o.option.id === 'free-school-meals');
+    expect(meals?.state).toBe('on');
+    expect(meals?.delayedTo).toBe('2028-29');
+    expect(s.priorities[0]?.status).toBe('delivered');
+    expect(s.delivered).toBe(1);
   });
 
-  it('reads each priority’s cost off the outcome in the target year', () => {
-    const game = { ...freshGame(1), priorities: ['bus-cap', 'dip-gap'] };
-    const status = ambitionStatus(game, pm, run({ bus2: 1, dip47: 1 }), ds.levers);
-    const by = new Map(status.priorities.map((p) => [p.flagship.id, p.costGbpm] as const));
-    expect(by.get('bus-cap')).toBeCloseTo(400, 6);
-    expect(by.get('dip-gap')).toBeCloseTo(1175, 6);
+  it('reads each option’s cost off the outcome in the target year, and sums it by priority', () => {
+    const game = { ...freshGame(1), priorities: ['cost-of-living', 'defence'] };
+    const s = status(game, { bus2: 1, dip47: 1 });
+    const options = new Map(
+      s.priorities.flatMap((p) => p.options).map((o) => [o.option.id, o.costGbpm] as const),
+    );
+    expect(options.get('bus-cap')).toBeCloseTo(400, 6);
+    expect(options.get('dip-gap')).toBeCloseTo(1175, 6);
+    expect(options.get('free-school-meals')).toBe(0);
+    expect(s.priorities.find((p) => p.priority.id === 'defence')?.costGbpm).toBeCloseTo(1175, 6);
   });
 });

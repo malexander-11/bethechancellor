@@ -27,7 +27,7 @@ function seedFor(id: string): number {
   throw new Error(`no seed lands on ${id}`);
 }
 const ADVISER = seedFor('adviser-right');
-const GAME = `g=s.${ADVISER}_st.5_pl.adviser_hr.20_th.security_pr.prisons+dip-gap_rv.1_rb.keep&M=rate.0.75_rpi.0.5`;
+const GAME = `g=s.${ADVISER}_st.5_pl.adviser_hr.20_pr.defence+safer-streets_rv.1_rb.keep&M=rate.0.75_rpi.0.5`;
 
 describe('Budget day: the speech, the reaction, the close', () => {
   it('opens with the speech, every sentence badged as a game judgement', () => {
@@ -94,12 +94,12 @@ describe('Budget day: the speech, the reaction, the close', () => {
     expect(within(couple).getByText('worse off')).toBeInTheDocument();
   });
 
-  it('approves of a theme carried through, and names what the money does not buy', () => {
-    at(`${BASE}&${GAME}&L=moj.10_dip47.1`);
+  it('approves of a priority carried through, and names what the money does not buy', () => {
+    at(`${BASE}&${GAME.replace('pr.defence+safer-streets', 'pr.safer-streets')}&L=moj.10`);
     next();
     expect(meter('The public')).toHaveAccessibleName('4 of 5: Approving');
     expect(
-      within(card('The public')).getAllByText(/One of the Budget’s themes shows up/).length,
+      within(card('The public')).getAllByText(/One of the Budget’s priorities shows up/).length,
     ).toBe(2);
     expect(screen.getByText(/Prison places take years to build/)).toBeInTheDocument();
   });
@@ -122,7 +122,7 @@ describe('Budget day: the speech, the reaction, the close', () => {
     next();
     const close = screen.getByRole('region', { name: /A Budget|Half a programme|small moves/ });
     expect(within(close).getByText(/Which ambitions survived/)).toBeInTheDocument();
-    expect(within(close).getByText(/A Justice uplift for prison capacity/)).toBeInTheDocument();
+    expect(within(close).getByText(/Safer streets: prisons, police, borders/)).toBeInTheDocument();
     expect(within(close).getByText(/broken by choice \(Basic rate\)/)).toBeInTheDocument();
     expect(within(close).getByText(/Everyone who earns or spends/)).toBeInTheDocument();
     expect(within(close).getByText(/Courts and prisons/)).toBeInTheDocument();
@@ -135,17 +135,15 @@ describe('Budget day: the speech, the reaction, the close', () => {
     ).toHaveAttribute('href', expect.stringContaining(`g=s.${ADVISER}`));
   });
 
-  it('the speech follows the choices: theme, funded flagship, broken promise and the rabbit', () => {
-    at(`${BASE}&${GAME.replace('rb.keep', 'rb.penny-off')}&L=moj.10_itbr.-1`);
+  it('the speech follows the choices: the first priority, its options and the add-on', () => {
+    at(`${BASE}&${GAME.replace('rb.keep', 'rb.fuel-cut')}&L=moj.10_fuel.-5`);
     const speech = screen.getByRole('article', { name: 'The Budget speech' });
     expect(
       within(speech).getByText(/first duty of any government is the security/),
     ).toBeInTheDocument();
     expect(
-      within(speech).getByText(/A Justice uplift for prison capacity: £1\.4bn in 2029-30/),
+      within(speech).getByText(/a Justice uplift for prison capacity, £1\.4bn in 2029-30/),
     ).toBeInTheDocument();
-    expect(
-      within(speech).getByText(/basic rate of income tax will be cut by one penny/),
-    ).toBeInTheDocument();
+    expect(within(speech).getByText(/Fuel duty is cut by five per cent/)).toBeInTheDocument();
   });
 });

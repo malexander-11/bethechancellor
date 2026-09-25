@@ -13,7 +13,7 @@ function seedFor(id: string): number {
   throw new Error(`no seed lands on ${id}`);
 }
 const ADVISER = seedFor('adviser-right');
-const G = `s.${ADVISER}_st.4_pl.adviser_hr.30_th.security_pr.prisons+dip-gap_rv.1`;
+const G = `s.${ADVISER}_st.4_pl.adviser_hr.30_pr.defence+safer-streets_rv.1`;
 const GAME = `g=${G}&M=rate.0.75_rpi.0.5`;
 
 function at(path: string) {
@@ -64,7 +64,7 @@ describe('making it add up', () => {
     expect(screen.getByText(/starts 2028-29/)).toBeInTheDocument();
   });
 
-  it('narrows a funded flagship to half the distance', async () => {
+  it('narrows a chosen option to half the distance', async () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1`);
     const route = screen.getByRole('region', { name: /Scale back a promise to the PM/ });
     fireEvent.click(within(route).getByRole('button', { name: 'Narrow it' }));

@@ -9,8 +9,8 @@ import type { AmbitionStatus } from './ambitions.js';
 /**
  * Advisers who remember. An intervention is an authored line with a predicate over the ambition
  * status and the scorecard; when the predicate holds, the adviser says it. `{name}` is filled
- * with the title of the promise or flagship concerned, and the sources of that promise or
- * flagship travel with the line, so the player can check what the adviser is holding them to.
+ * with the title of the promise or priority concerned, and the sources of that promise or
+ * priority travel with the line, so the player can check what the adviser is holding them to.
  */
 
 export interface Intervention {
@@ -21,7 +21,7 @@ export interface Intervention {
   text: string;
   /** The line's own sources plus those of what it is about. */
   sources: SourceRef[];
-  /** The promise or flagship id the predicate fired on, when it fired on one. */
+  /** The promise or priority id the predicate fired on, when it fired on one. */
   about?: string;
   badge: SimulatedLine['badge'];
 }
@@ -76,13 +76,13 @@ export function interventionsFor(
   }
   if (reading.ruleMissed) say('rule-missed', undefined, undefined, []);
   for (const p of status.priorities) {
-    if (p.status === 'unfunded') {
-      say('priority-unfunded', p.flagship.title, p.flagship.id, p.flagship.sources);
-    } else if (p.status === 'part-funded') {
-      say('priority-part-funded', p.flagship.title, p.flagship.id, p.flagship.sources);
+    if (p.status === 'undelivered') {
+      say('priority-unfunded', p.priority.title, p.priority.id, p.priority.sources);
+    } else if (p.status === 'part') {
+      say('priority-part-funded', p.priority.title, p.priority.id, p.priority.sources);
     }
   }
-  if (status.priorities.length > 0 && status.funded === status.priorities.length) {
+  if (status.priorities.length > 0 && status.delivered === status.priorities.length) {
     say('all-priorities-funded', undefined, undefined, []);
   }
   if (reading.targetGbpm > 0) {

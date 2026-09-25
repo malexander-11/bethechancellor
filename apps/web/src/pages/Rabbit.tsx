@@ -1,37 +1,50 @@
-import { ambitionStatus, formatGbpBn, nextNotch, type Lever } from '@btc/engine';
+import {
+  ambitionStatus,
+  formatGbpBn,
+  nextNotch,
+  type Lever,
+  type SimulatedLine,
+} from '@btc/engine';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Spoken } from '../components/Conversation';
 import { BudgetSummary } from '../components/BudgetSummary';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
-import { formatLeverValue } from '../components/LeverControl';
-import { adviserById, levers, pm, rabbit } from '../data';
+import { adviserById, levers, options, pm, rabbit } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
 import { useHeadroomOf } from '../journey/headroom';
 import { StepLink } from '../journey/links';
 import { useBudget } from '../state/budget';
 
+/** How many little add-ons a speech can carry. */
+export const MAX_ADD_ONS = 3;
+
 interface Card {
   id: string;
   title: string;
+  /** The lever settings the add-on applies; none for keeping the headroom. */
+  values?: Record<string, number>;
+  /** What those levers go back to when the add-on is dropped. */
+  back?: Record<string, number>;
+  /** The lever whose level the card states, when it moves exactly one. */
   lever?: Lever;
-  value?: number;
   /** What choosing this does to headroom in the target year, £ million; nought for keeping it. */
   changeGbpm: number;
   headroomAfterGbpm: number;
   /** Already moved in the package for its own sake: not a surprise, so not on offer. */
   taken: boolean;
-  line: { text: string; sources: { sourceId: string }[]; badge: 'simulated' };
+  line: SimulatedLine;
   who: string;
 }
 
 /**
- * Stage 6. A short menu of prepared announcements, each already a lever in the package, each priced
- * by the engine as the headroom it would leave. Two more cards: raise a priority one notch past
- * what was agreed, or keep the headroom and make that the announcement. Whatever is chosen is a
- * lever value, so the final forecast includes it before anything is said; the surprise is only
- * in the speech.
+ * Stage 6 (Phase 18): suggested little add-ons. A short menu of small, costed announcements, each a
+ * lever setting the engine prices as the headroom it would leave; one more notch on a priority
+ * already delivered; or keeping the headroom and making that the announcement. Up to three can
+ * go in the speech, and each is priced against the package with none of them in it, so the
+ * figures do not depend on the order they were ticked. Whatever is chosen is a lever value, so the
+ * final forecast includes it before anything is said; the surprise is only in the speech.
  */
 export function RabbitPage() {
   const { state, dispatch, outcome } = useBudget();
@@ -45,63 +58,74 @@ export function RabbitPage() {
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const targetYear = stability?.targetYear ?? '2029-30';
   const headroom = stability?.headroomGbpm ?? 0;
-  const status = ambitionStatus(game, pm, outcome, levers);
+  const status = ambitionStatus(game, pm, options, outcome, levers);
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
-  const current = (lever: Lever) => state.leverValues[lever.code] ?? lever.control.default;
   const role = (id: string) => adviserById.get(id)?.role ?? id;
   const chosen = game.rabbit;
+  const isChosen = (id: string) => chosen.includes(id);
+  const defaults = (values: Record<string, number>) =>
+    Object.fromEntries(
+      Object.keys(values).map((code) => [code, byCode.get(code)?.control.default ?? 0]),
+    );
 
-  /** The package without the rabbit in it: the baseline every card is priced against. */
-  const bare: Record<string, number> = { ...state.leverValues };
-  if (chosen) {
-    const option = rabbit.options.find((o) => o.id === chosen);
-    if (option) delete bare[option.code];
-    if (chosen.startsWith('flagship:')) {
-      const p = status.priorities.find((x) => x.flagship.id === chosen.slice('flagship:'.length));
-      if (p) bare[p.flagship.target.code] = p.flagship.target.value;
-    }
-  }
-  const bareHeadroom = chosen && chosen !== 'keep' ? headroomOf(bare) : headroom;
-
-  const price = (lever: Lever, value: number) => {
-    const after = headroomOf({ ...bare, [lever.code]: value });
-    return { changeGbpm: after - bareHeadroom, headroomAfterGbpm: after };
-  };
-
-  const cards: Card[] = [];
-  for (const option of rabbit.options) {
-    const lever = byCode.get(option.code);
-    if (!lever) continue;
-    const mine = chosen === option.id;
-    const taken = !mine && current(lever) !== lever.control.default;
-    cards.push({
-      id: option.id,
-      title: option.title,
-      lever,
-      value: option.value,
-      ...price(lever, option.value),
-      taken,
-      line: option.line,
+  // The cards' settings first, so the package can be read without any add-on in it.
+  const specs: Omit<Card, 'changeGbpm' | 'headroomAfterGbpm' | 'taken'>[] = [];
+  for (const addOn of options.addOns) {
+    const codes = Object.keys(addOn.values);
+    specs.push({
+      id: addOn.id,
+      title: addOn.title,
+      values: addOn.values,
+      back: defaults(addOn.values),
+      ...(codes.length === 1 ? { lever: byCode.get(codes[0]!) } : {}),
+      line: addOn.line,
       who: role('political-adviser'),
     });
   }
   for (const p of status.priorities) {
-    const lever = byCode.get(p.flagship.target.code);
-    if (!lever) continue;
-    const funded = p.status === 'funded' || p.status === 'delayed';
-    const notch = nextNotch(lever, p.flagship.target.value);
-    if (!funded || notch === null) continue;
-    cards.push({
-      id: `flagship:${p.flagship.id}`,
-      title: `Go further on ${p.flagship.title}`,
-      lever,
-      value: notch,
-      ...price(lever, notch),
-      taken: false,
-      line: rabbit.strengthen.line,
-      who: role(rabbit.strengthen.adviser),
-    });
+    if (p.status !== 'delivered') continue;
+    // One notch more on the biggest single-slider option delivering the priority.
+    const on = p.options
+      .filter((o) => o.state === 'on' && Object.keys(o.option.values).length === 1)
+      .sort((a, b) => Math.abs(b.costGbpm) - Math.abs(a.costGbpm));
+    for (const o of on) {
+      const code = Object.keys(o.option.values)[0]!;
+      const lever = byCode.get(code);
+      const value = o.option.values[code] ?? 0;
+      const notch = lever ? nextNotch(lever, value) : null;
+      if (!lever || notch === null) continue;
+      specs.push({
+        id: `further:${p.priority.id}`,
+        title: `Go further on ${p.priority.title}`,
+        values: { [code]: notch },
+        back: { [code]: value },
+        lever,
+        line: rabbit.further.line,
+        who: role(rabbit.further.adviser),
+      });
+      break;
+    }
   }
+
+  /** The package with no add-on in it: the baseline every card is priced against. */
+  const bare: Record<string, number> = { ...state.leverValues };
+  for (const spec of specs) {
+    if (isChosen(spec.id) && spec.back) Object.assign(bare, spec.back);
+  }
+  const bareHeadroom = headroomOf(bare);
+  const cards: Card[] = specs.map((spec) => {
+    const after = headroomOf({ ...bare, ...spec.values });
+    // Moved in the package for its own sake (an option chosen earlier, or the desk): not a surprise.
+    const taken =
+      !isChosen(spec.id) &&
+      !spec.id.startsWith('further:') &&
+      Object.keys(spec.values ?? {}).some(
+        (code) =>
+          (bare[code] ?? byCode.get(code)?.control.default ?? 0) !==
+          (byCode.get(code)?.control.default ?? 0),
+      );
+    return { ...spec, changeGbpm: after - bareHeadroom, headroomAfterGbpm: after, taken };
+  });
   cards.push({
     id: 'keep',
     title: 'Keep the headroom',
@@ -111,30 +135,34 @@ export function RabbitPage() {
     line: rabbit.keep.line,
     who: role(rabbit.keep.adviser),
   });
+  const count = chosen.filter((id) => id !== 'keep').length;
 
   const choose = (card: Card) => {
     if (card.taken) return;
-    // Put back whatever the previous rabbit moved, then pull the new one out of the hat.
-    if (chosen && chosen !== card.id) {
-      const previous = cards.find((c) => c.id === chosen);
-      if (previous?.lever) {
-        const back = previous.id.startsWith('flagship:')
-          ? (status.priorities.find((x) => `flagship:${x.flagship.id}` === previous.id)?.flagship
-              .target.value ?? previous.lever.control.default)
-          : previous.lever.control.default;
-        dispatch({ type: 'setLever', code: previous.lever.code, value: back });
-      }
+    if (card.id === 'keep') {
+      // Keeping the headroom is exclusive: every add-on goes back where it was.
+      for (const c of cards)
+        if (isChosen(c.id) && c.back) dispatch({ type: 'setLevers', values: c.back });
+      dispatch({ type: 'updateGame', patch: { rabbit: isChosen('keep') ? [] : ['keep'] } });
+      return;
     }
-    if (card.lever && card.value !== undefined) {
-      dispatch({ type: 'setLever', code: card.lever.code, value: card.value });
+    if (isChosen(card.id)) {
+      if (card.back) dispatch({ type: 'setLevers', values: card.back });
+      dispatch({ type: 'updateGame', patch: { rabbit: chosen.filter((id) => id !== card.id) } });
+      return;
     }
-    dispatch({ type: 'updateGame', patch: { rabbit: card.id } });
+    if (count >= MAX_ADD_ONS) return;
+    if (card.values) dispatch({ type: 'setLevers', values: card.values });
+    dispatch({
+      type: 'updateGame',
+      patch: { rabbit: [...chosen.filter((id) => id !== 'keep'), card.id] },
+    });
   };
 
   return (
     <JourneyLayout step="rabbit">
       <Beats step="rabbit">
-        <Beat title="The rabbit">
+        <Beat title="Suggested little add-ons">
           <BudgetSummary
             game={game}
             status={status}
@@ -142,30 +170,38 @@ export function RabbitPage() {
             targetYear={targetYear}
           />
           <Spoken line={rabbit.intro.line} who={role(rabbit.intro.adviser)} tone="adviser" />
-          <div className="choices" role="radiogroup" aria-label="The rabbit">
+          <p className="panel__hint">
+            Up to {MAX_ADD_ONS}, each priced on its own in {targetYear}. {count} of {MAX_ADD_ONS}{' '}
+            chosen.
+          </p>
+          <div className="choices" role="group" aria-label="The add-ons">
             {cards.map((card) => {
-              const picked = chosen === card.id;
+              const picked = isChosen(card.id);
+              const disabled =
+                card.taken || (!picked && card.id !== 'keep' && count >= MAX_ADD_ONS);
               return (
                 <label
                   key={card.id}
                   className={`choice${picked ? ' choice--picked' : ''}${card.taken ? ' choice--taken' : ''}`}
                 >
                   <input
-                    type="radio"
-                    name="rabbit"
+                    type="checkbox"
+                    name="add-on"
                     value={card.id}
                     checked={picked}
-                    disabled={card.taken}
+                    disabled={disabled}
                     onChange={() => choose(card)}
                   />
                   <span className="choice__body">
-                    <span className="choice__title">{card.title}</span>
-                    {card.lever && card.value !== undefined ? (
-                      <span className="choice__line">
-                        {card.lever.title} to {formatLeverValue(card.lever, card.value)} ·{' '}
-                        <LabelBadge badge={card.lever.badge} />
-                      </span>
-                    ) : null}
+                    <span className="choice__title">
+                      {card.title}
+                      {card.lever ? (
+                        <>
+                          {' '}
+                          <LabelBadge badge={card.lever.badge} />
+                        </>
+                      ) : null}
+                    </span>
                     <span className="choice__meta">
                       {card.taken ? (
                         <span className="tag--treasury">already in your Budget</span>
@@ -177,16 +213,15 @@ export function RabbitPage() {
                               : `${card.changeGbpm < 0 ? 'costs' : 'raises'} ${formatGbpBn(Math.abs(card.changeGbpm), 1)}`}
                           </span>{' '}
                           <span className="source">
-                            headroom after:{' '}
-                            {formatGbpBn(card.headroomAfterGbpm, 1, card.headroomAfterGbpm < 0)} in{' '}
-                            {targetYear}
+                            leaves{' '}
+                            {formatGbpBn(card.headroomAfterGbpm, 1, card.headroomAfterGbpm < 0)}
                           </span>
                         </>
                       )}
                     </span>
                     <span className="choice__delivery">
                       <span className="kicker">{card.who}</span>{' '}
-                      <LabelBadge badge={card.line.badge} /> {card.line.text}
+                      <LabelBadge badge={card.line.badge} /> {card.line.short ?? card.line.text}
                     </span>
                   </span>
                 </label>

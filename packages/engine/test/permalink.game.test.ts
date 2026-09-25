@@ -34,11 +34,10 @@ describe('the playthrough in the link (g= and S=)', () => {
       reached: 5,
       planning: 'adviser',
       headroomTargetBn: 30,
-      themes: ['cost-of-living', 'security'],
-      priorities: ['ufsm', 'dip47'],
+      priorities: ['cost-of-living', 'defence'],
       delays: { ufsm: '2028-29', dhsc: '2029-30' },
       revealed: true,
-      rabbit: 'flagship:ufsm',
+      rabbit: ['further:nhs', 'meals'],
       breachAccepted: true,
     };
     const q = encodePermalink(
@@ -55,21 +54,31 @@ describe('the playthrough in the link (g= and S=)', () => {
   it('writes only what differs from a fresh game', () => {
     expect(encodeGame(freshGame(7))).toBe('s.7');
     expect(encodeGame({ ...freshGame(7), revealed: true, reached: 3 })).toBe('s.7_st.3_rv.1');
-    expect(encodeGame({ ...freshGame(7), themes: ['security', 'cost-of-living'] })).toBe(
-      's.7_th.security+cost-of-living',
+    expect(encodeGame({ ...freshGame(7), priorities: ['defence', 'cost-of-living'] })).toBe(
+      's.7_pr.defence+cost-of-living',
     );
+    expect(encodeGame({ ...freshGame(7), rabbit: ['meals', 'pubs'] })).toBe('s.7_rb.meals+pubs');
   });
 
-  it('opens a Phase 8 link: one theme reads as a list of one, and the negotiation keys are ignored', () => {
+  it('opens a Phase 8 link: a theme reads as the priority that replaced it, and the negotiation keys are ignored', () => {
     const { state, warnings } = decodePermalink(
       'v=1&g=s.9_st.2_th.security_pr.prisons_pp.tax-lock+ct-cap_cn.tax-lock-narrowed_cp.2_dp.dip-gap',
       ds.levers,
     );
     expect(warnings).toEqual([]);
-    expect(state.game?.themes).toEqual(['security']);
-    expect(state.game?.priorities).toEqual(['prisons']);
+    // The theme leads; the old flagship id is kept here and dropped by rankedPriorities.
+    expect(state.game?.priorities).toEqual(['defence', 'prisons']);
     // The retired fields are gone from the type, so nothing of the negotiation survives decoding.
     expect(Object.keys(state.game ?? {}).sort()).toEqual(Object.keys(freshGame(9)).sort());
+  });
+
+  it('reads one rabbit as a list of one, and drops the retired flagship cards with a warning', () => {
+    expect(decodePermalink('v=1&g=s.9_rb.penny-off', ds.levers).state.game?.rabbit).toEqual([
+      'penny-off',
+    ]);
+    const { state, warnings } = decodePermalink('v=1&g=s.9_rb.flagship:ufsm+meals', ds.levers);
+    expect(state.game?.rabbit).toEqual(['meals']);
+    expect(warnings.some((w) => /flagship:ufsm/.test(w))).toBe(true);
   });
 
   it('treats a link without a usable seed as a link without a game', () => {
@@ -96,7 +105,7 @@ describe('a list typed by hand', () => {
   it('reads a space where a browser turned a plus into one', () => {
     const warnings: string[] = [];
     const g = decodeGame('s.7_st.1_th.security_pr.dip-gap prisons', warnings);
-    expect(g?.priorities).toEqual(['dip-gap', 'prisons']);
+    expect(g?.priorities).toEqual(['defence', 'dip-gap', 'prisons']);
     expect(warnings).toEqual([]);
   });
 });

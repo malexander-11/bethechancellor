@@ -29,9 +29,9 @@ export interface ReadingsInput {
   /** The package as the OBR saw it, re-run under today's conditions, for the compromises line. */
   snapshotOutcome?: Outcome;
   macroCodes?: readonly string[];
-  /** The rabbit: the lever it moved, if any, and what to call it. */
-  rabbit?: { code?: string; label: string };
-  /** The PM file, for which themes a funded flagship delivers. */
+  /** The add-ons: the levers they moved, if any, and what to call them. */
+  rabbit?: { codes?: string[]; label: string };
+  /** The PM file; kept so callers need not change, read by nothing since Phase 18. */
   pm?: PmFile;
   /** Who each lever falls on, for whether the revenue comes from the top or the broad base. */
   incidence?: IncidenceFile;
@@ -152,10 +152,8 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   // The game's own readings.
   const target = (game?.headroomTargetBn ?? 0) * 1000;
   const broken = status?.promises.filter((p) => !p.kept) ?? [];
-  const unfunded =
-    status?.priorities.filter((p) => p.status !== 'funded' && p.status !== 'delayed') ?? [];
-  const funded =
-    status?.priorities.filter((p) => p.status === 'funded' || p.status === 'delayed') ?? [];
+  const unfunded = status?.priorities.filter((p) => p.status !== 'delivered') ?? [];
+  const funded = status?.priorities.filter((p) => p.status === 'delivered') ?? [];
   const delayed = Object.keys(game?.delays ?? {}).filter((code) => moved.has(code));
   let compromises = 0;
   const compromised: string[] = [];
@@ -173,14 +171,16 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       }
     }
   }
-  const rabbitEffect = input.rabbit?.code
-    ? outcome.leverEffects.find((e) => e.code === input.rabbit?.code)
-    : undefined;
-  const rabbitGbpm = rabbitEffect
-    ? (rabbitEffect.receipts[year] ?? 0) -
-      (rabbitEffect.currentSpending[year] ?? 0) -
-      (rabbitEffect.capitalSpending[year] ?? 0)
-    : 0;
+  const rabbitGbpm = (input.rabbit?.codes ?? []).reduce((acc, code) => {
+    const e = outcome.leverEffects.find((x) => x.code === code);
+    if (!e) return acc;
+    return (
+      acc +
+      (e.receipts[year] ?? 0) -
+      (e.currentSpending[year] ?? 0) -
+      (e.capitalSpending[year] ?? 0)
+    );
+  }, 0);
   const missedRules = outcome.verdicts
     .filter((v) => v.status === 'notMet' || v.status === 'aboveMargin')
     .map((v) => v.ruleName);
@@ -218,17 +218,11 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       progressiveCauses.push(title(e.code));
     }
   }
-  // Themes: a ticked theme is delivered when a funded flagship it offers, or a cross-cutting
-  // one, is in the package; one theme with everything ticked funded is a clear story.
-  const themes = game?.themes ?? [];
-  const fundedIds = new Set(funded.map((p) => p.flagship.id));
-  const crossFunded = (input.pm?.crossCutting ?? []).some((id) => fundedIds.has(id));
-  const delivered = (input.pm?.themes ?? []).filter(
-    (t) => themes.includes(t.id) && (crossFunded || t.flagships.some((id) => fundedIds.has(id))),
-  );
-  const fundedFlagshipsGbpm = funded.reduce((acc, p) => acc + Math.abs(p.costGbpm), 0);
-  const clearThemeGbpm =
-    themes.length === 1 && funded.length > 0 && unfunded.length === 0 ? fundedFlagshipsGbpm : 0;
+  // Priorities: one priority ranked, delivered, with nothing partly done, is a clear story.
+  const ranked = status?.priorities ?? [];
+  const deliveredGbpm = funded.reduce((acc, p) => acc + Math.abs(p.costGbpm), 0);
+  const clearPriorityGbpm =
+    ranked.length === 1 && funded.length === 1 && unfunded.length === 0 ? deliveredGbpm : 0;
   const manifestoBroken = broken.filter((p) => p.promise.breaks.length > 0);
 
   const out: Readings = {
@@ -249,10 +243,8 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       manifestoBroken: manifestoBroken.length,
       prioritiesUnfunded: unfunded.length,
       prioritiesFunded: funded.length,
-      fundedFlagshipsGbpm,
-      themesChosen: themes.length,
-      themesDelivered: delivered.length,
-      clearThemeGbpm,
+      deliveredGbpm,
+      clearPriorityGbpm,
       welfareReversals: welfareReversals.length,
       welfareChangeGbpm: welfareChange,
       departmentsCut: cutDepartments.length,
@@ -292,20 +284,16 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       manifestoBroken: manifestoBroken.map(
         (p) => `${p.promise.title} (${p.brokenBy.map((b) => title(b.code)).join(', ')})`,
       ),
-      prioritiesUnfunded: unfunded.map((p) => p.flagship.title),
-      prioritiesFunded: funded.map((p) => p.flagship.title),
-      fundedFlagshipsGbpm: funded.map((p) => p.flagship.title),
-      themesChosen: (input.pm?.themes ?? [])
-        .filter((t) => themes.includes(t.id))
-        .map((t) => t.title),
-      themesDelivered: delivered.map((t) => t.title),
-      clearThemeGbpm: clearThemeGbpm > 0 ? funded.map((p) => p.flagship.title) : [],
+      prioritiesUnfunded: unfunded.map((p) => p.priority.title),
+      prioritiesFunded: funded.map((p) => p.priority.title),
+      deliveredGbpm: funded.map((p) => p.priority.title),
+      clearPriorityGbpm: clearPriorityGbpm > 0 ? funded.map((p) => p.priority.title) : [],
       welfareReversals: welfareReversals.map((l) => l.shortTitle),
       welfareChangeGbpm: topBy(welfareEffects, (e) => e.currentSpending[year] ?? 0),
       departmentsCut: cutDepartments.map((l) => l.shortTitle),
       rebellionRisk: [
         ...broken.map((p) => p.promise.title),
-        ...unfunded.map((p) => p.flagship.title),
+        ...unfunded.map((p) => p.priority.title),
         ...welfareReversals.map((l) => l.shortTitle),
       ],
       credibilityShare: uncertifiedTitles,

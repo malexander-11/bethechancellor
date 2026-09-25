@@ -6,7 +6,7 @@ import { App } from '../App';
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 // A game that has reached the rabbit with the envelope open, so every stage renders its beats.
 const GAME =
-  'g=s.1_st.5_pl.adviser_hr.20_th.security_pr.prisons+dip-gap_rv.1&M=rate.0.75_rpi.0.5&L=moj.10';
+  'g=s.1_st.5_pl.adviser_hr.20_pr.defence+safer-streets_rv.1&M=rate.0.75_rpi.0.5&L=moj.10';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -95,13 +95,17 @@ describe('the beat and word budgets', () => {
     }
   });
 
-  it('keeps the one-screen decisions to at most 300 visible words', () => {
-    // The outlook and the rabbit have no hand-off: the screen is the decision, a handful of cards
-    // and a note. Still a game, not a lecture.
-    for (const path of ['/outlook', '/rabbit']) {
+  it('keeps the one-screen decisions to a few hundred visible words', () => {
+    // The outlook and the add-ons have no hand-off: the screen is the decision, a handful of
+    // cards and a note. Still a game, not a lecture. The add-ons screen carries ten cards, each
+    // with its adviser's short line, so it gets sixty words more than the outlook (ADR-0022).
+    for (const [path, limit] of [
+      ['/outlook', 300],
+      ['/rabbit', 360],
+    ] as const) {
       const view = at(`${path}?${BASE}&${GAME}`);
       const n = liveBeatWords();
-      expect(n, `${path} shows ${n} words`).toBeLessThanOrEqual(300);
+      expect(n, `${path} shows ${n} words`).toBeLessThanOrEqual(limit);
       view.unmount();
     }
   });

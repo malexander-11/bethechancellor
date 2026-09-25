@@ -20,7 +20,17 @@ import { formatLeverValue } from '../components/LeverControl';
 import { MinisterLine } from '../components/MinisterLine';
 import { Scorecard } from '../components/Scorecard';
 import { SourceList } from '../components/SourceLink';
-import { adviserById, compromise, context, draws, levers, pm, rules, vintage } from '../data';
+import {
+  adviserById,
+  compromise,
+  context,
+  draws,
+  levers,
+  pm,
+  rules,
+  vintage,
+  options,
+} from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
 import { useHeadroomOf } from '../journey/headroom';
@@ -76,7 +86,7 @@ export function CompromisePage() {
   const headroom = stability?.headroomGbpm ?? 0;
   const target = game.headroomTargetBn * 1000;
   const gap = target - headroom;
-  const status = ambitionStatus(game, pm, outcome, levers);
+  const status = ambitionStatus(game, pm, options, outcome, levers);
   const missed = outcome.verdicts.filter(
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
   );
@@ -304,69 +314,73 @@ export function CompromisePage() {
                 <p className="panel__hint">You agreed no priorities to narrow.</p>
               ) : (
                 <ul className="suggestions">
-                  {status.priorities.map((p) => {
-                    const lever = byCode.get(p.flagship.target.code);
-                    if (!lever) return null;
-                    const narrowed = narrowedValue(lever, p.flagship.target.value);
-                    const funded = p.status === 'funded' || p.status === 'delayed';
-                    return (
-                      <li key={p.flagship.id} className="suggestion">
-                        <div>
-                          <strong>{p.flagship.title}</strong>{' '}
-                          <span className="source">
-                            {p.status.replace('-', ' ')} · {formatLeverValue(lever, value(lever))}
-                            {lever.control.kind === 'toggle'
-                              ? ''
-                              : ` of ${formatLeverValue(lever, p.flagship.target.value)}`}
-                          </span>
-                        </div>
-                        <div className="suggestion__act">
-                          {funded && narrowed !== null ? (
-                            <>
-                              <span className="source">
-                                to {formatLeverValue(lever, narrowed)}:{' '}
-                                {formatGbpBn(
-                                  effectOf({ ...state.leverValues, [lever.code]: narrowed }),
-                                  1,
-                                  true,
-                                )}
-                              </span>
-                              <button
-                                type="button"
-                                className="btn"
-                                onClick={() => set(lever.code, narrowed)}
-                              >
-                                Narrow it
-                              </button>
-                            </>
-                          ) : funded ? (
-                            <>
-                              <span className="source">
-                                a toggle cannot be halved · off:{' '}
-                                {formatGbpBn(
-                                  effectOf({
-                                    ...state.leverValues,
-                                    [lever.code]: lever.control.default,
-                                  }),
-                                  1,
-                                  true,
-                                )}
-                              </span>
-                              <button
-                                type="button"
-                                className="btn"
-                                onClick={() => set(lever.code, lever.control.default)}
-                              >
-                                Switch it off
-                              </button>
-                            </>
-                          ) : (
-                            <span className="source">not funded, so nothing to narrow</span>
-                          )}
-                        </div>
-                      </li>
-                    );
-                  })}
+                  {status.priorities
+                    .flatMap((p) => p.options.filter((o) => o.state !== 'off'))
+                    .map((o) => {
+                      const codes = Object.keys(o.option.values);
+                      const lever = codes.length === 1 ? byCode.get(codes[0]!) : undefined;
+                      const chosenValue = lever ? (o.option.values[lever.code] ?? 0) : 0;
+                      const narrowed = lever ? narrowedValue(lever, chosenValue) : null;
+                      const on = o.state === 'on';
+                      return (
+                        <li key={o.option.id} className="suggestion">
+                          <div>
+                            <strong>{o.option.title}</strong>{' '}
+                            <span className="source">
+                              {on ? 'in your package' : 'adjusted'}
+                              {lever ? ` · ${formatLeverValue(lever, value(lever))}` : ''}
+                              {lever && lever.control.kind !== 'toggle'
+                                ? ` of ${formatLeverValue(lever, chosenValue)}`
+                                : ''}
+                            </span>
+                          </div>
+                          <div className="suggestion__act">
+                            {lever && on && narrowed !== null ? (
+                              <>
+                                <span className="source">
+                                  to {formatLeverValue(lever, narrowed)}:{' '}
+                                  {formatGbpBn(
+                                    effectOf({ ...state.leverValues, [lever.code]: narrowed }),
+                                    1,
+                                    true,
+                                  )}
+                                </span>
+                                <button
+                                  type="button"
+                                  className="btn"
+                                  onClick={() => set(lever.code, narrowed)}
+                                >
+                                  Narrow it
+                                </button>
+                              </>
+                            ) : lever && on ? (
+                              <>
+                                <span className="source">
+                                  a toggle cannot be halved · off:{' '}
+                                  {formatGbpBn(
+                                    effectOf({
+                                      ...state.leverValues,
+                                      [lever.code]: lever.control.default,
+                                    }),
+                                    1,
+                                    true,
+                                  )}
+                                </span>
+                                <button
+                                  type="button"
+                                  className="btn"
+                                  onClick={() => set(lever.code, lever.control.default)}
+                                >
+                                  Switch it off
+                                </button>
+                              </>
+                            ) : (
+                              <span className="source">already scaled back on the desk</span>
+                            )}
+                          </div>
+                        </li>
+                      );
+                    })}
                 </ul>
               )}
             </section>

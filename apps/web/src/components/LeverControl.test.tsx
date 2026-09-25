@@ -96,28 +96,20 @@ describe('LeverControl', () => {
         lever={moj}
         value={10}
         onChange={() => undefined}
-        promised={{
-          title: 'A Justice uplift for prison capacity',
-          target: '+10%',
-          status: 'funded',
-        }}
+        chosen={{ title: 'A Justice uplift for prison capacity', state: 'on' }}
       />,
     );
-    expect(within(funded.container).getByText('Promised to the PM')).toBeInTheDocument();
+    expect(within(funded.container).getByText('In your package')).toBeInTheDocument();
     funded.unmount();
     const pulled = render(
       <LeverControl
         lever={moj}
         value={4}
         onChange={() => undefined}
-        promised={{
-          title: 'A Justice uplift for prison capacity',
-          target: '+10%',
-          status: 'part-funded',
-        }}
+        chosen={{ title: 'A Justice uplift for prison capacity', state: 'adjusted' }}
       />,
     );
-    expect(within(pulled.container).getByText('Below what you promised the PM')).toHaveClass(
+    expect(within(pulled.container).getByText('Adjusted from what you chose')).toHaveClass(
       'tag--warn',
     );
   });

@@ -21,7 +21,7 @@ function outcomeFor(leverValues: Record<string, number>) {
 
 function advice(game: GamePermalink, leverValues: Record<string, number>) {
   const outcome = outcomeFor(leverValues);
-  const status = ambitionStatus(game, ds.pm, outcome, ds.levers);
+  const status = ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers);
   const headroomGbpm = outcome.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;
   const ruleMissed = outcome.verdicts.some(
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
@@ -50,14 +50,14 @@ describe('advisers who remember', () => {
   });
 
   it('flags a priority nothing funds yet, then stops once the target is met', () => {
-    const game = { ...freshGame(7), themes: ['security'], priorities: ['prisons', 'dip-gap'] };
+    const game = { ...freshGame(7), priorities: ['safer-streets', 'defence'] };
     const before = advice(game, {});
     expect(before.filter((x) => x.when === 'priority-unfunded').map((x) => x.about)).toEqual([
-      'prisons',
-      'dip-gap',
+      'safer-streets',
+      'defence',
     ]);
     const half = advice(game, { moj: 5 });
-    expect(half.find((x) => x.about === 'prisons')?.when).toBe('priority-part-funded');
+    expect(half.find((x) => x.about === 'safer-streets')?.when).toBe('priority-part-funded');
     const done = advice(game, { moj: 10, dip47: 1 });
     expect(done.some((x) => x.when === 'priority-unfunded')).toBe(false);
     expect(done.some((x) => x.when === 'all-priorities-funded')).toBe(true);
@@ -73,7 +73,7 @@ describe('advisers who remember', () => {
   });
 
   it('puts the most pressing note first', () => {
-    const game = { ...freshGame(7), priorities: ['prisons'], headroomTargetBn: 30 };
+    const game = { ...freshGame(7), priorities: ['safer-streets'], headroomTargetBn: 30 };
     // A penny on the basic rate breaks the lock; the health money eats the headroom it raised.
     const items = advice(game, { itbr: 1, dhsc: 5 });
     expect(items[0]?.when).toBe('promise-broken');

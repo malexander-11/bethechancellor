@@ -16,15 +16,12 @@ function at(path: string) {
 
 const next = () => fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
 const param = (key: string) => new URLSearchParams(window.location.search).get(key) ?? '';
-const themeBox = (name: RegExp) =>
-  within(screen.getByRole('group', { name: 'The Budget’s themes' })).getByRole('checkbox', {
+const priorityBox = (name: RegExp) =>
+  within(screen.getByRole('group', { name: 'The Budget’s priorities' })).getByRole('checkbox', {
     name,
   });
-/** The flagship checkboxes: every checkbox inside a fieldset, whichever theme offers it. */
-const flagshipBoxes = () =>
-  screen.getAllByRole('checkbox').filter((box) => box.closest('fieldset') !== null);
 
-describe('the conversation with the Prime Minister', () => {
+describe('agreeing the priorities with the Prime Minister', () => {
   it('sends a link with no game back to the outlook', () => {
     at(`/pm?${BASE}`);
     expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
@@ -39,73 +36,59 @@ describe('the conversation with the Prime Minister', () => {
     );
   });
 
-  it('will not go on to the flagships until a theme is ticked', () => {
+  it('will not go on until a priority is ranked, and the PM reacts to each one', () => {
     at(`/pm?${BASE}&g=s.7_st.1`);
     next();
-    const go = screen.getByRole('button', { name: /Choose the flagships/ });
+    const go = screen.getByRole('button', { name: /Hear the PM read it back/ });
     expect(go).toBeDisabled();
-    fireEvent.click(themeBox(/Security/));
+    expect(screen.getAllByRole('checkbox')).toHaveLength(8);
+    fireEvent.click(priorityBox(/Defence on the NATO path/));
     expect(go).toBeEnabled();
-    // The PM's pitch for the theme appears, in the PM's voice.
-    expect(screen.getByText(/first priority/)).toBeInTheDocument();
-  });
-
-  it('offers the ticked themes’ flagships plus the cross-cutting ones, each once, priced by the engine', () => {
-    at(`/pm?${BASE}&g=s.7_st.1_th.security`);
-    next();
-    next();
-    // Four security flagships plus the cross-cutting ones; the Defence plan gap is both, once.
-    expect(flagshipBoxes()).toHaveLength(5);
-    // What the money buys, and when, is on every card before it is ticked.
-    expect(document.querySelectorAll('.choice__delivery')).toHaveLength(5);
-    expect(screen.getByRole('group', { name: 'Security' })).toBeInTheDocument();
-    expect(screen.getByRole('group', { name: 'Whichever theme you pick' })).toBeInTheDocument();
-    expect(screen.getByText(/End the threshold freeze early/)).toBeInTheDocument();
-    expect(screen.getAllByText(/costs £1\.2bn a year/).length).toBeGreaterThan(0);
-  });
-
-  it('funds a flagship the moment it is ticked, and puts the money back when it is unticked', async () => {
-    at(`/pm?${BASE}&g=s.7_st.1_th.security`);
-    next();
-    next();
-    const box = screen.getByRole('region', { name: 'Your Budget so far' });
-    expect(within(box).getByText('none agreed yet')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('checkbox', { name: /Fund the Defence Investment Plan/ }));
-    // The lever moves in the package at once, and the PM reacts.
-    await waitFor(() => expect(param('L')).toMatch(/dip47\.1/));
-    expect(param('g')).toMatch(/pr\.dip-gap/);
-    expect(within(box).getByText('1 of 1 funded')).toBeInTheDocument();
     expect(screen.getByText(/not a favour to the Defence Secretary/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('checkbox', { name: /Fund the Defence Investment Plan/ }));
-    await waitFor(() => expect(param('L')).not.toMatch(/dip47/));
-    expect(param('g')).not.toMatch(/pr\./);
   });
 
-  it('lets two themes be ticked, and unticking one takes its flagships and their money with it', async () => {
-    at(`/pm?${BASE}&g=s.7_st.1_th.security+cost-of-living_pr.prisons+ufsm-all&L=moj.10_ufsm.1`);
+  it('ranks up to three in the order ticked, writes them to the link and moves no lever', async () => {
+    at(`/pm?${BASE}&g=s.7_st.1`);
     next();
-    next();
-    expect(screen.getByRole('group', { name: 'Security' })).toBeInTheDocument();
-    expect(screen.getByRole('group', { name: 'Cost of living' })).toBeInTheDocument();
-    fireEvent.click(themeBox(/Cost of living/));
-    await waitFor(() => expect(param('L')).toBe('moj.10'));
-    expect(param('g')).toMatch(/th\.security(_|$)/);
-    expect(param('g')).toMatch(/pr\.prisons(_|$)/);
-    expect(screen.queryByRole('group', { name: 'Cost of living' })).toBeNull();
+    fireEvent.click(priorityBox(/Defence on the NATO path/));
+    fireEvent.click(priorityBox(/Cut the cost of living/));
+    fireEvent.click(priorityBox(/Bring down NHS waiting lists/));
+    await waitFor(() => expect(param('g')).toMatch(/pr\.defence\+cost-of-living\+nhs/));
+    expect(param('L')).toBe('');
+    // Ranks read in the order ticked; a fourth cannot be ticked until one is unticked.
+    const group = screen.getByRole('group', { name: 'The Budget’s priorities' });
+    expect(within(group).getByText('1st').closest('li')).toHaveTextContent(/Defence on the NATO/);
+    expect(within(group).getByText('3rd').closest('li')).toHaveTextContent(/NHS waiting lists/);
+    expect(priorityBox(/Families and child poverty/)).toBeDisabled();
+    fireEvent.click(priorityBox(/Cut the cost of living/));
+    await waitFor(() => expect(param('g')).toMatch(/pr\.defence\+nhs(_|$)/));
+    expect(priorityBox(/Families and child poverty/)).toBeEnabled();
   });
 
-  it('has nothing to negotiate: the red lines are fixed, and agreeing goes to the package', async () => {
-    at(`/pm?${BASE}&g=s.7_st.1_th.cost-of-living_pr.ufsm-all+bus-cap&L=ufsm.1_bus2.1`);
+  it('reads the ranking back with the red lines, and agreeing goes on to the options', async () => {
+    at(`/pm?${BASE}&g=s.7_st.1_pr.safer-streets+defence`);
     next();
     next();
     expect(screen.queryByRole('button', { name: /Push back/ })).toBeNull();
+    const readBack = document.querySelector('ol.ranked') as HTMLElement;
+    expect(within(readBack).getByText('1st').closest('li')).toHaveTextContent(/Safer streets/);
+    expect(within(readBack).getByText('2nd').closest('li')).toHaveTextContent(/Defence/);
     expect(screen.getByText(/red lines from step 1 still apply/)).toBeInTheDocument();
-    const link = screen.getByRole('link', { name: /Agreed. Build the package/ });
-    expect(link).toHaveAttribute('href', expect.stringContaining('/budget/taxes'));
+    const link = screen.getByRole('link', { name: /Agreed. To the options/ });
+    expect(link).toHaveAttribute('href', expect.stringContaining('/budget/'));
     fireEvent.click(link);
     await waitFor(() => {
       expect(param('g')).toMatch(/st\.2/);
-      expect(param('g')).not.toMatch(/pp\./);
+      expect(param('g')).toMatch(/pr\.safer-streets\+defence/);
     });
+  });
+
+  it('opens a Phase 9 link with a theme as the priority that replaced it', () => {
+    at(`/pm?${BASE}&g=s.7_st.1_th.security_pr.prisons`);
+    next();
+    expect(priorityBox(/Defence on the NATO path/)).toBeChecked();
+    expect(
+      screen.getAllByRole('checkbox').filter((b) => (b as HTMLInputElement).checked),
+    ).toHaveLength(1);
   });
 });

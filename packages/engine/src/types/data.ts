@@ -50,12 +50,11 @@ import type {
   drawOutcomeSchema,
   drawRevisionSchema,
   drawsFileSchema,
-  flagshipSchema,
+  prioritySchema,
   macroCandidateSchema,
   pmFileSchema,
   promiseSchema,
   simulatedLineSchema,
-  themeSchema,
   ministersFileSchema,
   ministerSchema,
   ministerBandSchema,
@@ -64,7 +63,6 @@ import type {
   interventionWhenSchema,
   compromiseFileSchema,
   rabbitFileSchema,
-  rabbitOptionSchema,
   householdsFileSchema,
   householdSchema,
   householdTouchSchema,
@@ -137,8 +135,7 @@ export type MacroCandidateName = z.infer<typeof macroCandidateSchema>;
 export type SimulatedLine = z.infer<typeof simulatedLineSchema>;
 export type Calendar = z.infer<typeof calendarSchema>;
 export type PmFile = z.infer<typeof pmFileSchema>;
-export type Flagship = z.infer<typeof flagshipSchema>;
-export type Theme = z.infer<typeof themeSchema>;
+export type Priority = z.infer<typeof prioritySchema>;
 export type Promise_ = z.infer<typeof promiseSchema>;
 export type MinistersFile = z.infer<typeof ministersFileSchema>;
 export type Minister = z.infer<typeof ministerSchema>;
@@ -148,7 +145,6 @@ export type InterventionSpec = z.infer<typeof interventionSchema>;
 export type InterventionWhen = z.infer<typeof interventionWhenSchema>;
 export type CompromiseFile = z.infer<typeof compromiseFileSchema>;
 export type RabbitFile = z.infer<typeof rabbitFileSchema>;
-export type RabbitOption = z.infer<typeof rabbitOptionSchema>;
 export type OptionsFile = z.infer<typeof optionsFileSchema>;
 export type DeliverOption = z.infer<typeof deliverOptionSchema>;
 export type AffordOption = z.infer<typeof affordOptionSchema>;

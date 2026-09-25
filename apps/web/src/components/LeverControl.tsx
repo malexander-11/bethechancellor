@@ -10,7 +10,7 @@ import {
   realGrowthPerYear,
   type Lever,
   type LeverEffect,
-  type PriorityStatus,
+  type OptionState,
   type YearValues,
 } from '@btc/engine';
 import { vintage } from '../data';
@@ -70,11 +70,10 @@ export interface RedLine {
   broken: boolean;
 }
 
-/** A flagship promised to the PM that this lever delivers, and whether it still does. */
-export interface Promised {
+/** An option the player chose that this lever belongs to, and whether it is still on or adjusted. */
+export interface Chosen {
   title: string;
-  target: string;
-  status: PriorityStatus;
+  state: OptionState;
 }
 
 const RED_LINE_WORDS: Record<RedLine['when'], string> = {
@@ -85,28 +84,22 @@ const RED_LINE_WORDS: Record<RedLine['when'], string> = {
 
 /**
  * The warnings on the lever. A watched lever always wears a quiet tag naming the red line, so a
- * newcomer learns it before touching the control; a crossed line turns red. A promised flagship
- * wears its promise while it is funded and a red tag once the package has pulled it below the target.
- * Which promise, and what was agreed, is in the tag's text for a screen reader; a tooltip would
- * reach only a mouse.
+ * newcomer learns it before touching the control; a crossed line turns red. A lever inside an
+ * option the player chose wears the option's title while the option is on, and a red tag once the
+ * desk has adjusted it away from what was chosen. Which promise, and which option, is in the tag's
+ * text for a screen reader; a tooltip would reach only a mouse.
  */
-export function LeverFlags({ redLines, promised }: { redLines: RedLine[]; promised?: Promised }) {
+export function LeverFlags({ redLines, chosen }: { redLines: RedLine[]; chosen?: Chosen }) {
   return (
     <>
-      {promised ? (
-        promised.status === 'funded' || promised.status === 'delayed' ? (
+      {chosen ? (
+        chosen.state === 'on' ? (
           <span className="tag--treasury">
-            Promised to the PM
-            <span className="sr-only">
-              : {promised.title}, {promised.target}
-            </span>
+            In your package<span className="sr-only">: {chosen.title}</span>
           </span>
         ) : (
           <span className="tag--treasury tag--warn">
-            Below what you promised the PM
-            <span className="sr-only">
-              : {promised.title}, you agreed {promised.target} with the Prime Minister
-            </span>
+            Adjusted from what you chose<span className="sr-only">: {chosen.title}</span>
           </span>
         )
       ) : null}
@@ -214,7 +207,7 @@ export function LeverControl({
   summaryYear,
   onChange,
   redLines = [],
-  promised,
+  chosen,
 }: {
   lever: Lever;
   value: number;
@@ -223,8 +216,8 @@ export function LeverControl({
   onChange: (value: number) => void;
   /** The manifesto red lines watching this lever (Phase 9): shown quietly, red when crossed. */
   redLines?: RedLine[];
-  /** The flagship this lever delivers, if the player promised one to the PM. */
-  promised?: Promised;
+  /** The option this lever belongs to, if the player chose one that moves it. */
+  chosen?: Chosen;
 }) {
   const id = useId();
   const [open, setOpen] = useState(false);
@@ -305,7 +298,7 @@ export function LeverControl({
           </h3>
         )}
         <span className="lever__flags">
-          <LeverFlags redLines={redLines} promised={promised} />
+          <LeverFlags redLines={redLines} chosen={chosen} />
           <LabelBadge badge={lever.badge} />
         </span>
       </div>

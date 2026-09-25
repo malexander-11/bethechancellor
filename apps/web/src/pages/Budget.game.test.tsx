@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
-/** A game that has been to Downing Street: security theme, two priorities; every red line binds. */
-const GAME = 'g=s.7_st.2_pl.adviser_hr.20_th.security_pr.prisons+dip-gap';
+/** A game that has been to Downing Street: two priorities ranked; every red line binds. */
+const GAME = 'g=s.7_st.2_pl.adviser_hr.20_pr.safer-streets+defence';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -26,7 +26,7 @@ describe('the package, with a game under way', () => {
     // Headroom against the target is said once, on the scorecard; the strip keeps the rest.
     expect(screen.getByText(/against your £20bn target/)).toBeInTheDocument();
     expect(within(box).queryByText(/Headroom/)).toBeNull();
-    expect(within(box).getByText('0 of 2 funded')).toBeInTheDocument();
+    expect(within(box).getByText('0 of 2 delivered')).toBeInTheDocument();
     expect(within(box).getByText('all 6 kept')).toBeInTheDocument();
   });
 
@@ -46,25 +46,23 @@ describe('the package, with a game under way', () => {
     expect(within(attribution as HTMLElement).getByText(/20\.5bn better/)).toBeInTheDocument();
   });
 
-  it('pins a promised flagship to the top of its group, tagged with how it stands', () => {
-    // Un-funded in the package, the flagship wears a red tag; funded, the accent one.
-    const first = at(`/budget/spending?${BASE}&${GAME}`);
+  it('pins a chosen option’s lever to the top of its group, tagged with how it stands', () => {
+    // Adjusted on the desk below what was chosen, the lever wears a red tag; on, the accent one.
+    const first = at(`/budget/spending?${BASE}&${GAME}&L=moj.5`);
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
     let panel = screen.getByRole('tabpanel');
-    const below = within(panel).getAllByText('Below what you promised the PM');
-    expect(below).toHaveLength(1);
-    // Which promise, and what was agreed, is in the tag's text, where a screen reader finds it.
-    expect(below[0]?.textContent).toMatch(
-      /A Justice uplift for prison capacity, you agreed \+10(\.0)?% with the Prime Minister/,
-    );
+    const adjusted = within(panel).getAllByText('Adjusted from what you chose');
+    expect(adjusted).toHaveLength(1);
+    // Which option, is in the tag's text, where a screen reader finds it.
+    expect(adjusted[0]?.textContent).toMatch(/A Justice uplift for prison capacity/);
     // The pinned lever is the first control in the group, ahead of Health in the authored order.
     expect(within(panel).getAllByRole('slider')[0]).toHaveAccessibleName('Justice');
     first.unmount();
     at(`/budget/spending?${BASE}&${GAME}&L=moj.10`);
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
     panel = screen.getByRole('tabpanel');
-    expect(within(panel).getAllByText('Promised to the PM')).toHaveLength(1);
-    expect(within(panel).queryByText('Below what you promised the PM')).toBeNull();
+    expect(within(panel).getAllByText('In your package')).toHaveLength(1);
+    expect(within(panel).queryByText('Adjusted from what you chose')).toBeNull();
   });
 
   it('wears the manifesto red lines on the levers they watch, red once crossed', () => {
@@ -99,11 +97,11 @@ describe('the package, with a game under way', () => {
     const notes = screen.getByRole('region', { name: 'Your advisers' });
     expect(within(notes).getByText(/That is The tax lock, Chancellor/)).toBeInTheDocument();
     expect(
-      within(notes).getByText(/A Justice uplift for prison capacity was funded when you left/),
+      within(notes).getByText(/Safer streets: prisons, police, borders is a priority you agreed/),
     ).toBeInTheDocument();
     // The Political Adviser's warning outranks the Director's reminder.
     const texts = within(notes)
-      .getAllByText(/Chancellor|was funded when you left/)
+      .getAllByText(/Chancellor|is a priority you agreed/)
       .map((e) => e.textContent);
     expect(texts[0]).toMatch(/tax lock/);
   });

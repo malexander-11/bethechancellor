@@ -17,7 +17,7 @@ import { LabelBadge } from '../components/LabelBadge';
 import { TableScroll } from '../components/TableScroll';
 import { formatLeverValue } from '../components/LeverControl';
 import { SourceList } from '../components/SourceLink';
-import { context, draws, levers, leversByCategory, pm, rules, vintage } from '../data';
+import { context, draws, levers, leversByCategory, pm, rules, vintage, options } from '../data';
 import { Beat, Beats } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
@@ -221,8 +221,8 @@ function ForecastReveal({
   const d = decomposition;
   const year = d.targetYear;
   const revised = revisedMeasures(d.revised, year);
-  const status = ambitionStatus(game, pm, d.revised, levers);
-  const before = ambitionStatus(game, pm, d.planned, levers);
+  const status = ambitionStatus(game, pm, options, d.revised, levers);
+  const before = ambitionStatus(game, pm, options, d.planned, levers);
   const target = game.headroomTargetBn * 1000;
   const planningName =
     planning === 'own'
@@ -401,9 +401,10 @@ function ForecastReveal({
         ) : (
           <ul className="ambitions">
             {status.priorities.map((p) => (
-              <li key={p.flagship.id}>
-                <strong>{p.flagship.title}</strong>: {p.status.replace('-', ' ')}
-                {p.status !== 'unfunded' ? ` · ${formatGbpBn(p.costGbpm, 1)} in ${year}` : ''}
+              <li key={p.priority.id}>
+                <strong>{p.priority.title}</strong>:{' '}
+                {p.status === 'part' ? 'partly delivered' : p.status}
+                {p.status !== 'undelivered' ? ` · ${formatGbpBn(p.costGbpm, 1)} in ${year}` : ''}
               </li>
             ))}
             {nowBroken.map((p) => (

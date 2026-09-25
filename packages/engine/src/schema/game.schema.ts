@@ -89,27 +89,27 @@ export const calendarSchema = z.strictObject({
 
 /* ------------------------------------------------------------------ the PM */
 
-/** A flagship the PM can offer: a lever and the value that delivers it, with its provenance. */
-export const flagshipSchema = z.strictObject({
+/**
+ * A priority the Chancellor can rank with the Prime Minister (Phase 18): what the Budget is for.
+ * Nothing is funded by ranking one; the ways to deliver it are options (options.json) proposed
+ * by the minister or adviser who leads on it. Every line is in someone's voice and sourced.
+ */
+export const prioritySchema = z.strictObject({
   id: slug,
-  title: z.string().min(1),
-  /** One line on what it is and why the PM wants it. */
-  headline: z.string().min(1).max(160),
-  /** The lever setting that delivers it. Cost is read live from the engine, never written here. */
-  target: z.strictObject({ code: z.string().min(1), value: z.number() }),
-  /** What buying it does and does not buy: places not meals, capacity not cash. Sourced. */
-  delivery: simulatedLineSchema,
+  title: z.string().min(1).max(40),
+  /** The priority as a noun phrase for a sentence: "the cost of living", "defence". */
+  noun: z.string().min(1).max(40),
+  purpose: z.string().min(1).max(160),
+  /** The PM's case for it, in the PM's voice. */
+  pitch: simulatedLineSchema,
+  /** What the PM says when it is ranked. */
+  reaction: simulatedLineSchema,
+  /** The role that leads on delivering it: an adviser's or a minister's, as the data names them. */
+  lead: z.string().min(1),
+  /** The lead's line opening the ways to deliver it. */
+  brief: simulatedLineSchema,
   /** Where the commitment comes from. */
   sources: z.array(sourceRefSchema).min(1),
-});
-
-export const themeSchema = z.strictObject({
-  id: slug,
-  title: z.string().min(1),
-  purpose: z.string().min(1).max(160),
-  /** The PM's pitch for this theme, in the PM's voice. */
-  pitch: simulatedLineSchema,
-  flagships: z.array(slug).min(2),
 });
 
 /**
@@ -136,54 +136,21 @@ export const pmFileSchema = z
     schemaVersion: z.literal(1),
     /** What the PM has already done, said before asking for anything. Every fact sourced. */
     opening: z.array(simulatedLineSchema).min(1),
-    themes: z.array(themeSchema).min(2),
-    flagships: z.array(flagshipSchema).min(4),
-    /** Flagships the PM offers whichever theme is chosen. */
-    crossCutting: z.array(slug).default([]),
+    /** What this Budget could be for; the Chancellor ranks up to three. */
+    priorities: z.array(prioritySchema).min(6).max(10),
     promises: z.array(promiseSchema).min(1),
-    /** The PM's reaction to each flagship being chosen, in the PM's voice. */
-    reactions: z.record(slug, simulatedLineSchema),
   })
   .superRefine((file, ctx) => {
-    const flagships = new Set(file.flagships.map((f) => f.id));
-    // Ticking a flagship moves its lever and un-ticking restores the default, so two flagships on
-    // one lever would fight over it.
-    const codes = new Set<string>();
-    file.flagships.forEach((f, i) => {
-      if (codes.has(f.target.code))
+    const ids = new Set<string>();
+    file.priorities.forEach((p, i) => {
+      if (ids.has(p.id))
         ctx.addIssue({
           code: 'custom',
-          message: `two flagships move lever ${f.target.code}`,
-          path: ['flagships', i, 'target', 'code'],
+          message: `duplicate priority ${p.id}`,
+          path: ['priorities', i],
         });
-      codes.add(f.target.code);
+      ids.add(p.id);
     });
-    file.themes.forEach((t, i) =>
-      t.flagships.forEach((id, j) => {
-        if (!flagships.has(id))
-          ctx.addIssue({
-            code: 'custom',
-            message: `theme ${t.id} offers unknown flagship ${id}`,
-            path: ['themes', i, 'flagships', j],
-          });
-      }),
-    );
-    file.crossCutting.forEach((id, j) => {
-      if (!flagships.has(id))
-        ctx.addIssue({
-          code: 'custom',
-          message: `unknown flagship ${id}`,
-          path: ['crossCutting', j],
-        });
-    });
-    for (const id of Object.keys(file.reactions)) {
-      if (!flagships.has(id))
-        ctx.addIssue({
-          code: 'custom',
-          message: `reaction for unknown flagship ${id}`,
-          path: ['reactions', id],
-        });
-    }
   });
 
 /* ------------------------------------------------------------ the options */
@@ -428,37 +395,18 @@ export const compromiseFileSchema = z.strictObject({
 /* ------------------------------------------------------------- the rabbit */
 
 /**
- * A prepared announcement for the speech (stage 6): a lever and the setting that is the
- * announcement, with the Political Adviser's line on how it lands. Cost and headroom after are
- * read from the engine on the page; nothing here carries a number.
+ * The add-ons screen's framing lines (stage 6). The add-ons themselves are options (options.json),
+ * each a lever setting the engine prices; nothing here carries a number.
  */
-export const rabbitOptionSchema = z.strictObject({
-  id: slug,
-  title: z.string().min(1),
-  code: z.string().min(1),
-  value: z.number(),
-  line: simulatedLineSchema,
+export const rabbitFileSchema = z.strictObject({
+  schemaVersion: z.literal(1),
+  /** The Permanent Secretary sets the scene: what an add-on is for, and what it costs. */
+  intro: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+  /** Raise a priority one notch beyond what was chosen. */
+  further: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+  /** No add-on: the headroom is the announcement. */
+  keep: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
 });
-
-export const rabbitFileSchema = z
-  .strictObject({
-    schemaVersion: z.literal(1),
-    /** The Permanent Secretary sets the scene: what a rabbit is for, and what it costs. */
-    intro: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    options: z.array(rabbitOptionSchema).min(2),
-    /** Raise a priority one notch beyond what was agreed. */
-    strengthen: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    /** No rabbit: the headroom is the announcement. */
-    keep: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-  })
-  .superRefine((file, ctx) => {
-    const ids = new Set<string>();
-    file.options.forEach((o, i) => {
-      if (ids.has(o.id))
-        ctx.addIssue({ code: 'custom', message: `duplicate option ${o.id}`, path: ['options', i] });
-      ids.add(o.id);
-    });
-  });
 
 /* ---------------------------------------------------------- the electorate */
 
@@ -518,10 +466,10 @@ export const speechFragmentSchema = z.strictObject({
 
 export const speechFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
-  /** Keyed by theme id, plus `default` for no theme and `several` for more than one: {themes}. */
+  /** Keyed by the first priority's id, plus `default` for none: {priorities}, {targetYear}. */
   opening: z.record(z.string(), speechFragmentSchema),
-  /** One paragraph per funded flagship: {title}, {level}, {cost}, {targetYear}. */
-  flagship: speechFragmentSchema,
+  /** One paragraph per priority delivered: {title}, {options}, {cost}, {targetYear}. */
+  priority: speechFragmentSchema,
   /** Spending measures that are not flagships: {measures}. */
   spending: speechFragmentSchema,
   /** Budgets cut: {measures}. */
@@ -536,7 +484,10 @@ export const speechFileSchema = z.strictObject({
   compromises: speechFragmentSchema,
   /** Said per delayed measure: {title}, {year}. */
   delay: speechFragmentSchema,
-  /** The closing flourish, by rabbit option id, `flagship`, or `keep`: {title}, {headroom}. */
+  /**
+   * The closing flourish, by add-on id, `further` (one notch more on a priority: {title}),
+   * `several` (more than one add-on: {titles}) or `keep`: {headroom}.
+   */
   rabbit: z.record(z.string(), speechFragmentSchema),
   /** The last word, keyed `met`, `missed` or `breach`: {headroom}, {targetYear}. */
   peroration: z.record(z.string(), speechFragmentSchema),
@@ -573,7 +524,7 @@ export const incidenceFileSchema = z
 
 /**
  * A kind of Budget the close can name. Every condition present must hold; kinds are read in
- * order and the first that fits is the verdict. The text is a game judgement; `{theme}` and
+ * order and the first that fits is the verdict. The text is a game judgement; `{priority}` and
  * `{headroom}` are filled from data and the engine.
  */
 export const verdictKindSchema = z.strictObject({
@@ -581,7 +532,6 @@ export const verdictKindSchema = z.strictObject({
   title: z.string().min(1).max(120),
   line: simulatedLineSchema,
   when: z.strictObject({
-    themeIs: z.string().optional(),
     rulesMet: z.boolean().optional(),
     breachAccepted: z.boolean().optional(),
     promisesAllKept: z.boolean().optional(),
