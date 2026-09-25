@@ -1,19 +1,21 @@
-import type { Lever, Promise_ } from '../types/data.js';
+import type { AffordOption, Lever, Promise_ } from '../types/data.js';
 import type { Outcome } from '../types/engine.js';
 import { promiseBreaks } from './ambitions.js';
+import { optionState } from './options.js';
 
 /**
  * The routes out of a gap (stage 5). Nothing here is a judgement: the Director of Tax's
- * suggestions are every tax lever moved one notch and ranked by what the engine says it raises
- * (each wears its own badge, so our own arithmetic ranks beside HMRC's and says so); the
- * spending list is the package's own measures ranked by what they cost; a delay is a later start
- * year; a narrowing is half the distance to the target. The words about them come from data.
+ * suggestions are the ways to afford it not yet chosen, ranked by what the engine says each
+ * raises (every one wears its lever's badge, so our own arithmetic ranks beside HMRC's and says
+ * so); the spending list is the package's own measures ranked by what they cost; a delay is a
+ * later start year; a narrowing is half the distance to the target. The words about them come
+ * from data.
  */
 
-export interface RevenueSuggestion {
+export interface AffordSuggestion {
+  option: AffordOption;
+  /** The lever the option moves (every way to afford moves one), for its title and badge. */
   lever: Lever;
-  /** The setting suggested: one notch up, or a toggle switched on. */
-  value: number;
   /** What it does to stability-rule headroom in the target year, £ million, positive = more. */
   yieldGbpm: number;
   /** Promises in force that this move would break and the current package does not. */
@@ -36,40 +38,39 @@ export function nextNotch(lever: Lever, current: number): number | null {
 }
 
 /**
- * Every tax lever that raises money one notch up, ranked by the headroom it buys. `headroomOf` is
- * the caller's engine call, so this stays a pure ranking over whatever the engine says; a lever
+ * The ways to afford it not yet chosen, ranked by the headroom each buys. `headroomOf` is the
+ * caller's engine call, so this stays a pure ranking over whatever the engine says; an option
  * costed by our own arithmetic ranks on that arithmetic and shows its assumption badge beside the
- * figure. A spending saving is a cut, and belongs to the spending route.
+ * figure. One that moves nothing in the target year (a tax that cannot start before it,
+ * ADR-0021) buys no headroom there and is not suggested.
  */
-export function revenueSuggestions(
+export function affordSuggestions(
+  afford: readonly AffordOption[],
   levers: readonly Lever[],
   current: Record<string, number>,
   promises: readonly Promise_[],
   headroomOf: (values: Record<string, number>) => number,
   n = 3,
-): RevenueSuggestion[] {
+): AffordSuggestion[] {
+  const byCode = new Map(levers.map((l) => [l.code, l] as const));
   const base = headroomOf(current);
   const alreadyBroken = new Set(
     promiseBreaks(current, promises, levers)
       .filter((r) => !r.kept)
       .map((r) => r.promise.id),
   );
-  const out: RevenueSuggestion[] = [];
-  for (const lever of levers) {
-    // A shelved lever is kept for the record, not offered; a spending saving is the Director of
-    // Public Spending's route, not this one; and an option nobody proposes, costed only to show
-    // what a relief is worth, is not advice the Director of Tax would give.
-    if (lever.deprecated || lever.category !== 'tax' || lever.notOnTheTable) continue;
-    const now = current[lever.code] ?? lever.control.default;
-    const value = nextNotch(lever, now);
-    if (value === null) continue;
-    const trial = { ...current, [lever.code]: value };
+  const out: AffordSuggestion[] = [];
+  for (const option of afford) {
+    if (optionState(option, current, levers) !== 'off') continue;
+    const lever = byCode.get(Object.keys(option.values)[0] ?? '');
+    if (!lever) continue;
+    const trial = { ...current, ...option.values };
     const yieldGbpm = headroomOf(trial) - base;
     if (yieldGbpm <= 0) continue;
     const breaks = promiseBreaks(trial, promises, levers)
       .filter((r) => !r.kept && !alreadyBroken.has(r.promise.id))
       .map((r) => r.promise);
-    out.push({ lever, value, yieldGbpm, breaks });
+    out.push({ option, lever, yieldGbpm, breaks });
   }
   return out.sort((a, b) => b.yieldGbpm - a.yieldGbpm).slice(0, n);
 }
@@ -117,4 +118,21 @@ export function narrowedValue(lever: Lever, target: number): number | null {
   const value = Number(half.toFixed(6));
   if (value === base || value === target) return null;
   return value;
+}
+
+/**
+ * An option narrowed to half the distance: the lever values a single-slider bundle would take.
+ * Null for a toggle, a bundle of more than one lever, or a target one step from the default.
+ */
+export function narrowedBundle(
+  option: { values: Record<string, number> },
+  levers: readonly Lever[],
+): Record<string, number> | null {
+  const codes = Object.keys(option.values);
+  if (codes.length !== 1) return null;
+  const code = codes[0] ?? '';
+  const lever = levers.find((l) => l.code === code);
+  if (!lever) return null;
+  const value = narrowedValue(lever, option.values[code] ?? lever.control.default);
+  return value === null ? null : { [code]: value };
 }

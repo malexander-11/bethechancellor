@@ -1,15 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import {
+  affordSuggestions,
   computeOutcome,
   delayOptions,
+  narrowedBundle,
   narrowedValue,
   nextNotch,
-  revenueSuggestions,
   spendingMeasures,
 } from '../src/index.js';
 import { loadDataset } from './fixtures.js';
 
 const ds = loadDataset();
+const afford = ds.options?.afford ?? [];
+const deliver = ds.options?.deliver ?? [];
 const lever = (code: string) => {
   const l = ds.levers.find((x) => x.code === code);
   if (!l) throw new Error(`no lever ${code}`);
@@ -41,7 +44,8 @@ describe('the routes out of a gap', () => {
   });
 
   it('ranks the Director of Tax’s suggestions by yield and names the promise each breaks', () => {
-    const out = revenueSuggestions(ds.levers, {}, ds.pm.promises, headroomOf, 5);
+    expect(afford.length).toBeGreaterThan(20);
+    const out = affordSuggestions(afford, ds.levers, {}, ds.pm.promises, headroomOf, 5);
     expect(out).toHaveLength(5);
     for (let i = 1; i < out.length; i += 1) {
       expect(out[i - 1]!.yieldGbpm).toBeGreaterThanOrEqual(out[i]!.yieldGbpm);
@@ -50,26 +54,42 @@ describe('the routes out of a gap', () => {
       expect(s.lever.category).toBe('tax');
       expect(s.yieldGbpm).toBeGreaterThan(0);
     }
-    const all = revenueSuggestions(ds.levers, {}, ds.pm.promises, headroomOf, 100);
+    const all = affordSuggestions(afford, ds.levers, {}, ds.pm.promises, headroomOf, 100);
     // Our own arithmetic is in the list too, badged as such, beside the certified rows.
     expect(all.some((s) => s.lever.badge === 'assumption')).toBe(true);
-    expect(all.some((s) => s.lever.code === 'cgtdth')).toBe(true);
-    expect(all.some((s) => s.lever.code === 'pens30')).toBe(true);
-    expect(all.find((s) => s.lever.code === 'iinc2')?.yieldGbpm ?? 0).toBeGreaterThan(2000);
-    // What costs money never appears, whichever folder it is in; nor does a spending saving,
-    // which is a cut for the spending route, not revenue.
-    expect(all.some((s) => s.lever.code === 'ufsm' || s.lever.code === 'rvinv')).toBe(false);
-    expect(all.some((s) => s.lever.code === 'rv2ch' || s.lever.code === 'cpilock')).toBe(false);
-    // Nor an option nobody proposes: the relief toggles are on the desk to teach, not to advise.
-    expect(all.some((s) => s.lever.notOnTheTable !== undefined)).toBe(false);
-    expect(all.some((s) => s.lever.code === 'vatfood' || s.lever.code === 'cgtprr')).toBe(false);
-    const basic = all.find((s) => s.lever.code === 'itbr');
+    expect(all.some((s) => s.option.id === 'cgtdth')).toBe(true);
+    expect(all.some((s) => s.option.id === 'pens30')).toBe(true);
+    expect(all.find((s) => s.option.id === 'iinc2')?.yieldGbpm ?? 0).toBeGreaterThan(2000);
+    // A tax that cannot start before the target year buys no headroom there (ADR-0021), so the
+    // Director does not suggest it; it is on the ways to afford, priced honestly.
+    expect(afford.some((o) => o.id === 'wealth2')).toBe(true);
+    expect(all.some((s) => s.option.id === 'wealth2')).toBe(false);
+    const basic = all.find((s) => s.option.id === 'itbr');
     expect(basic?.breaks.map((p) => p.id)).toEqual(['tax-lock']);
-    const ct = all.find((s) => s.lever.code === 'ct');
+    const ct = all.find((s) => s.option.id === 'ct');
     expect(ct?.breaks.map((p) => p.id)).toEqual(['ct-cap']);
-    // A promise already broken by choice is not counted against the next notch.
-    const again = revenueSuggestions(ds.levers, { itbr: 1 }, ds.pm.promises, headroomOf, 100);
-    expect(again.find((s) => s.lever.code === 'itbr')?.breaks).toEqual([]);
+    // An option already chosen is not suggested again, and a promise already broken by choice is
+    // not counted against another move.
+    const again = affordSuggestions(
+      afford,
+      ds.levers,
+      { itbr: 1 },
+      ds.pm.promises,
+      headroomOf,
+      100,
+    );
+    expect(again.some((s) => s.option.id === 'itbr')).toBe(false);
+    expect(again.find((s) => s.option.id === 'vats')?.breaks).toEqual([]);
+    // Adjusted on the desk short of the option counts as chosen too: it is not offered again.
+    const adjusted = affordSuggestions(
+      afford,
+      ds.levers,
+      { alc: 2 },
+      ds.pm.promises,
+      headroomOf,
+      100,
+    );
+    expect(adjusted.some((s) => s.option.id === 'alc')).toBe(false);
   });
 
   it('lists the package’s spending measures biggest first, and only what costs money', () => {
@@ -92,5 +112,14 @@ describe('the routes out of a gap', () => {
     expect(narrowedValue(lever('fuel'), -10)).toBe(-5);
     expect(narrowedValue(lever('ufsm'), 1)).toBeNull();
     expect(narrowedValue(lever('dfe'), 0.5)).toBeNull();
+  });
+
+  it('narrows a chosen option when it is one slider, and not a toggle or a bundle', () => {
+    const prisons = deliver.find((o) => o.id === 'prisons');
+    const dip = deliver.find((o) => o.id === 'dip-gap');
+    expect(prisons && narrowedBundle(prisons, ds.levers)).toEqual({ moj: 5 });
+    expect(dip && narrowedBundle(dip, ds.levers)).toBeNull();
+    expect(narrowedBundle({ values: { dhsc: 3, dfe: 5 } }, ds.levers)).toBeNull();
+    expect(narrowedBundle({ values: { nosuch: 3 } }, ds.levers)).toBeNull();
   });
 });

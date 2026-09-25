@@ -4,7 +4,7 @@
     "revenue": {
       "adviser": "director-of-tax",
       "line": {
-        "text": "Every tax in your Budget, one notch up, ranked by what the figures say it raises. HMRC’s and the Treasury’s figures where they exist; our own arithmetic, badged, where they do not. The ones that break a promise say so.",
+        "text": "Every way to afford it you have not chosen, ranked by what the figures say it raises: HMRC’s and the Treasury’s where they exist, our own arithmetic, badged, where they do not. One that breaks a promise says so.",
         "sources": [
           {
             "sourceId": "hmrc-trr-2025-06-bulletin"
@@ -16,21 +16,13 @@
     "spending": {
       "adviser": "director-of-public-spending",
       "line": {
-        "text": "Everything in your package that costs money, biggest first. A measure that starts a year later costs nothing in the years before it starts; the OBR scores what is in the forecast window and the department feels the wait.",
+        "text": "What you chose to deliver, biggest first. Start one a year later and it costs nothing until it starts; narrow one to half the distance; or drop it. The department feels each, and the Prime Minister notices.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",
             "paragraph": "4.13"
           }
         ],
-        "badge": "simulated"
-      }
-    },
-    "narrow": {
-      "adviser": "director-of-public-spending",
-      "line": {
-        "text": "Half the distance to the target is still a real change to a real budget. It is also half a promise, and the Prime Minister will notice which half.",
-        "sources": [],
         "badge": "simulated"
       }
     },

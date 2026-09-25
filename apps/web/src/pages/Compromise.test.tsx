@@ -37,9 +37,9 @@ describe('making it add up', () => {
   });
 
   it('states the gap against the target, and ranks the Director of Tax’s suggestions', async () => {
-    // The costed reliefs and think-tank packages that out-yield every rate rise and are on the
-    // table are already on, so the Director's list reaches the rate rises the manifesto lock
-    // covers; the options nobody proposes are never suggested.
+    // The ways to afford it that out-yield every rate rise are already chosen, so the Director's
+    // list reaches the rate rises the manifesto lock covers; an option already on is not offered
+    // again.
     at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1_nicpen.1_pens20.1_cgtalign.1_wealth2.1`);
     expect(screen.getByText(/you set out to keep/)).toBeInTheDocument();
     // The stress test: the package under every forecast the draw could have produced.
@@ -64,13 +64,35 @@ describe('making it add up', () => {
     expect(screen.getByText(/starts 2028-29/)).toBeInTheDocument();
   });
 
-  it('narrows a chosen option to half the distance', async () => {
+  it('lists what was chosen to deliver, with a later start, half the distance, or dropped', async () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1`);
-    const route = screen.getByRole('region', { name: /Scale back a promise to the PM/ });
+    const route = screen.getByRole('region', { name: /Spend less, or later/ });
+    // Two chosen options, each named as the option, each with a way out; only the slider halves.
+    expect(within(route).getByText('A Justice uplift for prison capacity')).toBeInTheDocument();
+    expect(within(route).getByText('Fund the Defence Investment Plan’s gap')).toBeInTheDocument();
+    expect(within(route).getAllByRole('button', { name: 'Drop it' })).toHaveLength(2);
+    expect(within(route).getAllByRole('button', { name: 'Narrow it' })).toHaveLength(1);
     fireEvent.click(within(route).getByRole('button', { name: 'Narrow it' }));
     await waitFor(() => expect(L()).toMatch(/moj\.5/));
-    // A toggle cannot be halved; the page says so and offers to switch it off.
-    expect(within(route).getByRole('button', { name: 'Switch it off' })).toBeInTheDocument();
+    // Half-delivered now: still listed, adjusted, with no second halving on offer.
+    expect(within(route).getByText(/adjusted on the desk/)).toBeInTheDocument();
+    expect(within(route).queryByRole('button', { name: 'Narrow it' })).toBeNull();
+    // Dropping it puts the lever back where the OBR had it; the other option is untouched.
+    const prisons = within(route)
+      .getByText('A Justice uplift for prison capacity')
+      .closest('li') as HTMLElement;
+    fireEvent.click(within(prisons).getByRole('button', { name: 'Drop it' }));
+    await waitFor(() => expect(L()).not.toMatch(/moj/));
+    expect(L()).toMatch(/dip47\.1/);
+  });
+
+  it('keeps a spending measure moved on the desk in the list, after the chosen options', () => {
+    at(`/compromise?${BASE}&${GAME}&L=moj.10_dfe.5`);
+    const route = screen.getByRole('region', { name: /Spend less, or later/ });
+    const rows = within(route).getAllByRole('listitem');
+    expect(rows[0]).toHaveTextContent(/A Justice uplift for prison capacity/);
+    expect(rows[1]).toHaveTextContent(/Education/);
+    expect(rows[1]).toHaveTextContent(/moved on the desk/);
   });
 
   it('lets the Chancellor lower the target, and says what that costs', async () => {
@@ -96,10 +118,11 @@ describe('making it add up', () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10`);
     expect(screen.queryByRole('region', { name: /Borrow, and say so/ })).toBeNull();
     expect(screen.getByText(/No rule is missed on these numbers/)).toBeInTheDocument();
-    // The manifesto is not a route either: there is no going back to the Prime Minister.
+    // The manifesto is not a route either: there is no going back to the Prime Minister, and
+    // scaling back what was chosen lives inside "spend less, or later".
     expect(screen.queryByRole('region', { name: /Prime Minister/ })).toBeNull();
-    expect(
-      screen.getByRole('region', { name: /Scale back a promise to the PM/ }),
-    ).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: /Scale back/ })).toBeNull();
+    expect(screen.getByRole('region', { name: /Spend less, or later/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '3 · Accept less headroom' })).toBeInTheDocument();
   });
 });

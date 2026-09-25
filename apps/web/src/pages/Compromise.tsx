@@ -1,11 +1,12 @@
 import {
+  affordSuggestions,
   ambitionStatus,
   delayOptions,
   effectiveStartYear,
   formatGbpBn,
-  narrowedValue,
+  narrowedBundle,
+  optionOff,
   resilienceRows,
-  revenueSuggestions,
   spendingMeasures,
   stageIndex,
   type Lever,
@@ -43,11 +44,12 @@ const MACRO_CODES = macroCodesOf(context.readings);
 
 /**
  * Step 5, second screen. The gap between the headroom the OBR's forecast leaves and the margin
- * the player meant to keep, and the ways through it: raise more, spend less or later, scale back
- * a promise to the PM, accept less headroom, and, only when a rule is missed, borrow and say so.
- * The manifesto is not a route: its red lines are fixed. Every figure on the routes is the
- * engine's, re-run for the move in question; every word beside them is an adviser's and wears
- * the badge.
+ * the player meant to keep, and the ways through it: raise more (the ways to afford it not yet
+ * chosen, ranked by yield), spend less or later (what was chosen to deliver, each with a later
+ * start, half the distance, or dropped), accept less headroom, and, only when a rule is missed,
+ * borrow and say so. The manifesto is not a route: its red lines are fixed. Every figure on the
+ * routes is the engine's, re-run for the move in question; every word beside them is an
+ * adviser's and wears the badge.
  */
 export function CompromisePage() {
   const { state, dispatch, outcome } = useBudget();
@@ -56,7 +58,7 @@ export function CompromisePage() {
   const delays = game?.delays ?? {};
   const headroomOf = useHeadroomOf();
   const revenue = useMemo(
-    () => revenueSuggestions(levers, state.leverValues, pm.promises, headroomOf, 3),
+    () => affordSuggestions(options.afford, levers, state.leverValues, pm.promises, headroomOf, 3),
     [state.leverValues, headroomOf],
   );
   // The package as it stands, re-run under every forecast the draw could have produced.
@@ -94,7 +96,16 @@ export function CompromisePage() {
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (outcome.paths.baseline.nominalGdpFy[lastYear] ?? 0);
-  const spending = spendingMeasures(levers, outcome, targetYear).slice(0, 3);
+  // What was chosen to deliver and costs money in the target year, biggest first; then anything
+  // else in the package that costs money, moved on the desk rather than chosen as an option.
+  const chosen = status.priorities
+    .flatMap((p) => p.options)
+    .filter((o) => o.state !== 'off' && o.costGbpm > 0)
+    .sort((a, b) => b.costGbpm - a.costGbpm);
+  const chosenCodes = new Set(chosen.flatMap((o) => Object.keys(o.option.values)));
+  const spending = spendingMeasures(levers, outcome, targetYear)
+    .filter((m) => !chosenCodes.has(m.lever.code))
+    .slice(0, 3);
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
   const value = (lever: Lever) => state.leverValues[lever.code] ?? lever.control.default;
   const role = (id: string) => adviserById.get(id)?.role ?? id;
@@ -105,6 +116,7 @@ export function CompromisePage() {
 
   const spend = (patch: Partial<typeof game>) => dispatch({ type: 'updateGame', patch });
   const set = (code: string, v: number) => dispatch({ type: 'setLever', code, value: v });
+  const setAll = (values: Record<string, number>) => dispatch({ type: 'setLevers', values });
   const setDelay = (code: string, year: string) => {
     const next = { ...delays };
     if (year === '') delete next[code];
@@ -193,12 +205,16 @@ export function CompromisePage() {
               />
               <ul className="suggestions">
                 {revenue.map((s) => (
-                  <li key={s.lever.code} className="suggestion">
+                  <li key={s.option.id} className="suggestion">
                     <div>
                       <strong>{s.lever.title}</strong>{' '}
                       <span className="source">
-                        to {formatLeverValue(s.lever, s.value)} ·{' '}
-                        <LabelBadge badge={s.lever.badge} />
+                        to{' '}
+                        {formatLeverValue(
+                          s.lever,
+                          s.option.values[s.lever.code] ?? s.lever.control.default,
+                        )}{' '}
+                        · <LabelBadge badge={s.lever.badge} />
                       </span>
                       {s.breaks.length > 0 ? (
                         <span className="tag--treasury tag--warn">
@@ -210,11 +226,7 @@ export function CompromisePage() {
                       <span className="amount amount--better">
                         {formatGbpBn(s.yieldGbpm, 1, true)}
                       </span>
-                      <button
-                        type="button"
-                        className="btn"
-                        onClick={() => set(s.lever.code, s.value)}
-                      >
+                      <button type="button" className="btn" onClick={() => setAll(s.option.values)}>
                         Do it
                       </button>
                     </div>
@@ -222,6 +234,7 @@ export function CompromisePage() {
                 ))}
               </ul>
               <p className="panel__hint">
+                <StepLink to="/budget/afford">All the ways to afford it</StepLink> ·{' '}
                 <StepLink to="/budget/taxes">Every tax</StepLink>
               </p>
             </section>
@@ -235,58 +248,74 @@ export function CompromisePage() {
                 who={role(compromise.routes.spending.adviser)}
                 tone="adviser"
               />
-              {spending.length === 0 ? (
+              {chosen.length === 0 && spending.length === 0 ? (
                 <p className="panel__hint">Nothing in your package costs money in {targetYear}.</p>
               ) : (
                 <ul className="suggestions">
-                  {spending.map((m) => {
-                    // The floor is the lever's own earliest start; a delay can only push past it.
-                    const floor = effectiveStartYear(m.lever, {
-                      implementationYear: IMPLEMENTATION_YEAR,
-                    });
-                    const start = effectiveStartYear(m.lever, {
-                      implementationYear: IMPLEMENTATION_YEAR,
-                      implementationYearByCode: delays,
-                    });
-                    const options = delayOptions(outcome.paths.policyYears, floor);
-                    const next = delayOptions(outcome.paths.policyYears, start)[0];
-                    const nextSaving = next
-                      ? effectOf(state.leverValues, { ...delays, [m.lever.code]: next })
-                      : 0;
+                  {chosen.map((o) => {
+                    const codes = Object.keys(o.option.values);
+                    const optionLevers = codes
+                      .map((code) => byCode.get(code))
+                      .filter((l): l is Lever => l !== undefined);
+                    const narrowed = o.state === 'on' ? narrowedBundle(o.option, levers) : null;
+                    const started = codes.map((code) => delays[code]).find((y) => y !== undefined);
                     return (
-                      <li key={m.lever.code} className="suggestion">
+                      <li key={o.option.id} className="suggestion">
                         <div>
-                          <strong>{m.lever.title}</strong>{' '}
+                          <strong>{o.option.title}</strong>{' '}
                           <span className="source">
-                            {formatLeverValue(m.lever, value(m.lever))} · costs{' '}
-                            {formatGbpBn(m.costGbpm, 1)} in {targetYear}
-                            {delays[m.lever.code] ? ` · starts ${delays[m.lever.code]}` : ''}
+                            {o.state === 'on' ? 'in your package' : 'adjusted on the desk'}
+                            {optionLevers.length === 1 && optionLevers[0]
+                              ? ` · ${formatLeverValue(optionLevers[0], value(optionLevers[0]))}`
+                              : ''}{' '}
+                            · costs {formatGbpBn(o.costGbpm, 1)} in {targetYear}
+                            {started ? ` · starts ${started}` : ''}
                           </span>
                         </div>
                         <div className="suggestion__act">
-                          <label className="suggestion__delay">
-                            <span className="sr-only">Start year for {m.lever.title}</span>
-                            <select
-                              value={delays[m.lever.code] ?? ''}
-                              onChange={(e) => setDelay(m.lever.code, e.target.value)}
-                            >
-                              <option value="">Starts {floor}</option>
-                              {options.map((y) => (
-                                <option key={y} value={y}>
-                                  Delay to {y}
-                                </option>
-                              ))}
-                            </select>
-                          </label>
-                          {next ? (
-                            <span className="source">
-                              a year later: {formatGbpBn(nextSaving, 1, true)}
-                            </span>
+                          {optionLevers.map((lever) => (
+                            <DelayControl
+                              key={lever.code}
+                              lever={lever}
+                              delays={delays}
+                              policyYears={outcome.paths.policyYears}
+                              onChange={(year) => setDelay(lever.code, year)}
+                              savingFor={(next) =>
+                                effectOf(state.leverValues, { ...delays, [lever.code]: next })
+                              }
+                            />
+                          ))}
+                          {narrowed ? (
+                            <>
+                              <span className="source">
+                                half the distance:{' '}
+                                {formatGbpBn(
+                                  effectOf({ ...state.leverValues, ...narrowed }),
+                                  1,
+                                  true,
+                                )}
+                              </span>
+                              <button
+                                type="button"
+                                className="btn"
+                                onClick={() => setAll(narrowed)}
+                              >
+                                Narrow it
+                              </button>
+                            </>
                           ) : null}
+                          <span className="source">
+                            dropped:{' '}
+                            {formatGbpBn(
+                              effectOf({ ...state.leverValues, ...optionOff(o.option, levers) }),
+                              1,
+                              true,
+                            )}
+                          </span>
                           <button
                             type="button"
                             className="btn"
-                            onClick={() => set(m.lever.code, m.lever.control.default)}
+                            onClick={() => setAll(optionOff(o.option, levers))}
                           >
                             Drop it
                           </button>
@@ -294,100 +323,47 @@ export function CompromisePage() {
                       </li>
                     );
                   })}
+                  {spending.map((m) => (
+                    <li key={m.lever.code} className="suggestion">
+                      <div>
+                        <strong>{m.lever.title}</strong>{' '}
+                        <span className="source">
+                          moved on the desk · {formatLeverValue(m.lever, value(m.lever))} · costs{' '}
+                          {formatGbpBn(m.costGbpm, 1)} in {targetYear}
+                          {delays[m.lever.code] ? ` · starts ${delays[m.lever.code]}` : ''}
+                        </span>
+                      </div>
+                      <div className="suggestion__act">
+                        <DelayControl
+                          lever={m.lever}
+                          delays={delays}
+                          policyYears={outcome.paths.policyYears}
+                          onChange={(year) => setDelay(m.lever.code, year)}
+                          savingFor={(next) =>
+                            effectOf(state.leverValues, { ...delays, [m.lever.code]: next })
+                          }
+                        />
+                        <button
+                          type="button"
+                          className="btn"
+                          onClick={() => set(m.lever.code, m.lever.control.default)}
+                        >
+                          Drop it
+                        </button>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               )}
               <p className="panel__hint">
+                <StepLink to="/budget/deliver">All the ways to deliver</StepLink> ·{' '}
                 <StepLink to="/budget/spending">Every budget</StepLink>
               </p>
             </section>
 
-            <section className="route doc" aria-labelledby="route-narrow">
-              <h2 id="route-narrow" className="section-label">
-                3 · Scale back a promise to the PM
-              </h2>
-              <Spoken
-                line={compromise.routes.narrow.line}
-                who={role(compromise.routes.narrow.adviser)}
-                tone="adviser"
-              />
-              {status.priorities.length === 0 ? (
-                <p className="panel__hint">You agreed no priorities to narrow.</p>
-              ) : (
-                <ul className="suggestions">
-                  {status.priorities
-                    .flatMap((p) => p.options.filter((o) => o.state !== 'off'))
-                    .map((o) => {
-                      const codes = Object.keys(o.option.values);
-                      const lever = codes.length === 1 ? byCode.get(codes[0]!) : undefined;
-                      const chosenValue = lever ? (o.option.values[lever.code] ?? 0) : 0;
-                      const narrowed = lever ? narrowedValue(lever, chosenValue) : null;
-                      const on = o.state === 'on';
-                      return (
-                        <li key={o.option.id} className="suggestion">
-                          <div>
-                            <strong>{o.option.title}</strong>{' '}
-                            <span className="source">
-                              {on ? 'in your package' : 'adjusted'}
-                              {lever ? ` · ${formatLeverValue(lever, value(lever))}` : ''}
-                              {lever && lever.control.kind !== 'toggle'
-                                ? ` of ${formatLeverValue(lever, chosenValue)}`
-                                : ''}
-                            </span>
-                          </div>
-                          <div className="suggestion__act">
-                            {lever && on && narrowed !== null ? (
-                              <>
-                                <span className="source">
-                                  to {formatLeverValue(lever, narrowed)}:{' '}
-                                  {formatGbpBn(
-                                    effectOf({ ...state.leverValues, [lever.code]: narrowed }),
-                                    1,
-                                    true,
-                                  )}
-                                </span>
-                                <button
-                                  type="button"
-                                  className="btn"
-                                  onClick={() => set(lever.code, narrowed)}
-                                >
-                                  Narrow it
-                                </button>
-                              </>
-                            ) : lever && on ? (
-                              <>
-                                <span className="source">
-                                  a toggle cannot be halved · off:{' '}
-                                  {formatGbpBn(
-                                    effectOf({
-                                      ...state.leverValues,
-                                      [lever.code]: lever.control.default,
-                                    }),
-                                    1,
-                                    true,
-                                  )}
-                                </span>
-                                <button
-                                  type="button"
-                                  className="btn"
-                                  onClick={() => set(lever.code, lever.control.default)}
-                                >
-                                  Switch it off
-                                </button>
-                              </>
-                            ) : (
-                              <span className="source">already scaled back on the desk</span>
-                            )}
-                          </div>
-                        </li>
-                      );
-                    })}
-                </ul>
-              )}
-            </section>
-
             <section className="route doc" aria-labelledby="route-target">
               <h2 id="route-target" className="section-label">
-                4 · Accept less headroom
+                3 · Accept less headroom
               </h2>
               <Spoken
                 line={compromise.routes.target.line}
@@ -419,7 +395,7 @@ export function CompromisePage() {
             {missed.length > 0 ? (
               <section className="route doc route--breach" aria-labelledby="route-breach">
                 <h2 id="route-breach" className="section-label">
-                  5 · Borrow, and say so
+                  4 · Borrow, and say so
                 </h2>
                 <Spoken
                   line={compromise.routes.breach.line}
@@ -525,5 +501,49 @@ export function CompromisePage() {
         </Beat>
       </Beats>
     </JourneyLayout>
+  );
+}
+
+/**
+ * A later start for one lever: the floor is the lever's own earliest start (ADR-0021), a delay
+ * can only push past it, and the figure beside it is what one more year would save.
+ */
+function DelayControl({
+  lever,
+  delays,
+  policyYears,
+  onChange,
+  savingFor,
+}: {
+  lever: Lever;
+  delays: Record<string, string>;
+  policyYears: readonly string[];
+  onChange: (year: string) => void;
+  savingFor: (nextYear: string) => number;
+}) {
+  const floor = effectiveStartYear(lever, { implementationYear: IMPLEMENTATION_YEAR });
+  const start = effectiveStartYear(lever, {
+    implementationYear: IMPLEMENTATION_YEAR,
+    implementationYearByCode: delays,
+  });
+  const years = delayOptions(policyYears, floor);
+  const next = delayOptions(policyYears, start)[0];
+  return (
+    <>
+      <label className="suggestion__delay">
+        <span className="sr-only">Start year for {lever.title}</span>
+        <select value={delays[lever.code] ?? ''} onChange={(e) => onChange(e.target.value)}>
+          <option value="">Starts {floor}</option>
+          {years.map((y) => (
+            <option key={y} value={y}>
+              Delay to {y}
+            </option>
+          ))}
+        </select>
+      </label>
+      {next ? (
+        <span className="source">a year later: {formatGbpBn(savingFor(next), 1, true)}</span>
+      ) : null}
+    </>
   );
 }

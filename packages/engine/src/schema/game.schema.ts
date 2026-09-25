@@ -372,16 +372,16 @@ export const interventionsFileSchema = z
 
 /**
  * What the advisers say beside each route out of a gap (stage 5): raise more, spend less or
- * later, scale back a promise to the PM, accept less headroom, or borrow and say so. One line per
- * route, in the voice of the adviser named; the breach assessment is the Permanent Secretary's and
- * quotes the Charter. Everything simulated, every fact sourced, no number authored.
+ * later (which since Phase 18 also narrows or drops a chosen option), accept less headroom, or
+ * borrow and say so. One line per route, in the voice of the adviser named; the breach
+ * assessment is the Permanent Secretary's and quotes the Charter. Everything simulated, every
+ * fact sourced, no number authored.
  */
 export const compromiseFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
   routes: z.strictObject({
     revenue: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     spending: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    narrow: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     target: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     breach: z.strictObject({
       adviser: slug,
