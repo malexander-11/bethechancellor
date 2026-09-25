@@ -45,9 +45,12 @@ describe('the beat and word budgets', () => {
   beforeEach(() => window.localStorage.removeItem('btc.workings.v1'));
 
   it('asks for at most twelve Continues across the whole journey', () => {
+    // The desk's two screens are side rooms with a game under way: no hand-off, so no Continue.
     const stages = [
       '/outlook',
       '/pm',
+      '/budget/deliver',
+      '/budget/afford',
       '/budget/taxes',
       '/budget/spending',
       '/forecast',
@@ -66,7 +69,7 @@ describe('the beat and word budgets', () => {
   });
 
   it('opens every stage with a hand-off of at most 180 visible words', () => {
-    for (const path of ['/pm', '/budget/taxes', '/budget/spending', '/forecast']) {
+    for (const path of ['/pm', '/budget/deliver', '/budget/afford', '/forecast']) {
       const view = at(`${path}?${BASE}&${GAME}`);
       const n = liveBeatWords();
       expect(n, `${path} opens with ${n} words`).toBeLessThanOrEqual(180);
@@ -74,7 +77,32 @@ describe('the beat and word budgets', () => {
     }
   });
 
-  it('keeps the working screens of the package inside a budget, whichever group is open', () => {
+  it('keeps the guided screens of the package inside a budget', () => {
+    // Three priorities with the most options between them (fourteen cards), each with its lead's
+    // line, the figure and its tags: the widest the ways to deliver can be (ADR-0022).
+    const widest =
+      'g=s.1_st.2_pl.adviser_hr.20_pr.cost-of-living+welfare-bill+homes-growth&M=rate.0.75_rpi.0.5';
+    const deliver = at(`/budget/deliver?${BASE}&${widest}`);
+    pressThrough();
+    const n = liveBeatWords();
+    expect(n, `/budget/deliver shows ${n} words`).toBeLessThanOrEqual(750);
+    expect(n).toBeGreaterThan(300);
+    deliver.unmount();
+    // The ways to afford: five who-pays tabs, each read on its own.
+    const afford = at(`/budget/afford?${BASE}&${GAME}`);
+    pressThrough();
+    for (const tab of screen.getAllByRole('tab')) {
+      fireEvent.click(tab);
+      const m = liveBeatWords();
+      expect(m, `/budget/afford shows ${m} words with ${tab.textContent} open`).toBeLessThanOrEqual(
+        500,
+      );
+      expect(m).toBeGreaterThan(100);
+    }
+    afford.unmount();
+  });
+
+  it('keeps the desk’s screens inside a budget, whichever group is open', () => {
     // The scorecard, the strip, the tabs, the open group with its ministers, the running list:
     // everything a player sees while they work, before any disclosure is opened.
     const limits = { '/budget/taxes': 500, '/budget/spending': 700 } as const;

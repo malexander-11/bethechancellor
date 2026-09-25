@@ -12,7 +12,10 @@ describe('the road through the game', () => {
     expect(enterable('deliver', game(1))).toBe(false);
     expect(enterable('deliver', game(2))).toBe(true);
     expect(enterable('afford', game(2))).toBe(true);
-    expect(stageIndex('afford')).toBe(stageIndex('taxes'));
+    // One stage, four screens: the shared link's `st.2` means all of them.
+    expect(stageIndex('afford')).toBe(stageIndex('deliver'));
+    expect(stageIndex('taxes')).toBe(stageIndex('deliver'));
+    expect(stageIndex('spending')).toBe(2);
     expect(enterable('forecast', game(2))).toBe(false);
     expect(enterable('forecast', game(3))).toBe(true);
     expect(enterable('compromise', game(3))).toBe(false);
@@ -38,7 +41,14 @@ describe('the road through the game', () => {
   });
 
   it('treats a link with no game as a sandbox: the desk and Budget day open, the story shut', () => {
-    for (const step of ['outlook', 'taxes', 'spending', 'budget-day'] as const) {
+    for (const step of [
+      'outlook',
+      'deliver',
+      'afford',
+      'taxes',
+      'spending',
+      'budget-day',
+    ] as const) {
       expect(enterable(step, undefined), step).toBe(true);
     }
     for (const step of ['pm', 'forecast', 'compromise', 'rabbit'] as const) {
@@ -50,7 +60,8 @@ describe('the road through the game', () => {
     expect(furthestStep(undefined)).toBe('outlook');
     expect(furthestStep(game(0))).toBe('outlook');
     expect(furthestStep(game(1))).toBe('pm');
-    expect(furthestStep(game(2))).toBe('taxes');
+    // Agreed with the PM: the package opens on its first guided screen, the ways to deliver.
+    expect(furthestStep(game(2))).toBe('deliver');
     expect(furthestStep(game(3))).toBe('forecast');
     expect(furthestStep(game(4))).toBe('compromise');
     expect(furthestStep(game(5))).toBe('budget-day');

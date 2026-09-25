@@ -4,14 +4,12 @@ import {
   formatPct,
   incidenceRows,
   interventionsFor,
-  pickOutcome,
   promiseBreaks,
-  stageIndex,
   type JourneyStep,
   type Lever,
 } from '@btc/engine';
-import { useMemo, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { AdviserBriefing } from '../components/AdviserBriefing';
 import { AttributionList } from '../components/AttributionList';
 import { Desk } from '../components/Desk';
@@ -23,14 +21,12 @@ import { LabelBadge } from '../components/LabelBadge';
 import { LeverControl, formatLeverValue, type RedLine } from '../components/LeverControl';
 import { MinisterLine } from '../components/MinisterLine';
 import { PathChart } from '../components/PathChart';
-import { PressSummary } from '../components/PressSummary';
 import { PresetPicker } from '../components/PresetPicker';
 import { Scorecard } from '../components/Scorecard';
 import {
   briefingsFor,
   budget2025NetGbpm,
   context,
-  draws,
   groupLevers,
   incidence,
   interventions,
@@ -63,9 +59,11 @@ type Tab = 'taxes' | 'spending';
 const DESK_ORDER: readonly Tab[] = ['taxes', 'spending'];
 
 /**
- * The two screens of the package: what each is called, whose briefing opens it, and where it
- * leads. They come one after another, by the button at the foot of the page, with a way back but
- * no tab bar: one road (ADR-0014). The letters' screen has gone; its levers sit here by side
+ * The two screens of the desk: what each is called, whose briefing opens it, and where it leads.
+ * In the sandbox they come one after another, by the button at the foot of the page, with a way
+ * back but no tab bar: one road (ADR-0014). With a game under way they are side rooms off the
+ * guided screens (ADR-0022): the taxes behind the ways to afford, the spending behind the ways
+ * to deliver, each with one way back. The letters' screen has gone; its levers sit here by side
  * (ADR-0017).
  */
 const TABS: Record<
@@ -81,6 +79,8 @@ const TABS: Record<
     /** The next screen of the package; the last screen leads onward, wherever the game has got to. */
     next?: { to: string; label: string };
     back?: { to: string; label: string };
+    /** With a game: the guided screen this desk screen is the details of. */
+    room: { to: string; label: string };
   }
 > = {
   taxes: {
@@ -91,6 +91,7 @@ const TABS: Record<
     work: 'Set the taxes',
     briefingStep: 'taxes',
     next: { to: '/budget/spending', label: 'Next: the spending' },
+    room: { to: '/budget/afford', label: 'Back to the ways to afford it' },
   },
   spending: {
     part: 'the spending',
@@ -100,6 +101,7 @@ const TABS: Record<
     work: 'Set the spending',
     briefingStep: 'spending',
     back: { to: '/budget/taxes', label: 'Back to the taxes' },
+    room: { to: '/budget/deliver', label: 'Back to the ways to deliver' },
   },
 };
 
@@ -107,23 +109,41 @@ function isTab(tab: string | undefined): tab is Tab {
   return tab === 'taxes' || tab === 'spending';
 }
 
+/** What a link into the desk may carry in the router's state: which group to open, and where from. */
+interface DeskState {
+  group?: string;
+  from?: 'deliver' | 'afford';
+}
+
 /**
- * Stage 3: the package. Two screens of lever groups, and, when a game is under way, the people
- * in the room with you: ministers on the spending groups, advisers who remember what you agreed in
- * Downing Street, the summary strip keeping score, and the Political Adviser's press summary
- * planting the clue the seeded draw chose.
+ * Stage 3: the desk. Two screens of lever groups, and, when a game is under way, the people in the
+ * room with you: ministers on the spending groups, advisers who remember what you agreed in
+ * Downing Street, the summary strip keeping score, and the options you chose pinned to the top of
+ * their groups. With a game the desk is a side room off the guided screens, one link away and
+ * never the default (ADR-0022): one beat, the briefing folded, a way back and no onward flow.
+ * Without one it is the sandbox it always was, two screens in sequence leading to Budget day.
  */
 export function BudgetPage() {
   const { tab } = useParams();
+  const location = useLocation();
   const { state, dispatch, outcome, query } = useBudget();
   const [copied, setCopied] = useState(false);
-  // Which group is open is a fact about the screen, not about the Budget, so it stays out of the
-  // URL. Keyed by tab, so coming back to taxes finds the group you left open.
-  const [openGroups, setOpenGroups] = useState<Record<string, string>>({});
-  const workings = useWorkings();
   // Every hook runs before any early return: a redirect from one tab to another re-renders this
   // same component, and the hook order has to hold across it.
   const step: Tab = isTab(tab) ? tab : 'taxes';
+  const arrived = (location.state ?? null) as DeskState | null;
+  // Which group is open is a fact about the screen, not about the Budget, so it stays out of the
+  // URL. Keyed by tab, so coming back to taxes finds the group you left open. A link from a guided
+  // screen names the group to open ("Adjust the details"); it travels in the router's state, not
+  // the query string, which belongs to the Budget.
+  const [openGroups, setOpenGroups] = useState<Record<string, string>>(() =>
+    arrived?.group ? { [step]: arrived.group } : {},
+  );
+  const arrivedGroup = arrived?.group;
+  useEffect(() => {
+    if (arrivedGroup) setOpenGroups((f) => ({ ...f, [step]: arrivedGroup }));
+  }, [arrivedGroup, step, location.key]);
+  const workings = useWorkings();
   const items = step === 'taxes' ? leversByCategory.tax : leversByCategory.spend;
   const groups = useMemo(() => groupLevers(items), [items]);
   // A game that has not yet left Downing Street is sent back there; a sandbox walks straight in.
@@ -196,30 +216,22 @@ export function BudgetPage() {
             false,
         })),
     );
-  const clue = game && step === 'spending' ? pickOutcome(game.seed, draws.outcomes) : null;
   // Who pays and who benefits, by the tags each lever carries, in the target year.
   const { paid, benefited } = incidenceRows(outcome, levers, incidence, targetYear);
 
-  /**
-   * Leaving the package for the first time: remember it as it stood before the OBR spoke,
-   * assumptions included, so the forecast can be taken apart and the close can diff against it.
-   * Coming back afterwards changes the package, not the record of what it was.
-   */
-  const leaveDesk = () => {
-    if (!game) return;
-    if (!game.revealed) dispatch({ type: 'setSnapshot', values: { ...state.leverValues } });
-    dispatch({
-      type: 'updateGame',
-      patch: { reached: Math.max(game.reached, stageIndex('forecast')) },
-    });
-  };
-  // Where the package leads depends on how far the game has got: to the OBR's envelope, back to the
-  // compromises once it is open, or straight to Budget day for a sandbox with no game.
-  const onward = !game
-    ? { to: '/budget-day', label: 'Go to Budget day' }
-    : game.revealed
-      ? { to: '/compromise', label: 'Back to the compromises' }
-      : { to: '/forecast', label: 'Next: the OBR’s forecast' };
+  // Where the desk leads. A sandbox walks its two screens in sequence and on to Budget day. With a
+  // game the desk is a side room: the one link goes back to the guided screen you came from, or to
+  // the one these levers belong to, or to the compromises once the envelope is open.
+  const forward = game ? null : (spec.next ?? { to: '/budget-day', label: 'Go to Budget day' });
+  const back = game
+    ? arrived?.from === 'deliver'
+      ? TABS.spending.room
+      : arrived?.from === 'afford'
+        ? TABS.taxes.room
+        : game.revealed
+          ? { to: '/compromise', label: 'Back to the compromises' }
+          : spec.room
+    : spec.back;
 
   async function copyLink() {
     const url = `${window.location.origin}/budget-day?${query}`;
@@ -241,23 +253,36 @@ export function BudgetPage() {
     ...list.filter((l) => !chosen.has(l.code)),
   ];
 
+  const briefing = briefingsFor(spec.briefingStep).map((b) => (
+    <AdviserBriefing key={b.id} briefing={b} />
+  ));
+
   return (
     <JourneyLayout
       step={step}
       part={{
-        noun: 'Part',
+        noun: game ? 'Details' : 'Part',
         index: DESK_ORDER.indexOf(step) + 1,
         total: DESK_ORDER.length,
         label: spec.part,
       }}
     >
       <Beats step={step}>
-        <Beat title={spec.arrives} continueLabel={spec.open} foldWhenPast={spec.folded}>
-          {briefingsFor(spec.briefingStep).map((b) => (
-            <AdviserBriefing key={b.id} briefing={b} />
-          ))}
-        </Beat>
+        {game ? null : (
+          <Beat title={spec.arrives} continueLabel={spec.open} foldWhenPast={spec.folded}>
+            {briefing}
+          </Beat>
+        )}
         <Beat title={spec.work}>
+          {game ? (
+            // A side room has no hand-off: the briefing is here, folded, one click away.
+            <details className="panel details">
+              <summary>
+                <span className="details__title">{spec.folded}</span>
+              </summary>
+              {briefing}
+            </details>
+          ) : null}
           <Scorecard
             outcome={outcome}
             typicalErrorGbpm={typicalErrorGbpm}
@@ -278,7 +303,6 @@ export function BudgetPage() {
             · <StepLink to="/outlook">change</StepLink>
           </p>
           <Interventions items={advice} />
-          {clue ? <PressSummary outcome={clue} /> : null}
 
           <div className="layout">
             <div className="desk-column">
@@ -323,16 +347,14 @@ export function BudgetPage() {
                 )}
               </Desk>
               <p className="hero-start__actions">
-                <StepLink
-                  to={spec.next?.to ?? onward.to}
-                  className="btn btn--primary"
-                  onClick={spec.next ? undefined : leaveDesk}
-                >
-                  {spec.next?.label ?? onward.label}
-                </StepLink>
-                {spec.back ? (
-                  <StepLink to={spec.back.to} className="btn">
-                    {spec.back.label}
+                {forward ? (
+                  <StepLink to={forward.to} className="btn btn--primary">
+                    {forward.label}
+                  </StepLink>
+                ) : null}
+                {back ? (
+                  <StepLink to={back.to} className={forward ? 'btn' : 'btn btn--primary'}>
+                    {back.label}
                   </StepLink>
                 ) : null}
               </p>

@@ -30,6 +30,8 @@ describe('budget state', () => {
     for (const path of [
       '/',
       '/assumptions',
+      '/budget/deliver',
+      '/budget/afford',
       '/budget/taxes',
       '/budget/spending',
       '/budget-day',

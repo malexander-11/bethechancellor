@@ -4,12 +4,12 @@ import { useBudget } from '../state/budget';
 
 type Stop = 'start' | 'outlook' | 'pm' | 'budget' | 'forecast' | 'rabbit' | 'budget-day';
 
-/** The seven stops, in order. The package is one stop with three screens; so are the forecast and the sums. */
+/** The seven stops, in order. The package is one stop with four screens; the forecast and the sums are one too. */
 const STOPS: ReadonlyArray<{ id: Stop; label: string; to: string; step: JourneyStep }> = [
   { id: 'start', label: 'The appointment', to: '/', step: 'start' },
   { id: 'outlook', label: 'The outlook', to: '/outlook', step: 'outlook' },
   { id: 'pm', label: 'The PM', to: '/pm', step: 'pm' },
-  { id: 'budget', label: 'The package', to: '/budget/taxes', step: 'taxes' },
+  { id: 'budget', label: 'The package', to: '/budget/deliver', step: 'deliver' },
   { id: 'forecast', label: 'The forecast', to: '/forecast', step: 'forecast' },
   { id: 'rabbit', label: 'The rabbit', to: '/rabbit', step: 'rabbit' },
   { id: 'budget-day', label: 'Budget day', to: '/budget-day', step: 'budget-day' },

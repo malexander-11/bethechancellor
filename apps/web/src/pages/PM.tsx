@@ -38,7 +38,7 @@ export function PMPage() {
   const agree = () => {
     dispatch({
       type: 'updateGame',
-      patch: { reached: Math.max(game.reached, stageIndex('taxes')) },
+      patch: { reached: Math.max(game.reached, stageIndex('deliver')) },
     });
   };
 
@@ -109,7 +109,7 @@ export function PMPage() {
             Every option that crosses one says so before you choose it.
           </p>
           <p className="hero-start__actions">
-            <StepLink to="/budget/taxes" className="btn btn--primary" onClick={agree}>
+            <StepLink to="/budget/deliver" className="btn btn--primary" onClick={agree}>
               Agreed. To the options
             </StepLink>
           </p>

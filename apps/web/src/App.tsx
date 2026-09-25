@@ -4,9 +4,11 @@ import { BeatsProvider } from './journey/beats';
 import { WorkingsProvider, useWorkingsSwitch } from './journey/workings';
 import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
+import { AffordPage } from './pages/Afford';
 import { BudgetPage } from './pages/Budget';
 import { BudgetDayPage } from './pages/BudgetDay';
 import { CompromisePage } from './pages/Compromise';
+import { DeliverPage } from './pages/Deliver';
 import { ForecastPage } from './pages/Forecast';
 import { MethodologyPage } from './pages/Methodology';
 import { OutlookPage } from './pages/Outlook';
@@ -99,7 +101,10 @@ function Shell() {
           <Route path="/outlook" element={<OutlookPage />} />
           <Route path="/assumptions" element={<RedirectKeepingQuery to="/outlook" />} />
           <Route path="/pm" element={<PMPage />} />
-          <Route path="/budget" element={<RedirectKeepingQuery to="/budget/taxes" />} />
+          <Route path="/budget" element={<RedirectKeepingQuery to="/budget/deliver" />} />
+          {/* The two guided screens of the package; the desk's two screens catch everything else. */}
+          <Route path="/budget/deliver" element={<DeliverPage />} />
+          <Route path="/budget/afford" element={<AffordPage />} />
           <Route path="/budget/:tab" element={<BudgetPage />} />
           <Route path="/recommendations" element={<RedirectKeepingQuery to="/budget/spending" />} />
           <Route path="/forecast" element={<ForecastPage />} />
@@ -121,9 +126,9 @@ export function App() {
   return (
     <BudgetProvider>
       {/*
-        Beat progress lives above the routes, because /budget/taxes and /budget/spending are two
-        routes but one journey step: keeping it in the page would replay the adviser's hand-off
-        every time you switched tab. The workings switch sits beside it for the same reason: one
+        Beat progress lives above the routes, because the package's four screens are four routes
+        but one journey step: keeping it in the page would replay the adviser's hand-off every
+        time you switched screen. The workings switch sits beside it for the same reason: one
         preference for the whole journey, read by every citation on every page.
       */}
       <BeatsProvider>

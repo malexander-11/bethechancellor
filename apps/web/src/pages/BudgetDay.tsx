@@ -421,7 +421,7 @@ export function BudgetDayPage() {
             <span role="status" className="toolbar__note">
               {copied ? 'Link copied' : ''}
             </span>
-            <StepLink to="/budget/taxes" className="btn">
+            <StepLink to="/budget/deliver" className="btn">
               Back to the package
             </StepLink>
             <button

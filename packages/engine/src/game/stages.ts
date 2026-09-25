@@ -2,14 +2,17 @@ import type { JourneyStep } from '../types/data.js';
 import type { GamePermalink } from '../types/engine.js';
 
 /**
- * The seven stages of a playthrough, in order. Taxes and spending are one stage with two screens,
- * so the package's two step ids map to one index. `assumptions` is the Phase 4 name that still
- * appears in authored data.
+ * The seven stages of a playthrough, in order. The package is one stage with four screens: the
+ * two guided ones (ways to deliver, ways to afford) and the two desk screens behind them (taxes,
+ * spending), so all four step ids map to one index. The index is what a shared link carries
+ * (`st.N`), so it never changes; only the name of the canonical screen has, from `taxes` to
+ * `deliver` (Phase 18, ADR-0022). `assumptions` is the Phase 4 name that still appears in
+ * authored data.
  */
 export const GAME_STAGES: readonly JourneyStep[] = [
   'outlook',
   'pm',
-  'taxes',
+  'deliver',
   'forecast',
   'compromise',
   'rabbit',
@@ -20,10 +23,10 @@ export const FINAL_STAGE = GAME_STAGES.length - 1;
 
 const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   assumptions: 'outlook',
-  spending: 'taxes',
-  // The guided screens of the package (Phase 18): the same stage as the desk.
-  deliver: 'taxes',
-  afford: 'taxes',
+  // The package's other three screens: the second guided screen and the two desk screens.
+  afford: 'deliver',
+  taxes: 'deliver',
+  spending: 'deliver',
 };
 
 /** Where a step sits in the playthrough; the start page is before everything, at −1. */
@@ -31,13 +34,17 @@ export function stageIndex(step: JourneyStep): number {
   return GAME_STAGES.indexOf(ALIASES[step] ?? step);
 }
 
-/** The canonical stage a step belongs to: the package's two screens are `taxes`, and so on. */
+/** The canonical stage a step belongs to: the package's four screens are `deliver`, and so on. */
 function canonical(step: JourneyStep): JourneyStep {
   return ALIASES[step] ?? step;
 }
 
-/** With no game the package and Budget day are a sandbox; the stages that tell the story are not. */
-const SANDBOX_OPEN: ReadonlySet<JourneyStep> = new Set(['outlook', 'taxes', 'budget-day']);
+/**
+ * With no game the package and Budget day are a sandbox; the stages that tell the story are not.
+ * The guided screens need a game to have anything to show, so they send a sandbox on to the desk
+ * themselves; the stage stays open so the redirect has somewhere to land.
+ */
+const SANDBOX_OPEN: ReadonlySet<JourneyStep> = new Set(['outlook', 'deliver', 'budget-day']);
 
 /**
  * Whether a step may be opened, given how far the game has got. The road runs one way: a stage is

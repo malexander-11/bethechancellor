@@ -27,8 +27,12 @@ interface DeskProps {
   summaryYear: string;
   open: string;
   onOpen: (name: string) => void;
+  /** What a tab counts: levers by default; the ways to afford count options, and say "chosen". */
+  nouns?: { item: string; items: string; changed: string };
   children: (group: LeverGroup) => React.ReactNode;
 }
+
+const LEVER_NOUNS = { item: 'lever', items: 'levers', changed: 'changed' };
 
 /** What this group has done to borrowing in the target year, for the tag on its tab. */
 function groupEffect(group: LeverGroup, effects: LeverEffect[], year: string): number {
@@ -44,7 +48,16 @@ function groupEffect(group: LeverGroup, effects: LeverEffect[], year: string): n
   return total;
 }
 
-export function Desk({ groups, moved, effects, summaryYear, open, onOpen, children }: DeskProps) {
+export function Desk({
+  groups,
+  moved,
+  effects,
+  summaryYear,
+  open,
+  onOpen,
+  nouns = LEVER_NOUNS,
+  children,
+}: DeskProps) {
   const names = useMemo(() => groups.map((g) => g.name), [groups]);
   const current = names.includes(open) ? open : (names[0] ?? '');
   const [focused, setFocused] = useState(current);
@@ -109,8 +122,8 @@ export function Desk({ groups, moved, effects, summaryYear, open, onOpen, childr
               {/* Visible text, so the changed count is already in the tab's accessible name. */}
               <span className="group-tab__count">
                 {changed > 0
-                  ? `${changed} changed`
-                  : `${group.levers.length} ${group.levers.length === 1 ? 'lever' : 'levers'}`}
+                  ? `${changed} ${nouns.changed}`
+                  : `${group.levers.length} ${group.levers.length === 1 ? nouns.item : nouns.items}`}
               </span>
               {changed > 0 ? (
                 <span className="tag--treasury">

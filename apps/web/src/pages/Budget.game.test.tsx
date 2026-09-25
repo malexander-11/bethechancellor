@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
@@ -106,24 +106,24 @@ describe('the package, with a game under way', () => {
     expect(texts[0]).toMatch(/tax lock/);
   });
 
-  it('plants the press summary the seed chose, badged simulated and with no masthead', () => {
-    at(`/budget/spending?${BASE}&${GAME}`);
-    const note = screen.getByRole('complementary', { name: /press summary/ });
-    expect(within(note).getByText('Simulated')).toBeInTheDocument();
-    expect(within(note).getByText(/Political Adviser · the morning papers/)).toBeInTheDocument();
-    // Seed 7 draws a particular outcome; whichever it is, the headline is one of the five clues.
-    expect(within(note).getByRole('strong').textContent?.length).toBeGreaterThan(10);
-  });
-
-  it('takes a snapshot of the package on the way out, and moves the game on', async () => {
-    at(`/budget/spending?${BASE}&${GAME}&L=moj.10_ufsm.1`);
-    fireEvent.click(screen.getByRole('link', { name: /the OBR’s forecast/ }));
-    await waitFor(() => {
-      const params = new URLSearchParams(window.location.search);
-      expect(params.get('S')).toMatch(/moj\.10/);
-      expect(params.get('S')).toMatch(/ufsm\.1/);
-      expect(params.get('g')).toMatch(/st\.3/);
-    });
+  it('is a side room with a game under way: one beat, the briefing folded, one way back', () => {
+    // The desk is one link away from the guided screens and never the default (ADR-0022).
+    const spending = at(`/budget/spending?${BASE}&${GAME}`);
+    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
+    expect(screen.getByText(/Details 2 of 2/)).toBeInTheDocument();
+    expect(screen.getByText('The Director of Public Spending’s briefing')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to the ways to deliver' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /Next: the/ })).toBeNull();
+    // The press summary and the way out to the forecast live on the ways to afford now.
+    expect(screen.queryByRole('complementary', { name: /press summary/ })).toBeNull();
+    expect(screen.queryByRole('link', { name: /the OBR’s forecast/ })).toBeNull();
+    spending.unmount();
+    const taxes = at(`/budget/taxes?${BASE}&${GAME}`);
+    expect(screen.getByRole('link', { name: 'Back to the ways to afford it' })).toBeInTheDocument();
+    taxes.unmount();
+    // Once the envelope is open, the way back is to the compromises.
+    at(`/budget/taxes?${BASE}&g=s.7_st.4_pl.adviser_hr.20_pr.defence_rv.1`);
+    expect(screen.getByRole('link', { name: 'Back to the compromises' })).toBeInTheDocument();
   });
 
   it('shows none of this on a sandbox Budget with no game', () => {
