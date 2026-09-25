@@ -1,0 +1,863 @@
+{
+  "schemaVersion": 1,
+  "deliver": [
+    {
+      "id": "freeze-early",
+      "priority": "cost-of-living",
+      "title": "End the threshold freeze early",
+      "line": {
+        "text": "A tax cut for every basic-rate payer, but one nobody sees on a payslip until 2028: the freeze it undoes has not happened yet.",
+        "short": "A tax cut for every basic-rate payer, but nobody sees it on a payslip until 2028.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-speech"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "rvfrz": 1
+      }
+    },
+    {
+      "id": "vat-off-gas",
+      "priority": "cost-of-living",
+      "title": "Take VAT off gas as well as electricity",
+      "line": {
+        "text": "Gas to 0%, as electricity already is since October. HMRC’s relief figures put the cost at about £0.8bn a year, before anyone changes their behaviour.",
+        "short": "Gas to 0%, as electricity already is: about £0.8bn a year on HMRC’s figures.",
+        "sources": [
+          {
+            "sourceId": "hmrc-tax-reliefs-2026-01"
+          },
+          {
+            "sourceId": "govuk-vat-electricity-cut-2026"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "vatgas": 1
+      }
+    },
+    {
+      "id": "free-school-meals",
+      "priority": "cost-of-living",
+      "title": "Free school meals for every child",
+      "line": {
+        "text": "It funds a place, not a meal eaten: a fifth of pupils already entitled did not take one on census day. England only; consequentials follow.",
+        "short": "It funds a place, not a meal eaten; England only, and consequentials follow.",
+        "sources": [
+          {
+            "sourceId": "dfe-school-pupils-2025-26"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "ufsm": 1
+      }
+    },
+    {
+      "id": "bus-cap",
+      "priority": "cost-of-living",
+      "title": "Keep the £2 bus fare cap running",
+      "line": {
+        "text": "£400m buys a year of the cap at today's fare gap, outside London only, and the operators' costs keep rising.",
+        "short": "£400m buys a year of the cap outside London; the operators’ costs keep rising.",
+        "sources": [
+          {
+            "sourceId": "govuk-bus-fare-cap-2027"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "bus2": 1
+      }
+    },
+    {
+      "id": "fuel-duty-cut",
+      "priority": "cost-of-living",
+      "title": "Cut fuel duty by 10%",
+      "line": {
+        "text": "Fuel duty has not risen since 2011. A cut is felt at the pump within days, and it is paid for every year after.",
+        "short": "Felt at the pump within days, and paid for every year after.",
+        "sources": [
+          {
+            "sourceId": "govuk-fuel-duty-rates"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "fuel": -10
+      }
+    },
+    {
+      "id": "health-above-sr",
+      "priority": "nhs",
+      "title": "Health above the Spending Review path",
+      "line": {
+        "text": "Waiting lists fall with appointments, and appointments need staff who take years to train; money reaches the list slowly.",
+        "short": "Waiting lists fall with appointments, and appointments need staff who take years to train.",
+        "sources": [
+          {
+            "sourceId": "govuk-elective-reform-plan-2025"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "dhsc": 3
+      }
+    },
+    {
+      "id": "care-downpayment",
+      "priority": "nhs",
+      "title": "A down-payment on the National Care Service",
+      "line": {
+        "text": "Two million adults have unmet care needs. A down-payment funds pay before the Casey review reports; it is not yet a service.",
+        "short": "Two million adults have unmet care needs; this funds pay before the Casey review, not yet a service.",
+        "sources": [
+          {
+            "sourceId": "no10-social-care-speech-2026-07-29"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "mhclg": 5
+      }
+    },
+    {
+      "id": "drop-efficiencies",
+      "priority": "nhs",
+      "title": "Drop the extra efficiency savings from 2028-29",
+      "line": {
+        "text": "The settlements assume £14 billion of efficiencies the OBR calls a risk. Dropping them protects every department’s budget from 2028-29, and health’s is the largest of them; it buys the same output at a higher price.",
+        "short": "Drops savings the OBR called a risk, for every department; health’s budget is the largest.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "rveff": 1
+      }
+    },
+    {
+      "id": "dip-gap",
+      "priority": "defence",
+      "title": "Fund the Defence Investment Plan’s gap",
+      "line": {
+        "text": "Money is not capability: equipment programmes take years, and the plan is mostly equipment. But the commitment is already published.",
+        "short": "Money is not capability: equipment programmes take years. But the commitment is already published.",
+        "sources": [
+          {
+            "sourceId": "govuk-dip-funding-explainer"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "dip47": 1
+      }
+    },
+    {
+      "id": "three-per-cent-now",
+      "priority": "defence",
+      "title": "Defence at 3% of GDP now, not in 2030-31",
+      "line": {
+        "text": "Three per cent now rather than at the end of the forecast: that is the difference between a plan and a promise, and every allied capital will read it. The bill front-loads and falls away as the OBR's own path catches up.",
+        "short": "Three per cent now, not later. The bill front-loads and falls away as the OBR’s path catches up.",
+        "sources": [
+          {
+            "sourceId": "govuk-dip-funding-explainer"
+          },
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.15"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "def3": 1
+      }
+    },
+    {
+      "id": "defence-uplift",
+      "priority": "defence",
+      "title": "Defence day-to-day budget up 5%",
+      "line": {
+        "text": "Day-to-day money pays people and keeps kit running; it does not buy the submarines, which are capital.",
+        "short": "Day-to-day money pays people and keeps kit running; it does not buy the submarines.",
+        "sources": [
+          {
+            "sourceId": "govuk-submarine-investment-2026-07-30"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "mod": 5
+      }
+    },
+    {
+      "id": "send-settlement",
+      "priority": "schools-send",
+      "title": "A special needs settlement",
+      "line": {
+        "text": "43% of councils face deficits near or beyond their reserves by March 2026. Money closes the deficit; it does not slow the 12.5% a year rise in plans.",
+        "short": "Closes council deficits the NAO puts at £4.3bn to £4.9bn; it does not slow the rise in plans.",
+        "sources": [
+          {
+            "sourceId": "nao-send-2024"
+          },
+          {
+            "sourceId": "dfe-ehcp-2026"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "dfe": 5
+      }
+    },
+    {
+      "id": "plan2-threshold",
+      "priority": "schools-send",
+      "title": "Let the student loan repayment threshold rise again",
+      "line": {
+        "text": "Thank you. A frozen threshold is a tax rise on graduates and nobody else, and the Treasury's own note calls the repayment forecasts inherently uncertain. Letting it rise again costs £355 million in 2029-30 on the Treasury's figures.",
+        "short": "A frozen threshold is a tax rise on graduates alone. Letting it rise costs £355 million in 2029-30.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-policy-costings",
+            "page": "43"
+          },
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 48"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "rvplan2": 1
+      }
+    },
+    {
+      "id": "ai-retraining",
+      "priority": "schools-send",
+      "title": "An AI retraining programme",
+      "line": {
+        "text": "A budget, not a costing: whether £1bn buys a programme that works is a delivery question, not a fiscal one.",
+        "short": "A budget, not a costing: whether £1bn buys a programme that works is a delivery question.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "airet": 1
+      }
+    },
+    {
+      "id": "invest-push",
+      "priority": "homes-growth",
+      "title": "Investment push",
+      "line": {
+        "text": "Capital scores against the debt rule, not the stability rule, and departments underspent their capital budgets by £9.7bn last year.",
+        "short": "Counts against the debt rule, not the stability rule; departments underspent capital by £9.7bn last year.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "cdel": 10
+      }
+    },
+    {
+      "id": "council-homes",
+      "priority": "homes-growth",
+      "title": "More council and social rent homes",
+      "line": {
+        "text": "Land, planning and builder capacity bind before money does; the programme's own homes arrive over a decade.",
+        "short": "Land, planning and builder capacity bind before money does; the homes arrive over a decade.",
+        "sources": [
+          {
+            "sourceId": "mhclg-sahp-2026-2036"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "socrent": 1
+      }
+    },
+    {
+      "id": "devolution-downpayment",
+      "priority": "homes-growth",
+      "title": "A fiscal-devolution down-payment",
+      "line": {
+        "text": "Two-thirds of this line is the devolved block grants; a down-payment here reaches Scotland, Wales and Northern Ireland as well as the English regions.",
+        "short": "Two-thirds of this line is the block grants: it reaches the nations as well as the English regions.",
+        "sources": [
+          {
+            "sourceId": "hmt-sr25-del-tables"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "otherd": 2
+      }
+    },
+    {
+      "id": "business-rates-cut",
+      "priority": "homes-growth",
+      "title": "Cut business rates by 5%",
+      "line": {
+        "text": "Every business rates bill down 5%, about £2bn a year on the OBR’s receipts line. That line includes the devolved administrations’ rates, so the cut reaches further than England’s high streets.",
+        "short": "Every bill down 5%, about £2bn a year; the OBR line includes the devolved administrations’ rates.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "brates": -5
+      }
+    },
+    {
+      "id": "uc-floor",
+      "priority": "families",
+      "title": "A protected floor in Universal Credit",
+      "line": {
+        "text": "You have set the floor. JRF puts the cost at £680 million rising to £760 million by 2029-30; the card grows the first year with the OBR’s universal credit line and lands a little under that. Inside the welfare cap.",
+        "short": "The floor is set. JRF says £680 million rising to £760 million; the card lands under it.",
+        "sources": [
+          {
+            "sourceId": "jrf-uc-floor-2026",
+            "quote": "The cost rises to £760 million in 2029/30"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "ucfloor": 1
+      }
+    },
+    {
+      "id": "child-tax-allowance",
+      "priority": "families",
+      "title": "A child tax allowance for under-fives",
+      "line": {
+        "text": "Onward’s design: an allowance for families with children under five, costing £4.8bn a year from 2028-29 once the systems exist. It sits beside child benefit and its charge rather than replacing them.",
+        "short": "Onward’s allowance for families with under-fives: £4.8bn a year from 2028-29.",
+        "sources": [
+          {
+            "sourceId": "onward-family-support-2026"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "cta": 1
+      }
+    },
+    {
+      "id": "relink-housing-support",
+      "priority": "families",
+      "title": "Relink housing support to local rents",
+      "line": {
+        "text": "You have relinked it. The £2 billion is the Resolution Foundation’s 2029-30 figure; the true cost starts lower and keeps rising with rents, and some of it reaches landlords. It sits inside the welfare cap.",
+        "short": "Relinked. The cost starts lower, rises with rents, and some reaches landlords. Inside the cap.",
+        "sources": [
+          {
+            "sourceId": "rf-saving-private-renters-2026",
+            "quote": "only a small part leaks into higher rents"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "lha30": 1
+      }
+    },
+    {
+      "id": "uc-up",
+      "priority": "families",
+      "title": "Universal credit up 2%",
+      "line": {
+        "text": "Every pound here reaches the poorest households first. That is what a child poverty strategy costs.",
+        "sources": [
+          {
+            "sourceId": "labour-manifesto-2024-opportunity"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "wuc": 2
+      }
+    },
+    {
+      "id": "prisons",
+      "priority": "safer-streets",
+      "title": "A Justice uplift for prison capacity",
+      "line": {
+        "text": "Prison places take years to build. Money now buys staff, maintenance and the running cost of the sentencing changes the PM has already announced.",
+        "short": "Prison places take years to build; money now buys staff, maintenance and the sentencing changes’ running costs.",
+        "sources": [
+          {
+            "sourceId": "no10-commons-statement-2026-09-01"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "moj": 10
+      }
+    },
+    {
+      "id": "borders",
+      "priority": "safer-streets",
+      "title": "A Home Office uplift",
+      "line": {
+        "text": "Supporting asylum seekers cost £4.0bn in 2024-25; a settlement that falls in real terms leaves that bill to be met from elsewhere in the department.",
+        "short": "Asylum support cost £4.0bn in 2024-25; a falling settlement leaves that bill to the rest of the department.",
+        "sources": [
+          {
+            "sourceId": "nao-asylum-system-2025"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "home": 5
+      }
+    },
+    {
+      "id": "mental-health-reset",
+      "priority": "welfare-bill",
+      "title": "Withdraw PIP and UC health for milder mental-health conditions",
+      "line": {
+        "text": "You have taken the CSJ route. The £6.4 billion net is a think tank’s static figure for 2029-30; it needs an Act, a reassessment programme and a wait for the Timms review, and the savings from the last eligibility reform did not arrive. The OBR would score it down, and this game’s harsher forecasts do.",
+        "short": "Taken. A static think-tank figure needing an Act and reassessments; the last such reform missed its savings.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.13"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "csjmh": 1
+      }
+    },
+    {
+      "id": "pip-changes",
+      "priority": "welfare-bill",
+      "title": "Proceed with the 2025 PIP changes",
+      "line": {
+        "text": "You are taking PIP from people who qualify for it today. The department’s own evidence says even large reductions in new awards leave the caseload growing; the OBR says the last eligibility change did not deliver its savings.",
+        "short": "This takes PIP from people who qualify today, and the last eligibility change did not deliver its savings.",
+        "sources": [
+          {
+            "sourceId": "dwp-timms-review-evidence-pack",
+            "quote": "even with quite large reductions in new awards to PIP, there would still be considerable growth in caseload and spending over the next few years"
+          },
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.13"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "rvpip": 1
+      }
+    },
+    {
+      "id": "two-child-limit",
+      "priority": "welfare-bill",
+      "title": "Reinstate the two-child limit",
+      "line": {
+        "text": "Reinstating the limit puts 450,000 children back below the line on the Treasury’s own figure, for about £3 billion a year, concentrated on larger low-income families.",
+        "short": "Reinstating the limit puts 450,000 children back below the line, for about £3 billion a year.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-document"
+          },
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 6"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "rv2ch": 1
+      }
+    },
+    {
+      "id": "unemployment-insurance-limit",
+      "priority": "welfare-bill",
+      "title": "Time-limit the new unemployment insurance to six months",
+      "line": {
+        "text": "You have set the limit at six months. The IFS’s £1.4 billion is a steady-state figure after transitional protections expire, so the first years save less, and some of those timed out will claim universal credit instead. Whether it counts inside the welfare cap depends on how the benefit is classified.",
+        "short": "Six months it is. The £1.4 billion arrives after transitional protections; some claim universal credit instead.",
+        "sources": [
+          {
+            "sourceId": "ifs-green-budget-2025",
+            "quote": "after any transitional protections had expired"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "uitime": 1
+      }
+    },
+    {
+      "id": "smoothed-earnings-link",
+      "priority": "welfare-bill",
+      "title": "Replace the triple lock with a smoothed earnings link",
+      "line": {
+        "text": "You have replaced the triple lock. The saving is the Resolution Foundation’s and depends on earnings growth staying below 2.5%; it is net of the extra means-tested benefits and lower income tax that follow. Every pensioner is a little worse off each year, and the promise is broken.",
+        "short": "The lock is replaced. The saving needs earnings below 2.5%. Every pensioner loses a little each year.",
+        "sources": [
+          {
+            "sourceId": "rf-what-a-ratchet-2026",
+            "quote": "£199.65 per week in 2029-30, compared to £200.95 with triple lock uprating"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "pensmth": 1
+      }
+    }
+  ],
+  "afford": [
+    {
+      "id": "hscl",
+      "values": {
+        "hscl": 1
+      }
+    },
+    {
+      "id": "itbr",
+      "values": {
+        "itbr": 1
+      }
+    },
+    {
+      "id": "vats",
+      "values": {
+        "vats": 1
+      }
+    },
+    {
+      "id": "sugsalt",
+      "values": {
+        "sugsalt": 1
+      }
+    },
+    {
+      "id": "ipt",
+      "values": {
+        "ipt": 2
+      }
+    },
+    {
+      "id": "hmrc2",
+      "values": {
+        "hmrc2": 1
+      }
+    },
+    {
+      "id": "cgtalign",
+      "values": {
+        "cgtalign": 1
+      }
+    },
+    {
+      "id": "nicuel",
+      "values": {
+        "nicuel": 1
+      }
+    },
+    {
+      "id": "pens30",
+      "values": {
+        "pens30": 1
+      }
+    },
+    {
+      "id": "it50",
+      "values": {
+        "it50": 1
+      }
+    },
+    {
+      "id": "wealth2",
+      "values": {
+        "wealth2": 1
+      }
+    },
+    {
+      "id": "nicpen",
+      "values": {
+        "nicpen": 1
+      }
+    },
+    {
+      "id": "nicer",
+      "values": {
+        "nicer": 1
+      }
+    },
+    {
+      "id": "qelevy",
+      "values": {
+        "qelevy": 1
+      }
+    },
+    {
+      "id": "ct",
+      "values": {
+        "ct": 1
+      }
+    },
+    {
+      "id": "banklevy",
+      "values": {
+        "banklevy": 1
+      }
+    },
+    {
+      "id": "ctgh",
+      "values": {
+        "ctgh": 1
+      }
+    },
+    {
+      "id": "cgtdth",
+      "values": {
+        "cgtdth": 1
+      }
+    },
+    {
+      "id": "rnrb",
+      "values": {
+        "rnrb": 1
+      }
+    },
+    {
+      "id": "nicrent",
+      "values": {
+        "nicrent": 1
+      }
+    },
+    {
+      "id": "iinc2",
+      "values": {
+        "iinc2": 1
+      }
+    },
+    {
+      "id": "gam2",
+      "values": {
+        "gam2": 1
+      }
+    },
+    {
+      "id": "rvfuel",
+      "values": {
+        "rvfuel": 1
+      }
+    },
+    {
+      "id": "alc",
+      "values": {
+        "alc": 5
+      }
+    },
+    {
+      "id": "ved",
+      "values": {
+        "ved": 10
+      }
+    },
+    {
+      "id": "apd",
+      "values": {
+        "apd": 2
+      }
+    }
+  ],
+  "addOns": [
+    {
+      "id": "meals",
+      "title": "Free school meals for every child",
+      "line": {
+        "text": "It funds a place, not a meal eaten: a fifth of pupils already entitled did not take one on census day. England only; consequentials follow.",
+        "short": "It funds a place, not a meal eaten; England only, and consequentials follow.",
+        "sources": [
+          {
+            "sourceId": "dfe-school-pupils-2025-26"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "ufsm": 1
+      }
+    },
+    {
+      "id": "fuel-cut",
+      "title": "Fuel duty cut by 5%",
+      "line": {
+        "text": "Fuel duty has not risen since 2011. A cut is felt at the pump within days, and it is paid for every year after.",
+        "short": "Felt at the pump within days, and paid for every year after.",
+        "sources": [
+          {
+            "sourceId": "govuk-fuel-duty-rates"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "fuel": -5
+      }
+    },
+    {
+      "id": "retraining",
+      "title": "An AI retraining programme",
+      "line": {
+        "text": "A budget, not a costing: whether £1bn buys a programme that works is a delivery question, not a fiscal one.",
+        "short": "A budget, not a costing: whether £1bn buys a programme that works is a delivery question.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "airet": 1
+      }
+    },
+    {
+      "id": "keep-bus-cap",
+      "title": "Keep the £2 bus fare cap running",
+      "line": {
+        "text": "£400m buys a year of the cap at today's fare gap, outside London only, and the operators' costs keep rising.",
+        "short": "£400m buys a year of the cap outside London; the operators’ costs keep rising.",
+        "sources": [
+          {
+            "sourceId": "govuk-bus-fare-cap-2027"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "bus2": 1
+      }
+    },
+    {
+      "id": "plan2",
+      "title": "Let the student loan repayment threshold rise again",
+      "line": {
+        "text": "Thank you. A frozen threshold is a tax rise on graduates and nobody else, and the Treasury's own note calls the repayment forecasts inherently uncertain. Letting it rise again costs £355 million in 2029-30 on the Treasury's figures.",
+        "short": "A frozen threshold is a tax rise on graduates alone. Letting it rise costs £355 million in 2029-30.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-policy-costings",
+            "page": "43"
+          },
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 48"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "rvplan2": 1
+      }
+    },
+    {
+      "id": "vat-gas",
+      "title": "Take VAT off gas",
+      "line": {
+        "text": "Gas to 0%, as electricity already is since October. HMRC’s relief figures put the cost at about £0.8bn a year, before anyone changes their behaviour.",
+        "short": "Gas to 0%, as electricity already is: about £0.8bn a year on HMRC’s figures.",
+        "sources": [
+          {
+            "sourceId": "hmrc-tax-reliefs-2026-01"
+          },
+          {
+            "sourceId": "govuk-vat-electricity-cut-2026"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "vatgas": 1
+      }
+    },
+    {
+      "id": "benefit-floor",
+      "title": "A protected floor in Universal Credit",
+      "line": {
+        "text": "You have set the floor. JRF puts the cost at £680 million rising to £760 million by 2029-30; the card grows the first year with the OBR’s universal credit line and lands a little under that. Inside the welfare cap.",
+        "short": "The floor is set. JRF says £680 million rising to £760 million; the card lands under it.",
+        "sources": [
+          {
+            "sourceId": "jrf-uc-floor-2026",
+            "quote": "The cost rises to £760 million in 2029/30"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "ucfloor": 1
+      }
+    },
+    {
+      "id": "pubs",
+      "title": "Five per cent off alcohol duty",
+      "line": {
+        "text": "Five per cent off every alcohol duty: about £0.6bn a year on HMRC’s ready reckoner, welcomed in every pub and paid for by everyone, drinkers or not, through the borrowing it adds.",
+        "short": "Five per cent off alcohol duty: about £0.6bn a year on HMRC’s figures, welcomed in every pub.",
+        "sources": [
+          {
+            "sourceId": "hmrc-trr-2025-06"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "values": {
+        "alc": -5
+      }
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import {
   parseInterventions,
   parseCompromise,
   parseRabbit,
+  parseOptions,
   parseHouseholdsFile,
   parseSpeech,
   parseIncidence,
@@ -40,6 +41,7 @@ import ministersJson from '@data/journey/ministers.json';
 import interventionsJson from '@data/journey/interventions.json';
 import compromiseJson from '@data/journey/compromise.json';
 import rabbitJson from '@data/journey/rabbit.json';
+import optionsJson from '@data/journey/options.json';
 import electorateJson from '@data/journey/households.json';
 import speechJson from '@data/journey/speech.json';
 import incidenceJson from '@data/journey/incidence.json';
@@ -76,6 +78,7 @@ export const ministers = parseMinisters(ministersJson);
 export const interventions = parseInterventions(interventionsJson);
 export const compromise = parseCompromise(compromiseJson);
 export const rabbit = parseRabbit(rabbitJson);
+export const options = parseOptions(optionsJson);
 export const electorate = parseHouseholdsFile(electorateJson);
 export const speech = parseSpeech(speechJson);
 export const incidence = parseIncidence(incidenceJson);
@@ -115,6 +118,7 @@ const problems = validateDataset({
   interventions,
   compromise,
   rabbit,
+  options,
   electorate,
   speech,
   incidence,

@@ -77,6 +77,10 @@ import type {
   receptionBandSchema,
   receptionFileSchema,
   receptionRuleSchema,
+  optionsFileSchema,
+  deliverOptionSchema,
+  affordOptionSchema,
+  addOnSchema,
 } from '../schema/game.schema.js';
 import type {
   glossaryFileSchema,
@@ -145,6 +149,10 @@ export type InterventionWhen = z.infer<typeof interventionWhenSchema>;
 export type CompromiseFile = z.infer<typeof compromiseFileSchema>;
 export type RabbitFile = z.infer<typeof rabbitFileSchema>;
 export type RabbitOption = z.infer<typeof rabbitOptionSchema>;
+export type OptionsFile = z.infer<typeof optionsFileSchema>;
+export type DeliverOption = z.infer<typeof deliverOptionSchema>;
+export type AffordOption = z.infer<typeof affordOptionSchema>;
+export type AddOn = z.infer<typeof addOnSchema>;
 export type HouseholdsFile = z.infer<typeof householdsFileSchema>;
 export type Household = z.infer<typeof householdSchema>;
 export type HouseholdTouch = z.infer<typeof householdTouchSchema>;

@@ -10,6 +10,7 @@ import {
   interventionsFileSchema,
   compromiseFileSchema,
   rabbitFileSchema,
+  optionsFileSchema,
   householdsFileSchema,
   speechFileSchema,
   incidenceFileSchema,
@@ -41,6 +42,7 @@ import type {
   InterventionsFile,
   CompromiseFile,
   RabbitFile,
+  OptionsFile,
   HouseholdsFile,
   SpeechFile,
   IncidenceFile,
@@ -63,6 +65,7 @@ import type {
   Vintage,
 } from './types/data.js';
 import { policyYearsOf } from './calc/arithmetic.js';
+import { AFFORD_TABS } from './game/options.js';
 import { hasHead } from './costing/taxHead.js';
 import { GUIDED_STEPS, stageTerms } from './game/guide.js';
 import { validateVintage } from './validate/validateVintage.js';
@@ -182,6 +185,10 @@ export function parseRabbit(json: unknown): RabbitFile {
   return parseWith(rabbitFileSchema, json, 'the rabbit');
 }
 
+export function parseOptions(json: unknown): OptionsFile {
+  return parseWith(optionsFileSchema, json, 'the options');
+}
+
 export function parseHouseholdsFile(json: unknown): HouseholdsFile {
   return parseWith(householdsFileSchema, json, 'the households');
 }
@@ -224,6 +231,7 @@ export interface Dataset {
   interventions?: InterventionsFile;
   compromise?: CompromiseFile;
   rabbit?: RabbitFile;
+  options?: OptionsFile;
   electorate?: HouseholdsFile;
   speech?: SpeechFile;
   incidence?: IncidenceFile;
@@ -264,6 +272,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.interventions ?? null,
       ds.compromise ?? null,
       ds.rabbit ?? null,
+      ds.options ?? null,
       ds.electorate ?? null,
       ds.speech ?? null,
       ds.incidence ?? null,
@@ -571,6 +580,64 @@ export function validateDataset(ds: Dataset): string[] {
         problems.push(`rabbit ${option.id} sets ${option.value}, outside the lever's range`);
       } else if (option.value === lever.control.default) {
         problems.push(`rabbit ${option.id} leaves the lever where it is`);
+      }
+    }
+  }
+  if (ds.options) {
+    // An option is a bundle of lever settings the engine prices; one that names a lever the game
+    // lacks, a setting the control cannot reach, or a lever left where it is could never be
+    // chosen. The ways to afford sit in who-pays tabs, so every one of them must have a tab.
+    const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
+    const all = [
+      ...ds.options.deliver.map((o) => ({ screen: 'deliver', o })),
+      ...ds.options.afford.map((o) => ({ screen: 'afford', o })),
+      ...ds.options.addOns.map((o) => ({ screen: 'add-on', o })),
+    ];
+    for (const { screen, o } of all) {
+      for (const [code, value] of Object.entries(o.values)) {
+        const lever = byCode.get(code);
+        if (!lever) {
+          problems.push(`${screen} option ${o.id} names unknown lever "${code}"`);
+          continue;
+        }
+        if (lever.deprecated) problems.push(`${screen} option ${o.id} moves shelved lever ${code}`);
+        if (lever.category === 'macro')
+          problems.push(`${screen} option ${o.id} moves macro slider ${code}`);
+        const { min, max, step } = lever.control;
+        if (value < min || value > max) {
+          problems.push(
+            `${screen} option ${o.id} sets ${code} to ${value}, outside the lever's range`,
+          );
+        } else if (value === lever.control.default) {
+          problems.push(`${screen} option ${o.id} leaves lever ${code} where it is`);
+        } else if (
+          step > 0 &&
+          Math.abs(Math.round((value - min) / step) * step + min - value) > 1e-9
+        ) {
+          problems.push(
+            `${screen} option ${o.id} sets ${code} to ${value}, off the control's steps`,
+          );
+        }
+      }
+    }
+    if (ds.incidence) {
+      const incidence = ds.incidence;
+      const tabOf = (code: string) => {
+        const group = incidence.levers[code];
+        return AFFORD_TABS.find((t) => group !== undefined && t.groups.includes(group))?.id;
+      };
+      const perTab = new Map<string, number>();
+      for (const o of ds.options.afford) {
+        const tabs = new Set(Object.keys(o.values).map((code) => tabOf(code) ?? '?'));
+        if (tabs.has('?')) problems.push(`afford option ${o.id} has a lever with no who-pays tab`);
+        if (tabs.size > 1) problems.push(`afford option ${o.id} straddles two who-pays tabs`);
+        const [tab] = tabs;
+        if (tab && tab !== '?') perTab.set(tab, (perTab.get(tab) ?? 0) + 1);
+      }
+      for (const tab of AFFORD_TABS) {
+        const n = perTab.get(tab.id) ?? 0;
+        if (n < 3 || n > 6)
+          problems.push(`who-pays tab ${tab.id} offers ${n} options; 3 to 6 expected`);
       }
     }
   }

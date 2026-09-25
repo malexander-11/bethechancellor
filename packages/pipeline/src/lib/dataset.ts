@@ -10,6 +10,7 @@ import {
   parseInterventions,
   parseCompromise,
   parseRabbit,
+  parseOptions,
   parseHouseholdsFile,
   parseSpeech,
   parseIncidence,
@@ -67,6 +68,7 @@ export function loadDataset(
   );
   const compromise = parseCompromise(readJson(path.join(DATA_DIR, 'journey', 'compromise.json')));
   const rabbit = parseRabbit(readJson(path.join(DATA_DIR, 'journey', 'rabbit.json')));
+  const options = parseOptions(readJson(path.join(DATA_DIR, 'journey', 'options.json')));
   const electorate = parseHouseholdsFile(
     readJson(path.join(DATA_DIR, 'journey', 'households.json')),
   );
@@ -97,6 +99,7 @@ export function loadDataset(
     interventions,
     compromise,
     rabbit,
+    options,
     electorate,
     speech,
     incidence,
