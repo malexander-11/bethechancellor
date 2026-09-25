@@ -4,11 +4,14 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 16 (the think tanks' lists)**. You are appointed Chancellor
-in a Labour government with a Budget to deliver on 28 October 2026. The package holds the menu the
-reporting says is on the table, each option a published row or a stated calculation on one, badged
-for what it is; the third screen of colleagues' letters is gone, its plausible policies sit in the
-tax and spending groups and the rest are kept for the record. The page is plain: one accent, one
+Status: **Phase 18 (advice and direction)**. You are appointed Chancellor in a Labour government
+with a Budget to deliver on 28 October 2026. You rank priorities with the Prime Minister, choose
+among costed ways to deliver them proposed by the ministers who lead on them, choose among costed
+ways to afford them grouped by who pays, and add up to three little announcements; the desk of every
+lever is one link away and never the default. The package holds the menu the reporting says is on
+the table, each option a published row or a stated calculation on one, badged for what it is; the
+third screen of colleagues' letters is gone, its plausible policies sit in the tax and spending
+groups and the rest are kept for the record. The page is plain: one accent, one
 type family, white cards on an off-white page, nothing smaller than 14px, a dark theme that follows
 your system, and a countdown to Budget day. Every screen opens with a guide in plain English: which
 step this is, what you are doing, why it matters, what to do now. The road runs one way: a progress
@@ -24,18 +27,23 @@ running list.
 Seven steps. **The appointment**: three advisers brief you on the rules and why they matter, the
 economy since March, and a new Prime Minister who wants a Budget people notice while the manifesto
 ties your hands. **The outlook**: which forecast do you plan on, and how much headroom do you keep?
-**The Prime Minister**: tick the themes this Budget is for, then the flagships under each; every
-flagship you tick is funded on the spot and the headroom falls as you choose. **The package**:
-two screens in sequence (the taxes, the spending), every lever wearing the manifesto red line that
-watches it, with a minister on every spending line and advisers who remember what you agreed, and
-the menu a Chancellor actually weighs: employer National Insurance, pensions, the smaller duties,
+**The Prime Minister**: rank up to three of eight priorities; the PM reacts to each and reads the
+ranking back; nothing is funded yet. **The package**: two guided screens. First the ways to
+deliver each priority, three to five costed options proposed by the minister who leads on it, each
+a bundle of the game's own levers priced by the engine on its own; then the ways to afford it, the
+gap against your target and the revenue options on five who-pays tabs, each wearing its badge, its
+manifesto red line and its earliest start. Behind them, one link away, the desk: every lever
+wearing the manifesto red line that watches it, with a minister on every spending line and advisers
+who remember what you agreed, and the menu a Chancellor actually weighs: employer National Insurance, pensions, the smaller duties,
 capital-tax reliefs, going further on recent rises, capital gains at death, a lower council tax
 surcharge band, the bank surcharge, the energy profits levy again, the self-employed rate, VAT off
 gas, another compliance package, business rates, the Prime Minister's schemes and defence at 3%
 sooner. **The forecast**: the OBR's envelope,
 fixed by a seeded draw the day you chose your outlook, taken apart into what the economy did and
-what the OBR made of your costings, then the routes through the gap it leaves. **The rabbit**:
-something for the speech, priced as the headroom it leaves. **Budget day**: the speech built from
+what the OBR made of your costings, then the routes through the gap it leaves: more of the ways to
+afford it, or what you chose to deliver started later, narrowed or dropped. **The add-ons**: up to
+three little announcements for the speech, each priced as the headroom it leaves. **Budget day**:
+the speech built from
 your choices; your backbenchers, the markets and the public each rating the Budget out of five and
 saying why; and a close that says which ambitions survived, who paid, which compromises mattered,
 how the package fares under every forecast you might have drawn, and what kind of Budget it was.
@@ -67,9 +75,11 @@ CenTax, Tax Justice UK, the IFS Green Budget, Demos, the Adam Smith Institute, O
 own stated arithmetic where nobody has published a costing, badged as such), 32 spending levers
 (Spending Review 2025 settlements, OBR welfare lines, Budget 2025 spending decisions, the Prime
 Minister's schemes, six welfare cards from the think tanks) with milestones from PESA, six more levers
-kept for the record on no screen, four sets of economic assumptions and five forecast outcomes
-derived from HM Treasury's comparison of independent forecasts, and about two hundred simulated
-lines in the voices of roles, every one badged and every fact in them sourced. Next: the rebase to
+kept for the record on no screen, eight priorities with 29 ways to deliver them, 26 ways to afford
+them and 8 add-ons (every option a bundle of those levers), four sets of economic assumptions and
+five forecast outcomes derived from HM Treasury's comparison of independent forecasts, and about
+two hundred simulated lines in the voices of roles, every one badged and every fact in them
+sourced. Next: the rebase to
 the 28 October 2026 forecast.
 
 ## Principles
@@ -109,8 +119,8 @@ apps/web            Vite + React front end (deployed on Vercel)
 packages/engine     pure TypeScript fiscal engine, schemas and tests
 packages/pipeline   scripts that fetch, extract and validate source data
 data/               sourced JSON: vintages, rules, levers, context readings, adviser briefings,
-                    the Prime Minister, ministers, the forecast draws, the speech, households,
-                    Budget day reaction bands, raw source files
+                    the Prime Minister's priorities, the options, ministers, the forecast draws,
+                    the speech, households, Budget day reaction bands, raw source files
 docs/               methodology and architecture decision records
 ```
 

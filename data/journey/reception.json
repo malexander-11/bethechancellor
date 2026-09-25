@@ -656,7 +656,7 @@
           "id": "pb-priorities",
           "measure": "prioritiesFunded",
           "reading": {
-            "label": "Themes with a funded flagship behind them",
+            "label": "Priorities with a way to deliver them on",
             "unit": "count"
           },
           "note": "A priority counts when at least one way to deliver it is on in the package.",
@@ -705,7 +705,7 @@
           "id": "pb-clear-priority",
           "measure": "clearPriorityGbpm",
           "reading": {
-            "label": "Money behind a single, fully funded theme",
+            "label": "Money behind a single, fully delivered priority",
             "unit": "GBPm"
           },
           "note": "One priority ranked, delivered, and at least five billion a year behind it: a Budget people can describe in a sentence.",

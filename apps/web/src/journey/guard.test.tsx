@@ -57,6 +57,6 @@ describe('the road runs one way', () => {
     expect(screen.getByText('Build the package')).toBeInTheDocument();
     desk.unmount();
     at(`/pm?${BASE}&g=${G}_st.4_rv.1`);
-    expect(screen.getByText('Agree the themes with the Prime Minister')).toBeInTheDocument();
+    expect(screen.getByText('Agree the priorities with the Prime Minister')).toBeInTheDocument();
   });
 });

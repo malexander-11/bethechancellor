@@ -22,11 +22,11 @@
     {
       "step": "pm",
       "number": 3,
-      "title": "Agree the themes with the Prime Minister",
-      "doing": "Tell the Prime Minister what this Budget is for, and pick the [flagship] schemes that will show it.",
-      "why": "Every flagship you tick is paid for at once, so your [headroom] falls as you choose. The [manifesto] red lines still apply.",
-      "now": "Tick the themes that apply, then the flagships you want. Watch the headroom.",
-      "terms": ["certified"]
+      "title": "Agree the priorities with the Prime Minister",
+      "doing": "Tell the Prime Minister what this Budget is for: rank up to three priorities from eight.",
+      "why": "The order matters. Nothing is funded yet; the ways to deliver each come next, costed one by one. The [manifesto] red lines still apply.",
+      "now": "Tick the priorities in the order they matter, then hear the PM read them back.",
+      "terms": ["headroom", "certified"]
     },
     {
       "step": "deliver",
@@ -50,18 +50,18 @@
       "step": "taxes",
       "number": 4,
       "title": "Build the package",
-      "doing": "Set the taxes: where the money comes from, one group at a time.",
-      "why": "Three taxes raise most of it, and the [manifesto] fences them off. A lever that breaks a promise shows a red warning.",
-      "now": "Work through the tax groups and move what you want. Then the spending.",
+      "doing": "The details of the taxes: every lever, one group at a time, when an option is not quite right.",
+      "why": "Three taxes raise most of it, and the [manifesto] fences them off. A lever that breaks a promise warns in red.",
+      "now": "Move what you want, then go back to the options. Chosen ones are pinned at the top of their groups.",
       "terms": ["headroom", "current-budget", "borrowing", "hmrc-points", "certified", "uprating"]
     },
     {
       "step": "spending",
       "number": 4,
       "title": "Build the package",
-      "doing": "Set the spending: where the money goes, department by department.",
-      "why": "Day-to-day budgets are already set for the next three years. Investment counts against the debt rule, not the day-to-day one.",
-      "now": "Set the departments, the [flagship] programmes, investment and welfare. Ministers will tell you what each change means.",
+      "doing": "The details of the spending: every department, programme and benefit line, when an option is not quite right.",
+      "why": "Day-to-day budgets are set for three years. Investment counts against the debt rule, not the day-to-day one.",
+      "now": "Set the departments, the [flagship] programmes, investment and welfare, then go back. Ministers will tell you what each change means.",
       "terms": [
         "headroom",
         "welfare-cap",
@@ -92,17 +92,17 @@
       "number": 5,
       "title": "Make the sums add up",
       "doing": "Close the gap between the [headroom] you have and the headroom you wanted.",
-      "why": "Every route costs something: more tax, less spending, a smaller promise, or a thinner safety margin.",
+      "why": "Every route costs something: more of the ways to pay, less of what you chose, or a thinner safety margin.",
       "now": "Take the routes you can live with, then move on to the speech.",
       "terms": ["fiscal-rules", "borrowing", "escape-clause", "certified"]
     },
     {
       "step": "rabbit",
       "number": 6,
-      "title": "Something for the speech",
-      "doing": "Decide whether to add one surprise announcement, or to keep your [headroom].",
-      "why": "A rabbit gets the headlines. It is also money you no longer have in reserve.",
-      "now": "Pick a card. Keeping the headroom is a choice too.",
+      "title": "Suggested little add-ons",
+      "doing": "Decide whether to add up to three small announcements to the speech, or to keep your [headroom].",
+      "why": "An add-on gets a headline. It is also money you no longer have in reserve, and each is priced on its own.",
+      "now": "Tick up to three. Keeping the headroom is a choice too.",
       "terms": ["headroom"]
     },
     {

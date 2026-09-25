@@ -465,7 +465,7 @@ Budget day reads the outcome into a set of figures (`readingsWithCauses` in
 error, the change in borrowing, the debt path, the tax take, how many Budget 2025 and Autumn
 Budget 2024 decisions were reversed, the two rule statuses, and, from Phase 9, public
 spending, capital, tax rises and cuts, the balance of new revenue between the top and the broad
-base by incidence tag, themes chosen and delivered, manifesto red lines crossed and rules missed.
+base by incidence tag, priorities ranked and delivered, manifesto red lines crossed and rules missed.
 Each reading carries the decisions behind it, as the levers' own short titles. The Phase 5 reaction
 bands that read these figures were replaced in Phase 9 by the reception (§15).
 
@@ -528,26 +528,26 @@ Bank's account of gilt volatility), because no document publishes it.
 
 ### The Prime Minister
 
-Step 3 is a conversation in data (`data/journey/pm.json`): what has already been done, the themes
-this Budget is for (tick all that apply), and the flagships under each theme plus two cross-cutting
-ones. Every flagship is a lever and a target value whose cost is read live from the engine, and
-from Phase 9 ticking one funds it on the spot: the lever moves and the summary strip's headroom
-falls; un-ticking restores the default, which is why a validator forbids two flagships on one
-lever. The manifesto's promises are detectors over lever values (or, for the fiscal rules, over the
-verdicts) with their sources, and they are fixed: every one binds from the first screen to the
-last. `ambitionStatus` reports each priority funded, part-funded, unfunded or delayed and each
-promise kept or broken, with the lever named.
+Step 3 is a conversation in data (`data/journey/pm.json`): what has already been done, then what
+this Budget is for. From Phase 18 (§22) the player ranks up to three of eight priorities, in the
+order ticked, and the Prime Minister reacts to each and reads the ranking back with the manifesto
+red lines restated; nothing is funded here. The ways to deliver each priority come on the next
+screen, costed one by one. The manifesto's promises are detectors over lever values (or, for the
+fiscal rules, over the verdicts) with their sources, and they are fixed: every one binds from the
+first screen to the last. `ambitionStatus` reports each priority delivered, part-delivered or
+undelivered from the states of its options, and each promise kept or broken, with the lever named.
 
 ### The package, staffed
 
 Every spending and welfare lever has a minister (`ministers.json`): asking while it is untouched,
 saying what stops happening at a cut, making the case for more. The Prime Minister's schemes sit in
 a Flagship programmes group on the spending screen, each with a minister of its own (ADR-0017).
-Advisers intervene from a closed
-list of predicates (`interventions.json`): a promise broken, a priority unfunded, headroom below the
-target, a rule missed. Promised flagships are pinned to the top of their group; the summary strip keeps score;
-the Political Adviser's press summary plants the clue the seed chose. Leaving the package snapshots the
-package.
+Advisers intervene from a closed list of predicates (`interventions.json`): a promise broken, a
+priority undelivered, headroom below the target, a rule missed. From Phase 18 the package opens on
+two guided screens (§22) and the desk is a side room behind them: the levers of a chosen option
+are pinned to the top of their group wearing the option's name, the summary strip keeps score, and
+the Political Adviser's press summary plants the clue the seed chose on the ways to afford. Leaving
+the package for the forecast snapshots it.
 
 ### The forecast
 
@@ -559,23 +559,24 @@ OBR's; the outlook step becomes history; the scorecard grows an "OBR in October"
 
 ### The compromises and the rabbit
 
-The second screen of step 5 offers four routes, all of them levers, and a fifth only when a rule
-is missed: the Director of Tax's three suggestions (every tax one notch up, ranked by the engine,
-red-tagged where they break a manifesto red line), the package's own three biggest spending
-measures with a later start year (`Settings.implementationYearByCode`), scaling a flagship back to
-half the distance, lowering the target, and acknowledging a breach with the Permanent Secretary's
-reading of the Charter's escape clause. Step 6 prices four prepared announcements, going further
-on a flagship, or keeping the headroom, each as the headroom it would leave.
+The second screen of step 5 offers three routes, all of them levers, and a fourth only when a rule
+is missed: the Director of Tax's three suggestions (from Phase 18 the ways to afford it not yet
+chosen, ranked by the engine, red-tagged where they break a manifesto red line), what was chosen
+to deliver with a later start year for its lever (`Settings.implementationYearByCode`), half the
+distance or dropped, lowering the target, and acknowledging a breach with the Permanent
+Secretary's reading of the Charter's escape clause. Step 6 offers eight little add-ons, going
+further on a delivered priority, or keeping the headroom, each priced as the headroom it would
+leave; up to three go in the speech.
 
 ### Budget day
 
 The speech is assembled from fragments (`speech.json`) with every figure read from the outcome and
-every title from data; a test checks each pound sign; two or more themes share one opening. The
+every title from data; a test checks each pound sign; the opening is the first-ranked priority's. The
 reaction is the reception of §15: three audiences, each rated out of five with its reasons, plus
 five households touched by stated levers. The close totals the engine's figures by incidence tag,
 ranks the compromises against the snapshot, re-runs the final package under all five draws, and
-names the kind of Budget from a closed list of badged judgements, with `{theme}` filled by every
-ticked theme.
+names the kind of Budget from a closed list of badged judgements, with `{priority}` filled from the
+ranking.
 
 ### What is still not modelled
 
@@ -614,10 +615,10 @@ Budget people notice and a manifesto that ties your hands, with the red lines li
 ### The warnings on the lever
 
 A lever a red line watches wears a quiet "Manifesto: no rise" (or "no cut", "do not switch on")
-so the line is learnt before it is tested; a crossed line turns the tag red. A flagship promised to
-the PM wears "Promised to the PM" while the package funds it and "Below what you promised the PM" once
-it is pulled back. Both are read through `promiseBreaks` and `ambitionStatus`, pure arithmetic over
-the package.
+so the line is learnt before it is tested; a crossed line turns the tag red. A lever inside an
+option the player chose wears "In your package" while the option is on and "Adjusted from what you
+chose" once the desk has moved it elsewhere (§22). Both are read through `promiseBreaks` and
+`ambitionStatus`, pure arithmetic over the package.
 
 ### The reception
 
@@ -641,11 +642,12 @@ in one to five over random points and caps and over random packages.
 has been left, always backwards, Budget day from the rabbit, and with no game only the sandbox
 (the package and Budget day). Every page calls `useStageGuard`, which redirects an early arrival to
 `furthestStep(game)` with the budget's query string; the progress rail at the top of every page
-reads the same rule, so a stop is a link only when the guard would let it through. The package is
-two screens in sequence (taxes, spending) with a button forward and a link back; the guide's kicker
-says which screen ("Part 2 of 2"), as it does for the forecast and the sums. The third screen of
-Phase 10, the colleagues' letters, was retired in Phase 12 (ADR-0017); the journey asks seven
-Continues.
+reads the same rule, so a stop is a link only when the guard would let it through. With a game
+under way the package is two guided screens (the ways to deliver, the ways to afford it) with the
+desk one link behind them (§22); in the sandbox it is the desk's two screens in sequence (taxes,
+spending) with a button forward and a link back, and the guide's kicker says which screen ("Part 2
+of 2"), as it does for the forecast and the sums. The third screen of Phase 10, the colleagues'
+letters, was retired in Phase 12 (ADR-0017); the journey asks eight Continues.
 
 ### The revenue menu
 
@@ -659,8 +661,8 @@ relief by the `weightedSum` method over HMRC's relief by marginal rate, and two 
 certified Budget 2025 rises (investment income, gambling duties) by the `repeat` direction.
 Employer-side National Insurance is not a manifesto red line here, on the government's reading of
 the lock; the Political Adviser says on each such lever that the reading is contested. The Director
-of Tax's suggestions at the sums rank every tax lever that is not shelved, each with its badge; a
-spending saving is a cut and belongs to the spending route.
+of Tax's suggestions at the sums rank the ways to afford it not yet chosen, each with its lever's
+badge (§22); a spending saving is a cut and belongs to the spending route.
 
 ### The pension extract
 
@@ -821,3 +823,35 @@ Nothing is counted before it; a player can delay a measure past its floor, never
   the headline, and "nothing yet; from 2030-31 raises £18.5bn" where the target year sees nothing.
   The running list and the Budget-day table add "from 2030-31" beside the £0.0bn; the Director of
   Tax and the OBR's re-scored table leave such a measure out.
+
+## 22. Advice and direction (ADR-0022)
+
+The middle of the game is guided. After the outlook the Chancellor ranks up to three of eight
+priorities with the Prime Minister, then meets two screens of costed options before the desk: the
+ways to deliver each priority, proposed by the minister or adviser who leads on it, and the ways to
+afford it, grouped by who pays. The desk of every lever is one link away from either screen and is
+never the default while a game is under way.
+
+- **An option is a bundle of the game's own levers** (`data/journey/options.json`: 29 ways to
+  deliver, 26 ways to afford, 8 add-ons), one or two levers at stated values, none of them the
+  default. No lever appears twice on a screen or on both the deliver and the afford screens.
+  Choosing an option moves its levers; putting it back restores their defaults.
+- **Whether an option is on is read from the levers**, never stored: on when every lever is at or
+  beyond the option's value in its direction, adjusted when some lever has moved but not to there,
+  off otherwise. The desk and the guided screens therefore never disagree, a lever fine-tuned on the
+  desk shows on its card as "Adjusted on the desk", and a shared link needs no new key.
+- **Every card is priced on its own**: the engine re-run for the bundle alone with the economic
+  assumptions in force, read as "Raises £9.9bn in 2029-30", "Costs £2.2bn", "Saves £4.5bn",
+  "Borrowing up £13.4bn; the current budget is unchanged" for investment, or "Nothing until
+  2030-31, then raises £18.5bn" for a measure that cannot start before the target year (§21). The
+  strip shows the real package. The card also carries the badges of the costings behind it, the
+  manifesto red line it would cross, its earliest start and any interaction with a lever already
+  moved.
+- **The compromise step reads the same options**: the Director of Tax's suggestions are the ways to
+  afford it not yet chosen, ranked by the headroom each buys; the spending route lists what was
+  chosen to deliver, each with a later start, half the distance or dropped. The add-ons are eight
+  small costed announcements, up to three in the speech, each priced against the package with none
+  of them in it.
+- **The words are the advisers' and the ministers'**, simulated, sourced and shown short first; the
+  figures are the engine's. Priorities replace themes in the speech, the reception and the verdict,
+  and an old link's `th` values map to the priorities that took their place.

@@ -57,7 +57,9 @@ arrives on Budget day.
 6. **Two tabs for capital taxes.** Capital taxes was the widest tab and would have broken the
    500-word budget; it is now Capital gains and Wealth and property, each with its own briefing.
 7. **The Director of Tax does not suggest what nobody proposes.** `revenueSuggestions` skips
-   `notOnTheTable` levers, so the relief toggles teach without being advised.
+   `notOnTheTable` levers, so the relief toggles teach without being advised. (Phase 18 replaced
+   it with `affordSuggestions` over the ways to afford it, none of which is such a lever;
+   ADR-0022.)
 8. **Not built, and why.** Machine games duty: the Social Market Foundation's costing sits behind
    a blocked site and the Treasury's modelling is unpublished. The warehouse surcharge, the online
    sales levy, the flat estate levy, a council tax top band, the lump-sum cap and NICs on

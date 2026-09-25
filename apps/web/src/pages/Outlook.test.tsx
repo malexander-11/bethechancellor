@@ -42,7 +42,9 @@ describe('choosing what to plan on', () => {
     fireEvent.click(screen.getByRole('radio', { name: /A pessimistic analyst/ }));
     fireEvent.click(screen.getByRole('radio', { name: /£30bn/ }));
     fireEvent.click(screen.getByRole('button', { name: /Confirm, and go to Downing Street/ }));
-    expect(await screen.findByText('Agree the themes with the Prime Minister')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Agree the priorities with the Prime Minister'),
+    ).toBeInTheDocument();
     await waitFor(() => {
       const g = new URLSearchParams(window.location.search).get('g') ?? '';
       expect(g).toMatch(/^s\.\d+/);

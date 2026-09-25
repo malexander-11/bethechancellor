@@ -15,12 +15,13 @@ context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the late
 journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/briefings.json    sourced adviser briefings per step and lever group
 journey/calendar.json     the in-game date of each stage
-journey/pm.json           the Prime Minister: themes, flagships, the manifesto red lines, reactions
+journey/pm.json           the Prime Minister: the eight priorities, the manifesto red lines
+journey/options.json      the ways to deliver each priority, the ways to afford it, the add-ons (ADR-0022)
 journey/ministers.json    a minister's lines for every spending and welfare lever
 journey/interventions.json adviser lines with a closed predicate over the ambitions
 journey/draws.json        the five forecast outcomes the seed chooses among (ADR-0012)
 journey/compromise.json   the advisers' lines beside each route out of a gap
-journey/rabbit.json       the prepared announcements for the speech
+journey/rabbit.json       the add-ons screen's intro, "go further" and "keep the headroom" lines
 journey/speech.json       the speech fragments the assembler fills
 journey/households.json   five household archetypes and the levers that touch them
 journey/incidence.json    who each lever falls on, for the close
@@ -203,8 +204,8 @@ from the certified rows beside it (ADR-0017).
   Budget. Old links still work." Its costing, raw source and considerations stay, so
   `validate:data` and the engine tests keep reproducing it; the app filters it out at load, the
   incidence, minister and suggestion checks skip it, and an old link decodes it as an unknown
-  code with a warning. Nothing live may name it: no incidence tag, no draw revision, no flagship,
-  no rabbit card, no household touch.
+  code with a warning. Nothing live may name it: no incidence tag, no draw revision, no option,
+  no add-on, no household touch.
 
 ### Budget day reception (`data/journey/reception.json`, ADR-0013)
 
@@ -236,12 +237,32 @@ says so above the table.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
-One guide entry per screen: `step`, `number` (one to seven; the package's three screens and the two
+One guide entry per screen: `step`, `number` (one to seven; the package's four screens and the two
 forecast screens share a number), `title` (the page's heading), and `doing`, `why`, `now`, at most
 sixty words together. A word in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary
 reference and must exist in `glossary.json`; `terms` lists more to show under "Words on this
 page". Guide and glossary are chrome: no badge, and no figure unless the glossary entry carries a
 source.
+
+### Priorities and options (`data/journey/pm.json`, `options.json`, ADR-0022)
+
+`pm.json` names eight `priorities`: `id`, `title` and `noun` (at most forty characters each), a
+plain `purpose`, the PM's `pitch` and `reaction`, the `lead` (an adviser's or a minister's role, as
+the data names it) and the lead's `brief` opening its section of the ways to deliver, with sources.
+`options.json` holds three lists. Every option's `values` is a bundle of one or two levers at stated
+values: codes that exist and are not deprecated or macro, values inside the control's range and on
+its grid, none the default. Rules the validator enforces:
+
+- **No lever twice on a screen, and none on both deliver and afford**, so an option's state (on,
+  adjusted, off) is read from the levers alone and is never ambiguous. An add-on may overlap a
+  deliver option; the card is then disabled as "already in your Budget".
+- **Every priority has two to five ways to deliver it** (`deliver[].priority`); safer streets has
+  two because the game has only two levers there, and its brief says so.
+- **Every way to afford belongs to a who-pays tab** by its lever's incidence pays-group
+  (`AFFORD_TABS` in the engine), three to six per tab. A way to afford carries no authored line: the
+  card is the lever's title, headline and badge.
+- **The words are the proposer's** (`line`, a `SimulatedLine` with a `short`); the figure is never
+  authored: the page prices the bundle with the engine. Titles fit eighty characters.
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 

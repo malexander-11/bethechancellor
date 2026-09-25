@@ -29,7 +29,7 @@ describe('the ways to deliver', () => {
     expect(screen.getByText(/Part 1 of 2/)).toBeInTheDocument();
     sandbox.unmount();
     at(`/budget/deliver?${BASE}&g=s.7_st.1_pl.adviser_hr.20`);
-    expect(screen.getByText('Agree the themes with the Prime Minister')).toBeInTheDocument();
+    expect(screen.getByText('Agree the priorities with the Prime Minister')).toBeInTheDocument();
   });
 
   it('opens with the Director’s hand-off, then one section per ranked priority with its lead’s line', () => {
