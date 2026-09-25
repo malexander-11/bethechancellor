@@ -13,6 +13,7 @@ export function StepLink({
   end,
   replace,
   onClick,
+  state,
 }: {
   to: string;
   children: ReactNode;
@@ -21,6 +22,11 @@ export function StepLink({
   replace?: boolean;
   /** Something to record as the player leaves, such as how far the game has got. */
   onClick?: () => void;
+  /**
+   * Something for the next page to know that is not part of the Budget, such as which group of
+   * the desk to open. It rides in the router's history state: the query string is the Budget's.
+   */
+  state?: unknown;
 }) {
   const { query } = useBudget();
   return (
@@ -30,6 +36,7 @@ export function StepLink({
       end={end}
       replace={replace}
       onClick={onClick}
+      state={state}
     >
       {children}
     </NavLink>

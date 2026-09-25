@@ -20,6 +20,12 @@ import { LabelBadge } from './LabelBadge';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
 import { Term } from './Term';
 import { useWorkings } from '../journey/workings';
+import {
+  borrowingImprovement,
+  currentBudgetImprovement,
+  effectWords,
+  laterStartYear,
+} from '../journey/effects';
 
 const MINUS = '−';
 
@@ -47,40 +53,11 @@ export function formatLeverValue(lever: Lever, value: number): string {
   }
 }
 
-/** Effect on the current budget in a year: receipts up or spending down improves it. Positive = better. */
-function currentBudgetImprovement(effect: LeverEffect, year: string): number {
-  return (
-    (effect.receipts[year] ?? 0) -
-    (effect.currentSpending[year] ?? 0) -
-    (effect.macroCurrent[year] ?? 0)
-  );
-}
-
-/** Effect on total borrowing in a year, investment included. Positive = less borrowing. */
-function borrowingImprovement(effect: LeverEffect, year: string): number {
-  return (
-    (effect.receipts[year] ?? 0) -
-    (effect.currentSpending[year] ?? 0) -
-    (effect.capitalSpending[year] ?? 0) -
-    (effect.macroPsnb[year] ?? 0)
-  );
-}
-
 function tone(v: number): string {
   return v > 0.5 ? 'amount--better' : v < -0.5 ? 'amount--worse' : '';
 }
 
-/**
- * The effect as a verb, not a sign: a tax raises or costs, spending saves or costs, and investment
- * puts borrowing up or down. One convention for the reader, whatever the engine's sign is.
- */
-export function effectWords(improvement: number, capital: boolean, receipts: boolean): string {
-  const size = formatGbpBn(Math.abs(improvement), 1);
-  if (Math.abs(improvement) < 50) return 'unchanged';
-  if (capital) return `${improvement > 0 ? 'down' : 'up'} ${size}`;
-  if (improvement > 0) return `${receipts ? 'raises' : 'saves'} ${size}`;
-  return `costs ${size}`;
-}
+export { effectWords };
 
 const POLICY_YEARS = policyYearsOf(vintage);
 const IMPLEMENTATION_YEAR = vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? '';
@@ -113,7 +90,7 @@ const RED_LINE_WORDS: Record<RedLine['when'], string> = {
  * Which promise, and what was agreed, is in the tag's text for a screen reader; a tooltip would
  * reach only a mouse.
  */
-function LeverFlags({ redLines, promised }: { redLines: RedLine[]; promised?: Promised }) {
+export function LeverFlags({ redLines, promised }: { redLines: RedLine[]; promised?: Promised }) {
   return (
     <>
       {promised ? (
@@ -285,10 +262,8 @@ export function LeverControl({
   const improve = (e: LeverEffect, y: string) =>
     isCapital ? borrowingImprovement(e, y) : currentBudgetImprovement(e, y);
   const laterStart =
-    effect && summaryYear && improvement !== null && Math.abs(improvement) < 50
-      ? POLICY_YEARS.find(
-          (y) => fyStart(y) > fyStart(summaryYear) && Math.abs(improve(effect, y)) >= 50,
-        )
+    effect && summaryYear && improvement !== null
+      ? laterStartYear(effect, summaryYear, isCapital, POLICY_YEARS)
       : undefined;
   const lookupPoints =
     lever.costing.kind === 'lookupTable'
