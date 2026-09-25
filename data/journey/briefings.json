@@ -1051,6 +1051,50 @@
         }
       ],
       "group": "Flagship programmes"
+    },
+    {
+      "id": "deliver-overview",
+      "step": "deliver",
+      "adviser": "director-of-public-spending",
+      "title": "Ways to deliver",
+      "headline": "Each priority comes with a few costed ways to deliver it. Every option is a lever the game already prices.",
+      "paragraphs": [
+        {
+          "text": "The options here are the settlements, programmes and welfare lines the game already carries: a department's day-to-day budget moved against its Spending Review path, a programme the government has costed, or a reform a think tank has costed and badged as such. Each card shows the engine's figure for the target year and the minister's own line on what the money buys, and what it does not.",
+          "sources": [
+            {
+              "sourceId": "hmt-sr25-del-tables"
+            },
+            {
+              "sourceId": "obr-efo-2026-03",
+              "paragraph": "4.10"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "afford-overview",
+      "step": "afford",
+      "adviser": "director-of-tax",
+      "title": "Ways to afford it",
+      "headline": "The gap is your target minus the headroom you have left. Every way to close it says who pays.",
+      "paragraphs": [
+        {
+          "text": "HMRC's ready reckoner costs the rate and threshold changes and the Treasury's scorecards cost the decisions of the last two Budgets; where only a think tank has costed a measure, the card wears the assumption badge and, where the measure needs its own Act or is collected late, an earliest start. The manifesto's tax lock fences off income tax rates, National Insurance and VAT: an option that crosses it says so before you choose it.",
+          "sources": [
+            {
+              "sourceId": "hmrc-trr-2025-06"
+            },
+            {
+              "sourceId": "hmt-budget-2025-table-4-1"
+            },
+            {
+              "sourceId": "labour-manifesto-2024-strong-foundations"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

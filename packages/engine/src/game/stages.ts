@@ -21,6 +21,9 @@ export const FINAL_STAGE = GAME_STAGES.length - 1;
 const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   assumptions: 'outlook',
   spending: 'taxes',
+  // The guided screens of the package (Phase 18): the same stage as the desk.
+  deliver: 'taxes',
+  afford: 'taxes',
 };
 
 /** Where a step sits in the playthrough; the start page is before everything, at −1. */

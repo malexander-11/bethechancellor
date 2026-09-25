@@ -9,6 +9,10 @@ describe('the road through the game', () => {
     expect(enterable('pm', game(1))).toBe(true);
     expect(enterable('taxes', game(1))).toBe(false);
     expect(enterable('spending', game(2))).toBe(true);
+    expect(enterable('deliver', game(1))).toBe(false);
+    expect(enterable('deliver', game(2))).toBe(true);
+    expect(enterable('afford', game(2))).toBe(true);
+    expect(stageIndex('afford')).toBe(stageIndex('taxes'));
     expect(enterable('forecast', game(2))).toBe(false);
     expect(enterable('forecast', game(3))).toBe(true);
     expect(enterable('compromise', game(3))).toBe(false);

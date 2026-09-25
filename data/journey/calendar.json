@@ -22,6 +22,16 @@
       "label": "Downing Street"
     },
     {
+      "step": "deliver",
+      "on": "2026-10-02",
+      "label": "The package"
+    },
+    {
+      "step": "afford",
+      "on": "2026-10-02",
+      "label": "The package"
+    },
+    {
       "step": "taxes",
       "on": "2026-10-02",
       "label": "The package"

@@ -29,6 +29,24 @@
       "terms": ["certified"]
     },
     {
+      "step": "deliver",
+      "number": 4,
+      "title": "Choose how to deliver it",
+      "doing": "Each priority you agreed comes with a few costed ways to deliver it, proposed by the minister responsible.",
+      "why": "Every option is a set of the game's own levers, so the engine prices it; the [headroom] strip moves as you choose.",
+      "now": "Pick any mix. Open the details only if you want to fine-tune a figure yourself.",
+      "terms": ["headroom", "earliest-start"]
+    },
+    {
+      "step": "afford",
+      "number": 4,
+      "title": "Choose how to pay for it",
+      "doing": "The Director of Tax shows the gap between what you have chosen and your target, and ways to close it, grouped by who pays.",
+      "why": "Every option carries its badge, its [manifesto] red line and its [earliest start](earliest-start), so you see what each costs you politically.",
+      "now": "Pick until the gap closes, or carry it into the forecast knowingly.",
+      "terms": ["headroom", "manifesto", "earliest-start"]
+    },
+    {
       "step": "taxes",
       "number": 4,
       "title": "Build the package",

@@ -9,6 +9,8 @@ export const STAGE_ROUTES: Record<JourneyStep, string> = {
   outlook: '/outlook',
   assumptions: '/outlook',
   pm: '/pm',
+  deliver: '/budget/deliver',
+  afford: '/budget/afford',
   taxes: '/budget/taxes',
   spending: '/budget/spending',
   forecast: '/forecast',

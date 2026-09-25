@@ -7,13 +7,16 @@ import type {
 } from '../types/data.js';
 
 /**
- * The guide: one entry per screen a player meets, in the order they meet them. The package's two
- * screens and the two forecast screens are separate entries that share a step number.
+ * The guide: one entry per screen a player meets, in the order they meet them. The package's
+ * guided screens, its desk screens and the two forecast screens are separate entries that share
+ * a step number.
  */
 export const GUIDED_STEPS: readonly JourneyStep[] = [
   'start',
   'outlook',
   'pm',
+  'deliver',
+  'afford',
   'taxes',
   'spending',
   'forecast',

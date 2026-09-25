@@ -14,6 +14,8 @@ export const journeyStepSchema = z.enum([
   'outlook',
   'assumptions',
   'pm',
+  'deliver',
+  'afford',
   'taxes',
   'spending',
   'forecast',
