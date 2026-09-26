@@ -38,7 +38,10 @@ export function stopFor(step: JourneyStep): Stop {
   }
 }
 
-/** Which screen of a step this is, when a step has more than one: "Build your Budget · 2 of 4". */
+/**
+ * Which screen of a step this is, when a step has more than one: "Build your Budget · 2 of 4". A
+ * total of nought marks a side room off the step, named by its label alone: "· More policies".
+ */
 export interface SubStep {
   index: number;
   total: number;
@@ -79,7 +82,11 @@ export function Progress({
           {named ? (
             <span className="progress__name">
               {here?.label}
-              {part ? ` · ${part.index} of ${part.total}` : ''}
+              {part
+                ? part.total > 0
+                  ? ` · ${part.index} of ${part.total}`
+                  : ` · ${part.label}`
+                : ''}
             </span>
           ) : null}
         </p>

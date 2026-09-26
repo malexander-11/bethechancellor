@@ -11,64 +11,60 @@ import {
   optionRedLines,
   optionState,
   pickOutcome,
+  rankedPriorities,
   stageIndex,
   type AffordOption,
-  type Lever,
 } from '@btc/engine';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { AdviserBriefing } from '../components/AdviserBriefing';
-import { BudgetSummary } from '../components/BudgetSummary';
-import { Desk } from '../components/Desk';
+import { HeadroomBar } from '../components/HeadroomBar';
 import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { OptionCard } from '../components/OptionCard';
 import { PressSummary } from '../components/PressSummary';
-import { Scorecard } from '../components/Scorecard';
-import {
-  briefingsFor,
-  draws,
-  incidence,
-  interventions,
-  levers,
-  options,
-  pm,
-  vintage,
-  type LeverGroup,
-} from '../data';
-import { Beat, Beats } from '../journey/beats';
+import { draws, incidence, interventions, levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { useOptionPrices } from '../journey/prices';
 import { useBudget } from '../state/budget';
+import { deliverPath } from './Deliver';
 
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
-/** The five who-pays tabs, each holding the levers of its options, in the desk's shape. */
-const TABS = affordTabs(options, incidence);
-const GROUPS: LeverGroup[] = TABS.map((t) => ({
-  name: t.tab.label,
-  levers: t.options
-    .map((o) => byCode.get(Object.keys(o.values)[0] ?? ''))
-    .filter((l): l is Lever => l !== undefined),
-}));
-const OPTIONS_BY_TAB = new Map(TABS.map((t) => [t.tab.label, t.options] as const));
+/** The five who-pays groups, each with its options, in the order they are read. */
+const GROUPS = affordTabs(options, incidence);
+
+/** What a group's chosen options do to receipts in the target year, and how many are chosen. */
+function raised(
+  group: (typeof GROUPS)[number],
+  states: Map<string, string>,
+  effects: readonly { code: string; receipts: Record<string, number> }[],
+  year: string,
+): { chosen: number; gbpm: number } {
+  let chosen = 0;
+  let gbpm = 0;
+  for (const option of group.options) {
+    if (states.get(option.id) === 'off') continue;
+    chosen += 1;
+    for (const code of Object.keys(option.values)) {
+      gbpm += effects.find((e) => e.code === code)?.receipts[year] ?? 0;
+    }
+  }
+  return { chosen, gbpm };
+}
 
 /**
- * Step 4, second screen (Phase 18, ADR-0022): the ways to afford what has been chosen. The gap
- * between the headroom the package leaves and the margin the player set out to keep, then the
- * revenue options grouped by who pays, each priced by the engine against the Budget as it stands
- * and wearing its badge, its red line and its earliest start; one that counts the same money as
- * an option already in is blocked and says by what. Choosing is a tick; the tax desk is one link
- * away. Leaving for the forecast records the package as it stood before the OBR spoke, as the
- * desk used to.
+ * Step 4, the last screen: how will you pay for it? The gap between the headroom your choices
+ * leave and the margin you set out to keep, then the ways to raise money in five groups by who
+ * pays, stacked on one screen so the balance between them is in view: no tabs, every option on
+ * show, each priced against the Budget as it stands and wearing its badge, its red line and its
+ * earliest start (ADR-0022). Every tax lever is one link away. Leaving for the forecast records
+ * the package as it stood before the OBR spoke.
  */
 export function AffordPage() {
   const { state, dispatch, outcome } = useBudget();
-  const { search } = useLocation();
+  const { search, pathname } = useLocation();
   const priceOf = useOptionPrices();
-  const [openTab, setOpenTab] = useState('');
   const game = state.game;
-  // The states of every option, read from the levers: on, adjusted or off.
   const states = useMemo(
     () =>
       new Map(
@@ -82,11 +78,6 @@ export function AffordPage() {
 
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const targetYear = stability?.targetYear ?? '2029-30';
-  const years = outcome.paths.years;
-  const lastYear = years[years.length - 1] ?? targetYear;
-  const typicalErrorGbpm =
-    (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
-    (outcome.paths.baseline.nominalGdpFy[lastYear] ?? 0);
   const headroom = stability?.headroomGbpm ?? 0;
   const target = game.headroomTargetBn * 1000;
   const gap = target - headroom;
@@ -102,16 +93,13 @@ export function AffordPage() {
     ruleMissed,
   });
   const clue = pickOutcome(game.seed, draws.outcomes);
-  // Open on the first tab with something chosen, so a shared Budget does not look untouched.
-  const defaultTab =
-    GROUPS.find((g) => g.levers.some((l) => moved.has(l.code)))?.name ?? GROUPS[0]?.name ?? '';
+  const ranked = rankedPriorities(game, pm);
   const choose = (option: AffordOption, on: boolean) =>
     dispatch({ type: 'setLevers', values: on ? option.values : optionOff(option, levers) });
 
   /**
    * Leaving the package for the first time: remember it as it stood before the OBR spoke,
    * assumptions included, so the forecast can be taken apart and the close can diff against it.
-   * Coming back afterwards changes the package, not the record of what it was.
    */
   const leave = () => {
     if (!game.revealed) dispatch({ type: 'setSnapshot', values: { ...state.leverValues } });
@@ -122,148 +110,125 @@ export function AffordPage() {
   };
   const onward = game.revealed
     ? { to: '/compromise', label: 'Back to the compromises' }
-    : { to: '/forecast', label: 'Next: the OBR’s forecast' };
+    : { to: '/forecast', label: 'Next: the forecast' };
+  const back = ranked.length > 0 ? deliverPath(ranked.length) : '/pm';
 
   return (
-    <JourneyLayout step="afford">
-      <Beats step="afford">
-        <Beat
-          title="The Director of Tax’s briefing"
-          continueLabel="To the ways to afford it"
-          foldWhenPast="The Director of Tax’s briefing"
-        >
-          {briefingsFor('afford').map((b) => (
-            <AdviserBriefing key={b.id} briefing={b} />
-          ))}
-        </Beat>
-        <Beat title="Ways to afford it">
-          <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky target={target} />
-          <BudgetSummary
-            game={game}
-            status={status}
-            headroomGbpm={headroom}
-            targetYear={targetYear}
-            showHeadroom={false}
-          />
-          <section className="gap doc" aria-label="The gap">
-            <p className="gap__line">
-              {target > 0 ? (
-                gap > 0 ? (
-                  <>
-                    <strong className="amount amount--worse">{formatGbpBn(gap, 1)} short</strong> of
-                    the {formatGbpBn(target, 0)} you set out to keep.
-                  </>
-                ) : (
-                  <>
-                    <strong className="amount amount--better">
-                      {formatGbpBn(-gap, 1)} to spare
-                    </strong>{' '}
-                    against the {formatGbpBn(target, 0)} you set out to keep.
-                  </>
-                )
-              ) : headroom >= 0 ? (
-                <>
-                  <strong className="amount">{formatGbpBn(headroom, 1)}</strong> of headroom, and
-                  you set no target beyond the rules.
-                </>
-              ) : (
-                <>
-                  <strong className="amount amount--worse">
-                    {formatGbpBn(-headroom, 1)} short
-                  </strong>{' '}
-                  of the stability rule itself.
-                </>
-              )}
-              {spent > 0 ? (
-                <span className="gap__spent">
-                  {' '}
-                  Your priorities cost {formatGbpBn(spent, 1)} in {targetYear}.
-                </span>
-              ) : null}
-            </p>
-          </section>
-          <Interventions items={advice} />
-          <PressSummary outcome={clue} />
-          <p className="panel__hint">
-            Figures are for {targetYear}, against your Budget as it stands.
-          </p>
-          <Desk
-            groups={GROUPS}
-            moved={moved}
-            effects={outcome.leverEffects}
-            summaryYear={targetYear}
-            open={openTab || defaultTab}
-            onOpen={setOpenTab}
-            nouns={{ item: 'option', items: 'options', changed: 'chosen' }}
-          >
-            {(group) => {
-              const tabOptions = OPTIONS_BY_TAB.get(group.name) ?? [];
-              const first = group.levers[0];
-              return (
-                <>
-                  <div className="choices choices--list" role="group" aria-label={group.name}>
-                    {tabOptions.map((option) => {
-                      const code = Object.keys(option.values)[0] ?? '';
-                      const lever = byCode.get(code);
-                      if (!lever) return null;
-                      const optionState = states.get(option.id) ?? 'off';
-                      const blocked = blockedBy(option, options, levers, state.leverValues);
-                      const clashes =
-                        optionState === 'off'
-                          ? []
-                          : optionConflicts(option, options, levers, state.leverValues).filter(
-                              (c) => c.partner !== 'off',
-                            );
-                      return (
-                        <OptionCard
-                          key={option.id}
-                          id={option.id}
-                          name="afford"
-                          title={lever.title}
-                          note={lever.headline ?? lever.description}
-                          state={optionState}
-                          price={priceOf(option, optionState === 'on')}
-                          levers={[lever]}
-                          values={{ [code]: state.leverValues[code] ?? lever.control.default }}
-                          onChange={(on) => choose(option, on)}
-                          redLines={optionRedLines(option, pm.promises, levers, state.leverValues)}
-                          earliestStart={optionEarliestStart(option, levers)}
-                          overlaps={optionOverlaps(option, levers, moved, options)}
-                          {...(blocked ? { blocked } : {})}
-                          clashes={clashes}
-                          {...(option.line ? { line: option.line, who: 'Director of Tax' } : {})}
-                        />
+    <JourneyLayout
+      step="afford"
+      part={{ index: ranked.length + 1, total: ranked.length + 1, label: 'Pay for it' }}
+      tabTitle="Pay for it"
+    >
+      <HeadroomBar outcome={outcome} game={game} status={status} />
+      <section className="gap doc" aria-label="The gap">
+        <p className="gap__line">
+          {spent > 0 ? (
+            <span className="gap__spent">
+              Your priorities cost {formatGbpBn(spent, 1)} in {targetYear}.{' '}
+            </span>
+          ) : null}
+          {target > 0 ? (
+            gap > 0 ? (
+              <>
+                You are{' '}
+                <strong className="amount amount--worse">{formatGbpBn(gap, 1)} short</strong> of the{' '}
+                {formatGbpBn(target, 0)} you set out to keep.
+              </>
+            ) : (
+              <>
+                You have{' '}
+                <strong className="amount amount--better">{formatGbpBn(-gap, 1)} to spare</strong>{' '}
+                against the {formatGbpBn(target, 0)} you set out to keep.
+              </>
+            )
+          ) : headroom >= 0 ? (
+            <>
+              <strong className="amount">{formatGbpBn(headroom, 1)}</strong> of headroom, and you
+              set no target beyond the rules.
+            </>
+          ) : (
+            <>
+              <strong className="amount amount--worse">{formatGbpBn(-headroom, 1)} short</strong> of
+              the stability rule itself.
+            </>
+          )}
+        </p>
+      </section>
+      <Interventions items={advice} />
+      <p className="panel__hint">Figures are for {targetYear}, against your Budget as it stands.</p>
+      {GROUPS.map((group) => {
+        const id = `who-${group.tab.id}`;
+        const { chosen, gbpm } = raised(group, states, outcome.leverEffects, targetYear);
+        return (
+          <section key={group.tab.id} className="who" aria-labelledby={id}>
+            <h2 id={id} className="section-label who__title">
+              {group.tab.label}{' '}
+              <span className="who__count">
+                {chosen > 0
+                  ? `${chosen} chosen · raises ${formatGbpBn(gbpm, 1)}`
+                  : `${group.options.length} options`}
+              </span>
+            </h2>
+            <div className="choices choices--list choices--compact">
+              {group.options.map((option) => {
+                const code = Object.keys(option.values)[0] ?? '';
+                const lever = byCode.get(code);
+                if (!lever) return null;
+                const own = states.get(option.id) ?? 'off';
+                const blocked = blockedBy(option, options, levers, state.leverValues);
+                const clashes =
+                  own === 'off'
+                    ? []
+                    : optionConflicts(option, options, levers, state.leverValues).filter(
+                        (c) => c.partner !== 'off',
                       );
-                    })}
-                  </div>
-                  {first ? (
-                    <p className="choice-details">
-                      <StepLink
-                        to="/budget/taxes"
-                        state={{ group: first.group ?? '', from: 'afford' }}
-                      >
-                        Adjust the details
-                        <span className="sr-only">
-                          {' '}
-                          of the taxes {group.name.toLowerCase()} pay
-                        </span>
-                      </StepLink>
-                    </p>
-                  ) : null}
-                </>
-              );
-            }}
-          </Desk>
-          <p className="hero-start__actions">
-            <StepLink to={onward.to} className="btn btn--primary" onClick={leave}>
-              {onward.label}
-            </StepLink>
-            <StepLink to="/budget/deliver" className="btn">
-              Back to the ways to deliver
-            </StepLink>
-          </p>
-        </Beat>
-      </Beats>
+                return (
+                  <OptionCard
+                    key={option.id}
+                    id={option.id}
+                    name="afford"
+                    title={lever.title}
+                    note={lever.headline ?? lever.description}
+                    state={own}
+                    price={priceOf(option, own === 'on')}
+                    levers={[lever]}
+                    values={{ [code]: state.leverValues[code] ?? lever.control.default }}
+                    onChange={(on) => choose(option, on)}
+                    redLines={optionRedLines(option, pm.promises, levers, state.leverValues)}
+                    earliestStart={optionEarliestStart(option, levers)}
+                    overlaps={optionOverlaps(option, levers, moved, options)}
+                    {...(blocked ? { blocked } : {})}
+                    clashes={clashes}
+                    {...(option.line ? { line: option.line, who: 'Director of Tax' } : {})}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
+      <p className="more-link">
+        <StepLink
+          to="/budget/taxes"
+          state={{ from: 'afford', returnTo: pathname, returnLabel: 'Back to paying for it' }}
+        >
+          More policies: every tax lever
+        </StepLink>
+      </p>
+      <details className="more">
+        <summary>The morning papers</summary>
+        <div className="more__body">
+          <PressSummary outcome={clue} />
+        </div>
+      </details>
+      <p className="actions">
+        <StepLink to={onward.to} className="btn btn--primary" onClick={leave}>
+          {onward.label}
+        </StepLink>
+        <StepLink to={back} className="btn">
+          Back
+        </StepLink>
+      </p>
     </JourneyLayout>
   );
 }

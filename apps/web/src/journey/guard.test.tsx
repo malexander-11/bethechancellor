@@ -19,9 +19,11 @@ function at(path: string) {
 describe('the road runs one way', () => {
   it('sends a game that jumps ahead back to the furthest open stage', () => {
     // Agreed with the PM (st.2), so the package is open and the rabbit is not: the package opens
-    // on its first guided screen, the ways to deliver.
+    // on its first guided screen; with nothing ranked, that screen sends you to the PM.
     const early = at(`/rabbit?${BASE}&g=${G}_st.2`);
-    expect(screen.getByText('Choose how to deliver it')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Build your Budget' }),
+    ).toBeInTheDocument();
     early.unmount();
     // Left the forecast for the sums (st.4): Budget day is still two stops away.
     at(`/budget-day?${BASE}&g=${G}_st.4_rv.1`);
@@ -51,7 +53,7 @@ describe('the road runs one way', () => {
 
   it('always lets you go back: a game at the sums can reopen the package, the desk and the PM', () => {
     const guided = at(`/budget/afford?${BASE}&g=${G}_st.4_rv.1`);
-    expect(screen.getByText('Choose how to pay for it')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Pay for it' })).toBeInTheDocument();
     guided.unmount();
     const desk = at(`/budget/taxes?${BASE}&g=${G}_st.4_rv.1`);
     expect(screen.getByText('Build the package')).toBeInTheDocument();

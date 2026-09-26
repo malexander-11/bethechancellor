@@ -110,16 +110,16 @@ describe('the package, with a game under way', () => {
     // The desk is one link away from the guided screens and never the default (ADR-0022).
     const spending = at(`/budget/spending?${BASE}&${GAME}`);
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
-    expect(screen.getByText(/Build your Budget · 2 of 2/)).toBeInTheDocument();
+    expect(screen.getByText(/Build your Budget · More policies/)).toBeInTheDocument();
     expect(screen.getByText('The Director of Public Spending’s briefing')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Back to the ways to deliver' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to building your Budget' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Next: the/ })).toBeNull();
     // The press summary and the way out to the forecast live on the ways to afford now.
     expect(screen.queryByRole('complementary', { name: /press summary/ })).toBeNull();
     expect(screen.queryByRole('link', { name: /the OBR’s forecast/ })).toBeNull();
     spending.unmount();
     const taxes = at(`/budget/taxes?${BASE}&${GAME}`);
-    expect(screen.getByRole('link', { name: 'Back to the ways to afford it' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to paying for it' })).toBeInTheDocument();
     taxes.unmount();
     // Once the envelope is open, the way back is to the compromises.
     at(`/budget/taxes?${BASE}&g=s.7_st.4_pl.adviser_hr.20_pr.defence_rv.1`);

@@ -29,6 +29,20 @@ function liveBeatWords(): number {
   return words(clone.textContent ?? '');
 }
 
+/**
+ * Visible words of a screen with no beats: everything in the main column before any disclosure
+ * is opened, less the road, the footer and what only a screen reader hears.
+ */
+function screenWords(): number {
+  const main = document.querySelector('main');
+  if (!main) return 0;
+  const clone = main.cloneNode(true) as HTMLElement;
+  clone
+    .querySelectorAll('details, .speech, .sr-only, table, nav.progress, footer')
+    .forEach((el) => el.remove());
+  return words(clone.textContent ?? '');
+}
+
 /** Press Continue until a step has no more, counting the presses. */
 function pressThrough(): number {
   let n = 0;
@@ -78,29 +92,28 @@ describe('the beat and word budgets', () => {
   });
 
   it('keeps the guided screens of the package inside a budget', () => {
-    // Three priorities with the most options between them (fourteen cards), each with its lead's
-    // line, the figure with the headroom it would leave, its tags and the options it overlaps:
-    // the widest the ways to deliver can be (ADR-0022, revised 2026-09-26: 750 became 800 when
-    // the cards started naming what they overlap and the headroom each would leave).
+    // One priority a screen: the widest has five cards, each with its lead's line, the figure
+    // with the headroom it would leave, its tags and the options it overlaps, under the bar and
+    // the lead's brief. Then paying for it: all twenty-six ways on one screen, in five groups by
+    // who pays, each a title, a headline, a figure and its tags. Measured on 2026-09-26 at 316
+    // to 388 words a priority screen and 819 for paying, and pinned with about a tenth to spare.
     const widest =
       'g=s.1_st.2_pl.adviser_hr.20_pr.cost-of-living+welfare-bill+homes-growth&M=rate.0.75_rpi.0.5';
-    const deliver = at(`/budget/deliver?${BASE}&${widest}`);
-    pressThrough();
-    const n = liveBeatWords();
-    expect(n, `/budget/deliver shows ${n} words`).toBeLessThanOrEqual(800);
-    expect(n).toBeGreaterThan(300);
-    deliver.unmount();
-    // The ways to afford: five who-pays tabs, each read on its own.
-    const afford = at(`/budget/afford?${BASE}&${GAME}`);
-    pressThrough();
-    for (const tab of screen.getAllByRole('tab')) {
-      fireEvent.click(tab);
-      const m = liveBeatWords();
-      expect(m, `/budget/afford shows ${m} words with ${tab.textContent} open`).toBeLessThanOrEqual(
-        500,
-      );
-      expect(m).toBeGreaterThan(100);
+    for (const [path, limit] of [
+      ['/budget/deliver', 430],
+      ['/budget/deliver/2', 430],
+      ['/budget/deliver/3', 430],
+    ] as const) {
+      const view = at(`${path}?${BASE}&${widest}`);
+      const n = screenWords();
+      expect(n, `${path} shows ${n} words`).toBeLessThanOrEqual(limit);
+      expect(n).toBeGreaterThan(100);
+      view.unmount();
     }
+    const afford = at(`/budget/afford?${BASE}&${GAME}`);
+    const m = screenWords();
+    expect(m, `/budget/afford shows ${m} words`).toBeLessThanOrEqual(900);
+    expect(m).toBeGreaterThan(400);
     afford.unmount();
   });
 

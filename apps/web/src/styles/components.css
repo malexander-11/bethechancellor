@@ -1645,3 +1645,148 @@ label.choice {
 .gap__spent {
   color: var(--ink-2);
 }
+
+/* ------------------------------------------------------- the headroom bar */
+
+/* The score while you build: one slim strip under the header, never over a control. */
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 20px;
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 1px 0 var(--border);
+}
+
+.bar__headroom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin: 0;
+}
+
+.bar__label {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.bar__figure {
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.bar__figure--short {
+  color: var(--warning);
+}
+
+.bar__figure--worse {
+  color: var(--critical);
+}
+
+.bar__target {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.bar__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.bar__facts div {
+  display: flex;
+  gap: 5px;
+}
+
+.bar__facts dt {
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+.bar__facts dd {
+  margin: 0;
+}
+
+.bar__missed {
+  color: var(--critical);
+  font-weight: 600;
+}
+
+@media (max-height: 560px) {
+  .bar {
+    position: static;
+  }
+}
+
+/* The rank before a priority's title: "1st Safer streets". */
+.intro__rank {
+  margin-right: 2px;
+  color: var(--brass-ink);
+  font-family: var(--font);
+  font-size: 0.6em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  vertical-align: 0.15em;
+}
+
+/* --------------------------------------------------------------- who pays */
+
+.who {
+  margin: 20px 0 0;
+}
+
+.who__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+  margin: 0 0 6px;
+}
+
+.who__count {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.choices--compact {
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.choices--compact .choice {
+  padding: 10px 14px;
+}
+
+.choices--compact .choice__title {
+  font-size: 1rem;
+}
+
+/* "More policies": the way into the desk, one line. */
+.more-link {
+  margin: 4px 0 12px;
+  font-size: 0.9375rem;
+}
+
+.more-link a {
+  display: inline-block;
+  padding: 10px 0;
+  font-weight: 600;
+}

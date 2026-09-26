@@ -106,6 +106,7 @@ function Shell() {
           <Route path="/budget" element={<RedirectKeepingQuery to="/budget/deliver" />} />
           {/* The two guided screens of the package; the desk's two screens catch everything else. */}
           <Route path="/budget/deliver" element={<DeliverPage />} />
+          <Route path="/budget/deliver/:n" element={<DeliverPage />} />
           <Route path="/budget/afford" element={<AffordPage />} />
           <Route path="/budget/:tab" element={<BudgetPage />} />
           <Route path="/recommendations" element={<RedirectKeepingQuery to="/budget/spending" />} />

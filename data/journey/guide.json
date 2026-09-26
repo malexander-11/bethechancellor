@@ -31,19 +31,19 @@
     {
       "step": "deliver",
       "number": 4,
-      "title": "Choose how to deliver it",
-      "doing": "Each priority you agreed comes with a few costed ways to deliver it, proposed by the minister responsible.",
-      "why": "Every option is a set of the game's levers, priced against your Budget as it stands, with the [headroom] it would leave; two that count the same money cannot both be on.",
-      "now": "Pick any mix; the details are one link away.",
+      "title": "Build your Budget",
+      "doing": "One screen for each priority you agreed: a few costed ways to deliver it, from the minister responsible.",
+      "why": "Every option is a set of the game’s levers, priced against your Budget as it stands, with the [headroom] it would leave; two that count the same money cannot both be on.",
+      "now": "Tick the ways you want, then pay for them.",
       "terms": ["headroom", "earliest-start"]
     },
     {
       "step": "afford",
       "number": 4,
-      "title": "Choose how to pay for it",
-      "doing": "The Director of Tax shows the gap between what you have chosen and your target, and ways to close it, grouped by who pays.",
-      "why": "Every option carries its badge, its [manifesto] red line and its [earliest start](earliest-start), so you see what each costs you politically.",
-      "now": "Pick until the gap closes, or carry it into the forecast knowingly.",
+      "title": "Pay for it",
+      "doing": "The gap between what you chose and the margin you set out to keep, and ways to close it, grouped by who pays.",
+      "why": "Each option carries its badge, its [manifesto] red line and its [earliest start](earliest-start): what it costs you politically as well as in money.",
+      "now": "Choose who pays. Carry a gap into the forecast if you mean to.",
       "terms": ["headroom", "manifesto", "earliest-start"]
     },
     {

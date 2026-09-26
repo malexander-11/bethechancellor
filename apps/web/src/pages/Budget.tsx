@@ -91,7 +91,7 @@ const TABS: Record<
     work: 'Set the taxes',
     briefingStep: 'taxes',
     next: { to: '/budget/spending', label: 'Next: the spending' },
-    room: { to: '/budget/afford', label: 'Back to the ways to afford it' },
+    room: { to: '/budget/afford', label: 'Back to paying for it' },
   },
   spending: {
     part: 'the spending',
@@ -101,7 +101,7 @@ const TABS: Record<
     work: 'Set the spending',
     briefingStep: 'spending',
     back: { to: '/budget/taxes', label: 'Back to the taxes' },
-    room: { to: '/budget/deliver', label: 'Back to the ways to deliver' },
+    room: { to: '/budget/deliver', label: 'Back to building your Budget' },
   },
 };
 
@@ -113,6 +113,9 @@ function isTab(tab: string | undefined): tab is Tab {
 interface DeskState {
   group?: string;
   from?: 'deliver' | 'afford';
+  /** The exact screen to go back to, and what to call it, when a guided screen sent you here. */
+  returnTo?: string;
+  returnLabel?: string;
 }
 
 /**
@@ -224,13 +227,15 @@ export function BudgetPage() {
   // the one these levers belong to, or to the compromises once the envelope is open.
   const forward = game ? null : (spec.next ?? { to: '/budget-day', label: 'Go to Budget day' });
   const back = game
-    ? arrived?.from === 'deliver'
-      ? TABS.spending.room
-      : arrived?.from === 'afford'
-        ? TABS.taxes.room
-        : game.revealed
-          ? { to: '/compromise', label: 'Back to the compromises' }
-          : spec.room
+    ? arrived?.returnTo
+      ? { to: arrived.returnTo, label: arrived.returnLabel ?? 'Back' }
+      : arrived?.from === 'deliver'
+        ? TABS.spending.room
+        : arrived?.from === 'afford'
+          ? TABS.taxes.room
+          : game.revealed
+            ? { to: '/compromise', label: 'Back to the compromises' }
+            : spec.room
     : spec.back;
 
   async function copyLink() {
@@ -260,12 +265,12 @@ export function BudgetPage() {
   return (
     <JourneyLayout
       step={step}
-      part={{
-        noun: game ? 'Details' : 'Part',
-        index: DESK_ORDER.indexOf(step) + 1,
-        total: DESK_ORDER.length,
-        label: spec.part,
-      }}
+      part={
+        // With a game the desk is a side room, named on the line; a sandbox walks its two parts.
+        game
+          ? { index: 0, total: 0, label: 'More policies' }
+          : { index: DESK_ORDER.indexOf(step) + 1, total: DESK_ORDER.length, label: spec.part }
+      }
     >
       <Beats step={step}>
         {game ? null : (
