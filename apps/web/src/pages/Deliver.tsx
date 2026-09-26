@@ -1,6 +1,8 @@
 import {
   ambitionStatus,
+  blockedBy,
   interventionsFor,
+  optionConflicts,
   optionEarliestStart,
   optionOff,
   optionOverlaps,
@@ -59,9 +61,11 @@ function deskLinks(
 /**
  * Step 4, first screen (Phase 18, ADR-0022): the ways to deliver what was agreed with the Prime
  * Minister. One section per ranked priority, opened by the minister or adviser who leads on it,
- * then its costed options: each a bundle of the game's own levers, priced by the engine on its
- * own, chosen with a tick. The desk is one link away for anyone who wants to set a figure by hand;
- * a sandbox with no game goes straight there, because there are no priorities to deliver.
+ * then its costed options: each a bundle of the game's own levers, priced by the engine against
+ * the Budget as it stands, chosen with a tick. Two options that count the same money cannot both
+ * be chosen here: while one is in, the other's card says "Instead of" and waits. The desk is one
+ * link away for anyone who wants to set a figure by hand; a sandbox with no game goes straight
+ * there, because there are no priorities to deliver.
  */
 export function DeliverPage() {
   const { state, dispatch, outcome } = useBudget();
@@ -125,6 +129,9 @@ export function DeliverPage() {
             showHeadroom={false}
           />
           <Interventions items={advice} />
+          <p className="panel__hint">
+            Figures are for {targetYear}, against your Budget as it stands.
+          </p>
           {ranked.length === 0 ? (
             <p className="panel__hint">
               No priority is ranked yet. <StepLink to="/pm">Back to the Prime Minister</StepLink>.
@@ -148,6 +155,13 @@ export function DeliverPage() {
                 >
                   {report.options.map(({ option, state: optionState }) => {
                     const optionLevers = leversOf(option);
+                    const blocked = blockedBy(option, options, levers, state.leverValues);
+                    const clashes =
+                      optionState === 'off'
+                        ? []
+                        : optionConflicts(option, options, levers, state.leverValues).filter(
+                            (c) => c.partner !== 'off',
+                          );
                     return (
                       <OptionCard
                         key={option.id}
@@ -155,7 +169,7 @@ export function DeliverPage() {
                         name="deliver"
                         title={option.title}
                         state={optionState}
-                        price={priceOf(option)}
+                        price={priceOf(option, optionState === 'on')}
                         levers={optionLevers}
                         values={Object.fromEntries(
                           optionLevers.map((l) => [
@@ -166,7 +180,9 @@ export function DeliverPage() {
                         onChange={(on) => choose(option, on)}
                         redLines={optionRedLines(option, pm.promises, levers, state.leverValues)}
                         earliestStart={optionEarliestStart(option, levers)}
-                        overlaps={optionOverlaps(option, levers, moved)}
+                        overlaps={optionOverlaps(option, levers, moved, options)}
+                        {...(blocked ? { blocked } : {})}
+                        clashes={clashes}
                         line={option.line}
                         who={priority.lead}
                       >

@@ -50,8 +50,10 @@ describe('the ways to deliver', () => {
       2,
     );
     expect(within(section(/Ways to deliver: Defence/)).getAllByRole('checkbox')).toHaveLength(3);
-    // Every card carries the engine's figure for the option on its own.
-    expect(screen.getAllByText(/Costs £\d+\.\dbn in 2029-30/).length).toBeGreaterThanOrEqual(4);
+    // Every card carries the engine's figure for choosing it now, and the headroom that would leave;
+    // the year is said once, in the hint.
+    expect(screen.getAllByText(/Costs £\d+\.\dbn · leaves (−|£)/).length).toBeGreaterThanOrEqual(4);
+    expect(screen.getByText(/^Figures are for 2029-30/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Next: the ways to afford it' })).toBeInTheDocument();
   });
 
@@ -59,13 +61,17 @@ describe('the ways to deliver', () => {
     at(`/budget/deliver?${BASE}&${GAME}`);
     const strip = screen.getByRole('region', { name: 'Your Budget so far' });
     expect(within(strip).getByText('0 of 2 delivered')).toBeInTheDocument();
-    fireEvent.click(box(/Ways to deliver: Defence/, /Fund the Defence Investment Plan’s gap/));
+    const gap = () => box(/Ways to deliver: Defence/, /^Fund the Defence Investment Plan’s gap/);
+    fireEvent.click(gap());
     await waitFor(() => expect(L()).toMatch(/dip47\.1/));
     expect(within(strip).getByText('1 of 2 delivered')).toBeInTheDocument();
-    expect(box(/Ways to deliver: Defence/, /Fund the Defence Investment Plan’s gap/)).toBeChecked();
-    // Once on, the minister behind the lever reacts, and the price is unchanged: it is the option's own.
+    expect(gap()).toBeChecked();
+    // Once on, the minister behind the lever reacts, and the card prices what putting it back would
+    // undo: the headroom the Budget would have without it.
     expect(screen.getAllByText('Defence Secretary').length).toBeGreaterThanOrEqual(2);
-    fireEvent.click(box(/Ways to deliver: Defence/, /Fund the Defence Investment Plan’s gap/));
+    const card = gap().closest('.choice') as HTMLElement;
+    expect(within(card).getByText(/Costs £\d+\.\dbn · without it (−|£)/)).toBeInTheDocument();
+    fireEvent.click(gap());
     await waitFor(() => expect(L()).not.toMatch(/dip47/));
     expect(within(strip).getByText('0 of 2 delivered')).toBeInTheDocument();
   });
@@ -102,7 +108,7 @@ describe('the ways to deliver', () => {
       .getByRole('checkbox', { name: /Time-limit the new unemployment insurance/ })
       .closest('.choice') as HTMLElement;
     expect(
-      within(insurance).getByText(/Nothing until 2030-31, then saves £1\.4bn/),
+      within(insurance).getByText(/Nothing until 2030-31, then saves £1\.4bn · leaves/),
     ).toBeInTheDocument();
     // The child tax allowance starts in 2028-29 and wears the tag.
     const families = section(/Ways to deliver: Families and child poverty/);
@@ -111,6 +117,69 @@ describe('the ways to deliver', () => {
       .closest('.choice') as HTMLElement;
     expect(within(allowance).getByText(/Earliest start/)).toBeInTheDocument();
     expect(within(allowance).getByText(/April 2028/)).toBeInTheDocument();
+  });
+
+  it('blocks an option that counts the same money as one already chosen, and says by what', async () => {
+    at(`/budget/deliver?${BASE}&${GAME}`);
+    const defence = /Ways to deliver: Defence/;
+    const gap = () => box(defence, /^Fund the Defence Investment Plan’s gap/);
+    const three = () => box(defence, /^Defence at 3% of GDP now/);
+    expect(gap()).toBeEnabled();
+    fireEvent.click(three());
+    await waitFor(() => expect(L()).toMatch(/def3\.1/));
+    // The gap is blocked while the 3% option is in: the card is disabled and names the reason.
+    expect(gap()).toBeDisabled();
+    const gapCard = gap().closest('.choice') as HTMLElement;
+    expect(gapCard.className).toMatch(/choice--blocked/);
+    expect(
+      within(gapCard).getByText('Instead of Defence at 3% of GDP now, not in 2030-31'),
+    ).toBeInTheDocument();
+    expect(within(gapCard).getByText(/counts some of the same money twice/)).toBeInTheDocument();
+    // The 3% option itself is not blocked by the pair it is in.
+    expect(three()).toBeEnabled();
+    fireEvent.click(three());
+    await waitFor(() => expect(L()).not.toMatch(/def3/));
+    expect(gap()).toBeEnabled();
+    expect(gapCard.className).not.toMatch(/choice--blocked/);
+  });
+
+  it('with both sides of a pair in from the desk, both cards warn and neither is blocked', () => {
+    at(`/budget/deliver?${BASE}&${GAME}&L=def3.1_dip47.1`);
+    const defence = /Ways to deliver: Defence/;
+    const gap = box(defence, /^Fund the Defence Investment Plan’s gap/);
+    const three = box(defence, /^Defence at 3% of GDP now/);
+    expect(gap).toBeEnabled();
+    expect(three).toBeEnabled();
+    expect(gap).toBeChecked();
+    expect(three).toBeChecked();
+    expect(
+      within(gap.closest('.choice') as HTMLElement).getByText(
+        /^Warning: both this and Defence at 3% of GDP now, not in 2030-31 are in your Budget/,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      within(three.closest('.choice') as HTMLElement).getByText(
+        /^Warning: both this and Fund the Defence Investment Plan’s gap are in your Budget/,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('names the options it overlaps before either is chosen, and quotes the interaction once the other moves', () => {
+    const cost = 'g=s.7_st.2_pl.adviser_hr.20_pr.cost-of-living';
+    const quiet = at(`/budget/deliver?${BASE}&${cost}`);
+    const freeze = () =>
+      box(/Ways to deliver: Cut the cost of living/, /^End the threshold freeze early/).closest(
+        '.choice',
+      ) as HTMLElement;
+    // A way to afford moves the basic rate; the two interact, so the card says so, quietly.
+    const note = within(freeze()).getByText('Overlaps with Basic rate');
+    expect(note.className).not.toMatch(/choice__overlap--warn/);
+    quiet.unmount();
+    at(`/budget/deliver?${BASE}&${cost}&L=itbr.1`);
+    const moved = within(freeze()).getByText(
+      /^Overlaps with Basic rate: Both change the income tax base/,
+    );
+    expect(moved.className).not.toMatch(/choice__overlap--warn/);
   });
 
   it('opens the desk one link away, at the right group, with a way back to the options', () => {

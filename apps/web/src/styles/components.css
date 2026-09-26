@@ -838,7 +838,8 @@ label.choice {
   line-height: 1.45;
 }
 
-.choice--taken {
+.choice--taken,
+.choice--blocked {
   opacity: 0.6;
 }
 

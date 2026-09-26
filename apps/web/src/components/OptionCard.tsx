@@ -1,8 +1,10 @@
 import {
+  formatGbpBn,
   formatLevel,
   levelValue,
   type Badge,
   type Lever,
+  type OptionConflict,
   type OptionOverlap,
   type OptionRedLine,
   type OptionState,
@@ -33,12 +35,21 @@ function standing(lever: Lever, value: number): string {
   return formatLeverValue(lever, value);
 }
 
+/** "Costs £2.2bn · leaves £4.5bn" or "Costs £2.2bn · without it £6.7bn", one text node for one figure. */
+export function priceLine(price: OptionPrice): string {
+  const headroom = formatGbpBn(price.headroomGbpm, 1, price.headroomGbpm < 0);
+  return `${price.text} · ${price.standing === 'leaves' ? 'leaves' : 'without it'} ${headroom}`;
+}
+
 /**
  * One costed option a Chancellor can choose: a checkbox card with the title, the engine's figure
- * for the option on its own, the badges of the costings it rests on, the manifesto red lines it
- * would cross, its earliest start, the levers it overlaps with, and the line of whoever proposes
- * it. Choosing it moves the levers inside; the state is read back from the levers, so a card can
- * also show that its levers were adjusted on the desk to somewhere else (ADR-0022).
+ * for choosing it now against the Budget as it stands and the headroom that would leave, the
+ * badges of the costings it rests on, the manifesto red lines it would cross, its earliest start,
+ * the options it overlaps or counts the same money as, and the line of whoever proposes it.
+ * Choosing it moves the levers inside; the state is read back from the levers, so a card can also
+ * show that its levers were adjusted on the desk to somewhere else (ADR-0022). While an option it
+ * conflicts with is in the Budget the card is blocked and says by what; with both in from the
+ * desk, both warn and neither is blocked.
  */
 export function OptionCard({
   id,
@@ -53,6 +64,8 @@ export function OptionCard({
   redLines = [],
   earliestStart,
   overlaps = [],
+  blocked,
+  clashes = [],
   line,
   who,
   note,
@@ -73,6 +86,10 @@ export function OptionCard({
   redLines?: readonly OptionRedLine[];
   earliestStart?: string;
   overlaps?: readonly OptionOverlap[];
+  /** The option in the Budget that counts the same money, while this one is not on. */
+  blocked?: OptionConflict;
+  /** Options in the Budget that count the same money as this one, which is in the Budget too. */
+  clashes?: readonly OptionConflict[];
   /** The proposer's line, simulated and sourced; a way to afford has none and shows the lever's headline. */
   line?: SimulatedLine;
   who?: string;
@@ -84,18 +101,24 @@ export function OptionCard({
   const on = state === 'on';
   const adjusted = state === 'adjusted';
   const badges = badgesOf(levers);
+  const classes = [
+    'choice',
+    'choice--option',
+    on ? 'choice--picked' : '',
+    adjusted ? 'choice--adjusted' : '',
+    blocked ? 'choice--blocked' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
   return (
-    <div
-      className={`choice choice--option${on ? ' choice--picked' : ''}${adjusted ? ' choice--adjusted' : ''}`}
-      data-option={id}
-    >
+    <div className={classes} data-option={id}>
       <label>
         <input
           type="checkbox"
           name={name}
           value={id}
           checked={on}
-          disabled={disabled}
+          disabled={disabled || blocked !== undefined}
           onChange={(e) => onChange(e.target.checked)}
         />
         <span className="choice__body">
@@ -108,9 +131,12 @@ export function OptionCard({
           {note ? <span className="choice__line">{note}</span> : null}
           <span className="choice__meta">
             <span className={`choice__figure amount amount--${price.tone}`}>
-              {price.text}
-              <span className="sr-only">, for this option on its own</span>
+              {priceLine(price)}
+              <span className="sr-only">, in {price.year}</span>
             </span>
+            {blocked ? (
+              <span className="tag--treasury">Instead of {blocked.option.title}</span>
+            ) : null}
             {adjusted
               ? levers.map((lever) => (
                   <span key={lever.code} className="tag--treasury tag--warn">
@@ -138,15 +164,26 @@ export function OptionCard({
               </span>
             ) : null}
           </span>
-          {overlaps.map((o) => (
-            <span
-              key={o.withLever.code}
-              className={`choice__line choice__overlap${o.severity === 'warn' ? ' choice__overlap--warn' : ''}`}
-            >
-              {o.severity === 'warn' ? 'Warning: ' : ''}with {o.withLever.shortTitle}, already
-              moved: {o.text}
+          {blocked ? <span className="choice__line choice__overlap">{blocked.text}</span> : null}
+          {clashes.map((c) => (
+            <span key={c.option.id} className="choice__line choice__overlap choice__overlap--warn">
+              Warning: both this and {c.option.title} are in your Budget: {c.text}
             </span>
           ))}
+          {overlaps.map((o) => {
+            const partner = o.option?.shortTitle ?? o.withLever.shortTitle;
+            const warn = o.active && o.severity === 'warn';
+            return (
+              <span
+                key={o.withLever.code}
+                className={`choice__line choice__overlap${warn ? ' choice__overlap--warn' : ''}`}
+              >
+                {o.active
+                  ? `${warn ? 'Warning: ' : ''}Overlaps with ${partner}: ${o.text}`
+                  : `Overlaps with ${partner}`}
+              </span>
+            );
+          })}
           {line && who ? (
             <span className="choice__delivery">
               <span className="kicker">{who}</span> <LabelBadge badge={line.badge} />{' '}

@@ -35,17 +35,38 @@ describe('suggested little add-ons', () => {
     expect(screen.getByText('The OBR’s forecast arrives')).toBeInTheDocument();
   });
 
-  it('prices every suggestion as the headroom it would leave', () => {
+  it('prices every suggestion against the Budget as it stands, as the headroom it would leave', async () => {
     at(`/rabbit?${BASE}&g=${G}&${MACRO}&L=dhsc.3`);
     const cards = within(menu()).getAllByRole('checkbox');
     // Eight little add-ons, one priority to go further on, and keeping the headroom.
     expect(cards).toHaveLength(10);
     expect(within(menu()).getAllByText(/leaves (−|£)/).length).toBe(10);
-    expect(within(menu()).getByText(/costs nothing/)).toBeInTheDocument();
+    expect(within(menu()).getByText(/^Costs nothing · leaves/)).toBeInTheDocument();
     const pubs = box(/Five per cent off alcohol duty/).closest('label') as HTMLElement;
-    expect(within(pubs).getByText(/costs £\d+\.\dbn/)).toBeInTheDocument();
+    expect(within(pubs).getByText(/^Costs £\d+\.\dbn · leaves (−|£)/)).toBeInTheDocument();
     expect(within(pubs).getByText('Political Adviser')).toBeInTheDocument();
-    expect(screen.getByText(/0 of 3 chosen/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/priced against your Budget in 2029-30\. 0 of 3 chosen/),
+    ).toBeInTheDocument();
+    // Ticked, the card says what the Budget would have without it.
+    fireEvent.click(box(/Five per cent off alcohol duty/));
+    await waitFor(() => expect(g()).toMatch(/rb\.pubs/));
+    expect(within(pubs).getByText(/^Costs £\d+\.\dbn · without it (−|£)/)).toBeInTheDocument();
+  });
+
+  it('names the option an add-on overlaps, and quotes the interaction once that option is in', () => {
+    const quiet = at(`/rabbit?${BASE}&g=${G}&${MACRO}&L=dhsc.3`);
+    const electricity = () => box(/Keep VAT off electricity/).closest('.choice') as HTMLElement;
+    expect(
+      within(electricity()).getByText('Overlaps with Take VAT off gas as well as electricity'),
+    ).toBeInTheDocument();
+    quiet.unmount();
+    at(`/rabbit?${BASE}&g=${G}&${MACRO}&L=dhsc.3_vatgas.1`);
+    expect(
+      within(electricity()).getByText(
+        /^Overlaps with Take VAT off gas as well as electricity: The gas card’s arithmetic/,
+      ),
+    ).toBeInTheDocument();
   });
 
   it('takes up to three, no more, and puts each back when it is unticked', async () => {

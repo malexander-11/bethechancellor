@@ -79,13 +79,15 @@ describe('the beat and word budgets', () => {
 
   it('keeps the guided screens of the package inside a budget', () => {
     // Three priorities with the most options between them (fourteen cards), each with its lead's
-    // line, the figure and its tags: the widest the ways to deliver can be (ADR-0022).
+    // line, the figure with the headroom it would leave, its tags and the options it overlaps:
+    // the widest the ways to deliver can be (ADR-0022, revised 2026-09-26: 750 became 800 when
+    // the cards started naming what they overlap and the headroom each would leave).
     const widest =
       'g=s.1_st.2_pl.adviser_hr.20_pr.cost-of-living+welfare-bill+homes-growth&M=rate.0.75_rpi.0.5';
     const deliver = at(`/budget/deliver?${BASE}&${widest}`);
     pressThrough();
     const n = liveBeatWords();
-    expect(n, `/budget/deliver shows ${n} words`).toBeLessThanOrEqual(750);
+    expect(n, `/budget/deliver shows ${n} words`).toBeLessThanOrEqual(800);
     expect(n).toBeGreaterThan(300);
     deliver.unmount();
     // The ways to afford: five who-pays tabs, each read on its own.
@@ -126,10 +128,11 @@ describe('the beat and word budgets', () => {
   it('keeps the one-screen decisions to a few hundred visible words', () => {
     // The outlook and the add-ons have no hand-off: the screen is the decision, a handful of
     // cards and a note. Still a game, not a lecture. The add-ons screen carries ten cards, each
-    // with its adviser's short line, so it gets sixty words more than the outlook (ADR-0022).
+    // with its adviser's short line, the headroom it would leave and the options it overlaps, so
+    // it gets a hundred words more than the outlook (ADR-0022, revised 2026-09-26: 360 → 400).
     for (const [path, limit] of [
       ['/outlook', 300],
-      ['/rabbit', 360],
+      ['/rabbit', 400],
     ] as const) {
       const view = at(`${path}?${BASE}&${GAME}`);
       const n = liveBeatWords();

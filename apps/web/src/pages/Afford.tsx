@@ -1,8 +1,10 @@
 import {
   affordTabs,
   ambitionStatus,
+  blockedBy,
   formatGbpBn,
   interventionsFor,
+  optionConflicts,
   optionEarliestStart,
   optionOff,
   optionOverlaps,
@@ -54,9 +56,11 @@ const OPTIONS_BY_TAB = new Map(TABS.map((t) => [t.tab.label, t.options] as const
 /**
  * Step 4, second screen (Phase 18, ADR-0022): the ways to afford what has been chosen. The gap
  * between the headroom the package leaves and the margin the player set out to keep, then the
- * revenue options grouped by who pays, each priced by the engine on its own and wearing its badge,
- * its red line and its earliest start. Choosing is a tick; the tax desk is one link away. Leaving
- * for the forecast records the package as it stood before the OBR spoke, as the desk used to.
+ * revenue options grouped by who pays, each priced by the engine against the Budget as it stands
+ * and wearing its badge, its red line and its earliest start; one that counts the same money as
+ * an option already in is blocked and says by what. Choosing is a tick; the tax desk is one link
+ * away. Leaving for the forecast records the package as it stood before the OBR spoke, as the
+ * desk used to.
  */
 export function AffordPage() {
   const { state, dispatch, outcome } = useBudget();
@@ -180,6 +184,9 @@ export function AffordPage() {
           </section>
           <Interventions items={advice} />
           <PressSummary outcome={clue} />
+          <p className="panel__hint">
+            Figures are for {targetYear}, against your Budget as it stands.
+          </p>
           <Desk
             groups={GROUPS}
             moved={moved}
@@ -199,6 +206,14 @@ export function AffordPage() {
                       const code = Object.keys(option.values)[0] ?? '';
                       const lever = byCode.get(code);
                       if (!lever) return null;
+                      const optionState = states.get(option.id) ?? 'off';
+                      const blocked = blockedBy(option, options, levers, state.leverValues);
+                      const clashes =
+                        optionState === 'off'
+                          ? []
+                          : optionConflicts(option, options, levers, state.leverValues).filter(
+                              (c) => c.partner !== 'off',
+                            );
                       return (
                         <OptionCard
                           key={option.id}
@@ -206,14 +221,16 @@ export function AffordPage() {
                           name="afford"
                           title={lever.title}
                           note={lever.headline ?? lever.description}
-                          state={states.get(option.id) ?? 'off'}
-                          price={priceOf(option)}
+                          state={optionState}
+                          price={priceOf(option, optionState === 'on')}
                           levers={[lever]}
                           values={{ [code]: state.leverValues[code] ?? lever.control.default }}
                           onChange={(on) => choose(option, on)}
                           redLines={optionRedLines(option, pm.promises, levers, state.leverValues)}
                           earliestStart={optionEarliestStart(option, levers)}
-                          overlaps={optionOverlaps(option, levers, moved)}
+                          overlaps={optionOverlaps(option, levers, moved, options)}
+                          {...(blocked ? { blocked } : {})}
+                          clashes={clashes}
                           {...(option.line ? { line: option.line, who: 'Director of Tax' } : {})}
                         />
                       );

@@ -53,9 +53,12 @@ describe('the ways to afford it', () => {
     const before = gapLine();
     const levy = within(panel()).getByRole('checkbox', { name: /health and social care levy/i });
     const card = levy.closest('.choice') as HTMLElement;
-    expect(within(card).getByText(/Raises £1\d\.\dbn in 2029-30/)).toBeInTheDocument();
+    expect(within(card).getByText(/Raises £1\d\.\dbn · leaves £/)).toBeInTheDocument();
+    expect(screen.getByText(/^Figures are for 2029-30/)).toBeInTheDocument();
     fireEvent.click(levy);
     await waitFor(() => expect(L()).toMatch(/hscl\.1/));
+    // Once on, the card says what the Budget would have without it.
+    expect(within(card).getByText(/Raises £1\d\.\dbn · without it £/)).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /Everyone/ })).toHaveAccessibleName(/1 chosen/);
     expect(gapLine()).not.toBe(before);
     expect(gapLine()).toMatch(/to spare/);
@@ -79,7 +82,7 @@ describe('the ways to afford it', () => {
       .getByRole('checkbox', { name: /Two per cent above £10m|wealth/i })
       .closest('.choice') as HTMLElement;
     expect(
-      within(wealth).getByText('Nothing until 2030-31, then raises £18.5bn'),
+      within(wealth).getByText(/^Nothing until 2030-31, then raises £18\.5bn · leaves/),
     ).toBeInTheDocument();
     expect(within(wealth).getByText(/Earliest start/)).toBeInTheDocument();
     // Choosing it moves nothing in the target year, so the gap line does not move.
@@ -89,13 +92,33 @@ describe('the ways to afford it', () => {
     expect(gapLine()).toBe(before);
   });
 
-  it('warns when an option overlaps a lever already moved', () => {
+  it('blocks an option that counts the same money as a way to deliver already in the Budget', () => {
     at(`/budget/afford?${BASE}&${GAME}&L=fuel.-10`);
     fireEvent.click(screen.getByRole('tab', { name: /Drivers/ }));
-    const uprating = within(panel())
-      .getByRole('checkbox', { name: /fuel duty/i })
-      .closest('.choice') as HTMLElement;
-    expect(within(uprating).getByText(/already moved/)).toBeInTheDocument();
+    const uprating = within(panel()).getByRole('checkbox', { name: /fuel duty/i });
+    expect(uprating).toBeDisabled();
+    const card = uprating.closest('.choice') as HTMLElement;
+    expect(within(card).getByText('Instead of Cut fuel duty by 10%')).toBeInTheDocument();
+    expect(within(card).getByText(/one decision on one duty/)).toBeInTheDocument();
+    // A conflict is not also an overlap: the pair is said once.
+    expect(within(card).queryByText(/Overlaps with/)).toBeNull();
+  });
+
+  it('names an overlapping option before it is chosen, and quotes the interaction once it moves', () => {
+    const quiet = at(`/budget/afford?${BASE}&${GAME}`);
+    fireEvent.click(screen.getByRole('tab', { name: /Business/ }));
+    const nics = () =>
+      within(panel())
+        .getByRole('checkbox', { name: /^Employer NICs rate/ })
+        .closest('.choice') as HTMLElement;
+    expect(within(nics()).getByText('Overlaps with Corporation tax')).toBeInTheDocument();
+    quiet.unmount();
+    at(`/budget/afford?${BASE}&${GAME}&L=ct.1`);
+    expect(
+      within(nics()).getByText(
+        /^Overlaps with Corporation tax: Employer costs and company profits interact/,
+      ),
+    ).toBeInTheDocument();
   });
 
   it('opens the tax desk one link away, at the group of the tab’s first option, with a way back', () => {
