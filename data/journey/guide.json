@@ -33,8 +33,8 @@
       "number": 4,
       "title": "Choose how to deliver it",
       "doing": "Each priority you agreed comes with a few costed ways to deliver it, proposed by the minister responsible.",
-      "why": "Every option is a set of the game's own levers, so the engine prices it; the [headroom] strip moves as you choose.",
-      "now": "Pick any mix. Open the details only if you want to fine-tune a figure yourself.",
+      "why": "Every option is a set of the game's levers, priced against your Budget as it stands, with the [headroom] it would leave; two that count the same money cannot both be on.",
+      "now": "Pick any mix; the details are one link away.",
       "terms": ["headroom", "earliest-start"]
     },
     {
@@ -101,7 +101,7 @@
       "number": 6,
       "title": "Suggested little add-ons",
       "doing": "Decide whether to add up to three small announcements to the speech, or to keep your [headroom].",
-      "why": "An add-on gets a headline. It is also money you no longer have in reserve, and each is priced on its own.",
+      "why": "An add-on gets a headline. It is also money you no longer have in reserve, and each is priced against the Budget as it stands.",
       "now": "Tick up to three. Keeping the headroom is a choice too.",
       "terms": ["headroom"]
     },

@@ -253,16 +253,23 @@ the data names it) and the lead's `brief` opening its section of the ways to del
 values: codes that exist and are not deprecated or macro, values inside the control's range and on
 its grid, none the default. Rules the validator enforces:
 
-- **No lever twice on a screen, and none on both deliver and afford**, so an option's state (on,
-  adjusted, off) is read from the levers alone and is never ambiguous. An add-on may overlap a
-  deliver option; the card is then disabled as "already in your Budget".
+- **No lever in more than one option anywhere**, so an option's state (on, adjusted, off) is
+  read from the levers alone, is never ambiguous, and no screen can light or undo another's option.
+  The add-ons therefore sit on levers the ways to deliver and afford do not use.
+- **An option may name the options it counts the same money as**: `conflicts: [{ with, text }]`,
+  `with` an option id on any screen, `text` the reason in at most two hundred characters, best
+  quoted from the levers' own interactions. Author each pair once, on one side; never on the option
+  itself; never for an unknown id. While one is in the Budget the other's card is blocked and says
+  why. Softer overlaps need no authoring: they are the levers' `interactions`, read from either
+  side, named on the card before either option is chosen and quoted once the other moves.
 - **Every priority has two to five ways to deliver it** (`deliver[].priority`); safer streets has
   two because the game has only two levers there, and its brief says so.
 - **Every way to afford belongs to a who-pays tab** by its lever's incidence pays-group
   (`AFFORD_TABS` in the engine), three to six per tab. A way to afford carries no authored line: the
   card is the lever's title, headline and badge.
 - **The words are the proposer's** (`line`, a `SimulatedLine` with a `short`); the figure is never
-  authored: the page prices the bundle with the engine. Titles fit eighty characters.
+  authored: the page prices the bundle with the engine against the Budget as it stands, and shows
+  the headroom the move would leave. Titles fit eighty characters.
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 

@@ -4,7 +4,7 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 18 (advice and direction)**. You are appointed Chancellor in a Labour government
+Status: **Phase 19 (independent options)**. You are appointed Chancellor in a Labour government
 with a Budget to deliver on 28 October 2026. You rank priorities with the Prime Minister, choose
 among costed ways to deliver them proposed by the ministers who lead on them, choose among costed
 ways to afford them grouped by who pays, and add up to three little announcements; the desk of every
@@ -30,9 +30,11 @@ ties your hands. **The outlook**: which forecast do you plan on, and how much he
 **The Prime Minister**: rank up to three of eight priorities; the PM reacts to each and reads the
 ranking back; nothing is funded yet. **The package**: two guided screens. First the ways to
 deliver each priority, three to five costed options proposed by the minister who leads on it, each
-a bundle of the game's own levers priced by the engine on its own; then the ways to afford it, the
-gap against your target and the revenue options on five who-pays tabs, each wearing its badge, its
-manifesto red line and its earliest start. Behind them, one link away, the desk: every lever
+a bundle of the game's own levers priced by the engine against your Budget as it stands, with the
+headroom it would leave; then the ways to afford it, the gap against your target and the revenue
+options on five who-pays tabs, each wearing its badge, its manifesto red line and its earliest
+start. No two options share a lever, and two that count the same money cannot both be chosen: the
+second is blocked and says why. Behind them, one link away, the desk: every lever
 wearing the manifesto red line that watches it, with a minister on every spending line and advisers
 who remember what you agreed, and the menu a Chancellor actually weighs: employer National Insurance, pensions, the smaller duties,
 capital-tax reliefs, going further on recent rises, capital gains at death, a lower council tax

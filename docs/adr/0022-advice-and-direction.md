@@ -1,6 +1,7 @@
 # ADR-0022: Advice and direction
 
-Status: Accepted, 2026-09-25. Follows ADR-0021 (nothing before it can start).
+Status: Accepted, 2026-09-25; revised 2026-09-26 (every option its own lever, below). Follows
+ADR-0021 (nothing before it can start).
 
 ## Context
 
@@ -62,7 +63,8 @@ no lever. `themes`, `flagships`, `crossCutting` and the PM's flagship `reactions
 A bundle moves one or two levers to stated values, none of them the default, none macro, all on
 the lever's own grid. No lever appears twice on one screen, and none appears on both the deliver
 and the afford screens, so an option's state is never ambiguous. An add-on may overlap a deliver
-option; the card is then disabled as "already in your Budget".
+option; the card is then disabled as "already in your Budget" (revised below: no lever appears in
+more than one option anywhere).
 
 ### State is read from the levers
 
@@ -74,7 +76,7 @@ guided screens can never disagree, a player who fine-tunes on the desk sees the 
 nor off ("Adjusted on the desk: +5%"), a shared link needs no new key, and every old `L=` link
 lights the options it happens to satisfy. Delays stay per lever (`dl`).
 
-### Every card is priced on its own
+### Every card is priced on its own (revised below: against the Budget as it stands)
 
 `useOptionPrices` re-runs the engine for the bundle alone with the economic assumptions in force,
 and `describeBundle` reads the effect into one line: "Raises £9.9bn in 2029-30", "Costs £2.2bn in
@@ -115,7 +117,7 @@ suggested); "Spend less, or later" lists what was chosen to deliver, biggest fir
 later start for its lever, half the distance where it is one slider (`narrowedBundle`), or
 dropped, then any spending moved on the desk; the old third route, scaling back a promise, folds
 into it. The add-ons are checkboxes, up to three, each priced against the package with none of
-them in it so the figures do not depend on the order ticked; "Keep the headroom" is exclusive;
+them in it so the figures do not depend on the order ticked (revised below); "Keep the headroom" is exclusive;
 "Go further on {priority}" appears for each delivered priority whose largest single-slider option
 has a notch to go. The speech opens on the first-ranked priority, says one paragraph per delivered
 priority and names every add-on; the reception reads priorities delivered and a clear priority;
@@ -135,7 +137,8 @@ is a list of one; `rb.flagship:*` is dropped with a warning. Old `L=` values sti
   figure the options do not offer is one link from it, and the tests of the sandbox are unchanged.
 - Word budgets: the ways to deliver at most 750 visible words with three priorities of five
   options; the ways to afford at most 500 per tab; the add-ons 360 (raised from 300 for the ten
-  cards' short lines); the hand-offs 180; eight Continues across the journey.
+  cards' short lines); the hand-offs 180; eight Continues across the journey (revised below: 800
+  and 400).
 - The engine gains `game/options.ts` (state, red lines, earliest start, overlaps, the who-pays
   tabs, the ranking) and `game/promises.ts`; `ambitionStatus` reports each priority delivered,
   part-delivered or undelivered from its options' states; nothing in the arithmetic changed.
@@ -146,3 +149,95 @@ is a list of one; `rb.flagship:*` is dropped with a warning. Old `L=` values sti
 - Not built: a policing or courts lever, so safer streets has two ways; a speech fragment for a
   measure that starts after the target year (ADR-0021's follow-up); a delay on a whole bundle
   rather than its levers.
+
+## Revision (2026-09-26): every option its own lever
+
+### Context
+
+Playing Phase 18, the user said: _"Issue: the options are not independent of each other."_ Asked
+which coupling they had met, they named all three the code showed:
+
+1. **The same lever on two screens.** Seven of the eight add-ons were a way to deliver under
+   another name (`meals` moved `ufsm`, `fuel-cut` moved `fuel`, `retraining` `airet`, `keep-bus-cap`
+   `bus2`, `plan2` `rvplan2`, `vat-gas` `vatgas`, `benefit-floor` `ucfloor`), and the eighth, the pub
+   cut, reversed the afford screen's alcohol rise. Ticking an add-on lit a way to deliver as
+   delivered; a 10% fuel duty cut disabled the 5% add-on as "already in your Budget"; raising
+   alcohol duty disabled the pub cut for the wrong reason; an add-on ticked first made a way to
+   deliver read "Adjusted on the desk". The decision above allowed it, and the schema forbade a
+   shared lever only within one list and between deliver and afford.
+2. **Overlapping measures double counted.** Pairs that count the same money could both be on at
+   full price: defence at 3% now and the Investment Plan gap (the lever's own text says funding both
+   counts some of the same money twice); the CSJ mental-health reset and the 2025 PIP changes (two
+   reforms of one caseload); CenTax's CGT package and the charge at death (the package already
+   removes the write-off); a fuel duty cut and the restored uprating. Eleven softer "approximate
+   combination" pairs existed between option levers. `optionOverlaps` warned only once the other
+   lever had moved, read one direction only, and disabled nothing.
+3. **Card prices ignored the package.** Each card priced its bundle alone with only the economic
+   assumptions in force, so its figure never moved with what else was chosen and the strip's move
+   differed from the card's. The add-ons and the compromise step already priced against the
+   package.
+
+### Decisions taken with the user (2026-09-26)
+
+| Question                                                   | Choice                                                                                                                                                                                                                                                                                                                                          |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Add-ons that duplicated a way to deliver; the alcohol pair | **Every option its own lever.** The schema forbids a lever in more than one option anywhere. The seven duplicates are replaced by small measures nobody else offers; the pub cut stays and the afford screen's alcohol rise becomes a tobacco rise.                                                                                             |
+| Options that count the same money twice                    | **Disable the second, say why.** Pairs are authored in `options.json` with a reason; while one is in the Budget the other's card is blocked, reading "Instead of {other}" and the reason. To switch, untick the first. Softer overlaps read "Overlaps with {other}" before either is chosen and quote the interaction once the other has moved. |
+| Card prices                                                | **Against the Budget as it stands**: what choosing the option now would do, and the headroom that would leave; on, what it is doing and the headroom the Budget would have without it.                                                                                                                                                          |
+
+### What changed
+
+- **Schema.** `optionsFileSchema` refuses any lever in two options across the three lists
+  ("addOns option x and deliver option y both move lever z"). Every option kind may carry
+  `conflicts: [{ with, text }]`: `with` is an option id on any screen, never the option itself, and
+  each pair is authored once ("options x and y both author their conflict; author it on one").
+- **Data.** The Duties tab's alcohol rise is a tobacco rise (`tob: 10`, which the lever's own
+  headline says raises little). Four conflicts, each quoting the levers' own interaction text:
+  `three-per-cent-now` with `dip-gap`, `mental-health-reset` with `pip-changes`, `cgtalign` with
+  `cgtdth`, `fuel-duty-cut` with `rvfuel`. The eight add-ons are now: keep VAT off electricity past
+  March 2027 (`vatelec`), a point off the 5% stamp duty band (`sdlt5`), £100 on the personal
+  allowance (`itpa`), £2 a week more before National Insurance starts (`nicpt`), transport's
+  day-to-day budget up 5% (`dft`), aid up 5% (`fcdo`), half a per cent more for pensioners
+  (`wpens`) and five per cent off alcohol duty (`alc`), each with a sourced short line and a speech
+  fragment. The defence 3% card's interaction with the day-to-day defence slider is information,
+  not a warning: the two add up rather than count the same money.
+- **Engine.** `allOptions` and `optionByLever` name every option on every screen; `optionConflicts`
+  reads a pair from either side with how the partner stands; `blockedBy` is the conflict that blocks
+  an option (it is not on, and the partner is on or adjusted on the desk). `optionOverlaps` reads
+  the levers' authored interactions from both sides, names the option that offers the partner
+  lever, carries `active` (the partner has moved), lists a partner no option offers only once it has
+  moved, and leaves out a pair authored as a conflict, because the conflict says it. The compromise
+  step's suggestions skip a blocked option; the speech skips an add-on id the data no longer offers.
+- **Prices.** `describeMove(withIt, withoutIt, …)` reads an option's levers' effect in the Budget
+  with the move made less their effect without it, into the same words as before but without the
+  year. `useOptionPrices` returns, for an option off or adjusted, that move on top of the Budget as
+  it stands and the headroom it would leave ("Costs £2.2bn · leaves £4.5bn"); for one on, what
+  putting it back would undo and the headroom without it ("· without it £6.7bn"). The card's "leaves"
+  is what the strip will read once the option is ticked, debt-interest feedback included; the year
+  is said once per screen ("Figures are for 2029-30, against your Budget as it stands") and in a
+  screen-reader note on each figure.
+- **Cards.** A blocked card is disabled, dimmed, tagged "Instead of {other}" and carries the
+  reason; with both sides of a pair in from the desk, both cards warn ("both this and {other} are
+  in your Budget") and neither is blocked, because either can be put back. Overlap notes read
+  "Overlaps with {option}" quietly, then "Overlaps with {option}: {interaction}" (red for a warning)
+  once the other has moved.
+- **The add-ons** are `OptionCard`s priced the same way, against the Budget with the other add-ons
+  in it. This reverses the order-independent baseline decided above: the figures now depend on what
+  is already ticked, which is what the user asked for, and "leaves" makes the dependence plain.
+  "Keep the headroom" prices what it does: every add-on back, "Costs nothing · leaves £X". The
+  count reads only the cards on the page, so an old `rb.meals` link cannot pin "3 of 3 chosen".
+- **Word budgets**, measured: the widest ways to deliver 766 visible words (limit 750 → 800: the
+  cards now name what they overlap and the headroom each would leave), the add-ons 382 (360 → 400).
+  The ways to afford stay under 500 per tab.
+
+### Consequences
+
+- No screen can light or undo another's option; an option's state is the truth about its own
+  levers and nothing else.
+- Two options that count the same money cannot both be chosen from the cards; the desk can still
+  set both levers, and then both cards say so rather than one being quietly right.
+- Card figures move with the package. Two cards' figures still do not add to the strip's move, and
+  no longer pretend to: each is the next move from here.
+- Old links carrying a retired add-on id (`rb.meals`, `rb.fuel-cut`, …) decode to fewer add-ons;
+  the speech and the count ignore them; an old `L=alc.5` still applies on the desk.
+- Counts unchanged: 29 ways to deliver, 26 ways to afford, 8 add-ons; four conflicts.

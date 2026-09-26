@@ -834,24 +834,35 @@ never the default while a game is under way.
 
 - **An option is a bundle of the game's own levers** (`data/journey/options.json`: 29 ways to
   deliver, 26 ways to afford, 8 add-ons), one or two levers at stated values, none of them the
-  default. No lever appears twice on a screen or on both the deliver and the afford screens.
+  default. No lever appears in more than one option anywhere (revised 2026-09-26: the add-ons used
+  to share levers with the ways to deliver), so no screen can light or undo another's option.
   Choosing an option moves its levers; putting it back restores their defaults.
+- **Two options that count the same money cannot both be chosen.** An option may name the options
+  it conflicts with, each pair authored once with the reason in the levers' own words (defence at
+  3% now and the Investment Plan gap; two PIP reforms on one caseload; the CGT package and the
+  charge at death; a fuel duty cut and the restored uprating). While one is in the Budget the other's
+  card is blocked and reads "Instead of {other}" with the reason; with both in from the desk, both
+  cards warn and either can be put back. Softer overlaps are the levers' authored interactions,
+  read from either side: a card says "Overlaps with {other}" before either is chosen and quotes the
+  interaction once the other has moved. The compromise step never suggests a blocked option.
 - **Whether an option is on is read from the levers**, never stored: on when every lever is at or
   beyond the option's value in its direction, adjusted when some lever has moved but not to there,
   off otherwise. The desk and the guided screens therefore never disagree, a lever fine-tuned on the
   desk shows on its card as "Adjusted on the desk", and a shared link needs no new key.
-- **Every card is priced on its own**: the engine re-run for the bundle alone with the economic
-  assumptions in force, read as "Raises £9.9bn in 2029-30", "Costs £2.2bn", "Saves £4.5bn",
-  "Borrowing up £13.4bn; the current budget is unchanged" for investment, or "Nothing until
-  2030-31, then raises £18.5bn" for a measure that cannot start before the target year (§21). The
-  strip shows the real package. The card also carries the badges of the costings behind it, the
-  manifesto red line it would cross, its earliest start and any interaction with a lever already
-  moved.
+- **Every card is priced against the Budget as it stands** (revised 2026-09-26; each used to be
+  priced on its own): the engine re-run with the option's move made on top of everything else
+  chosen, under the game's own conditions, read as "Raises £9.9bn · leaves £14.2bn", "Costs
+  £2.2bn · leaves £4.5bn", "Saves £4.5bn", "Borrowing up £13.4bn; the current budget is unchanged"
+  for investment, or "Nothing until 2030-31, then raises £18.5bn" for a measure that cannot start
+  before the target year (§21). "Leaves" is the headroom the strip will show once the option is
+  ticked, debt-interest feedback included; an option already on says instead what the Budget would
+  have "without it". The year is said once per screen. The card also carries the badges of the
+  costings behind it, the manifesto red line it would cross and its earliest start.
 - **The compromise step reads the same options**: the Director of Tax's suggestions are the ways to
   afford it not yet chosen, ranked by the headroom each buys; the spending route lists what was
   chosen to deliver, each with a later start, half the distance or dropped. The add-ons are eight
-  small costed announcements, up to three in the speech, each priced against the package with none
-  of them in it.
+  small costed announcements on levers no other option moves, up to three in the speech, each
+  priced like every other card against the Budget as it stands, the other add-ons included.
 - **The words are the advisers' and the ministers'**, simulated, sourced and shown short first; the
   figures are the engine's. Priorities replace themes in the speech, the reception and the verdict,
   and an old link's `th` values map to the priorities that took their place.
