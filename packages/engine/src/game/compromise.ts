@@ -1,15 +1,23 @@
-import type { AffordOption, Lever, OptionsFile, Promise_ } from '../types/data.js';
+import type {
+  AffordOption,
+  DeliverOption,
+  Lever,
+  OptionsFile,
+  Priority,
+  Promise_,
+} from '../types/data.js';
 import type { Outcome } from '../types/engine.js';
-import { promiseBreaks } from './ambitions.js';
+import { promiseBreaks, type AmbitionStatus } from './ambitions.js';
 import { blockedBy, optionState } from './options.js';
 
 /**
- * The routes out of a gap (stage 5). Nothing here is a judgement: the Director of Tax's
- * suggestions are the ways to afford it not yet chosen, ranked by what the engine says each
- * raises (every one wears its lever's badge, so our own arithmetic ranks beside HMRC's and says
- * so); the spending list is the package's own measures ranked by what they cost; a delay is a
- * later start year; a narrowing is half the distance to the target. The words about them come
- * from data.
+ * The routes out of a gap, and the ways to use room to spare (stage 5). Nothing here is a
+ * judgement: the Director of Tax's suggestions are the ways to afford it not yet chosen, ranked
+ * by what the engine says each raises (every one wears its lever's badge, so our own arithmetic
+ * ranks beside HMRC's and says so); the spending list is the package's own measures ranked by
+ * what they cost; a delay is a later start year; a narrowing is half the distance to the target;
+ * with headroom to spare, the ways to deliver the ranked priorities not yet chosen come one per
+ * priority in rank order. The words about them come from data.
  */
 
 export interface AffordSuggestion {
@@ -75,6 +83,51 @@ export function affordSuggestions(
     out.push({ option, lever, yieldGbpm, breaks });
   }
   return out.sort((a, b) => b.yieldGbpm - a.yieldGbpm).slice(0, n);
+}
+
+export interface DeliverSuggestion {
+  option: DeliverOption;
+  priority: Priority;
+  /** The priority's rank with the Prime Minister: 1, 2 or 3. */
+  rank: number;
+}
+
+/**
+ * With headroom to spare: the ways to deliver the ranked priorities that are still off and not
+ * blocked by an option already in the Budget, the first open way of each priority in rank order,
+ * then the second of each, and so on, up to n. Nothing is priced here; the caller prices each
+ * against the Budget as it stands, as the option cards do (ADR-0022).
+ */
+export function deliverSuggestions(
+  status: AmbitionStatus,
+  options: OptionsFile,
+  levers: readonly Lever[],
+  current: Record<string, number>,
+  n = 3,
+): DeliverSuggestion[] {
+  const open = status.priorities
+    .slice()
+    .sort((a, b) => a.rank - b.rank)
+    .map((p) => ({
+      priority: p.priority,
+      rank: p.rank,
+      ways: p.options
+        .filter((o) => o.state === 'off' && !blockedBy(o.option, options, levers, current))
+        .map((o) => o.option),
+    }));
+  const out: DeliverSuggestion[] = [];
+  for (let round = 0; out.length < n; round += 1) {
+    let any = false;
+    for (const p of open) {
+      const option = p.ways[round];
+      if (!option) continue;
+      any = true;
+      out.push({ option, priority: p.priority, rank: p.rank });
+      if (out.length >= n) break;
+    }
+    if (!any) break;
+  }
+  return out;
 }
 
 export interface SpendingMeasure {

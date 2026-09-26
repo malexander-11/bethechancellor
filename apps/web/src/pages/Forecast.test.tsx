@@ -31,6 +31,16 @@ const money = (s: string) => {
 };
 
 describe('the OBR’s forecast', () => {
+  it('names the next screen for the headroom it leaves: a shortfall to respond to, or room to use', () => {
+    const G = `g=s.${ADVISER}_st.4_pl.adviser_hr.20_pr.defence_rv.1&M=rate.0.75_rpi.0.5`;
+    const short = at(`/forecast?${BASE}&${G}&L=dip47.1`);
+    expect(screen.getByRole('link', { name: 'Respond to it' })).toBeInTheDocument();
+    short.unmount();
+    at(`/forecast?${BASE}&${G}&L=dip47.1_hscl.1`);
+    expect(screen.getByRole('link', { name: 'Make the most of it' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Respond to it' })).toBeNull();
+  });
+
   it('sends a link with no game back to the outlook', () => {
     at(`/forecast?${BASE}&L=ufsm.1`);
     expect(screen.getByText('Your starting position')).toBeInTheDocument();

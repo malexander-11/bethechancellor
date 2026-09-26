@@ -41,9 +41,15 @@ describe('making it add up', () => {
   it('states the gap against the target, and ranks the Director of Tax’s suggestions', async () => {
     // The ways to afford it that out-yield every rate rise are already chosen, so the Director's
     // list reaches the rate rises the manifesto lock covers; an option already on is not offered
-    // again.
-    at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1_nicpen.1_pens20.1_cgtalign.1_wealth2.1`);
-    expect(screen.getByText(/you set out to keep/)).toBeInTheDocument();
+    // again. The spending keeps the Budget short of its £30bn target, so the screen is the sums.
+    at(
+      `/compromise?${BASE}&${GAME}&L=moj.10_dip47.1_nicpen.1_pens20.1_cgtalign.1_wealth2.1_hscl.1_dhsc.10_dfe.10_otherd.10_mod.10_home.10_wpens.5`,
+    );
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Make the sums add up' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/^£\d+\.\dbn short$/)).toBeInTheDocument();
+    expect(screen.getByText(/of the £30bn you set out to keep/)).toBeInTheDocument();
     // The stress test: the package under every forecast the draw could have produced.
     fireEvent.click(screen.getByText(/hold up under the other forecasts/));
     const stress = screen.getByText(/hold up under the other forecasts/).closest('details');
@@ -55,7 +61,7 @@ describe('making it add up', () => {
     expect(within(route).getAllByText(/breaks The tax lock/).length).toBeGreaterThan(0);
     fireEvent.click(buttons[0]!);
     // The biggest yield in the package is applied, whichever tax it is; the package grows by one.
-    await waitFor(() => expect(L().split('_')).toHaveLength(7));
+    await waitFor(() => expect(L().split('_')).toHaveLength(14));
   });
 
   it('delays a measure to a later year and writes the delay into the link', async () => {
@@ -126,6 +132,67 @@ describe('making it add up', () => {
     expect(screen.queryByRole('region', { name: /Prime Minister/ })).toBeNull();
     expect(screen.queryByRole('region', { name: /Scale back/ })).toBeNull();
     expect(screen.getByRole('region', { name: /Spend less, or later/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '3 · Accept less headroom' })).toBeInTheDocument();
+  });
+});
+
+describe('making the most of extra headroom', () => {
+  // Two priorities, a £20bn target, and one way to pay that leaves the Budget over the target
+  // with every rule met: the screen offers ways to use the room, not ways out.
+  const SURPLUS = `g=s.${ADVISER}_st.4_pl.adviser_hr.20_pr.defence+safer-streets_rv.1&M=rate.0.75_rpi.0.5`;
+
+  it('offers the ways to deliver the priorities, one per priority first, and does one', async () => {
+    at(`/compromise?${BASE}&${SURPLUS}&L=hscl.1`);
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Make the most of your extra headroom' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/^£\d+\.\dbn to spare$/)).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: /Raise more revenue/ })).toBeNull();
+    expect(screen.queryByRole('region', { name: /Spend less, or later/ })).toBeNull();
+    expect(screen.queryByRole('region', { name: /Borrow, and say so/ })).toBeNull();
+    expect(screen.queryByText(/No rule is missed on these numbers/)).toBeNull();
+    const more = screen.getByRole('region', { name: /Do more for your priorities/ });
+    const rows = within(more).getAllByRole('listitem');
+    expect(rows).toHaveLength(3);
+    expect(rows[0]).toHaveTextContent(/for defence/);
+    expect(rows[1]).toHaveTextContent(/A Justice uplift for prison capacity/);
+    // Each priced against the Budget as it stands, with the headroom it would leave.
+    expect(within(more).getAllByText(/^leaves £/)).toHaveLength(3);
+    expect(within(more).getAllByText(/^Costs £/).length).toBeGreaterThan(0);
+    fireEvent.click(within(more).getAllByRole('button', { name: 'Do it' })[0]!);
+    await waitFor(() => expect(L().split('_')).toHaveLength(2));
+    expect(L()).toMatch(/dip47\.1/);
+  });
+
+  it('eases off a tax rise, and follows the headroom back to the sums when that leaves a gap', async () => {
+    at(`/compromise?${BASE}&${SURPLUS}&L=hscl.1`);
+    const ease = screen.getByRole('region', { name: /Ease off a tax rise/ });
+    expect(within(ease).getByText(/dropped: −£/)).toBeInTheDocument();
+    expect(within(ease).getAllByText(/each with the headroom/).length).toBe(1);
+    fireEvent.click(within(ease).getByRole('button', { name: 'Drop it' }));
+    await waitFor(() => expect(L()).not.toMatch(/hscl/));
+    // The only way to pay is gone and the Budget is short again: the screen is the sums.
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Make the sums add up' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /Raise more revenue/ })).toBeInTheDocument();
+  });
+
+  it('says when there is nothing to ease, and lets the Chancellor bank the room by raising the target', async () => {
+    at(
+      `/compromise?${BASE}&g=s.${ADVISER}_st.4_pl.adviser_hr.0_pr.defence_rv.1&M=rate.0.75_rpi.0.5`,
+    );
+    expect(screen.getByText(/headroom beyond the rules/)).toBeInTheDocument();
+    expect(screen.getByText(/nothing to ease/)).toBeInTheDocument();
+    const keep = screen.getByRole('region', { name: /Keep more headroom/ });
+    // The adviser's short line and the full one behind "More" both carry the phrase.
+    expect(within(keep).getAllByText(/Money not spent is the cheapest insurance/).length).toBe(2);
+    fireEvent.click(within(keep).getByRole('radio', { name: /£30bn/ }));
+    await waitFor(() => expect(g()).toMatch(/hr\.30/));
+    // Short of the new target: the sums again, with the target's own route.
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Make the sums add up' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '3 · Accept less headroom' })).toBeInTheDocument();
   });
 });

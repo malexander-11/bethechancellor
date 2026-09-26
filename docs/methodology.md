@@ -897,6 +897,17 @@ Budget means. The rules that hold every screen to the same shape:
   screens reads the engine's headroom in the target year against the margin the player set, the
   priorities delivered, the promises kept and the rules met; a card's "leaves £X" is the figure the
   bar shows once the card is ticked, to the pound.
+- **The compromise screen follows the headroom.** Short of the margin the player set out to keep,
+  or with a rule missed, it is "Make the sums add up": raise more, spend less or later, accept
+  less headroom, and, only when a rule is missed, borrow and say so. With room to spare and every
+  rule met it is "Make the most of your extra headroom": the ways to deliver the ranked priorities
+  not yet chosen (`deliverSuggestions`: the first open way of each priority in rank order, then
+  the second of each, a way blocked by one already in the Budget skipped), each priced against
+  the Budget as it stands with the headroom it would leave; the ways to pay already chosen, each
+  with what dropping it would leave; and the target, with the Chief Economic Adviser's case for
+  keeping the margin. The forecast's button says which screen follows ("Respond to it" or "Make
+  the most of it"), and the screen changes mood as the headroom moves: ease off the only tax rise
+  and the sums are back.
 - **The Budget in three sentences.** Budget day opens with what was prioritised (the priorities'
   nouns), who pays (the largest payers by the incidence tags) and what was accepted, in this order
   of weight: a rule missed, a promise broken, a target not kept, a measure moved after the forecast.

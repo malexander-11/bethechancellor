@@ -9,6 +9,9 @@ const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 // something to say.
 const GAME =
   'g=s.1_st.5_pl.adviser_hr.20_pr.defence+safer-streets_rv.1_rb.pubs&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_hscl.1_alc.-5&S=moj.10_dip47.1_hscl.1';
+// The same game short of its target: the compromise screen in its other mood, the sums.
+const SHORT =
+  'g=s.1_st.5_pl.adviser_hr.20_pr.defence+safer-streets_rv.1_rb.pubs&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_alc.-5&S=moj.10_dip47.1';
 // Three priorities with the most options between them: the widest the priority screens get.
 const WIDEST =
   'g=s.1_st.2_pl.adviser_hr.20_pr.cost-of-living+welfare-bill+homes-growth&M=rate.0.75_rpi.0.5';
@@ -48,6 +51,7 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/budget/deliver/3', 350, WIDEST],
   ['/budget/afford', 620, GAME],
   ['/forecast', 150, GAME],
+  ['/compromise', 340, SHORT],
   ['/compromise', 340, GAME],
   ['/rabbit', 430, GAME],
   ['/review', 140, GAME],

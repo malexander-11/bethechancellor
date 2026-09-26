@@ -175,3 +175,24 @@ Every moved pairing was re-audited on every screen in both themes (`walk21.mjs`,
 any corner radius outside the browser's controls and the motifs): on the light paper the badge inks
 sit at 6.3:1 to 9.9:1, green at 6.2:1, brass ink and the muted numerals at 5.6:1; on the dark paper
 nothing is under 6.5:1. The word budgets, the playtime estimate and every page test are unaffected.
+
+## Revision (2026-09-26, later): the compromise screen follows the headroom
+
+The same player found "Make the sums add up" wrong for a Budget the forecast had left with more
+headroom than they set out to keep: the routes out of a gap were offered when there was no gap.
+The screen now has two moods, decided by the engine's headroom against the player's target and
+the rules. Short, or with a rule missed, it is the screen above. With room to spare and every rule
+met it is **Make the most of your extra headroom**, with three routes: _do more for your
+priorities_ (the ways to deliver the ranked priorities not yet chosen, the first open way of each
+priority in rank order and then the second of each, a way blocked by one already in the Budget
+skipped, each priced against the Budget as it stands with the headroom it would leave, and a **Do
+it**); _ease off a tax rise_ (the ways to pay already chosen, each with the headroom dropping it
+would leave, and a **Drop it**); and _keep more headroom_ (the target, with the Chief Economic
+Adviser's case for the margin). There is no borrowing route and no breach aside in this mood, only
+a way to withdraw an acknowledgement signed earlier. The forecast's primary button says which
+screen follows ("Respond to it" or "Make the most of it"). The three new advisers' lines live in
+`compromise.json` beside the four, sourced and badged like them, inside the forty-word budget; the
+guide's title stays the sums', the page overriding it in the other mood. The screen changes mood
+as the headroom moves: dropping the only tax rise, or raising the target past the headroom,
+brings the sums back, which is the point. `deliverSuggestions` (engine) and the two moods are
+tested; the word budget for the surplus screen is measured and pinned beside the sums'.

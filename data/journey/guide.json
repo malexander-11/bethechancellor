@@ -91,8 +91,8 @@
       "step": "compromise",
       "number": 5,
       "title": "Make the sums add up",
-      "doing": "Close the gap between the [headroom] you have and the headroom you wanted.",
-      "why": "Every route costs something: more of the ways to pay, less of what you chose, or a thinner safety margin.",
+      "doing": "Set the [headroom] you have against the headroom you wanted, and act on the difference.",
+      "why": "Short of it, every route costs something: more of the ways to pay, less of what you chose, a thinner margin. Over it, every pound spent is margin gone.",
       "now": "Take the routes you can live with, then make your final choices.",
       "terms": ["fiscal-rules", "borrowing", "escape-clause", "certified"]
     },

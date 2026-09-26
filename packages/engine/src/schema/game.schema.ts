@@ -395,9 +395,11 @@ export const interventionsFileSchema = z
 /**
  * What the advisers say beside each route out of a gap (stage 5): raise more, spend less or
  * later (which since Phase 18 also narrows or drops a chosen option), accept less headroom, or
- * borrow and say so. One line per route, in the voice of the adviser named; the breach
- * assessment is the Permanent Secretary's and quotes the Charter. Everything simulated, every
- * fact sourced, no number authored.
+ * borrow and say so; and, when the forecast leaves more headroom than the player set out to keep,
+ * beside the ways to use it: do more for the priorities, ease off a tax rise, or keep the margin.
+ * One line per route, in the voice of the adviser named; the breach assessment is the Permanent
+ * Secretary's and quotes the Charter. Everything simulated, every fact sourced, no number
+ * authored.
  */
 export const compromiseFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
@@ -405,6 +407,12 @@ export const compromiseFileSchema = z.strictObject({
     revenue: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     spending: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     target: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    /** With room to spare: the ways to deliver the priorities not yet chosen. */
+    more: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    /** With room to spare: the ways to pay already chosen, each with what dropping it leaves. */
+    ease: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
+    /** With room to spare: the case for keeping the margin, or raising the target. */
+    bank: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
     breach: z.strictObject({
       adviser: slug,
       line: simulatedLineSchema,

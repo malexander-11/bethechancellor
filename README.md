@@ -42,7 +42,9 @@ sooner. **Respond to the forecast**: the OBR's forecast,
 fixed by a seeded draw the day you chose your starting position, opens on one button into what
 changed in two lines (the economy, and what the OBR made of your costings), the headroom before and
 after against your target, and the routes through the gap: more of the ways to pay, or what you
-chose to deliver started later, narrowed or dropped, a thinner margin, or a breach you sign for.
+chose to deliver started later, narrowed or dropped, a thinner margin, or a breach you sign for; or,
+with room to spare, the ways to use it: more for your priorities, a tax rise eased off, or the
+margin kept.
 **Final choices**: up to three little announcements for the speech, then a review of the whole
 Budget with a way back to every part, and one red button. **What your Budget means**: the Budget in
 three sentences (what you prioritised, who pays, what you accepted), your backbenchers, the markets

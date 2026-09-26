@@ -25,9 +25,15 @@ describe('the road runs one way', () => {
       screen.getByRole('heading', { level: 1, name: 'Build your Budget' }),
     ).toBeInTheDocument();
     early.unmount();
-    // Left the forecast for the sums (st.4): Budget day is still two stops away.
+    // Left the forecast for the sums (st.4): Budget day is still two stops away. The compromise
+    // screen shows whichever mood the seed's forecast leaves it in.
     at(`/budget-day?${BASE}&g=${G}_st.4_rv.1`);
-    expect(screen.getByText('Make the sums add up')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: /^(Make the sums add up|Make the most of your extra headroom)$/,
+      }),
+    ).toBeInTheDocument();
   });
 
   it('opens Budget day from the final choices, and a finished link opens the same screen', () => {

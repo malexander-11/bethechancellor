@@ -212,6 +212,10 @@ function ForecastReveal({
   const status = ambitionStatus(game, pm, options, d.revised, levers);
   const before = ambitionStatus(game, pm, options, d.planned, levers);
   const target = game.headroomTargetBn * 1000;
+  // Room to spare and every rule met: the next screen offers ways to use it, and says so here.
+  const surplus =
+    d.headroom.revised > target &&
+    !d.revised.verdicts.some((v) => v.status === 'notMet' || v.status === 'aboveMargin');
   const planningName =
     planning === 'own'
       ? 'figures of your own'
@@ -438,7 +442,7 @@ function ForecastReveal({
 
       <p className="actions">
         <StepLink to="/compromise" className="btn btn--primary" onClick={onward}>
-          Respond to it
+          {surplus ? 'Make the most of it' : 'Respond to it'}
         </StepLink>
         <StepLink to="/budget/afford" className="btn">
           Back

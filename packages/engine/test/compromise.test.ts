@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
   affordSuggestions,
+  ambitionStatus,
   computeOutcome,
   delayOptions,
+  deliverSuggestions,
+  freshGame,
   narrowedBundle,
   narrowedValue,
   nextNotch,
@@ -102,6 +105,40 @@ describe('the routes out of a gap', () => {
     expect(suggests({ fuel: -5 }, 'rvfuel')).toBe(false);
     expect(suggests({}, 'cgtdth')).toBe(true);
     expect(suggests({ cgtalign: 1 }, 'cgtdth')).toBe(false);
+  });
+
+  it('with room to spare, offers the ways to deliver the priorities not yet chosen, one per priority first', () => {
+    const game = { ...freshGame(1), priorities: ['defence', 'safer-streets', 'cost-of-living'] };
+    const values = { dip47: 1 };
+    const status = ambitionStatus(game, ds.pm, ds.options, run(values), ds.levers);
+    const out = deliverSuggestions(status, ds.options, ds.levers, values, 3);
+    // The first open way of each priority, in rank order.
+    expect(out.map((s) => [s.rank, s.priority.id])).toEqual([
+      [1, 'defence'],
+      [2, 'safer-streets'],
+      [3, 'cost-of-living'],
+    ]);
+    // A way already in the Budget is not offered again, nor is one it blocks: defence at 3% now
+    // counts the plan's gap twice, so with the gap funded the uplift is defence's open way.
+    expect(out[0]?.option.id).toBe('defence-uplift');
+    expect(out.some((s) => s.option.id === 'dip-gap')).toBe(false);
+    expect(out.some((s) => s.option.id === 'three-per-cent-now')).toBe(false);
+    // Fewer priorities than places: the second way of each follows the first of each.
+    const one = ambitionStatus(
+      { ...game, priorities: ['safer-streets'] },
+      ds.pm,
+      ds.options,
+      run({}),
+      ds.levers,
+    );
+    expect(deliverSuggestions(one, ds.options, ds.levers, {}, 3).map((s) => s.option.id)).toEqual([
+      'prisons',
+      'borders',
+    ]);
+    // The count is honoured, and nothing ranked means nothing offered.
+    expect(deliverSuggestions(status, ds.options, ds.levers, values, 1)).toHaveLength(1);
+    const none = ambitionStatus(freshGame(1), ds.pm, ds.options, run({}), ds.levers);
+    expect(deliverSuggestions(none, ds.options, ds.levers, {}, 3)).toEqual([]);
   });
 
   it('lists the package’s spending measures biggest first, and only what costs money', () => {

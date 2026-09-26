@@ -48,6 +48,53 @@
         "short": "Lowering the target costs nothing today. The markets judge the number, not the target."
       }
     },
+    "more": {
+      "adviser": "director-of-public-spending",
+      "line": {
+        "text": "Room to spare is room to deliver: the ways to deliver your priorities you have not chosen, one for each priority first, each priced against your Budget as it stands. Each is a settlement above the Spending Review path.",
+        "sources": [
+          {
+            "sourceId": "hmt-sr25-del-tables"
+          },
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.13"
+          }
+        ],
+        "badge": "simulated",
+        "short": "The ways to deliver your priorities you have not chosen, one for each priority first."
+      }
+    },
+    "ease": {
+      "adviser": "director-of-tax",
+      "line": {
+        "text": "Every way to pay you chose can come out again. The figure beside each is HMRC’s or the Treasury’s where one exists and ours, badged, where it does not; beside it is the headroom that dropping it would leave.",
+        "sources": [
+          {
+            "sourceId": "hmrc-trr-2025-06-bulletin"
+          }
+        ],
+        "badge": "simulated",
+        "short": "The ways to pay you chose, each with the headroom that dropping it would leave."
+      }
+    },
+    "bank": {
+      "adviser": "chief-economic-adviser",
+      "line": {
+        "text": "Money not spent is the cheapest insurance you can buy: the OBR’s typical five-year error is about £32bn, and Budget 2025 left £21.7bn. Keep the margin, or raise your target so the sums hold you to it.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "3.4"
+          },
+          {
+            "sourceId": "hmt-budget-2025-speech"
+          }
+        ],
+        "badge": "simulated",
+        "short": "Money not spent is the cheapest insurance: the OBR’s typical five-year error is about £32bn."
+      }
+    },
     "breach": {
       "adviser": "permanent-secretary",
       "line": {
