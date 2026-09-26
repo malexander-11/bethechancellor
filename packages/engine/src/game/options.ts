@@ -16,8 +16,9 @@ import { deliversTarget, promiseBreaks } from './promises.js';
  * The options (Phase 18, ADR-0022): bundles of lever settings that advisers propose and the
  * Chancellor chooses among. Nothing here prices anything; the page runs the engine. What lives
  * here is the reading of an option against the Budget as it stands: on, adjusted or off; which
- * red lines it crosses; the latest of its levers' earliest starts; which moved levers it
- * interacts with; and which who-pays tab a way to afford belongs to.
+ * red lines it crosses; the latest of its levers' earliest starts; which other options it
+ * overlaps or counts the same money as; and which who-pays tab a way to afford belongs to. No
+ * two options anywhere share a lever (the schema forbids it), so every reading is unambiguous.
  */
 
 export type OptionState = 'on' | 'adjusted' | 'off';
@@ -62,6 +63,115 @@ export function optionOff(option: Bundle, levers: readonly Lever[]): Record<stri
   return Object.fromEntries(
     Object.keys(option.values).map((code) => [code, byCode.get(code)?.control.default ?? 0]),
   );
+}
+
+export type OptionScreen = 'deliver' | 'afford' | 'addOns';
+
+/** One option, whichever screen offers it, with the names a card would use for it. */
+export interface OptionRef {
+  id: string;
+  screen: OptionScreen;
+  /** The option's title; a way to afford has none of its own and wears its lever's title. */
+  title: string;
+  /** A shorter name for a note on another card: the lever's short title for a way to afford. */
+  shortTitle: string;
+  values: Record<string, number>;
+  conflicts: readonly { with: string; text: string }[];
+}
+
+/** Every option on every screen. */
+export function allOptions(options: OptionsFile, levers: readonly Lever[]): OptionRef[] {
+  const byCode = leverMap(levers);
+  const leverOf = (o: AffordOption) => byCode.get(Object.keys(o.values)[0] ?? '');
+  return [
+    ...options.deliver.map((o) => ({
+      id: o.id,
+      screen: 'deliver' as const,
+      title: o.title,
+      shortTitle: o.title,
+      values: o.values,
+      conflicts: o.conflicts ?? [],
+    })),
+    ...options.afford.map((o) => ({
+      id: o.id,
+      screen: 'afford' as const,
+      title: leverOf(o)?.title ?? o.id,
+      shortTitle: leverOf(o)?.shortTitle ?? o.id,
+      values: o.values,
+      conflicts: o.conflicts ?? [],
+    })),
+    ...options.addOns.map((o) => ({
+      id: o.id,
+      screen: 'addOns' as const,
+      title: o.title,
+      shortTitle: o.title,
+      values: o.values,
+      conflicts: o.conflicts ?? [],
+    })),
+  ];
+}
+
+/** The option that moves each lever, by code; one at most, because no two options share a lever. */
+export function optionByLever(
+  options: OptionsFile,
+  levers: readonly Lever[],
+): Map<string, OptionRef> {
+  const out = new Map<string, OptionRef>();
+  for (const ref of allOptions(options, levers)) {
+    for (const code of Object.keys(ref.values)) out.set(code, ref);
+  }
+  return out;
+}
+
+export interface OptionConflict {
+  /** The other option. */
+  option: OptionRef;
+  /** Why the two count the same money, as authored. */
+  text: string;
+  /** How the other option stands in the Budget. */
+  partner: OptionState;
+}
+
+/**
+ * The options authored to count the same money as this one, read from either side of the pair,
+ * each with how it stands in the Budget as given.
+ */
+export function optionConflicts(
+  option: { id: string },
+  options: OptionsFile,
+  levers: readonly Lever[],
+  values: Record<string, number>,
+): OptionConflict[] {
+  const all = allOptions(options, levers);
+  const byId = new Map(all.map((o) => [o.id, o] as const));
+  const self = byId.get(option.id);
+  if (!self) return [];
+  const out: OptionConflict[] = [];
+  const seen = new Set<string>();
+  const push = (other: OptionRef | undefined, text: string) => {
+    if (!other || other.id === self.id || seen.has(other.id)) return;
+    seen.add(other.id);
+    out.push({ option: other, text, partner: optionState(other, values, levers) });
+  };
+  for (const c of self.conflicts) push(byId.get(c.with), c.text);
+  for (const other of all) {
+    for (const c of other.conflicts) if (c.with === self.id) push(other, c.text);
+  }
+  return out;
+}
+
+/**
+ * The conflict that blocks this option: it is not on, and the other side of the pair is in the
+ * Budget, on or adjusted on the desk. An option already on is never blocked; it can be put back.
+ */
+export function blockedBy(
+  option: Bundle,
+  options: OptionsFile,
+  levers: readonly Lever[],
+  values: Record<string, number>,
+): OptionConflict | undefined {
+  if (optionState(option, values, levers) === 'on') return undefined;
+  return optionConflicts(option, options, levers, values).find((c) => c.partner !== 'off');
 }
 
 /** How many priorities a Chancellor may rank with the Prime Minister. */
@@ -139,29 +249,71 @@ export function optionRedLines(
 }
 
 export interface OptionOverlap {
-  /** The lever already moved that this option's lever interacts with. */
+  /** The lever this option's lever interacts with. */
   withLever: Lever;
+  /** The option that offers that lever, when one does. */
+  option?: OptionRef;
   text: string;
   severity: 'info' | 'warn';
+  /** True once the partner lever has moved: the card then shows the text, not only the name. */
+  active: boolean;
 }
 
-/** The authored interactions between the option's levers and levers the player has already moved. */
+/**
+ * The authored interactions between the option's levers and other levers, read from either side
+ * of the pair. With the options file, every partner another option offers is listed, so a card can
+ * say "Overlaps with …" before either is chosen, and a partner no option offers is listed once it
+ * has moved on the desk; a pair authored as a conflict is left out, because the conflict says it.
+ * Without the file, only the partners already moved, as the desk read them.
+ */
 export function optionOverlaps(
   option: Bundle,
   levers: readonly Lever[],
   moved: ReadonlySet<string>,
+  options?: OptionsFile,
 ): OptionOverlap[] {
   const byCode = leverMap(levers);
   const byId = new Map(levers.map((l) => [l.id, l] as const));
   const codes = new Set(Object.keys(option.values));
-  const out: OptionOverlap[] = [];
-  for (const code of codes) {
-    for (const i of byCode.get(code)?.interactions ?? []) {
+  const own = [...codes].map((c) => byCode.get(c)).filter((l): l is Lever => l !== undefined);
+  const ownIds = new Set(own.map((l) => l.id));
+  const offering = options ? optionByLever(options, levers) : undefined;
+  const conflicting = new Set(
+    options ? optionConflicts(option, options, levers, {}).map((c) => c.option.id) : [],
+  );
+  const found = new Map<string, OptionOverlap>();
+  for (const lever of own) {
+    for (const i of lever.interactions ?? []) {
       const other = byId.get(i.withLever);
-      if (other && moved.has(other.code) && !codes.has(other.code)) {
-        out.push({ withLever: other, text: i.text, severity: i.severity });
-      }
+      if (!other || codes.has(other.code) || found.has(other.code)) continue;
+      found.set(other.code, {
+        withLever: other,
+        text: i.text,
+        severity: i.severity,
+        active: moved.has(other.code),
+      });
     }
+  }
+  if (options) {
+    // The other side: a lever whose own interactions name one of ours.
+    for (const other of levers) {
+      if (codes.has(other.code) || found.has(other.code)) continue;
+      const i = (other.interactions ?? []).find((x) => ownIds.has(x.withLever));
+      if (!i) continue;
+      found.set(other.code, {
+        withLever: other,
+        text: i.text,
+        severity: i.severity,
+        active: moved.has(other.code),
+      });
+    }
+  }
+  const out: OptionOverlap[] = [];
+  for (const o of found.values()) {
+    const partner = offering?.get(o.withLever.code);
+    if (partner && conflicting.has(partner.id)) continue;
+    if (!o.active && (!options || !partner)) continue;
+    out.push(partner ? { ...o, option: partner } : o);
   }
   return out;
 }

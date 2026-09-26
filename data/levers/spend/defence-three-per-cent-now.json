@@ -133,7 +133,7 @@
     {
       "withLever": "defence",
       "text": "Both raise defence: the day-to-day slider moves the Spending Review settlement, this one buys the path to 3% of GDP, and the two add up.",
-      "severity": "warn"
+      "severity": "info"
     },
     {
       "withLever": "defence-investment-plan-gap",

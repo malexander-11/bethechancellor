@@ -45,7 +45,7 @@ describe('the routes out of a gap', () => {
 
   it('ranks the Director of Tax’s suggestions by yield and names the promise each breaks', () => {
     expect(afford.length).toBeGreaterThan(20);
-    const out = affordSuggestions(afford, ds.levers, {}, ds.pm.promises, headroomOf, 5);
+    const out = affordSuggestions(ds.options, ds.levers, {}, ds.pm.promises, headroomOf, 5);
     expect(out).toHaveLength(5);
     for (let i = 1; i < out.length; i += 1) {
       expect(out[i - 1]!.yieldGbpm).toBeGreaterThanOrEqual(out[i]!.yieldGbpm);
@@ -54,7 +54,7 @@ describe('the routes out of a gap', () => {
       expect(s.lever.category).toBe('tax');
       expect(s.yieldGbpm).toBeGreaterThan(0);
     }
-    const all = affordSuggestions(afford, ds.levers, {}, ds.pm.promises, headroomOf, 100);
+    const all = affordSuggestions(ds.options, ds.levers, {}, ds.pm.promises, headroomOf, 100);
     // Our own arithmetic is in the list too, badged as such, beside the certified rows.
     expect(all.some((s) => s.lever.badge === 'assumption')).toBe(true);
     expect(all.some((s) => s.option.id === 'cgtdth')).toBe(true);
@@ -71,7 +71,7 @@ describe('the routes out of a gap', () => {
     // An option already chosen is not suggested again, and a promise already broken by choice is
     // not counted against another move.
     const again = affordSuggestions(
-      afford,
+      ds.options,
       ds.levers,
       { itbr: 1 },
       ds.pm.promises,
@@ -82,14 +82,26 @@ describe('the routes out of a gap', () => {
     expect(again.find((s) => s.option.id === 'vats')?.breaks).toEqual([]);
     // Adjusted on the desk short of the option counts as chosen too: it is not offered again.
     const adjusted = affordSuggestions(
-      afford,
+      ds.options,
       ds.levers,
-      { alc: 2 },
+      { tob: 5 },
       ds.pm.promises,
       headroomOf,
       100,
     );
-    expect(adjusted.some((s) => s.option.id === 'alc')).toBe(false);
+    expect(adjusted.some((s) => s.option.id === 'tob')).toBe(false);
+    // An option that counts the same money as one already in the Budget is not suggested either:
+    // the fuel duty cut rules out restoring the uprating (even a cut only half made on the desk),
+    // and the CGT package rules out the charge at death.
+    const suggests = (values: Record<string, number>, id: string) =>
+      affordSuggestions(ds.options, ds.levers, values, ds.pm.promises, headroomOf, 100).some(
+        (s) => s.option.id === id,
+      );
+    expect(suggests({}, 'rvfuel')).toBe(true);
+    expect(suggests({ fuel: -10 }, 'rvfuel')).toBe(false);
+    expect(suggests({ fuel: -5 }, 'rvfuel')).toBe(false);
+    expect(suggests({}, 'cgtdth')).toBe(true);
+    expect(suggests({ cgtalign: 1 }, 'cgtdth')).toBe(false);
   });
 
   it('lists the package’s spending measures biggest first, and only what costs money', () => {

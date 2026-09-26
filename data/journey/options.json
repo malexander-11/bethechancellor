@@ -92,7 +92,13 @@
       },
       "values": {
         "fuel": -10
-      }
+      },
+      "conflicts": [
+        {
+          "with": "rvfuel",
+          "text": "Both set fuel duty rates and pull opposite ways: a 10% cut and restoring the cancelled uprating are one decision on one duty, and the combined figure is approximate."
+        }
+      ]
     },
     {
       "id": "health-above-sr",
@@ -186,7 +192,13 @@
       },
       "values": {
         "def3": 1
-      }
+      },
+      "conflicts": [
+        {
+          "with": "dip-gap",
+          "text": "The £4.7bn the plan’s explainer still has to find is part of getting to 3%; funding both counts some of the same money twice."
+        }
+      ]
     },
     {
       "id": "defence-uplift",
@@ -467,7 +479,13 @@
       },
       "values": {
         "csjmh": 1
-      }
+      },
+      "conflicts": [
+        {
+          "with": "pip-changes",
+          "text": "Two PIP reforms on the same caseload: the CSJ package already includes the people the 2025 changes would have affected."
+        }
+      ]
     },
     {
       "id": "pip-changes",
@@ -595,7 +613,13 @@
       "id": "cgtalign",
       "values": {
         "cgtalign": 1
-      }
+      },
+      "conflicts": [
+        {
+          "with": "cgtdth",
+          "text": "CenTax’s package already removes the write-off at death; that card’s £4bn would be counted twice."
+        }
+      ]
     },
     {
       "id": "nicuel",
@@ -694,9 +718,9 @@
       }
     },
     {
-      "id": "alc",
+      "id": "tob",
       "values": {
-        "alc": 5
+        "tob": 10
       }
     },
     {
@@ -714,132 +738,137 @@
   ],
   "addOns": [
     {
-      "id": "meals",
-      "title": "Free school meals for every child",
+      "id": "keep-electricity-zero",
+      "title": "Keep VAT off electricity past March 2027",
+      "values": {
+        "vatelec": 1
+      },
       "line": {
-        "text": "It funds a place, not a meal eaten: a fifth of pupils already entitled did not take one on census day. England only; consequentials follow.",
-        "short": "It funds a place, not a meal eaten; England only, and consequentials follow.",
+        "text": "The zero rate on electricity runs to 31 March 2027. Keeping it past then costs about £1.9bn a year, and every household gets it, whatever its means.",
+        "short": "The zero rate ends in March 2027; keeping it costs about £1.9bn a year, for every household.",
         "sources": [
           {
-            "sourceId": "dfe-school-pupils-2025-26"
+            "sourceId": "govuk-vat-electricity-cut-2026"
+          },
+          {
+            "sourceId": "hmrc-vat-notice-701-19"
           }
         ],
         "badge": "simulated"
-      },
-      "values": {
-        "ufsm": 1
       }
     },
     {
-      "id": "fuel-cut",
-      "title": "Fuel duty cut by 5%",
+      "id": "stamp-duty-point",
+      "title": "A point off the 5% stamp duty band",
+      "values": {
+        "sdlt5": -1
+      },
       "line": {
-        "text": "Fuel duty has not risen since 2011. A cut is felt at the pump within days, and it is paid for every year after.",
-        "short": "Felt at the pump within days, and paid for every year after.",
+        "text": "One point off the 5% band, the slice of a home’s price from £250,001 to £925,000: about £1bn a year on HMRC’s ready reckoner, to buyers who already pay the tax.",
+        "short": "A point off the £250,001 to £925,000 slice: about £1bn a year on HMRC’s ready reckoner.",
         "sources": [
           {
-            "sourceId": "govuk-fuel-duty-rates"
+            "sourceId": "hmrc-trr-2025-06"
+          },
+          {
+            "sourceId": "govuk-sdlt-rates"
           }
         ],
         "badge": "simulated"
-      },
-      "values": {
-        "fuel": -5
       }
     },
     {
-      "id": "retraining",
-      "title": "An AI retraining programme",
+      "id": "allowance-100",
+      "title": "£100 on the personal allowance",
+      "values": {
+        "itpa": 100
+      },
       "line": {
-        "text": "A budget, not a costing: whether £1bn buys a programme that works is a delivery question, not a fiscal one.",
-        "short": "A budget, not a costing: whether £1bn buys a programme that works is a delivery question.",
+        "text": "The personal allowance is £12,570 and frozen to 2031. The first £100 back costs about £1bn a year on HMRC’s ready reckoner, and every taxpayer gets the same pounds.",
+        "short": "Frozen at £12,570 to 2031: the first £100 back costs about £1bn a year on HMRC’s figures.",
+        "sources": [
+          {
+            "sourceId": "hmrc-trr-2025-06"
+          },
+          {
+            "sourceId": "govuk-income-tax-rates"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "nics-threshold-2",
+      "title": "£2 a week more before National Insurance starts",
+      "values": {
+        "nicpt": 104
+      },
+      "line": {
+        "text": "The threshold is £242 a week, £12,570 a year, aligned with the personal allowance. £2 a week more costs about £0.3bn a year and breaks that alignment unless the allowance moves too.",
+        "short": "£2 a week on the £242 threshold costs about £0.3bn a year; it breaks alignment with the allowance.",
+        "sources": [
+          {
+            "sourceId": "hmrc-trr-2025-06"
+          },
+          {
+            "sourceId": "govuk-nics-rates"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "transport-up",
+      "title": "Transport’s day-to-day budget up 5%",
+      "values": {
+        "dft": 5
+      },
+      "line": {
+        "text": "Transport’s day-to-day budget falls 5% a year in real terms to 2028-29 under the Spending Review. Five per cent more is about £0.4bn a year, and it does not undo that fall.",
+        "short": "The settlement falls 5% a year in real terms; 5% more, about £0.4bn, does not undo that.",
+        "sources": [
+          {
+            "sourceId": "hmt-sr25-del-tables"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "aid-up",
+      "title": "Aid up 5%, a first step back towards 0.7%",
+      "values": {
+        "fcdo": 5
+      },
+      "line": {
+        "text": "Aid is falling to 0.3% of national income and the department’s day-to-day budget falls 6.9% a year in real terms. Five per cent more is about £0.4bn a year: a gesture towards 0.7%, not a return to it.",
+        "short": "Aid falls to 0.3% of income; 5% more, about £0.4bn, is a gesture towards 0.7%, not a return.",
+        "sources": [
+          {
+            "sourceId": "hmt-sr25-del-tables"
+          },
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
+      "id": "pensioners-half",
+      "title": "Half a per cent more for pensioners",
+      "values": {
+        "wpens": 0.5
+      },
+      "line": {
+        "text": "Pensioner benefits reach £187.5bn by 2029-30 and sit outside the welfare cap. Half a per cent more is about £0.9bn a year, spread across every pensioner household whatever its means.",
+        "short": "£187.5bn by 2029-30, outside the welfare cap: half a per cent more is about £0.9bn a year.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03"
           }
         ],
         "badge": "simulated"
-      },
-      "values": {
-        "airet": 1
-      }
-    },
-    {
-      "id": "keep-bus-cap",
-      "title": "Keep the £2 bus fare cap running",
-      "line": {
-        "text": "£400m buys a year of the cap at today's fare gap, outside London only, and the operators' costs keep rising.",
-        "short": "£400m buys a year of the cap outside London; the operators’ costs keep rising.",
-        "sources": [
-          {
-            "sourceId": "govuk-bus-fare-cap-2027"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "values": {
-        "bus2": 1
-      }
-    },
-    {
-      "id": "plan2",
-      "title": "Let the student loan repayment threshold rise again",
-      "line": {
-        "text": "Thank you. A frozen threshold is a tax rise on graduates and nobody else, and the Treasury's own note calls the repayment forecasts inherently uncertain. Letting it rise again costs £355 million in 2029-30 on the Treasury's figures.",
-        "short": "A frozen threshold is a tax rise on graduates alone. Letting it rise costs £355 million in 2029-30.",
-        "sources": [
-          {
-            "sourceId": "hmt-budget-2025-policy-costings",
-            "page": "43"
-          },
-          {
-            "sourceId": "hmt-budget-2025-table-4-1",
-            "table": "Table 4.1",
-            "note": "line 48"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "values": {
-        "rvplan2": 1
-      }
-    },
-    {
-      "id": "vat-gas",
-      "title": "Take VAT off gas",
-      "line": {
-        "text": "Gas to 0%, as electricity already is since October. HMRC’s relief figures put the cost at about £0.8bn a year, before anyone changes their behaviour.",
-        "short": "Gas to 0%, as electricity already is: about £0.8bn a year on HMRC’s figures.",
-        "sources": [
-          {
-            "sourceId": "hmrc-tax-reliefs-2026-01"
-          },
-          {
-            "sourceId": "govuk-vat-electricity-cut-2026"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "values": {
-        "vatgas": 1
-      }
-    },
-    {
-      "id": "benefit-floor",
-      "title": "A protected floor in Universal Credit",
-      "line": {
-        "text": "You have set the floor. JRF puts the cost at £680 million rising to £760 million by 2029-30; the card grows the first year with the OBR’s universal credit line and lands a little under that. Inside the welfare cap.",
-        "short": "The floor is set. JRF says £680 million rising to £760 million; the card lands under it.",
-        "sources": [
-          {
-            "sourceId": "jrf-uc-floor-2026",
-            "quote": "The cost rises to £760 million in 2029/30"
-          }
-        ],
-        "badge": "simulated"
-      },
-      "values": {
-        "ucfloor": 1
       }
     },
     {

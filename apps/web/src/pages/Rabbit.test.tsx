@@ -50,26 +50,26 @@ describe('suggested little add-ons', () => {
 
   it('takes up to three, no more, and puts each back when it is unticked', async () => {
     at(`/rabbit?${BASE}&g=${G}&${MACRO}&L=dhsc.3`);
-    fireEvent.click(box(/Fuel duty cut by 5%/));
+    fireEvent.click(box(/Half a per cent more for pensioners/));
     await waitFor(() => {
-      expect(L()).toMatch(/fuel\.-5/);
-      expect(g()).toMatch(/rb\.fuel-cut/);
+      expect(L()).toMatch(/wpens\.0\.5/);
+      expect(g()).toMatch(/rb\.pensioners-half/);
     });
     fireEvent.click(box(/Five per cent off alcohol duty/));
-    fireEvent.click(box(/Keep the £2 bus fare cap/));
-    await waitFor(() => expect(g()).toMatch(/rb\.fuel-cut\+pubs\+keep-bus-cap/));
+    fireEvent.click(box(/Transport’s day-to-day budget up 5%/));
+    await waitFor(() => expect(g()).toMatch(/rb\.pensioners-half\+pubs\+transport-up/));
     expect(screen.getByText(/3 of 3 chosen/)).toBeInTheDocument();
-    expect(box(/AI retraining/)).toBeDisabled();
+    expect(box(/Keep VAT off electricity/)).toBeDisabled();
     fireEvent.click(box(/Five per cent off alcohol duty/));
     await waitFor(() => {
       expect(L()).not.toMatch(/alc/);
-      expect(g()).toMatch(/rb\.fuel-cut\+keep-bus-cap/);
+      expect(g()).toMatch(/rb\.pensioners-half\+transport-up/);
     });
-    expect(box(/AI retraining/)).toBeEnabled();
+    expect(box(/Keep VAT off electricity/)).toBeEnabled();
   });
 
   it('keeping the headroom is exclusive: every add-on goes back where it was', async () => {
-    at(`/rabbit?${BASE}&g=${G}_rb.fuel-cut+pubs&${MACRO}&L=dhsc.3_fuel.-5_alc.-5`);
+    at(`/rabbit?${BASE}&g=${G}_rb.pensioners-half+pubs&${MACRO}&L=dhsc.3_wpens.0.5_alc.-5`);
     fireEvent.click(box(/Keep the headroom/));
     await waitFor(() => {
       expect(g()).toMatch(/rb\.keep(_|$)/);
@@ -91,12 +91,13 @@ describe('suggested little add-ons', () => {
     });
   });
 
-  it('will not offer as a surprise something already in the Budget', () => {
-    at(`/rabbit?${BASE}&g=${G}&${MACRO}&L=dhsc.3_ufsm.1`);
-    const meals = box(/Free school meals/);
-    expect(meals).toBeDisabled();
+  it('will not offer as a surprise something already moved on the desk', () => {
+    // No add-on shares a lever with another option, so only the desk can pre-empt one.
+    at(`/rabbit?${BASE}&g=${G}&${MACRO}&L=dhsc.3_alc.-5`);
+    const pubs = box(/Five per cent off alcohol duty/);
+    expect(pubs).toBeDisabled();
     expect(
-      within(meals.closest('label') as HTMLElement).getByText('already in your Budget'),
+      within(pubs.closest('label') as HTMLElement).getByText('already in your Budget'),
     ).toBeInTheDocument();
   });
 });

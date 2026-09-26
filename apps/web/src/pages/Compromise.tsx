@@ -58,7 +58,7 @@ export function CompromisePage() {
   const delays = game?.delays ?? {};
   const headroomOf = useHeadroomOf();
   const revenue = useMemo(
-    () => affordSuggestions(options.afford, levers, state.leverValues, pm.promises, headroomOf, 3),
+    () => affordSuggestions(options, levers, state.leverValues, pm.promises, headroomOf, 3),
     [state.leverValues, headroomOf],
   );
   // The package as it stands, re-run under every forecast the draw could have produced.

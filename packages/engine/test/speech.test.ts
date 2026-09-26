@@ -42,7 +42,7 @@ describe('the speech', () => {
     const game: GamePermalink = {
       ...freshGame(3),
       priorities: ['nhs', 'schools-send'],
-      rabbit: ['meals'],
+      rabbit: ['pubs'],
     };
     const values = {
       dhsc: 3,
@@ -80,9 +80,9 @@ describe('the speech', () => {
     const game: GamePermalink = {
       ...freshGame(3),
       priorities: ['cost-of-living'],
-      rabbit: ['fuel-cut'],
+      rabbit: ['pubs'],
     };
-    const s = speak({ ufsm: 1, bus2: 1, fuel: -5, ct: 1, it50: 1 }, game);
+    const s = speak({ ufsm: 1, bus2: 1, alc: -5, ct: 1, it50: 1 }, game);
     const kinds = s.paragraphs.map((p) => p.kind);
     expect(kinds[0]).toBe('opening');
     expect(s.paragraphs[0]?.text).toMatch(/cost of living/);
@@ -100,7 +100,9 @@ describe('the speech', () => {
     expect(s.paragraphs.find((p) => p.kind === 'lock-break')?.text).toMatch(
       /corporation tax capped/i,
     );
-    expect(s.paragraphs.find((p) => p.kind === 'rabbit')?.text).toMatch(/cut by five per cent/);
+    expect(s.paragraphs.find((p) => p.kind === 'rabbit')?.text).toMatch(
+      /Alcohol duty is cut by five per cent/,
+    );
     expect(kinds[kinds.length - 1]).toBe('peroration');
   });
 
@@ -108,13 +110,18 @@ describe('the speech', () => {
     const game: GamePermalink = {
       ...freshGame(3),
       priorities: ['defence', 'cost-of-living'],
-      rabbit: ['meals', 'fuel-cut'],
+      rabbit: ['pubs', 'transport-up'],
     };
-    const s = speak({ dip47: 1, ufsm: 1, fuel: -5 }, game);
+    const s = speak({ dip47: 1, alc: -5, dft: 5 }, game);
     expect(s.paragraphs[0]?.kind).toBe('opening');
     expect(s.paragraphs[0]?.text).toMatch(/security of its people/);
     const flourish = s.paragraphs.find((p) => p.kind === 'rabbit')?.text ?? '';
-    expect(flourish).toMatch(/free school meals for every child and fuel duty cut by 5%/);
+    expect(flourish).toMatch(
+      /five per cent off alcohol duty and transport’s day-to-day budget up 5%/,
+    );
+    // An add-on id the data no longer offers (an old link) is not spoken as an empty title.
+    const retired = speak({ dip47: 1 }, { ...game, rabbit: ['meals'] });
+    expect(retired.paragraphs.find((p) => p.kind === 'rabbit')).toBeUndefined();
     // Keeping the headroom is an announcement only while there is headroom to keep.
     const kept = speak({ dip47: 1 }, { ...game, rabbit: ['keep'] });
     expect(kept.paragraphs.find((p) => p.kind === 'rabbit')?.text).toMatch(/no rabbit in this hat/);

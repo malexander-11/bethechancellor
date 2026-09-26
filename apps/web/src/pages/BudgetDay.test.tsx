@@ -136,7 +136,7 @@ describe('Budget day: the speech, the reaction, the close', () => {
   });
 
   it('the speech follows the choices: the first priority, its options and the add-on', () => {
-    at(`${BASE}&${GAME.replace('rb.keep', 'rb.fuel-cut')}&L=moj.10_fuel.-5`);
+    at(`${BASE}&${GAME.replace('rb.keep', 'rb.pubs')}&L=moj.10_alc.-5`);
     const speech = screen.getByRole('article', { name: 'The Budget speech' });
     expect(
       within(speech).getByText(/first duty of any government is the security/),
@@ -144,6 +144,6 @@ describe('Budget day: the speech, the reaction, the close', () => {
     expect(
       within(speech).getByText(/a Justice uplift for prison capacity, £1\.4bn in 2029-30/),
     ).toBeInTheDocument();
-    expect(within(speech).getByText(/Fuel duty is cut by five per cent/)).toBeInTheDocument();
+    expect(within(speech).getByText(/Alcohol duty is cut by five per cent/)).toBeInTheDocument();
   });
 });

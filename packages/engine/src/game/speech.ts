@@ -280,7 +280,10 @@ export function assembleSpeech(input: SpeechInput): Speech {
 
   // The add-ons, if any, and the last word. Keeping the headroom is only an announcement while
   // there is headroom to keep; with none, the peroration says what there is to say.
-  const addOns = (game?.rabbit ?? []).filter((r) => r !== 'keep');
+  // An add-on id the data no longer offers (an old link) has nothing to say and is left out.
+  const known = (id: string) =>
+    id.startsWith('further:') || !input.rabbitTitles || input.rabbitTitles[id] !== undefined;
+  const addOns = (game?.rabbit ?? []).filter((r) => r !== 'keep' && known(r));
   const keep = (game?.rabbit ?? []).includes('keep') && addOns.length === 0;
   const titleOf = (id: string) =>
     id.startsWith('further:')

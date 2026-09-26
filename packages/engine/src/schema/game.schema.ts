@@ -158,14 +158,26 @@ export const pmFileSchema = z
 /**
  * A bundle of lever settings an adviser can propose (Phase 18, ADR-0022): one or two levers and
  * the values that deliver it. Cost, yield, badge, earliest start and red lines are all read from
- * the levers and the engine on the page; nothing here carries a number. Two options on one screen
- * never share a lever, so whether an option is on, adjusted or off follows from the lever values.
+ * the levers and the engine on the page; nothing here carries a number. No two options anywhere
+ * share a lever, so whether an option is on, adjusted or off follows from the lever values and no
+ * screen can light or undo another's choice (revised 2026-09-26).
  */
 export const optionBundleSchema = z
   .record(z.string().min(1), z.number())
   .refine((v) => Object.keys(v).length >= 1 && Object.keys(v).length <= 2, {
     message: 'an option moves one or two levers',
   });
+
+/**
+ * Two options that count the same money. Authored once, on either of the pair, and read from
+ * both sides: while one is in the Budget the other is offered "instead of" it, never as well.
+ */
+export const optionConflictSchema = z.strictObject({
+  /** The other option's id, on any screen. */
+  with: slug,
+  /** Why the two cannot both be counted, in the proposer's words. */
+  text: z.string().min(1).max(200),
+});
 
 /** A way to deliver a priority, proposed by the minister or adviser who leads on it. */
 export const deliverOptionSchema = z.strictObject({
@@ -176,6 +188,7 @@ export const deliverOptionSchema = z.strictObject({
   /** What choosing it buys and does not buy, in the proposer's voice. Sourced. */
   line: simulatedLineSchema,
   values: optionBundleSchema,
+  conflicts: z.array(optionConflictSchema).min(1).optional(),
 });
 
 /** A way to pay for it: the levers say everything the card needs, so the line is optional. */
@@ -183,6 +196,7 @@ export const affordOptionSchema = z.strictObject({
   id: slug,
   values: optionBundleSchema,
   line: simulatedLineSchema.optional(),
+  conflicts: z.array(optionConflictSchema).min(1).optional(),
 });
 
 /** A little add-on for the speech: small, costed, with the adviser's line on how it lands. */
@@ -191,27 +205,8 @@ export const addOnSchema = z.strictObject({
   title: z.string().min(1).max(80),
   values: optionBundleSchema,
   line: simulatedLineSchema,
+  conflicts: z.array(optionConflictSchema).min(1).optional(),
 });
-
-function noSharedLever(
-  options: readonly { id: string; values: Record<string, number> }[],
-  screen: string,
-  ctx: z.RefinementCtx,
-): void {
-  const seen = new Map<string, string>();
-  options.forEach((o, i) => {
-    for (const code of Object.keys(o.values)) {
-      const other = seen.get(code);
-      if (other)
-        ctx.addIssue({
-          code: 'custom',
-          message: `${screen} options ${other} and ${o.id} both move lever ${code}`,
-          path: [screen, i, 'values', code],
-        });
-      seen.set(code, o.id);
-    }
-  });
-}
 
 export const optionsFileSchema = z
   .strictObject({
@@ -221,34 +216,61 @@ export const optionsFileSchema = z
     addOns: z.array(addOnSchema).min(2),
   })
   .superRefine((file, ctx) => {
-    const ids = new Set<string>();
-    for (const [screen, list] of [
+    const lists = [
       ['deliver', file.deliver],
       ['afford', file.afford],
       ['addOns', file.addOns],
-    ] as const) {
+    ] as const;
+    const ids = new Set<string>();
+    for (const [screen, list] of lists) {
       list.forEach((o, i) => {
         if (ids.has(o.id))
           ctx.addIssue({ code: 'custom', message: `duplicate option ${o.id}`, path: [screen, i] });
         ids.add(o.id);
       });
-      noSharedLever(list, screen, ctx);
     }
-    // A way to deliver and a way to afford on one lever would silently undo each other.
-    const delivering = new Map<string, string>();
-    for (const o of file.deliver)
-      for (const code of Object.keys(o.values)) delivering.set(code, o.id);
-    file.afford.forEach((o, i) => {
-      for (const code of Object.keys(o.values)) {
-        const other = delivering.get(code);
-        if (other)
-          ctx.addIssue({
-            code: 'custom',
-            message: `afford option ${o.id} and deliver option ${other} both move lever ${code}`,
-            path: ['afford', i, 'values', code],
-          });
-      }
-    });
+    // No lever twice anywhere: two options on one lever would light or undo each other.
+    const seen = new Map<string, { screen: string; id: string }>();
+    for (const [screen, list] of lists) {
+      list.forEach((o, i) => {
+        for (const code of Object.keys(o.values)) {
+          const other = seen.get(code);
+          if (other)
+            ctx.addIssue({
+              code: 'custom',
+              message: `${other.screen} option ${other.id} and ${screen} option ${o.id} both move lever ${code}`,
+              path: [screen, i, 'values', code],
+            });
+          seen.set(code, { screen, id: o.id });
+        }
+      });
+    }
+    // A conflict names another option, and each pair is authored once.
+    const pairs = new Set<string>();
+    for (const [screen, list] of lists) {
+      list.forEach((o, i) => {
+        (o.conflicts ?? []).forEach((c, j) => {
+          const path = [screen, i, 'conflicts', j, 'with'];
+          if (c.with === o.id) {
+            ctx.addIssue({ code: 'custom', message: `option ${o.id} conflicts with itself`, path });
+          } else if (!ids.has(c.with)) {
+            ctx.addIssue({
+              code: 'custom',
+              message: `option ${o.id} conflicts with unknown option ${c.with}`,
+              path,
+            });
+          }
+          const key = [o.id, c.with].sort().join('|');
+          if (pairs.has(key))
+            ctx.addIssue({
+              code: 'custom',
+              message: `options ${o.id} and ${c.with} both author their conflict; author it on one`,
+              path,
+            });
+          pairs.add(key);
+        });
+      });
+    }
   });
 
 /* ------------------------------------------------------------ the package */

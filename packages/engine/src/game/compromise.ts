@@ -1,7 +1,7 @@
-import type { AffordOption, Lever, Promise_ } from '../types/data.js';
+import type { AffordOption, Lever, OptionsFile, Promise_ } from '../types/data.js';
 import type { Outcome } from '../types/engine.js';
 import { promiseBreaks } from './ambitions.js';
-import { optionState } from './options.js';
+import { blockedBy, optionState } from './options.js';
 
 /**
  * The routes out of a gap (stage 5). Nothing here is a judgement: the Director of Tax's
@@ -42,10 +42,11 @@ export function nextNotch(lever: Lever, current: number): number | null {
  * caller's engine call, so this stays a pure ranking over whatever the engine says; an option
  * costed by our own arithmetic ranks on that arithmetic and shows its assumption badge beside the
  * figure. One that moves nothing in the target year (a tax that cannot start before it,
- * ADR-0021) buys no headroom there and is not suggested.
+ * ADR-0021) buys no headroom there and is not suggested; nor is one that counts the same money
+ * as an option already in the Budget.
  */
 export function affordSuggestions(
-  afford: readonly AffordOption[],
+  options: OptionsFile,
   levers: readonly Lever[],
   current: Record<string, number>,
   promises: readonly Promise_[],
@@ -60,8 +61,9 @@ export function affordSuggestions(
       .map((r) => r.promise.id),
   );
   const out: AffordSuggestion[] = [];
-  for (const option of afford) {
+  for (const option of options.afford) {
     if (optionState(option, current, levers) !== 'off') continue;
+    if (blockedBy(option, options, levers, current)) continue;
     const lever = byCode.get(Object.keys(option.values)[0] ?? '');
     if (!lever) continue;
     const trial = { ...current, ...option.values };

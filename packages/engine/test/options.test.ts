@@ -3,8 +3,12 @@ import type { Settings } from '../src/index.js';
 import {
   AFFORD_TABS,
   affordTabs,
+  allOptions,
+  blockedBy,
   computeOutcome,
   deliverOptionsFor,
+  optionByLever,
+  optionConflicts,
   optionEarliestStart,
   optionOff,
   optionOverlaps,
@@ -20,6 +24,11 @@ const ds = loadDataset();
 const options = ds.options;
 const levers = ds.levers;
 const codesOf = (values: Record<string, number>) => Object.keys(values);
+const byCode = (code: string) => {
+  const l = levers.find((x) => x.code === code);
+  if (!l) throw new Error(`no lever ${code}`);
+  return l;
+};
 const deliverOption = (id: string) => {
   const o = options.deliver.find((x) => x.id === id);
   if (!o) throw new Error(`no deliver option ${id}`);
@@ -28,6 +37,11 @@ const deliverOption = (id: string) => {
 const affordOption = (id: string) => {
   const o = options.afford.find((x) => x.id === id);
   if (!o) throw new Error(`no afford option ${id}`);
+  return o;
+};
+const addOn = (id: string) => {
+  const o = options.addOns.find((x) => x.id === id);
+  if (!o) throw new Error(`no add-on ${id}`);
   return o;
 };
 const run = (values: Record<string, number>, settings: Partial<Settings> = {}) =>
@@ -55,15 +69,18 @@ describe('the options (ADR-0022)', () => {
     }
   });
 
-  it('no lever appears twice on a screen, and none on both deliver and afford', () => {
-    for (const list of [options.deliver, options.afford, options.addOns]) {
-      const codes = list.flatMap((o) => codesOf(o.values));
-      expect(new Set(codes).size).toBe(codes.length);
-    }
-    const delivering = new Set(options.deliver.flatMap((o) => codesOf(o.values)));
-    for (const o of options.afford) {
-      for (const code of codesOf(o.values)) expect(delivering.has(code), code).toBe(false);
-    }
+  it('no lever appears in more than one option anywhere, so no screen can light or undo another', () => {
+    const codes = [...options.deliver, ...options.afford, ...options.addOns].flatMap((o) =>
+      codesOf(o.values),
+    );
+    expect(new Set(codes).size).toBe(codes.length);
+    // Every option is found by its lever, and a way to afford wears its lever's titles.
+    const byLever = optionByLever(options, levers);
+    expect(byLever.size).toBe(codes.length);
+    expect(byLever.get('itbr')?.title).toBe('Basic rate of income tax');
+    expect(byLever.get('itbr')?.shortTitle).toBe('Basic rate');
+    expect(byLever.get('moj')?.title).toBe('A Justice uplift for prison capacity');
+    expect(allOptions(options, levers).map((o) => o.screen)).toContain('addOns');
   });
 
   it('every priority named has two to five ways to deliver it', () => {
@@ -125,6 +142,66 @@ describe('the options (ADR-0022)', () => {
     const hits = optionOverlaps(uprating, levers, new Set(['fuel']));
     expect(hits.length).toBeGreaterThan(0);
     expect(hits[0]?.withLever.code).toBe('fuel');
+    expect(hits[0]?.active).toBe(true);
+  });
+
+  it('names the options it overlaps before either is chosen, from either side of the pair', () => {
+    // Employer NICs and corporation tax interact: the note is there before anything moves, and
+    // the text comes once the partner has.
+    const quiet = optionOverlaps(affordOption('nicer'), levers, new Set(), options);
+    const ct = quiet.find((o) => o.option?.id === 'ct');
+    expect(ct?.active).toBe(false);
+    expect(ct?.option?.title).toBe(byCode('ct').title);
+    const loud = optionOverlaps(affordOption('nicer'), levers, new Set(['ct']), options);
+    expect(loud.find((o) => o.option?.id === 'ct')?.active).toBe(true);
+    // The child tax allowance lists the personal allowance; the allowance does not list it back.
+    // Read from either side, the £100 add-on still knows about it, and about the NICs threshold.
+    const allowance = optionOverlaps(addOn('allowance-100'), levers, new Set(), options);
+    expect(allowance.map((o) => o.option?.id).sort()).toEqual([
+      'child-tax-allowance',
+      'nics-threshold-2',
+    ]);
+    // A lever no option offers is only mentioned once it has moved on the desk.
+    const vat = optionOverlaps(deliverOption('vat-off-gas'), levers, new Set(), options);
+    expect(vat.some((o) => o.withLever.code === 'vatnrg')).toBe(false);
+    const vatMoved = optionOverlaps(
+      deliverOption('vat-off-gas'),
+      levers,
+      new Set(['vatnrg']),
+      options,
+    );
+    expect(vatMoved.some((o) => o.withLever.code === 'vatnrg' && o.option === undefined)).toBe(
+      true,
+    );
+    // A pair authored as a conflict is not an overlap as well: the conflict says it.
+    expect(optionOverlaps(affordOption('rvfuel'), levers, new Set(['fuel']), options)).toEqual([]);
+  });
+
+  it('reads a conflict from either side, and blocks the other option while one is in the Budget', () => {
+    const gap = deliverOption('dip-gap');
+    const three = deliverOption('three-per-cent-now');
+    // Authored on the 3% option, seen from the gap's side too.
+    const fromGap = optionConflicts(gap, options, levers, {});
+    expect(fromGap.map((c) => [c.option.id, c.partner])).toEqual([['three-per-cent-now', 'off']]);
+    expect(fromGap[0]?.text).toMatch(/counts some of the same money twice/);
+    expect(optionConflicts(three, options, levers, { dip47: 1 })[0]?.partner).toBe('on');
+    // Nothing chosen: nothing blocked. The 3% option on: the gap is blocked, and says by what.
+    expect(blockedBy(gap, options, levers, {})).toBeUndefined();
+    expect(blockedBy(gap, options, levers, { def3: 1 })?.option.id).toBe('three-per-cent-now');
+    // Both on (from the desk): neither is blocked, both can be put back.
+    expect(blockedBy(three, options, levers, { def3: 1, dip47: 1 })).toBeUndefined();
+    expect(blockedBy(gap, options, levers, { def3: 1, dip47: 1 })).toBeUndefined();
+    // A partner adjusted on the desk blocks too: half a fuel duty cut still rules out the uprating.
+    expect(blockedBy(affordOption('rvfuel'), options, levers, { fuel: -5 })?.option.id).toBe(
+      'fuel-duty-cut',
+    );
+    // Across screens: the CGT package blocks the charge at death, and the reverse.
+    expect(blockedBy(affordOption('cgtdth'), options, levers, { cgtalign: 1 })?.option.id).toBe(
+      'cgtalign',
+    );
+    expect(blockedBy(affordOption('cgtalign'), options, levers, { cgtdth: 1 })?.option.id).toBe(
+      'cgtdth',
+    );
   });
 
   it('every option, on its own, moves money in some policy year', () => {
@@ -144,7 +221,7 @@ describe('the options (ADR-0022)', () => {
     }
   });
 
-  it('the schema refuses two options on one lever, or an afford option on a deliver lever', () => {
+  it('the schema refuses two options on one lever anywhere, and a conflict that names nobody', () => {
     const line = { text: 'x', sources: [], badge: 'simulated' as const };
     const base = {
       schemaVersion: 1 as const,
@@ -156,6 +233,27 @@ describe('the options (ADR-0022)', () => {
       ],
     };
     expect(optionsFileSchema.safeParse(base).success).toBe(true);
+    // An add-on on a deliver lever: the coupling the user found, refused now.
+    expect(
+      optionsFileSchema.safeParse({
+        ...base,
+        addOns: [...base.addOns, { id: 'c2', title: 'C2', line, values: { dhsc: 3 } }],
+      }).success,
+    ).toBe(false);
+    // Conflicts: an unknown partner, a self conflict, a pair authored on both sides; one side is fine.
+    const withConflict = (
+      deliverConflicts: { with: string; text: string }[],
+      affordConflicts?: { with: string; text: string }[],
+    ) =>
+      optionsFileSchema.safeParse({
+        ...base,
+        deliver: [{ ...base.deliver[0], conflicts: deliverConflicts }],
+        afford: [{ ...base.afford[0], ...(affordConflicts ? { conflicts: affordConflicts } : {}) }],
+      }).success;
+    expect(withConflict([{ with: 'b', text: 'same money' }])).toBe(true);
+    expect(withConflict([{ with: 'nosuch', text: 'x' }])).toBe(false);
+    expect(withConflict([{ with: 'a', text: 'x' }])).toBe(false);
+    expect(withConflict([{ with: 'b', text: 'x' }], [{ with: 'a', text: 'x' }])).toBe(false);
     expect(
       optionsFileSchema.safeParse({
         ...base,
