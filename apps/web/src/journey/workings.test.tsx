@@ -84,13 +84,14 @@ describe('the "Show workings" switch', () => {
     expect(screen.getByText('Five-year paths')).toBeInTheDocument();
   });
 
-  it('can be turned on from the appointment screen', () => {
+  it('is off on the opening screen, and the header switch is the one way to turn it on', () => {
     at('/');
-    const box = screen.getByRole('checkbox', { name: /Show the workings as you play/ });
-    expect(box).not.toBeChecked();
-    fireEvent.click(box);
-    expect(box).toBeChecked();
+    // The opening carries no toggles of its own: one sentence, the playtime and the button.
+    expect(screen.queryByRole('checkbox', { name: /Show the workings/ })).toBeNull();
+    expect(theSwitch()).not.toBeChecked();
+    fireEvent.click(theSwitch());
     expect(theSwitch()).toBeChecked();
+    expect(window.localStorage.getItem(KEY)).toBe('on');
   });
 
   it('is always on, and cannot be moved, on the pages that are the workings', () => {

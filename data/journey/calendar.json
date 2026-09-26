@@ -57,6 +57,11 @@
       "label": "Something for the speech"
     },
     {
+      "step": "review",
+      "on": "2026-10-26",
+      "label": "The Budget, reviewed"
+    },
+    {
       "step": "budget-day",
       "on": "2026-10-28",
       "label": "Budget day"

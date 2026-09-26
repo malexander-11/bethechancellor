@@ -23,7 +23,7 @@ describe('the package in two parts', () => {
   it('opens on the taxes as part one of two, and leads to the spending', () => {
     at('/budget/taxes');
     expect(screen.getByText('Build the package')).toBeInTheDocument();
-    expect(screen.getByText(/Part 1 of 2/)).toBeInTheDocument();
+    expect(screen.getByText(/Build your Budget · 1 of 2/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Next: the spending' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /colleagues/ })).toBeNull();
   });
@@ -31,7 +31,7 @@ describe('the package in two parts', () => {
   it('sends the old third screen and the old recommendations step to the spending, query intact', () => {
     for (const path of ['/recommendations', '/budget/policies']) {
       const { unmount } = at(path, `${BASE}&L=itbr.1`);
-      expect(screen.getByText(/Part 2 of 2/)).toBeInTheDocument();
+      expect(screen.getByText(/Build your Budget · 2 of 2/)).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'Back to the taxes' })).toBeInTheDocument();
       // The penny on the basic rate survived the redirect.
       expect(screen.getByText(/Headroom, 2029-30/)).toBeInTheDocument();
@@ -102,7 +102,7 @@ describe('the package in two parts', () => {
 
   it('puts the flagship programmes on the spending screen with a minister under each', () => {
     at('/budget/spending');
-    expect(screen.getByText(/Part 2 of 2/)).toBeInTheDocument();
+    expect(screen.getByText(/Build your Budget · 2 of 2/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('tab', { name: /Flagship programmes/ }));
     const panel = screen.getByRole('tabpanel');
     const flagships = leversByCategory.spend.filter((l) => l.group === 'Flagship programmes');

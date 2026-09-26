@@ -16,5 +16,6 @@ export const STAGE_ROUTES: Record<JourneyStep, string> = {
   forecast: '/forecast',
   compromise: '/compromise',
   rabbit: '/rabbit',
+  review: '/review',
   'budget-day': '/budget-day',
 };

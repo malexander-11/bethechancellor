@@ -26,7 +26,7 @@ describe('the ways to deliver', () => {
   it('sends a sandbox with no game to the desk, and a game that has not seen the PM back to the PM', () => {
     const sandbox = at(`/budget/deliver?${BASE}&L=itbr.1`);
     expect(screen.getByText('Build the package')).toBeInTheDocument();
-    expect(screen.getByText(/Part 1 of 2/)).toBeInTheDocument();
+    expect(screen.getByText(/Build your Budget · 1 of 2/)).toBeInTheDocument();
     sandbox.unmount();
     at(`/budget/deliver?${BASE}&g=s.7_st.1_pl.adviser_hr.20`);
     expect(screen.getByText('Agree the priorities with the Prime Minister')).toBeInTheDocument();

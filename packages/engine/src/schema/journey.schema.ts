@@ -21,6 +21,7 @@ export const journeyStepSchema = z.enum([
   'forecast',
   'compromise',
   'rabbit',
+  'review',
   'budget-day',
 ]);
 

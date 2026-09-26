@@ -2,8 +2,9 @@
 @import './styles/components.css';
 
 /*
- * Base. One page colour, one type family at 16px (17px on a wide screen), hairline rules and
- * plain cards. Nothing here is under 14px, in capitals or in a second family (ADR-0016).
+ * Base. Warm paper, charcoal ink, the reader's sans at 16px (17px on a wide screen) with an
+ * editorial serif for the headings, hairline rules and plain cards. Nothing here is under 14px or
+ * in capitals (ADR-0016, ADR-0023).
  */
 
 *,
@@ -46,6 +47,15 @@ h4 {
   font-weight: 700;
   line-height: 1.25;
   overflow-wrap: break-word;
+}
+
+/* The headings are the editorial voice; the numbers and the controls stay in the body face. */
+h1,
+h2,
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 h1,
@@ -163,31 +173,48 @@ hr {
 /* ---------------------------------------------------------------- header */
 
 .site-header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  background: var(--accent);
+  border-bottom: 3px solid var(--brass);
+  color: var(--accent-ink);
 }
 
 .site-header__inner {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 24px;
+  gap: 0 24px;
   align-items: center;
   justify-content: space-between;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 10px 16px;
+  padding: 10px 16px 6px;
+}
+
+/* The two reference links and the switch share one line, under the name on a phone. */
+.site-tools {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 @media (min-width: 640px) {
   .site-header__inner {
     padding: 12px 24px;
   }
+
+  .site-tools {
+    flex: 0 1 auto;
+    gap: 0 28px;
+  }
 }
 
 .brand {
-  color: var(--ink);
-  font-size: 1.125rem;
-  font-weight: 700;
+  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
   line-height: 1.2;
   text-decoration: none;
 }
@@ -195,9 +222,11 @@ hr {
 .brand small {
   display: block;
   margin-top: 2px;
-  color: var(--ink-2);
+  color: var(--accent-ink);
+  font-family: var(--font);
   font-size: 0.875rem;
   font-weight: 400;
+  opacity: 0.85;
 }
 
 .site-nav {
@@ -210,19 +239,24 @@ hr {
   align-items: center;
   min-height: 44px;
   border-bottom: 2px solid transparent;
-  color: var(--ink-2);
+  color: var(--accent-ink);
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
+  opacity: 0.85;
 }
 
 .site-nav a:hover {
-  color: var(--ink);
+  opacity: 1;
 }
 
 .site-nav a[aria-current='page'] {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
+  border-bottom-color: var(--brass);
+  opacity: 1;
+}
+
+.site-header :focus-visible {
+  outline-color: var(--accent-ink);
 }
 
 /* The switch that puts the workings on show. The sources are never gone, only one click away. */
@@ -231,10 +265,11 @@ hr {
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  color: var(--ink-2);
+  color: var(--accent-ink);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+  opacity: 0.85;
 }
 
 .workings-switch input {
@@ -250,7 +285,11 @@ hr {
 }
 
 .workings-switch:has(input:checked) {
-  color: var(--accent);
+  opacity: 1;
+}
+
+.workings-switch input {
+  accent-color: var(--brass);
 }
 
 /* ------------------------------------------------------------------ page */
@@ -388,6 +427,96 @@ hr {
 .btn--primary:hover {
   border-color: var(--accent-hover);
   background: var(--accent-hover);
+}
+
+.btn--big {
+  min-height: 52px;
+  padding: 12px 28px;
+  font-size: 1.125rem;
+}
+
+.btn--budget {
+  border-color: var(--red);
+  background: var(--red);
+  color: var(--red-ink);
+}
+
+.btn--budget:hover {
+  border-color: var(--red-hover);
+  background: var(--red-hover);
+}
+
+/* "Why this matters", "See the numbers", "More policies": detail that opens where you are. */
+.more {
+  margin: 4px 0 0;
+}
+
+.more > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 0;
+  color: var(--accent);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.more > summary::before {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin: 0 2px 2px 4px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.more[open] > summary::before {
+  transform: rotate(45deg);
+  margin-bottom: 6px;
+}
+
+.more__body {
+  margin: 0;
+  padding: 0 0 8px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.more__body > p {
+  margin: 0 0 8px;
+}
+
+.more--quiet > summary {
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+.badges-key {
+  display: grid;
+  gap: 8px;
+}
+
+.badges-key div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+}
+
+.badges-key dt,
+.badges-key dd {
+  margin: 0;
 }
 
 .linklike {

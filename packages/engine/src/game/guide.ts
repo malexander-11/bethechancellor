@@ -22,6 +22,7 @@ export const GUIDED_STEPS: readonly JourneyStep[] = [
   'forecast',
   'compromise',
   'rabbit',
+  'review',
   'budget-day',
 ];
 

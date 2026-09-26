@@ -84,15 +84,17 @@ function Shell() {
       <RouteFocus />
       <header className="site-header">
         <div className="site-header__inner">
-          <NavLink to="/" className="brand">
+          <NavLink to="/" className="brand" end>
             Be the Chancellor
-            <small>UK fiscal trade-offs, every number sourced</small>
+            <small>Every number sourced</small>
           </NavLink>
-          <nav className="site-nav" aria-label="Main">
-            <NavLink to="/methodology">Methodology</NavLink>
-            <NavLink to="/about">About &amp; sources</NavLink>
-          </nav>
-          <WorkingsSwitch />
+          <div className="site-tools">
+            <nav className="site-nav" aria-label="Main">
+              <NavLink to="/methodology">Methodology</NavLink>
+              <NavLink to="/about">About &amp; sources</NavLink>
+            </nav>
+            <WorkingsSwitch />
+          </div>
         </div>
       </header>
       <main id="main" tabIndex={-1} className="page" data-workings={workings ? 'on' : 'off'}>

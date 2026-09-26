@@ -27,6 +27,8 @@ const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   afford: 'deliver',
   taxes: 'deliver',
   spending: 'deliver',
+  // The review of the Budget before it is delivered: the second screen of the final choices.
+  review: 'rabbit',
 };
 
 /** Where a step sits in the playthrough; the start page is before everything, at −1. */

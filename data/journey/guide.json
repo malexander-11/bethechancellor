@@ -106,6 +106,15 @@
       "terms": ["headroom"]
     },
     {
+      "step": "review",
+      "number": 6,
+      "title": "Review your Budget",
+      "doing": "Check what you prioritised, what you chose to do and how you are paying for it, before you deliver it.",
+      "why": "This is the Budget the House, the markets and the public will judge. Nothing is final until you deliver it, so anything here can still change.",
+      "now": "Change anything you like, then deliver your Budget.",
+      "terms": ["headroom"]
+    },
+    {
       "step": "budget-day",
       "number": 7,
       "title": "Deliver the Budget",

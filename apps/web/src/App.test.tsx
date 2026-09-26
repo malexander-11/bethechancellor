@@ -4,16 +4,19 @@ import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
 describe('journey routes', () => {
-  it('starts with the appointment and the advisers', () => {
+  it('opens on one sentence, the playtime and the one button', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('You have been appointed Chancellor.')).toBeInTheDocument();
-    expect(
-      screen.getAllByText('Permanent Secretary to the Treasury').length,
-    ).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole('heading', { level: 1, name: 'It’s your Budget now.' })).toBeVisible();
+    expect(screen.getByText(/About 10 minutes/)).toBeInTheDocument();
+    const go = screen.getByRole('link', { name: 'Build my Budget' });
+    expect(go).toHaveAttribute('href', expect.stringMatching(/^\/outlook/));
+    // No tutorial, no adviser essays: the advisers wait for the screens where they matter.
+    expect(screen.queryByText('Permanent Secretary to the Treasury')).toBeNull();
+    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
   });
 
   it('redirects old /b links into the package with the scorecard, on the first of its two parts', () => {
@@ -23,9 +26,9 @@ describe('journey routes', () => {
       </MemoryRouter>,
     );
     expect(screen.getByText('Build the package')).toBeInTheDocument();
-    // No tab bar: one road. The kicker says which part this is, the button says what is next.
+    // No tab bar: one road. The progress line says which part this is, the button says what is next.
     expect(screen.queryByRole('link', { name: 'Taxes' })).toBeNull();
-    expect(screen.getByText(/Part 1 of 2/)).toBeInTheDocument();
+    expect(screen.getByText(/^Build your Budget · 1 of 2$/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Next: the spending' })).toBeInTheDocument();
     expect(screen.getByText(/Headroom, 2029-30/)).toBeInTheDocument();
     expect(screen.getByText('Budget 2025 decisions')).toBeInTheDocument();

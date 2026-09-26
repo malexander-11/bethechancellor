@@ -1,46 +1,62 @@
 /*
- * A plain, editorial skin (ADR-0016): one page colour, one accent, one type family.
+ * A Westminster skin (ADR-0023): warm paper, charcoal ink, House of Commons green as the one
+ * working colour, a restrained brass for small labels and rules, and Budget red kept for the
+ * Budget itself. Editorial headings in Fraunces; the body in the reader's own sans.
  *
- * Every text-on-ground pairing below is at or above 4.5:1 in both themes. The chart series colour
- * is used for marks only, never for words. Nothing outside this file names a colour.
+ * Every text-on-ground pairing below is at or above 4.5:1 in both themes. Brass is a rule and a
+ * small-caps label colour; where it carries words it is the darker `--brass-ink`. Chart series
+ * colours are marks only, never words. Nothing outside this file names a colour.
  */
 
 :root {
   color-scheme: light;
 
-  /* Surfaces */
-  --page: #faf7f2;
-  --surface: #ffffff;
-  --surface-2: #f3f0ea;
+  /* Surfaces: paper */
+  --page: #f3eee2;
+  --surface: #fbf8f1;
+  --surface-2: #ebe4d3;
 
-  /* Text */
-  --ink: #1a1a1a;
-  --ink-2: #5a5751;
-  --muted: #6b675f;
+  /* Text: charcoal */
+  --ink: #23262a;
+  --ink-2: #56554e;
+  --muted: #605e56;
 
   /* Rules */
-  --border: #e3dfd6;
-  --grid: #e8e4dc;
-  --axis: #b9b5ad;
+  --border: #d9d0bc;
+  --grid: #e3dccb;
+  --axis: #b1a78d;
 
-  /* The accent: links, buttons, focus, the current step */
-  --accent: #0b6e76;
-  --accent-hover: #085a61;
+  /* Commons green: links, buttons, focus, the current step */
+  --accent: #00644a;
+  --accent-hover: #004b37;
   --accent-ink: #ffffff;
-  --accent-wash: rgba(11, 110, 118, 0.1);
+  --accent-wash: rgba(0, 100, 74, 0.1);
+
+  /* Brass: hairlines and small labels */
+  --brass: #b3934c;
+  --brass-ink: #745a1f;
+
+  /* Budget red: the Budget box, the one Budget-day action */
+  --red: #a3202a;
+  --red-hover: #83171f;
+  --red-ink: #ffffff;
+  --red-wash: rgba(163, 32, 42, 0.1);
+  /* The Budget box itself: an object's colour, never a word's */
+  --box: #a3202a;
+  --box-edge: #7a161e;
 
   /* Status, always beside an icon or a word */
   --good: #1a7736;
   --warning: #8a5a00;
-  --critical: #b3261e;
+  --critical: #a3202a;
   --good-wash: rgba(26, 119, 54, 0.1);
   --warning-wash: rgba(138, 90, 0, 0.1);
-  --critical-wash: rgba(179, 38, 30, 0.1);
+  --critical-wash: rgba(163, 32, 42, 0.1);
 
   /* Charts: marks only */
-  --series-policy: #0d9488;
+  --series-policy: #0f7f5f;
   --series-baseline: #8a8680;
-  --series-policy-wash: rgba(13, 148, 136, 0.12);
+  --series-policy-wash: rgba(15, 127, 95, 0.14);
 
   /* Badges: the honesty contract's five words */
   --badge-direct-bg: #dbe6f3;
@@ -55,10 +71,11 @@
   --badge-simulated-fg: #4b2d5e;
 
   --focus: var(--accent);
-  --radius: 4px;
+  --radius: 6px;
 
-  /* One family, the reader's own */
+  /* Two families: the reader's sans for the body, an editorial serif for the headings */
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Fraunces Variable', Georgia, 'Iowan Old Style', 'Times New Roman', serif;
 
   /* Motion: short, and off entirely when the reader asks */
   --t-fast: 120ms;
@@ -70,33 +87,43 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --page: #1c1c1a;
-    --surface: #242422;
-    --surface-2: #2c2c29;
+    --page: #131c17;
+    --surface: #1b2620;
+    --surface-2: #243029;
 
-    --ink: #ecece7;
-    --ink-2: #b8b5ad;
-    --muted: #a39f97;
+    --ink: #ece6d7;
+    --ink-2: #b9b3a3;
+    --muted: #a49e8e;
 
-    --border: #3a3936;
-    --grid: #333230;
-    --axis: #6b6862;
+    --border: #35433b;
+    --grid: #2e3a34;
+    --axis: #6f7b73;
 
-    --accent: #34adb8;
-    --accent-hover: #4dbcc6;
-    --accent-ink: #0f1211;
-    --accent-wash: rgba(52, 173, 184, 0.12);
+    --accent: #6cc59b;
+    --accent-hover: #86d3ad;
+    --accent-ink: #0d1a13;
+    --accent-wash: rgba(108, 197, 155, 0.14);
+
+    --brass: #c9a75c;
+    --brass-ink: #d6b96f;
+
+    --red: #ff8a86;
+    --red-hover: #ffa09c;
+    --red-ink: #1a0f10;
+    --red-wash: rgba(255, 138, 134, 0.14);
+    --box: #b8323b;
+    --box-edge: #8a2028;
 
     --good: #6ccf8a;
     --warning: #e0b45f;
-    --critical: #ff7b73;
+    --critical: #ff8a86;
     --good-wash: rgba(108, 207, 138, 0.16);
     --warning-wash: rgba(224, 180, 95, 0.16);
-    --critical-wash: rgba(255, 123, 115, 0.16);
+    --critical-wash: rgba(255, 138, 134, 0.16);
 
-    --series-policy: #25a0aa;
+    --series-policy: #4fbf93;
     --series-baseline: #9a968f;
-    --series-policy-wash: rgba(37, 160, 170, 0.16);
+    --series-policy-wash: rgba(79, 191, 147, 0.16);
 
     --badge-direct-bg: #17304d;
     --badge-direct-fg: #a8c9f0;
