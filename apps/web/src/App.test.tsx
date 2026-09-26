@@ -40,7 +40,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(document.title).toBe('Choose what to plan on · Step 2 of 7 · Be the Chancellor');
+    expect(document.title).toBe('Your starting position · Step 2 of 7 · Be the Chancellor');
     const skip = screen.getByRole('link', { name: 'Skip to the step' });
     expect(skip).toHaveAttribute('href', '#main');
     expect(document.body.querySelector('a, button, input, [tabindex]')).toBe(skip);
@@ -73,7 +73,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
+    expect(screen.getByText('Your starting position')).toBeInTheDocument();
     // One screen: the four forecasts you can budget on are on the page at once.
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     const cards = screen.getByRole('radiogroup', { name: 'Economic assumptions' });

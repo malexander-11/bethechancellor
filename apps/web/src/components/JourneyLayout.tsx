@@ -26,7 +26,7 @@ export function JourneyLayout({
 }) {
   return (
     <div className="journey">
-      <Progress step={step} part={part} />
+      <Progress step={step} part={part} named={!intro || part !== undefined} />
       {intro ? (
         <PageIntro step={step} part={part} title={title} lead={lead} tabTitle={tabTitle} />
       ) : null}

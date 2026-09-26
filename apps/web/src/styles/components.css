@@ -142,6 +142,93 @@
   margin: 0;
 }
 
+/* ------------------------------------------------ the Treasury's briefing */
+
+.brief {
+  margin: 0 0 20px;
+}
+
+.brief__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  color: var(--brass-ink);
+  font-family: var(--font);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.brief__facts {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+
+@media (min-width: 720px) {
+  .brief__facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+.brief__fact dt {
+  margin: 0 0 2px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.brief__fact dd {
+  margin: 0;
+}
+
+.brief__fact dd strong {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.brief__fact dd span {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.section-label--spaced {
+  margin-top: 28px;
+}
+
+/* The one primary action, the way back beside it, and a hint under both when the action waits. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin: 24px 0 8px;
+}
+
+.actions__hint {
+  flex-basis: 100%;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+/* The manifesto's red lines, in one line with a red rule. */
+.redlines-line {
+  margin: 16px 0 0;
+  padding: 8px 0 8px 14px;
+  border-left: 3px solid var(--red);
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
 /* ------------------------------------------------------------ the opening */
 
 .opening {

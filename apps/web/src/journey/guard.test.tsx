@@ -46,7 +46,7 @@ describe('the road runs one way', () => {
     expect(screen.getByText('Deliver the Budget')).toBeInTheDocument();
     day.unmount();
     at(`/pm?${BASE}`);
-    expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
+    expect(screen.getByText('Your starting position')).toBeInTheDocument();
   });
 
   it('always lets you go back: a game at the sums can reopen the package, the desk and the PM', () => {
@@ -57,6 +57,6 @@ describe('the road runs one way', () => {
     expect(screen.getByText('Build the package')).toBeInTheDocument();
     desk.unmount();
     at(`/pm?${BASE}&g=${G}_st.4_rv.1`);
-    expect(screen.getByText('Agree the priorities with the Prime Minister')).toBeInTheDocument();
+    expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 });

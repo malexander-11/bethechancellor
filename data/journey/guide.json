@@ -13,19 +13,19 @@
     {
       "step": "outlook",
       "number": 2,
-      "title": "Choose what to plan on",
-      "doing": "Pick the economic forecast you will build your Budget on, and how much [headroom] to keep in reserve.",
-      "why": "A rosier forecast gives you more to spend now. The [OBR](obr) will publish its own forecast later, and it will not care what you assumed.",
-      "now": "Choose one of the four cards and a headroom target, then confirm.",
+      "title": "Your starting position",
+      "doing": "The Treasury’s briefing: where the public finances stand, and the forecast you will build your Budget on.",
+      "why": "A rosier forecast gives you more to spend now. The [OBR](obr) publishes its own forecast later and will not care what you assumed; your [headroom] is whatever it leaves you.",
+      "now": "Choose the forecast you’ll plan on and how much headroom to keep.",
       "terms": ["fiscal-rules", "gilts", "gdp"]
     },
     {
       "step": "pm",
       "number": 3,
-      "title": "Agree the priorities with the Prime Minister",
-      "doing": "Tell the Prime Minister what this Budget is for: rank up to three priorities from eight.",
-      "why": "The order matters. Nothing is funded yet; the ways to deliver each come next, costed one by one. The [manifesto] red lines still apply.",
-      "now": "Tick the priorities in the order they matter, then hear the PM read them back.",
+      "title": "What is this Budget for?",
+      "doing": "Tell the Prime Minister what this Budget is for: rank up to three of eight priorities.",
+      "why": "The order matters: the first is the Budget’s headline. Nothing is paid for yet; the ways to deliver each come next, costed one by one. The [manifesto] red lines still apply.",
+      "now": "Tick up to three, in the order they matter, then agree them.",
       "terms": ["headroom", "certified"]
     },
     {

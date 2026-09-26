@@ -65,7 +65,7 @@ describe('the beat and word budgets', () => {
       view.unmount();
     }
     expect(total).toBeLessThanOrEqual(12);
-    expect(total).toBeGreaterThanOrEqual(7);
+    // The hand-off beats are being retired screen by screen (Phase 20); only the ceiling holds.
   });
 
   it('opens every stage with a hand-off of at most 180 visible words', () => {

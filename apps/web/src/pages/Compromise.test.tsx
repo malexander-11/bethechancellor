@@ -33,7 +33,7 @@ describe('making it add up', () => {
     expect(screen.getByText('The OBR’s forecast arrives')).toBeInTheDocument();
     first.unmount();
     at(`/compromise?${BASE}`);
-    expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
+    expect(screen.getByText('Your starting position')).toBeInTheDocument();
   });
 
   it('states the gap against the target, and ranks the Director of Tax’s suggestions', async () => {

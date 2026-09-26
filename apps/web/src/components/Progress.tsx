@@ -55,7 +55,16 @@ export interface SubStep {
  * on every page, so it never offers a link that would only bounce (ADR-0014). The segments carry
  * their names for a screen reader; sighted readers get the name of the step they are on.
  */
-export function Progress({ step, part }: { step: JourneyStep; part?: SubStep }) {
+export function Progress({
+  step,
+  part,
+  named = false,
+}: {
+  step: JourneyStep;
+  part?: SubStep;
+  /** Name the step on the line too: for a screen whose own heading is not the step's name. */
+  named?: boolean;
+}) {
   const { state } = useBudget();
   const current = stopFor(step);
   const at = STOPS.findIndex((s) => s.id === current);
@@ -67,10 +76,12 @@ export function Progress({ step, part }: { step: JourneyStep; part?: SubStep }) 
           <span className="progress__step">
             Step {at + 1} of {STOPS.length}
           </span>
-          <span className="progress__name">
-            {here?.label}
-            {part ? ` · ${part.index} of ${part.total}` : ''}
-          </span>
+          {named ? (
+            <span className="progress__name">
+              {here?.label}
+              {part ? ` · ${part.index} of ${part.total}` : ''}
+            </span>
+          ) : null}
         </p>
         <Dateline now={dateFor(step)} />
       </div>

@@ -33,7 +33,7 @@ const money = (s: string) => {
 describe('the OBR’s forecast', () => {
   it('sends a link with no game back to the outlook', () => {
     at(`/forecast?${BASE}&L=ufsm.1`);
-    expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
+    expect(screen.getByText('Your starting position')).toBeInTheDocument();
   });
 
   it('opens the envelope: the sliders become the OBR’s, the package is remembered, the game moves on', async () => {

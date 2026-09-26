@@ -14,7 +14,6 @@ function at(path: string) {
   );
 }
 
-const next = () => fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
 const param = (key: string) => new URLSearchParams(window.location.search).get(key) ?? '';
 const priorityBox = (name: RegExp) =>
   within(screen.getByRole('group', { name: 'The Budget’s priorities' })).getByRole('checkbox', {
@@ -24,11 +23,13 @@ const priorityBox = (name: RegExp) =>
 describe('agreeing the priorities with the Prime Minister', () => {
   it('sends a link with no game back to the outlook', () => {
     at(`/pm?${BASE}`);
-    expect(screen.getByText('Choose what to plan on')).toBeInTheDocument();
+    expect(screen.getByText('Your starting position')).toBeInTheDocument();
   });
 
-  it('opens with what has been done, every line badged simulated and sourced', () => {
+  it('keeps what the PM has done one fold away, every line badged simulated and sourced', () => {
     at(`/pm?${BASE}&g=s.7_st.1`);
+    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
+    fireEvent.click(screen.getByText('What the Prime Minister has already done'));
     expect(screen.getByText(/VAT came off electricity bills/)).toBeInTheDocument();
     expect(screen.getAllByText('Simulated').length).toBeGreaterThanOrEqual(3);
     expect(screen.getAllByRole('link', { name: /HMT|No10|Prime Minister/ }).length).toBeGreaterThan(
@@ -38,18 +39,17 @@ describe('agreeing the priorities with the Prime Minister', () => {
 
   it('will not go on until a priority is ranked, and the PM reacts to each one', () => {
     at(`/pm?${BASE}&g=s.7_st.1`);
-    next();
-    const go = screen.getByRole('button', { name: /Hear the PM read it back/ });
-    expect(go).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Agree these priorities' })).toBeDisabled();
+    expect(screen.getByText('Tick at least one priority.')).toBeInTheDocument();
     expect(screen.getAllByRole('checkbox')).toHaveLength(8);
     fireEvent.click(priorityBox(/Defence on the NATO path/));
-    expect(go).toBeEnabled();
+    // Once one is ranked, agreeing is a link to the ways to deliver.
+    expect(screen.getByRole('link', { name: 'Agree these priorities' })).toBeInTheDocument();
     expect(screen.getByText(/not a favour to the Defence Secretary/)).toBeInTheDocument();
   });
 
   it('ranks up to three in the order ticked, writes them to the link and moves no lever', async () => {
     at(`/pm?${BASE}&g=s.7_st.1`);
-    next();
     fireEvent.click(priorityBox(/Defence on the NATO path/));
     fireEvent.click(priorityBox(/Cut the cost of living/));
     fireEvent.click(priorityBox(/Bring down NHS waiting lists/));
@@ -65,16 +65,18 @@ describe('agreeing the priorities with the Prime Minister', () => {
     expect(priorityBox(/Families and child poverty/)).toBeEnabled();
   });
 
-  it('reads the ranking back with the red lines, and agreeing goes on to the options', async () => {
+  it('shows the ranking on the cards with the red lines beneath, and agreeing goes on to the options', async () => {
     at(`/pm?${BASE}&g=s.7_st.1_pr.safer-streets+defence`);
-    next();
-    next();
     expect(screen.queryByRole('button', { name: /Push back/ })).toBeNull();
-    const readBack = document.querySelector('ol.ranked') as HTMLElement;
-    expect(within(readBack).getByText('1st').closest('li')).toHaveTextContent(/Safer streets/);
-    expect(within(readBack).getByText('2nd').closest('li')).toHaveTextContent(/Defence/);
-    expect(screen.getByText(/red lines from step 1 still apply/)).toBeInTheDocument();
-    const link = screen.getByRole('link', { name: /Agreed. To the options/ });
+    const group = screen.getByRole('group', { name: 'The Budget’s priorities' });
+    expect(within(group).getByText('1st').closest('li')).toHaveTextContent(/Safer streets/);
+    expect(within(group).getByText('2nd').closest('li')).toHaveTextContent(/Defence/);
+    expect(
+      screen.getByText(/still applies: the tax lock, corporation tax capped/),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByText('What the red lines are'));
+    expect(screen.getByText(/We will not increase National Insurance/)).toBeInTheDocument();
+    const link = screen.getByRole('link', { name: 'Agree these priorities' });
     expect(link).toHaveAttribute('href', expect.stringContaining('/budget/'));
     fireEvent.click(link);
     await waitFor(() => {
@@ -85,7 +87,6 @@ describe('agreeing the priorities with the Prime Minister', () => {
 
   it('opens a Phase 9 link with a theme as the priority that replaced it', () => {
     at(`/pm?${BASE}&g=s.7_st.1_th.security_pr.prisons`);
-    next();
     expect(priorityBox(/Defence on the NATO path/)).toBeChecked();
     expect(
       screen.getAllByRole('checkbox').filter((b) => (b as HTMLInputElement).checked),

@@ -19,8 +19,8 @@ describe('the head of every screen', () => {
   it('numbers the step, names the screen, and says what to do in one line', () => {
     at(`/outlook?${BASE}`);
     expect(screen.getByText('Step 2 of 7')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 1, name: 'Choose what to plan on' })).toBeVisible();
-    expect(screen.getByText(/Choose one of the four cards/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Your starting position' })).toBeVisible();
+    expect(screen.getByText(/Choose the forecast you’ll plan on/)).toBeInTheDocument();
     // The reason and the words wait behind one line.
     expect(screen.getByText(/A rosier forecast gives you more to spend now/)).not.toBeVisible();
     fireEvent.click(within(intro()).getByText('Why this matters'));
