@@ -148,7 +148,7 @@ describe('the close', () => {
     );
     expect(delivered.kind.id).toBe('delivered-and-paid');
     expect(delivered.kind.title).toBe(
-      'A safer streets Budget that delivered what it promised and paid for it',
+      'A Budget for safer streets that delivered what it promised and paid for it',
     );
     // The first priority ranked names the Budget.
     const both = close(
@@ -156,7 +156,7 @@ describe('the close', () => {
       { moj: 10, dip47: 1, vatfood: 1 },
     );
     expect(both.kind.title).toBe(
-      'A defence Budget that delivered what it promised and paid for it',
+      'A Budget for defence that delivered what it promised and paid for it',
     );
     const quiet = close({ ...freshGame(seed) }, {});
     expect(quiet.kind.id).toBe('small-moves');

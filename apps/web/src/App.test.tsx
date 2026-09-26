@@ -85,10 +85,11 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Deliver the Budget')).toBeInTheDocument();
-    // The close, with the workings behind the verdict, is the third beat.
-    for (let i = 0; i < 2; i += 1)
-      fireEvent.click(screen.getByRole('button', { name: /Continue/ }));
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
+    ).toBeInTheDocument();
+    // The documents, with the workings behind them, are one fold away.
+    fireEvent.click(screen.getByText('Budget documents'));
     expect(screen.getByText('Table 4.1: your policy decisions')).toBeInTheDocument();
     expect(screen.getAllByText('Rule met').length).toBeGreaterThanOrEqual(2);
   });

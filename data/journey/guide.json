@@ -99,17 +99,17 @@
     {
       "step": "rabbit",
       "number": 6,
-      "title": "Suggested little add-ons",
-      "doing": "Decide whether to add up to three small announcements to the speech, or to keep your [headroom].",
+      "title": "Anything for the speech?",
+      "doing": "Up to three small announcements, each already costed; or keep the headroom and make that the story.",
       "why": "An add-on gets a headline. It is also money you no longer have in reserve, and each is priced against the Budget as it stands.",
-      "now": "Tick up to three. Keeping the headroom is a choice too.",
+      "now": "Tick up to three, then review your Budget.",
       "terms": ["headroom"]
     },
     {
       "step": "review",
       "number": 6,
-      "title": "Review your Budget",
-      "doing": "Check what you prioritised, what you chose to do and how you are paying for it, before you deliver it.",
+      "title": "Your Budget, reviewed",
+      "doing": "What you prioritised, what you chose to do, how you are paying for it and where that leaves you.",
       "why": "This is the Budget the House, the markets and the public will judge. Nothing is final until you deliver it, so anything here can still change.",
       "now": "Change anything you like, then deliver your Budget.",
       "terms": ["headroom"]
@@ -117,10 +117,10 @@
     {
       "step": "budget-day",
       "number": 7,
-      "title": "Deliver the Budget",
-      "doing": "Give the speech and see how your backbenchers, the markets and the public react.",
-      "why": "Each reaction follows from what you chose, and says which choices caused it.",
-      "now": "Read the speech, hear the reactions, then read the verdict.",
+      "title": "What your Budget means",
+      "doing": "Your Budget in three sentences, then how your backbenchers, the markets and the public take it.",
+      "why": "Each reaction follows from what you chose, and says which choices caused it. The speech, the households and the documents are one fold away.",
+      "now": "Share it, change something, or play again.",
       "terms": ["headroom", "gilts", "manifesto", "gdp"]
     }
   ]

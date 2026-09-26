@@ -30,14 +30,17 @@ describe('the road runs one way', () => {
     expect(screen.getByText('Make the sums add up')).toBeInTheDocument();
   });
 
-  it('opens Budget day from the rabbit, and a finished link opens it with every beat', () => {
+  it('opens Budget day from the final choices, and a finished link opens the same screen', () => {
     const fromRabbit = at(`/budget-day?${BASE}&g=${G}_st.5_rv.1`);
-    expect(screen.getByText('Deliver the Budget')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Continue/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     fromRabbit.unmount();
     at(`/budget-day?${BASE}&g=${G}_st.6_rv.1`);
-    expect(screen.getByText('Deliver the Budget')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
+    ).toBeInTheDocument();
   });
 
   it('keeps a sandbox link open to the package and Budget day, and sends its story pages to the outlook', () => {
@@ -45,7 +48,9 @@ describe('the road runs one way', () => {
     expect(screen.getByText('Build the package')).toBeInTheDocument();
     desk.unmount();
     const day = at(`/budget-day?${BASE}&L=itbr.1`);
-    expect(screen.getByText('Deliver the Budget')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
+    ).toBeInTheDocument();
     day.unmount();
     at(`/pm?${BASE}`);
     expect(screen.getByText('Your starting position')).toBeInTheDocument();

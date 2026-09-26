@@ -37,7 +37,6 @@ import {
   vintage,
   options,
 } from '../data';
-import { Beat, Beats } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
@@ -59,9 +58,9 @@ type Tab = 'taxes' | 'spending';
 const DESK_ORDER: readonly Tab[] = ['taxes', 'spending'];
 
 /**
- * The two screens of the desk: what each is called, whose briefing opens it, and where it leads.
- * In the sandbox they come one after another, by the button at the foot of the page, with a way
- * back but no tab bar: one road (ADR-0014). With a game under way they are side rooms off the
+ * The two screens of the desk: what each is called, whose briefing sits folded at its head, and
+ * where it leads. In the sandbox they come one after another, by the button at the foot of the
+ * page, with a way back but no tab bar: one road (ADR-0014). With a game under way they are side rooms off the
  * guided screens (ADR-0022): the taxes behind the ways to afford, the spending behind the ways
  * to deliver, each with one way back. The letters' screen has gone; its levers sit here by side
  * (ADR-0017).
@@ -69,12 +68,10 @@ const DESK_ORDER: readonly Tab[] = ['taxes', 'spending'];
 const TABS: Record<
   Tab,
   {
-    /** How the guide's kicker names this screen: "Part 1 of 2: the taxes". */
+    /** How the progress line names this screen in the sandbox: "Build your Budget · 1 of 2". */
     part: string;
-    arrives: string;
-    open: string;
+    /** What the folded briefing is called. */
     folded: string;
-    work: string;
     briefingStep: JourneyStep;
     /** The next screen of the package; the last screen leads onward, wherever the game has got to. */
     next?: { to: string; label: string };
@@ -85,20 +82,14 @@ const TABS: Record<
 > = {
   taxes: {
     part: 'the taxes',
-    arrives: 'The Director of Tax’s briefing',
-    open: 'To the taxes',
     folded: 'The Director of Tax’s briefing',
-    work: 'Set the taxes',
     briefingStep: 'taxes',
     next: { to: '/budget/spending', label: 'Next: the spending' },
     room: { to: '/budget/afford', label: 'Back to paying for it' },
   },
   spending: {
     part: 'the spending',
-    arrives: 'The Director of Public Spending’s briefing',
-    open: 'To the spending',
     folded: 'The Director of Public Spending’s briefing',
-    work: 'Set the spending',
     briefingStep: 'spending',
     back: { to: '/budget/taxes', label: 'Back to the taxes' },
     room: { to: '/budget/deliver', label: 'Back to building your Budget' },
@@ -123,8 +114,9 @@ interface DeskState {
  * room with you: ministers on the spending groups, advisers who remember what you agreed in
  * Downing Street, the summary strip keeping score, and the options you chose pinned to the top of
  * their groups. With a game the desk is a side room off the guided screens, one link away and
- * never the default (ADR-0022): one beat, the briefing folded, a way back and no onward flow.
- * Without one it is the sandbox it always was, two screens in sequence leading to Budget day.
+ * never the default (ADR-0022): the briefing folded, a way back to the screen that opened it and
+ * no onward flow. Without one it is the sandbox it always was, two screens in sequence leading to
+ * Budget day.
  */
 export function BudgetPage() {
   const { tab } = useParams();
@@ -272,285 +264,266 @@ export function BudgetPage() {
           : { index: DESK_ORDER.indexOf(step) + 1, total: DESK_ORDER.length, label: spec.part }
       }
     >
-      <Beats step={step}>
-        {game ? null : (
-          <Beat title={spec.arrives} continueLabel={spec.open} foldWhenPast={spec.folded}>
-            {briefing}
-          </Beat>
-        )}
-        <Beat title={spec.work}>
-          {game ? (
-            // A side room has no hand-off: the briefing is here, folded, one click away.
-            <details className="panel details">
-              <summary>
-                <span className="details__title">{spec.folded}</span>
-              </summary>
-              {briefing}
-            </details>
-          ) : null}
-          <Scorecard
-            outcome={outcome}
-            typicalErrorGbpm={typicalErrorGbpm}
-            sticky
-            target={game ? game.headroomTargetBn * 1000 : undefined}
-          />
-          {game && status ? (
-            <BudgetSummary
-              game={game}
-              status={status}
-              headroomGbpm={headroomGbpm}
-              targetYear={targetYear}
-              showHeadroom={false}
-            />
-          ) : null}
-          <p className="assumptions-line">
-            Economic assumptions: {macroSummary.length > 0 ? macroSummary : "the OBR's March view"}{' '}
-            · <StepLink to="/outlook">change</StepLink>
-          </p>
-          <Interventions items={advice} />
+      {/* No hand-off: the Director's briefing is here, folded, one click away. */}
+      <details className="more">
+        <summary>{spec.folded}</summary>
+        <div className="more__body">{briefing}</div>
+      </details>
+      <Scorecard
+        outcome={outcome}
+        typicalErrorGbpm={typicalErrorGbpm}
+        sticky
+        target={game ? game.headroomTargetBn * 1000 : undefined}
+      />
+      {game && status ? (
+        <BudgetSummary
+          game={game}
+          status={status}
+          headroomGbpm={headroomGbpm}
+          targetYear={targetYear}
+          showHeadroom={false}
+        />
+      ) : null}
+      <p className="assumptions-line">
+        Economic assumptions: {macroSummary.length > 0 ? macroSummary : "the OBR's March view"} ·{' '}
+        <StepLink to="/outlook">change</StepLink>
+      </p>
+      <Interventions items={advice} />
 
-          <div className="layout">
-            <div className="desk-column">
-              <Desk
-                groups={groups}
-                moved={moved}
-                effects={outcome.leverEffects}
-                summaryYear={targetYear}
-                open={openGroup ?? defaultGroup}
-                onOpen={(name) => setOpenGroups((f) => ({ ...f, [step]: name }))}
-              >
-                {(group) => (
-                  <>
-                    {briefingsFor(spec.briefingStep, group.name).map((b) => (
-                      <AdviserBriefing key={b.id} briefing={b} compact variant="body" />
-                    ))}
-                    {orderForDesk(group.levers).map((lever) => {
-                      const value = state.leverValues[lever.code] ?? lever.control.default;
-                      const report = chosen.get(lever.code);
-                      return (
-                        <div key={lever.id} className={report ? 'pinned' : undefined}>
-                          <LeverControl
-                            lever={lever}
-                            value={value}
-                            effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                            summaryYear={targetYear}
-                            onChange={(next) =>
-                              dispatch({ type: 'setLever', code: lever.code, value: next })
-                            }
-                            redLines={redLinesFor(lever.code)}
-                            chosen={
-                              report
-                                ? { title: report.option.title, state: report.state }
-                                : undefined
-                            }
-                          />
-                          <MinisterLine lever={lever} value={value} />
-                        </div>
-                      );
-                    })}
-                  </>
-                )}
-              </Desk>
-              <p className="hero-start__actions">
-                {forward ? (
-                  <StepLink to={forward.to} className="btn btn--primary">
-                    {forward.label}
-                  </StepLink>
-                ) : null}
-                {back ? (
-                  <StepLink to={back.to} className={forward ? 'btn' : 'btn btn--primary'}>
-                    {back.label}
-                  </StepLink>
-                ) : null}
-              </p>
-            </div>
-
-            <aside className="working-notes" aria-label="Working notes">
-              <div className="toolbar">
-                {workings ? (
-                  <>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={state.debtInterestFeedback}
-                        onChange={(e) => dispatch({ type: 'setFeedback', value: e.target.checked })}
-                      />
-                      Charge interest on extra borrowing (mechanical)
-                    </label>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={state.assessAsOf === 'nextBudget'}
-                        onChange={(e) =>
-                          dispatch({
-                            type: 'setAssessAsOf',
-                            value: e.target.checked ? 'nextBudget' : 'vintage',
-                          })
+      <div className="layout">
+        <div className="desk-column">
+          <Desk
+            groups={groups}
+            moved={moved}
+            effects={outcome.leverEffects}
+            summaryYear={targetYear}
+            open={openGroup ?? defaultGroup}
+            onOpen={(name) => setOpenGroups((f) => ({ ...f, [step]: name }))}
+          >
+            {(group) => (
+              <>
+                {briefingsFor(spec.briefingStep, group.name).map((b) => (
+                  <AdviserBriefing key={b.id} briefing={b} compact variant="body" />
+                ))}
+                {orderForDesk(group.levers).map((lever) => {
+                  const value = state.leverValues[lever.code] ?? lever.control.default;
+                  const report = chosen.get(lever.code);
+                  return (
+                    <div key={lever.id} className={report ? 'pinned' : undefined}>
+                      <LeverControl
+                        lever={lever}
+                        value={value}
+                        effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                        summaryYear={targetYear}
+                        onChange={(next) =>
+                          dispatch({ type: 'setLever', code: lever.code, value: next })
+                        }
+                        redLines={redLinesFor(lever.code)}
+                        chosen={
+                          report ? { title: report.option.title, state: report.state } : undefined
                         }
                       />
-                      Judge by the rules as they will apply from the{' '}
-                      {nextBudget.split(' ').slice(-2).join(' ')} Budget (rolling target)
-                    </label>
-                  </>
-                ) : null}
-                <button type="button" className="btn" onClick={() => dispatch({ type: 'reset' })}>
-                  Reset to OBR
-                </button>
-                <button type="button" className="btn btn--primary" onClick={copyLink}>
-                  Copy link to this budget
-                </button>
-                <span role="status" className="toolbar__note">
-                  {copied ? 'Link copied' : ''}
-                </span>
-              </div>
+                      <MinisterLine lever={lever} value={value} />
+                    </div>
+                  );
+                })}
+              </>
+            )}
+          </Desk>
+          <p className="actions">
+            {forward ? (
+              <StepLink to={forward.to} className="btn btn--primary">
+                {forward.label}
+              </StepLink>
+            ) : null}
+            {back ? (
+              <StepLink to={back.to} className={forward ? 'btn' : 'btn btn--primary'}>
+                {back.label}
+              </StepLink>
+            ) : null}
+          </p>
+        </div>
 
-              {state.warnings.length > 0 && (
-                <div className="warnings warnings--link" role="status">
-                  This link could not be read completely:
+        <aside className="working-notes" aria-label="Working notes">
+          <div className="toolbar">
+            {workings ? (
+              <>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={state.debtInterestFeedback}
+                    onChange={(e) => dispatch({ type: 'setFeedback', value: e.target.checked })}
+                  />
+                  Charge interest on extra borrowing (mechanical)
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={state.assessAsOf === 'nextBudget'}
+                    onChange={(e) =>
+                      dispatch({
+                        type: 'setAssessAsOf',
+                        value: e.target.checked ? 'nextBudget' : 'vintage',
+                      })
+                    }
+                  />
+                  Judge by the rules as they will apply from the{' '}
+                  {nextBudget.split(' ').slice(-2).join(' ')} Budget (rolling target)
+                </label>
+              </>
+            ) : null}
+            <button type="button" className="btn" onClick={() => dispatch({ type: 'reset' })}>
+              Reset to OBR
+            </button>
+            <button type="button" className="btn btn--primary" onClick={copyLink}>
+              Copy link to this budget
+            </button>
+            <span role="status" className="toolbar__note">
+              {copied ? 'Link copied' : ''}
+            </span>
+          </div>
+
+          {state.warnings.length > 0 && (
+            <div className="warnings warnings--link" role="status">
+              This link could not be read completely:
+              <ul>
+                {state.warnings.map((w) => (
+                  <li key={w}>{w}</li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                className="linklike"
+                onClick={() => dispatch({ type: 'dismissWarnings' })}
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
+
+          <section className="panel" aria-labelledby="attribution-heading">
+            <h2 id="attribution-heading">What you’ve changed</h2>
+            <p className="panel__hint">
+              What each change does in {targetYear} to the current budget (day-to-day) and to total
+              borrowing, which adds investment. Better means less borrowing.
+            </p>
+            <AttributionList
+              rows={outcome.attribution}
+              baselineHeadroomGbpm={stability?.baseline.headroomGbpm ?? 0}
+              comparator={{
+                label: 'Budget 2025’s measures, for scale',
+                psnbGbpm: -budget2025NetGbpm(targetYear),
+              }}
+            />
+          </section>
+
+          {paid.length > 0 || benefited.length > 0 ? (
+            <section className="panel" aria-labelledby="who-pays-heading">
+              <h2 id="who-pays-heading">Who pays · who benefits</h2>
+              <ul className="who-pays">
+                {paid.slice(0, 3).map((r) => (
+                  <li key={r.group}>
+                    <span>{r.label}</span>
+                    <span className={`amount ${r.gbpm >= 0 ? 'amount--worse' : 'amount--better'}`}>
+                      {r.gbpm >= 0 ? 'pays ' : 'gains '}
+                      {formatGbpBn(Math.abs(r.gbpm), 1)}
+                    </span>
+                  </li>
+                ))}
+                {benefited.slice(0, 3).map((r) => (
+                  <li key={r.group}>
+                    <span>{r.label}</span>
+                    <span className={`amount ${r.gbpm >= 0 ? 'amount--better' : 'amount--worse'}`}>
+                      {r.gbpm >= 0 ? 'receives ' : 'loses '}
+                      {formatGbpBn(Math.abs(r.gbpm), 1)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="panel__hint">
+                The engine’s figures in {targetYear}, totalled by the group each lever is tagged
+                with. <LabelBadge badge="mechanical" />
+              </p>
+            </section>
+          ) : null}
+
+          <InteractionsNotice interactions={outcome.interactions} />
+
+          {workings ? (
+            <>
+              {outcome.warnings.length > 0 && (
+                <div className="warnings" role="note">
+                  Assumptions in play:
                   <ul>
-                    {state.warnings.map((w) => (
+                    {outcome.warnings.map((w) => (
                       <li key={w}>{w}</li>
                     ))}
                   </ul>
-                  <button
-                    type="button"
-                    className="linklike"
-                    onClick={() => dispatch({ type: 'dismissWarnings' })}
-                  >
-                    Dismiss
-                  </button>
                 </div>
               )}
 
-              <section className="panel" aria-labelledby="attribution-heading">
-                <h2 id="attribution-heading">What you’ve changed</h2>
-                <p className="panel__hint">
-                  What each change does in {targetYear} to the current budget (day-to-day) and to
-                  total borrowing, which adds investment. Better means less borrowing.
-                </p>
-                <AttributionList
-                  rows={outcome.attribution}
-                  baselineHeadroomGbpm={stability?.baseline.headroomGbpm ?? 0}
-                  comparator={{
-                    label: 'Budget 2025’s measures, for scale',
-                    psnbGbpm: -budget2025NetGbpm(targetYear),
-                  }}
+              <section className="panel" aria-labelledby="presets-heading">
+                <h2 id="presets-heading">Try a ready-made Budget</h2>
+                <PresetPicker
+                  onApply={(leverValues) => dispatch({ type: 'applyPreset', leverValues })}
+                  current={state.leverValues}
                 />
               </section>
-
-              {paid.length > 0 || benefited.length > 0 ? (
-                <section className="panel" aria-labelledby="who-pays-heading">
-                  <h2 id="who-pays-heading">Who pays · who benefits</h2>
-                  <ul className="who-pays">
-                    {paid.slice(0, 3).map((r) => (
-                      <li key={r.group}>
-                        <span>{r.label}</span>
-                        <span
-                          className={`amount ${r.gbpm >= 0 ? 'amount--worse' : 'amount--better'}`}
-                        >
-                          {r.gbpm >= 0 ? 'pays ' : 'gains '}
-                          {formatGbpBn(Math.abs(r.gbpm), 1)}
-                        </span>
-                      </li>
-                    ))}
-                    {benefited.slice(0, 3).map((r) => (
-                      <li key={r.group}>
-                        <span>{r.label}</span>
-                        <span
-                          className={`amount ${r.gbpm >= 0 ? 'amount--better' : 'amount--worse'}`}
-                        >
-                          {r.gbpm >= 0 ? 'receives ' : 'loses '}
-                          {formatGbpBn(Math.abs(r.gbpm), 1)}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="panel__hint">
-                    The engine’s figures in {targetYear}, totalled by the group each lever is tagged
-                    with. <LabelBadge badge="mechanical" />
-                  </p>
-                </section>
-              ) : null}
-
-              <InteractionsNotice interactions={outcome.interactions} />
-
-              {workings ? (
-                <>
-                  {outcome.warnings.length > 0 && (
-                    <div className="warnings" role="note">
-                      Assumptions in play:
-                      <ul>
-                        {outcome.warnings.map((w) => (
-                          <li key={w}>{w}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  <section className="panel" aria-labelledby="presets-heading">
-                    <h2 id="presets-heading">Try a ready-made Budget</h2>
-                    <PresetPicker
-                      onApply={(leverValues) => dispatch({ type: 'applyPreset', leverValues })}
-                      current={state.leverValues}
-                    />
-                  </section>
-                </>
-              ) : null}
-            </aside>
-          </div>
-          {/* The charts want the full width: in the working notes their labels drew too small. */}
-          {workings ? (
-            <details className="panel details">
-              <summary>
-                <span className="details__title">Five-year paths</span>
-              </summary>
-              <div className="charts">
-                <PathChart
-                  title="Current budget surplus"
-                  subtitle="£ billion; negative means day-to-day spending exceeds revenue"
-                  years={years}
-                  baseline={surplus(paths.baseline.currentBudgetDeficit)}
-                  policy={surplus(paths.policy.currentBudgetDeficit)}
-                  format={(v) => formatGbpBn(v * 1000, 1, true)}
-                  tickFormat={(v) => formatGbpBn(v * 1000, 0, true)}
-                  highlightYear={targetYear}
-                  zeroLine
-                />
-                <PathChart
-                  title="Borrowing (PSNB)"
-                  subtitle="£ billion a year"
-                  years={years}
-                  baseline={toBn(paths.baseline.psnb)}
-                  policy={toBn(paths.policy.psnb)}
-                  format={(v) => formatGbpBn(v * 1000, 1)}
-                  tickFormat={(v) => formatGbpBn(v * 1000, 0)}
-                  highlightYear={targetYear}
-                  zeroLine
-                />
-                <PathChart
-                  title="Net financial liabilities"
-                  subtitle="% of GDP (the investment rule's debt measure)"
-                  years={years}
-                  baseline={years.map((y) => paths.baseline.psnflPctGdp[y] ?? 0)}
-                  policy={years.map((y) => paths.policy.psnflPctGdp[y] ?? 0)}
-                  format={(v) => formatPct(v, 1)}
-                  highlightYear={targetYear}
-                />
-                <PathChart
-                  title="Borrowing as a share of GDP"
-                  subtitle="% of GDP"
-                  years={years}
-                  baseline={years.map((y) => paths.baseline.psnbPctGdp[y] ?? 0)}
-                  policy={years.map((y) => paths.policy.psnbPctGdp[y] ?? 0)}
-                  format={(v) => formatPct(v, 1)}
-                  highlightYear={targetYear}
-                  zeroLine
-                />
-              </div>
-            </details>
+            </>
           ) : null}
-        </Beat>
-      </Beats>
+        </aside>
+      </div>
+      {/* The charts want the full width: in the working notes their labels drew too small. */}
+      {workings ? (
+        <details className="panel details">
+          <summary>
+            <span className="details__title">Five-year paths</span>
+          </summary>
+          <div className="charts">
+            <PathChart
+              title="Current budget surplus"
+              subtitle="£ billion; negative means day-to-day spending exceeds revenue"
+              years={years}
+              baseline={surplus(paths.baseline.currentBudgetDeficit)}
+              policy={surplus(paths.policy.currentBudgetDeficit)}
+              format={(v) => formatGbpBn(v * 1000, 1, true)}
+              tickFormat={(v) => formatGbpBn(v * 1000, 0, true)}
+              highlightYear={targetYear}
+              zeroLine
+            />
+            <PathChart
+              title="Borrowing (PSNB)"
+              subtitle="£ billion a year"
+              years={years}
+              baseline={toBn(paths.baseline.psnb)}
+              policy={toBn(paths.policy.psnb)}
+              format={(v) => formatGbpBn(v * 1000, 1)}
+              tickFormat={(v) => formatGbpBn(v * 1000, 0)}
+              highlightYear={targetYear}
+              zeroLine
+            />
+            <PathChart
+              title="Net financial liabilities"
+              subtitle="% of GDP (the investment rule's debt measure)"
+              years={years}
+              baseline={years.map((y) => paths.baseline.psnflPctGdp[y] ?? 0)}
+              policy={years.map((y) => paths.policy.psnflPctGdp[y] ?? 0)}
+              format={(v) => formatPct(v, 1)}
+              highlightYear={targetYear}
+            />
+            <PathChart
+              title="Borrowing as a share of GDP"
+              subtitle="% of GDP"
+              years={years}
+              baseline={years.map((y) => paths.baseline.psnbPctGdp[y] ?? 0)}
+              policy={years.map((y) => paths.policy.psnbPctGdp[y] ?? 0)}
+              format={(v) => formatPct(v, 1)}
+              highlightYear={targetYear}
+              zeroLine
+            />
+          </div>
+        </details>
+      ) : null}
     </JourneyLayout>
   );
 }

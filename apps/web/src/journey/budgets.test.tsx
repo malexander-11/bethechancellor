@@ -127,7 +127,7 @@ describe('the beat and word budgets', () => {
       let widest = 0;
       for (const tab of screen.getAllByRole('tab')) {
         fireEvent.click(tab);
-        const n = liveBeatWords();
+        const n = screenWords();
         widest = Math.max(widest, n);
         expect(n, `${path} shows ${n} words with ${tab.textContent} open`).toBeLessThanOrEqual(
           limit,

@@ -9,10 +9,13 @@ import {
   formatPct,
   freshGame,
   householdReactions,
+  rankedPriorities,
   readings,
   receptions,
+  type BudgetVerdict,
+  type Outcome,
 } from '@btc/engine';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdviserBriefing } from '../components/AdviserBriefing';
 import { ClosingNotes } from '../components/ClosingNotes';
@@ -24,7 +27,6 @@ import { formatLeverValue } from '../components/LeverControl';
 import { MeasuresTable } from '../components/MeasuresTable';
 import { PathChart } from '../components/PathChart';
 import { ReceptionCard } from '../components/ReceptionCard';
-import { Scorecard } from '../components/Scorecard';
 import { Speech } from '../components/Speech';
 import { Verdict } from '../components/Verdict';
 import { VerdictCard } from '../components/VerdictCard';
@@ -45,7 +47,6 @@ import {
   vintage,
   options,
 } from '../data';
-import { Beat, Beats, resetProgress } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
@@ -55,11 +56,67 @@ import { permalinkQuery, useBudget } from '../state/budget';
 const ASSUMPTION_CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
 
+/** "a, b and c" */
+function list(items: readonly string[]): string {
+  if (items.length <= 1) return items[0] ?? '';
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
+function lowerFirst(s: string): string {
+  return s.replace(/^./, (c) => c.toLowerCase());
+}
+
 /**
- * Step 7. Three beats: the speech, built from the actual choices; the reaction, when the
- * backbenchers, the markets and the public each rate the Budget out of five and say why; and the
- * close. Every rating is a game judgement from authored thresholds, names the decisions behind it
- * and wears the badge; the rules line above the cards is the one thing here that is arithmetic.
+ * The Budget in three sentences: what was prioritised, who pays, what was accepted. Every clause
+ * is read from the engine's figures and the player's own choices: the ranked priorities' nouns,
+ * the largest payers by the incidence tags, and the most consequential thing given up, in this
+ * order: a rule missed, a promise broken, a target not kept, a measure moved after the forecast.
+ */
+function statementOf(
+  game: NonNullable<ReturnType<typeof useBudget>['state']['game']>,
+  outcome: Outcome,
+  verdict: BudgetVerdict,
+  status: ReturnType<typeof ambitionStatus>,
+): { prioritised: string; paid: string; accepted: string } {
+  const nouns = rankedPriorities(game, pm).map((p) => p.noun);
+  const prioritised =
+    nouns.length > 0
+      ? `I prioritised ${list(nouns)}.`
+      : 'I set no priorities with the Prime Minister.';
+  const payers = verdict.paid.filter((r) => r.gbpm > 0).slice(0, 2);
+  const losers = verdict.benefited.filter((r) => r.gbpm < 0).slice(0, 2);
+  const paid =
+    payers.length > 0
+      ? `I paid for it by asking ${list(payers.map((r) => lowerFirst(r.label)))}.`
+      : losers.length > 0
+        ? `I paid for it with less for ${list(losers.map((r) => lowerFirst(r.label)))}.`
+        : 'I paid for it out of the headroom the forecast left.';
+  const missed = outcome.verdicts.filter(
+    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
+  );
+  const broken = status.promises.filter((p) => !p.kept);
+  const target = game.headroomTargetBn * 1000;
+  const change = verdict.compromises[0];
+  const accepted =
+    missed.length > 0
+      ? `I accepted missing ${list(missed.map((v) => `the ${lowerFirst(v.ruleName)} by ${formatGbpBn(Math.abs(v.headroomGbpm), 1)}`))}.`
+      : broken.length > 0
+        ? `I accepted breaking ${list(broken.map((p) => lowerFirst(p.promise.title)))}.`
+        : target > 0 && verdict.headroomGbpm < target
+          ? `I accepted ${formatGbpBn(target - verdict.headroomGbpm, 1)} less headroom than I set out to keep.`
+          : change
+            ? `I accepted ${lowerFirst(change.lever.shortTitle)} at ${formatLeverValue(change.lever, change.to)} rather than ${formatLeverValue(change.lever, change.from)}.`
+            : 'I accepted no compromise the forecast forced: the OBR saw the Budget I delivered.';
+  return { prioritised, paid, accepted };
+}
+
+/**
+ * Step 7: what your Budget means, on one screen. The Budget in three sentences; the rules line,
+ * which is the one thing here that is arithmetic; the backbenchers, the markets and the public,
+ * each rating the Budget out of five and saying which choices caused it; and the close, with the
+ * ambitions, who paid, the compromises and every other forecast. The speech, the households and
+ * the Budget documents are one fold away. Arriving here marks the game finished, so a link shared
+ * from here opens as a finished Budget.
  */
 export function BudgetDayPage() {
   const { state, dispatch, outcome, query } = useBudget();
@@ -217,6 +274,14 @@ export function BudgetDayPage() {
       rebellionRisk: values.rebellionRisk ?? 0,
     });
   }, [game, outcome, status, state.snapshot, typicalErrorGbpm]);
+  // Arriving here is the end of the story: a link shared from here opens as a finished Budget.
+  // Not when the guard is sending the player back to where they are.
+  const reached = game?.reached;
+  useEffect(() => {
+    if (!guard && game && reached !== undefined && reached < FINAL_STAGE) {
+      dispatch({ type: 'updateGame', patch: { reached: FINAL_STAGE } });
+    }
+  }, [guard, game, reached, dispatch]);
   // A game in play that jumps to Budget day is sent back to where it is; a sandbox link and a
   // finished, shared link both walk in.
   if (guard) return guard;
@@ -229,13 +294,7 @@ export function BudgetDayPage() {
         game: freshGame(game.seed),
       })}`
     : '/outlook';
-
-  /** Reaching the close is the end of the story; a link shared from here opens everything. */
-  const reachClose = () => {
-    if (game && game.reached < FINAL_STAGE) {
-      dispatch({ type: 'updateGame', patch: { reached: FINAL_STAGE } });
-    }
-  };
+  const statement = game && verdict && status ? statementOf(game, outcome, verdict, status) : null;
 
   async function copyLink() {
     const url = `${window.location.origin}/budget-day?${query}`;
@@ -253,35 +312,45 @@ export function BudgetDayPage() {
 
   return (
     <JourneyLayout step="budget-day">
-      <Beats step="budget-day">
-        <Beat title="The speech" continueLabel="Sit down, and hear the room">
-          <Speech speech={theSpeech} />
-        </Beat>
-        <Beat title="The reaction" continueLabel="Read the verdict" onAdvance={reachClose}>
-          <Scorecard
-            outcome={outcome}
-            typicalErrorGbpm={typicalErrorGbpm}
-            revealed={game?.revealed ?? false}
+      {statement ? (
+        <section className="statement doc" aria-labelledby="statement-heading">
+          <h2 id="statement-heading" className="section-label">
+            Your Budget, in three sentences <LabelBadge badge="mechanical" />
+          </h2>
+          <p className="statement__line">{statement.prioritised}</p>
+          <p className="statement__line">{statement.paid}</p>
+          <p className="statement__line">{statement.accepted}</p>
+        </section>
+      ) : null}
+      <p className="rules-line">
+        <LabelBadge badge="mechanical" /> {rulesLine}
+      </p>
+      <div className="receptions">
+        {room.map((r) => (
+          <ReceptionCard
+            key={r.audience}
+            reception={r}
+            notes={r.audience === 'public' ? notes : undefined}
           />
-          <p className="rules-line">
-            <LabelBadge badge="mechanical" /> {rulesLine}
-          </p>
-          <div className="receptions">
-            {room.map((r) => (
-              <ReceptionCard
-                key={r.audience}
-                reception={r}
-                notes={r.audience === 'public' ? notes : undefined}
-              />
-            ))}
-          </div>
-          <h2 className="section-label">Five households</h2>
+        ))}
+      </div>
+      {verdict ? <Verdict verdict={verdict} replayHref={replayHref} /> : null}
+
+      <details className="more">
+        <summary>Read the speech</summary>
+        <div className="more__body">
+          <Speech speech={theSpeech} />
+        </div>
+      </details>
+      <details className="more">
+        <summary>Who feels it: five households</summary>
+        <div className="more__body">
           <Households reactions={voters} />
           {deliveredOptions.length > 0 ? (
             <section className="panel" aria-labelledby="delivery-heading">
-              <h2 id="delivery-heading" className="section-label">
+              <h3 id="delivery-heading" className="section-label">
                 What the money does and does not buy
-              </h2>
+              </h3>
               <ul className="delivery">
                 {deliveredOptions.map((o) => (
                   <li key={o.option.id}>
@@ -291,19 +360,21 @@ export function BudgetDayPage() {
               </ul>
             </section>
           ) : null}
-        </Beat>
-        <Beat title="The close">
-          {verdict ? <Verdict verdict={verdict} replayHref={replayHref} /> : null}
+        </div>
+      </details>
+      <details className="more">
+        <summary>Budget documents</summary>
+        <div className="more__body">
           <section className="panel" aria-labelledby="documents-heading">
-            <h2 id="documents-heading" className="section-label">
-              Budget documents
-            </h2>
+            <h3 id="documents-heading" className="section-label">
+              What the Treasury publishes
+            </h3>
             <p className="panel__hint">
               What the Treasury publishes as the Chancellor sits down: the Red Book with its table
               of policy decisions, the OBR’s forecast beside it, and a costing note for every
               measure.
             </p>
-            <h3 className="section-label">Table 4.1: your policy decisions</h3>
+            <h4 className="section-label">Table 4.1: your policy decisions</h4>
             <MeasuresTable outcome={outcome} levers={levers} targetYear={targetYear} />
             <p className="source">
               Economic assumptions:{' '}
@@ -340,10 +411,10 @@ export function BudgetDayPage() {
                 </span>
               </summary>
               <div className="verdicts">
-                {outcome.verdicts.map((verdict) => (
+                {outcome.verdicts.map((v) => (
                   <VerdictCard
-                    key={verdict.ruleId}
-                    verdict={verdict}
+                    key={v.ruleId}
+                    verdict={v}
                     householdCount={households.value}
                     typicalErrorGbpm={typicalErrorGbpm}
                   />
@@ -414,30 +485,30 @@ export function BudgetDayPage() {
               </div>
             </details>
           </WorkingsOnly>
-          <div className="toolbar">
-            <button type="button" className="btn btn--primary" onClick={copyLink}>
-              Copy a link to this Budget
-            </button>
-            <span role="status" className="toolbar__note">
-              {copied ? 'Link copied' : ''}
-            </span>
-            <StepLink to="/budget/deliver" className="btn">
-              Back to the package
-            </StepLink>
-            <button
-              type="button"
-              className="btn"
-              onClick={() => {
-                dispatch({ type: 'reset' });
-                resetProgress();
-                navigate('/');
-              }}
-            >
-              Start again
-            </button>
-          </div>
-        </Beat>
-      </Beats>
+        </div>
+      </details>
+
+      <p className="actions">
+        <button type="button" className="btn btn--primary" onClick={copyLink}>
+          Copy a link to this Budget
+        </button>
+        <StepLink to={game ? '/review' : '/budget/taxes'} className="btn">
+          Change something
+        </StepLink>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            dispatch({ type: 'reset' });
+            navigate('/');
+          }}
+        >
+          Play again
+        </button>
+        <span role="status" className="actions__hint">
+          {copied ? 'Link copied' : ''}
+        </span>
+      </p>
     </JourneyLayout>
   );
 }

@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
-import { BeatsProvider } from './journey/beats';
 import { WorkingsProvider, useWorkingsSwitch } from './journey/workings';
 import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
@@ -14,6 +13,7 @@ import { MethodologyPage } from './pages/Methodology';
 import { OutlookPage } from './pages/Outlook';
 import { PMPage } from './pages/PM';
 import { RabbitPage } from './pages/Rabbit';
+import { ReviewPage } from './pages/Review';
 import { StartPage } from './pages/Start';
 import { Disclaimer } from './components/Disclaimer';
 
@@ -113,6 +113,7 @@ function Shell() {
           <Route path="/forecast" element={<ForecastPage />} />
           <Route path="/compromise" element={<CompromisePage />} />
           <Route path="/rabbit" element={<RabbitPage />} />
+          <Route path="/review" element={<ReviewPage />} />
           <Route path="/budget-day" element={<BudgetDayPage />} />
           <Route path="/b" element={<RedirectKeepingQuery to="/budget/taxes" />} />
           <Route path="/methodology" element={<MethodologyPage />} />
@@ -129,16 +130,12 @@ export function App() {
   return (
     <BudgetProvider>
       {/*
-        Beat progress lives above the routes, because the package's four screens are four routes
-        but one journey step: keeping it in the page would replay the adviser's hand-off every
-        time you switched screen. The workings switch sits beside it for the same reason: one
-        preference for the whole journey, read by every citation on every page.
+        The workings switch lives above the routes: one preference for the whole journey, read by
+        every citation on every page.
       */}
-      <BeatsProvider>
-        <WorkingsProvider>
-          <Shell />
-        </WorkingsProvider>
-      </BeatsProvider>
+      <WorkingsProvider>
+        <Shell />
+      </WorkingsProvider>
     </BudgetProvider>
   );
 }
