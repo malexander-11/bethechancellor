@@ -36,11 +36,12 @@ describe('the OBR’s forecast', () => {
     expect(screen.getByText('Your starting position')).toBeInTheDocument();
   });
 
-  it('opens the envelope: the sliders become the OBR’s, the package is remembered, the game moves on', async () => {
+  it('opens the forecast: the sliders become the OBR’s, the package is remembered, the game moves on', async () => {
     at(`/forecast?${BASE}&g=s.${ADVISER}_st.3_pl.baseline&L=ufsm.1`);
     expect(screen.queryByText(/What happened to the economy/)).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: /Open the envelope/ }));
-    expect(screen.getByText(/1 · What happened to the economy/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /Open the forecast/ }));
+    expect(screen.getByRole('heading', { level: 1, name: 'What changed' })).toBeInTheDocument();
+    expect(screen.getByText('What happened to the economy')).toBeInTheDocument();
     await waitFor(() => {
       const params = new URLSearchParams(window.location.search);
       expect(params.get('g')).toMatch(/rv\.1/);
@@ -52,10 +53,7 @@ describe('the OBR’s forecast', () => {
 
   it('shows an economy line of nought when the plan matched what arrived, and the lines add up', () => {
     at(`/forecast?${BASE}&g=s.${ADVISER}_st.3_pl.adviser&M=rate.0.75_rpi.0.5&L=ufsm.1_cgtdth.1`);
-    fireEvent.click(screen.getByRole('button', { name: /Open the envelope/ }));
-    // Round one is the economy alone; the measures come back scored in round two.
-    expect(screen.queryByText('The OBR re-scored your measures')).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: /Send your measures to the OBR/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Open the forecast/ }));
     const economy = screen
       .getByText(/The economy moved, including what dearer money does/)
       .closest('p');
@@ -70,8 +68,11 @@ describe('the OBR’s forecast', () => {
 
   it('lists the measures the OBR re-scored, with the factor and the original badge', () => {
     at(`/forecast?${BASE}&g=s.${HARD}_st.3_pl.adviser&L=cgtdth.1_itbr.1`);
-    fireEvent.click(screen.getByRole('button', { name: /Open the envelope/ }));
-    fireEvent.click(screen.getByRole('button', { name: /Send your measures to the OBR/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Open the forecast/ }));
+    // The re-scored measures wait under "See the numbers", closed until asked for.
+    const fold = screen.getByText('See the numbers').closest('details') as HTMLElement;
+    expect(fold).not.toHaveAttribute('open');
+    fireEvent.click(screen.getByText('See the numbers'));
     const row = screen
       .getByText(/End the capital gains write-off at death/)
       .closest('tr') as HTMLElement;
@@ -85,7 +86,7 @@ describe('the OBR’s forecast', () => {
     );
   });
 
-  it('locks the outlook step once the envelope is open', () => {
+  it('locks the starting position once the forecast is open', () => {
     at(`/outlook?${BASE}&g=s.${ADVISER}_st.3_pl.adviser_rv.1&M=rate.0.75_rpi.0.5`);
     expect(screen.getByText(/The OBR’s October forecast has arrived/)).toBeInTheDocument();
     expect(screen.getByRole('radio', { name: /£20bn/ })).toBeDisabled();

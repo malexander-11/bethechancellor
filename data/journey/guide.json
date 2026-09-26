@@ -81,10 +81,10 @@
     {
       "step": "forecast",
       "number": 5,
-      "title": "The OBR’s forecast arrives",
+      "title": "The forecast arrives",
       "doing": "The [OBR](obr) hands you the forecast your Budget will be judged against.",
-      "why": "It was fixed the day you chose your assumptions, and it may not match them. Your [headroom] can rise or fall.",
-      "now": "Open the envelope and see what it does to your plans.",
+      "why": "It was fixed the day you chose your starting position, and it may not match it. Your [headroom] can rise or fall.",
+      "now": "Open it and see what it does to your plans.",
       "terms": ["gilts", "rpi", "certified"]
     },
     {
@@ -93,7 +93,7 @@
       "title": "Make the sums add up",
       "doing": "Close the gap between the [headroom] you have and the headroom you wanted.",
       "why": "Every route costs something: more of the ways to pay, less of what you chose, or a thinner safety margin.",
-      "now": "Take the routes you can live with, then move on to the speech.",
+      "now": "Take the routes you can live with, then make your final choices.",
       "terms": ["fiscal-rules", "borrowing", "escape-clause", "certified"]
     },
     {

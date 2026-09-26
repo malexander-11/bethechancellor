@@ -18,7 +18,6 @@ import { TableScroll } from '../components/TableScroll';
 import { formatLeverValue } from '../components/LeverControl';
 import { SourceList } from '../components/SourceLink';
 import { context, draws, levers, leversByCategory, pm, rules, vintage, options } from '../data';
-import { Beat, Beats } from '../journey/beats';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { macroCodesOf, scenarioCards } from '../journey/scenarios';
@@ -27,6 +26,8 @@ import { IMPLEMENTATION_YEAR, permalinkQuery, useBudget } from '../state/budget'
 
 const CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
+/** The first of the two screens of step 5; the compromises are the second. */
+const PART = { index: 1, total: 2, label: 'The forecast' };
 
 const STATUS: Record<RuleVerdict['status'], { text: string; tone: string; icon: string }> = {
   met: { text: 'Rule met', tone: 'good', icon: '✓' },
@@ -38,10 +39,12 @@ const STATUS: Record<RuleVerdict['status'], { text: string; tone: string; icon: 
 };
 
 /**
- * Stage 4. The envelope from the OBR. Which forecast is inside was fixed by the seed when the
- * player confirmed their outlook (ADR-0012); opening it overwrites the macro sliders with the
- * OBR's figures and locks the outlook step. The page then takes the move apart: what the economy
- * did, what the OBR made of the player's own costings, and what that leaves of the ambitions.
+ * Step 5, first screen: the OBR's forecast. Which forecast arrives was fixed by the seed when the
+ * player confirmed their starting position (ADR-0012); opening it overwrites the macro sliders
+ * with the OBR's figures and locks that step. The screen then says what changed in two lines,
+ * the economy and the costings, what that leaves of the headroom against the target, and what it
+ * does to the ambitions; the tables behind the two lines wait under "See the numbers". The state
+ * of the game decides which of the two faces shows, so a link that lands here works either way.
  */
 export function ForecastPage() {
   const { state, dispatch } = useBudget();
@@ -55,7 +58,7 @@ export function ForecastPage() {
   const planning = game?.planning ?? 'baseline';
   const planningMacro = useMemo(() => {
     if (planning !== 'own') return CARDS.find((c) => c.kind === planning)?.values ?? {};
-    // Hand-set sliders: the snapshot remembers them once the envelope is open, the URL before.
+    // Hand-set sliders: the snapshot remembers them once the forecast is open, the URL before.
     return pick(state.snapshot ?? state.leverValues, MACRO_CODES);
   }, [planning, state.snapshot, state.leverValues]);
   const decomposition = useMemo(
@@ -89,7 +92,7 @@ export function ForecastPage() {
     return <Navigate to={{ pathname: '/outlook', search }} replace />;
   }
 
-  /** Open the envelope: the sliders become the OBR's, the outlook step becomes history. */
+  /** Open the forecast: the sliders become the OBR's, the starting position becomes history. */
   const reveal = () => {
     if (!state.snapshot) dispatch({ type: 'setSnapshot', values: { ...state.leverValues } });
     dispatch({ type: 'setLevers', values: draw.values });
@@ -114,90 +117,76 @@ export function ForecastPage() {
     game: freshGame(game.seed),
   })}`;
 
+  if (!game.revealed || !decomposition) {
+    return (
+      <JourneyLayout
+        step="forecast"
+        part={PART}
+        title="The forecast arrives"
+        tabTitle="The forecast arrives"
+        lead="The Office for Budget Responsibility has finished its own forecast. It does not know what you planned on."
+      >
+        <section className="envelope doc" aria-label="A sealed envelope">
+          <p className="doc__head">
+            <span className="kicker">Office for Budget Responsibility</span>
+            <span className="doc__ref">Pre-measures forecast · in confidence</span>
+          </p>
+          <p>
+            This is the forecast your Budget will be judged against. It was fixed the day you chose
+            your starting position. Open it, and its figures replace the ones you planned on.
+          </p>
+          <p className="source">
+            Seed {game.seed} of 999 · <LabelBadge badge="simulated" /> which published forecast is
+            inside was decided by a draw weighted to the centre.
+          </p>
+        </section>
+        <p className="actions">
+          <button type="button" className="btn btn--primary" onClick={reveal}>
+            Open the forecast
+          </button>
+          <StepLink to="/budget/afford" className="btn">
+            Back
+          </StepLink>
+        </p>
+      </JourneyLayout>
+    );
+  }
+
+  const arrived = draw.outcome.title.replace(/^./, (c) => c.toLowerCase());
   return (
     <JourneyLayout
       step="forecast"
-      part={{ noun: 'Part', index: 1, total: 2, label: 'the forecast' }}
+      part={PART}
+      title="What changed"
+      tabTitle="What changed"
+      lead={
+        <>
+          The OBR’s forecast is in: <strong>{arrived}</strong>. Here is what moved, and what it
+          leaves you.
+        </>
+      }
     >
-      <Beats step="forecast">
-        <Beat
-          title="An envelope from the Office for Budget Responsibility"
-          continueLabel="Open the envelope"
-          onAdvance={reveal}
-        >
-          <section className="envelope doc" aria-label="A sealed envelope">
-            <p className="doc__head">
-              <span className="kicker">Office for Budget Responsibility</span>
-              <span className="doc__ref">Pre-measures forecast · in confidence</span>
-            </p>
-            <p>
-              This is the forecast your Budget will be judged against. It was fixed the day you
-              chose your assumptions, and it does not know what you chose. Open it, and the sliders
-              become the OBR’s.
-            </p>
-            <p className="source">
-              Seed {game.seed} of 999 · <LabelBadge badge="simulated" /> which published forecast is
-              inside was decided by a draw weighted to the centre.
-            </p>
-          </section>
-        </Beat>
-        <Beat title="The pre-measures forecast" continueLabel="Send your measures to the OBR">
-          {!game.revealed || !decomposition ? (
-            <OpenIt reveal={reveal} />
-          ) : (
-            <ForecastReveal
-              part="economy"
-              decomposition={decomposition}
-              draw={draw}
-              planning={planning}
-              planningMacro={planningMacro}
-              game={game}
-              odds={odds}
-              replay={replay}
-              onward={onward}
-            />
-          )}
-        </Beat>
-        <Beat title="Your measures, scored">
-          {!game.revealed || !decomposition ? (
-            <OpenIt reveal={reveal} />
-          ) : (
-            <ForecastReveal
-              part="measures"
-              decomposition={decomposition}
-              draw={draw}
-              planning={planning}
-              planningMacro={planningMacro}
-              game={game}
-              odds={odds}
-              replay={replay}
-              onward={onward}
-            />
-          )}
-        </Beat>
-      </Beats>
+      <ForecastReveal
+        decomposition={decomposition}
+        draw={draw}
+        planning={planning}
+        planningMacro={planningMacro}
+        game={game}
+        odds={odds}
+        replay={replay}
+        onward={onward}
+      />
     </JourneyLayout>
   );
 }
 
-/** A link that lands here with the beats open but the envelope shut: open it first. */
-function OpenIt({ reveal }: { reveal: () => void }) {
-  return (
-    <p className="hero-start__actions">
-      <button type="button" className="btn btn--primary" onClick={reveal}>
-        Open the envelope
-      </button>
-    </p>
-  );
-}
-
 /**
- * The forecast in the two rounds the real one comes in. First the pre-measures forecast: the
- * economy and the public finances before any decision in this Budget. Then the measures go to
- * the OBR and come back scored, and the bottom line is what the two together leave.
+ * The forecast taken apart: what the economy did and what the OBR made of the player's own
+ * costings, each one line with the engine's figure; the bottom line against the target and the
+ * rules; and what that leaves of the ambitions. The tables behind the lines, the story's sources
+ * and the disclosure of how the draw was made are one fold away.
  */
 function ForecastReveal({
-  part,
   decomposition,
   draw,
   planning,
@@ -207,7 +196,6 @@ function ForecastReveal({
   replay,
   onward,
 }: {
-  part: 'economy' | 'measures';
   decomposition: ReturnType<typeof decomposeForecast>;
   draw: ReturnType<typeof drawForecast>;
   planning: string;
@@ -233,58 +221,16 @@ function ForecastReveal({
   const nowBroken = status.promises.filter(
     (p) => !p.kept && before.promises.find((q) => q.promise.id === p.promise.id)?.kept,
   );
-  if (part === 'economy') {
-    return (
-      <section className="panel doc" aria-labelledby="economy-heading">
-        <h2 id="economy-heading" className="section-label">
-          1 · What happened to the economy
+  return (
+    <>
+      <section className="panel doc" aria-labelledby="changed-heading">
+        <h2 id="changed-heading" className="section-label">
+          What the OBR changed
         </h2>
-        <p className="panel__hint">
-          The OBR sends the Treasury the economy first, before any decision in this Budget is
-          counted. Your measures go in next, and come back scored.
-        </p>
         <p className="reveal__headline">
           <strong>{draw.outcome.title}.</strong> {draw.outcome.story.headline}{' '}
           <LabelBadge badge={draw.outcome.story.badge} />
         </p>
-        <p>{draw.outcome.story.text}</p>
-        <SourceList refs={draw.outcome.story.sources} />
-        <TableScroll label="What happened to the economy">
-          <table className="measures decomp">
-            <thead>
-              <tr>
-                <th>Assumption</th>
-                <th>OBR in March</th>
-                <th>You planned on</th>
-                <th>OBR, October</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leversByCategory.macro.map((lever) => {
-                const setting = draw.settings.find((s) => s.leverCode === lever.code);
-                return (
-                  <tr key={lever.code}>
-                    <td>
-                      {lever.shortTitle}
-                      {workings && setting ? (
-                        <span className="source"> {setting.workings}</span>
-                      ) : null}
-                    </td>
-                    <td>as forecast</td>
-                    <td>
-                      {formatLeverValue(lever, planningMacro[lever.code] ?? lever.control.default)}
-                    </td>
-                    <td>
-                      <strong>
-                        {formatLeverValue(lever, draw.values[lever.code] ?? lever.control.default)}
-                      </strong>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </TableScroll>
         <p className="reveal__line">
           <span className="reveal__label">
             The economy moved, including what dearer money does to your own borrowing
@@ -294,60 +240,6 @@ function ForecastReveal({
           </strong>
           <LabelBadge badge="mechanical" />
         </p>
-        <p className="panel__hint">
-          You planned on {planningName}. Headroom on your assumptions:{' '}
-          {formatGbpBn(d.headroom.planned, 1, d.headroom.planned < 0)}; on the OBR’s economy:{' '}
-          {formatGbpBn(d.headroom.economy, 1, d.headroom.economy < 0)}.
-        </p>
-      </section>
-    );
-  }
-  return (
-    <>
-      <section className="panel doc" aria-labelledby="costings-heading">
-        <h2 id="costings-heading" className="section-label">
-          2 · What happened to your measures
-        </h2>
-        {revised.length === 0 ? (
-          <p>
-            The OBR certified every measure as you scored it. Nothing in your package carries a
-            caveat this outcome doubts.
-          </p>
-        ) : (
-          <TableScroll label="What happened to your measures">
-            <table className="measures decomp">
-              <thead>
-                <tr>
-                  <th>Measure</th>
-                  <th>As you scored it, {year}</th>
-                  <th>As the OBR scores it</th>
-                  {workings ? <th>Why</th> : null}
-                </tr>
-              </thead>
-              <tbody>
-                {revised.map((r) => (
-                  <tr key={r.effect.code}>
-                    <td>
-                      {r.effect.title} <LabelBadge badge={r.effect.badge} />{' '}
-                      <span className="tag--treasury">re-scored ×{r.revision.factor}</span>
-                    </td>
-                    <td className="amount">{formatGbpBn(r.asScoredGbpm, 1, true)}</td>
-                    <td className="amount">
-                      <strong>{formatGbpBn(r.revisedGbpm, 1, true)}</strong>
-                    </td>
-                    {workings ? (
-                      <td>
-                        <span className="source">
-                          <LabelBadge badge="simulated" /> {r.revision.note}
-                        </span>
-                      </td>
-                    ) : null}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </TableScroll>
-        )}
         <p className="reveal__line">
           <span className="reveal__label">The OBR re-scored your measures</span>
           <strong className={`amount ${tone(d.costingsGbpm)}`}>
@@ -355,6 +247,118 @@ function ForecastReveal({
           </strong>
           <LabelBadge badge="simulated" />
         </p>
+        <p className="panel__hint">
+          {revised.length === 0
+            ? 'The OBR certified every measure as you scored it.'
+            : `${revised.length} of your measures ${revised.length === 1 ? 'carries' : 'carry'} a caveat this outcome doubts.`}{' '}
+          You planned on {planningName}.
+        </p>
+        <details className="more">
+          <summary>See the numbers</summary>
+          <div className="more__body">
+            <h3 className="section-label">What happened to the economy</h3>
+            <p>{draw.outcome.story.text}</p>
+            <SourceList refs={draw.outcome.story.sources} />
+            <TableScroll label="What happened to the economy">
+              <table className="measures decomp">
+                <thead>
+                  <tr>
+                    <th>Assumption</th>
+                    <th>OBR in March</th>
+                    <th>You planned on</th>
+                    <th>OBR, October</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leversByCategory.macro.map((lever) => {
+                    const setting = draw.settings.find((s) => s.leverCode === lever.code);
+                    return (
+                      <tr key={lever.code}>
+                        <td>
+                          {lever.shortTitle}
+                          {workings && setting ? (
+                            <span className="source"> {setting.workings}</span>
+                          ) : null}
+                        </td>
+                        <td>as forecast</td>
+                        <td>
+                          {formatLeverValue(
+                            lever,
+                            planningMacro[lever.code] ?? lever.control.default,
+                          )}
+                        </td>
+                        <td>
+                          <strong>
+                            {formatLeverValue(
+                              lever,
+                              draw.values[lever.code] ?? lever.control.default,
+                            )}
+                          </strong>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </TableScroll>
+            <p className="panel__hint">
+              Headroom on your assumptions:{' '}
+              {formatGbpBn(d.headroom.planned, 1, d.headroom.planned < 0)}; on the OBR’s economy:{' '}
+              {formatGbpBn(d.headroom.economy, 1, d.headroom.economy < 0)}.
+            </p>
+            <h3 className="section-label">What happened to your measures</h3>
+            {revised.length === 0 ? (
+              <p>
+                The OBR certified every measure as you scored it. Nothing in your package carries a
+                caveat this outcome doubts.
+              </p>
+            ) : (
+              <TableScroll label="What happened to your measures">
+                <table className="measures decomp">
+                  <thead>
+                    <tr>
+                      <th>Measure</th>
+                      <th>As you scored it, {year}</th>
+                      <th>As the OBR scores it</th>
+                      {workings ? <th>Why</th> : null}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {revised.map((r) => (
+                      <tr key={r.effect.code}>
+                        <td>
+                          {r.effect.title} <LabelBadge badge={r.effect.badge} />{' '}
+                          <span className="tag--treasury">re-scored ×{r.revision.factor}</span>
+                        </td>
+                        <td className="amount">{formatGbpBn(r.asScoredGbpm, 1, true)}</td>
+                        <td className="amount">
+                          <strong>{formatGbpBn(r.revisedGbpm, 1, true)}</strong>
+                        </td>
+                        {workings ? (
+                          <td>
+                            <span className="source">
+                              <LabelBadge badge="simulated" /> {r.revision.note}
+                            </span>
+                          </td>
+                        ) : null}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </TableScroll>
+            )}
+            <aside className="note" aria-label="How this forecast was made">
+              <p>
+                <span className="kicker">Disclosure</span> <LabelBadge badge="simulated" />
+              </p>
+              <p>{draws.disclosure}</p>
+              <p className="source">
+                Seed {game.seed}: this outcome arrives in about {Math.round(odds * 100)} seeds in
+                100. <a href={replay}>Replay these conditions</a> with a fresh Budget.
+              </p>
+            </aside>
+          </div>
+        </details>
       </section>
 
       <section className="panel doc bottom-line" aria-labelledby="bottom-heading">
@@ -393,7 +397,12 @@ function ForecastReveal({
             </li>
           ))}
         </ul>
-        <h3 className="section-label">What this does to your ambitions</h3>
+      </section>
+
+      <section className="panel doc" aria-labelledby="ambitions-heading">
+        <h2 id="ambitions-heading" className="section-label">
+          What this does to your ambitions
+        </h2>
         {status.priorities.length === 0 && status.promises.length === 0 ? (
           <p className="panel__hint">
             Nothing was agreed in Downing Street, so nothing is at risk.
@@ -427,23 +436,12 @@ function ForecastReveal({
         )}
       </section>
 
-      <aside className="note" aria-label="How this forecast was made">
-        <p>
-          <span className="kicker">Disclosure</span> <LabelBadge badge="simulated" />
-        </p>
-        <p>{draws.disclosure}</p>
-        <p className="source">
-          Seed {game.seed}: this outcome arrives in about {Math.round(odds * 100)} seeds in 100.{' '}
-          <a href={replay}>Replay these conditions</a> with a fresh Budget.
-        </p>
-      </aside>
-
-      <p className="hero-start__actions">
+      <p className="actions">
         <StepLink to="/compromise" className="btn btn--primary" onClick={onward}>
-          Make it add up
+          Respond to it
         </StepLink>
-        <StepLink to="/budget/deliver" className="btn">
-          Back to the package
+        <StepLink to="/budget/afford" className="btn">
+          Back
         </StepLink>
       </p>
     </>

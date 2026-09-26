@@ -32,7 +32,9 @@ const box = (name: RegExp) => within(menu()).getByRole('checkbox', { name });
 describe('suggested little add-ons', () => {
   it('sends a game that has not opened the envelope to the forecast', () => {
     at(`/rabbit?${BASE}&g=s.${ADVISER}_st.3`);
-    expect(screen.getByText('The OBR’s forecast arrives')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'The forecast arrives' }),
+    ).toBeInTheDocument();
   });
 
   it('prices every suggestion against the Budget as it stands, as the headroom it would leave', async () => {

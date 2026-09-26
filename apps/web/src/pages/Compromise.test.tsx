@@ -30,7 +30,9 @@ const L = () => new URLSearchParams(window.location.search).get('L') ?? '';
 describe('making it add up', () => {
   it('sends a game that has not opened the envelope to the forecast, and no game to the outlook', () => {
     const first = at(`/compromise?${BASE}&g=s.${ADVISER}_st.3`);
-    expect(screen.getByText('The OBR’s forecast arrives')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'The forecast arrives' }),
+    ).toBeInTheDocument();
     first.unmount();
     at(`/compromise?${BASE}`);
     expect(screen.getByText('Your starting position')).toBeInTheDocument();
