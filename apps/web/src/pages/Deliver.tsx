@@ -126,6 +126,11 @@ export function DeliverPage() {
 
   const { priority } = report;
   const rank = RANK[n - 1] ?? `${n}th`;
+  // One note from the room at a time: the one about this priority if there is one, else the
+  // first that is about the Budget as a whole. Notes about the other priorities wait for theirs.
+  const own = advice.find((i) => i.about === priority.title);
+  const general = advice.find((i) => i.about === undefined);
+  const aside = own ? [own] : general ? [general] : [];
   const tone = MINISTER_ROLES.has(priority.lead) ? 'minister' : 'adviser';
   const links = deskLinks(report.options.map((o) => o.option));
   const nextPriority = ranked[n];
@@ -145,7 +150,7 @@ export function DeliverPage() {
     >
       <HeadroomBar outcome={outcome} game={game} status={status} />
       <Spoken line={priority.brief} who={priority.lead} tone={tone} />
-      <Interventions items={advice} />
+      <Interventions items={aside} />
       <div
         className="choices choices--list"
         role="group"

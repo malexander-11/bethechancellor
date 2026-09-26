@@ -46,8 +46,8 @@
   --box-edge: #7a161e;
 
   /* Status, always beside an icon or a word */
-  --good: #1a7736;
-  --warning: #8a5a00;
+  --good: #166a30;
+  --warning: #7a4f00;
   --critical: #a3202a;
   --good-wash: rgba(26, 119, 54, 0.1);
   --warning-wash: rgba(138, 90, 0, 0.1);

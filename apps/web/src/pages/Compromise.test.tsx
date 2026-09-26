@@ -100,7 +100,8 @@ describe('making it add up', () => {
   it('lets the Chancellor lower the target, and says what that costs', async () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1`);
     const route = screen.getByRole('region', { name: /Accept less headroom/ });
-    expect(within(route).getByText(/Lowering the target costs nothing today/)).toBeInTheDocument();
+    // The adviser's short line and the full one behind "More" both carry the phrase.
+    expect(within(route).getAllByText(/Lowering the target costs nothing today/).length).toBe(2);
     fireEvent.click(within(route).getByRole('radio', { name: /Whatever the rules leave/ }));
     await waitFor(() => expect(g()).toMatch(/hr\.0/));
     expect(screen.getByText(/you set no target beyond the rules/)).toBeInTheDocument();
@@ -111,7 +112,7 @@ describe('making it add up', () => {
     const route = screen.getByRole('region', { name: /Borrow, and say so/ });
     const box = within(route).getByRole('checkbox');
     expect(within(route).getByText(/will be missed by £/)).toBeInTheDocument();
-    expect(within(route).getByText(/Write down that you know/)).toBeInTheDocument();
+    expect(within(route).getAllByText(/Write down that you know/).length).toBe(2);
     fireEvent.click(box);
     await waitFor(() => expect(g()).toMatch(/br\.1/));
   });

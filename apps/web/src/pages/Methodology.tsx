@@ -104,20 +104,25 @@ export function MethodologyPage() {
 
       <h2>The journey and the advisers</h2>
       <p>
-        The game walks through seven steps: the appointment, the outlook, the Prime Minister, the
-        package, the OBR&rsquo;s forecast and the sums, the rabbit and Budget day. The road runs one
-        way: a stage opens once the one before it has been left, going back is always allowed, and a
-        link that jumps ahead is sent back to where the game has got. The progress rail at the top
-        of every page and the guard on every page read the same rule. With the Prime Minister you
-        rank up to three of eight priorities; the package then opens on two guided screens, the ways
-        to deliver each priority and the ways to afford them, every option a bundle of the
-        game&rsquo;s own levers that no other option moves, priced by the engine against the Budget
-        as it stands with the headroom it would leave, two that count the same money never both
-        chosen, and the desk of every lever sits one link behind them (a sandbox with no game still
-        walks the desk&rsquo;s two screens in sequence). Every screen opens with a guide in plain
-        English (which step, what you are doing, why it matters, what to do now) and a glossary of
-        the words a newcomer will not know; both are chrome, carry no badge and quote no figure that
-        is not sourced. The advisers, the Prime Minister and the ministers are roles, not people; a
+        The game walks through seven steps, one screen at a time, with one primary button on each:
+        become Chancellor; your starting position (the Treasury&rsquo;s briefing, the forecast you
+        plan on and the headroom you mean to keep); set your priorities with the Prime Minister;
+        build your Budget, one screen per priority and then one to pay for it, the ways to raise
+        money in five groups by who pays; respond to the OBR&rsquo;s forecast and make the sums add
+        up; final choices, with a review of the whole Budget and one red button; and what your
+        Budget means. The road runs one way: a stage opens once the one before it has been left,
+        going back is always allowed and keeps every choice, because the Budget lives in the link,
+        and a link that jumps ahead is sent back to where the game has got. The progress line at the
+        top of every page and the guard on every page read the same rule. Every option is a bundle
+        of the game&rsquo;s own levers that no other option moves, priced by the engine against the
+        Budget as it stands with the headroom it would leave, two that count the same money never
+        both chosen; the desk of every lever sits one link behind the guided screens under
+        &ldquo;More policies&rdquo; and returns to the screen that opened it (a sandbox with no game
+        still walks the desk&rsquo;s two screens in sequence). Every screen opens with one heading
+        and one instruction; the guide&rsquo;s reasons and a glossary of the words a newcomer will
+        not know sit under &ldquo;Why this matters&rdquo;, and the tables under &ldquo;See the
+        numbers&rdquo;; both are chrome, carry no badge and quote no figure that is not sourced. is
+        not sourced. The advisers, the Prime Minister and the ministers are roles, not people; a
         briefing that cites a public document is labelled commentary, and a judgement nobody
         published is labelled simulated and never produces a number. The advisers&rsquo; suggested
         slider settings follow a stated rule: the latest market or independent reading minus the

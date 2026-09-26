@@ -645,9 +645,10 @@ has been left, always backwards, Budget day from the rabbit, and with no game on
 reads the same rule, so a stop is a link only when the guard would let it through. With a game
 under way the package is two guided screens (the ways to deliver, the ways to afford it) with the
 desk one link behind them (§22); in the sandbox it is the desk's two screens in sequence (taxes,
-spending) with a button forward and a link back, and the guide's kicker says which screen ("Part 2
-of 2"), as it does for the forecast and the sums. The third screen of Phase 10, the colleagues'
-letters, was retired in Phase 12 (ADR-0017); the journey asks eight Continues.
+spending) with a button forward and a link back, and the progress line says which screen ("Build
+your Budget · 2 of 2"), as it does for the forecast and the sums. The third screen of Phase 10, the
+colleagues' letters, was retired in Phase 12 (ADR-0017). Since Phase 20 the journey asks no
+Continues at all: every screen is a decision with one primary button (§23).
 
 ### The revenue menu
 
@@ -866,3 +867,51 @@ never the default while a game is under way.
 - **The words are the advisers' and the ministers'**, simulated, sourced and shown short first; the
   figures are the engine's. Priorities replace themes in the speech, the reception and the verdict,
   and an old link's `th` values map to the priorities that took their place.
+
+## 23. The Westminster journey (ADR-0023)
+
+Phase 20 redesigned the presentation and the road without touching the engine, the data's numbers
+or the state. The seven steps are the ones the player is told: become Chancellor, your starting
+position, set your priorities, build your Budget, respond to the forecast, final choices, what your
+Budget means. The rules that hold every screen to the same shape:
+
+- **One screen, one decision, one primary button.** The hand-off beats and their Continues are gone
+  (the `beats` module with them); the desk's briefing sits folded at its head. The progress line
+  says "Step n of 7", names the step, and counts a step's screens ("Build your Budget · 2 of 4");
+  a side room off the road, the desk, is named on the line rather than counted.
+- **No tab on the main road.** Step 4 is one screen per ranked priority (`/budget/deliver`,
+  `/budget/deliver/2`, `/budget/deliver/3`) and then one screen to pay for it, the five who-pays
+  groups stacked with a running total in each heading, the first three ways of each group on show
+  and the rest under "n more ways". The desk keeps its tablist and is reached
+  only through "More policies", carrying in the router's state the exact screen to return to.
+- **The state is the link.** Nothing new is stored: going back, the progress line's links and the
+  review's "Change" links all land on a screen with every choice intact, because the Budget lives in
+  the query string (§10). `/review` is an alias of the rabbit stage, so no `st.` index moved and
+  every shared link still decodes. Arriving on Budget day marks the game finished.
+- **Detail expands in place.** "Why this matters" (the guide's doing and why, and the glossary),
+  "See the numbers" (the since-March table and the sliders on the starting position; the economy
+  and costings tables on the forecast), "More policies", "The morning papers", the stress test,
+  "Read the speech", "Who feels it" and "Budget documents" are `details` elements, closed on
+  arrival, keyboard-openable, and they never hold a badge or a figure the visible screen relies on.
+- **The score stays in view.** A slim sticky bar on the building, compromise, add-on and review
+  screens reads the engine's headroom in the target year against the margin the player set, the
+  priorities delivered, the promises kept and the rules met; a card's "leaves £X" is the figure the
+  bar shows once the card is ticked, to the pound.
+- **The Budget in three sentences.** Budget day opens with what was prioritised (the priorities'
+  nouns), who pays (the largest payers by the incidence tags) and what was accepted, in this order
+  of weight: a rule missed, a promise broken, a target not kept, a measure moved after the forecast.
+  Every clause is read from the engine or the player's own choices and the card wears the
+  mechanical badge; the reactions and the close beneath it are unchanged.
+- **Identity.** Commons green (`--accent`), warm paper, charcoal ink, restrained brass, Budget red
+  for the one button that delivers and for the Budget box on the opening; Fraunces (self-hosted,
+  OFL) for headings and the three sentences, the system sans for everything else. Every text
+  pairing in both themes holds 4.5:1 (the good and warning inks were darkened for a picked card's
+  wash), every control 44px, and the reduced-motion rule stands.
+- **Word budgets, measured then pinned** (`apps/web/src/journey/budgets.test.tsx`): visible words
+  with the folds closed, the road and the footer left out, on 2026-09-26: the opening 60, the
+  starting position 267, the priorities 192, a priority screen 244 to 316, paying for it 564, the
+  forecast 126, the sums 302, the add-ons 391, the review 121, Budget day 529; each pinned with
+  about a tenth to spare. The playtime estimate (ADR-0023) reads the same screens at 200 words a
+  minute plus ten seconds a decision and three a screen change, once for everything visible (18
+  minutes) and once for the skim a decision needs (11½ minutes); it is an estimate from the
+  rendered screens, not user testing.

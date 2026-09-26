@@ -96,7 +96,11 @@ function statementOf(
   );
   const broken = status.promises.filter((p) => !p.kept);
   const target = game.headroomTargetBn * 1000;
-  const change = verdict.compromises[0];
+  // A measure moved since the OBR saw the package, the add-ons aside: they are announcements.
+  const addOnCodes = new Set(
+    options.addOns.filter((o) => game.rabbit.includes(o.id)).flatMap((o) => Object.keys(o.values)),
+  );
+  const change = verdict.compromises.find((c) => !addOnCodes.has(c.lever.code));
   const accepted =
     missed.length > 0
       ? `I accepted missing ${list(missed.map((v) => `the ${lowerFirst(v.ruleName)} by ${formatGbpBn(Math.abs(v.headroomGbpm), 1)}`))}.`
@@ -105,7 +109,7 @@ function statementOf(
         : target > 0 && verdict.headroomGbpm < target
           ? `I accepted ${formatGbpBn(target - verdict.headroomGbpm, 1)} less headroom than I set out to keep.`
           : change
-            ? `I accepted ${lowerFirst(change.lever.shortTitle)} at ${formatLeverValue(change.lever, change.to)} rather than ${formatLeverValue(change.lever, change.from)}.`
+            ? `I accepted ${lowerFirst(change.lever.shortTitle)} at ${formatLeverValue(change.lever, change.to)} rather than ${formatLeverValue(change.lever, change.from)}, after the forecast.`
             : 'I accepted no compromise the forecast forced: the OBR saw the Budget I delivered.';
   return { prioritised, paid, accepted };
 }

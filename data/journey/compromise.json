@@ -10,7 +10,8 @@
             "sourceId": "hmrc-trr-2025-06-bulletin"
           }
         ],
-        "badge": "simulated"
+        "badge": "simulated",
+        "short": "The ways to pay you have not chosen, ranked by what each raises."
       }
     },
     "spending": {
@@ -23,7 +24,8 @@
             "paragraph": "4.13"
           }
         ],
-        "badge": "simulated"
+        "badge": "simulated",
+        "short": "What you chose to deliver, biggest first: start it later, narrow it, or drop it."
       }
     },
     "target": {
@@ -42,7 +44,8 @@
             "sourceId": "boe-fsr-2026-07"
           }
         ],
-        "badge": "simulated"
+        "badge": "simulated",
+        "short": "Lowering the target costs nothing today. The markets judge the number, not the target."
       }
     },
     "breach": {
@@ -55,7 +58,8 @@
             "paragraph": "3.9-3.10"
           }
         ],
-        "badge": "simulated"
+        "badge": "simulated",
+        "short": "A rule missed by choice is not a shock; the OBR will say so. Write down that you know."
       },
       "noBreach": {
         "text": "No rule is missed on these numbers. Leaving the gap open is not a breach; it is less headroom than you meant to keep, and the target is yours to lower if you can live with that.",

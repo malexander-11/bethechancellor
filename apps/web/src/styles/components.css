@@ -1778,3 +1778,12 @@ label.choice {
 .statement__line:last-child {
   margin-bottom: 0;
 }
+
+/* A fold inside a who-pays group: "3 more ways", flush with the cards above it. */
+.more--inset {
+  margin: 2px 0 0;
+}
+
+.more--inset > .more__body {
+  padding-top: 4px;
+}

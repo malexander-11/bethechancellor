@@ -591,6 +591,8 @@ hr {
 /* ---------------------------------------------------------------- badges */
 
 .badge {
+  font-family: var(--font);
+  font-family: var(--font);
   display: inline-flex;
   align-items: center;
   gap: 4px;

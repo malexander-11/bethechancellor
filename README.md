@@ -4,52 +4,50 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 19 (independent options)**. You are appointed Chancellor in a Labour government
-with a Budget to deliver on 28 October 2026. You rank priorities with the Prime Minister, choose
-among costed ways to deliver them proposed by the ministers who lead on them, choose among costed
-ways to afford them grouped by who pays, and add up to three little announcements; the desk of every
-lever is one link away and never the default. The package holds the menu the reporting says is on
-the table, each option a published row or a stated calculation on one, badged for what it is; the
-third screen of colleagues' letters is gone, its plausible policies sit in the tax and spending
-groups and the rest are kept for the record. The page is plain: one accent, one
-type family, white cards on an off-white page, nothing smaller than 14px, a dark theme that follows
-your system, and a countdown to Budget day. Every screen opens with a guide in plain English: which
-step this is, what you are doing, why it matters, what to do now. The road runs one way: a progress
-rail of seven stops, a button forward at the foot of every page, a way back but never a way to
-jump ahead. The sources and breakdowns sit behind a "Show workings" switch, off by default; the
-badges that say what kind of number something is never go away. A first playthrough takes about
-ten minutes and eight Continues. Every screen names itself, can be reached by keyboard and screen
-reader, and says met or missed in words; the lines a newcomer reads fit eighteen words with the
-rest one click behind; the OBR's forecast arrives in two rounds; what the government has decided
-since March is on the outlook; every card says what it assumes, and who pays sits beside the
-running list.
+Status: **Phase 20 (the Westminster journey)**. You are appointed Chancellor in a Labour government
+with a Budget to deliver on 28 October 2026, and the game walks you through it in seven steps with
+one clear action on every screen: become Chancellor; understand your starting position; set your
+priorities; build your Budget, one priority at a time and then paying for it; respond to the OBR's
+forecast; make your final choices and review the whole Budget; see what it means. No tab is on the
+main road and there is no hand-off to click through: every screen is a decision with a primary
+button and a way back, and the Budget lives in the link, so going back keeps every choice. The
+identity is Westminster's: Commons green, warm paper, charcoal, restrained brass, Budget red for the
+one button that delivers, editorial headings in Fraunces, the Budget box on the opening. Every
+number still comes from an official source or a stated calculation on one, badged for what it is,
+and the sources and breakdowns sit behind a "Show workings" switch, off by default. A first
+playthrough's required reading and decisions come to about ten minutes (an estimate from the
+rendered screens, not user testing; ADR-0023). Every screen names itself, can be reached by
+keyboard and screen reader, holds 4.5:1 contrast in light and dark themes, keeps every control at
+44px and says met or missed in words.
 
-Seven steps. **The appointment**: three advisers brief you on the rules and why they matter, the
-economy since March, and a new Prime Minister who wants a Budget people notice while the manifesto
-ties your hands. **The outlook**: which forecast do you plan on, and how much headroom do you keep?
-**The Prime Minister**: rank up to three of eight priorities; the PM reacts to each and reads the
-ranking back; nothing is funded yet. **The package**: two guided screens. First the ways to
-deliver each priority, three to five costed options proposed by the minister who leads on it, each
-a bundle of the game's own levers priced by the engine against your Budget as it stands, with the
-headroom it would leave; then the ways to afford it, the gap against your target and the revenue
-options on five who-pays tabs, each wearing its badge, its manifesto red line and its earliest
-start. No two options share a lever, and two that count the same money cannot both be chosen: the
-second is blocked and says why. Behind them, one link away, the desk: every lever
-wearing the manifesto red line that watches it, with a minister on every spending line and advisers
-who remember what you agreed, and the menu a Chancellor actually weighs: employer National Insurance, pensions, the smaller duties,
+Seven steps. **Become Chancellor**: one sentence, the playtime, the button. **Your starting
+position**: the Treasury's briefing in three figures (the room March left, borrowing costs against
+the OBR's assumption, borrowing so far), the four forecasts you might plan on with the headroom each
+leaves, and the margin you want to keep, with the decisions since March and the sliders under "See
+the numbers". **Set your priorities**: rank up to three of eight with the Prime Minister, who reacts
+to each; the red lines are one fold away; nothing is funded yet. **Build your Budget**: one screen
+per priority, the minister who leads on it, its costed options priced against your Budget as it
+stands with the headroom each would leave, and a slim bar keeping score; then one screen to pay for
+it, the twenty-six ways to raise money in five groups by who pays, each heading counting what its
+chosen options raise, the first three of each group on show and the rest a fold away. No two options share a lever, and two that count the same money cannot both
+be chosen. Behind them, one link away under "More policies", the desk: every lever wearing the
+manifesto red line that watches it, with a minister on every spending line and advisers who
+remember what you agreed, and the menu a Chancellor actually weighs: employer National Insurance, pensions, the smaller duties,
 capital-tax reliefs, going further on recent rises, capital gains at death, a lower council tax
 surcharge band, the bank surcharge, the energy profits levy again, the self-employed rate, VAT off
 gas, another compliance package, business rates, the Prime Minister's schemes and defence at 3%
-sooner. **The forecast**: the OBR's envelope,
-fixed by a seeded draw the day you chose your outlook, taken apart into what the economy did and
-what the OBR made of your costings, then the routes through the gap it leaves: more of the ways to
-afford it, or what you chose to deliver started later, narrowed or dropped. **The add-ons**: up to
-three little announcements for the speech, each priced as the headroom it leaves. **Budget day**:
-the speech built from
-your choices; your backbenchers, the markets and the public each rating the Budget out of five and
-saying why; and a close that says which ambitions survived, who paid, which compromises mattered,
-how the package fares under every forecast you might have drawn, and what kind of Budget it was.
-Share the link; replay the same seed with a fresh Budget. The menu was read against the Budget
+sooner. **Respond to the forecast**: the OBR's forecast,
+fixed by a seeded draw the day you chose your starting position, opens on one button into what
+changed in two lines (the economy, and what the OBR made of your costings), the headroom before and
+after against your target, and the routes through the gap: more of the ways to pay, or what you
+chose to deliver started later, narrowed or dropped, a thinner margin, or a breach you sign for.
+**Final choices**: up to three little announcements for the speech, then a review of the whole
+Budget with a way back to every part, and one red button. **What your Budget means**: the Budget in
+three sentences (what you prioritised, who pays, what you accepted), your backbenchers, the markets
+and the public each rating it out of five and saying which choices caused it, and a close that says
+which ambitions survived, who paid, which compromises mattered and how the package fares under
+every forecast you might have drawn; the speech, five households and the Budget documents one fold
+away. Share the link; replay the same seed with a fresh Budget. The menu was read against the Budget
 reporting again on 21 September 2026: the electricity VAT zero rate that HMRC says ends in March
 2027, National Insurance for working pensioners and for LLP partners, and CenTax's package for
 taxing gains like income joined it; what has no published costing is named in words instead. On

@@ -375,7 +375,7 @@ export function BudgetPage() {
             <button type="button" className="btn" onClick={() => dispatch({ type: 'reset' })}>
               Reset to OBR
             </button>
-            <button type="button" className="btn btn--primary" onClick={copyLink}>
+            <button type="button" className="btn" onClick={copyLink}>
               Copy link to this budget
             </button>
             <span role="status" className="toolbar__note">

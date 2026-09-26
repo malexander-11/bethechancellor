@@ -237,9 +237,10 @@ says so above the table.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
-One guide entry per screen: `step`, `number` (one to seven; the package's four screens and the two
-forecast screens share a number), `title` (the page's heading), and `doing`, `why`, `now`, at most
-sixty words together. A word in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary
+One guide entry per screen: `step`, `number` (one to seven; the package's screens, the two
+forecast screens and the two final-choices screens each share a number), `title` (the page's
+heading, unless the page names itself, as each priority screen does), and `doing`, `why`, `now`,
+at most sixty words together. A word in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary
 reference and must exist in `glossary.json`; `terms` lists more to show under "Words on this
 page". Guide and glossary are chrome: no badge, and no figure unless the glossary entry carries a
 source.

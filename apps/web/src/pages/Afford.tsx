@@ -32,6 +32,8 @@ import { deliverPath } from './Deliver';
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
 /** The five who-pays groups, each with its options, in the order they are read. */
 const GROUPS = affordTabs(options, incidence);
+/** How many of a group's ways are on show before the fold. */
+const SHOWN_PER_GROUP = 3;
 
 /** What a group's chosen options do to receipts in the target year, and how many are chosen. */
 function raised(
@@ -159,6 +161,45 @@ export function AffordPage() {
       {GROUPS.map((group) => {
         const id = `who-${group.tab.id}`;
         const { chosen, gbpm } = raised(group, states, outcome.leverEffects, targetYear);
+        // The first few ways in each group are on show, with anything already chosen; the rest of
+        // the group waits under "n more ways", so nobody has to read every measure to decide.
+        const shown = group.options.filter(
+          (o, i) => i < SHOWN_PER_GROUP || states.get(o.id) !== 'off',
+        );
+        const folded = group.options.filter((o) => !shown.includes(o));
+        const card = (option: AffordOption) => {
+          const code = Object.keys(option.values)[0] ?? '';
+          const lever = byCode.get(code);
+          if (!lever) return null;
+          const own = states.get(option.id) ?? 'off';
+          const blocked = blockedBy(option, options, levers, state.leverValues);
+          const clashes =
+            own === 'off'
+              ? []
+              : optionConflicts(option, options, levers, state.leverValues).filter(
+                  (c) => c.partner !== 'off',
+                );
+          return (
+            <OptionCard
+              key={option.id}
+              id={option.id}
+              name="afford"
+              title={lever.title}
+              note={lever.headline ?? lever.description}
+              state={own}
+              price={priceOf(option, own === 'on')}
+              levers={[lever]}
+              values={{ [code]: state.leverValues[code] ?? lever.control.default }}
+              onChange={(on) => choose(option, on)}
+              redLines={optionRedLines(option, pm.promises, levers, state.leverValues)}
+              earliestStart={optionEarliestStart(option, levers)}
+              overlaps={optionOverlaps(option, levers, moved, options)}
+              {...(blocked ? { blocked } : {})}
+              clashes={clashes}
+              {...(option.line ? { line: option.line, who: 'Director of Tax' } : {})}
+            />
+          );
+        };
         return (
           <section key={group.tab.id} className="who" aria-labelledby={id}>
             <h2 id={id} className="section-label who__title">
@@ -169,41 +210,17 @@ export function AffordPage() {
                   : `${group.options.length} options`}
               </span>
             </h2>
-            <div className="choices choices--list choices--compact">
-              {group.options.map((option) => {
-                const code = Object.keys(option.values)[0] ?? '';
-                const lever = byCode.get(code);
-                if (!lever) return null;
-                const own = states.get(option.id) ?? 'off';
-                const blocked = blockedBy(option, options, levers, state.leverValues);
-                const clashes =
-                  own === 'off'
-                    ? []
-                    : optionConflicts(option, options, levers, state.leverValues).filter(
-                        (c) => c.partner !== 'off',
-                      );
-                return (
-                  <OptionCard
-                    key={option.id}
-                    id={option.id}
-                    name="afford"
-                    title={lever.title}
-                    note={lever.headline ?? lever.description}
-                    state={own}
-                    price={priceOf(option, own === 'on')}
-                    levers={[lever]}
-                    values={{ [code]: state.leverValues[code] ?? lever.control.default }}
-                    onChange={(on) => choose(option, on)}
-                    redLines={optionRedLines(option, pm.promises, levers, state.leverValues)}
-                    earliestStart={optionEarliestStart(option, levers)}
-                    overlaps={optionOverlaps(option, levers, moved, options)}
-                    {...(blocked ? { blocked } : {})}
-                    clashes={clashes}
-                    {...(option.line ? { line: option.line, who: 'Director of Tax' } : {})}
-                  />
-                );
-              })}
-            </div>
+            <div className="choices choices--list choices--compact">{shown.map(card)}</div>
+            {folded.length > 0 ? (
+              <details className="more more--inset">
+                <summary>
+                  {folded.length} more {folded.length === 1 ? 'way' : 'ways'}
+                </summary>
+                <div className="choices choices--list choices--compact more__body">
+                  {folded.map(card)}
+                </div>
+              </details>
+            ) : null}
           </section>
         );
       })}
