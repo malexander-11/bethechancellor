@@ -29,7 +29,7 @@ body {
   color: var(--ink);
   font-family: var(--font);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 @media (min-width: 900px) {
@@ -172,10 +172,11 @@ hr {
 
 /* ---------------------------------------------------------------- header */
 
+/* Paper, with the Commons green as a rule beneath it, not a band (ADR-0023, revised). */
 .site-header {
-  background: var(--accent);
-  border-bottom: 3px solid var(--brass);
-  color: var(--accent-ink);
+  background: var(--page);
+  border-bottom: 3px solid var(--accent);
+  color: var(--ink);
 }
 
 .site-header__inner {
@@ -211,7 +212,7 @@ hr {
 }
 
 .brand {
-  color: var(--accent-ink);
+  color: var(--ink);
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 600;
@@ -222,11 +223,9 @@ hr {
 .brand small {
   display: block;
   margin-top: 2px;
-  color: var(--accent-ink);
-  font-family: var(--font);
+  color: var(--ink-2);
   font-size: 0.875rem;
   font-weight: 400;
-  opacity: 0.85;
 }
 
 .site-nav {
@@ -239,24 +238,19 @@ hr {
   align-items: center;
   min-height: 44px;
   border-bottom: 2px solid transparent;
-  color: var(--accent-ink);
+  color: var(--ink-2);
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
-  opacity: 0.85;
 }
 
 .site-nav a:hover {
-  opacity: 1;
+  color: var(--accent);
 }
 
 .site-nav a[aria-current='page'] {
-  border-bottom-color: var(--brass);
-  opacity: 1;
-}
-
-.site-header :focus-visible {
-  outline-color: var(--accent-ink);
+  border-bottom-color: var(--accent);
+  color: var(--ink);
 }
 
 /* The switch that puts the workings on show. The sources are never gone, only one click away. */
@@ -265,11 +259,10 @@ hr {
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  color: var(--accent-ink);
+  color: var(--ink-2);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  opacity: 0.85;
 }
 
 .workings-switch input {
@@ -285,11 +278,11 @@ hr {
 }
 
 .workings-switch:has(input:checked) {
-  opacity: 1;
+  color: var(--ink);
 }
 
 .workings-switch input {
-  accent-color: var(--brass);
+  accent-color: var(--accent);
 }
 
 /* ------------------------------------------------------------------ page */
@@ -350,11 +343,11 @@ hr {
 .kicker {
   margin: 0;
   color: var(--accent);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
 }
 
-/* A subheading inside a card or a page section. */
+/* A subheading inside a block or a page section. */
 .section-label {
   display: flex;
   flex-wrap: wrap;
@@ -362,7 +355,6 @@ hr {
   gap: 8px;
   margin: 24px 0 8px;
   color: var(--ink);
-  font-family: var(--font);
   font-size: 1.125rem;
   font-weight: 600;
   letter-spacing: 0;
@@ -535,25 +527,32 @@ hr {
   cursor: pointer;
 }
 
-/* --------------------------------------------------------- cards and hints */
+/* --------------------------------------------------------- blocks and hints */
 
+/*
+ * A block of the document: a hairline above and below, the text flush with the page. Two blocks
+ * in a row share one rule. Nothing on the road is a box (ADR-0023, revised: official paper).
+ */
 .panel,
 .doc {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 @media (min-width: 640px) {
   .panel,
   .doc {
-    padding: 20px 24px;
+    padding: 20px 0;
   }
 }
 
-.panel + .panel {
-  margin-top: 16px;
+.panel + .panel,
+.panel + .doc,
+.doc + .panel,
+.doc + .doc {
+  margin-top: 0;
+  border-top: 0;
 }
 
 .panel h2 {
@@ -581,24 +580,41 @@ hr {
 
 .adopted-line {
   margin: 0 0 12px;
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-2);
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   font-weight: 600;
+}
+
+/* ---------------------------------------------------------------- labels */
+
+/*
+ * Labels are small capitals set on the paper, never pills: the five badges, the tags, the kickers,
+ * the ranks, the bar's labels, the step counter. Colour carries the kind and the words carry the
+ * meaning; `font-variant-caps` leaves the text itself as written for a reader.
+ */
+.badge,
+.tag,
+.tag--manifesto,
+.tag--treasury,
+.kicker,
+.opening__kicker,
+.bar__label,
+.bar__facts dt,
+.progress__step,
+.intro__rank,
+.review__rank {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.05em;
 }
 
 /* ---------------------------------------------------------------- badges */
 
 .badge {
-  font-family: var(--font);
-  font-family: var(--font);
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   line-height: 1.3;
   white-space: nowrap;
@@ -606,27 +622,22 @@ hr {
 }
 
 .badge--direct {
-  background: var(--badge-direct-bg);
   color: var(--badge-direct-fg);
 }
 
 .badge--mechanical {
-  background: var(--badge-mechanical-bg);
   color: var(--badge-mechanical-fg);
 }
 
 .badge--assumption {
-  background: var(--badge-assumption-bg);
   color: var(--badge-assumption-fg);
 }
 
 .badge--commentary {
-  background: var(--badge-commentary-bg);
   color: var(--badge-commentary-fg);
 }
 
 .badge--simulated {
-  background: var(--badge-simulated-bg);
   color: var(--badge-simulated-fg);
 }
 
@@ -636,17 +647,14 @@ hr {
 .tag--manifesto {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
   color: var(--ink-2);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
   line-height: 1.3;
 }
 
 .tag--quiet {
   color: var(--muted);
-  border-style: dashed;
 }
 
 .lever__assumes {
@@ -674,18 +682,13 @@ hr {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 2px 10px;
-  border: 1px solid var(--accent);
-  border-radius: 999px;
   color: var(--accent);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   line-height: 1.3;
 }
 
 .tag--warn {
-  border-color: var(--critical);
-  background: var(--critical-wash);
   color: var(--critical);
 }
 
@@ -704,7 +707,6 @@ hr {
   place-items: center;
   width: 22px;
   height: 22px;
-  border-radius: 50%;
   color: var(--accent-ink);
   font-size: 0.875rem;
   line-height: 1;
@@ -986,9 +988,6 @@ hr {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: var(--surface-2);
   font-size: 0.875rem;
   cursor: help;
 }
@@ -1049,10 +1048,9 @@ hr {
 
 .drawer {
   margin-top: 12px;
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-2);
+  padding: 12px 0 16px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   font-size: 0.9375rem;
 }
 
@@ -1086,10 +1084,8 @@ hr {
 
 .interactions {
   margin: 12px 0 0;
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-2);
+  padding: 4px 0 4px 14px;
+  border-left: 2px solid var(--warning);
   font-size: 0.9375rem;
 }
 
@@ -1111,11 +1107,8 @@ hr {
 
 .warnings {
   margin: 12px 0 0;
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--warning);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 4px 0 4px 14px;
+  border-left: 2px solid var(--warning);
   font-size: 0.9375rem;
 }
 
@@ -1229,17 +1222,16 @@ hr {
 .verdicts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  gap: 0 24px;
+  border-bottom: 1px solid var(--border);
 }
 
 .verdict {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 16px 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
 }
 
 .verdict__name {
@@ -1506,10 +1498,10 @@ details.table-view td:first-child {
   grid-template-columns: minmax(220px, 1.6fr) repeat(5, minmax(120px, 1fr));
   gap: 12px 16px;
   margin: 12px 0;
-  padding: 16px 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 16px 0;
+  border-top: 1px solid var(--brass);
+  border-bottom: 1px solid var(--border);
+  background: var(--page);
 }
 
 .scorecard--sticky {
@@ -1584,9 +1576,6 @@ details.table-view td:first-child {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: var(--surface-2);
   font-size: 0.875rem;
   font-weight: 600;
 }
@@ -1631,15 +1620,12 @@ details.table-view td:first-child {
 
 .briefing {
   margin: 0 0 12px;
-  padding: 16px 20px;
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 4px 0 4px 14px;
+  border-left: 2px solid var(--accent);
 }
 
 .briefing--compact {
-  padding: 12px 16px;
+  padding: 2px 0 2px 14px;
   font-size: 0.9375rem;
 }
 
@@ -1738,7 +1724,6 @@ details.table-view td:first-child {
 .facts__bar {
   display: block;
   height: 8px;
-  border-radius: 4px;
   background: var(--surface-2);
   overflow: hidden;
 }
@@ -1770,11 +1755,13 @@ details.table-view td:first-child {
 }
 
 .chip {
-  padding: 3px 10px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface-2);
   font-size: 0.875rem;
+}
+
+.chip + .chip::before {
+  content: '·';
+  margin-right: 6px;
+  color: var(--brass);
 }
 
 .chip__value {
@@ -1813,10 +1800,9 @@ details.table-view td:first-child {
 }
 
 .reading {
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .reading__title {
@@ -1826,9 +1812,8 @@ details.table-view td:first-child {
 
 .reading__suggestion {
   margin: 4px 0 8px;
-  padding: 8px 12px;
-  border-radius: var(--radius);
-  background: var(--surface-2);
+  padding: 2px 0 2px 14px;
+  border-left: 2px solid var(--accent);
 }
 
 .reading__compare {
@@ -1929,9 +1914,6 @@ details:not([open]) > .group__head .group__name::before {
 }
 
 .group__count {
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: var(--surface-2);
   color: var(--ink-2);
   font-size: 0.875rem;
   font-weight: 600;

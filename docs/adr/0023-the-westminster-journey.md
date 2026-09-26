@@ -85,8 +85,8 @@ Continues on the road in all.
    Budget red `#a3202a` for the delivering button and the Budget box on the opening; a dark theme
    with the same roles. Fraunces (variable, self-hosted from `@fontsource-variable/fraunces`, OFL)
    for `h1`, `h2`, the brand, the three sentences and the verdict's kind; the system sans for
-   everything else, badges included. Every text pairing in both themes holds 4.5:1 (checked by the
-   walk's contrast audit; the good and warning inks were darkened to `#166a30` and `#7a4f00` so a
+   everything else, badges included (revised below). Every text pairing in both themes holds 4.5:1
+   (checked by the walk's contrast audit; the good and warning inks were darkened to `#166a30` and `#7a4f00` so a
    figure holds on a picked card's wash); every control 44px tall; the reduced-motion rule of
    ADR-0016 stands. The Budget box, the Commons benches and the Budget papers are drawn as inline
    SVG (`Motifs.tsx`) and used where they mean something: the box on the opening, the papers on the
@@ -134,3 +134,44 @@ explain a compromise) still needs people in front of it.
   testing finds the groups' first three the wrong three, the order is the data's (`options.json`).
 - Not done: user testing; a walk with a screen reader (the landmarks, names and folds are checked
   by the audit, not by a reader); a check of the design at 200% zoom beyond the 360px pass.
+
+## Revision (2026-09-26, later): official paper
+
+Played, the skin above read as futuristic to its first player: the solid green header band, the
+coloured pill badges and tags, the sans-serif body and the rounded cards (the segmented progress
+and score bars did not jar). Asked which direction to take, they chose "official paper": the page
+set like a well-set Treasury or parliamentary document. The palette, the words, the journey, the
+tests and every class name a test pins are unchanged; what changed is the set of cues.
+
+1. **A serif body.** Source Serif 4 (variable, self-hosted from `@fontsource-variable/source-serif-4`,
+   OFL-1.1; the latin weight file is about 50 KB, italics another 50 KB) for every word that is not
+   a heading. Fraunces stays for `h1`, `h2`, the brand, the three sentences, the verdict's kind and
+   now the step numerals. Sizes and the 14px floor are unchanged; the line height rises to 1.55.
+2. **A paper header with a green rule.** The header is the page's paper with a 3px Commons-green
+   rule beneath it; the brand, the two links and the switch are set in ink, the current link and a
+   hover in green; the browser chrome's light theme colour is the paper.
+3. **Square corners.** `--radius` is nought and the seven pill radii are gone. Checkboxes, radios
+   and the slider thumb keep the browser's shape; the Budget box motif is drawn as before.
+4. **Rules, not boxes.** Every container that was a bordered, filled, rounded card (the document
+   blocks, the option cards, the headroom bar, the adviser quotes, the review, the scenarios, the
+   targets, the households, the verdicts, the scorecard, the desk's panel and drawer, the notices)
+   is a block on the paper with a hairline above and below, the text flush with the page; two
+   blocks in a row share one rule; a quotation carries a 2px rule in its speaker's colour on the
+   left; a chosen option, scenario or target carries a 3px green mark in the margin and a faint
+   wash. The sticky bar and the sticky scorecard keep the page's own colour behind them, so they
+   can sit over content.
+5. **Small capitals, not pills.** The five badges, the tags, the kickers, the ranks, the bar's
+   labels and the step counter are set in small capitals (`font-variant-caps`, so nothing is
+   transformed for a reader) at 15px, tracked, in the colour that carries their kind: the badge
+   inks of ADR-0011 straight on the paper, `--ink-2` for a tag, `--muted` for a quiet one, green
+   for a Treasury one, Budget red for a warning whose words already say what it warns of.
+6. **Numerals, not a bar.** The progress is a running head: "Step 4 of 7 · Build your Budget ·
+   2 of 4" and the dateline, then seven numerals on a brass rule, the current one green with the
+   rule thickened above it, the ones behind links in ink, the ones ahead muted. The seven list
+   items, the links, `aria-current`, the sr-only names and "(not yet open)" are exactly as before;
+   the visible numeral is `aria-hidden`.
+
+Every moved pairing was re-audited on every screen in both themes (`walk21.mjs`, which also refuses
+any corner radius outside the browser's controls and the motifs): on the light paper the badge inks
+sit at 6.3:1 to 9.9:1, green at 6.2:1, brass ink and the muted numerals at 5.6:1; on the dark paper
+nothing is under 6.5:1. The word budgets, the playtime estimate and every page test are unaffected.

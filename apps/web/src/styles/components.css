@@ -11,8 +11,9 @@
 /* ---------------------------------------------------------- the progress */
 
 /*
- * "Step 3 of 7 · Set your priorities", the in-game date, and seven segments. A segment behind
- * you is a link, the one you are at is filled, the ones ahead are paper (ADR-0014, ADR-0023).
+ * "Step 3 of 7 · Set your priorities", the in-game date, and seven numerals on a brass rule, like
+ * a document's running head. A numeral behind you is a link, the one you are at is set in green
+ * with the rule thickened beneath it, the ones ahead are muted (ADR-0014, ADR-0023).
  */
 .progress {
   margin: 0 0 20px;
@@ -34,6 +35,7 @@
 
 .progress__step {
   color: var(--brass-ink);
+  font-size: 0.9375rem;
   font-weight: 700;
 }
 
@@ -65,46 +67,48 @@
 
 .progress__stops {
   display: flex;
-  gap: 4px;
-  margin: 2px 0 0;
+  margin: 4px 0 0;
   padding: 0;
+  border-top: 1px solid var(--brass);
   list-style: none;
 }
 
 .progress__stop {
-  flex: 1 1 0;
+  flex: 0 0 auto;
   min-width: 0;
 }
 
-/* The segment is 6px of colour inside a 44px hit area, so a step behind you is easy to go back to. */
+/* Each numeral sits in a 44px hit area on the rule, so a step behind you is easy to go back to. */
 .progress__stop > a,
 .progress__stop > span {
-  display: block;
-  padding: 19px 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 44px;
+  min-height: 44px;
+  margin-top: -1px;
+  padding-top: 6px;
+  border-top: 2px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
   text-decoration: none;
 }
 
-.progress__stop > a::before,
-.progress__stop > span::before {
-  content: '';
-  display: block;
-  height: 6px;
-  border-radius: 3px;
-  background: var(--border);
+.progress__stop--open > a {
+  color: var(--ink);
 }
 
-.progress__stop--open > a::before {
-  background: var(--accent);
-  opacity: 0.55;
+.progress__stop--open > a:hover {
+  color: var(--accent);
 }
 
-.progress__stop--open > a:hover::before {
-  opacity: 0.8;
-}
-
-.progress__stop--current > span::before {
-  background: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-wash);
+.progress__stop--current > span {
+  border-top-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
 }
 
 /* -------------------------------------------------------------- the intro */
@@ -430,11 +434,8 @@
 }
 
 .group-panel {
-  padding: 16px 20px 20px;
-  border: 1px solid var(--border);
-  border-top: 0;
-  border-radius: 0 0 var(--radius) var(--radius);
-  background: var(--surface);
+  padding: 8px 0 20px;
+  border-bottom: 1px solid var(--border);
 }
 
 .group-panel > .lever:first-of-type {
@@ -471,10 +472,9 @@
   flex-wrap: wrap;
   gap: 12px 24px;
   margin: 12px 0;
-  padding: 12px 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 .summary__cell {
@@ -507,11 +507,8 @@
 /* --------------------------------------------------------------- a note */
 
 .note {
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--ink-2);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 4px 0 4px 14px;
+  border-left: 2px solid var(--ink-2);
 }
 
 .note p {
@@ -536,25 +533,22 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   align-items: start;
-  gap: 12px;
+  gap: 0 16px;
   margin: 12px 0 16px;
+  border-bottom: 1px solid var(--border);
 }
 
 .scenario {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  transition:
-    border-color var(--t-base) var(--ease),
-    background-color var(--t-base) var(--ease);
+  border-top: 1px solid var(--border);
+  transition: background-color var(--t-base) var(--ease);
 }
 
+/* The chosen one carries a green mark in the margin and a faint wash: a state, not a box. */
 .scenario--picked {
-  border-color: var(--accent);
   background: var(--accent-wash);
-  box-shadow: inset 0 0 0 1px var(--accent);
+  box-shadow: -3px 0 0 0 var(--accent);
 }
 
 .scenario__choose {
@@ -562,7 +556,7 @@
   flex: 1;
   align-items: flex-start;
   gap: 12px;
-  padding: 16px;
+  padding: 16px 0;
   cursor: pointer;
 }
 
@@ -601,13 +595,15 @@
 }
 
 .scenario__chip {
-  padding: 2px 8px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface-2);
   color: var(--ink-2);
   font-size: 0.875rem;
   white-space: nowrap;
+}
+
+.scenario__chip + .scenario__chip::before {
+  content: '·';
+  margin-right: 6px;
+  color: var(--brass);
 }
 
 .scenario__chip strong {
@@ -693,11 +689,8 @@
    is a game judgement. The PM's edge is red, a minister's grey, an adviser's the accent. */
 .spoken {
   margin: 12px 0;
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--critical);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 4px 0 4px 14px;
+  border-left: 2px solid var(--critical);
 }
 
 .spoken--minister {
@@ -710,7 +703,6 @@
 
 .spoken--press {
   border-left-color: var(--muted);
-  background: var(--surface-2);
 }
 
 .spoken__who {
@@ -749,9 +741,10 @@
 .choices {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 12px;
+  gap: 0 16px;
   margin: 8px 0 16px;
   padding: 0;
+  border-bottom: 1px solid var(--border);
   list-style: none;
 }
 
@@ -763,14 +756,10 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 14px 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
   cursor: pointer;
-  transition:
-    border-color var(--t-base) var(--ease),
-    background-color var(--t-base) var(--ease);
+  transition: background-color var(--t-base) var(--ease);
 }
 
 label.choice {
@@ -787,9 +776,8 @@ label.choice {
 }
 
 .choice--picked {
-  border-color: var(--accent);
   background: var(--accent-wash);
-  box-shadow: inset 0 0 0 1px var(--accent);
+  box-shadow: -3px 0 0 0 var(--accent);
 }
 
 .choice input {
@@ -861,26 +849,24 @@ label.choice {
 .targets__options {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 8px;
+  gap: 0 16px;
+  border-bottom: 1px solid var(--border);
 }
 
 .target {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: 12px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
   font-size: 0.9375rem;
   line-height: 1.4;
   cursor: pointer;
 }
 
 .target--picked {
-  border-color: var(--accent);
   background: var(--accent-wash);
-  box-shadow: inset 0 0 0 1px var(--accent);
+  box-shadow: -3px 0 0 0 var(--accent);
 }
 
 .target input {
@@ -1006,8 +992,12 @@ label.choice {
 .routes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 16px;
+  gap: 16px 24px;
   margin: 12px 0;
+}
+
+.gap.doc + .routes {
+  margin-top: -1px;
 }
 
 .route .section-label {
@@ -1078,9 +1068,8 @@ label.choice {
   align-items: flex-start;
   gap: 12px;
   margin: 8px 0 0;
-  padding: 12px 14px;
-  border: 2px solid var(--critical);
-  border-radius: var(--radius);
+  padding: 8px 0 8px 14px;
+  border-left: 3px solid var(--critical);
   font-size: 0.9375rem;
   cursor: pointer;
 }
@@ -1109,8 +1098,8 @@ label.choice {
 .receptions {
   display: grid;
   grid-template-columns: 1fr;
-  align-items: start;
-  gap: 12px;
+  align-items: stretch;
+  gap: 12px 24px;
   margin: 12px 0;
 }
 
@@ -1167,7 +1156,6 @@ label.choice {
 .meter__step {
   flex: 1;
   height: 8px;
-  border-radius: 2px;
   background: var(--border);
 }
 
@@ -1272,18 +1260,16 @@ label.choice {
 .households {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 12px;
+  gap: 0 16px;
   margin: 8px 0 12px;
   padding: 0;
   list-style: none;
 }
 
 .household {
-  padding: 14px 16px;
-  border: 1px solid var(--border);
+  padding: 12px 0 14px;
   border-top: 3px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 
 .household--gains {
@@ -1489,14 +1475,12 @@ label.choice {
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 12px;
+  border-bottom: 1px solid var(--border);
 }
 
 .ranked > li {
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
 }
 
 .ranked .spoken {
@@ -1573,12 +1557,9 @@ label.choice {
   align-items: baseline;
   gap: 4px 20px;
   margin: 0 0 16px;
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: 0 1px 0 var(--border);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--brass);
+  background: var(--page);
 }
 
 .bar__headroom {
@@ -1591,7 +1572,7 @@ label.choice {
 
 .bar__label {
   color: var(--ink-2);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
 }
 
@@ -1652,10 +1633,8 @@ label.choice {
 .intro__rank {
   margin-right: 2px;
   color: var(--brass-ink);
-  font-family: var(--font);
   font-size: 0.6em;
   font-weight: 700;
-  letter-spacing: 0.02em;
   vertical-align: 0.15em;
 }
 
@@ -1682,12 +1661,11 @@ label.choice {
 }
 
 .choices--compact {
-  gap: 8px;
   margin-top: 4px;
 }
 
 .choices--compact .choice {
-  padding: 10px 14px;
+  padding: 10px 0;
 }
 
 .choices--compact .choice__title {
@@ -1709,8 +1687,8 @@ label.choice {
 /* ------------------------------------------------------------- the review */
 
 .review {
-  margin: 0 0 12px;
-  padding: 14px 16px;
+  margin: 0;
+  padding: 14px 0;
 }
 
 .review__head {
@@ -1751,7 +1729,7 @@ label.choice {
 
 .review__rank {
   color: var(--brass-ink);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 700;
 }
 
@@ -1761,10 +1739,12 @@ label.choice {
 
 /* ---------------------------------------------------------- the statement */
 
-/* "I prioritised…, paid for it by…, accepted…": the Budget in three sentences, under the red rule. */
-.statement {
+/* "I prioritised…, paid for it by…, accepted…": the Budget in three sentences, beside the red rule. */
+.doc.statement {
   margin: 0 0 16px;
-  padding: 18px 20px;
+  padding: 6px 0 6px 18px;
+  border-top: 0;
+  border-bottom: 0;
   border-left: 4px solid var(--red);
 }
 

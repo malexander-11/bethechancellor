@@ -1,7 +1,8 @@
 /*
  * A Westminster skin (ADR-0023): warm paper, charcoal ink, House of Commons green as the one
  * working colour, a restrained brass for small labels and rules, and Budget red kept for the
- * Budget itself. Editorial headings in Fraunces; the body in the reader's own sans.
+ * Budget itself. Editorial headings in Fraunces; a book serif (Source Serif 4) for the body: a
+ * set document, not an app.
  *
  * Every text-on-ground pairing below is at or above 4.5:1 in both themes. Brass is a rule and a
  * small-caps label colour; where it carries words it is the darker `--brass-ink`. Chart series
@@ -71,10 +72,10 @@
   --badge-simulated-fg: #4b2d5e;
 
   --focus: var(--accent);
-  --radius: 6px;
+  --radius: 0;
 
-  /* Two families: the reader's sans for the body, an editorial serif for the headings */
-  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* Two serifs, both variable, self-hosted and OFL: Source Serif 4 for the body, Fraunces for the headings */
+  --font: 'Source Serif 4 Variable', Georgia, 'Iowan Old Style', 'Times New Roman', serif;
   --font-display: 'Fraunces Variable', Georgia, 'Iowan Old Style', 'Times New Roman', serif;
 
   /* Motion: short, and off entirely when the reader asks */

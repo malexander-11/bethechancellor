@@ -52,10 +52,10 @@ export interface SubStep {
 }
 
 /**
- * The road, as one line and a bar: "Step 3 of 7 · Set your priorities", the in-game date, and
- * seven segments, one per step. A step you have reached is a link, so you can go back; the one
+ * The road, as a running head: "Step 3 of 7 · Set your priorities", the in-game date, and seven
+ * numerals on a rule, one per step. A step you have reached is a link, so you can go back; the one
  * you are at is marked; the ones ahead are inert. It reads the same `enterable` rule as the guard
- * on every page, so it never offers a link that would only bounce (ADR-0014). The segments carry
+ * on every page, so it never offers a link that would only bounce (ADR-0014). The numerals carry
  * their names for a screen reader; sighted readers get the name of the step they are on.
  */
 export function Progress({
@@ -98,6 +98,11 @@ export function Progress({
           const open =
             !isCurrent && enterable(s.step, state.game) && (state.game !== undefined || i < at);
           const kind = isCurrent ? 'current' : open ? 'open' : 'ahead';
+          const num = (
+            <span className="progress__num" aria-hidden="true">
+              {i + 1}
+            </span>
+          );
           const name = (
             <span className="sr-only">
               {i + 1}. {s.label}
@@ -107,13 +112,20 @@ export function Progress({
           return (
             <li key={s.id} className={`progress__stop progress__stop--${kind}`}>
               {isCurrent ? (
-                <span aria-current="step">{name}</span>
+                <span aria-current="step">
+                  {num}
+                  {name}
+                </span>
               ) : open ? (
                 <StepLink to={s.to} end={s.id === 'start'}>
+                  {num}
                   {name}
                 </StepLink>
               ) : (
-                <span className="progress__ahead">{name}</span>
+                <span className="progress__ahead">
+                  {num}
+                  {name}
+                </span>
               )}
             </li>
           );

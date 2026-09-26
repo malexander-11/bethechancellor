@@ -12,7 +12,9 @@ forecast; make your final choices and review the whole Budget; see what it means
 main road and there is no hand-off to click through: every screen is a decision with a primary
 button and a way back, and the Budget lives in the link, so going back keeps every choice. The
 identity is Westminster's: Commons green, warm paper, charcoal, restrained brass, Budget red for the
-one button that delivers, editorial headings in Fraunces, the Budget box on the opening. Every
+one button that delivers, and the page is set like an official paper: a serif body under editorial
+headings in Fraunces, hairline rules rather than boxes, small-capital labels, the Budget box on the
+opening. Every
 number still comes from an official source or a stated calculation on one, badged for what it is,
 and the sources and breakdowns sit behind a "Show workings" switch, off by default. A first
 playthrough's required reading and decisions come to about ten minutes (an estimate from the
@@ -101,8 +103,9 @@ the 28 October 2026 forecast.
   resembles, is badged an assumption rather than a direct costing, and is reproduced from those
   inputs by a test. Where the base is contested, the card says so before it shows the number; where
   no published figure exists at all, there is no lever.
-- **The page is plain, and the plainness is honest.** One accent, one type family, nothing under
-  14px, every text colour checked for contrast in both themes; there are no images and no webfonts.
+- **The page is plain, and the plainness is honest.** One accent, two self-hosted serifs under the
+  OFL, nothing under 14px, every text colour checked for contrast in both themes; there are no
+  images.
   The badges never become decoration, a verdict is always a word beside an icon and never a colour
   alone, the provenance drawer never loses a table, and the only facts on screen that the engine
   did not compute are the date and the countdown, which carry no badge.

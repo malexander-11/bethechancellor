@@ -903,10 +903,14 @@ Budget means. The rules that hold every screen to the same shape:
   Every clause is read from the engine or the player's own choices and the card wears the
   mechanical badge; the reactions and the close beneath it are unchanged.
 - **Identity.** Commons green (`--accent`), warm paper, charcoal ink, restrained brass, Budget red
-  for the one button that delivers and for the Budget box on the opening; Fraunces (self-hosted,
-  OFL) for headings and the three sentences, the system sans for everything else. Every text
-  pairing in both themes holds 4.5:1 (the good and warning inks were darkened for a picked card's
-  wash), every control 44px, and the reduced-motion rule stands.
+  for the one button that delivers and for the Budget box on the opening; the page set like an
+  official paper (ADR-0023, revised): Source Serif 4 (self-hosted, OFL) for the body and Fraunces
+  (self-hosted, OFL) for the headings, the three sentences and the step numerals; hairline rules
+  instead of boxed cards, square corners, small-capital labels instead of pills, a paper header
+  under a green rule, and seven numerals on a rule for the road. Every text pairing in both themes
+  holds 4.5:1 (re-audited after the change: the badge inks sit at 6.3:1 or better on the paper,
+  green at 6.2:1, brass ink and the muted numerals at 5.6:1), every control 44px, and the
+  reduced-motion rule stands.
 - **Word budgets, measured then pinned** (`apps/web/src/journey/budgets.test.tsx`): visible words
   with the folds closed, the road and the footer left out, on 2026-09-26: the opening 60, the
   starting position 267, the priorities 192, a priority screen 244 to 316, paying for it 564, the
