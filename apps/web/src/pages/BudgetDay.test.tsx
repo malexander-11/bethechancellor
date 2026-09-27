@@ -105,9 +105,10 @@ describe('Budget day: what your Budget means', () => {
     expect(
       within(card('The public')).getAllByText(/A manifesto promise has been broken/).length,
     ).toBe(2);
+    // On the surface each audience gives its strongest reason; the rest wait in "Why this rating".
     expect(
       within(card('Your backbenchers')).getAllByText(/manifesto red line is crossed/).length,
-    ).toBe(2);
+    ).toBeGreaterThanOrEqual(1);
     expect(
       within(card('Your backbenchers')).getAllByText(/Because of The tax lock \(Basic rate\)/)
         .length,

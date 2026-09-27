@@ -86,13 +86,11 @@ describe('the review before delivery', () => {
     );
 
     const position = part(/^Where that leaves you/);
-    expect(within(position).getByText(/Headroom in 2029-30/)).toBeInTheDocument();
-    expect(
-      within(position).getByText(/Both fiscal rules and the welfare cap are met/),
-    ).toBeInTheDocument();
+    expect(within(position).getByText(/Rules met/)).toBeInTheDocument();
     // Since the forecast: education up and the alcohol cut, neither in the snapshot.
     expect(within(position).getByText(/^Education.*→/)).toBeInTheDocument();
-    expect(within(position).getByText(/^Alcohol.*→/)).toBeInTheDocument();
+    // The add-on is listed once, under the speech, not again as a move since the forecast.
+    expect(within(position).queryByText(/^Alcohol.*→/)).toBeNull();
     expect(changeIn(position, 'Change')).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/compromise\?/),

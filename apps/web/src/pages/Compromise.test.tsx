@@ -48,8 +48,9 @@ describe('making it add up', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'Make the sums add up' }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/^£\d+\.\dbn short$/)).toBeInTheDocument();
-    expect(screen.getByText(/of the £30bn you set out to keep/)).toBeInTheDocument();
+    // The gap is said once, on the bar.
+    expect(screen.getByText(/short of your £30bn target/)).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'The gap' })).toBeNull();
     // The stress test: the package under every forecast the draw could have produced.
     fireEvent.click(screen.getByText(/hold up under the other forecasts/));
     const stress = screen.getByText(/hold up under the other forecasts/).closest('details');
@@ -107,10 +108,11 @@ describe('making it add up', () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1`);
     const route = screen.getByRole('region', { name: /Accept less headroom/ });
     // The adviser's short line and the full one behind "More" both carry the phrase.
-    expect(within(route).getAllByText(/Lowering the target costs nothing today/).length).toBe(2);
+    // The adviser's line is folded under their name: the full line, once.
+    expect(within(route).getAllByText(/Lowering the target costs nothing today/).length).toBe(1);
     fireEvent.click(within(route).getByRole('radio', { name: /Whatever the rules leave/ }));
     await waitFor(() => expect(g()).toMatch(/hr\.0/));
-    expect(screen.getByText(/you set no target beyond the rules/)).toBeInTheDocument();
+    expect(screen.getByText(/no target beyond the rules/)).toBeInTheDocument();
   });
 
   it('offers a conscious breach only when a rule is missed, and records the acknowledgement', async () => {
@@ -118,7 +120,7 @@ describe('making it add up', () => {
     const route = screen.getByRole('region', { name: /Borrow, and say so/ });
     const box = within(route).getByRole('checkbox');
     expect(within(route).getByText(/will be missed by £/)).toBeInTheDocument();
-    expect(within(route).getAllByText(/Write down that you know/).length).toBe(2);
+    expect(within(route).getAllByText(/Write down that you know/).length).toBe(1);
     fireEvent.click(box);
     await waitFor(() => expect(g()).toMatch(/br\.1/));
   });
@@ -126,7 +128,8 @@ describe('making it add up', () => {
   it('offers no borrowing route when the rules are met, only a line saying so', () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10`);
     expect(screen.queryByRole('region', { name: /Borrow, and say so/ })).toBeNull();
-    expect(screen.getByText(/No rule is missed on these numbers/)).toBeInTheDocument();
+    // With every rule met, nothing says so twice: the bar is silent and the aside is gone.
+    expect(screen.queryByText(/No rule is missed on these numbers/)).toBeNull();
     // The manifesto is not a route either: there is no going back to the Prime Minister, and
     // scaling back what was chosen lives inside "spend less, or later".
     expect(screen.queryByRole('region', { name: /Prime Minister/ })).toBeNull();
@@ -146,7 +149,7 @@ describe('making the most of extra headroom', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'Make the most of your extra headroom' }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/^£\d+\.\dbn to spare$/)).toBeInTheDocument();
+    expect(screen.getByText(/over your £20bn target/)).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: /Raise more revenue/ })).toBeNull();
     expect(screen.queryByRole('region', { name: /Spend less, or later/ })).toBeNull();
     expect(screen.queryByRole('region', { name: /Borrow, and say so/ })).toBeNull();
@@ -168,7 +171,7 @@ describe('making the most of extra headroom', () => {
     at(`/compromise?${BASE}&${SURPLUS}&L=hscl.1`);
     const ease = screen.getByRole('region', { name: /Ease off a tax rise/ });
     expect(within(ease).getByText(/dropped: −£/)).toBeInTheDocument();
-    expect(within(ease).getAllByText(/with the headroom dropping each would leave/).length).toBe(1);
+    expect(within(ease).getAllByText(/the headroom that dropping it would leave/).length).toBe(1);
     fireEvent.click(within(ease).getByRole('button', { name: 'Drop it' }));
     await waitFor(() => expect(L()).not.toMatch(/hscl/));
     // The only way to pay is gone and the Budget is short again: the screen is the sums.
@@ -186,7 +189,7 @@ describe('making the most of extra headroom', () => {
     expect(screen.getByText(/nothing to ease/)).toBeInTheDocument();
     const keep = screen.getByRole('region', { name: /Keep more headroom/ });
     // The adviser's short line and the full one behind "More" both carry the phrase.
-    expect(within(keep).getAllByText(/Money not spent is the cheapest insurance/).length).toBe(2);
+    expect(within(keep).getAllByText(/Money not spent is the cheapest insurance/).length).toBe(1);
     fireEvent.click(within(keep).getByRole('radio', { name: /£30bn/ }));
     await waitFor(() => expect(g()).toMatch(/hr\.30/));
     // Short of the new target: the sums again, with the target's own route.

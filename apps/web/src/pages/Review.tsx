@@ -75,8 +75,6 @@ export function ReviewPage() {
   const ranked = rankedPriorities(game, pm);
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const year = stability?.targetYear ?? '2029-30';
-  const headroom = stability?.headroomGbpm ?? 0;
-  const target = game.headroomTargetBn * 1000;
   const value = (lever: Lever) => state.leverValues[lever.code] ?? lever.control.default;
   const receiptsOf = (codes: readonly string[]) =>
     codes.reduce(
@@ -120,11 +118,17 @@ export function ReviewPage() {
     )
     .filter((t): t is string => t !== undefined);
   const keeping = game.rabbit.includes('keep');
-  // What moved since the OBR saw the package, and what starts later.
+  // What moved since the OBR saw the package, and what starts later. The add-ons are listed
+  // above as announcements, so their levers are not listed again here.
   const snapshot = state.snapshot ?? {};
+  const addOnCodes = new Set(
+    options.addOns.filter((o) => game.rabbit.includes(o.id)).flatMap((o) => Object.keys(o.values)),
+  );
   const moved = [...new Set([...Object.keys(snapshot), ...Object.keys(state.leverValues)])]
     .map((code) => byCode.get(code))
-    .filter((l): l is Lever => l !== undefined && !MACRO_CODES.has(l.code))
+    .filter(
+      (l): l is Lever => l !== undefined && !MACRO_CODES.has(l.code) && !addOnCodes.has(l.code),
+    )
     .map((l) => ({ lever: l, from: snapshot[l.code] ?? l.control.default, to: value(l) }))
     .filter((r) => r.from !== r.to);
   const delays = Object.entries(game.delays)
@@ -259,17 +263,8 @@ export function ReviewPage() {
         change={{ to: '/compromise', label: 'Change' }}
       >
         <p>
-          Headroom in {year}:{' '}
-          <strong className={`amount ${headroom < 0 ? 'amount--worse' : ''}`}>
-            {formatGbpBn(headroom, 1, headroom < 0)}
-          </strong>
-          {target > 0
-            ? headroom >= target
-              ? `, ${formatGbpBn(headroom - target, 1)} over the ${formatGbpBn(target, 0)} you set out to keep.`
-              : `, ${formatGbpBn(target - headroom, 1)} short of the ${formatGbpBn(target, 0)} you set out to keep.`
-            : '; you set no target beyond the rules.'}{' '}
           {missed.length === 0
-            ? 'Both fiscal rules and the welfare cap are met.'
+            ? 'Rules met.'
             : `Missed: ${missed.map((v) => v.ruleName).join(' and ')}.`}
           {game.breachAccepted ? ' You have said so, in writing.' : ''}
         </p>

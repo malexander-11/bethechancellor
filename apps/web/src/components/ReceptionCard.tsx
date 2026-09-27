@@ -9,10 +9,10 @@ function points(r: Reason): string {
 }
 
 /**
- * One audience's reception: a five-step meter, the label in words, the two or three reasons
- * that moved it most, and a "why this rating" disclosure listing every rule with its points, its
- * reading, the decisions behind it and, with the workings on, its sources. Every sentence is a game
- * judgement from data and wears the badge.
+ * One audience's reception: a five-step meter, the label in words, the one reason that moved it
+ * most with the decisions behind it, and a "why this rating" disclosure with the question the
+ * audience asks and every rule with its points, its reading, the decisions behind it and, with the
+ * workings on, its sources. Every sentence is a game judgement from data and wears the badge.
  */
 export function ReceptionCard({
   reception,
@@ -24,6 +24,7 @@ export function ReceptionCard({
 }) {
   const { audience, title, question, rating, label, reasons, all } = reception;
   const id = `reception-${audience}`;
+  const first = reasons[0];
   return (
     <section
       className={`reception doc reception--${audience} reception--r${rating}`}
@@ -35,7 +36,6 @@ export function ReceptionCard({
         </h3>
         <LabelBadge badge="simulated" />
       </div>
-      <p className="reception__question kicker">{question}</p>
       <ol className="meter" role="img" aria-label={`${rating} of 5: ${label}`}>
         {[1, 2, 3, 4, 5].map((step) => (
           <li key={step} className={`meter__step${step <= rating ? ' meter__step--lit' : ''}`} />
@@ -44,28 +44,25 @@ export function ReceptionCard({
       <p className="reception__label">
         {label} <span className="reception__score">{rating} of 5</span>
       </p>
-      {reasons.length === 0 ? (
+      {!first ? (
         <p className="panel__hint">Nothing in this Budget moved them either way.</p>
       ) : (
-        <ul className="reasons">
-          {reasons.map((r) => (
-            <li key={r.rule} className={`reason reason--${r.direction}`}>
-              <span className="reason__mark" aria-hidden="true">
-                {MARK[r.direction]}
-              </span>
-              <span>
-                <span className="sr-only">{r.direction === 'up' ? 'For: ' : 'Against: '}</span>
-                {r.text}
-                {r.causes.length > 0 ? (
-                  <span className="reason__causes">Because of {r.causes.join(' · ')}</span>
-                ) : null}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <p className={`reason reason--${first.direction}`}>
+          <span className="reason__mark" aria-hidden="true">
+            {MARK[first.direction]}
+          </span>
+          <span>
+            <span className="sr-only">{first.direction === 'up' ? 'For: ' : 'Against: '}</span>
+            {first.text}
+            {first.causes.length > 0 ? (
+              <span className="reason__causes">Because of {first.causes.join(' · ')}</span>
+            ) : null}
+          </span>
+        </p>
       )}
       <details className="reception__why">
         <summary>Why this rating</summary>
+        <p className="reception__question kicker">{question}</p>
         <p className="panel__hint">
           Every audience starts at three. Each line below adds or takes points; a red line can hold
           the rating down whatever else happens. The thresholds are the game’s, and each says what

@@ -51,12 +51,12 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/budget/deliver/2', 150, WIDEST],
   ['/budget/deliver/3', 150, WIDEST],
   ['/budget/afford', 320, GAME],
-  ['/forecast', 150, GAME],
-  ['/compromise', 340, SHORT],
-  ['/compromise', 340, GAME],
-  ['/rabbit', 430, GAME],
-  ['/review', 140, GAME],
-  ['/budget-day', 580, GAME],
+  ['/forecast', 100, GAME],
+  ['/compromise', 155, SHORT],
+  ['/compromise', 120, GAME],
+  ['/rabbit', 155, GAME],
+  ['/review', 110, GAME],
+  ['/budget-day', 260, GAME],
 ];
 
 describe('the word budgets', () => {
@@ -78,11 +78,11 @@ describe('the word budgets', () => {
   });
 
   it('keeps every screen of the main road inside its word budget', () => {
-    // Measured with the folds closed and pinned with about a tenth to spare (ADR-0023). The first
-    // five screens, halved on 2026-09-27: the opening 30, the position 132, the priorities 109,
+    // Measured on 2026-09-27 with the folds closed, after the words were halved (ADR-0023), and
+    // pinned with about a tenth to spare: the opening 30, the position 132, the priorities 109,
     // the priority screens 80 to 125, paying for it 290 (the first three ways of each group on
-    // show). The rest, measured on 2026-09-26: the forecast 126, the sums 302, the add-ons 391,
-    // the review 121, Budget day 529.
+    // show), the forecast 91, the sums 140 and the room to spare 106, the add-ons 140, the review
+    // 98, Budget day 233.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();

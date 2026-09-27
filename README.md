@@ -4,7 +4,7 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 20 (the Westminster journey)**. You are appointed Chancellor in a Labour government
+Status: **Phase 22 (half the words)**. You are appointed Chancellor in a Labour government
 with a Budget to deliver on 28 October 2026, and the game walks you through it in seven steps with
 one clear action on every screen: become Chancellor; understand your starting position; set your
 priorities; build your Budget, one priority at a time and then paying for it; respond to the OBR's
@@ -14,10 +14,11 @@ button and a way back, and the Budget lives in the link, so going back keeps eve
 identity is Westminster's: Commons green, warm paper, charcoal, restrained brass, Budget red for the
 one button that delivers, and the page is set like an official paper: a serif body under editorial
 headings in Fraunces, hairline rules rather than boxes, small-capital labels, the Budget box on the
-opening. Every
+opening. Every screen is one heading, one line, the choices and one button, with one adviser
+speaking and everything else one tap away. Every
 number still comes from an official source or a stated calculation on one, badged for what it is,
 and the sources and breakdowns sit behind a "Show workings" switch, off by default. A first
-playthrough's required reading and decisions come to about ten minutes (an estimate from the
+playthrough's required reading and decisions come to about nine minutes (an estimate from the
 rendered screens, not user testing; ADR-0023). Every screen names itself, can be reached by
 keyboard and screen reader, holds 4.5:1 contrast in light and dark themes, keeps every control at
 44px and says met or missed in words.

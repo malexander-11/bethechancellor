@@ -275,10 +275,13 @@ its grid, none the default. Rules the validator enforces:
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 
 Everything a role says is a `SimulatedLine`: `{ text, short?, sources, badge: "simulated" }`,
-badged per item so no line inherits honesty from its file. `short` is the same line in at most
-eighteen words, shown first with the full `text` one click behind; every minister's asking line
-has one, and any band over eighteen words. A figure in the short line must be a figure in the long
-one, so the sources cover both (a test checks it). Rules for authoring one:
+badged per item so no line inherits honesty from its file. `short` is the same line in fewer
+words, shown first with the full `text` one click behind. Every line a newcomer meets on the road
+has one when the line is over its budget, and the words test pins each kind: a minister's asking
+line and any band over eighteen words; the Prime Minister's briefs and reactions and the add-ons'
+framing lines twelve; the advisers' notes and the compromise routes fourteen; the verdicts' close
+and an option's line eighteen. A figure in the short line must be a figure in the long one, so
+the sources cover both (a test checks it). Rules for authoring one:
 
 - **Never type a number the engine or a document did not produce.** A line may quote a published
   figure (with the source beside it) and the page may print an engine figure next to the line; the

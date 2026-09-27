@@ -19,7 +19,8 @@ const PROMISE: Record<BudgetVerdict['ambitions']['promises'][number]['fate'], st
 
 /**
  * The close: what the playthrough came to. The kind of Budget is a judgement from data and wears
- * the badge; everything beneath it is the engine's figures totalled, ranked or re-run.
+ * the badge, in one sentence with the rest a tap away; everything beneath it, folded under "The
+ * close in full", is the engine's figures totalled, ranked or re-run.
  */
 export function Verdict({ verdict, replayHref }: { verdict: BudgetVerdict; replayHref: string }) {
   const { ambitions, paid, benefited, compromises, resilience, kind, targetYear } = verdict;
@@ -37,137 +38,146 @@ export function Verdict({ verdict, replayHref }: { verdict: BudgetVerdict; repla
       <h2 id="verdict-heading" className="verdict-close__kind">
         {kind.title} <LabelBadge badge={kind.line.badge} />
       </h2>
-      <p className="verdict-close__line">{kind.line.text}</p>
+      <p className="verdict-close__line">{kind.line.short ?? kind.line.text}</p>
+      {kind.line.short ? (
+        <details className="spoken__more">
+          <summary>More</summary>
+          <p>{kind.line.text}</p>
+        </details>
+      ) : null}
       <SourceList refs={kind.line.sources} />
 
-      <div className="verdict-close__grid">
-        <section aria-labelledby="ambitions-heading">
-          <h3 id="ambitions-heading" className="section-label">
-            Which ambitions survived
-          </h3>
-          {ambitions.priorities.length === 0 ? (
-            <p className="panel__hint">No priorities were agreed in Downing Street.</p>
-          ) : (
+      <details className="more">
+        <summary>The close in full</summary>
+        <div className="more__body verdict-close__grid">
+          <section aria-labelledby="ambitions-heading">
+            <h3 id="ambitions-heading" className="section-label">
+              Which ambitions survived
+            </h3>
+            {ambitions.priorities.length === 0 ? (
+              <p className="panel__hint">No priorities were agreed in Downing Street.</p>
+            ) : (
+              <ul className="fates">
+                {ambitions.priorities.map((p) => (
+                  <li key={p.title} className={`fate fate--${p.fate}`}>
+                    <strong>{p.title}</strong> · {PRIORITY[p.fate]}
+                    {p.fate === 'delivered' || p.fate === 'narrowed' || p.fate === 'delayed'
+                      ? ` · ${formatGbpBn(Math.abs(p.costGbpm), 1)} in ${targetYear}`
+                      : ''}
+                  </li>
+                ))}
+              </ul>
+            )}
             <ul className="fates">
-              {ambitions.priorities.map((p) => (
+              {ambitions.promises.map((p) => (
                 <li key={p.title} className={`fate fate--${p.fate}`}>
-                  <strong>{p.title}</strong> · {PRIORITY[p.fate]}
-                  {p.fate === 'delivered' || p.fate === 'narrowed' || p.fate === 'delayed'
-                    ? ` · ${formatGbpBn(Math.abs(p.costGbpm), 1)} in ${targetYear}`
-                    : ''}
+                  <strong>{p.title}</strong> · {PROMISE[p.fate]}
+                  {p.by?.length ? ` (${p.by.join(', ')})` : ''}
                 </li>
               ))}
             </ul>
-          )}
-          <ul className="fates">
-            {ambitions.promises.map((p) => (
-              <li key={p.title} className={`fate fate--${p.fate}`}>
-                <strong>{p.title}</strong> · {PROMISE[p.fate]}
-                {p.by?.length ? ` (${p.by.join(', ')})` : ''}
-              </li>
-            ))}
-          </ul>
-        </section>
+          </section>
 
-        <section aria-labelledby="incidence-heading">
-          <h3 id="incidence-heading" className="section-label">
-            Who paid, who benefited <LabelBadge badge="mechanical" />
-          </h3>
-          {paid.length === 0 && benefited.length === 0 ? (
-            <p className="panel__hint">Nothing moved money in {targetYear}.</p>
-          ) : (
-            <TableScroll label="Who paid, who benefited">
-              <table className="measures incidence">
-                <tbody>
-                  {paid.map((r) => (
-                    <tr key={r.group}>
-                      <td>
-                        {r.label} <span className="source">{r.levers.join(', ')}</span>
-                      </td>
-                      <td className="amount">
-                        {r.gbpm >= 0 ? 'pays ' : 'gains '}
-                        {formatGbpBn(Math.abs(r.gbpm), 1)}
-                      </td>
-                    </tr>
-                  ))}
-                  {benefited.map((r) => (
-                    <tr key={r.group}>
-                      <td>
-                        {r.label} <span className="source">{r.levers.join(', ')}</span>
-                      </td>
-                      <td className="amount">
-                        {r.gbpm >= 0 ? 'receives ' : 'loses '}
-                        {formatGbpBn(Math.abs(r.gbpm), 1)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </TableScroll>
-          )}
-        </section>
+          <section aria-labelledby="incidence-heading">
+            <h3 id="incidence-heading" className="section-label">
+              Who paid, who benefited <LabelBadge badge="mechanical" />
+            </h3>
+            {paid.length === 0 && benefited.length === 0 ? (
+              <p className="panel__hint">Nothing moved money in {targetYear}.</p>
+            ) : (
+              <TableScroll label="Who paid, who benefited">
+                <table className="measures incidence">
+                  <tbody>
+                    {paid.map((r) => (
+                      <tr key={r.group}>
+                        <td>
+                          {r.label} <span className="source">{r.levers.join(', ')}</span>
+                        </td>
+                        <td className="amount">
+                          {r.gbpm >= 0 ? 'pays ' : 'gains '}
+                          {formatGbpBn(Math.abs(r.gbpm), 1)}
+                        </td>
+                      </tr>
+                    ))}
+                    {benefited.map((r) => (
+                      <tr key={r.group}>
+                        <td>
+                          {r.label} <span className="source">{r.levers.join(', ')}</span>
+                        </td>
+                        <td className="amount">
+                          {r.gbpm >= 0 ? 'receives ' : 'loses '}
+                          {formatGbpBn(Math.abs(r.gbpm), 1)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </TableScroll>
+            )}
+          </section>
 
-        <section aria-labelledby="compromises-heading">
-          <h3 id="compromises-heading" className="section-label">
-            The compromises that mattered <LabelBadge badge="mechanical" />
-          </h3>
-          {compromises.length === 0 ? (
+          <section aria-labelledby="compromises-heading">
+            <h3 id="compromises-heading" className="section-label">
+              The compromises that mattered <LabelBadge badge="mechanical" />
+            </h3>
+            {compromises.length === 0 ? (
+              <p className="panel__hint">
+                Nothing moved after the forecast: the package you delivered is the one the OBR saw.
+              </p>
+            ) : (
+              <ul className="fates">
+                {compromises.slice(0, 6).map((c) => (
+                  <li key={c.lever.code}>
+                    <strong>{c.lever.shortTitle}</strong> · {formatLeverValue(c.lever, c.from)} →{' '}
+                    {formatLeverValue(c.lever, c.to)} ·{' '}
+                    <span
+                      className={`amount ${c.deltaGbpm < 0 ? 'amount--better' : 'amount--worse'}`}
+                    >
+                      {formatGbpBn(c.deltaGbpm, 1, true)}
+                    </span>{' '}
+                    to borrowing in {targetYear}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section aria-labelledby="resilience-heading">
+            <h3 id="resilience-heading" className="section-label">
+              How it would have fared under the other forecasts <LabelBadge badge="mechanical" />
+            </h3>
             <p className="panel__hint">
-              Nothing moved after the forecast: the package you delivered is the one the OBR saw.
+              Your final package, re-run under every outcome the draw could have produced. The one
+              that arrived is marked.
             </p>
-          ) : (
-            <ul className="fates">
-              {compromises.slice(0, 6).map((c) => (
-                <li key={c.lever.code}>
-                  <strong>{c.lever.shortTitle}</strong> · {formatLeverValue(c.lever, c.from)} →{' '}
-                  {formatLeverValue(c.lever, c.to)} ·{' '}
-                  <span
-                    className={`amount ${c.deltaGbpm < 0 ? 'amount--better' : 'amount--worse'}`}
-                  >
-                    {formatGbpBn(c.deltaGbpm, 1, true)}
-                  </span>{' '}
-                  to borrowing in {targetYear}
+            <ul className="fates resilience">
+              {resilience.map((r) => (
+                <li key={r.outcome.id} className={r.drawn ? 'resilience--drawn' : undefined}>
+                  <strong>{r.outcome.title}</strong>
+                  {r.drawn ? <span className="tag--treasury">what arrived</span> : null} ·{' '}
+                  <span className={`amount ${r.headroomGbpm < 0 ? 'amount--worse' : ''}`}>
+                    {formatGbpBn(r.headroomGbpm, 1, r.headroomGbpm < 0)}
+                  </span>
+                  {r.rulesMissed.length > 0 ? (
+                    <span className="source"> · {r.rulesMissed.join(' and ')} missed</span>
+                  ) : (
+                    <span className="source"> · rules met</span>
+                  )}
                 </li>
               ))}
             </ul>
-          )}
-        </section>
-
-        <section aria-labelledby="resilience-heading">
-          <h3 id="resilience-heading" className="section-label">
-            How it would have fared under the other forecasts <LabelBadge badge="mechanical" />
-          </h3>
-          <p className="panel__hint">
-            Your final package, re-run under every outcome the draw could have produced. The one
-            that arrived is marked.
-          </p>
-          <ul className="fates resilience">
-            {resilience.map((r) => (
-              <li key={r.outcome.id} className={r.drawn ? 'resilience--drawn' : undefined}>
-                <strong>{r.outcome.title}</strong>
-                {r.drawn ? <span className="tag--treasury">what arrived</span> : null} ·{' '}
-                <span className={`amount ${r.headroomGbpm < 0 ? 'amount--worse' : ''}`}>
-                  {formatGbpBn(r.headroomGbpm, 1, r.headroomGbpm < 0)}
-                </span>
-                {r.rulesMissed.length > 0 ? (
-                  <span className="source"> · {r.rulesMissed.join(' and ')} missed</span>
-                ) : (
-                  <span className="source"> · rules met</span>
-                )}
-              </li>
-            ))}
-          </ul>
-          {worst && best ? (
-            <p className="panel__hint">
-              Under the gloomiest published outcome you would have had{' '}
-              {formatGbpBn(worst.headroomGbpm, 1, worst.headroomGbpm < 0)}
-              {worst.rulesMissed.length > 0 ? ' and missed a rule' : ''}; under the kindest,{' '}
-              {formatGbpBn(best.headroomGbpm, 1, best.headroomGbpm < 0)} to spare.
-              {drawn ? ` You drew ${drawn.outcome.title.toLowerCase()}.` : ''}
-            </p>
-          ) : null}
-        </section>
-      </div>
+            {worst && best ? (
+              <p className="panel__hint">
+                Under the gloomiest published outcome you would have had{' '}
+                {formatGbpBn(worst.headroomGbpm, 1, worst.headroomGbpm < 0)}
+                {worst.rulesMissed.length > 0 ? ' and missed a rule' : ''}; under the kindest,{' '}
+                {formatGbpBn(best.headroomGbpm, 1, best.headroomGbpm < 0)} to spare.
+                {drawn ? ` You drew ${drawn.outcome.title.toLowerCase()}.` : ''}
+              </p>
+            ) : null}
+          </section>
+        </div>
+      </details>
       <p className="verdict-close__replay">
         <a href={replayHref}>Replay under the same conditions</a>: the same seed, a fresh Budget.
       </p>

@@ -152,46 +152,12 @@ export function CompromisePage() {
             tabTitle: 'Make the most of your extra headroom',
             lead:
               target > 0
-                ? 'The forecast left more than you set out to keep. Spend some on your priorities, ease off a tax rise, or bank it.'
-                : 'The forecast left you headroom beyond the rules. Spend some on your priorities, ease off a tax rise, or bank it.',
+                ? 'The forecast left you room to spare.'
+                : 'The forecast left you headroom beyond the rules.',
           }
         : {})}
     >
       <HeadroomBar outcome={outcome} game={game} status={status} />
-      <section className="gap doc" aria-label="The gap">
-        <p className="gap__line">
-          {target > 0 ? (
-            gap > 0 ? (
-              <>
-                <strong className="amount amount--worse">{formatGbpBn(gap, 1)} short</strong> of the{' '}
-                {formatGbpBn(target, 0)} you set out to keep.
-              </>
-            ) : (
-              <>
-                <strong className="amount amount--better">{formatGbpBn(-gap, 1)} to spare</strong>{' '}
-                against the {formatGbpBn(target, 0)} you set out to keep.
-              </>
-            )
-          ) : headroom >= 0 ? (
-            <>
-              <strong className="amount">{formatGbpBn(headroom, 1)}</strong> of headroom, and you
-              set no target beyond the rules.
-            </>
-          ) : (
-            <>
-              <strong className="amount amount--worse">{formatGbpBn(-headroom, 1)} short</strong> of
-              the stability rule itself.
-            </>
-          )}
-          {missed.length > 0 ? (
-            <span className="gap__missed">
-              {' '}
-              {missed.map((v) => v.ruleName).join(' and ')} missed on these numbers.
-            </span>
-          ) : null}
-        </p>
-      </section>
-
       {surplus ? (
         <div className="routes">
           <section className="route doc" aria-labelledby="route-more">
@@ -202,6 +168,7 @@ export function CompromisePage() {
               line={compromise.routes.more.line}
               who={role(compromise.routes.more.adviser)}
               tone="adviser"
+              folded
             />
             {more.length === 0 ? (
               <p className="panel__hint">
@@ -249,8 +216,7 @@ export function CompromisePage() {
               </ul>
             )}
             <p className="panel__hint">
-              <StepLink to="/budget/deliver">All the ways to deliver</StepLink> ·{' '}
-              <StepLink to="/budget/spending">Every budget</StepLink>
+              <StepLink to="/budget/deliver">All the ways to deliver</StepLink>
             </p>
           </section>
 
@@ -262,6 +228,7 @@ export function CompromisePage() {
               line={compromise.routes.ease.line}
               who={role(compromise.routes.ease.adviser)}
               tone="adviser"
+              folded
             />
             {chosenWays.length === 0 ? (
               <p className="panel__hint">You chose no tax rises, so there is nothing to ease.</p>
@@ -295,8 +262,7 @@ export function CompromisePage() {
               </ul>
             )}
             <p className="panel__hint">
-              <StepLink to="/budget/afford">All the ways to pay</StepLink> ·{' '}
-              <StepLink to="/budget/taxes">Every tax</StepLink>
+              <StepLink to="/budget/afford">All the ways to pay</StepLink>
             </p>
           </section>
 
@@ -308,6 +274,7 @@ export function CompromisePage() {
               line={compromise.routes.bank.line}
               who={role(compromise.routes.bank.adviser)}
               tone="adviser"
+              folded
             />
             <div className="targets__options" role="radiogroup" aria-label="Headroom target">
               {TARGETS.map((t) => (
@@ -332,12 +299,10 @@ export function CompromisePage() {
           </section>
 
           {game.breachAccepted ? (
-            <aside className="route doc route--quiet" aria-label="No rule is missed">
-              <Spoken
-                line={compromise.routes.breach.noBreach}
-                who={role(compromise.routes.breach.adviser)}
-                tone="adviser"
-              />
+            <aside className="route doc route--quiet" aria-label="Your acknowledgement">
+              <p className="panel__hint">
+                No rule is missed now. Your written acknowledgement stands.
+              </p>
               <button
                 type="button"
                 className="btn"
@@ -358,6 +323,7 @@ export function CompromisePage() {
               line={compromise.routes.revenue.line}
               who={role(compromise.routes.revenue.adviser)}
               tone="adviser"
+              folded
             />
             <ul className="suggestions">
               {revenue.map((s) => (
@@ -390,8 +356,7 @@ export function CompromisePage() {
               ))}
             </ul>
             <p className="panel__hint">
-              <StepLink to="/budget/afford">All the ways to afford it</StepLink> ·{' '}
-              <StepLink to="/budget/taxes">Every tax</StepLink>
+              <StepLink to="/budget/afford">All the ways to pay</StepLink>
             </p>
           </section>
 
@@ -403,6 +368,7 @@ export function CompromisePage() {
               line={compromise.routes.spending.line}
               who={role(compromise.routes.spending.adviser)}
               tone="adviser"
+              folded
             />
             {chosen.length === 0 && spending.length === 0 ? (
               <p className="panel__hint">Nothing in your package costs money in {targetYear}.</p>
@@ -420,11 +386,8 @@ export function CompromisePage() {
                       <div>
                         <strong>{o.option.title}</strong>{' '}
                         <span className="source">
-                          {o.state === 'on' ? 'in your package' : 'adjusted on the desk'}
-                          {optionLevers.length === 1 && optionLevers[0]
-                            ? ` · ${formatLeverValue(optionLevers[0], value(optionLevers[0]))}`
-                            : ''}{' '}
-                          · costs {formatGbpBn(o.costGbpm, 1)} in {targetYear}
+                          {o.state === 'adjusted' ? 'adjusted on the desk · ' : ''}costs{' '}
+                          {formatGbpBn(o.costGbpm, 1)}
                           {started ? ` · starts ${started}` : ''}
                         </span>
                       </div>
@@ -444,7 +407,7 @@ export function CompromisePage() {
                         {narrowed ? (
                           <>
                             <span className="source">
-                              half the distance:{' '}
+                              narrowed:{' '}
                               {formatGbpBn(
                                 effectOf({ ...state.leverValues, ...narrowed }),
                                 1,
@@ -480,8 +443,7 @@ export function CompromisePage() {
                     <div>
                       <strong>{m.lever.title}</strong>{' '}
                       <span className="source">
-                        moved on the desk · {formatLeverValue(m.lever, value(m.lever))} · costs{' '}
-                        {formatGbpBn(m.costGbpm, 1)} in {targetYear}
+                        moved on the desk · costs {formatGbpBn(m.costGbpm, 1)}
                         {delays[m.lever.code] ? ` · starts ${delays[m.lever.code]}` : ''}
                       </span>
                     </div>
@@ -508,8 +470,7 @@ export function CompromisePage() {
               </ul>
             )}
             <p className="panel__hint">
-              <StepLink to="/budget/deliver">All the ways to deliver</StepLink> ·{' '}
-              <StepLink to="/budget/spending">Every budget</StepLink>
+              <StepLink to="/budget/deliver">All the ways to deliver</StepLink>
             </p>
           </section>
 
@@ -521,6 +482,7 @@ export function CompromisePage() {
               line={compromise.routes.target.line}
               who={role(compromise.routes.target.adviser)}
               tone="adviser"
+              folded
             />
             <div className="targets__options" role="radiogroup" aria-label="Headroom target">
               {TARGETS.map((t) => (
@@ -553,6 +515,7 @@ export function CompromisePage() {
                 line={compromise.routes.breach.line}
                 who={role(compromise.routes.breach.adviser)}
                 tone="adviser"
+                folded
               />
               <details className="charter">
                 <summary>What the Charter says</summary>
@@ -579,24 +542,20 @@ export function CompromisePage() {
                 </span>
               </label>
             </section>
-          ) : (
-            <aside className="route doc route--quiet" aria-label="No rule is missed">
-              <Spoken
-                line={compromise.routes.breach.noBreach}
-                who={role(compromise.routes.breach.adviser)}
-                tone="adviser"
-              />
-              {game.breachAccepted ? (
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => spend({ breachAccepted: false })}
-                >
-                  Withdraw the acknowledgement
-                </button>
-              ) : null}
+          ) : game.breachAccepted ? (
+            <aside className="route doc route--quiet" aria-label="Your acknowledgement">
+              <p className="panel__hint">
+                No rule is missed now. Your written acknowledgement stands.
+              </p>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => spend({ breachAccepted: false })}
+              >
+                Withdraw the acknowledgement
+              </button>
             </aside>
-          )}
+          ) : null}
         </div>
       )}
 

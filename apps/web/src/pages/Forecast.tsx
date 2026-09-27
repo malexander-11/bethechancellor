@@ -124,7 +124,7 @@ export function ForecastPage() {
         part={PART}
         title="The forecast arrives"
         tabTitle="The forecast arrives"
-        lead="The Office for Budget Responsibility has finished its own forecast. It does not know what you planned on."
+        lead="The OBR has finished its forecast. Open it."
       >
         <section className="envelope doc" aria-label="A sealed envelope">
           <p className="doc__head">
@@ -132,12 +132,12 @@ export function ForecastPage() {
             <span className="doc__ref">Pre-measures forecast · in confidence</span>
           </p>
           <p>
-            This is the forecast your Budget will be judged against. It was fixed the day you chose
-            your starting position. Open it, and its figures replace the ones you planned on.
+            Fixed the day you set your starting position, and it does not know what you planned on.
+            Open it, and its figures replace yours.
           </p>
           <p className="source">
-            Seed {game.seed} of 999 · <LabelBadge badge="simulated" /> which published forecast is
-            inside was decided by a draw weighted to the centre.
+            Seed {game.seed} of 999 · <LabelBadge badge="simulated" /> a draw weighted to the
+            centre.
           </p>
         </section>
         <p className="actions">
@@ -161,8 +161,7 @@ export function ForecastPage() {
       tabTitle="What changed"
       lead={
         <>
-          The OBR’s forecast is in: <strong>{arrived}</strong>. Here is what moved, and what it
-          leaves you.
+          The OBR’s forecast is in: <strong>{arrived}</strong>.
         </>
       }
     >
@@ -222,6 +221,9 @@ function ForecastReveal({
       : (CARDS.find((c) => c.kind === planning)?.title ?? planning).replace(/^./, (c) =>
           c.toLowerCase(),
         );
+  const missedNow = d.revised.verdicts.filter(
+    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
+  );
   const nowBroken = status.promises.filter(
     (p) => !p.kept && before.promises.find((q) => q.promise.id === p.promise.id)?.kept,
   );
@@ -251,15 +253,15 @@ function ForecastReveal({
           </strong>
           <LabelBadge badge="simulated" />
         </p>
-        <p className="panel__hint">
-          {revised.length === 0
-            ? 'The OBR certified every measure as you scored it.'
-            : `${revised.length} of your measures ${revised.length === 1 ? 'carries' : 'carry'} a caveat this outcome doubts.`}{' '}
-          You planned on {planningName}.
-        </p>
         <details className="more">
           <summary>See the numbers</summary>
           <div className="more__body">
+            <p>
+              {revised.length === 0
+                ? 'The OBR certified every measure as you scored it.'
+                : `${revised.length} of your measures ${revised.length === 1 ? 'carries' : 'carry'} a caveat this outcome doubts.`}{' '}
+              You planned on {planningName}.
+            </p>
             <h3 className="section-label">What happened to the economy</h3>
             <p>{draw.outcome.story.text}</p>
             <SourceList refs={draw.outcome.story.sources} />
@@ -386,8 +388,9 @@ function ForecastReveal({
               : `${formatGbpBn(target - d.headroom.revised, 1)} short of the ${formatGbpBn(target, 0)} target you set yourself.`
             : 'You set no target beyond the rules themselves.'}
         </p>
+        {missedNow.length === 0 ? <p className="source">All rules met.</p> : null}
         <ul className="rule-list">
-          {d.revised.verdicts.map((v) => (
+          {missedNow.map((v) => (
             <li key={v.ruleId}>
               <span className={`status status--${STATUS[v.status].tone}`}>
                 <span className="status__icon" aria-hidden="true">

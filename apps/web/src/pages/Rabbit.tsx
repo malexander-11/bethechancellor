@@ -12,6 +12,7 @@ import { Spoken } from '../components/Conversation';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
+import { SourceList } from '../components/SourceLink';
 import { MinisterLine } from '../components/MinisterLine';
 import { OptionCard } from '../components/OptionCard';
 import { adviserById, levers, options, pm, rabbit } from '../data';
@@ -150,8 +151,7 @@ export function RabbitPage() {
       <HeadroomBar outcome={outcome} game={game} status={status} />
       <Spoken line={rabbit.intro.line} who={role(rabbit.intro.adviser)} tone="adviser" />
       <p className="panel__hint">
-        Up to {MAX_ADD_ONS}, each priced against your Budget in {targetYear}. {count} of{' '}
-        {MAX_ADD_ONS} chosen.
+        Up to {MAX_ADD_ONS} · {count} of {MAX_ADD_ONS} chosen.
       </p>
       <div className="choices choices--list" role="group" aria-label="The add-ons">
         {cards.map((card) => {
@@ -200,13 +200,21 @@ export function RabbitPage() {
                   <span className="sr-only">, in {targetYear}</span>
                 </span>
               </span>
-              <span className="choice__delivery">
-                <span className="kicker">{role(rabbit.keep.adviser)}</span>{' '}
-                <LabelBadge badge={rabbit.keep.line.badge} />{' '}
-                {rabbit.keep.line.short ?? rabbit.keep.line.text}
-              </span>
             </span>
           </label>
+          <details className="more more--quiet choice__more">
+            <summary>More about this</summary>
+            <div className="more__body">
+              <span className="choice__delivery">
+                <span className="kicker">{role(rabbit.keep.adviser)}</span>{' '}
+                <LabelBadge badge={rabbit.keep.line.badge} /> {rabbit.keep.line.text}
+              </span>
+              <SourceList
+                refs={rabbit.keep.line.sources}
+                className="choice__sources briefing__sources"
+              />
+            </div>
+          </details>
         </div>
       </div>
       <p className="actions">

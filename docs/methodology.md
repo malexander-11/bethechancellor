@@ -908,6 +908,16 @@ Budget means. The rules that hold every screen to the same shape:
   keeping the margin. The forecast's button says which screen follows ("Respond to it" or "Make
   the most of it"), and the screen changes mood as the headroom moves: ease off the only tax rise
   and the sums are back.
+- **Half the words (ADR-0023, revised 2026-09-27).** Every screen of the road is one heading, one
+  line of at most ten words, the choices and one button. One adviser or minister speaks on a
+  screen, in a short form of at most fourteen words, and every other simulated line folds; a card
+  is its title, badge and figure, with the lever's headline and the proposer's line behind "More
+  about this"; the bar says the headroom, the year and the target once, and a broken promise or a
+  missed rule only when there is one; on Budget day each audience shows its rating and its
+  strongest reason with the rest behind "Why this rating", and the close its kind in one sentence
+  with the rest behind "The close in full". Every cut line keeps its badge and its sources where
+  it shows. The budgets test measures each screen with the folds closed and pins it; the words
+  test checks every short form against its limit.
 - **The Budget in three sentences.** Budget day opens with what was prioritised (the priorities'
   nouns), who pays (the largest payers by the incidence tags) and what was accepted, in this order
   of weight: a rule missed, a promise broken, a target not kept, a measure moved after the forecast.

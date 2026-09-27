@@ -196,3 +196,46 @@ guide's title stays the sums', the page overriding it in the other mood. The scr
 as the headroom moves: dropping the only tax rise, or raising the target past the headroom,
 brings the sums back, which is the point. `deliverSuggestions` (engine) and the two moods are
 tested; the word budget for the surplus screen is measured and pinned beside the sums'.
+
+## Revision (2026-09-27): half the words
+
+Playing the official-paper build, the same player said: _"Too busy, too many words. Needs to be
+really crisp and clear. Much much fewer words."_ Asked how far to go, they chose to halve the
+words on every screen, to let one voice speak per screen, and to show each audience on Budget day
+its rating and one reason. Six rules did it, and every screen of the road now keeps them:
+
+1. **One heading, one line, one button.** The line is the guide's "do now", at most ten words;
+   one primary button and one Back; no hint lines.
+2. **One voice.** At most one adviser's or minister's line on a screen, in a short form of at
+   most fourteen words with its role and badge. Every other simulated line folds: "More about
+   this" on a card, "What the advisers say" for the other notes, "Advice from the …" on a
+   compromise route. A minister's reaction shows only on the card that was chosen.
+3. **A card is its title, its badge and its figure**, plus a red-line or earliest-start tag and any
+   live overlap or clash; the lever's headline, the quiet overlaps and the proposer's line wait
+   behind "More about this".
+4. **Say a fact once.** The bar carries the headroom, the year, the target and, only when one is
+   broken or missed, a promise or a rule; the gap lines, the year hints and the "no rule is
+   missed" aside went. The review lists an add-on once.
+5. **The footer is one line**, with what the badges mean behind it.
+6. **Folds are the depth.** Everything cut lives in "Why this matters", "More about this", "See
+   the numbers", "What the advisers say", "Why this rating" or "The close in full": closed on
+   arrival, openable from the keyboard, never holding a badge or a figure the screen relies on.
+
+In the data, every simulated line a newcomer meets on the road gained a `short` (the Prime
+Minister's briefs and longer reactions, the advisers' notes, the add-ons' framing lines, the
+verdicts' close; the compromise routes' shorts trimmed to fourteen words), the forecast cards an
+eight-word short, the priorities a five-word purpose and the target notes five words. Nothing
+else in the data or the honesty contract moved: every cut line is one tap away with its badge and
+its sources where it shows, and the desk, the side room, is untouched. The words test checks every
+short form against its limit and that it is shorter than its line.
+
+Measured with the folds closed (the budgets test, jsdom): the opening 60 → 30 words, the
+position 267 → 132, the priorities 192 → 109, the priority screens 244 to 316 → 80 to 125,
+paying for it 564 → 290, the forecast 126 → 91, the sums 302 → 140 (room to spare 225 → 106),
+the add-ons 391 → 140, the review 121 → 98, Budget day 529 → 233: about 3,400 words along the
+road became about 1,560, and each screen is pinned with a tenth to spare. The playtime estimate
+(the method above, unchanged) fell from 11m 25s skimmed and 18m 19s reading everything to 8m 17s
+and 10m 07s, a midpoint of about nine minutes: an estimate from the rendered screens, not user
+testing. `walk22.mjs` adds to the audits: at most one voice on a screen, no card note outside a
+fold, no gap line, no year hint, and a fold that opens and closes from the keyboard; it walks
+clean in light, dark and reduced-motion modes at 1300px and 360px.

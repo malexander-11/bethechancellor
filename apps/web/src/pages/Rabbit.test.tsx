@@ -48,9 +48,7 @@ describe('suggested little add-ons', () => {
     expect(within(pubs).getByText(/^Costs £\d+\.\dbn · leaves (−|£)/)).toBeInTheDocument();
     // The proposer's line waits behind the card's fold; the surface is title, badge and figure.
     expect(within(pubs).getByText('Political Adviser').closest('details')).not.toBeNull();
-    expect(
-      screen.getByText(/priced against your Budget in 2029-30\. 0 of 3 chosen/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/^Up to 3 · 0 of 3 chosen/)).toBeInTheDocument();
     // Ticked, the card says what the Budget would have without it.
     fireEvent.click(box(/Five per cent off alcohol duty/));
     await waitFor(() => expect(g()).toMatch(/rb\.pubs/));
