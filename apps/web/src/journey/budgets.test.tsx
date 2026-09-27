@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { appendFileSync } from 'node:fs';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
@@ -43,13 +44,13 @@ function screenWords(): number {
 
 /** Every screen of the main road, in order, with the game that renders it at its widest. */
 const ROAD: readonly [path: string, limit: number, game: string][] = [
-  ['/', 90, GAME],
-  ['/outlook', 300, GAME],
-  ['/pm', 220, GAME],
-  ['/budget/deliver', 350, WIDEST],
-  ['/budget/deliver/2', 350, WIDEST],
-  ['/budget/deliver/3', 350, WIDEST],
-  ['/budget/afford', 620, GAME],
+  ['/', 40, GAME],
+  ['/outlook', 150, GAME],
+  ['/pm', 125, GAME],
+  ['/budget/deliver', 150, WIDEST],
+  ['/budget/deliver/2', 150, WIDEST],
+  ['/budget/deliver/3', 150, WIDEST],
+  ['/budget/afford', 320, GAME],
   ['/forecast', 150, GAME],
   ['/compromise', 340, SHORT],
   ['/compromise', 340, GAME],
@@ -77,15 +78,19 @@ describe('the word budgets', () => {
   });
 
   it('keeps every screen of the main road inside its word budget', () => {
-    // Measured on 2026-09-26 with the folds closed and pinned with about a tenth to spare
-    // (ADR-0023): the opening 60, the position 267, the priorities 192, the priority screens 244
-    // to 316, paying for it 564 (the first three ways of each group on show), the forecast 126,
-    // the sums 302, the add-ons 391, the review 121, Budget day 529.
+    // Measured with the folds closed and pinned with about a tenth to spare (ADR-0023). The first
+    // five screens, halved on 2026-09-27: the opening 30, the position 132, the priorities 109,
+    // the priority screens 80 to 125, paying for it 290 (the first three ways of each group on
+    // show). The rest, measured on 2026-09-26: the forecast 126, the sums 302, the add-ons 391,
+    // the review 121, Budget day 529.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();
+      if (process.env.WORDS)
+        appendFileSync(process.env.WORDS, `${path}: ${n} words (limit ${limit})\n`);
       expect(n, `${path} shows ${n} words`).toBeLessThanOrEqual(limit);
-      expect(n, `${path} shows ${n} words`).toBeGreaterThan(30);
+      // A floor against an empty render: the opening screen is the shortest, at about thirty.
+      expect(n, `${path} shows ${n} words`).toBeGreaterThan(20);
       view.unmount();
     }
   });

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { TARGETS } from '../pages/Outlook';
 import {
   briefings,
   compromise,
@@ -83,6 +84,16 @@ describe('word budgets: one line visible, the rest a click away', () => {
       // A short line is a shorter version of the long one, not a second speech.
       if (line.short) expect(words(line.short), label).toBeLessThan(words(line.text));
     }
+  });
+
+  it('says what to do now in ten words, a priority’s purpose in five, a target in five', () => {
+    // The desk is a side room and keeps its longer lines; every screen on the road is one breath.
+    const road = guide.stages.filter((s) => s.step !== 'taxes' && s.step !== 'spending');
+    expect(road.length).toBeGreaterThanOrEqual(10);
+    for (const s of road) expect(words(s.now), `${s.step}: "${s.now}"`).toBeLessThanOrEqual(10);
+    for (const p of pm.priorities) expect(words(p.purpose), p.id).toBeLessThanOrEqual(5);
+    expect(TARGETS.length).toBe(4);
+    for (const t of TARGETS) expect(words(t.say), t.label).toBeLessThanOrEqual(5);
   });
 
   it('sums up each forecast card in at most eight words', () => {

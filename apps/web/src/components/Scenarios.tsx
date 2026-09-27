@@ -13,7 +13,8 @@ import { SourceList } from './SourceLink';
  *
  * Every card is one stated rule over published rows, and each shows the headroom it would leave
  * you with. That last part is the uncomfortable lesson the step exists to teach: a Chancellor can
- * buy headroom by picking the rosier forecast, and here you can watch it happen.
+ * buy headroom by picking the rosier forecast, and here you can watch it happen. On the surface a
+ * card is its title, one short line and its headroom; what it sets, and where from, fold beneath.
  */
 
 function leverOf(code: string): Lever | undefined {
@@ -48,18 +49,30 @@ function Setting({ setting }: { setting: ScenarioSetting }) {
   );
 }
 
-function Workings({ card }: { card: ScenarioCard }) {
+/**
+ * What a card sets and why, one fold under it: the headline in full, the sliders it moves, and
+ * with the workings on, the published rows each figure comes from.
+ */
+function Figures({ card, workings }: { card: ScenarioCard; workings: boolean }) {
   return (
     <details className="scenario__why">
       <summary>Where these figures come from</summary>
-      {card.rationale.map((line, i) => (
-        <p key={i}>
-          {line.text}
-          <SourceList as="span" className="briefing__sources" refs={line.sources} />
-        </p>
-      ))}
+      <p className="scenario__headline">{card.headline}</p>
+      <p className="scenario__settings">
+        {card.settings.map((s) => (
+          <Setting key={s.leverCode} setting={s} />
+        ))}
+      </p>
+      {workings
+        ? card.rationale.map((line, i) => (
+            <p key={i}>
+              {line.text}
+              <SourceList as="span" className="briefing__sources" refs={line.sources} />
+            </p>
+          ))
+        : null}
       <dl className="scenario__workings">
-        {card.settings.map((s) => {
+        {(workings ? card.settings : []).map((s) => {
           const lever = leverOf(s.leverCode);
           if (!lever) return null;
           return (
@@ -116,19 +129,14 @@ export function Scenarios({
               />
               <span className="scenario__body">
                 <span className="scenario__title">{card.title}</span>
-                <span className="scenario__headline">{card.headline}</span>
-                <span className="scenario__settings">
-                  {card.settings.map((s) => (
-                    <Setting key={s.leverCode} setting={s} />
-                  ))}
-                </span>
+                <span className="scenario__headline">{card.short ?? card.headline}</span>
                 <span className="scenario__headroom">
                   <small>Headroom in {summaryYear}</small>
                   <strong>{formatGbpBn(headrooms[i] ?? 0, 1, true)}</strong>
                 </span>
               </span>
             </label>
-            {workings ? <Workings card={card} /> : null}
+            <Figures card={card} workings={workings} />
           </article>
         ))}
       </div>
@@ -136,8 +144,7 @@ export function Scenarios({
         <article className="scenario scenario--picked scenario--own" aria-label="Your own figures">
           <p className="scenario__title">Your own figures</p>
           <p className="scenario__headline">
-            These sliders match none of the four. <LabelBadge badge="assumption" /> Your settings
-            stand until you pick a card above.
+            Your sliders match no card. <LabelBadge badge="assumption" />
           </p>
           <span className="scenario__headroom">
             <small>Headroom in {summaryYear}</small>

@@ -72,7 +72,7 @@ describe('agreeing the priorities with the Prime Minister', () => {
     expect(within(group).getByText('1st').closest('li')).toHaveTextContent(/Safer streets/);
     expect(within(group).getByText('2nd').closest('li')).toHaveTextContent(/Defence/);
     expect(
-      screen.getByText(/still applies: the tax lock, corporation tax capped/),
+      screen.getByText(/red lines still apply/, { selector: '.redlines-line' }),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByText('What the red lines are'));
     expect(screen.getByText(/We will not increase National Insurance/)).toBeInTheDocument();

@@ -41,7 +41,6 @@ export function PMPage() {
       patch: { reached: Math.max(game.reached, stageIndex('deliver')) },
     });
   };
-  const redLines = pm.promises.map((p) => p.title.replace(/^./, (c) => c.toLowerCase())).join(', ');
 
   return (
     <JourneyLayout step="pm">
@@ -82,8 +81,7 @@ export function PMPage() {
         })}
       </ul>
       <p className="redlines-line">
-        The <Term id="manifesto">manifesto</Term> still applies: {redLines}. Every option that
-        crosses one of these lines says so before you choose it.
+        The <Term id="manifesto">manifesto</Term>’s red lines still apply.
       </p>
       <details className="more">
         <summary>What the red lines are</summary>

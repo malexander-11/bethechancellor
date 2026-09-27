@@ -19,22 +19,10 @@ const MACRO_CODES = macroCodesOf(context.readings);
 
 /** The margins a Chancellor might set out to keep, £ billion; nought means whatever the rules leave. */
 export const TARGETS: { bn: number; label: string; say: string }[] = [
-  {
-    bn: 10,
-    label: '£10bn',
-    say: 'Thin. Room to be ambitious now; little room for the forecast to move.',
-  },
-  { bn: 20, label: '£20bn', say: 'Roughly where March left you. Your advisers’ rule of thumb.' },
-  {
-    bn: 30,
-    label: '£30bn',
-    say: 'Ample. Close to the OBR’s typical forecast error, and it constrains the package.',
-  },
-  {
-    bn: 0,
-    label: 'Whatever the rules leave',
-    say: 'Meet the rules and no more. Every pound of margin is a pound not spent.',
-  },
+  { bn: 10, label: '£10bn', say: 'Thin: room to spend now.' },
+  { bn: 20, label: '£20bn', say: 'Where March left you.' },
+  { bn: 30, label: '£30bn', say: 'Ample. It constrains the package.' },
+  { bn: 0, label: 'Whatever the rules leave', say: 'The rules and no more.' },
 ];
 
 const reading = (id: string): ContextReading | undefined =>
@@ -96,8 +84,7 @@ export function OutlookPage() {
             <dd>
               <strong>{formatGbpBn(headroom, 1)}</strong>
               <span>
-                of <Term id="headroom">headroom</Term> on the OBR’s March forecast: the margin the{' '}
-                <Term id="fiscal-rules">fiscal rules</Term> leave you.
+                of <Term id="headroom">headroom</Term> on the OBR’s March forecast.
               </span>
             </dd>
           </div>
@@ -107,9 +94,8 @@ export function OutlookPage() {
               <dd>
                 <strong>{summariseReading(gilts.latest, gilts.unit)}</strong>
                 <span>
-                  on ten-year <Term id="gilts">gilts</Term> now, against the{' '}
-                  {summariseReading(gilts.obr, gilts.unit)} the OBR assumed. Dearer money eats
-                  headroom.
+                  on ten-year <Term id="gilts">gilts</Term>; the OBR assumed{' '}
+                  {summariseReading(gilts.obr, gilts.unit)}.
                 </span>
               </dd>
             </div>
@@ -120,8 +106,8 @@ export function OutlookPage() {
               <dd>
                 <strong>{summariseReading(borrowing.latest, borrowing.unit)}</strong>
                 <span>
-                  April to August, against the {summariseReading(borrowing.obr, borrowing.unit)} the
-                  OBR pencilled in.
+                  April to August; the OBR pencilled in{' '}
+                  {summariseReading(borrowing.obr, borrowing.unit)}.
                 </span>
               </dd>
             </div>
@@ -136,7 +122,7 @@ export function OutlookPage() {
         />
       </section>
 
-      <h2 className="section-label section-label--spaced">Which forecast will you plan on?</h2>
+      <h2 className="section-label section-label--spaced">The forecast</h2>
       {revealed ? (
         <p className="note" role="note">
           The OBR’s October forecast has arrived, so these are no longer yours to set. You planned
@@ -155,7 +141,7 @@ export function OutlookPage() {
       />
 
       <fieldset className="targets" disabled={revealed}>
-        <legend className="section-label">How much headroom do you want to keep?</legend>
+        <legend className="section-label">Headroom to keep</legend>
         <div className="targets__options" role="radiogroup" aria-label="Headroom target">
           {TARGETS.map((t) => (
             <label key={t.bn} className={`target${targetBn === t.bn ? ' target--picked' : ''}`}>

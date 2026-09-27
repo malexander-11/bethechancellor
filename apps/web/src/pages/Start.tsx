@@ -1,7 +1,6 @@
-import { formatGbpBn } from '@btc/engine';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { BudgetBox } from '../components/Motifs';
-import { rules, vintage } from '../data';
+import { rules } from '../data';
 import { StepLink } from '../journey/links';
 import { usePageTitle } from '../journey/title';
 
@@ -14,11 +13,10 @@ export const PLAYTIME_MINUTES = 10;
 
 /**
  * Step 1: become Chancellor. The premise in one sentence, how long it takes, and the one button.
- * No tutorial: each screen says what to do when you reach it. The advisers, the rules and the
- * red lines wait for the screens where they matter.
+ * No tutorial: each screen says what to do when you reach it. The advisers, the rules, the
+ * figures and the red lines wait for the screens where they matter.
  */
 export function StartPage() {
-  const headroom = vintage.context?.headroomAtPublicationGbpm ?? 0;
   usePageTitle('Become Chancellor');
   return (
     <JourneyLayout step="start" intro={false}>
@@ -29,9 +27,7 @@ export function StartPage() {
             It’s your Budget now.
           </h1>
           <p className="opening__lede">
-            Choose what matters, decide who pays, and see what the country makes of it. Every number
-            comes from the official figures, and the fiscal rules are real: March left{' '}
-            {formatGbpBn(headroom, 1)} of room and the markets have moved since.
+            Choose what matters, decide who pays, and see what the country makes of it.
           </p>
           <p className="opening__meta">
             <span>About {PLAYTIME_MINUTES} minutes</span>
@@ -44,8 +40,7 @@ export function StartPage() {
             </StepLink>
           </p>
           <p className="opening__quiet">
-            <StepLink to="/methodology">How the numbers work</StepLink>
-            <StepLink to="/budget/taxes">Skip the story: every lever</StepLink>
+            <StepLink to="/budget/taxes">Every lever</StepLink>
           </p>
         </div>
         <div className="opening__art">

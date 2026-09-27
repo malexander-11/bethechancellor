@@ -49,7 +49,8 @@ describe('build your Budget: the ways to deliver', () => {
     // Every card carries the engine's figure for choosing it now, and the headroom that would leave;
     // the year is said once, in the hint. No tabs, no hand-off.
     expect(screen.getAllByText(/Costs £\d+\.\dbn · leaves (−|£)/).length).toBeGreaterThanOrEqual(2);
-    expect(screen.getByText(/^Figures are for 2029-30/)).toBeInTheDocument();
+    // The year is said once, on the bar; no hint repeats it.
+    expect(screen.queryByText(/^Figures are for/)).toBeNull();
     expect(screen.queryByRole('tab')).toBeNull();
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
@@ -214,7 +215,7 @@ describe('build your Budget: the ways to deliver', () => {
 
   it('opens the desk one link away, at the right group, and comes back to the same screen', () => {
     at(`/budget/deliver?${BASE}&${GAME}`);
-    fireEvent.click(screen.getByRole('link', { name: 'More policies: every spending lever' }));
+    fireEvent.click(screen.getByRole('link', { name: 'More policies: every lever' }));
     // The spending desk, with the Justice lever's group open, the briefing folded away, no
     // hand-off, and the line naming it a side room rather than a part of the road.
     expect(screen.getByText('Build the package')).toBeInTheDocument();

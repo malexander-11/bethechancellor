@@ -7,7 +7,7 @@
       "title": "You have been appointed Chancellor.",
       "doing": "You are about to write a Budget: the taxes and the spending for the next few years.",
       "why": "The [fiscal rules] limit how much you can borrow, and the [OBR](obr) checks your sums.",
-      "now": "Read what your three advisers have to tell you, then begin.",
+      "now": "Take the job, then choose what you will plan on.",
       "terms": ["headroom", "manifesto", "gdp"]
     },
     {
@@ -16,7 +16,7 @@
       "title": "Your starting position",
       "doing": "The Treasury’s briefing: where the public finances stand, and the forecast you will build your Budget on.",
       "why": "A rosier forecast gives you more to spend now. The [OBR](obr) publishes its own forecast later and will not care what you assumed; your [headroom] is whatever it leaves you.",
-      "now": "Choose the forecast you’ll plan on and how much headroom to keep.",
+      "now": "Choose the forecast you’ll plan on, and your headroom target.",
       "terms": ["fiscal-rules", "gilts", "gdp"]
     },
     {
@@ -25,7 +25,7 @@
       "title": "What is this Budget for?",
       "doing": "Tell the Prime Minister what this Budget is for: rank up to three of eight priorities.",
       "why": "The order matters: the first is the Budget’s headline. Nothing is paid for yet; the ways to deliver each come next, costed one by one. The [manifesto] red lines still apply.",
-      "now": "Tick up to three, in the order they matter, then agree them.",
+      "now": "Tick up to three, in the order they matter.",
       "terms": ["headroom", "certified"]
     },
     {
@@ -43,7 +43,7 @@
       "title": "Pay for it",
       "doing": "The gap between what you chose and the margin you set out to keep, and ways to close it, grouped by who pays.",
       "why": "Each option carries its badge, its [manifesto] red line and its [earliest start](earliest-start): what it costs you politically as well as in money.",
-      "now": "Choose who pays. Carry a gap into the forecast if you mean to.",
+      "now": "Choose who pays. Leave a gap if you mean to.",
       "terms": ["headroom", "manifesto", "earliest-start"]
     },
     {
@@ -93,7 +93,7 @@
       "title": "Make the sums add up",
       "doing": "Set the [headroom] you have against the headroom you wanted, and act on the difference.",
       "why": "Short of it, every route costs something: more of the ways to pay, less of what you chose, a thinner margin. Over it, every pound spent is margin gone.",
-      "now": "Take the routes you can live with, then make your final choices.",
+      "now": "Take the routes you can live with.",
       "terms": ["fiscal-rules", "borrowing", "escape-clause", "certified"]
     },
     {

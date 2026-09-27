@@ -19,7 +19,8 @@ function at(path: string) {
 }
 const L = () => new URLSearchParams(window.location.search).get('L') ?? '';
 const who = (name: RegExp) => screen.getByRole('region', { name });
-const gapLine = () => screen.getByRole('region', { name: 'The gap' }).textContent ?? '';
+// The gap is said once, on the bar: headroom against the target you set out to keep.
+const gapLine = () => screen.getByRole('region', { name: 'Your Budget so far' }).textContent ?? '';
 
 describe('build your Budget: pay for it', () => {
   it('sends a sandbox with no game to the desk', () => {
@@ -47,9 +48,8 @@ describe('build your Budget: pay for it', () => {
     expect(who(/^Everyone/)).toHaveAccessibleName(/6 options/);
     expect(within(who(/^Everyone/)).getAllByRole('checkbox')).toHaveLength(6);
     // The gap: the target less the headroom, with what the priorities cost.
-    expect(gapLine()).toMatch(/(short|to spare)/);
-    expect(gapLine()).toMatch(/£20bn you set out to keep/);
-    expect(gapLine()).toMatch(/Your priorities cost £1\.\dbn in 2029-30/);
+    expect(gapLine()).toMatch(/(short of|over) your £20bn target/);
+    expect(screen.queryByRole('region', { name: 'The gap' })).toBeNull();
     // The Political Adviser's press summary is folded under "The morning papers": badged, no
     // masthead, and not read until asked for.
     const papers = screen.getByText('The morning papers').closest('details') as HTMLElement;
@@ -75,7 +75,7 @@ describe('build your Budget: pay for it', () => {
     });
     const card = levy.closest('.choice') as HTMLElement;
     expect(within(card).getByText(/Raises £1\d\.\dbn · leaves £/)).toBeInTheDocument();
-    expect(screen.getByText(/^Figures are for 2029-30/)).toBeInTheDocument();
+    expect(screen.queryByText(/^Figures are for/)).toBeNull();
     fireEvent.click(levy);
     await waitFor(() => expect(L()).toMatch(/hscl\.1/));
     // Once on, the card says what the Budget would have without it; the group counts it and says
@@ -84,7 +84,7 @@ describe('build your Budget: pay for it', () => {
     expect(who(/^Everyone/)).toHaveAccessibleName(/1 chosen · raises £1\d\.\dbn/);
     expect(figure()).not.toBe(was);
     expect(gapLine()).not.toBe(before);
-    expect(gapLine()).toMatch(/to spare/);
+    expect(gapLine()).toMatch(/over your £20bn target/);
   });
 
   it('shows the manifesto on the levers it fences, the earliest start, and a start after the target year', async () => {

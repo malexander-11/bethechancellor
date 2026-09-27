@@ -1,7 +1,6 @@
 import {
   ambitionStatus,
   blockedBy,
-  interventionsFor,
   optionConflicts,
   optionEarliestStart,
   optionOff,
@@ -14,11 +13,10 @@ import {
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { Spoken } from '../components/Conversation';
 import { HeadroomBar } from '../components/HeadroomBar';
-import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { MinisterLine } from '../components/MinisterLine';
 import { OptionCard } from '../components/OptionCard';
-import { interventions, levers, ministers, options, pm } from '../data';
+import { levers, ministers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { useOptionPrices } from '../journey/prices';
@@ -41,8 +39,8 @@ function deskFor(lever: Lever): { to: string; group: string; noun: string } {
 }
 
 /**
- * The quiet way into the desk: one link per desk screen the priority's options touch, opening the
- * group of the first lever there. Most priorities touch one screen; the cost of living touches both.
+ * The ways into the desk, one per desk screen the priority's options touch, opening the group of
+ * the first lever there; the screen shows the first. Most priorities touch one screen.
  */
 function deskLinks(
   section: readonly DeliverOption[],
@@ -89,18 +87,7 @@ export function DeliverPage() {
   }
   const status = ambitionStatus(game, pm, options, outcome, levers);
   const report = status.priorities.find((p) => p.rank === n);
-  const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
-  const targetYear = stability?.targetYear ?? '2029-30';
-  const headroomGbpm = stability?.headroomGbpm ?? 0;
   const moved = new Set(outcome.leverEffects.map((e) => e.code));
-  const ruleMissed = outcome.verdicts.some(
-    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
-  );
-  const advice = interventionsFor(interventions, status, {
-    headroomGbpm,
-    targetGbpm: game.headroomTargetBn * 1000,
-    ruleMissed,
-  });
   const leversOf = (option: DeliverOption) =>
     Object.keys(option.values)
       .map((code) => byCode.get(code))
@@ -126,13 +113,9 @@ export function DeliverPage() {
 
   const { priority } = report;
   const rank = RANK[n - 1] ?? `${n}th`;
-  // One note from the room at a time: the one about this priority if there is one, else the
-  // first that is about the Budget as a whole. Notes about the other priorities wait for theirs.
-  const own = advice.find((i) => i.about === priority.id);
-  const general = advice.find((i) => i.about === undefined);
-  const aside = own ? [own] : general ? [general] : [];
   const tone = MINISTER_ROLES.has(priority.lead) ? 'minister' : 'adviser';
-  const links = deskLinks(report.options.map((o) => o.option));
+  // One quiet way into the desk: the screen the priority's first lever lives on.
+  const desk = deskLinks(report.options.map((o) => o.option))[0];
   const nextPriority = ranked[n];
   const back = n > 1 ? deliverPath(n - 1) : '/pm';
 
@@ -146,11 +129,10 @@ export function DeliverPage() {
         </>
       }
       tabTitle={`${rank} · ${priority.title}`}
-      lead="Tick the ways you want. Each shows its cost, and the headroom your Budget would then have."
+      lead="Tick the ways you want."
     >
       <HeadroomBar outcome={outcome} game={game} status={status} />
       <Spoken line={priority.brief} who={priority.lead} tone={tone} />
-      <Interventions items={aside} />
       <div
         className="choices choices--list"
         role="group"
@@ -199,25 +181,21 @@ export function DeliverPage() {
           );
         })}
       </div>
-      <p className="panel__hint">Figures are for {targetYear}, against your Budget as it stands.</p>
-      <p className="more-link">
-        {links.map((link, i) => (
-          <span key={link.to}>
-            {i > 0 ? ' · ' : ''}
-            <StepLink
-              to={link.to}
-              state={{
-                group: link.group,
-                from: 'deliver',
-                returnTo: pathname,
-                returnLabel: `Back to the options for ${priority.noun}`,
-              }}
-            >
-              More policies: every {link.noun} lever
-            </StepLink>
-          </span>
-        ))}
-      </p>
+      {desk ? (
+        <p className="more-link">
+          <StepLink
+            to={desk.to}
+            state={{
+              group: desk.group,
+              from: 'deliver',
+              returnTo: pathname,
+              returnLabel: `Back to the options for ${priority.noun}`,
+            }}
+          >
+            More policies: every lever
+          </StepLink>
+        </p>
+      ) : null}
       <p className="actions">
         {nextPriority ? (
           <StepLink to={deliverPath(n + 1)} className="btn btn--primary">

@@ -40,7 +40,7 @@
       "id": "cost-of-living",
       "title": "Cut the cost of living",
       "noun": "the cost of living",
-      "purpose": "Breathing space on bills, visibly, this winter.",
+      "purpose": "Breathing space on bills, now.",
       "pitch": {
         "text": "Energy bills are rising again this winter. People need to feel this Budget in their pockets before Christmas, not read about it in a forecast.",
         "sources": [
@@ -83,7 +83,7 @@
       "id": "nhs",
       "title": "Bring down NHS waiting lists",
       "noun": "the NHS",
-      "purpose": "The 18-week promise, and the care that keeps beds free.",
+      "purpose": "The 18-week promise, and care.",
       "pitch": {
         "text": "The waiting list is falling and the 18-week target is within reach. And I have promised a national care service without yet finding the money for it.",
         "sources": [
@@ -132,7 +132,7 @@
       "id": "defence",
       "title": "Defence on the NATO path",
       "noun": "defence",
-      "purpose": "The Defence Investment Plan funded, and 3% of GDP in sight.",
+      "purpose": "Fund the plan, reach 3%.",
       "pitch": {
         "text": "The defence of our nation will always be my first priority. The Defence Investment Plan is published and £4.7 billion of it is waiting for you.",
         "sources": [
@@ -179,7 +179,7 @@
       "id": "schools-send",
       "title": "Fix special needs and schools",
       "noun": "schools",
-      "purpose": "Council deficits closed, and the rise in plans faced.",
+      "purpose": "Close the special-needs deficits.",
       "pitch": {
         "text": "Special needs deficits are about to hit council reserves. Councils are about to hit the wall on this, and the plans keep rising.",
         "sources": [
@@ -225,7 +225,7 @@
       "id": "homes-growth",
       "title": "Homes and growth outside London",
       "noun": "homes and growth",
-      "purpose": "Build, and be seen to build, outside London.",
+      "purpose": "Build, visibly, outside London.",
       "pitch": {
         "text": "This will be a Budget that moves money and power out of Westminster. Council homes are the fair way to bring the welfare bill down. Show the country that re-industrialising Britain is real.",
         "sources": [
@@ -275,7 +275,7 @@
       "id": "families",
       "title": "Families and child poverty",
       "noun": "families",
-      "purpose": "Fewer children below the line, and rents that housing support meets.",
+      "purpose": "Fewer children in poverty.",
       "pitch": {
         "text": "Ending the two-child limit lifted 450,000 children out of poverty. I want this Budget to go further for families, not back.",
         "sources": [
@@ -318,7 +318,7 @@
       "id": "safer-streets",
       "title": "Safer streets: prisons, police, borders",
       "noun": "safer streets",
-      "purpose": "Cells for the sentences promised, and an asylum bill brought down.",
+      "purpose": "Cells for the sentences promised.",
       "pitch": {
         "text": "I have told the House that the worst offenders will serve their full terms, and that needs prison places. Bring the asylum bill down and the whole department breathes.",
         "sources": [
@@ -367,7 +367,7 @@
       "id": "welfare-bill",
       "title": "Get the welfare bill down",
       "noun": "welfare",
-      "purpose": "A smaller bill by the end of the Parliament, honestly scored.",
+      "purpose": "A smaller bill, honestly scored.",
       "pitch": {
         "text": "Council homes are the fair way to bring the welfare bill down. If you want to go faster than that, be honest about who loses.",
         "sources": [

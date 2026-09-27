@@ -55,9 +55,9 @@ function raised(
 }
 
 /**
- * Step 4, the last screen: how will you pay for it? The gap between the headroom your choices
- * leave and the margin you set out to keep, then the ways to raise money in five groups by who
- * pays, stacked on one screen so the balance between them is in view: no tabs, every option on
+ * Step 4, the last screen: how will you pay for it? The bar carries the gap between the headroom
+ * your choices leave and the margin you set out to keep; below it the ways to raise money in five
+ * groups by who pays, stacked on one screen so the balance between them is in view: no tabs, every option on
  * show, each priced against the Budget as it stands and wearing its badge, its red line and its
  * earliest start (ADR-0022). Every tax lever is one link away. Leaving for the forecast records
  * the package as it stood before the OBR spoke.
@@ -82,9 +82,7 @@ export function AffordPage() {
   const targetYear = stability?.targetYear ?? '2029-30';
   const headroom = stability?.headroomGbpm ?? 0;
   const target = game.headroomTargetBn * 1000;
-  const gap = target - headroom;
   const status = ambitionStatus(game, pm, options, outcome, levers);
-  const spent = status.priorities.reduce((acc, p) => acc + p.costGbpm, 0);
   const moved = new Set(outcome.leverEffects.map((e) => e.code));
   const ruleMissed = outcome.verdicts.some(
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
@@ -122,42 +120,7 @@ export function AffordPage() {
       tabTitle="Pay for it"
     >
       <HeadroomBar outcome={outcome} game={game} status={status} />
-      <section className="gap doc" aria-label="The gap">
-        <p className="gap__line">
-          {spent > 0 ? (
-            <span className="gap__spent">
-              Your priorities cost {formatGbpBn(spent, 1)} in {targetYear}.{' '}
-            </span>
-          ) : null}
-          {target > 0 ? (
-            gap > 0 ? (
-              <>
-                You are{' '}
-                <strong className="amount amount--worse">{formatGbpBn(gap, 1)} short</strong> of the{' '}
-                {formatGbpBn(target, 0)} you set out to keep.
-              </>
-            ) : (
-              <>
-                You have{' '}
-                <strong className="amount amount--better">{formatGbpBn(-gap, 1)} to spare</strong>{' '}
-                against the {formatGbpBn(target, 0)} you set out to keep.
-              </>
-            )
-          ) : headroom >= 0 ? (
-            <>
-              <strong className="amount">{formatGbpBn(headroom, 1)}</strong> of headroom, and you
-              set no target beyond the rules.
-            </>
-          ) : (
-            <>
-              <strong className="amount amount--worse">{formatGbpBn(-headroom, 1)} short</strong> of
-              the stability rule itself.
-            </>
-          )}
-        </p>
-      </section>
       <Interventions items={advice} />
-      <p className="panel__hint">Figures are for {targetYear}, against your Budget as it stands.</p>
       {GROUPS.map((group) => {
         const id = `who-${group.tab.id}`;
         const { chosen, gbpm } = raised(group, states, outcome.leverEffects, targetYear);
