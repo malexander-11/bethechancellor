@@ -43,7 +43,7 @@ describe('build your Budget: the ways to deliver', () => {
     // The Justice Secretary opens safer streets; the Defence Secretary waits for the next screen.
     expect(screen.getAllByText('Justice Secretary').length).toBeGreaterThan(0);
     expect(screen.queryByText('Defence Secretary')).toBeNull();
-    expect(screen.getAllByText('Simulated').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('Game judgement').length).toBeGreaterThanOrEqual(1);
     // Two ways for safer streets: the game has two levers there.
     expect(within(ways(/Ways to deliver: Safer streets/)).getAllByRole('checkbox')).toHaveLength(2);
     // Every card carries the engine's figure for choosing it now, and the headroom that would leave;

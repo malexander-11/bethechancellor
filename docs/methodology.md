@@ -9,13 +9,16 @@ methodology is wrong or the app is.
 Every figure on screen wears one of five badges (the fifth, for the game's own judgements, was
 added in Phase 8 under ADR-0011):
 
-| Badge                       | Meaning                                                                                                                                                                                                                              | Examples                                                                                                      |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| **Direct costing**          | An official estimate of the direct effect of a policy on receipts or spending, reproduced from HMRC, HM Treasury or the OBR, with the transformation steps shown.                                                                    | HMRC ready reckoner: 1p on the basic rate of income tax; HMT Budget 2025 scorecard lines.                     |
-| **Mechanical**              | Arithmetic that follows from the direct costings and the baseline, with no behavioural judgement.                                                                                                                                    | Adding deltas to the OBR path; debt interest on extra borrowing; ratios to GDP.                               |
-| **Assumption**              | A number the player or the tool chooses, using published sensitivities where they exist.                                                                                                                                             | The interest-rate, growth and inflation sliders; the uprating of ready-reckoner figures beyond their horizon. |
-| **Second-round commentary** | Behavioural and macroeconomic effects described in words and direction only, with sources. Never a number of our own.                                                                                                                | "Large CGT rises can lose revenue because people delay disposals (HMRC)."                                     |
-| **Simulated**               | A judgement nobody published, in a role's voice: what the Prime Minister wants, what a minister says at a cut, how a market or a household reads the Budget. May quote a sourced fact and read an engine number; never produces one. | "That is the tax lock, Chancellor." The kind of Budget named at the close.                                    |
+| Badge                            | Meaning                                                                                                                                                                                                                              | Examples                                                                                                      |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| **Official figure** (`direct`)   | An official estimate of the direct effect of a policy on receipts or spending, reproduced from HMRC, HM Treasury or the OBR, with the transformation steps shown.                                                                    | HMRC ready reckoner: 1p on the basic rate of income tax; HMT Budget 2025 scorecard lines.                     |
+| **Worked out** (`mechanical`)    | Arithmetic that follows from the direct costings and the baseline, with no behavioural judgement.                                                                                                                                    | Adding deltas to the OBR path; debt interest on extra borrowing; ratios to GDP.                               |
+| **Assumption**                   | A number the player or the tool chooses, using published sensitivities where they exist.                                                                                                                                             | The interest-rate, growth and inflation sliders; the uprating of ready-reckoner figures beyond their horizon. |
+| **Commentary** (`commentary`)    | Behavioural and macroeconomic effects described in words and direction only, with sources. Never a number of our own.                                                                                                                | "Large CGT rises can lose revenue because people delay disposals (HMRC)."                                     |
+| **Game judgement** (`simulated`) | A judgement nobody published, in a role's voice: what the Prime Minister wants, what a minister says at a cut, how a market or a household reads the Budget. May quote a sourced fact and read an engine number; never produces one. | "That is the tax lock, Chancellor." The kind of Budget named at the close.                                    |
+
+The names on the badges were made plainer on 2026-09-27 (Phase 23, for a reading age of ten to
+twelve); the ids in the data, the classes on the page and what each badge means are unchanged.
 
 The engine never adds a behavioural or macroeconomic knock-on of its own. Where HMRC's
 direct costings already include a standard behavioural response (they do, for example, for
@@ -475,7 +478,7 @@ in their own words and with their own citations, ordered by the size of the meas
 ## 13. The look (ADR-0009, ADR-0016)
 
 The interface is plain: an off-white page, white cards with hairline rules, one teal accent, the
-reader's own sans-serif at 16px with nothing under 14px, and a dark theme behind a switch in the header, light by default.
+reader's own sans-serif at 16px with nothing under 14px (as first built; the identity since Phase 20 is in §23), in one light theme: the dark theme went behind a switch and then went altogether on 2026-09-27 (ADR-0016, revised).
 Phase 6 dressed the game as paperwork on a Treasury desk (ADR-0009); Phase 11 took the furniture
 away because it stood between the reader and the numbers (ADR-0016). Three rules from the desk
 survive it.
@@ -489,9 +492,10 @@ removes what you have read: source links inside a briefing stay in the document.
 have finished with folds to one line rather than disappearing. The beat you are on never reaches
 the URL, which means one thing only, a budget.
 
-**Only the date is new.** The dateline and the countdown are the only facts on screen the engine
-did not compute. Both derive from the Charter's next formal assessment date, so a data refresh
-moves them, and neither carries a badge: chrome must not borrow the vocabulary of a costing.
+**Chrome carries no badge.** The guide's words are the only things on screen the engine did not
+compute; they quote no figure without a source and wear no badge, because chrome must not borrow
+the vocabulary of a costing. (The dateline and the countdown, which used to be the other two, went
+on 2026-09-27: a player does not need today's date to write a Budget.)
 
 One thing the tab bar costs: a closed group's levers leave the document, so find-in-page no longer
 reaches every lever at once. The attribution list beside the groups names every lever you have
@@ -888,11 +892,12 @@ Budget means. The rules that hold every screen to the same shape:
   review's "Change" links all land on a screen with every choice intact, because the Budget lives in
   the query string (§10). `/review` is an alias of the rabbit stage, so no `st.` index moved and
   every shared link still decodes. Arriving on Budget day marks the game finished.
-- **Detail expands in place.** "Why this matters" (the guide's doing and why, and the glossary),
-  "See the numbers" (the since-March table and the sliders on the starting position; the economy
+- **Detail expands in place.** "See the numbers" (the since-March table and the sliders on the starting position; the economy
   and costings tables on the forecast), "More policies", "The morning papers", the stress test,
   "Read the speech", "Who feels it" and "Budget documents" are `details` elements, closed on
   arrival, keyboard-openable, and they never hold a badge or a figure the visible screen relies on.
+  ("Why this matters", the guide's reasons and glossary list, went on 2026-09-27: the guide says
+  what to do, and the two words a newcomer must know are explained where they are used.)
 - **The score stays in view.** A slim sticky bar on the building, compromise, add-on and review
   screens reads the engine's headroom in the target year against the margin the player set, the
   priorities delivered, the promises kept and the rules met; a card's "leaves £X" is the figure the
@@ -928,8 +933,7 @@ Budget means. The rules that hold every screen to the same shape:
   official paper (ADR-0023, revised): Source Serif 4 (self-hosted, OFL) for the body and Fraunces
   (self-hosted, OFL) for the headings, the three sentences and the step numerals; hairline rules
   instead of boxed cards, square corners, small-capital labels instead of pills, a paper header
-  under a green rule, and seven numerals on a rule for the road. Every text pairing in both themes
-  holds 4.5:1 (re-audited after the change: the badge inks sit at 6.3:1 or better on the paper,
+  under a green rule, and seven numerals on a rule for the road. Every text pairing holds 4.5:1 (re-audited after the change: the badge inks sit at 6.3:1 or better on the paper,
   green at 6.2:1, brass ink and the muted numerals at 5.6:1), every control 44px, and the
   reduced-motion rule stands.
 - **Word budgets, measured then pinned** (`apps/web/src/journey/budgets.test.tsx`): visible words

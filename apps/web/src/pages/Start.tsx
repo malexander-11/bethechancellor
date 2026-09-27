@@ -14,7 +14,8 @@ export const PLAYTIME_MINUTES = 10;
 /**
  * Step 1: become Chancellor. The premise in one sentence, how long it takes, and the one button.
  * No tutorial: each screen says what to do when you reach it. The advisers, the rules, the
- * figures and the red lines wait for the screens where they matter.
+ * figures and the red lines wait for the screens where they matter; the way to every lever is in
+ * the footer, with the other utilities.
  */
 export function StartPage() {
   usePageTitle('Become Chancellor');
@@ -32,15 +33,11 @@ export function StartPage() {
           <p className="opening__meta">
             <span>About {PLAYTIME_MINUTES} minutes</span>
             <span>Seven steps</span>
-            <span>No right answer</span>
           </p>
           <p className="opening__actions">
             <StepLink to="/outlook" className="btn btn--primary btn--big">
               Build my Budget
             </StepLink>
-          </p>
-          <p className="opening__quiet">
-            <StepLink to="/budget/taxes">Every lever</StepLink>
           </p>
         </div>
         <div className="opening__art">

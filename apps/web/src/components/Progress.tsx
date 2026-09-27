@@ -1,8 +1,6 @@
 import { enterable, type JourneyStep } from '@btc/engine';
-import { dateFor } from '../data';
 import { StepLink } from '../journey/links';
 import { useBudget } from '../state/budget';
-import { Dateline } from './Dateline';
 
 type Stop = 'start' | 'outlook' | 'pm' | 'budget' | 'forecast' | 'final' | 'budget-day';
 
@@ -52,8 +50,8 @@ export interface SubStep {
 }
 
 /**
- * The road, as a running head: "Step 3 of 7 · Set your priorities", the in-game date, and seven
- * numerals on a rule, one per step. A step you have reached is a link, so you can go back; the one
+ * The road, as a running head: "Step 3 of 7 · Set your priorities" and seven numerals on a
+ * rule, one per step. A step you have reached is a link, so you can go back; the one
  * you are at is marked; the ones ahead are inert. It reads the same `enterable` rule as the guard
  * on every page, so it never offers a link that would only bounce (ADR-0014). The numerals carry
  * their names for a screen reader; sighted readers get the name of the step they are on.
@@ -90,7 +88,6 @@ export function Progress({
             </span>
           ) : null}
         </p>
-        <Dateline now={dateFor(step)} />
       </div>
       <ol className="progress__stops">
         {STOPS.map((s, i) => {

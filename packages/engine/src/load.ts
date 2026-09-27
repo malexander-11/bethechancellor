@@ -3,7 +3,6 @@ import { DataError } from './errors.js';
 import {
   advisersFileSchema,
   briefingsFileSchema,
-  calendarSchema,
   drawsFileSchema,
   pmFileSchema,
   ministersFileSchema,
@@ -35,7 +34,6 @@ import {
 import type {
   AdvisersFile,
   BriefingsFile,
-  Calendar,
   DrawsFile,
   PmFile,
   MinistersFile,
@@ -161,10 +159,6 @@ export function parseDraws(json: unknown): DrawsFile {
   return parseWith(drawsFileSchema, json, 'forecast draws');
 }
 
-export function parseCalendar(json: unknown): Calendar {
-  return parseWith(calendarSchema, json, 'journey calendar');
-}
-
 export function parsePm(json: unknown): PmFile {
   return parseWith(pmFileSchema, json, 'the Prime Minister');
 }
@@ -225,7 +219,6 @@ export interface Dataset {
   advisers?: AdvisersFile;
   briefings?: BriefingsFile;
   draws?: DrawsFile;
-  calendar?: Calendar;
   pm?: PmFile;
   ministers?: MinistersFile;
   interventions?: InterventionsFile;
@@ -707,8 +700,9 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   if (ds.guide) {
-    // Every screen a player meets has its guide entry, and every bracketed word its definition:
-    // a missing entry would leave a step with no title, a missing term a hover with no answer.
+    // Every screen a player meets has its guide entry, and every bracketed word in its line its
+    // definition: a missing entry would leave a step with no title, a missing term a hover with
+    // no answer.
     const covered = new Set(ds.guide.stages.map((s) => s.step));
     for (const step of GUIDED_STEPS) {
       if (!covered.has(step)) problems.push(`the guide has no entry for ${step}`);
@@ -723,16 +717,6 @@ export function validateDataset(ds: Dataset): string[] {
             problems.push(`guide ${stage.step} refers to unknown glossary term "${id}"`);
           }
         }
-      }
-    }
-  }
-  if (ds.calendar) {
-    const budgetDay = ds.rules.assessment.nextFormalAssessmentOn;
-    for (const stage of ds.calendar.stages) {
-      if (stage.on > budgetDay) {
-        problems.push(
-          `calendar puts ${stage.step} on ${stage.on}, after the Budget on ${budgetDay}`,
-        );
       }
     }
   }

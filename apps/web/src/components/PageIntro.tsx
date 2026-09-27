@@ -1,9 +1,8 @@
-import { STEP_COUNT, segments, termsFor, type JourneyStep } from '@btc/engine';
+import { STEP_COUNT, segments, type JourneyStep } from '@btc/engine';
 import { Fragment, type ReactNode } from 'react';
-import { glossary, guideFor } from '../data';
+import { guideFor } from '../data';
 import { usePageTitle } from '../journey/title';
 import type { SubStep } from './Progress';
-import { SourceList } from './SourceLink';
 import { Term } from './Term';
 
 export function Marked({ text }: { text: string }) {
@@ -23,11 +22,11 @@ export function Marked({ text }: { text: string }) {
 }
 
 /**
- * The head of every screen: one heading, one line saying what to do, and "Why this matters"
- * folded beneath for anyone who wants the reason and the words. The copy is the guide's
- * (data/journey/guide.json): chrome, with no badge and no figure that is not sourced. A page may
- * put its own heading and line in front of the guide's, when the screen is one of several in a
- * step and has a name of its own.
+ * The head of every screen: one heading and one line saying what to do. Nothing folds beneath it
+ * (Phase 23): the reason a screen matters is on the screen or nowhere, and a word a newcomer must
+ * know is explained where it is used. The copy is the guide's (data/journey/guide.json): chrome,
+ * with no badge and no figure that is not sourced. A page may put its own heading and line in
+ * front of the guide's, when the screen is one of several in a step and has a name of its own.
  */
 export function PageIntro({
   step,
@@ -58,36 +57,11 @@ export function PageIntro({
       : plainTitle,
   );
   if (!stage) return null;
-  const terms = termsFor(glossary, stage);
   return (
     <header className="intro">
       <h1 className="intro__title">{title ?? stage.title}</h1>
       <p className="intro__lead">{lead ?? <Marked text={stage.now} />}</p>
       {children}
-      <details className="more">
-        <summary>Why this matters</summary>
-        <div className="more__body">
-          <p>
-            <Marked text={stage.doing} />
-          </p>
-          <p>
-            <Marked text={stage.why} />
-          </p>
-          {terms.length > 0 ? (
-            <dl className="intro__terms">
-              {terms.map(({ id, term }) => (
-                <div key={id}>
-                  <dt>{term.term}</dt>
-                  <dd>
-                    {term.short}
-                    <SourceList as="span" className="briefing__sources" refs={term.sources} />
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          ) : null}
-        </div>
-      </details>
     </header>
   );
 }

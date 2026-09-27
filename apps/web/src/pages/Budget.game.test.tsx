@@ -87,7 +87,7 @@ describe('the package, with a game under way', () => {
     expect(
       within(panel).getByText(/nothing left to trim that is not a classroom/),
     ).toBeInTheDocument();
-    expect(within(panel).getAllByText('Simulated').length).toBeGreaterThan(0);
+    expect(within(panel).getAllByText('Game judgement').length).toBeGreaterThan(0);
     // Untouched, the Justice Secretary is still asking.
     expect(within(panel).getByText(/Every sentence served needs a cell/)).toBeInTheDocument();
   });

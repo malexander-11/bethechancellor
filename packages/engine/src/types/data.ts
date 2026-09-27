@@ -46,7 +46,6 @@ import type {
   suggestionRuleSchema,
 } from '../schema/context.schema.js';
 import type {
-  calendarSchema,
   drawOutcomeSchema,
   drawRevisionSchema,
   drawsFileSchema,
@@ -133,7 +132,6 @@ export type DrawOutcome = z.infer<typeof drawOutcomeSchema>;
 export type DrawRevision = z.infer<typeof drawRevisionSchema>;
 export type MacroCandidateName = z.infer<typeof macroCandidateSchema>;
 export type SimulatedLine = z.infer<typeof simulatedLineSchema>;
-export type Calendar = z.infer<typeof calendarSchema>;
 export type PmFile = z.infer<typeof pmFileSchema>;
 export type Priority = z.infer<typeof prioritySchema>;
 export type Promise_ = z.infer<typeof promiseSchema>;

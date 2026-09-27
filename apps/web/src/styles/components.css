@@ -1,5 +1,5 @@
 /*
- * The journey: the dateline, the stepper, the guide, the beats, and the cards each step is made
+ * The journey: the stepper, the guide, and the cards each step is made
  * of. Plain cards on a plain page; the score stays visible through the stepper, the summary
  * strip, the status words and the reception bars, not through furniture (ADR-0016).
  */
@@ -11,8 +11,8 @@
 /* ---------------------------------------------------------- the progress */
 
 /*
- * "Step 3 of 7 · Set your priorities", the in-game date, and seven numerals on a brass rule, like
- * a document's running head. A numeral behind you is a link, the one you are at is set in green
+ * "Step 3 of 7 · Set your priorities" and seven numerals on a brass rule, like a document's
+ * running head. A numeral behind you is a link, the one you are at is set in green
  * with the rule thickened beneath it, the ones ahead are muted (ADR-0014, ADR-0023).
  */
 .progress {
@@ -43,26 +43,6 @@
   margin-left: 8px;
   color: var(--ink);
   font-weight: 600;
-}
-
-.dateline {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2px 8px;
-  margin: 0;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-}
-
-.dateline__countdown {
-  font-weight: 600;
-}
-
-.dateline__countdown::before {
-  content: '·';
-  margin-right: 8px;
-  font-weight: 400;
 }
 
 .progress__stops {
@@ -128,22 +108,6 @@
   margin: 0;
   font-size: 1.125rem;
   line-height: 1.5;
-}
-
-.intro__terms {
-  display: grid;
-  gap: 6px;
-  margin: 8px 0 0;
-  padding: 8px 0 0;
-  border-top: 1px solid var(--border);
-}
-
-.intro__terms dt {
-  font-weight: 600;
-}
-
-.intro__terms dd {
-  margin: 0;
 }
 
 /* ------------------------------------------------ the Treasury's briefing */
@@ -291,20 +255,6 @@
 
 .opening__actions {
   margin: 0 0 12px;
-}
-
-.opening__quiet {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 20px;
-  margin: 0;
-  font-size: 0.9375rem;
-}
-
-.opening__quiet a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
 }
 
 .opening__art {

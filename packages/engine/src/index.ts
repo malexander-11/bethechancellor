@@ -20,7 +20,6 @@ export {
   parseBriefings,
   parseReception,
   parseDraws,
-  parseCalendar,
   parsePm,
   parseMinisters,
   parseInterventions,

@@ -1,28 +1,65 @@
 import type { Badge } from '@btc/engine';
-import { Link } from 'react-router-dom';
-import { useWorkings } from '../journey/workings';
+import { Link, useLocation } from 'react-router-dom';
+import { StepLink } from '../journey/links';
+import { useWorkingsSwitch } from '../journey/workings';
 import { BADGE_LABELS, LabelBadge } from './LabelBadge';
 
 const BADGES = Object.keys(BADGE_LABELS) as Badge[];
 
+/** The switch that puts the workings on show. The sources are never gone, only one click away. */
+function WorkingsSwitch() {
+  const { workings, setWorkings, forced } = useWorkingsSwitch();
+  const explanation = forced
+    ? 'This page is the workings.'
+    : 'Show where every number comes from: sources, derivations and breakdowns.';
+  // The explanation sits outside the label, so it describes the switch without renaming it.
+  return (
+    <>
+      <label className="workings-switch" title={explanation}>
+        <input
+          type="checkbox"
+          role="switch"
+          checked={workings}
+          disabled={forced}
+          aria-describedby="workings-switch-note"
+          onChange={(e) => setWorkings(e.target.checked)}
+        />
+        <span>Show workings</span>
+      </label>
+      <span id="workings-switch-note" className="sr-only">
+        {explanation}
+      </span>
+    </>
+  );
+}
+
 /**
- * The foot of every screen, in one line: what kind of numbers these are and where the rest is
- * written down, with what the badges mean one tap away. The paragraphs it used to carry live on
- * the About and Methodology pages.
+ * The foot of every screen: what kind of numbers these are, then the utilities in one row (the
+ * workings switch, the way to every lever, the sources and licence) and what the badges mean, one
+ * tap away. The utilities live here rather than in the header, where a reader looks for them
+ * once they want them (Phase 23). On the desk itself the "Every lever" link is not offered: the
+ * desk is every lever.
  */
 export function Disclaimer() {
-  const workings = useWorkings();
+  const { workings } = useWorkingsSwitch();
+  const { pathname } = useLocation();
+  const onDesk = pathname.startsWith('/budget/');
   return (
     <footer className="footer-note">
       <p>
-        {!workings ? (
-          <>
-            Every figure is sourced: turn on <strong>Show workings</strong> to see where.{' '}
-          </>
-        ) : null}
-        Official costings, badged where the arithmetic is ours; the reactions are judgements and say
-        so. <Link to="/about">Sources and licence</Link>.
+        The figures are official, or clearly marked as our own sums. The reactions are the game’s
+        opinion.
       </p>
+      <div className="footer-note__tools">
+        <WorkingsSwitch />
+        {!workings ? (
+          <span className="footer-note__hint">
+            Turn on Show workings to see where every figure comes from.
+          </span>
+        ) : null}
+        {onDesk ? null : <StepLink to="/budget/taxes">Every lever</StepLink>}
+        <Link to="/about">Sources and licence</Link>
+      </div>
       <details className="more more--quiet">
         <summary>What the badges mean</summary>
         <dl className="more__body badges-key">

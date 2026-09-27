@@ -5,9 +5,9 @@ import { sourceRefSchema } from './provenance.schema.js';
 const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
 
 /**
- * The guide (Phase 9): what a player is doing on each screen, why it matters and what to do now,
- * in plain English, plus a glossary of the dozen words a newcomer will not know. Both are chrome,
- * like the dateline: no badge, and no figure unless it carries a source (guide.test.ts).
+ * The guide (Phase 9, cut to one line in Phase 23): the heading of each screen and what to do
+ * now, in plain English, plus a glossary of the words a newcomer will not know, for the hover on
+ * the desk. Both are chrome: no badge, and no figure unless it carries a source (guide.test.ts).
  *
  * A term in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary reference; the page
  * renders it with the definition to hand.
@@ -28,11 +28,8 @@ export const guideStageSchema = z.strictObject({
   /** Which of the seven steps this screen belongs to; the package's three screens share one. */
   number: z.number().int().min(1).max(7),
   title: z.string().min(1).max(60),
-  doing: z.string().min(1).max(200),
-  why: z.string().min(1).max(220),
+  /** The one line under the heading: what to do on this screen. */
   now: z.string().min(1).max(200),
-  /** Glossary ids to list under "Words on this page", besides those the text brackets. */
-  terms: z.array(slug).default([]),
 });
 
 export const guideFileSchema = z

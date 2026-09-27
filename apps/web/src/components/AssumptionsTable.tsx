@@ -45,7 +45,7 @@ function Compare({ reading }: { reading: ContextReading }) {
 function Why({ reading }: { reading: ContextReading }) {
   return (
     <details className="reading__why">
-      <summary>Why this matters</summary>
+      <summary>Where these figures come from</summary>
       <p>{reading.text}</p>
       <div className="briefing__sources">
         <SourceLink ref={reading.obr.source} />

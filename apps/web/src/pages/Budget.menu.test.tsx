@@ -46,14 +46,14 @@ describe('the package in two parts', () => {
     const business = screen.getByRole('tabpanel');
     // A lever is a named group now, so it is found by its title whatever control it holds.
     expect(within(business).getByRole('group', { name: 'Business rates' })).toBeInTheDocument();
-    expect(within(business).getByText('Mechanical')).toBeInTheDocument();
+    expect(within(business).getByText('Worked out')).toBeInTheDocument();
     expect(
       within(business).getByRole('group', { name: 'Raise the bank surcharge from 3% to 5%' }),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByRole('tab', { name: /Capital gains/ }));
     const capital = screen.getByRole('tabpanel');
     // Certified rows and our own arithmetic sit side by side; the badge does the quarantining.
-    expect(within(capital).getAllByText('Direct costing').length).toBeGreaterThan(0);
+    expect(within(capital).getAllByText('Official figure').length).toBeGreaterThan(0);
     expect(within(capital).getAllByText('Assumption').length).toBeGreaterThan(0);
     expect(within(capital).getAllByText(/upper bound/).length).toBeGreaterThan(0);
     // Wealth and property is the second half of what was one crowded tab.

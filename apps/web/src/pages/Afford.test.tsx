@@ -57,7 +57,7 @@ describe('build your Budget: pay for it', () => {
     fireEvent.click(screen.getByText('The morning papers'));
     expect(papers).toHaveAttribute('open');
     const note = within(papers).getByRole('complementary', { name: /press summary/ });
-    expect(within(note).getByText('Simulated')).toBeInTheDocument();
+    expect(within(note).getByText('Game judgement')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/budget\/deliver\/2\?/),

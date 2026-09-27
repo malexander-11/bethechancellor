@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { journeyStepSchema, readingMeasureSchema } from './journey.schema.js';
-import { isoDateSchema, sourceRefSchema } from './provenance.schema.js';
+import { readingMeasureSchema } from './journey.schema.js';
+import { sourceRefSchema } from './provenance.schema.js';
 
 /**
  * The game layer (ADR-0011, ADR-0012). Everything in these files is a judgement nobody published,
@@ -72,20 +72,6 @@ export const drawsFileSchema = z
       ids.add(o.id);
     });
   });
-
-/** The in-game calendar: which date each stage is played on. The Budget date comes from the Charter. */
-export const calendarSchema = z.strictObject({
-  schemaVersion: z.literal(1),
-  stages: z
-    .array(
-      z.strictObject({
-        step: journeyStepSchema,
-        on: isoDateSchema,
-        label: z.string().min(1),
-      }),
-    )
-    .min(1),
-});
 
 /* ------------------------------------------------------------------ the PM */
 

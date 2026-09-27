@@ -190,24 +190,9 @@ hr {
   padding: 10px 16px 6px;
 }
 
-/* The two reference links and the switch share one line, under the name on a phone. */
-.site-tools {
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  gap: 0 20px;
-  align-items: center;
-  justify-content: space-between;
-}
-
 @media (min-width: 640px) {
   .site-header__inner {
     padding: 12px 24px;
-  }
-
-  .site-tools {
-    flex: 0 1 auto;
-    gap: 0 28px;
   }
 }
 
@@ -218,14 +203,6 @@ hr {
   font-weight: 600;
   line-height: 1.2;
   text-decoration: none;
-}
-
-.brand small {
-  display: block;
-  margin-top: 2px;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  font-weight: 400;
 }
 
 .site-nav {
@@ -253,7 +230,10 @@ hr {
   color: var(--ink);
 }
 
-/* The switch that puts the workings on show. The sources are never gone, only one click away. */
+/*
+ * The switch that puts the workings on show, in the footer with the other utilities (Phase 23).
+ * The sources are never gone, only one click away.
+ */
 .workings-switch {
   display: inline-flex;
   align-items: center;
@@ -1487,8 +1467,23 @@ details.table-view td:first-child {
   margin: 0 0 8px;
 }
 
-.footer-note__workings {
-  font-weight: 600;
+/* The utilities in one row: the workings switch and its hint, every lever, the sources. */
+.footer-note__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 20px;
+  margin: 0 0 8px;
+}
+
+.footer-note__tools a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.footer-note__hint {
+  color: var(--ink-2);
 }
 
 /* ------------------------------------------------------------- scorecard */

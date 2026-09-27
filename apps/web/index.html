@@ -13,17 +13,6 @@
     />
     <meta name="theme-color" content="#f3eee2" />
     <title>Be the Chancellor</title>
-    <script>
-      // Light by default. A dark theme chosen earlier is applied before the first paint.
-      try {
-        if (localStorage.getItem('btc.theme.v1') === 'dark') {
-          document.documentElement.dataset.theme = 'dark';
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#131c17');
-        }
-      } catch (e) {
-        // No storage: the page stays light.
-      }
-    </script>
   </head>
   <body>
     <div id="root"></div>

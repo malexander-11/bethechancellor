@@ -77,3 +77,12 @@ the header, remembered in the browser and applied before the first paint so a da
 flashes light. The tokens moved from a `prefers-color-scheme` media query to
 `:root[data-theme='dark']`; the walk sets the switch for its dark run, and the audits pass as
 before.
+
+## Revision (2026-09-27, later): light only
+
+The dark theme went the same day. The user asked for it to go, and a page read as an official
+paper needs one face. `theme.tsx`, its switch and test, the `:root[data-theme='dark']` token block
+and the first-paint script were deleted; the tokens are one set, `theme-color` is the paper, and
+the walk and the audits run light and reduced-motion only. The "Show workings" switch left the
+header for the footer at the same time, with the way to every lever and the sources beside it: the
+header is the name of the game and the two reference pages, nothing else (Phase 23).

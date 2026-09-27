@@ -14,7 +14,6 @@ context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the late
                           suggestion rules, published forecast ranges and the assumption scenarios
 journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/briefings.json    sourced adviser briefings per step and lever group
-journey/calendar.json     the in-game date of each stage
 journey/pm.json           the Prime Minister: the eight priorities, the manifesto red lines
 journey/options.json      the ways to deliver each priority, the ways to afford it, the add-ons (ADR-0022)
 journey/ministers.json    a minister's lines for every spending and welfare lever
@@ -27,7 +26,7 @@ journey/households.json   five household archetypes and the levers that touch th
 journey/incidence.json    who each lever falls on, for the close
 journey/verdicts.json     the kinds of Budget the close chooses between
 journey/reception.json    Budget day: three audiences, their rules, bands, points and caps (ADR-0013)
-journey/guide.json        the guide at the head of every screen: step, title, doing, why, now
+journey/guide.json        the guide at the head of every screen: step, title, now
 journey/glossary.json     the words a newcomer will not know, defined in words
 raw/<source-id>/          committed copies of small source files, with sha256 in the registry
 derived/                  pipeline outputs (regenerated in CI and compared with the commit)
@@ -239,11 +238,12 @@ says so above the table.
 
 One guide entry per screen: `step`, `number` (one to seven; the package's screens, the two
 forecast screens and the two final-choices screens each share a number), `title` (the page's
-heading, unless the page names itself, as each priority screen does), and `doing`, `why`, `now`,
-at most sixty words together. A word in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary
-reference and must exist in `glossary.json`; `terms` lists more to show under "Words on this
-page". Guide and glossary are chrome: no badge, and no figure unless the glossary entry carries a
-source.
+heading, unless the page names itself, as each priority screen does) and `now`, the one line under
+it saying what to do, at most ten words on the road. A word in square brackets, `[headroom]` or
+`[the OBR](obr)`, is a glossary reference and must exist in `glossary.json`; the desk's tooltips
+read the glossary too. Guide and glossary are chrome: no badge, and no figure unless the glossary
+entry carries a source. (The `doing`, `why` and `terms` fields, and the "Why this matters" fold
+they filled, went in Phase 23.)
 
 ### Priorities and options (`data/journey/pm.json`, `options.json`, ADR-0022)
 

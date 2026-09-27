@@ -43,3 +43,10 @@ default. This changes how the contract is presented, not the contract: every fig
 engine's or a document's, every badge stays on show whatever the switch says, and the sources are
 one click away on every page. A page that offered no way to reach a source with the switch on would
 break this decision. The reference pages force the switch on, because they are the workings.
+
+## Revision, 2026-09-27 (Phase 23)
+
+The words on the badges were made plainer, for a reading age of ten to twelve: **Official figure**
+(`direct`), **Worked out** (`mechanical`), **Assumption**, **Commentary** and **Game judgement**
+(`simulated`). The ids in the data, the classes on the page and what each badge means are
+unchanged; only the label and its tooltip moved.

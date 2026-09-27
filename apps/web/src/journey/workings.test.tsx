@@ -36,12 +36,12 @@ describe('the "Show workings" switch', () => {
     expect(sourceLinks()).toBe(0);
     expect(screen.queryByRole('button', { name: /Detail and sources/ })).toBeNull();
     // The badges that say what kind of number something is stay whatever the switch says.
-    expect(screen.getAllByText('Direct costing').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Official figure').length).toBeGreaterThan(0);
     // The expert controls and the ready-made Budgets are workings too.
     expect(screen.queryByText(/Charge interest on extra borrowing/)).toBeNull();
     expect(screen.queryByText('Try a ready-made Budget')).toBeNull();
-    // The footer says where the sources went.
-    expect(screen.getByText(/Every figure is sourced/)).toBeInTheDocument();
+    // The footer says where the sources went, beside the switch that shows them.
+    expect(screen.getByText(/Turn on Show workings/)).toBeInTheDocument();
   });
 
   it('puts everything back when switched on, and remembers the choice', () => {
@@ -53,7 +53,7 @@ describe('the "Show workings" switch', () => {
     expect(sourceLinks()).toBeGreaterThan(0);
     expect(screen.getAllByRole('button', { name: /Detail and sources/ }).length).toBeGreaterThan(0);
     expect(screen.getByText(/Charge interest on extra borrowing/)).toBeInTheDocument();
-    expect(screen.queryByText(/Every figure is sourced/)).toBeNull();
+    expect(screen.queryByText(/Turn on Show workings/)).toBeNull();
     expect(window.localStorage.getItem(KEY)).toBe('on');
   });
 
@@ -84,7 +84,7 @@ describe('the "Show workings" switch', () => {
     expect(screen.getByText('Five-year paths')).toBeInTheDocument();
   });
 
-  it('is off on the opening screen, and the header switch is the one way to turn it on', () => {
+  it('is off on the opening screen, and the footer switch is the one way to turn it on', () => {
     at('/');
     // The opening carries no toggles of its own: one sentence, the playtime and the button.
     expect(screen.queryByRole('checkbox', { name: /Show the workings/ })).toBeNull();

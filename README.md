@@ -20,7 +20,7 @@ number still comes from an official source or a stated calculation on one, badge
 and the sources and breakdowns sit behind a "Show workings" switch, off by default. A first
 playthrough's required reading and decisions come to about nine minutes (an estimate from the
 rendered screens, not user testing; ADR-0023). Every screen names itself, can be reached by
-keyboard and screen reader, holds 4.5:1 contrast in light and dark themes (light by default, dark one switch away), keeps every control at
+keyboard and screen reader, holds 4.5:1 contrast, keeps every control at
 44px and says met or missed in words.
 
 Seven steps. **Become Chancellor**: one sentence, the playtime, the button. **Your starting
@@ -93,8 +93,8 @@ the 28 October 2026 forecast.
   policy costings and OBR forecast lines. They are shown as numbers, with the source and every
   transformation step visible.
 - **Second-round effects are words, not numbers.** Behavioural and macroeconomic knock-on
-  effects are described qualitatively with sources. The interface labels every figure as a
-  direct costing, a mechanical consequence, an assumption, or commentary.
+  effects are described qualitatively with sources. The interface labels every figure as an
+  official figure, worked out, an assumption, or commentary.
 - **The game may judge, and says so.** What the Prime Minister wants, what a minister says at a
   cut, how a market or a household reads the Budget: these are judgements nobody published, badged
   **simulated** wherever they appear. A simulated line may quote a sourced fact and read an engine
@@ -107,11 +107,10 @@ the 28 October 2026 forecast.
   inputs by a test. Where the base is contested, the card says so before it shows the number; where
   no published figure exists at all, there is no lever.
 - **The page is plain, and the plainness is honest.** One accent, two self-hosted serifs under the
-  OFL, nothing under 14px, every text colour checked for contrast in both themes; there are no
-  images.
+  OFL, nothing under 14px, every text colour checked for contrast; there are no images.
   The badges never become decoration, a verdict is always a word beside an icon and never a colour
-  alone, the provenance drawer never loses a table, and the only facts on screen that the engine
-  did not compute are the date and the countdown, which carry no badge.
+  alone, the provenance drawer never loses a table, and the guide's words, the only text on screen the
+  engine did not compute, carry no badge.
 - **Rebasing is a data refresh.** The baseline forecast is a versioned "vintage". When the OBR
   publishes a new forecast (next: Budget, 28 October 2026) the data is regenerated and the app
   re-reads it.

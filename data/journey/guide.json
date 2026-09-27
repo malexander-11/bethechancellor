@@ -5,123 +5,73 @@
       "step": "start",
       "number": 1,
       "title": "You have been appointed Chancellor.",
-      "doing": "You are about to write a Budget: the taxes and the spending for the next few years.",
-      "why": "The [fiscal rules] limit how much you can borrow, and the [OBR](obr) checks your sums.",
-      "now": "Take the job, then choose what you will plan on.",
-      "terms": ["headroom", "manifesto", "gdp"]
+      "now": "Take the job, then choose what you will plan on."
     },
     {
       "step": "outlook",
       "number": 2,
       "title": "Your starting position",
-      "doing": "The Treasury’s briefing: where the public finances stand, and the forecast you will build your Budget on.",
-      "why": "A rosier forecast gives you more to spend now. The [OBR](obr) publishes its own forecast later and will not care what you assumed; your [headroom] is whatever it leaves you.",
-      "now": "Choose the forecast you’ll plan on, and your headroom target.",
-      "terms": ["fiscal-rules", "gilts", "gdp"]
+      "now": "Choose the forecast you’ll plan on, and your headroom target."
     },
     {
       "step": "pm",
       "number": 3,
       "title": "What is this Budget for?",
-      "doing": "Tell the Prime Minister what this Budget is for: rank up to three of eight priorities.",
-      "why": "The order matters: the first is the Budget’s headline. Nothing is paid for yet; the ways to deliver each come next, costed one by one. The [manifesto] red lines still apply.",
-      "now": "Tick up to three, in the order they matter.",
-      "terms": ["headroom", "certified"]
+      "now": "Tick up to three, in the order they matter."
     },
     {
       "step": "deliver",
       "number": 4,
       "title": "Build your Budget",
-      "doing": "One screen for each priority you agreed: a few costed ways to deliver it, from the minister responsible.",
-      "why": "Every option is a set of the game’s levers, priced against your Budget as it stands, with the [headroom] it would leave; two that count the same money cannot both be on.",
-      "now": "Tick the ways you want, then pay for them.",
-      "terms": ["headroom", "earliest-start"]
+      "now": "Tick the ways you want, then pay for them."
     },
     {
       "step": "afford",
       "number": 4,
       "title": "Pay for it",
-      "doing": "The gap between what you chose and the margin you set out to keep, and ways to close it, grouped by who pays.",
-      "why": "Each option carries its badge, its [manifesto] red line and its [earliest start](earliest-start): what it costs you politically as well as in money.",
-      "now": "Choose who pays. Leave a gap if you mean to.",
-      "terms": ["headroom", "manifesto", "earliest-start"]
+      "now": "Choose who pays. Leave a gap if you mean to."
     },
     {
       "step": "taxes",
       "number": 4,
       "title": "Build the package",
-      "doing": "The details of the taxes: every lever, one group at a time, when an option is not quite right.",
-      "why": "Three taxes raise most of it, and the [manifesto] fences them off. A lever that breaks a promise warns in red.",
-      "now": "Move what you want, then go back to the options. Chosen ones are pinned at the top of their groups.",
-      "terms": ["headroom", "current-budget", "borrowing", "hmrc-points", "certified", "uprating"]
+      "now": "Move what you want, then go back to the options. Chosen ones are pinned at the top of their groups."
     },
     {
       "step": "spending",
       "number": 4,
       "title": "Build the package",
-      "doing": "The details of the spending: every department, programme and benefit line, when an option is not quite right.",
-      "why": "Day-to-day budgets are set for three years. Investment counts against the debt rule, not the day-to-day one.",
-      "now": "Set the departments, the [flagship] programmes, investment and welfare, then go back. Ministers will tell you what each change means.",
-      "terms": [
-        "headroom",
-        "welfare-cap",
-        "barnett",
-        "spending-review",
-        "settlement",
-        "real-terms",
-        "protected",
-        "unprotected",
-        "reserve",
-        "triple-lock",
-        "pip",
-        "nao",
-        "uprating"
-      ]
+      "now": "Set the departments, the [flagship] programmes, investment and welfare, then go back. Ministers will tell you what each change means."
     },
     {
       "step": "forecast",
       "number": 5,
       "title": "The forecast arrives",
-      "doing": "The [OBR](obr) hands you the forecast your Budget will be judged against.",
-      "why": "It was fixed the day you chose your starting position, and it may not match it. Your [headroom] can rise or fall.",
-      "now": "Open it and see what it does to your plans.",
-      "terms": ["gilts", "rpi", "certified"]
+      "now": "Open it and see what it does to your plans."
     },
     {
       "step": "compromise",
       "number": 5,
       "title": "Make the sums add up",
-      "doing": "Set the [headroom] you have against the headroom you wanted, and act on the difference.",
-      "why": "Short of it, every route costs something: more of the ways to pay, less of what you chose, a thinner margin. Over it, every pound spent is margin gone.",
-      "now": "Take the routes you can live with.",
-      "terms": ["fiscal-rules", "borrowing", "escape-clause", "certified"]
+      "now": "Take the routes you can live with."
     },
     {
       "step": "rabbit",
       "number": 6,
       "title": "Anything for the speech?",
-      "doing": "Up to three small announcements, each already costed; or keep the headroom and make that the story.",
-      "why": "An add-on gets a headline. It is also money you no longer have in reserve, and each is priced against the Budget as it stands.",
-      "now": "Tick up to three, then review your Budget.",
-      "terms": ["headroom"]
+      "now": "Tick up to three, then review your Budget."
     },
     {
       "step": "review",
       "number": 6,
       "title": "Your Budget, reviewed",
-      "doing": "What you prioritised, what you chose to do, how you are paying for it and where that leaves you.",
-      "why": "This is the Budget the House, the markets and the public will judge. Nothing is final until you deliver it, so anything here can still change.",
-      "now": "Change anything you like, then deliver your Budget.",
-      "terms": ["headroom"]
+      "now": "Change anything you like, then deliver your Budget."
     },
     {
       "step": "budget-day",
       "number": 7,
       "title": "What your Budget means",
-      "doing": "Your Budget in three sentences, then how your backbenchers, the markets and the public take it.",
-      "why": "Each reaction follows from what you chose, and says which choices caused it. The speech, the households and the documents are one fold away.",
-      "now": "Share it, change something, or play again.",
-      "terms": ["headroom", "gilts", "manifesto", "gdp"]
+      "now": "Share it, change something, or play again."
     }
   ]
 }

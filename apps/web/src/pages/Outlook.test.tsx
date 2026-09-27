@@ -32,7 +32,7 @@ describe('choosing what to plan on', () => {
     // The £20bn rule of thumb is a judgement, badged, one fold away.
     fireEvent.click(screen.getByText('Why about £20bn?'));
     const note = screen.getByRole('complementary', { name: /rule of thumb/ });
-    expect(within(note).getByText('Simulated')).toBeInTheDocument();
+    expect(within(note).getByText('Game judgement')).toBeInTheDocument();
     expect(within(note).getByText(/Nobody has published that number/)).toBeInTheDocument();
     // What the government has already decided since March, on its own figures, behind "See the numbers".
     fireEvent.click(screen.getByText('See the numbers'));

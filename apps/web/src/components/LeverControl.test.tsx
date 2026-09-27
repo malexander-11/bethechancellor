@@ -13,7 +13,7 @@ describe('LeverControl', () => {
     const box = screen.getByRole('checkbox', { name: /End the personal tax threshold freeze/ });
     fireEvent.click(box);
     expect(onChange).toHaveBeenCalledWith(1);
-    expect(screen.getByText('Direct costing')).toBeInTheDocument();
+    expect(screen.getByText('Official figure')).toBeInTheDocument();
   });
 
   it('reports borrowing for a capital lever and shows a Barnett note for comparable departments', () => {

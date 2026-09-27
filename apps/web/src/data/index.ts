@@ -1,7 +1,6 @@
 import {
   parseAdvisers,
   parseBriefings,
-  parseCalendar,
   parseDraws,
   parsePm,
   parseMinisters,
@@ -34,7 +33,6 @@ import {
 } from '@btc/engine';
 import advisersJson from '@data/journey/advisers.json';
 import briefingsJson from '@data/journey/briefings.json';
-import calendarJson from '@data/journey/calendar.json';
 import drawsJson from '@data/journey/draws.json';
 import pmJson from '@data/journey/pm.json';
 import ministersJson from '@data/journey/ministers.json';
@@ -72,7 +70,6 @@ export const advisers = parseAdvisers(advisersJson);
 export const briefings = parseBriefings(briefingsJson);
 export const reception = parseReception(receptionJson);
 export const draws = parseDraws(drawsJson);
-export const calendar = parseCalendar(calendarJson);
 export const pm = parsePm(pmJson);
 export const ministers = parseMinisters(ministersJson);
 export const interventions = parseInterventions(interventionsJson);
@@ -112,7 +109,6 @@ const problems = validateDataset({
   advisers,
   briefings,
   draws,
-  calendar,
   pm,
   ministers,
   interventions,
@@ -134,18 +130,6 @@ if (problems.length > 0) {
 export const adviserById: ReadonlyMap<string, Adviser> = new Map(
   advisers.advisers.map((a) => [a.id, a] as const),
 );
-
-/**
- * The in-game date a step is played on. Noon UTC, so the day survives any browser timezone. The
- * Budget date itself comes from the Charter and is not repeated in the calendar.
- */
-export function dateFor(step: JourneyStep): Date {
-  const on =
-    calendar.stages.find((s) => s.step === step)?.on ??
-    calendar.stages[0]?.on ??
-    rules.assessment.nextFormalAssessmentOn;
-  return new Date(`${on}T12:00:00Z`);
-}
 
 /** The guide entry for a screen; the old step names find their screen. */
 export function guideFor(step: JourneyStep) {

@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
   GUIDED_STEPS,
   guideFor,
-  guideWords,
   plainText,
   segments,
   stageTerms,
@@ -12,6 +11,7 @@ import { loadDataset } from './fixtures.js';
 
 const ds = loadDataset();
 const FIGURE = /£\d|\d{3},\d{3}|\d+%|\d+bn/;
+const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 
 describe('the guide and the glossary', () => {
   it('has an entry for every screen, numbered one to seven in the order they are met', () => {
@@ -27,10 +27,13 @@ describe('the guide and the glossary', () => {
     expect(validateDataset(ds).filter((p) => /guide|glossary/.test(p))).toEqual([]);
   });
 
-  it('says what you are doing, why, and what to do now in at most sixty words', () => {
+  it('says what to do now in one short line, and quotes no figure in it', () => {
     for (const stage of ds.guide.stages) {
-      const n = guideWords(stage);
-      expect(n, `${stage.step} guide runs to ${n} words`).toBeLessThanOrEqual(60);
+      const line = plainText(stage.now);
+      const n = words(line);
+      expect(n, `${stage.step}: "${stage.now}" runs to ${n} words`).toBeLessThanOrEqual(20);
+      // The guide carries no sources, so it may quote no figure at all.
+      expect(FIGURE.test(line), `${stage.step}: "${stage.now}" quotes a figure`).toBe(false);
     }
   });
 
@@ -38,12 +41,6 @@ describe('the guide and the glossary', () => {
     for (const stage of ds.guide.stages) {
       for (const id of stageTerms(stage)) {
         expect(ds.glossary.terms[id], `${stage.step} refers to unknown term ${id}`).toBeDefined();
-      }
-      for (const text of [stage.doing, stage.why, stage.now]) {
-        // The guide carries no sources, so it may quote no figure at all.
-        expect(FIGURE.test(plainText(text)), `${stage.step}: "${text}" quotes a figure`).toBe(
-          false,
-        );
       }
     }
     for (const [id, term] of Object.entries(ds.glossary.terms)) {

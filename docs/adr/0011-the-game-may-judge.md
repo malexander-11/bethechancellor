@@ -50,3 +50,9 @@ is, the citation says what it leans on. A test forbids the badge on levers; anot
 every simulated line quoting a figure carries a source; the close re-runs the engine rather than
 guessing. What the tool gives up is the pretence that it has no view. It has views now, about two
 hundred of them, and each one is labelled.
+
+## Revision, 2026-09-27 (Phase 23)
+
+The badge reads **Game judgement** on the page now, not "Simulated", with the tooltip "The game’s
+opinion, in a role’s voice. It quotes sources and never makes a number." The id `simulated`, the
+class and every rule above are unchanged (ADR-0002, revised the same day).

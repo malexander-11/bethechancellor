@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
-import { ThemeSwitch } from './journey/theme';
 import { WorkingsProvider, useWorkingsSwitch } from './journey/workings';
 import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
@@ -45,36 +44,11 @@ function RouteFocus() {
 }
 
 /**
- * The brass plate: the name (which is the way home), the two reference pages, and the switch that
- * puts the workings on show. The journey itself is not in the header: one road, entered at the
- * start and walked by the button at the foot of each page.
+ * The brass plate: the name (which is the way home) and the two reference pages. The journey
+ * itself is not in the header: one road, entered at the start and walked by the button at the
+ * foot of each page. The utilities (the workings switch, every lever, the sources) sit in the
+ * footer, where a reader looks for them, not above the story.
  */
-function WorkingsSwitch() {
-  const { workings, setWorkings, forced } = useWorkingsSwitch();
-  const explanation = forced
-    ? 'This page is the workings.'
-    : 'Show where every number comes from: sources, derivations and breakdowns.';
-  // The explanation sits outside the label, so it describes the switch without renaming it.
-  return (
-    <>
-      <label className="workings-switch" title={explanation}>
-        <input
-          type="checkbox"
-          role="switch"
-          checked={workings}
-          disabled={forced}
-          aria-describedby="workings-switch-note"
-          onChange={(e) => setWorkings(e.target.checked)}
-        />
-        <span>Show workings</span>
-      </label>
-      <span id="workings-switch-note" className="sr-only">
-        {explanation}
-      </span>
-    </>
-  );
-}
-
 function Shell() {
   const { workings } = useWorkingsSwitch();
   return (
@@ -87,16 +61,11 @@ function Shell() {
         <div className="site-header__inner">
           <NavLink to="/" className="brand" end>
             Be the Chancellor
-            <small>Every number sourced</small>
           </NavLink>
-          <div className="site-tools">
-            <nav className="site-nav" aria-label="Main">
-              <NavLink to="/methodology">Methodology</NavLink>
-              <NavLink to="/about">About &amp; sources</NavLink>
-            </nav>
-            <WorkingsSwitch />
-            <ThemeSwitch />
-          </div>
+          <nav className="site-nav" aria-label="Main">
+            <NavLink to="/methodology">Methodology</NavLink>
+            <NavLink to="/about">About &amp; sources</NavLink>
+          </nav>
         </div>
       </header>
       <main id="main" tabIndex={-1} className="page" data-workings={workings ? 'on' : 'off'}>

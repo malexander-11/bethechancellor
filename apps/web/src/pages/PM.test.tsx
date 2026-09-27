@@ -31,7 +31,7 @@ describe('agreeing the priorities with the Prime Minister', () => {
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     fireEvent.click(screen.getByText('What the Prime Minister has already done'));
     expect(screen.getByText(/VAT came off electricity bills/)).toBeInTheDocument();
-    expect(screen.getAllByText('Simulated').length).toBeGreaterThanOrEqual(3);
+    expect(screen.getAllByText('Game judgement').length).toBeGreaterThanOrEqual(3);
     expect(screen.getAllByRole('link', { name: /HMT|No10|Prime Minister/ }).length).toBeGreaterThan(
       0,
     );

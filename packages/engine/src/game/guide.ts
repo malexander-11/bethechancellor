@@ -1,10 +1,4 @@
-import type {
-  GlossaryFile,
-  GlossaryTerm,
-  GuideFile,
-  GuideStage,
-  JourneyStep,
-} from '../types/data.js';
+import type { GuideFile, GuideStage, JourneyStep } from '../types/data.js';
 
 /**
  * The guide: one entry per screen a player meets, in the order they meet them. The package's
@@ -74,32 +68,11 @@ export function plainText(text: string): string {
     .join('');
 }
 
-/** Every glossary id a stage refers to, bracketed in its text or listed, once each, in order. */
+/** Every glossary id a stage's line brackets, once each, in order. */
 export function stageTerms(stage: GuideStage): string[] {
   const ids: string[] = [];
-  for (const text of [stage.doing, stage.why, stage.now]) {
-    for (const s of segments(text)) {
-      if (s.kind === 'term' && !ids.includes(s.id)) ids.push(s.id);
-    }
+  for (const s of segments(stage.now)) {
+    if (s.kind === 'term' && !ids.includes(s.id)) ids.push(s.id);
   }
-  for (const id of stage.terms) if (!ids.includes(id)) ids.push(id);
   return ids;
-}
-
-/** The glossary entries a stage needs, resolved; an unknown id is dropped (the validator reports it). */
-export function termsFor(
-  glossary: GlossaryFile,
-  stage: GuideStage,
-): { id: string; term: GlossaryTerm }[] {
-  return stageTerms(stage).flatMap((id) => {
-    const term = glossary.terms[id];
-    return term ? [{ id, term }] : [];
-  });
-}
-
-/** Visible words in the three guide lines together: the budget is sixty. */
-export function guideWords(stage: GuideStage): number {
-  return [stage.doing, stage.why, stage.now]
-    .map((t) => plainText(t).trim().split(/\s+/).filter(Boolean).length)
-    .reduce((a, b) => a + b, 0);
 }
