@@ -68,13 +68,8 @@ describe('the readings of a Budget', () => {
     expect(read({ wuc: -5 }).welfareReversals).toBe(0);
   });
 
-  it('reads the game: red lines, flagships, themes and the breach', () => {
-    const game: GamePermalink = {
-      ...freshGame(7),
-      headroomTargetBn: 30,
-      priorities: ['defence', 'safer-streets'],
-      breachAccepted: true,
-    };
+  it('reads the game: red lines and priorities', () => {
+    const game: GamePermalink = { ...freshGame(), priorities: ['defence', 'safer-streets'] };
     const r = read({ itbr: 1, moj: 10 }, game);
     expect(r.promisesBroken).toBe(1);
     expect(r.manifestoBroken).toBe(1);
@@ -88,8 +83,10 @@ describe('the readings of a Budget', () => {
     // Two priorities ranked: not a single story, whatever the money behind either.
     expect(r.clearPriorityGbpm).toBe(0);
     expect(r.deliveredGbpm).toBeGreaterThan(1000);
-    expect(r.breachAccepted).toBe(1);
-    expect(r.headroomVsTargetGbpm).toBeCloseTo((r.stabilityHeadroomGbpm ?? 0) - 30000, 6);
+    // The target, the breach and the add-ons went with the forecast (Phase 24).
+    expect(r.breachAccepted).toBeUndefined();
+    expect(r.headroomVsTargetGbpm).toBeUndefined();
+    expect(r.rabbitGbpm).toBeUndefined();
     expect(r.rebellionRisk).toBe(2 + 1 + 0);
     // One priority ranked and delivered: a clear story worth what its options cost.
     const clear = read({ moj: 10 }, { ...game, priorities: ['safer-streets'] });
@@ -103,7 +100,7 @@ describe('the readings of a Budget', () => {
   });
 
   it('names the decisions behind each reading', () => {
-    const game: GamePermalink = { ...freshGame(7), priorities: ['safer-streets'] };
+    const game: GamePermalink = { ...freshGame(), priorities: ['safer-streets'] };
     const outcome = run({ itbr: 1, moj: 10, def5: 1 });
     const status = ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers);
     const { causes } = readingsWithCauses({

@@ -75,41 +75,9 @@
       "adviser": "permanent-secretary",
       "when": "all-priorities-funded",
       "line": {
-        "text": "Every priority you agreed with the Prime Minister has something behind it. What remains is whether the rules and your headroom survive the October forecast.",
-        "short": "Every priority has something behind it; now the rules and headroom must survive October.",
+        "text": "Every priority you agreed with the Prime Minister has something behind it. What remains is whether the rules hold, with headroom to spare.",
+        "short": "Every priority has something behind it. Now the rules must hold.",
         "sources": [],
-        "badge": "simulated"
-      }
-    },
-    {
-      "id": "cea-headroom-below-target",
-      "adviser": "chief-economic-adviser",
-      "when": "headroom-below-target",
-      "line": {
-        "text": "Headroom is below the target you set yourself. Remember what it is: a forecast margin. The OBR’s typical five-year error on receipts alone is about £32bn, bigger than any target on that list.",
-        "short": "Headroom is below the target you set yourself, and it is a forecast margin.",
-        "sources": [
-          {
-            "sourceId": "obr-efo-2026-03",
-            "paragraph": "3.4"
-          }
-        ],
-        "badge": "simulated"
-      }
-    },
-    {
-      "id": "cea-headroom-above-target",
-      "adviser": "chief-economic-adviser",
-      "when": "headroom-above-target",
-      "line": {
-        "text": "You are inside your own target. It is still a forecast: the OBR’s typical error over five years is about £32bn, and October’s numbers will be the OBR’s, not ours.",
-        "short": "Inside your own target, and still a forecast: October’s numbers will be the OBR’s.",
-        "sources": [
-          {
-            "sourceId": "obr-efo-2026-03",
-            "paragraph": "3.4"
-          }
-        ],
         "badge": "simulated"
       }
     }

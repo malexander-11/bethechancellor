@@ -277,22 +277,19 @@ export function matchScenario(
 }
 
 /**
- * How to name the current assumptions in a sentence elsewhere in the journey — "your Chief
- * Economic Adviser's view" rather than "Interest rates +0.75 pp · Inflation (RPI) +0.5 pp".
- * Returns null for sliders set by hand, where the figures themselves are the only honest summary.
- * Once the in-game OBR has spoken, the sliders are its forecast and are named as such, whichever
- * card they happen to coincide with.
+ * How to name the economy a Budget plans on, in a sentence elsewhere in the journey (Phase 24,
+ * ADR-0025): "the OBR’s March forecast" when every macro setting is the OBR's own, "today’s
+ * estimate" when they are the estimate every game plans on (the suggestion rule applied to every
+ * reading, `suggestedSettings`), and "your own figures" for anything else, which only a sandbox
+ * link can carry.
  */
 export function describeAssumptions(
-  cards: readonly ScenarioCard[],
   leverValues: Record<string, number>,
+  estimate: Record<string, number>,
   codes: readonly string[],
-  revealed = false,
-): string | null {
-  if (revealed) return 'the OBR’s October forecast';
-  const kind = matchScenario(cards, leverValues, codes);
-  if (kind === null) return null;
-  if (kind === 'baseline') return 'the OBR’s March forecast, unchanged';
-  const title = cards.find((c) => c.kind === kind)?.title ?? '';
-  return title.charAt(0).toLowerCase() + title.slice(1);
+): string {
+  const current = pick(leverValues, codes);
+  if (Object.values(current).every((v) => v === 0)) return 'the OBR’s March forecast';
+  if (sameValues(current, pick(estimate, codes))) return 'today’s estimate';
+  return 'your own figures';
 }

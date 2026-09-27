@@ -1,13 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  AMPLE_HEADROOM_GBPM,
+  THIN_HEADROOM_GBPM,
   budgetVerdict,
   computeOutcome,
-  drawForecast,
   freshGame,
-  macroCodesOf,
-  pickOutcome,
-  SEED_MAX,
-  SEED_MIN,
+  suggestedSettings,
   type GamePermalink,
 } from '../src/index.js';
 import { loadDataset } from './fixtures.js';
@@ -15,73 +13,55 @@ import { loadDataset } from './fixtures.js';
 const ds = loadDataset();
 const context = ds.contexts[ds.contexts.length - 1];
 if (!context) throw new Error('no context');
-const MACRO = macroCodesOf(context.readings);
+/** Today's estimate: every game is played on it (Phase 24). */
+const ESTIMATE = suggestedSettings(context.readings, ds.levers);
 const typicalErrorGbpm =
   (ds.vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
   (ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0);
 
-function seedFor(id: string): number {
-  for (let s = SEED_MIN; s <= SEED_MAX; s += 1)
-    if (pickOutcome(s, ds.draws.outcomes).id === id) return s;
-  throw new Error(`no seed lands on ${id}`);
-}
-
-/** A finished playthrough: the envelope open, the sliders the OBR's, the package as given. */
+/** A delivered Budget: today's estimate, the package as given. */
 function close(
   game: GamePermalink,
   policy: Record<string, number>,
-  snapshot?: Record<string, number>,
   extra: { credibilityShare?: number; rebellionRisk?: number } = {},
 ) {
-  const draw = drawForecast(game.seed, ds.draws, context!, ds.levers, ds.vintage);
   const outcome = computeOutcome({
     vintage: ds.vintage,
     rules: ds.rules,
     levers: ds.levers,
-    settings: {
-      leverValues: { ...policy, ...draw.values },
-      implementationYear: '2027-28',
-      ...(Object.keys(game.delays).length > 0 ? { implementationYearByCode: game.delays } : {}),
-      ...(Object.keys(draw.revisions).length > 0 ? { revisions: draw.revisions } : {}),
-    },
+    settings: { leverValues: { ...policy, ...ESTIMATE }, implementationYear: '2027-28' },
   });
-  return budgetVerdict({
-    vintage: ds.vintage,
-    rules: ds.rules,
-    levers: ds.levers,
-    pm: ds.pm,
-    options: ds.options,
-    draws: ds.draws,
-    context: context!,
-    incidence: ds.incidence,
-    kinds: ds.verdicts,
-    game: { ...game, revealed: true },
+  return {
     outcome,
-    ...(snapshot ? { snapshot } : {}),
-    macroCodes: MACRO,
-    typicalErrorGbpm,
-    credibilityShare: extra.credibilityShare ?? 0,
-    rebellionRisk: extra.rebellionRisk ?? 0,
-  });
+    verdict: budgetVerdict({
+      levers: ds.levers,
+      pm: ds.pm,
+      options: ds.options,
+      incidence: ds.incidence,
+      kinds: ds.verdicts,
+      game,
+      outcome,
+      typicalErrorGbpm,
+      credibilityShare: extra.credibilityShare ?? 0,
+      rebellionRisk: extra.rebellionRisk ?? 0,
+    }),
+  };
 }
+const verdictOf = (...args: Parameters<typeof close>) => close(...args).verdict;
 
 describe('the close', () => {
   it('says how each ambition fared, and how each promise was lost', () => {
-    const game: GamePermalink = {
-      ...freshGame(seedFor('adviser-right')),
-      priorities: ['safer-streets', 'nhs'],
-      delays: { moj: '2028-29' },
-    };
-    const v = close(game, { moj: 10, dhsc: 1, itbr: 1 });
+    const game: GamePermalink = { ...freshGame(), priorities: ['safer-streets', 'nhs'] };
+    const v = verdictOf(game, { moj: 10, dhsc: 1, itbr: 1 });
     const fates = Object.fromEntries(v.ambitions.priorities.map((p) => [p.title, p.fate]));
-    // Prisons are on but pushed back a year; health has moved without getting there.
-    expect(fates['Safer streets: prisons, police, borders']).toBe('delayed');
+    // Prisons are funded as chosen; health has moved without getting there.
+    expect(fates['Safer streets: prisons, police, borders']).toBe('delivered');
     expect(fates['Bring down NHS waiting lists']).toBe('narrowed');
     const lock = v.ambitions.promises.find((p) => p.title === 'The tax lock');
     expect(lock?.fate).toBe('broken-by-choice');
     expect(lock?.by).toEqual(['Basic rate']);
     // Amber (Phase 23): paid for by the levy instead, the lock is kept in its words and strained.
-    const levy = close(game, { moj: 10, dhsc: 1, hscl: 1 });
+    const levy = verdictOf(game, { moj: 10, dhsc: 1, hscl: 1 });
     const strained = levy.ambitions.promises.find((p) => p.title === 'The tax lock');
     expect(strained?.fate).toBe('strained');
     expect(strained?.by).toEqual(['Health and social care levy']);
@@ -93,8 +73,7 @@ describe('the close', () => {
   });
 
   it('totals who paid and who benefited from the engine’s own figures', () => {
-    const game = { ...freshGame(seedFor('adviser-right')) };
-    const v = close(game, { itbr: 1, ct: 1, dhsc: 3, rv2ch: 1 });
+    const v = verdictOf(freshGame(), { itbr: 1, ct: 1, dhsc: 3, rv2ch: 1 });
     const paid = Object.fromEntries(v.paid.map((r) => [r.group, r.gbpm]));
     expect(paid['broad-base']).toBeGreaterThan(8000);
     expect(paid['business']).toBeGreaterThan(3000);
@@ -108,63 +87,63 @@ describe('the close', () => {
     }
   });
 
-  it('ranks the compromises since the desk by what they did to borrowing', () => {
-    const game = {
-      ...freshGame(seedFor('adviser-right')),
-      priorities: ['nhs', 'schools-send'],
-    };
-    const v = close(game, { dhsc: 1.5, dfe: 5, ufsm: 0 }, { dhsc: 3, dfe: 5, ufsm: 1 });
-    expect(v.compromises.map((c) => c.lever.code)).toEqual(['dhsc', 'ufsm']);
-    expect(v.compromises[0]!.deltaGbpm).toBeLessThan(0);
-    expect(v.compromises[0]!.from).toBe(3);
-    expect(v.compromises[0]!.to).toBe(1.5);
-    expect(close(game, { dhsc: 3 }, { dhsc: 3 }).compromises).toEqual([]);
-  });
-
-  it('re-runs the final package under every outcome, marking the one that arrived', () => {
-    const seed = seedFor('sticky');
-    const v = close({ ...freshGame(seed) }, { dhsc: 5 });
-    expect(v.resilience).toHaveLength(ds.draws.outcomes.length);
-    expect(v.resilience.filter((r) => r.drawn).map((r) => r.outcome.id)).toEqual(['sticky']);
-    const byId = Object.fromEntries(v.resilience.map((r) => [r.outcome.id, r]));
-    expect(byId.kindest!.headroomGbpm).toBeGreaterThan(byId['hard-line']!.headroomGbpm);
-    // A package this thin misses the stability rule under the gloomiest outcome.
-    expect(byId['hard-line']!.rulesMissed.length).toBeGreaterThan(0);
-    expect(byId.kindest!.rulesMissed).toEqual([]);
-    // The drawn row agrees with the outcome the player actually saw.
-    expect(byId.sticky!.headroomGbpm).toBeCloseTo(v.headroomGbpm, 3);
+  it('judges the Budget on the figures the player saw, and nothing else', () => {
+    const { outcome, verdict } = close(freshGame(), { dhsc: 3 });
+    const stability = outcome.verdicts.find((r) => r.kind === 'currentBudget');
+    expect(verdict.headroomGbpm).toBe(stability?.headroomGbpm);
+    expect(verdict.targetYear).toBe('2029-30');
+    // Phase 24 retired the forecast that arrived later: no compromises since it, no re-runs.
+    expect(Object.keys(verdict).sort()).toEqual([
+      'ambitions',
+      'benefited',
+      'headroomGbpm',
+      'kind',
+      'paid',
+      'targetYear',
+    ]);
   });
 
   it('names the kind of Budget from the closed list, first fit wins', () => {
-    const seed = seedFor('adviser-right');
-    const breach = close({ ...freshGame(seed), breachAccepted: true }, { def5: 1 });
-    expect(breach.kind.id).toBe('breach-said-so');
-    const missed = close({ ...freshGame(seed) }, { def5: 1 });
+    const missed = verdictOf(freshGame(), { def5: 1 });
     expect(missed.kind.id).toBe('rules-missed');
-    const cautious = close(
-      { ...freshGame(seed), headroomTargetBn: 0, priorities: ['safer-streets'] },
-      { itbr: 1 },
-    );
-    expect(cautious.kind.id).toBe('cautious');
+    // Cautious: rules met with ample headroom, and nothing done for the priorities.
+    const game = { ...freshGame(), priorities: ['safer-streets'] };
+    const cautious = close(game, { itbr: 2 });
+    const headroom = cautious.verdict.headroomGbpm;
+    expect(headroom).toBeGreaterThanOrEqual(AMPLE_HEADROOM_GBPM);
+    expect(cautious.verdict.kind.id).toBe('cautious');
+    // A penny raises less than the advisers’ twenty billion on today’s estimate: not cautious.
+    const penny = verdictOf(game, { itbr: 1 });
+    expect(penny.headroomGbpm).toBeLessThan(AMPLE_HEADROOM_GBPM);
+    expect(penny.kind.id).not.toBe('cautious');
     // Paid for by broadening the VAT base, which the tax lock does not name.
-    const delivered = close(
-      { ...freshGame(seed), priorities: ['safer-streets'] },
-      { moj: 10, vatfood: 1 },
-    );
+    const delivered = verdictOf(game, { moj: 10, vatfood: 1 });
     expect(delivered.kind.id).toBe('delivered-and-paid');
     expect(delivered.kind.title).toBe(
       'A Budget for safer streets that delivered what it promised and paid for it',
     );
     // The first priority ranked names the Budget.
-    const both = close(
-      { ...freshGame(seed), priorities: ['defence', 'safer-streets'] },
+    const both = verdictOf(
+      { ...freshGame(), priorities: ['defence', 'safer-streets'] },
       { moj: 10, dip47: 1, vatfood: 1 },
     );
     expect(both.kind.title).toBe(
       'A Budget for defence that delivered what it promised and paid for it',
     );
-    const quiet = close({ ...freshGame(seed) }, {});
+    const quiet = verdictOf(freshGame(), {});
     expect(quiet.kind.id).toBe('small-moves');
     expect(quiet.kind.line.badge).toBe('simulated');
+  });
+
+  it('draws the thin and ample lines where the markets’ bands do', () => {
+    const rule = ds.reception.audiences.flatMap((a) => a.rules).find((r) => r.id === 'mk-headroom');
+    const ceilings = Object.fromEntries((rule?.bands ?? []).map((b) => [b.id, b.upTo]));
+    expect(THIN_HEADROOM_GBPM).toBe(ceilings.thin);
+    expect(AMPLE_HEADROOM_GBPM).toBe(ceilings.modest);
+    // No verdict kind reads a target the player set: Phase 24 has none.
+    for (const kind of ds.verdicts.kinds) {
+      expect(Object.keys(kind.when)).not.toContain('headroomAtLeastTarget');
+      expect(Object.keys(kind.when)).not.toContain('breachAccepted');
+    }
   });
 });

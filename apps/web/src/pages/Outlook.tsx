@@ -1,33 +1,25 @@
-import { formatGbpBn, freshGame, type ContextReading, type GamePermalink } from '@btc/engine';
+import {
+  AMPLE_HEADROOM_GBPM,
+  formatGbpBn,
+  stageIndex,
+  type ContextReading,
+  type Lever,
+} from '@btc/engine';
 import { useNavigate } from 'react-router-dom';
-import { AssumptionReading, ContextRow, summariseReading } from '../components/AssumptionsTable';
+import { summariseReading } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
+import { formatLeverValue } from '../components/LeverControl';
 import { Papers } from '../components/Motifs';
-import { headroomOf, Scenarios } from '../components/Scenarios';
-import { SourceList } from '../components/SourceLink';
+import { SourceLink, SourceList } from '../components/SourceLink';
 import { TableScroll } from '../components/TableScroll';
 import { Term } from '../components/Term';
-import { context, levers, rules, vintage } from '../data';
+import { ESTIMATE, context, levers, rules, vintage } from '../data';
 import { StepLink } from '../journey/links';
-import { macroCodesOf, matchScenario, scenarioCards } from '../journey/scenarios';
-import { mintSeed } from '../journey/seed';
+import { headroomOfOutcome, useOutcomeOf } from '../journey/outcome';
+import { suggestSetting } from '../journey/suggest';
 import { WorkingsOnly, useWorkings } from '../journey/workings';
-import { permalinkQuery, useBudget } from '../state/budget';
-
-const CARDS = scenarioCards(context, levers, vintage);
-const MACRO_CODES = macroCodesOf(context.readings);
-
-/** The margins a Chancellor might set out to keep, £ billion; nought means whatever the rules leave. */
-export const TARGETS: { bn: number; label: string; say: string }[] = [
-  { bn: 10, label: '£10bn', say: 'Thin: room to spend now.' },
-  { bn: 20, label: '£20bn', say: 'Where March left you.' },
-  { bn: 30, label: '£30bn', say: 'Ample. It constrains the package.' },
-  { bn: 0, label: 'Whatever the rules leave', say: 'The rules and no more.' },
-];
-
-/** Where the advisers think the gilt markets get nervous, £ million: their judgement, not a published figure. */
-const RULE_OF_THUMB_GBPM = 20_000;
+import { permalinkQuery, reducer, useBudget } from '../state/budget';
 
 const COUNT = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
 const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
@@ -36,18 +28,18 @@ const reading = (id: string): ContextReading | undefined =>
   context.readings.find((r) => r.id === id);
 
 /**
- * Step 2: your starting position. The Treasury's briefing in three numbers and one line on the
- * rules, with the rules in full one fold away; what has been promised since March and what has
- * cut the headroom, in words; then the two questions that shape everything after: which forecast
- * to plan on (four cards, each showing the headroom it leaves) and how much headroom to keep, with
- * headroom explained beneath. Both are plans, not rules: the game measures the player against
- * them and never enforces either. Confirming mints the seed for the OBR draw, which knows nothing
- * of what was chosen here. The sliders behind the cards are the expert path, behind the workings.
+ * Step 1: your briefing (Phase 24, ADR-0025). One figure to plan on: the headroom on today's
+ * estimate, the OBR's March forecast brought up to date for today's borrowing costs and prices
+ * with the OBR's own sensitivities. Then the two rules in one line, what has been promised since
+ * March and why the headroom fell, and what headroom is, one fold away. Nothing is chosen here:
+ * the primary starts the game on the estimate and goes to the priorities. With the workings on,
+ * the table the estimate is made from.
  */
 export function OutlookPage() {
   const { state, dispatch, outcome } = useBudget();
   const navigate = useNavigate();
   const workings = useWorkings();
+  const outcomeOf = useOutcomeOf();
   const targetYear =
     outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '2029-30';
   const years = outcome.paths.years;
@@ -55,41 +47,22 @@ export function OutlookPage() {
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (outcome.paths.baseline.nominalGdpFy[lastYear] ?? 0);
-  const selected = matchScenario(CARDS, state.leverValues, MACRO_CODES);
-  const game = state.game;
-  const revealed = game?.revealed ?? false;
-  const targetBn = game?.headroomTargetBn ?? 20;
-  const headroom = vintage.context?.headroomAtPublicationGbpm ?? 0;
+  const march = vintage.context?.headroomAtPublicationGbpm ?? 0;
+  // The starting position: today's estimate with no policy of the player's own.
+  const estimate = headroomOfOutcome(outcomeOf({ ...ESTIMATE }));
+  const estimateText = formatGbpBn(estimate, 1, estimate < 0);
   const gilts = reading('gilt-10y');
   const borrowing = reading('psnb-ytd');
   const prices = context.readings.find((r) => r.leverCode === 'rpi');
-  // What the adviser's card leaves on this Budget: the figure the since-March block points at.
-  const adviserCard = CARDS.find((c) => c.kind === 'adviser');
-  const adviserHeadroom = adviserCard ? headroomOf(state, adviserCard.values) : undefined;
   const decisions = context.decisionsSinceForecast;
 
-  const setTarget = (bn: number) => {
-    if (!game) {
-      // The seed is minted at the first decision here; the draw it fixes is independent of it.
-      const started = { ...freshGame(mintSeed()), headroomTargetBn: bn };
-      dispatch({ type: 'startGame', seed: started.seed });
-      dispatch({ type: 'updateGame', patch: { headroomTargetBn: bn } });
-      return;
-    }
-    dispatch({ type: 'updateGame', patch: { headroomTargetBn: bn } });
-  };
-
-  const confirm = () => {
-    const base: GamePermalink = game ?? freshGame(mintSeed());
-    const next: GamePermalink = {
-      ...base,
-      planning: selected ?? 'own',
-      headroomTargetBn: targetBn,
-      reached: Math.max(base.reached, 1),
-    };
-    if (!game) dispatch({ type: 'startGame', seed: next.seed });
-    dispatch({ type: 'updateGame', patch: next });
-    navigate({ pathname: '/pm', search: `?${permalinkQuery({ ...state, game: next })}` });
+  const begin = () => {
+    const started = reducer(state, { type: 'startGame' });
+    const patch = { reached: Math.max(started.game?.reached ?? 0, stageIndex('pm')) };
+    dispatch({ type: 'startGame' });
+    dispatch({ type: 'updateGame', patch });
+    const next = reducer(started, { type: 'updateGame', patch });
+    navigate({ pathname: '/pm', search: `?${permalinkQuery(next)}` });
   };
 
   return (
@@ -100,11 +73,12 @@ export function OutlookPage() {
         </h2>
         <dl className="brief__facts">
           <div className="brief__fact">
-            <dt>Room to spend</dt>
+            <dt>Your headroom</dt>
             <dd>
-              <strong>{formatGbpBn(headroom, 1)}</strong>
+              <strong>{estimateText}</strong> <LabelBadge badge="assumption" />
               <span>
-                of <Term id="headroom">headroom</Term> on the OBR’s March forecast.
+                our estimate for {targetYear}: the OBR’s March forecast on today’s borrowing costs
+                and prices.
               </span>
             </dd>
           </div>
@@ -198,15 +172,9 @@ export function OutlookPage() {
                   : ''}
                 .
               </>
-            ) : null}
-            {adviserHeadroom !== undefined ? (
-              <>
-                {' '}
-                Your adviser’s card shows what that does:{' '}
-                {formatGbpBn(adviserHeadroom, 1, adviserHeadroom < 0)} where March showed{' '}
-                {formatGbpBn(headroom, 1)}.
-              </>
-            ) : null}
+            ) : null}{' '}
+            That is why your headroom is about {estimateText}, not the {formatGbpBn(march, 1)} March
+            showed.
           </p>
           <SourceList
             className="briefing__sources"
@@ -218,46 +186,6 @@ export function OutlookPage() {
         </section>
       ) : null}
 
-      <h2 className="question">
-        Nobody knows what the economy will do by Budget day. Which forecast will you plan on?
-      </h2>
-      {revealed ? (
-        <p className="note" role="note">
-          The OBR’s October forecast has arrived, so these are no longer yours to set. You planned
-          on <strong>{planningName(game?.planning)}</strong>; the sliders now hold the OBR’s
-          figures.
-        </p>
-      ) : null}
-      <Scenarios
-        cards={CARDS}
-        state={state}
-        selected={selected}
-        summaryYear={targetYear}
-        onPick={(values) => {
-          if (!revealed) dispatch({ type: 'setLevers', values });
-        }}
-      />
-
-      <fieldset className="targets" disabled={revealed}>
-        <legend className="question">How much headroom do you want to keep?</legend>
-        <div className="targets__options" role="radiogroup" aria-label="Headroom target">
-          {TARGETS.map((t) => (
-            <label key={t.bn} className={`target${targetBn === t.bn ? ' target--picked' : ''}`}>
-              <input
-                type="radio"
-                name="headroom-target"
-                value={t.bn}
-                checked={targetBn === t.bn}
-                onChange={() => setTarget(t.bn)}
-              />
-              <span className="target__body">
-                <strong>{t.label}</strong>
-                <span>{t.say}</span>
-              </span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
       <details className="more">
         <summary>What is headroom?</summary>
         <aside className="note more__body" aria-label="Headroom, explained by your advisers">
@@ -266,12 +194,11 @@ export function OutlookPage() {
           </p>
           <p>
             Headroom is the gap between what the rules let you borrow and what the forecast says you
-            will borrow. It is your safety margin. In March it was {formatGbpBn(headroom, 1)}.
-            Forecasts move: over five years the OBR’s have been out by about{' '}
-            {formatGbpBn(typicalErrorGbpm, 0)} on average. Your advisers think the markets get
-            nervous below about {formatGbpBn(RULE_OF_THUMB_GBPM, 0)}. Nobody has published that
-            number: it is their judgement. Whatever you pick, the OBR’s October forecast will not
-            know it.
+            will borrow. It is your safety margin. In March it was {formatGbpBn(march, 1)}; on
+            today’s estimate it is {estimateText}. Forecasts move: over five years the OBR’s have
+            been out by about {formatGbpBn(typicalErrorGbpm, 0)} on average. Your advisers think the
+            markets get nervous below about {formatGbpBn(AMPLE_HEADROOM_GBPM, 0)}. Nobody has
+            published that number: it is their judgement.
           </p>
           <SourceList
             refs={[
@@ -288,66 +215,52 @@ export function OutlookPage() {
 
       <WorkingsOnly>
         <details className="more">
-          <summary>Set your own figures</summary>
+          <summary>How the estimate is made</summary>
           <div className="more__body">
-            <section className="panel" aria-labelledby="own-heading">
-              <h3 id="own-heading" className="section-label">
-                The three sliders behind the cards
-              </h3>
-              <p className="panel__hint">Each is set from a reading; move it if you know better.</p>
-              <div className="readings">
-                {context.readings.map((r) => {
-                  const lever = r.leverCode
-                    ? levers.find((l) => l.code === r.leverCode)
-                    : undefined;
-                  if (!lever) return null;
-                  return (
-                    <AssumptionReading
+            <p className="panel__hint">
+              Each setting is the latest reading less the OBR’s March figure, rounded to the step
+              the game uses. The OBR’s own sensitivities turn the settings into headroom.
+            </p>
+            <TableScroll label="How the estimate is made">
+              <table className="measures">
+                <thead>
+                  <tr>
+                    <th>Reading</th>
+                    <th>OBR in March</th>
+                    <th>Latest</th>
+                    <th>Setting used</th>
+                    <th>Source</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {context.readings.map((r) => (
+                    <EstimateRow
                       key={r.id}
                       reading={r}
-                      lever={lever}
-                      value={state.leverValues[lever.code] ?? lever.control.default}
-                      effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                      summaryYear={targetYear}
-                      onChange={(value) => {
-                        if (!revealed) dispatch({ type: 'setLever', code: lever.code, value });
-                      }}
+                      lever={r.leverCode ? levers.find((l) => l.code === r.leverCode) : undefined}
                     />
-                  );
-                })}
-              </div>
-            </section>
-            <section className="panel" aria-labelledby="also-heading">
-              <h3 id="also-heading" className="section-label">
-                Also changed since March
-              </h3>
-              <TableScroll label="Also changed since March">
-                <table className="measures">
-                  <thead>
-                    <tr>
-                      <th>Reading</th>
-                      <th>OBR in March</th>
-                      <th>Latest</th>
-                      <th>Source</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {context.readings
-                      .filter((r) => !r.leverCode)
-                      .map((r) => (
-                        <ContextRow key={r.id} reading={r} />
-                      ))}
-                  </tbody>
-                </table>
-              </TableScroll>
-            </section>
+                  ))}
+                </tbody>
+              </table>
+            </TableScroll>
+            <ul className="since__list">
+              {context.readings.map((r) => {
+                const lever = r.leverCode ? levers.find((l) => l.code === r.leverCode) : undefined;
+                const s = lever ? suggestSetting(r, lever) : null;
+                return s ? (
+                  <li key={r.id}>
+                    <strong>{r.title}</strong>: {s.rationale}
+                  </li>
+                ) : null;
+              })}
+            </ul>
           </div>
         </details>
       </WorkingsOnly>
 
       <p className="actions">
-        <button type="button" className="btn btn--primary" onClick={confirm}>
-          Set my starting position
+        <button type="button" className="btn btn--primary" onClick={begin}>
+          Set your priorities
         </button>
         <StepLink to="/" className="btn">
           Back
@@ -357,8 +270,22 @@ export function OutlookPage() {
   );
 }
 
-function planningName(kind: string | undefined): string {
-  const card = CARDS.find((c) => c.kind === kind);
-  if (card) return card.title.charAt(0).toLowerCase() + card.title.slice(1);
-  return 'figures of your own';
+/** One reading, and the setting the estimate takes from it (none for a reading kept as context). */
+function EstimateRow({ reading, lever }: { reading: ContextReading; lever?: Lever }) {
+  const s = lever ? suggestSetting(reading, lever) : null;
+  const setting =
+    lever && s
+      ? `${formatLeverValue(lever, s.value)}${s.value === lever.control.default ? ' (the OBR’s path)' : ''}`
+      : 'Context only';
+  return (
+    <tr>
+      <th scope="row">{reading.title}</th>
+      <td>{summariseReading(reading.obr, reading.unit)}</td>
+      <td>{summariseReading(reading.latest, reading.unit)}</td>
+      <td>{setting}</td>
+      <td className="source">
+        <SourceLink ref={reading.latest.source} />
+      </td>
+    </tr>
+  );
 }

@@ -1,39 +1,29 @@
-import { formatGbpBn, type AmbitionStatus, type GamePermalink } from '@btc/engine';
+import { formatGbpBn, type AmbitionStatus } from '@btc/engine';
 
 /**
- * The running score of the game, in one strip: headroom against the target the player set at
- * stage 1, priorities funded against the number agreed with the Prime Minister, promises kept.
- * Every figure is the engine's; the target and the counts are the player's own choices.
+ * The running score of the game, in one strip: headroom, priorities delivered against the number
+ * agreed with the Prime Minister, promises kept. Every figure is the engine's; the counts are the
+ * player's own choices read back.
  */
 export function BudgetSummary({
-  game,
   status,
   headroomGbpm,
   targetYear,
   showHeadroom = true,
 }: {
-  game: GamePermalink;
   status: AmbitionStatus;
   headroomGbpm: number;
   targetYear: string;
-  /** Off where a scorecard on the same screen already carries headroom against the target. */
+  /** Off where a scorecard on the same screen already carries the headroom. */
   showHeadroom?: boolean;
 }) {
-  const target = game.headroomTargetBn * 1000;
   const kept = status.promises.length - status.broken;
   return (
     <section className="summary" aria-label="Your Budget so far">
       {showHeadroom ? (
         <div className="summary__cell">
           <span className="summary__label">Headroom, {targetYear}</span>
-          <span className="summary__value">
-            {formatGbpBn(headroomGbpm, 1, true)}
-            <span className="summary__sub">
-              {target > 0
-                ? ` against your ${formatGbpBn(target, 0)} target`
-                : ' · target: whatever the rules leave'}
-            </span>
-          </span>
+          <span className="summary__value">{formatGbpBn(headroomGbpm, 1, true)}</span>
         </div>
       ) : null}
       <div className="summary__cell">

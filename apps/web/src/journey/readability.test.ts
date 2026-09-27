@@ -1,20 +1,15 @@
 import { finetuneItems } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import {
-  compromise,
-  draws,
   finetune,
   guide,
   interventions,
   ministers,
   options,
   pm,
-  rabbit,
   reception,
   verdicts,
 } from '../data';
-import { LEAD_MISSED, LEADS, NEXT, QUESTIONS } from '../pages/compromise/copy';
-import { TARGETS } from '../pages/Outlook';
 
 /** The longest sentence a newcomer meets on the road (Phase 23, ADR-0024): one idea, one breath. */
 const SENTENCE_MAX = 20;
@@ -104,32 +99,12 @@ const SETS: Record<string, readonly string[]> = {
     p.title,
     ...p.strains.map((s) => s.text).filter((t): t is string => t !== undefined),
   ]),
-  'the targets': TARGETS.flatMap((t) => [t.label, t.say]),
-  'the forecast outcomes': draws.outcomes.flatMap((o) => [
-    o.title,
-    o.story.headline,
-    o.clue.headline,
-  ]),
-  'the compromise questions': [
-    ...QUESTIONS.sums,
-    ...QUESTIONS.room,
-    ...LEADS.sums,
-    ...LEADS.room,
-    LEAD_MISSED,
-    ...NEXT.sums,
-    ...NEXT.room,
-  ],
-  'the compromise routes': [
-    ...Object.values(compromise.routes).map((r) => short(r.line)),
-    short(compromise.routes.breach.noBreach),
-  ],
   'the reception labels': reception.audiences.flatMap((a) => [a.title, a.question, ...a.labels]),
   'the reception bands': reception.audiences.flatMap((a) =>
     a.rules.flatMap((r) => r.bands.map((b) => b.text)),
   ),
   'the verdicts': verdicts.kinds.flatMap((k) => [k.title, short(k.line)]),
   'the interventions': interventions.interventions.map((x) => short(x.line)),
-  'the add-ons’ lines': [short(rabbit.further.line), short(rabbit.keep.line)],
   'the ministers': ministers.ministers.flatMap((m) =>
     [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)].map(short),
   ),
@@ -137,7 +112,7 @@ const SETS: Record<string, readonly string[]> = {
 
 describe('readability: a reading age of about twelve, one idea a sentence', () => {
   it('reads every set a newcomer meets', () => {
-    expect(Object.keys(SETS).length).toBe(17);
+    expect(Object.keys(SETS).length).toBe(12);
     for (const [name, texts] of Object.entries(SETS)) expect(texts.length, name).toBeGreaterThan(0);
   });
 
@@ -153,11 +128,11 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
 
   it('reads at a Flesch-Kincaid grade of seven or below, set by set', () => {
     // Measured on 2026-09-27 (ADR-0024): the guide 1.8, option titles 4.8, option advice 4.7,
-    // the priorities 3.5, the promises 6.7, the targets 0.5, the outcomes 4.7, the compromise
-    // questions 1.0, the routes 4.1, the reception labels 4.9 and bands about 6, the verdicts 5.5,
-    // the interventions 5.8, the add-ons 5.5, the ministers 5.5. Proper nouns (National Insurance,
+    // the priorities 3.5, the promises 6.7, the reception labels 4.9 and bands about 6, the
+    // verdicts 5.5, the interventions 5.8, the ministers 5.5. Proper nouns (National Insurance,
     // the manifesto, the Chancellor) hold the promises and the bands highest. The fine-tuning
-    // screens' titles 5.1 and their advisers' lines 4.9 (Phase 24).
+    // screens' titles 5.1 and their advisers' lines 4.9 (Phase 24, ADR-0025, which retired the
+    // targets, the forecast outcomes, the compromise screens and the add-ons with their sets).
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       expect(g, `${name} reads at grade ${g.toFixed(1)}`).toBeLessThanOrEqual(GRADE_MAX);

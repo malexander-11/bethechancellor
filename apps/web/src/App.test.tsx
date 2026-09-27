@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from './App';
@@ -28,7 +28,7 @@ describe('journey routes', () => {
     expect(screen.getByText('Build the package')).toBeInTheDocument();
     // No tab bar: one road. The progress line says which part this is, the button says what is next.
     expect(screen.queryByRole('link', { name: 'Taxes' })).toBeNull();
-    expect(screen.getByText(/^Build your Budget · 1 of 2$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Fine-tune tax and spend · 1 of 2$/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Next: the spending' })).toBeInTheDocument();
     expect(screen.getByText(/Headroom, 2029-30/)).toBeInTheDocument();
     expect(screen.getByText('Budget 2025 decisions')).toBeInTheDocument();
@@ -40,7 +40,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(document.title).toBe('Your starting position · Step 2 of 7 · Be the Chancellor');
+    expect(document.title).toBe('Your briefing · Step 1 of 6 · Be the Chancellor');
     const skip = screen.getByRole('link', { name: 'Skip to the step' });
     expect(skip).toHaveAttribute('href', '#main');
     expect(document.body.querySelector('a, button, input, [tabindex]')).toBe(skip);
@@ -51,7 +51,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(document.title).toBe('Build the package (the taxes) · Step 4 of 7 · Be the Chancellor');
+    expect(document.title).toBe('Build the package (the taxes) · Step 4 of 6 · Be the Chancellor');
   });
 
   it('moves focus to the new screen when a step link is followed', () => {
@@ -62,23 +62,23 @@ describe('journey routes', () => {
     );
     fireEvent.click(screen.getByRole('link', { name: 'Next: the spending' }));
     expect(document.title).toBe(
-      'Build the package (the spending) · Step 4 of 7 · Be the Chancellor',
+      'Build the package (the spending) · Step 4 of 6 · Be the Chancellor',
     );
     expect(document.activeElement).toBe(document.getElementById('main'));
   });
 
-  it('shows the assumptions step as a choice of forecasts, and Budget day with the verdicts', () => {
+  it('lands the old assumptions link on the briefing, one estimate and no choice, and Budget day with the verdicts', () => {
     const { unmount } = render(
       <MemoryRouter initialEntries={['/assumptions']}>
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByText('Your starting position')).toBeInTheDocument();
-    // One screen: the four forecasts you can budget on are on the page at once.
-    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
-    const cards = screen.getByRole('radiogroup', { name: 'Economic assumptions' });
-    expect(within(cards).getAllByRole('radio')).toHaveLength(4);
-    expect(within(cards).getByRole('radio', { name: /Keep the March baseline/ })).toBeChecked();
+    expect(screen.getByRole('heading', { level: 1, name: 'Your briefing' })).toBeInTheDocument();
+    // One figure to plan on (Phase 24): no forecasts to choose between, no target to set.
+    expect(screen.getByText('Your headroom')).toBeInTheDocument();
+    expect(screen.queryByRole('radiogroup')).toBeNull();
+    expect(screen.queryByRole('radio')).toBeNull();
+    expect(screen.getByRole('button', { name: 'Set your priorities' })).toBeInTheDocument();
     unmount();
     render(
       <MemoryRouter initialEntries={['/budget-day']}>

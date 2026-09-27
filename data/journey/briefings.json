@@ -103,7 +103,7 @@
           ]
         },
         {
-          "text": "Independent forecasters expect more inflation and more borrowing than the OBR did: CPI of 3.1% this year against the OBR's 2.3%, and borrowing £27 billion above the OBR's path in 2029-30. None of this is a forecast of mine. The next step asks whose figures you will plan on; the OBR will publish its own in October whatever you choose.",
+          "text": "Independent forecasters expect more inflation and more borrowing than the OBR did: CPI of 3.1% this year against the OBR's 2.3%, and borrowing £27 billion above the OBR's path in 2029-30. None of this is a forecast of mine. Your briefing turns it into one estimate of your headroom, using the OBR’s own sensitivities; the OBR will publish its own forecast in October.",
           "sources": [
             {
               "sourceId": "hmt-forecasts-2026-08"
@@ -1009,11 +1009,11 @@
       "id": "budget-day-assumptions",
       "step": "budget-day",
       "adviser": "chief-economic-adviser",
-      "title": "Your assumptions are not the OBR's",
-      "headline": "These are your assumptions, not the OBR's. It publishes its own on 28 October.",
+      "title": "The estimate is not the OBR’s",
+      "headline": "The economy here is our estimate, not the OBR’s. It publishes its own on 28 October.",
       "paragraphs": [
         {
-          "text": "Any change you made to the interest rate, growth or inflation sliders is your view, costed with the OBR's published sensitivities. On 28 October the OBR will publish its own updated forecast; the arithmetic here shows what your Budget looks like if your assumptions turn out to be right.",
+          "text": "The game plans on today’s estimate: the OBR’s March forecast with its own published sensitivities applied to today’s gilt yields and inflation. On 28 October the OBR will publish its own updated forecast; the arithmetic here shows what your Budget looks like if the estimate turns out to be right.",
           "sources": [
             {
               "sourceId": "obr-efo-2026-03",

@@ -1515,12 +1515,6 @@ details.table-view td:first-child {
   border-right: 1px solid var(--border);
 }
 
-.scorecard__target {
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
 .scorecard__caption {
   margin: 4px 0 0;
   color: var(--muted);

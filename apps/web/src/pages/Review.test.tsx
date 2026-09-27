@@ -1,20 +1,11 @@
-import { pickOutcome, SEED_MAX, SEED_MIN } from '@btc/engine';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
-import { draws } from '../data';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
-
-function seedFor(id: string): number {
-  for (let s = SEED_MIN; s <= SEED_MAX; s += 1)
-    if (pickOutcome(s, draws.outcomes).id === id) return s;
-  throw new Error(`no seed lands on ${id}`);
-}
-const ADVISER = seedFor('adviser-right');
-/** Two priorities, the forecast open, the pub add-on chosen, at the final choices. */
-const G = `g=s.${ADVISER}_st.5_pl.adviser_hr.20_pr.safer-streets+defence_rv.1_rb.pubs&M=rate.0.75_rpi.0.5`;
+/** Two priorities agreed, fine-tuning done, on today's estimate: at the review. */
+const G = 'g=st.4_pr.safer-streets+defence&M=rate.0.75_rpi.0.5';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -27,20 +18,18 @@ function at(path: string) {
 const part = (name: RegExp) => screen.getByRole('region', { name });
 const changeIn = (region: HTMLElement, name: string) => within(region).getByRole('link', { name });
 
-describe('the review before delivery', () => {
-  it('sends a game that has not made its final choices back to where it is', () => {
-    at(`/review?${BASE}&g=s.${ADVISER}_st.4_pl.adviser_hr.20_pr.defence_rv.1&M=rate.0.75_rpi.0.5`);
-    expect(
-      screen.getByRole('heading', { level: 1, name: 'Will you raise more tax?' }),
-    ).toBeInTheDocument();
+describe('step 5: deliver the Budget', () => {
+  it('sends a game that has not finished fine-tuning back to where it is', () => {
+    at(`/review?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
+    expect(screen.getByRole('heading', { level: 1, name: 'Fine-tune tax' })).toBeInTheDocument();
   });
 
   it('reads the Budget back, part by part, each with a way to change it', () => {
-    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_hscl.1_alc.-5_dfe.5&S=moj.10_dip47.1_hscl.1`);
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_hscl.1_dfe.5`);
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Your Budget, reviewed' }),
+      screen.getByRole('heading', { level: 1, name: 'Deliver your Budget' }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/^Final choices · 2 of 2$/)).toBeInTheDocument();
+    expect(screen.getByText('Step 5 of 6')).toBeInTheDocument();
     expect(screen.queryByRole('tab')).toBeNull();
 
     const priorities = part(/^Your priorities/);
@@ -51,17 +40,17 @@ describe('the review before delivery', () => {
       expect.stringMatching(/^\/pm\?/),
     );
 
-    const deliver = part(/^What you chose to deliver/);
-    expect(within(deliver).getByText(/More money for prisons and courts/)).toBeInTheDocument();
+    const flagships = part(/^Flagship policies/);
+    expect(within(flagships).getByText(/More money for prisons and courts/)).toBeInTheDocument();
     expect(
-      within(deliver).getByText(/Fill the funding gap in the defence investment plan/),
+      within(flagships).getByText(/Fill the funding gap in the defence investment plan/),
     ).toBeInTheDocument();
-    expect(within(deliver).getAllByText(/costs £\d\.\dbn/).length).toBe(2);
-    expect(changeIn(deliver, 'Change safer streets')).toHaveAttribute(
+    expect(within(flagships).getAllByText(/costs £\d\.\dbn/).length).toBe(2);
+    expect(changeIn(flagships, 'Change safer streets')).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/budget\/deliver\?/),
     );
-    expect(changeIn(deliver, 'Change defence')).toHaveAttribute(
+    expect(changeIn(flagships, 'Change defence')).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/budget\/deliver\/2\?/),
     );
@@ -81,43 +70,54 @@ describe('the review before delivery', () => {
     const spending = part(/^Spending/);
     expect(within(spending).getByText(/^Schools and education · \+5%/)).toBeInTheDocument();
     expect(within(spending).getByText(/costs £\d\.\dbn/)).toBeInTheDocument();
-    // The flagships' levers are read back once, as flagships; the add-on once, for the speech.
+    // The flagships' levers are read back once, as flagships.
     expect(within(spending).queryByText(/Prisons and courts/)).toBeNull();
-    expect(within(tax).queryByText(/lcohol/)).toBeNull();
     expect(changeIn(spending, 'Change')).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/finetune\/spending\?/),
     );
 
-    const speech = part(/^For the speech/);
-    expect(within(speech).getByText(/alcohol duty/i)).toBeInTheDocument();
-    expect(changeIn(speech, 'Change')).toHaveAttribute(
-      'href',
-      expect.stringMatching(/^\/rabbit\?/),
-    );
-
+    // Where that leaves you, in words: the bar above already says the figure.
     const position = part(/^Where that leaves you/);
-    expect(within(position).getByText(/Rules met/)).toBeInTheDocument();
-    // Since the forecast: education up and the alcohol cut, neither in the snapshot.
-    expect(within(position).getByText(/^Education.*→/)).toBeInTheDocument();
-    // The add-on is listed once, under the speech, not again as a move since the forecast.
-    expect(within(position).queryByText(/^Alcohol.*→/)).toBeNull();
+    expect(within(position).getByText('Rules met.')).toBeInTheDocument();
+    // The levy keeps the tax lock's words and strains its spirit: amber, not red.
+    expect(within(position).getByText('Strains the manifesto: The tax lock')).toHaveClass(
+      'tag--amber',
+    );
     expect(changeIn(position, 'Change')).toHaveAttribute(
       'href',
-      expect.stringMatching(/^\/compromise\/3\?/),
+      expect.stringMatching(/^\/finetune\/tax\?/),
     );
+    // Nothing of the retired steps is left: no speech, no forecast, no target.
+    expect(screen.queryByRole('region', { name: /For the speech/ })).toBeNull();
+    expect(screen.queryByText(/Since the forecast/)).toBeNull();
+    expect(screen.queryByText(/target/)).toBeNull();
   });
 
-  it('says so when no tax or other budget moved, no add-on, and nothing since the forecast', () => {
-    at(`/review?${BASE}&${G.replace('_rb.pubs', '')}&L=moj.10&S=moj.10`);
+  it('says so when no tax or other budget moved, and names a missed rule and a broken promise', () => {
+    const quiet = at(`/review?${BASE}&${G}&L=moj.10`);
     expect(within(part(/^Tax/)).getByText('No tax changed.')).toBeInTheDocument();
     expect(within(part(/^Spending/)).getByText('No other budget changed.')).toBeInTheDocument();
-    expect(screen.getByText('No add-ons.')).toBeInTheDocument();
-    expect(screen.getByText(/Nothing changed since the OBR saw the package/)).toBeInTheDocument();
+    expect(within(part(/^Where that leaves you/)).queryByText(/manifesto/)).toBeNull();
+    quiet.unmount();
+    at(`/review?${BASE}&${G}&L=dhsc.10_itbr.1`);
+    const position = part(/^Where that leaves you/);
+    expect(
+      within(position).getByText(
+        /^Missed: .*Stability rule.*\. The OBR would say so on Budget day\.$/,
+      ),
+    ).toBeInTheDocument();
+    expect(within(position).getByText('Breaks the manifesto: The tax lock')).toHaveClass(
+      'tag--warn',
+    );
   });
 
   it('delivers: the red button marks the game finished and opens Budget day with the Budget intact', async () => {
-    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_alc.-5`);
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1`);
+    expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/finetune\/spending\?/),
+    );
     const deliver = screen.getByRole('link', { name: 'Deliver my Budget' });
     expect(deliver.className).toMatch(/btn--budget/);
     fireEvent.click(deliver);
@@ -126,7 +126,7 @@ describe('the review before delivery', () => {
     ).toBeInTheDocument();
     await waitFor(() => {
       const params = new URLSearchParams(window.location.search);
-      expect(params.get('g')).toMatch(/st\.6/);
+      expect(params.get('g')).toMatch(/st\.5/);
       expect(params.get('L')).toMatch(/moj\.10/);
     });
   });

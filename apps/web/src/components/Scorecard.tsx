@@ -32,19 +32,17 @@ export function Scorecard({
   outcome,
   typicalErrorGbpm,
   sticky = false,
-  revealed = false,
-  target,
+  economy,
 }: {
   outcome: Outcome;
   typicalErrorGbpm: number;
   sticky?: boolean;
-  /** The headroom the player set out to keep, £ million; 0 means whatever the rules leave. */
-  target?: number;
   /**
-   * The in-game OBR has spoken: the macro sliders are its October forecast, so the hero shows a
-   * third figure, March plus the economy's move, and "your changes" becomes the measures alone.
+   * What the economy in play is called ("today’s estimate"). When it has moved the headroom from
+   * March, the hero shows it as a figure of its own, so the move is not credited to the player's
+   * measures: "OBR in March · today’s estimate · your measures".
    */
-  revealed?: boolean;
+  economy?: string;
 }) {
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const year =
@@ -58,7 +56,8 @@ export function Scorecard({
   const macroMove = outcome.attribution
     .filter((r) => r.kind === 'macro')
     .reduce((acc, r) => acc + r.currentBudgetGbpm, 0);
-  const octoberHeadroom = baseHeadroom - macroMove;
+  const economyHeadroom = baseHeadroom - macroMove;
+  const showEconomy = economy !== undefined && Math.abs(macroMove) >= 50;
   const cells = [
     {
       label: 'Budget balance',
@@ -101,19 +100,12 @@ export function Scorecard({
         >
           {formatGbpBn(headroom, 1, headroom < 0)}
         </div>
-        {target !== undefined ? (
-          <div className="scorecard__target">
-            {target > 0
-              ? `against your ${formatGbpBn(target, 0)} target`
-              : 'no target beyond the rules'}
-          </div>
-        ) : null}
         <div className="scorecard__from">
-          {revealed ? (
+          {showEconomy ? (
             <>
-              OBR in March {formatGbpBn(baseHeadroom, 1)} · OBR in October{' '}
-              {formatGbpBn(octoberHeadroom, 1, octoberHeadroom < 0)} · your measures{' '}
-              {moreOrLess(headroom - octoberHeadroom)}
+              OBR in March {formatGbpBn(baseHeadroom, 1)} · {economy}{' '}
+              {formatGbpBn(economyHeadroom, 1, economyHeadroom < 0)} · your measures{' '}
+              {moreOrLess(headroom - economyHeadroom)}
             </>
           ) : (
             <>

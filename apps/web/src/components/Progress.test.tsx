@@ -16,40 +16,57 @@ function at(path: string) {
 
 describe('the progress bar', () => {
   it('says which step this is, links the steps behind you, and leaves the road ahead inert', () => {
-    at(`/compromise?${BASE}&g=s.417_st.4_pl.adviser_hr.20_rv.1`);
-    expect(screen.getByText('Step 5 of 7')).toBeInTheDocument();
+    at(`/finetune/spending?${BASE}&g=st.3_pr.defence`);
+    expect(screen.getByText('Step 4 of 6')).toBeInTheDocument();
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
-    // The sums' first question is the second of the step's four screens, and the line says so.
-    expect(within(bar).getByText(/^Respond to the forecast · 2 of 4$/)).toBeInTheDocument();
-    expect(within(bar).getAllByRole('listitem')).toHaveLength(7);
-    // Behind: become Chancellor, the starting position, the priorities and the Budget are links.
-    expect(within(bar).getByRole('link', { name: /Become Chancellor/ })).toBeInTheDocument();
+    // Spending is the second of fine-tuning's two screens, and the line says so.
+    expect(within(bar).getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
+    expect(within(bar).getAllByRole('listitem')).toHaveLength(6);
+    // Behind: the briefing, the priorities and the flagship policies are links.
+    expect(within(bar).getByRole('link', { name: /Briefing/ })).toBeInTheDocument();
     expect(within(bar).getByRole('link', { name: /Set your priorities/ })).toBeInTheDocument();
-    expect(within(bar).getByRole('link', { name: /Build your Budget/ })).toBeInTheDocument();
-    // Here: the sums are the second screen of the forecast step, marked and not a link.
+    expect(within(bar).getByRole('link', { name: /Flagship policies/ })).toBeInTheDocument();
+    // Here: marked and not a link.
     expect(bar.querySelector('[aria-current="step"]')?.textContent).toMatch(
-      /Respond to the forecast/,
+      /Fine-tune tax and spend/,
     );
-    expect(within(bar).queryByRole('link', { name: /Respond to the forecast/ })).toBeNull();
+    expect(within(bar).queryByRole('link', { name: /Fine-tune tax and spend/ })).toBeNull();
     // Ahead: inert, and said to be.
-    expect(within(bar).queryByRole('link', { name: /Final choices/ })).toBeNull();
-    expect(within(bar).getByText(/Final choices \(not yet open\)/)).toBeInTheDocument();
-    expect(within(bar).queryByRole('link', { name: /What your Budget means/ })).toBeNull();
-    expect(within(bar).getAllByRole('link')).toHaveLength(4);
+    expect(within(bar).queryByRole('link', { name: /Deliver the Budget/ })).toBeNull();
+    expect(within(bar).getByText(/Deliver the Budget \(not yet open\)/)).toBeInTheDocument();
+    expect(within(bar).queryByRole('link', { name: /Feedback/ })).toBeNull();
+    expect(within(bar).getAllByRole('link')).toHaveLength(3);
+  });
+
+  it('names the six steps the player was promised, in order', () => {
+    at(`/review?${BASE}&g=st.4_pr.defence`);
+    const bar = screen.getByRole('navigation', { name: 'Budget steps' });
+    const names = within(bar)
+      .getAllByRole('listitem')
+      .map((li) => li.querySelector('.sr-only')?.textContent?.replace(/ \(not yet open\)$/, ''));
+    expect(names).toEqual([
+      '1. Briefing',
+      '2. Set your priorities',
+      '3. Flagship policies',
+      '4. Fine-tune tax and spend',
+      '5. Deliver the Budget',
+      '6. Feedback',
+    ]);
   });
 
   it('offers nothing ahead of you without a game, even where a shared link could go', () => {
     at(`/?${BASE}`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     expect(within(bar).queryAllByRole('link')).toHaveLength(0);
-    expect(bar.querySelector('[aria-current="step"]')?.textContent).toMatch(/Become Chancellor/);
+    // The cover is the briefing's first screen.
+    expect(bar.querySelector('[aria-current="step"]')?.textContent).toMatch(/Briefing/);
   });
 
-  it('carries the budget with every link it offers, and counts a sub-step of the Budget', () => {
-    at(`/pm?${BASE}&g=s.417_st.1_pl.adviser_hr.20`);
+  it('carries the budget with every link it offers', () => {
+    at(`/pm?${BASE}&g=st.1`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
-    const outlook = within(bar).getByRole('link', { name: /Your starting position/ });
-    expect(outlook).toHaveAttribute('href', expect.stringContaining('/outlook?'));
-    expect(outlook).toHaveAttribute('href', expect.stringContaining('g=s.417'));
+    const briefing = within(bar).getByRole('link', { name: /Briefing/ });
+    expect(briefing).toHaveAttribute('href', expect.stringContaining('/outlook?'));
+    expect(briefing).toHaveAttribute('href', expect.stringContaining('g=st.1'));
   });
 });

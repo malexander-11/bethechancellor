@@ -41,7 +41,7 @@ const by = (list: Reception[], id: Reception['audience']) => {
 };
 const FIGURE = /£\d|\d{3},\d{3}|\d+%/;
 const SECURITY: GamePermalink = {
-  ...freshGame(7),
+  ...freshGame(),
   priorities: ['defence', 'safer-streets'],
 };
 

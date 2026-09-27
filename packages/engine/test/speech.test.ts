@@ -14,11 +14,7 @@ const context = ds.contexts[ds.contexts.length - 1];
 if (!context) throw new Error('no context');
 const MACRO = macroCodesOf(context.readings);
 
-function speak(
-  values: Record<string, number>,
-  game?: GamePermalink,
-  snapshot?: Record<string, number>,
-) {
+function speak(values: Record<string, number>, game?: GamePermalink) {
   const outcome = computeOutcome({
     vintage: ds.vintage,
     rules: ds.rules,
@@ -31,19 +27,13 @@ function speak(
     levers: ds.levers,
     ...(game ? { game, status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers) } : {}),
     pm: ds.pm,
-    ...(snapshot ? { snapshot } : {}),
     macroCodes: MACRO,
-    rabbitTitles: Object.fromEntries(ds.options.addOns.map((o) => [o.id, o.title])),
   });
 }
 
 describe('the speech', () => {
   it('is deterministic, stays inside its word budget, and repeats no fragment', () => {
-    const game: GamePermalink = {
-      ...freshGame(3),
-      priorities: ['nhs', 'schools-send'],
-      rabbit: ['pubs'],
-    };
+    const game: GamePermalink = { ...freshGame(), priorities: ['nhs', 'schools-send'] };
     const values = {
       dhsc: 3,
       dfe: 5,
@@ -65,7 +55,7 @@ describe('the speech', () => {
   });
 
   it('quotes only figures the engine produced, formatted as the scorecard formats them', () => {
-    const game: GamePermalink = { ...freshGame(3), priorities: ['safer-streets'] };
+    const game: GamePermalink = { ...freshGame(), priorities: ['safer-streets'] };
     const s = speak({ moj: 10, itbr: 2, vats: 1 }, game);
     const figures = new Set(s.paragraphs.flatMap((p) => p.figures));
     for (const p of s.paragraphs) {
@@ -76,12 +66,8 @@ describe('the speech', () => {
     expect(figures.size).toBeGreaterThan(0);
   });
 
-  it('follows the choices: the priority, its options, who pays, a broken promise and the add-on', () => {
-    const game: GamePermalink = {
-      ...freshGame(3),
-      priorities: ['cost-of-living'],
-      rabbit: ['pubs'],
-    };
+  it('follows the choices: the priority, its options, who pays and a broken promise', () => {
+    const game: GamePermalink = { ...freshGame(), priorities: ['cost-of-living'] };
     const s = speak({ ufsm: 1, bus2: 1, alc: -5, ct: 1, it50: 1 }, game);
     const kinds = s.paragraphs.map((p) => p.kind);
     expect(kinds[0]).toBe('opening');
@@ -97,49 +83,35 @@ describe('the speech', () => {
     expect(
       s.paragraphs.some((p) => p.kind === 'revenue' && /Business will contribute/.test(p.text)),
     ).toBe(true);
+    expect(s.paragraphs.find((p) => p.kind === 'giveaways')?.text).toMatch(/alcohol/i);
     expect(s.paragraphs.find((p) => p.kind === 'lock-break')?.text).toMatch(
       /corporation tax capped/i,
-    );
-    expect(s.paragraphs.find((p) => p.kind === 'rabbit')?.text).toMatch(
-      /Alcohol duty is cut by five per cent/,
     );
     expect(kinds[kinds.length - 1]).toBe('peroration');
   });
 
-  it('opens on the first priority ranked, and names several add-ons in one flourish', () => {
-    const game: GamePermalink = {
-      ...freshGame(3),
-      priorities: ['defence', 'cost-of-living'],
-      rabbit: ['pubs', 'transport-up'],
-    };
-    const s = speak({ dip47: 1, alc: -5, dft: 5 }, game);
+  it('opens on the first priority ranked, and on the estimate when nothing is ranked', () => {
+    const game: GamePermalink = { ...freshGame(), priorities: ['defence', 'cost-of-living'] };
+    const s = speak({ dip47: 1 }, game);
     expect(s.paragraphs[0]?.kind).toBe('opening');
     expect(s.paragraphs[0]?.text).toMatch(/security of its people/);
-    const flourish = s.paragraphs.find((p) => p.kind === 'rabbit')?.text ?? '';
-    expect(flourish).toMatch(
-      /five per cent off alcohol duty and transport’s day-to-day budget up 5%/,
-    );
-    // An add-on id the data no longer offers (an old link) is not spoken as an empty title.
-    const retired = speak({ dip47: 1 }, { ...game, rabbit: ['meals'] });
-    expect(retired.paragraphs.find((p) => p.kind === 'rabbit')).toBeUndefined();
-    // Keeping the headroom is an announcement only while there is headroom to keep.
-    const kept = speak({ dip47: 1 }, { ...game, rabbit: ['keep'] });
-    expect(kept.paragraphs.find((p) => p.kind === 'rabbit')?.text).toMatch(/no rabbit in this hat/);
+    // Without a game the opening names what the Budget is built on: the March forecast brought
+    // up to date, never a forecast that arrived later.
+    const sandbox = speak({ itbr: 1 });
+    expect(sandbox.paragraphs[0]?.text).toMatch(/brought up to date/);
+    expect(sandbox.paragraphs[0]?.text).not.toMatch(/this morning/);
   });
 
-  it('owns a missed rule, and says so differently when the breach was chosen', () => {
-    const missed = speak({ def5: 1 }, { ...freshGame(3) });
+  it('owns a missed rule, and says so plainly when every rule is met', () => {
+    const missed = speak({ def5: 1 }, { ...freshGame() });
     expect(missed.paragraphs.at(-1)?.text).toMatch(/misses a rule in 2029-30/);
-    const chosen = speak({ def5: 1 }, { ...freshGame(3), breachAccepted: true });
-    expect(chosen.paragraphs.at(-1)?.text).toMatch(/I have chosen to proceed/);
     const met = speak({ itbr: 1 });
     expect(met.paragraphs.at(-1)?.text).toMatch(/meets the fiscal rules/);
-  });
-
-  it('mentions what was scaled back since the desk, and what starts later', () => {
-    const game: GamePermalink = { ...freshGame(3), delays: { ufsm: '2028-29' } };
-    const s = speak({ ufsm: 1, dhsc: 1 }, game, { ufsm: 1, dhsc: 3 });
-    expect(s.paragraphs.find((p) => p.kind === 'compromises')?.text).toMatch(/1 of our measures/);
-    expect(s.paragraphs.find((p) => p.kind === 'delay')?.text).toMatch(/2028-29/);
+    // Phase 24 retired the add-on flourish, the compromises and the delays: none is ever said.
+    for (const s of [missed, met]) {
+      for (const p of s.paragraphs) {
+        expect(['rabbit', 'compromises', 'delay']).not.toContain(p.kind);
+      }
+    }
   });
 });

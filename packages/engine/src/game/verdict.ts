@@ -1,32 +1,37 @@
-import { computeOutcome } from '../calc/spine.js';
 import { formatGbpBn } from '../format.js';
 import type {
-  ContextFile,
-  DrawOutcome,
-  DrawsFile,
   IncidenceFile,
   Lever,
   OptionsFile,
   PmFile,
-  RuleSet,
   SimulatedLine,
   VerdictKind,
   VerdictsFile,
-  Vintage,
 } from '../types/data.js';
-import type { GamePermalink, Outcome, Settings } from '../types/engine.js';
+import type { GamePermalink, Outcome } from '../types/engine.js';
 import { ambitionStatus, type AmbitionStatus, type PriorityReport } from './ambitions.js';
-import { drawSettings, pickOutcome, revisionsFor } from './draw.js';
 
 /**
- * The close (stage 7): what the playthrough came to. Which ambitions survived and how each
- * promise fared; who paid and who benefited, the engine's figures totalled by the incidence tags;
- * the compromises that mattered, ranked; how the final package fares under every forecast the
- * draw could have produced; and the kind of Budget it was, which is a judgement chosen from data
- * and badged as one. Nothing here adds a number: it totals, ranks and re-runs the engine.
+ * The close (the feedback, step 6): what the playthrough came to. Which ambitions survived and
+ * how each promise fared; who paid and who benefited, the engine's figures totalled by the
+ * incidence tags; and the kind of Budget it was, which is a judgement chosen from data and badged
+ * as one. Nothing here adds a number: it totals and ranks the engine's figures.
  */
 
-export type PriorityFate = 'delivered' | 'narrowed' | 'delayed' | 'unfunded';
+/**
+ * Below this much headroom the margin is thin: the ten billion commentators called wafer-thin
+ * before Budget 2025, the ceiling of the markets' "thin" band (reception.json, mk-headroom).
+ */
+export const THIN_HEADROOM_GBPM = 10_000;
+
+/**
+ * At or above this much the margin is ample: the advisers' rule of thumb of twenty billion, the
+ * ceiling of the markets' "modest" band (reception.json, mk-headroom). A judgement, not a
+ * published threshold, and badged as one wherever it is said.
+ */
+export const AMPLE_HEADROOM_GBPM = 20_000;
+
+export type PriorityFate = 'delivered' | 'narrowed' | 'unfunded';
 /** `strained` (Phase 23): kept in its words, tested in its spirit; amber, not red. */
 export type PromiseFate = 'kept' | 'strained' | 'broken-by-choice' | 'broken-by-arithmetic';
 
@@ -43,63 +48,31 @@ export interface IncidenceRow {
   levers: string[];
 }
 
-export interface CompromiseRow {
-  lever: Lever;
-  from: number;
-  to: number;
-  /** Change in borrowing in the target year from the move, £ million; negative = saved. */
-  deltaGbpm: number;
-}
-
-export interface ResilienceRow {
-  outcome: DrawOutcome;
-  headroomGbpm: number;
-  rulesMissed: string[];
-  /** The one that actually arrived in this playthrough. */
-  drawn: boolean;
-}
-
 export interface BudgetVerdict {
   ambitions: AmbitionVerdict;
   paid: IncidenceRow[];
   benefited: IncidenceRow[];
-  compromises: CompromiseRow[];
-  resilience: ResilienceRow[];
   kind: { title: string; line: SimulatedLine; id: string };
   targetYear: string;
   headroomGbpm: number;
 }
 
 export interface VerdictInput {
-  vintage: Vintage;
-  rules: RuleSet;
   levers: readonly Lever[];
   pm: PmFile;
   options: OptionsFile;
-  draws: DrawsFile;
-  context: ContextFile;
   incidence: IncidenceFile;
   kinds: VerdictsFile;
   game: GamePermalink;
   outcome: Outcome;
-  snapshot?: Record<string, number>;
-  macroCodes: readonly string[];
   typicalErrorGbpm: number;
   /** Readings the reactions engine already computed, for the kind of Budget. */
   credibilityShare: number;
   rebellionRisk: number;
 }
 
-function effectOnBorrowing(outcome: Outcome, code: string, year: string): number {
-  const e = outcome.leverEffects.find((x) => x.code === code);
-  if (!e) return 0;
-  return (e.currentSpending[year] ?? 0) + (e.capitalSpending[year] ?? 0) - (e.receipts[year] ?? 0);
-}
-
 function priorityFate(p: PriorityReport): PriorityFate {
-  if (p.status === 'delivered') {
-    return p.options.some((o) => o.state === 'on' && o.delayedTo) ? 'delayed' : 'delivered';
-  }
+  if (p.status === 'delivered') return 'delivered';
   if (p.status === 'part') return 'narrowed';
   return 'unfunded';
 }
@@ -166,91 +139,6 @@ export function incidenceRows(
   };
 }
 
-/** What changed between the forecast and Budget day, ranked by what it did to borrowing. */
-export function compromiseRows(
-  input: Pick<VerdictInput, 'vintage' | 'rules' | 'levers' | 'outcome' | 'snapshot' | 'macroCodes'>,
-  year: string,
-): CompromiseRow[] {
-  if (!input.snapshot) return [];
-  const byCode = new Map(input.levers.map((l) => [l.code, l] as const));
-  const values = input.outcome.settings.leverValues;
-  const before: Record<string, number> = {};
-  for (const [code, v] of Object.entries(input.snapshot)) {
-    if (!input.macroCodes.includes(code)) before[code] = v;
-  }
-  for (const code of input.macroCodes) if (values[code] !== undefined) before[code] = values[code]!;
-  const changed = [...new Set([...Object.keys(before), ...Object.keys(values)])].filter((code) => {
-    const lever = byCode.get(code);
-    if (!lever || input.macroCodes.includes(code)) return false;
-    return (before[code] ?? lever.control.default) !== (values[code] ?? lever.control.default);
-  });
-  if (changed.length === 0) return [];
-  const snapshotOutcome = computeOutcome({
-    vintage: input.vintage,
-    rules: input.rules,
-    levers: input.levers,
-    settings: { ...input.outcome.settings, leverValues: before },
-  });
-  return changed
-    .map((code) => {
-      const lever = byCode.get(code)!;
-      return {
-        lever,
-        from: before[code] ?? lever.control.default,
-        to: values[code] ?? lever.control.default,
-        deltaGbpm:
-          effectOnBorrowing(input.outcome, code, year) -
-          effectOnBorrowing(snapshotOutcome, code, year),
-      };
-    })
-    .sort((a, b) => Math.abs(b.deltaGbpm) - Math.abs(a.deltaGbpm));
-}
-
-/** The final package under every forecast the draw could have produced. */
-export function resilienceRows(
-  input: Pick<
-    VerdictInput,
-    'vintage' | 'rules' | 'levers' | 'draws' | 'context' | 'outcome' | 'macroCodes' | 'game'
-  >,
-): ResilienceRow[] {
-  const drawn = pickOutcome(input.game.seed, input.draws.outcomes).id;
-  const policy: Record<string, number> = {};
-  for (const [code, v] of Object.entries(input.outcome.settings.leverValues)) {
-    if (!input.macroCodes.includes(code)) policy[code] = v;
-  }
-  const base: Omit<Settings, 'leverValues' | 'revisions'> = {
-    implementationYear: input.outcome.settings.implementationYear,
-    debtInterestFeedback: input.outcome.settings.debtInterestFeedback,
-    assessAsOf: input.outcome.settings.assessAsOf,
-    ...(input.outcome.settings.implementationYearByCode
-      ? { implementationYearByCode: input.outcome.settings.implementationYearByCode }
-      : {}),
-  };
-  return input.draws.outcomes.map((outcome) => {
-    const { values } = drawSettings(outcome, input.context, input.levers);
-    const revisions = revisionsFor(outcome, input.levers);
-    const run = computeOutcome({
-      vintage: input.vintage,
-      rules: input.rules,
-      levers: input.levers,
-      settings: {
-        ...base,
-        leverValues: { ...policy, ...values },
-        ...(Object.keys(revisions).length > 0 ? { revisions } : {}),
-      },
-    });
-    const stability = run.verdicts.find((v) => v.kind === 'currentBudget');
-    return {
-      outcome,
-      headroomGbpm: stability?.headroomGbpm ?? 0,
-      rulesMissed: run.verdicts
-        .filter((v) => v.status === 'notMet' || v.status === 'aboveMargin')
-        .map((v) => v.ruleName),
-      drawn: outcome.id === drawn,
-    };
-  });
-}
-
 function fits(kind: VerdictKind, facts: Record<string, boolean>): boolean {
   for (const [key, want] of Object.entries(kind.when)) {
     if (want === undefined) continue;
@@ -276,23 +164,18 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
   const status = ambitionStatus(game, pm, input.options, outcome, levers);
   const ambitions = ambitionVerdict(status, levers);
   const { paid, benefited } = incidenceRows(outcome, levers, input.incidence, year);
-  const compromises = compromiseRows(input, year);
-  const resilience = resilienceRows(input);
 
   const rulesMet = !outcome.verdicts.some(
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
   );
-  const target = game.headroomTargetBn * 1000;
   const delivered = status.delivered;
   const facts: Record<string, boolean> = {
     rulesMet,
-    breachAccepted: game.breachAccepted,
     promisesAllKept: status.broken === 0,
     prioritiesAllFunded: status.priorities.length > 0 && delivered === status.priorities.length,
     prioritiesNoneFunded: delivered === 0,
-    headroomAtLeastTarget: headroom >= target,
+    headroomAmple: headroom >= AMPLE_HEADROOM_GBPM,
     headroomThin: headroom < input.typicalErrorGbpm / 2,
-    rabbitKept: game.rabbit.length === 1 && game.rabbit[0] === 'keep',
     certified: input.credibilityShare <= 0.1,
     restive: input.rebellionRisk >= 3,
   };
@@ -312,8 +195,6 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
     ambitions,
     paid,
     benefited,
-    compromises,
-    resilience,
     kind: {
       id: chosen.id,
       title: fillText(chosen.title),

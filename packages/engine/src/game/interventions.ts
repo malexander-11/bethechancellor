@@ -31,8 +31,6 @@ export interface Intervention {
 export interface DeskReading {
   /** Stability-rule headroom in the target year, £ million. */
   headroomGbpm: number;
-  /** The margin the player set out to keep, £ million; nought means whatever the rules leave. */
-  targetGbpm: number;
   /** Any rule missed, or the welfare cap above its margin. */
   ruleMissed: boolean;
 }
@@ -42,11 +40,9 @@ const ORDER: readonly InterventionWhen[] = [
   'promise-broken',
   'rule-missed',
   'priority-unfunded',
-  'headroom-below-target',
   'promise-strained',
   'priority-part-funded',
   'all-priorities-funded',
-  'headroom-above-target',
 ];
 
 export function interventionsFor(
@@ -96,13 +92,6 @@ export function interventionsFor(
   }
   if (status.priorities.length > 0 && status.delivered === status.priorities.length) {
     say('all-priorities-funded', undefined, undefined, []);
-  }
-  if (reading.targetGbpm > 0) {
-    if (reading.headroomGbpm < reading.targetGbpm) {
-      say('headroom-below-target', undefined, undefined, []);
-    } else {
-      say('headroom-above-target', undefined, undefined, []);
-    }
   }
   return out.sort((a, b) => ORDER.indexOf(a.when) - ORDER.indexOf(b.when));
 }

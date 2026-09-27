@@ -7,6 +7,7 @@ import {
   optionOverlaps,
   optionRedLines,
   rankedPriorities,
+  stageIndex,
   type DeliverOption,
   type Lever,
 } from '@btc/engine';
@@ -29,49 +30,24 @@ export function deliverPath(n: number): string {
   return n <= 1 ? '/budget/deliver' : `/budget/deliver/${n}`;
 }
 
-/** Which desk screen a lever lives on, and which group of it. */
-function deskFor(lever: Lever): { to: string; group: string; noun: string } {
-  return lever.category === 'tax'
-    ? { to: '/budget/taxes', group: lever.group ?? '', noun: 'tax' }
-    : { to: '/budget/spending', group: lever.group ?? '', noun: 'spending' };
-}
-
 /**
- * The ways into the desk, one per desk screen the priority's options touch, opening the group of
- * the first lever there; the screen shows the first. Most priorities touch one screen.
- */
-function deskLinks(
-  section: readonly DeliverOption[],
-): { to: string; group: string; noun: string }[] {
-  const seen = new Map<string, { to: string; group: string; noun: string }>();
-  for (const option of section) {
-    for (const code of Object.keys(option.values)) {
-      const lever = byCode.get(code);
-      if (!lever) continue;
-      const desk = deskFor(lever);
-      if (!seen.has(desk.to)) seen.set(desk.to, desk);
-    }
-  }
-  return [...seen.values()];
-}
-
-/**
- * Step 4, the first screens: one per priority agreed with the Prime Minister, in rank order: its
- * costed options, each a bundle of the game's own levers priced against the Budget as it stands
- * (ADR-0022), chosen with a tick, each with one adviser's line on who proposed it and what it costs
- * and does (Phase 23); two that count the same money cannot both be on. The headroom bar keeps score as you tick. Every lever the game
- * has is one link away under "More policies"; a sandbox with no game goes straight there, because
- * it has no priorities to deliver.
+ * Step 3: flagship policies (Phase 24). One screen per priority agreed with the Prime Minister, in
+ * rank order: its costed options, each a bundle of the game's own levers priced against the Budget
+ * as it stands (ADR-0022), chosen with a tick, each with one adviser's line on who proposed it and
+ * what it costs and does (Phase 23); two that count the same money cannot both be on. The headroom
+ * bar keeps score as you tick. Step 4 is next, and it is where every other lever is; a sandbox
+ * with no game is sent to the briefing, which starts one, because it has no priorities to deliver.
  */
 export function DeliverPage() {
   const { n: nParam } = useParams();
   const { state, dispatch, outcome } = useBudget();
-  const { search, pathname } = useLocation();
+  const { search } = useLocation();
   const priceOf = useOptionPrices();
   const game = state.game;
   const guard = useStageGuard('deliver');
   if (guard) return guard;
-  if (!game) return <Navigate to={{ pathname: '/budget/taxes', search }} replace />;
+  // The guard has sent a sandbox to the briefing already; this only satisfies the types.
+  if (!game) return <Navigate to={{ pathname: '/outlook', search }} replace />;
 
   const ranked = rankedPriorities(game, pm);
   const requested = Number(nParam ?? '1');
@@ -97,7 +73,7 @@ export function DeliverPage() {
     return (
       <JourneyLayout
         step="deliver"
-        title="Build your Budget"
+        title="Flagship policies"
         lead="Nothing is ranked yet, so there is nothing to deliver."
       >
         <p className="actions">
@@ -111,15 +87,13 @@ export function DeliverPage() {
 
   const { priority } = report;
   const rank = RANK[n - 1] ?? `${n}th`;
-  // One quiet way into the desk: the screen the priority's first lever lives on.
-  const desk = deskLinks(report.options.map((o) => o.option))[0];
   const nextPriority = ranked[n];
   const back = n > 1 ? deliverPath(n - 1) : '/pm';
 
   return (
     <JourneyLayout
       step="deliver"
-      part={{ index: n, total: ranked.length + 2, label: priority.title }}
+      part={{ index: n, total: ranked.length, label: priority.title }}
       title={
         <>
           <span className="intro__rank">{rank}</span> {priority.title}
@@ -128,7 +102,7 @@ export function DeliverPage() {
       tabTitle={`${rank} · ${priority.title}`}
       lead="Tick the ways you want."
     >
-      <HeadroomBar outcome={outcome} game={game} status={status} />
+      <HeadroomBar outcome={outcome} status={status} />
       <div
         className="choices choices--list"
         role="group"
@@ -181,28 +155,22 @@ export function DeliverPage() {
           );
         })}
       </div>
-      {desk ? (
-        <p className="more-link">
-          <StepLink
-            to={desk.to}
-            state={{
-              group: desk.group,
-              from: 'deliver',
-              returnTo: pathname,
-              returnLabel: `Back to the options for ${priority.noun}`,
-            }}
-          >
-            More policies: every lever
-          </StepLink>
-        </p>
-      ) : null}
       <p className="actions">
         {nextPriority ? (
           <StepLink to={deliverPath(n + 1)} className="btn btn--primary">
             Next: {nextPriority.title}
           </StepLink>
         ) : (
-          <StepLink to="/finetune/tax" className="btn btn--primary">
+          <StepLink
+            to="/finetune/tax"
+            className="btn btn--primary"
+            onClick={() =>
+              dispatch({
+                type: 'updateGame',
+                patch: { reached: Math.max(game.reached, stageIndex('finetune')) },
+              })
+            }
+          >
             Next: fine-tune tax and spend
           </StepLink>
         )}

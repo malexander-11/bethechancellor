@@ -2,37 +2,38 @@ import { enterable, type JourneyStep } from '@btc/engine';
 import { StepLink } from '../journey/links';
 import { useBudget } from '../state/budget';
 
-type Stop = 'start' | 'outlook' | 'pm' | 'budget' | 'forecast' | 'final' | 'budget-day';
+type Stop = 'briefing' | 'pm' | 'flagships' | 'finetune' | 'review' | 'budget-day';
 
-/** The seven steps, in order, as the player is told them. */
+/** The six steps, in order, as the player is told them (Phase 24, ADR-0025). */
 export const STOPS: ReadonlyArray<{ id: Stop; label: string; to: string; step: JourneyStep }> = [
-  { id: 'start', label: 'Become Chancellor', to: '/', step: 'start' },
-  { id: 'outlook', label: 'Your starting position', to: '/outlook', step: 'outlook' },
+  { id: 'briefing', label: 'Briefing', to: '/outlook', step: 'outlook' },
   { id: 'pm', label: 'Set your priorities', to: '/pm', step: 'pm' },
-  { id: 'budget', label: 'Build your Budget', to: '/budget/deliver', step: 'deliver' },
-  { id: 'forecast', label: 'Respond to the forecast', to: '/forecast', step: 'forecast' },
-  { id: 'final', label: 'Final choices', to: '/rabbit', step: 'rabbit' },
-  { id: 'budget-day', label: 'What your Budget means', to: '/budget-day', step: 'budget-day' },
+  { id: 'flagships', label: 'Flagship policies', to: '/budget/deliver', step: 'deliver' },
+  { id: 'finetune', label: 'Fine-tune tax and spend', to: '/finetune/tax', step: 'finetune' },
+  { id: 'review', label: 'Deliver the Budget', to: '/review', step: 'review' },
+  { id: 'budget-day', label: 'Feedback', to: '/budget-day', step: 'budget-day' },
 ];
 
-/** Which step a screen belongs to. */
+/** Which step a screen belongs to. The cover is the briefing's; the desk is fine-tuning's. */
 export function stopFor(step: JourneyStep): Stop {
   switch (step) {
     case 'start':
-    case 'pm':
-    case 'forecast':
-    case 'budget-day':
-      return step;
-    case 'rabbit':
-    case 'review':
-      return 'final';
-    case 'compromise':
-      return 'forecast';
     case 'outlook':
     case 'assumptions':
-      return 'outlook';
+      return 'briefing';
+    case 'pm':
+      return 'pm';
+    case 'deliver':
+      return 'flagships';
+    case 'forecast':
+    case 'compromise':
+    case 'rabbit':
+    case 'review':
+      return 'review';
+    case 'budget-day':
+      return 'budget-day';
     default:
-      return 'budget';
+      return 'finetune';
   }
 }
 
@@ -50,7 +51,7 @@ export interface SubStep {
 }
 
 /**
- * The road, as a running head: "Step 3 of 7 · Set your priorities" and seven numerals on a
+ * The road, as a running head: "Step 2 of 6 · Set your priorities" and six numerals on a
  * rule, one per step. A step you have reached is a link, so you can go back; the one
  * you are at is marked; the ones ahead are inert. It reads the same `enterable` rule as the guard
  * on every page, so it never offers a link that would only bounce (ADR-0014). The numerals carry
@@ -114,7 +115,7 @@ export function Progress({
                   {name}
                 </span>
               ) : open ? (
-                <StepLink to={s.to} end={s.id === 'start'}>
+                <StepLink to={s.to}>
                   {num}
                   {name}
                 </StepLink>

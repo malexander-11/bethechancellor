@@ -17,6 +17,8 @@ import {
   parseGlossary,
   guideFor as guideStageFor,
   finetuneTitles,
+  macroCodesOf,
+  suggestedSettings,
   parseReception,
   parseContext,
   parseHouseholds,
@@ -98,6 +100,19 @@ export const levers: Lever[] = Object.keys(leverModules)
   .sort()
   .map((key) => parseLever(leverModules[key]))
   .filter((lever) => lever.status === 'reviewed' && !lever.deprecated);
+
+/**
+ * Today's estimate (Phase 24, ADR-0025): the OBR's March forecast on today's borrowing costs and
+ * prices, each setting the advisers' stated rule applied to a published reading. Every game is
+ * played on it; the sandbox may still set its own figures on the desk.
+ */
+export const ESTIMATE: Readonly<Record<string, number>> = suggestedSettings(
+  context.readings,
+  levers,
+);
+
+/** The levers the estimate sets: the economy, not policy. */
+export const MACRO_CODES: readonly string[] = macroCodesOf(context.readings);
 
 export const sourcesById: ReadonlyMap<string, SourceDoc> = new Map(
   sources.sources.map((s) => [s.id, s] as const),

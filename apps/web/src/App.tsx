@@ -5,14 +5,11 @@ import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
 import { BudgetPage } from './pages/Budget';
 import { BudgetDayPage } from './pages/BudgetDay';
-import { CompromisePage } from './pages/Compromise';
 import { DeliverPage } from './pages/Deliver';
 import { FinetunePage } from './pages/Finetune';
-import { ForecastPage } from './pages/Forecast';
 import { MethodologyPage } from './pages/Methodology';
 import { OutlookPage } from './pages/Outlook';
 import { PMPage } from './pages/PM';
-import { RabbitPage } from './pages/Rabbit';
 import { ReviewPage } from './pages/Review';
 import { StartPage } from './pages/Start';
 import { Disclaimer } from './components/Disclaimer';
@@ -74,7 +71,7 @@ function Shell() {
           <Route path="/outlook" element={<OutlookPage />} />
           <Route path="/assumptions" element={<RedirectKeepingQuery to="/outlook" />} />
           <Route path="/pm" element={<PMPage />} />
-          <Route path="/budget" element={<RedirectKeepingQuery to="/budget/deliver" />} />
+          <Route path="/budget" element={<RedirectKeepingQuery to="/budget/taxes" />} />
           {/* The flagship screens of the package; the desk's two screens catch everything else. */}
           <Route path="/budget/deliver" element={<DeliverPage />} />
           <Route path="/budget/deliver/:n" element={<DeliverPage />} />
@@ -84,10 +81,14 @@ function Shell() {
           <Route path="/finetune" element={<RedirectKeepingQuery to="/finetune/tax" />} />
           <Route path="/finetune/:side" element={<FinetunePage />} />
           <Route path="/recommendations" element={<RedirectKeepingQuery to="/budget/spending" />} />
-          <Route path="/forecast" element={<ForecastPage />} />
-          <Route path="/compromise" element={<CompromisePage />} />
-          <Route path="/compromise/:n" element={<CompromisePage />} />
-          <Route path="/rabbit" element={<RabbitPage />} />
+          {/*
+            The forecast that arrived later, the compromises and the add-ons retired in Phase 24:
+            their old addresses open the review, and the stage guard sends an early game back.
+          */}
+          <Route path="/forecast" element={<RedirectKeepingQuery to="/review" />} />
+          <Route path="/compromise" element={<RedirectKeepingQuery to="/review" />} />
+          <Route path="/compromise/:n" element={<RedirectKeepingQuery to="/review" />} />
+          <Route path="/rabbit" element={<RedirectKeepingQuery to="/review" />} />
           <Route path="/review" element={<ReviewPage />} />
           <Route path="/budget-day" element={<BudgetDayPage />} />
           <Route path="/b" element={<RedirectKeepingQuery to="/budget/taxes" />} />

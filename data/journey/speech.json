@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "opening": {
     "default": {
-      "text": "Madam Deputy Speaker, this Budget is built on the forecast the Office for Budget Responsibility published this morning and on the rules this government set itself. Every figure in it is theirs; every choice in it is mine.",
+      "text": "Madam Deputy Speaker, this Budget is built on the Office for Budget Responsibility’s March forecast, brought up to date for today’s borrowing costs and prices, and on the rules this government set itself. Every figure in it starts from theirs; every choice in it is mine.",
       "sources": []
     },
     "cost-of-living": {
@@ -136,67 +136,6 @@
     "text": "I will be straight with the House. This Budget does not keep every promise this government made: {promises}. I chose that, and I will answer for it here.",
     "sources": []
   },
-  "compromises": {
-    "text": "Not everything we set out to do in September survives the forecast. {count} of our measures are scaled back or delayed, and I would rather say so than pretend otherwise.",
-    "sources": []
-  },
-  "delay": {
-    "text": "{title} will now begin in {year}.",
-    "sources": []
-  },
-  "rabbit": {
-    "keep-electricity-zero": {
-      "text": "And one more thing. VAT stays off electricity after March 2027. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "stamp-duty-point": {
-      "text": "And one more thing. A point off stamp duty’s 5% band for every buyer above £250,000. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "allowance-100": {
-      "text": "And one more thing. The personal allowance rises by £100 from next April. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "nics-threshold-2": {
-      "text": "And one more thing. Working people keep £2 a week more before National Insurance starts. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "transport-up": {
-      "text": "And one more thing. Five per cent more for transport’s day-to-day budget. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "aid-up": {
-      "text": "And one more thing. Aid rises by five per cent, a first step back towards 0.7% of national income. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "pensioners-half": {
-      "text": "And one more thing. Half a per cent more for pensioners, above what the forecast already assumes. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "pubs": {
-      "text": "And one more thing. Alcohol duty is cut by five per cent from next April. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "further": {
-      "text": "And I can go further than I agreed on {title}. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "several": {
-      "text": "And a few smaller things, each already costed: {titles}. Headroom after this Budget: {headroom}.",
-      "sources": []
-    },
-    "keep": {
-      "text": "There is no rabbit in this hat. The announcement is the margin itself: {headroom} of headroom against our rules, kept deliberately, because a thin margin costs more than a cheer.",
-      "sources": [
-        {
-          "sourceId": "hmt-budget-2025-speech"
-        },
-        {
-          "sourceId": "ifg-healey-tax-budget-2026"
-        }
-      ]
-    }
-  },
   "peroration": {
     "met": {
       "text": "The Office for Budget Responsibility confirms this Budget meets the fiscal rules, with {headroom} of headroom in {targetYear}. Stability first, then everything else. I commend this Budget to the House.",
@@ -204,10 +143,6 @@
     },
     "missed": {
       "text": "The Office for Budget Responsibility will publish that this Budget misses a rule in {targetYear}, by {headroom}. I have heard its assessment and made my choice. I commend this Budget to the House.",
-      "sources": []
-    },
-    "breach": {
-      "text": "I say openly what the Office for Budget Responsibility will publish this afternoon: this Budget misses a rule in {targetYear}, by {headroom}. I have chosen to proceed, and I have written down why. I commend this Budget to the House.",
       "sources": []
     }
   }

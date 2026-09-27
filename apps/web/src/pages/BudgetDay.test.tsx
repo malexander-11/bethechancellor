@@ -1,14 +1,12 @@
-import { pickOutcome, SEED_MAX, SEED_MIN } from '@btc/engine';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
-import { draws } from '../data';
 
 function at(search: string) {
   // The provider reads the budget out of the real location, so set it before rendering.
   window.history.replaceState(null, '', `/budget-day?${search}`);
-  render(
+  return render(
     <MemoryRouter initialEntries={[`/budget-day?${search}`]}>
       <App />
     </MemoryRouter>,
@@ -22,13 +20,8 @@ const meter = (name: string) => within(card(name)).getByRole('img');
 /** Open one of the folds by its summary. */
 const open = (summary: string) => fireEvent.click(screen.getByText(summary));
 
-function seedFor(id: string): number {
-  for (let s = SEED_MIN; s <= SEED_MAX; s += 1)
-    if (pickOutcome(s, draws.outcomes).id === id) return s;
-  throw new Error(`no seed lands on ${id}`);
-}
-const ADVISER = seedFor('adviser-right');
-const GAME = `g=s.${ADVISER}_st.5_pl.adviser_hr.20_pr.defence+safer-streets_rv.1_rb.keep&M=rate.0.75_rpi.0.5`;
+/** Two priorities agreed, delivered from the review, on today's estimate (Phase 24). */
+const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5';
 
 describe('Budget day: what your Budget means', () => {
   it('is one screen: the rules line, three rated audiences, and the rest behind folds', () => {
@@ -80,6 +73,25 @@ describe('Budget day: what your Budget means', () => {
     ).toBeInTheDocument();
     // A broken promise outranks a thin margin as the thing accepted.
     expect(within(statement).getByText('I accepted breaking the tax lock.')).toBeInTheDocument();
+  });
+
+  it('says what was accepted when nothing was broken: a thin margin, or what was kept', () => {
+    // Prisons paid for out of today's estimate: under ten billion is left, and the Budget says so.
+    const thin = at(`${BASE}&${GAME}&L=moj.10`);
+    let statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
+    expect(
+      within(statement).getByText('I paid for it out of the headroom I had.'),
+    ).toBeInTheDocument();
+    expect(
+      within(statement).getByText(/^I accepted a thin margin: £\d\.\dbn of headroom\.$/),
+    ).toBeInTheDocument();
+    thin.unmount();
+    // Paid for by broadening the VAT base, which the tax lock does not name: every promise kept.
+    at(`${BASE}&${GAME}&L=moj.10_vatfood.1`);
+    statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
+    expect(
+      within(statement).getByText(/^I kept every promise and £\d+\.\dbn of headroom\.$/),
+    ).toBeInTheDocument();
   });
 
   it('gives the reasons and the decisions behind them, and shows its workings on request', () => {
@@ -147,32 +159,35 @@ describe('Budget day: what your Budget means', () => {
     at(`${BASE}&${GAME}&L=moj.10`);
     open('Budget documents');
     expect(screen.getByText('Table 4.1: your policy decisions')).toBeInTheDocument();
+    // The economy is named for what it is: our estimate, standing in for the OBR's own.
+    expect(screen.getByText('Economic assumptions: today’s estimate.')).toBeInTheDocument();
+    expect(screen.getByText(/this game uses today’s estimate in its place/)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'the one you opened' })).toBeNull();
     // The tests run with the workings on, so the rules in full and the paths are there too.
     expect(screen.getByText('The rules in full')).toBeInTheDocument();
     expect(screen.getByText('Five-year paths')).toBeInTheDocument();
     await new Promise((r) => setTimeout(r, 200));
-    expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.6/);
+    expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.5/);
   });
 
-  it('closes with the verdict: the kind of Budget, the ambitions, who paid, and every other forecast', () => {
-    at(`${BASE}&${GAME}&L=moj.10_itbr.1&S=moj.10_dip47.1_itbr.1`);
+  it('closes with the verdict: the kind of Budget, the ambitions and who paid', () => {
+    at(`${BASE}&${GAME}&L=moj.10_itbr.1`);
     const close = screen.getByRole('region', { name: /A Budget|Half a programme|small moves/ });
     expect(within(close).getByText(/Which ambitions survived/)).toBeInTheDocument();
     expect(within(close).getByText(/Safer streets: prisons, police, borders/)).toBeInTheDocument();
     expect(within(close).getByText(/broken by choice \(Basic rate\)/)).toBeInTheDocument();
     expect(within(close).getByText(/Everyone who earns or spends/)).toBeInTheDocument();
     expect(within(close).getByText(/Courts and prisons/)).toBeInTheDocument();
-    // The DIP gap was in the snapshot and is not in the package: a compromise that mattered.
-    expect(within(close).getByText(/Defence plan gap/)).toBeInTheDocument();
-    expect(within(close).getAllByText(/rules met|missed/).length).toBeGreaterThanOrEqual(5);
-    expect(within(close).getByText('what arrived')).toBeInTheDocument();
-    expect(
-      within(close).getByRole('link', { name: /Replay under the same conditions/ }),
-    ).toHaveAttribute('href', expect.stringContaining(`g=s.${ADVISER}`));
+    // Phase 24 retired the forecast that arrived later: no compromises since it, no other
+    // forecasts to re-run the Budget under, no replay of a seed.
+    expect(within(close).queryByText(/The compromises that mattered/)).toBeNull();
+    expect(within(close).queryByText(/other forecasts/)).toBeNull();
+    expect(within(close).queryByText('what arrived')).toBeNull();
+    expect(screen.queryByRole('link', { name: /Replay/ })).toBeNull();
   });
 
-  it('the speech follows the choices: the first priority, its options and the add-on', () => {
-    at(`${BASE}&${GAME.replace('rb.keep', 'rb.pubs')}&L=moj.10_alc.-5`);
+  it('the speech follows the choices: the first priority, its options and what it cuts', () => {
+    at(`${BASE}&${GAME}&L=moj.10_alc.-5`);
     open('Read the speech');
     const speech = screen.getByRole('article', { name: 'The Budget speech' });
     expect(
@@ -181,7 +196,9 @@ describe('Budget day: what your Budget means', () => {
     expect(
       within(speech).getByText(/more money for prisons and courts, £1\.4bn in 2029-30/),
     ).toBeInTheDocument();
-    expect(within(speech).getByText(/Alcohol duty is cut by five per cent/)).toBeInTheDocument();
+    expect(
+      within(speech).getByText(/we cut taxes where we can: alcohol duties/),
+    ).toBeInTheDocument();
   });
 
   it('offers the ways on: a link to copy, the review to change something, and a fresh start', () => {

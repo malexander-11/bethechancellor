@@ -1,7 +1,7 @@
 import type { Lever } from '../types/data.js';
 import { freshGame, type AssessAsOf, type GamePermalink } from '../types/engine.js';
 import { LEGACY_THEME_PRIORITY } from '../game/options.js';
-import { SEED_MAX, SEED_MIN } from '../game/draw.js';
+import { FINAL_STAGE } from '../game/stages.js';
 
 export const PERMALINK_VERSION = 1;
 
@@ -12,10 +12,8 @@ export interface PermalinkState {
   leverValues: Record<string, number>;
   debtInterestFeedback: boolean;
   assessAsOf: AssessAsOf;
-  /** The playthrough, once a seed exists (`g=`). */
+  /** The playthrough, once the player has left the briefing (`g=`). */
   game?: GamePermalink;
-  /** The policy levers as they stood when the in-game OBR update arrived (`S=`). */
-  snapshot?: Record<string, number>;
 }
 
 export interface DecodedPermalink {
@@ -29,42 +27,32 @@ const LIST_SPLIT = /[+ ]/;
 const slugOk = (s: string) => /^[a-z0-9][a-z0-9:-]*$/.test(s);
 
 /**
- * `g=` holds the story of a playthrough as `key.value` items. Only what differs from a fresh game
- * is written, so a link stays readable: `g=s.417_st.6_pl.adviser_hr.20_th.cost_pr.ufsm+dip47`.
+ * How a stage from before Phase 24 reads now, by its old index: the outlook, the PM and the
+ * flagships stay where they were; the forecast (3) opens fine-tuning; the compromises (4) and the
+ * final choices (5) open the review, short of Budget day; a finished Budget (6) stays finished.
+ */
+export const LEGACY_STAGE: readonly number[] = [0, 1, 2, 3, 4, 4, 5];
+
+/**
+ * `g=` holds the story of a playthrough as `key.value` items: `g=st.3_pr.defence+nhs`. The stage
+ * is always written, so a `g=` always marks a game (`st.0` is a game at the briefing).
  *
- * Retired keys, never to be reused: `pp` (protected promises), `cn` (concessions), `cp`
- * (political capital) and `dp` (dropped priorities) carried the Phase 8 negotiation with the PM.
- * The manifesto is now a fixed set of red lines, so a link that carries them decodes without
- * them and without a warning; a Budget that had negotiated away the tax lock now shows it broken.
- * `th` (the Phase 9 themes) is retired too: on the way in each theme reads as the priority that
- * took its place (Phase 18), so an old link still opens with a ranking.
+ * Retired keys, never to be reused, ignored without a warning when an old link carries them:
+ * `s` (the seed of the in-game OBR draw), `pl` (the forecast planned on), `hr` (the headroom
+ * target), `dl` (delayed measures), `rv` (the forecast opened), `rb` (the add-ons) and `br` (a
+ * rule breach accepted) went with the forecast, the compromises and the add-ons in Phase 24
+ * (ADR-0025); `pp`, `cn`, `cp` and `dp` carried the Phase 8 negotiation with the PM. A link that
+ * carries a seed is from before Phase 24, so its stage is read through `LEGACY_STAGE`. `th` (the
+ * Phase 9 themes) still reads as the priority that took each one's place (Phase 18). The `S=`
+ * snapshot of the package before the forecast is no longer read or written.
  */
 export function encodeGame(g: GamePermalink): string {
-  const fresh = freshGame(g.seed);
-  const items = [`s.${g.seed}`];
-  if (g.reached !== fresh.reached) items.push(`st.${g.reached}`);
-  if (g.planning !== fresh.planning) items.push(`pl.${g.planning}`);
-  if (g.headroomTargetBn !== fresh.headroomTargetBn) items.push(`hr.${g.headroomTargetBn}`);
+  const items = [`st.${g.reached}`];
   if (g.priorities.length > 0) items.push(`pr.${g.priorities.join(LIST_SEPARATOR)}`);
-  const delays = Object.entries(g.delays).sort(([a], [b]) => a.localeCompare(b));
-  if (delays.length > 0) {
-    items.push(
-      `dl.${delays.map(([code, year]) => `${code}-${year.slice(0, 4)}`).join(LIST_SEPARATOR)}`,
-    );
-  }
-  if (g.revealed) items.push('rv.1');
-  if (g.rabbit.length > 0) items.push(`rb.${g.rabbit.join(LIST_SEPARATOR)}`);
-  if (g.breachAccepted) items.push('br.1');
   return items.join(ITEM_SEPARATOR);
 }
 
-function toFiscalYear(start: string): string | null {
-  if (!/^\d{4}$/.test(start)) return null;
-  const n = Number(start);
-  return `${n}-${String((n + 1) % 100).padStart(2, '0')}`;
-}
-
-/** Never throws. A game without a usable seed is no game; unknown items are ignored. */
+/** Never throws. A `g=` with nothing in it that can be read is no game; unknown items are ignored. */
 export function decodeGame(raw: string, warnings: string[]): GamePermalink | undefined {
   const items = new Map<string, string>();
   for (const item of raw.split(ITEM_SEPARATOR)) {
@@ -72,44 +60,27 @@ export function decodeGame(raw: string, warnings: string[]): GamePermalink | und
     if (dot <= 0) continue;
     items.set(item.slice(0, dot), item.slice(dot + 1));
   }
-  const seed = Number(items.get('s'));
-  if (!Number.isInteger(seed) || seed < SEED_MIN || seed > SEED_MAX) {
-    warnings.push('Ignored the game in this link: it has no usable seed.');
+  if (!['st', 's', 'pr', 'th'].some((key) => items.has(key))) {
+    warnings.push('Ignored the game in this link: nothing in it could be read.');
     return undefined;
   }
-  const g = freshGame(seed);
-  const int = (key: string, fallback: number) => {
-    const v = Number(items.get(key));
-    return Number.isInteger(v) ? v : fallback;
-  };
+  const g = freshGame();
+  const st = Number(items.get('st'));
+  const stage = Number.isInteger(st) ? st : 0;
+  // A link from before Phase 24 carried a seed and seven stages.
+  const legacy = items.has('s');
+  const reached = legacy ? (LEGACY_STAGE[Math.min(Math.max(stage, 0), 6)] ?? 0) : stage;
+  g.reached = Math.min(Math.max(reached, 0), FINAL_STAGE);
   // A `+` typed into a browser's address bar arrives here as a space, so both separate items.
   const list = (key: string) =>
     (items.get(key) ?? '').split(LIST_SPLIT).filter((s) => s.length > 0 && slugOk(s));
-  g.reached = int('st', g.reached);
-  const pl = items.get('pl');
-  if (pl && slugOk(pl)) g.planning = pl;
-  g.headroomTargetBn = int('hr', g.headroomTargetBn);
   // A Phase 9 link ranked themes; each reads as the priority that took its place, ahead of any
   // priorities the link also names. An id the data no longer knows is kept here and dropped by
   // rankedPriorities, so the codec needs no data.
-  const legacy = list('th')
+  const themes = list('th')
     .map((t) => LEGACY_THEME_PRIORITY[t])
     .filter((p): p is string => p !== undefined);
-  g.priorities = [...new Set([...legacy, ...list('pr')])];
-  for (const d of list('dl')) {
-    const dash = d.lastIndexOf('-');
-    const year = toFiscalYear(d.slice(dash + 1));
-    if (dash > 0 && year) g.delays[d.slice(0, dash)] = year;
-  }
-  g.revealed = items.get('rv') === '1';
-  // A Phase 9 link carried one rabbit; it reads as a list of one. Its `flagship:` cards belonged
-  // to the flagships, which the priorities replaced, so they are dropped and said so.
-  const rabbit = list('rb');
-  const stale = rabbit.filter((r) => r.startsWith('flagship:'));
-  if (stale.length > 0)
-    warnings.push(`Ignored ${stale.join(', ')} in this link: the flagships have been retired.`);
-  g.rabbit = rabbit.filter((r) => !r.startsWith('flagship:'));
-  g.breachAccepted = items.get('br') === '1';
+  g.priorities = [...new Set([...themes, ...list('pr')])];
   return g;
 }
 
@@ -130,8 +101,8 @@ function encodePairs(values: Record<string, number>): string {
  * Sparse, versioned, human-skimmable query string (methodology and plan):
  *   v=1&f=obr2603&r=ch2602&i=2027&L=itbr.2_vat.1&M=rate.0.5&o=dif0,nb1
  * Only non-default lever values are encoded. `L` holds policy levers, `M` macro sliders.
- * `g` carries the playthrough and `S` the pre-forecast snapshot, both absent until they exist,
- * so a link with neither is exactly what it was before Phase 8.
+ * `g` carries the playthrough, absent until there is one, so a link without it is exactly what it
+ * was before Phase 8.
  */
 export function encodePermalink(state: PermalinkState, levers: readonly Lever[]): string {
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
@@ -155,14 +126,6 @@ export function encodePermalink(state: PermalinkState, levers: readonly Lever[])
   if (state.assessAsOf === 'nextBudget') options.push('nb1');
   if (options.length > 0) params.set('o', options.join(','));
   if (state.game) params.set('g', encodeGame(state.game));
-  if (state.snapshot && Object.keys(state.snapshot).length > 0) {
-    const snapshot: Record<string, number> = {};
-    for (const [code, value] of Object.entries(state.snapshot)) {
-      const lever = byCode.get(code);
-      if (lever && value !== lever.control.default) snapshot[code] = value;
-    }
-    if (Object.keys(snapshot).length > 0) params.set('S', encodePairs(snapshot));
-  }
   return params.toString();
 }
 
@@ -237,12 +200,6 @@ export function decodePermalink(query: string, levers: readonly Lever[]): Decode
   if (g) {
     const game = decodeGame(g, warnings);
     if (game) state.game = game;
-  }
-  const snap = params.get('S');
-  if (snap) {
-    const snapshot: Record<string, number> = {};
-    decodePairs(snap, byCode, warnings, snapshot);
-    if (Object.keys(snapshot).length > 0) state.snapshot = snapshot;
   }
   return { state, warnings };
 }

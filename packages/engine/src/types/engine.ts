@@ -23,43 +23,22 @@ export interface Settings {
 }
 
 /**
- * The story of one playthrough, as the permalink carries it (ADR-0011). Absent until the player
- * confirms an outlook and a seed is minted, so a fresh link has no game in it. The engine owns the
+ * The story of one playthrough, as the permalink carries it (ADR-0011, ADR-0025). Absent until the
+ * player leaves the briefing, so a fresh link has no game in it. Since Phase 24 there is one
+ * estimate of the economy, no draw and no target, so a game is how far the player has got and
+ * what they agreed with the Prime Minister; everything else is lever values. The engine owns the
  * type because the codec encodes it; the web app is its only writer.
  */
 export interface GamePermalink {
-  /** Which in-game OBR forecast this playthrough gets; 1–999. */
-  seed: number;
   /** Furthest stage reached, as an index into GAME_STAGES. */
   reached: number;
-  /** The outlook chosen at stage 1: a scenario kind, or 'own' for hand-set sliders. */
-  planning: string;
-  /** The headroom the player means to keep, £ billion; 0 means "whatever the rules leave". */
-  headroomTargetBn: number;
   /** The priorities ranked with the Prime Minister, first first; empty until Downing Street. */
   priorities: string[];
-  /** Lever code → the later fiscal year the measure now starts in. */
-  delays: Record<string, string>;
-  /** The OBR update has been seen; the macro sliders are now its forecast, not the player's. */
-  revealed: boolean;
-  /** Stage 6: the add-ons chosen, by id, `further:<priority id>` for one notch more, or ['keep']. */
-  rabbit: string[];
-  breachAccepted: boolean;
 }
 
-/** A fresh game around a seed, before any choice has been made. */
-export function freshGame(seed: number): GamePermalink {
-  return {
-    seed,
-    reached: 0,
-    planning: 'baseline',
-    headroomTargetBn: 20,
-    priorities: [],
-    delays: {},
-    revealed: false,
-    rabbit: [],
-    breachAccepted: false,
-  };
+/** A fresh game, before any choice has been made. */
+export function freshGame(): GamePermalink {
+  return { reached: 0, priorities: [] };
 }
 
 /** Why a lever's costed effect was scaled, for the drawer and the badge beside it. */

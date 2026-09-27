@@ -1,5 +1,6 @@
 import {
   ambitionStatus,
+  describeAssumptions,
   formatGbpBn,
   formatPct,
   incidenceRows,
@@ -23,9 +24,10 @@ import { PathChart } from '../components/PathChart';
 import { PresetPicker } from '../components/PresetPicker';
 import { Scorecard } from '../components/Scorecard';
 import {
+  ESTIMATE,
+  MACRO_CODES,
   briefingsFor,
   budget2025NetGbpm,
-  context,
   groupLevers,
   incidence,
   interventions,
@@ -39,12 +41,8 @@ import {
 import { useStageGuard } from '../journey/guard';
 import { chosenByLever, redLinesOf } from '../journey/levers';
 import { StepLink } from '../journey/links';
-import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { useWorkings } from '../journey/workings';
-import { useBudget } from '../state/budget';
-
-const ASSUMPTION_CARDS = scenarioCards(context, levers, vintage);
-const MACRO_CODES = macroCodesOf(context.readings);
+import { onEstimate, useBudget } from '../state/budget';
 
 const nextBudget = new Date(rules.assessment.nextFormalAssessmentOn).toLocaleDateString('en-GB', {
   day: 'numeric',
@@ -110,13 +108,13 @@ interface DeskState {
 }
 
 /**
- * Stage 3: the desk. Two screens of lever groups, and, when a game is under way, the people in the
- * room with you: ministers on the spending groups, advisers who remember what you agreed in
- * Downing Street, the summary strip keeping score, and the options you chose pinned to the top of
- * their groups. With a game the desk is a side room off the guided screens, one link away and
- * never the default (ADR-0022): the briefing folded, a way back to the screen that opened it and
- * no onward flow. Without one it is the sandbox it always was, two screens in sequence leading to
- * Budget day.
+ * The desk: every lever the game has, on two screens of lever groups, and, when a game is under
+ * way, the people in the room with you: ministers on the spending groups, advisers who remember
+ * what you agreed in Downing Street, the summary strip keeping score, and the flagship policies you
+ * chose pinned to the top of their groups. With a game the desk is step 4's side room, one link
+ * away from fine-tuning and never the default (ADR-0022, ADR-0025): the briefing folded, a way
+ * back to the screen that opened it and no onward flow. Without one it is the sandbox it always
+ * was, two screens in sequence leading to Budget day.
  */
 export function BudgetPage() {
   const { tab } = useParams();
@@ -165,14 +163,16 @@ export function BudgetPage() {
   // Open on the first group you have touched, so a shared Budget does not look untouched.
   const defaultGroup =
     groups.find((g) => g.levers.some((l) => moved.has(l.code)))?.name ?? groups[0]?.name ?? '';
-  // Name the card the player chose on step 1; fall back to the figures only if they set their own.
-  const macroSummary =
-    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES, state.game?.revealed) ??
-    leversByCategory.macro
-      .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
-      .filter((x) => x.value !== x.lever.control.default)
-      .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
-      .join(' · ');
+  // The economy the Budget sits on: today's estimate in a game; a sandbox link may carry the
+  // March forecast or figures of its own, which are listed.
+  const economy = describeAssumptions(state.leverValues, ESTIMATE, MACRO_CODES);
+  const ownFigures = onEstimate(state.leverValues)
+    ? ''
+    : leversByCategory.macro
+        .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
+        .filter((x) => x.value !== x.lever.control.default)
+        .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
+        .join(' · ');
 
   // The game, when there is one: what was agreed with the PM, held against the package.
   const game = state.game;
@@ -182,13 +182,7 @@ export function BudgetPage() {
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
   );
   const advice =
-    game && status
-      ? interventionsFor(interventions, status, {
-          headroomGbpm,
-          targetGbpm: game.headroomTargetBn * 1000,
-          ruleMissed,
-        })
-      : [];
+    game && status ? interventionsFor(interventions, status, { headroomGbpm, ruleMissed }) : [];
   // The options the player chose, by the levers they move, so the desk can pin and tag them.
   const chosen = chosenByLever(status);
   // The manifesto red lines, and whether the package as it stands crosses each.
@@ -198,14 +192,12 @@ export function BudgetPage() {
 
   // Where the desk leads. A sandbox walks its two screens in sequence and on to Budget day. With a
   // game the desk is a side room: the one link goes back to the screen you came from, or to the
-  // curated screen these levers belong to, or to the compromises once the envelope is open.
+  // fine-tuning screen these levers belong to.
   const forward = game ? null : (spec.next ?? { to: '/budget-day', label: 'Go to Budget day' });
   const back = game
     ? arrived?.returnTo
       ? { to: arrived.returnTo, label: arrived.returnLabel ?? 'Back' }
-      : game.revealed
-        ? { to: '/compromise', label: 'Back to the compromises' }
-        : spec.room
+      : spec.room
     : spec.back;
 
   async function copyLink() {
@@ -238,7 +230,7 @@ export function BudgetPage() {
       part={
         // With a game the desk is a side room, named on the line; a sandbox walks its two parts.
         game
-          ? { index: 0, total: 0, label: 'More policies' }
+          ? { index: 0, total: 0, label: 'Every lever' }
           : { index: DESK_ORDER.indexOf(step) + 1, total: DESK_ORDER.length, label: spec.part }
       }
     >
@@ -247,15 +239,9 @@ export function BudgetPage() {
         <summary>{spec.folded}</summary>
         <div className="more__body">{briefing}</div>
       </details>
-      <Scorecard
-        outcome={outcome}
-        typicalErrorGbpm={typicalErrorGbpm}
-        sticky
-        target={game ? game.headroomTargetBn * 1000 : undefined}
-      />
+      <Scorecard outcome={outcome} typicalErrorGbpm={typicalErrorGbpm} sticky economy={economy} />
       {game && status ? (
         <BudgetSummary
-          game={game}
           status={status}
           headroomGbpm={headroomGbpm}
           targetYear={targetYear}
@@ -263,8 +249,8 @@ export function BudgetPage() {
         />
       ) : null}
       <p className="assumptions-line">
-        Economic assumptions: {macroSummary.length > 0 ? macroSummary : "the OBR's March view"} ·{' '}
-        <StepLink to="/outlook">change</StepLink>
+        Economic assumptions: {economy}
+        {ownFigures ? ` (${ownFigures})` : ''}.
       </p>
       <Interventions items={advice} />
 
@@ -350,9 +336,20 @@ export function BudgetPage() {
                 </label>
               </>
             ) : null}
-            <button type="button" className="btn" onClick={() => dispatch({ type: 'reset' })}>
-              Reset to OBR
-            </button>
+            {game ? (
+              // The policy goes; the economy and the game stay.
+              <button
+                type="button"
+                className="btn"
+                onClick={() => dispatch({ type: 'resetPolicy' })}
+              >
+                Put every lever back
+              </button>
+            ) : (
+              <button type="button" className="btn" onClick={() => dispatch({ type: 'reset' })}>
+                Reset to OBR
+              </button>
+            )}
             <button type="button" className="btn" onClick={copyLink}>
               Copy link to this budget
             </button>
@@ -440,13 +437,16 @@ export function BudgetPage() {
                 </div>
               )}
 
-              <section className="panel" aria-labelledby="presets-heading">
-                <h2 id="presets-heading">Try a ready-made Budget</h2>
-                <PresetPicker
-                  onApply={(leverValues) => dispatch({ type: 'applyPreset', leverValues })}
-                  current={state.leverValues}
-                />
-              </section>
+              {/* A preset replaces every lever, the economy included: the sandbox's alone. */}
+              {game ? null : (
+                <section className="panel" aria-labelledby="presets-heading">
+                  <h2 id="presets-heading">Try a ready-made Budget</h2>
+                  <PresetPicker
+                    onApply={(leverValues) => dispatch({ type: 'applyPreset', leverValues })}
+                    current={state.leverValues}
+                  />
+                </section>
+              )}
             </>
           ) : null}
         </aside>

@@ -123,7 +123,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const chosen = chosenByLever(status);
   const redLinesFor = redLinesOf(state.leverValues);
   const who = adviserById.get(spec.adviser)?.role ?? spec.adviser;
-  const index = ranked.length + (side === 'tax' ? 1 : 2);
+  const index = side === 'tax' ? 1 : 2;
 
   const card = (item: FinetuneItem) => {
     const lever = byCode.get(item.code);
@@ -143,34 +143,27 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
     );
   };
 
-  /**
-   * Leaving the package for the first time: remember it as it stood before the OBR spoke,
-   * assumptions included, so the forecast can be taken apart and the close can diff against it.
-   */
-  const leave = () => {
-    if (!game.revealed) dispatch({ type: 'setSnapshot', values: { ...state.leverValues } });
+  /** On to step 5: the review, and the red button. */
+  const leave = () =>
     dispatch({
       type: 'updateGame',
-      patch: { reached: Math.max(game.reached, stageIndex('forecast')) },
+      patch: { reached: Math.max(game.reached, stageIndex('review')) },
     });
-  };
   const onward =
     side === 'tax'
       ? { to: finetunePath('spending'), label: 'Next: spending', leave: false }
-      : game.revealed
-        ? { to: '/compromise', label: 'Back to the compromises', leave: true }
-        : { to: '/forecast', label: 'Next: the forecast', leave: true };
+      : { to: '/review', label: 'Next: deliver the Budget', leave: true };
   const back =
     side === 'tax' ? (ranked.length > 0 ? deliverPath(ranked.length) : '/pm') : finetunePath('tax');
 
   return (
     <JourneyLayout
       step="finetune"
-      part={{ index, total: ranked.length + 2, label: spec.title }}
+      part={{ index, total: 2, label: spec.title }}
       title={spec.title}
       lead={spec.lead}
     >
-      <HeadroomBar outcome={outcome} game={game} status={status} />
+      <HeadroomBar outcome={outcome} status={status} />
       {spec.groups.map((group) => {
         const id = `tune-${group.id}`;
         const shown = group.items.filter(

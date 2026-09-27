@@ -1608,10 +1608,6 @@ label.choice {
   line-height: 1.1;
 }
 
-.bar__figure--short {
-  color: var(--warning);
-}
-
 .bar__figure--worse {
   color: var(--critical);
 }

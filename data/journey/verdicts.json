@@ -2,25 +2,6 @@
   "schemaVersion": 1,
   "kinds": [
     {
-      "id": "breach-said-so",
-      "title": "A Budget that broke a rule and said so",
-      "when": {
-        "breachAccepted": true,
-        "rulesMet": false
-      },
-      "line": {
-        "text": "You knew a rule would be missed, wrote it down and delivered anyway. The Charter’s escape clause is for a shock the OBR agrees is one, so this stands as a choice, and the market prices choices. What survives is the honesty of it: nobody can say you hid the number.",
-        "short": "You knew a rule would be missed and said so. Nobody can say you hid the number.",
-        "sources": [
-          {
-            "sourceId": "hmt-charter-2025-autumn",
-            "paragraph": "3.9-3.10"
-          }
-        ],
-        "badge": "simulated"
-      }
-    },
-    {
       "id": "rules-missed",
       "title": "A Budget the OBR will mark down",
       "when": {
@@ -43,7 +24,7 @@
       "title": "A cautious Budget the markets liked and the party did not",
       "when": {
         "rulesMet": true,
-        "headroomAtLeastTarget": true,
+        "headroomAmple": true,
         "prioritiesNoneFunded": true
       },
       "line": {
@@ -70,7 +51,7 @@
         "headroomThin": true
       },
       "line": {
-        "text": "Every promise kept, every priority funded, and a margin the OBR’s typical forecast error would erase. This is the Budget the programme asked for, delivered on the thinnest ice the rules allow. Whether it holds is October’s forecast, not yours.",
+        "text": "Every promise kept, every priority funded, and a margin the OBR’s typical forecast error would erase. This is the Budget the programme asked for, delivered on the thinnest ice the rules allow. Whether it holds is up to the next forecast, not you.",
         "short": "Every promise kept, every priority funded, and a margin the OBR’s typical forecast error would erase.",
         "sources": [
           {
@@ -150,7 +131,7 @@
         "prioritiesNoneFunded": false
       },
       "line": {
-        "text": "Some of what was agreed in Downing Street is funded and some is not, and the Budget says which. That is most Budgets: a programme trimmed to the forecast, with the trimming visible. The question the morning papers ask is whether the missing half comes next year.",
+        "text": "Some of what was agreed in Downing Street is funded and some is not, and the Budget says which. That is most Budgets: a programme trimmed to the money, with the trimming visible. The question the morning papers ask is whether the missing half comes next year.",
         "short": "Some of what was agreed is funded and some is not, and the Budget says which.",
         "sources": [
           {
@@ -165,7 +146,7 @@
       "title": "A Budget of small moves",
       "when": {},
       "line": {
-        "text": "Nothing broke and nothing much changed. The March forecast is more or less the October Budget, with a few adjustments at the edges. Markets barely notice; nor does anyone else.",
+        "text": "Nothing broke and nothing much changed. The plans are more or less as the Budget found them, with a few adjustments at the edges. Markets barely notice; nor does anyone else.",
         "short": "Nothing broke and nothing much changed; markets barely notice, nor does anyone else.",
         "sources": [
           {

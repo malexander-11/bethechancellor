@@ -1,13 +1,8 @@
 import { computeOutcome, finetuneItems } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
-import { LEAD_MISSED, LEADS, NEXT, QUESTIONS } from '../pages/compromise/copy';
-import { TARGETS } from '../pages/Outlook';
 import {
   advisers,
   briefings,
-  compromise,
-  context,
-  draws,
   finetune,
   glossary,
   guide,
@@ -16,7 +11,6 @@ import {
   ministers,
   options,
   pm,
-  rabbit,
   reception,
   rules,
   verdicts,
@@ -68,20 +62,10 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const road: { label: string; line: Line; max: number }[] = [
       ...pm.priorities.map((p) => ({ label: `${p.id} reaction`, line: p.reaction, max: 12 })),
       ...interventions.interventions.map((x) => ({ label: x.id, line: x.line, max: 14 })),
-      { label: 'rabbit intro', line: rabbit.intro.line, max: 12 },
-      { label: 'rabbit further', line: rabbit.further.line, max: 12 },
-      { label: 'rabbit keep', line: rabbit.keep.line, max: 12 },
-      ...Object.entries(compromise.routes).map(([id, r]) => ({
-        label: `route ${id}`,
-        line: r.line,
-        max: 14,
-      })),
-      { label: 'no breach', line: compromise.routes.breach.noBreach, max: 14 },
       ...verdicts.kinds.map((k) => ({ label: `verdict ${k.id}`, line: k.line, max: 18 })),
       ...options.deliver.map((o) => ({ label: `option ${o.id}`, line: o.line, max: 18 })),
-      ...options.addOns.map((o) => ({ label: `add-on ${o.id}`, line: o.line, max: 18 })),
     ];
-    expect(road.length).toBeGreaterThan(60);
+    expect(road.length).toBeGreaterThan(50);
     for (const { label, line, max } of road) {
       const read = line.short ?? line.text;
       expect(words(read), `${label} reads "${read}"`).toBeLessThanOrEqual(max);
@@ -151,31 +135,21 @@ describe('word budgets: one line visible, the rest a click away', () => {
     }
   });
 
-  it('says what to do now in ten words, a priority’s purpose in five, a target in five', () => {
+  it('says what to do now in ten words, and a priority’s purpose in five', () => {
     // The desk is a side room and keeps its longer lines; every screen on the road is one breath.
     const road = guide.stages.filter((s) => s.step !== 'taxes' && s.step !== 'spending');
-    expect(road.length).toBeGreaterThanOrEqual(10);
+    // The cover and the six steps (Phase 24).
+    expect(road.map((s) => s.step)).toEqual([
+      'start',
+      'outlook',
+      'pm',
+      'deliver',
+      'finetune',
+      'review',
+      'budget-day',
+    ]);
     for (const s of road) expect(words(s.now), `${s.step}: "${s.now}"`).toBeLessThanOrEqual(10);
     for (const p of pm.priorities) expect(words(p.purpose), p.id).toBeLessThanOrEqual(5);
-    expect(TARGETS.length).toBe(4);
-    for (const t of TARGETS) expect(words(t.say), t.label).toBeLessThanOrEqual(5);
-  });
-
-  it('sums up each forecast card in at most eight words', () => {
-    const cards = context.scenarios ?? [];
-    expect(cards.length).toBe(4);
-    for (const card of cards) {
-      expect(card.short, `${card.kind} has no short form`).toBeTruthy();
-      expect(words(card.short ?? ''), card.kind).toBeLessThanOrEqual(8);
-    }
-  });
-
-  it('keeps every compromise route to one paragraph of at most forty words', () => {
-    const lines = [
-      ...Object.values(compromise.routes).map((r) => r.line.text),
-      compromise.routes.breach.noBreach.text,
-    ];
-    for (const text of lines) expect(words(text), text).toBeLessThanOrEqual(40);
   });
 
   it('never uses Treasury shorthand in the lines a newcomer reads', () => {
@@ -197,16 +171,7 @@ describe('word budgets: one line visible, the rest a click away', () => {
       ...guide.stages.map((s) => s.title),
       ...all.map((o) => o.title),
       ...all.map((o) => o.advice.text),
-      ...TARGETS.flatMap((t) => [t.label, t.say]),
-      ...QUESTIONS.sums,
-      ...QUESTIONS.room,
-      ...LEADS.sums,
-      ...LEADS.room,
-      LEAD_MISSED,
-      ...NEXT.sums,
-      ...NEXT.room,
       ...pm.priorities.flatMap((p) => [p.title, p.purpose, p.reaction.short ?? p.reaction.text]),
-      ...draws.outcomes.flatMap((o) => [o.title, o.story.headline, o.clue.headline]),
       ...verdicts.kinds.flatMap((k) => [k.title, k.line.short ?? k.line.text]),
       ...interventions.interventions.map((x) => x.line.short ?? x.line.text),
       ...reception.audiences.flatMap((a) => [a.title, a.question, ...a.labels]),
@@ -216,7 +181,6 @@ describe('word budgets: one line visible, the rest a click away', () => {
           (l) => l.short ?? l.text,
         ),
       ),
-      ...Object.values(compromise.routes).map((r) => r.line.text),
       ...reception.audiences.flatMap((a) => a.rules.flatMap((r) => r.bands.map((b) => b.text))),
     ];
     const defined = Object.values(glossary.terms).map((t) => t.short);

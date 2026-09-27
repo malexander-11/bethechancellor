@@ -2,16 +2,16 @@ import {
   ambitionStatus,
   assembleSpeech,
   budgetVerdict,
-  computeOutcome,
+  describeAssumptions,
   distributionalNotes,
   FINAL_STAGE,
   formatGbpBn,
   formatPct,
-  freshGame,
   householdReactions,
   rankedPriorities,
   readings,
   receptions,
+  THIN_HEADROOM_GBPM,
   type BudgetVerdict,
   type Outcome,
 } from '@btc/engine';
@@ -31,9 +31,9 @@ import { Speech } from '../components/Speech';
 import { Verdict } from '../components/Verdict';
 import { VerdictCard } from '../components/VerdictCard';
 import {
+  ESTIMATE,
+  MACRO_CODES,
   briefingsFor,
-  context,
-  draws,
   electorate,
   households,
   incidence,
@@ -41,7 +41,6 @@ import {
   leversByCategory,
   pm,
   reception,
-  rules,
   speech as speechFile,
   verdicts,
   vintage,
@@ -49,12 +48,8 @@ import {
 } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
-import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { WorkingsOnly } from '../journey/workings';
-import { permalinkQuery, useBudget } from '../state/budget';
-
-const ASSUMPTION_CARDS = scenarioCards(context, levers, vintage);
-const MACRO_CODES = macroCodesOf(context.readings);
+import { onEstimate, useBudget } from '../state/budget';
 
 /** "a, b and c" */
 function list(items: readonly string[]): string {
@@ -67,10 +62,11 @@ function lowerFirst(s: string): string {
 }
 
 /**
- * The Budget in three sentences: what was prioritised, who pays, what was accepted. Every clause
- * is read from the engine's figures and the player's own choices: the ranked priorities' nouns,
- * the largest payers by the incidence tags, and the most consequential thing given up, in this
- * order: a rule missed, a promise broken, a target not kept, a measure moved after the forecast.
+ * The Budget in three sentences: what was prioritised, who pays, what was accepted or kept. Every
+ * clause is read from the engine's figures and the player's own choices: the ranked priorities'
+ * nouns, the largest payers by the incidence tags, and the most consequential thing given up, in
+ * this order: a rule missed, a promise broken, a promise strained, a thin margin; with none of
+ * those, what was kept.
  */
 function statementOf(
   game: NonNullable<ReturnType<typeof useBudget>['state']['game']>,
@@ -90,37 +86,33 @@ function statementOf(
       ? `I paid for it by asking ${list(payers.map((r) => lowerFirst(r.label)))}.`
       : losers.length > 0
         ? `I paid for it with less for ${list(losers.map((r) => lowerFirst(r.label)))}.`
-        : 'I paid for it out of the headroom the forecast left.';
+        : 'I paid for it out of the headroom I had.';
   const missed = outcome.verdicts.filter(
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
   );
   const broken = status.promises.filter((p) => !p.kept);
-  const target = game.headroomTargetBn * 1000;
-  // A measure moved since the OBR saw the package, the add-ons aside: they are announcements.
-  const addOnCodes = new Set(
-    options.addOns.filter((o) => game.rabbit.includes(o.id)).flatMap((o) => Object.keys(o.values)),
-  );
-  const change = verdict.compromises.find((c) => !addOnCodes.has(c.lever.code));
+  const brokenIds = new Set(broken.map((p) => p.promise.id));
+  const strained = status.strains.filter((s) => s.strained && !brokenIds.has(s.promise.id));
+  const headroom = formatGbpBn(verdict.headroomGbpm, 1);
   const accepted =
     missed.length > 0
       ? `I accepted missing ${list(missed.map((v) => `the ${lowerFirst(v.ruleName)} by ${formatGbpBn(Math.abs(v.headroomGbpm), 1)}`))}.`
       : broken.length > 0
         ? `I accepted breaking ${list(broken.map((p) => lowerFirst(p.promise.title)))}.`
-        : target > 0 && verdict.headroomGbpm < target
-          ? `I accepted ${formatGbpBn(target - verdict.headroomGbpm, 1)} less headroom than I set out to keep.`
-          : change
-            ? `I accepted ${lowerFirst(change.lever.shortTitle)} at ${formatLeverValue(change.lever, change.to)} rather than ${formatLeverValue(change.lever, change.from)}, after the forecast.`
-            : 'I accepted no compromise the forecast forced: the OBR saw the Budget I delivered.';
+        : strained.length > 0
+          ? `I accepted straining ${list(strained.map((p) => lowerFirst(p.promise.title)))}.`
+          : verdict.headroomGbpm < THIN_HEADROOM_GBPM
+            ? `I accepted a thin margin: ${headroom} of headroom.`
+            : `I kept every promise and ${headroom} of headroom.`;
   return { prioritised, paid, accepted };
 }
 
 /**
- * Step 7: what your Budget means, on one screen. The Budget in three sentences; the rules line,
- * which is the one thing here that is arithmetic; the backbenchers, the markets and the public,
- * each rating the Budget out of five and saying which choices caused it; and the close, with the
- * ambitions, who paid, the compromises and every other forecast. The speech, the households and
- * the Budget documents are one fold away. Arriving here marks the game finished, so a link shared
- * from here opens as a finished Budget.
+ * Step 6: feedback, on one screen. The Budget in three sentences; the rules line, which is the one
+ * thing here that is arithmetic; the backbenchers, the markets and the public, each rating the
+ * Budget out of five and saying which choices caused it; and the close, with the ambitions and who
+ * paid. The speech, the households and the Budget documents are one fold away. Arriving here marks
+ * the game finished, so a link shared from here opens as a finished Budget.
  */
 export function BudgetDayPage() {
   const { state, dispatch, outcome, query } = useBudget();
@@ -136,57 +128,21 @@ export function BudgetDayPage() {
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
-  const macroSummary =
-    describeAssumptions(ASSUMPTION_CARDS, state.leverValues, MACRO_CODES, game?.revealed) ??
-    leversByCategory.macro
-      .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
-      .filter((x) => x.value !== x.lever.control.default)
-      .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
-      .join(' · ');
+  // The economy the Budget was built on: today's estimate in a game; a sandbox may set its own.
+  const economy = describeAssumptions(state.leverValues, ESTIMATE, MACRO_CODES);
+  const ownFigures = onEstimate(state.leverValues)
+    ? ''
+    : leversByCategory.macro
+        .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
+        .filter((x) => x.value !== x.lever.control.default)
+        .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
+        .join(' · ');
 
   // The game's readings: ambitions against the package, and the package as the OBR saw it.
   const status = useMemo(
     () => (game ? ambitionStatus(game, pm, options, outcome, levers) : undefined),
     [game, outcome],
   );
-  const snapshotOutcome = useMemo(() => {
-    if (!game || !state.snapshot) return undefined;
-    const policy: Record<string, number> = {};
-    for (const [code, v] of Object.entries(state.snapshot)) {
-      if (!MACRO_CODES.includes(code)) policy[code] = v;
-    }
-    for (const code of MACRO_CODES) {
-      if (state.leverValues[code] !== undefined) policy[code] = state.leverValues[code]!;
-    }
-    return computeOutcome({
-      vintage,
-      rules,
-      levers,
-      settings: { ...outcome.settings, leverValues: policy },
-    });
-  }, [game, state.snapshot, state.leverValues, outcome.settings]);
-  // The add-ons: the levers they moved, and what to call them together.
-  const rabbitChoice = useMemo(() => {
-    if (!game || game.rabbit.length === 0) return undefined;
-    if (game.rabbit.length === 1 && game.rabbit[0] === 'keep') {
-      return { codes: [], label: 'keeping the headroom' };
-    }
-    const codes: string[] = [];
-    const labels: string[] = [];
-    for (const id of game.rabbit) {
-      if (id === 'keep') continue;
-      if (id.startsWith('further:')) {
-        const pid = id.slice('further:'.length);
-        labels.push(`going further on ${pm.priorities.find((p) => p.id === pid)?.title ?? pid}`);
-        continue;
-      }
-      const addOn = options.addOns.find((o) => o.id === id);
-      if (!addOn) continue;
-      codes.push(...Object.keys(addOn.values));
-      labels.push(addOn.title);
-    }
-    return labels.length > 0 ? { codes, label: labels.join(', ') } : undefined;
-  }, [game]);
   const room = useMemo(
     () =>
       receptions({
@@ -198,11 +154,8 @@ export function BudgetDayPage() {
         incidence,
         ...(game ? { game } : {}),
         ...(status ? { status } : {}),
-        ...(snapshotOutcome ? { snapshotOutcome } : {}),
-        macroCodes: MACRO_CODES,
-        ...(rabbitChoice ? { rabbit: rabbitChoice } : {}),
       }),
-    [outcome, typicalErrorGbpm, game, status, snapshotOutcome, rabbitChoice],
+    [outcome, typicalErrorGbpm, game, status],
   );
   const notes = distributionalNotes(outcome, levers, targetYear).slice(0, 3);
   // The one audience that is arithmetic: the rules, in a line above the three cards.
@@ -239,17 +192,15 @@ export function BudgetDayPage() {
         ...(game ? { game } : {}),
         pm,
         ...(status ? { status } : {}),
-        ...(state.snapshot ? { snapshot: state.snapshot } : {}),
         macroCodes: MACRO_CODES,
-        rabbitTitles: Object.fromEntries(options.addOns.map((o) => [o.id, o.title])),
       }),
-    [outcome, game, status, state.snapshot],
+    [outcome, game, status],
   );
   // The options on in the package, for what the money does and does not buy.
   const deliveredOptions = (status?.priorities ?? []).flatMap((p) =>
     p.options.filter((o) => o.state === 'on'),
   );
-  // The close: what the playthrough came to, re-running the engine under every draw.
+  // The close: what the playthrough came to.
   const verdict = useMemo(() => {
     if (!game) return undefined;
     const values = readings({
@@ -260,24 +211,18 @@ export function BudgetDayPage() {
       ...(status ? { status } : {}),
     });
     return budgetVerdict({
-      vintage,
-      rules,
       levers,
       pm,
       options,
-      draws,
-      context,
       incidence,
       kinds: verdicts,
       game,
       outcome,
-      ...(state.snapshot ? { snapshot: state.snapshot } : {}),
-      macroCodes: MACRO_CODES,
       typicalErrorGbpm,
       credibilityShare: values.credibilityShare ?? 0,
       rebellionRisk: values.rebellionRisk ?? 0,
     });
-  }, [game, outcome, status, state.snapshot, typicalErrorGbpm]);
+  }, [game, outcome, status, typicalErrorGbpm]);
   // Arriving here is the end of the story: a link shared from here opens as a finished Budget.
   // Not when the guard is sending the player back to where they are.
   const reached = game?.reached;
@@ -289,15 +234,6 @@ export function BudgetDayPage() {
   // A game in play that jumps to Budget day is sent back to where it is; a sandbox link and a
   // finished, shared link both walk in.
   if (guard) return guard;
-  const replayHref = game
-    ? `/outlook?${permalinkQuery({
-        leverValues: {},
-        debtInterestFeedback: true,
-        assessAsOf: 'vintage',
-        warnings: [],
-        game: freshGame(game.seed),
-      })}`
-    : '/outlook';
   const statement = game && verdict && status ? statementOf(game, outcome, verdict, status) : null;
 
   async function copyLink() {
@@ -338,7 +274,7 @@ export function BudgetDayPage() {
           />
         ))}
       </div>
-      {verdict ? <Verdict verdict={verdict} replayHref={replayHref} /> : null}
+      {verdict ? <Verdict verdict={verdict} /> : null}
 
       <details className="more">
         <summary>Read the speech</summary>
@@ -381,21 +317,13 @@ export function BudgetDayPage() {
             <h4 className="section-label">Table 4.1: your policy decisions</h4>
             <MeasuresTable outcome={outcome} levers={levers} targetYear={targetYear} />
             <p className="source">
-              Economic assumptions:{' '}
-              {macroSummary.length > 0 ? macroSummary : "the OBR's March view"}
-              {' · '}
-              <StepLink to="/outlook">change</StepLink>
+              Economic assumptions: {economy}
+              {ownFigures ? ` (${ownFigures})` : ''}.
             </p>
             <ul className="documents">
               <li>
-                <strong>Economic and fiscal outlook.</strong> The OBR’s forecast, published beside
-                the Budget:{' '}
-                {game?.revealed ? (
-                  <StepLink to="/forecast">the one you opened</StepLink>
-                ) : (
-                  'the March forecast, as it stands'
-                )}
-                .
+                <strong>Economic and fiscal outlook.</strong> The OBR publishes its own forecast
+                beside the Budget; this game uses {economy} in its place.
               </li>
               <li>
                 <strong>Policy costings.</strong> One note per measure with the method behind it:

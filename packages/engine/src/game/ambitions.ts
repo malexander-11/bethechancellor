@@ -30,8 +30,6 @@ export type PriorityStatus = 'delivered' | 'part' | 'undelivered';
 export interface OptionReport {
   option: DeliverOption;
   state: OptionState;
-  /** Set when a lever in the bundle has been pushed to a later year. */
-  delayedTo?: string;
   /** The option's effect on borrowing in the target year, £ million, positive = more borrowing. */
   costGbpm: number;
 }
@@ -86,13 +84,7 @@ export function ambitionStatus(
     const reports = deliverOptionsFor(priority.id, options).map((option): OptionReport => {
       const state = optionState(option, values, levers);
       const codes = Object.keys(option.values);
-      const delayedTo = codes.map((code) => game.delays[code]).find((y) => y !== undefined);
-      return {
-        option,
-        state,
-        ...(delayedTo ? { delayedTo } : {}),
-        costGbpm: state === 'off' ? 0 : costOf(codes),
-      };
+      return { option, state, costGbpm: state === 'off' ? 0 : costOf(codes) };
     });
     const status: PriorityStatus = reports.some((r) => r.state === 'on')
       ? 'delivered'

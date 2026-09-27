@@ -12,7 +12,8 @@ const BUDGET_DAY = new Date(
 export const PLAYTIME_MINUTES = 10;
 
 /**
- * Step 1: become Chancellor. The premise in one sentence, how long it takes, and the one button.
+ * The cover, the first screen of step 1 (the briefing follows it). The premise in one sentence,
+ * how long it takes, and the one button.
  * No tutorial: each screen says what to do when you reach it. The advisers, the rules, the
  * figures and the red lines wait for the screens where they matter; the way to every lever is in
  * the footer, with the other utilities.
@@ -32,7 +33,7 @@ export function StartPage() {
           </p>
           <p className="opening__meta">
             <span>About {PLAYTIME_MINUTES} minutes</span>
-            <span>Seven steps</span>
+            <span>Six steps</span>
           </p>
           <p className="opening__actions">
             <StepLink to="/outlook" className="btn btn--primary btn--big">

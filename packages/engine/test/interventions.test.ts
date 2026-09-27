@@ -26,16 +26,12 @@ function advice(game: GamePermalink, leverValues: Record<string, number>) {
   const ruleMissed = outcome.verdicts.some(
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
   );
-  return interventionsFor(ds.interventions, status, {
-    headroomGbpm,
-    targetGbpm: game.headroomTargetBn * 1000,
-    ruleMissed,
-  });
+  return interventionsFor(ds.interventions, status, { headroomGbpm, ruleMissed });
 }
 
 describe('advisers who remember', () => {
   it('names the promise a lever breaks, and carries the promise’s own sources', () => {
-    const game = freshGame(7);
+    const game = freshGame();
     const items = advice(game, { itbr: 1 });
     const broken = items.find((x) => x.when === 'promise-broken');
     expect(broken?.text).toBe(
@@ -50,7 +46,7 @@ describe('advisers who remember', () => {
   });
 
   it('says a strained promise is tested, not broken, and says nothing once it is broken', () => {
-    const game = freshGame(7);
+    const game = freshGame();
     const strained = advice(game, { hscl: 1 }).find((x) => x.when === 'promise-strained');
     expect(strained?.text).toMatch(/^The tax lock is tested, not broken/);
     expect(strained?.about).toBe('tax-lock');
@@ -61,7 +57,7 @@ describe('advisers who remember', () => {
   });
 
   it('flags a priority nothing funds yet, then stops once the target is met', () => {
-    const game = { ...freshGame(7), priorities: ['safer-streets', 'defence'] };
+    const game = { ...freshGame(), priorities: ['safer-streets', 'defence'] };
     const before = advice(game, {});
     expect(before.filter((x) => x.when === 'priority-unfunded').map((x) => x.about)).toEqual([
       'safer-streets',
@@ -74,21 +70,21 @@ describe('advisers who remember', () => {
     expect(done.some((x) => x.when === 'all-priorities-funded')).toBe(true);
   });
 
-  it('reads headroom against the target the player set, and says nothing when there is no target', () => {
-    const tight = advice({ ...freshGame(7), headroomTargetBn: 30 }, {});
-    expect(tight.some((x) => x.when === 'headroom-below-target')).toBe(true);
-    const easy = advice({ ...freshGame(7), headroomTargetBn: 10 }, {});
-    expect(easy.some((x) => x.when === 'headroom-above-target')).toBe(true);
-    const none = advice({ ...freshGame(7), headroomTargetBn: 0 }, {});
-    expect(none.some((x) => x.when.startsWith('headroom'))).toBe(false);
+  it('has no target to hold the player to: the rules are the line (Phase 24)', () => {
+    const items = advice({ ...freshGame(), priorities: ['safer-streets'] }, { moj: 10 });
+    expect(items.some((x) => x.when.startsWith('headroom'))).toBe(false);
+    expect(ds.interventions.interventions.some((x) => x.when.startsWith('headroom'))).toBe(false);
   });
 
   it('puts the most pressing note first', () => {
-    const game = { ...freshGame(7), priorities: ['safer-streets'], headroomTargetBn: 30 };
-    // A penny on the basic rate breaks the lock; the health money eats the headroom it raised.
+    const game = { ...freshGame(), priorities: ['safer-streets'] };
+    // A penny on the basic rate breaks the lock; the levy strains it too, and prisons wait.
     const items = advice(game, { itbr: 1, dhsc: 5 });
     expect(items[0]?.when).toBe('promise-broken');
     const order = items.map((x) => x.when);
-    expect(order.indexOf('priority-unfunded')).toBeLessThan(order.indexOf('headroom-below-target'));
+    expect(order.indexOf('priority-unfunded')).toBeGreaterThan(order.indexOf('promise-broken'));
+    // A rule missed outranks an unfunded priority.
+    const missed = advice(game, { dhsc: 10, dfe: 10, def3: 1 }).map((x) => x.when);
+    expect(missed.indexOf('rule-missed')).toBeLessThan(missed.indexOf('priority-unfunded'));
   });
 });

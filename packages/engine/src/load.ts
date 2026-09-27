@@ -763,16 +763,8 @@ export function validateDataset(ds: Dataset): string[] {
       if (!ds.speech.opening[priority.id])
         problems.push(`the speech has no opening for priority ${priority.id}`);
     }
-    for (const key of ['met', 'missed', 'breach']) {
+    for (const key of ['met', 'missed']) {
       if (!ds.speech.peroration[key]) problems.push(`the speech has no ${key} peroration`);
-    }
-    for (const key of [
-      'keep',
-      'further',
-      'several',
-      ...(ds.options?.addOns.map((o) => o.id) ?? []),
-    ]) {
-      if (!ds.speech.rabbit[key]) problems.push(`the speech has no flourish for add-on ${key}`);
     }
   }
   if (ds.compromise) {

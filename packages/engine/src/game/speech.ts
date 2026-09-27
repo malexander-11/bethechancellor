@@ -21,9 +21,6 @@ export type SpeechParagraphKind =
   | 'revenue'
   | 'giveaways'
   | 'lock-break'
-  | 'compromises'
-  | 'delay'
-  | 'rabbit'
   | 'peroration';
 
 export interface SpeechParagraph {
@@ -47,11 +44,7 @@ export interface SpeechInput {
   game?: GamePermalink;
   pm?: PmFile;
   status?: AmbitionStatus;
-  /** The package as the OBR saw it, for the compromises paragraph. */
-  snapshot?: Record<string, number>;
   macroCodes: readonly string[];
-  /** Titles of the add-ons, by id. */
-  rabbitTitles?: Record<string, string>;
 }
 
 /** Who a revenue measure falls on. A closed map, so the speech never guesses. */
@@ -155,7 +148,6 @@ export function assembleSpeech(input: SpeechInput): Speech {
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const year = stability?.targetYear ?? '';
   const headroom = stability?.headroomGbpm ?? 0;
-  const values = outcome.settings.leverValues;
   const paragraphs: SpeechParagraph[] = [];
   const say = (
     kind: SpeechParagraphKind,
@@ -261,56 +253,9 @@ export function assembleSpeech(input: SpeechInput): Speech {
     });
   }
 
-  // What was scaled back since the forecast, and what starts later.
-  if (input.snapshot) {
-    let count = 0;
-    for (const [code, was] of Object.entries(input.snapshot)) {
-      const lever = byCode.get(code);
-      if (!lever || macroCodes.includes(code) || lever.category === 'tax') continue;
-      const now = values[code] ?? lever.control.default;
-      if (now < was) count += 1;
-    }
-    if (count > 0) say('compromises', speech.compromises, { count: String(count) });
-  }
-  for (const [code, toYear] of Object.entries(game?.delays ?? {})) {
-    const lever = byCode.get(code);
-    if (!lever || (values[code] ?? lever.control.default) === lever.control.default) continue;
-    say('delay', speech.delay, { title: lower(lever.title), year: toYear });
-  }
-
-  // The add-ons, if any, and the last word. Keeping the headroom is only an announcement while
-  // there is headroom to keep; with none, the peroration says what there is to say.
-  // An add-on id the data no longer offers (an old link) has nothing to say and is left out.
-  const known = (id: string) =>
-    id.startsWith('further:') || !input.rabbitTitles || input.rabbitTitles[id] !== undefined;
-  const addOns = (game?.rabbit ?? []).filter((r) => r !== 'keep' && known(r));
-  const keep = (game?.rabbit ?? []).includes('keep') && addOns.length === 0;
-  const titleOf = (id: string) =>
-    id.startsWith('further:')
-      ? (input.pm?.priorities.find((p) => p.id === id.slice('further:'.length))?.title ?? '')
-      : (input.rabbitTitles?.[id] ?? '');
-  const headroomText = money(headroom);
-  if (addOns.length === 1) {
-    const id = addOns[0]!;
-    const key = id.startsWith('further:') ? 'further' : id;
-    say(
-      'rabbit',
-      speech.rabbit[key] ?? speech.rabbit.several,
-      { title: lower(titleOf(id)), titles: lower(titleOf(id)), headroom: headroomText },
-      [headroomText],
-    );
-  } else if (addOns.length > 1) {
-    say(
-      'rabbit',
-      speech.rabbit.several,
-      { titles: list(addOns.map((id) => lower(titleOf(id)))), headroom: headroomText },
-      [headroomText],
-    );
-  } else if (keep && headroom > 0) {
-    say('rabbit', speech.rabbit.keep, { headroom: headroomText }, [headroomText]);
-  }
+  // The last word.
   const missed = outcome.verdicts.some((v) => v.status === 'notMet' || v.status === 'aboveMargin');
-  const perorationKey = game?.breachAccepted && missed ? 'breach' : missed ? 'missed' : 'met';
+  const perorationKey = missed ? 'missed' : 'met';
   // A rule met is stated with its headroom; a rule missed is stated by how much, as a size.
   const closing = missed
     ? formatGbpBn(Math.abs(headroom), 1)

@@ -5,23 +5,17 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
-// A game at its final choices with the forecast open, two priorities delivered, one way to pay,
-// one add-on: every screen renders in its working state, and the review and the close have
-// something to say.
-const GAME =
-  'g=s.1_st.5_pl.adviser_hr.20_pr.defence+safer-streets_rv.1_rb.pubs&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_hscl.1_alc.-5&S=moj.10_dip47.1_hscl.1';
-// The same game short of its target: the compromise screen in its other mood, the sums.
-const SHORT =
-  'g=s.1_st.5_pl.adviser_hr.20_pr.defence+safer-streets_rv.1_rb.pubs&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_alc.-5&S=moj.10_dip47.1';
+// A game at the review on today's estimate, two priorities delivered and the levy raised: every
+// screen renders in its working state, and the review and the close have something to say.
+const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_hscl.1';
 // The same game with one folded lever moved in every group of the fine-tuning screens, so each
 // group shows four: the widest those screens get on arrival.
 const TUNED = GAME.replace(
-  'L=moj.10_dip47.1_hscl.1_alc.-5',
-  'L=moj.10_dip47.1_hscl.1_alc.-5_ipt.2_wealth2.1_banklevy.1_iinc2.1_apd.2_otherd.-1_woth.-1_rvplan2.1',
+  'L=moj.10_dip47.1_hscl.1',
+  'L=moj.10_dip47.1_hscl.1_ipt.2_wealth2.1_banklevy.1_iinc2.1_apd.2_otherd.-1_woth.-1_rvplan2.1',
 );
 // Three priorities with the most options between them: the widest the priority screens get.
-const WIDEST =
-  'g=s.1_st.2_pl.adviser_hr.20_pr.cost-of-living+welfare-bill+homes-growth&M=rate.0.75_rpi.0.5';
+const WIDEST = 'g=st.2_pr.cost-of-living+welfare-bill+homes-growth&M=rate.0.75_rpi.0.5';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -51,7 +45,7 @@ function screenWords(): number {
 /** Every screen of the main road, in order, with the game that renders it at its widest. */
 const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/', 40, GAME],
-  ['/outlook', 335, GAME],
+  ['/outlook', 225, GAME],
   ['/pm', 155, GAME],
   ['/budget/deliver', 205, WIDEST],
   ['/budget/deliver/2', 205, WIDEST],
@@ -60,16 +54,8 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/finetune/tax', 785, TUNED],
   ['/finetune/spending', 530, GAME],
   ['/finetune/spending', 735, TUNED],
-  ['/forecast', 125, GAME],
-  ['/compromise', 75, SHORT],
-  ['/compromise/2', 80, SHORT],
-  ['/compromise/3', 50, SHORT],
-  ['/compromise', 65, GAME],
-  ['/compromise/2', 50, GAME],
-  ['/compromise/3', 55, GAME],
-  ['/rabbit', 275, GAME],
-  ['/review', 115, GAME],
-  ['/budget-day', 225, GAME],
+  ['/review', 100, GAME],
+  ['/budget-day', 210, GAME],
 ];
 
 describe('the word budgets', () => {
@@ -106,7 +92,9 @@ describe('the word budgets', () => {
     // keep and go-further cards gained the Political Adviser's line: the add-ons 252. Paying for
     // it then became fine-tuning tax and spending, real levers with an adviser's line and a price
     // each (Phase 24): tax 531, spending 479 on arrival; 714 and 668 with one folded lever moved
-    // in every group, so each group shows four.
+    // in every group, so each group shows four. Then one estimate replaced the forecast cards and
+    // the target, and the forecast, the compromises and the add-ons went (Phase 24, ADR-0025):
+    // the briefing 201, the review 88, Budget day 188; tax 528 and 711, spending 476 and 665.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();

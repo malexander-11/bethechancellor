@@ -113,7 +113,7 @@ describe('the routes out of a gap', () => {
   });
 
   it('with room to spare, offers the ways to deliver the priorities not yet chosen, one per priority first', () => {
-    const game = { ...freshGame(1), priorities: ['defence', 'safer-streets', 'cost-of-living'] };
+    const game = { ...freshGame(), priorities: ['defence', 'safer-streets', 'cost-of-living'] };
     const values = { dip47: 1 };
     const status = ambitionStatus(game, ds.pm, ds.options, run(values), ds.levers);
     const out = deliverSuggestions(status, ds.options, ds.levers, values, 3);
@@ -142,7 +142,7 @@ describe('the routes out of a gap', () => {
     ]);
     // The count is honoured, and nothing ranked means nothing offered.
     expect(deliverSuggestions(status, ds.options, ds.levers, values, 1)).toHaveLength(1);
-    const none = ambitionStatus(freshGame(1), ds.pm, ds.options, run({}), ds.levers);
+    const none = ambitionStatus(freshGame(), ds.pm, ds.options, run({}), ds.levers);
     expect(deliverSuggestions(none, ds.options, ds.levers, {}, 3)).toEqual([]);
   });
 

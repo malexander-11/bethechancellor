@@ -1,10 +1,10 @@
 import type { GuideFile, GuideStage, JourneyStep } from '../types/data.js';
 
 /**
- * The guide: one entry per screen a player meets, in the order they meet them. The package's
- * guided screens, its desk screens and the two forecast screens are separate entries that share
- * a step number. The two fine-tuning screens share one entry: each has its own heading and line,
- * from finetune.json.
+ * The guide: one entry per screen a player meets, in the order they meet them. The opening and
+ * the briefing are step 1; the desk's two screens share step 4 with the curated screens they sit
+ * behind. The two fine-tuning screens share one entry: each has its own heading and line, from
+ * finetune.json.
  */
 export const GUIDED_STEPS: readonly JourneyStep[] = [
   'start',
@@ -14,15 +14,12 @@ export const GUIDED_STEPS: readonly JourneyStep[] = [
   'finetune',
   'taxes',
   'spending',
-  'forecast',
-  'compromise',
-  'rabbit',
   'review',
   'budget-day',
 ];
 
-/** How many steps the kicker counts to: "Step 3 of 7". */
-export const STEP_COUNT = 7;
+/** How many steps the kicker counts to: "Step 3 of 6" (Phase 24). */
+export const STEP_COUNT = 6;
 
 /** The old name finds its screen. */
 const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {

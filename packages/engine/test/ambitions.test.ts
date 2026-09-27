@@ -13,19 +13,16 @@ import { loadDataset } from './fixtures.js';
 
 const ds = loadDataset();
 const pm = ds.pm;
-const run = (leverValues: Record<string, number>, game?: Partial<GamePermalink>) =>
+const run = (leverValues: Record<string, number>) =>
   computeOutcome({
     vintage: ds.vintage,
     rules: ds.rules,
     levers: ds.levers,
-    settings: {
-      leverValues,
-      implementationYearByCode: game?.delays,
-    },
+    settings: { leverValues },
   });
 const lever = (code: string) => ds.levers.find((l) => l.code === code);
 const status = (game: GamePermalink, values: Record<string, number>) =>
-  ambitionStatus(game, pm, ds.options, run(values, game), ds.levers);
+  ambitionStatus(game, pm, ds.options, run(values), ds.levers);
 
 describe('what the Chancellor agreed with the Prime Minister', () => {
   it('breaks the tax lock on exactly the levers the manifesto names', () => {
@@ -64,7 +61,7 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     expect(by?.code).toBe('nicer');
     expect(by?.text).toMatch(/still National Insurance/);
     // The status counts a strain once, and a promise both broken and strained once, as broken.
-    const game = { ...freshGame(7), priorities: [] };
+    const game = { ...freshGame(), priorities: [] };
     expect(status(game, { hscl: 1 }).broken).toBe(0);
     expect(status(game, { hscl: 1 }).strained).toBe(1);
     expect(status(game, { hscl: 1, itbr: 1 }).broken).toBe(1);
@@ -79,7 +76,7 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
   });
 
   it('judges the fiscal-rules promise by the verdicts, since no lever names it', () => {
-    const game = freshGame(1);
+    const game = freshGame();
     const rulesPromise = (values: Record<string, number>) =>
       status(game, values).promises.find((p) => p.promise.id === 'fiscal-rules');
     expect(rulesPromise({})?.kept).toBe(true);
@@ -90,7 +87,7 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
   });
 
   it('holds every manifesto promise in force from the first screen to the last', () => {
-    const s = status(freshGame(1), {});
+    const s = status(freshGame(), {});
     expect(s.promises.map((p) => p.promise.id)).toEqual(pm.promises.map((p) => p.id));
     expect(s.broken).toBe(0);
     // A red line cannot be negotiated away: the data carries no push-backs or concessions.
@@ -99,7 +96,7 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
 
   it('ranks only priorities the data knows, first three, in the order given', () => {
     const game = {
-      ...freshGame(1),
+      ...freshGame(),
       priorities: ['nhs', 'prisons', 'defence', 'families', 'schools-send'],
     };
     expect(rankedPriorities(game, pm).map((p) => p.id)).toEqual(['nhs', 'defence', 'families']);
@@ -107,7 +104,7 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
   });
 
   it('reads a priority delivered, part or undelivered from the state of its options', () => {
-    const game = { ...freshGame(1), priorities: ['nhs', 'schools-send', 'families'] };
+    const game = { ...freshGame(), priorities: ['nhs', 'schools-send', 'families'] };
     const s = status(game, { dhsc: 3, dfe: 2 });
     const by = new Map(s.priorities.map((p) => [p.priority.id, p] as const));
     expect(by.get('nhs')?.status).toBe('delivered');
@@ -125,18 +122,8 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     expect(deliversTarget(lever('fuel'), -5, -10)).toBe(false);
   });
 
-  it('records a delay on the option whose lever was pushed back', () => {
-    const game = { ...freshGame(1), priorities: ['cost-of-living'], delays: { ufsm: '2028-29' } };
-    const s = status(game, { ufsm: 1 });
-    const meals = s.priorities[0]?.options.find((o) => o.option.id === 'free-school-meals');
-    expect(meals?.state).toBe('on');
-    expect(meals?.delayedTo).toBe('2028-29');
-    expect(s.priorities[0]?.status).toBe('delivered');
-    expect(s.delivered).toBe(1);
-  });
-
   it('reads each option’s cost off the outcome in the target year, and sums it by priority', () => {
-    const game = { ...freshGame(1), priorities: ['cost-of-living', 'defence'] };
+    const game = { ...freshGame(), priorities: ['cost-of-living', 'defence'] };
     const s = status(game, { bus2: 1, dip47: 1 });
     const options = new Map(
       s.priorities.flatMap((p) => p.options).map((o) => [o.option.id, o.costGbpm] as const),

@@ -10,19 +10,16 @@ import {
   type LeverEffect,
 } from '@btc/engine';
 import type { ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { formatLeverValue, formatLeverValueShort } from '../components/LeverControl';
-import { context, finetuneTitle, levers, options, pm } from '../data';
+import { formatLeverValueShort } from '../components/LeverControl';
+import { MACRO_CODES as MACRO_LIST, finetuneTitle, levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
-import { macroCodesOf } from '../journey/scenarios';
 import { useBudget } from '../state/budget';
-import { compromisePath } from './Compromise';
 import { deliverPath } from './Deliver';
 
-const MACRO_CODES = new Set(macroCodesOf(context.readings));
+const MACRO_CODES = new Set(MACRO_LIST);
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
 const RANK = ['1st', '2nd', '3rd'];
 
@@ -103,20 +100,18 @@ function Part({
 }
 
 /**
- * Step 6, second screen: the Budget as it stands, read back before it is delivered. What you
- * prioritised, what you chose to deliver and what each costs, every tax and every other budget you
- * moved (Phase 24), the add-ons, and where that leaves you against your target and the rules, with
- * what changed since the forecast. Every line has a way back to the screen that set it, carrying
- * the Budget, so nothing is final until the red button. Every figure is the engine's for the
- * target year.
+ * Step 5: deliver the Budget (Phase 24, ADR-0025). The Budget as it stands, read back before it is
+ * delivered: what you prioritised, the flagship policies you chose and what each costs, every tax
+ * and every other budget you moved, and where that leaves you against the rules and the manifesto,
+ * in words (the bar above already says the figure). Every part has a way back to the screen that
+ * set it, carrying the Budget, so nothing is final until the red button. Every figure is the
+ * engine's for the target year.
  */
 export function ReviewPage() {
   const { state, dispatch, outcome } = useBudget();
-  const { search } = useLocation();
   const game = state.game;
   const guard = useStageGuard('review');
   if (guard || !game) return guard;
-  if (!game.revealed) return <Navigate to={{ pathname: '/forecast', search }} replace />;
 
   const status = ambitionStatus(game, pm, options, outcome, levers);
   const ranked = rankedPriorities(game, pm);
@@ -124,16 +119,13 @@ export function ReviewPage() {
   const year = stability?.targetYear ?? '2029-30';
   const value = (lever: Lever) => state.leverValues[lever.code] ?? lever.control.default;
 
-  // Every tax and every budget moved, except those a flagship or an add-on already accounts for:
-  // they are read back under their own names above and below.
-  const owned = new Set<string>([
-    ...status.priorities.flatMap((p) =>
+  // Every tax and every budget moved, except those a flagship policy already accounts for: they
+  // are read back under their own names above.
+  const owned = new Set<string>(
+    status.priorities.flatMap((p) =>
       p.options.filter((o) => o.state !== 'off').flatMap((o) => Object.keys(o.option.values)),
     ),
-    ...options.addOns
-      .filter((o) => game.rabbit.includes(o.id))
-      .flatMap((o) => Object.keys(o.values)),
-  ]);
+  );
   const rows: Row[] = outcome.leverEffects
     .map((e) => ({ effect: e, lever: byCode.get(e.code) }))
     .filter(
@@ -151,35 +143,14 @@ export function ReviewPage() {
     }));
   const taxRows = rows.filter((r) => r.lever.category === 'tax');
   const spendingRows = rows.filter((r) => r.lever.category !== 'tax');
-  // The add-ons, by name.
-  const addOns = game.rabbit
-    .filter((id) => id !== 'keep')
-    .map((id) =>
-      id.startsWith('further:')
-        ? `Going further on ${pm.priorities.find((p) => p.id === id.slice('further:'.length))?.title ?? id}`
-        : options.addOns.find((o) => o.id === id)?.title,
-    )
-    .filter((t): t is string => t !== undefined);
-  const keeping = game.rabbit.includes('keep');
-  // What moved since the OBR saw the package, and what starts later. The add-ons are listed
-  // above as announcements, so their levers are not listed again here.
-  const snapshot = state.snapshot ?? {};
-  const addOnCodes = new Set(
-    options.addOns.filter((o) => game.rabbit.includes(o.id)).flatMap((o) => Object.keys(o.values)),
-  );
-  const moved = [...new Set([...Object.keys(snapshot), ...Object.keys(state.leverValues)])]
-    .map((code) => byCode.get(code))
-    .filter(
-      (l): l is Lever => l !== undefined && !MACRO_CODES.has(l.code) && !addOnCodes.has(l.code),
-    )
-    .map((l) => ({ lever: l, from: snapshot[l.code] ?? l.control.default, to: value(l) }))
-    .filter((r) => r.from !== r.to);
-  const delays = Object.entries(game.delays)
-    .map(([code, yearFrom]) => ({ lever: byCode.get(code), yearFrom }))
-    .filter((r): r is { lever: Lever; yearFrom: string } => r.lever !== undefined);
   const missed = outcome.verdicts.filter(
     (v) => v.status === 'notMet' || v.status === 'aboveMargin',
   );
+  // The manifesto: broken by a lever (red), or kept in its words and strained (amber). A promise
+  // with no lever of its own (the fiscal rules) is the rules line above it.
+  const broken = status.promises.filter((p) => !p.kept && p.promise.breaks.length > 0);
+  const brokenIds = new Set(broken.map((p) => p.promise.id));
+  const strained = status.strains.filter((s) => s.strained && !brokenIds.has(s.promise.id));
 
   /** The red button: the game has reached Budget day; a link shared from there opens everything. */
   const deliver = () =>
@@ -189,8 +160,8 @@ export function ReviewPage() {
     });
 
   return (
-    <JourneyLayout step="review" part={{ index: 2, total: 2, label: 'Review' }}>
-      <HeadroomBar outcome={outcome} game={game} status={status} />
+    <JourneyLayout step="review">
+      <HeadroomBar outcome={outcome} status={status} />
 
       <Part id="priorities" title="Your priorities" change={{ to: '/pm', label: 'Change' }}>
         {ranked.length === 0 ? (
@@ -211,7 +182,7 @@ export function ReviewPage() {
 
       <Part
         id="deliver"
-        title="What you chose to deliver"
+        title="Flagship policies"
         change={status.priorities.map((p) => ({
           to: deliverPath(p.rank),
           label: `Change ${p.priority.noun}`,
@@ -233,11 +204,10 @@ export function ReviewPage() {
                       {on.map((o) => (
                         <li key={o.option.id}>
                           {o.option.title}
-                          {o.state === 'adjusted' ? ' (adjusted on the desk)' : ''} ·{' '}
+                          {o.state === 'adjusted' ? ' (adjusted)' : ''} ·{' '}
                           <span className="amount amount--worse">
                             costs {formatGbpBn(Math.abs(o.costGbpm), 1)}
                           </span>
-                          {o.delayedTo ? ` · starts ${o.delayedTo}` : ''}
                         </li>
                       ))}
                     </ul>
@@ -265,58 +235,37 @@ export function ReviewPage() {
         )}
       </Part>
 
-      <Part id="speech" title="For the speech" change={{ to: '/rabbit', label: 'Change' }}>
-        {keeping ? (
-          <p>Keeping the headroom: that is the announcement.</p>
-        ) : addOns.length === 0 ? (
-          <p className="panel__hint">No add-ons.</p>
-        ) : (
-          <ul className="review__list">
-            {addOns.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ul>
-        )}
-      </Part>
-
       <Part
         id="position"
         title="Where that leaves you"
-        change={{ to: compromisePath(3), label: 'Change' }}
+        change={{ to: '/finetune/tax', label: 'Change' }}
       >
         <p>
           {missed.length === 0
             ? 'Rules met.'
-            : `Missed: ${missed.map((v) => v.ruleName).join(' and ')}.`}
-          {game.breachAccepted ? ' You have said so, in writing.' : ''}
+            : `Missed: ${missed.map((v) => v.ruleName).join(' and ')}. The OBR would say so on Budget day.`}
         </p>
-        {moved.length > 0 || delays.length > 0 ? (
-          <>
-            <h3 className="section-label">Since the forecast</h3>
-            <ul className="review__list">
-              {moved.map((r) => (
-                <li key={r.lever.code}>
-                  {r.lever.shortTitle}: {formatLeverValue(r.lever, r.from)} →{' '}
-                  {formatLeverValue(r.lever, r.to)}
-                </li>
-              ))}
-              {delays.map((r) => (
-                <li key={`delay-${r.lever.code}`}>
-                  {r.lever.shortTitle} starts {r.yearFrom}
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <p className="panel__hint">Nothing changed since the OBR saw the package.</p>
-        )}
+        {broken.length > 0 || strained.length > 0 ? (
+          <ul className="review__list">
+            {broken.map((p) => (
+              <li key={p.promise.id}>
+                <span className="tag tag--warn">Breaks the manifesto: {p.promise.title}</span>
+              </li>
+            ))}
+            {strained.map((p) => (
+              <li key={p.promise.id}>
+                <span className="tag tag--amber">Strains the manifesto: {p.promise.title}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </Part>
 
       <p className="actions">
         <StepLink to="/budget-day" className="btn btn--primary btn--budget" onClick={deliver}>
           Deliver my Budget
         </StepLink>
-        <StepLink to="/rabbit" className="btn">
+        <StepLink to="/finetune/spending" className="btn">
           Back
         </StepLink>
       </p>

@@ -121,6 +121,7 @@ export {
   type PermalinkState,
   encodeGame,
   decodeGame,
+  LEGACY_STAGE,
 } from './permalink/codec.js';
 export { formatGbp, formatGbpBn, formatPct, perHousehold } from './format.js';
 export { describeLevelChange, formatLevel, levelValue } from './levels.js';

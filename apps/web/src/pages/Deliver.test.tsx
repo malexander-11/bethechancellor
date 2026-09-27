@@ -5,7 +5,7 @@ import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 /** A game that has agreed two priorities with the PM and reached the package. */
-const GAME = 'g=s.7_st.2_pl.adviser_hr.20_pr.safer-streets+defence';
+const GAME = 'g=st.2_pr.safer-streets+defence';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -27,19 +27,19 @@ const bar = () => screen.getByRole('region', { name: 'Your Budget so far' });
 const barFigure = () => bar().querySelector('.bar__figure')?.textContent ?? '';
 
 describe('build your Budget: the ways to deliver', () => {
-  it('sends a sandbox with no game to the desk, and a game that has not seen the PM back to the PM', () => {
+  it('sends a sandbox with no game to the briefing, and a game that has not seen the PM back to the PM', () => {
+    // Flagship policies need priorities, and priorities need a game: the briefing starts one.
     const sandbox = at(`/budget/deliver?${BASE}&L=itbr.1`);
-    expect(screen.getByText('Build the package')).toBeInTheDocument();
-    expect(screen.getByText(/Build your Budget · 1 of 2/)).toBeInTheDocument();
+    expect(h1('Your briefing')).toBeInTheDocument();
     sandbox.unmount();
-    at(`/budget/deliver?${BASE}&g=s.7_st.1_pl.adviser_hr.20`);
+    at(`/budget/deliver?${BASE}&g=st.1`);
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 
   it('shows one priority per screen, in rank order, with its lead’s line and a way on to the next', () => {
     at(`/budget/deliver?${BASE}&${GAME}`);
     expect(h1(/^1st Safer streets: prisons, police, borders/)).toBeInTheDocument();
-    expect(screen.getByText(/^Build your Budget · 1 of 4$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Flagship policies · 1 of 2$/)).toBeInTheDocument();
     // No voice at the top (Phase 23): the Justice Secretary's line waits in each card's fold, and
     // every card carries one adviser's line saying who proposed it and what it costs and does.
     expect(document.querySelector('.journey > .spoken')).toBeNull();
@@ -68,7 +68,7 @@ describe('build your Budget: the ways to deliver', () => {
     expect(next).toHaveAttribute('href', expect.stringMatching(/^\/budget\/deliver\/2\?/));
     fireEvent.click(next);
     expect(h1(/^2nd Defence on the NATO path/)).toBeInTheDocument();
-    expect(screen.getByText(/^Build your Budget · 2 of 4$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Flagship policies · 2 of 2$/)).toBeInTheDocument();
     expect(within(ways(/Ways to deliver: Defence/)).getAllByRole('checkbox')).toHaveLength(3);
     expect(screen.getByRole('link', { name: 'Next: fine-tune tax and spend' })).toHaveAttribute(
       'href',
@@ -96,7 +96,9 @@ describe('build your Budget: the ways to deliver', () => {
     at(`/budget/deliver/2?${BASE}&${GAME}`);
     expect(within(bar()).getByText('0 of 2 delivered')).toBeInTheDocument();
     expect(within(bar()).getByText(/Headroom, 2029-30/)).toBeInTheDocument();
-    expect(within(bar()).getByText(/your £20bn target/)).toBeInTheDocument();
+    // No target (Phase 24): the rules are the line.
+    expect(within(bar()).getByText('rules met')).toBeInTheDocument();
+    expect(within(bar()).queryByText(/target/)).toBeNull();
     const gap = () => box(/^Fill the funding gap in the defence investment plan/);
     const card = gap().closest('.choice') as HTMLElement;
     // The card promises the headroom the Budget would then have; the bar shows that figure once
@@ -120,17 +122,17 @@ describe('build your Budget: the ways to deliver', () => {
     expect(within(bar()).getByText('0 of 2 delivered')).toBeInTheDocument();
   });
 
-  it('shows a lever adjusted on the desk as neither on nor off, with where it stands', () => {
+  it('shows a lever adjusted elsewhere as neither on nor off, with where it stands', () => {
     at(`/budget/deliver?${BASE}&${GAME}&L=moj.5`);
     const prisons = box(/More money for prisons and courts/);
     expect(prisons).not.toBeChecked();
     const card = prisons.closest('.choice') as HTMLElement;
-    expect(within(card).getByText(/Adjusted on the desk/)).toBeInTheDocument();
+    expect(within(card).getByText(/^Adjusted: /)).toBeInTheDocument();
     expect(card.className).toMatch(/choice--adjusted/);
   });
 
   it('wears the red lines, the earliest starts and a later start on the options that carry them', async () => {
-    at(`/budget/deliver?${BASE}&g=s.7_st.2_pl.adviser_hr.20_pr.welfare-bill+families`);
+    at(`/budget/deliver?${BASE}&g=st.2_pr.welfare-bill+families`);
     expect(h1(/^1st Get the welfare bill down/)).toBeInTheDocument();
     const twoChild = box(/Reinstate the two-child limit/);
     const twoChildCard = twoChild.closest('.choice') as HTMLElement;
@@ -205,7 +207,7 @@ describe('build your Budget: the ways to deliver', () => {
   });
 
   it('names the options it overlaps before either is chosen, and quotes the interaction once the other moves', () => {
-    const cost = 'g=s.7_st.2_pl.adviser_hr.20_pr.cost-of-living';
+    const cost = 'g=st.2_pr.cost-of-living';
     const quiet = at(`/budget/deliver?${BASE}&${cost}`);
     const freeze = () => box(/^End the threshold freeze early/).closest('.choice') as HTMLElement;
     // A way to afford moves the basic rate; the two interact, so the card says so, quietly.
@@ -219,22 +221,13 @@ describe('build your Budget: the ways to deliver', () => {
     expect(moved.className).not.toMatch(/choice__overlap--warn/);
   });
 
-  it('opens the desk one link away, at the right group, and comes back to the same screen', () => {
-    at(`/budget/deliver?${BASE}&${GAME}`);
-    fireEvent.click(screen.getByRole('link', { name: 'More policies: every lever' }));
-    // The spending desk, with the Justice lever's group open, the briefing folded away, no
-    // hand-off, and the line naming it a side room rather than a part of the road.
-    expect(screen.getByText('Build the package')).toBeInTheDocument();
-    expect(screen.getByText(/Build your Budget · More policies/)).toBeInTheDocument();
-    expect(screen.getByRole('tab', { selected: true })).toHaveAccessibleName(
-      /Day-to-day departmental budgets/,
+  it('leads on to fine-tuning, with no side door to the desk: step 4 has every lever', async () => {
+    at(`/budget/deliver/2?${BASE}&${GAME}`);
+    expect(screen.queryByRole('link', { name: /More policies/ })).toBeNull();
+    fireEvent.click(screen.getByRole('link', { name: 'Next: fine-tune tax and spend' }));
+    expect(h1('Fine-tune tax')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(new URLSearchParams(window.location.search).get('g')).toMatch(/^st\.3/),
     );
-    expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
-    expect(screen.getByText('The Director of Public Spending’s briefing')).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: /Next: the/ })).toBeNull();
-    const back = screen.getByRole('link', { name: 'Back to the options for safer streets' });
-    expect(back).toHaveAttribute('href', expect.stringMatching(/^\/budget\/deliver\?/));
-    fireEvent.click(back);
-    expect(h1(/^1st Safer streets/)).toBeInTheDocument();
   });
 });

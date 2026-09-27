@@ -21,13 +21,13 @@ const priorityBox = (name: RegExp) =>
   });
 
 describe('agreeing the priorities with the Prime Minister', () => {
-  it('sends a link with no game back to the outlook', () => {
+  it('sends a link with no game back to the briefing', () => {
     at(`/pm?${BASE}`);
-    expect(screen.getByText('Your starting position')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Your briefing' })).toBeInTheDocument();
   });
 
   it('writes the theme of the Budget from the ranking, for the Comms team and the advisers', () => {
-    at(`/pm?${BASE}&g=s.7_st.1`);
+    at(`/pm?${BASE}&g=st.1`);
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     // What the PM has already done is no longer a fold here: the theme is.
     expect(screen.queryByText('What the Prime Minister has already done')).toBeNull();
@@ -44,7 +44,7 @@ describe('agreeing the priorities with the Prime Minister', () => {
   });
 
   it('will not go on until a priority is ranked, and the PM reacts to each one', () => {
-    at(`/pm?${BASE}&g=s.7_st.1`);
+    at(`/pm?${BASE}&g=st.1`);
     expect(screen.getByRole('button', { name: 'Agree these priorities' })).toBeDisabled();
     expect(screen.getByText('Tick at least one priority.')).toBeInTheDocument();
     expect(screen.getAllByRole('checkbox')).toHaveLength(8);
@@ -55,7 +55,7 @@ describe('agreeing the priorities with the Prime Minister', () => {
   });
 
   it('ranks up to three in the order ticked, writes them to the link and moves no lever', async () => {
-    at(`/pm?${BASE}&g=s.7_st.1`);
+    at(`/pm?${BASE}&g=st.1`);
     fireEvent.click(priorityBox(/Defence on the NATO path/));
     fireEvent.click(priorityBox(/Cut the cost of living/));
     fireEvent.click(priorityBox(/Bring down NHS waiting lists/));
@@ -72,7 +72,7 @@ describe('agreeing the priorities with the Prime Minister', () => {
   });
 
   it('shows the ranking on the cards with the promises beneath, and agreeing goes on to the options', async () => {
-    at(`/pm?${BASE}&g=s.7_st.1_pr.safer-streets+defence`);
+    at(`/pm?${BASE}&g=st.1_pr.safer-streets+defence`);
     expect(screen.queryByRole('button', { name: /Push back/ })).toBeNull();
     const group = screen.getByRole('group', { name: 'The Budget’s priorities' });
     expect(within(group).getByText('1st').closest('li')).toHaveTextContent(/Safer streets/);

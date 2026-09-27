@@ -26,11 +26,6 @@ export interface ReadingsInput {
   game?: GamePermalink;
   /** Ambitions against the package, computed by the caller from the same outcome. */
   status?: AmbitionStatus;
-  /** The package as the OBR saw it, re-run under today's conditions, for the compromises line. */
-  snapshotOutcome?: Outcome;
-  macroCodes?: readonly string[];
-  /** The add-ons: the levers they moved, if any, and what to call them. */
-  rabbit?: { codes?: string[]; label: string };
   /** The PM file; kept so callers need not change, read by nothing since Phase 18. */
   pm?: PmFile;
   /** Who each lever falls on, for whether the revenue comes from the top or the broad base. */
@@ -74,7 +69,7 @@ export interface Readings {
 
 /** Every reading the signals can use, and the decisions behind each, computed once. */
 export function readingsWithCauses(input: ReadingsInput): Readings {
-  const { outcome, levers, typicalErrorGbpm, game, status } = input;
+  const { outcome, levers, typicalErrorGbpm, status } = input;
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
   const title = (code: string) => byCode.get(code)?.shortTitle ?? code;
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
@@ -122,7 +117,9 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
         .filter((r) => r.kind !== 'debtInterest')
         .sort((a, b) => Math.abs(b.psnbGbpm) - Math.abs(a.psnbGbpm))
         .slice(0, 4)
-        .map((r) => (r.kind === 'macro' ? 'the OBR’s forecast' : r.code ? title(r.code) : r.label)),
+        .map((r) =>
+          r.kind === 'macro' ? 'the economy since March' : r.code ? title(r.code) : r.label,
+        ),
     ),
   ].slice(0, 3);
   const taxMovers = outcome.leverEffects
@@ -150,37 +147,9 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   }
 
   // The game's own readings.
-  const target = (game?.headroomTargetBn ?? 0) * 1000;
   const broken = status?.promises.filter((p) => !p.kept) ?? [];
   const unfunded = status?.priorities.filter((p) => p.status !== 'delivered') ?? [];
   const funded = status?.priorities.filter((p) => p.status === 'delivered') ?? [];
-  const delayed = Object.keys(game?.delays ?? {}).filter((code) => moved.has(code));
-  let compromises = 0;
-  const compromised: string[] = [];
-  if (input.snapshotOutcome) {
-    const macro = new Set(input.macroCodes ?? []);
-    for (const before of input.snapshotOutcome.leverEffects) {
-      const lever = byCode.get(before.code);
-      if (!lever || macro.has(before.code) || lever.category === 'tax') continue;
-      const cost = (e: typeof before | undefined) =>
-        e ? (e.currentSpending[year] ?? 0) + (e.capitalSpending[year] ?? 0) : 0;
-      const saving = cost(before) - cost(outcome.leverEffects.find((e) => e.code === before.code));
-      if (saving > 0.5) {
-        compromises += saving;
-        compromised.push(title(before.code));
-      }
-    }
-  }
-  const rabbitGbpm = (input.rabbit?.codes ?? []).reduce((acc, code) => {
-    const e = outcome.leverEffects.find((x) => x.code === code);
-    if (!e) return acc;
-    return (
-      acc +
-      (e.receipts[year] ?? 0) -
-      (e.currentSpending[year] ?? 0) -
-      (e.capitalSpending[year] ?? 0)
-    );
-  }, 0);
   const missedRules = outcome.verdicts
     .filter((v) => v.status === 'notMet' || v.status === 'aboveMargin')
     .map((v) => v.ruleName);
@@ -242,7 +211,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       debtFallingPp: debtFalling,
       taxTakeChangePp: taxTakeChange,
       budget2025Reversals: reversals.length,
-      headroomVsTargetGbpm: headroom - target,
       promisesBroken: broken.length,
       manifestoBroken: manifestoBroken.length,
       manifestoStrained: strained.length,
@@ -256,10 +224,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       rebellionRisk: broken.length * 2 + unfunded.length + welfareReversals.length,
       credibilityShare: improving > 0 ? uncertified / improving : 0,
       priceRaisingMeasures: priceRaisers.length,
-      compromisesGbpm: compromises,
-      rabbitGbpm,
-      breachAccepted: game?.breachAccepted ? 1 : 0,
-      delayedMeasures: delayed.length,
       thresholdFreezeKept: moved.has('rvfrz') ? 0 : 1,
       efficienciesKept: moved.has('rveff') ? 0 : 1,
       publicServiceSpendingGbpm: publicServiceSpending,
@@ -281,7 +245,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       debtFallingPp: movers,
       taxTakeChangePp: taxMovers,
       budget2025Reversals: reversals.map((l) => l.shortTitle),
-      headroomVsTargetGbpm: movers,
       promisesBroken: broken.map(
         (p) =>
           `${p.promise.title}${p.brokenBy.length > 0 ? ` (${p.brokenBy.map((b) => title(b.code)).join(', ')})` : ''}`,
@@ -306,10 +269,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       ],
       credibilityShare: uncertifiedTitles,
       priceRaisingMeasures: priceRaisers.map((l) => l.shortTitle),
-      compromisesGbpm: compromised,
-      rabbitGbpm: input.rabbit ? [input.rabbit.label] : [],
-      breachAccepted: missedRules,
-      delayedMeasures: delayed.map((code) => `${title(code)} → ${game?.delays[code] ?? ''}`),
       thresholdFreezeKept: moved.has('rvfrz') ? [title('rvfrz')] : [],
       efficienciesKept: moved.has('rveff') ? [title('rveff')] : [],
       publicServiceSpendingGbpm: topBy(policyEffects, spendOf),

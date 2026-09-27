@@ -457,8 +457,6 @@ export const interventionWhenSchema = z.enum([
   'priority-unfunded',
   'priority-part-funded',
   'all-priorities-funded',
-  'headroom-below-target',
-  'headroom-above-target',
   'rule-missed',
 ]);
 
@@ -612,16 +610,7 @@ export const speechFileSchema = z.strictObject({
   giveaways: speechFragmentSchema,
   /** Said once if a promise made in Downing Street is broken: {promises}. */
   lockBreak: speechFragmentSchema,
-  /** Said if anything was scaled back since the forecast: {count}, {saving}. */
-  compromises: speechFragmentSchema,
-  /** Said per delayed measure: {title}, {year}. */
-  delay: speechFragmentSchema,
-  /**
-   * The closing flourish, by add-on id, `further` (one notch more on a priority: {title}),
-   * `several` (more than one add-on: {titles}) or `keep`: {headroom}.
-   */
-  rabbit: z.record(z.string(), speechFragmentSchema),
-  /** The last word, keyed `met`, `missed` or `breach`: {headroom}, {targetYear}. */
+  /** The last word, keyed `met` or `missed`: {headroom}, {targetYear}. */
   peroration: z.record(z.string(), speechFragmentSchema),
 });
 
@@ -665,13 +654,12 @@ export const verdictKindSchema = z.strictObject({
   line: simulatedLineSchema,
   when: z.strictObject({
     rulesMet: z.boolean().optional(),
-    breachAccepted: z.boolean().optional(),
     promisesAllKept: z.boolean().optional(),
     prioritiesAllFunded: z.boolean().optional(),
     prioritiesNoneFunded: z.boolean().optional(),
-    headroomAtLeastTarget: z.boolean().optional(),
+    /** Headroom of at least the advisers' rule of thumb, £20bn (Phase 24: there is no target). */
+    headroomAmple: z.boolean().optional(),
     headroomThin: z.boolean().optional(),
-    rabbitKept: z.boolean().optional(),
     certified: z.boolean().optional(),
     restive: z.boolean().optional(),
   }),

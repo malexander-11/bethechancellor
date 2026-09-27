@@ -29,7 +29,7 @@ export function badgesOf(levers: readonly Lever[]): Badge[] {
   return [...new Set(levers.map((l) => l.badge))];
 }
 
-/** How a lever that was adjusted on the desk now stands, as its level where it has one. */
+/** How a lever that was adjusted elsewhere now stands, as its level where it has one. */
 function standing(lever: Lever, value: number): string {
   const level = lever.control.level;
   if (level) return formatLevel(level, levelValue(level, value));
@@ -159,7 +159,7 @@ export function OptionCard({
             {adjusted
               ? levers.map((lever) => (
                   <span key={lever.code} className="tag--treasury tag--warn">
-                    Adjusted on the desk: {standing(lever, values[lever.code] ?? 0)}
+                    Adjusted: {standing(lever, values[lever.code] ?? 0)}
                   </span>
                 ))
               : null}

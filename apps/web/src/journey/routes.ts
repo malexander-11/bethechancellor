@@ -1,8 +1,8 @@
 import type { JourneyStep } from '@btc/engine';
 
 /**
- * Where each step of the journey lives. The package's two screens and the old outlook name all
- * resolve to a route, so a redirect to "the furthest open stage" always has somewhere to go.
+ * Where each step of the journey lives. The desk's two screens and the old step names all resolve
+ * to a route, so a redirect to "the furthest open stage" always has somewhere to go.
  */
 export const STAGE_ROUTES: Record<JourneyStep, string> = {
   start: '/',
@@ -14,9 +14,10 @@ export const STAGE_ROUTES: Record<JourneyStep, string> = {
   finetune: '/finetune/tax',
   taxes: '/budget/taxes',
   spending: '/budget/spending',
-  forecast: '/forecast',
-  compromise: '/compromise',
-  rabbit: '/rabbit',
+  // Retired in Phase 24: the review took their place.
+  forecast: '/review',
+  compromise: '/review',
+  rabbit: '/review',
   review: '/review',
   'budget-day': '/budget-day',
 };

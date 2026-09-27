@@ -1,11 +1,11 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
-/** A game that has been to Downing Street: two priorities ranked; every red line binds. */
-const GAME = 'g=s.7_st.2_pl.adviser_hr.20_pr.safer-streets+defence';
+/** A game at fine-tuning: two priorities ranked; every red line binds; on today's estimate. */
+const GAME = 'g=st.3_pr.safer-streets+defence';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -20,11 +20,15 @@ function at(path: string) {
 }
 
 describe('the package, with a game under way', () => {
-  it('keeps score in the summary strip: headroom against the target, priorities, promises', () => {
+  it('keeps score in the summary strip: priorities and promises, with no target anywhere', () => {
     at(`/budget/spending?${BASE}&${GAME}`);
     const box = screen.getByRole('region', { name: 'Your Budget so far' });
-    // Headroom against the target is said once, on the scorecard; the strip keeps the rest.
-    expect(screen.getByText(/against your £20bn target/)).toBeInTheDocument();
+    // Headroom is said once, on the scorecard, which keeps the estimate apart from the measures.
+    expect(screen.queryByText(/your £\d+bn target|headroom target/)).toBeNull();
+    expect(
+      screen.getByText(/^OBR in March £23\.6bn · today’s estimate £6\.8bn · your measures/),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Economic assumptions: today’s estimate.')).toBeInTheDocument();
     expect(within(box).queryByText(/Headroom/)).toBeNull();
     expect(within(box).getByText('0 of 2 delivered')).toBeInTheDocument();
     expect(within(box).getByText('all 6 kept')).toBeInTheDocument();
@@ -120,7 +124,7 @@ describe('the package, with a game under way', () => {
     // The desk is one link away from the guided screens and never the default (ADR-0022).
     const spending = at(`/budget/spending?${BASE}&${GAME}`);
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
-    expect(screen.getByText(/Build your Budget · More policies/)).toBeInTheDocument();
+    expect(screen.getByText(/Fine-tune tax and spend · Every lever/)).toBeInTheDocument();
     expect(screen.getByText('The Director of Public Spending’s briefing')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to fine-tuning spending' })).toHaveAttribute(
       'href',
@@ -135,10 +139,26 @@ describe('the package, with a game under way', () => {
       'href',
       expect.stringMatching(/^\/finetune\/tax\?/),
     );
+    // A game's desk keeps the game: no ready-made Budgets, which would replace the estimate, and
+    // "Put every lever back" rather than a reset that would end the game.
+    expect(screen.queryByText('Try a ready-made Budget')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Reset to OBR' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Put every lever back' })).toBeInTheDocument();
     taxes.unmount();
-    // Once the envelope is open, the way back is to the compromises.
-    at(`/budget/taxes?${BASE}&g=s.7_st.4_pl.adviser_hr.20_pr.defence_rv.1`);
-    expect(screen.getByRole('link', { name: 'Back to the compromises' })).toBeInTheDocument();
+    // At the review, the way back is still to the fine-tuning screen these levers belong to.
+    at(`/budget/taxes?${BASE}&g=st.4_pr.defence`);
+    expect(screen.getByRole('link', { name: 'Back to fine-tuning tax' })).toBeInTheDocument();
+  });
+
+  it('puts every lever back without ending the game or changing the economy', async () => {
+    at(`/budget/taxes?${BASE}&${GAME}&M=rate.0.75_rpi.0.5&L=itbr.1_moj.10`);
+    fireEvent.click(screen.getByRole('button', { name: 'Put every lever back' }));
+    await waitFor(() => {
+      const params = new URLSearchParams(window.location.search);
+      expect(params.get('L')).toBeNull();
+      expect(params.get('M')).toBe('rate.0.75_rpi.0.5');
+      expect(params.get('g')).toBe('st.3_pr.safer-streets+defence');
+    });
   });
 
   it('shows none of this on a sandbox Budget with no game', () => {

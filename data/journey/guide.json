@@ -5,25 +5,25 @@
       "step": "start",
       "number": 1,
       "title": "You have been appointed Chancellor.",
-      "now": "Take the job, then choose what you will plan on."
+      "now": "Take the job, then read your briefing."
     },
     {
       "step": "outlook",
-      "number": 2,
-      "title": "Your starting position",
-      "now": "Choose the forecast you’ll plan on, and your headroom target."
+      "number": 1,
+      "title": "Your briefing",
+      "now": "The headroom you have, and the rules to meet."
     },
     {
       "step": "pm",
-      "number": 3,
+      "number": 2,
       "title": "What is this Budget for?",
       "now": "Tick up to three, in the order they matter."
     },
     {
       "step": "deliver",
-      "number": 4,
-      "title": "Build your Budget",
-      "now": "Tick the ways you want, then pay for them."
+      "number": 3,
+      "title": "Flagship policies",
+      "now": "Tick the flagship policies you want."
     },
     {
       "step": "finetune",
@@ -35,7 +35,7 @@
       "step": "taxes",
       "number": 4,
       "title": "Build the package",
-      "now": "Move what you want, then go back to the options. Chosen ones are pinned at the top of their groups."
+      "now": "Move any tax you want, then go back. Your flagship policies are pinned at the top of their groups."
     },
     {
       "step": "spending",
@@ -44,32 +44,14 @@
       "now": "Set the departments, the [flagship] programmes, investment and welfare, then go back. Ministers will tell you what each change means."
     },
     {
-      "step": "forecast",
-      "number": 5,
-      "title": "The forecast arrives",
-      "now": "Open it and see what it does to your plans."
-    },
-    {
-      "step": "compromise",
-      "number": 5,
-      "title": "Make the sums add up",
-      "now": "Tax first, then spending, then headroom."
-    },
-    {
-      "step": "rabbit",
-      "number": 6,
-      "title": "Anything for the speech?",
-      "now": "Tick up to three, then review your Budget."
-    },
-    {
       "step": "review",
-      "number": 6,
-      "title": "Your Budget, reviewed",
-      "now": "Change anything you like, then deliver your Budget."
+      "number": 5,
+      "title": "Deliver your Budget",
+      "now": "Check it, change anything, then deliver it."
     },
     {
       "step": "budget-day",
-      "number": 7,
+      "number": 6,
       "title": "What your Budget means",
       "now": "Share it, change something, or play again."
     }

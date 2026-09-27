@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
-/** A game that has agreed two priorities with the PM and reached the package. */
-const GAME = 'g=s.7_st.2_pl.adviser_hr.20_pr.safer-streets+defence';
+/** A game that has agreed two priorities with the PM and reached fine-tuning. */
+const GAME = 'g=st.3_pr.safer-streets+defence';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -28,7 +28,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     const { container } = at(`/finetune/tax?${BASE}&${GAME}`);
     expect(h1('Fine-tune tax')).toBeInTheDocument();
     expect(screen.getByText('Raise or cut any tax. Watch your headroom move.')).toBeInTheDocument();
-    expect(screen.getByText(/^Build your Budget · 3 of 4$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Fine-tune tax and spend · 1 of 2$/)).toBeInTheDocument();
     expect(bar()).toBeInTheDocument();
     const names = screen
       .getAllByRole('region')
@@ -124,7 +124,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
   });
 
   it('warns when two levers count the same money: restoring fuel duty against a fuel duty cut', () => {
-    at(`/finetune/tax?${BASE}&g=s.7_st.2_pl.adviser_hr.20_pr.cost-of-living&L=fuel.-10`);
+    at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&L=fuel.-10`);
     const restore = cardOf(
       screen.getByRole('checkbox', { name: 'Put fuel duty up with inflation from April 2027' }),
     );
@@ -138,7 +138,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
   it('lays out the spending screen, with a minister once a budget moves and the flagships tagged', () => {
     at(`/finetune/spending?${BASE}&${GAME}&L=moj.10`);
     expect(h1('Fine-tune spending')).toBeInTheDocument();
-    expect(screen.getByText(/^Build your Budget · 4 of 4$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
     expect(group(/^Public services 1 moved · costs £\d\.\dbn/)).toBeInTheDocument();
     expect(group(/^Investment 1 lever/)).toBeInTheDocument();
     expect(group(/^Benefits 4 levers/)).toBeInTheDocument();
@@ -163,13 +163,18 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(within(prisons).getByText('Adjusted from what you chose')).toHaveClass('tag--warn');
   });
 
-  it('leaves for the forecast from the spending screen, remembering the package', async () => {
+  it('leads from the spending screen to the review, the package intact', async () => {
     at(`/finetune/spending?${BASE}&${GAME}&L=moj.10_hscl.1`);
-    fireEvent.click(screen.getByRole('link', { name: 'Next: the forecast' }));
-    expect(h1('The forecast arrives')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/finetune\/tax\?/),
+    );
+    fireEvent.click(screen.getByRole('link', { name: 'Next: deliver the Budget' }));
+    expect(h1('Deliver your Budget')).toBeInTheDocument();
     await waitFor(() => {
-      expect(search().get('g')).toMatch(/st\.3/);
-      expect(search().get('S')).toMatch(/hscl\.1/);
+      expect(search().get('g')).toBe('st.4_pr.safer-streets+defence');
+      expect(search().get('L')).toMatch(/hscl\.1/);
+      expect(search().get('S')).toBeNull();
     });
   });
 
@@ -196,7 +201,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(screen.getByText(/The Director of Public Spending’s briefing/)).toBeInTheDocument();
     sandbox.unmount();
     // A game that has not yet agreed its priorities is sent back to them.
-    at(`/finetune/tax?${BASE}&g=s.7_st.1_pl.adviser_hr.20`);
+    at(`/finetune/tax?${BASE}&g=st.1`);
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 });

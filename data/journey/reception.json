@@ -578,7 +578,7 @@
             "label": "Share of the improvement resting on uncertified costings",
             "unit": "ratio"
           },
-          "note": "Two-fifths of the yield: beyond that the OBR’s re-scoring, not the Budget, sets the number.",
+          "note": "Two-fifths of the yield: beyond that the OBR’s own scoring, not the Budget, sets the number.",
           "bands": [
             {
               "id": "certified",
@@ -602,45 +602,6 @@
                 },
                 {
                   "sourceId": "osr-trr-review-2025-12"
-                }
-              ],
-              "badge": "simulated"
-            }
-          ]
-        },
-        {
-          "id": "mk-breach",
-          "measure": "breachAccepted",
-          "reading": {
-            "label": "Breach acknowledged",
-            "unit": "status"
-          },
-          "note": "Whether the Chancellor wrote down that a rule would be missed.",
-          "bands": [
-            {
-              "id": "none",
-              "upTo": 0,
-              "points": 0,
-              "text": "No rule is knowingly missed; the Charter’s escape clause stays unused.",
-              "sources": [
-                {
-                  "sourceId": "hmt-charter-2025-autumn",
-                  "paragraph": "3.9-3.10"
-                }
-              ],
-              "badge": "simulated"
-            },
-            {
-              "id": "acknowledged",
-              "points": -1,
-              "text": "You have said openly that a rule will be missed. The Charter allows that only for a significant shock.",
-              "sources": [
-                {
-                  "sourceId": "hmt-charter-2025-autumn",
-                  "paragraph": "3.9-3.10"
-                },
-                {
-                  "sourceId": "boe-insights-long-rates-2025"
                 }
               ],
               "badge": "simulated"
@@ -893,40 +854,6 @@
               "points": 1,
               "text": "Tax cuts worth {value} a year. Money back in pockets is noticed before anything else in a Budget.",
               "sources": [],
-              "badge": "simulated"
-            }
-          ]
-        },
-        {
-          "id": "pb-rabbit",
-          "measure": "rabbitGbpm",
-          "reading": {
-            "label": "What the rabbit costs in the target year",
-            "unit": "GBPm"
-          },
-          "note": "Any surprise announcement that costs money in the target year.",
-          "bands": [
-            {
-              "id": "pulled",
-              "upTo": -1,
-              "points": 1,
-              "text": "A surprise at the end of the speech, worth {abs} a year: the headline, at the cost of headroom.",
-              "sources": [
-                {
-                  "sourceId": "hmt-budget-2025-speech"
-                }
-              ],
-              "badge": "simulated"
-            },
-            {
-              "id": "none",
-              "points": 0,
-              "text": "No rabbit: the headroom is the announcement.",
-              "sources": [
-                {
-                  "sourceId": "hmt-budget-2025-speech"
-                }
-              ],
               "badge": "simulated"
             }
           ]

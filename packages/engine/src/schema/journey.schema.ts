@@ -77,6 +77,8 @@ export const briefingsFileSchema = z.strictObject({
  * What the Budget-day readings measure (Phase 5, extended in Phases 8 and 9). Every reading is a
  * number the engine computes over the outcome, so a reception rule can compare it with an
  * authored threshold deterministically; statuses are encoded as 0 for the best case and upwards.
+ * The headroom target, the compromises, the add-ons, the breach and the delays went with the
+ * forecast in Phase 24 (ADR-0025).
  */
 export const readingMeasureSchema = z.enum([
   'stabilityHeadroomGbpm',
@@ -91,7 +93,6 @@ export const readingMeasureSchema = z.enum([
   'taxTakeChangePp',
   'budget2025Reversals',
   // The game's own readings (Phase 8): nought or the baseline value without a game.
-  'headroomVsTargetGbpm',
   'promisesBroken',
   'manifestoBroken',
   'manifestoStrained',
@@ -105,10 +106,6 @@ export const readingMeasureSchema = z.enum([
   'rebellionRisk',
   'credibilityShare',
   'priceRaisingMeasures',
-  'compromisesGbpm',
-  'rabbitGbpm',
-  'breachAccepted',
-  'delayedMeasures',
   'thresholdFreezeKept',
   'efficienciesKept',
   // Spending, tax and who pays, in the target year (Phase 9).
