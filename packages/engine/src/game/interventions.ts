@@ -19,6 +19,8 @@ export interface Intervention {
   when: InterventionWhen;
   /** The line with `{name}` filled in. */
   text: string;
+  /** The line's short form with `{name}` filled in, when it has one. */
+  short?: string;
   /** The line's own sources plus those of what it is about. */
   sources: SourceRef[];
   /** The promise or priority id the predicate fired on, when it fired on one. */
@@ -60,11 +62,13 @@ export function interventionsFor(
   ) => {
     for (const spec of file.interventions) {
       if (spec.when !== when) continue;
+      const fill = (s: string) => s.replace(/\{name\}/g, name ?? '');
       out.push({
         id: spec.id,
         adviser: spec.adviser,
         when,
-        text: spec.line.text.replace(/\{name\}/g, name ?? ''),
+        text: fill(spec.line.text),
+        ...(spec.line.short ? { short: fill(spec.line.short) } : {}),
         sources: [...spec.line.sources, ...sources],
         about,
         badge: spec.line.badge,

@@ -35,6 +35,11 @@ function standing(lever: Lever, value: number): string {
   return formatLeverValue(lever, value);
 }
 
+/** The option, or failing that the lever, on the other side of an overlap. */
+function partnerOf(o: OptionOverlap): string {
+  return o.option?.shortTitle ?? o.withLever.shortTitle;
+}
+
 /** "Costs £2.2bn · leaves £4.5bn" or "Costs £2.2bn · without it £6.7bn", one text node for one figure. */
 export function priceLine(price: OptionPrice): string {
   const headroom = formatGbpBn(price.headroomGbpm, 1, price.headroomGbpm < 0);
@@ -49,7 +54,9 @@ export function priceLine(price: OptionPrice): string {
  * Choosing it moves the levers inside; the state is read back from the levers, so a card can also
  * show that its levers were adjusted on the desk to somewhere else (ADR-0022). While an option it
  * conflicts with is in the Budget the card is blocked and says by what; with both in from the
- * desk, both warn and neither is blocked.
+ * desk, both warn and neither is blocked. On the surface a card is its title, its badge and its
+ * figure, plus the tags that change what choosing it means; the lever's headline, the options it
+ * quietly overlaps and the proposer's line wait behind one fold, "More about this".
  */
 export function OptionCard({
   id,
@@ -69,6 +76,7 @@ export function OptionCard({
   line,
   who,
   note,
+  tag,
   children,
 }: {
   id: string;
@@ -93,14 +101,19 @@ export function OptionCard({
   /** The proposer's line, simulated and sourced; a way to afford has none and shows the lever's headline. */
   line?: SimulatedLine;
   who?: string;
-  /** A plain factual line under the title when there is no speaker: the lever's own headline. */
+  /** A plain factual line about the option, folded: the lever's own headline. */
   note?: string;
+  /** A short state the player must see beside the figure: "already in your Budget". */
+  tag?: string;
   /** Anything to show once the option is on: the minister's reaction, for one. */
   children?: ReactNode;
 }) {
   const on = state === 'on';
   const adjusted = state === 'adjusted';
   const badges = badgesOf(levers);
+  const quiet = overlaps.filter((o) => !o.active);
+  const active = overlaps.filter((o) => o.active);
+  const more = Boolean(note || quiet.length > 0 || (line && who));
   const classes = [
     'choice',
     'choice--option',
@@ -128,12 +141,12 @@ export function OptionCard({
               <LabelBadge key={b} badge={b} />
             ))}
           </span>
-          {note ? <span className="choice__line">{note}</span> : null}
           <span className="choice__meta">
             <span className={`choice__figure amount amount--${price.tone}`}>
               {priceLine(price)}
               <span className="sr-only">, in {price.year}</span>
             </span>
+            {tag ? <span className="tag tag--quiet">{tag}</span> : null}
             {blocked ? (
               <span className="tag--treasury">Instead of {blocked.option.title}</span>
             ) : null}
@@ -170,36 +183,39 @@ export function OptionCard({
               Warning: both this and {c.option.title} are in your Budget: {c.text}
             </span>
           ))}
-          {overlaps.map((o) => {
-            const partner = o.option?.shortTitle ?? o.withLever.shortTitle;
-            const warn = o.active && o.severity === 'warn';
+          {active.map((o) => {
+            const warn = o.severity === 'warn';
             return (
               <span
                 key={o.withLever.code}
                 className={`choice__line choice__overlap${warn ? ' choice__overlap--warn' : ''}`}
               >
-                {o.active
-                  ? `${warn ? 'Warning: ' : ''}Overlaps with ${partner}: ${o.text}`
-                  : `Overlaps with ${partner}`}
+                {warn ? 'Warning: ' : ''}Overlaps with {partnerOf(o)}: {o.text}
               </span>
             );
           })}
-          {line && who ? (
-            <span className="choice__delivery">
-              <span className="kicker">{who}</span> <LabelBadge badge={line.badge} />{' '}
-              {line.short ?? line.text}
-            </span>
-          ) : null}
         </span>
       </label>
-      {line?.short ? (
-        <details className="spoken__more">
-          <summary>More</summary>
-          <p>{line.text}</p>
+      {more ? (
+        <details className="more more--quiet choice__more">
+          <summary>More about this</summary>
+          <div className="more__body">
+            {note ? <span className="choice__line">{note}</span> : null}
+            {quiet.map((o) => (
+              <span key={o.withLever.code} className="choice__line choice__overlap">
+                Overlaps with {partnerOf(o)}
+              </span>
+            ))}
+            {line && who ? (
+              <span className="choice__delivery">
+                <span className="kicker">{who}</span> <LabelBadge badge={line.badge} /> {line.text}
+              </span>
+            ) : null}
+            {line ? (
+              <SourceList refs={line.sources} className="choice__sources briefing__sources" />
+            ) : null}
+          </div>
         </details>
-      ) : null}
-      {line ? (
-        <SourceList refs={line.sources} className="choice__sources briefing__sources" />
       ) : null}
       {on ? children : null}
     </div>

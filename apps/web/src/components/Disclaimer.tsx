@@ -6,9 +6,9 @@ import { BADGE_LABELS, LabelBadge } from './LabelBadge';
 const BADGES = Object.keys(BADGE_LABELS) as Badge[];
 
 /**
- * The foot of every screen: what kind of numbers these are, what the badges on them mean, and
- * where the rest is written down. The paragraphs it used to carry live on the About and
- * Methodology pages.
+ * The foot of every screen, in one line: what kind of numbers these are and where the rest is
+ * written down, with what the badges mean one tap away. The paragraphs it used to carry live on
+ * the About and Methodology pages.
  */
 export function Disclaimer() {
   const workings = useWorkings();
@@ -17,13 +17,11 @@ export function Disclaimer() {
       <p>
         {!workings ? (
           <>
-            Every figure is sourced: turn on <strong>Show workings</strong>, at the top of the page,
-            to see where.{' '}
+            Every figure is sourced: turn on <strong>Show workings</strong> to see where.{' '}
           </>
         ) : null}
-        Costings are official estimates; the sliders are assumptions; the reactions are judgements,
-        and say so. Growth and market effects are not modelled.{' '}
-        <Link to="/about">Licence and sources</Link>.
+        Official costings, badged where the arithmetic is ours; the reactions are judgements and say
+        so. <Link to="/about">Sources and licence</Link>.
       </p>
       <details className="more more--quiet">
         <summary>What the badges mean</summary>

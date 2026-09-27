@@ -75,6 +75,8 @@ export const contextScenarioSchema = z.strictObject({
   kind: scenarioKindSchema,
   title: z.string().min(1),
   headline: z.string().min(1).max(160),
+  /** The card in a breath: at most sixty characters, a shorter form of the headline. */
+  short: z.string().min(1).max(60).optional(),
   rationale: z
     .array(
       z.strictObject({

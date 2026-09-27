@@ -168,7 +168,7 @@ describe('making the most of extra headroom', () => {
     at(`/compromise?${BASE}&${SURPLUS}&L=hscl.1`);
     const ease = screen.getByRole('region', { name: /Ease off a tax rise/ });
     expect(within(ease).getByText(/dropped: −£/)).toBeInTheDocument();
-    expect(within(ease).getAllByText(/each with the headroom/).length).toBe(1);
+    expect(within(ease).getAllByText(/with the headroom dropping each would leave/).length).toBe(1);
     fireEvent.click(within(ease).getByRole('button', { name: 'Drop it' }));
     await waitFor(() => expect(L()).not.toMatch(/hscl/));
     // The only way to pay is gone and the Budget is short again: the screen is the sums.

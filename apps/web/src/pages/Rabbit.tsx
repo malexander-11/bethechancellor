@@ -173,7 +173,7 @@ export function RabbitPage() {
               {...(blocked ? { blocked } : {})}
               line={card.line}
               who={card.who}
-              {...(card.taken ? { note: 'already in your Budget' } : {})}
+              {...(card.taken ? { tag: 'already in your Budget' } : {})}
             >
               {card.levers
                 .filter((l) => l.category !== 'tax')

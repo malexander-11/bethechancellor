@@ -321,6 +321,7 @@
       "kind": "baseline",
       "title": "Keep the March baseline",
       "headline": "The OBR’s own central forecast, left exactly as it was. The figures your Budget will be judged on.",
+      "short": "The OBR’s March forecast, unchanged.",
       "rationale": [
         {
           "text": "This is the forecast your Budget will be judged against until the OBR publishes a new one on 28 October. The OBR’s own warning about it: a central forecast is the middle of a range of possible outcomes, with a low probability of the outcome being very close to the central estimate.",
@@ -342,6 +343,7 @@
       "kind": "adviser",
       "title": "Your Chief Economic Adviser’s view",
       "headline": "Today’s readings, not a forecast: each slider moved by the gap between the latest figure and the OBR’s.",
+      "short": "Today’s readings, not a forecast.",
       "rationale": [
         {
           "text": "Gilt yields are the large change. The OBR conditioned March on 10-year yields of 4.5%; they closed at 5.29% on 18 September. The OBR’s sensitivity puts a sustained point on rates at about £15 billion of borrowing by 2030-31.",
@@ -382,6 +384,7 @@
       "kind": "optimistic",
       "title": "An optimistic analyst",
       "headline": "The kindest figure published anywhere for each assumption — whoever published it, and whichever table it sits in.",
+      "short": "The kindest published figure for each assumption.",
       "rationale": [
         {
           "text": "Rates do the work. The lowest Bank Rate path in the Treasury’s comparison runs about 0.6 points a year below the OBR’s, falling to 2.59% by 2030 where the OBR has 3.89%. Borrowing gets cheaper than the March forecast assumed, and nothing else published is kinder.",
@@ -424,6 +427,7 @@
       "kind": "pessimistic",
       "title": "A pessimistic analyst",
       "headline": "The cruellest figure published anywhere for each assumption. An envelope, not one forecaster’s view.",
+      "short": "The cruellest published figure for each assumption.",
       "rationale": [
         {
           "text": "The gloomiest figure for interest rates is not a forecast at all. None of the sixteen forecasters in the comparison publishes a gilt yield — their range is for Bank Rate, and its top is milder than the market. So this card takes today’s 10-year gilt yield, 5.29% against the 4.5% the OBR assumed, the same figure your adviser reads. Gilt yields, not Bank Rate, are what drive debt interest.",

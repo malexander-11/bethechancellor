@@ -52,12 +52,14 @@
       },
       "reaction": {
         "text": "Good. That is the one thing people will feel before Christmas. I will want to know what pays for it.",
+        "short": "Good. People will feel that before Christmas. What pays for it?",
         "sources": [],
         "badge": "simulated"
       },
       "lead": "Political Adviser",
       "brief": {
         "text": "Bills first: pick what people notice before Christmas. The freeze costs the most and lands the latest; the bus cap is the smallest and the most visible.",
+        "short": "Bills first: the freeze costs the most, the bus cap the least.",
         "sources": [
           {
             "sourceId": "hmt-budget-2025-document"
@@ -106,6 +108,7 @@
       "lead": "Health Secretary",
       "brief": {
         "text": "Every pound above the settlement goes on appointments, and care money frees beds. Neither works quickly, and the efficiency savings are the whole government’s, not mine.",
+        "short": "Every pound above the settlement goes on appointments; care money frees beds.",
         "sources": [
           {
             "sourceId": "govuk-elective-reform-plan-2025"
@@ -144,6 +147,7 @@
       },
       "reaction": {
         "text": "That is not a favour to the Defence Secretary. It is a commitment we have published.",
+        "short": "Not a favour to the Defence Secretary: a commitment we have published.",
         "sources": [
           {
             "sourceId": "govuk-dip-funding-explainer"
@@ -154,6 +158,7 @@
       "lead": "Defence Secretary",
       "brief": {
         "text": "Confirm the plan’s gap first: it is already published. Reaching 3% sooner is the expensive choice, and every allied capital will read it.",
+        "short": "Confirm the plan’s gap first; reaching 3% sooner is the expensive choice.",
         "sources": [
           {
             "sourceId": "govuk-dip-funding-explainer"
@@ -199,6 +204,7 @@
       "lead": "Education Secretary",
       "brief": {
         "text": "High needs first: the deficits are real and dated. The rest is smaller and slower, and none of it slows the rise in plans.",
+        "short": "High needs first: the deficits are real and dated.",
         "sources": [
           {
             "sourceId": "nao-send-2024"
@@ -234,6 +240,7 @@
       },
       "reaction": {
         "text": "Power and money out of Westminster. That is the whole point of us.",
+        "short": "Power and money out of Westminster: the whole point of us.",
         "sources": [
           {
             "sourceId": "govuk-budget-2026-every-postcode"
@@ -244,6 +251,7 @@
       "lead": "Communities Secretary",
       "brief": {
         "text": "Capital counts against the debt rule, not the day-to-day one, so investment costs less against the stability rule than it looks. The homes arrive over a decade.",
+        "short": "Capital counts against the debt rule, not the day-to-day one.",
         "sources": [
           {
             "sourceId": "hmt-charter-2025-autumn"
@@ -279,12 +287,14 @@
       },
       "reaction": {
         "text": "Families first. The party will like that a great deal, and so will I.",
+        "short": "Families first. The party will like that, and so will I.",
         "sources": [],
         "badge": "simulated"
       },
       "lead": "Work and Pensions Secretary",
       "brief": {
         "text": "Every pound here reaches the poorest households first. The floor and the housing link are cheap; the allowance is not, and it starts late.",
+        "short": "Every pound here reaches the poorest households first; the allowance starts late.",
         "sources": [
           {
             "sourceId": "jrf-uc-floor-2026"
@@ -333,6 +343,7 @@
       "lead": "Justice Secretary",
       "brief": {
         "text": "Two levers, and only two: Justice buys places and sitting days, the Home Office buys caseworkers. Neither is large.",
+        "short": "Two levers only: Justice buys places, the Home Office buys caseworkers.",
         "sources": [
           {
             "sourceId": "no10-commons-statement-2026-09-01"
@@ -368,6 +379,7 @@
       },
       "reaction": {
         "text": "Careful. The last reform missed its savings, and the party will read every line.",
+        "short": "Careful. The last reform missed its savings; the party reads every line.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03"
@@ -378,6 +390,7 @@
       "lead": "Chief Secretary to the Treasury",
       "brief": {
         "text": "Every option here is a static saving, the Treasury’s or a think tank’s. The OBR scored the last eligibility change down, and this game’s harsher forecasts do the same.",
+        "short": "Static savings, every one; the OBR scored the last eligibility change down.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03"

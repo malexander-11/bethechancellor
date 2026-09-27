@@ -460,6 +460,15 @@
   margin: 8px 0;
 }
 
+/* One voice on the surface; the other notes wait behind one fold. */
+.interventions__more {
+  margin: 0;
+}
+
+.interventions__more > .more__body {
+  padding-bottom: 0;
+}
+
 .minister .spoken {
   margin: 4px 0 16px;
   font-size: 0.9375rem;
@@ -1442,6 +1451,30 @@ label.choice {
   font-size: 0.9375rem;
 }
 
+/* A spoken line folded under its speaker: the role and the badge show, the words wait. */
+.spoken--folded {
+  margin: 8px 0;
+}
+
+.spoken--folded > .more__body {
+  padding-bottom: 4px;
+}
+
+.spoken--folded .spoken__text {
+  color: var(--ink);
+}
+
+/* The rest of a card, one fold: the lever's headline, the options it overlaps, the proposer. */
+.choice__more {
+  margin: 0;
+}
+
+.choice__more .choice__line,
+.choice__more .choice__delivery {
+  display: block;
+  margin: 0 0 6px;
+}
+
 /* The full line behind a shortened one: one click, no words on the surface. */
 .spoken__more {
   margin: 0;
@@ -1596,26 +1629,17 @@ label.choice {
   font-size: 0.875rem;
 }
 
-.bar__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 16px;
-  margin: 0;
+.bar__fact {
+  color: var(--ink-2);
   font-size: 0.875rem;
 }
 
-.bar__facts div {
-  display: flex;
-  gap: 5px;
-}
-
-.bar__facts dt {
-  color: var(--ink-2);
-  font-weight: 600;
-}
-
-.bar__facts dd {
-  margin: 0;
+/* One line, the facts parted by a dot; nothing here that another line says. */
+.bar__target::before,
+.bar__fact::before {
+  content: '·';
+  margin-right: 8px;
+  color: var(--muted);
 }
 
 .bar__missed {

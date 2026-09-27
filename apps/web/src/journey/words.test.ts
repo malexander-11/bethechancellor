@@ -1,5 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { briefings, compromise, glossary, guide, levers, ministers, reception } from '../data';
+import {
+  briefings,
+  compromise,
+  context,
+  glossary,
+  guide,
+  interventions,
+  levers,
+  ministers,
+  options,
+  pm,
+  rabbit,
+  reception,
+  verdicts,
+} from '../data';
 
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 
@@ -37,6 +51,46 @@ describe('word budgets: one line visible, the rest a click away', () => {
         // A short line is a shorter version of the long one, not a second speech.
         if (line.short) expect(words(line.short)).toBeLessThan(words(line.text));
       }
+    }
+  });
+
+  it('gives every line met on the road a short form, and reads the short form in one breath', () => {
+    // What shows on a screen is the short form; the full line is one tap away (ADR-0023).
+    type Line = { text: string; short?: string | undefined };
+    const road: { label: string; line: Line; max: number }[] = [
+      ...pm.priorities.flatMap((p) => [
+        { label: `${p.id} brief`, line: p.brief, max: 12 },
+        { label: `${p.id} reaction`, line: p.reaction, max: 12 },
+      ]),
+      ...interventions.interventions.map((x) => ({ label: x.id, line: x.line, max: 14 })),
+      { label: 'rabbit intro', line: rabbit.intro.line, max: 12 },
+      { label: 'rabbit further', line: rabbit.further.line, max: 12 },
+      { label: 'rabbit keep', line: rabbit.keep.line, max: 12 },
+      ...Object.entries(compromise.routes).map(([id, r]) => ({
+        label: `route ${id}`,
+        line: r.line,
+        max: 14,
+      })),
+      { label: 'no breach', line: compromise.routes.breach.noBreach, max: 14 },
+      ...verdicts.kinds.map((k) => ({ label: `verdict ${k.id}`, line: k.line, max: 18 })),
+      ...options.deliver.map((o) => ({ label: `option ${o.id}`, line: o.line, max: 18 })),
+      ...options.addOns.map((o) => ({ label: `add-on ${o.id}`, line: o.line, max: 18 })),
+    ];
+    expect(road.length).toBeGreaterThan(60);
+    for (const { label, line, max } of road) {
+      const read = line.short ?? line.text;
+      expect(words(read), `${label} reads "${read}"`).toBeLessThanOrEqual(max);
+      // A short line is a shorter version of the long one, not a second speech.
+      if (line.short) expect(words(line.short), label).toBeLessThan(words(line.text));
+    }
+  });
+
+  it('sums up each forecast card in at most eight words', () => {
+    const cards = context.scenarios ?? [];
+    expect(cards.length).toBe(4);
+    for (const card of cards) {
+      expect(card.short, `${card.kind} has no short form`).toBeTruthy();
+      expect(words(card.short ?? ''), card.kind).toBeLessThanOrEqual(8);
     }
   });
 

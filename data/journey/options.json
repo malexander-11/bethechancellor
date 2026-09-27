@@ -415,6 +415,7 @@
       "title": "Universal credit up 2%",
       "line": {
         "text": "Every pound here reaches the poorest households first. That is what a child poverty strategy costs.",
+        "short": "Every pound here reaches the poorest households first.",
         "sources": [
           {
             "sourceId": "labour-manifesto-2024-opportunity"

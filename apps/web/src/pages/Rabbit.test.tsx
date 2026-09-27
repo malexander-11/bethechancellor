@@ -44,9 +44,10 @@ describe('suggested little add-ons', () => {
     expect(cards).toHaveLength(10);
     expect(within(menu()).getAllByText(/leaves (−|£)/).length).toBe(10);
     expect(within(menu()).getByText(/^Costs nothing · leaves/)).toBeInTheDocument();
-    const pubs = box(/Five per cent off alcohol duty/).closest('label') as HTMLElement;
+    const pubs = box(/Five per cent off alcohol duty/).closest('.choice') as HTMLElement;
     expect(within(pubs).getByText(/^Costs £\d+\.\dbn · leaves (−|£)/)).toBeInTheDocument();
-    expect(within(pubs).getByText('Political Adviser')).toBeInTheDocument();
+    // The proposer's line waits behind the card's fold; the surface is title, badge and figure.
+    expect(within(pubs).getByText('Political Adviser').closest('details')).not.toBeNull();
     expect(
       screen.getByText(/priced against your Budget in 2029-30\. 0 of 3 chosen/),
     ).toBeInTheDocument();

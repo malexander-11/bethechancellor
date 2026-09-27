@@ -10,6 +10,7 @@
       },
       "line": {
         "text": "You knew a rule would be missed, wrote it down and delivered anyway. The Charter’s escape clause is for a shock the OBR agrees is one, so this stands as a choice, and the market prices choices. What survives is the honesty of it: nobody can say you hid the number.",
+        "short": "You knew a rule would be missed and said so. Nobody can say you hid the number.",
         "sources": [
           {
             "sourceId": "hmt-charter-2025-autumn",
@@ -27,6 +28,7 @@
       },
       "line": {
         "text": "A rule is missed on the OBR’s own arithmetic and the Budget went ahead without saying so. The forecast does the talking on the afternoon; the letters from the Treasury Committee follow. The programme may be intact, but the framework it was meant to stand on is not.",
+        "short": "A rule is missed on the OBR’s arithmetic and the Budget went ahead without saying so.",
         "sources": [
           {
             "sourceId": "hmt-charter-2025-autumn",
@@ -46,6 +48,7 @@
       },
       "line": {
         "text": "The margin is kept, the costings are certified, and nothing the Prime Minister asked for is funded. The gilt market reads a Chancellor who can say no; the backbenches read one who said it to them. Stability is a kind of success, and the quietest.",
+        "short": "The margin is kept, the costings are certified, and nothing the Prime Minister asked for is funded.",
         "sources": [
           {
             "sourceId": "hmt-budget-2025-speech"
@@ -68,6 +71,7 @@
       },
       "line": {
         "text": "Every promise kept, every priority funded, and a margin the OBR’s typical forecast error would erase. This is the Budget the programme asked for, delivered on the thinnest ice the rules allow. Whether it holds is October’s forecast, not yours.",
+        "short": "Every promise kept, every priority funded, and a margin the OBR’s typical forecast error would erase.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",
@@ -88,6 +92,7 @@
       },
       "line": {
         "text": "The priorities are funded, the promises stand and the margin survives. Somebody paid for that, and the incidence table says who. It is the rarest kind of Budget because it is the hardest: it asks for the money before it spends it.",
+        "short": "The priorities are funded, the promises stand and the margin survives. The incidence table says who paid.",
         "sources": [
           {
             "sourceId": "hmt-budget-2025-speech"
@@ -106,6 +111,7 @@
       },
       "line": {
         "text": "The programme is funded and a written commitment was the price. The manifesto’s words are on the record and so are yours. The people the priorities were for will remember one; the people the promise was made to will remember the other.",
+        "short": "The programme is funded and a written commitment was the price.",
         "sources": [
           {
             "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -123,6 +129,7 @@
       },
       "line": {
         "text": "The arithmetic holds and the party does not. Promises broken, priorities missing or welfare cuts re-run have given several groups a reason to vote against a Budget that passes the OBR’s test. The rules were never the only audience.",
+        "short": "The arithmetic holds and the party does not: the rules were never the only audience.",
         "sources": [
           {
             "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -144,6 +151,7 @@
       },
       "line": {
         "text": "Some of what was agreed in Downing Street is funded and some is not, and the Budget says which. That is most Budgets: a programme trimmed to the forecast, with the trimming visible. The question the morning papers ask is whether the missing half comes next year.",
+        "short": "Some of what was agreed is funded and some is not, and the Budget says which.",
         "sources": [
           {
             "sourceId": "no10-first-speech-2026-07-20"
@@ -158,6 +166,7 @@
       "when": {},
       "line": {
         "text": "Nothing broke and nothing much changed. The March forecast is more or less the October Budget, with a few adjustments at the edges. Markets barely notice; nor does anyone else.",
+        "short": "Nothing broke and nothing much changed; markets barely notice, nor does anyone else.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",

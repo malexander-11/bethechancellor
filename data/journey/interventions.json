@@ -7,6 +7,7 @@
       "when": "promise-broken",
       "line": {
         "text": "That is {name}, Chancellor: a manifesto red line, and the words are on the record. Nothing here will stop you. On Budget day the public’s rating starts at the floor, whatever else you do.",
+        "short": "{name} is a manifesto red line, Chancellor. The public’s rating starts at the floor.",
         "sources": [],
         "badge": "simulated"
       }
@@ -17,6 +18,7 @@
       "when": "rule-missed",
       "line": {
         "text": "On these numbers a rule is missed, and the OBR will say so on 28 October. The Charter’s escape clause is for an emergency or a significant shock, judged by the OBR, not for a choice.",
+        "short": "On these numbers a rule is missed, and the OBR will say so.",
         "sources": [
           {
             "sourceId": "hmt-charter-2025-autumn",
@@ -32,6 +34,7 @@
       "when": "priority-unfunded",
       "line": {
         "text": "{name} is a priority you agreed with the Prime Minister. Nothing in your Budget delivers it yet.",
+        "short": "{name} is an agreed priority. Nothing in your Budget delivers it yet.",
         "sources": [],
         "badge": "simulated"
       }
@@ -42,6 +45,7 @@
       "when": "priority-part-funded",
       "line": {
         "text": "{name} is only partly delivered: an option has been adjusted on the desk below what it needs.",
+        "short": "{name} is only partly delivered: an option was adjusted below what it needs.",
         "sources": [],
         "badge": "simulated"
       }
@@ -52,6 +56,7 @@
       "when": "all-priorities-funded",
       "line": {
         "text": "Every priority you agreed with the Prime Minister has something behind it. What remains is whether the rules and your headroom survive the October forecast.",
+        "short": "Every priority has something behind it; now the rules and headroom must survive October.",
         "sources": [],
         "badge": "simulated"
       }
@@ -62,6 +67,7 @@
       "when": "headroom-below-target",
       "line": {
         "text": "Headroom is below the target you set yourself. Remember what it is: a forecast margin. The OBR’s typical five-year error on receipts alone is about £32bn, bigger than any target on that list.",
+        "short": "Headroom is below the target you set yourself, and it is a forecast margin.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",
@@ -77,6 +83,7 @@
       "when": "headroom-above-target",
       "line": {
         "text": "You are inside your own target. It is still a forecast: the OBR’s typical error over five years is about £32bn, and October’s numbers will be the OBR’s, not ours.",
+        "short": "Inside your own target, and still a forecast: October’s numbers will be the OBR’s.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",

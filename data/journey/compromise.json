@@ -25,7 +25,7 @@
           }
         ],
         "badge": "simulated",
-        "short": "What you chose to deliver, biggest first: start it later, narrow it, or drop it."
+        "short": "What you chose to deliver, biggest first: delay it, narrow it, or drop it."
       }
     },
     "target": {
@@ -62,7 +62,7 @@
           }
         ],
         "badge": "simulated",
-        "short": "The ways to deliver your priorities you have not chosen, one for each priority first."
+        "short": "The ways to deliver your priorities you have not chosen, one per priority first."
       }
     },
     "ease": {
@@ -75,7 +75,7 @@
           }
         ],
         "badge": "simulated",
-        "short": "The ways to pay you chose, each with the headroom that dropping it would leave."
+        "short": "The ways to pay you chose, with the headroom dropping each would leave."
       }
     },
     "bank": {
@@ -92,7 +92,7 @@
           }
         ],
         "badge": "simulated",
-        "short": "Money not spent is the cheapest insurance: the OBR’s typical five-year error is about £32bn."
+        "short": "Money not spent is the cheapest insurance; the OBR’s typical error is about £32bn."
       }
     },
     "breach": {
@@ -106,10 +106,11 @@
           }
         ],
         "badge": "simulated",
-        "short": "A rule missed by choice is not a shock; the OBR will say so. Write down that you know."
+        "short": "A rule missed by choice is not a shock. Write down that you know."
       },
       "noBreach": {
         "text": "No rule is missed on these numbers. Leaving the gap open is not a breach; it is less headroom than you meant to keep, and the target is yours to lower if you can live with that.",
+        "short": "No rule is missed: the gap is less headroom than you meant to keep.",
         "sources": [
           {
             "sourceId": "hmt-charter-2025-autumn",
