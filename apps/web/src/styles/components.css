@@ -1005,13 +1005,6 @@ label.choice {
   color: var(--critical);
 }
 
-.routes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 16px 24px;
-  margin: 12px 0;
-}
-
 .route .section-label {
   margin-top: 0;
 }

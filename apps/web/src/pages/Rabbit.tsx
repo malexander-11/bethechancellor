@@ -20,6 +20,7 @@ import { useHeadroomOf } from '../journey/headroom';
 import { StepLink } from '../journey/links';
 import { useOptionPrices } from '../journey/prices';
 import { useBudget } from '../state/budget';
+import { compromisePath } from './Compromise';
 
 /** How many little add-ons a speech can carry. */
 export const MAX_ADD_ONS = 3;
@@ -225,7 +226,7 @@ export function RabbitPage() {
         <StepLink to="/review" className="btn btn--primary">
           Review my Budget
         </StepLink>
-        <StepLink to="/compromise" className="btn">
+        <StepLink to={compromisePath(3)} className="btn">
           Back
         </StepLink>
       </p>

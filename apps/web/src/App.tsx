@@ -83,6 +83,7 @@ function Shell() {
           <Route path="/recommendations" element={<RedirectKeepingQuery to="/budget/spending" />} />
           <Route path="/forecast" element={<ForecastPage />} />
           <Route path="/compromise" element={<CompromisePage />} />
+          <Route path="/compromise/:n" element={<CompromisePage />} />
           <Route path="/rabbit" element={<RabbitPage />} />
           <Route path="/review" element={<ReviewPage />} />
           <Route path="/budget-day" element={<BudgetDayPage />} />

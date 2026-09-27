@@ -19,8 +19,8 @@ describe('the progress bar', () => {
     at(`/compromise?${BASE}&g=s.417_st.4_pl.adviser_hr.20_rv.1`);
     expect(screen.getByText('Step 5 of 7')).toBeInTheDocument();
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
-    // The sums are the second screen of the step, and the line says so.
-    expect(within(bar).getByText(/^Respond to the forecast · 2 of 2$/)).toBeInTheDocument();
+    // The sums' first question is the second of the step's four screens, and the line says so.
+    expect(within(bar).getByText(/^Respond to the forecast · 2 of 4$/)).toBeInTheDocument();
     expect(within(bar).getAllByRole('listitem')).toHaveLength(7);
     // Behind: become Chancellor, the starting position, the priorities and the Budget are links.
     expect(within(bar).getByRole('link', { name: /Become Chancellor/ })).toBeInTheDocument();

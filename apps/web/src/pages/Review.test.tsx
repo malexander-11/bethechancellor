@@ -30,7 +30,9 @@ const changeIn = (region: HTMLElement, name: string) => within(region).getByRole
 describe('the review before delivery', () => {
   it('sends a game that has not made its final choices back to where it is', () => {
     at(`/review?${BASE}&g=s.${ADVISER}_st.4_pl.adviser_hr.20_pr.defence_rv.1&M=rate.0.75_rpi.0.5`);
-    expect(screen.getByText('Make the sums add up')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Will you raise more tax?' }),
+    ).toBeInTheDocument();
   });
 
   it('reads the Budget back, part by part, each with a way to change it', () => {
@@ -95,7 +97,7 @@ describe('the review before delivery', () => {
     expect(within(position).queryByText(/^Alcohol.*→/)).toBeNull();
     expect(changeIn(position, 'Change')).toHaveAttribute(
       'href',
-      expect.stringMatching(/^\/compromise\?/),
+      expect.stringMatching(/^\/compromise\/3\?/),
     );
   });
 

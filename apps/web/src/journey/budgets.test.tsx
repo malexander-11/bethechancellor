@@ -52,8 +52,12 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/budget/deliver/3', 205, WIDEST],
   ['/budget/afford', 590, GAME],
   ['/forecast', 125, GAME],
-  ['/compromise', 165, SHORT],
-  ['/compromise', 125, GAME],
+  ['/compromise', 75, SHORT],
+  ['/compromise/2', 80, SHORT],
+  ['/compromise/3', 50, SHORT],
+  ['/compromise', 65, GAME],
+  ['/compromise/2', 50, GAME],
+  ['/compromise/3', 55, GAME],
   ['/rabbit', 260, GAME],
   ['/review', 115, GAME],
   ['/budget-day', 265, GAME],
@@ -87,7 +91,9 @@ describe('the word budgets', () => {
     // position 303, the priorities 138, the forecast 114. Re-measured again after every option
     // gained its adviser's line and the ways to pay their plain titles, and the voices at the top
     // of the option screens went: the priority screens 145 to 184, paying for it 536, the sums 147
-    // and the room to spare 112, the add-ons 234, the review 105, Budget day 240.
+    // and the room to spare 112, the add-ons 234, the review 105, Budget day 240. Then the
+    // compromises became three screens, one question each: the sums 67, 73 and 43, the room to
+    // spare 57, 44 and 46.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();

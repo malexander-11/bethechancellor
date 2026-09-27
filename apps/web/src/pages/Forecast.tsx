@@ -26,8 +26,8 @@ import { IMPLEMENTATION_YEAR, permalinkQuery, useBudget } from '../state/budget'
 
 const CARDS = scenarioCards(context, levers, vintage);
 const MACRO_CODES = macroCodesOf(context.readings);
-/** The first of the two screens of step 5; the compromises are the second. */
-const PART = { index: 1, total: 2, label: 'The forecast' };
+/** The first of the four screens of step 5; the three compromise screens follow. */
+const PART = { index: 1, total: 4, label: 'The forecast' };
 
 const STATUS: Record<RuleVerdict['status'], { text: string; tone: string; icon: string }> = {
   met: { text: 'Rule met', tone: 'good', icon: '✓' },

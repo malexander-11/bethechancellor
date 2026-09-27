@@ -17,6 +17,7 @@ import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { macroCodesOf } from '../journey/scenarios';
 import { useBudget } from '../state/budget';
+import { compromisePath } from './Compromise';
 import { deliverPath } from './Deliver';
 
 const MACRO_CODES = new Set(macroCodesOf(context.readings));
@@ -272,7 +273,7 @@ export function ReviewPage() {
       <Part
         id="position"
         title="Where that leaves you"
-        change={{ to: '/compromise', label: 'Change' }}
+        change={{ to: compromisePath(3), label: 'Change' }}
       >
         <p>
           {missed.length === 0
