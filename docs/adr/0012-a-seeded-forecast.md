@@ -1,6 +1,6 @@
 # ADR-0012: A seeded forecast inside the published range
 
-**Status:** accepted, 2026-09-16
+**Status:** accepted, 2026-09-16; **retired 2026-09-27** by ADR-0025 (see the revision at the foot)
 
 ## Context
 
@@ -57,3 +57,13 @@ published figure or a stated transformation of one. The player can be vindicated
 their outlook without the game ever typing a number. What is given up: the draw can only be as
 gloomy as the gloomiest published row, and the plan says so rather than pretending the range is
 wider than it is.
+
+## Revision, 2026-09-27: retired (ADR-0025)
+
+The user asked for "None of the reveal and tinkering". The seeded draw is gone: the seed, the five
+outcomes, the clue, the envelope, the decomposition, the costing revisions and the snapshot the OBR
+re-scored (`draws.json`, `game/draw.ts`, `game/forecast.ts`, `Settings.revisions`, `S=`). Every game
+now plans on today's estimate and nothing arrives later to change it. With the draw went the one
+place a game judgement moved the arithmetic, so no simulated element moves a number any more. An
+old link that carries a seed still opens: its stage is read through `LEGACY_STAGE` and its economy
+is replaced by the estimate, with a warning on the desk.

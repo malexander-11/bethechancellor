@@ -127,12 +127,12 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
   });
 
   it('reads at a Flesch-Kincaid grade of seven or below, set by set', () => {
-    // Measured on 2026-09-27 (ADR-0024): the guide 1.8, option titles 4.8, option advice 4.7,
-    // the priorities 3.5, the promises 6.7, the reception labels 4.9 and bands about 6, the
-    // verdicts 5.5, the interventions 5.8, the ministers 5.5. Proper nouns (National Insurance,
-    // the manifesto, the Chancellor) hold the promises and the bands highest. The fine-tuning
-    // screens' titles 5.1 and their advisers' lines 4.9 (Phase 24, ADR-0025, which retired the
-    // targets, the forecast outcomes, the compromise screens and the add-ons with their sets).
+    // Measured on 2026-09-27 after Phase 24 (ADR-0025, which retired the targets, the forecast
+    // outcomes, the compromise screens and the add-ons with their sets): the guide 3.2, option
+    // titles 5.1, option advice 4.6, the fine-tuning screens 5.1 and their advisers' lines 4.9,
+    // the priorities 3.5, the promises 6.7, the reception labels 4.9 and bands 5.3, the verdicts
+    // 5.9, the interventions 4.4, the ministers 5.5. Proper nouns (National Insurance, the
+    // manifesto, the Chancellor) hold the promises highest.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       expect(g, `${name} reads at grade ${g.toFixed(1)}`).toBeLessThanOrEqual(GRADE_MAX);

@@ -1,6 +1,7 @@
 # ADR-0010: Four sets of assumptions, and where an optimist comes from
 
-**Status:** accepted, 2026-09-16; **revised the same day** — see _Revision_ at the foot. The
+**Status:** accepted, 2026-09-16; **revised the same day** — see _Revision_ at the foot;
+**superseded on the road 2026-09-27** by ADR-0025 (see the last revision). The
 original decision shipped a pessimistic card that left more headroom than the player's own
 adviser. The reasoning below is kept as written, because the mistake is instructive.
 
@@ -194,3 +195,14 @@ lowest and highest published rows, which coincide only while the slider's harmfu
 They are now `alternatives.lowest` and `alternatives.highest`, and the derived direction decides
 which card each feeds. Had they kept the old names, a committed nominal-GDP range would have put
 the lowest growth row on the optimistic card, which is the wrong way round.
+
+## Revision, 2026-09-27: one estimate, no cards (ADR-0025)
+
+The user asked for the forecast guess to go: "Just give them the estimated headroom that they have".
+The four cards, the published ranges they read (`alternatives`) and the ordering rule
+(`psnbDirection`, `moreHarmful`) are retired, with the context file's `scenarios`. What survives
+is the adviser's rule, the `gap` rule above: it now makes **today's estimate**, the one figure every
+game plans on (rates +0.75, RPI +0.5, growth 0; £6.8bn of headroom in 2029-30), badged Assumption.
+`validateVintage` still rejects a sensitivity whose years disagree in sign. The findings above
+(the gilt yield that nobody forecasts, the one-sided RPI range, growth with no published range)
+stay true; they are no longer on a card.

@@ -27,7 +27,7 @@ interface DeskProps {
   summaryYear: string;
   open: string;
   onOpen: (name: string) => void;
-  /** What a tab counts: levers by default; the ways to afford count options, and say "chosen". */
+  /** What a tab counts, in words: levers, unless a caller names something else. */
   nouns?: { item: string; items: string; changed: string };
   children: (group: LeverGroup) => React.ReactNode;
 }

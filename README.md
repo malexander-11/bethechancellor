@@ -4,58 +4,52 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 23 (plain words, real questions, a guided repair)**. You are appointed Chancellor in a Labour government
-with a Budget to deliver on 28 October 2026, and the game walks you through it in seven steps with
-one clear action on every screen: become Chancellor; understand your starting position; set your
-priorities; build your Budget, one priority at a time and then paying for it; respond to the OBR's
-forecast; make your final choices and review the whole Budget; see what it means. No tab is on the
-main road and there is no hand-off to click through: every screen is a decision with a primary
-button and a way back, and the Budget lives in the link, so going back keeps every choice. The
-identity is Westminster's: Commons green, warm paper, charcoal, restrained brass, Budget red for the
-one button that delivers, and the page is set like an official paper: a serif body under editorial
-headings in Fraunces, hairline rules rather than boxes, small-capital labels, the Budget box on the
-opening. Every screen is one heading, one line, the choices and one button; every option carries
-its adviser's line, and everything else is one tap away. The words are plain (ADR-0024): a screen
-that asks for a choice asks it as a question, no sentence a player meets runs past twenty words,
-and a readability test holds every set of them at a reading age of about twelve. Every number
-still comes from an official source or a stated calculation on one, badged for what it is
-(Official figure, Worked out, Assumption, Commentary, Game judgement), and the sources and
-breakdowns sit behind a "Show workings" switch in the footer, off by default. A first
-playthrough's required reading and decisions come to about ten minutes (an estimate from the
-rendered screens, not user testing; ADR-0024). Every screen names itself, can be reached by
-keyboard and screen reader, holds 4.5:1 contrast, keeps every control at
-44px and says met or missed in words.
+Status: **Phase 24 (one estimate, six steps, curated levers)**. You are appointed Chancellor in a
+Labour government with a Budget to deliver on 28 October 2026, and the game walks you through it in
+six steps with one clear action on every screen: your briefing; set your priorities; flagship
+policies; fine-tune tax and spend; deliver the Budget; feedback. There is no forecast to guess:
+every game plans on one figure, today's estimate of your headroom (£6.8bn in 2029-30: the OBR's
+March forecast brought up to date for today's borrowing costs and prices with the OBR's own
+sensitivities, badged as an assumption), and the fiscal rules are the line to meet (ADR-0025). No
+tab is on the main road and there is no hand-off to click through: every screen is a decision with
+a primary button and a way back, and the Budget lives in the link, so going back keeps every
+choice. The identity is Westminster's: Commons green, warm paper, charcoal, restrained brass,
+Budget red for the one button that delivers, and the page is set like an official paper: a serif
+body under editorial headings in Fraunces, hairline rules rather than boxes, small-capital labels,
+the Budget box on the opening. The words are plain (ADR-0024): no sentence a player meets runs past
+twenty words, and a readability test holds every set of them at a reading age of about twelve.
+Every number still comes from an official source or a stated calculation on one, badged for what it
+is (Official figure, Worked out, Assumption, Commentary, Game judgement), and the sources and
+breakdowns sit behind a "Show workings" switch in the footer, off by default. A first playthrough's
+required reading and decisions come to about nine minutes (an estimate from the rendered screens,
+not user testing; ADR-0025). Every screen names itself, can be reached by keyboard and screen
+reader, holds 4.5:1 contrast, keeps every control at 44px and says met or missed in words.
 
-Seven steps. **Become Chancellor**: one sentence, the playtime, the button. **Your starting
-position**: the Treasury's briefing in three figures and one line on the rules (the Charter's words
-one fold away), what has been promised since March and what has cut the headroom, then two
-questions: which forecast will you plan on, and how much headroom do you want to keep, with "What
-is headroom?" beneath; the sliders are workings. **Set your priorities**: rank up to three of eight with the Prime Minister, who reacts
-to each, and the game writes the theme of the Budget from the ranking; the promises are one fold
-away; nothing is funded yet. **Build your Budget**: one screen
-per priority, its costed options, each named for what it does and carrying its adviser's line,
-priced against your Budget as it stands with the headroom each would leave, and a slim bar keeping score; then one screen to pay for
-it, the twenty-six ways to raise money in five groups by who pays, each heading counting what its
-chosen options raise, the first three of each group on show and the rest a fold away. No two options share a lever, and two that count the same money cannot both
-be chosen. Behind them, one link away under "More policies", the desk: every lever wearing the
-manifesto promise it would break, in red, or strain, in amber, with a minister on every spending line and advisers who
-remember what you agreed, and the menu a Chancellor actually weighs: employer National Insurance, pensions, the smaller duties,
-capital-tax reliefs, going further on recent rises, capital gains at death, a lower council tax
-surcharge band, the bank surcharge, the energy profits levy again, the self-employed rate, VAT off
-gas, another compliance package, business rates, the Prime Minister's schemes and defence at 3%
-sooner. **Respond to the forecast**: the OBR's forecast, fixed by a seeded draw the day you
-chose your starting position, opens on one button into what changed in two lines (the economy, and
-what the OBR made of your costings) and the headroom before and after against your target; then
-three questions, one a screen: will you raise more tax, will you spend less or later, will you keep
-less headroom (and, with a rule missed, borrow and say so); or, with room to spare, will you do more
-for your priorities, ease off a tax rise, keep the extra headroom.
-**Final choices**: up to three little announcements for the speech, then a review of the whole
-Budget with a way back to every part, and one red button. **What your Budget means**: the Budget in
-three sentences (what you prioritised, who pays, what you accepted), your backbenchers, the markets
-and the public each rating it out of five and saying which choices caused it, and a close that says
-which ambitions survived, who paid, which compromises mattered and how the package fares under
-every forecast you might have drawn; the speech, five households and the Budget documents one fold
-away. Share the link; replay the same seed with a fresh Budget. The menu was read against the Budget
+Six steps. **Briefing**: one sentence, the playtime and the button; then the Treasury's briefing:
+your headroom on today's estimate, what borrowing costs and what has been borrowed so far, the two
+rules in one line (the Charter's words one fold away), what has been promised since March and why
+the headroom is £6.8bn rather than March's £23.6bn, and "What is headroom?" beneath; with the
+workings on, how the estimate is made. **Set your priorities**: rank up to three of eight with the
+Prime Minister, who reacts to each, and the game writes the theme of the Budget from the ranking;
+the promises are one fold away; nothing is funded yet. **Flagship policies**: one screen per
+priority, its costed options, each named for what it does and carrying its adviser's line, priced
+against your Budget as it stands with the headroom each would leave, and a slim bar keeping score.
+No two options share a lever, and two that count the same money cannot both be chosen. **Fine-tune
+tax and spend**: two screens of hand-picked levers, twenty-six taxes in five groups by who pays and
+nineteen budgets in four, each the desk's own control under a plain title with its adviser's line,
+saying before it moves what its usual move would do and the headroom that would leave; red and
+amber manifesto tags, a minister on every budget you move, the first three levers of each group on
+show and the rest a fold away. Behind them, one link away, the desk: every lever wearing the
+manifesto promise it would break, in red, or strain, in amber, with a minister on every spending
+line, and the menu a Chancellor actually weighs: employer National Insurance, pensions, the smaller
+duties, capital-tax reliefs, going further on recent rises, capital gains at death, a lower council
+tax surcharge band, the bank surcharge, the energy profits levy again, the self-employed rate, VAT
+off gas, another compliance package, business rates, the Prime Minister's schemes and defence at 3%
+sooner. **Deliver the Budget**: the whole Budget read back with a way to change every part, and one
+red button. **Feedback**: the Budget in three sentences (what you prioritised, who pays, what you
+accepted or kept), your backbenchers, the markets and the public each rating it out of five and
+saying which choices caused it, and a close that says which ambitions survived and who paid; the
+speech, five households and the Budget documents one fold away. Share the link. The menu was read against the Budget
 reporting again on 21 September 2026: the electricity VAT zero rate that HMRC says ends in March
 2027, National Insurance for working pensioners and for LLP partners, and CenTax's package for
 taxing gains like income joined it; what has no published costing is named in words instead. On
@@ -83,12 +77,11 @@ CenTax, Tax Justice UK, the IFS Green Budget, Demos, the Adam Smith Institute, O
 own stated arithmetic where nobody has published a costing, badged as such), 32 spending levers
 (Spending Review 2025 settlements, OBR welfare lines, Budget 2025 spending decisions, the Prime
 Minister's schemes, six welfare cards from the think tanks) with milestones from PESA, six more levers
-kept for the record on no screen, eight priorities with 29 ways to deliver them, 26 ways to afford
-them and 8 add-ons (every option a bundle of those levers), four sets of economic assumptions and
-five forecast outcomes derived from HM Treasury's comparison of independent forecasts, and about
-two hundred simulated lines in the voices of roles, every one badged and every fact in them
-sourced. Next: the rebase to
-the 28 October 2026 forecast.
+kept for the record on no screen, eight priorities with 29 ways to deliver them (every option a
+bundle of those levers), 45 of the levers hand-picked for the fine-tuning screens, one estimate of
+the economy today from the Bank of England's gilt yields and HM Treasury's comparison of independent
+forecasts, and simulated lines in the voices of roles, every one badged and every fact in them
+sourced. Next: the rebase to the 28 October 2026 forecast.
 
 ## Principles
 
@@ -101,8 +94,9 @@ the 28 October 2026 forecast.
 - **The game may judge, and says so.** What the Prime Minister wants, what a minister says at a
   cut, how a market or a household reads the Budget: these are judgements nobody published, badged
   **simulated** wherever they appear. A simulated line may quote a sourced fact and read an engine
-  number; it never produces a number of its own. Roles, not people. The one place a judgement moves
-  the arithmetic is the seeded forecast draw, which only chooses among published figures.
+  number; it never produces a number of its own. Roles, not people. No judgement moves the
+  arithmetic: the seeded forecast draw, which only ever chose among published figures, retired in
+  Phase 24.
 - **Where nobody has published a costing, the arithmetic is ours and the workings are on the
   card.** Not everything a Chancellor weighs has a certified costing. Each such lever states its
   method, its published inputs and its assumptions, sits in the same group as the certified rows it
@@ -127,8 +121,8 @@ apps/web            Vite + React front end (deployed on Vercel)
 packages/engine     pure TypeScript fiscal engine, schemas and tests
 packages/pipeline   scripts that fetch, extract and validate source data
 data/               sourced JSON: vintages, rules, levers, context readings, adviser briefings,
-                    the Prime Minister's priorities, the options, ministers, the forecast draws,
-                    the speech, households, Budget day reaction bands, raw source files
+                    the Prime Minister's priorities, the options, the fine-tuning levers,
+                    ministers, the speech, households, Budget day reaction bands, raw source files
 docs/               methodology and architecture decision records
 ```
 

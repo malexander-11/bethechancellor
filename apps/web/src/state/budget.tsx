@@ -76,7 +76,8 @@ export function initialStateFromLocation(search: string): BudgetState {
   };
   if (state.game) {
     // Every game is played on today's estimate (ADR-0025). A link from before Phase 24 may carry
-    // the forecast its seed drew or figures of its own; it opens on the estimate and says so.
+    // the forecast its seed drew or figures of its own; it opens on the estimate, with a warning
+    // the desk shows beside the link's other warnings.
     out.game = state.game;
     if (!onEstimate(out.leverValues)) {
       out.leverValues = withValues(out.leverValues, ESTIMATE);

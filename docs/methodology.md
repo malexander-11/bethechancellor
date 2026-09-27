@@ -310,7 +310,8 @@ own path is one click away.
 From Phase 7 the step is a choice between four cards rather than three sliders. Each is one
 stated rule over published rows, run through the same rounding and clamping as the suggestion
 rule above; none of the four settings is authored, so tampering with a published figure moves
-the card.
+the card. (Retired on 2026-09-27, §25: every game now plans on one figure, today's estimate, made
+by the `gap` rule above; the cards, the published ranges and the ordering rule are gone.)
 
 | Card                               | Rule                                              | rates | growth | RPI  | Headroom |
 | ---------------------------------- | ------------------------------------------------- | ----- | ------ | ---- | -------- |
@@ -511,7 +512,10 @@ priorities, delays, whether the envelope is open, the rabbit, an acknowledged br
 package as the OBR saw it). Both are absent until a seed is minted, so every older link is byte
 for byte the same. The Phase 8 keys for protected promises, concessions, political capital and
 dropped priorities (`pp`, `cn`, `cp`, `dp`) are retired: a link that carries them decodes without
-them (ADR-0013).
+them (ADR-0013). (Phase 24, §25: the seed, the outlook, the target, the delays, the envelope, the
+add-ons, the acknowledged breach and `S=` are retired too. `g=` now carries the stage reached and
+the priorities, and a link with a seed is read through `LEGACY_STAGE`. The outlook, the forecast,
+the compromises and the rabbit below describe Phases 8 to 23.)
 
 ### The fifth badge
 
@@ -877,7 +881,9 @@ never the default while a game is under way.
 Phase 20 redesigned the presentation and the road without touching the engine, the data's numbers
 or the state. The seven steps are the ones the player is told: become Chancellor, your starting
 position, set your priorities, build your Budget, respond to the forecast, final choices, what your
-Budget means. The rules that hold every screen to the same shape:
+Budget means. (From Phase 24 the road is six steps, §25: the forecast, the compromises and the
+add-ons are gone, and the bar has no target. The rules below still hold on every screen.) The rules
+that hold every screen to the same shape:
 
 - **One screen, one decision, one primary button.** The hand-off beats and their Continues are gone
   (the `beats` module with them); the desk's briefing sits folded at its head. The progress line
@@ -995,3 +1001,42 @@ Budget means. The rules that hold every screen to the same shape:
   mandate, deleveraging, uprating, incidence) and reads every visible set; every reception band is
   twenty words or fewer. Word budgets and the playtime estimate are re-measured and recorded in
   ADR-0024 (about ten minutes, an estimate, not user testing).
+- **Revised by Phase 24 (§25).** The starting position's two questions went with the forecast
+  guess, and the three compromise screens with the reveal; the sums are made on step 4's two
+  fine-tuning screens, taxes first and then spending. The readability test reads twelve sets.
+
+## 25. One estimate, six steps, curated levers (ADR-0025)
+
+- **One estimate.** Every game plans on one figure: the headroom on today's estimate, the OBR's
+  March forecast brought up to date for today's borrowing costs and prices with the OBR's own
+  sensitivities. The settings come from the `gap` rule (§11): the 10-year gilt yield at 5.29%
+  against the OBR's 4.5% gives rates +0.75; RPI from the August 2026 comparison, 3.3% against the
+  OBR's 2.8% on average over 2026 to 2030, gives +0.5; growth stays on the OBR's path (the authored
+  rule). That leaves £6.8bn of headroom on the stability rule in 2029-30, against £23.6bn in March,
+  badged Assumption. The briefing says why the headroom fell: the three promises made since March
+  moved money, and dearer borrowing and higher inflation cut the margin. Nothing is chosen on the
+  briefing; the estimate is fixed for the game, and a sandbox can still set its own economy on the
+  desk.
+- **No target.** The rules are the line. The bar reads "rules met" or names the rule missed. The
+  markets' own headroom bands mark a thin margin (under £10bn) and an ample one (£20bn or more,
+  "cautious"); the two thresholds are exported by the engine and a test pins them to the bands.
+- **Six steps.** Briefing (the cover, then the briefing), Set your priorities, Flagship policies
+  (one screen per ranked priority), Fine-tune tax and spend (two screens), Deliver the Budget (the
+  review and the red button), Feedback (Budget day). The desk of every lever is step 4's side room.
+- **Curated levers.** `data/journey/finetune.json` hand-picks twenty-six taxes in five who-pays
+  groups and nineteen spending levers in four groups, each with a plain title, an adviser's line
+  and the move that line judges. The validator checks each lever is live, on its own side, once;
+  each move reachable and not where the lever rests; each tax in the who-pays group its incidence
+  tag names; the adviser speaking on this step. At rest a card says what its move would do against
+  the Budget as it stands and the headroom that would leave; moved, it shows the lever's own
+  effect. The first three levers of a group are on show with any moved before arrival; a lever
+  moved inside the fold stays there until the next visit.
+- **Retired.** The forecast cards and targets, the seeded draw and its re-scoring (ADR-0012), the
+  compromise screens, the add-ons, the ways to pay as option cards, and the snapshot. Old links
+  still open: a link carrying a seed is read through `LEGACY_STAGE` (the forecast opens
+  fine-tuning; the compromises and the add-ons open the review), its retired items are ignored,
+  and its economy is replaced by the estimate with a warning on the desk. The retired routes
+  redirect with the query kept.
+- **Measured** (ADR-0025): word budgets from 27 words (the cover) to 711 (fine-tuning tax with a
+  folded lever moved in every group); readability grades from 3.2 to 6.7; playtime nine screens and
+  eight decisions, about nine minutes at the midpoint, an estimate and not user testing.

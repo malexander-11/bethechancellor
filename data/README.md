@@ -11,16 +11,14 @@ levers/<category>/*.json  policy levers (tax, spend, welfare) and assumption sli
 reference/*.json          non-forecast reference numbers (e.g. UK households)
 presets/presets.json      named combinations of lever settings
 context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the latest figures, with
-                          suggestion rules, published forecast ranges and the assumption scenarios
+                          the suggestion rules that make today's estimate (ADR-0025)
 journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/briefings.json    sourced adviser briefings per step and lever group
 journey/pm.json           the Prime Minister: the eight priorities, the manifesto red lines
-journey/options.json      the ways to deliver each priority, the ways to afford it, the add-ons (ADR-0022)
+journey/options.json      the ways to deliver each priority (ADR-0022)
+journey/finetune.json     the fine-tuning screens: hand-picked tax and spending levers (ADR-0025)
 journey/ministers.json    a minister's lines for every spending and welfare lever
 journey/interventions.json adviser lines with a closed predicate over the ambitions
-journey/draws.json        the five forecast outcomes the seed chooses among (ADR-0012)
-journey/compromise.json   the advisers' lines beside each route out of a gap
-journey/rabbit.json       the add-ons screen's intro, "go further" and "keep the headroom" lines
 journey/speech.json       the speech fragments the assembler fills
 journey/households.json   five household archetypes and the levers that touch them
 journey/incidence.json    who each lever falls on, for the close
@@ -93,22 +91,10 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
 - **Briefings** need an existing adviser who speaks on the step, a real lever group for group
   briefings, and at least one source per paragraph. **Context readings** that name a
   `leverCode` need a `suggestion` rule (`gap` or `authored`).
-- **Published ranges** (`reading.alternatives`) carry the `lowest` and `highest` rows of a forecast
-  comparison, the comparator row from the same table (`against`) and a `note` saying what basis
-  they are on. They are named for what they are, not for the cards they feed: which one is the
-  optimistic case depends on which way the slider moves borrowing, which is derived from the
-  lever's OBR sensitivity. `against` is mandatory and separate from the reading's own `obr` block because the
-  two can differ: the rates reading compares 10-year gilt yields, but the published range is for
-  Bank Rate, which the note has to say. All three rows must cover the same years, since the gap
-  rule averages over them. A range needs a `leverCode`; the validator checks all of this.
-- **Scenarios** (`context.scenarios`) carry a card's words only — title, headline and rationale
-  paragraphs with sources. Never author its slider settings: those are derived in
-  `apps/web/src/journey/scenarios.ts` from the rows above, so a tampered figure moves the card.
-  The two analysts pick, per slider, the kindest and cruellest of every published candidate — the
-  OBR's own assumption, the adviser's reading, and both range rows — which is what keeps the four
-  cards ordered by headroom whatever a data refresh does.
-  One scenario per `kind`; an `optimistic` or `pessimistic` card needs at least one reading with a
-  published range.
+- **Today's estimate** (ADR-0025) is the `gap` rule run over every reading that names a
+  `leverCode`, with the `authored` rule for growth: the one economy every game plans on. The
+  published forecast ranges (`reading.alternatives`) and the forecast cards (`context.scenarios`)
+  that Phases 7 to 23 read are retired, and the schema no longer accepts them.
 
 ### Spending levers
 
@@ -147,8 +133,7 @@ from the certified rows beside it (ADR-0017).
   publishes (`it50`, five one-penny steps) are all assumptions (ADR-0018).
 - **Not on the table.** A live, costed option nobody proposes (the VAT base toggles, capital gains
   on main homes) carries `notOnTheTable: { note, sources }`. It wears a quiet tag, sorts to the foot
-  of its group, and the note says why it is here; the sources say who has not proposed it. The
-  Director of Tax's suggestions on the compromise step never name one.
+  of its group, and the note says why it is here; the sources say who has not proposed it.
 - **A cost as a product.** A `statedProduct` term may be negative: the electricity card multiplies
   the government's six-month £850 million by −2, so the result is a cost to receipts and the
   validator still reproduces it.
@@ -160,8 +145,8 @@ from the certified rows beside it (ADR-0017).
   registered (org `Other`, or `RF`; licence `Other`) with the sentence quoted in its `notes`, and
   cited as the `statedProduct` or `weightedSum` term. The card is badged `assumption`, says static
   or after behaviour, scores an "up to" range at the cautious published figure with the ceiling in
-  words, carries `static-not-yield` or the matching draw consideration where the figure is static,
-  and names any step of ours (growing, placing, netting). Party documents are context, never a
+  words, carries the `static-not-yield` consideration where the figure is static, and names any
+  step of ours (growing, placing, netting). Party documents are context, never a
   card. A figure quoted second-hand says so.
 - **Earliest start.** A card whose measure cannot take effect from the game's first year carries
   `earliestStart: { year, text, sources }`: the first fiscal year it can start on its source's own
@@ -203,8 +188,8 @@ from the certified rows beside it (ADR-0017).
   Budget. Old links still work." Its costing, raw source and considerations stay, so
   `validate:data` and the engine tests keep reproducing it; the app filters it out at load, the
   incidence, minister and suggestion checks skip it, and an old link decodes it as an unknown
-  code with a warning. Nothing live may name it: no incidence tag, no draw revision, no option,
-  no add-on, no household touch.
+  code with a warning. Nothing live may name it: no incidence tag, no option, no fine-tuning
+  item, no household touch.
 
 ### Budget day reception (`data/journey/reception.json`, ADR-0013)
 
@@ -253,34 +238,53 @@ role, as the data names it), with sources. Each `promise` has `breaks`, the leve
 words, and may have `strains` (Phase 23): the levers that keep its words and test its spirit, each
 with a line saying why; the game marks a strain amber and a break red, and a lever is in one list
 or the other, never both.
-`options.json` holds three lists. Every option's `values` is a bundle of one or two levers at stated
-values: codes that exist and are not deprecated or macro, values inside the control's range and on
-its grid, none the default. Rules the validator enforces:
+`options.json` holds one list, the ways to deliver (the ways to afford and the add-ons went in
+Phase 24; the ways to pay are now levers on the fine-tuning screens, below). Every option's
+`values` is a bundle of one or two levers at stated values: codes that exist and are not deprecated
+or macro, values inside the control's range and on its grid, none the default. Rules the validator
+enforces:
 
-- **No lever in more than one option anywhere**, so an option's state (on, adjusted, off) is
-  read from the levers alone, is never ambiguous, and no screen can light or undo another's option.
-  The add-ons therefore sit on levers the ways to deliver and afford do not use.
+- **No lever in more than one option**, so an option's state (on, adjusted, off) is read from the
+  levers alone, is never ambiguous, and no screen can light or undo another's option.
 - **An option may name the options it counts the same money as**: `conflicts: [{ with, text }]`,
-  `with` an option id on any screen, `text` the reason in at most two hundred characters, best
+  `with` another option's id, `text` the reason in at most two hundred characters, best
   quoted from the levers' own interactions. Author each pair once, on one side; never on the option
   itself; never for an unknown id. While one is in the Budget the other's card is blocked and says
   why. Softer overlaps need no authoring: they are the levers' `interactions`, read from either
   side, named on the card before either option is chosen and quoted once the other moves.
 - **Every priority has two to five ways to deliver it** (`deliver[].priority`); safer streets has
   two because the game has only two levers there, and its brief says so.
-- **Every way to afford belongs to a who-pays tab** by its lever's incidence pays-group
-  (`AFFORD_TABS` in the engine), three to six per tab, and has a plain `title` saying what it does
-  ("Put a penny on the basic rate of income tax"); the lever's headline is folded on the card.
 - **Every option carries one adviser's line** (`advice`, Phase 23): a `SimulatedLine` of at most
   twelve words with an `adviser` id who speaks on that screen and at least one source, saying who
   proposed it and one plain judgement of its cost and effect. No figure is typed; "big" (or
   expensive, large, costly) may be said only where the engine's own figure for the option is £5bn
   or more in the target year, "small" (cheap, little, modest, tiny) only at £1bn or less, and the
-  words test checks both. Titles are unique across every screen.
+  words test checks both. Titles are unique.
 - **The words are the proposer's** (`line`, a `SimulatedLine` with a `short`); the figure is never
   authored: the page prices the bundle with the engine against the Budget as it stands, and shows
   the headroom the move would leave. Titles say what the option does, in at most twelve words and
   eighty characters.
+
+### Fine-tuning (`data/journey/finetune.json`, ADR-0025)
+
+Two sides, `tax` and `spending`, each with its screen's `title` (at most four words) and `lead` (at
+most ten), the `adviser` who speaks there, and `groups` of `items`. An item is a live lever's
+`code`, a plain `title` (at most twelve words), the `move` the adviser's line judges (a toggle's
+1; a slider's usual step) and the `advice`, a `SimulatedLine` with at least one source. Rules the
+validator enforces:
+
+- **A live lever on its own side, once.** Tax items are tax levers; spending items are spend or
+  welfare levers; no code appears twice in the file.
+- **A move the control can reach**, inside its range and on its grid, and never the setting the
+  lever rests at.
+- **Every tax sits with the people who pay it**: its group is the who-pays group (`WHO_PAYS` in the
+  engine) its incidence pays-group maps to.
+- **The adviser exists and speaks on this step** (`finetune` in `advisers.json`).
+
+The words test holds every title and line to twelve words with no figure, and checks each size
+word against the engine's own figure for the lever at its `move` (big at £5bn or more in the
+target year, small at £1bn or less). The page prices the move against the Budget as it stands; no
+figure is authored.
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 
@@ -288,11 +292,10 @@ Everything a role says is a `SimulatedLine`: `{ text, short?, sources, badge: "s
 badged per item so no line inherits honesty from its file. `short` is the same line in fewer
 words, shown first with the full `text` one click behind. Every line a newcomer meets on the road
 has one when the line is over its budget, and the words test pins each kind: a minister's asking
-line and any band over eighteen words; the Prime Minister's briefs and reactions and the add-ons'
-framing lines twelve; the advisers' notes and the compromise routes fourteen; the verdicts' close
-and an option's line eighteen; an option's adviser line (`advice`) twelve, with no figure and a
-size word only where the engine's figure bears it out; every reception band twenty words in all
-(Phase 23). A figure in the short line must be a figure in the long one, so the sources cover both
+line and any band over eighteen words; the Prime Minister's reactions twelve; the advisers' notes
+fourteen; the verdicts' close and an option's line eighteen; an option's or a curated lever's
+adviser line (`advice`) twelve, with no figure and a size word only where the engine's figure bears
+it out; every reception band twenty words in all (Phase 23). A figure in the short line must be a figure in the long one, so the sources cover both
 (a test checks it). A readability test reads every set a player meets with the folds closed: no
 sentence over twenty words, and a Flesch-Kincaid grade of seven or below per set (ADR-0024).
 Rules for authoring one:
@@ -305,8 +308,5 @@ Rules for authoring one:
   person's name, and no description that identifies one.
 - **Predicates are closed.** Interventions, verdict kinds and household touches choose from enums the
   engine evaluates; a new condition needs code, not a string.
-- **Draws name candidates and considerations, never values.** An outcome says `rate: "adviser"` or
-  `rpi: "highest"` and the engine derives the figure; a re-scoring names a consideration id and the
-  validator refuses one that sits on a certified row.
 - The speech's `{…}` placeholders are filled from data and the outcome; a test checks every pound
   sign in the assembled text against the engine.

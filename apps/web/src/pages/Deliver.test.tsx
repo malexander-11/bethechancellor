@@ -210,7 +210,7 @@ describe('build your Budget: the ways to deliver', () => {
     const cost = 'g=st.2_pr.cost-of-living';
     const quiet = at(`/budget/deliver?${BASE}&${cost}`);
     const freeze = () => box(/^End the threshold freeze early/).closest('.choice') as HTMLElement;
-    // A way to afford moves the basic rate; the two interact, so the card says so, quietly.
+    // Fine-tuning offers the basic rate; the two interact, so the card says so, quietly.
     const note = within(freeze()).getByText('Overlaps with Basic rate');
     expect(note.className).not.toMatch(/choice__overlap--warn/);
     quiet.unmount();

@@ -1,6 +1,7 @@
 # ADR-0022: Advice and direction
 
-Status: Accepted, 2026-09-25; revised 2026-09-26 (every option its own lever, below). Follows
+Status: Accepted, 2026-09-25; revised 2026-09-26 (every option its own lever, below) and
+2026-09-27 (the ways to pay and the add-ons retired, ADR-0025). Follows
 ADR-0021 (nothing before it can start).
 
 ## Context
@@ -241,3 +242,16 @@ which coupling they had met, they named all three the code showed:
 - Old links carrying a retired add-on id (`rb.meals`, `rb.fuel-cut`, …) decode to fewer add-ons;
   the speech and the count ignore them; an old `L=alc.5` still applies on the desk.
 - Counts unchanged: 29 ways to deliver, 26 ways to afford, 8 add-ons; four conflicts.
+
+## Revision (2026-09-27): the ways to pay become levers, the add-ons go (ADR-0025)
+
+The ways to afford and the add-ons are retired as option lists: `options.json` holds the ways to
+deliver alone. The twenty-six ways to pay are now step 4's tax levers ("Fine-tune tax"), the desk's
+own controls under plain titles with the same adviser lines, and nineteen spending levers join them
+on "Fine-tune spending" (`data/journey/finetune.json`). The eight add-ons, the go-further cards and
+the compromise step's suggestions are gone. The four conflicts lose the two that named a way to
+pay (CenTax's capital gains package against the charge at death, and the fuel duty cut against
+restoring the uprating). Both pairs still warn on the levers themselves, as `warn` interactions, on
+the fine-tuning screens and the desk. The other two stand between ways to deliver. `optionOverlaps`
+takes the set of levers the fine-tuning screens offer, so a flagship card still names a curated tax
+lever as its partner. Counts now: 29 ways to deliver, two conflicts.

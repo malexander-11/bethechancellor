@@ -1,6 +1,7 @@
 # ADR-0023: The Westminster journey
 
-Status: Accepted, 2026-09-26. Follows ADR-0022 (advice and direction) and its revision.
+Status: Accepted, 2026-09-26; revised since (below), last on 2026-09-27 (six steps, ADR-0025). Follows
+ADR-0022 (advice and direction) and its revision.
 
 ## Context
 
@@ -248,3 +249,14 @@ longer holds on those three screens: the voice is per card, at most twelve words
 sourced, and nobody speaks above the cards. It still holds on every other screen of the road. The
 same phase makes the compromise step three screens, one question each, under the same stage, and
 retires the dark theme and the dateline; ADR-0024 records why.
+
+## Revision (2026-09-27, later still): six steps (ADR-0025)
+
+The road is six steps, as the user listed them: Briefing, Set your priorities, Flagship policies,
+Fine-tune tax and spend, Deliver the Budget, Feedback. The rules above still hold on every screen
+(one decision, one primary button, no tab on the road, the state in the link, detail one fold away,
+the score in view), and the rail shows six numerals. What went: the forecast step, the three
+compromise screens and the add-ons (so "respond to the forecast" and "final choices" are gone, and
+the review is a step of its own), and the target on the bar, which now says "rules met" or what is
+missed. "Pay for it" became two curated screens of real levers. The desk's hand-back links return
+to fine-tuning.

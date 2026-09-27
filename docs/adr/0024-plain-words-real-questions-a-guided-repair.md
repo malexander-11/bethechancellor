@@ -1,7 +1,8 @@
 # ADR-0024: Plain words, real questions, a guided repair
 
-Date: 2026-09-27. Status: accepted. Builds on ADR-0002, ADR-0011, ADR-0016, ADR-0022 and
-ADR-0023, each of which carries a dated revision pointing here.
+Date: 2026-09-27. Status: accepted; revised the same day by ADR-0025 (see the revision at the
+foot). Builds on ADR-0002, ADR-0011, ADR-0016, ADR-0022 and ADR-0023, each of which carries a
+dated revision pointing here.
 
 ## Context
 
@@ -227,3 +228,14 @@ highest.
 - **What was not built.** A strains weight in `rebellionRisk`; the speech's silence on a strain;
   the desk keeps the Treasury's own terms in its lever headlines and drawers, because it is the side
   room and the readability test reads the road; `rabbit.intro` stays in the data unshown.
+
+## Revision (2026-09-27, later): one estimate, six steps (ADR-0025)
+
+The content rules stand. Two of this record's questions went with the forecast guess: "Which
+forecast will you plan on?" and "How much headroom do you want to keep?" The briefing gives one
+figure instead, today's estimate, and asks nothing. The three compromise screens, one question
+each, went too: the sums are made on step 4's two fine-tuning screens, taxes first and then
+spending, which keeps this record's order. The readability test now reads twelve sets; the
+targets, the forecast outcomes, the compromise questions and routes and the add-ons' lines left
+with their screens, and the fine-tuning screens' titles and advisers' lines joined. The grades as
+re-measured are in ADR-0025.

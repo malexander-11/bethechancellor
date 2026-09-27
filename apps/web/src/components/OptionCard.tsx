@@ -102,7 +102,7 @@ export function OptionCard({
   blocked?: OptionConflict;
   /** Options in the Budget that count the same money as this one, which is in the Budget too. */
   clashes?: readonly OptionConflict[];
-  /** The proposer's line, simulated and sourced; a way to afford has none and shows the lever's headline. */
+  /** The proposer's line, simulated and sourced, folded under "More about this". */
   line?: SimulatedLine;
   who?: string;
   /** A plain factual line about the option, folded: the lever's own headline. */
