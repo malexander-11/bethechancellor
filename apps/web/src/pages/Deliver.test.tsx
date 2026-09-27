@@ -40,10 +40,16 @@ describe('build your Budget: the ways to deliver', () => {
     at(`/budget/deliver?${BASE}&${GAME}`);
     expect(h1(/^1st Safer streets: prisons, police, borders/)).toBeInTheDocument();
     expect(screen.getByText(/^Build your Budget · 1 of 3$/)).toBeInTheDocument();
-    // The Justice Secretary opens safer streets; the Defence Secretary waits for the next screen.
+    // No voice at the top (Phase 23): the Justice Secretary's line waits in each card's fold, and
+    // every card carries one adviser's line saying who proposed it and what it costs and does.
+    expect(document.querySelector('.journey > .spoken')).toBeNull();
     expect(screen.getAllByText('Justice Secretary').length).toBeGreaterThan(0);
     expect(screen.queryByText('Defence Secretary')).toBeNull();
     expect(screen.getAllByText('Game judgement').length).toBeGreaterThanOrEqual(1);
+    const cards = document.querySelectorAll('.choice--option');
+    expect(cards.length).toBe(2);
+    for (const card of cards) expect(card.querySelector('.choice__advice')).not.toBeNull();
+    expect(screen.getByText(/Buys staff and maintenance, not cells yet/)).toBeInTheDocument();
     // Two ways for safer streets: the game has two levers there.
     expect(within(ways(/Ways to deliver: Safer streets/)).getAllByRole('checkbox')).toHaveLength(2);
     // Every card carries the engine's figure for choosing it now, and the headroom that would leave;
@@ -91,7 +97,7 @@ describe('build your Budget: the ways to deliver', () => {
     expect(within(bar()).getByText('0 of 2 delivered')).toBeInTheDocument();
     expect(within(bar()).getByText(/Headroom, 2029-30/)).toBeInTheDocument();
     expect(within(bar()).getByText(/your £20bn target/)).toBeInTheDocument();
-    const gap = () => box(/^Fund the Defence Investment Plan’s gap/);
+    const gap = () => box(/^Fill the funding gap in the defence investment plan/);
     const card = gap().closest('.choice') as HTMLElement;
     // The card promises the headroom the Budget would then have; the bar shows that figure once
     // the option is in, to the pound.
@@ -116,7 +122,7 @@ describe('build your Budget: the ways to deliver', () => {
 
   it('shows a lever adjusted on the desk as neither on nor off, with where it stands', () => {
     at(`/budget/deliver?${BASE}&${GAME}&L=moj.5`);
-    const prisons = box(/A Justice uplift for prison capacity/);
+    const prisons = box(/More money for prisons and courts/);
     expect(prisons).not.toBeChecked();
     const card = prisons.closest('.choice') as HTMLElement;
     expect(within(card).getByText(/Adjusted on the desk/)).toBeInTheDocument();
@@ -157,7 +163,7 @@ describe('build your Budget: the ways to deliver', () => {
 
   it('blocks an option that counts the same money as one already chosen, and says by what', async () => {
     at(`/budget/deliver/2?${BASE}&${GAME}`);
-    const gap = () => box(/^Fund the Defence Investment Plan’s gap/);
+    const gap = () => box(/^Fill the funding gap in the defence investment plan/);
     const three = () => box(/^Defence at 3% of GDP now/);
     expect(gap()).toBeEnabled();
     fireEvent.click(three());
@@ -180,7 +186,7 @@ describe('build your Budget: the ways to deliver', () => {
 
   it('with both sides of a pair in from the desk, both cards warn and neither is blocked', () => {
     at(`/budget/deliver/2?${BASE}&${GAME}&L=def3.1_dip47.1`);
-    const gap = box(/^Fund the Defence Investment Plan’s gap/);
+    const gap = box(/^Fill the funding gap in the defence investment plan/);
     const three = box(/^Defence at 3% of GDP now/);
     expect(gap).toBeEnabled();
     expect(three).toBeEnabled();
@@ -193,7 +199,7 @@ describe('build your Budget: the ways to deliver', () => {
     ).toBeInTheDocument();
     expect(
       within(three.closest('.choice') as HTMLElement).getByText(
-        /^Warning: both this and Fund the Defence Investment Plan’s gap are in your Budget/,
+        /^Warning: both this and Fill the funding gap in the defence investment plan are in your Budget/,
       ),
     ).toBeInTheDocument();
   });

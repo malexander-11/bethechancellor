@@ -88,9 +88,17 @@ export function ReviewPage() {
     .filter((o) => optionState(o, state.leverValues, levers) !== 'off')
     .map((o) => {
       const code = Object.keys(o.values)[0] ?? '';
-      return { id: o.id, lever: byCode.get(code), gbpm: receiptsOf(Object.keys(o.values)) };
+      return {
+        id: o.id,
+        title: o.title,
+        lever: byCode.get(code),
+        gbpm: receiptsOf(Object.keys(o.values)),
+      };
     })
-    .filter((row): row is { id: string; lever: Lever; gbpm: number } => row.lever !== undefined);
+    .filter(
+      (row): row is { id: string; title: string; lever: Lever; gbpm: number } =>
+        row.lever !== undefined,
+    );
   // Set by hand: levers moved that no option on this Budget owns.
   const owned = new Set<string>([
     ...status.priorities.flatMap((p) =>
@@ -216,7 +224,7 @@ export function ReviewPage() {
           <ul className="review__list">
             {paying.map((row) => (
               <li key={row.id}>
-                {row.lever.title} ·{' '}
+                {row.title} ·{' '}
                 <span className="amount amount--better">raises {formatGbpBn(row.gbpm, 1)}</span>
               </li>
             ))}

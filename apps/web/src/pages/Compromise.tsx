@@ -329,7 +329,7 @@ export function CompromisePage() {
               {revenue.map((s) => (
                 <li key={s.option.id} className="suggestion">
                   <div>
-                    <strong>{s.lever.title}</strong>{' '}
+                    <strong>{s.option.title}</strong>{' '}
                     <span className="source">
                       to{' '}
                       {formatLeverValue(
@@ -341,6 +341,11 @@ export function CompromisePage() {
                     {s.breaks.length > 0 ? (
                       <span className="tag--treasury tag--warn">
                         breaks {s.breaks.map((p) => p.title).join(', ')}
+                      </span>
+                    ) : null}
+                    {s.strains.length > 0 ? (
+                      <span className="tag--treasury tag--amber">
+                        strains {s.strains.map((p) => p.title).join(', ')}
                       </span>
                     ) : null}
                   </div>

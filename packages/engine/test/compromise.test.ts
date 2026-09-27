@@ -71,6 +71,11 @@ describe('the routes out of a gap', () => {
     expect(basic?.breaks.map((p) => p.id)).toEqual(['tax-lock']);
     const ct = all.find((s) => s.option.id === 'ct');
     expect(ct?.breaks.map((p) => p.id)).toEqual(['ct-cap']);
+    // Amber (Phase 23): the levy strains the lock rather than breaking it, and says so.
+    const levy = all.find((s) => s.option.id === 'hscl');
+    expect(levy?.breaks).toEqual([]);
+    expect(levy?.strains.map((p) => p.id)).toEqual(['tax-lock']);
+    expect(basic?.strains).toEqual([]);
     // An option already chosen is not suggested again, and a promise already broken by choice is
     // not counted against another move.
     const again = affordSuggestions(

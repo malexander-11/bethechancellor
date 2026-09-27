@@ -509,7 +509,7 @@ export function validateDataset(ds: Dataset): string[] {
       }
     }
     for (const promise of ds.pm.promises) {
-      for (const rule of promise.breaks) {
+      for (const rule of [...promise.breaks, ...promise.strains]) {
         if (!codes.has(rule.code)) {
           problems.push(`promise ${promise.id} watches unknown lever "${rule.code}"`);
         }
@@ -585,6 +585,23 @@ export function validateDataset(ds: Dataset): string[] {
       ...ds.options.afford.map((o) => ({ screen: 'afford', o })),
       ...ds.options.addOns.map((o) => ({ screen: 'add-on', o })),
     ];
+    // The adviser's line on every option is spoken by an adviser who is on that screen (Phase 23).
+    const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
+    const stepOf: Record<string, string> = {
+      deliver: 'deliver',
+      afford: 'afford',
+      'add-on': 'rabbit',
+    };
+    for (const { screen, o } of all) {
+      const adviser = adviserById.get(o.advice.adviser);
+      if (adviserById.size > 0 && !adviser) {
+        problems.push(`${screen} option ${o.id} names unknown adviser ${o.advice.adviser}`);
+      } else if (adviser && !(adviser.steps as readonly string[]).includes(stepOf[screen] ?? '')) {
+        problems.push(
+          `${screen} option ${o.id}: adviser ${adviser.id} does not speak on ${stepOf[screen]}`,
+        );
+      }
+    }
     for (const { screen, o } of all) {
       for (const [code, value] of Object.entries(o.values)) {
         const lever = byCode.get(code);

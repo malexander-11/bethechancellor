@@ -54,7 +54,7 @@ describe('the package, with a game under way', () => {
     const adjusted = within(panel).getAllByText('Adjusted from what you chose');
     expect(adjusted).toHaveLength(1);
     // Which option, is in the tag's text, where a screen reader finds it.
-    expect(adjusted[0]?.textContent).toMatch(/A Justice uplift for prison capacity/);
+    expect(adjusted[0]?.textContent).toMatch(/More money for prisons and courts/);
     // The pinned lever is the first control in the group, ahead of Health in the authored order.
     expect(within(panel).getAllByRole('slider')[0]).toHaveAccessibleName('Justice');
     first.unmount();
@@ -76,6 +76,16 @@ describe('the package, with a game under way', () => {
     expect(within(panel).getAllByText('Manifesto: no rise').length).toBeGreaterThanOrEqual(2);
     const allowance = within(panel).getByRole('slider', { name: /Personal allowance/ });
     expect(allowance.closest('.lever')?.textContent).not.toMatch(/Manifesto/);
+  });
+
+  it('marks the levy amber on the desk: the tax lock strained, not broken', () => {
+    at(`/budget/taxes?${BASE}&L=hscl.1`);
+    fireEvent.click(screen.getByRole('tab', { name: /National Insurance/ }));
+    const panel = screen.getByRole('tabpanel');
+    expect(within(panel).getByText('Strains the manifesto: The tax lock')).toHaveClass(
+      'tag--amber',
+    );
+    expect(within(panel).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
   });
 
   it('puts a minister on every spending lever, asking until the lever moves', () => {

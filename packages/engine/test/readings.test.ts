@@ -78,6 +78,11 @@ describe('the readings of a Budget', () => {
     const r = read({ itbr: 1, moj: 10 }, game);
     expect(r.promisesBroken).toBe(1);
     expect(r.manifestoBroken).toBe(1);
+    expect(r.manifestoStrained).toBe(0);
+    // Amber (Phase 23): the levy strains the lock; with the lock already broken it counts once.
+    expect(read({ hscl: 1, moj: 10 }, game).manifestoStrained).toBe(1);
+    expect(read({ hscl: 1, moj: 10 }, game).manifestoBroken).toBe(0);
+    expect(read({ hscl: 1, itbr: 1, moj: 10 }, game).manifestoStrained).toBe(0);
     expect(r.prioritiesUnfunded).toBe(1);
     expect(r.prioritiesFunded).toBe(1);
     // Two priorities ranked: not a single story, whatever the money behind either.

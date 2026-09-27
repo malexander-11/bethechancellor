@@ -8,7 +8,6 @@ import {
   type SimulatedLine,
 } from '@btc/engine';
 import { Navigate, useLocation } from 'react-router-dom';
-import { Spoken } from '../components/Conversation';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
@@ -37,6 +36,8 @@ interface Card {
   taken: boolean;
   line: SimulatedLine;
   who: string;
+  /** The adviser's line on the add-on (Phase 23); the "go further" cards have none. */
+  advice?: SimulatedLine & { adviser: string };
 }
 
 /**
@@ -89,6 +90,7 @@ export function RabbitPage() {
       taken,
       line: addOn.line,
       who: role('political-adviser'),
+      advice: addOn.advice,
     });
   }
   for (const p of status.priorities) {
@@ -149,7 +151,6 @@ export function RabbitPage() {
   return (
     <JourneyLayout step="rabbit" part={{ index: 1, total: 2, label: 'Add-ons' }}>
       <HeadroomBar outcome={outcome} game={game} status={status} />
-      <Spoken line={rabbit.intro.line} who={role(rabbit.intro.adviser)} tone="adviser" />
       <p className="panel__hint">
         Up to {MAX_ADD_ONS} · {count} of {MAX_ADD_ONS} chosen.
       </p>
@@ -173,6 +174,9 @@ export function RabbitPage() {
               {...(blocked ? { blocked } : {})}
               line={card.line}
               who={card.who}
+              {...(card.advice
+                ? { advice: { who: role(card.advice.adviser), line: card.advice } }
+                : {})}
               {...(card.taken ? { tag: 'already in your Budget' } : {})}
             >
               {card.levers

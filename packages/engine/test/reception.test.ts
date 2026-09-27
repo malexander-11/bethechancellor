@@ -99,6 +99,23 @@ describe('three audiences, five steps', () => {
     expect(by(room({ def5: 1 }, SECURITY), 'public').rating).toBeGreaterThan(1);
   });
 
+  it('marks a strain amber: the levy alone leaves the public above the floor, with the strain named', () => {
+    const budget = { moj: 10, dip47: 1, hscl: 1 };
+    const pub = by(room(budget, SECURITY), 'public');
+    expect(pub.rating).toBeGreaterThan(1);
+    expect(pub.all.find((r) => r.rule === 'pb-manifesto')?.points).toBe(0);
+    expect(pub.all.find((r) => r.rule === 'pb-manifesto-strain')?.points).toBe(-1);
+    expect(pub.all.find((r) => r.rule === 'pb-manifesto-strain')?.text).toMatch(
+      /kept in the words and tested in the spirit/,
+    );
+    const benches = by(room(budget, SECURITY), 'backbenchers');
+    expect(benches.all.find((r) => r.rule === 'bb-manifesto-strain')?.points).toBe(-1);
+    // Paid for by the penny instead: the floor, and the strain rule has nothing to add.
+    const penny = by(room({ moj: 10, dip47: 1, itbr: 1 }, SECURITY), 'public');
+    expect(penny.rating).toBe(1);
+    expect(penny.all.find((r) => r.rule === 'pb-manifesto-strain')?.points).toBe(0);
+  });
+
   it('warms the backbenchers to services funded from the top, and cools them to cuts', () => {
     const labour = by(room({ dhsc: 5, dfe: 3, it50: 1, wealth: 1, iht: 10 }), 'backbenchers');
     const austere = by(room({ dhsc: -5, dfe: -5, rv2ch: 1, fuel: 10 }), 'backbenchers');

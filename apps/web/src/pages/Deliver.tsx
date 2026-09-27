@@ -11,19 +11,17 @@ import {
   type Lever,
 } from '@btc/engine';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
-import { Spoken } from '../components/Conversation';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { MinisterLine } from '../components/MinisterLine';
 import { OptionCard } from '../components/OptionCard';
-import { levers, ministers, options, pm } from '../data';
+import { adviserById, levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { useOptionPrices } from '../journey/prices';
 import { useBudget } from '../state/budget';
 
 const RANK = ['1st', '2nd', '3rd'];
-const MINISTER_ROLES = new Set(ministers.ministers.map((m) => m.role));
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
 
 /** The route of the n-th priority's screen (1-based): the first has the bare route. */
@@ -58,10 +56,10 @@ function deskLinks(
 }
 
 /**
- * Step 4, the first screens: one per priority agreed with the Prime Minister, in rank order. The
- * minister or adviser who leads on it opens; then its costed options, each a bundle of the game's
- * own levers priced against the Budget as it stands (ADR-0022), chosen with a tick; two that count
- * the same money cannot both be on. The headroom bar keeps score as you tick. Every lever the game
+ * Step 4, the first screens: one per priority agreed with the Prime Minister, in rank order: its
+ * costed options, each a bundle of the game's own levers priced against the Budget as it stands
+ * (ADR-0022), chosen with a tick, each with one adviser's line on who proposed it and what it costs
+ * and does (Phase 23); two that count the same money cannot both be on. The headroom bar keeps score as you tick. Every lever the game
  * has is one link away under "More policies"; a sandbox with no game goes straight there, because
  * it has no priorities to deliver.
  */
@@ -113,7 +111,6 @@ export function DeliverPage() {
 
   const { priority } = report;
   const rank = RANK[n - 1] ?? `${n}th`;
-  const tone = MINISTER_ROLES.has(priority.lead) ? 'minister' : 'adviser';
   // One quiet way into the desk: the screen the priority's first lever lives on.
   const desk = deskLinks(report.options.map((o) => o.option))[0];
   const nextPriority = ranked[n];
@@ -132,7 +129,6 @@ export function DeliverPage() {
       lead="Tick the ways you want."
     >
       <HeadroomBar outcome={outcome} game={game} status={status} />
-      <Spoken line={priority.brief} who={priority.lead} tone={tone} />
       <div
         className="choices choices--list"
         role="group"
@@ -167,6 +163,10 @@ export function DeliverPage() {
               clashes={clashes}
               line={option.line}
               who={priority.lead}
+              advice={{
+                who: adviserById.get(option.advice.adviser)?.role ?? option.advice.adviser,
+                line: option.advice,
+              }}
             >
               {optionLevers
                 .filter((l) => l.category !== 'tax')

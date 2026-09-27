@@ -22,19 +22,6 @@
         "badge": "simulated"
       },
       "lead": "Political Adviser",
-      "brief": {
-        "text": "Bills first: pick what people notice before Christmas. The freeze costs the most and lands the latest; the bus cap is the smallest and the most visible.",
-        "short": "Bills first: the freeze costs the most, the bus cap the least.",
-        "sources": [
-          {
-            "sourceId": "hmt-budget-2025-document"
-          },
-          {
-            "sourceId": "govuk-bus-fare-cap-2027"
-          }
-        ],
-        "badge": "simulated"
-      },
       "sources": [
         {
           "sourceId": "rf-policy-landscape-2026"
@@ -71,19 +58,6 @@
         "badge": "simulated"
       },
       "lead": "Health Secretary",
-      "brief": {
-        "text": "Every pound above the settlement goes on appointments, and care money frees beds. Neither works quickly, and the efficiency savings are the whole government’s, not mine.",
-        "short": "Every pound above the settlement goes on appointments; care money frees beds.",
-        "sources": [
-          {
-            "sourceId": "govuk-elective-reform-plan-2025"
-          },
-          {
-            "sourceId": "obr-efo-2026-03"
-          }
-        ],
-        "badge": "simulated"
-      },
       "sources": [
         {
           "sourceId": "labour-manifesto-2024-nhs"
@@ -121,16 +95,6 @@
         "badge": "simulated"
       },
       "lead": "Defence Secretary",
-      "brief": {
-        "text": "Confirm the plan’s gap first: it is already published. Reaching 3% sooner is the expensive choice, and every allied capital will read it.",
-        "short": "Confirm the plan’s gap first; reaching 3% sooner is the expensive choice.",
-        "sources": [
-          {
-            "sourceId": "govuk-dip-funding-explainer"
-          }
-        ],
-        "badge": "simulated"
-      },
       "sources": [
         {
           "sourceId": "govuk-dip-funding-explainer"
@@ -167,19 +131,6 @@
         "badge": "simulated"
       },
       "lead": "Education Secretary",
-      "brief": {
-        "text": "High needs first: the deficits are real and dated. The rest is smaller and slower, and none of it slows the rise in plans.",
-        "short": "High needs first: the deficits are real and dated.",
-        "sources": [
-          {
-            "sourceId": "nao-send-2024"
-          },
-          {
-            "sourceId": "dfe-ehcp-2026"
-          }
-        ],
-        "badge": "simulated"
-      },
       "sources": [
         {
           "sourceId": "nao-send-2024"
@@ -214,19 +165,6 @@
         "badge": "simulated"
       },
       "lead": "Communities Secretary",
-      "brief": {
-        "text": "Capital counts against the debt rule, not the day-to-day one, so investment costs less against the stability rule than it looks. The homes arrive over a decade.",
-        "short": "Capital counts against the debt rule, not the day-to-day one.",
-        "sources": [
-          {
-            "sourceId": "hmt-charter-2025-autumn"
-          },
-          {
-            "sourceId": "mhclg-sahp-2026-2036"
-          }
-        ],
-        "badge": "simulated"
-      },
       "sources": [
         {
           "sourceId": "govuk-budget-2026-every-postcode"
@@ -257,19 +195,6 @@
         "badge": "simulated"
       },
       "lead": "Work and Pensions Secretary",
-      "brief": {
-        "text": "Every pound here reaches the poorest households first. The floor and the housing link are cheap; the allowance is not, and it starts late.",
-        "short": "Every pound here reaches the poorest households first; the allowance starts late.",
-        "sources": [
-          {
-            "sourceId": "jrf-uc-floor-2026"
-          },
-          {
-            "sourceId": "rf-saving-private-renters-2026"
-          }
-        ],
-        "badge": "simulated"
-      },
       "sources": [
         {
           "sourceId": "hmt-budget-2025-document"
@@ -306,19 +231,6 @@
         "badge": "simulated"
       },
       "lead": "Justice Secretary",
-      "brief": {
-        "text": "Two levers, and only two: Justice buys places and sitting days, the Home Office buys caseworkers. Neither is large.",
-        "short": "Two levers only: Justice buys places, the Home Office buys caseworkers.",
-        "sources": [
-          {
-            "sourceId": "no10-commons-statement-2026-09-01"
-          },
-          {
-            "sourceId": "nao-asylum-system-2025"
-          }
-        ],
-        "badge": "simulated"
-      },
       "sources": [
         {
           "sourceId": "no10-commons-statement-2026-09-01"
@@ -353,16 +265,6 @@
         "badge": "simulated"
       },
       "lead": "Chief Secretary to the Treasury",
-      "brief": {
-        "text": "Every option here is a static saving, the Treasury’s or a think tank’s. The OBR scored the last eligibility change down, and this game’s harsher forecasts do the same.",
-        "short": "Static savings, every one; the OBR scored the last eligibility change down.",
-        "sources": [
-          {
-            "sourceId": "obr-efo-2026-03"
-          }
-        ],
-        "badge": "simulated"
-      },
       "sources": [
         {
           "sourceId": "obr-efo-2026-03"
@@ -431,6 +333,38 @@
         {
           "code": "vat1z",
           "when": "on"
+        }
+      ],
+      "strains": [
+        {
+          "code": "hscl",
+          "when": "on",
+          "text": "A levy on pay and employers is National Insurance by another name."
+        },
+        {
+          "code": "nicer",
+          "when": "above",
+          "text": "Employer National Insurance is not named in the pledge; it is still National Insurance."
+        },
+        {
+          "code": "nicst",
+          "when": "below",
+          "text": "Employer National Insurance is not named in the pledge; it is still National Insurance."
+        },
+        {
+          "code": "nicpen",
+          "when": "on",
+          "text": "Employer National Insurance on pensions: not named in the pledge, still National Insurance."
+        },
+        {
+          "code": "nicllp",
+          "when": "on",
+          "text": "An employer-style National Insurance charge on partners: not named in the pledge, still National Insurance."
+        },
+        {
+          "code": "it50",
+          "when": "on",
+          "text": "A new top rate is not a rise in the three named rates, and it is an income tax rise."
         }
       ]
     },

@@ -5,6 +5,7 @@ import {
   deliversTarget,
   freshGame,
   promiseBreaks,
+  promiseStrains,
   rankedPriorities,
   type GamePermalink,
 } from '../src/index.js';
@@ -37,6 +38,37 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     // A cut is not a rise, and a threshold is not a rate.
     expect(promiseBreaks({ itbr: -1 }, [lock], ds.levers)[0]?.kept).toBe(true);
     expect(promiseBreaks({ itpa: 500 }, [lock], ds.levers)[0]?.kept).toBe(true);
+  });
+
+  it('marks the levy, the employer-side NICs charges and the new top rate as straining the lock, not breaking it', () => {
+    const lock = pm.promises.find((p) => p.id === 'tax-lock');
+    if (!lock) throw new Error('no tax lock');
+    const cases: Record<string, number>[] = [
+      { hscl: 1 },
+      { nicer: 1 },
+      { nicst: -104 },
+      { nicpen: 1 },
+      { nicllp: 1 },
+      { it50: 1 },
+    ];
+    for (const values of cases) {
+      expect(promiseBreaks(values, [lock], ds.levers)[0]?.kept, JSON.stringify(values)).toBe(true);
+      expect(promiseStrains(values, [lock], ds.levers)[0]?.strained, JSON.stringify(values)).toBe(
+        true,
+      );
+    }
+    // The threshold strained downwards only; a cut in the rate strains nothing.
+    expect(promiseStrains({ nicst: 104 }, [lock], ds.levers)[0]?.strained).toBe(false);
+    expect(promiseStrains({ nicer: -1 }, [lock], ds.levers)[0]?.strained).toBe(false);
+    const by = promiseStrains({ nicer: 1 }, [lock], ds.levers)[0]?.strainedBy[0];
+    expect(by?.code).toBe('nicer');
+    expect(by?.text).toMatch(/still National Insurance/);
+    // The status counts a strain once, and a promise both broken and strained once, as broken.
+    const game = { ...freshGame(7), priorities: [] };
+    expect(status(game, { hscl: 1 }).broken).toBe(0);
+    expect(status(game, { hscl: 1 }).strained).toBe(1);
+    expect(status(game, { hscl: 1, itbr: 1 }).broken).toBe(1);
+    expect(status(game, { hscl: 1, itbr: 1 }).strained).toBe(0);
   });
 
   it('breaks the two-child promise when the limit is reinstated, and no other way', () => {

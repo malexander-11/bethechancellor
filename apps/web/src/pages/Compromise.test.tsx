@@ -77,8 +77,10 @@ describe('making it add up', () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10_dip47.1`);
     const route = screen.getByRole('region', { name: /Spend less, or later/ });
     // Two chosen options, each named as the option, each with a way out; only the slider halves.
-    expect(within(route).getByText('A Justice uplift for prison capacity')).toBeInTheDocument();
-    expect(within(route).getByText('Fund the Defence Investment Plan’s gap')).toBeInTheDocument();
+    expect(within(route).getByText('More money for prisons and courts')).toBeInTheDocument();
+    expect(
+      within(route).getByText('Fill the funding gap in the defence investment plan'),
+    ).toBeInTheDocument();
     expect(within(route).getAllByRole('button', { name: 'Drop it' })).toHaveLength(2);
     expect(within(route).getAllByRole('button', { name: 'Narrow it' })).toHaveLength(1);
     fireEvent.click(within(route).getByRole('button', { name: 'Narrow it' }));
@@ -88,7 +90,7 @@ describe('making it add up', () => {
     expect(within(route).queryByRole('button', { name: 'Narrow it' })).toBeNull();
     // Dropping it puts the lever back where the OBR had it; the other option is untouched.
     const prisons = within(route)
-      .getByText('A Justice uplift for prison capacity')
+      .getByText('More money for prisons and courts')
       .closest('li') as HTMLElement;
     fireEvent.click(within(prisons).getByRole('button', { name: 'Drop it' }));
     await waitFor(() => expect(L()).not.toMatch(/moj/));
@@ -99,7 +101,7 @@ describe('making it add up', () => {
     at(`/compromise?${BASE}&${GAME}&L=moj.10_dfe.5`);
     const route = screen.getByRole('region', { name: /Spend less, or later/ });
     const rows = within(route).getAllByRole('listitem');
-    expect(rows[0]).toHaveTextContent(/A Justice uplift for prison capacity/);
+    expect(rows[0]).toHaveTextContent(/More money for prisons and courts/);
     expect(rows[1]).toHaveTextContent(/Education/);
     expect(rows[1]).toHaveTextContent(/moved on the desk/);
   });
@@ -158,7 +160,7 @@ describe('making the most of extra headroom', () => {
     const rows = within(more).getAllByRole('listitem');
     expect(rows).toHaveLength(3);
     expect(rows[0]).toHaveTextContent(/for defence/);
-    expect(rows[1]).toHaveTextContent(/A Justice uplift for prison capacity/);
+    expect(rows[1]).toHaveTextContent(/More money for prisons and courts/);
     // Each priced against the Budget as it stands, with the headroom it would leave.
     expect(within(more).getAllByText(/^leaves £/)).toHaveLength(3);
     expect(within(more).getAllByText(/^Costs £/).length).toBeGreaterThan(0);

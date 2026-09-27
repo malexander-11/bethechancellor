@@ -3,7 +3,6 @@ import {
   ambitionStatus,
   blockedBy,
   formatGbpBn,
-  interventionsFor,
   optionConflicts,
   optionEarliestStart,
   optionOff,
@@ -18,11 +17,10 @@ import {
 import { useMemo } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
-import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { OptionCard } from '../components/OptionCard';
 import { PressSummary } from '../components/PressSummary';
-import { draws, incidence, interventions, levers, options, pm } from '../data';
+import { adviserById, draws, incidence, levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { useOptionPrices } from '../journey/prices';
@@ -57,9 +55,10 @@ function raised(
 /**
  * Step 4, the last screen: how will you pay for it? The bar carries the gap between the headroom
  * your choices leave and the margin you set out to keep; below it the ways to raise money in five
- * groups by who pays, stacked on one screen so the balance between them is in view: no tabs, every option on
- * show, each priced against the Budget as it stands and wearing its badge, its red line and its
- * earliest start (ADR-0022). Every tax lever is one link away. Leaving for the forecast records
+ * groups by who pays, stacked on one screen so the balance between them is in view: no tabs, every
+ * option on show under a plain title saying what it does, each priced against the Budget as it
+ * stands and wearing its badge, the promise it would break or strain, its earliest start and one
+ * adviser's line (ADR-0022, Phase 23). Every tax lever is one link away. Leaving for the forecast records
  * the package as it stood before the OBR spoke.
  */
 export function AffordPage() {
@@ -80,18 +79,8 @@ export function AffordPage() {
 
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const targetYear = stability?.targetYear ?? '2029-30';
-  const headroom = stability?.headroomGbpm ?? 0;
-  const target = game.headroomTargetBn * 1000;
   const status = ambitionStatus(game, pm, options, outcome, levers);
   const moved = new Set(outcome.leverEffects.map((e) => e.code));
-  const ruleMissed = outcome.verdicts.some(
-    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
-  );
-  const advice = interventionsFor(interventions, status, {
-    headroomGbpm: headroom,
-    targetGbpm: target,
-    ruleMissed,
-  });
   const clue = pickOutcome(game.seed, draws.outcomes);
   const ranked = rankedPriorities(game, pm);
   const choose = (option: AffordOption, on: boolean) =>
@@ -120,7 +109,6 @@ export function AffordPage() {
       tabTitle="Pay for it"
     >
       <HeadroomBar outcome={outcome} game={game} status={status} />
-      <Interventions items={advice} />
       {GROUPS.map((group) => {
         const id = `who-${group.tab.id}`;
         const { chosen, gbpm } = raised(group, states, outcome.leverEffects, targetYear);
@@ -147,7 +135,7 @@ export function AffordPage() {
               key={option.id}
               id={option.id}
               name="afford"
-              title={lever.title}
+              title={option.title}
               note={lever.headline ?? lever.description}
               state={own}
               price={priceOf(option, own === 'on')}
@@ -160,6 +148,10 @@ export function AffordPage() {
               {...(blocked ? { blocked } : {})}
               clashes={clashes}
               {...(option.line ? { line: option.line, who: 'Director of Tax' } : {})}
+              advice={{
+                who: adviserById.get(option.advice.adviser)?.role ?? option.advice.adviser,
+                line: option.advice,
+              }}
             />
           );
         };

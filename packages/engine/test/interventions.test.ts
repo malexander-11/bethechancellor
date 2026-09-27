@@ -49,6 +49,17 @@ describe('advisers who remember', () => {
     expect(items.filter((x) => x.when === 'promise-broken')).toHaveLength(1);
   });
 
+  it('says a strained promise is tested, not broken, and says nothing once it is broken', () => {
+    const game = freshGame(7);
+    const strained = advice(game, { hscl: 1 }).find((x) => x.when === 'promise-strained');
+    expect(strained?.text).toMatch(/^The tax lock is tested, not broken/);
+    expect(strained?.about).toBe('tax-lock');
+    expect(advice(game, { hscl: 1 }).some((x) => x.when === 'promise-broken')).toBe(false);
+    const both = advice(game, { hscl: 1, itbr: 1 });
+    expect(both.some((x) => x.when === 'promise-strained')).toBe(false);
+    expect(both.some((x) => x.when === 'promise-broken')).toBe(true);
+  });
+
   it('flags a priority nothing funds yet, then stops once the target is met', () => {
     const game = { ...freshGame(7), priorities: ['safer-streets', 'defence'] };
     const before = advice(game, {});

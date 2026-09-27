@@ -74,12 +74,12 @@ describe('the options (ADR-0022)', () => {
       codesOf(o.values),
     );
     expect(new Set(codes).size).toBe(codes.length);
-    // Every option is found by its lever, and a way to afford wears its lever's titles.
+    // Every option is found by its lever; a way to afford has a plain title of its own (Phase 23).
     const byLever = optionByLever(options, levers);
     expect(byLever.size).toBe(codes.length);
-    expect(byLever.get('itbr')?.title).toBe('Basic rate of income tax');
+    expect(byLever.get('itbr')?.title).toBe('Put a penny on the basic rate of income tax');
     expect(byLever.get('itbr')?.shortTitle).toBe('Basic rate');
-    expect(byLever.get('moj')?.title).toBe('A Justice uplift for prison capacity');
+    expect(byLever.get('moj')?.title).toBe('More money for prisons and courts');
     expect(allOptions(options, levers).map((o) => o.screen)).toContain('addOns');
   });
 
@@ -129,8 +129,19 @@ describe('the options (ADR-0022)', () => {
   it('names the red line a lever is watched by, and whether the Budget would cross it', () => {
     const lock = ds.pm.promises.find((p) => p.id === 'tax-lock');
     const lines = optionRedLines(affordOption('itbr'), ds.pm.promises, levers, {});
-    expect(lines).toEqual([{ promise: lock?.title, when: 'above', broken: true }]);
-    expect(optionRedLines(affordOption('hscl'), ds.pm.promises, levers, {})).toEqual([]);
+    expect(lines).toEqual([
+      { promise: lock?.title, when: 'above', severity: 'breaks', broken: true },
+    ]);
+    // The levy keeps the pledge's words and tests its spirit: amber (Phase 23).
+    expect(optionRedLines(affordOption('hscl'), ds.pm.promises, levers, {})).toEqual([
+      { promise: lock?.title, when: 'on', severity: 'strains', broken: true },
+    ]);
+    expect(optionRedLines(affordOption('nicer'), ds.pm.promises, levers, {})[0]?.severity).toBe(
+      'strains',
+    );
+    expect(optionRedLines(affordOption('ct'), ds.pm.promises, levers, {})[0]?.severity).toBe(
+      'breaks',
+    );
     // A saving that breaks a promise when switched on.
     const limit = optionRedLines(deliverOption('two-child-limit'), ds.pm.promises, levers, {});
     expect(limit.map((l) => l.broken)).toEqual([true]);
@@ -151,7 +162,8 @@ describe('the options (ADR-0022)', () => {
     const quiet = optionOverlaps(affordOption('nicer'), levers, new Set(), options);
     const ct = quiet.find((o) => o.option?.id === 'ct');
     expect(ct?.active).toBe(false);
-    expect(ct?.option?.title).toBe(byCode('ct').title);
+    expect(ct?.option?.title).toBe(affordOption('ct').title);
+    expect(ct?.option?.shortTitle).toBe(byCode('ct').shortTitle);
     const loud = optionOverlaps(affordOption('nicer'), levers, new Set(['ct']), options);
     expect(loud.find((o) => o.option?.id === 'ct')?.active).toBe(true);
     // The child tax allowance lists the personal allowance; the allowance does not list it back.
@@ -223,13 +235,19 @@ describe('the options (ADR-0022)', () => {
 
   it('the schema refuses two options on one lever anywhere, and a conflict that names nobody', () => {
     const line = { text: 'x', sources: [], badge: 'simulated' as const };
+    const advice = {
+      adviser: 'director-of-tax',
+      text: 'x',
+      sources: [{ sourceId: 'obr-efo-2026-03' }],
+      badge: 'simulated' as const,
+    };
     const base = {
       schemaVersion: 1 as const,
-      deliver: [{ id: 'a', priority: 'p', title: 'A', line, values: { dhsc: 3 } }],
-      afford: [{ id: 'b', values: { itbr: 1 } }],
+      deliver: [{ id: 'a', priority: 'p', title: 'A', line, advice, values: { dhsc: 3 } }],
+      afford: [{ id: 'b', title: 'B', values: { itbr: 1 }, advice }],
       addOns: [
-        { id: 'c', title: 'C', line, values: { ufsm: 1 } },
-        { id: 'd', title: 'D', line, values: { bus2: 1 } },
+        { id: 'c', title: 'C', line, advice, values: { ufsm: 1 } },
+        { id: 'd', title: 'D', line, advice, values: { bus2: 1 } },
       ],
     };
     expect(optionsFileSchema.safeParse(base).success).toBe(true);
@@ -237,7 +255,7 @@ describe('the options (ADR-0022)', () => {
     expect(
       optionsFileSchema.safeParse({
         ...base,
-        addOns: [...base.addOns, { id: 'c2', title: 'C2', line, values: { dhsc: 3 } }],
+        addOns: [...base.addOns, { id: 'c2', title: 'C2', line, advice, values: { dhsc: 3 } }],
       }).success,
     ).toBe(false);
     // Conflicts: an unknown partner, a self conflict, a pair authored on both sides; one side is fine.
@@ -254,22 +272,35 @@ describe('the options (ADR-0022)', () => {
     expect(withConflict([{ with: 'nosuch', text: 'x' }])).toBe(false);
     expect(withConflict([{ with: 'a', text: 'x' }])).toBe(false);
     expect(withConflict([{ with: 'b', text: 'x' }], [{ with: 'a', text: 'x' }])).toBe(false);
+    // Two options with one title, and an option with no adviser's line, are refused (Phase 23).
+    expect(
+      optionsFileSchema.safeParse({ ...base, afford: [{ ...base.afford[0], title: 'A' }] }).success,
+    ).toBe(false);
+    expect(
+      optionsFileSchema.safeParse({
+        ...base,
+        afford: [{ id: 'b', title: 'B', values: { itbr: 1 } }],
+      }).success,
+    ).toBe(false);
     expect(
       optionsFileSchema.safeParse({
         ...base,
         deliver: [
           ...base.deliver,
-          { id: 'e', priority: 'p', title: 'E', line, values: { dhsc: 5 } },
+          { id: 'e', priority: 'p', title: 'E', line, advice, values: { dhsc: 5 } },
         ],
       }).success,
     ).toBe(false);
     expect(
-      optionsFileSchema.safeParse({ ...base, afford: [{ id: 'b', values: { dhsc: 1 } }] }).success,
+      optionsFileSchema.safeParse({
+        ...base,
+        afford: [{ id: 'b', title: 'B', values: { dhsc: 1 }, advice }],
+      }).success,
     ).toBe(false);
     expect(
       optionsFileSchema.safeParse({
         ...base,
-        afford: [{ id: 'b', values: { itbr: 1, vats: 1, nicm: 1 } }],
+        afford: [{ id: 'b', title: 'B', values: { itbr: 1, vats: 1, nicm: 1 }, advice }],
       }).success,
     ).toBe(false);
   });
@@ -282,7 +313,13 @@ describe('the options (ADR-0022)', () => {
           ...options,
           addOns: [
             ...options.addOns,
-            { id: 'zz', title: 'Z', line: options.addOns[0]!.line, values },
+            {
+              id: 'zz',
+              title: 'Z',
+              line: options.addOns[0]!.line,
+              advice: options.addOns[0]!.advice,
+              values,
+            },
           ],
         },
       });

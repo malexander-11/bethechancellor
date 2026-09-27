@@ -237,6 +237,50 @@
           ]
         },
         {
+          "id": "bb-manifesto-strain",
+          "measure": "manifestoStrained",
+          "reading": {
+            "label": "Manifesto promises strained",
+            "unit": "count"
+          },
+          "note": "The levy, the employer-side National Insurance charges and a new top rate keep the pledge’s words and test its spirit: the government’s own reading in October 2024, contested then and now. Amber, not red: one point, and no floor.",
+          "bands": [
+            {
+              "id": "kept",
+              "upTo": 0,
+              "points": 0,
+              "text": "Nothing in this Budget tests the spirit of the pledge while keeping its words.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "hmt-autumn-budget-2024-table-5-1",
+                  "table": "Table 5.1",
+                  "note": "line 26"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "strained",
+              "points": -1,
+              "text": "A tax rise that keeps the letter of the manifesto and not its spirit. The benches will argue about it.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "hmt-autumn-budget-2024-table-5-1",
+                  "table": "Table 5.1",
+                  "note": "line 26"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
           "id": "bb-downing-street",
           "measure": "prioritiesUnfunded",
           "reading": {
@@ -646,6 +690,50 @@
                 },
                 {
                   "sourceId": "hmt-budget-2025-speech"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-manifesto-strain",
+          "measure": "manifestoStrained",
+          "reading": {
+            "label": "Manifesto promises strained",
+            "unit": "count"
+          },
+          "note": "A promise kept in the words and tested in the spirit costs a point, never the floor: the floor is for the pledge’s own words.",
+          "bands": [
+            {
+              "id": "kept",
+              "upTo": 0,
+              "points": 0,
+              "text": "Nothing here tests the pledge’s spirit while keeping its words.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "hmt-autumn-budget-2024-table-5-1",
+                  "table": "Table 5.1",
+                  "note": "line 26"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "strained",
+              "points": -1,
+              "text": "A promise kept in the words and tested in the spirit. People will notice a National Insurance rise by another name.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "hmt-autumn-budget-2024-table-5-1",
+                  "table": "Table 5.1",
+                  "note": "line 26"
                 }
               ],
               "badge": "simulated"

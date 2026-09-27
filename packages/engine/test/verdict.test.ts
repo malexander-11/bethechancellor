@@ -80,6 +80,11 @@ describe('the close', () => {
     const lock = v.ambitions.promises.find((p) => p.title === 'The tax lock');
     expect(lock?.fate).toBe('broken-by-choice');
     expect(lock?.by).toEqual(['Basic rate']);
+    // Amber (Phase 23): paid for by the levy instead, the lock is kept in its words and strained.
+    const levy = close(game, { moj: 10, dhsc: 1, hscl: 1 });
+    const strained = levy.ambitions.promises.find((p) => p.title === 'The tax lock');
+    expect(strained?.fate).toBe('strained');
+    expect(strained?.by).toEqual(['Health and social care levy']);
     // Every manifesto promise is judged; the rest were kept.
     expect(v.ambitions.promises).toHaveLength(ds.pm.promises.length);
     expect(v.ambitions.promises.filter((p) => p.fate === 'kept')).toHaveLength(

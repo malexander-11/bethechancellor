@@ -68,6 +68,8 @@ export interface RedLine {
   promise: string;
   when: 'above' | 'below' | 'on';
   broken: boolean;
+  /** Red (the promise's words) or amber (its spirit, Phase 23); red when unsaid. */
+  severity?: 'breaks' | 'strains';
 }
 
 /** An option the player chose that this lever belongs to, and whether it is still on or adjusted. */
@@ -83,8 +85,9 @@ const RED_LINE_WORDS: Record<RedLine['when'], string> = {
 };
 
 /**
- * The warnings on the lever. A watched lever always wears a quiet tag naming the red line, so a
- * newcomer learns it before touching the control; a crossed line turns red. A lever inside an
+ * The warnings on the lever. A watched lever always wears a quiet tag naming the promise, so a
+ * newcomer learns it before touching the control; a crossed line turns red, or amber where the
+ * promise's words are kept and its spirit tested (Phase 23). A lever inside an
  * option the player chose wears the option's title while the option is on, and a red tag once the
  * desk has adjusted it away from what was chosen. Which promise, and which option, is in the tag's
  * text for a screen reader; a tooltip would reach only a mouse.
@@ -105,12 +108,15 @@ export function LeverFlags({ redLines, chosen }: { redLines: RedLine[]; chosen?:
       ) : null}
       {redLines.map((r) =>
         r.broken ? (
-          <span key={r.promise} className="tag--treasury tag--warn">
-            Breaks the manifesto: {r.promise}
+          <span
+            key={`${r.severity ?? 'breaks'}-${r.promise}`}
+            className={`tag--treasury ${r.severity === 'strains' ? 'tag--amber' : 'tag--warn'}`}
+          >
+            {r.severity === 'strains' ? 'Strains' : 'Breaks'} the manifesto: {r.promise}
           </span>
         ) : (
-          <span key={r.promise} className="tag--manifesto">
-            Manifesto: {RED_LINE_WORDS[r.when]}
+          <span key={`${r.severity ?? 'breaks'}-${r.promise}`} className="tag--manifesto">
+            Manifesto: {r.severity === 'strains' ? 'contested' : RED_LINE_WORDS[r.when]}
             <span className="sr-only"> ({r.promise})</span>
           </span>
         ),

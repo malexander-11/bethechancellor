@@ -672,6 +672,11 @@ hr {
   color: var(--critical);
 }
 
+/* Amber (Phase 23): the manifesto's words kept, its spirit tested. The words say which. */
+.tag--amber {
+  color: var(--warning);
+}
+
 /* ---------------------------------------------------------------- status */
 
 .status {

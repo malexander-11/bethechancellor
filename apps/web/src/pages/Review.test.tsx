@@ -50,8 +50,10 @@ describe('the review before delivery', () => {
     );
 
     const deliver = part(/^What you chose to deliver/);
-    expect(within(deliver).getByText(/A Justice uplift for prison capacity/)).toBeInTheDocument();
-    expect(within(deliver).getByText(/Fund the Defence Investment Plan’s gap/)).toBeInTheDocument();
+    expect(within(deliver).getByText(/More money for prisons and courts/)).toBeInTheDocument();
+    expect(
+      within(deliver).getByText(/Fill the funding gap in the defence investment plan/),
+    ).toBeInTheDocument();
     expect(within(deliver).getAllByText(/costs £\d\.\dbn/).length).toBe(2);
     expect(changeIn(deliver, 'Change safer streets')).toHaveAttribute(
       'href',

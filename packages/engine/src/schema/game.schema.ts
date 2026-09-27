@@ -92,8 +92,6 @@ export const prioritySchema = z.strictObject({
   reaction: simulatedLineSchema,
   /** The role that leads on delivering it: an adviser's or a minister's, as the data names them. */
   lead: z.string().min(1),
-  /** The lead's line opening the ways to deliver it. */
-  brief: simulatedLineSchema,
   /** Where the commitment comes from. */
   sources: z.array(sourceRefSchema).min(1),
 });
@@ -103,18 +101,26 @@ export const prioritySchema = z.strictObject({
  * on the wrong side of its default (or on at all, for a toggle). The red lines are fixed: there
  * is no negotiating them away (Phase 9), only crossing them and being judged for it.
  */
+/** A lever and the side of its default that crosses the promise: on (a toggle), above or below. */
+const promiseRuleSchema = z.strictObject({
+  code: z.string().min(1),
+  when: z.enum(['above', 'below', 'on']),
+});
+
 export const promiseSchema = z.strictObject({
   id: slug,
   title: z.string().min(1),
   text: z.string().min(1),
   sources: z.array(sourceRefSchema).min(1),
   /** Empty for a promise the verdicts judge (the fiscal rules) rather than a lever. */
-  breaks: z.array(
-    z.strictObject({
-      code: z.string().min(1),
-      when: z.enum(['above', 'below', 'on']),
-    }),
-  ),
+  breaks: z.array(promiseRuleSchema),
+  /**
+   * The cases that keep the promise's words and test its spirit (Phase 23): the same detector,
+   * amber rather than red, each with a line saying why. A lever named here is not in `breaks`.
+   */
+  strains: z
+    .array(promiseRuleSchema.extend({ text: z.string().min(1).max(160).optional() }))
+    .default([]),
 });
 
 export const pmFileSchema = z
@@ -134,6 +140,17 @@ export const pmFileSchema = z
           path: ['priorities', i],
         });
       ids.add(p.id);
+    });
+    file.promises.forEach((p, i) => {
+      const broken = new Set(p.breaks.map((r) => r.code));
+      p.strains.forEach((r, j) => {
+        if (broken.has(r.code))
+          ctx.addIssue({
+            code: 'custom',
+            message: `promise ${p.id} both breaks and strains on ${r.code}; pick one`,
+            path: ['promises', i, 'strains', j, 'code'],
+          });
+      });
     });
   });
 
@@ -163,22 +180,40 @@ export const optionConflictSchema = z.strictObject({
   text: z.string().min(1).max(200),
 });
 
+/**
+ * One adviser's line on an option (Phase 23): who proposed it and one plain judgement of its cost
+ * and effect, in at most twelve words, in the voice of the screen's adviser (an id in
+ * advisers.json who speaks on that screen). A size word ("big", "small") is tested against the
+ * engine's own figure for the option, no figure is typed, and the sources are the option's.
+ */
+export const optionAdviceSchema = simulatedLineSchema.extend({
+  adviser: slug,
+  sources: z.array(sourceRefSchema).min(1),
+});
+
 /** A way to deliver a priority, proposed by the minister or adviser who leads on it. */
 export const deliverOptionSchema = z.strictObject({
   id: slug,
   /** The priority this delivers (an id in pm.json's priorities). */
   priority: slug,
+  /** What it does, plainly: "More money for prisons and courts". */
   title: z.string().min(1).max(80),
   /** What choosing it buys and does not buy, in the proposer's voice. Sourced. */
   line: simulatedLineSchema,
+  advice: optionAdviceSchema,
   values: optionBundleSchema,
   conflicts: z.array(optionConflictSchema).min(1).optional(),
 });
 
-/** A way to pay for it: the levers say everything the card needs, so the line is optional. */
+/**
+ * A way to pay for it: a plain title saying what it does ("Put a penny on the basic rate of income
+ * tax"), the lever, and the adviser's line; the lever's own headline is folded on the card.
+ */
 export const affordOptionSchema = z.strictObject({
   id: slug,
+  title: z.string().min(1).max(80),
   values: optionBundleSchema,
+  advice: optionAdviceSchema,
   line: simulatedLineSchema.optional(),
   conflicts: z.array(optionConflictSchema).min(1).optional(),
 });
@@ -189,6 +224,7 @@ export const addOnSchema = z.strictObject({
   title: z.string().min(1).max(80),
   values: optionBundleSchema,
   line: simulatedLineSchema,
+  advice: optionAdviceSchema,
   conflicts: z.array(optionConflictSchema).min(1).optional(),
 });
 
@@ -211,6 +247,19 @@ export const optionsFileSchema = z
         if (ids.has(o.id))
           ctx.addIssue({ code: 'custom', message: `duplicate option ${o.id}`, path: [screen, i] });
         ids.add(o.id);
+      });
+    }
+    // A title names one option: two cards reading the same would be one choice made twice.
+    const titles = new Set<string>();
+    for (const [screen, list] of lists) {
+      list.forEach((o, i) => {
+        if (titles.has(o.title))
+          ctx.addIssue({
+            code: 'custom',
+            message: `two options are titled "${o.title}"`,
+            path: [screen, i, 'title'],
+          });
+        titles.add(o.title);
       });
     }
     // No lever twice anywhere: two options on one lever would light or undo each other.
@@ -336,6 +385,7 @@ export const ministersFileSchema = z
  */
 export const interventionWhenSchema = z.enum([
   'promise-broken',
+  'promise-strained',
   'priority-unfunded',
   'priority-part-funded',
   'all-priorities-funded',

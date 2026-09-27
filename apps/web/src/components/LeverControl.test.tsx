@@ -91,12 +91,27 @@ describe('LeverControl', () => {
       'tag--warn',
     );
     crossed.unmount();
+    // Amber (Phase 23): the levy keeps the pledge's words and tests its spirit.
+    const hscl = levers.find((l) => l.code === 'hscl');
+    if (!hscl) throw new Error('missing levy');
+    const strained = render(
+      <LeverControl
+        lever={hscl}
+        value={1}
+        onChange={() => undefined}
+        redLines={[{ promise: 'The tax lock', when: 'on', broken: true, severity: 'strains' }]}
+      />,
+    );
+    expect(within(strained.container).getByText('Strains the manifesto: The tax lock')).toHaveClass(
+      'tag--amber',
+    );
+    strained.unmount();
     const funded = render(
       <LeverControl
         lever={moj}
         value={10}
         onChange={() => undefined}
-        chosen={{ title: 'A Justice uplift for prison capacity', state: 'on' }}
+        chosen={{ title: 'More money for prisons and courts', state: 'on' }}
       />,
     );
     expect(within(funded.container).getByText('In your package')).toBeInTheDocument();
@@ -106,7 +121,7 @@ describe('LeverControl', () => {
         lever={moj}
         value={4}
         onChange={() => undefined}
-        chosen={{ title: 'A Justice uplift for prison capacity', state: 'adjusted' }}
+        chosen={{ title: 'More money for prisons and courts', state: 'adjusted' }}
       />,
     );
     expect(within(pulled.container).getByText('Adjusted from what you chose')).toHaveClass(

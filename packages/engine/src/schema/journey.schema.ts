@@ -92,6 +92,7 @@ export const readingMeasureSchema = z.enum([
   'headroomVsTargetGbpm',
   'promisesBroken',
   'manifestoBroken',
+  'manifestoStrained',
   'prioritiesUnfunded',
   'prioritiesFunded',
   'deliveredGbpm',

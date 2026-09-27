@@ -248,8 +248,11 @@ they filled, went in Phase 23.)
 ### Priorities and options (`data/journey/pm.json`, `options.json`, ADR-0022)
 
 `pm.json` names eight `priorities`: `id`, `title` and `noun` (at most forty characters each), a
-plain `purpose`, the PM's `pitch` and `reaction`, the `lead` (an adviser's or a minister's role, as
-the data names it) and the lead's `brief` opening its section of the ways to deliver, with sources.
+plain `purpose`, the PM's `pitch` and `reaction`, and the `lead` (an adviser's or a minister's
+role, as the data names it), with sources. Each `promise` has `breaks`, the levers that break its
+words, and may have `strains` (Phase 23): the levers that keep its words and test its spirit, each
+with a line saying why; the game marks a strain amber and a break red, and a lever is in one list
+or the other, never both.
 `options.json` holds three lists. Every option's `values` is a bundle of one or two levers at stated
 values: codes that exist and are not deprecated or macro, values inside the control's range and on
 its grid, none the default. Rules the validator enforces:
@@ -266,11 +269,18 @@ its grid, none the default. Rules the validator enforces:
 - **Every priority has two to five ways to deliver it** (`deliver[].priority`); safer streets has
   two because the game has only two levers there, and its brief says so.
 - **Every way to afford belongs to a who-pays tab** by its lever's incidence pays-group
-  (`AFFORD_TABS` in the engine), three to six per tab. A way to afford carries no authored line: the
-  card is the lever's title, headline and badge.
+  (`AFFORD_TABS` in the engine), three to six per tab, and has a plain `title` saying what it does
+  ("Put a penny on the basic rate of income tax"); the lever's headline is folded on the card.
+- **Every option carries one adviser's line** (`advice`, Phase 23): a `SimulatedLine` of at most
+  twelve words with an `adviser` id who speaks on that screen and at least one source, saying who
+  proposed it and one plain judgement of its cost and effect. No figure is typed; "big" (or
+  expensive, large, costly) may be said only where the engine's own figure for the option is £5bn
+  or more in the target year, "small" (cheap, little, modest, tiny) only at £1bn or less, and the
+  words test checks both. Titles are unique across every screen.
 - **The words are the proposer's** (`line`, a `SimulatedLine` with a `short`); the figure is never
   authored: the page prices the bundle with the engine against the Budget as it stands, and shows
-  the headroom the move would leave. Titles fit eighty characters.
+  the headroom the move would leave. Titles say what the option does, in at most twelve words and
+  eighty characters.
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 

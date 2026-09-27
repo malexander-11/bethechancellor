@@ -28,13 +28,13 @@ position**: the Treasury's briefing in three figures (the room March left, borro
 the OBR's assumption, borrowing so far), the four forecasts you might plan on with the headroom each
 leaves, and the margin you want to keep, with the decisions since March and the sliders under "See
 the numbers". **Set your priorities**: rank up to three of eight with the Prime Minister, who reacts
-to each; the red lines are one fold away; nothing is funded yet. **Build your Budget**: one screen
+to each; the promises are one fold away; nothing is funded yet. **Build your Budget**: one screen
 per priority, the minister who leads on it, its costed options priced against your Budget as it
 stands with the headroom each would leave, and a slim bar keeping score; then one screen to pay for
 it, the twenty-six ways to raise money in five groups by who pays, each heading counting what its
 chosen options raise, the first three of each group on show and the rest a fold away. No two options share a lever, and two that count the same money cannot both
 be chosen. Behind them, one link away under "More policies", the desk: every lever wearing the
-manifesto red line that watches it, with a minister on every spending line and advisers who
+manifesto promise it would break, in red, or strain, in amber, with a minister on every spending line and advisers who
 remember what you agreed, and the menu a Chancellor actually weighs: employer National Insurance, pensions, the smaller duties,
 capital-tax reliefs, going further on recent rises, capital gains at death, a lower council tax
 surcharge band, the bank surcharge, the energy profits levy again, the self-employed rate, VAT off

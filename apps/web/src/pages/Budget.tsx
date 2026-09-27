@@ -5,6 +5,7 @@ import {
   incidenceRows,
   interventionsFor,
   promiseBreaks,
+  promiseStrains,
   type JourneyStep,
   type Lever,
 } from '@btc/engine';
@@ -199,18 +200,30 @@ export function BudgetPage() {
   // The manifesto red lines, read from the same file the PM's promises come from, and whether the
   // package as it stands crosses each. Pure arithmetic over the levers: it works without a game.
   const breaks = promiseBreaks(state.leverValues, pm.promises, levers);
+  const strains = promiseStrains(state.leverValues, pm.promises, levers);
   const redLinesFor = (code: string): RedLine[] =>
-    pm.promises.flatMap((p) =>
-      p.breaks
+    pm.promises.flatMap((p) => [
+      ...p.breaks
         .filter((rule) => rule.code === code)
         .map((rule) => ({
           promise: p.title,
           when: rule.when,
+          severity: 'breaks' as const,
           broken:
             breaks.find((b) => b.promise.id === p.id)?.brokenBy.some((b) => b.code === code) ??
             false,
         })),
-    );
+      ...p.strains
+        .filter((rule) => rule.code === code)
+        .map((rule) => ({
+          promise: p.title,
+          when: rule.when,
+          severity: 'strains' as const,
+          broken:
+            strains.find((s) => s.promise.id === p.id)?.strainedBy.some((b) => b.code === code) ??
+            false,
+        })),
+    ]);
   // Who pays and who benefits, by the tags each lever carries, in the target year.
   const { paid, benefited } = incidenceRows(outcome, levers, incidence, targetYear);
 

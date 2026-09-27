@@ -119,6 +119,19 @@ describe('Budget day: what your Budget means', () => {
     expect(within(couple).getByText('worse off')).toBeInTheDocument();
   });
 
+  it('marks the levy amber: the public is not pinned at the floor, and the strain is a reason', () => {
+    at(`${BASE}&${GAME}&L=moj.10_hscl.1`);
+    expect(meter('The public')).not.toHaveAccessibleName(/Furious/);
+    fireEvent.click(within(card('The public')).getByText('Why this rating'));
+    expect(
+      within(card('The public')).getAllByText(/kept in the words and tested in the spirit/).length,
+    ).toBeGreaterThan(0);
+    fireEvent.click(within(card('Your backbenchers')).getByText('Why this rating'));
+    expect(
+      within(card('Your backbenchers')).getAllByText(/keeps the letter of the manifesto/).length,
+    ).toBeGreaterThan(0);
+  });
+
   it('approves of a priority carried through, and names what the money does not buy', () => {
     at(`${BASE}&${GAME.replace('pr.defence+safer-streets', 'pr.safer-streets')}&L=moj.10`);
     expect(meter('The public')).toHaveAccessibleName('4 of 5: Approving');
@@ -166,7 +179,7 @@ describe('Budget day: what your Budget means', () => {
       within(speech).getByText(/first duty of any government is the security/),
     ).toBeInTheDocument();
     expect(
-      within(speech).getByText(/a Justice uplift for prison capacity, £1\.4bn in 2029-30/),
+      within(speech).getByText(/more money for prisons and courts, £1\.4bn in 2029-30/),
     ).toBeInTheDocument();
     expect(within(speech).getByText(/Alcohol duty is cut by five per cent/)).toBeInTheDocument();
   });

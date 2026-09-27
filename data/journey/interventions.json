@@ -13,6 +13,26 @@
       }
     },
     {
+      "id": "pa-promise-strained",
+      "adviser": "political-adviser",
+      "when": "promise-strained",
+      "line": {
+        "text": "{name} is tested, not broken: a tax rise in all but name. The words are kept, and the benches and the public will still notice.",
+        "short": "{name} is tested, not broken: a tax rise in all but name.",
+        "sources": [
+          {
+            "sourceId": "labour-manifesto-2024-strong-foundations"
+          },
+          {
+            "sourceId": "hmt-autumn-budget-2024-table-5-1",
+            "table": "Table 5.1",
+            "note": "line 26"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
       "id": "ps-rule-missed",
       "adviser": "permanent-secretary",
       "when": "rule-missed",

@@ -49,14 +49,16 @@ export function priceLine(price: OptionPrice): string {
 /**
  * One costed option a Chancellor can choose: a checkbox card with the title, the engine's figure
  * for choosing it now against the Budget as it stands and the headroom that would leave, the
- * badges of the costings it rests on, the manifesto red lines it would cross, its earliest start,
+ * badges of the costings it rests on, the manifesto promises it would break (red) or strain
+ * (amber), its earliest start,
  * the options it overlaps or counts the same money as, and the line of whoever proposes it.
  * Choosing it moves the levers inside; the state is read back from the levers, so a card can also
  * show that its levers were adjusted on the desk to somewhere else (ADR-0022). While an option it
  * conflicts with is in the Budget the card is blocked and says by what; with both in from the
  * desk, both warn and neither is blocked. On the surface a card is its title, its badge and its
- * figure, plus the tags that change what choosing it means; the lever's headline, the options it
- * quietly overlaps and the proposer's line wait behind one fold, "More about this".
+ * figure, plus the tags that change what choosing it means, and one adviser's line saying who
+ * proposed it and what it costs and does (Phase 23); the lever's headline, the options it quietly
+ * overlaps and the proposer's line wait behind one fold, "More about this".
  */
 export function OptionCard({
   id,
@@ -77,6 +79,7 @@ export function OptionCard({
   who,
   note,
   tag,
+  advice,
   children,
 }: {
   id: string;
@@ -105,6 +108,8 @@ export function OptionCard({
   note?: string;
   /** A short state the player must see beside the figure: "already in your Budget". */
   tag?: string;
+  /** The adviser's line on this option (Phase 23): who proposed it, one plain judgement. */
+  advice?: { who: string; line: SimulatedLine };
   /** Anything to show once the option is on: the minister's reaction, for one. */
   children?: ReactNode;
 }) {
@@ -159,12 +164,22 @@ export function OptionCard({
               : null}
             {redLines.map((r) =>
               r.broken ? (
-                <span key={r.promise} className="tag--treasury tag--warn">
-                  {on ? 'Breaks' : 'Would break'} the manifesto: {r.promise}
+                <span
+                  key={`${r.severity}-${r.promise}`}
+                  className={`tag--treasury ${r.severity === 'strains' ? 'tag--amber' : 'tag--warn'}`}
+                >
+                  {r.severity === 'strains'
+                    ? on
+                      ? 'Strains'
+                      : 'Would strain'
+                    : on
+                      ? 'Breaks'
+                      : 'Would break'}{' '}
+                  the manifesto: {r.promise}
                 </span>
               ) : (
-                <span key={r.promise} className="tag--manifesto">
-                  Manifesto: {RED_LINE_WORDS[r.when]}
+                <span key={`${r.severity}-${r.promise}`} className="tag--manifesto">
+                  Manifesto: {r.severity === 'strains' ? 'contested' : RED_LINE_WORDS[r.when]}
                   <span className="sr-only"> ({r.promise})</span>
                 </span>
               ),
@@ -196,6 +211,17 @@ export function OptionCard({
           })}
         </span>
       </label>
+      {advice ? (
+        <p className="choice__advice">
+          <span className="kicker">{advice.who}</span> <LabelBadge badge={advice.line.badge} />{' '}
+          {advice.line.text}
+          <SourceList
+            as="span"
+            className="choice__sources briefing__sources"
+            refs={advice.line.sources}
+          />
+        </p>
+      ) : null}
       {more ? (
         <details className="more more--quiet choice__more">
           <summary>More about this</summary>

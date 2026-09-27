@@ -47,16 +47,16 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/', 40, GAME],
   ['/outlook', 335, GAME],
   ['/pm', 155, GAME],
-  ['/budget/deliver', 150, WIDEST],
-  ['/budget/deliver/2', 150, WIDEST],
-  ['/budget/deliver/3', 150, WIDEST],
-  ['/budget/afford', 320, GAME],
+  ['/budget/deliver', 205, WIDEST],
+  ['/budget/deliver/2', 205, WIDEST],
+  ['/budget/deliver/3', 205, WIDEST],
+  ['/budget/afford', 590, GAME],
   ['/forecast', 125, GAME],
-  ['/compromise', 155, SHORT],
-  ['/compromise', 120, GAME],
-  ['/rabbit', 155, GAME],
-  ['/review', 110, GAME],
-  ['/budget-day', 260, GAME],
+  ['/compromise', 165, SHORT],
+  ['/compromise', 125, GAME],
+  ['/rabbit', 260, GAME],
+  ['/review', 115, GAME],
+  ['/budget-day', 265, GAME],
 ];
 
 describe('the word budgets', () => {
@@ -84,7 +84,10 @@ describe('the word budgets', () => {
     // 106, the add-ons 140, the review 98, Budget day 233. Re-measured the same day after the
     // starting position gained its rules line, its since-March account and its two questions,
     // the priorities their theme, and the forecast its visible disclosure (Phase 23): the
-    // position 303, the priorities 138, the forecast 114.
+    // position 303, the priorities 138, the forecast 114. Re-measured again after every option
+    // gained its adviser's line and the ways to pay their plain titles, and the voices at the top
+    // of the option screens went: the priority screens 145 to 184, paying for it 536, the sums 147
+    // and the room to spare 112, the add-ons 234, the review 105, Budget day 240.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();

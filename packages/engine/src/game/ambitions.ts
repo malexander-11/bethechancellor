@@ -1,9 +1,20 @@
 import type { DeliverOption, Lever, OptionsFile, PmFile, Priority } from '../types/data.js';
 import type { GamePermalink, Outcome } from '../types/engine.js';
 import { deliverOptionsFor, optionState, rankedPriorities, type OptionState } from './options.js';
-import { promiseBreaks, type PromiseReport } from './promises.js';
+import {
+  promiseBreaks,
+  promiseStrains,
+  type PromiseReport,
+  type PromiseStrainReport,
+} from './promises.js';
 
-export { deliversTarget, promiseBreaks, type PromiseReport } from './promises.js';
+export {
+  deliversTarget,
+  promiseBreaks,
+  promiseStrains,
+  type PromiseReport,
+  type PromiseStrainReport,
+} from './promises.js';
 
 /**
  * What the Chancellor agreed with the Prime Minister, against what the package actually does
@@ -38,10 +49,14 @@ export interface PriorityReport {
 export interface AmbitionStatus {
   priorities: PriorityReport[];
   promises: PromiseReport[];
+  /** The promises' amber cases (Phase 23): the words kept, the spirit tested. */
+  strains: PromiseStrainReport[];
   /** Priorities with at least one way to deliver them on. */
   delivered: number;
   /** Manifesto promises broken. */
   broken: number;
+  /** Manifesto promises strained and not also broken: a promise counts once, as broken. */
+  strained: number;
 }
 
 export function ambitionStatus(
@@ -101,10 +116,14 @@ export function ambitionStatus(
     );
     return { ...report, kept: !missed };
   });
+  const strains = promiseStrains(values, pm.promises, levers);
+  const brokenIds = new Set(promises.filter((p) => !p.kept).map((p) => p.promise.id));
   return {
     priorities,
     promises,
+    strains,
     delivered: priorities.filter((p) => p.status === 'delivered').length,
-    broken: promises.filter((p) => !p.kept).length,
+    broken: brokenIds.size,
+    strained: strains.filter((s) => s.strained && !brokenIds.has(s.promise.id)).length,
   };
 }

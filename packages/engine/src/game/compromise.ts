@@ -7,7 +7,7 @@ import type {
   Promise_,
 } from '../types/data.js';
 import type { Outcome } from '../types/engine.js';
-import { promiseBreaks, type AmbitionStatus } from './ambitions.js';
+import { promiseBreaks, promiseStrains, type AmbitionStatus } from './ambitions.js';
 import { blockedBy, optionState } from './options.js';
 
 /**
@@ -28,6 +28,8 @@ export interface AffordSuggestion {
   yieldGbpm: number;
   /** Promises in force that this move would break and the current package does not. */
   breaks: Promise_[];
+  /** Promises this move would strain (amber, Phase 23) that the package does not break or strain yet. */
+  strains: Promise_[];
 }
 
 /** One notch up from the current setting, or null when there is no room to move. */
@@ -68,6 +70,11 @@ export function affordSuggestions(
       .filter((r) => !r.kept)
       .map((r) => r.promise.id),
   );
+  const alreadyStrained = new Set(
+    promiseStrains(current, promises, levers)
+      .filter((r) => r.strained)
+      .map((r) => r.promise.id),
+  );
   const out: AffordSuggestion[] = [];
   for (const option of options.afford) {
     if (optionState(option, current, levers) !== 'off') continue;
@@ -80,7 +87,12 @@ export function affordSuggestions(
     const breaks = promiseBreaks(trial, promises, levers)
       .filter((r) => !r.kept && !alreadyBroken.has(r.promise.id))
       .map((r) => r.promise);
-    out.push({ option, lever, yieldGbpm, breaks });
+    const strains = promiseStrains(trial, promises, levers)
+      .filter(
+        (r) => r.strained && !alreadyStrained.has(r.promise.id) && !alreadyBroken.has(r.promise.id),
+      )
+      .map((r) => r.promise);
+    out.push({ option, lever, yieldGbpm, breaks, strains });
   }
   return out.sort((a, b) => b.yieldGbpm - a.yieldGbpm).slice(0, n);
 }

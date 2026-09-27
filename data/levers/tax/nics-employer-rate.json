@@ -119,6 +119,27 @@
         }
       ],
       "magnitudeWords": "unknown"
+    },
+    {
+      "id": "employer-nics-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "appliesWhen": {
+        "above": 0
+      },
+      "text": "The manifesto promised not to increase National Insurance. The government's reading, when it raised this rate from 13.8% to 15% in October 2024, was that the promise covered the National Insurance working people pay; critics read it the other way. The game marks it amber, not red: the pledge’s words are kept and its spirit is tested, and the benches and the public will say so on Budget day.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations"
+        },
+        {
+          "sourceId": "hmt-autumn-budget-2024-table-5-1",
+          "table": "Table 5.1",
+          "note": "line 26"
+        }
+      ]
     }
   ],
   "status": "reviewed",

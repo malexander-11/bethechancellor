@@ -43,6 +43,7 @@ const ORDER: readonly InterventionWhen[] = [
   'rule-missed',
   'priority-unfunded',
   'headroom-below-target',
+  'promise-strained',
   'priority-part-funded',
   'all-priorities-funded',
   'headroom-above-target',
@@ -75,8 +76,15 @@ export function interventionsFor(
       });
     }
   };
+  const brokenIds = new Set(status.promises.filter((p) => !p.kept).map((p) => p.promise.id));
   for (const p of status.promises) {
     if (!p.kept) say('promise-broken', p.promise.title, p.promise.id, p.promise.sources);
+  }
+  // Amber (Phase 23): a promise strained and not broken gets its own, quieter line.
+  for (const s of status.strains) {
+    if (s.strained && !brokenIds.has(s.promise.id)) {
+      say('promise-strained', s.promise.title, s.promise.id, s.promise.sources);
+    }
   }
   if (reading.ruleMissed) say('rule-missed', undefined, undefined, []);
   for (const p of status.priorities) {

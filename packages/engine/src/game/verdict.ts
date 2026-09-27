@@ -27,7 +27,8 @@ import { drawSettings, pickOutcome, revisionsFor } from './draw.js';
  */
 
 export type PriorityFate = 'delivered' | 'narrowed' | 'delayed' | 'unfunded';
-export type PromiseFate = 'kept' | 'broken-by-choice' | 'broken-by-arithmetic';
+/** `strained` (Phase 23): kept in its words, tested in its spirit; amber, not red. */
+export type PromiseFate = 'kept' | 'strained' | 'broken-by-choice' | 'broken-by-arithmetic';
 
 export interface AmbitionVerdict {
   priorities: { title: string; fate: PriorityFate; costGbpm: number }[];
@@ -111,17 +112,25 @@ export function ambitionVerdict(status: AmbitionStatus, levers: readonly Lever[]
     fate: priorityFate(p),
     costGbpm: p.costGbpm,
   }));
-  const promises: AmbitionVerdict['promises'] = status.promises.map((p) => ({
-    title: p.promise.title,
-    fate: p.kept
-      ? ('kept' as const)
-      : p.promise.breaks.length > 0
-        ? ('broken-by-choice' as const)
-        : ('broken-by-arithmetic' as const),
-    ...(p.brokenBy.length > 0
-      ? { by: p.brokenBy.map((b) => byCode.get(b.code)?.shortTitle ?? b.code) }
-      : {}),
-  }));
+  const strainedBy = new Map(
+    status.strains.filter((s) => s.strained).map((s) => [s.promise.id, s.strainedBy] as const),
+  );
+  const promises: AmbitionVerdict['promises'] = status.promises.map((p) => {
+    const strain = p.kept ? strainedBy.get(p.promise.id) : undefined;
+    const fate: PromiseFate = !p.kept
+      ? p.promise.breaks.length > 0
+        ? 'broken-by-choice'
+        : 'broken-by-arithmetic'
+      : strain
+        ? 'strained'
+        : 'kept';
+    const by = p.brokenBy.length > 0 ? p.brokenBy : (strain ?? []);
+    return {
+      title: p.promise.title,
+      fate,
+      ...(by.length > 0 ? { by: by.map((b) => byCode.get(b.code)?.shortTitle ?? b.code) } : {}),
+    };
+  });
   return { priorities, promises };
 }
 

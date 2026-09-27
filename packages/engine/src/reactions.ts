@@ -224,6 +224,10 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   const clearPriorityGbpm =
     ranked.length === 1 && funded.length === 1 && unfunded.length === 0 ? deliveredGbpm : 0;
   const manifestoBroken = broken.filter((p) => p.promise.breaks.length > 0);
+  // Amber (Phase 23): the pledge's words kept, its spirit tested; a promise also broken counts once.
+  const strained = (status?.strains ?? []).filter(
+    (s) => s.strained && !broken.some((p) => p.promise.id === s.promise.id),
+  );
 
   const out: Readings = {
     values: {
@@ -241,6 +245,7 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       headroomVsTargetGbpm: headroom - target,
       promisesBroken: broken.length,
       manifestoBroken: manifestoBroken.length,
+      manifestoStrained: strained.length,
       prioritiesUnfunded: unfunded.length,
       prioritiesFunded: funded.length,
       deliveredGbpm,
@@ -283,6 +288,9 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       ),
       manifestoBroken: manifestoBroken.map(
         (p) => `${p.promise.title} (${p.brokenBy.map((b) => title(b.code)).join(', ')})`,
+      ),
+      manifestoStrained: strained.map(
+        (s) => `${s.promise.title} (${s.strainedBy.map((b) => title(b.code)).join(', ')})`,
       ),
       prioritiesUnfunded: unfunded.map((p) => p.priority.title),
       prioritiesFunded: funded.map((p) => p.priority.title),

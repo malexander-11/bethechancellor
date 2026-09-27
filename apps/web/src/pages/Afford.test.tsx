@@ -92,7 +92,7 @@ describe('build your Budget: pay for it', () => {
     // A penny on the basic rate would cross the tax lock: the card says so before it is chosen,
     // and says it has once it is.
     const basic = within(who(/^Everyone/)).getByRole('checkbox', {
-      name: /Basic rate of income tax/,
+      name: /Put a penny on the basic rate of income tax/,
     });
     const basicCard = basic.closest('.choice') as HTMLElement;
     expect(
@@ -116,6 +116,31 @@ describe('build your Budget: pay for it', () => {
     expect(gapLine()).toBe(before);
   });
 
+  it('puts an adviser’s line on every card, and no adviser at the top; the levy is amber, the penny red', () => {
+    at(`/budget/afford?${BASE}&${GAME}`);
+    expect(screen.queryByRole('region', { name: 'Your advisers' })).toBeNull();
+    const cards = document.querySelectorAll('.choice--option');
+    expect(cards.length).toBeGreaterThan(10);
+    for (const card of cards) expect(card.querySelector('.choice__advice')).not.toBeNull();
+    // The levy keeps the pledge's words and tests its spirit: amber, with the reason in the line.
+    const levy = within(who(/^Everyone/))
+      .getByRole('checkbox', { name: /health and social care levy/i })
+      .closest('.choice') as HTMLElement;
+    expect(within(levy).getByText('Would strain the manifesto: The tax lock')).toHaveClass(
+      'tag--amber',
+    );
+    expect(within(levy).getByText(/National Insurance in all but name/)).toBeInTheDocument();
+    expect(within(levy).getByText('Director of Tax')).toBeInTheDocument();
+    // The penny is the pledge's own words: red.
+    const basic = within(who(/^Everyone/))
+      .getByRole('checkbox', { name: /Put a penny on the basic rate/ })
+      .closest('.choice') as HTMLElement;
+    expect(within(basic).getByText('Would break the manifesto: The tax lock')).toHaveClass(
+      'tag--warn',
+    );
+    expect(within(basic).queryByText(/Would strain/)).toBeNull();
+  });
+
   it('blocks an option that counts the same money as a way to deliver already in the Budget', () => {
     at(`/budget/afford?${BASE}&${GAME}&L=fuel.-10`);
     const uprating = within(who(/^Drivers/)).getByRole('checkbox', { name: /fuel duty/i });
@@ -131,7 +156,7 @@ describe('build your Budget: pay for it', () => {
     const quiet = at(`/budget/afford?${BASE}&${GAME}`);
     const nics = () =>
       within(who(/^Business/))
-        .getByRole('checkbox', { name: /^Employer NICs rate/ })
+        .getByRole('checkbox', { name: /^Put employer National Insurance up from 15% to 16%/ })
         .closest('.choice') as HTMLElement;
     expect(within(nics()).getByText('Overlaps with Corporation tax')).toBeInTheDocument();
     quiet.unmount();

@@ -46,8 +46,15 @@ describe('suggested little add-ons', () => {
     expect(within(menu()).getByText(/^Costs nothing · leaves/)).toBeInTheDocument();
     const pubs = box(/Five per cent off alcohol duty/).closest('.choice') as HTMLElement;
     expect(within(pubs).getByText(/^Costs £\d+\.\dbn · leaves (−|£)/)).toBeInTheDocument();
-    // The proposer's line waits behind the card's fold; the surface is title, badge and figure.
-    expect(within(pubs).getByText('Political Adviser').closest('details')).not.toBeNull();
+    // The proposer's line waits behind the card's fold; on the surface, the title, badge, figure
+    // and one adviser's line (Phase 23). No adviser speaks at the top of the screen.
+    expect(
+      within(pubs)
+        .getAllByText('Political Adviser')
+        .some((e) => e.closest('details') !== null),
+    ).toBe(true);
+    expect(within(pubs).getByText(/Small money, welcomed in every pub/)).toBeInTheDocument();
+    expect(screen.queryByText(/A few small things for the speech/)).toBeNull();
     expect(screen.getByText(/^Up to 3 · 0 of 3 chosen/)).toBeInTheDocument();
     // Ticked, the card says what the Budget would have without it.
     fireEvent.click(box(/Five per cent off alcohol duty/));

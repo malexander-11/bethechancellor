@@ -10,7 +10,7 @@ import type {
   Promise_,
 } from '../types/data.js';
 import type { GamePermalink } from '../types/engine.js';
-import { deliversTarget, promiseBreaks } from './promises.js';
+import { deliversTarget, promiseBreaks, promiseStrains } from './promises.js';
 
 /**
  * The options (Phase 18, ADR-0022): bundles of lever settings that advisers propose and the
@@ -71,7 +71,7 @@ export type OptionScreen = 'deliver' | 'afford' | 'addOns';
 export interface OptionRef {
   id: string;
   screen: OptionScreen;
-  /** The option's title; a way to afford has none of its own and wears its lever's title. */
+  /** The option's title: what it does, plainly. */
   title: string;
   /** A shorter name for a note on another card: the lever's short title for a way to afford. */
   shortTitle: string;
@@ -95,8 +95,8 @@ export function allOptions(options: OptionsFile, levers: readonly Lever[]): Opti
     ...options.afford.map((o) => ({
       id: o.id,
       screen: 'afford' as const,
-      title: leverOf(o)?.title ?? o.id,
-      shortTitle: leverOf(o)?.shortTitle ?? o.id,
+      title: o.title,
+      shortTitle: leverOf(o)?.shortTitle ?? o.title,
       values: o.values,
       conflicts: o.conflicts ?? [],
     })),
@@ -219,13 +219,15 @@ export function optionEarliestStart(option: Bundle, levers: readonly Lever[]): s
 export interface OptionRedLine {
   promise: string;
   when: 'above' | 'below' | 'on';
+  /** Red or amber: whether the case breaks the promise's words or only tests its spirit (Phase 23). */
+  severity: 'breaks' | 'strains';
   /** Whether the Budget with this option in it crosses the line. */
   broken: boolean;
 }
 
 /**
- * The manifesto red lines that watch any of the option's levers, and whether choosing it would
- * cross them given the rest of the Budget.
+ * The manifesto promises that watch any of the option's levers, red and amber, and whether
+ * choosing it would cross them given the rest of the Budget.
  */
 export function optionRedLines(
   option: Bundle,
@@ -234,18 +236,33 @@ export function optionRedLines(
   current: Record<string, number>,
 ): OptionRedLine[] {
   const codes = new Set(Object.keys(option.values));
-  const watching = promises.filter((p) => p.breaks.some((rule) => codes.has(rule.code)));
-  if (watching.length === 0) return [];
-  const reports = promiseBreaks({ ...current, ...option.values }, watching, levers);
-  return watching.map((promise) => {
+  const trial = { ...current, ...option.values };
+  const breaks = promiseBreaks(trial, promises, levers);
+  const strains = promiseStrains(trial, promises, levers);
+  const out: OptionRedLine[] = [];
+  for (const promise of promises) {
     const rule = promise.breaks.find((r) => codes.has(r.code));
-    const report = reports.find((r) => r.promise.id === promise.id);
-    return {
-      promise: promise.title,
-      when: rule?.when ?? 'on',
-      broken: report ? report.brokenBy.some((b) => codes.has(b.code)) : false,
-    };
-  });
+    if (rule) {
+      const report = breaks.find((r) => r.promise.id === promise.id);
+      out.push({
+        promise: promise.title,
+        when: rule.when,
+        severity: 'breaks',
+        broken: report?.brokenBy.some((b) => codes.has(b.code)) ?? false,
+      });
+    }
+    const strain = promise.strains.find((r) => codes.has(r.code));
+    if (strain) {
+      const report = strains.find((r) => r.promise.id === promise.id);
+      out.push({
+        promise: promise.title,
+        when: strain.when,
+        severity: 'strains',
+        broken: report?.strainedBy.some((b) => codes.has(b.code)) ?? false,
+      });
+    }
+  }
+  return out;
 }
 
 export interface OptionOverlap {

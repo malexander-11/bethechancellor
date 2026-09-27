@@ -1,6 +1,8 @@
+import { computeOutcome } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import { TARGETS } from '../pages/Outlook';
 import {
+  advisers,
   briefings,
   compromise,
   context,
@@ -13,7 +15,9 @@ import {
   pm,
   rabbit,
   reception,
+  rules,
   verdicts,
+  vintage,
 } from '../data';
 
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
@@ -59,10 +63,7 @@ describe('word budgets: one line visible, the rest a click away', () => {
     // What shows on a screen is the short form; the full line is one tap away (ADR-0023).
     type Line = { text: string; short?: string | undefined };
     const road: { label: string; line: Line; max: number }[] = [
-      ...pm.priorities.flatMap((p) => [
-        { label: `${p.id} brief`, line: p.brief, max: 12 },
-        { label: `${p.id} reaction`, line: p.reaction, max: 12 },
-      ]),
+      ...pm.priorities.map((p) => ({ label: `${p.id} reaction`, line: p.reaction, max: 12 })),
       ...interventions.interventions.map((x) => ({ label: x.id, line: x.line, max: 14 })),
       { label: 'rabbit intro', line: rabbit.intro.line, max: 12 },
       { label: 'rabbit further', line: rabbit.further.line, max: 12 },
@@ -84,6 +85,36 @@ describe('word budgets: one line visible, the rest a click away', () => {
       // A short line is a shorter version of the long one, not a second speech.
       if (line.short) expect(words(line.short), label).toBeLessThan(words(line.text));
     }
+  });
+
+  it('gives every option one adviser line: twelve words, no figure, a size word the engine bears out', () => {
+    // The line may say "big" or "small" only where the option's own figure for the target year
+    // says so (Phase 23): big is £5bn or more, small £1bn or less, on the engine's arithmetic.
+    const headroomOf = (leverValues: Record<string, number>) =>
+      computeOutcome({ vintage, rules, levers, settings: { leverValues } }).verdicts.find(
+        (v) => v.kind === 'currentBudget',
+      )?.headroomGbpm ?? 0;
+    const base = headroomOf({});
+    const BIG = /\b(big|expensive|large|costly)\b/i;
+    const SMALL = /\b(small|cheap|little|modest|tiny)\b/i;
+    const FIGURE = /£\d|\d+%|\d+bn|\d{3},\d{3}/;
+    const adviserIds = new Set(advisers.advisers.map((a) => a.id));
+    const all = [...options.deliver, ...options.afford, ...options.addOns];
+    expect(all.length).toBeGreaterThan(60);
+    for (const o of all) {
+      const text = o.advice.text;
+      expect(words(text), `${o.id}: "${text}"`).toBeLessThanOrEqual(12);
+      expect(text, o.id).not.toMatch(FIGURE);
+      expect(adviserIds.has(o.advice.adviser), `${o.id} names ${o.advice.adviser}`).toBe(true);
+      expect(o.advice.sources.length, o.id).toBeGreaterThan(0);
+      const size = Math.abs(headroomOf(o.values) - base);
+      const bn = (size / 1000).toFixed(1);
+      if (BIG.test(text)) expect(size, `${o.id} says big at £${bn}bn`).toBeGreaterThanOrEqual(5000);
+      if (SMALL.test(text))
+        expect(size, `${o.id} says small at £${bn}bn`).toBeLessThanOrEqual(1000);
+    }
+    // Every title says what the option does, in at most twelve words.
+    for (const o of all) expect(words(o.title), o.title).toBeLessThanOrEqual(12);
   });
 
   it('says what to do now in ten words, a priority’s purpose in five, a target in five', () => {

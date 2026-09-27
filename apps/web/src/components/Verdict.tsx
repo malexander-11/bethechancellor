@@ -13,6 +13,7 @@ const PRIORITY: Record<BudgetVerdict['ambitions']['priorities'][number]['fate'],
 
 const PROMISE: Record<BudgetVerdict['ambitions']['promises'][number]['fate'], string> = {
   kept: 'kept',
+  strained: 'kept, in the words',
   'broken-by-choice': 'broken by choice',
   'broken-by-arithmetic': 'broken by the arithmetic',
 };
