@@ -1,5 +1,6 @@
 import {
   ambitionStatus,
+  budgetTheme,
   formatGbpBn,
   optionState,
   rankedPriorities,
@@ -153,13 +154,16 @@ export function ReviewPage() {
         {ranked.length === 0 ? (
           <p className="panel__hint">None agreed with the Prime Minister.</p>
         ) : (
-          <ol className="review__list">
-            {ranked.map((p, i) => (
-              <li key={p.id}>
-                <span className="review__rank">{RANK[i] ?? `${i + 1}th`}</span> {p.title}
-              </li>
-            ))}
-          </ol>
+          <>
+            <p className="theme__title">{budgetTheme(pm, game.priorities)}</p>
+            <ol className="review__list">
+              {ranked.map((p, i) => (
+                <li key={p.id}>
+                  <span className="review__rank">{RANK[i] ?? `${i + 1}th`}</span> {p.title}
+                </li>
+              ))}
+            </ol>
+          </>
         )}
       </Part>
 

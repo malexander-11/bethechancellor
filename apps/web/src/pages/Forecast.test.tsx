@@ -79,17 +79,16 @@ describe('the OBR’s forecast', () => {
   it('lists the measures the OBR re-scored, with the factor and the original badge', () => {
     at(`/forecast?${BASE}&g=s.${HARD}_st.3_pl.adviser&L=cgtdth.1_itbr.1`);
     fireEvent.click(screen.getByRole('button', { name: /Open the forecast/ }));
-    // The re-scored measures wait under "See the numbers", closed until asked for.
-    const fold = screen.getByText('See the numbers').closest('details') as HTMLElement;
-    expect(fold).not.toHaveAttribute('open');
-    fireEvent.click(screen.getByText('See the numbers'));
+    // The tables are workings (on in this setup); the disclosure is one visible line with the seed.
+    expect(screen.queryByText('See the numbers')).toBeNull();
     const row = screen
       .getByText(/End the capital gains write-off at death/)
       .closest('tr') as HTMLElement;
     expect(within(row).getByText('re-scored ×0.6')).toBeInTheDocument();
     expect(within(row).getByText('Assumption')).toBeInTheDocument();
     expect(screen.queryByText(/Basic rate of income tax.*re-scored/)).toBeNull();
-    expect(screen.getByText(/This forecast is a simulation/)).toBeInTheDocument();
+    expect(screen.getAllByText(/This forecast is a simulation/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText(/weighted to the middle\. Seed \d+\./)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Replay these conditions/ })).toHaveAttribute(
       'href',
       expect.stringContaining(`g=s.${HARD}`),

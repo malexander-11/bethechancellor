@@ -22,7 +22,7 @@ function leverOf(code: string): Lever | undefined {
 }
 
 /** What a card does to the stability rule's headroom, on top of whatever else is in the budget. */
-function headroomOf(state: BudgetState, values: Record<string, number>): number {
+export function headroomOf(state: BudgetState, values: Record<string, number>): number {
   const outcome = computeOutcome({
     vintage,
     rules,

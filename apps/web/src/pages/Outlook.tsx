@@ -4,14 +4,15 @@ import { AssumptionReading, ContextRow, summariseReading } from '../components/A
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { Papers } from '../components/Motifs';
-import { Scenarios } from '../components/Scenarios';
+import { headroomOf, Scenarios } from '../components/Scenarios';
 import { SourceList } from '../components/SourceLink';
 import { TableScroll } from '../components/TableScroll';
 import { Term } from '../components/Term';
-import { context, levers, vintage } from '../data';
+import { context, levers, rules, vintage } from '../data';
 import { StepLink } from '../journey/links';
 import { macroCodesOf, matchScenario, scenarioCards } from '../journey/scenarios';
 import { mintSeed } from '../journey/seed';
+import { WorkingsOnly, useWorkings } from '../journey/workings';
 import { permalinkQuery, useBudget } from '../state/budget';
 
 const CARDS = scenarioCards(context, levers, vintage);
@@ -25,21 +26,35 @@ export const TARGETS: { bn: number; label: string; say: string }[] = [
   { bn: 0, label: 'Whatever the rules leave', say: 'The rules and no more.' },
 ];
 
+/** Where the advisers think the gilt markets get nervous, £ million: their judgement, not a published figure. */
+const RULE_OF_THUMB_GBPM = 20_000;
+
+const COUNT = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
+const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
+
 const reading = (id: string): ContextReading | undefined =>
   context.readings.find((r) => r.id === id);
 
 /**
- * Step 2: your starting position. The Treasury's briefing in three numbers, then the two choices
- * that shape everything after: which forecast to plan on (four cards, each showing the headroom it
- * leaves) and how much headroom to keep. Both are plans, not rules: the game measures the player
- * against them and never enforces either. Confirming mints the seed for the OBR draw, which knows
- * nothing of what was chosen here. The tables and the sliders behind the cards open in place.
+ * Step 2: your starting position. The Treasury's briefing in three numbers and one line on the
+ * rules, with the rules in full one fold away; what has been promised since March and what has
+ * cut the headroom, in words; then the two questions that shape everything after: which forecast
+ * to plan on (four cards, each showing the headroom it leaves) and how much headroom to keep, with
+ * headroom explained beneath. Both are plans, not rules: the game measures the player against
+ * them and never enforces either. Confirming mints the seed for the OBR draw, which knows nothing
+ * of what was chosen here. The sliders behind the cards are the expert path, behind the workings.
  */
 export function OutlookPage() {
   const { state, dispatch, outcome } = useBudget();
   const navigate = useNavigate();
+  const workings = useWorkings();
   const targetYear =
     outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '2029-30';
+  const years = outcome.paths.years;
+  const lastYear = years[years.length - 1] ?? targetYear;
+  const typicalErrorGbpm =
+    (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
+    (outcome.paths.baseline.nominalGdpFy[lastYear] ?? 0);
   const selected = matchScenario(CARDS, state.leverValues, MACRO_CODES);
   const game = state.game;
   const revealed = game?.revealed ?? false;
@@ -47,6 +62,11 @@ export function OutlookPage() {
   const headroom = vintage.context?.headroomAtPublicationGbpm ?? 0;
   const gilts = reading('gilt-10y');
   const borrowing = reading('psnb-ytd');
+  const prices = context.readings.find((r) => r.leverCode === 'rpi');
+  // What the adviser's card leaves on this Budget: the figure the since-March block points at.
+  const adviserCard = CARDS.find((c) => c.kind === 'adviser');
+  const adviserHeadroom = adviserCard ? headroomOf(state, adviserCard.values) : undefined;
+  const decisions = context.decisionsSinceForecast;
 
   const setTarget = (bn: number) => {
     if (!game) {
@@ -120,9 +140,87 @@ export function OutlookPage() {
             ...(borrowing ? [borrowing.latest.source] : []),
           ]}
         />
+        <p className="brief__rules">
+          Two <Term id="fiscal-rules">rules</Term>: pay for day-to-day spending with tax by{' '}
+          {targetYear}, and have debt falling by then. Miss one and the <Term id="obr">OBR</Term>{' '}
+          says so on Budget day.
+        </p>
+        <details className="more">
+          <summary>About the fiscal rules</summary>
+          <dl className="more__body rules-key">
+            {rules.rules.map((r) => (
+              <div key={r.id}>
+                <dt>{r.name}</dt>
+                <dd>
+                  {r.plainEnglish}
+                  {workings ? (
+                    <>
+                      {' '}
+                      <span className="source">The Charter says: “{r.charterText}”</span>{' '}
+                      <SourceList as="span" className="briefing__sources" refs={[r.source]} />
+                    </>
+                  ) : null}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </details>
       </section>
 
-      <h2 className="section-label section-label--spaced">The forecast</h2>
+      {decisions.length > 0 ? (
+        <section className="since doc" aria-labelledby="since-heading">
+          <h2 id="since-heading" className="section-label">
+            Since March
+          </h2>
+          <p>
+            Since March the government has made {COUNT[decisions.length] ?? decisions.length}{' '}
+            spending promises:
+          </p>
+          <ul className="since__list">
+            {decisions.map((d) => (
+              <li key={d.id}>
+                {d.title}: {formatGbpBn(Math.abs(d.amountGbpm), 1)} ({d.year}), paid for by{' '}
+                {lowerFirst(d.paidFor)}.
+                <SourceList as="span" className="briefing__sources" refs={d.sources} />
+              </li>
+            ))}
+          </ul>
+          <p>
+            Each was paid for by moving money, so none used the headroom. What has cut the headroom
+            is dearer borrowing{prices ? ' and higher inflation' : ''}.
+            {gilts ? (
+              <>
+                {' '}
+                Gilts pay {summariseReading(gilts.latest, gilts.unit)} against the{' '}
+                {summariseReading(gilts.obr, gilts.unit)} the OBR assumed
+                {prices
+                  ? `; inflation is ${summariseReading(prices.latest, prices.unit)} against ${summariseReading(prices.obr, prices.unit)}`
+                  : ''}
+                .
+              </>
+            ) : null}
+            {adviserHeadroom !== undefined ? (
+              <>
+                {' '}
+                Your adviser’s card shows what that does:{' '}
+                {formatGbpBn(adviserHeadroom, 1, adviserHeadroom < 0)} where March showed{' '}
+                {formatGbpBn(headroom, 1)}.
+              </>
+            ) : null}
+          </p>
+          <SourceList
+            className="briefing__sources"
+            refs={[
+              ...(gilts ? [gilts.latest.source, gilts.obr.source] : []),
+              ...(prices ? [prices.latest.source, prices.obr.source] : []),
+            ]}
+          />
+        </section>
+      ) : null}
+
+      <h2 className="question">
+        Nobody knows what the economy will do by Budget day. Which forecast will you plan on?
+      </h2>
       {revealed ? (
         <p className="note" role="note">
           The OBR’s October forecast has arrived, so these are no longer yours to set. You planned
@@ -141,7 +239,7 @@ export function OutlookPage() {
       />
 
       <fieldset className="targets" disabled={revealed}>
-        <legend className="section-label">Headroom to keep</legend>
+        <legend className="question">How much headroom do you want to keep?</legend>
         <div className="targets__options" role="radiogroup" aria-label="Headroom target">
           {TARGETS.map((t) => (
             <label key={t.bn} className={`target${targetBn === t.bn ? ' target--picked' : ''}`}>
@@ -161,24 +259,24 @@ export function OutlookPage() {
         </div>
       </fieldset>
       <details className="more">
-        <summary>Why about £20bn?</summary>
-        <aside className="note more__body" aria-label="A rule of thumb from your advisers">
+        <summary>What is headroom?</summary>
+        <aside className="note more__body" aria-label="Headroom, explained by your advisers">
           <p>
             <span className="kicker">Chief Economic Adviser</span> <LabelBadge badge="simulated" />
           </p>
           <p>
-            Our rule of thumb: gilt markets get nervous below about £20bn of headroom. Nobody has
-            published that number; it is a judgement resting on published facts. Budget 2025 “more
-            than doubled” headroom to £21.7bn; the OBR’s typical five-year forecast error is about
-            £32bn; you told the Treasury Committee we would “retain a buffer”; the Resolution
-            Foundation put headroom near £10bn in July; and the Bank found this year’s gilt moves
-            “amplified by hedge fund deleveraging”. Whatever you pick, the OBR’s October forecast
-            will not know it.
+            Headroom is the gap between what the rules let you borrow and what the forecast says you
+            will borrow. It is your safety margin. In March it was {formatGbpBn(headroom, 1)}.
+            Forecasts move: over five years the OBR’s have been out by about{' '}
+            {formatGbpBn(typicalErrorGbpm, 0)} on average. Your advisers think the markets get
+            nervous below about {formatGbpBn(RULE_OF_THUMB_GBPM, 0)}. Nobody has published that
+            number: it is their judgement. Whatever you pick, the OBR’s October forecast will not
+            know it.
           </p>
           <SourceList
             refs={[
-              { sourceId: 'hmt-budget-2025-speech' },
               { sourceId: 'obr-efo-2026-03', paragraph: '3.4' },
+              { sourceId: 'hmt-budget-2025-speech' },
               { sourceId: 'hmt-tsc-budget-2026-letter' },
               { sourceId: 'rf-headroom-2026-07-21' },
               { sourceId: 'boe-fsr-2026-07' },
@@ -188,98 +286,64 @@ export function OutlookPage() {
         </aside>
       </details>
 
-      <details className="more">
-        <summary>See the numbers</summary>
-        <div className="more__body">
-          {context.decisionsSinceForecast.length > 0 ? (
-            <section className="panel" aria-labelledby="since-heading">
-              <h3 id="since-heading" className="section-label">
-                Decided since March
+      <WorkingsOnly>
+        <details className="more">
+          <summary>Set your own figures</summary>
+          <div className="more__body">
+            <section className="panel" aria-labelledby="own-heading">
+              <h3 id="own-heading" className="section-label">
+                The three sliders behind the cards
               </h3>
-              <TableScroll label="Decisions since March">
+              <p className="panel__hint">Each is set from a reading; move it if you know better.</p>
+              <div className="readings">
+                {context.readings.map((r) => {
+                  const lever = r.leverCode
+                    ? levers.find((l) => l.code === r.leverCode)
+                    : undefined;
+                  if (!lever) return null;
+                  return (
+                    <AssumptionReading
+                      key={r.id}
+                      reading={r}
+                      lever={lever}
+                      value={state.leverValues[lever.code] ?? lever.control.default}
+                      effect={outcome.leverEffects.find((e) => e.code === lever.code)}
+                      summaryYear={targetYear}
+                      onChange={(value) => {
+                        if (!revealed) dispatch({ type: 'setLever', code: lever.code, value });
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </section>
+            <section className="panel" aria-labelledby="also-heading">
+              <h3 id="also-heading" className="section-label">
+                Also changed since March
+              </h3>
+              <TableScroll label="Also changed since March">
                 <table className="measures">
-                  <caption>
-                    On the government’s own figures, not yet certified by the OBR. Each was paid for
-                    by moving money; none used March’s headroom.
-                  </caption>
                   <thead>
                     <tr>
-                      <th scope="col">Decision</th>
-                      <th scope="col">Cost</th>
-                      <th scope="col">Paid for by</th>
+                      <th>Reading</th>
+                      <th>OBR in March</th>
+                      <th>Latest</th>
+                      <th>Source</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {context.decisionsSinceForecast.map((d) => (
-                      <tr key={d.id}>
-                        <th scope="row">{d.title}</th>
-                        <td className="amount">
-                          {formatGbpBn(Math.abs(d.amountGbpm), 1)}
-                          <span className="source"> {d.year}</span>
-                        </td>
-                        <td>
-                          {d.paidFor} <SourceList as="span" refs={d.sources} />
-                        </td>
-                      </tr>
-                    ))}
+                    {context.readings
+                      .filter((r) => !r.leverCode)
+                      .map((r) => (
+                        <ContextRow key={r.id} reading={r} />
+                      ))}
                   </tbody>
                 </table>
               </TableScroll>
             </section>
-          ) : null}
-          <section className="panel" aria-labelledby="also-heading">
-            <h3 id="also-heading" className="section-label">
-              Also changed since March
-            </h3>
-            <TableScroll label="Also changed since March">
-              <table className="measures">
-                <thead>
-                  <tr>
-                    <th>Reading</th>
-                    <th>OBR in March</th>
-                    <th>Latest</th>
-                    <th>Source</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {context.readings
-                    .filter((r) => !r.leverCode)
-                    .map((r) => (
-                      <ContextRow key={r.id} reading={r} />
-                    ))}
-                </tbody>
-              </table>
-            </TableScroll>
-          </section>
-          <section className="panel" aria-labelledby="own-heading">
-            <h3 id="own-heading" className="section-label">
-              Set your own figures
-            </h3>
-            <p className="panel__hint">
-              The three sliders behind the cards, with the reading each one is set from.
-            </p>
-            <div className="readings">
-              {context.readings.map((r) => {
-                const lever = r.leverCode ? levers.find((l) => l.code === r.leverCode) : undefined;
-                if (!lever) return null;
-                return (
-                  <AssumptionReading
-                    key={r.id}
-                    reading={r}
-                    lever={lever}
-                    value={state.leverValues[lever.code] ?? lever.control.default}
-                    effect={outcome.leverEffects.find((e) => e.code === lever.code)}
-                    summaryYear={targetYear}
-                    onChange={(value) => {
-                      if (!revealed) dispatch({ type: 'setLever', code: lever.code, value });
-                    }}
-                  />
-                );
-              })}
-            </div>
-          </section>
-        </div>
-      </details>
+          </div>
+        </details>
+      </WorkingsOnly>
 
       <p className="actions">
         <button type="button" className="btn btn--primary" onClick={confirm}>

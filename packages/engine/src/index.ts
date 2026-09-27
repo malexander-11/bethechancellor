@@ -73,6 +73,7 @@ export * from './game/options.js';
 export * from './game/households.js';
 export * from './game/speech.js';
 export * from './game/verdict.js';
+export * from './game/theme.js';
 export { applyRevision } from './calc/spine.js';
 export { costLever, effectiveStartYear } from './costing/index.js';
 export {

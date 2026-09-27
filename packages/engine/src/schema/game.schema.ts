@@ -120,8 +120,6 @@ export const promiseSchema = z.strictObject({
 export const pmFileSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
-    /** What the PM has already done, said before asking for anything. Every fact sourced. */
-    opening: z.array(simulatedLineSchema).min(1),
     /** What this Budget could be for; the Chancellor ranks up to three. */
     priorities: z.array(prioritySchema).min(6).max(10),
     promises: z.array(promiseSchema).min(1),

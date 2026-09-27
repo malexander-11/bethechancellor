@@ -1,40 +1,5 @@
 {
   "schemaVersion": 1,
-  "opening": [
-    {
-      "text": "Before what I want, what we have done. VAT came off electricity bills on 1 October: about £45 a year off a price-cap bill, £850 million a year, paid for by cancelling Digital ID.",
-      "sources": [
-        {
-          "sourceId": "govuk-vat-electricity-cut-2026"
-        }
-      ],
-      "badge": "simulated"
-    },
-    {
-      "text": "Bus fares are capped at £2 across England outside London for all of 2027, £400 million from the energy department’s budget, and disabled bus passes work at any hour from April. None of it is in your Budget.",
-      "sources": [
-        {
-          "sourceId": "govuk-bus-fare-cap-2027"
-        },
-        {
-          "sourceId": "govuk-disabled-bus-travel-2026"
-        }
-      ],
-      "badge": "simulated"
-    },
-    {
-      "text": "Now the Budget. I told the House our approach would be grounded in fiscal responsibility, and I meant it. But this government exists to put life’s essentials back under public control. What kind of Budget is this?",
-      "sources": [
-        {
-          "sourceId": "no10-commons-statement-2026-09-01"
-        },
-        {
-          "sourceId": "no10-first-speech-2026-07-20"
-        }
-      ],
-      "badge": "simulated"
-    }
-  ],
   "priorities": [
     {
       "id": "cost-of-living",

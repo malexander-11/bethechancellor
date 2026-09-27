@@ -892,12 +892,16 @@ Budget means. The rules that hold every screen to the same shape:
   review's "Change" links all land on a screen with every choice intact, because the Budget lives in
   the query string (§10). `/review` is an alias of the rabbit stage, so no `st.` index moved and
   every shared link still decodes. Arriving on Budget day marks the game finished.
-- **Detail expands in place.** "See the numbers" (the since-March table and the sliders on the starting position; the economy
-  and costings tables on the forecast), "More policies", "The morning papers", the stress test,
+- **Detail expands in place.** "More policies", "The morning papers", the stress test,
   "Read the speech", "Who feels it" and "Budget documents" are `details` elements, closed on
   arrival, keyboard-openable, and they never hold a badge or a figure the visible screen relies on.
   ("Why this matters", the guide's reasons and glossary list, went on 2026-09-27: the guide says
-  what to do, and the two words a newcomer must know are explained where they are used.)
+  what to do, and the two words a newcomer must know are explained where they are used. "See the
+  numbers" and "Why about £20bn?" went the same day: the starting position says in words what has
+  been promised since March and what has cut the headroom, asks its two questions outright and
+  explains headroom under "What is headroom?"; the sliders and the forecast's tables sit behind
+  the Show workings switch; the priorities screen writes the theme of the Budget from the ranking
+  in place of the Prime Minister's opening lines.)
 - **The score stays in view.** A slim sticky bar on the building, compromise, add-on and review
   screens reads the engine's headroom in the target year against the margin the player set, the
   priorities delivered, the promises kept and the rules met; a card's "leaves £X" is the figure the

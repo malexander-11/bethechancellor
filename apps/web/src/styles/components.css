@@ -197,6 +197,85 @@
   line-height: 1.5;
 }
 
+/* ------------------------------------------------------- the questions */
+
+/* A question a screen turns on, as the heading above its choices (Phase 23). */
+.question {
+  max-width: 40em;
+  margin: 28px 0 8px;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+legend.question {
+  padding: 0;
+}
+
+/* The Treasury's one line on the rules, and the rules in full in the fold beneath it. */
+.brief__rules {
+  max-width: 44em;
+  margin: 16px 0 0;
+  line-height: 1.5;
+}
+
+.rules-key {
+  display: grid;
+  gap: 8px;
+}
+
+.rules-key dt {
+  font-weight: 600;
+}
+
+.rules-key dd {
+  margin: 0;
+}
+
+/* Since March: the promises made, and what has cut the headroom. */
+.since p {
+  max-width: 44em;
+  margin: 0 0 8px;
+}
+
+.since__list {
+  margin: 0 0 8px;
+  padding-left: 1.2em;
+}
+
+.since__list li {
+  margin: 0 0 4px;
+}
+
+/* The theme of the Budget, written from the ranking (Phase 23). */
+.theme {
+  margin: 0 0 16px;
+  padding: 12px 0 12px 14px;
+  border-left: 3px solid var(--accent);
+}
+
+.theme__title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.theme__line {
+  max-width: 44em;
+  margin: 0;
+  color: var(--ink-2);
+}
+
+/* How the forecast was made, in one visible line under the two that say what it did. */
+.reveal__note {
+  margin: 12px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
 /* ------------------------------------------------------------ the opening */
 
 .opening {

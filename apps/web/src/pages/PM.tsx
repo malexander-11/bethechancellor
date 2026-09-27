@@ -1,4 +1,4 @@
-import { MAX_PRIORITIES, rankedPriorities, stageIndex } from '@btc/engine';
+import { budgetTheme, MAX_PRIORITIES, rankedPriorities, stageIndex } from '@btc/engine';
 import { Spoken } from '../components/Conversation';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { SourceList } from '../components/SourceLink';
@@ -11,12 +11,13 @@ import { useBudget } from '../state/budget';
 const RANK = ['1st', '2nd', '3rd'];
 
 /**
- * Step 3: set your priorities. One screen: the eight priorities as cards, ticked in the order
- * they matter, the Prime Minister reacting to each; what the PM has already done and the
- * manifesto's red lines fold open beneath. Nothing is funded here: the ways to deliver each
- * priority come next, costed one by one, and the ways to pay after that. The manifesto is not up
- * for negotiation here or anywhere: every option that crosses a red line says so, and Budget day
- * judges it. Every PM line is simulated and says so (ADR-0011).
+ * Step 3: set your priorities. One screen: the theme of the Budget, written by the game from the
+ * ranking as it is made (what the Comms team will tell voters, and what the advisers will suggest
+ * ways to deliver); the eight priorities as cards, ticked in the order they matter, the Prime
+ * Minister reacting to each; the manifesto's promises one fold away. Nothing is funded here: the
+ * ways to deliver each priority come next, costed one by one, and the ways to pay after that. The
+ * manifesto is not up for negotiation here or anywhere: every option that crosses a promise says
+ * so, and Budget day judges it. Every PM line is simulated and says so (ADR-0011).
  */
 export function PMPage() {
   const { state, dispatch } = useBudget();
@@ -27,6 +28,7 @@ export function PMPage() {
   if (guard || !game) return guard;
 
   const ranked = rankedPriorities(game, pm);
+  const theme = budgetTheme(pm, game.priorities);
   const rankOf = (id: string) => ranked.findIndex((p) => p.id === id);
   const full = ranked.length >= MAX_PRIORITIES;
   const toggle = (id: string) => {
@@ -44,14 +46,22 @@ export function PMPage() {
 
   return (
     <JourneyLayout step="pm">
-      <details className="more">
-        <summary>What the Prime Minister has already done</summary>
-        <div className="more__body">
-          {pm.opening.map((line, i) => (
-            <Spoken key={i} line={line} who="The Prime Minister" />
-          ))}
-        </div>
-      </details>
+      <section className="theme" aria-labelledby="theme-heading">
+        <h2 id="theme-heading" className="section-label">
+          The theme of this Budget
+        </h2>
+        {theme ? (
+          <>
+            <p className="theme__title">{theme}</p>
+            <p className="theme__line">
+              The Comms team will explain the Budget to voters this way. Your advisers will suggest
+              ways to deliver it.
+            </p>
+          </>
+        ) : (
+          <p className="theme__line">The theme is written from what you tick.</p>
+        )}
+      </section>
       <ul className="choices choices--list" role="group" aria-label="The Budget’s priorities">
         {pm.priorities.map((p) => {
           const rank = rankOf(p.id);
@@ -81,11 +91,11 @@ export function PMPage() {
         })}
       </ul>
       <p className="redlines-line">
-        The <Term id="manifesto">manifesto</Term>’s red lines still apply.
+        The <Term id="manifesto">manifesto</Term>’s promises still apply.
       </p>
       <details className="more">
-        <summary>What the red lines are</summary>
-        <ul className="redlines more__body" aria-label="The manifesto red lines">
+        <summary>What the promises are</summary>
+        <ul className="redlines more__body" aria-label="The manifesto’s promises">
           {pm.promises.map((p) => (
             <li key={p.id}>
               <strong>{p.title}.</strong> {p.text}

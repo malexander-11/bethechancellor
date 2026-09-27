@@ -21,7 +21,7 @@ import { context, draws, levers, leversByCategory, pm, rules, vintage, options }
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { macroCodesOf, scenarioCards } from '../journey/scenarios';
-import { useWorkings } from '../journey/workings';
+import { WorkingsOnly } from '../journey/workings';
 import { IMPLEMENTATION_YEAR, permalinkQuery, useBudget } from '../state/budget';
 
 const CARDS = scenarioCards(context, levers, vintage);
@@ -43,7 +43,8 @@ const STATUS: Record<RuleVerdict['status'], { text: string; tone: string; icon: 
  * player confirmed their starting position (ADR-0012); opening it overwrites the macro sliders
  * with the OBR's figures and locks that step. The screen then says what changed in two lines,
  * the economy and the costings, what that leaves of the headroom against the target, and what it
- * does to the ambitions; the tables behind the two lines wait under "See the numbers". The state
+ * does to the ambitions; how the draw was made is said in one line, and the tables behind the two
+ * lines sit behind the workings switch. The state
  * of the game decides which of the two faces shows, so a link that lands here works either way.
  */
 export function ForecastPage() {
@@ -182,8 +183,8 @@ export function ForecastPage() {
 /**
  * The forecast taken apart: what the economy did and what the OBR made of the player's own
  * costings, each one line with the engine's figure; the bottom line against the target and the
- * rules; and what that leaves of the ambitions. The tables behind the lines, the story's sources
- * and the disclosure of how the draw was made are one fold away.
+ * rules; and what that leaves of the ambitions. How the draw was made is one visible line with the
+ * seed; the tables behind the lines, the story's sources and the disclosure in full are workings.
  */
 function ForecastReveal({
   decomposition,
@@ -204,7 +205,6 @@ function ForecastReveal({
   replay: string;
   onward: () => void;
 }) {
-  const workings = useWorkings();
   const d = decomposition;
   const year = d.targetYear;
   const revised = revisedMeasures(d.revised, year);
@@ -253,16 +253,23 @@ function ForecastReveal({
           </strong>
           <LabelBadge badge="simulated" />
         </p>
-        <details className="more">
-          <summary>See the numbers</summary>
-          <div className="more__body">
+        <p className="reveal__note">
+          <LabelBadge badge="simulated" /> This forecast is a simulation: a draw from published
+          forecasts, weighted to the middle. Seed {game.seed}.{' '}
+          <a href={replay}>Replay these conditions</a>.
+        </p>
+        <WorkingsOnly>
+          <section className="panel" aria-labelledby="numbers-heading">
+            <h3 id="numbers-heading" className="section-label">
+              The numbers
+            </h3>
             <p>
               {revised.length === 0
                 ? 'The OBR certified every measure as you scored it.'
                 : `${revised.length} of your measures ${revised.length === 1 ? 'carries' : 'carry'} a caveat this outcome doubts.`}{' '}
               You planned on {planningName}.
             </p>
-            <h3 className="section-label">What happened to the economy</h3>
+            <h4 className="section-label">What happened to the economy</h4>
             <p>{draw.outcome.story.text}</p>
             <SourceList refs={draw.outcome.story.sources} />
             <TableScroll label="What happened to the economy">
@@ -282,9 +289,7 @@ function ForecastReveal({
                       <tr key={lever.code}>
                         <td>
                           {lever.shortTitle}
-                          {workings && setting ? (
-                            <span className="source"> {setting.workings}</span>
-                          ) : null}
+                          {setting ? <span className="source"> {setting.workings}</span> : null}
                         </td>
                         <td>as forecast</td>
                         <td>
@@ -312,7 +317,7 @@ function ForecastReveal({
               {formatGbpBn(d.headroom.planned, 1, d.headroom.planned < 0)}; on the OBR’s economy:{' '}
               {formatGbpBn(d.headroom.economy, 1, d.headroom.economy < 0)}.
             </p>
-            <h3 className="section-label">What happened to your measures</h3>
+            <h4 className="section-label">What happened to your measures</h4>
             {revised.length === 0 ? (
               <p>
                 The OBR certified every measure as you scored it. Nothing in your package carries a
@@ -326,7 +331,7 @@ function ForecastReveal({
                       <th>Measure</th>
                       <th>As you scored it, {year}</th>
                       <th>As the OBR scores it</th>
-                      {workings ? <th>Why</th> : null}
+                      <th>Why</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -340,13 +345,11 @@ function ForecastReveal({
                         <td className="amount">
                           <strong>{formatGbpBn(r.revisedGbpm, 1, true)}</strong>
                         </td>
-                        {workings ? (
-                          <td>
-                            <span className="source">
-                              <LabelBadge badge="simulated" /> {r.revision.note}
-                            </span>
-                          </td>
-                        ) : null}
+                        <td>
+                          <span className="source">
+                            <LabelBadge badge="simulated" /> {r.revision.note}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -360,11 +363,11 @@ function ForecastReveal({
               <p>{draws.disclosure}</p>
               <p className="source">
                 Seed {game.seed}: this outcome arrives in about {Math.round(odds * 100)} seeds in
-                100. <a href={replay}>Replay these conditions</a> with a fresh Budget.
+                100.
               </p>
             </aside>
-          </div>
-        </details>
+          </section>
+        </WorkingsOnly>
       </section>
 
       <section className="panel doc bottom-line" aria-labelledby="bottom-heading">

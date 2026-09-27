@@ -45,13 +45,13 @@ function screenWords(): number {
 /** Every screen of the main road, in order, with the game that renders it at its widest. */
 const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/', 40, GAME],
-  ['/outlook', 150, GAME],
-  ['/pm', 125, GAME],
+  ['/outlook', 335, GAME],
+  ['/pm', 155, GAME],
   ['/budget/deliver', 150, WIDEST],
   ['/budget/deliver/2', 150, WIDEST],
   ['/budget/deliver/3', 150, WIDEST],
   ['/budget/afford', 320, GAME],
-  ['/forecast', 100, GAME],
+  ['/forecast', 125, GAME],
   ['/compromise', 155, SHORT],
   ['/compromise', 120, GAME],
   ['/rabbit', 155, GAME],
@@ -79,10 +79,12 @@ describe('the word budgets', () => {
 
   it('keeps every screen of the main road inside its word budget', () => {
     // Measured on 2026-09-27 with the folds closed, after the words were halved (ADR-0023), and
-    // pinned with about a tenth to spare: the opening 30, the position 132, the priorities 109,
-    // the priority screens 80 to 125, paying for it 290 (the first three ways of each group on
-    // show), the forecast 91, the sums 140 and the room to spare 106, the add-ons 140, the review
-    // 98, Budget day 233.
+    // pinned with about a tenth to spare: the opening 27, the priority screens 80 to 125, paying
+    // for it 290 (the first three ways of each group on show), the sums 140 and the room to spare
+    // 106, the add-ons 140, the review 98, Budget day 233. Re-measured the same day after the
+    // starting position gained its rules line, its since-March account and its two questions,
+    // the priorities their theme, and the forecast its visible disclosure (Phase 23): the
+    // position 303, the priorities 138, the forecast 114.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();

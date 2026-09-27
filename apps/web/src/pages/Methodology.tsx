@@ -130,7 +130,7 @@ export function MethodologyPage() {
         both chosen; the desk of every lever sits one link behind the guided screens under
         &ldquo;More policies&rdquo; and returns to the screen that opened it (a sandbox with no game
         still walks the desk&rsquo;s two screens in sequence). Every screen opens with one heading
-        and one instruction, and the tables sit under &ldquo;See the numbers&rdquo;; the guide is
+        and one instruction, and the tables sit behind the Show workings switch; the guide is
         chrome, carries no badge and quotes no figure that is not sourced. The advisers, the Prime
         Minister and the ministers are roles, not people; a briefing that cites a public document is
         labelled commentary, and a judgement nobody published is labelled simulated and never
