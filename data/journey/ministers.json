@@ -768,7 +768,7 @@
           },
           "line": {
             "text": "There is no way to take money off this line except uprating or eligibility, and both need legislation and a fight.",
-            "short": "Only uprating or eligibility can take money off this line, and both need legislation and a fight.",
+            "short": "Only the yearly rise or who qualifies can cut this line, and both need legislation and a fight.",
             "sources": [
               {
                 "sourceId": "obr-efo-2026-03",
@@ -1221,7 +1221,7 @@
       "role": "Work and Pensions Secretary",
       "asking": {
         "text": "The triple lock gives pensioners 2.5% a year from 2027-28 on the OBR's forecast, above prices at 2.0% and earnings at 2.1% to 2.4%. Uprating by prices alone saves £2.7 billion by 2029-30, and takes it from every one of roughly 13 million pensioners, permanently. The earnings element is in statute: this needs an Act, not a Budget line.",
-        "short": "Prices-only uprating saves £2.7 billion by 2029-30, taken permanently from roughly 13 million pensioners. It needs an Act.",
+        "short": "Prices-only rises save £2.7 billion by 2029-30, taken for good from roughly 13 million pensioners.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",

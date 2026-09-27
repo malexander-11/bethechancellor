@@ -239,3 +239,12 @@ and 10m 07s, a midpoint of about nine minutes: an estimate from the rendered scr
 testing. `walk22.mjs` adds to the audits: at most one voice on a screen, no card note outside a
 fold, no gap line, no year hint, and a fold that opens and closes from the keyboard; it walks
 clean in light, dark and reduced-motion modes at 1300px and 360px.
+
+## Revision (2026-09-27, later): one voice, reversed on the option screens
+
+Phase 23 (ADR-0024) puts one adviser's line on every option card and takes the single voice off
+the top of the priority, pay-for-it and add-on screens. Rule 2 above ("one voice") therefore no
+longer holds on those three screens: the voice is per card, at most twelve words, badged and
+sourced, and nobody speaks above the cards. It still holds on every other screen of the road. The
+same phase makes the compromise step three screens, one question each, under the same stage, and
+retires the dark theme and the dateline; ADR-0024 records why.

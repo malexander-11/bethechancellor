@@ -58,9 +58,9 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/compromise', 65, GAME],
   ['/compromise/2', 50, GAME],
   ['/compromise/3', 55, GAME],
-  ['/rabbit', 260, GAME],
+  ['/rabbit', 275, GAME],
   ['/review', 115, GAME],
-  ['/budget-day', 265, GAME],
+  ['/budget-day', 225, GAME],
 ];
 
 describe('the word budgets', () => {
@@ -93,7 +93,8 @@ describe('the word budgets', () => {
     // of the option screens went: the priority screens 145 to 184, paying for it 536, the sums 147
     // and the room to spare 112, the add-ons 234, the review 105, Budget day 240. Then the
     // compromises became three screens, one question each: the sums 67, 73 and 43, the room to
-    // spare 57, 44 and 46.
+    // spare 57, 44 and 46; every reception band was cut to twenty words: Budget day 205; and the
+    // keep and go-further cards gained the Political Adviser's line: the add-ons 252.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();

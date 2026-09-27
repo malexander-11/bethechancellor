@@ -924,7 +924,8 @@ Budget means. The rules that hold every screen to the same shape:
   second screen of the sums is in its place.
 - **Half the words (ADR-0023, revised 2026-09-27).** Every screen of the road is one heading, one
   line of at most ten words, the choices and one button. One adviser or minister speaks on a
-  screen, in a short form of at most fourteen words, and every other simulated line folds; a card
+  screen, in a short form of at most fourteen words, and every other simulated line folds (from Phase 23 each option card carries its adviser's line
+  instead, and no voice sits at the top of those screens; §24); a card
   is its title, badge and figure, with the lever's headline and the proposer's line behind "More
   about this"; the bar says the headroom, the year and the target once, and a broken promise or a
   missed rule only when there is one; on Budget day each audience shows its rating and its
@@ -953,3 +954,44 @@ Budget means. The rules that hold every screen to the same shape:
   minute plus ten seconds a decision and three a screen change, once for everything visible (18
   minutes) and once for the skim a decision needs (11½ minutes); it is an estimate from the
   rendered screens, not user testing.
+
+## 24. Plain words, real questions, a guided repair (ADR-0024)
+
+- **The content rules.** A screen that asks for a choice asks it as a question, in the second
+  person, and the answer is the button. No sentence a player meets with the folds closed runs past
+  twenty words; everyday words for things, a term of art only where it is the name of the thing
+  and then explained in place. An option is named for what it does ("Put a penny on the basic
+  rate of income tax"). Nothing is for the player to discover: the fact a screen turns on is on the
+  screen, and folds hold detail, never the point. The badges read Official figure, Worked out,
+  Assumption, Commentary and Game judgement; their meanings and the honesty contract are unchanged.
+- **The chrome.** The header is the name of the game and the two reference pages; the footer is
+  the utility row (one line on the figures, the Show workings switch, the way to every lever,
+  Sources and licence, what the badges mean). The dark theme, the dateline and the countdown are
+  gone. The guide is a heading and one line per step.
+- **The starting position** briefs in three figures and one line on the rules, with the Charter's
+  words one fold away; says what has been promised since March and, honestly, what has cut the
+  headroom (dearer borrowing and higher inflation; the three promises moved money); asks two
+  questions outright, which forecast to plan on and how much headroom to keep, with "What is
+  headroom?" beneath. The sliders and the readings table are workings.
+- **The theme** of the Budget is written from the ranking by a pure helper ("A Budget for defence
+  and the cost of living") for the Comms team and the advisers, in place of the Prime Minister's
+  opening lines.
+- **Every option** has a plain title and one adviser's line of at most twelve words, badged Game
+  judgement and sourced, saying who proposed it and one judgement of cost and effect; a size word
+  is tested against the engine's own figure for the option (big at £5bn or more, small at £1bn or
+  less) and no line carries a figure. No adviser speaks at the top of an option screen.
+- **Amber.** A promise's `strains` list names the levers that keep its words and test its spirit
+  (the health and social care levy, the employer-side National Insurance levers, the new 50p rate).
+  The engine reports strains beside breaks all the way to the verdict; the cards and the desk show
+  an amber tag; the reception loses a point for a strain without pinning the public at the floor.
+  `rebellionRisk` weighs breaks only, a recorded follow-up.
+- **The compromises** are three screens, one question each, taxes first (§23 above): raise more
+  tax, spend less or later, keep less headroom; or, with room to spare, do more for the priorities,
+  ease off a tax rise, keep the extra headroom. The mood is read again on every screen.
+- **The readability test** (`apps/web/src/journey/readability.test.ts`) reads fifteen sets of
+  words a player meets with the folds closed and holds every sentence to twenty words and every
+  set to a Flesch-Kincaid grade of seven or below (measured between about 1 and about 7, ADR-0024).
+  The words test's jargon rule gained the words of the trade (outturn, consequentials, fiscal
+  mandate, deleveraging, uprating, incidence) and reads every visible set; every reception band is
+  twenty words or fewer. Word budgets and the playtime estimate are re-measured and recorded in
+  ADR-0024 (about ten minutes, an estimate, not user testing).

@@ -290,8 +290,12 @@ words, shown first with the full `text` one click behind. Every line a newcomer 
 has one when the line is over its budget, and the words test pins each kind: a minister's asking
 line and any band over eighteen words; the Prime Minister's briefs and reactions and the add-ons'
 framing lines twelve; the advisers' notes and the compromise routes fourteen; the verdicts' close
-and an option's line eighteen. A figure in the short line must be a figure in the long one, so
-the sources cover both (a test checks it). Rules for authoring one:
+and an option's line eighteen; an option's adviser line (`advice`) twelve, with no figure and a
+size word only where the engine's figure bears it out; every reception band twenty words in all
+(Phase 23). A figure in the short line must be a figure in the long one, so the sources cover both
+(a test checks it). A readability test reads every set a player meets with the folds closed: no
+sentence over twenty words, and a Flesch-Kincaid grade of seven or below per set (ADR-0024).
+Rules for authoring one:
 
 - **Never type a number the engine or a document did not produce.** A line may quote a published
   figure (with the source beside it) and the page may print an engine figure next to the line; the

@@ -22,7 +22,7 @@
               "id": "cut",
               "upTo": -5000,
               "points": -1,
-              "text": "Public services lose {abs} against the Spending Review. Unprotected budgets were already set to fall in real terms after 2028-29, and a cut on top lands on a service a minister will name.",
+              "text": "Public services lose {abs} against the Spending Review. A minister will name the service that pays.",
               "sources": [
                 {
                   "sourceId": "hmt-sr25-del-tables"
@@ -38,7 +38,7 @@
               "id": "steady",
               "upTo": 5000,
               "points": 0,
-              "text": "Public spending is about where the Spending Review left it ({value}). Nothing here to cheer, nothing to fight.",
+              "text": "Public spending is about where the Spending Review left it ({value}).",
               "sources": [
                 {
                   "sourceId": "hmt-sr25-del-tables"
@@ -49,7 +49,7 @@
             {
               "id": "more",
               "points": 1,
-              "text": "Public services get {abs} more than the Spending Review planned. Funding them is what the party came in to do, and the benches can see it.",
+              "text": "Public services get {abs} more than the Spending Review planned. That is what the party came in to do.",
               "sources": [
                 {
                   "sourceId": "hmt-sr25-del-tables"
@@ -72,7 +72,7 @@
               "id": "stand",
               "upTo": 0,
               "points": 0,
-              "text": "The welfare U-turns of last November stand. Ending the two-child limit was scored as lifting 450,000 children out of poverty, and the left of the party fought for it.",
+              "text": "Last November’s welfare U-turns stand. Ending the two-child limit was scored as lifting 450,000 children out of poverty.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-document"
@@ -87,7 +87,7 @@
               "id": "one",
               "upTo": 1,
               "points": -1,
-              "text": "A welfare cut the party fought to reverse is back. The Treasury’s own scorecard describes the two-child limit’s removal as lifting 450,000 children out of poverty; the argument of last year runs backwards.",
+              "text": "A welfare cut the party fought to reverse is back. Last year’s argument now runs backwards.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-document"
@@ -101,7 +101,7 @@
             {
               "id": "several",
               "points": -2,
-              "text": "More than one of last November’s welfare U-turns has been undone. The left of the party fought for each of them and will fight again.",
+              "text": "More than one of last November’s welfare U-turns is undone. The left of the party will fight again.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-document"
@@ -128,7 +128,7 @@
               "id": "cut",
               "upTo": -2000,
               "points": -1,
-              "text": "Benefits are cut by {abs} a year. Tackling inequality was the argument for this government; the benches will ask who this falls on.",
+              "text": "Benefits are cut by {abs} a year. The benches will ask who this falls on.",
               "sources": [
                 {
                   "sourceId": "dwp-benefit-expenditure-2026"
@@ -163,7 +163,7 @@
               "id": "broad",
               "upTo": -2000,
               "points": -1,
-              "text": "The new money comes mainly from everyone who earns or spends, from motorists and from duties, not from the top: {abs} net. The manifesto promised not to raise taxes on working people, and the benches remember.",
+              "text": "The new money comes mainly from everyone, motorists and duties, not the top: {abs} net. The benches remember the manifesto.",
               "sources": [
                 {
                   "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -186,7 +186,7 @@
             {
               "id": "top",
               "points": 1,
-              "text": "More is asked of the best-off, of wealth and of business than of everyone else: {abs} net. That is the Budget the benches wanted to see.",
+              "text": "More is asked of the best-off, wealth and business than of everyone else: {abs} net. The benches wanted this.",
               "sources": [
                 {
                   "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -209,7 +209,7 @@
               "id": "kept",
               "upTo": 0,
               "points": 0,
-              "text": "Every manifesto red line holds. MPs in marginal seats have nothing to explain on the doorstep, which is the outcome they wanted most.",
+              "text": "Every manifesto red line holds. MPs in marginal seats have nothing to explain on the doorstep.",
               "sources": [
                 {
                   "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -223,7 +223,7 @@
             {
               "id": "crossed",
               "points": -1,
-              "text": "A manifesto red line is crossed, and the words are on the record. The MPs who won narrowly will be asked about it first.",
+              "text": "A manifesto red line is crossed, and the words are on the record. Marginal-seat MPs will be asked first.",
               "sources": [
                 {
                   "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -249,7 +249,7 @@
               "id": "kept",
               "upTo": 0,
               "points": 0,
-              "text": "Nothing in this Budget tests the spirit of the pledge while keeping its words.",
+              "text": "Nothing here tests the pledge’s spirit while keeping its words.",
               "sources": [
                 {
                   "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -307,7 +307,7 @@
             {
               "id": "pulled",
               "points": -1,
-              "text": "A priority agreed in Downing Street has nothing behind it. The programme was set out in public in July and September, and No. 10 will read that before anyone else does.",
+              "text": "A priority agreed in Downing Street has nothing behind it. No. 10 will notice before anyone else.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
@@ -343,7 +343,7 @@
               "upTo": -1,
               "points": -2,
               "cap": 2,
-              "text": "The stability rule is missed: the current budget is not in surplus in the target year, and the OBR will say so on Budget day. The Bank attributes part of 2025’s higher long rates to concerns about fiscal sustainability.",
+              "text": "The stability rule is missed, and the OBR will say so on Budget day. Gilt investors read that first.",
               "sources": [
                 {
                   "sourceId": "hmt-charter-2025-autumn",
@@ -359,7 +359,7 @@
               "id": "thin",
               "upTo": 10000,
               "points": -1,
-              "text": "Headroom of {value} is below the ten billion that commentators called wafer-thin before the last Budget doubled it. The Bank found this year’s gilt moves amplified by hedge fund deleveraging: thin margins are noticed.",
+              "text": "Headroom of {value} is below the ten billion commentators called wafer-thin before the last Budget. Thin margins are noticed.",
               "sources": [
                 {
                   "sourceId": "ifg-healey-tax-budget-2026"
@@ -377,7 +377,7 @@
               "id": "modest",
               "upTo": 20000,
               "points": 0,
-              "text": "Headroom of {value}: less than March left, and smaller than the OBR’s typical five-year forecast error of about £32bn.",
+              "text": "Headroom of {value}: less than March left, and smaller than the OBR’s typical forecast error of about £32bn.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03",
@@ -389,7 +389,7 @@
             {
               "id": "ample",
               "points": 1,
-              "text": "Headroom of {value}, inside the twenty billion your advisers call comfortable: about what March left, and more than the last Budget did. The Chancellor’s letter to the Treasury Committee promised a buffer; this is one.",
+              "text": "Headroom of {value}, inside the twenty billion your advisers call comfortable: about what March left. A buffer, as promised.",
               "sources": [
                 {
                   "sourceId": "hmt-tsc-budget-2026-letter"
@@ -416,7 +416,7 @@
               "id": "less",
               "upTo": -5000,
               "points": 1,
-              "text": "Borrowing in the target year is {abs} lower than the forecast assumed: fewer gilts to sell into a market where ten-year yields were 5.35% against the 4.5% the OBR assumed.",
+              "text": "Borrowing in the target year is {abs} lower than forecast: fewer gilts to sell into a nervous market.",
               "sources": [
                 {
                   "sourceId": "boe-iadb-gilt-10y"
@@ -431,7 +431,7 @@
               "id": "flat",
               "upTo": 10000,
               "points": 0,
-              "text": "Borrowing is close to where the forecast had it ({value}). Yields at 5.35% against the OBR’s 4.5% assumption are a bigger fact than anything in this Budget.",
+              "text": "Borrowing is close to where the forecast had it ({value}). Yields at 5.35% against the OBR’s 4.5% matter more.",
               "sources": [
                 {
                   "sourceId": "boe-iadb-gilt-10y"
@@ -445,7 +445,7 @@
             {
               "id": "more",
               "points": -1,
-              "text": "Borrowing is {abs} higher than the forecast assumed: more gilts to sell where yields were already 5.35% against 4.5%. The OBR puts a point on rates at about £15bn a year of borrowing by 2030-31.",
+              "text": "Borrowing is {abs} higher than forecast: more gilts to sell where yields were already 5.35% against 4.5%.",
               "sources": [
                 {
                   "sourceId": "boe-iadb-gilt-10y"
@@ -472,7 +472,7 @@
               "id": "steady",
               "upTo": 0.5,
               "points": 0,
-              "text": "The tax take moves by {value}, against a forecast that already reaches 38.5% of GDP by 2030-31, which the OBR calls a historic high.",
+              "text": "The tax take moves by {value}. The forecast already reaches 38.5% of GDP by 2030-31, a historic high.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03"
@@ -483,7 +483,7 @@
             {
               "id": "higher",
               "points": -1,
-              "text": "The tax take rises by {value} on top of a level the OBR already calls a historic high: 38.5% of GDP by 2030-31, from 34.5% in 2024-25. Growth is the worry the City writes about first.",
+              "text": "The tax take rises by {value}, on top of 38.5% of GDP by 2030-31, already a historic high.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03"
@@ -506,7 +506,7 @@
               "id": "cut",
               "upTo": -2000,
               "points": -1,
-              "text": "Public investment is cut by {abs}. Investment scores against the debt rule, not the stability rule, and the framework was rewritten in 2024 so that it would not be the first thing cut to make a sum add up.",
+              "text": "Public investment is cut by {abs}. The 2024 rules were written so it would not be the first thing cut.",
               "sources": [
                 {
                   "sourceId": "hmt-strong-fiscal-framework-2024-10"
@@ -521,7 +521,7 @@
             {
               "id": "kept",
               "points": 0,
-              "text": "Public investment is {value} against the plan; the debt rule, not the stability rule, is where it counts.",
+              "text": "Public investment is {value} against the plan. It counts against the debt rule, not the stability rule.",
               "sources": [
                 {
                   "sourceId": "hmt-charter-2025-autumn",
@@ -557,7 +557,7 @@
             {
               "id": "missed",
               "points": -1,
-              "text": "Debt no longer falls in the target year: the investment rule is missed. A falling debt ratio is what gilt investors watch over the medium term, whatever a single year’s deficit does.",
+              "text": "Debt no longer falls in the target year: the investment rule is missed. Gilt investors watch the debt path.",
               "sources": [
                 {
                   "sourceId": "hmt-charter-2025-autumn",
@@ -584,7 +584,7 @@
               "id": "certified",
               "upTo": 0.4,
               "points": 0,
-              "text": "What improves the current budget rests mostly on HMRC rows and Treasury scorecard lines the OBR will certify without argument.",
+              "text": "What improves the current budget rests mostly on HMRC rows and Treasury lines the OBR will certify.",
               "sources": [
                 {
                   "sourceId": "osr-trr-review-2025-12"
@@ -595,7 +595,7 @@
             {
               "id": "doubted",
               "points": -1,
-              "text": "More than two-fifths of the yield rests on figures nobody certified: contested bases and static relief costs. HMRC says a relief’s cost is not the yield from removing it, and the OBR scores accordingly.",
+              "text": "More than two-fifths of the yield rests on figures nobody certified. HMRC says a relief’s cost is not a yield.",
               "sources": [
                 {
                   "sourceId": "hmrc-tax-reliefs-quality-report"
@@ -633,7 +633,7 @@
             {
               "id": "acknowledged",
               "points": -1,
-              "text": "You have said openly that a rule will be missed. The Charter allows suspension in an emergency or a significant shock judged by the OBR; a choice is neither.",
+              "text": "You have said openly that a rule will be missed. The Charter allows that only for a significant shock.",
               "sources": [
                 {
                   "sourceId": "hmt-charter-2025-autumn",
@@ -683,7 +683,7 @@
               "id": "broken",
               "points": -2,
               "cap": 1,
-              "text": "A manifesto promise has been broken. “We will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT” was the pledge on the doorstep. Nothing else in this Budget will be heard over that.",
+              "text": "A manifesto promise has been broken. The pledge was made on every doorstep, and nothing else will be heard.",
               "sources": [
                 {
                   "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -725,7 +725,7 @@
             {
               "id": "strained",
               "points": -1,
-              "text": "A promise kept in the words and tested in the spirit. People will notice a National Insurance rise by another name.",
+              "text": "A promise kept in the words and tested in the spirit. People notice a National Insurance rise by another name.",
               "sources": [
                 {
                   "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -776,7 +776,7 @@
             {
               "id": "all",
               "points": 2,
-              "text": "Two or more of the Budget’s priorities are backed by funded options: people can see what it was for.",
+              "text": "Two or more of the Budget’s priorities are funded. People can see what it was for.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
@@ -803,7 +803,7 @@
               "id": "no",
               "upTo": 4999,
               "points": 0,
-              "text": "There is no single story: more than one priority, an option adjusted back, or too little money behind the one priority.",
+              "text": "There is no single story: more than one priority, an option cut back, or too little money behind it.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
@@ -861,7 +861,7 @@
             {
               "id": "heavy",
               "points": -2,
-              "text": "Tax rises of {value} a year, on top of a tax take the OBR already calls a historic high: 38.5% of GDP by 2030-31.",
+              "text": "Tax rises of {value} a year, on top of a tax take already at a historic high.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03"
@@ -910,7 +910,7 @@
               "id": "pulled",
               "upTo": -1,
               "points": 1,
-              "text": "A surprise at the end of the speech, worth {abs} a year: the headline, at the cost of the headroom. The last Budget made headroom the headline instead.",
+              "text": "A surprise at the end of the speech, worth {abs} a year: the headline, at the cost of headroom.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-speech"

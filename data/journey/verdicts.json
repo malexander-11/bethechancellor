@@ -91,8 +91,8 @@
         "headroomThin": false
       },
       "line": {
-        "text": "The priorities are funded, the promises stand and the margin survives. Somebody paid for that, and the incidence table says who. It is the rarest kind of Budget because it is the hardest: it asks for the money before it spends it.",
-        "short": "The priorities are funded, the promises stand and the margin survives. The incidence table says who paid.",
+        "text": "The priorities are funded, the promises stand and the margin survives. Somebody paid for that, and the who-pays table says who. It is the rarest kind of Budget because it is the hardest: it asks for the money before it spends it.",
+        "short": "The priorities are funded, the promises stand and the margin survives. The who-pays table says who paid.",
         "sources": [
           {
             "sourceId": "hmt-budget-2025-speech"

@@ -4,7 +4,7 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 22 (half the words)**. You are appointed Chancellor in a Labour government
+Status: **Phase 23 (plain words, real questions, a guided repair)**. You are appointed Chancellor in a Labour government
 with a Budget to deliver on 28 October 2026, and the game walks you through it in seven steps with
 one clear action on every screen: become Chancellor; understand your starting position; set your
 priorities; build your Budget, one priority at a time and then paying for it; respond to the OBR's
@@ -14,23 +14,27 @@ button and a way back, and the Budget lives in the link, so going back keeps eve
 identity is Westminster's: Commons green, warm paper, charcoal, restrained brass, Budget red for the
 one button that delivers, and the page is set like an official paper: a serif body under editorial
 headings in Fraunces, hairline rules rather than boxes, small-capital labels, the Budget box on the
-opening. Every screen is one heading, one line, the choices and one button, with one adviser
-speaking and everything else one tap away. Every
-number still comes from an official source or a stated calculation on one, badged for what it is,
-and the sources and breakdowns sit behind a "Show workings" switch, off by default. A first
-playthrough's required reading and decisions come to about nine minutes (an estimate from the
-rendered screens, not user testing; ADR-0023). Every screen names itself, can be reached by
+opening. Every screen is one heading, one line, the choices and one button; every option carries
+its adviser's line, and everything else is one tap away. The words are plain (ADR-0024): a screen
+that asks for a choice asks it as a question, no sentence a player meets runs past twenty words,
+and a readability test holds every set of them at a reading age of about twelve. Every number
+still comes from an official source or a stated calculation on one, badged for what it is
+(Official figure, Worked out, Assumption, Commentary, Game judgement), and the sources and
+breakdowns sit behind a "Show workings" switch in the footer, off by default. A first
+playthrough's required reading and decisions come to about ten minutes (an estimate from the
+rendered screens, not user testing; ADR-0024). Every screen names itself, can be reached by
 keyboard and screen reader, holds 4.5:1 contrast, keeps every control at
 44px and says met or missed in words.
 
 Seven steps. **Become Chancellor**: one sentence, the playtime, the button. **Your starting
-position**: the Treasury's briefing in three figures (the room March left, borrowing costs against
-the OBR's assumption, borrowing so far), the four forecasts you might plan on with the headroom each
-leaves, and the margin you want to keep, with the decisions since March and the sliders under "See
-the numbers". **Set your priorities**: rank up to three of eight with the Prime Minister, who reacts
-to each; the promises are one fold away; nothing is funded yet. **Build your Budget**: one screen
-per priority, the minister who leads on it, its costed options priced against your Budget as it
-stands with the headroom each would leave, and a slim bar keeping score; then one screen to pay for
+position**: the Treasury's briefing in three figures and one line on the rules (the Charter's words
+one fold away), what has been promised since March and what has cut the headroom, then two
+questions: which forecast will you plan on, and how much headroom do you want to keep, with "What
+is headroom?" beneath; the sliders are workings. **Set your priorities**: rank up to three of eight with the Prime Minister, who reacts
+to each, and the game writes the theme of the Budget from the ranking; the promises are one fold
+away; nothing is funded yet. **Build your Budget**: one screen
+per priority, its costed options, each named for what it does and carrying its adviser's line,
+priced against your Budget as it stands with the headroom each would leave, and a slim bar keeping score; then one screen to pay for
 it, the twenty-six ways to raise money in five groups by who pays, each heading counting what its
 chosen options raise, the first three of each group on show and the rest a fold away. No two options share a lever, and two that count the same money cannot both
 be chosen. Behind them, one link away under "More policies", the desk: every lever wearing the
@@ -39,13 +43,12 @@ remember what you agreed, and the menu a Chancellor actually weighs: employer Na
 capital-tax reliefs, going further on recent rises, capital gains at death, a lower council tax
 surcharge band, the bank surcharge, the energy profits levy again, the self-employed rate, VAT off
 gas, another compliance package, business rates, the Prime Minister's schemes and defence at 3%
-sooner. **Respond to the forecast**: the OBR's forecast,
-fixed by a seeded draw the day you chose your starting position, opens on one button into what
-changed in two lines (the economy, and what the OBR made of your costings), the headroom before and
-after against your target, and the routes through the gap: more of the ways to pay, or what you
-chose to deliver started later, narrowed or dropped, a thinner margin, or a breach you sign for; or,
-with room to spare, the ways to use it: more for your priorities, a tax rise eased off, or the
-margin kept.
+sooner. **Respond to the forecast**: the OBR's forecast, fixed by a seeded draw the day you
+chose your starting position, opens on one button into what changed in two lines (the economy, and
+what the OBR made of your costings) and the headroom before and after against your target; then
+three questions, one a screen: will you raise more tax, will you spend less or later, will you keep
+less headroom (and, with a rule missed, borrow and say so); or, with room to spare, will you do more
+for your priorities, ease off a tax rise, keep the extra headroom.
 **Final choices**: up to three little announcements for the speech, then a review of the whole
 Budget with a way back to every part, and one red button. **What your Budget means**: the Budget in
 three sentences (what you prioritised, who pays, what you accepted), your backbenchers, the markets

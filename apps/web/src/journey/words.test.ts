@@ -1,11 +1,13 @@
 import { computeOutcome } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
+import { LEAD_MISSED, LEADS, NEXT, QUESTIONS } from '../pages/compromise/copy';
 import { TARGETS } from '../pages/Outlook';
 import {
   advisers,
   briefings,
   compromise,
   context,
+  draws,
   glossary,
   guide,
   interventions,
@@ -145,10 +147,29 @@ describe('word budgets: one line visible, the rest a click away', () => {
   });
 
   it('never uses Treasury shorthand in the lines a newcomer reads', () => {
-    const JARGON = /\b(RDEL|CDEL|PSNFL|PSNB|AME|accruals?|forestalling)\b/;
+    // The acronyms, and the words of the trade a newcomer would have to look up (Phase 23).
+    const ACRONYMS = /\b(RDEL|CDEL|PSNFL|PSNB|AME)\b/;
+    const TRADE =
+      /\b(accruals?|forestalling|outturns?|consequentials?|fiscal mandate|deleverag(?:ing|ed)|uprat(?:ing|ed)|incidence)\b/i;
+    const all = [...options.deliver, ...options.afford, ...options.addOns];
     const read: string[] = [
       ...guide.stages.map((s) => s.now),
-      ...Object.values(glossary.terms).map((t) => t.short),
+      ...guide.stages.map((s) => s.title),
+      ...all.map((o) => o.title),
+      ...all.map((o) => o.advice.text),
+      ...TARGETS.flatMap((t) => [t.label, t.say]),
+      ...QUESTIONS.sums,
+      ...QUESTIONS.room,
+      ...LEADS.sums,
+      ...LEADS.room,
+      LEAD_MISSED,
+      ...NEXT.sums,
+      ...NEXT.room,
+      ...pm.priorities.flatMap((p) => [p.title, p.purpose, p.reaction.short ?? p.reaction.text]),
+      ...draws.outcomes.flatMap((o) => [o.title, o.story.headline, o.clue.headline]),
+      ...verdicts.kinds.flatMap((k) => [k.title, k.line.short ?? k.line.text]),
+      ...interventions.interventions.map((x) => x.line.short ?? x.line.text),
+      ...reception.audiences.flatMap((a) => [a.title, a.question, ...a.labels]),
       ...briefings.briefings.map((b) => b.headline),
       ...ministers.ministers.flatMap((m) =>
         [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)].map(
@@ -158,8 +179,14 @@ describe('word budgets: one line visible, the rest a click away', () => {
       ...Object.values(compromise.routes).map((r) => r.line.text),
       ...reception.audiences.flatMap((a) => a.rules.flatMap((r) => r.bands.map((b) => b.text))),
     ];
-    expect(read.length).toBeGreaterThan(100);
-    for (const text of read) expect(text, text).not.toMatch(JARGON);
+    const defined = Object.values(glossary.terms).map((t) => t.short);
+    expect(read.length).toBeGreaterThan(300);
+    // A glossary entry may name the word it defines; nothing else on the road may.
+    for (const text of defined) expect(text, text).not.toMatch(ACRONYMS);
+    for (const text of read) {
+      expect(text, text).not.toMatch(ACRONYMS);
+      expect(text, text).not.toMatch(TRADE);
+    }
   });
 
   it('a step reads as a briefing, not a report', () => {

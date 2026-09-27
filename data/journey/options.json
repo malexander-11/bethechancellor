@@ -68,8 +68,8 @@
       "priority": "cost-of-living",
       "title": "Free school meals for every child",
       "line": {
-        "text": "It funds a place, not a meal eaten: a fifth of pupils already entitled did not take one on census day. England only; consequentials follow.",
-        "short": "It funds a place, not a meal eaten; England only, and consequentials follow.",
+        "text": "It funds a place, not a meal eaten: a fifth of pupils already entitled did not take one on census day. England only; the devolved nations get their share.",
+        "short": "It funds a place, not a meal eaten; England only, and the nations get their share.",
         "sources": [
           {
             "sourceId": "dfe-school-pupils-2025-26"

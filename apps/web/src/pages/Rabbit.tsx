@@ -37,8 +37,8 @@ interface Card {
   taken: boolean;
   line: SimulatedLine;
   who: string;
-  /** The adviser's line on the add-on (Phase 23); the "go further" cards have none. */
-  advice?: SimulatedLine & { adviser: string };
+  /** The adviser's line on the card (Phase 23): an add-on's own, or the Political Adviser's short line on going further. */
+  advice: SimulatedLine & { adviser: string };
 }
 
 /**
@@ -115,6 +115,11 @@ export function RabbitPage() {
         taken: false,
         line: rabbit.further.line,
         who: role(rabbit.further.adviser),
+        advice: {
+          ...rabbit.further.line,
+          text: rabbit.further.line.short ?? rabbit.further.line.text,
+          adviser: rabbit.further.adviser,
+        },
       });
       break;
     }
@@ -175,9 +180,7 @@ export function RabbitPage() {
               {...(blocked ? { blocked } : {})}
               line={card.line}
               who={card.who}
-              {...(card.advice
-                ? { advice: { who: role(card.advice.adviser), line: card.advice } }
-                : {})}
+              advice={{ who: role(card.advice.adviser), line: card.advice }}
               {...(card.taken ? { tag: 'already in your Budget' } : {})}
             >
               {card.levers
@@ -207,6 +210,16 @@ export function RabbitPage() {
               </span>
             </span>
           </label>
+          <p className="choice__advice">
+            <span className="kicker">{role(rabbit.keep.adviser)}</span>{' '}
+            <LabelBadge badge={rabbit.keep.line.badge} />{' '}
+            {rabbit.keep.line.short ?? rabbit.keep.line.text}
+            <SourceList
+              as="span"
+              className="choice__sources briefing__sources"
+              refs={rabbit.keep.line.sources}
+            />
+          </p>
           <details className="more more--quiet choice__more">
             <summary>More about this</summary>
             <div className="more__body">
