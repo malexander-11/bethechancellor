@@ -1,44 +1,20 @@
-import { psnbDirection } from '../costing/sensitivity.js';
-import type {
-  ContextFile,
-  ContextReading,
-  ContextScenario,
-  Lever,
-  ScenarioKind,
-  Vintage,
-} from '../types/data.js';
+import type { ContextReading, Lever } from '../types/data.js';
 
 /**
- * The four sets of economic assumptions a player chooses between, and where each number came from.
+ * Today's estimate (Phase 24, ADR-0025): the economic settings every game plans on, and where each
+ * number came from.
  *
- * Nothing here is authored. A card's settings are computed from the published rows in the context
- * file by one stated rule per card, so tampering with a row moves the card and a test catches it.
- * That is the same discipline every costing in the tool is held to; the words on a card are
- * authored, its numbers never are. This lives in the engine rather than the web app because the
- * in-game OBR draw (ADR-0012) chooses among the same candidates.
+ * Nothing here is authored. Each setting is the advisers' stated rule applied to a published
+ * reading in the context file (the latest figure less the OBR's March one, rounded to the slider's
+ * step), so tampering with a reading moves the estimate and a test catches it. That is the same
+ * discipline every costing in the tool is held to. The four forecast cards the rule once shared
+ * (ADR-0010) and the seeded OBR draw (ADR-0012) retired with Phase 24.
  */
 
 export interface Suggestion {
   value: number;
   rationale: string;
   rule: 'gap' | 'authored';
-}
-
-/** Which published figure a slider takes: the OBR's path, the adviser's reading, or a range row. */
-export type MacroCandidate = 'obr' | 'adviser' | 'lowest' | 'highest';
-
-export interface ScenarioSetting {
-  leverCode: string;
-  value: number;
-  /** Where this number came from, in one sentence. */
-  workings: string;
-  /** Said plainly when the published range is on a different footing from the reading above it. */
-  note?: string;
-}
-
-export interface ScenarioCard extends ContextScenario {
-  values: Record<string, number>;
-  settings: ScenarioSetting[];
 }
 
 type ReadingValue = ContextReading['obr'];
@@ -131,120 +107,6 @@ export function macroCodesOf(readings: readonly ContextReading[]): string[] {
   return readings.map((r) => r.leverCode).filter((c): c is string => !!c);
 }
 
-function listSeries(series: Record<string, number>, unit: ContextReading['unit']): string {
-  return Object.entries(series)
-    .map(([year, v]) => `${year} ${formatReading(v, unit, 2)}`)
-    .join(', ');
-}
-
-/**
- * Every setting for one slider that the committed data can justify, by name, with its workings.
- * `obr` is always present; the rest depend on what the reading carries.
- */
-export function candidatesFor(
-  reading: ContextReading,
-  lever: Lever,
-): Partial<Record<MacroCandidate, ScenarioSetting>> & { obr: ScenarioSetting } {
-  const out: Partial<Record<MacroCandidate, ScenarioSetting>> & { obr: ScenarioSetting } = {
-    obr: {
-      leverCode: lever.code,
-      value: lever.control.default,
-      workings: 'The OBR’s own March assumption, left as it is.',
-    },
-  };
-  const adviser = suggestSetting(reading, lever);
-  if (adviser) {
-    out.adviser = { leverCode: lever.code, value: adviser.value, workings: adviser.rationale };
-  }
-  const alt = reading.alternatives;
-  if (alt) {
-    for (const [name, row] of [
-      ['lowest', alt.lowest],
-      ['highest', alt.highest],
-    ] as const) {
-      const gap = meanSeriesGap(row.series, alt.against.series);
-      if (gap === null) continue;
-      out[name] = {
-        leverCode: lever.code,
-        value: toSliderValue(lever, gap),
-        workings: `${row.label}: ${listSeries(row.series, reading.unit)}, against ${alt.against.label} of ${listSeries(alt.against.series, reading.unit)}. An average gap of ${gap.toFixed(2)} points, rounded to the slider’s ${lever.control.step} step${wouldClamp(lever, gap) ? ' and clamped to its range' : ''}.`,
-        note: alt.note,
-      };
-    }
-  }
-  return out;
-}
-
-const NO_RANGE =
-  'No published range in the comparison reaches this slider, so it stays on the OBR’s path.';
-
-/**
- * One slider under one card.
- *
- * The two analysts do not read one row of one table. They pick, out of every published figure this
- * slider has, the one that is kindest or cruellest to the public finances — and the OBR's own
- * assumption and the adviser's reading are both in that pool. That is what makes the cards come
- * out ordered: the pessimist is by construction at least as harmful as the baseline and at least
- * as harmful as the adviser on every slider, so it can never leave more headroom than either.
- *
- * Which direction is harmful comes from the sign of the OBR's own sensitivity for the lever, so
- * nothing about it is authored here. See ADR-0010.
- */
-function settingFor(
-  reading: ContextReading,
-  lever: Lever,
-  kind: ScenarioKind,
-  direction: 1 | -1,
-): ScenarioSetting | null {
-  const candidates = candidatesFor(reading, lever);
-  if (kind === 'baseline') return candidates.obr;
-  if (kind === 'adviser') return candidates.adviser ?? null;
-  const worst = kind === 'pessimistic';
-  let best: ScenarioSetting = candidates.obr;
-  for (const c of Object.values(candidates)) {
-    if (!c) continue;
-    const better = worst
-      ? direction * c.value > direction * best.value
-      : direction * c.value < direction * best.value;
-    if (better) best = c;
-  }
-  if (best.value === lever.control.default && !reading.alternatives) {
-    return { ...best, workings: NO_RANGE };
-  }
-  return best;
-}
-
-/** The lever a reading drives, if it is a sensitivity lever the engine can orient. */
-export function macroLeverFor(
-  reading: ContextReading,
-  levers: readonly Lever[],
-): (Lever & { costing: { kind: 'sensitivity'; sensitivityId: string } }) | undefined {
-  if (!reading.leverCode) return undefined;
-  const lever = levers.find((l) => l.code === reading.leverCode);
-  if (!lever || lever.costing.kind !== 'sensitivity') return undefined;
-  return lever as Lever & { costing: { kind: 'sensitivity'; sensitivityId: string } };
-}
-
-/** The cards as authored, each with the settings its rule produces. */
-export function scenarioCards(
-  context: ContextFile,
-  levers: readonly Lever[],
-  vintage: Vintage,
-): ScenarioCard[] {
-  return (context.scenarios ?? []).map((scenario) => {
-    const settings: ScenarioSetting[] = [];
-    for (const reading of context.readings) {
-      const lever = macroLeverFor(reading, levers);
-      if (!lever) continue;
-      const direction = psnbDirection(vintage, lever.costing.sensitivityId);
-      const setting = settingFor(reading, lever, scenario.kind, direction);
-      if (setting) settings.push(setting);
-    }
-    const values = Object.fromEntries(settings.map((s) => [s.leverCode, s.value]));
-    return { ...scenario, settings, values };
-  });
-}
-
 /** Two sets of lever values are the same budget when every code they mention agrees. */
 export function sameValues(a: Record<string, number>, b: Record<string, number>): boolean {
   const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
@@ -260,20 +122,6 @@ export function pick(
   const out: Record<string, number> = {};
   for (const code of codes) if (values[code] !== undefined) out[code] = values[code] as number;
   return out;
-}
-
-/**
- * Which card the player is on, or null for a budget that matches none of them — a permalink with
- * hand-set sliders, which the step shows as "your own figures" rather than pretending it is one of
- * the four.
- */
-export function matchScenario(
-  cards: readonly ScenarioCard[],
-  leverValues: Record<string, number>,
-  codes: readonly string[],
-): ScenarioKind | null {
-  const current = pick(leverValues, codes);
-  return cards.find((card) => sameValues(pick(card.values, codes), current))?.kind ?? null;
 }
 
 /**

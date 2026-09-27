@@ -1,6 +1,7 @@
 import {
   ambitionStatus,
   blockedBy,
+  finetuneItems,
   optionConflicts,
   optionEarliestStart,
   optionOff,
@@ -16,7 +17,7 @@ import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { MinisterLine } from '../components/MinisterLine';
 import { OptionCard } from '../components/OptionCard';
-import { adviserById, levers, options, pm } from '../data';
+import { adviserById, finetune, levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { useOptionPrices } from '../journey/prices';
@@ -24,6 +25,8 @@ import { useBudget } from '../state/budget';
 
 const RANK = ['1st', '2nd', '3rd'];
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
+/** The levers step 4 puts on show: a card may name one of them as a partner before it moves. */
+const OFFERED: ReadonlySet<string> = new Set(finetuneItems(finetune).map((i) => i.code));
 
 /** The route of the n-th priority's screen (1-based): the first has the bare route. */
 export function deliverPath(n: number): string {
@@ -132,7 +135,7 @@ export function DeliverPage() {
               onChange={(on) => choose(option, on)}
               redLines={optionRedLines(option, pm.promises, levers, state.leverValues)}
               earliestStart={optionEarliestStart(option, levers)}
-              overlaps={optionOverlaps(option, levers, moved, options)}
+              overlaps={optionOverlaps(option, levers, moved, options, OFFERED)}
               {...(blocked ? { blocked } : {})}
               clashes={clashes}
               line={option.line}

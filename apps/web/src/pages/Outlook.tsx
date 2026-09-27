@@ -1,17 +1,10 @@
-import {
-  AMPLE_HEADROOM_GBPM,
-  formatGbpBn,
-  stageIndex,
-  type ContextReading,
-  type Lever,
-} from '@btc/engine';
+import { AMPLE_HEADROOM_GBPM, formatGbpBn, stageIndex, type ContextReading } from '@btc/engine';
 import { useNavigate } from 'react-router-dom';
-import { summariseReading } from '../components/AssumptionsTable';
+import { EstimateRow, summariseReading } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
-import { formatLeverValue } from '../components/LeverControl';
 import { Papers } from '../components/Motifs';
-import { SourceLink, SourceList } from '../components/SourceLink';
+import { SourceList } from '../components/SourceLink';
 import { TableScroll } from '../components/TableScroll';
 import { Term } from '../components/Term';
 import { ESTIMATE, context, levers, rules, vintage } from '../data';
@@ -267,25 +260,5 @@ export function OutlookPage() {
         </StepLink>
       </p>
     </JourneyLayout>
-  );
-}
-
-/** One reading, and the setting the estimate takes from it (none for a reading kept as context). */
-function EstimateRow({ reading, lever }: { reading: ContextReading; lever?: Lever }) {
-  const s = lever ? suggestSetting(reading, lever) : null;
-  const setting =
-    lever && s
-      ? `${formatLeverValue(lever, s.value)}${s.value === lever.control.default ? ' (the OBR’s path)' : ''}`
-      : 'Context only';
-  return (
-    <tr>
-      <th scope="row">{reading.title}</th>
-      <td>{summariseReading(reading.obr, reading.unit)}</td>
-      <td>{summariseReading(reading.latest, reading.unit)}</td>
-      <td>{setting}</td>
-      <td className="source">
-        <SourceLink ref={reading.latest.source} />
-      </td>
-    </tr>
   );
 }

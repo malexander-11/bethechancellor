@@ -5,6 +5,7 @@ import {
   enterable,
   freshGame,
   furthestStep,
+  journeyStepSchema,
   stageIndex,
 } from '../src/index.js';
 
@@ -32,11 +33,10 @@ describe('the road through the game (Phase 24: six steps)', () => {
     expect(enterable('review', game(4))).toBe(true);
   });
 
-  it('reads the steps Phase 24 retired as the stage that took their place', () => {
-    expect(stageIndex('afford')).toBe(stageIndex('finetune'));
-    expect(stageIndex('forecast')).toBe(stageIndex('review'));
-    expect(stageIndex('compromise')).toBe(stageIndex('review'));
-    expect(stageIndex('rabbit')).toBe(stageIndex('review'));
+  it('has no step for what Phase 24 retired: their old addresses open the review', () => {
+    for (const step of ['afford', 'forecast', 'compromise', 'rabbit']) {
+      expect(journeyStepSchema.safeParse(step).success, step).toBe(false);
+    }
   });
 
   it('opens Budget day from the review, because reached only becomes final on delivering', () => {

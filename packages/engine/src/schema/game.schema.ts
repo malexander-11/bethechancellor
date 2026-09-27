@@ -5,8 +5,8 @@ import { sourceRefSchema } from './provenance.schema.js';
 /**
  * The game layer (ADR-0011, ADR-0012). Everything in these files is a judgement nobody published,
  * so every item carries `badge: 'simulated'` as a literal: no text can pretend to be a costing.
- * Numbers are never authored here; where a file names a figure it names a *published candidate*
- * (`obr`, `adviser`, `lowest`, `highest`) or a *consideration id*, and the engine derives the value.
+ * Numbers are never authored here: where a line needs a figure the engine derives it and fills it
+ * in.
  */
 
 const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
@@ -24,54 +24,6 @@ export const simulatedLineSchema = z.strictObject({
   sources: z.array(sourceRefSchema).default([]),
   badge: simulatedBadgeSchema,
 });
-
-/**
- * Which published figure a slider takes in a draw. `obr` is the March path, `adviser` is the
- * suggestion rule (today's gap, or the authored value), `lowest`/`highest` are the rows of HM
- * Treasury's comparison the context file carries. The value is derived, never typed.
- */
-export const macroCandidateSchema = z.enum(['obr', 'adviser', 'lowest', 'highest']);
-
-/**
- * A revision the in-game OBR applies to any lever carrying the named consideration. The
- * consideration is the source: a lever without a sourced uncertainty caveat is never re-scored.
- */
-export const drawRevisionSchema = z.strictObject({
-  considerationId: slug,
-  factor: z.number().min(0).max(1.5),
-  note: z.string().min(1),
-});
-
-export const drawOutcomeSchema = z.strictObject({
-  id: slug,
-  title: z.string().min(1),
-  weight: z.number().int().positive(),
-  macro: z.record(z.string(), macroCandidateSchema),
-  story: simulatedLineSchema.extend({ headline: z.string().min(1).max(160) }),
-  /** What the Political Adviser's press summary says in stage 3: the foreshadowing. */
-  clue: simulatedLineSchema.extend({ headline: z.string().min(1).max(120) }),
-  revisions: z.array(drawRevisionSchema),
-});
-
-export const drawsFileSchema = z
-  .strictObject({
-    schemaVersion: z.literal(1),
-    /** The honesty text shown under the envelope. */
-    disclosure: z.string().min(1),
-    outcomes: z.array(drawOutcomeSchema).min(2),
-  })
-  .superRefine((file, ctx) => {
-    const ids = new Set<string>();
-    file.outcomes.forEach((o, i) => {
-      if (ids.has(o.id))
-        ctx.addIssue({
-          code: 'custom',
-          message: `duplicate outcome ${o.id}`,
-          path: ['outcomes', i, 'id'],
-        });
-      ids.add(o.id);
-    });
-  });
 
 /* ------------------------------------------------------------------ the PM */
 
@@ -205,42 +157,15 @@ export const deliverOptionSchema = z.strictObject({
   conflicts: z.array(optionConflictSchema).min(1).optional(),
 });
 
-/**
- * A way to pay for it: a plain title saying what it does ("Put a penny on the basic rate of income
- * tax"), the lever, and the adviser's line; the lever's own headline is folded on the card.
- */
-export const affordOptionSchema = z.strictObject({
-  id: slug,
-  title: z.string().min(1).max(80),
-  values: optionBundleSchema,
-  advice: optionAdviceSchema,
-  line: simulatedLineSchema.optional(),
-  conflicts: z.array(optionConflictSchema).min(1).optional(),
-});
-
-/** A little add-on for the speech: small, costed, with the adviser's line on how it lands. */
-export const addOnSchema = z.strictObject({
-  id: slug,
-  title: z.string().min(1).max(80),
-  values: optionBundleSchema,
-  line: simulatedLineSchema,
-  advice: optionAdviceSchema,
-  conflicts: z.array(optionConflictSchema).min(1).optional(),
-});
-
 export const optionsFileSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
     deliver: z.array(deliverOptionSchema).min(1),
-    afford: z.array(affordOptionSchema).min(1),
-    addOns: z.array(addOnSchema).min(2),
   })
   .superRefine((file, ctx) => {
-    const lists = [
-      ['deliver', file.deliver],
-      ['afford', file.afford],
-      ['addOns', file.addOns],
-    ] as const;
+    // One list since Phase 24 (the ways to pay became step 4's levers and the add-ons went), kept
+    // in this shape so the checks read the same whichever lists the file carries.
+    const lists = [['deliver', file.deliver]] as const;
     const ids = new Set<string>();
     for (const [screen, list] of lists) {
       list.forEach((o, i) => {
@@ -489,54 +414,6 @@ export const interventionsFileSchema = z
       ids.add(x.id);
     });
   });
-
-/* ------------------------------------------------------- the compromises */
-
-/**
- * What the advisers say beside each route out of a gap (stage 5): raise more, spend less or
- * later (which since Phase 18 also narrows or drops a chosen option), accept less headroom, or
- * borrow and say so; and, when the forecast leaves more headroom than the player set out to keep,
- * beside the ways to use it: do more for the priorities, ease off a tax rise, or keep the margin.
- * One line per route, in the voice of the adviser named; the breach assessment is the Permanent
- * Secretary's and quotes the Charter. Everything simulated, every fact sourced, no number
- * authored.
- */
-export const compromiseFileSchema = z.strictObject({
-  schemaVersion: z.literal(1),
-  routes: z.strictObject({
-    revenue: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    spending: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    target: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    /** With room to spare: the ways to deliver the priorities not yet chosen. */
-    more: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    /** With room to spare: the ways to pay already chosen, each with what dropping it leaves. */
-    ease: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    /** With room to spare: the case for keeping the margin, or raising the target. */
-    bank: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-    breach: z.strictObject({
-      adviser: slug,
-      line: simulatedLineSchema,
-      /** When no rule is missed: what leaving a gap means instead. */
-      noBreach: simulatedLineSchema,
-    }),
-  }),
-});
-
-/* ------------------------------------------------------------- the rabbit */
-
-/**
- * The add-ons screen's framing lines (stage 6). The add-ons themselves are options (options.json),
- * each a lever setting the engine prices; nothing here carries a number.
- */
-export const rabbitFileSchema = z.strictObject({
-  schemaVersion: z.literal(1),
-  /** The Permanent Secretary sets the scene: what an add-on is for, and what it costs. */
-  intro: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-  /** Raise a priority one notch beyond what was chosen. */
-  further: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-  /** No add-on: the headroom is the announcement. */
-  keep: z.strictObject({ adviser: slug, line: simulatedLineSchema }),
-});
 
 /* ---------------------------------------------------------- the electorate */
 

@@ -3,12 +3,9 @@ import { DataError } from './errors.js';
 import {
   advisersFileSchema,
   briefingsFileSchema,
-  drawsFileSchema,
   pmFileSchema,
   ministersFileSchema,
   interventionsFileSchema,
-  compromiseFileSchema,
-  rabbitFileSchema,
   optionsFileSchema,
   finetuneFileSchema,
   householdsFileSchema,
@@ -35,12 +32,9 @@ import {
 import type {
   AdvisersFile,
   BriefingsFile,
-  DrawsFile,
   PmFile,
   MinistersFile,
   InterventionsFile,
-  CompromiseFile,
-  RabbitFile,
   OptionsFile,
   FinetuneFile,
   HouseholdsFile,
@@ -65,7 +59,6 @@ import type {
   Vintage,
 } from './types/data.js';
 import { policyYearsOf } from './calc/arithmetic.js';
-import { AFFORD_TABS } from './game/options.js';
 import { FINETUNE_SIDES, WHO_PAYS, finetuneSideOf } from './game/finetune.js';
 import { hasHead } from './costing/taxHead.js';
 import { GUIDED_STEPS, stageTerms } from './game/guide.js';
@@ -158,10 +151,6 @@ export function parseReception(json: unknown): ReceptionFile {
   return parseWith(receptionFileSchema, json, 'the reception');
 }
 
-export function parseDraws(json: unknown): DrawsFile {
-  return parseWith(drawsFileSchema, json, 'forecast draws');
-}
-
 export function parsePm(json: unknown): PmFile {
   return parseWith(pmFileSchema, json, 'the Prime Minister');
 }
@@ -172,14 +161,6 @@ export function parseMinisters(json: unknown): MinistersFile {
 
 export function parseInterventions(json: unknown): InterventionsFile {
   return parseWith(interventionsFileSchema, json, 'adviser interventions');
-}
-
-export function parseCompromise(json: unknown): CompromiseFile {
-  return parseWith(compromiseFileSchema, json, 'the compromises');
-}
-
-export function parseRabbit(json: unknown): RabbitFile {
-  return parseWith(rabbitFileSchema, json, 'the rabbit');
 }
 
 export function parseOptions(json: unknown): OptionsFile {
@@ -225,12 +206,9 @@ export interface Dataset {
   contexts?: ContextFile[];
   advisers?: AdvisersFile;
   briefings?: BriefingsFile;
-  draws?: DrawsFile;
   pm?: PmFile;
   ministers?: MinistersFile;
   interventions?: InterventionsFile;
-  compromise?: CompromiseFile;
-  rabbit?: RabbitFile;
   options?: OptionsFile;
   /** The curated levers of step 4 (Phase 24, ADR-0025). */
   finetune?: FinetuneFile;
@@ -283,12 +261,9 @@ export function validateDataset(ds: Dataset): string[] {
       ds.households ?? null,
       ds.contexts ?? null,
       ds.briefings ?? null,
-      ds.draws ?? null,
       ds.pm ?? null,
       ds.ministers ?? null,
       ds.interventions ?? null,
-      ds.compromise ?? null,
-      ds.rabbit ?? null,
       ds.options ?? null,
       ds.finetune ?? null,
       ds.electorate ?? null,
@@ -425,82 +400,6 @@ export function validateDataset(ds: Dataset): string[] {
           `context ${context.id} reading ${reading.id} names a lever but has no suggestion rule`,
         );
       }
-      const alt = reading.alternatives;
-      if (alt) {
-        if (!reading.leverCode) {
-          problems.push(
-            `context ${context.id} reading ${reading.id} carries a published range but sets no lever`,
-          );
-        }
-        // The gap rule averages over the years both rows share, so a mismatch would silently
-        // change which years a scenario is built from.
-        const years = Object.keys(alt.against.series).sort().join(',');
-        for (const [role, row] of [
-          ['lowest', alt.lowest],
-          ['highest', alt.highest],
-        ] as const) {
-          if (Object.keys(row.series).sort().join(',') !== years) {
-            problems.push(
-              `context ${context.id} reading ${reading.id}: the ${role} row covers different years from its comparator`,
-            );
-          }
-        }
-      }
-    }
-    const kinds = new Set<string>();
-    for (const scenario of context.scenarios ?? []) {
-      if (kinds.has(scenario.kind)) {
-        problems.push(`context ${context.id} has two ${scenario.kind} scenarios`);
-      }
-      kinds.add(scenario.kind);
-      const needsRange = scenario.kind === 'optimistic' || scenario.kind === 'pessimistic';
-      if (needsRange && !context.readings.some((r) => r.alternatives)) {
-        problems.push(
-          `context ${context.id} offers a ${scenario.kind} scenario but no reading carries a published range`,
-        );
-      }
-    }
-  }
-  if (ds.draws) {
-    const latest = ds.contexts?.[ds.contexts.length - 1];
-    const macro = new Map(ds.levers.filter((l) => l.category === 'macro').map((l) => [l.code, l]));
-    // Consideration ids that sit on certified rows: naming one would let a draw re-score an HMRC
-    // rate row or a Treasury scorecard line, which the honesty contract forbids (ADR-0012).
-    const certified = new Set(['hmrc-direct', 'hmrc-2026-deferred', 'hmt-costing']);
-    const allConsiderations = new Set(ds.levers.flatMap((l) => l.considerations.map((c) => c.id)));
-    for (const outcome of ds.draws.outcomes) {
-      for (const [code, name] of Object.entries(outcome.macro)) {
-        const lever = macro.get(code);
-        if (!lever) {
-          problems.push(`draw ${outcome.id} sets "${code}", which is not a macro lever`);
-          continue;
-        }
-        const reading = latest?.readings.find((r) => r.leverCode === code);
-        if (!reading) {
-          problems.push(`draw ${outcome.id} sets "${code}" but no context reading drives it`);
-          continue;
-        }
-        const has =
-          name === 'obr' ||
-          (name === 'adviser' && reading.suggestion !== undefined) ||
-          ((name === 'lowest' || name === 'highest') && reading.alternatives !== undefined);
-        if (!has) {
-          problems.push(
-            `draw ${outcome.id} names the ${name} figure for "${code}", which the ${reading.id} reading does not carry`,
-          );
-        }
-      }
-      for (const revision of outcome.revisions) {
-        if (certified.has(revision.considerationId)) {
-          problems.push(
-            `draw ${outcome.id} revises "${revision.considerationId}", a caveat that sits on certified rows`,
-          );
-        } else if (!allConsiderations.has(revision.considerationId)) {
-          problems.push(
-            `draw ${outcome.id} revises "${revision.considerationId}", which no lever carries`,
-          );
-        }
-      }
     }
   }
   if (ds.pm) {
@@ -592,39 +491,20 @@ export function validateDataset(ds: Dataset): string[] {
       }
     }
   }
-  if (ds.rabbit) {
-    const adviserIds = new Set((ds.advisers?.advisers ?? []).map((a) => a.id));
-    for (const spec of [ds.rabbit.intro, ds.rabbit.further, ds.rabbit.keep]) {
-      if (adviserIds.size > 0 && !adviserIds.has(spec.adviser)) {
-        problems.push(`the add-ons name unknown adviser ${spec.adviser}`);
-      }
-    }
-  }
   if (ds.options) {
     // An option is a bundle of lever settings the engine prices; one that names a lever the game
     // lacks, a setting the control cannot reach, or a lever left where it is could never be
-    // chosen. The ways to afford sit in who-pays tabs, so every one of them must have a tab.
+    // chosen. Since Phase 24 every option is a way to deliver a priority (ADR-0025).
     const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
-    const all = [
-      ...ds.options.deliver.map((o) => ({ screen: 'deliver', o })),
-      ...ds.options.afford.map((o) => ({ screen: 'afford', o })),
-      ...ds.options.addOns.map((o) => ({ screen: 'add-on', o })),
-    ];
+    const all = ds.options.deliver.map((o) => ({ screen: 'deliver', o }));
     // The adviser's line on every option is spoken by an adviser who is on that screen (Phase 23).
     const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
-    const stepOf: Record<string, string> = {
-      deliver: 'deliver',
-      afford: 'afford',
-      'add-on': 'rabbit',
-    };
     for (const { screen, o } of all) {
       const adviser = adviserById.get(o.advice.adviser);
       if (adviserById.size > 0 && !adviser) {
         problems.push(`${screen} option ${o.id} names unknown adviser ${o.advice.adviser}`);
-      } else if (adviser && !(adviser.steps as readonly string[]).includes(stepOf[screen] ?? '')) {
-        problems.push(
-          `${screen} option ${o.id}: adviser ${adviser.id} does not speak on ${stepOf[screen]}`,
-        );
+      } else if (adviser && !adviser.steps.includes('deliver')) {
+        problems.push(`${screen} option ${o.id}: adviser ${adviser.id} does not speak on deliver`);
       }
     }
     for (const { screen, o } of all) {
@@ -649,26 +529,6 @@ export function validateDataset(ds: Dataset): string[] {
             `${screen} option ${o.id} sets ${code} to ${value}, off the control's steps`,
           );
         }
-      }
-    }
-    if (ds.incidence) {
-      const incidence = ds.incidence;
-      const tabOf = (code: string) => {
-        const group = incidence.levers[code];
-        return AFFORD_TABS.find((t) => group !== undefined && t.groups.includes(group))?.id;
-      };
-      const perTab = new Map<string, number>();
-      for (const o of ds.options.afford) {
-        const tabs = new Set(Object.keys(o.values).map((code) => tabOf(code) ?? '?'));
-        if (tabs.has('?')) problems.push(`afford option ${o.id} has a lever with no who-pays tab`);
-        if (tabs.size > 1) problems.push(`afford option ${o.id} straddles two who-pays tabs`);
-        const [tab] = tabs;
-        if (tab && tab !== '?') perTab.set(tab, (perTab.get(tab) ?? 0) + 1);
-      }
-      for (const tab of AFFORD_TABS) {
-        const n = perTab.get(tab.id) ?? 0;
-        if (n < 3 || n > 6)
-          problems.push(`who-pays tab ${tab.id} offers ${n} options; 3 to 6 expected`);
       }
     }
   }
@@ -765,14 +625,6 @@ export function validateDataset(ds: Dataset): string[] {
     }
     for (const key of ['met', 'missed']) {
       if (!ds.speech.peroration[key]) problems.push(`the speech has no ${key} peroration`);
-    }
-  }
-  if (ds.compromise) {
-    const adviserIds = new Set((ds.advisers?.advisers ?? []).map((a) => a.id));
-    for (const [route, spec] of Object.entries(ds.compromise.routes)) {
-      if (adviserIds.size > 0 && !adviserIds.has(spec.adviser)) {
-        problems.push(`compromise route ${route} names unknown adviser ${spec.adviser}`);
-      }
     }
   }
   if (ds.interventions) {

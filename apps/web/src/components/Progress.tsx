@@ -25,9 +25,6 @@ export function stopFor(step: JourneyStep): Stop {
       return 'pm';
     case 'deliver':
       return 'flagships';
-    case 'forecast':
-    case 'compromise':
-    case 'rabbit':
     case 'review':
       return 'review';
     case 'budget-day':

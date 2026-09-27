@@ -8,7 +8,9 @@ const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
  * became `outlook`; it stays so that advisers authored against it keep validating, and the app
  * routes it on. The package's third screen (`policies`, once `recommendations`) was retired in
  * Phase 12: its levers sit on `taxes` and `spending` (ADR-0017). `finetune` is step 4's curated
- * tax and spending screens (Phase 24, ADR-0025), which replaced `afford`.
+ * tax and spending screens (Phase 24, ADR-0025), which replaced `afford`; the forecast, the
+ * compromises and the add-ons (`forecast`, `compromise`, `rabbit`) retired with it, and their old
+ * addresses open the review.
  */
 export const journeyStepSchema = z.enum([
   'start',
@@ -16,13 +18,9 @@ export const journeyStepSchema = z.enum([
   'assumptions',
   'pm',
   'deliver',
-  'afford',
   'finetune',
   'taxes',
   'spending',
-  'forecast',
-  'compromise',
-  'rabbit',
   'review',
   'budget-day',
 ]);

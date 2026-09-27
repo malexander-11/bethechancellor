@@ -3,12 +3,9 @@ import {
   parseAdvisers,
   parseBriefings,
   parseContext,
-  parseDraws,
   parsePm,
   parseMinisters,
   parseInterventions,
-  parseCompromise,
-  parseRabbit,
   parseOptions,
   parseFinetune,
   parseHouseholdsFile,
@@ -59,14 +56,11 @@ export function loadDataset(
   );
   const advisers = parseAdvisers(readJson(path.join(DATA_DIR, 'journey', 'advisers.json')));
   const briefings = parseBriefings(readJson(path.join(DATA_DIR, 'journey', 'briefings.json')));
-  const draws = parseDraws(readJson(path.join(DATA_DIR, 'journey', 'draws.json')));
   const pm = parsePm(readJson(path.join(DATA_DIR, 'journey', 'pm.json')));
   const ministers = parseMinisters(readJson(path.join(DATA_DIR, 'journey', 'ministers.json')));
   const interventions = parseInterventions(
     readJson(path.join(DATA_DIR, 'journey', 'interventions.json')),
   );
-  const compromise = parseCompromise(readJson(path.join(DATA_DIR, 'journey', 'compromise.json')));
-  const rabbit = parseRabbit(readJson(path.join(DATA_DIR, 'journey', 'rabbit.json')));
   const options = parseOptions(readJson(path.join(DATA_DIR, 'journey', 'options.json')));
   const finetune = parseFinetune(readJson(path.join(DATA_DIR, 'journey', 'finetune.json')));
   const electorate = parseHouseholdsFile(
@@ -92,12 +86,9 @@ export function loadDataset(
     contexts,
     advisers,
     briefings,
-    draws,
     pm,
     ministers,
     interventions,
-    compromise,
-    rabbit,
     options,
     finetune,
     electorate,

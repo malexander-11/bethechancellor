@@ -135,3 +135,25 @@ describe('nothing before it can start (ADR-0021)', () => {
     expect(run({ itbr: 1 }).attribution.find((r) => r.code === 'itbr')?.fromYear).toBeUndefined();
   });
 });
+
+describe('a later start for one measure (the seam every floor uses, Phase 8)', () => {
+  it('zeroes the early years of a schedule and leaves the later ones alone', () => {
+    const now = effectOf({ ufsm: 1 }, 'ufsm');
+    const later = effectOf({ ufsm: 1 }, 'ufsm', {
+      implementationYearByCode: { ufsm: '2028-29' },
+    });
+    expect(now.currentSpending['2027-28']).toBeGreaterThan(0);
+    expect(later.currentSpending['2027-28'] ?? 0).toBe(0);
+    expect(later.currentSpending['2029-30']).toBeCloseTo(now.currentSpending['2029-30'] ?? 0, 6);
+  });
+
+  it('delays only the named lever, and a share-of-baseline lever the same way', () => {
+    const later = run({ dhsc: 2, dfe: 2 }, { implementationYearByCode: { dhsc: '2028-29' } });
+    const health = later.leverEffects.find((e) => e.code === 'dhsc');
+    const schools = later.leverEffects.find((e) => e.code === 'dfe');
+    expect(health?.currentSpending['2027-28'] ?? 0).toBe(0);
+    expect(health?.currentSpending['2028-29']).toBeGreaterThan(0);
+    expect(schools?.currentSpending['2027-28']).toBeGreaterThan(0);
+    expect(later.settings.implementationYearByCode).toEqual({ dhsc: '2028-29' });
+  });
+});

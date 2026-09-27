@@ -11,15 +11,10 @@ export interface Settings {
   assessAsOf: AssessAsOf;
   /**
    * A later start for particular levers, by code. Every costing reads the implementation year, so
-   * this is the one place a "delay this measure" decision can live (Phase 8, ADR-0012).
+   * this is the one place a later start can live (Phase 8); it is also how a measure's earliest
+   * start (ADR-0021) is kept, whatever start year the game uses.
    */
   implementationYearByCode?: Record<string, string>;
-  /**
-   * The OBR's in-game re-scoring of the player's measures: a factor per lever code applied to the
-   * costed effect after costing, recorded as a `scale` step. Illustrative, badged simulated, and
-   * only ever applied to levers whose own sourced caveats call the figure uncertain.
-   */
-  revisions?: Record<string, LeverRevision>;
 }
 
 /**
@@ -39,14 +34,6 @@ export interface GamePermalink {
 /** A fresh game, before any choice has been made. */
 export function freshGame(): GamePermalink {
   return { reached: 0, priorities: [] };
-}
-
-/** Why a lever's costed effect was scaled, for the drawer and the badge beside it. */
-export interface LeverRevision {
-  factor: number;
-  /** The consideration on the lever whose caveat licenses the revision. */
-  considerationId: string;
-  note: string;
 }
 
 export type SettingsInput = Partial<Settings>;
@@ -82,8 +69,6 @@ export interface LeverEffect {
   warnings: string[];
   /** For the provenance drawer: raw published figure, factor and uprated value per target year. */
   detail?: CostingDetail;
-  /** Set when the in-game OBR re-scored this measure; the original badge stays, this sits beside it. */
-  revision?: LeverRevision;
 }
 
 export interface CostingDetail {

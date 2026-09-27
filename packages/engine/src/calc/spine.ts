@@ -4,7 +4,6 @@ import type {
   AttributionRow,
   InteractionNotice,
   LeverEffect,
-  LeverRevision,
   Outcome,
   Settings,
   SettingsInput,
@@ -35,42 +34,7 @@ export function resolveSettings(vintage: Vintage, input: SettingsInput | undefin
   if (input?.implementationYearByCode && Object.keys(input.implementationYearByCode).length > 0) {
     settings.implementationYearByCode = { ...input.implementationYearByCode };
   }
-  if (input?.revisions && Object.keys(input.revisions).length > 0) {
-    settings.revisions = { ...input.revisions };
-  }
   return settings;
-}
-
-const MONEY_SERIES = [
-  'receipts',
-  'currentSpending',
-  'capitalSpending',
-  'welfareInCap',
-  'financialTransactions',
-] as const;
-
-/**
- * The in-game OBR's re-scoring of one measure: every money series scaled by the factor, the step
- * recorded so the drawer shows it, and the revision carried on the effect so the badge beside the
- * figure can say "re-scored" rather than letting a simulated number sit under "Direct costing".
- */
-export function applyRevision(effect: LeverEffect, revision: LeverRevision): LeverEffect {
-  const scaled: LeverEffect = { ...effect, revision };
-  for (const key of MONEY_SERIES) {
-    scaled[key] = Object.fromEntries(
-      Object.entries(effect[key]).map(([year, v]) => [year, v * revision.factor]),
-    );
-  }
-  scaled.steps = [
-    ...effect.steps,
-    {
-      op: 'scale',
-      formula: `costed effect × ${revision.factor} (in-game OBR re-scoring)`,
-      factor: revision.factor,
-      note: revision.note,
-    },
-  ];
-  return scaled;
 }
 
 /** Snap a raw lever value to the control's step and range; a select snaps to its nearest offered option. */
@@ -105,10 +69,7 @@ export function computeOutcome(input: ComputeInput): Outcome {
     if (raw === undefined) continue;
     const value = normaliseLeverValue(lever, raw);
     if (value === lever.control.default) continue;
-    const costed = costLever(lever, value, vintage, settings, policyYears);
-    const revision = settings.revisions?.[lever.code];
-    const effect =
-      revision && lever.category !== 'macro' ? applyRevision(costed, revision) : costed;
+    const effect = costLever(lever, value, vintage, settings, policyYears);
     effects.push(effect);
     warnings.push(...effect.warnings);
   }

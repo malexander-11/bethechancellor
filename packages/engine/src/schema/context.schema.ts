@@ -21,35 +21,6 @@ export const suggestionRuleSchema = z.discriminatedUnion('rule', [
   z.strictObject({ rule: z.literal('authored'), value: z.number(), rationale: z.string().min(1) }),
 ]);
 
-/** One published row of a forecast comparison, copied as printed. */
-const rangeRowSchema = z.strictObject({
-  label: z.string().min(1),
-  series: z.record(z.string(), z.number()),
-});
-
-/**
- * The published range around a reading: the highest and lowest figures in a comparison of
- * independent forecasts, and the row from the same table they are measured against.
- *
- * `against` exists because a reading's headline `obr` block can be on a different basis. The rates
- * reading compares 10-year gilt yields, which no forecaster in the comparison publishes; its range
- * is a Bank Rate range, so it carries the Bank Rate comparator and says so in `note`. Smoothing
- * that over would be the dishonest thing, so the schema makes it impossible to omit.
- */
-const alternativesSchema = z.strictObject({
-  source: sourceRefSchema,
-  note: z.string().min(1),
-  against: rangeRowSchema,
-  /**
-   * The lowest and highest figures any forecaster in the comparison publishes, year by year.
-   * Named for what they are rather than for the cards they feed: which of them is the optimistic
-   * case depends on which way the slider moves borrowing, and for a growth reading that is the
-   * other way round. Per-cell extremes, so each is an envelope rather than one forecaster's view.
-   */
-  lowest: rangeRowSchema,
-  highest: rangeRowSchema,
-});
-
 export const contextReadingSchema = z.strictObject({
   id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
   title: z.string().min(1),
@@ -59,32 +30,7 @@ export const contextReadingSchema = z.strictObject({
   obr: readingValueSchema,
   latest: readingValueSchema,
   suggestion: suggestionRuleSchema.optional(),
-  alternatives: alternativesSchema.optional(),
   text: z.string().min(1),
-});
-
-/** Which of the four sets of assumptions a card offers. */
-export const scenarioKindSchema = z.enum(['baseline', 'adviser', 'optimistic', 'pessimistic']);
-
-/**
- * One card on the assumptions step. Carries the words only: the slider settings are derived from
- * the readings above by a stated rule, never authored here, so tampering with a published row
- * moves the card and a test catches it.
- */
-export const contextScenarioSchema = z.strictObject({
-  kind: scenarioKindSchema,
-  title: z.string().min(1),
-  headline: z.string().min(1).max(160),
-  /** The card in a breath: at most sixty characters, a shorter form of the headline. */
-  short: z.string().min(1).max(60).optional(),
-  rationale: z
-    .array(
-      z.strictObject({
-        text: z.string().min(1),
-        sources: z.array(sourceRefSchema).default([]),
-      }),
-    )
-    .min(1),
 });
 
 /**
@@ -113,6 +59,5 @@ export const contextFileSchema = z.strictObject({
   adviser: z.string().min(1),
   intro: z.string().min(1),
   readings: z.array(contextReadingSchema).min(1),
-  scenarios: z.array(contextScenarioSchema).optional(),
   decisionsSinceForecast: z.array(decisionSinceForecastSchema).default([]),
 });

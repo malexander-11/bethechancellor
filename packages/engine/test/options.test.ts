@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { Settings } from '../src/index.js';
 import {
-  AFFORD_TABS,
-  affordTabs,
   allOptions,
   blockedBy,
   computeOutcome,
   deliverOptionsFor,
+  finetuneItems,
   optionByLever,
   optionConflicts,
   optionEarliestStart,
@@ -23,25 +22,11 @@ import { loadDataset } from './fixtures.js';
 const ds = loadDataset();
 const options = ds.options;
 const levers = ds.levers;
-const codesOf = (values: Record<string, number>) => Object.keys(values);
-const byCode = (code: string) => {
-  const l = levers.find((x) => x.code === code);
-  if (!l) throw new Error(`no lever ${code}`);
-  return l;
-};
+/** The levers step 4 puts on show (Phase 24): a flagship card may name one as its partner. */
+const offered = new Set(finetuneItems(ds.finetune).map((i) => i.code));
 const deliverOption = (id: string) => {
   const o = options.deliver.find((x) => x.id === id);
   if (!o) throw new Error(`no deliver option ${id}`);
-  return o;
-};
-const affordOption = (id: string) => {
-  const o = options.afford.find((x) => x.id === id);
-  if (!o) throw new Error(`no afford option ${id}`);
-  return o;
-};
-const addOn = (id: string) => {
-  const o = options.addOns.find((x) => x.id === id);
-  if (!o) throw new Error(`no add-on ${id}`);
   return o;
 };
 const run = (values: Record<string, number>, settings: Partial<Settings> = {}) =>
@@ -56,11 +41,11 @@ const run = (values: Record<string, number>, settings: Partial<Settings> = {}) =
     },
   });
 
-describe('the options (ADR-0022)', () => {
+describe('the options (ADR-0022): since Phase 24, the ways to deliver the priorities', () => {
   it('validate:data accepts the file, and every option moves a real lever off its default', () => {
     expect(validateDataset(ds)).toEqual([]);
     const byCode = new Map(levers.map((l) => [l.code, l] as const));
-    for (const o of [...options.deliver, ...options.afford, ...options.addOns]) {
+    for (const o of options.deliver) {
       for (const [code, value] of Object.entries(o.values)) {
         const lever = byCode.get(code);
         expect(lever, `${o.id} names ${code}`).toBeDefined();
@@ -69,18 +54,15 @@ describe('the options (ADR-0022)', () => {
     }
   });
 
-  it('no lever appears in more than one option anywhere, so no screen can light or undo another', () => {
-    const codes = [...options.deliver, ...options.afford, ...options.addOns].flatMap((o) =>
-      codesOf(o.values),
-    );
+  it('no lever appears in two options, so no card can light or undo another', () => {
+    const codes = options.deliver.flatMap((o) => Object.keys(o.values));
     expect(new Set(codes).size).toBe(codes.length);
-    // Every option is found by its lever; a way to afford has a plain title of its own (Phase 23).
-    const byLever = optionByLever(options, levers);
+    const byLever = optionByLever(options);
     expect(byLever.size).toBe(codes.length);
-    expect(byLever.get('itbr')?.title).toBe('Put a penny on the basic rate of income tax');
-    expect(byLever.get('itbr')?.shortTitle).toBe('Basic rate');
     expect(byLever.get('moj')?.title).toBe('More money for prisons and courts');
-    expect(allOptions(options, levers).map((o) => o.screen)).toContain('addOns');
+    // The ways to pay became step 4's levers and the add-ons went (ADR-0025).
+    expect(allOptions(options)).toHaveLength(options.deliver.length);
+    expect(byLever.get('itbr')).toBeUndefined();
   });
 
   it('every priority named has two to five ways to deliver it', () => {
@@ -90,17 +72,6 @@ describe('the options (ADR-0022)', () => {
       const n = deliverOptionsFor(id, options).length;
       expect(n, id).toBeGreaterThanOrEqual(2);
       expect(n, id).toBeLessThanOrEqual(5);
-    }
-  });
-
-  it('every way to afford sits in exactly one who-pays tab, three to six a tab', () => {
-    const tabs = affordTabs(options, ds.incidence);
-    expect(tabs.map((t) => t.tab.id)).toEqual(AFFORD_TABS.map((t) => t.id));
-    const placed = tabs.flatMap((t) => t.options.map((o) => o.id));
-    expect([...placed].sort()).toEqual(options.afford.map((o) => o.id).sort());
-    for (const t of tabs) {
-      expect(t.options.length, t.tab.id).toBeGreaterThanOrEqual(3);
-      expect(t.options.length, t.tab.id).toBeLessThanOrEqual(6);
     }
   });
 
@@ -118,9 +89,12 @@ describe('the options (ADR-0022)', () => {
   });
 
   it('carries the latest earliest start of its levers', () => {
-    expect(optionEarliestStart(affordOption('wealth2'), levers)).toBe('2030-31');
-    expect(optionEarliestStart(affordOption('cgtalign'), levers)).toBe('2028-29');
-    expect(optionEarliestStart(affordOption('hscl'), levers)).toBeUndefined();
+    expect(optionEarliestStart(deliverOption('unemployment-insurance-limit'), levers)).toBe(
+      '2030-31',
+    );
+    expect(optionEarliestStart(deliverOption('mental-health-reset'), levers)).toBe('2029-30');
+    expect(optionEarliestStart(deliverOption('child-tax-allowance'), levers)).toBe('2028-29');
+    expect(optionEarliestStart(deliverOption('prisons'), levers)).toBeUndefined();
     expect(optionEarliestStart({ id: 'both', values: { cgtalign: 1, wealth2: 1 } }, levers)).toBe(
       '2030-31',
     );
@@ -128,19 +102,16 @@ describe('the options (ADR-0022)', () => {
 
   it('names the red line a lever is watched by, and whether the Budget would cross it', () => {
     const lock = ds.pm.promises.find((p) => p.id === 'tax-lock');
-    const lines = optionRedLines(affordOption('itbr'), ds.pm.promises, levers, {});
-    expect(lines).toEqual([
+    const bundle = (values: Record<string, number>) => ({ id: 'b', values });
+    expect(optionRedLines(bundle({ itbr: 1 }), ds.pm.promises, levers, {})).toEqual([
       { promise: lock?.title, when: 'above', severity: 'breaks', broken: true },
     ]);
     // The levy keeps the pledge's words and tests its spirit: amber (Phase 23).
-    expect(optionRedLines(affordOption('hscl'), ds.pm.promises, levers, {})).toEqual([
+    expect(optionRedLines(bundle({ hscl: 1 }), ds.pm.promises, levers, {})).toEqual([
       { promise: lock?.title, when: 'on', severity: 'strains', broken: true },
     ]);
-    expect(optionRedLines(affordOption('nicer'), ds.pm.promises, levers, {})[0]?.severity).toBe(
+    expect(optionRedLines(bundle({ nicer: 1 }), ds.pm.promises, levers, {})[0]?.severity).toBe(
       'strains',
-    );
-    expect(optionRedLines(affordOption('ct'), ds.pm.promises, levers, {})[0]?.severity).toBe(
-      'breaks',
     );
     // A saving that breaks a promise when switched on.
     const limit = optionRedLines(deliverOption('two-child-limit'), ds.pm.promises, levers, {});
@@ -148,45 +119,45 @@ describe('the options (ADR-0022)', () => {
   });
 
   it('warns when an option meets a lever already moved that it interacts with', () => {
-    const uprating = affordOption('rvfuel');
-    expect(optionOverlaps(uprating, levers, new Set())).toEqual([]);
-    const hits = optionOverlaps(uprating, levers, new Set(['fuel']));
-    expect(hits.length).toBeGreaterThan(0);
-    expect(hits[0]?.withLever.code).toBe('fuel');
-    expect(hits[0]?.active).toBe(true);
+    const cut = deliverOption('fuel-duty-cut');
+    expect(optionOverlaps(cut, levers, new Set())).toEqual([]);
+    const hits = optionOverlaps(cut, levers, new Set(['rvfuel']));
+    expect(hits.map((h) => [h.withLever.code, h.severity, h.active])).toEqual([
+      ['rvfuel', 'warn', true],
+    ]);
   });
 
-  it('names the options it overlaps before either is chosen, from either side of the pair', () => {
-    // Employer NICs and corporation tax interact: the note is there before anything moves, and
-    // the text comes once the partner has.
-    const quiet = optionOverlaps(affordOption('nicer'), levers, new Set(), options);
-    const ct = quiet.find((o) => o.option?.id === 'ct');
-    expect(ct?.active).toBe(false);
-    expect(ct?.option?.title).toBe(affordOption('ct').title);
-    expect(ct?.option?.shortTitle).toBe(byCode('ct').shortTitle);
-    const loud = optionOverlaps(affordOption('nicer'), levers, new Set(['ct']), options);
-    expect(loud.find((o) => o.option?.id === 'ct')?.active).toBe(true);
-    // The child tax allowance lists the personal allowance; the allowance does not list it back.
-    // Read from either side, the £100 add-on still knows about it, and about the NICs threshold.
-    const allowance = optionOverlaps(addOn('allowance-100'), levers, new Set(), options);
-    expect(allowance.map((o) => o.option?.id).sort()).toEqual([
-      'child-tax-allowance',
-      'nics-threshold-2',
+  it('names a partner before either moves when another option or step 4 offers it', () => {
+    // The freeze and the basic rate interact; the basic rate is on the fine-tuning screen, so the
+    // card names it before anything moves, and quotes the interaction once it has.
+    const freeze = deliverOption('freeze-early');
+    const quiet = optionOverlaps(freeze, levers, new Set(), options, offered);
+    expect(quiet.map((o) => [o.withLever.code, o.active, o.option])).toEqual([
+      ['itbr', false, undefined],
     ]);
-    // A lever no option offers is only mentioned once it has moved on the desk.
-    const vat = optionOverlaps(deliverOption('vat-off-gas'), levers, new Set(), options);
-    expect(vat.some((o) => o.withLever.code === 'vatnrg')).toBe(false);
-    const vatMoved = optionOverlaps(
-      deliverOption('vat-off-gas'),
+    expect(optionOverlaps(freeze, levers, new Set(), options)).toEqual([]);
+    const loud = optionOverlaps(freeze, levers, new Set(['itbr']), options, offered);
+    expect(loud[0]?.active).toBe(true);
+    // Restoring fuel duty's uprating and cutting it, the old conflict (ADR-0022), is now a
+    // warning the card names at once, because the uprating is one of step 4's levers.
+    const fuel = optionOverlaps(
+      deliverOption('fuel-duty-cut'),
       levers,
-      new Set(['vatnrg']),
+      new Set(),
       options,
+      offered,
     );
-    expect(vatMoved.some((o) => o.withLever.code === 'vatnrg' && o.option === undefined)).toBe(
-      true,
-    );
+    expect(fuel.map((o) => [o.withLever.code, o.severity])).toEqual([['rvfuel', 'warn']]);
+    // Another option is named as the option: the 3% path and a day-to-day uplift add up.
+    const three = optionOverlaps(deliverOption('three-per-cent-now'), levers, new Set(), options);
+    expect(three.find((o) => o.withLever.code === 'mod')?.option?.id).toBe('defence-uplift');
+    // A lever nobody offers is mentioned once it has moved, read from either side of the pair.
+    const gas = deliverOption('vat-off-gas');
+    expect(optionOverlaps(gas, levers, new Set(), options, offered)).toEqual([]);
+    const moved = optionOverlaps(gas, levers, new Set(['vatnrg', 'vatelec']), options, offered);
+    expect(moved.map((o) => o.withLever.code).sort()).toEqual(['vatelec', 'vatnrg']);
     // A pair authored as a conflict is not an overlap as well: the conflict says it.
-    expect(optionOverlaps(affordOption('rvfuel'), levers, new Set(['fuel']), options)).toEqual([]);
+    expect(three.some((o) => o.withLever.code === 'dip47')).toBe(false);
   });
 
   it('reads a conflict from either side, and blocks the other option while one is in the Budget', () => {
@@ -203,22 +174,15 @@ describe('the options (ADR-0022)', () => {
     // Both on (from the desk): neither is blocked, both can be put back.
     expect(blockedBy(three, options, levers, { def3: 1, dip47: 1 })).toBeUndefined();
     expect(blockedBy(gap, options, levers, { def3: 1, dip47: 1 })).toBeUndefined();
-    // A partner adjusted on the desk blocks too: half a fuel duty cut still rules out the uprating.
-    expect(blockedBy(affordOption('rvfuel'), options, levers, { fuel: -5 })?.option.id).toBe(
-      'fuel-duty-cut',
-    );
-    // Across screens: the CGT package blocks the charge at death, and the reverse.
-    expect(blockedBy(affordOption('cgtdth'), options, levers, { cgtalign: 1 })?.option.id).toBe(
-      'cgtalign',
-    );
-    expect(blockedBy(affordOption('cgtalign'), options, levers, { cgtdth: 1 })?.option.id).toBe(
-      'cgtdth',
-    );
+    // The two PIP reforms on one caseload, likewise; a partner adjusted blocks too.
+    const pip = deliverOption('pip-changes');
+    expect(blockedBy(pip, options, levers, { csjmh: 1 })?.option.id).toBe('mental-health-reset');
+    expect(fromGap).toHaveLength(1);
   });
 
   it('every option, on its own, moves money in some policy year', () => {
     const years = policyYearsOf(ds.vintage);
-    for (const o of [...options.deliver, ...options.afford, ...options.addOns]) {
+    for (const o of options.deliver) {
       const out = run(o.values);
       const moved = out.leverEffects.some((e) =>
         years.some(
@@ -233,99 +197,79 @@ describe('the options (ADR-0022)', () => {
     }
   });
 
-  it('the schema refuses two options on one lever anywhere, and a conflict that names nobody', () => {
+  it('the schema refuses two options on one lever, a conflict that names nobody, and the retired lists', () => {
     const line = { text: 'x', sources: [], badge: 'simulated' as const };
     const advice = {
-      adviser: 'director-of-tax',
+      adviser: 'director-of-public-spending',
       text: 'x',
       sources: [{ sourceId: 'obr-efo-2026-03' }],
       badge: 'simulated' as const,
     };
+    const option = (id: string, title: string, values: Record<string, number>) => ({
+      id,
+      priority: 'p',
+      title,
+      line,
+      advice,
+      values,
+    });
     const base = {
       schemaVersion: 1 as const,
-      deliver: [{ id: 'a', priority: 'p', title: 'A', line, advice, values: { dhsc: 3 } }],
-      afford: [{ id: 'b', title: 'B', values: { itbr: 1 }, advice }],
-      addOns: [
-        { id: 'c', title: 'C', line, advice, values: { ufsm: 1 } },
-        { id: 'd', title: 'D', line, advice, values: { bus2: 1 } },
-      ],
+      deliver: [option('a', 'A', { dhsc: 3 }), option('b', 'B', { dfe: 5 })],
     };
     expect(optionsFileSchema.safeParse(base).success).toBe(true);
-    // An add-on on a deliver lever: the coupling the user found, refused now.
+    // Two options on one lever.
     expect(
       optionsFileSchema.safeParse({
         ...base,
-        addOns: [...base.addOns, { id: 'c2', title: 'C2', line, advice, values: { dhsc: 3 } }],
+        deliver: [...base.deliver, option('c', 'C', { dhsc: 5 })],
       }).success,
     ).toBe(false);
     // Conflicts: an unknown partner, a self conflict, a pair authored on both sides; one side is fine.
-    const withConflict = (
-      deliverConflicts: { with: string; text: string }[],
-      affordConflicts?: { with: string; text: string }[],
+    const withConflicts = (
+      a: { with: string; text: string }[],
+      b?: { with: string; text: string }[],
     ) =>
       optionsFileSchema.safeParse({
         ...base,
-        deliver: [{ ...base.deliver[0], conflicts: deliverConflicts }],
-        afford: [{ ...base.afford[0], ...(affordConflicts ? { conflicts: affordConflicts } : {}) }],
-      }).success;
-    expect(withConflict([{ with: 'b', text: 'same money' }])).toBe(true);
-    expect(withConflict([{ with: 'nosuch', text: 'x' }])).toBe(false);
-    expect(withConflict([{ with: 'a', text: 'x' }])).toBe(false);
-    expect(withConflict([{ with: 'b', text: 'x' }], [{ with: 'a', text: 'x' }])).toBe(false);
-    // Two options with one title, and an option with no adviser's line, are refused (Phase 23).
-    expect(
-      optionsFileSchema.safeParse({ ...base, afford: [{ ...base.afford[0], title: 'A' }] }).success,
-    ).toBe(false);
-    expect(
-      optionsFileSchema.safeParse({
-        ...base,
-        afford: [{ id: 'b', title: 'B', values: { itbr: 1 } }],
-      }).success,
-    ).toBe(false);
-    expect(
-      optionsFileSchema.safeParse({
-        ...base,
         deliver: [
-          ...base.deliver,
-          { id: 'e', priority: 'p', title: 'E', line, advice, values: { dhsc: 5 } },
+          { ...base.deliver[0], conflicts: a },
+          { ...base.deliver[1], ...(b ? { conflicts: b } : {}) },
         ],
-      }).success,
-    ).toBe(false);
+      }).success;
+    expect(withConflicts([{ with: 'b', text: 'same money' }])).toBe(true);
+    expect(withConflicts([{ with: 'nosuch', text: 'x' }])).toBe(false);
+    expect(withConflicts([{ with: 'a', text: 'x' }])).toBe(false);
+    expect(withConflicts([{ with: 'b', text: 'x' }], [{ with: 'a', text: 'x' }])).toBe(false);
+    // Two options with one title, and an option with no adviser's line (Phase 23).
     expect(
       optionsFileSchema.safeParse({
         ...base,
-        afford: [{ id: 'b', title: 'B', values: { dhsc: 1 }, advice }],
+        deliver: [base.deliver[0], { ...base.deliver[1], title: 'A' }],
       }).success,
     ).toBe(false);
+    const silent = { id: 'b', priority: 'p', title: 'B', line, values: { dfe: 5 } };
     expect(
-      optionsFileSchema.safeParse({
-        ...base,
-        afford: [{ id: 'b', title: 'B', values: { itbr: 1, vats: 1, nicm: 1 }, advice }],
-      }).success,
+      optionsFileSchema.safeParse({ ...base, deliver: [base.deliver[0], silent] }).success,
     ).toBe(false);
+    // The ways to pay and the add-ons retired in Phase 24: a file that still lists them is refused.
+    expect(optionsFileSchema.safeParse({ ...base, afford: [] }).success).toBe(false);
+    expect(optionsFileSchema.safeParse({ ...base, addOns: [] }).success).toBe(false);
   });
 
   it('validate:data refuses an unknown lever, a default value and a value off the steps', () => {
+    const template = deliverOption('health-above-sr');
     const tamper = (values: Record<string, number>) =>
       validateDataset({
         ...ds,
         options: {
           ...options,
-          addOns: [
-            ...options.addOns,
-            {
-              id: 'zz',
-              title: 'Z',
-              line: options.addOns[0]!.line,
-              advice: options.addOns[0]!.advice,
-              values,
-            },
-          ],
+          deliver: [...options.deliver, { ...template, id: 'zz', title: 'Z', values }],
         },
       });
     expect(tamper({ nosuch: 1 }).join('\n')).toMatch(/unknown lever "nosuch"/);
-    expect(tamper({ dhsc: 0 }).join('\n')).toMatch(/leaves lever dhsc where it is/);
-    expect(tamper({ dhsc: 0.3 }).join('\n')).toMatch(/off the control's steps/);
-    expect(tamper({ dhsc: 40 }).join('\n')).toMatch(/outside the lever's range/);
+    expect(tamper({ mhclg: 0 }).join('\n')).toMatch(/leaves lever mhclg where it is/);
+    expect(tamper({ mhclg: 0.3 }).join('\n')).toMatch(/off the control's steps/);
+    expect(tamper({ mhclg: 40 }).join('\n')).toMatch(/outside the lever's range/);
   });
 });

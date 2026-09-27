@@ -1,14 +1,6 @@
 import { fyStart } from '../calc/years.js';
 import type { Lever } from '../types/data.js';
-import type {
-  AffordOption,
-  DeliverOption,
-  IncidenceFile,
-  OptionsFile,
-  PmFile,
-  Priority,
-  Promise_,
-} from '../types/data.js';
+import type { DeliverOption, OptionsFile, PmFile, Priority, Promise_ } from '../types/data.js';
 import type { GamePermalink } from '../types/engine.js';
 import { deliversTarget, promiseBreaks, promiseStrains } from './promises.js';
 
@@ -16,9 +8,10 @@ import { deliversTarget, promiseBreaks, promiseStrains } from './promises.js';
  * The options (Phase 18, ADR-0022): bundles of lever settings that advisers propose and the
  * Chancellor chooses among. Nothing here prices anything; the page runs the engine. What lives
  * here is the reading of an option against the Budget as it stands: on, adjusted or off; which
- * red lines it crosses; the latest of its levers' earliest starts; which other options it
- * overlaps or counts the same money as; and which who-pays tab a way to afford belongs to. No
- * two options anywhere share a lever (the schema forbids it), so every reading is unambiguous.
+ * red lines it crosses; the latest of its levers' earliest starts; and which other options or
+ * levers it overlaps or counts the same money as. No two options share a lever (the schema forbids
+ * it), so every reading is unambiguous. Since Phase 24 every option is a way to deliver a
+ * priority: the ways to pay became step 4's levers and the add-ons went (ADR-0025).
  */
 
 export type OptionState = 'on' | 'adjusted' | 'off';
@@ -65,59 +58,32 @@ export function optionOff(option: Bundle, levers: readonly Lever[]): Record<stri
   );
 }
 
-export type OptionScreen = 'deliver' | 'afford' | 'addOns';
-
-/** One option, whichever screen offers it, with the names a card would use for it. */
+/** One option, with the names a card would use for it. */
 export interface OptionRef {
   id: string;
-  screen: OptionScreen;
   /** The option's title: what it does, plainly. */
   title: string;
-  /** A shorter name for a note on another card: the lever's short title for a way to afford. */
+  /** The name a note on another card uses for it. */
   shortTitle: string;
   values: Record<string, number>;
   conflicts: readonly { with: string; text: string }[];
 }
 
-/** Every option on every screen. */
-export function allOptions(options: OptionsFile, levers: readonly Lever[]): OptionRef[] {
-  const byCode = leverMap(levers);
-  const leverOf = (o: AffordOption) => byCode.get(Object.keys(o.values)[0] ?? '');
-  return [
-    ...options.deliver.map((o) => ({
-      id: o.id,
-      screen: 'deliver' as const,
-      title: o.title,
-      shortTitle: o.title,
-      values: o.values,
-      conflicts: o.conflicts ?? [],
-    })),
-    ...options.afford.map((o) => ({
-      id: o.id,
-      screen: 'afford' as const,
-      title: o.title,
-      shortTitle: leverOf(o)?.shortTitle ?? o.title,
-      values: o.values,
-      conflicts: o.conflicts ?? [],
-    })),
-    ...options.addOns.map((o) => ({
-      id: o.id,
-      screen: 'addOns' as const,
-      title: o.title,
-      shortTitle: o.title,
-      values: o.values,
-      conflicts: o.conflicts ?? [],
-    })),
-  ];
+/** Every option: the ways to deliver the priorities. */
+export function allOptions(options: OptionsFile): OptionRef[] {
+  return options.deliver.map((o) => ({
+    id: o.id,
+    title: o.title,
+    shortTitle: o.title,
+    values: o.values,
+    conflicts: o.conflicts ?? [],
+  }));
 }
 
 /** The option that moves each lever, by code; one at most, because no two options share a lever. */
-export function optionByLever(
-  options: OptionsFile,
-  levers: readonly Lever[],
-): Map<string, OptionRef> {
+export function optionByLever(options: OptionsFile): Map<string, OptionRef> {
   const out = new Map<string, OptionRef>();
-  for (const ref of allOptions(options, levers)) {
+  for (const ref of allOptions(options)) {
     for (const code of Object.keys(ref.values)) out.set(code, ref);
   }
   return out;
@@ -142,7 +108,7 @@ export function optionConflicts(
   levers: readonly Lever[],
   values: Record<string, number>,
 ): OptionConflict[] {
-  const all = allOptions(options, levers);
+  const all = allOptions(options);
   const byId = new Map(all.map((o) => [o.id, o] as const));
   const self = byId.get(option.id);
   if (!self) return [];
@@ -278,23 +244,25 @@ export interface OptionOverlap {
 
 /**
  * The authored interactions between the option's levers and other levers, read from either side
- * of the pair. With the options file, every partner another option offers is listed, so a card can
- * say "Overlaps with …" before either is chosen, and a partner no option offers is listed once it
- * has moved on the desk; a pair authored as a conflict is left out, because the conflict says it.
- * Without the file, only the partners already moved, as the desk read them.
+ * of the pair. With the options file, every partner another option offers is listed, and so is
+ * every partner in `offered` (the levers step 4 puts on show, Phase 24), so a card can say
+ * "Overlaps with …" before either is chosen; a partner offered by neither is listed once it has
+ * moved; a pair authored as a conflict is left out, because the conflict says it. Without the
+ * file, only the partners already moved, as the desk read them.
  */
 export function optionOverlaps(
   option: Bundle,
   levers: readonly Lever[],
   moved: ReadonlySet<string>,
   options?: OptionsFile,
+  offered: ReadonlySet<string> = new Set(),
 ): OptionOverlap[] {
   const byCode = leverMap(levers);
   const byId = new Map(levers.map((l) => [l.id, l] as const));
   const codes = new Set(Object.keys(option.values));
   const own = [...codes].map((c) => byCode.get(c)).filter((l): l is Lever => l !== undefined);
   const ownIds = new Set(own.map((l) => l.id));
-  const offering = options ? optionByLever(options, levers) : undefined;
+  const offering = options ? optionByLever(options) : undefined;
   const conflicting = new Set(
     options ? optionConflicts(option, options, levers, {}).map((c) => c.option.id) : [],
   );
@@ -329,41 +297,9 @@ export function optionOverlaps(
   for (const o of found.values()) {
     const partner = offering?.get(o.withLever.code);
     if (partner && conflicting.has(partner.id)) continue;
-    if (!o.active && (!options || !partner)) continue;
+    const named = partner !== undefined || offered.has(o.withLever.code);
+    if (!o.active && (!options || !named)) continue;
     out.push(partner ? { ...o, option: partner } : o);
   }
   return out;
-}
-
-/**
- * The who-pays tabs of the ways to afford, each a set of incidence pays-groups
- * (data/journey/incidence.json). Small groups join the nearest large one.
- */
-export const AFFORD_TABS: readonly { id: string; label: string; groups: readonly string[] }[] = [
-  { id: 'everyone', label: 'Everyone', groups: ['broad-base', 'tax-gap', 'working-pensioners'] },
-  { id: 'best-off', label: 'The best-off', groups: ['top'] },
-  { id: 'business', label: 'Business', groups: ['business'] },
-  { id: 'savers-owners', label: 'Savers and owners', groups: ['savers-owners'] },
-  {
-    id: 'duties',
-    label: 'Drivers, drinkers, smokers, gamblers, flyers',
-    groups: ['duties', 'motorists', 'flyers', 'disabled-motorists'],
-  },
-];
-
-export interface AffordTab {
-  tab: (typeof AFFORD_TABS)[number];
-  options: AffordOption[];
-}
-
-/** The ways to afford, grouped into the who-pays tabs by their first lever's incidence tag. */
-export function affordTabs(options: OptionsFile, incidence: IncidenceFile): AffordTab[] {
-  return AFFORD_TABS.map((tab) => ({
-    tab,
-    options: options.afford.filter((o) => {
-      const code = Object.keys(o.values)[0];
-      const group = code ? incidence.levers[code] : undefined;
-      return group !== undefined && tab.groups.includes(group);
-    }),
-  }));
 }

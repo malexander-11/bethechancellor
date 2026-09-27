@@ -72,7 +72,7 @@ export function grade(texts: readonly string[]): number {
 }
 
 const short = (l: { text: string; short?: string | undefined }) => l.short ?? l.text;
-const all = [...options.deliver, ...options.afford, ...options.addOns];
+const all = options.deliver;
 const curated = finetuneItems(finetune);
 
 /**

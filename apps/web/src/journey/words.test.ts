@@ -86,8 +86,9 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const SMALL = /\b(small|cheap|little|modest|tiny)\b/i;
     const FIGURE = /£\d|\d+%|\d+bn|\d{3},\d{3}/;
     const adviserIds = new Set(advisers.advisers.map((a) => a.id));
-    const all = [...options.deliver, ...options.afford, ...options.addOns];
-    expect(all.length).toBeGreaterThan(60);
+    // Since Phase 24 every option is a way to deliver a priority (ADR-0025).
+    const all = options.deliver;
+    expect(all.length).toBeGreaterThan(25);
     for (const o of all) {
       const text = o.advice.text;
       expect(words(text), `${o.id}: "${text}"`).toBeLessThanOrEqual(12);
@@ -157,7 +158,7 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const ACRONYMS = /\b(RDEL|CDEL|PSNFL|PSNB|AME)\b/;
     const TRADE =
       /\b(accruals?|forestalling|outturns?|consequentials?|fiscal mandate|deleverag(?:ing|ed)|uprat(?:ing|ed)|incidence)\b/i;
-    const all = [...options.deliver, ...options.afford, ...options.addOns];
+    const all = options.deliver;
     const curated = finetuneItems(finetune);
     const read: string[] = [
       ...curated.map((i) => i.title),

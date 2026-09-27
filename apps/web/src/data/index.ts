@@ -1,12 +1,9 @@
 import {
   parseAdvisers,
   parseBriefings,
-  parseDraws,
   parsePm,
   parseMinisters,
   parseInterventions,
-  parseCompromise,
-  parseRabbit,
   parseOptions,
   parseFinetune,
   parseHouseholdsFile,
@@ -37,12 +34,9 @@ import {
 } from '@btc/engine';
 import advisersJson from '@data/journey/advisers.json';
 import briefingsJson from '@data/journey/briefings.json';
-import drawsJson from '@data/journey/draws.json';
 import pmJson from '@data/journey/pm.json';
 import ministersJson from '@data/journey/ministers.json';
 import interventionsJson from '@data/journey/interventions.json';
-import compromiseJson from '@data/journey/compromise.json';
-import rabbitJson from '@data/journey/rabbit.json';
 import optionsJson from '@data/journey/options.json';
 import finetuneJson from '@data/journey/finetune.json';
 import electorateJson from '@data/journey/households.json';
@@ -74,12 +68,9 @@ export const context = parseContext(contextJson);
 export const advisers = parseAdvisers(advisersJson);
 export const briefings = parseBriefings(briefingsJson);
 export const reception = parseReception(receptionJson);
-export const draws = parseDraws(drawsJson);
 export const pm = parsePm(pmJson);
 export const ministers = parseMinisters(ministersJson);
 export const interventions = parseInterventions(interventionsJson);
-export const compromise = parseCompromise(compromiseJson);
-export const rabbit = parseRabbit(rabbitJson);
 export const options = parseOptions(optionsJson);
 /** Step 4's curated tax and spending levers (Phase 24, ADR-0025). */
 export const finetune = parseFinetune(finetuneJson);
@@ -128,12 +119,9 @@ const problems = validateDataset({
   contexts: [context],
   advisers,
   briefings,
-  draws,
   pm,
   ministers,
   interventions,
-  compromise,
-  rabbit,
   options,
   finetune,
   electorate,

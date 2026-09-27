@@ -51,15 +51,13 @@ h4 {
 
 /* The headings are the editorial voice; the numbers and the controls stay in the body face. */
 h1,
-h2,
-.page-title {
+h2 {
   font-family: var(--font-display);
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
-h1,
-.page-title {
+h1 {
   font-size: 2rem;
   line-height: 1.15;
 }
@@ -558,14 +556,6 @@ hr {
   font-size: 0.9375rem;
 }
 
-.adopted-line {
-  margin: 0 0 12px;
-  padding: 10px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  font-weight: 600;
-}
-
 /* ---------------------------------------------------------------- labels */
 
 /*
@@ -580,7 +570,6 @@ hr {
 .kicker,
 .opening__kicker,
 .bar__label,
-.bar__facts dt,
 .progress__step,
 .intro__rank,
 .review__rank {
@@ -895,12 +884,6 @@ hr {
   flex-wrap: wrap;
   gap: 6px;
   margin: 8px 0 0;
-}
-
-.lever__note {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 0.875rem;
 }
 
 .lever__effect {
@@ -1639,11 +1622,6 @@ details.table-view td:first-child {
   line-height: 1.3;
 }
 
-.briefing__title {
-  margin: 4px 0 8px;
-  font-size: 1.125rem;
-}
-
 .briefing__headline {
   margin: 6px 0 8px;
   font-size: 1.125rem;
@@ -1679,24 +1657,6 @@ details.table-view td:first-child {
 
 .briefing__more .briefing__para:last-child .briefing__sources {
   margin-bottom: 0;
-}
-
-.briefing-row {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-@media (min-width: 900px) {
-  .briefing-row {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .briefing-row--three {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    align-items: start;
-  }
 }
 
 .facts {
@@ -1763,10 +1723,6 @@ details.table-view td:first-child {
   font-variant-numeric: tabular-nums;
 }
 
-.chip__was {
-  color: var(--ink-2);
-}
-
 /* The manifesto red lines, as the Political Adviser lists them. */
 .redlines {
   margin: 8px 0;
@@ -1783,92 +1739,6 @@ details.table-view td:first-child {
 
 .redlines li + li {
   margin-top: 6px;
-}
-
-/* ---------------------------------------------------------- your own figures */
-
-.readings {
-  display: grid;
-  gap: 12px;
-  margin: 12px 0;
-}
-
-.reading {
-  padding: 16px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.reading__title {
-  margin: 0 0 8px;
-  font-size: 1.125rem;
-}
-
-.reading__suggestion {
-  margin: 4px 0 8px;
-  padding: 2px 0 2px 14px;
-  border-left: 2px solid var(--accent);
-}
-
-.reading__compare {
-  display: flex;
-  align-items: flex-end;
-  gap: 16px;
-  margin: 6px 0 10px;
-}
-
-.reading__side {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.reading__side small {
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.reading__side strong {
-  font-size: 1.375rem;
-  line-height: 1.15;
-  font-variant-numeric: tabular-nums;
-}
-
-.reading__arrow {
-  padding-bottom: 3px;
-  color: var(--muted);
-  font-size: 1.1rem;
-}
-
-.reading__suggestion p {
-  margin: 0;
-}
-
-.reading__rationale {
-  margin: 0;
-  font-size: 0.9375rem;
-}
-
-.reading__rationale summary {
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.reading__rationale p {
-  margin: 0 0 6px;
-  color: var(--ink-2);
-}
-
-.reading__why summary {
-  padding: 10px 0;
-  color: var(--accent);
-  font-size: 0.9375rem;
-}
-
-.reading .lever {
-  margin-top: 0;
-  padding-top: 4px;
-  border-top: 0;
 }
 
 /* ---------------------------------------------- collapsible groups and notes */

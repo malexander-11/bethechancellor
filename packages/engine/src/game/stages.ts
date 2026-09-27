@@ -6,9 +6,7 @@ import type { GamePermalink } from '../types/engine.js';
  * the flagship policies, fine-tuning tax and spending, delivering the Budget, and the feedback.
  * The index is what a shared link carries (`st.N`). Fine-tuning is one stage with its two
  * curated screens and the desk's two screens behind them; `assumptions` is the Phase 4 name that
- * still appears in authored data. The steps Phase 24 retired (`afford`, `forecast`,
- * `compromise`, `rabbit`) read as the stage that took their place, so authored data that names
- * them keeps validating until it is gone.
+ * still appears in authored data.
  */
 export const GAME_STAGES: readonly JourneyStep[] = [
   'outlook',
@@ -26,12 +24,6 @@ const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   // The desk's two screens are fine-tuning's side room: every tax and every spending lever.
   taxes: 'finetune',
   spending: 'finetune',
-  // Retired in Phase 24: paying for it became fine-tuning; the forecast, the compromises and the
-  // add-ons went, and the review took their place on the road.
-  afford: 'finetune',
-  forecast: 'review',
-  compromise: 'review',
-  rabbit: 'review',
 };
 
 /** Where a step sits in the playthrough; the start page is before everything, at −1. */

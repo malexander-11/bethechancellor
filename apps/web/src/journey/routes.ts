@@ -10,14 +10,9 @@ export const STAGE_ROUTES: Record<JourneyStep, string> = {
   assumptions: '/outlook',
   pm: '/pm',
   deliver: '/budget/deliver',
-  afford: '/finetune/tax',
   finetune: '/finetune/tax',
   taxes: '/budget/taxes',
   spending: '/budget/spending',
-  // Retired in Phase 24: the review took their place.
-  forecast: '/review',
-  compromise: '/review',
-  rabbit: '/review',
   review: '/review',
   'budget-day': '/budget-day',
 };

@@ -41,16 +41,10 @@ import type {
 import type {
   contextFileSchema,
   contextReadingSchema,
-  contextScenarioSchema,
-  scenarioKindSchema,
   suggestionRuleSchema,
 } from '../schema/context.schema.js';
 import type {
-  drawOutcomeSchema,
-  drawRevisionSchema,
-  drawsFileSchema,
   prioritySchema,
-  macroCandidateSchema,
   pmFileSchema,
   promiseSchema,
   simulatedLineSchema,
@@ -60,8 +54,6 @@ import type {
   interventionsFileSchema,
   interventionSchema,
   interventionWhenSchema,
-  compromiseFileSchema,
-  rabbitFileSchema,
   householdsFileSchema,
   householdSchema,
   householdTouchSchema,
@@ -76,8 +68,6 @@ import type {
   receptionRuleSchema,
   optionsFileSchema,
   deliverOptionSchema,
-  affordOptionSchema,
-  addOnSchema,
   finetuneFileSchema,
   finetuneGroupSchema,
   finetuneItemSchema,
@@ -129,12 +119,6 @@ export type DwpBenefitExtract = z.infer<typeof dwpBenefitExtractSchema>;
 export type ContextFile = z.infer<typeof contextFileSchema>;
 export type ContextReading = z.infer<typeof contextReadingSchema>;
 export type SuggestionRule = z.infer<typeof suggestionRuleSchema>;
-export type ContextScenario = z.infer<typeof contextScenarioSchema>;
-export type ScenarioKind = z.infer<typeof scenarioKindSchema>;
-export type DrawsFile = z.infer<typeof drawsFileSchema>;
-export type DrawOutcome = z.infer<typeof drawOutcomeSchema>;
-export type DrawRevision = z.infer<typeof drawRevisionSchema>;
-export type MacroCandidateName = z.infer<typeof macroCandidateSchema>;
 export type SimulatedLine = z.infer<typeof simulatedLineSchema>;
 export type PmFile = z.infer<typeof pmFileSchema>;
 export type Priority = z.infer<typeof prioritySchema>;
@@ -145,12 +129,8 @@ export type MinisterBand = z.infer<typeof ministerBandSchema>;
 export type InterventionsFile = z.infer<typeof interventionsFileSchema>;
 export type InterventionSpec = z.infer<typeof interventionSchema>;
 export type InterventionWhen = z.infer<typeof interventionWhenSchema>;
-export type CompromiseFile = z.infer<typeof compromiseFileSchema>;
-export type RabbitFile = z.infer<typeof rabbitFileSchema>;
 export type OptionsFile = z.infer<typeof optionsFileSchema>;
 export type DeliverOption = z.infer<typeof deliverOptionSchema>;
-export type AffordOption = z.infer<typeof affordOptionSchema>;
-export type AddOn = z.infer<typeof addOnSchema>;
 export type FinetuneFile = z.infer<typeof finetuneFileSchema>;
 export type FinetuneSide = z.infer<typeof finetuneSideSchema>;
 export type FinetuneGroup = z.infer<typeof finetuneGroupSchema>;
