@@ -83,7 +83,7 @@ Continues on the road in all.
 8. **Identity.** Tokens in `apps/web/src/styles/tokens.css`: Commons green `#00644a` as the accent,
    warm paper `#f3eee2` and `#fbf8f1`, charcoal `#23262a`, brass `#b3934c` (as ink `#745a1f`),
    Budget red `#a3202a` for the delivering button and the Budget box on the opening; a dark theme
-   with the same roles. Fraunces (variable, self-hosted from `@fontsource-variable/fraunces`, OFL)
+   with the same roles, one switch away (light by default; ADR-0016, revised). Fraunces (variable, self-hosted from `@fontsource-variable/fraunces`, OFL)
    for `h1`, `h2`, the brand, the three sentences and the verdict's kind; the system sans for
    everything else, badges included (revised below). Every text pairing in both themes holds 4.5:1
    (checked by the walk's contrast audit; the good and warning inks were darkened to `#166a30` and `#7a4f00` so a

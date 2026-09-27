@@ -20,7 +20,7 @@ number still comes from an official source or a stated calculation on one, badge
 and the sources and breakdowns sit behind a "Show workings" switch, off by default. A first
 playthrough's required reading and decisions come to about nine minutes (an estimate from the
 rendered screens, not user testing; ADR-0023). Every screen names itself, can be reached by
-keyboard and screen reader, holds 4.5:1 contrast in light and dark themes, keeps every control at
+keyboard and screen reader, holds 4.5:1 contrast in light and dark themes (light by default, dark one switch away), keeps every control at
 44px and says met or missed in words.
 
 Seven steps. **Become Chancellor**: one sentence, the playtime, the button. **Your starting

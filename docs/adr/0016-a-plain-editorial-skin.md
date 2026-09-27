@@ -26,7 +26,7 @@ either.
 - **One page colour, one accent.** An off-white page, white cards with a 1px hairline border and a
   4px radius, a single teal accent for links, buttons, focus and the current step. No shadows, no
   grain, no gradients, no transforms, no clip-paths. A dark theme with the same layout and inverted
-  neutrals follows the system preference.
+  neutrals follows the system preference (revised below: light by default).
 - **One type family.** The reader's own sans-serif at 16px (17px on a wide screen), line height
   1.5. Labels, kickers, tags, badges, sources and the footer are 14px, the floor for everything, in
   sentence case with no letter-spacing. No uppercase, no monospace, no serif.
@@ -68,3 +68,12 @@ the slider thumb all have a 44px hit area.
   and on.
 - The container this was built in falls back to a wide sans-serif, so anything that fits here fits
   on a reader's own system font.
+
+## Revision (2026-09-27): light by default
+
+The page no longer follows the reader's system colour scheme. It is light by default, because an
+official paper is read on paper, and the dark theme, unchanged, sits behind a "Dark mode" switch in
+the header, remembered in the browser and applied before the first paint so a dark page never
+flashes light. The tokens moved from a `prefers-color-scheme` media query to
+`:root[data-theme='dark']`; the walk sets the switch for its dark run, and the audits pass as
+before.

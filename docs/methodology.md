@@ -475,7 +475,7 @@ in their own words and with their own citations, ordered by the size of the meas
 ## 13. The look (ADR-0009, ADR-0016)
 
 The interface is plain: an off-white page, white cards with hairline rules, one teal accent, the
-reader's own sans-serif at 16px with nothing under 14px, and a dark theme that follows the system.
+reader's own sans-serif at 16px with nothing under 14px, and a dark theme behind a switch in the header, light by default.
 Phase 6 dressed the game as paperwork on a Treasury desk (ADR-0009); Phase 11 took the furniture
 away because it stood between the reader and the numbers (ADR-0016). Three rules from the desk
 survive it.

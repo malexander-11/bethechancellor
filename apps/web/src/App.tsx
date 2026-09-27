@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { ThemeSwitch } from './journey/theme';
 import { WorkingsProvider, useWorkingsSwitch } from './journey/workings';
 import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
@@ -94,6 +95,7 @@ function Shell() {
               <NavLink to="/about">About &amp; sources</NavLink>
             </nav>
             <WorkingsSwitch />
+            <ThemeSwitch />
           </div>
         </div>
       </header>
