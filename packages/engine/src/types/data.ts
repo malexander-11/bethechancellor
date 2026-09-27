@@ -78,6 +78,10 @@ import type {
   deliverOptionSchema,
   affordOptionSchema,
   addOnSchema,
+  finetuneFileSchema,
+  finetuneGroupSchema,
+  finetuneItemSchema,
+  finetuneSideSchema,
 } from '../schema/game.schema.js';
 import type {
   glossaryFileSchema,
@@ -147,6 +151,10 @@ export type OptionsFile = z.infer<typeof optionsFileSchema>;
 export type DeliverOption = z.infer<typeof deliverOptionSchema>;
 export type AffordOption = z.infer<typeof affordOptionSchema>;
 export type AddOn = z.infer<typeof addOnSchema>;
+export type FinetuneFile = z.infer<typeof finetuneFileSchema>;
+export type FinetuneSide = z.infer<typeof finetuneSideSchema>;
+export type FinetuneGroup = z.infer<typeof finetuneGroupSchema>;
+export type FinetuneItem = z.infer<typeof finetuneItemSchema>;
 export type HouseholdsFile = z.infer<typeof householdsFileSchema>;
 export type Household = z.infer<typeof householdSchema>;
 export type HouseholdTouch = z.infer<typeof householdTouchSchema>;

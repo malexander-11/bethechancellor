@@ -60,7 +60,7 @@ export function RaiseMoreTax({
         </ul>
       )}
       <p className="panel__hint">
-        <StepLink to="/budget/afford">All the ways to pay</StepLink>
+        <StepLink to="/finetune/tax">All the ways to pay</StepLink>
       </p>
     </section>
   );
@@ -106,7 +106,7 @@ export function EaseOffTax({ ways, moves }: { ways: readonly AffordOption[]; mov
         </ul>
       )}
       <p className="panel__hint">
-        <StepLink to="/budget/afford">All the ways to pay</StepLink>
+        <StepLink to="/finetune/tax">All the ways to pay</StepLink>
       </p>
     </section>
   );

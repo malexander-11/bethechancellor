@@ -1072,29 +1072,6 @@
           ]
         }
       ]
-    },
-    {
-      "id": "afford-overview",
-      "step": "afford",
-      "adviser": "director-of-tax",
-      "title": "Ways to afford it",
-      "headline": "The gap is your target minus the headroom you have left. Every way to close it says who pays.",
-      "paragraphs": [
-        {
-          "text": "HMRC's ready reckoner costs the rate and threshold changes and the Treasury's scorecards cost the decisions of the last two Budgets; where only a think tank has costed a measure, the card wears the assumption badge and, where the measure needs its own Act or is collected late, an earliest start. The manifesto's tax lock fences off income tax rates, National Insurance and VAT: an option that crosses it says so before you choose it.",
-          "sources": [
-            {
-              "sourceId": "hmrc-trr-2025-06"
-            },
-            {
-              "sourceId": "hmt-budget-2025-table-4-1"
-            },
-            {
-              "sourceId": "labour-manifesto-2024-strong-foundations"
-            }
-          ]
-        }
-      ]
     }
   ]
 }

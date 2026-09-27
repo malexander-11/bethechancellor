@@ -10,6 +10,7 @@ import {
   compromiseFileSchema,
   rabbitFileSchema,
   optionsFileSchema,
+  finetuneFileSchema,
   householdsFileSchema,
   speechFileSchema,
   incidenceFileSchema,
@@ -41,6 +42,7 @@ import type {
   CompromiseFile,
   RabbitFile,
   OptionsFile,
+  FinetuneFile,
   HouseholdsFile,
   SpeechFile,
   IncidenceFile,
@@ -64,6 +66,7 @@ import type {
 } from './types/data.js';
 import { policyYearsOf } from './calc/arithmetic.js';
 import { AFFORD_TABS } from './game/options.js';
+import { FINETUNE_SIDES, WHO_PAYS, finetuneSideOf } from './game/finetune.js';
 import { hasHead } from './costing/taxHead.js';
 import { GUIDED_STEPS, stageTerms } from './game/guide.js';
 import { validateVintage } from './validate/validateVintage.js';
@@ -183,6 +186,10 @@ export function parseOptions(json: unknown): OptionsFile {
   return parseWith(optionsFileSchema, json, 'the options');
 }
 
+export function parseFinetune(json: unknown): FinetuneFile {
+  return parseWith(finetuneFileSchema, json, 'the fine-tuning screens');
+}
+
 export function parseHouseholdsFile(json: unknown): HouseholdsFile {
   return parseWith(householdsFileSchema, json, 'the households');
 }
@@ -225,6 +232,8 @@ export interface Dataset {
   compromise?: CompromiseFile;
   rabbit?: RabbitFile;
   options?: OptionsFile;
+  /** The curated levers of step 4 (Phase 24, ADR-0025). */
+  finetune?: FinetuneFile;
   electorate?: HouseholdsFile;
   speech?: SpeechFile;
   incidence?: IncidenceFile;
@@ -232,6 +241,21 @@ export interface Dataset {
   guide?: GuideFile;
   glossary?: GlossaryFile;
   reception?: ReceptionFile;
+}
+
+/**
+ * Why a card cannot propose a setting: it is outside the control's range, it is where the lever
+ * rests (so choosing it would change nothing), or it is off the control's steps (so the player
+ * could never reach it). Shared by the options and the fine-tuning screens.
+ */
+function settingProblem(lever: Lever, value: number): 'range' | 'default' | 'steps' | undefined {
+  const { min, max, step } = lever.control;
+  if (value < min || value > max) return 'range';
+  if (value === lever.control.default) return 'default';
+  if (step > 0 && Math.abs(Math.round((value - min) / step) * step + min - value) > 1e-9) {
+    return 'steps';
+  }
+  return undefined;
 }
 
 function collectSourceIds(value: unknown, out: Set<string>): void {
@@ -266,6 +290,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.compromise ?? null,
       ds.rabbit ?? null,
       ds.options ?? null,
+      ds.finetune ?? null,
       ds.electorate ?? null,
       ds.speech ?? null,
       ds.incidence ?? null,
@@ -612,17 +637,14 @@ export function validateDataset(ds: Dataset): string[] {
         if (lever.deprecated) problems.push(`${screen} option ${o.id} moves shelved lever ${code}`);
         if (lever.category === 'macro')
           problems.push(`${screen} option ${o.id} moves macro slider ${code}`);
-        const { min, max, step } = lever.control;
-        if (value < min || value > max) {
+        const setting = settingProblem(lever, value);
+        if (setting === 'range') {
           problems.push(
             `${screen} option ${o.id} sets ${code} to ${value}, outside the lever's range`,
           );
-        } else if (value === lever.control.default) {
+        } else if (setting === 'default') {
           problems.push(`${screen} option ${o.id} leaves lever ${code} where it is`);
-        } else if (
-          step > 0 &&
-          Math.abs(Math.round((value - min) / step) * step + min - value) > 1e-9
-        ) {
+        } else if (setting === 'steps') {
           problems.push(
             `${screen} option ${o.id} sets ${code} to ${value}, off the control's steps`,
           );
@@ -647,6 +669,59 @@ export function validateDataset(ds: Dataset): string[] {
         const n = perTab.get(tab.id) ?? 0;
         if (n < 3 || n > 6)
           problems.push(`who-pays tab ${tab.id} offers ${n} options; 3 to 6 expected`);
+      }
+    }
+  }
+  if (ds.finetune) {
+    // Step 4's curated levers (Phase 24, ADR-0025). Each is a live lever on its own screen's side
+    // of the Budget; the move its adviser's line judges is a setting the control can reach and
+    // not where the lever rests; a tax sits in the who-pays group its incidence tag names; and
+    // the screen's adviser exists and speaks on that step.
+    const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
+    const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
+    for (const side of FINETUNE_SIDES) {
+      const screen = ds.finetune[side];
+      const adviser = adviserById.get(screen.adviser);
+      if (adviserById.size > 0 && !adviser) {
+        problems.push(`the ${side} screen names unknown adviser ${screen.adviser}`);
+      } else if (adviser && !adviser.steps.includes('finetune')) {
+        problems.push(`the ${side} screen's adviser ${adviser.id} does not speak on finetune`);
+      }
+      for (const group of screen.groups) {
+        const payers = WHO_PAYS[group.id];
+        if (side === 'tax' && !payers) {
+          problems.push(`tax group ${group.id} is not one of the who-pays groups`);
+        }
+        for (const item of group.items) {
+          const lever = byCode.get(item.code);
+          if (!lever) {
+            problems.push(`the ${side} screen offers unknown lever "${item.code}"`);
+            continue;
+          }
+          if (lever.deprecated)
+            problems.push(`the ${side} screen offers shelved lever ${item.code}`);
+          if (finetuneSideOf(lever) !== side) {
+            problems.push(`the ${side} screen offers ${item.code}, a ${lever.category} lever`);
+          }
+          const setting = settingProblem(lever, item.move);
+          if (setting === 'range') {
+            problems.push(
+              `the line on ${item.code} judges ${item.move}, outside the lever's range`,
+            );
+          } else if (setting === 'default') {
+            problems.push(`the line on ${item.code} judges ${item.move}, where the lever rests`);
+          } else if (setting === 'steps') {
+            problems.push(`the line on ${item.code} judges ${item.move}, off the control's steps`);
+          }
+          if (side === 'tax' && payers && ds.incidence) {
+            const pays = ds.incidence.levers[item.code];
+            if (!pays || !payers.includes(pays)) {
+              problems.push(
+                `tax lever ${item.code} falls on ${pays ?? 'nobody'}, not on group ${group.id}`,
+              );
+            }
+          }
+        }
       }
     }
   }

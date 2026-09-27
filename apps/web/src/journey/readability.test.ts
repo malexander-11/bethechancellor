@@ -1,7 +1,9 @@
+import { finetuneItems } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import {
   compromise,
   draws,
+  finetune,
   guide,
   interventions,
   ministers,
@@ -76,6 +78,7 @@ export function grade(texts: readonly string[]): number {
 
 const short = (l: { text: string; short?: string | undefined }) => l.short ?? l.text;
 const all = [...options.deliver, ...options.afford, ...options.addOns];
+const curated = finetuneItems(finetune);
 
 /**
  * Every set of words a player meets with the folds closed, by where it is met. The desk's own
@@ -87,6 +90,15 @@ const SETS: Record<string, readonly string[]> = {
     .flatMap((s) => [s.title, s.now]),
   'option titles': all.map((o) => o.title),
   'option advice': all.map((o) => o.advice.text),
+  'the fine-tuning screens': [
+    ...[finetune.tax, finetune.spending].flatMap((s) => [
+      s.title,
+      s.lead,
+      ...s.groups.map((g) => g.label),
+    ]),
+    ...curated.map((i) => i.title),
+  ],
+  'the fine-tuning advice': curated.map((i) => i.advice.text),
   'the priorities': pm.priorities.flatMap((p) => [p.title, p.purpose, short(p.reaction)]),
   'the promises': pm.promises.flatMap((p) => [
     p.title,
@@ -125,7 +137,7 @@ const SETS: Record<string, readonly string[]> = {
 
 describe('readability: a reading age of about twelve, one idea a sentence', () => {
   it('reads every set a newcomer meets', () => {
-    expect(Object.keys(SETS).length).toBe(15);
+    expect(Object.keys(SETS).length).toBe(17);
     for (const [name, texts] of Object.entries(SETS)) expect(texts.length, name).toBeGreaterThan(0);
   });
 
@@ -144,7 +156,8 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // the priorities 3.5, the promises 6.7, the targets 0.5, the outcomes 4.7, the compromise
     // questions 1.0, the routes 4.1, the reception labels 4.9 and bands about 6, the verdicts 5.5,
     // the interventions 5.8, the add-ons 5.5, the ministers 5.5. Proper nouns (National Insurance,
-    // the manifesto, the Chancellor) hold the promises and the bands highest.
+    // the manifesto, the Chancellor) hold the promises and the bands highest. The fine-tuning
+    // screens' titles 5.1 and their advisers' lines 4.9 (Phase 24).
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       expect(g, `${name} reads at grade ${g.toFixed(1)}`).toBeLessThanOrEqual(GRADE_MAX);

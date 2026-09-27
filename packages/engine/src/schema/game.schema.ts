@@ -306,6 +306,74 @@ export const optionsFileSchema = z
     }
   });
 
+/* --------------------------------------------------------- fine-tuning */
+
+/**
+ * One lever on the fine-tuning screens (Phase 24, ADR-0025): a real control the player moves,
+ * hand-picked, under a plain title, with one line from the screen's adviser judging the move the
+ * adviser has in mind. `move` is that move: a toggle switched on (1), or a slider's usual step. It
+ * is never applied for the player; it is what the line's judgement is tested against (a size word
+ * must match the engine's own figure at `move`, words.test.ts), and what the card's price reads
+ * before the lever has moved. No figure is typed, and the line cites what it rests on.
+ */
+export const finetuneItemSchema = z.strictObject({
+  /** The lever's code: a live tax lever on the tax side, a spending or welfare one on the other. */
+  code: z.string().min(1),
+  /** What the lever is, plainly: "The basic rate of income tax". */
+  title: z.string().min(1).max(80),
+  move: z.number(),
+  advice: simulatedLineSchema.extend({ sources: z.array(sourceRefSchema).min(1) }),
+});
+
+/** A group of levers on one screen: who pays, on the tax side; what the money is for, on the other. */
+export const finetuneGroupSchema = z.strictObject({
+  id: slug,
+  label: z.string().min(1).max(60),
+  items: z.array(finetuneItemSchema).min(1),
+});
+
+/** One of the two screens: its heading, its one line, whose voice speaks on it, and its groups. */
+export const finetuneSideSchema = z.strictObject({
+  title: z.string().min(1).max(40),
+  lead: z.string().min(1).max(120),
+  /** The adviser who speaks every line on the screen (an id in advisers.json, on `finetune`). */
+  adviser: slug,
+  groups: z.array(finetuneGroupSchema).min(1),
+});
+
+export const finetuneFileSchema = z
+  .strictObject({
+    schemaVersion: z.literal(1),
+    tax: finetuneSideSchema,
+    spending: finetuneSideSchema,
+  })
+  .superRefine((file, ctx) => {
+    // A lever appears once in the file, and a group id once on its screen: two cards for one
+    // lever would move together and read as two choices.
+    const codes = new Set<string>();
+    for (const side of ['tax', 'spending'] as const) {
+      const groups = new Set<string>();
+      file[side].groups.forEach((g, i) => {
+        if (groups.has(g.id))
+          ctx.addIssue({
+            code: 'custom',
+            message: `two ${side} groups are called ${g.id}`,
+            path: [side, 'groups', i, 'id'],
+          });
+        groups.add(g.id);
+        g.items.forEach((item, j) => {
+          if (codes.has(item.code))
+            ctx.addIssue({
+              code: 'custom',
+              message: `lever ${item.code} is offered twice`,
+              path: [side, 'groups', i, 'items', j, 'code'],
+            });
+          codes.add(item.code);
+        });
+      });
+    }
+  });
+
 /* ------------------------------------------------------------ the package */
 
 /**

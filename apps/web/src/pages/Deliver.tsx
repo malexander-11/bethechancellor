@@ -119,7 +119,7 @@ export function DeliverPage() {
   return (
     <JourneyLayout
       step="deliver"
-      part={{ index: n, total: ranked.length + 1, label: priority.title }}
+      part={{ index: n, total: ranked.length + 2, label: priority.title }}
       title={
         <>
           <span className="intro__rank">{rank}</span> {priority.title}
@@ -202,8 +202,8 @@ export function DeliverPage() {
             Next: {nextPriority.title}
           </StepLink>
         ) : (
-          <StepLink to="/budget/afford" className="btn btn--primary">
-            Next: pay for it
+          <StepLink to="/finetune/tax" className="btn btn--primary">
+            Next: fine-tune tax and spend
           </StepLink>
         )}
         <StepLink to={back} className="btn">

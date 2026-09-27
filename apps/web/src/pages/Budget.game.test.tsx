@@ -61,7 +61,7 @@ describe('the package, with a game under way', () => {
     at(`/budget/spending?${BASE}&${GAME}&L=moj.10`);
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
     panel = screen.getByRole('tabpanel');
-    expect(within(panel).getAllByText('In your package')).toHaveLength(1);
+    expect(within(panel).getAllByText('In your flagship policies')).toHaveLength(1);
     expect(within(panel).queryByText('Adjusted from what you chose')).toBeNull();
   });
 
@@ -122,14 +122,19 @@ describe('the package, with a game under way', () => {
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     expect(screen.getByText(/Build your Budget · More policies/)).toBeInTheDocument();
     expect(screen.getByText('The Director of Public Spending’s briefing')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Back to building your Budget' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to fine-tuning spending' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/finetune\/spending\?/),
+    );
     expect(screen.queryByRole('link', { name: /Next: the/ })).toBeNull();
-    // The press summary and the way out to the forecast live on the ways to afford now.
-    expect(screen.queryByRole('complementary', { name: /press summary/ })).toBeNull();
+    // The way out to the forecast lives on the fine-tuning screens now.
     expect(screen.queryByRole('link', { name: /the OBR’s forecast/ })).toBeNull();
     spending.unmount();
     const taxes = at(`/budget/taxes?${BASE}&${GAME}`);
-    expect(screen.getByRole('link', { name: 'Back to paying for it' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to fine-tuning tax' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/finetune\/tax\?/),
+    );
     taxes.unmount();
     // Once the envelope is open, the way back is to the compromises.
     at(`/budget/taxes?${BASE}&g=s.7_st.4_pl.adviser_hr.20_pr.defence_rv.1`);

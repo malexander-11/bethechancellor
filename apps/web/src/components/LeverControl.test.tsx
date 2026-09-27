@@ -114,7 +114,7 @@ describe('LeverControl', () => {
         chosen={{ title: 'More money for prisons and courts', state: 'on' }}
       />,
     );
-    expect(within(funded.container).getByText('In your package')).toBeInTheDocument();
+    expect(within(funded.container).getByText('In your flagship policies')).toBeInTheDocument();
     funded.unmount();
     const pulled = render(
       <LeverControl
@@ -127,6 +127,75 @@ describe('LeverControl', () => {
     expect(within(pulled.container).getByText('Adjusted from what you chose')).toHaveClass(
       'tag--warn',
     );
+  });
+
+  it('wears a curated title, a price at rest, an adviser line and a fold for the rest', () => {
+    // The fine-tuning screens' card (Phase 24): the desk's control with a plain name, the numbers
+    // in view before anything moves, one adviser's line, the warnings that apply now, and the
+    // lever's own headline and caveats under one fold.
+    const itbr = levers.find((l) => l.code === 'itbr');
+    if (!itbr) throw new Error('missing basic rate');
+    const line = {
+      text: 'HMRC’s figure. A penny is big money.',
+      sources: [{ sourceId: 'hmrc-trr-2025-06' }],
+      badge: 'simulated' as const,
+    };
+    const rest = render(
+      <LeverControl
+        lever={itbr}
+        value={0}
+        summaryYear="2029-30"
+        onChange={() => undefined}
+        displayTitle="The basic rate of income tax"
+        hint={{ text: 'At 21%: raises £8.6bn · leaves £32.2bn', tone: 'better' }}
+        advice={{ who: 'Director of Tax', line }}
+        notes={[
+          { key: 'x', text: 'Overlaps with Something: both move the same base.', warn: true },
+        ]}
+        compact
+      >
+        <p>From the minister</p>
+      </LeverControl>,
+    );
+    const slider = screen.getByRole('slider', { name: 'The basic rate of income tax' });
+    // The price at rest describes the control, with the lever's own headline, folded.
+    expect(slider).toHaveAccessibleDescription(
+      expect.stringContaining('At 21%: raises £8.6bn · leaves £32.2bn'),
+    );
+    expect(screen.getByText('At 21%: raises £8.6bn · leaves £32.2bn')).toHaveClass(
+      'amount--better',
+    );
+    expect(screen.getByText('Director of Tax')).toHaveClass('kicker');
+    expect(screen.getByText(/A penny is big money/)).toBeInTheDocument();
+    expect(screen.getByText(/^Warning: Overlaps with Something/)).toHaveClass(
+      'choice__overlap--warn',
+    );
+    expect(screen.getByText('From the minister')).toBeInTheDocument();
+    const fold = screen.getByText(/^More about this/).closest('details') as HTMLElement;
+    expect(within(fold).getByText(itbr.headline ?? '')).toBeInTheDocument();
+    expect(within(fold).getByText('What this assumes')).toBeInTheDocument();
+    rest.unmount();
+    // Moved, the hint gives way to the lever's own effect line.
+    const outcome = computeOutcome({
+      vintage,
+      rules,
+      levers,
+      settings: { leverValues: { itbr: 1 } },
+    });
+    render(
+      <LeverControl
+        lever={itbr}
+        value={1}
+        effect={outcome.leverEffects.find((e) => e.code === 'itbr')}
+        summaryYear="2029-30"
+        onChange={() => undefined}
+        displayTitle="The basic rate of income tax"
+        hint={{ text: 'At 21%: raises £8.6bn · leaves £32.2bn', tone: 'better' }}
+        compact
+      />,
+    );
+    expect(screen.queryByText(/^At 21%/)).toBeNull();
+    expect(screen.getByText(/Current budget in 2029-30: raises £8\.\dbn/)).toBeInTheDocument();
   });
 
   it('formats pence, points, per cent and pounds', () => {

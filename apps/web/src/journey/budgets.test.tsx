@@ -13,6 +13,12 @@ const GAME =
 // The same game short of its target: the compromise screen in its other mood, the sums.
 const SHORT =
   'g=s.1_st.5_pl.adviser_hr.20_pr.defence+safer-streets_rv.1_rb.pubs&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_alc.-5&S=moj.10_dip47.1';
+// The same game with one folded lever moved in every group of the fine-tuning screens, so each
+// group shows four: the widest those screens get on arrival.
+const TUNED = GAME.replace(
+  'L=moj.10_dip47.1_hscl.1_alc.-5',
+  'L=moj.10_dip47.1_hscl.1_alc.-5_ipt.2_wealth2.1_banklevy.1_iinc2.1_apd.2_otherd.-1_woth.-1_rvplan2.1',
+);
 // Three priorities with the most options between them: the widest the priority screens get.
 const WIDEST =
   'g=s.1_st.2_pl.adviser_hr.20_pr.cost-of-living+welfare-bill+homes-growth&M=rate.0.75_rpi.0.5';
@@ -50,7 +56,10 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/budget/deliver', 205, WIDEST],
   ['/budget/deliver/2', 205, WIDEST],
   ['/budget/deliver/3', 205, WIDEST],
-  ['/budget/afford', 590, GAME],
+  ['/finetune/tax', 585, GAME],
+  ['/finetune/tax', 785, TUNED],
+  ['/finetune/spending', 530, GAME],
+  ['/finetune/spending', 735, TUNED],
   ['/forecast', 125, GAME],
   ['/compromise', 75, SHORT],
   ['/compromise/2', 80, SHORT],
@@ -94,7 +103,10 @@ describe('the word budgets', () => {
     // and the room to spare 112, the add-ons 234, the review 105, Budget day 240. Then the
     // compromises became three screens, one question each: the sums 67, 73 and 43, the room to
     // spare 57, 44 and 46; every reception band was cut to twenty words: Budget day 205; and the
-    // keep and go-further cards gained the Political Adviser's line: the add-ons 252.
+    // keep and go-further cards gained the Political Adviser's line: the add-ons 252. Paying for
+    // it then became fine-tuning tax and spending, real levers with an adviser's line and a price
+    // each (Phase 24): tax 531, spending 479 on arrival; 714 and 668 with one folded lever moved
+    // in every group, so each group shows four.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();

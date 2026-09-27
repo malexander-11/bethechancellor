@@ -39,7 +39,7 @@ describe('build your Budget: the ways to deliver', () => {
   it('shows one priority per screen, in rank order, with its lead’s line and a way on to the next', () => {
     at(`/budget/deliver?${BASE}&${GAME}`);
     expect(h1(/^1st Safer streets: prisons, police, borders/)).toBeInTheDocument();
-    expect(screen.getByText(/^Build your Budget · 1 of 3$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Build your Budget · 1 of 4$/)).toBeInTheDocument();
     // No voice at the top (Phase 23): the Justice Secretary's line waits in each card's fold, and
     // every card carries one adviser's line saying who proposed it and what it costs and does.
     expect(document.querySelector('.journey > .spoken')).toBeNull();
@@ -68,11 +68,11 @@ describe('build your Budget: the ways to deliver', () => {
     expect(next).toHaveAttribute('href', expect.stringMatching(/^\/budget\/deliver\/2\?/));
     fireEvent.click(next);
     expect(h1(/^2nd Defence on the NATO path/)).toBeInTheDocument();
-    expect(screen.getByText(/^Build your Budget · 2 of 3$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Build your Budget · 2 of 4$/)).toBeInTheDocument();
     expect(within(ways(/Ways to deliver: Defence/)).getAllByRole('checkbox')).toHaveLength(3);
-    expect(screen.getByRole('link', { name: 'Next: pay for it' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Next: fine-tune tax and spend' })).toHaveAttribute(
       'href',
-      expect.stringMatching(/^\/budget\/afford\?/),
+      expect.stringMatching(/^\/finetune\/tax\?/),
     );
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
       'href',

@@ -12,8 +12,11 @@ describe('the road through the game', () => {
     expect(enterable('deliver', game(1))).toBe(false);
     expect(enterable('deliver', game(2))).toBe(true);
     expect(enterable('afford', game(2))).toBe(true);
-    // One stage, four screens: the shared link's `st.2` means all of them.
+    expect(enterable('finetune', game(1))).toBe(false);
+    expect(enterable('finetune', game(2))).toBe(true);
+    // One stage, several screens: the shared link's `st.2` means all of them.
     expect(stageIndex('afford')).toBe(stageIndex('deliver'));
+    expect(stageIndex('finetune')).toBe(stageIndex('deliver'));
     expect(stageIndex('taxes')).toBe(stageIndex('deliver'));
     expect(stageIndex('spending')).toBe(2);
     expect(enterable('forecast', game(2))).toBe(false);
@@ -45,6 +48,7 @@ describe('the road through the game', () => {
       'outlook',
       'deliver',
       'afford',
+      'finetune',
       'taxes',
       'spending',
       'budget-day',

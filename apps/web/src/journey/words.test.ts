@@ -1,4 +1,4 @@
-import { computeOutcome } from '@btc/engine';
+import { computeOutcome, finetuneItems } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import { LEAD_MISSED, LEADS, NEXT, QUESTIONS } from '../pages/compromise/copy';
 import { TARGETS } from '../pages/Outlook';
@@ -8,6 +8,7 @@ import {
   compromise,
   context,
   draws,
+  finetune,
   glossary,
   guide,
   interventions,
@@ -119,6 +120,37 @@ describe('word budgets: one line visible, the rest a click away', () => {
     for (const o of all) expect(words(o.title), o.title).toBeLessThanOrEqual(12);
   });
 
+  it('gives every curated lever a plain title and one adviser line that the engine bears out', () => {
+    // The fine-tuning screens (Phase 24): the same rule as the options' lines, judged at the move
+    // the line has in mind. Big is £5bn or more, small £1bn or less, on the engine's arithmetic.
+    const headroomOf = (leverValues: Record<string, number>) =>
+      computeOutcome({ vintage, rules, levers, settings: { leverValues } }).verdicts.find(
+        (v) => v.kind === 'currentBudget',
+      )?.headroomGbpm ?? 0;
+    const base = headroomOf({});
+    const BIG = /\b(big|expensive|large|costly)\b/i;
+    const SMALL = /\b(small|cheap|little|modest|tiny)\b/i;
+    const FIGURE = /£\d|\d+%|\d+bn|\d{3},\d{3}/;
+    const items = finetuneItems(finetune);
+    expect(items).toHaveLength(45);
+    for (const item of items) {
+      const text = item.advice.text;
+      expect(words(text), `${item.code}: "${text}"`).toBeLessThanOrEqual(12);
+      expect(text, item.code).not.toMatch(FIGURE);
+      expect(words(item.title), item.title).toBeLessThanOrEqual(12);
+      const size = Math.abs(headroomOf({ [item.code]: item.move }) - base);
+      const bn = (size / 1000).toFixed(1);
+      if (BIG.test(text))
+        expect(size, `${item.code} says big at £${bn}bn`).toBeGreaterThanOrEqual(5000);
+      if (SMALL.test(text))
+        expect(size, `${item.code} says small at £${bn}bn`).toBeLessThanOrEqual(1000);
+    }
+    for (const side of [finetune.tax, finetune.spending]) {
+      expect(words(side.title), side.title).toBeLessThanOrEqual(4);
+      expect(words(side.lead), side.lead).toBeLessThanOrEqual(10);
+    }
+  });
+
   it('says what to do now in ten words, a priority’s purpose in five, a target in five', () => {
     // The desk is a side room and keeps its longer lines; every screen on the road is one breath.
     const road = guide.stages.filter((s) => s.step !== 'taxes' && s.step !== 'spending');
@@ -152,7 +184,15 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const TRADE =
       /\b(accruals?|forestalling|outturns?|consequentials?|fiscal mandate|deleverag(?:ing|ed)|uprat(?:ing|ed)|incidence)\b/i;
     const all = [...options.deliver, ...options.afford, ...options.addOns];
+    const curated = finetuneItems(finetune);
     const read: string[] = [
+      ...curated.map((i) => i.title),
+      ...curated.map((i) => i.advice.text),
+      ...[finetune.tax, finetune.spending].flatMap((s) => [
+        s.title,
+        s.lead,
+        ...s.groups.map((g) => g.label),
+      ]),
       ...guide.stages.map((s) => s.now),
       ...guide.stages.map((s) => s.title),
       ...all.map((o) => o.title),

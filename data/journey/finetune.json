@@ -1,0 +1,811 @@
+{
+  "schemaVersion": 1,
+  "tax": {
+    "title": "Fine-tune tax",
+    "lead": "Raise or cut any tax. Watch your headroom move.",
+    "adviser": "director-of-tax",
+    "groups": [
+      {
+        "id": "everyone",
+        "label": "Everyone",
+        "items": [
+          {
+            "code": "hscl",
+            "title": "Bring back the health and social care levy",
+            "move": 1,
+            "advice": {
+              "text": "The 2021 levy, back. Big money; National Insurance in all but name.",
+              "sources": [
+                {
+                  "sourceId": "hmt-build-back-better-2021"
+                },
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "itbr",
+            "title": "The basic rate of income tax",
+            "move": 1,
+            "advice": {
+              "text": "HMRC’s figure. A penny is big money; a rise breaks the lock.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-trr-2025-06",
+                  "table": "Publication_Format"
+                },
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "vats",
+            "title": "The main rate of VAT",
+            "move": 1,
+            "advice": {
+              "text": "HMRC’s figure. Big, felt on every receipt; a rise breaks the lock.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-trr-2025-06",
+                  "table": "Publication_Format"
+                },
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "sugsalt",
+            "title": "A new tax on sugar and salt in food",
+            "move": 1,
+            "advice": {
+              "text": "The Resolution Foundation’s design. Years to build; shrinks as recipes change.",
+              "sources": [
+                {
+                  "sourceId": "rf-call-of-duties-2025"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "ipt",
+            "title": "Insurance premium tax",
+            "move": 2,
+            "advice": {
+              "text": "HMRC’s figure. A quiet tax on every insurance premium.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-trr-2025-06",
+                  "table": "Publication_Format"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "hmrc2",
+            "title": "Another push to close the tax gap",
+            "move": 1,
+            "advice": {
+              "text": "A repeat of last year’s package; nobody has costed a further round.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "table": "Table 4.1"
+                }
+              ],
+              "badge": "simulated"
+            }
+          }
+        ]
+      },
+      {
+        "id": "best-off",
+        "label": "The best-off",
+        "items": [
+          {
+            "code": "cgtalign",
+            "title": "Tax capital gains at the same rates as income",
+            "move": 1,
+            "advice": {
+              "text": "CenTax’s package. Big money, but nothing before 2028.",
+              "sources": [
+                {
+                  "sourceId": "centax-taxes-at-the-top-2026"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "nicuel",
+            "title": "Charge full National Insurance on all earnings, however high",
+            "move": 1,
+            "advice": {
+              "text": "The IFS’s figure, static. Big, and it breaks the tax lock.",
+              "sources": [
+                {
+                  "sourceId": "ifs-green-budget-2025"
+                },
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "pens30",
+            "title": "Give everyone the same 30% pension tax relief",
+            "move": 1,
+            "advice": {
+              "text": "Our arithmetic on HMRC’s rows. Higher-rate savers pay; basic-rate savers gain.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-private-pensions-2026-07-tidy"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "it50",
+            "title": "A new 50% income tax rate above £125,140",
+            "move": 1,
+            "advice": {
+              "text": "Five times HMRC’s penny row. Symbolic money, and it strains the lock.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-trr-2025-06",
+                  "table": "Publication_Format"
+                },
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "wealth2",
+            "title": "A 2% yearly tax on wealth above £10 million",
+            "move": 1,
+            "advice": {
+              "text": "Tax Policy Associates’ figure. Nothing before 2030-31, and hotly contested.",
+              "sources": [
+                {
+                  "sourceId": "tpa-wealth-tax-2025"
+                }
+              ],
+              "badge": "simulated"
+            }
+          }
+        ]
+      },
+      {
+        "id": "business",
+        "label": "Business",
+        "items": [
+          {
+            "code": "nicpen",
+            "title": "Charge employer National Insurance on pension contributions",
+            "move": 1,
+            "advice": {
+              "text": "HMRC’s static cost of the relief. Big, and employers would respond.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-private-pensions-2026-07",
+                  "table": "Table 6"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "nicer",
+            "title": "Employer National Insurance",
+            "move": 1,
+            "advice": {
+              "text": "HMRC’s figure. Big; on the government’s reading, outside the lock.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-trr-2025-06",
+                  "table": "Publication_Format"
+                },
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "hmt-autumn-budget-2024-table-5-1",
+                  "table": "Table 5.1",
+                  "note": "line 26"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "qelevy",
+            "title": "A levy on the interest banks earn at the Bank of England",
+            "move": 1,
+            "advice": {
+              "text": "IPPR’s design. Big while Bank Rate stays high; new legislation needed.",
+              "sources": [
+                {
+                  "sourceId": "ippr-fixing-the-leak-2025"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "ct",
+            "title": "Corporation tax",
+            "move": 1,
+            "advice": {
+              "text": "HMRC’s figure. Steady money; any rise breaks the corporation tax cap.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-trr-2025-06",
+                  "table": "Publication_Format"
+                },
+                {
+                  "sourceId": "labour-manifesto-2024-growth"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "banklevy",
+            "title": "Double the bank levy",
+            "move": 1,
+            "advice": {
+              "text": "HMRC’s receipts, doubled. Static; balance sheets shrink when the rate rises.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-banking-sector-receipts-2025",
+                  "table": "Table 1"
+                }
+              ],
+              "badge": "simulated"
+            }
+          }
+        ]
+      },
+      {
+        "id": "savers-owners",
+        "label": "Savers and owners",
+        "items": [
+          {
+            "code": "ctgh",
+            "title": "Double council tax on the biggest homes (bands G and H)",
+            "move": 1,
+            "advice": {
+              "text": "The IFS’s illustration. Steady money from the biggest homes, England only.",
+              "sources": [
+                {
+                  "sourceId": "ifs-green-budget-2025"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "cgtdth",
+            "title": "Tax capital gains when someone dies",
+            "move": 1,
+            "advice": {
+              "text": "The Resolution Foundation’s idea. Steady money; nothing before 2028.",
+              "sources": [
+                {
+                  "sourceId": "rf-call-of-duties-2025"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "rnrb",
+            "title": "End the extra inheritance tax allowance for family homes",
+            "move": 1,
+            "advice": {
+              "text": "HMRC’s static cost of the relief. Steady money from larger estates.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-tax-reliefs-2026-01",
+                  "table": "Table 2"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "nicrent",
+            "title": "Charge National Insurance on landlords’ rent",
+            "move": 1,
+            "advice": {
+              "text": "CenTax’s ceiling, static. Landlords pay; it breaks the tax lock.",
+              "sources": [
+                {
+                  "sourceId": "centax-taxes-at-the-top-2026"
+                },
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "iinc2",
+            "title": "Add another 2p to the tax on dividends, savings and rental income",
+            "move": 1,
+            "advice": {
+              "text": "The Treasury’s own costing, repeated. Investors pay; a second helping.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "table": "Table 4.1"
+                }
+              ],
+              "badge": "simulated"
+            }
+          }
+        ]
+      },
+      {
+        "id": "duties",
+        "label": "Drivers, smokers, gamblers and flyers",
+        "items": [
+          {
+            "code": "gam2",
+            "title": "Put gambling duties up again",
+            "move": 1,
+            "advice": {
+              "text": "The Treasury’s costing, repeated. Bookmakers pay again; a second helping.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "table": "Table 4.1"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "rvfuel",
+            "title": "Put fuel duty up with inflation from April 2027",
+            "move": 1,
+            "advice": {
+              "text": "The Treasury’s own costing. Drivers pay, and it ends a fifteen-year freeze.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "table": "Table 4.1"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "tob",
+            "title": "Tobacco duty",
+            "move": 10,
+            "advice": {
+              "text": "HMRC’s figure. Small money; smokers pay, and fewer of them each year.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-trr-2025-06",
+                  "table": "Publication_Format"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "ved",
+            "title": "Car tax",
+            "move": 10,
+            "advice": {
+              "text": "HMRC’s figure. Small money, spread across every car and van.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-trr-2025-06",
+                  "table": "Publication_Format"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "apd",
+            "title": "Air passenger duty",
+            "move": 2,
+            "advice": {
+              "text": "HMRC’s figure. Small money from every flight.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-trr-2025-06",
+                  "table": "Publication_Format"
+                }
+              ],
+              "badge": "simulated"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "spending": {
+    "title": "Fine-tune spending",
+    "lead": "Trim or top up any budget. Watch your headroom move.",
+    "adviser": "director-of-public-spending",
+    "groups": [
+      {
+        "id": "services",
+        "label": "Public services",
+        "items": [
+          {
+            "code": "dhsc",
+            "title": "Health and social care",
+            "move": -1,
+            "advice": {
+              "text": "Protected, and the biggest budget. A cut shows up in waiting lists.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables",
+                  "table": "Table 5.3 RDELex"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "paragraph": "4.15-4.16"
+                },
+                {
+                  "sourceId": "govuk-elective-reform-plan-2025"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "dfe",
+            "title": "Schools and education",
+            "move": -1,
+            "advice": {
+              "text": "Protected. Special needs costs already squeeze what schools get.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "paragraph": "4.15-4.16"
+                },
+                {
+                  "sourceId": "nao-send-2024"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "mod",
+            "title": "Defence, day to day",
+            "move": -1,
+            "advice": {
+              "text": "Small money, and any cut breaks the defence promise.",
+              "sources": [
+                {
+                  "sourceId": "govuk-dip-funding-explainer"
+                },
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "home",
+            "title": "The Home Office and borders",
+            "move": -1,
+            "advice": {
+              "text": "Small money. It assumes asylum costs fall; if not, it overspends.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables",
+                  "table": "Table 5.3 RDELex"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03"
+                },
+                {
+                  "sourceId": "nao-asylum-system-2025"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "moj",
+            "title": "Prisons and courts",
+            "move": -1,
+            "advice": {
+              "text": "Small money. The House has been told sentences will not be shortened.",
+              "sources": [
+                {
+                  "sourceId": "no10-commons-statement-2026-09-01"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "mhclg",
+            "title": "Grants to councils",
+            "move": -1,
+            "advice": {
+              "text": "Small money here; councils would feel it in social care.",
+              "sources": [
+                {
+                  "sourceId": "govuk-local-government-settlement-2025-26"
+                },
+                {
+                  "sourceId": "no10-social-care-speech-2026-07-29"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "dft",
+            "title": "Transport, day to day",
+            "move": -1,
+            "advice": {
+              "text": "Small money. Already falling in real terms, and unprotected.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables",
+                  "table": "Table 5.3 RDELex"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "paragraph": "4.15-4.16"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "fcdo",
+            "title": "The Foreign Office and aid",
+            "move": -1,
+            "advice": {
+              "text": "Small money. Aid is already falling, and unprotected.",
+              "sources": [
+                {
+                  "sourceId": "fcdo-oda-2025"
+                },
+                {
+                  "sourceId": "hmt-sr25-del-tables",
+                  "table": "Table 5.3 RDELex"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "paragraph": "4.15-4.16"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "otherd",
+            "title": "All other departments",
+            "move": -1,
+            "advice": {
+              "text": "Mostly the block grants to Scotland, Wales and Northern Ireland.",
+              "sources": [
+                {
+                  "sourceId": "hmt-statement-of-funding-policy-2025"
+                },
+                {
+                  "sourceId": "hmt-sr25-del-tables",
+                  "table": "Table 5.3 RDELex"
+                }
+              ],
+              "badge": "simulated"
+            }
+          }
+        ]
+      },
+      {
+        "id": "investment",
+        "label": "Investment",
+        "items": [
+          {
+            "code": "cdel",
+            "title": "Public investment",
+            "move": -5,
+            "advice": {
+              "text": "Counts against the debt rule, not the day-to-day rule.",
+              "sources": [
+                {
+                  "sourceId": "hmt-strong-fiscal-framework-2024-10"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            }
+          }
+        ]
+      },
+      {
+        "id": "benefits",
+        "label": "Benefits",
+        "items": [
+          {
+            "code": "wpens",
+            "title": "Pensioner benefits",
+            "move": -1,
+            "advice": {
+              "text": "Mostly the state pension. A cut reaches every pensioner.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "table": "Table 4.6"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "wuc",
+            "title": "Universal credit",
+            "move": -1,
+            "advice": {
+              "text": "Inside the welfare cap, which the forecast already exceeds.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "table": "Table 4.6"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "wdis",
+            "title": "Disability benefits",
+            "move": -1,
+            "advice": {
+              "text": "Small money a point, and caseloads are rising fast.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03"
+                },
+                {
+                  "sourceId": "dwp-pip-statistics-2026-04"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "woth",
+            "title": "Other benefits",
+            "move": -1,
+            "advice": {
+              "text": "Small money: carers, housing support and Northern Ireland’s benefits.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "table": "Table 4.6"
+                }
+              ],
+              "badge": "simulated"
+            }
+          }
+        ]
+      },
+      {
+        "id": "decisions",
+        "label": "Last year’s decisions",
+        "items": [
+          {
+            "code": "rvpip",
+            "title": "Go ahead with the 2025 cuts to PIP",
+            "move": 1,
+            "advice": {
+              "text": "The Treasury’s costing. Undoes last year’s U-turn; the benches will fight.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "note": "line 83"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "rveff",
+            "title": "Cancel the extra efficiency savings planned from 2028",
+            "move": 1,
+            "advice": {
+              "text": "The Treasury’s costing. The OBR already doubts these savings will come.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "note": "line 37"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "rv2ch",
+            "title": "Reinstate the two-child limit",
+            "move": 1,
+            "advice": {
+              "text": "The Treasury’s costing. Families on benefits pay, and it breaks a promise.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "note": "line 6"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-document"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "rvwfp",
+            "title": "Limit winter fuel payments to pensioners on pension credit",
+            "move": 1,
+            "advice": {
+              "text": "The Treasury’s costing. A cut the government reversed last year.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "note": "line 84"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-policy-costings"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "rvplan2",
+            "title": "Let the student loan repayment threshold rise again",
+            "move": 1,
+            "advice": {
+              "text": "Small money. Graduates repaying loans keep a little more.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "note": "line 48"
+                }
+              ],
+              "badge": "simulated"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

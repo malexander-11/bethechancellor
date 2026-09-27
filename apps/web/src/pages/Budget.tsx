@@ -4,8 +4,6 @@ import {
   formatPct,
   incidenceRows,
   interventionsFor,
-  promiseBreaks,
-  promiseStrains,
   type JourneyStep,
   type Lever,
 } from '@btc/engine';
@@ -19,7 +17,7 @@ import { InteractionsNotice } from '../components/InteractionsNotice';
 import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
-import { LeverControl, formatLeverValue, type RedLine } from '../components/LeverControl';
+import { LeverControl, formatLeverValue } from '../components/LeverControl';
 import { MinisterLine } from '../components/MinisterLine';
 import { PathChart } from '../components/PathChart';
 import { PresetPicker } from '../components/PresetPicker';
@@ -39,6 +37,7 @@ import {
   options,
 } from '../data';
 import { useStageGuard } from '../journey/guard';
+import { chosenByLever, redLinesOf } from '../journey/levers';
 import { StepLink } from '../journey/links';
 import { describeAssumptions, macroCodesOf, scenarioCards } from '../journey/scenarios';
 import { useWorkings } from '../journey/workings';
@@ -61,10 +60,10 @@ const DESK_ORDER: readonly Tab[] = ['taxes', 'spending'];
 /**
  * The two screens of the desk: what each is called, whose briefing sits folded at its head, and
  * where it leads. In the sandbox they come one after another, by the button at the foot of the
- * page, with a way back but no tab bar: one road (ADR-0014). With a game under way they are side rooms off the
- * guided screens (ADR-0022): the taxes behind the ways to afford, the spending behind the ways
- * to deliver, each with one way back. The letters' screen has gone; its levers sit here by side
- * (ADR-0017).
+ * page, with a way back but no tab bar: one road (ADR-0014). With a game under way they are side
+ * rooms (ADR-0022): every tax lever behind the fine-tuning of tax, every spending lever behind the
+ * fine-tuning of spending (Phase 24), each with one way back. The letters' screen has gone; its
+ * levers sit here by side (ADR-0017).
  */
 const TABS: Record<
   Tab,
@@ -77,7 +76,7 @@ const TABS: Record<
     /** The next screen of the package; the last screen leads onward, wherever the game has got to. */
     next?: { to: string; label: string };
     back?: { to: string; label: string };
-    /** With a game: the guided screen this desk screen is the details of. */
+    /** With a game: the curated screen this desk screen holds every lever for. */
     room: { to: string; label: string };
   }
 > = {
@@ -86,14 +85,14 @@ const TABS: Record<
     folded: 'The Director of Tax’s briefing',
     briefingStep: 'taxes',
     next: { to: '/budget/spending', label: 'Next: the spending' },
-    room: { to: '/budget/afford', label: 'Back to paying for it' },
+    room: { to: '/finetune/tax', label: 'Back to fine-tuning tax' },
   },
   spending: {
     part: 'the spending',
     folded: 'The Director of Public Spending’s briefing',
     briefingStep: 'spending',
     back: { to: '/budget/taxes', label: 'Back to the taxes' },
-    room: { to: '/budget/deliver', label: 'Back to building your Budget' },
+    room: { to: '/finetune/spending', label: 'Back to fine-tuning spending' },
   },
 };
 
@@ -104,7 +103,7 @@ function isTab(tab: string | undefined): tab is Tab {
 /** What a link into the desk may carry in the router's state: which group to open, and where from. */
 interface DeskState {
   group?: string;
-  from?: 'deliver' | 'afford';
+  from?: 'deliver' | 'finetune';
   /** The exact screen to go back to, and what to call it, when a guided screen sent you here. */
   returnTo?: string;
   returnLabel?: string;
@@ -191,56 +190,22 @@ export function BudgetPage() {
         })
       : [];
   // The options the player chose, by the levers they move, so the desk can pin and tag them.
-  const chosen = new Map(
-    (status?.priorities ?? [])
-      .flatMap((p) => p.options)
-      .filter((o) => o.state !== 'off')
-      .flatMap((o) => Object.keys(o.option.values).map((code) => [code, o] as const)),
-  );
-  // The manifesto red lines, read from the same file the PM's promises come from, and whether the
-  // package as it stands crosses each. Pure arithmetic over the levers: it works without a game.
-  const breaks = promiseBreaks(state.leverValues, pm.promises, levers);
-  const strains = promiseStrains(state.leverValues, pm.promises, levers);
-  const redLinesFor = (code: string): RedLine[] =>
-    pm.promises.flatMap((p) => [
-      ...p.breaks
-        .filter((rule) => rule.code === code)
-        .map((rule) => ({
-          promise: p.title,
-          when: rule.when,
-          severity: 'breaks' as const,
-          broken:
-            breaks.find((b) => b.promise.id === p.id)?.brokenBy.some((b) => b.code === code) ??
-            false,
-        })),
-      ...p.strains
-        .filter((rule) => rule.code === code)
-        .map((rule) => ({
-          promise: p.title,
-          when: rule.when,
-          severity: 'strains' as const,
-          broken:
-            strains.find((s) => s.promise.id === p.id)?.strainedBy.some((b) => b.code === code) ??
-            false,
-        })),
-    ]);
+  const chosen = chosenByLever(status);
+  // The manifesto red lines, and whether the package as it stands crosses each.
+  const redLinesFor = redLinesOf(state.leverValues);
   // Who pays and who benefits, by the tags each lever carries, in the target year.
   const { paid, benefited } = incidenceRows(outcome, levers, incidence, targetYear);
 
   // Where the desk leads. A sandbox walks its two screens in sequence and on to Budget day. With a
-  // game the desk is a side room: the one link goes back to the guided screen you came from, or to
-  // the one these levers belong to, or to the compromises once the envelope is open.
+  // game the desk is a side room: the one link goes back to the screen you came from, or to the
+  // curated screen these levers belong to, or to the compromises once the envelope is open.
   const forward = game ? null : (spec.next ?? { to: '/budget-day', label: 'Go to Budget day' });
   const back = game
     ? arrived?.returnTo
       ? { to: arrived.returnTo, label: arrived.returnLabel ?? 'Back' }
-      : arrived?.from === 'deliver'
-        ? TABS.spending.room
-        : arrived?.from === 'afford'
-          ? TABS.taxes.room
-          : game.revealed
-            ? { to: '/compromise', label: 'Back to the compromises' }
-            : spec.room
+      : game.revealed
+        ? { to: '/compromise', label: 'Back to the compromises' }
+        : spec.room
     : spec.back;
 
   async function copyLink() {

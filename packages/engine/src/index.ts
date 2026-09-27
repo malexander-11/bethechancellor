@@ -26,6 +26,7 @@ export {
   parseCompromise,
   parseRabbit,
   parseOptions,
+  parseFinetune,
   parseHouseholdsFile,
   parseSpeech,
   parseIncidence,
@@ -70,6 +71,7 @@ export * from './game/interventions.js';
 export * from './game/forecast.js';
 export * from './game/compromise.js';
 export * from './game/options.js';
+export * from './game/finetune.js';
 export * from './game/households.js';
 export * from './game/speech.js';
 export * from './game/verdict.js';

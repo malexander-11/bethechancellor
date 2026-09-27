@@ -23,8 +23,10 @@ export const FINAL_STAGE = GAME_STAGES.length - 1;
 
 const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   assumptions: 'outlook',
-  // The package's other three screens: the second guided screen and the two desk screens.
+  // The package's other screens: the curated tax and spending screens (which replaced paying for
+  // it, `afford`, in Phase 24) and the two desk screens behind them.
   afford: 'deliver',
+  finetune: 'deliver',
   taxes: 'deliver',
   spending: 'deliver',
   // The review of the Budget before it is delivered: the second screen of the final choices.

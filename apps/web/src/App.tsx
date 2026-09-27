@@ -3,11 +3,11 @@ import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import { WorkingsProvider, useWorkingsSwitch } from './journey/workings';
 import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
-import { AffordPage } from './pages/Afford';
 import { BudgetPage } from './pages/Budget';
 import { BudgetDayPage } from './pages/BudgetDay';
 import { CompromisePage } from './pages/Compromise';
 import { DeliverPage } from './pages/Deliver';
+import { FinetunePage } from './pages/Finetune';
 import { ForecastPage } from './pages/Forecast';
 import { MethodologyPage } from './pages/Methodology';
 import { OutlookPage } from './pages/Outlook';
@@ -75,11 +75,14 @@ function Shell() {
           <Route path="/assumptions" element={<RedirectKeepingQuery to="/outlook" />} />
           <Route path="/pm" element={<PMPage />} />
           <Route path="/budget" element={<RedirectKeepingQuery to="/budget/deliver" />} />
-          {/* The two guided screens of the package; the desk's two screens catch everything else. */}
+          {/* The flagship screens of the package; the desk's two screens catch everything else. */}
           <Route path="/budget/deliver" element={<DeliverPage />} />
           <Route path="/budget/deliver/:n" element={<DeliverPage />} />
-          <Route path="/budget/afford" element={<AffordPage />} />
+          {/* Paying for it became fine-tuning tax and spending (Phase 24). */}
+          <Route path="/budget/afford" element={<RedirectKeepingQuery to="/finetune/tax" />} />
           <Route path="/budget/:tab" element={<BudgetPage />} />
+          <Route path="/finetune" element={<RedirectKeepingQuery to="/finetune/tax" />} />
+          <Route path="/finetune/:side" element={<FinetunePage />} />
           <Route path="/recommendations" element={<RedirectKeepingQuery to="/budget/spending" />} />
           <Route path="/forecast" element={<ForecastPage />} />
           <Route path="/compromise" element={<CompromisePage />} />

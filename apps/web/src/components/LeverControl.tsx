@@ -11,11 +11,13 @@ import {
   type Lever,
   type LeverEffect,
   type OptionState,
+  type SimulatedLine,
   type YearValues,
 } from '@btc/engine';
 import { vintage } from '../data';
 import { Milestones } from './Milestones';
-import { useId, useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
+import { AdviceLine } from './AdviceLine';
 import { LabelBadge } from './LabelBadge';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
 import { Term } from './Term';
@@ -51,6 +53,11 @@ export function formatLeverValue(lever: Lever, value: number): string {
     default:
       return `${sign}${abs}`;
   }
+}
+
+/** The same, without a trailing ".0": "−1%" for a whole step, as a sentence would say it. */
+export function formatLeverValueShort(lever: Lever, value: number): string {
+  return formatLeverValue(lever, value).replace(/(\d)\.0(?!\d)/, '$1');
 }
 
 function tone(v: number): string {
@@ -98,7 +105,7 @@ export function LeverFlags({ redLines, chosen }: { redLines: RedLine[]; chosen?:
       {chosen ? (
         chosen.state === 'on' ? (
           <span className="tag--treasury">
-            In your package<span className="sr-only">: {chosen.title}</span>
+            In your flagship policies<span className="sr-only">: {chosen.title}</span>
           </span>
         ) : (
           <span className="tag--treasury tag--warn">
@@ -206,6 +213,13 @@ function nearestOption(lever: Lever, value: number): string {
   );
 }
 
+/** A warning that applies now, beside a curated lever: another lever it interacts with has moved. */
+export interface LeverNote {
+  key: string;
+  text: string;
+  warn: boolean;
+}
+
 export function LeverControl({
   lever,
   value,
@@ -214,6 +228,12 @@ export function LeverControl({
   onChange,
   redLines = [],
   chosen,
+  displayTitle,
+  hint,
+  advice,
+  notes = [],
+  compact = false,
+  children,
 }: {
   lever: Lever;
   value: number;
@@ -224,6 +244,25 @@ export function LeverControl({
   redLines?: RedLine[];
   /** The option this lever belongs to, if the player chose one that moves it. */
   chosen?: Chosen;
+  /** A plain title of the curated screens' own (Phase 24): the control's name, in place of the lever's. */
+  displayTitle?: string;
+  /**
+   * What the adviser's usual move would do, while the lever rests (Phase 24): the numbers in view
+   * before anything moves. Once the lever has moved, the effect line takes its place.
+   */
+  hint?: { text: string; tone: 'better' | 'worse' | 'neutral' };
+  /** One adviser's line on the lever (Phase 24). */
+  advice?: { who: string; line: SimulatedLine };
+  /** Warnings that apply now: a lever this one interacts with has moved. */
+  notes?: readonly LeverNote[];
+  /**
+   * The curated card (Phase 24): the lever's own headline, its milestones, the quieter tags and
+   * what the number assumes wait under one fold, "More about this"; the surface is the control,
+   * its price, the adviser's line and the tags that change what moving it means.
+   */
+  compact?: boolean;
+  /** Anything to show beneath the lever: the minister's line, on a spending lever that has moved. */
+  children?: ReactNode;
 }) {
   const id = useId();
   const [open, setOpen] = useState(false);
@@ -241,6 +280,7 @@ export function LeverControl({
   const commitment = lever.commitment;
   const notOnTheTable = lever.notOnTheTable;
   const earliest = lever.earliestStart;
+  const title = displayTitle ?? lever.title;
   // What the number rests on: the costing's own caveats, plus why a teaching option is here and
   // where a department stands in the OBR's forecast. One click, no words on the surface.
   const assumes = [
@@ -271,16 +311,147 @@ export function LeverControl({
           .filter((p) => p !== 0)
           .map((p) => formatLeverValue(lever, p))
       : null;
-  // The control is described by the one-line headline and, once it has moved, by what it does.
+  const showHint = hint !== undefined && isDefault;
+  // The control is described by the one-line headline and, once it has moved, by what it does;
+  // on a curated card at rest, by what the usual move would do.
   const hasEffectLine =
     (improvement !== null && summaryYear !== undefined) ||
-    (isFinancialTransaction && cashOut !== 0);
+    (isFinancialTransaction && cashOut !== 0) ||
+    showHint;
   const describedBy = [`${id}-desc`, hasEffectLine ? `${id}-effect` : null]
     .filter(Boolean)
     .join(' ');
+
+  const notOnTheTableTag = notOnTheTable ? (
+    <span className="tag tag--quiet">Not on the table</span>
+  ) : null;
+  const earliestTag = earliest ? (
+    <span className="tag tag--quiet">
+      {/* One flex item, so the space before the month survives the inline-flex tag. */}
+      <span>
+        <Term id="earliest-start">Earliest start</Term> April {earliest.year.slice(0, 4)}
+      </span>
+      <span className="sr-only">: {earliest.text}</span>
+    </span>
+  ) : null;
+  const commitmentTag = commitment ? (
+    <span className="tag">
+      <Term id={commitment.kind}>
+        {commitment.kind === 'protected' ? 'Protected' : 'Unprotected'}
+      </Term>
+      <span className="sr-only">: {commitment.text}</span>
+    </span>
+  ) : null;
+  const lookupTag = lookupPoints ? (
+    <span className="tag">
+      <Term id="hmrc-points">HMRC points only</Term>
+      <span className="sr-only">
+        : HMRC publishes estimates at {lookupPoints.join(', ')}; between them the game draws a
+        straight line.
+      </span>
+    </span>
+  ) : null;
+  const barnettTag = barnett ? (
+    <span className="tag">
+      <Term id="barnett">Barnett applies</Term>
+      <span className="sr-only">
+        : a change here also moves the Scottish, Welsh and Northern Irish block grants, described in
+        the sources and not counted in the number.
+      </span>
+    </span>
+  ) : null;
+  const desc = (
+    <p className="lever__desc" id={`${id}-desc`}>
+      {lever.headline ?? lever.description}
+    </p>
+  );
+  const milestones = lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null;
+  const financialLine =
+    isFinancialTransaction && cashOut !== 0 ? (
+      <p className="lever__effect" id={`${id}-effect`}>
+        Cash to borrow: {formatGbpBn(Math.abs(cashOut), 1)}
+        <span className="lever__effect-note">
+          {' '}
+          · buying an asset is not spending, so borrowing and the debt rule barely move. The
+          interest on the money is charged separately.
+        </span>
+      </p>
+    ) : null;
+  const effectLine =
+    improvement !== null && summaryYear ? (
+      <p className={`lever__effect ${tone(improvement)}`} id={`${id}-effect`}>
+        {isCapital ? 'Borrowing' : 'Current budget'} in {summaryYear}:{' '}
+        {laterStart && effect ? (
+          <>
+            nothing yet; from {laterStart}{' '}
+            {effectWords(
+              improve(effect, laterStart),
+              isCapital,
+              lever.classification?.side === 'receipts',
+            )}
+          </>
+        ) : (
+          effectWords(improvement, isCapital, lever.classification?.side === 'receipts')
+        )}
+        {isCapital ? (
+          <span className="lever__effect-note">
+            {' '}
+            · current budget unchanged: investment sits outside the stability rule
+          </span>
+        ) : null}
+      </p>
+    ) : null;
+  const hintLine =
+    showHint && hint ? (
+      <p
+        className={`lever__effect lever__hint${hint.tone === 'neutral' ? '' : ` amount--${hint.tone}`}`}
+        id={`${id}-effect`}
+      >
+        {hint.text}
+      </p>
+    ) : null;
+  const adviceLine = advice ? <AdviceLine who={advice.who} line={advice.line} /> : null;
+  const noteLines =
+    notes.length > 0 ? (
+      <ul className="lever__notes">
+        {notes.map((n) => (
+          <li key={n.key} className={`choice__overlap${n.warn ? ' choice__overlap--warn' : ''}`}>
+            {n.warn ? 'Warning: ' : ''}
+            {n.text}
+          </li>
+        ))}
+      </ul>
+    ) : null;
+  const actions =
+    workings || !isDefault ? (
+      <div className="lever__actions">
+        {workings ? (
+          <button
+            type="button"
+            className="linklike"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+          >
+            {open ? 'Hide detail' : 'Detail and sources'}
+            <span className="sr-only"> for {lever.shortTitle}</span>
+          </button>
+        ) : null}
+        {!isDefault ? (
+          <button
+            type="button"
+            className="linklike"
+            onClick={() => onChange(lever.control.default)}
+          >
+            Back to OBR
+            <span className="sr-only"> for {lever.shortTitle}</span>
+          </button>
+        ) : null}
+      </div>
+    ) : null;
+
   return (
     <div
-      className={`lever${isToggle ? ' lever--toggle' : ''}`}
+      className={`lever${isToggle ? ' lever--toggle' : ''}${compact ? ' lever--curated' : ''}`}
       role="group"
       aria-labelledby={`${id}-title`}
     >
@@ -295,12 +466,12 @@ export function LeverControl({
                 aria-describedby={describedBy}
                 onChange={(e) => onChange(e.target.checked ? 1 : 0)}
               />
-              {lever.title}
+              {title}
             </label>
           </h3>
         ) : (
           <h3 className="lever__title" id={`${id}-title`}>
-            <label htmlFor={id}>{lever.title}</label>
+            <label htmlFor={id}>{title}</label>
           </h3>
         )}
         <span className="lever__flags">
@@ -383,118 +554,75 @@ export function LeverControl({
           )}
         </>
       ) : null}
-      <p className="lever__desc" id={`${id}-desc`}>
-        {lever.headline ?? lever.description}
-      </p>
-      {lever.milestones?.length ? <Milestones milestones={lever.milestones} /> : null}
-      {lookupPoints || barnett || commitment || notOnTheTable || earliest ? (
-        <p className="lever__tags">
-          {notOnTheTable ? <span className="tag tag--quiet">Not on the table</span> : null}
-          {earliest ? (
-            <span className="tag tag--quiet">
-              {/* One flex item, so the space before the month survives the inline-flex tag. */}
-              <span>
-                <Term id="earliest-start">Earliest start</Term> April {earliest.year.slice(0, 4)}
-              </span>
-              <span className="sr-only">: {earliest.text}</span>
-            </span>
+      {compact ? (
+        <>
+          {financialLine}
+          {effectLine}
+          {hintLine}
+          {adviceLine}
+          {noteLines}
+          {earliestTag ? <p className="lever__tags">{earliestTag}</p> : null}
+          {children}
+          <details className="more more--quiet lever__more">
+            <summary>
+              More about this<span className="sr-only">: {title}</span>
+            </summary>
+            <div className="more__body">
+              {desc}
+              {milestones}
+              {notOnTheTableTag || commitmentTag || lookupTag || barnettTag ? (
+                <p className="lever__tags">
+                  {notOnTheTableTag}
+                  {commitmentTag}
+                  {lookupTag}
+                  {barnettTag}
+                </p>
+              ) : null}
+              {assumes.length > 0 ? (
+                <>
+                  <p className="lever__assumes-title">What this assumes</p>
+                  <ul className="lever__assumes-list">
+                    {assumes.map((text) => (
+                      <li key={text}>{text}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : null}
+            </div>
+          </details>
+        </>
+      ) : (
+        <>
+          {desc}
+          {milestones}
+          {lookupPoints || barnett || commitment || notOnTheTable || earliest ? (
+            <p className="lever__tags">
+              {notOnTheTableTag}
+              {earliestTag}
+              {commitmentTag}
+              {lookupTag}
+              {barnettTag}
+            </p>
           ) : null}
-          {commitment ? (
-            <span className="tag">
-              <Term id={commitment.kind}>
-                {commitment.kind === 'protected' ? 'Protected' : 'Unprotected'}
-              </Term>
-              <span className="sr-only">: {commitment.text}</span>
-            </span>
+          {assumes.length > 0 ? (
+            <details className="lever__assumes">
+              <summary>What this assumes</summary>
+              <ul>
+                {assumes.map((text) => (
+                  <li key={text}>{text}</li>
+                ))}
+              </ul>
+            </details>
           ) : null}
-          {lookupPoints ? (
-            <span className="tag">
-              <Term id="hmrc-points">HMRC points only</Term>
-              <span className="sr-only">
-                : HMRC publishes estimates at {lookupPoints.join(', ')}; between them the game draws
-                a straight line.
-              </span>
-            </span>
-          ) : null}
-          {barnett ? (
-            <span className="tag">
-              <Term id="barnett">Barnett applies</Term>
-              <span className="sr-only">
-                : a change here also moves the Scottish, Welsh and Northern Irish block grants,
-                described in the sources and not counted in the number.
-              </span>
-            </span>
-          ) : null}
-        </p>
-      ) : null}
-      {assumes.length > 0 ? (
-        <details className="lever__assumes">
-          <summary>What this assumes</summary>
-          <ul>
-            {assumes.map((text) => (
-              <li key={text}>{text}</li>
-            ))}
-          </ul>
-        </details>
-      ) : null}
-      {isFinancialTransaction && cashOut !== 0 ? (
-        <p className="lever__effect" id={`${id}-effect`}>
-          Cash to borrow: {formatGbpBn(Math.abs(cashOut), 1)}
-          <span className="lever__effect-note">
-            {' '}
-            · buying an asset is not spending, so borrowing and the debt rule barely move. The
-            interest on the money is charged separately.
-          </span>
-        </p>
-      ) : null}
-      {improvement !== null && summaryYear ? (
-        <p className={`lever__effect ${tone(improvement)}`} id={`${id}-effect`}>
-          {isCapital ? 'Borrowing' : 'Current budget'} in {summaryYear}:{' '}
-          {laterStart && effect ? (
-            <>
-              nothing yet; from {laterStart}{' '}
-              {effectWords(
-                improve(effect, laterStart),
-                isCapital,
-                lever.classification?.side === 'receipts',
-              )}
-            </>
-          ) : (
-            effectWords(improvement, isCapital, lever.classification?.side === 'receipts')
-          )}
-          {isCapital ? (
-            <span className="lever__effect-note">
-              {' '}
-              · current budget unchanged: investment sits outside the stability rule
-            </span>
-          ) : null}
-        </p>
-      ) : null}
-      {workings || !isDefault ? (
-        <div className="lever__actions">
-          {workings ? (
-            <button
-              type="button"
-              className="linklike"
-              onClick={() => setOpen((o) => !o)}
-              aria-expanded={open}
-            >
-              {open ? 'Hide detail' : 'Detail and sources'}
-              <span className="sr-only"> for {lever.shortTitle}</span>
-            </button>
-          ) : null}
-          {!isDefault ? (
-            <button
-              type="button"
-              className="linklike"
-              onClick={() => onChange(lever.control.default)}
-            >
-              Back to OBR
-              <span className="sr-only"> for {lever.shortTitle}</span>
-            </button>
-          ) : null}
-        </div>
-      ) : null}
+          {financialLine}
+          {effectLine}
+          {hintLine}
+          {adviceLine}
+          {noteLines}
+          {children}
+        </>
+      )}
+      {actions}
       {open && workings ? <ProvenanceDrawer lever={lever} effect={effect} /> : null}
     </div>
   );

@@ -66,20 +66,27 @@ describe('the review before delivery', () => {
       expect.stringMatching(/^\/budget\/deliver\/2\?/),
     );
 
-    const pay = part(/^How you pay for it/);
-    expect(within(pay).getByText(/health and social care levy/i)).toBeInTheDocument();
-    expect(within(pay).getByText(/raises £1\d\.\dbn/)).toBeInTheDocument();
-    expect(changeIn(pay, 'Change')).toHaveAttribute(
+    // Every tax moved, under its plain title, with what it raises.
+    const tax = part(/^Tax/);
+    expect(
+      within(tax).getByText(/^Bring back the health and social care levy/),
+    ).toBeInTheDocument();
+    expect(within(tax).getByText(/raises £1\d\.\dbn/)).toBeInTheDocument();
+    expect(changeIn(tax, 'Change')).toHaveAttribute(
       'href',
-      expect.stringMatching(/^\/budget\/afford\?/),
+      expect.stringMatching(/^\/finetune\/tax\?/),
     );
 
-    // A lever moved on the desk that no option owns is listed as set by hand.
-    const hand = part(/^Set by hand/);
-    expect(within(hand).getByText(/Education/)).toBeInTheDocument();
-    expect(changeIn(hand, 'Change the spending')).toHaveAttribute(
+    // Every other budget moved that no flagship owns, with where it now stands and its cost.
+    const spending = part(/^Spending/);
+    expect(within(spending).getByText(/^Schools and education · \+5%/)).toBeInTheDocument();
+    expect(within(spending).getByText(/costs £\d\.\dbn/)).toBeInTheDocument();
+    // The flagships' levers are read back once, as flagships; the add-on once, for the speech.
+    expect(within(spending).queryByText(/Prisons and courts/)).toBeNull();
+    expect(within(tax).queryByText(/lcohol/)).toBeNull();
+    expect(changeIn(spending, 'Change')).toHaveAttribute(
       'href',
-      expect.stringMatching(/^\/budget\/spending\?/),
+      expect.stringMatching(/^\/finetune\/spending\?/),
     );
 
     const speech = part(/^For the speech/);
@@ -101,12 +108,12 @@ describe('the review before delivery', () => {
     );
   });
 
-  it('says so when there is nothing to pay with, no add-on and nothing moved since the forecast', () => {
+  it('says so when no tax or other budget moved, no add-on, and nothing since the forecast', () => {
     at(`/review?${BASE}&${G.replace('_rb.pubs', '')}&L=moj.10&S=moj.10`);
-    expect(screen.getByText(/paid for out of the headroom the forecast left/)).toBeInTheDocument();
+    expect(within(part(/^Tax/)).getByText('No tax changed.')).toBeInTheDocument();
+    expect(within(part(/^Spending/)).getByText('No other budget changed.')).toBeInTheDocument();
     expect(screen.getByText('No add-ons.')).toBeInTheDocument();
     expect(screen.getByText(/Nothing changed since the OBR saw the package/)).toBeInTheDocument();
-    expect(screen.queryByRole('region', { name: /^Set by hand/ })).toBeNull();
   });
 
   it('delivers: the red button marks the game finished and opens Budget day with the Budget intact', async () => {

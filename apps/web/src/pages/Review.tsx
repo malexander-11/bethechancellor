@@ -2,17 +2,19 @@ import {
   ambitionStatus,
   budgetTheme,
   formatGbpBn,
-  optionState,
+  formatLevel,
+  levelValue,
   rankedPriorities,
   stageIndex,
   type Lever,
+  type LeverEffect,
 } from '@btc/engine';
 import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { formatLeverValue } from '../components/LeverControl';
-import { context, levers, options, pm } from '../data';
+import { formatLeverValue, formatLeverValueShort } from '../components/LeverControl';
+import { context, finetuneTitle, levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { macroCodesOf } from '../journey/scenarios';
@@ -23,6 +25,49 @@ import { deliverPath } from './Deliver';
 const MACRO_CODES = new Set(macroCodesOf(context.readings));
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
 const RANK = ['1st', '2nd', '3rd'];
+
+/** A moved lever read back: its plain title, where it now stands, and what it does in the year. */
+interface Row {
+  lever: Lever;
+  title: string;
+  at?: string;
+  amount: { text: string; tone: 'better' | 'worse' };
+}
+
+/** Where a lever stands, as its level where it has one: "21%", "£210", "−1%"; a toggle is simply on. */
+function standing(lever: Lever, value: number): string | undefined {
+  if (lever.control.kind === 'toggle') return undefined;
+  const level = lever.control.level;
+  return level ? formatLevel(level, levelValue(level, value)) : formatLeverValueShort(lever, value);
+}
+
+/** What a tax raises or costs, and what spending costs or saves, in the target year. */
+function amountOf(lever: Lever, effect: LeverEffect | undefined, year: string): Row['amount'] {
+  if (lever.category === 'tax') {
+    const gbpm = effect?.receipts[year] ?? 0;
+    return gbpm >= 0
+      ? { text: `raises ${formatGbpBn(gbpm, 1)}`, tone: 'better' }
+      : { text: `costs ${formatGbpBn(-gbpm, 1)}`, tone: 'worse' };
+  }
+  const gbpm = (effect?.currentSpending[year] ?? 0) + (effect?.capitalSpending[year] ?? 0);
+  return gbpm > 0
+    ? { text: `costs ${formatGbpBn(gbpm, 1)}`, tone: 'worse' }
+    : { text: `saves ${formatGbpBn(-gbpm, 1)}`, tone: 'better' };
+}
+
+function RowList({ rows }: { rows: readonly Row[] }) {
+  return (
+    <ul className="review__list">
+      {rows.map((r) => (
+        <li key={r.lever.code}>
+          {r.title}
+          {r.at ? ` · ${r.at}` : ''} ·{' '}
+          <span className={`amount amount--${r.amount.tone}`}>{r.amount.text}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 /** One section of the review: what it is called, what is in it, and where to change it. */
 function Part({
@@ -59,11 +104,11 @@ function Part({
 
 /**
  * Step 6, second screen: the Budget as it stands, read back before it is delivered. What you
- * prioritised, what you chose to deliver and what each costs, how you are paying for it, anything
- * set by hand on the desk, the add-ons, and where that leaves you against your target and the
- * rules, with what changed since the forecast. Every line has a way back to the screen that set
- * it, carrying the Budget, so nothing is final until the red button. Every figure is the engine's
- * for the target year.
+ * prioritised, what you chose to deliver and what each costs, every tax and every other budget you
+ * moved (Phase 24), the add-ons, and where that leaves you against your target and the rules, with
+ * what changed since the forecast. Every line has a way back to the screen that set it, carrying
+ * the Budget, so nothing is final until the red button. Every figure is the engine's for the
+ * target year.
  */
 export function ReviewPage() {
   const { state, dispatch, outcome } = useBudget();
@@ -78,46 +123,34 @@ export function ReviewPage() {
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const year = stability?.targetYear ?? '2029-30';
   const value = (lever: Lever) => state.leverValues[lever.code] ?? lever.control.default;
-  const receiptsOf = (codes: readonly string[]) =>
-    codes.reduce(
-      (acc, code) => acc + (outcome.leverEffects.find((e) => e.code === code)?.receipts[year] ?? 0),
-      0,
-    );
 
-  // How you pay: the ways to afford that are on, with what each raises.
-  const paying = options.afford
-    .filter((o) => optionState(o, state.leverValues, levers) !== 'off')
-    .map((o) => {
-      const code = Object.keys(o.values)[0] ?? '';
-      return {
-        id: o.id,
-        title: o.title,
-        lever: byCode.get(code),
-        gbpm: receiptsOf(Object.keys(o.values)),
-      };
-    })
-    .filter(
-      (row): row is { id: string; title: string; lever: Lever; gbpm: number } =>
-        row.lever !== undefined,
-    );
-  // Set by hand: levers moved that no option on this Budget owns.
+  // Every tax and every budget moved, except those a flagship or an add-on already accounts for:
+  // they are read back under their own names above and below.
   const owned = new Set<string>([
     ...status.priorities.flatMap((p) =>
       p.options.filter((o) => o.state !== 'off').flatMap((o) => Object.keys(o.option.values)),
     ),
-    ...options.afford
-      .filter((o) => optionState(o, state.leverValues, levers) !== 'off')
-      .flatMap((o) => Object.keys(o.values)),
     ...options.addOns
       .filter((o) => game.rabbit.includes(o.id))
       .flatMap((o) => Object.keys(o.values)),
   ]);
-  const byHand = outcome.leverEffects
-    .map((e) => byCode.get(e.code))
+  const rows: Row[] = outcome.leverEffects
+    .map((e) => ({ effect: e, lever: byCode.get(e.code) }))
     .filter(
-      (l): l is Lever =>
-        l !== undefined && l.category !== 'macro' && !MACRO_CODES.has(l.code) && !owned.has(l.code),
-    );
+      (x): x is { effect: LeverEffect; lever: Lever } =>
+        x.lever !== undefined &&
+        x.lever.category !== 'macro' &&
+        !MACRO_CODES.has(x.lever.code) &&
+        !owned.has(x.lever.code),
+    )
+    .map(({ effect, lever }) => ({
+      lever,
+      title: finetuneTitle(lever.code) ?? lever.shortTitle,
+      ...(standing(lever, value(lever)) ? { at: standing(lever, value(lever)) } : {}),
+      amount: amountOf(lever, effect, year),
+    }));
+  const taxRows = rows.filter((r) => r.lever.category === 'tax');
+  const spendingRows = rows.filter((r) => r.lever.category !== 'tax');
   // The add-ons, by name.
   const addOns = game.rabbit
     .filter((id) => id !== 'keep')
@@ -216,45 +249,21 @@ export function ReviewPage() {
         )}
       </Part>
 
-      <Part id="pay" title="How you pay for it" change={{ to: '/budget/afford', label: 'Change' }}>
-        {paying.length === 0 ? (
-          <p className="panel__hint">
-            No tax rises chosen: the Budget is paid for out of the headroom the forecast left.
-          </p>
+      <Part id="tax" title="Tax" change={{ to: '/finetune/tax', label: 'Change' }}>
+        {taxRows.length === 0 ? (
+          <p className="panel__hint">No tax changed.</p>
         ) : (
-          <ul className="review__list">
-            {paying.map((row) => (
-              <li key={row.id}>
-                {row.title} ·{' '}
-                <span className="amount amount--better">raises {formatGbpBn(row.gbpm, 1)}</span>
-              </li>
-            ))}
-          </ul>
+          <RowList rows={taxRows} />
         )}
       </Part>
 
-      {byHand.length > 0 ? (
-        <Part
-          id="desk"
-          title="Set by hand"
-          change={[
-            ...(byHand.some((l) => l.category === 'tax')
-              ? [{ to: '/budget/taxes', label: 'Change the taxes' }]
-              : []),
-            ...(byHand.some((l) => l.category !== 'tax')
-              ? [{ to: '/budget/spending', label: 'Change the spending' }]
-              : []),
-          ]}
-        >
-          <ul className="review__list">
-            {byHand.map((l) => (
-              <li key={l.code}>
-                {l.title} · {formatLeverValue(l, value(l))}
-              </li>
-            ))}
-          </ul>
-        </Part>
-      ) : null}
+      <Part id="spending" title="Spending" change={{ to: '/finetune/spending', label: 'Change' }}>
+        {spendingRows.length === 0 ? (
+          <p className="panel__hint">No other budget changed.</p>
+        ) : (
+          <RowList rows={spendingRows} />
+        )}
+      </Part>
 
       <Part id="speech" title="For the speech" change={{ to: '/rabbit', label: 'Change' }}>
         {keeping ? (

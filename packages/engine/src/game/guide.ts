@@ -3,14 +3,15 @@ import type { GuideFile, GuideStage, JourneyStep } from '../types/data.js';
 /**
  * The guide: one entry per screen a player meets, in the order they meet them. The package's
  * guided screens, its desk screens and the two forecast screens are separate entries that share
- * a step number.
+ * a step number. The two fine-tuning screens share one entry: each has its own heading and line,
+ * from finetune.json.
  */
 export const GUIDED_STEPS: readonly JourneyStep[] = [
   'start',
   'outlook',
   'pm',
   'deliver',
-  'afford',
+  'finetune',
   'taxes',
   'spending',
   'forecast',

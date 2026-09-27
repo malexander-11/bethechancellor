@@ -63,8 +63,8 @@ describe('the road runs one way', () => {
   });
 
   it('always lets you go back: a game at the sums can reopen the package, the desk and the PM', () => {
-    const guided = at(`/budget/afford?${BASE}&g=${G}_st.4_rv.1`);
-    expect(screen.getByRole('heading', { level: 1, name: 'Pay for it' })).toBeInTheDocument();
+    const guided = at(`/finetune/tax?${BASE}&g=${G}_st.4_rv.1`);
+    expect(screen.getByRole('heading', { level: 1, name: 'Fine-tune tax' })).toBeInTheDocument();
     guided.unmount();
     const desk = at(`/budget/taxes?${BASE}&g=${G}_st.4_rv.1`);
     expect(screen.getByText('Build the package')).toBeInTheDocument();

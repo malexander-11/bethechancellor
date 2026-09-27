@@ -1688,6 +1688,57 @@ label.choice {
   font-size: 1rem;
 }
 
+/* ------------------------------------------------ fine-tuning (Phase 24) */
+
+/*
+ * A curated lever: the desk's own control under a plain title, then its price (at rest) or its
+ * effect (moved), the adviser's line, any warning that applies now, and one fold for the rest.
+ */
+.lever--curated .choice__advice {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.lever__notes {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.lever__notes li + li {
+  margin-top: 4px;
+}
+
+.lever--curated .minister {
+  margin: 8px 0 0;
+}
+
+.lever__more {
+  margin: 4px 0 0;
+}
+
+.lever__assumes-title {
+  margin: 8px 0 2px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.lever__assumes-list {
+  margin: 0;
+  padding-left: 1.2em;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.lever__assumes-list li + li {
+  margin-top: 4px;
+}
+
 /* "More policies": the way into the desk, one line. */
 .more-link {
   margin: 4px 0 12px;

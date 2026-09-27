@@ -26,10 +26,10 @@
       "now": "Tick the ways you want, then pay for them."
     },
     {
-      "step": "afford",
+      "step": "finetune",
       "number": 4,
-      "title": "Pay for it",
-      "now": "Choose who pays. Leave a gap if you mean to."
+      "title": "Fine-tune tax and spend",
+      "now": "Move the levers until the numbers add up."
     },
     {
       "step": "taxes",

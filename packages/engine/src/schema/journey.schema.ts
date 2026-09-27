@@ -7,7 +7,8 @@ const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
  * The steps of the guided Budget journey, in order. `assumptions` is the Phase 4 name of what
  * became `outlook`; it stays so that advisers authored against it keep validating, and the app
  * routes it on. The package's third screen (`policies`, once `recommendations`) was retired in
- * Phase 12: its levers sit on `taxes` and `spending` (ADR-0017).
+ * Phase 12: its levers sit on `taxes` and `spending` (ADR-0017). `finetune` is step 4's curated
+ * tax and spending screens (Phase 24, ADR-0025), which replaced `afford`.
  */
 export const journeyStepSchema = z.enum([
   'start',
@@ -16,6 +17,7 @@ export const journeyStepSchema = z.enum([
   'pm',
   'deliver',
   'afford',
+  'finetune',
   'taxes',
   'spending',
   'forecast',

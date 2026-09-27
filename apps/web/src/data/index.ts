@@ -8,6 +8,7 @@ import {
   parseCompromise,
   parseRabbit,
   parseOptions,
+  parseFinetune,
   parseHouseholdsFile,
   parseSpeech,
   parseIncidence,
@@ -15,6 +16,7 @@ import {
   parseGuide,
   parseGlossary,
   guideFor as guideStageFor,
+  finetuneTitles,
   parseReception,
   parseContext,
   parseHouseholds,
@@ -40,6 +42,7 @@ import interventionsJson from '@data/journey/interventions.json';
 import compromiseJson from '@data/journey/compromise.json';
 import rabbitJson from '@data/journey/rabbit.json';
 import optionsJson from '@data/journey/options.json';
+import finetuneJson from '@data/journey/finetune.json';
 import electorateJson from '@data/journey/households.json';
 import speechJson from '@data/journey/speech.json';
 import incidenceJson from '@data/journey/incidence.json';
@@ -76,6 +79,8 @@ export const interventions = parseInterventions(interventionsJson);
 export const compromise = parseCompromise(compromiseJson);
 export const rabbit = parseRabbit(rabbitJson);
 export const options = parseOptions(optionsJson);
+/** Step 4's curated tax and spending levers (Phase 24, ADR-0025). */
+export const finetune = parseFinetune(finetuneJson);
 export const electorate = parseHouseholdsFile(electorateJson);
 export const speech = parseSpeech(speechJson);
 export const incidence = parseIncidence(incidenceJson);
@@ -115,6 +120,7 @@ const problems = validateDataset({
   compromise,
   rabbit,
   options,
+  finetune,
   electorate,
   speech,
   incidence,
@@ -134,6 +140,13 @@ export const adviserById: ReadonlyMap<string, Adviser> = new Map(
 /** The guide entry for a screen; the old step names find their screen. */
 export function guideFor(step: JourneyStep) {
   return guideStageFor(guide, step);
+}
+
+const FINETUNE_TITLES = finetuneTitles(finetune);
+
+/** The plain title a lever wears on the fine-tuning screens, when it is one of theirs. */
+export function finetuneTitle(code: string): string | undefined {
+  return FINETUNE_TITLES.get(code);
 }
 
 export const briefingById: ReadonlyMap<string, Briefing> = new Map(

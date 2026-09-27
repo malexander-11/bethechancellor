@@ -145,7 +145,7 @@ export function ForecastPage() {
           <button type="button" className="btn btn--primary" onClick={reveal}>
             Open the forecast
           </button>
-          <StepLink to="/budget/afford" className="btn">
+          <StepLink to="/finetune/spending" className="btn">
             Back
           </StepLink>
         </p>
@@ -450,7 +450,7 @@ function ForecastReveal({
         <StepLink to="/compromise" className="btn btn--primary" onClick={onward}>
           {surplus ? 'Make the most of it' : 'Respond to it'}
         </StepLink>
-        <StepLink to="/budget/afford" className="btn">
+        <StepLink to="/finetune/spending" className="btn">
           Back
         </StepLink>
       </p>

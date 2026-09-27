@@ -1,0 +1,202 @@
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { describe, expect, it } from 'vitest';
+import { App } from '../App';
+
+const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+/** A game that has agreed two priorities with the PM and reached the package. */
+const GAME = 'g=s.7_st.2_pl.adviser_hr.20_pr.safer-streets+defence';
+
+function at(path: string) {
+  window.history.replaceState(null, '', path);
+  return render(
+    <MemoryRouter initialEntries={[path]}>
+      <App />
+    </MemoryRouter>,
+  );
+}
+const h1 = (name: RegExp | string) => screen.getByRole('heading', { level: 1, name });
+const group = (name: RegExp) => screen.getByRole('region', { name });
+const bar = () => screen.getByRole('region', { name: 'Your Budget so far' });
+const barFigure = () => bar().querySelector('.bar__figure')?.textContent ?? '';
+/** The card a control sits in. */
+const cardOf = (control: HTMLElement) => control.closest('.lever') as HTMLElement;
+const search = () => new URLSearchParams(window.location.search);
+
+describe('fine-tune tax and spend: the curated levers', () => {
+  it('lays the tax screen out as five who-pays groups of real levers, with one way on', () => {
+    const { container } = at(`/finetune/tax?${BASE}&${GAME}`);
+    expect(h1('Fine-tune tax')).toBeInTheDocument();
+    expect(screen.getByText('Raise or cut any tax. Watch your headroom move.')).toBeInTheDocument();
+    expect(screen.getByText(/^Build your Budget · 3 of 4$/)).toBeInTheDocument();
+    expect(bar()).toBeInTheDocument();
+    const names = screen
+      .getAllByRole('region')
+      .map((r) => r.getAttribute('aria-labelledby') ?? '')
+      .filter((id) => id.startsWith('tune-'));
+    expect(names).toEqual([
+      'tune-everyone',
+      'tune-best-off',
+      'tune-business',
+      'tune-savers-owners',
+      'tune-duties',
+    ]);
+    expect(group(/^Everyone 6 levers/)).toBeInTheDocument();
+    expect(group(/^Drivers, smokers, gamblers and flyers 5 levers/)).toBeInTheDocument();
+    // Stacked, not tabbed; one primary button; every lever with its adviser's line.
+    expect(screen.queryByRole('tab')).toBeNull();
+    expect(container.querySelectorAll('.btn--primary')).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Next: spending' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/finetune\/spending\?/),
+    );
+    expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/budget\/deliver\/2\?/),
+    );
+    const levers = container.querySelectorAll('.lever--curated');
+    expect(levers).toHaveLength(26);
+    for (const lever of levers) {
+      expect(lever.querySelector('.choice__advice .kicker')?.textContent).toBe('Director of Tax');
+    }
+    // The controls carry their plain titles as their names.
+    expect(
+      screen.getByRole('slider', { name: 'The basic rate of income tax' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('checkbox', { name: 'Bring back the health and social care levy' }),
+    ).toBeInTheDocument();
+  });
+
+  it('prices a lever before it moves, then says what it does, and the bar keeps score', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    const penny = screen.getByRole('slider', { name: 'The basic rate of income tax' });
+    const card = cardOf(penny);
+    // At rest: what the adviser's usual move would do, and the headroom that would leave.
+    expect(
+      within(card).getByText(/^At 21%: raises £\d\.\dbn · leaves £\d+\.\dbn$/),
+    ).toBeInTheDocument();
+    expect(within(card).getByText('Manifesto: no rise')).toBeInTheDocument();
+    const before = barFigure();
+    fireEvent.change(penny, { target: { value: '1' } });
+    // Moved: the hint gives way to the lever's own effect line, the red line is crossed, the
+    // group says what it now raises, and the bar has moved.
+    expect(within(card).queryByText(/^At 21%/)).toBeNull();
+    expect(
+      within(card).getByText(/Current budget in 2029-30: raises £\d\.\dbn/),
+    ).toBeInTheDocument();
+    expect(within(card).getByText('Breaks the manifesto: The tax lock')).toHaveClass('tag--warn');
+    expect(group(/^Everyone 1 moved · raises £\d\.\dbn/)).toBeInTheDocument();
+    expect(barFigure()).not.toBe(before);
+    await waitFor(() => expect(search().get('L')).toMatch(/itbr\.1/));
+  });
+
+  it('marks the levy amber, not red: the tax lock strained', () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    const levy = screen.getByRole('checkbox', {
+      name: 'Bring back the health and social care levy',
+    });
+    const card = cardOf(levy);
+    expect(within(card).getByText(/^Switched on: raises £\d+\.\dbn · leaves/)).toBeInTheDocument();
+    fireEvent.click(levy);
+    expect(within(card).getByText('Strains the manifesto: The tax lock')).toHaveClass('tag--amber');
+    expect(within(card).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
+  });
+
+  it('keeps a lever moved inside the fold where it is, and shows it at the top next time', () => {
+    const first = at(`/finetune/tax?${BASE}&${GAME}`);
+    const everyone = group(/^Everyone/);
+    const fold = within(everyone).getByText('3 more levers').closest('details') as HTMLElement;
+    const premium = within(fold).getByRole('slider', { name: 'Insurance premium tax' });
+    fireEvent.click(within(fold).getByText('3 more levers'));
+    fireEvent.change(premium, { target: { value: '2' } });
+    // Still in the fold: the slider never jumps from under the pointer.
+    expect(within(fold).getByRole('slider', { name: 'Insurance premium tax' })).toBe(premium);
+    first.unmount();
+    // The next visit finds it moved, and on show.
+    at(`/finetune/tax?${BASE}&${GAME}&L=ipt.2`);
+    const again = group(/^Everyone 1 moved/);
+    const folded = within(again).getByText('2 more levers').closest('details') as HTMLElement;
+    expect(within(folded).queryByRole('slider', { name: 'Insurance premium tax' })).toBeNull();
+    expect(
+      within(again).getByRole('slider', { name: 'Insurance premium tax' }),
+    ).toBeInTheDocument();
+  });
+
+  it('warns when two levers count the same money: restoring fuel duty against a fuel duty cut', () => {
+    at(`/finetune/tax?${BASE}&g=s.7_st.2_pl.adviser_hr.20_pr.cost-of-living&L=fuel.-10`);
+    const restore = cardOf(
+      screen.getByRole('checkbox', { name: 'Put fuel duty up with inflation from April 2027' }),
+    );
+    expect(
+      within(restore).getByText(
+        /^Warning: Overlaps with Cut fuel duty by 10%: Both change fuel duty rates/,
+      ),
+    ).toHaveClass('choice__overlap--warn');
+  });
+
+  it('lays out the spending screen, with a minister once a budget moves and the flagships tagged', () => {
+    at(`/finetune/spending?${BASE}&${GAME}&L=moj.10`);
+    expect(h1('Fine-tune spending')).toBeInTheDocument();
+    expect(screen.getByText(/^Build your Budget · 4 of 4$/)).toBeInTheDocument();
+    expect(group(/^Public services 1 moved · costs £\d\.\dbn/)).toBeInTheDocument();
+    expect(group(/^Investment 1 lever/)).toBeInTheDocument();
+    expect(group(/^Benefits 4 levers/)).toBeInTheDocument();
+    expect(group(/^Last year’s decisions 5 levers/)).toBeInTheDocument();
+    // The prisons budget belongs to a flagship the player chose; moved before arrival, it is on show.
+    const prisons = cardOf(screen.getByRole('slider', { name: 'Prisons and courts' }));
+    expect(within(prisons).getByText('In your flagship policies')).toBeInTheDocument();
+    expect(within(prisons).getByText('Justice Secretary')).toBeInTheDocument();
+    for (const kicker of document.querySelectorAll('.lever--curated .choice__advice .kicker')) {
+      expect(kicker.textContent).toBe('Director of Public Spending');
+    }
+    // Untouched, a budget has no minister on it; cut, its minister says what stops happening.
+    const schools = screen.getByRole('slider', { name: 'Schools and education' });
+    expect(within(cardOf(schools)).queryByText('Education Secretary')).toBeNull();
+    expect(within(cardOf(schools)).getByText(/^At −1%: saves £\d\.\dbn/)).toBeInTheDocument();
+    fireEvent.change(schools, { target: { value: '-1' } });
+    expect(within(cardOf(schools)).getByText('Education Secretary')).toBeInTheDocument();
+    // A flagship budget cut below what was chosen shows the flagship as adjusted.
+    fireEvent.change(screen.getByRole('slider', { name: 'Prisons and courts' }), {
+      target: { value: '5' },
+    });
+    expect(within(prisons).getByText('Adjusted from what you chose')).toHaveClass('tag--warn');
+  });
+
+  it('leaves for the forecast from the spending screen, remembering the package', async () => {
+    at(`/finetune/spending?${BASE}&${GAME}&L=moj.10_hscl.1`);
+    fireEvent.click(screen.getByRole('link', { name: 'Next: the forecast' }));
+    expect(h1('The forecast arrives')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(search().get('g')).toMatch(/st\.3/);
+      expect(search().get('S')).toMatch(/hscl\.1/);
+    });
+  });
+
+  it('opens every lever on the desk, and comes back', () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    fireEvent.click(screen.getByRole('link', { name: 'Every tax lever' }));
+    expect(screen.getByText('Build the package')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('link', { name: 'Back to fine-tuning tax' }));
+    expect(h1('Fine-tune tax')).toBeInTheDocument();
+  });
+
+  it('sends the old and odd addresses to the right screen, and a sandbox to the desk', () => {
+    const old = at(`/budget/afford?${BASE}&${GAME}`);
+    expect(h1('Fine-tune tax')).toBeInTheDocument();
+    old.unmount();
+    const bare = at(`/finetune?${BASE}&${GAME}`);
+    expect(h1('Fine-tune tax')).toBeInTheDocument();
+    bare.unmount();
+    const odd = at(`/finetune/nothing?${BASE}&${GAME}`);
+    expect(h1('Fine-tune tax')).toBeInTheDocument();
+    odd.unmount();
+    const sandbox = at(`/finetune/spending?${BASE}&L=dfe.-2`);
+    expect(screen.getByText('Build the package')).toBeInTheDocument();
+    expect(screen.getByText(/The Director of Public Spending’s briefing/)).toBeInTheDocument();
+    sandbox.unmount();
+    // A game that has not yet agreed its priorities is sent back to them.
+    at(`/finetune/tax?${BASE}&g=s.7_st.1_pl.adviser_hr.20`);
+    expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
+  });
+});

@@ -12,6 +12,7 @@ import {
 } from '@btc/engine';
 import type { ReactNode } from 'react';
 import type { OptionPrice } from '../journey/prices';
+import { AdviceLine } from './AdviceLine';
 import { LabelBadge } from './LabelBadge';
 import { formatLeverValue } from './LeverControl';
 import { SourceList } from './SourceLink';
@@ -211,17 +212,7 @@ export function OptionCard({
           })}
         </span>
       </label>
-      {advice ? (
-        <p className="choice__advice">
-          <span className="kicker">{advice.who}</span> <LabelBadge badge={advice.line.badge} />{' '}
-          {advice.line.text}
-          <SourceList
-            as="span"
-            className="choice__sources briefing__sources"
-            refs={advice.line.sources}
-          />
-        </p>
-      ) : null}
+      {advice ? <AdviceLine who={advice.who} line={advice.line} /> : null}
       {more ? (
         <details className="more more--quiet choice__more">
           <summary>More about this</summary>
