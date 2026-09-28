@@ -2,7 +2,7 @@ import { computeOutcome } from '@btc/engine';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { levers, rules, vintage } from '../data';
-import { formatLeverValue, LeverControl } from './LeverControl';
+import { formatLeverValue, formatLeverValueShort, LeverControl } from './LeverControl';
 
 describe('LeverControl', () => {
   it('reads a relief cost as the most it could raise, with one plain line on why (Phase 25)', () => {
@@ -28,7 +28,8 @@ describe('LeverControl', () => {
         onChange={() => undefined}
       />,
     );
-    expect(screen.getByText(/Current budget in 2029-30/).textContent).toMatch(
+    // "Day-to-day budget", not "Current budget", which a newcomer reads as "now" (Phase 25).
+    expect(screen.getByText(/Day-to-day budget in 2029-30/).textContent).toMatch(
       /raises at most £\d+\.\dbn/,
     );
     expect(
@@ -99,8 +100,8 @@ describe('LeverControl', () => {
         onChange={() => undefined}
       />,
     );
-    const borrowing = screen.getByText(/Borrowing in 2029-30/);
-    expect(borrowing.textContent).toMatch(/up £13\.4bn/);
+    // A spending line moved reads as money against its plan, in the card's one year (Phase 25).
+    const borrowing = screen.getByText(/£13\.4bn more than planned in 2029-30/);
     // Investment counts against the debt rule; the day-to-day rule moves only by interest.
     expect(borrowing.textContent).toMatch(/counts against the debt rule, not the day-to-day rule/);
     expect(screen.queryByText(/Barnett formula/)).toBeNull();
@@ -117,8 +118,7 @@ describe('LeverControl', () => {
     );
     const scope = within(container);
     expect(scope.getByText('Barnett applies')).toBeInTheDocument();
-    const current = scope.getByText(/Current budget in 2029-30/);
-    expect(current.textContent).toMatch(/costs £2\.4bn/);
+    expect(scope.getByText(/£2\.4bn more than planned in 2029-30/)).toBeInTheDocument();
     fireEvent.click(scope.getByRole('button', { name: /Detail and sources/ }));
     expect(scope.getByText(/Spending Review 2025 rows/)).toBeInTheDocument();
     expect(scope.getAllByText(/extended from 2028-29/)).toHaveLength(2);
@@ -143,6 +143,28 @@ describe('LeverControl', () => {
       /The tax lock/,
     );
     quiet.unmount();
+    // Named, the resting tag says which promise, and opens what it covers (Phase 25).
+    const named = render(
+      <LeverControl
+        lever={itbr}
+        value={0}
+        onChange={() => undefined}
+        redLines={[
+          {
+            promise: 'The tax lock',
+            id: 'tax-lock',
+            tag: 'Tax lock',
+            when: 'above',
+            broken: false,
+          },
+        ]}
+      />,
+    );
+    const word = within(named.container).getByRole('button', { name: 'Tax lock' });
+    expect(word.closest('.tag--manifesto')?.textContent).toMatch(/^Tax lock: no rise/);
+    fireEvent.click(word);
+    expect(named.container.textContent).toMatch(/not to raise National Insurance, VAT/);
+    named.unmount();
     const crossed = render(
       <LeverControl
         lever={itbr}
@@ -195,7 +217,7 @@ describe('LeverControl', () => {
       within(settled.container).getByText('Chief Secretary to the Treasury'),
     ).toBeInTheDocument();
     expect(
-      within(settled.container).getByText(/^Settled lower: the Justice Secretary asked for more/),
+      within(settled.container).getByText(/Settled lower: the Justice Secretary asked for more/),
     ).toBeInTheDocument();
     settled.unmount();
     // Moved the other way: a red tag, and no line about settling.
@@ -220,7 +242,7 @@ describe('LeverControl', () => {
     const itbr = levers.find((l) => l.code === 'itbr');
     if (!itbr) throw new Error('missing basic rate');
     const line = {
-      text: 'HMRC’s figure. A penny is big money.',
+      text: 'A penny is big money.',
       sources: [{ sourceId: 'hmrc-trr-2025-06' }],
       badge: 'simulated' as const,
     };
@@ -231,8 +253,8 @@ describe('LeverControl', () => {
         summaryYear="2029-30"
         onChange={() => undefined}
         displayTitle="The basic rate of income tax"
-        hint={{ text: 'At 21%: raises £8.6bn · leaves £32.2bn', tone: 'better' }}
-        advice={{ who: 'Director of Tax', line }}
+        hint={{ text: 'Up 1p to 21%: would raise £8.6bn', headroom: '£32.2bn' }}
+        advice={{ line }}
         notes={[
           { key: 'x', text: 'Overlaps with Something: both move the same base.', warn: true },
         ]}
@@ -242,15 +264,21 @@ describe('LeverControl', () => {
       </LeverControl>,
     );
     const slider = screen.getByRole('slider', { name: 'The basic rate of income tax' });
-    // The price at rest describes the control, with the lever's own headline, folded.
+    // The price at rest describes the control, with the lever's own headline, folded. It is in
+    // the conditional and in plain ink (Phase 25): not money already in the Budget.
     expect(slider).toHaveAccessibleDescription(
-      expect.stringContaining('At 21%: raises £8.6bn · leaves £32.2bn'),
+      expect.stringContaining('Up 1p to 21%: would raise £8.6bn · headroom would be £32.2bn'),
     );
-    expect(screen.getByText('At 21%: raises £8.6bn · leaves £32.2bn')).toHaveClass(
-      'amount--better',
-    );
-    expect(screen.getByText('Director of Tax')).toHaveClass('kicker');
-    expect(screen.getByText(/A penny is big money/)).toBeInTheDocument();
+    const hint = screen.getByText(/^Up 1p to 21%: would raise £8\.6bn/);
+    expect(hint).toHaveClass('lever__hint');
+    expect(hint).not.toHaveClass('amount--better');
+    // The screen's lead names the adviser once; the card's line carries its badge after it.
+    expect(screen.queryByText('Director of Tax')).toBeNull();
+    const said = screen.getByText(/A penny is big money/);
+    expect(said.textContent).toMatch(/^A penny is big money\. Game judgement/);
+    // At rest there is no "20% → 20%": the level, as planned.
+    expect(screen.getByText('as planned')).toBeInTheDocument();
+    expect(screen.queryByText('→')).toBeNull();
     expect(screen.getByText(/^Warning: Overlaps with Something/)).toHaveClass(
       'choice__overlap--warn',
     );
@@ -258,6 +286,8 @@ describe('LeverControl', () => {
     const fold = screen.getByText(/^More about this/).closest('details') as HTMLElement;
     expect(within(fold).getByText(itbr.headline ?? '')).toBeInTheDocument();
     expect(within(fold).getByText('What this assumes')).toBeInTheDocument();
+    // The slider's ends wait in the fold on a phone (Phase 25).
+    expect(within(fold).getByText('The slider runs from 17% to 25%.')).toBeInTheDocument();
     rest.unmount();
     // Moved, the hint gives way to the lever's own effect line.
     const outcome = computeOutcome({
@@ -274,12 +304,58 @@ describe('LeverControl', () => {
         summaryYear="2029-30"
         onChange={() => undefined}
         displayTitle="The basic rate of income tax"
-        hint={{ text: 'At 21%: raises £8.6bn · leaves £32.2bn', tone: 'better' }}
+        hint={{ text: 'Up 1p to 21%: would raise £8.6bn', headroom: '£32.2bn' }}
         compact
       />,
     );
-    expect(screen.queryByText(/^At 21%/)).toBeNull();
-    expect(screen.getByText(/Current budget in 2029-30: raises £8\.\dbn/)).toBeInTheDocument();
+    expect(screen.queryByText(/^Up 1p to 21%/)).toBeNull();
+    expect(screen.getByText(/Day-to-day budget in 2029-30: raises £8\.\dbn/)).toBeInTheDocument();
+    // Undo, not "Back to OBR" (Phase 25).
+    expect(
+      screen.getByRole('button', { name: 'Undo for The basic rate of income tax' }),
+    ).toBeInTheDocument();
+  });
+
+  it('badges a move past its source’s range Worked out, and says why (Phase 25)', () => {
+    const itbr = levers.find((l) => l.code === 'itbr');
+    if (!itbr) throw new Error('missing basic rate');
+    const at = (value: number) =>
+      render(
+        <LeverControl
+          lever={itbr}
+          value={value}
+          effect={computeOutcome({
+            vintage,
+            rules,
+            levers,
+            settings: { leverValues: { itbr: value } },
+          }).leverEffects.find((e) => e.code === 'itbr')}
+          summaryYear="2029-30"
+          onChange={() => undefined}
+        />,
+      );
+    const two = at(2);
+    expect(within(two.container).queryByText(/does not vouch for/)).toBeNull();
+    two.unmount();
+    const five = at(5);
+    const note = within(five.container).getByText(
+      /Beyond 2p the game scales it in a straight line/,
+    );
+    expect(note.closest('.lever__effect')?.textContent).toMatch(/Worked out/);
+    five.unmount();
+    // The curated card stops where the source does, and keeps a setting already past it in reach.
+    const curated = render(
+      <LeverControl
+        lever={itbr}
+        value={4}
+        onChange={() => undefined}
+        range={{ min: -2, max: 2 }}
+        compact
+      />,
+    );
+    const slider = within(curated.container).getByRole('slider');
+    expect(slider).toHaveAttribute('min', '-2');
+    expect(slider).toHaveAttribute('max', '4');
   });
 
   it('formats pence, points, per cent and pounds', () => {
@@ -289,7 +365,9 @@ describe('LeverControl', () => {
     const nicpt = levers.find((l) => l.code === 'nicpt');
     if (!itbr || !nicm || !fuel || !nicpt) throw new Error('missing levers');
     expect(formatLeverValue(itbr, -1)).toBe('−1p');
-    expect(formatLeverValue(nicm, 0.5)).toBe('+0.5 pp');
+    // A point, never "pp" (Phase 25).
+    expect(formatLeverValue(nicm, 0.5)).toBe('+0.5 points');
+    expect(formatLeverValueShort(nicm, 1)).toBe('+1 point');
     expect(formatLeverValue(fuel, 10)).toBe('+10%');
     expect(formatLeverValue(nicpt, 1040)).toBe('+£1,040');
   });
@@ -302,32 +380,53 @@ describe('LeverControl', () => {
     const first = render(<LeverControl lever={itbr} value={1} onChange={() => undefined} />);
     expect(within(first.container).getByText('20%')).toBeInTheDocument();
     expect(within(first.container).getByText('21%')).toBeInTheDocument();
+    // A screen reader hears the level and the move in words (Phase 25).
     expect(within(first.container).getByRole('slider')).toHaveAttribute(
       'aria-valuetext',
-      '21% (+1p)',
+      '21%, up 1p',
     );
     first.unmount();
     const second = render(<LeverControl lever={iht} value={-40} onChange={() => undefined} />);
     const select = within(second.container).getByRole('combobox');
     expect(select).toHaveValue('-40');
     expect(
-      within(second.container).getByRole('option', { name: 'Abolish (0%) · not on the table' }),
+      within(second.container).getByRole('option', { name: 'Abolish (0%)' }),
     ).toBeInTheDocument();
     expect(within(second.container).getByText('0%')).toBeInTheDocument();
     second.unmount();
     const third = render(<LeverControl lever={dhsc} value={2} onChange={() => undefined} />);
-    // Spending leads with real-terms growth and shows the cash budget beneath it.
-    expect(within(third.container).getByText('+2.9%')).toBeInTheDocument();
-    expect(within(third.container).getByText('+3.9%')).toBeInTheDocument();
-    expect(third.container.querySelector('.lever__level-note')?.textContent).toMatch(
-      /a year in real terms, 2026-27 to 2028-29/,
-    );
+    // Spending leads with growth after rising prices, in words, and the plan beside it (Phase
+    // 25); the desk keeps the cash budget beneath it.
+    expect(
+      within(third.container).getByText('Grows 3.9% a year after rising prices (planned: 2.9%)'),
+    ).toBeInTheDocument();
     expect(third.container.querySelector('.lever__cash')?.textContent).toMatch(
-      /£232\.0bn → £236\.6bn in 2028-29/,
+      /£232\.0bn → £236\.6bn in 2028-29; growth measured from 2026-27 to 2028-29/,
     );
+    expect(within(third.container).getByRole('slider')).toHaveAttribute(
+      'aria-valuetext',
+      'Grows 3.9% a year after rising prices, 2% more than planned',
+    );
+    third.unmount();
+    // At rest: one plain line, as planned, and no pair of equal figures.
+    const fourth = render(<LeverControl lever={dhsc} value={0} onChange={() => undefined} />);
+    expect(
+      within(fourth.container).getByText('Grows 2.9% a year after rising prices, as planned'),
+    ).toBeInTheDocument();
+    expect(within(fourth.container).getByText('10% less')).toBeInTheDocument();
+    expect(within(fourth.container).getByText('10% more')).toBeInTheDocument();
+    fourth.unmount();
+    // A cut to a growing budget cannot read as a rise.
+    const fifth = render(<LeverControl lever={dhsc} value={-1} onChange={() => undefined} />);
+    expect(
+      within(fifth.container).getByText(
+        'Still grows 2.4% a year after rising prices (planned: 2.9%)',
+      ),
+    ).toBeInTheDocument();
+    const third_ = fifth;
     // The Spending Review's own figure and the 2010s record sit beside the control, one click
     // away whatever the workings switch says.
-    const milestones = third.container.querySelector('.milestones')?.textContent ?? '';
+    const milestones = third_.container.querySelector('.milestones')?.textContent ?? '';
     expect(milestones).toMatch(/For comparison/);
     expect(milestones).toMatch(/This Spending Review\+2\.8% a year/);
     expect(milestones).toMatch(/2010-11 to 2019-20\+1\.8% a year/);
@@ -356,7 +455,7 @@ describe('LeverControl', () => {
     expect(tag).toHaveClass('tag--quiet');
     expect(tag?.textContent).toMatch(/April 2030/);
     expect(tag?.textContent).toMatch(/January 2031/);
-    const line = scope.getByText(/Current budget in 2029-30/);
+    const line = scope.getByText(/Day-to-day budget in 2029-30/);
     expect(line.textContent).toMatch(/nothing yet; from 2030-31 raises £18\.5bn/);
     fireEvent.click(scope.getByText('What this assumes'));
     // The reason appears twice on purpose: read aloud inside the tag, and listed under the disclosure.

@@ -27,7 +27,12 @@ describe('fine-tune tax and spend: the curated levers', () => {
   it('lays the tax screen out as five who-pays groups of real levers, with one way on', () => {
     const { container } = at(`/finetune/tax?${BASE}&${GAME}`);
     expect(h1('Fine-tune tax')).toBeInTheDocument();
-    expect(screen.getByText('Raise or cut any tax. Watch your headroom move.')).toBeInTheDocument();
+    // The lead names the adviser once; the cards carry no name (Phase 25).
+    expect(
+      screen.getByText(
+        'Raise or cut any tax. Watch your headroom move. Your Director of Tax’s view is on each lever.',
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 1 of 2$/)).toBeInTheDocument();
     expect(bar()).toBeInTheDocument();
     const names = screen
@@ -57,7 +62,8 @@ describe('fine-tune tax and spend: the curated levers', () => {
     const levers = container.querySelectorAll('.lever--curated');
     expect(levers).toHaveLength(28);
     for (const lever of levers) {
-      expect(lever.querySelector('.choice__advice .kicker')?.textContent).toBe('Director of Tax');
+      expect(lever.querySelector('.choice__advice')).not.toBeNull();
+      expect(lever.querySelector('.choice__advice .kicker')).toBeNull();
     }
     // The controls carry their plain titles as their names.
     expect(
@@ -73,23 +79,29 @@ describe('fine-tune tax and spend: the curated levers', () => {
     const penny = screen.getByRole('slider', { name: 'The basic rate of income tax' });
     const card = cardOf(penny);
     // At rest: what the adviser's usual move would do, on HMRC's own figure, and what the
-    // headroom would then be, interest included (Phase 25), which the screen says once.
-    expect(
-      within(card).getByText(/^At 21%: raises £\d\.\dbn · headroom would be £\d+\.\dbn$/),
-    ).toBeInTheDocument();
+    // headroom would then be, interest included (Phase 25), which the screen says once. It is in
+    // the conditional, so it cannot read as money already in the Budget.
+    expect(within(card).getByText(/^Up 1p to 21%: would raise/).textContent).toMatch(
+      /^Up 1p to 21%: would raise £\d\.\dbn · headroom would be £\d+\.\dbn$/,
+    );
     expect(
       screen.getByText(
         'Headroom also moves with the interest on borrowing, so it can move more than a tax raises.',
       ),
     ).toBeInTheDocument();
-    expect(within(card).getByText('Manifesto: no rise')).toBeInTheDocument();
+    // The resting tag names the promise, and the name opens what it covers (Phase 25).
+    expect(card.querySelector('.tag--manifesto')?.textContent).toMatch(/^Tax lock: no rise/);
+    expect(within(card).getByRole('button', { name: 'Tax lock' })).toBeInTheDocument();
+    // The curated slider stops where HMRC's figure stops: 2p either way (Phase 25).
+    expect(penny).toHaveAttribute('min', '-2');
+    expect(penny).toHaveAttribute('max', '2');
     const before = barFigure();
     fireEvent.change(penny, { target: { value: '1' } });
     // Moved: the hint gives way to the lever's own effect line, the red line is crossed, the
     // group says what it now raises, and the bar has moved.
-    expect(within(card).queryByText(/^At 21%/)).toBeNull();
+    expect(within(card).queryByText(/^Up 1p to 21%/)).toBeNull();
     expect(
-      within(card).getByText(/Current budget in 2029-30: raises £\d\.\dbn/),
+      within(card).getByText(/Day-to-day budget in 2029-30: raises £\d\.\dbn/),
     ).toBeInTheDocument();
     expect(within(card).getByText('Breaks the manifesto: The tax lock')).toHaveClass('tag--warn');
     expect(group(/^Everyone 1 moved · raises £\d\.\dbn/)).toBeInTheDocument();
@@ -104,8 +116,11 @@ describe('fine-tune tax and spend: the curated levers', () => {
     });
     const card = cardOf(levy);
     expect(
-      within(card).getByText(/^Switched on: raises £\d+\.\dbn · headroom would be/),
+      within(card).getByText(/^If you switch it on: would raise £\d+\.\dbn · headroom would be/),
     ).toBeInTheDocument();
+    expect(card.querySelector('.tag--manifesto')?.textContent).toMatch(
+      /^Tax lock: keeps its words, strains its spirit/,
+    );
     fireEvent.click(levy);
     expect(within(card).getByText('Strains the manifesto: The tax lock')).toHaveClass('tag--amber');
     expect(within(card).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
@@ -144,7 +159,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     // The freeze a Chancellor faces this autumn is on show, and costs money (Phase 25).
     const freeze = cardOf(screen.getByRole('checkbox', { name: 'Freeze fuel duty in April 2027' }));
     expect(
-      within(freeze).getByText(/^Switched on: costs £0\.\dbn · headroom would be/),
+      within(freeze).getByText(/^If you switch it on: would cost £0\.\dbn · headroom would be/),
     ).toBeInTheDocument();
   });
 
@@ -156,7 +171,9 @@ describe('fine-tune tax and spend: the curated levers', () => {
       }),
     );
     expect(
-      within(pensions).getByText(/^Switched on: raises at most £1\d\.\dbn · headroom would be/),
+      within(pensions).getByText(
+        /^If you switch it on: would raise at most £1\d\.\dbn · headroom would be/,
+      ),
     ).toBeInTheDocument();
     expect(
       within(pensions).getByText(
@@ -169,7 +186,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
       }),
     );
     expect(
-      within(pensions).getByText(/Current budget in 2029-30: raises at most £1\d\.\dbn/),
+      within(pensions).getByText(/Day-to-day budget in 2029-30: raises at most £1\d\.\dbn/),
     ).toBeInTheDocument();
   });
 
@@ -184,7 +201,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(card.className).toMatch(/lever--blocked/);
     // Priced as the swap it offers, never as both at once.
     expect(
-      within(card).getByText(/^Swap them: costs £\d+\.\dbn · headroom would be/),
+      within(card).getByText(/^If you swap them: would cost £\d+\.\dbn · headroom would be/),
     ).toBeInTheDocument();
     fireEvent.click(death);
     expect(search().get('L')).toMatch(/cgtalign\.1/);
@@ -212,28 +229,48 @@ describe('fine-tune tax and spend: the curated levers', () => {
       screen.getByText(/Departments’ day-to-day budgets are set to 2028-29\. Cutting one reopens/),
     ).toBeInTheDocument();
     expect(screen.getByText(/falling 4\.4% a year after inflation/)).toBeInTheDocument();
+    // Whose budgets most of these are: England's, and the other nations' share left out (Phase 25).
+    expect(
+      screen.getByText(/^Most public services here are England’s budgets\./),
+    ).toBeInTheDocument();
     expect(group(/^Benefits 4 levers/)).toBeInTheDocument();
     expect(group(/^Last year’s decisions 5 levers/)).toBeInTheDocument();
     // The prisons budget belongs to a flagship the player chose; moved before arrival, it is on show.
     const prisons = cardOf(screen.getByRole('slider', { name: 'Prisons and courts' }));
     expect(within(prisons).getByText('In your flagship policies')).toBeInTheDocument();
     expect(within(prisons).getByText('Justice Secretary')).toBeInTheDocument();
-    for (const kicker of document.querySelectorAll('.lever--curated .choice__advice .kicker')) {
-      expect(kicker.textContent).toBe('Director of Public Spending');
-    }
+    expect(document.querySelectorAll('.lever--curated .choice__advice .kicker')).toHaveLength(0);
+    expect(
+      screen.getByText(
+        'Trim or top up any budget. A top-up costs what a trim saves. Your Director of Public Spending’s view is on each lever.',
+      ),
+    ).toBeInTheDocument();
     // Untouched, a budget has no minister on it; cut, its minister says what stops happening.
     const schools = screen.getByRole('slider', { name: 'Schools and education' });
     expect(within(cardOf(schools)).queryByText('Education Secretary')).toBeNull();
-    expect(within(cardOf(schools)).getByText(/^At −1%: saves £\d\.\dbn/)).toBeInTheDocument();
+    // At rest, a cut in cash terms, so it cannot be read as the growth rate the card leads with.
+    expect(
+      within(cardOf(schools)).getByText(/^Cut the budget by 1%: would save £\d\.\dbn/),
+    ).toBeInTheDocument();
+    expect(
+      within(cardOf(schools)).getByText('Falls 0.3% a year after rising prices, as planned'),
+    ).toBeInTheDocument();
     fireEvent.change(schools, { target: { value: '-1' } });
     expect(within(cardOf(schools)).getByText('Education Secretary')).toBeInTheDocument();
+    // Moved: the new path beside the plan, and the money in the card's one year.
+    expect(
+      within(cardOf(schools)).getByText('Falls 0.8% a year after rising prices (planned: 0.3%)'),
+    ).toBeInTheDocument();
+    expect(
+      within(cardOf(schools)).getByText(/^£\d\.\dbn less than planned in 2029-30$/),
+    ).toBeInTheDocument();
     // A flagship budget cut below what was chosen is settled lower, and the Chief Secretary says
     // so (Phase 25); cut below where it started, it is against the flagship.
     fireEvent.change(screen.getByRole('slider', { name: 'Prisons and courts' }), {
       target: { value: '5' },
     });
     expect(
-      within(prisons).getByText(/^Settled lower: the Justice Secretary asked for more/),
+      within(prisons).getByText(/Settled lower: the Justice Secretary asked for more/),
     ).toBeInTheDocument();
     fireEvent.change(screen.getByRole('slider', { name: 'Prisons and courts' }), {
       target: { value: '-2' },

@@ -95,7 +95,7 @@ describe('the package in two parts', () => {
     fireEvent.click(screen.getByRole('tab', { name: /Wealth and property/ }));
     expect(
       within(screen.getByRole('tabpanel')).getByRole('option', {
-        name: 'Abolish (0%) · not on the table',
+        name: 'Abolish (0%)',
       }),
     ).toBeInTheDocument();
   });

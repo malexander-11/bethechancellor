@@ -38,6 +38,11 @@
         "sourceId": "govuk-nics-rates"
       },
       "note": "8% since 6 April 2024; 10% from January 2024 and 12% before."
+    },
+    "sourceRange": {
+      "min": -2,
+      "max": 2,
+      "text": "HMRC's figure is for 1 point. Beyond 2 points the game scales it in a straight line, which HMRC does not vouch for."
     }
   },
   "appliesFrom": "implementationYear",
@@ -98,7 +103,7 @@
     },
     "caveats": [
       "Sum of HMRC's Class 1 employee main rate and Class 4 main rate rows.",
-      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so rate changes are scaled linearly here.",
+      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so changes up to 2p are scaled in a straight line. Beyond that the straight line is the game's own arithmetic, badged Worked out.",
       "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
     ]
   },

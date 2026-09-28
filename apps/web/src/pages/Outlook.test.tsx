@@ -106,10 +106,10 @@ describe('the briefing: one estimate to plan on (Phase 24)', () => {
     const items = within(fold as HTMLElement).getAllByRole('listitem', { hidden: true });
     expect(items).toHaveLength(3);
     expect(items[0]).toHaveTextContent(
-      /£850 million, paid for by cancelling the Digital ID programme\./,
+      /£850 million\. Paid for by cancelling the Digital ID programme\./,
     );
     expect(items[2]).toHaveTextContent(
-      /£60 million, paid for by £40 million from Work and Pensions/,
+      /£60 million\. Paid for by £40 million from Work and Pensions/,
     );
     // No bracketed periods, and no sum under a billion rounded to "£0.1bn".
     for (const item of items) expect(item.textContent).not.toMatch(/\((20\d\d|from )|£0\.\dbn/);
@@ -154,7 +154,7 @@ describe('the briefing: one estimate to plan on (Phase 24)', () => {
     const table = screen.getByRole('table');
     expect(within(table).getByText('Setting used')).toBeInTheDocument();
     // The gilt yield sets interest rates three-quarters of a point above the OBR's path.
-    expect(within(table).getByText('+0.75 pp')).toBeInTheDocument();
+    expect(within(table).getByText('+0.75 points')).toBeInTheDocument();
     // How that setting is applied, and which way it leans, as an assumption (Phase 25).
     const method = screen.getByText(/we apply it to the rise in gilt yields alone/);
     expect(method).toHaveTextContent(/so the estimate leans cautious\./);

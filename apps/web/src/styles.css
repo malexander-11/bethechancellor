@@ -843,6 +843,14 @@ a.badge:hover {
   font-variant-numeric: tabular-nums;
 }
 
+/* A spending line's growth after rising prices, in words (Phase 25): the card's lead figure. */
+.lever__growth {
+  display: block;
+  color: var(--ink);
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
 /* The slider: a 4px track, a 20px thumb, a 44px hit area. */
 .lever input[type='range'] {
   -webkit-appearance: none;
@@ -931,6 +939,12 @@ a.badge:hover {
   color: var(--muted);
   font-weight: 400;
   font-variant-numeric: normal;
+}
+
+/* A resting card's hint (Phase 25): an explainer in plain ink, not an effect already made. */
+.lever__hint {
+  color: var(--ink-2);
+  font-weight: 400;
 }
 
 .lever__actions {

@@ -38,6 +38,18 @@ export const prioritySchema = z.strictObject({
   /** The priority as a noun phrase for a sentence: "the cost of living", "defence". */
   noun: z.string().min(1).max(40),
   purpose: z.string().min(1).max(160),
+  /**
+   * Where the priority's spending reaches, when that is not the whole UK (Phase 25): "Health and
+   * care budgets here are England's…", said once on its flagship screen. Words about scope, sourced
+   * to the Statement of Funding Policy; commentary, never a number.
+   */
+  reach: z
+    .strictObject({
+      text: z.string().min(1).max(220),
+      badge: z.literal('commentary'),
+      sources: z.array(sourceRefSchema).min(1),
+    })
+    .optional(),
   /** The PM's case for it, in the PM's voice. */
   pitch: simulatedLineSchema,
   /** What the PM says when it is ranked. */
@@ -79,6 +91,8 @@ export const promiseSchema = z.strictObject({
     .min(1)
     .max(60)
     .regex(/^[^A-Z]/, 'a noun follows "breaking" or "Because of", so it starts in lower case'),
+  /** Its short name on a lever's resting tag (Phase 25): "Tax lock: no rise". */
+  tag: z.string().min(1).max(24),
   text: z.string().min(1),
   sources: z.array(sourceRefSchema).min(1),
   origin: promiseOriginSchema,

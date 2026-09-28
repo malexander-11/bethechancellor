@@ -67,9 +67,9 @@ describe('the lever groups', () => {
     );
     // The slider is described by the lever's one line and, once moved, by what it does.
     expect(within(card).getByRole('slider')).toHaveAccessibleDescription(
-      /Current budget in 2029-30/,
+      /Day-to-day budget in 2029-30/,
     );
-    expect(within(card).getByRole('button', { name: /Back to OBR for/ })).toBeInTheDocument();
+    expect(within(card).getByRole('button', { name: /Undo for/ })).toBeInTheDocument();
     // Five "Detail and sources" buttons in a group would otherwise be five identical names.
     const names = screen
       .getAllByRole('button', { name: /Detail and sources/ })

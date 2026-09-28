@@ -6,6 +6,16 @@
       "title": "Cut the cost of living",
       "noun": "the cost of living",
       "purpose": "Breathing space on bills, now.",
+      "reach": {
+        "text": "Free school meals and the bus cap are for England. Scotland, Wales and Northern Ireland get a share through their own grants (the Barnett formula), which our prices leave out.",
+        "badge": "commentary",
+        "sources": [
+          {
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "note": "Annex B.13, comparability factors at Spending Review 2025"
+          }
+        ]
+      },
       "pitch": {
         "text": "Energy bills are rising again this winter. People need to feel this Budget in their pockets before Christmas, not read about it in a forecast.",
         "sources": [
@@ -35,7 +45,17 @@
       "id": "nhs",
       "title": "Bring down NHS waiting lists",
       "noun": "the NHS",
-      "purpose": "The 18-week promise, and care.",
+      "purpose": "England’s 18-week waiting promise, and social care.",
+      "reach": {
+        "text": "Health and care budgets here are England’s. Scotland, Wales and Northern Ireland get a share through their own grants (the Barnett formula), which our prices leave out.",
+        "badge": "commentary",
+        "sources": [
+          {
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "note": "Annex B.13, comparability factors at Spending Review 2025"
+          }
+        ]
+      },
       "pitch": {
         "text": "The waiting list is falling and the 18-week target is within reach. And I have promised a national care service without yet finding the money for it.",
         "sources": [
@@ -71,7 +91,7 @@
       "id": "defence",
       "title": "Defence on the NATO path",
       "noun": "defence",
-      "purpose": "Fund the plan, reach 3%.",
+      "purpose": "Fund the defence plan. Aim for 3% of national income.",
       "pitch": {
         "text": "The defence of our nation will always be my first priority. The Defence Investment Plan is published and £4.7 billion of it is waiting for you.",
         "sources": [
@@ -108,7 +128,17 @@
       "id": "schools-send",
       "title": "Fix special needs and schools",
       "noun": "schools",
-      "purpose": "Close the special-needs deficits.",
+      "purpose": "Clear councils’ growing special-needs debts.",
+      "reach": {
+        "text": "Schools and skills budgets here are England’s. Scotland, Wales and Northern Ireland get a share through their own grants (the Barnett formula), which our prices leave out.",
+        "badge": "commentary",
+        "sources": [
+          {
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "note": "Annex B.13, comparability factors at Spending Review 2025"
+          }
+        ]
+      },
       "pitch": {
         "text": "Special needs deficits are about to hit council reserves. Councils are about to hit the wall on this, and the plans keep rising.",
         "sources": [
@@ -141,7 +171,17 @@
       "id": "homes-growth",
       "title": "Homes and growth outside London",
       "noun": "homes and growth",
-      "purpose": "Build, visibly, outside London.",
+      "purpose": "Build homes and invest, visibly, outside London.",
+      "reach": {
+        "text": "Council homes here are England’s. Scotland, Wales and Northern Ireland get a share through their own grants (the Barnett formula), which our prices leave out.",
+        "badge": "commentary",
+        "sources": [
+          {
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "note": "Annex B.13, comparability factors at Spending Review 2025"
+          }
+        ]
+      },
       "pitch": {
         "text": "This will be a Budget that moves money and power out of Westminster. Council homes are the fair way to bring the welfare bill down. Show the country that re-industrialising Britain is real.",
         "sources": [
@@ -208,7 +248,17 @@
       "id": "safer-streets",
       "title": "Safer streets: prisons, police, borders",
       "noun": "safer streets",
-      "purpose": "Cells for the sentences promised.",
+      "purpose": "Prison places for the sentences promised.",
+      "reach": {
+        "text": "Prisons, courts and police here are England and Wales’s. Scotland and Northern Ireland get a share through their own grants (the Barnett formula), which our prices leave out.",
+        "badge": "commentary",
+        "sources": [
+          {
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "note": "Annex B.13, comparability factors at Spending Review 2025"
+          }
+        ]
+      },
       "pitch": {
         "text": "I have told the House that the worst offenders will serve their full terms, and that needs prison places. Bring the asylum bill down and the whole department breathes.",
         "sources": [
@@ -244,7 +294,7 @@
       "id": "welfare-bill",
       "title": "Get the welfare bill down",
       "noun": "getting the welfare bill down",
-      "purpose": "A smaller bill, honestly scored.",
+      "purpose": "A smaller benefits bill, with savings that are real.",
       "pitch": {
         "text": "Council homes are the fair way to bring the welfare bill down. If you want to go faster than that, be honest about who loses.",
         "sources": [
@@ -280,6 +330,7 @@
       "id": "tax-lock",
       "title": "The tax lock",
       "noun": "the tax lock",
+      "tag": "Tax lock",
       "text": "We will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT. The manifesto's words, repeated at Budget 2025.",
       "origin": "manifesto-2024",
       "sources": [
@@ -374,6 +425,7 @@
       "id": "ct-cap",
       "title": "Corporation tax capped at 25%",
       "noun": "the corporation tax cap",
+      "tag": "Corporation tax cap",
       "text": "We will cap corporation tax at the current level of 25 per cent, the lowest in the G7, for the entire parliament.",
       "origin": "manifesto-2024",
       "sources": [
@@ -393,6 +445,7 @@
       "id": "two-child",
       "title": "The two-child limit stays abolished",
       "noun": "the promise on the two-child limit",
+      "tag": "Two-child limit",
       "text": "Ending the two-child limit from April 2026 lifts 450,000 children out of poverty. A Budget 2025 decision, not a manifesto promise: bringing the limit back is a U-turn.",
       "origin": "budget-2025",
       "sources": [
@@ -415,6 +468,7 @@
       "id": "fiscal-rules",
       "title": "The fiscal rules",
       "noun": "the fiscal rules",
+      "tag": "Fiscal rules",
       "text": "We will abide by the fiscal rules, ensuring we retain a buffer to protect us against uncertainty. The Chancellor's own words to the Treasury Committee.",
       "origin": "government",
       "judgedBy": "fiscalRules",
@@ -433,6 +487,7 @@
       "id": "defence-path",
       "title": "Defence on its path",
       "noun": "the defence path",
+      "tag": "Defence path",
       "text": "The manifesto set the path to 2.5% of GDP; the government has since committed to 3% in the next Parliament and 3.5% by 2035. A cut to day-to-day defence slows that path.",
       "origin": "manifesto-2024",
       "sources": [
@@ -458,6 +513,7 @@
       "id": "triple-lock",
       "title": "The triple lock",
       "noun": "the triple lock",
+      "tag": "Triple lock",
       "text": "Labour will retain the triple lock for the state pension: it rises each year by the highest of earnings growth, prices or 2.5%. The OBR's forecast assumes it.",
       "origin": "manifesto-2024",
       "sources": [
@@ -492,6 +548,7 @@
       "id": "nhs-18-weeks",
       "title": "NHS waits within 18 weeks",
       "noun": "the 18-week waiting target",
+      "tag": "18-week target",
       "text": "Patients should expect to wait no longer than 18 weeks from referral for consultant-led treatment: the manifesto's words, for the NHS in England. The plan is 9 in 10 within 18 weeks by the end of the Parliament.",
       "origin": "manifesto-2024",
       "sources": [

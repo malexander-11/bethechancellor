@@ -68,7 +68,8 @@ describe('step 5: deliver the Budget', () => {
 
     // Every other budget moved that no flagship owns, with where it now stands and its cost.
     const spending = part(/^Spending/);
-    expect(within(spending).getByText(/^Schools and education · \+5%/)).toBeInTheDocument();
+    // A spending line in the card's words: its share against the plan (Phase 25).
+    expect(within(spending).getByText(/^Schools and education · 5% more/)).toBeInTheDocument();
     expect(within(spending).getByText(/costs £\d\.\dbn/)).toBeInTheDocument();
     // The flagships' levers are read back once, as flagships.
     expect(within(spending).queryByText(/Prisons and courts/)).toBeNull();
@@ -123,6 +124,18 @@ describe('step 5: deliver the Budget', () => {
     expect(within(position).queryByText(/call headroom under/)).toBeNull();
   });
 
+  it('says the tax take in words when it rises by more than half a point (Phase 25)', () => {
+    const levy = at(`/review?${BASE}&${G}&L=moj.10_hscl.1`);
+    const line = document.querySelector('.review__taxtake');
+    expect(line?.textContent).toMatch(
+      /^Taxes take \d+p more in every £100 of national income in 2029-30\. Worked out The OBR already forecasts the tax take at a historic high\./,
+    );
+    levy.unmount();
+    // A small rise says nothing: the markets' band starts at half a point.
+    at(`/review?${BASE}&${G}&L=moj.10_ipt.2`);
+    expect(document.querySelector('.review__taxtake')).toBeNull();
+  });
+
   it('says so when no tax or other budget moved, and names a missed rule and a broken promise', () => {
     const quiet = at(`/review?${BASE}&${G}&L=moj.10`);
     expect(within(part(/^Tax/)).getByText('No tax changed.')).toBeInTheDocument();
@@ -175,7 +188,7 @@ describe('step 5: deliver the Budget', () => {
     ).toHaveClass('review__short');
     // The cut is a cut: in the spending list too, as a saving.
     expect(
-      within(part(/^Spending/)).getByText(/^Health and social care · −1%/),
+      within(part(/^Spending/)).getByText(/^Health and social care · 1% less/),
     ).toBeInTheDocument();
     expect(within(part(/^Spending/)).getByText(/^saves £\d\.\dbn$/)).toBeInTheDocument();
   });

@@ -120,6 +120,20 @@
           "quote": "children with severe or complex needs would be fully protected at their current award rate"
         }
       ]
+    },
+    {
+      "id": "scotland-child-disability-payment",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "In Scotland, children claim Child Disability Payment from Social Security Scotland instead of DLA.",
+      "sources": [
+        {
+          "sourceId": "govuk-dla-children-scotland",
+          "quote": "If your child lives in Scotland You need to apply for Child Disability Payment instead of DLA for children."
+        }
+      ]
     }
   ],
   "interactions": [

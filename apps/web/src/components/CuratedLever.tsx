@@ -8,21 +8,28 @@ import {
   type OptionReport,
 } from '@btc/engine';
 import { levers, finetuneTitle } from '../data';
-import { reliefWords } from '../journey/effects';
+import { reliefWords, wouldWords } from '../journey/effects';
 import { leverNotes, type redLinesOf } from '../journey/levers';
 import type { useLeverHints } from '../journey/prices';
 import { useBudget } from '../state/budget';
-import { LeverControl, formatLeverValueShort } from './LeverControl';
+import { LeverControl, changeWords } from './LeverControl';
 import { MinisterLine } from './MinisterLine';
 
-/** Where the adviser's usual move takes a lever, in the words a hint opens with. */
+/**
+ * The adviser's usual move, in the words a hint opens with (Phase 25): "If you switch it on",
+ * "Up 1p to 21%", "Cut the budget by 1%". A spending line says its cut in cash terms, so it cannot
+ * be read as the growth rate the card leads with.
+ */
 export function moveWords(lever: Lever, move: number): string {
-  if (lever.control.kind === 'toggle') return 'Switched on';
+  if (lever.control.kind === 'toggle') return 'If you switch it on';
+  const words = changeWords(lever, move);
+  if (lever.costing.kind === 'pctOfBaseline' && lever.classification?.side !== 'receipts') {
+    const size = words.replace(/^(up|down) /, '');
+    return `${move < 0 ? 'Cut' : 'Raise'} the budget by ${size}`;
+  }
   const level = lever.control.level;
-  const at = level
-    ? formatLevel(level, levelValue(level, move))
-    : formatLeverValueShort(lever, move);
-  return `At ${at}`;
+  const phrase = words.charAt(0).toUpperCase() + words.slice(1);
+  return level ? `${phrase} to ${formatLevel(level, levelValue(level, move))}` : phrase;
 }
 
 /**
@@ -39,7 +46,6 @@ export function moveWords(lever: Lever, move: number): string {
 export function CuratedLever({
   item,
   lever,
-  who,
   summaryYear,
   hintOf,
   redLinesFor,
@@ -48,8 +54,6 @@ export function CuratedLever({
 }: {
   item: FinetuneItem;
   lever: Lever;
-  /** The role whose line this is: the screen's adviser. */
-  who: string;
   summaryYear: string;
   hintOf: ReturnType<typeof useLeverHints>;
   redLinesFor: ReturnType<typeof redLinesOf>;
@@ -68,13 +72,15 @@ export function CuratedLever({
       )
     : null;
   const effect = priced ? lowerFirst(priced.text) : '';
-  const line = priced
-    ? `${lever.reliefCost ? reliefWords(effect) : effect} · headroom would be ${formatGbpBn(priced.headroomGbpm, 1, priced.headroomGbpm < 0)}`
-    : '';
+  // In the conditional and in plain ink (Phase 25): what the move would do, and the headroom it
+  // would leave, red only below nought.
   const hint = priced
     ? {
-        text: `${excluder ? 'Swap them' : moveWords(lever, item.move)}: ${line}`,
-        tone: priced.tone,
+        text: `${excluder ? 'If you swap them' : moveWords(lever, item.move)}: ${wouldWords(
+          lever.reliefCost ? reliefWords(effect) : effect,
+        )}`,
+        headroom: formatGbpBn(priced.headroomGbpm, 1, priced.headroomGbpm < 0),
+        negative: priced.headroomGbpm < 0,
       }
     : undefined;
   const blocked = excluder
@@ -104,9 +110,10 @@ export function CuratedLever({
       chosen={chosen ? { title: chosen.option.title, state: chosen.state } : undefined}
       displayTitle={item.title}
       {...(hint ? { hint } : {})}
-      advice={{ who, line: item.advice }}
+      advice={{ line: item.advice }}
       notes={notes}
       {...(blocked ? { blocked } : {})}
+      {...(lever.control.sourceRange ? { range: lever.control.sourceRange } : {})}
       compact
     >
       {!resting && lever.category !== 'tax' ? <MinisterLine lever={lever} value={value} /> : null}

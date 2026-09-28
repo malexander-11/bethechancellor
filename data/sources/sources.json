@@ -197,7 +197,7 @@
       "url": "https://assets.publishing.service.gov.uk/media/684859e3d0ca5d7801e4e6f6/Statement_of_Funding_Policy.pdf",
       "retrievedOn": "2026-09-15",
       "licence": "OGL-3.0",
-      "notes": "Barnett formula (paragraphs 3.9-3.18): change to planned UK Government departmental spending × comparability factor × population proportion, applied to resource and capital DEL separately. Annex B lists the departmental comparability factors used at Spending Review 2025; the FCDO and Ministry of Defence undertake only reserved activities and have none (B.12)."
+      "notes": "Barnett formula (paragraphs 3.9-3.18): change to planned UK Government departmental spending × comparability factor × population proportion, applied to resource and capital DEL separately. Annex B lists the departmental comparability factors used at Spending Review 2025; the FCDO and Ministry of Defence undertake only reserved activities and have none (B.12). Annex B.13, the comparability factors used at Spending Review 2025 (Scotland, Wales, Northern Ireland): Health and Social Care 99.5%, 99.5%, 99.5%; Education 100%, 100%, 100%; MHCLG Local Government 100%, 100%, 100%; Transport 95.6%, 33.5%, 95.6%; Justice 100%, 0.0%, 100%; Home Office 73.3%, 0.5%, 74.5%. Rechecked 2026-09-28."
     },
     {
       "id": "hmrc-tax-reliefs-2026-01",
@@ -1404,6 +1404,51 @@
       "retrievedOn": "2026-09-23",
       "licence": "OGL-3.0",
       "notes": "Fetched 2026-09-23. \"You must report by 31 December in the tax year after you made your gain and pay by 31 January. For example, if you made a gain in the 2025 to 2026 tax year, you need to report it by 31 December 2026 and pay by 31 January 2027.\" The collection lag that puts a change from April 2027 into 2028-29 receipts, which is why the think-tank capital gains cards start there."
+    },
+    {
+      "id": "govuk-pip-scotland",
+      "org": "DWP",
+      "title": "Personal Independence Payment (PIP)",
+      "url": "https://www.gov.uk/pip",
+      "retrievedOn": "2026-09-28",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-28. \"If you live in Scotland You need to apply for Adult Disability Payment (ADP) instead of PIP.\""
+    },
+    {
+      "id": "govuk-dla-children-scotland",
+      "org": "DWP",
+      "title": "Disability Living Allowance (DLA) for children",
+      "url": "https://www.gov.uk/disability-living-allowance-children",
+      "retrievedOn": "2026-09-28",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-28. \"If your child lives in Scotland You need to apply for Child Disability Payment instead of DLA for children.\""
+    },
+    {
+      "id": "govuk-carers-allowance-scotland",
+      "org": "DWP",
+      "title": "Carer's Allowance",
+      "url": "https://www.gov.uk/carers-allowance",
+      "retrievedOn": "2026-09-28",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-28. \"If you live in Scotland You need to apply for Carer Support Payment instead of Carer’s Allowance.\""
+    },
+    {
+      "id": "govuk-student-loan-plans",
+      "org": "DfE",
+      "title": "Repaying your student loan: which repayment plan you are on",
+      "url": "https://www.gov.uk/repaying-your-student-loan/which-repayment-plan-you-are-on",
+      "retrievedOn": "2026-09-28",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-28. Plan 2 is for students who applied to Student Finance England (courses started between 1 September 2012 and 31 July 2023) or Student Finance Wales (\"If you started your course on or after 1 September 2012 You’re on: Plan 2 if you studied an undergraduate course\"). Scottish and Northern Irish borrowers are on other plans."
+    },
+    {
+      "id": "govuk-scottish-income-tax",
+      "org": "HMRC",
+      "title": "Scottish Income Tax",
+      "url": "https://www.gov.uk/scottish-income-tax",
+      "retrievedOn": "2026-09-28",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-28. \"You pay Scottish Income Tax if you live in Scotland. It’s paid to the Scottish Government. Scottish Income Tax applies to your wages, pension and most other taxable income. You’ll pay the same tax as the rest of the UK on dividends and savings interest.\""
     }
   ]
 }

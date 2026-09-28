@@ -49,8 +49,9 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     );
     expect(finetuneItems(file, 'tax')).toHaveLength(28);
     expect(finetuneItems(file, 'spending')).toHaveLength(20);
-    // The spending screen says how long the settlements run and the squeeze already after them.
-    expect(file.spending.notes.map((n) => n.badge)).toEqual(['simulated', 'direct']);
+    // The spending screen says how long the settlements run, the squeeze already after them, and
+    // whose budgets most of these are (Phase 25).
+    expect(file.spending.notes.map((n) => n.badge)).toEqual(['simulated', 'direct', 'commentary']);
     expect(finetuneItems(file)).toHaveLength(48);
     expect(FINETUNE_SIDES).toEqual(['tax', 'spending']);
   });

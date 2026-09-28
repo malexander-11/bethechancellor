@@ -36,6 +36,23 @@ describe('build your Budget: the ways to deliver', () => {
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 
+  it('says once what the badges mean, and whose budgets a screen’s are (Phase 25)', () => {
+    const first = at(`/budget/deliver?${BASE}&${GAME}`);
+    // The first flagship screen, where badges first crowd a card: one line, and no hover needed.
+    expect(document.querySelector('.deliver__key')?.textContent).toBe(
+      'Badges say what a figure is: Official figure, Worked out or Assumption, a number we chose. Game judgement is the game’s opinion.',
+    );
+    // Safer streets: prisons, courts and police are England and Wales's; Wales gets no share.
+    expect(document.querySelector('.deliver__reach')?.textContent).toMatch(
+      /Prisons, courts and police here are England and Wales’s\. Scotland and Northern Ireland get a share through their own grants \(the Barnett formula\), which our prices leave out\./,
+    );
+    first.unmount();
+    // The second screen carries no key; defence is the UK's, so no England line either.
+    at(`/budget/deliver/2?${BASE}&${GAME}`);
+    expect(document.querySelector('.deliver__key')).toBeNull();
+    expect(document.querySelector('.deliver__reach')).toBeNull();
+  });
+
   it('shows one priority per screen, in rank order, with its lead’s line and a way on to the next', () => {
     at(`/budget/deliver?${BASE}&${GAME}`);
     expect(h1(/^1st Safer streets: prisons, police, borders/)).toBeInTheDocument();
@@ -49,7 +66,7 @@ describe('build your Budget: the ways to deliver', () => {
     const cards = document.querySelectorAll('.choice--option');
     expect(cards.length).toBe(2);
     for (const card of cards) expect(card.querySelector('.choice__advice')).not.toBeNull();
-    expect(screen.getByText(/Buys staff and maintenance, not cells yet/)).toBeInTheDocument();
+    expect(screen.getByText(/Buys staff and repairs, not new cells yet/)).toBeInTheDocument();
     // Two ways for safer streets: the game has two levers there.
     expect(within(ways(/Ways to deliver: Safer streets/)).getAllByRole('checkbox')).toHaveLength(2);
     // Every card carries the engine's figure for choosing it now, and the headroom that would leave;
@@ -259,7 +276,7 @@ describe('build your Budget: the ways to deliver', () => {
     );
     const gapCard = gap().closest('.choice') as HTMLElement;
     expect(gapCard.className).toMatch(/choice--blocked/);
-    expect(within(gapCard).getByText(/counts some of the same money twice/)).toBeInTheDocument();
+    expect(within(gapCard).getByText(/Funding both counts some money twice/)).toBeInTheDocument();
     expect(within(gapCard).getByText(/^Swap them: /)).toBeInTheDocument();
     fireEvent.click(gap());
     expect(L()).toMatch(/def3\.1/);

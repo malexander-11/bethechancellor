@@ -4,14 +4,41 @@ import { useBudget } from '../state/budget';
 
 type Stop = 'briefing' | 'pm' | 'flagships' | 'finetune' | 'review' | 'budget-day';
 
-/** The six steps, in order, as the player is told them (Phase 24, ADR-0025). */
-export const STOPS: ReadonlyArray<{ id: Stop; label: string; to: string; step: JourneyStep }> = [
-  { id: 'briefing', label: 'Briefing', to: '/outlook', step: 'outlook' },
-  { id: 'pm', label: 'Set your priorities', to: '/pm', step: 'pm' },
-  { id: 'flagships', label: 'Flagship policies', to: '/budget/deliver', step: 'deliver' },
-  { id: 'finetune', label: 'Fine-tune tax and spend', to: '/finetune/tax', step: 'finetune' },
-  { id: 'review', label: 'Deliver the Budget', to: '/review', step: 'review' },
-  { id: 'budget-day', label: 'Feedback', to: '/budget-day', step: 'budget-day' },
+/**
+ * The six steps, in order, as the player is told them (Phase 24, ADR-0025), with the short name a
+ * wide screen shows under each numeral (Phase 25): the step's own words, cut down, never new ones.
+ */
+export const STOPS: ReadonlyArray<{
+  id: Stop;
+  label: string;
+  short: string;
+  to: string;
+  step: JourneyStep;
+}> = [
+  { id: 'briefing', label: 'Briefing', short: 'Briefing', to: '/outlook', step: 'outlook' },
+  { id: 'pm', label: 'Set your priorities', short: 'Priorities', to: '/pm', step: 'pm' },
+  {
+    id: 'flagships',
+    label: 'Flagship policies',
+    short: 'Flagships',
+    to: '/budget/deliver',
+    step: 'deliver',
+  },
+  {
+    id: 'finetune',
+    label: 'Fine-tune tax and spend',
+    short: 'Fine-tune',
+    to: '/finetune/tax',
+    step: 'finetune',
+  },
+  { id: 'review', label: 'Deliver the Budget', short: 'Deliver', to: '/review', step: 'review' },
+  {
+    id: 'budget-day',
+    label: 'Feedback',
+    short: 'Feedback',
+    to: '/budget-day',
+    step: 'budget-day',
+  },
 ];
 
 /** Which step a screen belongs to. The cover is the briefing's; the desk is fine-tuning's. */
@@ -93,10 +120,17 @@ export function Progress({
           const open =
             !isCurrent && enterable(s.step, state.game) && (state.game !== undefined || i < at);
           const kind = isCurrent ? 'current' : open ? 'open' : 'ahead';
+          // The numeral and, on a wide screen, the step's short name; a screen reader hears the
+          // full name once, below.
           const num = (
-            <span className="progress__num" aria-hidden="true">
-              {i + 1}
-            </span>
+            <>
+              <span className="progress__num" aria-hidden="true">
+                {i + 1}
+              </span>
+              <span className="progress__label" aria-hidden="true">
+                {s.short}
+              </span>
+            </>
           );
           const name = (
             <span className="sr-only">

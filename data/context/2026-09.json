@@ -256,10 +256,10 @@
     },
     {
       "id": "bus-fare-cap-2027",
-      "title": "The £2 bus fare cap kept for all of 2027",
+      "title": "The £2 bus fare cap in England, outside London, kept for 2027",
       "amountGbpm": -400,
       "year": "2027",
-      "paidFor": "Reallocation inside the energy department’s budget",
+      "paidFor": "Moving money within the energy department",
       "sources": [
         {
           "sourceId": "govuk-bus-fare-cap-2027"
@@ -268,7 +268,7 @@
     },
     {
       "id": "disabled-bus-travel",
-      "title": "Free bus travel for disabled people at any hour",
+      "title": "Free bus travel in England for disabled people at any hour",
       "amountGbpm": -60,
       "year": "from April 2027",
       "paidFor": "£40 million from Work and Pensions and £20 million from Transport",

@@ -151,7 +151,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         key={item.code}
         item={item}
         lever={lever}
-        who={who}
         summaryYear={year}
         hintOf={hintOf}
         redLinesFor={redLinesFor}
@@ -179,7 +178,8 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       step="finetune"
       part={{ index, total: 2, label: spec.title }}
       title={spec.title}
-      lead={spec.lead}
+      // The adviser is named once, here, not on every card (Phase 25).
+      lead={`${spec.lead} Your ${who}’s view is on each lever.`}
     >
       <HeadroomBar outcome={outcome} status={status} />
       {spec.notes.length > 0 ? (

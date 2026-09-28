@@ -1,6 +1,7 @@
 import { finetuneItems } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import {
+  context,
   finetune,
   guide,
   interventions,
@@ -44,8 +45,17 @@ const words = (s: string) =>
     .map((w) => w.replace(/^[^\w£]+|[^\w%]+$/g, ''))
     .filter(Boolean);
 
-/** A syllable count by the usual heuristic: vowel groups, less a silent e; a figure is one. */
+/** Capitals said as a word, not letter by letter. */
+const SAID_AS_WORDS = new Set(['NATO', 'PIP', 'SEND']);
+
+/**
+ * A syllable count by the usual heuristic: vowel groups, less a silent e; a figure is one. An
+ * acronym is read letter by letter (Phase 25): "OBR" is three syllables, not one, so a set that
+ * leans on them cannot hide behind a flattering grade.
+ */
 export function syllables(word: string): number {
+  const caps = word.replace(/['’]s$/, '').replace(/[^A-Za-z]/g, '');
+  if (/^[A-Z]{2,5}$/.test(caps) && !SAID_AS_WORDS.has(caps)) return caps.length;
   const w = word.toLowerCase().replace(/[^a-z]/g, '');
   if (!w) return 1;
   if (w.length <= 3) return 1;
@@ -92,11 +102,24 @@ const SETS: Record<string, readonly string[]> = {
       s.title,
       s.lead,
       ...s.groups.map((g) => g.label),
+      ...s.notes.map((n) => n.text),
     ]),
     ...curated.map((i) => i.title),
   ],
   'the fine-tuning advice': curated.map((i) => i.advice.text),
-  'the priorities': pm.priorities.flatMap((p) => [p.title, p.purpose, short(p.reaction)]),
+  'the priorities': pm.priorities.flatMap((p) => [
+    p.title,
+    p.purpose,
+    short(p.reaction),
+    ...(p.reach ? [p.reach.text] : []),
+  ]),
+  // Phase 25: the lines that say why two options cannot both be on, and the briefing's decisions
+  // since March, as its fold reads them.
+  'the conflicts': all.flatMap((o) => (o.conflicts ?? []).map((c) => c.text)),
+  'since March': context.decisionsSinceForecast.map(
+    (d) =>
+      `${d.title}: £5bn. Paid for by ${d.paidFor.charAt(0).toLowerCase()}${d.paidFor.slice(1)}.`,
+  ),
   'the promises': pm.promises.flatMap((p) => [
     p.title,
     ...p.strains.map((s) => s.text).filter((t): t is string => t !== undefined),
@@ -116,7 +139,7 @@ const SETS: Record<string, readonly string[]> = {
 
 describe('readability: a reading age of about twelve, one idea a sentence', () => {
   it('reads every set a newcomer meets', () => {
-    expect(Object.keys(SETS).length).toBe(13);
+    expect(Object.keys(SETS).length).toBe(15);
     for (const [name, texts] of Object.entries(SETS)) expect(texts.length, name).toBeGreaterThan(0);
   });
 
@@ -147,6 +170,10 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     expect(syllables('tax')).toBe(1);
     expect(syllables('Budget')).toBe(2);
     expect(syllables('manifesto')).toBe(4);
+    // Letter by letter (Phase 25), except the capitals said as words.
+    expect(syllables('OBR')).toBe(3);
+    expect(syllables('HMRC’s')).toBe(4);
+    expect(syllables('NATO')).toBe(2);
     expect(syllables('£5bn')).toBe(1);
     expect(sentences('No. 10 will notice. Nothing else is heard.')).toHaveLength(2);
     expect(sentences('Headroom of {value}: less than March left.')).toHaveLength(1);

@@ -27,7 +27,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The Treasury’s own costing. Big, and unfelt on payslips until 2028.",
+        "text": "Big, but nobody feels it on a payslip until 2028.",
         "sources": [
           {
             "sourceId": "hmt-budget-2025-speech"
@@ -69,7 +69,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "HMRC’s relief figure. Small, and every household gets it.",
+        "text": "Small, and every home heated by gas gets it.",
         "sources": [
           {
             "sourceId": "hmrc-tax-reliefs-2026-01"
@@ -110,7 +110,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The PM’s own scheme. It funds a place, not a meal eaten.",
+        "text": "England only. It pays for every place, not just meals eaten.",
         "sources": [
           {
             "sourceId": "dfe-school-pupils-2025-26"
@@ -148,7 +148,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The government’s own figure. Small, outside London only.",
+        "text": "Small, and only for buses in England outside London.",
         "sources": [
           {
             "sourceId": "govuk-bus-fare-cap-2027"
@@ -224,7 +224,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The Health Secretary’s ask. Expensive, and waiting lists move slowly.",
+        "text": "Expensive, and waiting lists fall slowly.",
         "sources": [
           {
             "sourceId": "govuk-elective-reform-plan-2025"
@@ -262,7 +262,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The Prime Minister’s promise. Small, and not yet a service.",
+        "text": "Small: a first step, not yet a care service.",
         "sources": [
           {
             "sourceId": "no10-social-care-speech-2026-07-29"
@@ -300,7 +300,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The OBR called these savings a risk. Dropping them protects every budget.",
+        "text": "These savings may never come; dropping them protects every budget.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03"
@@ -338,7 +338,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The plan is published; this is the bill. Small, and short-lived.",
+        "text": "Small, and the defence plan already counts on it.",
         "sources": [
           {
             "sourceId": "govuk-dip-funding-explainer"
@@ -381,7 +381,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The Defence Secretary’s ask. Front-loaded; the bill fades by 2030.",
+        "text": "Costs most at first; the bill fades by 2030.",
         "sources": [
           {
             "sourceId": "govuk-dip-funding-explainer"
@@ -409,7 +409,7 @@
       "conflicts": [
         {
           "with": "dip-gap",
-          "text": "The £4.7bn the plan’s explainer still has to find is part of getting to 3%; funding both counts some of the same money twice."
+          "text": "The defence plan’s gap is part of the path to 3%. Funding both counts some money twice."
         }
       ]
     },
@@ -470,7 +470,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The NAO’s deficits, closed. Expensive, and it does not slow demand.",
+        "text": "Expensive: it clears councils’ debts, but demand keeps rising.",
         "sources": [
           {
             "sourceId": "nao-send-2024"
@@ -517,7 +517,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The Treasury’s own costing. Small, and graduates alone feel it.",
+        "text": "Small, and only graduates in England and Wales feel it.",
         "sources": [
           {
             "sourceId": "hmt-budget-2025-policy-costings",
@@ -561,7 +561,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "A budget, not a costing. Whether it works is a delivery question.",
+        "text": "A sum set aside; whether it works depends on delivery.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03"
@@ -599,7 +599,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "Counts against the debt rule, not the day-to-day one. Departments underspend.",
+        "text": "Counts against the debt rule only, and departments often underspend.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03"
@@ -637,7 +637,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "Homes England’s programme. Small now; the homes arrive over a decade.",
+        "text": "Small now; England’s new homes arrive over a decade.",
         "sources": [
           {
             "sourceId": "mhclg-sahp-2026-2036"
@@ -758,7 +758,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "JRF’s design. Small, and it reaches the poorest households first.",
+        "text": "Small, and it reaches the poorest households first.",
         "sources": [
           {
             "sourceId": "jrf-uc-floor-2026",
@@ -797,7 +797,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "Onward’s design. Expensive, and nothing before the systems exist in 2028.",
+        "text": "Expensive, and nothing until the tax systems are ready in 2028.",
         "sources": [
           {
             "sourceId": "onward-family-support-2026"
@@ -836,7 +836,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The Resolution Foundation’s idea. Renters feel it; some of it reaches landlords.",
+        "text": "Renters feel it, though some of it ends up with landlords.",
         "sources": [
           {
             "sourceId": "rf-saving-private-renters-2026",
@@ -919,7 +919,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The Justice Secretary’s ask. Buys staff and maintenance, not cells yet.",
+        "text": "Buys staff and repairs, not new cells yet.",
         "sources": [
           {
             "sourceId": "no10-commons-statement-2026-09-01"
@@ -957,7 +957,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The Home Secretary’s ask. Asylum support eats a falling settlement.",
+        "text": "Asylum costs are eating a budget that is already falling.",
         "sources": [
           {
             "sourceId": "nao-asylum-system-2025"
@@ -996,7 +996,7 @@
       },
       "advice": {
         "adviser": "political-adviser",
-        "text": "The CSJ’s plan: big on paper, and the last such reform missed.",
+        "text": "Big on paper, but the last reform like it fell short.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",
@@ -1022,7 +1022,7 @@
       "conflicts": [
         {
           "with": "pip-changes",
-          "text": "Two PIP reforms on the same caseload: the CSJ package already includes the people the 2025 changes would have affected."
+          "text": "Both cut PIP for many of the same people, so the savings overlap."
         }
       ]
     },
@@ -1102,7 +1102,7 @@
       },
       "advice": {
         "adviser": "political-adviser",
-        "text": "The Treasury’s costing. Saves money by putting children back below the line.",
+        "text": "Saves money by pushing children back below the poverty line.",
         "sources": [
           {
             "sourceId": "hmt-budget-2025-document"
@@ -1148,7 +1148,7 @@
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "The IFS’s idea. Nothing until 2030-31; then a steady-state saving.",
+        "text": "Saves nothing until 2030-31, then the same each year.",
         "sources": [
           {
             "sourceId": "ifs-green-budget-2025",
@@ -1188,7 +1188,7 @@
       },
       "advice": {
         "adviser": "political-adviser",
-        "text": "The Resolution Foundation’s design. A small saving now, growing; the promise breaks.",
+        "text": "A small saving now that grows, and it breaks the triple lock.",
         "sources": [
           {
             "sourceId": "rf-what-a-ratchet-2026",

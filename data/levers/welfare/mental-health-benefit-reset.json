@@ -140,6 +140,20 @@
           "sourceId": "dwp-timms-review-evidence-pack"
         }
       ]
+    },
+    {
+      "id": "scotland-adult-disability-payment",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "In Scotland, people claim Adult Disability Payment from Social Security Scotland instead of PIP.",
+      "sources": [
+        {
+          "sourceId": "govuk-pip-scotland",
+          "quote": "If you live in Scotland You need to apply for Adult Disability Payment (ADP) instead of PIP."
+        }
+      ]
     }
   ],
   "interactions": [

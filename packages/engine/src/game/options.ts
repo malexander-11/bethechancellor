@@ -198,6 +198,9 @@ export function optionEarliestStart(option: Bundle, levers: readonly Lever[]): s
 
 export interface OptionRedLine {
   promise: string;
+  /** The promise's id and its short name on a resting tag (Phase 25): "Tax lock: no rise". */
+  id: string;
+  tag: string;
   when: 'above' | 'below' | 'on';
   /** Red or amber: whether the case breaks the promise's words or only tests its spirit (Phase 23). */
   severity: 'breaks' | 'strains';
@@ -230,6 +233,8 @@ export function optionRedLines(
       const report = breaks.find((r) => r.promise.id === promise.id);
       out.push({
         promise: promise.title,
+        id: promise.id,
+        tag: promise.tag,
         when: rule.when,
         severity: 'breaks',
         broken: report?.brokenBy.some((b) => codes.has(b.code)) ?? false,
@@ -242,6 +247,8 @@ export function optionRedLines(
       const report = strains.find((r) => r.promise.id === promise.id);
       out.push({
         promise: promise.title,
+        id: promise.id,
+        tag: promise.tag,
         when: strain.when,
         severity: 'strains',
         broken: report?.strainedBy.some((b) => codes.has(b.code)) ?? false,

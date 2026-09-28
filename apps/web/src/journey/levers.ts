@@ -31,6 +31,8 @@ export function redLinesOf(values: Record<string, number>): (code: string) => Re
         .filter((rule) => rule.code === code)
         .map((rule) => ({
           promise: p.title,
+          id: p.id,
+          tag: p.tag,
           when: rule.when,
           severity: 'breaks' as const,
           broken:
@@ -42,6 +44,8 @@ export function redLinesOf(values: Record<string, number>): (code: string) => Re
         .filter((rule) => rule.code === code)
         .map((rule) => ({
           promise: p.title,
+          id: p.id,
+          tag: p.tag,
           when: rule.when,
           severity: 'strains' as const,
           broken:

@@ -60,7 +60,7 @@ describe('the package, with a game under way', () => {
     expect(tagged).toHaveLength(1);
     // Which option, is in the tag's text, where a screen reader finds it.
     expect(tagged[0]?.textContent).toMatch(/More money for prisons and courts/);
-    expect(within(panel).getByText(/^Settled lower: the Justice Secretary/)).toBeInTheDocument();
+    expect(within(panel).getByText(/Settled lower: the Justice Secretary/)).toBeInTheDocument();
     // The pinned lever is the first control in the group, ahead of Health in the authored order.
     expect(within(panel).getAllByRole('slider')[0]).toHaveAccessibleName('Justice');
     first.unmount();
@@ -82,11 +82,15 @@ describe('the package, with a game under way', () => {
     const panel = screen.getByRole('tabpanel');
     // The basic rate has been raised: the tax lock is broken, and the lever says so in red.
     expect(within(panel).getByText('Breaks the manifesto: The tax lock')).toBeInTheDocument();
-    // The higher and additional rates are untouched: they wear the quiet tag, so the line is
-    // learnt before it is crossed. The personal allowance is not in the lock and wears nothing.
-    expect(within(panel).getAllByText('Manifesto: no rise').length).toBeGreaterThanOrEqual(2);
+    // The higher and additional rates are untouched: they wear the quiet tag, named by the
+    // promise (Phase 25), so the line is learnt before it is crossed. The personal allowance is
+    // not in the lock and wears nothing.
+    const quiet = [...panel.querySelectorAll('.tag--manifesto')].filter((t) =>
+      /^Tax lock: no rise/.test(t.textContent ?? ''),
+    );
+    expect(quiet.length).toBeGreaterThanOrEqual(2);
     const allowance = within(panel).getByRole('slider', { name: /Personal allowance/ });
-    expect(allowance.closest('.lever')?.textContent).not.toMatch(/Manifesto/);
+    expect(allowance.closest('.lever')?.textContent).not.toMatch(/Tax lock/);
   });
 
   it('marks the levy amber on the desk: the tax lock strained, not broken', () => {

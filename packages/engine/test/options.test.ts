@@ -103,7 +103,8 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
   it('names the red line a lever is watched by, and whether the Budget would cross it', () => {
     const lock = ds.pm.promises.find((p) => p.id === 'tax-lock');
     const bundle = (values: Record<string, number>) => ({ id: 'b', values });
-    const red = { manifesto: true, scored: true };
+    // Each carries the promise's id and short name for its resting tag (Phase 25).
+    const red = { manifesto: true, scored: true, id: 'tax-lock', tag: 'Tax lock' };
     expect(optionRedLines(bundle({ itbr: 1 }), ds.pm.promises, levers, {})).toEqual([
       { promise: lock?.title, when: 'above', severity: 'breaks', broken: true, ...red },
     ]);
@@ -182,7 +183,7 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     // Authored on the 3% option, seen from the gap's side too.
     const fromGap = optionConflicts(gap, options, levers, {});
     expect(fromGap.map((c) => [c.option.id, c.partner])).toEqual([['three-per-cent-now', 'off']]);
-    expect(fromGap[0]?.text).toMatch(/counts some of the same money twice/);
+    expect(fromGap[0]?.text).toMatch(/Funding both counts some money twice/);
     expect(optionConflicts(three, options, levers, { dip47: 1 })[0]?.partner).toBe('on');
     // Nothing chosen: nothing blocked. The 3% option on: the gap is blocked, and says by what.
     expect(blockedBy(gap, options, levers, {})).toBeUndefined();

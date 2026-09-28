@@ -179,7 +179,8 @@ export function OutlookPage() {
             <ul className="more__body since__list">
               {decisions.map((d) => (
                 <li key={d.id}>
-                  {d.title}: {sumInWords(d.amountGbpm)}, paid for by {lowerFirst(d.paidFor)}.
+                  {/* Two sentences, each one breath (Phase 25). */}
+                  {d.title}: {sumInWords(d.amountGbpm)}. Paid for by {lowerFirst(d.paidFor)}.
                   <SourceList as="span" className="briefing__sources" refs={d.sources} />
                 </li>
               ))}

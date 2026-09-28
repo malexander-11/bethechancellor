@@ -37,6 +37,11 @@
         "sourceId": "govuk-vat-rates"
       },
       "note": "20% since 4 January 2011; 17.5% before."
+    },
+    "sourceRange": {
+      "min": -2,
+      "max": 2,
+      "text": "HMRC's figure is for 1 point. Beyond 2 points the game scales it in a straight line, which HMRC does not vouch for."
     }
   },
   "appliesFrom": "implementationYear",
@@ -84,7 +89,7 @@
       "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
     },
     "caveats": [
-      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so rate changes are scaled linearly here.",
+      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so changes up to 2p are scaled in a straight line. Beyond that the straight line is the game's own arithmetic, badged Worked out.",
       "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
     ]
   },

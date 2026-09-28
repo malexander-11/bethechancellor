@@ -17,6 +17,16 @@
       "term": "The manifesto",
       "short": "The promises the party made at the election, such as not raising certain taxes. Breaking one is the fastest way to lose the public."
     },
+    "tax-lock": {
+      "term": "The tax lock",
+      "short": "The manifesto’s promise not to raise National Insurance, VAT, or the basic, higher or additional rates of income tax.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations",
+          "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT."
+        }
+      ]
+    },
     "flagship": {
       "term": "A flagship",
       "short": "A headline policy that shows what the Budget is for. Each one here is a lever in the package with a price."

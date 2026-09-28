@@ -52,6 +52,18 @@ describe('the progress bar', () => {
       '5. Deliver the Budget',
       '6. Feedback',
     ]);
+    // A wide screen shows each step's short name beside its numeral (Phase 25): the step's own
+    // words, cut down; hidden from a screen reader, which hears the full name once.
+    const shorts = [...bar.querySelectorAll('.progress__label')];
+    expect(shorts.map((s) => s.textContent)).toEqual([
+      'Briefing',
+      'Priorities',
+      'Flagships',
+      'Fine-tune',
+      'Deliver',
+      'Feedback',
+    ]);
+    for (const s of shorts) expect(s).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('offers nothing ahead of you without a game, even where a shared link could go', () => {

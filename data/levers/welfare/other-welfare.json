@@ -64,6 +64,20 @@
           "table": "Table 4.6, footnote 4"
         }
       ]
+    },
+    {
+      "id": "scotland-carer-support-payment",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "In Scotland, carers claim Carer Support Payment from Social Security Scotland instead of Carer’s Allowance.",
+      "sources": [
+        {
+          "sourceId": "govuk-carers-allowance-scotland",
+          "quote": "If you live in Scotland You need to apply for Carer Support Payment instead of Carer’s Allowance."
+        }
+      ]
     }
   ],
   "status": "reviewed",

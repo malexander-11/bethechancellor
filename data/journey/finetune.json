@@ -14,7 +14,7 @@
             "title": "Bring back the health and social care levy",
             "move": 1,
             "advice": {
-              "text": "The 2021 levy, back. Big money; National Insurance in all but name.",
+              "text": "Big money, and National Insurance in all but name.",
               "sources": [
                 {
                   "sourceId": "hmt-build-back-better-2021"
@@ -31,7 +31,7 @@
             "title": "The basic rate of income tax",
             "move": 1,
             "advice": {
-              "text": "HMRC’s figure. A penny is big money; a rise breaks the lock.",
+              "text": "Big money; Scotland sets its own rates on wages and pensions.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
@@ -39,6 +39,10 @@
                 },
                 {
                   "sourceId": "labour-manifesto-2024-strong-foundations"
+                },
+                {
+                  "sourceId": "govuk-scottish-income-tax",
+                  "quote": "Scottish Income Tax applies to your wages, pension and most other taxable income."
                 }
               ],
               "badge": "simulated"
@@ -67,7 +71,7 @@
             "title": "The main rate of VAT",
             "move": 1,
             "advice": {
-              "text": "HMRC’s figure. Big, felt on every receipt; a rise breaks the lock.",
+              "text": "Big, and felt on every till receipt.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
@@ -85,7 +89,7 @@
             "title": "A new tax on sugar and salt in food",
             "move": 1,
             "advice": {
-              "text": "The Resolution Foundation’s design. Years to build; shrinks as recipes change.",
+              "text": "Years to set up, and it shrinks as recipes change.",
               "sources": [
                 {
                   "sourceId": "rf-call-of-duties-2025"
@@ -99,7 +103,7 @@
             "title": "Insurance premium tax",
             "move": 2,
             "advice": {
-              "text": "HMRC’s figure. A quiet tax on every insurance premium.",
+              "text": "A quiet tax on most insurance, from cars to homes.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
@@ -135,7 +139,7 @@
             "title": "Tax capital gains at the same rates as income",
             "move": 1,
             "advice": {
-              "text": "CenTax’s package. Big money, but nothing before 2028.",
+              "text": "Big money, but nothing arrives before 2028.",
               "sources": [
                 {
                   "sourceId": "centax-taxes-at-the-top-2026"
@@ -149,7 +153,7 @@
             "title": "Charge full National Insurance on all earnings, however high",
             "move": 1,
             "advice": {
-              "text": "The IFS’s figure, static. Big, and it breaks the tax lock.",
+              "text": "Big on paper; top earners would find ways to pay less.",
               "sources": [
                 {
                   "sourceId": "ifs-green-budget-2025"
@@ -166,7 +170,7 @@
             "title": "Give everyone the same 30% pension tax relief",
             "move": 1,
             "advice": {
-              "text": "Our arithmetic on HMRC’s rows. Higher-rate savers pay; basic-rate savers gain.",
+              "text": "Higher-rate savers pay more; basic-rate savers gain.",
               "sources": [
                 {
                   "sourceId": "hmrc-private-pensions-2026-07-tidy"
@@ -180,7 +184,7 @@
             "title": "A new 50% income tax rate above £125,140",
             "move": 1,
             "advice": {
-              "text": "Five times HMRC’s penny row. Symbolic money, and it strains the lock.",
+              "text": "Symbolic money from the very highest earners.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
@@ -198,7 +202,7 @@
             "title": "A 2% yearly tax on wealth above £10 million",
             "move": 1,
             "advice": {
-              "text": "Tax Policy Associates’ figure. Nothing before 2030-31, and hotly contested.",
+              "text": "Nothing before 2030-31, and hotly contested.",
               "sources": [
                 {
                   "sourceId": "tpa-wealth-tax-2025"
@@ -218,7 +222,7 @@
             "title": "Charge employer National Insurance on pension contributions",
             "move": 1,
             "advice": {
-              "text": "The private-sector share of HMRC’s relief figure. Big; employers would respond.",
+              "text": "Big, but employers would cut what they pay in.",
               "sources": [
                 {
                   "sourceId": "hmrc-private-pensions-2026-07",
@@ -260,7 +264,7 @@
             "title": "A levy on the interest banks earn at the Bank of England",
             "move": 1,
             "advice": {
-              "text": "IPPR’s design. Big while Bank Rate stays high; new legislation needed.",
+              "text": "Big only while interest rates stay high; it needs a new law.",
               "sources": [
                 {
                   "sourceId": "ippr-fixing-the-leak-2025"
@@ -274,7 +278,7 @@
             "title": "Corporation tax",
             "move": 1,
             "advice": {
-              "text": "HMRC’s figure. Steady money; any rise breaks the corporation tax cap.",
+              "text": "Steady money from company profits.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
@@ -292,7 +296,7 @@
             "title": "Double the bank levy",
             "move": 1,
             "advice": {
-              "text": "HMRC’s receipts, doubled. Static; balance sheets shrink when the rate rises.",
+              "text": "Banks would shrink their balance sheets to pay less.",
               "sources": [
                 {
                   "sourceId": "hmrc-banking-sector-receipts-2025",
@@ -313,7 +317,7 @@
             "title": "Double council tax on the biggest homes (bands G and H)",
             "move": 1,
             "advice": {
-              "text": "The IFS’s illustration. Steady money from the biggest homes, England only.",
+              "text": "Steady money from the biggest homes, in England only.",
               "sources": [
                 {
                   "sourceId": "ifs-green-budget-2025"
@@ -327,7 +331,7 @@
             "title": "Tax capital gains when someone dies",
             "move": 1,
             "advice": {
-              "text": "The Resolution Foundation’s idea. Steady money; nothing before 2028.",
+              "text": "Steady money from estates, but nothing before 2028.",
               "sources": [
                 {
                   "sourceId": "rf-call-of-duties-2025"
@@ -341,7 +345,7 @@
             "title": "End the extra inheritance tax allowance for family homes",
             "move": 1,
             "advice": {
-              "text": "HMRC’s static cost of the relief. Steady money from larger estates.",
+              "text": "Steady money from larger estates passing on a home.",
               "sources": [
                 {
                   "sourceId": "hmrc-tax-reliefs-2026-01",
@@ -356,7 +360,7 @@
             "title": "Charge National Insurance on landlords’ rent",
             "move": 1,
             "advice": {
-              "text": "CenTax’s ceiling, static. Landlords pay; it breaks the tax lock.",
+              "text": "Landlords pay; the figure is a ceiling.",
               "sources": [
                 {
                   "sourceId": "centax-taxes-at-the-top-2026"
@@ -373,7 +377,7 @@
             "title": "Add another 2p to the tax on dividends, savings and rental income",
             "move": 1,
             "advice": {
-              "text": "The Treasury’s own costing, repeated. Investors pay; a second helping.",
+              "text": "Investors pay again, on top of last year’s rise.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
@@ -412,7 +416,7 @@
             "title": "Put gambling duties up again",
             "move": 1,
             "advice": {
-              "text": "The Treasury’s costing, repeated. Bookmakers pay again; a second helping.",
+              "text": "Betting firms pay again, on top of last year’s rise.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
@@ -427,7 +431,7 @@
             "title": "Tobacco duty",
             "move": 10,
             "advice": {
-              "text": "HMRC’s figure. Small money; smokers pay, and fewer of them each year.",
+              "text": "Small money; smokers pay, and there are fewer each year.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
@@ -442,7 +446,7 @@
             "title": "Car tax",
             "move": 10,
             "advice": {
-              "text": "HMRC’s figure. Small money, spread across every car and van.",
+              "text": "Small money, spread across every car and van.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
@@ -457,7 +461,7 @@
             "title": "Air passenger duty",
             "move": 2,
             "advice": {
-              "text": "HMRC’s figure. Small money from every flight.",
+              "text": "Small money from every flight.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
@@ -472,7 +476,7 @@
             "title": "Add back last year’s cancelled fuel duty rise",
             "move": 1,
             "advice": {
-              "text": "Adds back the rise Budget 2025 cancelled. Small money; drivers pay.",
+              "text": "Small money; drivers pay the rise last year’s Budget cancelled.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
@@ -488,7 +492,7 @@
   },
   "spending": {
     "title": "Fine-tune spending",
-    "lead": "Trim or top up any budget. Watch your headroom move.",
+    "lead": "Trim or top up any budget. A top-up costs what a trim saves.",
     "notes": [
       {
         "text": "Departments’ day-to-day budgets are set to 2028-29. Cutting one reopens a minister’s deal.",
@@ -510,6 +514,16 @@
           {
             "sourceId": "obr-efo-2026-03",
             "paragraph": "4.16"
+          }
+        ]
+      },
+      {
+        "text": "Most public services here are England’s budgets. The other nations get a share through their own grants (the Barnett formula), which our prices leave out.",
+        "badge": "commentary",
+        "sources": [
+          {
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "note": "Annex B.13, comparability factors at Spending Review 2025"
           }
         ]
       }
@@ -565,7 +579,7 @@
             "title": "Defence, day to day",
             "move": -1,
             "advice": {
-              "text": "Small money, and any cut breaks the defence promise.",
+              "text": "Small money, and any cut puts the defence promise at risk.",
               "sources": [
                 {
                   "sourceId": "govuk-dip-funding-explainer"
@@ -603,7 +617,7 @@
             "title": "Prisons and courts",
             "move": -1,
             "advice": {
-              "text": "Small money. The House has been told sentences will not be shortened.",
+              "text": "Small money, and ministers have promised not to shorten sentences.",
               "sources": [
                 {
                   "sourceId": "no10-commons-statement-2026-09-01"
@@ -804,7 +818,7 @@
             "title": "Go ahead with the 2025 cuts to PIP",
             "move": 1,
             "advice": {
-              "text": "The Treasury’s costing. Undoes last year’s U-turn; the benches will fight.",
+              "text": "Undoes last year’s U-turn; your own MPs will fight it.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
@@ -819,7 +833,7 @@
             "title": "Cancel the extra efficiency savings planned from 2028",
             "move": 1,
             "advice": {
-              "text": "The Treasury’s costing. The OBR already doubts these savings will come.",
+              "text": "The OBR already doubts these savings will ever come.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
@@ -837,7 +851,7 @@
             "title": "Reinstate the two-child limit",
             "move": 1,
             "advice": {
-              "text": "The Treasury’s costing. Families on benefits pay, and it breaks a promise.",
+              "text": "Families on benefits pay, and it breaks a promise.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
@@ -855,7 +869,7 @@
             "title": "Limit winter fuel payments to pensioners on pension credit",
             "move": 1,
             "advice": {
-              "text": "The Treasury’s costing. A cut the government reversed last year.",
+              "text": "Brings back a cut the government reversed last year.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
@@ -873,11 +887,14 @@
             "title": "Let the student loan repayment threshold rise again",
             "move": 1,
             "advice": {
-              "text": "Small money. Graduates repaying loans keep a little more.",
+              "text": "Small money; graduates in England and Wales keep a little more.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
                   "note": "line 48"
+                },
+                {
+                  "sourceId": "govuk-student-loan-plans"
                 }
               ],
               "badge": "simulated"

@@ -38,6 +38,11 @@
         "sourceId": "govuk-income-tax-rates"
       },
       "note": "45% since 2013-14 (Finance Act 2012, section 1); 50% in 2012-13."
+    },
+    "sourceRange": {
+      "min": -2,
+      "max": 2,
+      "text": "HMRC's figure is for 1p. Beyond 2p the game scales it in a straight line, which HMRC does not vouch for."
     }
   },
   "appliesFrom": "implementationYear",
@@ -97,7 +102,7 @@
     },
     "caveats": [
       "HMRC publishes separate figures for a rise (yield) and a cut (cost); this lever uses each for its direction.",
-      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so rate changes are scaled linearly here.",
+      "HMRC: a 2p (or 2 point) change costs about twice as much as a 1p change, so changes up to 2p are scaled in a straight line. Beyond that the straight line is the game's own arithmetic, badged Worked out.",
       "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
     ],
     "decreasePerUnit": {

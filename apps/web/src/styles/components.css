@@ -91,6 +91,26 @@
   font-weight: 700;
 }
 
+/* The steps' short names (Phase 25): on a wide screen there is room, so the numerals say where
+   they go; on a phone the numerals stand alone and the heading names the step you are on. */
+.progress__label {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .progress__stop > a,
+  .progress__stop > span {
+    gap: 6px;
+    padding-right: 16px;
+  }
+
+  .progress__label {
+    display: inline;
+    font-family: var(--font);
+    font-size: 0.875rem;
+  }
+}
+
 /* -------------------------------------------------------------- the intro */
 
 .intro {
@@ -1432,4 +1452,28 @@ label.choice {
 .brief__yardstick {
   max-width: 68ch;
   margin: 8px 0;
+}
+
+/* ------------------------------------------ plain words on step 3 and 4 (Phase 25) */
+
+/* The fold's cash budget and the slider's reach: detail, in the quieter ink. */
+.lever__cash-note,
+.lever__range {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The badges' key, said once on the first flagship screen, and whose budgets a screen's are. */
+.deliver__key,
+.deliver__reach {
+  max-width: 40em;
+  margin: 0 0 12px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+.review__taxtake {
+  margin: 8px 0 0;
 }

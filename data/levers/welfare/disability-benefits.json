@@ -105,6 +105,28 @@
           "paragraph": "4.24"
         }
       ]
+    },
+    {
+      "id": "scotland-disability-payments",
+      "kind": "devolution",
+      "direction": "ambiguous",
+      "magnitudeWords": "small",
+      "alreadyInDirectCosting": false,
+      "text": "In Scotland, people claim Adult Disability Payment instead of PIP, and Child Disability Payment instead of DLA for children. The OBR's line counts disability living allowance, personal independence payment and attendance allowance.",
+      "sources": [
+        {
+          "sourceId": "govuk-pip-scotland",
+          "quote": "If you live in Scotland You need to apply for Adult Disability Payment (ADP) instead of PIP."
+        },
+        {
+          "sourceId": "govuk-dla-children-scotland",
+          "quote": "If your child lives in Scotland You need to apply for Child Disability Payment instead of DLA for children."
+        },
+        {
+          "sourceId": "obr-efo-2026-03",
+          "table": "Table 4.6, footnote 3"
+        }
+      ]
     }
   ],
   "status": "reviewed",

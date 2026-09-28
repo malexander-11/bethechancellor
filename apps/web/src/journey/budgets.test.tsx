@@ -46,15 +46,15 @@ function screenWords(): number {
 const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/', 40, GAME],
   ['/outlook', 255, GAME],
-  ['/pm', 155, GAME],
-  ['/budget/deliver', 205, WIDEST],
-  ['/budget/deliver/2', 205, WIDEST],
-  ['/budget/deliver/3', 205, WIDEST],
-  ['/finetune/tax', 660, GAME],
-  ['/finetune/tax', 860, TUNED],
-  ['/finetune/spending', 670, GAME],
-  ['/finetune/spending', 880, TUNED],
-  ['/review', 165, GAME],
+  ['/pm', 175, GAME],
+  ['/budget/deliver', 220, WIDEST],
+  ['/budget/deliver/2', 220, WIDEST],
+  ['/budget/deliver/3', 220, WIDEST],
+  ['/finetune/tax', 650, GAME],
+  ['/finetune/tax', 810, TUNED],
+  ['/finetune/spending', 630, GAME],
+  ['/finetune/spending', 810, TUNED],
+  ['/review', 190, GAME],
   ['/budget-day', 210, GAME],
 ];
 
@@ -102,7 +102,11 @@ describe('the word budgets', () => {
     // beside it, the advisers' yardstick and what is already on the desk, and folded the decisions
     // since March; step 4's spending screen gained its two notes and the defence plan's gap; the
     // review says what is still on the desk (Phase 25): the briefing 234, spending 612 and 801,
-    // the review 148.
+    // the review 148. Then step 4 lost its pairs of equal figures, its slider ends, its year spans
+    // and its adviser's name on every card, and its hints went into the conditional: tax 589 and
+    // 736, spending 573 and 736. The priorities gained purposes of up to ten words (158); the
+    // first flagship screen the badges' key and each its England line (200, 178, 161); the review
+    // the tax take in words (173).
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();

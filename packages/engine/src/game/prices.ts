@@ -244,6 +244,11 @@ export interface Reconciliation {
   /** Debt interest the measures add through borrowing, £ million (negative: interest saved). */
   interestGbpm: number;
   endGbpm: number;
+  /**
+   * The tax take's change in points of GDP in the same year, from before the Budget (Phase 25): the
+   * markets' reading, said on the review when it rises by more than half a point.
+   */
+  taxTakeChangePp: number;
 }
 
 export function reconcile(outcome: Outcome, pre: Outcome): Reconciliation {
@@ -257,6 +262,8 @@ export function reconcile(outcome: Outcome, pre: Outcome): Reconciliation {
   }
   const interest =
     (outcome.paths.deltas.debtInterest[year] ?? 0) - (pre.paths.deltas.debtInterest[year] ?? 0);
+  const share = (o: Outcome) =>
+    ((o.paths.policy.receipts[year] ?? 0) / (o.paths.policy.nominalGdpFy[year] ?? 1)) * 100;
   return {
     year,
     startGbpm: headroomOn(pre, 'currentBudget'),
@@ -264,5 +271,6 @@ export function reconcile(outcome: Outcome, pre: Outcome): Reconciliation {
     spendingGbpm: spending,
     interestGbpm: interest,
     endGbpm: headroomOn(outcome, 'currentBudget'),
+    taxTakeChangePp: share(outcome) - share(pre),
   };
 }

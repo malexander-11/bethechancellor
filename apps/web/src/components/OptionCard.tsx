@@ -16,7 +16,7 @@ import type { OptionPrice } from '../journey/prices';
 import { AdviceLine } from './AdviceLine';
 import { BlockedNotice } from './BlockedNotice';
 import { LabelBadge } from './LabelBadge';
-import { formatLeverValue, promiseWords, restingWords } from './LeverControl';
+import { formatLeverValue, promiseWords, RestingTag } from './LeverControl';
 import { SourceList } from './SourceLink';
 import { Term } from './Term';
 
@@ -231,10 +231,7 @@ export function OptionCard({
                   {promiseWords(r).noun}: {r.promise}
                 </span>
               ) : (
-                <span key={`${r.severity}-${r.promise}`} className="tag--manifesto">
-                  {promiseWords(r).label}: {restingWords(r)}
-                  <span className="sr-only"> ({r.promise})</span>
-                </span>
+                <RestingTag key={`${r.severity}-${r.promise}`} r={r} />
               ),
             )}
             {earliestStart ? (

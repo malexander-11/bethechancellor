@@ -21,7 +21,13 @@ import { HeadroomBar } from '../components/HeadroomBar';
 import { inTrayText, leftAsIs } from '../components/InTray';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
-import { formatLeverValueShort, promiseWords } from '../components/LeverControl';
+import {
+  formatLeverValueShort,
+  isShareOfSpending,
+  promiseWords,
+  shareWords,
+} from '../components/LeverControl';
+import { SourceList } from '../components/SourceLink';
 import { Yardstick } from '../components/Yardstick';
 import {
   MACRO_CODES as MACRO_LIST,
@@ -44,6 +50,14 @@ import { deliverPath } from './Deliver';
 const MACRO_CODES = new Set(MACRO_LIST);
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
 const RANK = ['1st', '2nd', '3rd'];
+/** Above this rise in the tax take, in points of GDP, the review says it (Phase 25): the markets' band. */
+const TAX_TAKE_SAID_PP = 0.5;
+
+/** A change in points of GDP as money in every £100 of national income: "74p", "£1.20". */
+function inEvery100(pp: number): string {
+  const pence = Math.round(pp * 100);
+  return pence >= 100 ? `£${(pence / 100).toFixed(2)}` : `${pence}p`;
+}
 
 /** A moved lever read back: its plain title, where it now stands, and what it does in the year. */
 interface Row {
@@ -53,11 +67,15 @@ interface Row {
   amount: { text: string; tone: 'better' | 'worse' };
 }
 
-/** Where a lever stands, as its level where it has one: "21%", "£210", "−1%"; a toggle is simply on. */
+/**
+ * Where a lever stands, as its level where it has one: "21%", "£210"; a spending line as its share
+ * against the plan, in the card's words: "1% less" (Phase 25); a toggle is simply on.
+ */
 function standing(lever: Lever, value: number): string | undefined {
   if (lever.control.kind === 'toggle') return undefined;
   const level = lever.control.level;
-  return level ? formatLevel(level, levelValue(level, value)) : formatLeverValueShort(lever, value);
+  if (level) return formatLevel(level, levelValue(level, value));
+  return isShareOfSpending(lever) ? shareWords(lever, value) : formatLeverValueShort(lever, value);
 }
 
 /**
@@ -387,6 +405,19 @@ export function ReviewPage() {
           <LabelBadge badge="mechanical" />
         </p>
         {whoPays ? <p>{whoPays}</p> : null}
+        {r.taxTakeChangePp > TAX_TAKE_SAID_PP ? (
+          // The tax take in words, only when it rises by more than half a point (Phase 25).
+          <p className="review__taxtake">
+            Taxes take {inEvery100(r.taxTakeChangePp)} more in every £100 of national income in{' '}
+            {r.year}. <LabelBadge badge="mechanical" /> The OBR already forecasts the tax take at a
+            historic high.{' '}
+            <SourceList
+              as="span"
+              className="briefing__sources"
+              refs={[{ sourceId: 'obr-efo-2026-03', paragraph: '3.1' }]}
+            />
+          </p>
+        ) : null}
         <p className={missed.length > 0 ? 'review__missed' : undefined}>{rulesLine}</p>
         {missed.length === 0 && r.endGbpm < THIN_HEADROOM_GBPM ? (
           <Yardstick className="review__yardstick" />

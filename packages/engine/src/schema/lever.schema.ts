@@ -74,8 +74,28 @@ export const controlSchema = z
     /** For `select`: the offered values (as strings) and their labels, e.g. { "-40": "Abolish (0%)", "0": "40%" }. */
     labels: z.record(z.string(), z.string()).optional(),
     level: levelSchema.optional(),
+    /**
+     * The settings its source's figure covers (Phase 25): HMRC vouches for scaling a 1p row to about
+     * 2p, not beyond. Past it the card badges the effect Worked out and says why, in `text`.
+     */
+    sourceRange: z
+      .strictObject({ min: z.number(), max: z.number(), text: z.string().min(1).max(140) })
+      .optional(),
   })
   .superRefine((control, ctx) => {
+    if (
+      control.sourceRange &&
+      (control.sourceRange.min > control.default ||
+        control.sourceRange.max < control.default ||
+        control.sourceRange.min < control.min ||
+        control.sourceRange.max > control.max)
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'sourceRange must hold the default and sit inside [min, max]',
+        path: ['sourceRange'],
+      });
+    }
     if (control.kind === 'select') {
       const keys = Object.keys(control.labels ?? {});
       if (keys.length < 2) {

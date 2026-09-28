@@ -132,11 +132,12 @@ describe('word budgets: one line visible, the rest a click away', () => {
     }
     for (const side of [finetune.tax, finetune.spending]) {
       expect(words(side.title), side.title).toBeLessThanOrEqual(4);
-      expect(words(side.lead), side.lead).toBeLessThanOrEqual(10);
+      // Room for one more short sentence (Phase 25): a top-up costs what a trim saves.
+      expect(words(side.lead), side.lead).toBeLessThanOrEqual(14);
     }
   });
 
-  it('says what to do now in ten words, and a priority’s purpose in five', () => {
+  it('says what to do now in ten words, and a priority’s purpose in ten', () => {
     // The desk is a side room and keeps its longer lines; every screen on the road is one breath.
     const road = guide.stages.filter((s) => s.step !== 'taxes' && s.step !== 'spending');
     // The cover and the six steps (Phase 24).
@@ -150,7 +151,30 @@ describe('word budgets: one line visible, the rest a click away', () => {
       'budget-day',
     ]);
     for (const s of road) expect(words(s.now), `${s.step}: "${s.now}"`).toBeLessThanOrEqual(10);
-    for (const p of pm.priorities) expect(words(p.purpose), p.id).toBeLessThanOrEqual(5);
+    // Ten words, not five (Phase 25): "Fund the plan, reach 3%" named no plan and no 3% of what.
+    for (const p of pm.priorities) expect(words(p.purpose), p.id).toBeLessThanOrEqual(10);
+  });
+
+  it('keeps an adviser’s line to a consequence, not a citation or the trade’s own words', () => {
+    // Phase 25: a line carries one plain consequence; where a figure comes from is the badge's and
+    // the workings' job. No organisation a newcomer would have to look up, none of the words of
+    // the trade, and never "the lock" alone, which a pensioner hears as the triple lock.
+    const ORGS =
+      /\b(HMRC|IFS|IPPR|CenTax|JRF|CSJ|NAO|Onward|Resolution Foundation|Tax Policy Associates)\b/;
+    const INSIDE =
+      /\b(static|rows?|penny row|Bank Rate|front-loaded|steady-state|settlement|the benches)\b/i;
+    const LOCK = /\bthe lock\b/i;
+    const lines: string[] = [
+      ...finetuneItems(finetune).map((i) => i.advice.text),
+      ...options.deliver.map((o) => o.advice.text),
+      ...options.deliver.flatMap((o) => (o.conflicts ?? []).map((c) => c.text)),
+    ];
+    expect(lines.length).toBeGreaterThan(75);
+    for (const text of lines) {
+      expect(text, text).not.toMatch(ORGS);
+      expect(text, text).not.toMatch(INSIDE);
+      expect(text, text).not.toMatch(LOCK);
+    }
   });
 
   it('never uses Treasury shorthand in the lines a newcomer reads', () => {

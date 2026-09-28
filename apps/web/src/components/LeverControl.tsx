@@ -28,8 +28,10 @@ import {
   borrowingImprovement,
   currentBudgetImprovement,
   effectWords,
+  growthWords,
   laterStartYear,
   reliefWords,
+  UNCHANGED_BELOW_GBPM,
 } from '../journey/effects';
 
 const MINUS = '−';
@@ -42,7 +44,8 @@ export function formatLeverValue(lever: Lever, value: number): string {
     case 'p':
       return `${sign}${abs}p`;
     case 'pp':
-      return `${sign}${abs} pp`;
+      // "+1 point", never "pp" (Phase 25): a point is how a rate's change is said aloud.
+      return `${sign}${abs} ${Math.abs(value) === 1 ? 'point' : 'points'}`;
     case 'pct':
       return `${sign}${abs}%`;
     case 'GBP':
@@ -63,8 +66,21 @@ export function formatLeverValueShort(lever: Lever, value: number): string {
   return formatLeverValue(lever, value).replace(/(\d)\.0(?!\d)/, '$1');
 }
 
-function tone(v: number): string {
-  return v > 0.5 ? 'amount--better' : v < -0.5 ? 'amount--worse' : '';
+/** A move in words, with no sign to decode (Phase 25): "up 1p", "down 2 points", "up £10". */
+export function changeWords(lever: Lever, value: number): string {
+  const size = formatLeverValueShort(lever, Math.abs(value)).replace(/^\+/, '');
+  return `${value < 0 ? 'down' : 'up'} ${size}`;
+}
+
+/** A spending lever read as a share of its budget (Phase 25): "1% less", "10% more". */
+export function shareWords(lever: Lever, value: number): string {
+  const size = formatLeverValueShort(lever, Math.abs(value)).replace(/^\+/, '');
+  return `${size} ${value < 0 ? 'less' : 'more'}`;
+}
+
+/** A spending line priced as a share of its forecast path (departments, benefits, investment). */
+export function isShareOfSpending(lever: Lever): boolean {
+  return lever.costing.kind === 'pctOfBaseline' && lever.classification?.side !== 'receipts';
 }
 
 export { effectWords };
@@ -76,6 +92,9 @@ const DEFLATOR = vintage.economy.gdpDeflator ? deflatorIndex(vintage) : null;
 /** A promise this lever is watched by, and whether the current setting crosses it. */
 export interface RedLine {
   promise: string;
+  /** The promise's id (a glossary word, where there is one) and its tag name (Phase 25). */
+  id?: string;
+  tag?: string;
   when: 'above' | 'below' | 'on';
   broken: boolean;
   /** Red (the promise's words) or amber (its spirit, Phase 23); red when unsaid. */
@@ -95,7 +114,7 @@ export interface Chosen {
 const RED_LINE_WORDS: Record<RedLine['when'], string> = {
   above: 'no rise',
   below: 'no cut',
-  on: 'do not switch on',
+  on: 'breaks if switched on',
 };
 
 /** A strain scored by nobody, at rest: what the move would put at risk (Phase 25). */
@@ -122,7 +141,22 @@ export function promiseWords(r: Pick<RedLine, 'manifesto' | 'scored'>): {
 /** A watched lever at rest: the quiet words of its tag. */
 export function restingWords(r: Pick<RedLine, 'when' | 'severity' | 'scored'>): string {
   if (r.severity !== 'strains') return RED_LINE_WORDS[r.when];
-  return r.scored === false ? AT_RISK_WORDS[r.when] : 'contested';
+  return r.scored === false ? AT_RISK_WORDS[r.when] : 'keeps its words, strains its spirit';
+}
+
+/**
+ * A watched lever at rest (Phase 25): the promise by its short name, a glossary word where there is
+ * one ("Tax lock: no rise"), so a newcomer can open what the promise covers where the choice is
+ * made; the promise's full title follows for a screen reader.
+ */
+export function RestingTag({ r }: { r: RedLine }) {
+  const name = r.tag ?? promiseWords(r).label;
+  return (
+    <span className="tag--manifesto">
+      {r.id ? <Term id={r.id}>{name}</Term> : name}: {restingWords(r)}
+      <span className="sr-only"> ({r.promise})</span>
+    </span>
+  );
 }
 
 /**
@@ -157,10 +191,7 @@ export function LeverFlags({ redLines, chosen }: { redLines: RedLine[]; chosen?:
             {r.severity === 'strains' ? 'Strains' : 'Breaks'} {promiseWords(r).noun}: {r.promise}
           </span>
         ) : (
-          <span key={`${r.severity ?? 'breaks'}-${r.promise}`} className="tag--manifesto">
-            {promiseWords(r).label}: {restingWords(r)}
-            <span className="sr-only"> ({r.promise})</span>
-          </span>
+          <RestingTag key={`${r.severity ?? 'breaks'}-${r.promise}`} r={r} />
         ),
       )}
     </>
@@ -171,8 +202,11 @@ export interface LevelChange {
   from: string;
   to: string;
   note?: string;
-  /** Spending controls lead with real-terms growth; the cash budget sits beneath it. */
-  real?: { from: string; to: string; note: string };
+  /**
+   * Spending controls lead with growth a year after rising prices, in words (Phase 25); the cash
+   * budget and the years the growth is measured over wait under "More about this" on a curated card.
+   */
+  real?: { from: string; to: string; note: string; fromPct: number; toPct: number; span: string };
 }
 
 /** The path a percentage-of-baseline lever produces at a setting. */
@@ -224,6 +258,9 @@ export function levelChange(lever: Lever, value: number, summaryYear?: string): 
           from: formatPct(before, 1, true),
           to: formatPct(after, 1, true),
           note: `a year in real terms, ${fromYear} to ${year}`,
+          fromPct: before,
+          toPct: after,
+          span: `${fromYear} to ${year}`,
         };
       } catch {
         // No deflator for these years: the cash figures stand alone.
@@ -234,10 +271,20 @@ export function levelChange(lever: Lever, value: number, summaryYear?: string): 
   return null;
 }
 
-/** Slider end labels: the level at each end when the lever has level metadata, else the change. */
+/**
+ * Slider end labels: the level at each end when the lever has level metadata; a spending line's
+ * share in words ("10% less", "10% more", Phase 25); else the change.
+ */
 function endLabel(lever: Lever, value: number): string {
   const level = lever.control.level;
-  return level ? formatLevel(level, levelValue(level, value)) : formatLeverValue(lever, value);
+  if (level) return formatLevel(level, levelValue(level, value));
+  if (isShareOfSpending(lever)) return shareWords(lever, value);
+  return formatLeverValueShort(lever, value);
+}
+
+/** What a slider can reach, in one sentence for "More about this" (Phase 25). */
+function rangeWords(lever: Lever, min: number, max: number): string {
+  return `The slider runs from ${endLabel(lever, min)} to ${endLabel(lever, max)}.`;
 }
 
 function nearestOption(lever: Lever, value: number): string {
@@ -283,6 +330,7 @@ export function LeverControl({
   notes = [],
   blocked,
   compact = false,
+  range,
   children,
 }: {
   lever: Lever;
@@ -298,11 +346,16 @@ export function LeverControl({
   displayTitle?: string;
   /**
    * What the adviser's usual move would do, while the lever rests (Phase 24): the numbers in view
-   * before anything moves. Once the lever has moved, the effect line takes its place.
+   * before anything moves, in the conditional and in plain ink, so it cannot read as money already
+   * in the Budget (Phase 25). The headroom it would leave turns red only below nought. Once the
+   * lever has moved, the effect line takes its place.
    */
-  hint?: { text: string; tone: 'better' | 'worse' | 'neutral' };
-  /** One adviser's line on the lever (Phase 24). */
-  advice?: { who: string; line: SimulatedLine };
+  hint?: { text: string; headroom?: string; negative?: boolean };
+  /**
+   * One adviser's line on the lever (Phase 24). On the fine-tuning screens the screen's lead names
+   * the adviser once, so a card's line carries no name (Phase 25).
+   */
+  advice?: { who?: string; line: SimulatedLine };
   /** Warnings that apply now: a lever this one interacts with has moved. */
   notes?: readonly LeverNote[];
   /**
@@ -316,13 +369,20 @@ export function LeverControl({
    * its price, the adviser's line and the tags that change what moving it means.
    */
   compact?: boolean;
+  /**
+   * A narrower range for a curated card (Phase 25): the part of the lever's range its source's
+   * figure covers. A setting already outside it, from the desk or a link, stays reachable.
+   */
+  range?: { min: number; max: number };
   /** Anything to show beneath the lever: the minister's line, on a spending lever that has moved. */
   children?: ReactNode;
 }) {
   const id = useId();
   const [open, setOpen] = useState(false);
   const workings = useWorkings();
-  const { min, max, step } = lever.control;
+  const { step } = lever.control;
+  const min = range ? Math.min(range.min, value) : lever.control.min;
+  const max = range ? Math.max(range.max, value) : lever.control.max;
   const isToggle = lever.control.kind === 'toggle';
   const isSelect = lever.control.kind === 'select';
   const change = !isToggle ? levelChange(lever, value, summaryYear) : null;
@@ -389,6 +449,21 @@ export function LeverControl({
     const plain = effectWords(improvement, isCapital, lever.classification?.side === 'receipts');
     return relief ? reliefWords(plain) : plain;
   };
+  // What a screen reader hears as the slider moves (Phase 25): the same words the card leads
+  // with, and how far the setting is from the plan, never the other half of a pair it cannot see.
+  const pathWords = (pct: number) => growthWords(pct, pct, false).replace(/, as planned$/, '');
+  const valueText = change?.real
+    ? isDefault
+      ? `${pathWords(change.real.toPct)}, as planned`
+      : `${pathWords(change.real.toPct)}, ${shareWords(lever, value)} than planned`
+    : change
+      ? `${change.to}, ${isDefault ? 'as planned' : changeWords(lever, value)}`
+      : isDefault
+        ? 'As planned'
+        : changeWords(lever, value);
+  const cashWords = change?.real
+    ? `Cash: ${isDefault ? change.to : `${change.from} → ${change.to}`} ${change.note ?? ''}; growth measured from ${change.real.span}.`
+    : '';
 
   const notOnTheTableTag = notOnTheTable ? (
     <span className="tag tag--quiet">Not on the table</span>
@@ -445,16 +520,39 @@ export function LeverControl({
         </span>
       </p>
     ) : null;
+  // A spending line moved is read as money against its plan, in the one year the card uses
+  // (Phase 25): "£2.6bn less than planned in 2029-30", never a second percentage.
+  const spent =
+    effect && summaryYear
+      ? (effect.currentSpending[summaryYear] ?? 0) + (effect.capitalSpending[summaryYear] ?? 0)
+      : 0;
+  const againstPlan =
+    Math.abs(spent) < UNCHANGED_BELOW_GBPM
+      ? `Barely different from the plan in ${summaryYear ?? ''}`
+      : `${formatGbpBn(Math.abs(spent), 1)} ${spent < 0 ? 'less' : 'more'} than planned in ${summaryYear ?? ''}`;
+  // Past the range its source's figure covers, a straight-line figure is our arithmetic, and the
+  // card says so (Phase 25).
+  const sourceRange = lever.control.sourceRange;
+  const beyondSource =
+    sourceRange !== undefined && (value < sourceRange.min || value > sourceRange.max);
+  // The effect, in plain ink (Phase 25): a tax that raises money is not good news in green, and a
+  // cut is not bad news in red; the bar's headroom is where the score is kept.
   const effectLine =
     improvement !== null && summaryYear ? (
-      <p className={`lever__effect ${tone(improvement)}`} id={`${id}-effect`}>
-        {isCapital ? 'Borrowing' : 'Current budget'} in {summaryYear}:{' '}
-        {laterStart && effect ? (
-          <>
-            nothing yet; from {laterStart} {words(improve(effect, laterStart))}
-          </>
+      <p className="lever__effect" id={`${id}-effect`}>
+        {isShareOfSpending(lever) ? (
+          againstPlan
         ) : (
-          words(improvement)
+          <>
+            {isCapital ? 'Borrowing' : 'Day-to-day budget'} in {summaryYear}:{' '}
+            {laterStart && effect ? (
+              <>
+                nothing yet; from {laterStart} {words(improve(effect, laterStart))}
+              </>
+            ) : (
+              words(improvement)
+            )}
+          </>
         )}
         {isCapital ? (
           <span className="lever__effect-note">
@@ -462,15 +560,24 @@ export function LeverControl({
             · investment counts against the debt rule, not the day-to-day rule
           </span>
         ) : null}
+        {beyondSource ? (
+          <span className="lever__effect-note">
+            {' '}
+            <LabelBadge badge="mechanical" /> {sourceRange.text}
+          </span>
+        ) : null}
       </p>
     ) : null;
   const hintLine =
     showHint && hint ? (
-      <p
-        className={`lever__effect lever__hint${hint.tone === 'neutral' ? '' : ` amount--${hint.tone}`}`}
-        id={`${id}-effect`}
-      >
+      <p className="lever__effect lever__hint" id={`${id}-effect`}>
         {hint.text}
+        {hint.headroom ? (
+          <>
+            {' · headroom would be '}
+            <span className={hint.negative ? 'amount--worse' : undefined}>{hint.headroom}</span>
+          </>
+        ) : null}
       </p>
     ) : null;
   // On the curated cards always; on the desk once the lever has moved, beside what it does.
@@ -485,7 +592,7 @@ export function LeverControl({
       {...(blocked.onSwap ? { onSwap: blocked.onSwap } : {})}
     />
   ) : null;
-  const adviceLine = advice ? <AdviceLine who={advice.who} line={advice.line} /> : null;
+  const adviceLine = advice ? <AdviceLine {...advice} /> : null;
   // A flagship ask trimmed short of what was chosen is settled lower, in the Chief Secretary's
   // words (Phase 25): the option still counts, as a start, and its minister will say so.
   const settled = chosen?.state === 'adjusted' ? settledLine(lever) : null;
@@ -517,8 +624,8 @@ export function LeverControl({
         ) : null}
         {!isDefault ? (
           <button type="button" className="linklike" onClick={() => change_(lever.control.default)}>
-            Back to OBR
-            <span className="sr-only"> for {lever.shortTitle}</span>
+            Undo
+            <span className="sr-only"> for {title}</span>
           </button>
         ) : null}
       </div>
@@ -558,32 +665,37 @@ export function LeverControl({
       {!isToggle ? (
         <>
           <div className="lever__value">
-            {change ? (
+            {change?.real ? (
+              // Spending: growth a year after rising prices, in words (Phase 25). The desk keeps
+              // the cash budget beside it; a curated card keeps it under "More about this".
               <>
-                <span className="lever__level-from">{(change.real ?? change).from}</span>
-                <span className="lever__arrow" aria-hidden="true">
-                  {' → '}
-                </span>
-                <strong className="lever__level-to">{(change.real ?? change).to}</strong>
-                {change.real ? (
-                  <span className="lever__level-note"> {change.real.note}</span>
-                ) : change.note ? (
-                  <span className="lever__level-note"> {change.note}</span>
-                ) : null}
-                {change.real ? (
-                  <span className="lever__cash">
-                    {change.from} → {change.to} {change.note}
-                  </span>
-                ) : null}
-                <span className="lever__delta">
-                  {isDefault ? 'as the OBR forecast' : formatLeverValue(lever, value)}
-                </span>
+                <strong className="lever__growth">
+                  {growthWords(change.real.fromPct, change.real.toPct, !isDefault)}
+                </strong>
+                {compact ? null : <span className="lever__cash">{cashWords}</span>}
               </>
+            ) : change ? (
+              isDefault ? (
+                // No "20% → 20%" at rest (Phase 25): the level, as planned.
+                <>
+                  <strong className="lever__level-to">{change.to}</strong>
+                  {change.note ? <span className="lever__level-note"> {change.note}</span> : null}
+                  <span className="lever__delta">as planned</span>
+                </>
+              ) : (
+                <>
+                  <span className="lever__level-from">{change.from}</span>
+                  <span className="lever__arrow" aria-hidden="true">
+                    {' → '}
+                  </span>
+                  <strong className="lever__level-to">{change.to}</strong>
+                  {change.note ? <span className="lever__level-note"> {change.note}</span> : null}
+                  <span className="lever__delta">{formatLeverValue(lever, value)}</span>
+                </>
+              )
             ) : (
               <>
-                <strong>
-                  {isDefault ? 'As the OBR forecast' : formatLeverValue(lever, value)}
-                </strong>
+                <strong>{isDefault ? 'As planned' : formatLeverValue(lever, value)}</strong>
                 {!isDefault && lever.control.formatLabel ? ` ${lever.control.formatLabel}` : ''}
               </>
             )}
@@ -617,17 +729,16 @@ export function LeverControl({
                 onChange={(e) => change_(Number(e.target.value))}
                 aria-describedby={describedBy}
                 aria-disabled={blocked ? true : undefined}
-                aria-valuetext={
-                  change
-                    ? `${change.to} (${formatLeverValue(lever, value)})`
-                    : formatLeverValue(lever, value)
-                }
+                aria-valuetext={valueText}
               />
-              <div className="lever__scale" aria-hidden="true">
-                <span>{endLabel(lever, min)}</span>
-                <span>{min < 0 && max > 0 ? 'OBR' : ''}</span>
-                <span>{endLabel(lever, max)}</span>
-              </div>
+              {compact ? null : (
+                // The ends only (Phase 25): a middle mark labelled "OBR" read as a place and sat
+                // wherever the middle was, not where the plan is.
+                <div className="lever__scale" aria-hidden="true">
+                  <span>{endLabel(lever, min)}</span>
+                  <span>{endLabel(lever, max)}</span>
+                </div>
+              )}
             </>
           )}
         </>
@@ -642,7 +753,6 @@ export function LeverControl({
           {adviceLine}
           {settledEl}
           {noteLines}
-          {earliestTag ? <p className="lever__tags">{earliestTag}</p> : null}
           {children}
           <details className="more more--quiet lever__more">
             <summary>
@@ -650,10 +760,16 @@ export function LeverControl({
             </summary>
             <div className="more__body">
               {desc}
+              {/* The cash budget, the years and the slider's ends live here on a phone (Phase 25). */}
+              {cashWords ? <p className="lever__cash-note">{cashWords}</p> : null}
+              {!isToggle && !isSelect ? (
+                <p className="lever__range">{rangeWords(lever, min, max)}</p>
+              ) : null}
               {milestones}
-              {notOnTheTableTag || commitmentTag || lookupTag || barnettTag ? (
+              {notOnTheTableTag || earliestTag || commitmentTag || lookupTag || barnettTag ? (
                 <p className="lever__tags">
                   {notOnTheTableTag}
+                  {earliestTag}
                   {commitmentTag}
                   {lookupTag}
                   {barnettTag}
