@@ -428,7 +428,7 @@ export function LeverControl({
         {isCapital ? (
           <span className="lever__effect-note">
             {' '}
-            · current budget unchanged: investment sits outside the stability rule
+            · investment counts against the debt rule, not the day-to-day rule
           </span>
         ) : null}
       </p>

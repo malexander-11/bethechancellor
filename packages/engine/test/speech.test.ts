@@ -7,12 +7,13 @@ import {
   macroCodesOf,
   type GamePermalink,
 } from '../src/index.js';
-import { loadDataset } from './fixtures.js';
+import { loadDataset, outcomeOfFor } from './fixtures.js';
 
 const ds = loadDataset();
 const context = ds.contexts[ds.contexts.length - 1];
 if (!context) throw new Error('no context');
 const MACRO = macroCodesOf(context.readings);
+const outcomeOf = outcomeOfFor(ds, { implementationYear: '2027-28' });
 
 function speak(values: Record<string, number>, game?: GamePermalink) {
   const outcome = computeOutcome({
@@ -28,6 +29,7 @@ function speak(values: Record<string, number>, game?: GamePermalink) {
     ...(game ? { game, status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers) } : {}),
     pm: ds.pm,
     macroCodes: MACRO,
+    outcomeOf,
   });
 }
 

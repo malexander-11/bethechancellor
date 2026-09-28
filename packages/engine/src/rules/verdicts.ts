@@ -11,7 +11,7 @@ import type { AssessAsOf, FiscalPaths, RuleVerdict, VerdictStatus } from '../typ
 import { resolveTargetYear } from './targetYear.js';
 
 function unavailable(
-  rule: { id: string; name: string; kind: RuleVerdict['kind'] },
+  rule: { id: string; name: string; shortName: string; kind: RuleVerdict['kind'] },
   targetYear: string,
   rolling: boolean,
   why: string,
@@ -19,6 +19,7 @@ function unavailable(
   return {
     ruleId: rule.id,
     ruleName: rule.name,
+    shortName: rule.shortName,
     kind: rule.kind,
     targetYear,
     rolling,
@@ -77,6 +78,7 @@ export function evaluateCurrentBudgetRule(
   return {
     ruleId: rule.id,
     ruleName: rule.name,
+    shortName: rule.shortName,
     kind: 'currentBudget',
     targetYear,
     rolling,
@@ -133,6 +135,7 @@ export function evaluateStockFallingRule(
   return {
     ruleId: rule.id,
     ruleName: rule.name,
+    shortName: rule.shortName,
     kind: 'stockFalling',
     targetYear,
     rolling,
@@ -182,6 +185,7 @@ export function evaluateWelfareCapRule(rule: WelfareCapRule, paths: FiscalPaths)
   return {
     ruleId: rule.id,
     ruleName: rule.name,
+    shortName: rule.shortName,
     kind: 'welfareCap',
     targetYear: year,
     rolling: false,

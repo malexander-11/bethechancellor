@@ -64,6 +64,7 @@ export * from './game/ambitions.js';
 export * from './game/ministers.js';
 export * from './game/interventions.js';
 export * from './game/options.js';
+export * from './game/prices.js';
 export * from './game/excludes.js';
 export * from './game/finetune.js';
 export * from './game/households.js';

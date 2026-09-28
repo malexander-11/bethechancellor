@@ -160,7 +160,7 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   const funded = status?.priorities.filter((p) => p.status === 'delivered') ?? [];
   const missedRules = outcome.verdicts
     .filter((v) => v.status === 'notMet' || v.status === 'aboveMargin')
-    .map((v) => v.ruleName);
+    .map((v) => v.shortName);
 
   // Spending, tax and who pays, in the target year (Phase 9). Titles are the levers' own.
   const policyEffects = outcome.leverEffects.filter((e) => e.category !== 'macro');

@@ -8,13 +8,14 @@ import {
   suggestedSettings,
   type GamePermalink,
 } from '../src/index.js';
-import { loadDataset } from './fixtures.js';
+import { loadDataset, outcomeOfFor } from './fixtures.js';
 
 const ds = loadDataset();
 const context = ds.contexts[ds.contexts.length - 1];
 if (!context) throw new Error('no context');
 /** Today's estimate: every game is played on it (Phase 24). */
 const ESTIMATE = suggestedSettings(context.readings, ds.levers);
+const outcomeOf = outcomeOfFor(ds, { implementationYear: '2027-28' });
 const typicalErrorGbpm =
   (ds.vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
   (ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0);
@@ -44,6 +45,7 @@ function close(
       typicalErrorGbpm,
       credibilityShare: extra.credibilityShare ?? 0,
       rebellionRisk: extra.rebellionRisk ?? 0,
+      outcomeOf,
     }),
   };
 }

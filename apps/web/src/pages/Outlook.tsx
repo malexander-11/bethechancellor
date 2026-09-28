@@ -117,7 +117,12 @@ export function OutlookPage() {
           <dl className="more__body rules-key">
             {rules.rules.map((r) => (
               <div key={r.id}>
-                <dt>{r.name}</dt>
+                <dt>
+                  {r.shortName.charAt(0).toUpperCase() + r.shortName.slice(1)}
+                  {r.shortName.replace(/^the /, '').toLowerCase() !== r.name.toLowerCase() ? (
+                    <span className="rules-key__official"> (officially the {r.name})</span>
+                  ) : null}
+                </dt>
                 <dd>
                   {r.plainEnglish}
                   {workings ? (

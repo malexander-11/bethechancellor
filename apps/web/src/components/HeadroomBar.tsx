@@ -1,4 +1,5 @@
 import { formatGbpBn, type AmbitionStatus, type Outcome } from '@btc/engine';
+import { isMissed, ruleTitle } from '../journey/rules';
 
 /**
  * The score while you build, in one slim line that stays in view: headroom in the target year,
@@ -13,12 +14,16 @@ export function HeadroomBar({ outcome, status }: { outcome: Outcome; status: Amb
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const year = stability?.targetYear ?? '';
   const headroom = stability?.headroomGbpm ?? 0;
-  const missed = outcome.verdicts.filter(
-    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
-  );
+  const missed = outcome.verdicts.filter(isMissed);
   const tone = headroom < 0 ? ' bar__figure--worse' : '';
+  // A missed rule by its plain name and the engine's own margin (Phase 25): a player can see
+  // which rule to fix, and by how much.
   const rules =
-    missed.length === 0 ? 'rules met' : `${missed.map((v) => v.ruleName).join(', ')} missed`;
+    missed.length === 0
+      ? 'rules met'
+      : missed
+          .map((v) => `${ruleTitle(v)} missed by ${formatGbpBn(Math.abs(v.headroomGbpm), 1)}`)
+          .join(' · ');
   const facts: { id: string; text: string; warn?: boolean; short?: boolean }[] = [];
   if (status.priorities.length > 0) {
     facts.push({

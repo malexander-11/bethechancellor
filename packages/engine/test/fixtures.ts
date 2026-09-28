@@ -2,6 +2,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  computeOutcome,
   parseAdvisers,
   parseBriefings,
   parseContext,
@@ -31,6 +32,8 @@ import {
   parseVintage,
   type Dataset,
   type ExtractedSources,
+  type OutcomeOf,
+  type Settings,
 } from '../src/index.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -110,3 +113,28 @@ export const FORECAST_YEARS = [
   '2029-30',
   '2030-31',
 ] as const;
+
+/**
+ * The engine re-run for a set of lever values (Phase 25): what the web's useOutcomeOf gives the
+ * pages, for the engine functions that price a choice. The settings other than the lever values
+ * are the caller's, so a test prices against the same conditions it runs the Budget under.
+ */
+export function outcomeOfFor(
+  ds: Pick<Dataset, 'vintage' | 'rules' | 'levers'>,
+  settings: Omit<Partial<Settings>, 'leverValues'> = {},
+): OutcomeOf {
+  const cache = new Map<string, ReturnType<OutcomeOf>>();
+  return (leverValues) => {
+    const key = JSON.stringify(Object.entries(leverValues).sort(([a], [b]) => a.localeCompare(b)));
+    const hit = cache.get(key);
+    if (hit) return hit;
+    const outcome = computeOutcome({
+      vintage: ds.vintage,
+      rules: ds.rules,
+      levers: ds.levers,
+      settings: { ...settings, leverValues },
+    });
+    cache.set(key, outcome);
+    return outcome;
+  };
+}

@@ -72,9 +72,15 @@ describe('fine-tune tax and spend: the curated levers', () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     const penny = screen.getByRole('slider', { name: 'The basic rate of income tax' });
     const card = cardOf(penny);
-    // At rest: what the adviser's usual move would do, and the headroom that would leave.
+    // At rest: what the adviser's usual move would do, on HMRC's own figure, and what the
+    // headroom would then be, interest included (Phase 25), which the screen says once.
     expect(
-      within(card).getByText(/^At 21%: raises £\d\.\dbn · leaves £\d+\.\dbn$/),
+      within(card).getByText(/^At 21%: raises £\d\.\dbn · headroom would be £\d+\.\dbn$/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Headroom also moves with the interest on borrowing, so it can move more than a tax raises.',
+      ),
     ).toBeInTheDocument();
     expect(within(card).getByText('Manifesto: no rise')).toBeInTheDocument();
     const before = barFigure();
@@ -97,7 +103,9 @@ describe('fine-tune tax and spend: the curated levers', () => {
       name: 'Bring back the health and social care levy',
     });
     const card = cardOf(levy);
-    expect(within(card).getByText(/^Switched on: raises £\d+\.\dbn · leaves/)).toBeInTheDocument();
+    expect(
+      within(card).getByText(/^Switched on: raises £\d+\.\dbn · headroom would be/),
+    ).toBeInTheDocument();
     fireEvent.click(levy);
     expect(within(card).getByText('Strains the manifesto: The tax lock')).toHaveClass('tag--amber');
     expect(within(card).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
@@ -135,7 +143,9 @@ describe('fine-tune tax and spend: the curated levers', () => {
     ).toHaveClass('choice__overlap--warn');
     // The freeze a Chancellor faces this autumn is on show, and costs money (Phase 25).
     const freeze = cardOf(screen.getByRole('checkbox', { name: 'Freeze fuel duty in April 2027' }));
-    expect(within(freeze).getByText(/^Switched on: costs £0\.\dbn · leaves/)).toBeInTheDocument();
+    expect(
+      within(freeze).getByText(/^Switched on: costs £0\.\dbn · headroom would be/),
+    ).toBeInTheDocument();
   });
 
   it('reads a relief cost as the most it could raise, and says why in plain words', () => {
@@ -146,7 +156,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
       }),
     );
     expect(
-      within(pensions).getByText(/^Switched on: raises at most £1\d\.\dbn · leaves/),
+      within(pensions).getByText(/^Switched on: raises at most £1\d\.\dbn · headroom would be/),
     ).toBeInTheDocument();
     expect(
       within(pensions).getByText(
@@ -173,7 +183,9 @@ describe('fine-tune tax and spend: the curated levers', () => {
     );
     expect(card.className).toMatch(/lever--blocked/);
     // Priced as the swap it offers, never as both at once.
-    expect(within(card).getByText(/^Swap them: costs £\d+\.\dbn · leaves/)).toBeInTheDocument();
+    expect(
+      within(card).getByText(/^Swap them: costs £\d+\.\dbn · headroom would be/),
+    ).toBeInTheDocument();
     fireEvent.click(death);
     expect(search().get('L')).toMatch(/cgtalign\.1/);
     expect(search().get('L') ?? '').not.toMatch(/cgtdth/);

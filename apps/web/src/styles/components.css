@@ -211,6 +211,11 @@
   font-weight: 600;
 }
 
+.rules-key__official {
+  color: var(--ink-2);
+  font-weight: 400;
+}
+
 .rules-key dd {
   margin: 0;
 }
@@ -1325,6 +1330,28 @@ label.choice {
 
 .review__none {
   color: var(--ink-2);
+}
+
+/* A priority short of delivery, and a lever moved against its own flagship (Phase 25). */
+.review__short {
+  margin: 4px 0 0;
+  color: var(--warning);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.review__against {
+  color: var(--critical);
+}
+
+/* How the headroom got from the estimate to the bar; a missed rule by name and margin. */
+.review__reconcile {
+  max-width: 44em;
+}
+
+.review__missed {
+  color: var(--critical);
+  font-weight: 600;
 }
 
 /* ---------------------------------------------------------- the statement */

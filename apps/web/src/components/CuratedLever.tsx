@@ -1,5 +1,6 @@
 import {
   excludedBy,
+  formatGbpBn,
   formatLevel,
   levelValue,
   type FinetuneItem,
@@ -9,11 +10,10 @@ import {
 import { levers, finetuneTitle } from '../data';
 import { reliefWords } from '../journey/effects';
 import { leverNotes, type redLinesOf } from '../journey/levers';
-import type { useOptionPrices } from '../journey/prices';
+import type { useLeverHints } from '../journey/prices';
 import { useBudget } from '../state/budget';
 import { LeverControl, formatLeverValueShort } from './LeverControl';
 import { MinisterLine } from './MinisterLine';
-import { priceLine } from './OptionCard';
 
 /** Where the adviser's usual move takes a lever, in the words a hint opens with. */
 export function moveWords(lever: Lever, move: number): string {
@@ -28,8 +28,9 @@ export function moveWords(lever: Lever, move: number): string {
 /**
  * One lever on the fine-tuning screens (Phase 24, ADR-0025): the desk's own control under a plain
  * title, the adviser's line on it, and the numbers in view before anything moves. At rest it
- * says what the adviser's usual move would do against the Budget as it stands, and the headroom
- * that would leave; once moved, the control's own effect line takes over. The red and amber
+ * says what the adviser's usual move would do against the Budget as it stands, in the lever's own
+ * figure, and what the headroom would then be (Phase 25: the headroom moves by the interest too,
+ * which the screen says once); once moved, the control's own effect line takes over. The red and amber
  * manifesto tags, the flagship it belongs to, the warnings that apply now and, on a spending
  * lever that has moved, its minister's line, are all on the card; the lever's own headline and
  * caveats wait under "More about this". A relief cost reads "raises at most" (Phase 25). While a
@@ -40,7 +41,7 @@ export function CuratedLever({
   lever,
   who,
   summaryYear,
-  priceOf,
+  hintOf,
   redLinesFor,
   chosen,
   moved,
@@ -50,7 +51,7 @@ export function CuratedLever({
   /** The role whose line this is: the screen's adviser. */
   who: string;
   summaryYear: string;
-  priceOf: ReturnType<typeof useOptionPrices>;
+  hintOf: ReturnType<typeof useLeverHints>;
   redLinesFor: ReturnType<typeof redLinesOf>;
   chosen?: OptionReport;
   moved: ReadonlySet<string>;
@@ -60,18 +61,20 @@ export function CuratedLever({
   const resting = value === lever.control.default;
   const excluder = excludedBy(lever, levers, state.leverValues);
   // A blocked card is priced as the swap it offers, never as both at once.
-  const price = resting
-    ? priceOf({
-        values: excluder
-          ? { [excluder.lever.code]: excluder.lever.control.default, [lever.code]: item.move }
-          : { [lever.code]: item.move },
-      })
+  const priced = resting
+    ? hintOf(
+        { [lever.code]: item.move },
+        excluder ? { [excluder.lever.code]: excluder.lever.control.default } : undefined,
+      )
     : null;
-  const line = price ? lowerFirst(priceLine(price)) : '';
-  const hint = price
+  const effect = priced ? lowerFirst(priced.text) : '';
+  const line = priced
+    ? `${lever.reliefCost ? reliefWords(effect) : effect} · headroom would be ${formatGbpBn(priced.headroomGbpm, 1, priced.headroomGbpm < 0)}`
+    : '';
+  const hint = priced
     ? {
-        text: `${excluder ? 'Swap them' : moveWords(lever, item.move)}: ${lever.reliefCost ? reliefWords(line) : line}`,
-        tone: price.tone,
+        text: `${excluder ? 'Swap them' : moveWords(lever, item.move)}: ${line}`,
+        tone: priced.tone,
       }
     : undefined;
   const blocked = excluder

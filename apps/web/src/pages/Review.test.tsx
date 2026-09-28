@@ -77,9 +77,19 @@ describe('step 5: deliver the Budget', () => {
       expect.stringMatching(/^\/finetune\/spending\?/),
     );
 
-    // Where that leaves you, in words: the bar above already says the figure.
+    // Where that leaves you: from the estimate to the bar, and who pays most (Phase 25).
     const position = part(/^Where that leaves you/);
-    expect(within(position).getByText('Rules met.')).toBeInTheDocument();
+    expect(
+      within(position).getByText(
+        /^Headroom goes from £6\.8bn to £\d+\.\dbn in 2029-30\. Taxes raise £\d+\.\dbn; day-to-day spending adds £\d+\.\dbn net; less borrowing saves £\d\.\dbn in interest\./,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      within(position).getByText(
+        /^Who pays most: everyone who earns or spends, £\d+\.\dbn in 2029-30\.$/,
+      ),
+    ).toBeInTheDocument();
+    expect(within(position).getByText('You meet both fiscal rules.')).toBeInTheDocument();
     // The levy keeps the tax lock's words and strains its spirit: amber, not red.
     expect(within(position).getByText('Strains the manifesto: The tax lock')).toHaveClass(
       'tag--amber',
@@ -102,14 +112,62 @@ describe('step 5: deliver the Budget', () => {
     quiet.unmount();
     at(`/review?${BASE}&${G}&L=dhsc.10_itbr.1`);
     const position = part(/^Where that leaves you/);
+    // By its plain name and the engine's own margin (Phase 25).
     expect(
       within(position).getByText(
-        /^Missed: .*Stability rule.*\. The OBR would say so on Budget day\.$/,
+        /^Missed: the day-to-day rule by £10\.4bn and the debt rule by £6\.3bn\. The OBR would say so on Budget day\.$/,
       ),
     ).toBeInTheDocument();
     expect(within(position).getByText('Breaks the manifesto: The tax lock')).toHaveClass(
       'tag--warn',
     );
+  });
+
+  it('adds up: the headroom it ends on is the bar, to the pound', () => {
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_hscl.1_dfe.5`);
+    const bar = screen.getByRole('region', { name: 'Your Budget so far' });
+    const figure = bar.querySelector('.bar__figure')?.textContent;
+    const line = within(part(/^Where that leaves you/)).getByText(/^Headroom goes from/);
+    expect(line.textContent).toContain(`to ${figure} in 2029-30`);
+  });
+
+  it('prices every flagship with its sign: savings save, and one price throughout', () => {
+    // The welfare bill (Phase 25, R4): the two savings read as savings, never as red costs.
+    at(`/review?${BASE}&g=st.4_pr.welfare-bill&M=rate.0.75_rpi.0.5&L=rvpip.1_csjmh.1`);
+    const flagships = part(/^Flagship policies/);
+    const saves = within(flagships).getAllByText(/^saves £\d+\.\dbn$/);
+    expect(saves).toHaveLength(2);
+    for (const s of saves) expect(s).toHaveClass('amount--better');
+    expect(within(flagships).queryByText(/costs/)).toBeNull();
+  });
+
+  it('shows a cut to a priority’s own budget as against it, and warns in amber when nothing delivers it', () => {
+    // The adviser's usual health move on step 4 (−1%) with the NHS ranked: not a trimmed uplift.
+    at(`/review?${BASE}&g=st.4_pr.nhs&M=rate.0.75_rpi.0.5&L=dhsc.-1`);
+    const flagships = part(/^Flagship policies/);
+    expect(
+      within(flagships).getByText(/^Cuts against this priority: Health and social care · /),
+    ).toHaveClass('review__against');
+    expect(within(flagships).queryByText(/settled lower/)).toBeNull();
+    expect(
+      within(flagships).getByText(
+        /^It is an agreed priority\. Nothing in your Budget delivers it yet\./,
+      ),
+    ).toHaveClass('review__short');
+    // The cut is a cut: in the spending list too, as a saving.
+    expect(
+      within(part(/^Spending/)).getByText(/^Health and social care · −1%/),
+    ).toBeInTheDocument();
+    expect(within(part(/^Spending/)).getByText(/^saves £\d\.\dbn$/)).toBeInTheDocument();
+  });
+
+  it('says when a priority is only started', () => {
+    at(`/review?${BASE}&g=st.4_pr.nhs&M=rate.0.75_rpi.0.5&L=mhclg.5`);
+    expect(
+      within(part(/^Flagship policies/)).getByText(
+        /^It is started, not delivered: nothing delivers it in full yet\./,
+      ),
+    ).toHaveClass('review__short');
   });
 
   it('delivers: the red button marks the game finished and opens Budget day with the Budget intact', async () => {

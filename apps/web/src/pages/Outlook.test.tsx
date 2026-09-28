@@ -38,8 +38,14 @@ describe('the briefing: one estimate to plan on (Phase 24)', () => {
     );
     fireEvent.click(screen.getByText('About the fiscal rules'));
     const fold = screen.getByText('About the fiscal rules').closest('details') as HTMLElement;
-    expect(within(fold).getByText('Stability rule')).toBeInTheDocument();
-    expect(within(fold).getByText('Welfare cap')).toBeInTheDocument();
+    // The plain names the rest of the game uses, tied to the official ones (Phase 25).
+    expect(within(fold).getByText(/^The day-to-day rule/)).toHaveTextContent(
+      'The day-to-day rule (officially the Stability rule)',
+    );
+    expect(within(fold).getByText(/^The debt rule/)).toHaveTextContent(
+      'The debt rule (officially the Investment rule)',
+    );
+    expect(within(fold).getByText(/^The welfare cap/)).toHaveTextContent(/^The welfare cap$/);
     // With the workings on, the Charter's own words and their source sit beside each rule.
     expect(within(fold).getAllByText(/The Charter says:/).length).toBe(3);
   });

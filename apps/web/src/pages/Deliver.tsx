@@ -136,7 +136,7 @@ export function DeliverPage() {
               price={
                 blocked
                   ? // A blocked card is priced as the swap it offers, never as both at once.
-                    priceOf({ values: { ...optionOff(blocked.option, levers), ...option.values } })
+                    priceOf({ values: option.values, swapOut: optionOff(blocked.option, levers) })
                   : priceOf(option, optionState === 'on')
               }
               levers={optionLevers}

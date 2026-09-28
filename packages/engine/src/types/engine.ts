@@ -154,6 +154,8 @@ export type VerdictStatus =
 export interface RuleVerdict {
   ruleId: string;
   ruleName: string;
+  /** The plain name (Phase 25): "the day-to-day rule", "the debt rule", "the welfare cap". */
+  shortName: string;
   kind: 'currentBudget' | 'stockFalling' | 'welfareCap';
   targetYear: string;
   rolling: boolean;

@@ -47,10 +47,43 @@ function lowerFirst(text: string): string {
   return text.charAt(0).toLowerCase() + text.slice(1);
 }
 
-/** "Costs £2.2bn · leaves £4.5bn" or "Costs £2.2bn · without it £6.7bn", one text node for one figure. */
+/**
+ * "Costs £0.8bn · leaves £6.0bn", or "Costs £0.8bn · in your Budget" once chosen: the one price
+ * (Phase 25), the change to the headroom with interest in it, so the two figures add up. A move
+ * made only of investment is priced on the debt rule, which it touches, and says so.
+ */
 export function priceLine(price: OptionPrice): string {
   const headroom = formatGbpBn(price.headroomGbpm, 1, price.headroomGbpm < 0);
-  return `${price.text} · ${price.standing === 'leaves' ? 'leaves' : 'without it'} ${headroom}`;
+  const tail = price.standing === 'inBudget' ? 'in your Budget' : `leaves ${headroom}`;
+  return price.rule === 'stockFalling'
+    ? `On the debt rule: ${lowerFirst(price.text)} · ${tail}`
+    : `${price.text} · ${tail}`;
+}
+
+/** One part of a price's split: a cost, or what it saves. */
+function part(label: string, gbpm: number): string | null {
+  if (Math.abs(gbpm) < 50) return null;
+  const size = formatGbpBn(Math.abs(gbpm), 1);
+  return gbpm > 0 ? `${label} ${size}` : `${label} saves ${size}`;
+}
+
+/** The price's workings for the fold: what it is, split, and the dearest earlier year. */
+export function priceWorkings(price: OptionPrice): string {
+  const parts = [
+    part('day-to-day', price.split.currentGbpm),
+    part('investment', price.split.capitalGbpm),
+    part('interest', price.split.interestGbpm),
+  ].filter((p): p is string => p !== null);
+  const rule = price.rule === 'stockFalling' ? 'the debt rule' : 'your headroom';
+  const lines = [
+    `The change to ${rule} in ${price.year}, interest included${parts.length > 0 ? `: ${parts.join(', ')}` : ''}.`,
+  ];
+  if (price.earlier) {
+    lines.push(
+      `It costs most in ${price.earlier.year}: ${formatGbpBn(price.earlier.costGbpm, 1)}, before interest.`,
+    );
+  }
+  return lines.join(' ');
 }
 
 /**
@@ -137,7 +170,6 @@ export function OptionCard({
   const quiet = overlaps.filter((o) => !o.active);
   const active = overlaps.filter((o) => o.active);
   const start = scale?.kind === 'start' ? scale : undefined;
-  const more = Boolean(note || quiet.length > 0 || (line && who) || start);
   const classes = [
     'choice',
     'choice--option',
@@ -247,34 +279,35 @@ export function OptionCard({
         />
       ) : null}
       {advice ? <AdviceLine who={advice.who} line={advice.line} /> : null}
-      {more ? (
-        <details className="more more--quiet choice__more">
-          <summary>More about this</summary>
-          <div className="more__body">
-            {start ? (
-              <span className="choice__line">
-                Makes a start, not delivery: {lowerFirst(start.why)}{' '}
-                <LabelBadge badge={start.badge} />
-                <SourceList as="span" refs={start.sources} className="choice__sources" />
-              </span>
-            ) : null}
-            {note ? <span className="choice__line">{note}</span> : null}
-            {quiet.map((o) => (
-              <span key={o.withLever.code} className="choice__line choice__overlap">
-                Overlaps with {partnerOf(o)}
-              </span>
-            ))}
-            {line && who ? (
-              <span className="choice__delivery">
-                <span className="kicker">{who}</span> <LabelBadge badge={line.badge} /> {line.text}
-              </span>
-            ) : null}
-            {line ? (
-              <SourceList refs={line.sources} className="choice__sources briefing__sources" />
-            ) : null}
-          </div>
-        </details>
-      ) : null}
+      <details className="more more--quiet choice__more">
+        <summary>More about this</summary>
+        <div className="more__body">
+          <span className="choice__line choice__workings">
+            <LabelBadge badge="mechanical" /> {priceWorkings(price)}
+          </span>
+          {start ? (
+            <span className="choice__line">
+              Makes a start, not delivery: {lowerFirst(start.why)}{' '}
+              <LabelBadge badge={start.badge} />
+              <SourceList as="span" refs={start.sources} className="choice__sources" />
+            </span>
+          ) : null}
+          {note ? <span className="choice__line">{note}</span> : null}
+          {quiet.map((o) => (
+            <span key={o.withLever.code} className="choice__line choice__overlap">
+              Overlaps with {partnerOf(o)}
+            </span>
+          ))}
+          {line && who ? (
+            <span className="choice__delivery">
+              <span className="kicker">{who}</span> <LabelBadge badge={line.badge} /> {line.text}
+            </span>
+          ) : null}
+          {line ? (
+            <SourceList refs={line.sources} className="choice__sources briefing__sources" />
+          ) : null}
+        </div>
+      </details>
       {on ? children : null}
     </div>
   );

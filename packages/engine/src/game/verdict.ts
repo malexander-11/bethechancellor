@@ -10,6 +10,7 @@ import type {
 } from '../types/data.js';
 import type { GamePermalink, Outcome } from '../types/engine.js';
 import { ambitionStatus, type AmbitionStatus, type PriorityReport } from './ambitions.js';
+import { priceMove, withDefaults, type OutcomeOf } from './prices.js';
 
 /**
  * The close (the feedback, step 6): what the playthrough came to. Which ambitions survived and
@@ -37,7 +38,11 @@ export type PriorityFate = 'delivered' | 'settledLower' | 'started' | 'unfunded'
 export type PromiseFate = 'kept' | 'strained' | 'broken-by-choice' | 'broken-by-arithmetic';
 
 export interface AmbitionVerdict {
-  priorities: { title: string; fate: PriorityFate; spendingGbpm: number }[];
+  /**
+   * `priceGbpm` is the one price (Phase 25): what the options counting towards the priority do to
+   * the headroom in the target year, interest included; negative costs, positive saves.
+   */
+  priorities: { title: string; fate: PriorityFate; priceGbpm: number }[];
   promises: { title: string; fate: PromiseFate; by?: string[] }[];
 }
 
@@ -70,6 +75,8 @@ export interface VerdictInput {
   /** Readings the reactions engine already computed, for the kind of Budget. */
   credibilityShare: number;
   rebellionRisk: number;
+  /** The engine re-run under the Budget's own settings, for each priority's one price. */
+  outcomeOf: OutcomeOf;
 }
 
 function priorityFate(p: PriorityReport): PriorityFate {
@@ -77,13 +84,20 @@ function priorityFate(p: PriorityReport): PriorityFate {
   return p.status;
 }
 
-/** Which ambitions survived, and how each promise fared and why. */
-export function ambitionVerdict(status: AmbitionStatus, levers: readonly Lever[]): AmbitionVerdict {
+/**
+ * Which ambitions survived, and how each promise fared and why. A priority's figure is its price
+ * by id, when given: what its options do to the headroom (Phase 25); nought without one.
+ */
+export function ambitionVerdict(
+  status: AmbitionStatus,
+  levers: readonly Lever[],
+  prices: ReadonlyMap<string, number> = new Map(),
+): AmbitionVerdict {
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
   const priorities = status.priorities.map((p) => ({
     title: p.priority.title,
     fate: priorityFate(p),
-    spendingGbpm: p.spendingGbpm,
+    priceGbpm: prices.get(p.priority.id) ?? 0,
   }));
   const strainedBy = new Map(
     status.strains.filter((s) => s.strained).map((s) => [s.promise.id, s.strainedBy] as const),
@@ -162,7 +176,24 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
   const year = stability?.targetYear ?? '';
   const headroom = stability?.headroomGbpm ?? 0;
   const status = ambitionStatus(game, pm, input.options, outcome, levers);
-  const ambitions = ambitionVerdict(status, levers);
+  // Each priority's one price: the Budget as it stands against it without the options that count.
+  const values = outcome.settings.leverValues;
+  const prices = new Map(
+    status.priorities.map((p) => {
+      const codes = p.options
+        .filter((o) => o.state === 'on' || o.state === 'adjusted')
+        .flatMap((o) => Object.keys(o.option.values));
+      if (codes.length === 0) return [p.priority.id, 0] as const;
+      const price = priceMove({
+        outcomeOf: input.outcomeOf,
+        levers,
+        from: withDefaults(values, codes, levers),
+        to: values,
+      });
+      return [p.priority.id, price.headroomChangeGbpm] as const;
+    }),
+  );
+  const ambitions = ambitionVerdict(status, levers, prices);
   const { paid, benefited } = incidenceRows(outcome, levers, input.incidence, year);
 
   const rulesMet = !outcome.verdicts.some(

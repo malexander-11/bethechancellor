@@ -18,7 +18,7 @@ import { UNCHANGED_BELOW_GBPM } from '../journey/effects';
 import { useStageGuard } from '../journey/guard';
 import { chosenByLever, redLinesOf } from '../journey/levers';
 import { StepLink } from '../journey/links';
-import { useOptionPrices } from '../journey/prices';
+import { useLeverHints } from '../journey/prices';
 import { useBudget } from '../state/budget';
 import { deliverPath } from './Deliver';
 
@@ -32,12 +32,28 @@ export function finetunePath(side: FinetuneSideId): string {
 }
 
 /** Each screen's own words: its foot link into the desk, and what the desk's way back says. */
-const SIDES: Record<FinetuneSideId, { desk: string; every: string; back: string }> = {
-  tax: { desk: '/budget/taxes', every: 'Every tax lever', back: 'Back to fine-tuning tax' },
+/**
+ * Each screen's links, and its one sentence on interest (Phase 25): a card gives the lever's own
+ * figure, and the headroom it would leave moves by the interest on borrowing too, said once here
+ * rather than on every card.
+ */
+const SIDES: Record<
+  FinetuneSideId,
+  { desk: string; every: string; back: string; interest: string }
+> = {
+  tax: {
+    desk: '/budget/taxes',
+    every: 'Every tax lever',
+    back: 'Back to fine-tuning tax',
+    interest:
+      'Headroom also moves with the interest on borrowing, so it can move more than a tax raises.',
+  },
   spending: {
     desk: '/budget/spending',
     every: 'Every spending lever',
     back: 'Back to fine-tuning spending',
+    interest:
+      'Headroom also moves with the interest on borrowing, so it can move more than a budget saves.',
   },
 };
 
@@ -106,7 +122,7 @@ export function FinetunePage() {
 function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const { state, dispatch, outcome } = useBudget();
   const { pathname } = useLocation();
-  const priceOf = useOptionPrices();
+  const hintOf = useLeverHints();
   // Which levers had moved when the screen was opened: those join the ones on show; a lever moved
   // inside the fold stays in it until the next visit.
   const [arrived] = useState(() => new Set(Object.keys(state.leverValues)));
@@ -135,7 +151,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         lever={lever}
         who={who}
         summaryYear={year}
-        priceOf={priceOf}
+        hintOf={hintOf}
         redLinesFor={redLinesFor}
         chosen={chosen.get(item.code)}
         moved={moved}
@@ -164,6 +180,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       lead={spec.lead}
     >
       <HeadroomBar outcome={outcome} status={status} />
+      <p className="panel__hint tune__interest">{words.interest}</p>
       {spec.groups.map((group) => {
         const id = `tune-${group.id}`;
         const shown = group.items.filter(

@@ -30,7 +30,8 @@ describe('Budget day: what your Budget means', () => {
       screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
     ).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
-    expect(screen.getByText(/You meet both fiscal rules and the welfare cap/)).toBeInTheDocument();
+    // The rules by their plain names; the welfare cap only when it is missed (Phase 25).
+    expect(screen.getByText('You meet both fiscal rules on these numbers.')).toBeInTheDocument();
     for (const title of ['Your backbenchers', 'The markets', 'The public']) {
       expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
     }
@@ -101,7 +102,9 @@ describe('Budget day: what your Budget means', () => {
     expect(meter('The markets')).toHaveAccessibleName('1 of 5: Alarmed');
     expect(within(markets).getAllByText(/The stability rule is missed/).length).toBe(2);
     expect(within(markets).getAllByText(/Health and Social Care/).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Missed on these numbers: Stability rule/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/^Missed on these numbers: the day-to-day rule by £\d+\.\dbn/),
+    ).toBeInTheDocument();
     // Every rule, its points, its reading and its sources sit behind "Why this rating".
     fireEvent.click(within(markets).getByText('Why this rating'));
     expect(
@@ -200,8 +203,10 @@ describe('Budget day: what your Budget means', () => {
     expect(
       within(speech).getByText(/first duty of any government is the security/),
     ).toBeInTheDocument();
+    // The one price (Phase 25): what the flagship does to the headroom, interest included, so
+    // a little more than the lever's own £1.4bn.
     expect(
-      within(speech).getByText(/more money for prisons and courts, £1\.4bn in 2029-30/),
+      within(speech).getByText(/more money for prisons and courts, £1\.[5-9]bn in 2029-30/),
     ).toBeInTheDocument();
     expect(
       within(speech).getByText(/we cut taxes where we can: alcohol duties/),

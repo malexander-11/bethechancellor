@@ -116,10 +116,55 @@ describe('build your Budget: the ways to deliver', () => {
     // Once on, the minister behind the lever reacts, and the card prices what putting it back would
     // undo: the headroom the Budget would have without it.
     expect(screen.getAllByText('Defence Secretary').length).toBeGreaterThanOrEqual(2);
-    expect(within(card).getByText(/Costs £\d+\.\dbn · without it (−|£)/)).toBeInTheDocument();
+    expect(within(card).getByText(/^Costs £\d+\.\dbn · in your Budget$/)).toBeInTheDocument();
     fireEvent.click(gap());
     await waitFor(() => expect(L()).not.toMatch(/dip47/));
     expect(within(bar()).getByText('0 of 2 priorities delivered')).toBeInTheDocument();
+  });
+
+  it('prices each flagship once, interest included: the price and what it leaves add up to the bar', () => {
+    // One price per choice (Phase 25, R4): the change to the bar's headroom, with its workings in
+    // the fold, badged Worked out.
+    at(`/budget/deliver/2?${BASE}&${GAME}`);
+    const card = box(/^Fill the funding gap in the defence investment plan/).closest(
+      '.choice',
+    ) as HTMLElement;
+    const line = within(card).getByText(/^Costs £\d+\.\dbn · leaves £\d+\.\dbn$/).textContent ?? '';
+    const bn = (re: RegExp) => Number(line.match(re)?.[1]);
+    const cost = bn(/^Costs £([\d.]+)bn/);
+    const leaves = bn(/leaves £([\d.]+)bn/);
+    const now = Number(barFigure().replace(/[£bn]/g, ''));
+    expect(Math.abs(now - cost - leaves)).toBeLessThanOrEqual(0.15);
+    expect(
+      within(card).getByText(
+        /^The change to your headroom in 2029-30, interest included: day-to-day £0\.\dbn, investment £0\.\dbn, interest £0\.\dbn\.$/,
+      ),
+    ).toBeInTheDocument();
+    // Defence at 3% now costs most before the target year, and says so.
+    const now3 = box(/^Defence at 3% of GDP now/).closest('.choice') as HTMLElement;
+    expect(
+      within(now3).getByText(/^Costs £\d+\.\dbn, more in earlier years · leaves/),
+    ).toBeInTheDocument();
+    expect(
+      within(now3).getByText(/It costs most in 2027-28: £\d+\.\dbn, before interest\./),
+    ).toBeInTheDocument();
+  });
+
+  it('names a missed rule on the bar by its plain name and the engine’s own margin', () => {
+    // Investment up a tenth on today's estimate: the day-to-day headroom stays positive, the debt
+    // rule is missed (Phase 25, R13). The bar says which, and by how much.
+    at(`/budget/deliver?${BASE}&g=st.2_pr.homes-growth&M=rate.0.75_rpi.0.5&L=cdel.10`);
+    expect(barFigure()).toBe('£5.0bn');
+    expect(within(bar()).getByText('Debt rule missed by £4.5bn')).toHaveClass('bar__missed');
+  });
+
+  it('prices investment on the debt rule, which it touches', () => {
+    at(`/budget/deliver?${BASE}&g=st.2_pr.homes-growth`);
+    const invest = box(/^Spend 10% more on public investment/).closest('.choice') as HTMLElement;
+    expect(
+      within(invest).getByText(/^On the debt rule: costs £\d+\.\dbn · leaves (−|£)/),
+    ).toBeInTheDocument();
+    expect(within(invest).getByText(/^The change to the debt rule in 2029-30/)).toBeInTheDocument();
   });
 
   it('says which ways only make a start, and counts a ticked start as started, not delivered', async () => {

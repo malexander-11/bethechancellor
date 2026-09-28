@@ -3,20 +3,37 @@ import {
   budgetTheme,
   formatGbpBn,
   formatLevel,
+  incidenceRows,
   levelValue,
+  optionPrice,
+  preBudget,
   rankedPriorities,
+  reconcile,
   stageIndex,
   type Lever,
   type LeverEffect,
   type OptionReport,
+  type PriorityReport,
 } from '@btc/engine';
 import type { ReactNode } from 'react';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
+import { LabelBadge } from '../components/LabelBadge';
 import { formatLeverValueShort } from '../components/LeverControl';
-import { MACRO_CODES as MACRO_LIST, finetuneTitle, levers, options, pm } from '../data';
+import {
+  MACRO_CODES as MACRO_LIST,
+  finetuneTitle,
+  incidence,
+  interventions,
+  levers,
+  options,
+  pm,
+} from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
+import { useOutcomeOf } from '../journey/outcome';
+import { priceWords } from '../journey/prices';
+import { isMissed, missedBy } from '../journey/rules';
 import { useBudget } from '../state/budget';
 import { deliverPath } from './Deliver';
 
@@ -39,7 +56,10 @@ function standing(lever: Lever, value: number): string | undefined {
   return level ? formatLevel(level, levelValue(level, value)) : formatLeverValueShort(lever, value);
 }
 
-/** What a tax raises or costs, and what spending costs or saves, in the target year. */
+/**
+ * What a tax raises or costs, and what spending costs or saves, in the target year, on the lever's
+ * own figure. Investment is said as investment: it counts on the debt rule, not the headroom here.
+ */
 function amountOf(lever: Lever, effect: LeverEffect | undefined, year: string): Row['amount'] {
   if (lever.category === 'tax') {
     const gbpm = effect?.receipts[year] ?? 0;
@@ -47,10 +67,47 @@ function amountOf(lever: Lever, effect: LeverEffect | undefined, year: string): 
       ? { text: `raises ${formatGbpBn(gbpm, 1)}`, tone: 'better' }
       : { text: `costs ${formatGbpBn(-gbpm, 1)}`, tone: 'worse' };
   }
-  const gbpm = (effect?.currentSpending[year] ?? 0) + (effect?.capitalSpending[year] ?? 0);
+  const current = effect?.currentSpending[year] ?? 0;
+  const capital = effect?.capitalSpending[year] ?? 0;
+  if (current === 0 && capital !== 0) {
+    return capital > 0
+      ? { text: `adds ${formatGbpBn(capital, 1)} of investment`, tone: 'worse' }
+      : { text: `cuts ${formatGbpBn(-capital, 1)} of investment`, tone: 'better' };
+  }
+  const gbpm = current + capital;
   return gbpm > 0
     ? { text: `costs ${formatGbpBn(gbpm, 1)}`, tone: 'worse' }
     : { text: `saves ${formatGbpBn(-gbpm, 1)}`, tone: 'better' };
+}
+
+/** "a, b and c" */
+function list(items: readonly string[]): string {
+  if (items.length <= 1) return items[0] ?? '';
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
+function capitalise(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function lowerFirst(text: string): string {
+  return text.charAt(0).toLowerCase() + text.slice(1);
+}
+
+/**
+ * The adviser's line on a priority short of delivery (Phase 25), the one the desk's advisers say,
+ * here as an amber line under the priority: its name is already above it, so the line says "It".
+ */
+function shortfallLine(p: PriorityReport): { text: string; badge: 'simulated' } | null {
+  const when =
+    p.status === 'notFunded'
+      ? 'priority-unfunded'
+      : p.status === 'started' || p.status === 'settledLower'
+        ? 'priority-part-funded'
+        : null;
+  const line = when ? interventions.interventions.find((x) => x.when === when)?.line : undefined;
+  if (!line) return null;
+  return { text: (line.short ?? line.text).replace('{name}', 'It'), badge: line.badge };
 }
 
 function RowList({ rows }: { rows: readonly Row[] }) {
@@ -110,6 +167,7 @@ function Part({
  */
 export function ReviewPage() {
   const { state, dispatch, outcome } = useBudget();
+  const outcomeOf = useOutcomeOf();
   const game = state.game;
   const guard = useStageGuard('review');
   if (guard || !game) return guard;
@@ -146,9 +204,59 @@ export function ReviewPage() {
     }));
   const taxRows = rows.filter((r) => r.lever.category === 'tax');
   const spendingRows = rows.filter((r) => r.lever.category !== 'tax');
-  const missed = outcome.verdicts.filter(
-    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
-  );
+  const missed = outcome.verdicts.filter(isMissed);
+  const fiscalMissed = missed.filter((v) => v.kind !== 'welfareCap');
+  const rulesLine =
+    missed.length === 0
+      ? 'You meet both fiscal rules.'
+      : fiscalMissed.length === 0
+        ? `You meet both fiscal rules, but miss ${list(missed.map(missedBy))}.`
+        : `Missed: ${list(missed.map(missedBy))}. The OBR would say so on Budget day.`;
+  // How the bar got from the estimate to here (Phase 25): the four parts sum to it exactly.
+  const r = reconcile(outcome, preBudget(outcomeOf, state.leverValues, levers));
+  const money = (gbpm: number) => formatGbpBn(Math.abs(gbpm), 1);
+  const moved = Math.abs(r.endGbpm - r.startGbpm) >= 50;
+  const fromTo = moved
+    ? `Headroom goes from ${formatGbpBn(r.startGbpm, 1, r.startGbpm < 0)} to ${formatGbpBn(r.endGbpm, 1, r.endGbpm < 0)} in ${r.year}.`
+    : `Headroom stays at ${formatGbpBn(r.endGbpm, 1, r.endGbpm < 0)} in ${r.year}.`;
+  const how = [
+    Math.abs(r.taxesGbpm) >= 50
+      ? r.taxesGbpm > 0
+        ? `taxes raise ${money(r.taxesGbpm)}`
+        : `tax cuts cost ${money(r.taxesGbpm)}`
+      : null,
+    Math.abs(r.spendingGbpm) >= 50
+      ? r.spendingGbpm > 0
+        ? `day-to-day spending adds ${money(r.spendingGbpm)} net`
+        : `day-to-day spending saves ${money(r.spendingGbpm)} net`
+      : null,
+    Math.abs(r.interestGbpm) >= 50
+      ? r.interestGbpm > 0
+        ? `more borrowing costs ${money(r.interestGbpm)} in interest`
+        : `less borrowing saves ${money(r.interestGbpm)} in interest`
+      : null,
+  ].filter((x): x is string => x !== null);
+  const { paid, benefited } = incidenceRows(outcome, levers, incidence, r.year);
+  const payer = paid.find((row) => row.gbpm >= 50);
+  const loser = benefited.find((row) => row.gbpm <= -50);
+  const whoPays = payer
+    ? `Who pays most: ${lowerFirst(payer.label)}, ${money(payer.gbpm)} in ${r.year}.`
+    : loser
+      ? `Who loses most: ${lowerFirst(loser.label)}, ${money(loser.gbpm)} less in ${r.year}.`
+      : null;
+  // One price per flagship (Phase 25): what it does to the headroom, the card's own figure.
+  const priceOf = (o: OptionReport) =>
+    priceWords(
+      optionPrice({
+        outcomeOf,
+        levers,
+        current: state.leverValues,
+        values: o.option.values,
+        on: true,
+      }),
+      Object.keys(o.option.values),
+      true,
+    );
   // The manifesto: broken by a lever (red), or kept in its words and strained (amber). A promise
   // with no lever of its own (the fiscal rules) is the rules line above it.
   const broken = status.promises.filter((p) => !p.kept && p.promise.breaks.length > 0);
@@ -197,24 +305,48 @@ export function ReviewPage() {
           <ul className="review__list">
             {status.priorities.map((p) => {
               const on = p.options.filter(counts);
+              const against = p.options.filter((o) => o.state === 'against');
+              const short = shortfallLine(p);
               return (
                 <li key={p.priority.id}>
                   <strong>{p.priority.title}</strong>
-                  {on.length === 0 ? (
-                    <span className="review__none"> · nothing chosen</span>
-                  ) : (
+                  {on.length > 0 || against.length > 0 ? (
                     <ul>
-                      {on.map((o) => (
-                        <li key={o.option.id}>
-                          {o.option.title}
-                          {o.state === 'adjusted' ? ' (settled lower)' : ''} ·{' '}
-                          <span className="amount amount--worse">
-                            costs {formatGbpBn(Math.abs(o.spendingGbpm), 1)}
-                          </span>
-                        </li>
-                      ))}
+                      {on.map((o) => {
+                        const price = priceOf(o);
+                        return (
+                          <li key={o.option.id}>
+                            {o.option.title}
+                            {o.state === 'adjusted' ? ' (settled lower)' : ''} ·{' '}
+                            <span className={`amount amount--${price.tone}`}>
+                              {lowerFirst(price.text)}
+                            </span>
+                          </li>
+                        );
+                      })}
+                      {against.flatMap((o) =>
+                        Object.keys(o.option.values).flatMap((code) => {
+                          const lever = byCode.get(code);
+                          if (!lever || value(lever) === lever.control.default) return [];
+                          const at = standing(lever, value(lever));
+                          return [
+                            <li key={`${o.option.id}-${code}`} className="review__against">
+                              {lever.category === 'tax'
+                                ? 'Works against this priority'
+                                : 'Cuts against this priority'}
+                              : {finetuneTitle(code) ?? lever.shortTitle}
+                              {at ? ` · ${at}` : ''}
+                            </li>,
+                          ];
+                        }),
+                      )}
                     </ul>
-                  )}
+                  ) : null}
+                  {short ? (
+                    <p className="review__short">
+                      {short.text} <LabelBadge badge={short.badge} />
+                    </p>
+                  ) : null}
                 </li>
               );
             })}
@@ -243,11 +375,13 @@ export function ReviewPage() {
         title="Where that leaves you"
         change={{ to: '/finetune/tax', label: 'Change' }}
       >
-        <p>
-          {missed.length === 0
-            ? 'Rules met.'
-            : `Missed: ${missed.map((v) => v.ruleName).join(' and ')}. The OBR would say so on Budget day.`}
+        <p className="review__reconcile">
+          {fromTo}
+          {how.length > 0 ? ` ${capitalise(how.join('; '))}.` : ''}{' '}
+          <LabelBadge badge="mechanical" />
         </p>
+        {whoPays ? <p>{whoPays}</p> : null}
+        <p className={missed.length > 0 ? 'review__missed' : undefined}>{rulesLine}</p>
         {broken.length > 0 || strained.length > 0 ? (
           <ul className="review__list">
             {broken.map((p) => (

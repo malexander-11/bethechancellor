@@ -58,8 +58,8 @@ export function Verdict({ verdict }: { verdict: BudgetVerdict }) {
                 {ambitions.priorities.map((p) => (
                   <li key={p.title} className={`fate fate--${p.fate}`}>
                     <strong>{p.title}</strong> · {PRIORITY[p.fate]}
-                    {p.fate !== 'unfunded'
-                      ? ` · ${formatGbpBn(Math.abs(p.spendingGbpm), 1)} in ${targetYear}`
+                    {p.fate !== 'unfunded' && Math.abs(p.priceGbpm) >= 50
+                      ? ` · ${p.priceGbpm < 0 ? 'costs' : 'saves'} ${formatGbpBn(Math.abs(p.priceGbpm), 1)} in ${targetYear}`
                       : ''}
                   </li>
                 ))}

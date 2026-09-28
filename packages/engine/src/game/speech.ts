@@ -3,6 +3,7 @@ import type { Lever, PmFile, SourceRef, SpeechFile, SpeechFragment } from '../ty
 import type { GamePermalink, Outcome } from '../types/engine.js';
 import type { AmbitionStatus } from './ambitions.js';
 import { rankedPriorities } from './options.js';
+import { priceMove, withDefaults, type OutcomeOf } from './prices.js';
 import { prioritiesInWords } from './verdict.js';
 
 /**
@@ -45,6 +46,11 @@ export interface SpeechInput {
   pm?: PmFile;
   status?: AmbitionStatus;
   macroCodes: readonly string[];
+  /**
+   * The engine re-run under the Budget's own settings (Phase 25): a priority's figure is its one
+   * price, what its options do to the headroom, the figure its cards and the review show.
+   */
+  outcomeOf: OutcomeOf;
 }
 
 /** Who a revenue measure falls on. A closed map, so the speech never guesses. */
@@ -191,9 +197,17 @@ export function assembleSpeech(input: SpeechInput): Speech {
       p.options.filter((o) => o.state === 'on').flatMap((o) => Object.keys(o.option.values)),
     ),
   );
+  const values = outcome.settings.leverValues;
   for (const p of delivered) {
     const on = p.options.filter((o) => o.state === 'on');
-    const cost = money(Math.abs(on.reduce((acc, o) => acc + o.spendingGbpm, 0)));
+    const codes = on.flatMap((o) => Object.keys(o.option.values));
+    const price = priceMove({
+      outcomeOf: input.outcomeOf,
+      levers,
+      from: withDefaults(values, codes, levers),
+      to: values,
+    });
+    const cost = money(Math.abs(price.headroomChangeGbpm));
     say(
       'priority',
       speech.priority,

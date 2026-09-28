@@ -5,6 +5,8 @@ const currentBudgetRuleSchema = z.strictObject({
   kind: z.literal('currentBudget'),
   id: z.string().min(1),
   name: z.string().min(1),
+  /** The plain name the game uses (Phase 25): "the day-to-day rule", "the debt rule". */
+  shortName: z.string().min(1),
   fixedTargetYear: fiscalYearSchema,
   rollingFromThirdYear: z.literal(true),
   requirementBeforeRolling: z.literal('surplus'),
@@ -21,6 +23,8 @@ const stockFallingRuleSchema = z.strictObject({
   kind: z.literal('stockFalling'),
   id: z.string().min(1),
   name: z.string().min(1),
+  /** The plain name the game uses (Phase 25): "the day-to-day rule", "the debt rule". */
+  shortName: z.string().min(1),
   metric: z.literal('psnfl'),
   fixedTargetYear: fiscalYearSchema,
   rollingFromThirdYear: z.literal(true),
@@ -33,6 +37,8 @@ const welfareCapRuleSchema = z.strictObject({
   kind: z.literal('welfareCap'),
   id: z.string().min(1),
   name: z.string().min(1),
+  /** The plain name the game uses (Phase 25): "the day-to-day rule", "the debt rule". */
+  shortName: z.string().min(1),
   capYear: fiscalYearSchema,
   capGbpm: z.number().positive(),
   marginPct: z.number().min(0),

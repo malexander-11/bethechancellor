@@ -101,7 +101,8 @@ describe('LeverControl', () => {
     );
     const borrowing = screen.getByText(/Borrowing in 2029-30/);
     expect(borrowing.textContent).toMatch(/up £13\.4bn/);
-    expect(borrowing.textContent).toMatch(/current budget unchanged/);
+    // Investment counts against the debt rule; the day-to-day rule moves only by interest.
+    expect(borrowing.textContent).toMatch(/counts against the debt rule, not the day-to-day rule/);
     expect(screen.queryByText(/Barnett formula/)).toBeNull();
     unmount();
 

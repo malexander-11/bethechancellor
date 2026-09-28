@@ -48,6 +48,8 @@ import {
 } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
+import { useOutcomeOf } from '../journey/outcome';
+import { isMissed, missedBy } from '../journey/rules';
 import { WorkingsOnly } from '../journey/workings';
 import { onEstimate, useBudget } from '../state/budget';
 
@@ -87,16 +89,14 @@ function statementOf(
       : losers.length > 0
         ? `I paid for it with less for ${list(losers.map((r) => lowerFirst(r.label)))}.`
         : 'I paid for it out of the headroom I had.';
-  const missed = outcome.verdicts.filter(
-    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
-  );
+  const missed = outcome.verdicts.filter(isMissed);
   const broken = status.promises.filter((p) => !p.kept);
   const brokenIds = new Set(broken.map((p) => p.promise.id));
   const strained = status.strains.filter((s) => s.strained && !brokenIds.has(s.promise.id));
   const headroom = formatGbpBn(verdict.headroomGbpm, 1);
   const accepted =
     missed.length > 0
-      ? `I accepted missing ${list(missed.map((v) => `the ${lowerFirst(v.ruleName)} by ${formatGbpBn(Math.abs(v.headroomGbpm), 1)}`))}.`
+      ? `I accepted missing ${list(missed.map(missedBy))}.`
       : broken.length > 0
         ? `I accepted breaking ${list(broken.map((p) => lowerFirst(p.promise.title)))}.`
         : strained.length > 0
@@ -116,6 +116,7 @@ function statementOf(
  */
 export function BudgetDayPage() {
   const { state, dispatch, outcome, query } = useBudget();
+  const outcomeOf = useOutcomeOf();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const guard = useStageGuard('budget-day');
@@ -158,14 +159,15 @@ export function BudgetDayPage() {
     [outcome, typicalErrorGbpm, game, status],
   );
   const notes = distributionalNotes(outcome, levers, targetYear).slice(0, 3);
-  // The one audience that is arithmetic: the rules, in a line above the three cards.
-  const missedRules = outcome.verdicts.filter(
-    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
-  );
+  // The one audience that is arithmetic: the rules, in a line above the three cards, by their
+  // plain names and the engine's own margins (Phase 25). The welfare cap is named when missed.
+  const missedRules = outcome.verdicts.filter(isMissed);
   const rulesLine =
     missedRules.length === 0
-      ? 'You meet both fiscal rules and the welfare cap on these numbers.'
-      : `Missed on these numbers: ${missedRules.map((v) => v.ruleName).join(' and ')}.`;
+      ? 'You meet both fiscal rules on these numbers.'
+      : missedRules.every((v) => v.kind === 'welfareCap')
+        ? `You meet both fiscal rules on these numbers, but miss ${list(missedRules.map(missedBy))}.`
+        : `Missed on these numbers: ${list(missedRules.map(missedBy))}.`;
   const sizeOf = (code: string) => {
     const e = outcome.leverEffects.find((x) => x.code === code);
     if (!e) return 0;
@@ -193,8 +195,9 @@ export function BudgetDayPage() {
         pm,
         ...(status ? { status } : {}),
         macroCodes: MACRO_CODES,
+        outcomeOf,
       }),
-    [outcome, game, status],
+    [outcome, game, status, outcomeOf],
   );
   // The options on in the package, for what the money does and does not buy.
   const deliveredOptions = (status?.priorities ?? []).flatMap((p) =>
@@ -221,8 +224,9 @@ export function BudgetDayPage() {
       typicalErrorGbpm,
       credibilityShare: values.credibilityShare ?? 0,
       rebellionRisk: values.rebellionRisk ?? 0,
+      outcomeOf,
     });
-  }, [game, outcome, status, typicalErrorGbpm]);
+  }, [game, outcome, status, typicalErrorGbpm, outcomeOf]);
   // Arriving here is the end of the story: a link shared from here opens as a finished Budget.
   // Not when the guard is sending the player back to where they are.
   const reached = game?.reached;

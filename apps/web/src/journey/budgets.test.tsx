@@ -50,11 +50,11 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/budget/deliver', 205, WIDEST],
   ['/budget/deliver/2', 205, WIDEST],
   ['/budget/deliver/3', 205, WIDEST],
-  ['/finetune/tax', 585, GAME],
-  ['/finetune/tax', 785, TUNED],
-  ['/finetune/spending', 530, GAME],
-  ['/finetune/spending', 735, TUNED],
-  ['/review', 100, GAME],
+  ['/finetune/tax', 660, GAME],
+  ['/finetune/tax', 860, TUNED],
+  ['/finetune/spending', 570, GAME],
+  ['/finetune/spending', 775, TUNED],
+  ['/review', 140, GAME],
   ['/budget-day', 210, GAME],
 ];
 
@@ -95,6 +95,10 @@ describe('the word budgets', () => {
     // in every group, so each group shows four. Then one estimate replaced the forecast cards and
     // the target, and the forecast, the compromises and the add-ons went (Phase 24, ADR-0025):
     // the briefing 201, the review 88, Budget day 188; tax 528 and 711, spending 476 and 665.
+    // One price per choice (Phase 25): each fine-tuning card now says the headroom it would leave,
+    // and each screen says once why that moves with interest; the review says how the headroom got
+    // from the estimate to the bar, who pays most, and which priorities fall short: tax 599 and
+    // 782, spending 515 and 704, the review 125.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();
