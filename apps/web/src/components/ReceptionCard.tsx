@@ -8,11 +8,22 @@ function points(r: Reason): string {
   return r.points > 0 ? `+${r.points}` : r.points < 0 ? `−${Math.abs(r.points)}` : '0';
 }
 
+/** "Why this rating (2 for, 1 against)": the fold says how many rules pulled each way. */
+function whySummary(tally: Reception['tally']): string {
+  const parts = [
+    tally.for > 0 ? `${tally.for} for` : null,
+    tally.against > 0 ? `${tally.against} against` : null,
+  ].filter((p): p is string => p !== null);
+  return parts.length > 0 ? `Why this rating (${parts.join(', ')})` : 'Why this rating';
+}
+
 /**
- * One audience's reception: a five-step meter, the label in words, the one reason that moved it
- * most with the decisions behind it, and a "why this rating" disclosure with the question the
- * audience asks and every rule with its points, its reading, the decisions behind it and, with the
- * workings on, its sources. Every sentence is a game judgement from data and wears the badge.
+ * One audience's reception: a five-step meter, the label in words, and the one reason that always
+ * agrees with the rating (Phase 25), with the decisions behind it that pushed that way. When
+ * something pulled the other way, one short line names it: "Counted against: Tax burden ·
+ * Uncertified costings". A "why this rating" disclosure holds the question the audience asks and
+ * every rule with its points, its reading, the decisions behind it and, with the workings on, its
+ * sources. Every sentence is a game judgement from data and wears the badge.
  */
 export function ReceptionCard({
   reception,
@@ -22,9 +33,8 @@ export function ReceptionCard({
   /** For the public: who feels the measures, carried straight from the levers moved. */
   notes?: DistributionalNote[];
 }) {
-  const { audience, title, question, rating, label, reasons, all } = reception;
+  const { audience, title, question, rating, label, lead: first, counted, tally, all } = reception;
   const id = `reception-${audience}`;
-  const first = reasons[0];
   return (
     <section
       className={`reception doc reception--${audience} reception--r${rating}`}
@@ -60,8 +70,13 @@ export function ReceptionCard({
           </span>
         </p>
       )}
+      {counted ? (
+        <p className={`reason__counted reason__counted--${counted.side}`}>
+          Counted {counted.side}: {counted.labels.join(' · ')}
+        </p>
+      ) : null}
       <details className="reception__why">
-        <summary>Why this rating</summary>
+        <summary>{whySummary(tally)}</summary>
         <p className="reception__question kicker">{question}</p>
         <p className="panel__hint">
           Every audience starts at three. Each line below adds or takes points; a red line can hold

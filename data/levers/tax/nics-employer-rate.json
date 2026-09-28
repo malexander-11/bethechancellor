@@ -8,6 +8,7 @@
   "order": 30,
   "title": "Employer NICs rate",
   "shortTitle": "Employer NICs",
+  "noun": "employer National Insurance",
   "headline": "15% since April 2025, up from 13.8%. A point is worth about £11bn.",
   "description": "Change the 15% rate employers pay on wages above £5,000 a year, in percentage points.",
   "baselinePolicy": {

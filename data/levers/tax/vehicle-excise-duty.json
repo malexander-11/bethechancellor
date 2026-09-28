@@ -8,6 +8,7 @@
   "order": 25,
   "title": "Vehicle excise duty",
   "shortTitle": "Vehicle excise duty",
+  "noun": "car tax",
   "headline": "£200 a year for most cars. Each £5 on every vehicle raises about £0.2bn.",
   "description": "Add to the annual road tax on every vehicle, in steps of £5 for cars, vans and other vehicles (£1 for motorbikes), the unit HMRC publishes. The standard rate for cars registered since April 2017 is £200 a year after the first year; electric cars have paid it since April 2025.",
   "baselinePolicy": {

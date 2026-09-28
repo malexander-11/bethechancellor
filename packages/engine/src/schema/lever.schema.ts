@@ -476,6 +476,17 @@ export const leverSchema = z
     order: z.number().int().optional(),
     title: z.string().min(1),
     shortTitle: z.string().min(1),
+    /**
+     * What the lever is called in running words (Phase 25): "the basic rate of income tax", "the
+     * health budget". A Budget-day reason names its causes with it ("Because of the levy"), so it
+     * starts in lower case; the speech reuses it.
+     */
+    noun: z
+      .string()
+      .min(1)
+      .max(60)
+      .regex(/^[^A-Z]/, 'a noun follows "Because of", so it starts in lower case')
+      .optional(),
     /** The one line shown on the card. Everything longer belongs in `description`. */
     headline: z.string().min(1).max(90).optional(),
     /** The full explanation, shown in the provenance drawer. */

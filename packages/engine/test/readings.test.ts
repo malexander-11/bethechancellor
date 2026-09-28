@@ -120,11 +120,18 @@ describe('the readings of a Budget', () => {
       game,
       status,
     });
-    expect(causes.borrowingChangeGbpm).toContain('Defence to 5% of GDP');
-    expect(causes.manifestoBroken?.[0]).toMatch(/The tax lock \(Basic rate\)/);
-    expect(causes.taxRisesGbpm).toEqual(['Basic rate']);
-    expect(causes.prioritiesFunded).toEqual(['Safer streets: prisons, police, borders']);
-    expect(causes.publicServiceSpendingGbpm?.[0]).toBe('Defence to 5% of GDP');
+    // Causes carry how far each decision moved the reading, and are named in running words
+    // (Phase 25): a lever's noun, a promise or a priority in lower case.
+    const titles = (m: string) => (causes[m] ?? []).map((c) => c.title);
+    expect(titles('borrowingChangeGbpm')).toContain('Defence to 5% of GDP');
+    const tax = causes.borrowingChangeGbpm?.find((c) => c.title === 'the basic rate of income tax');
+    expect(tax?.delta).toBeLessThan(0);
+    expect(titles('manifestoBroken')[0]).toMatch(/^the tax lock \(the basic rate of income tax\)/);
+    expect(titles('taxRisesGbpm')).toEqual(['the basic rate of income tax']);
+    expect(titles('prioritiesFunded')).toEqual(['safer streets']);
+    expect(titles('publicServiceSpendingGbpm')[0]).toBe('Defence to 5% of GDP');
+    // The economy is not the player's decision: never a cause.
+    expect(titles('borrowingChangeGbpm')).not.toContain('the economy since March');
   });
 
   it('measures credibility as the share of the improvement that rests on uncertified figures', () => {

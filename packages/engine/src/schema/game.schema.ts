@@ -636,6 +636,15 @@ export const receptionBandSchema = z.strictObject({
 export const receptionRuleSchema = z
   .strictObject({
     id: slug,
+    /**
+     * The rule in three words at most (Phase 25): how a card names it among the reasons on the
+     * other side of its rating ("Counted against: Tax burden · Borrowing").
+     */
+    short: z
+      .string()
+      .min(1)
+      .max(30)
+      .refine((s) => s.trim().split(/\s+/).length <= 3, 'a short label is three words at most'),
     measure: readingMeasureSchema,
     reading: z.strictObject({
       label: z.string().min(1),

@@ -8,6 +8,7 @@
   "order": 20,
   "title": "Defence at 3% of GDP from April 2027",
   "shortTitle": "Defence 3% now",
+  "noun": "defence at 3% now",
   "headline": "Bring the 3% forward from 2030-31. About £4.2bn in 2029-30, falling.",
   "description": "The government has committed to 3% of GDP on defence in the next Parliament and 3.5% by 2035, and the OBR's forecast already has defence rising from 2.4% of GDP in 2025-26 to 3.0% by 2030-31. This card gets there from April 2027 instead. The cost is the gap between 3% and the OBR's path, multiplied by nominal GDP: about £11.8bn in 2027-28, £8.1bn in 2028-29, £4.2bn in 2029-30 and nothing in 2030-31, when the path arrives on its own. The years between the OBR's two published points are filled in by straight line, which is our assumption.",
   "baselinePolicy": {

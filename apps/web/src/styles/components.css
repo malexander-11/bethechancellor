@@ -809,6 +809,13 @@ label.choice {
   font-size: 0.875rem;
 }
 
+/* The other side of the rating, in one short line (Phase 25): what counted against, or for. */
+.reason__counted {
+  margin: 4px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
 .reception__why {
   margin-top: 8px;
   font-size: 0.9375rem;

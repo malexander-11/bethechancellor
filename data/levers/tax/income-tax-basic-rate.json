@@ -8,6 +8,7 @@
   "order": 10,
   "title": "Basic rate of income tax",
   "shortTitle": "Basic rate",
+  "noun": "the basic rate of income tax",
   "headline": "20% since 2008. A penny is worth about £8.6bn a year.",
   "description": "Change the 20% rate paid on income between the personal allowance and the higher-rate threshold, in pence in the pound.",
   "baselinePolicy": {

@@ -8,6 +8,7 @@
   "order": 35,
   "title": "Employer NICs threshold",
   "shortTitle": "Employer NICs threshold",
+  "noun": "the employer National Insurance threshold",
   "headline": "£5,000 a year since April 2025. Each £104 lower raises about £0.5bn.",
   "description": "Raise or lower the £5,000 a year (£96 a week) of each employee's pay on which employers pay no National Insurance, in steps of £104 a year (£2 a week), the unit HMRC publishes. Lowering it raises money from employers; the 2024 Budget cut it from £9,100.",
   "baselinePolicy": {

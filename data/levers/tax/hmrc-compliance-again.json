@@ -8,6 +8,7 @@
   "order": 60,
   "title": "Another HMRC package to close the tax gap",
   "shortTitle": "Compliance again",
+  "noun": "the tax gap package",
   "headline": "Another compliance package, assumed to yield what the last did: £2.4bn.",
   "description": "Budget 2025 scored a package of HMRC measures to close the tax gap at £695 million in 2027-28 rising to £2.4 billion in 2029-30 and £2.6 billion in 2030-31: more third-party data, more compliance staff, faster debt collection. This card assumes a second package of the same size raises the same again, year by year. Nobody has costed one, and the easy gains go first, so this is the assumption most likely to disappoint.",
   "baselinePolicy": {

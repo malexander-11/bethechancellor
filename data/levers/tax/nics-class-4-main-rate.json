@@ -8,6 +8,7 @@
   "order": 15,
   "title": "Self-employed National Insurance main rate (Class 4)",
   "shortTitle": "Self-employed NICs rate",
+  "noun": "self-employed National Insurance",
   "headline": "Class 4 is 6%; employees pay 8%. Each point raises about £0.5bn.",
   "description": "Change the Class 4 main rate that the self-employed pay on profits between £12,570 and £50,270, from April 2027. It is 6% today against the 8% employees pay on the same earnings, so the slider runs up to 4 points to close the gap. HMRC publishes the yield of a 1 point change (£440m, £525m and £445m in 2026-27 to 2028-29); larger changes are scaled linearly and the figures are carried forward with the OBR's National Insurance forecast.",
   "baselinePolicy": {

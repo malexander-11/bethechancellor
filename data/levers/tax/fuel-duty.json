@@ -8,6 +8,7 @@
   "order": 10,
   "title": "Fuel duty",
   "shortTitle": "Fuel duty",
+  "noun": "fuel duty",
   "headline": "52.95p since 2022, with rises planned to 57.95p. Not raised since 2011.",
   "description": "Change fuel duty rates on petrol and diesel, as a percentage of the current rates.",
   "baselinePolicy": {

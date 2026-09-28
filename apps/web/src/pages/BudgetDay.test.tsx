@@ -39,7 +39,8 @@ describe('Budget day: what your Budget means', () => {
     expect(meter('Your backbenchers')).toHaveAccessibleName('3 of 5: Divided');
     expect(meter('The public')).toHaveAccessibleName('3 of 5: Shrugging');
     expect(meter('The markets')).toHaveAccessibleName('4 of 5: Reassured');
-    expect(within(card('The markets')).getAllByText(/inside the twenty billion/).length).toBe(2);
+    // March's £23.6bn is above twenty billion and close to what March left, and says so (Phase 25).
+    expect(within(card('The markets')).getAllByText(/close to what March left/).length).toBe(2);
     // The speech, the households and the documents wait behind their folds, closed.
     for (const fold of ['Read the speech', 'Who feels it: five households', 'Budget documents']) {
       expect(screen.getByText(fold).closest('details')).not.toHaveAttribute('open');
@@ -100,15 +101,15 @@ describe('Budget day: what your Budget means', () => {
     at(`${BASE}&L=dhsc.10_dfe.10_moj.10`);
     const markets = card('The markets');
     expect(meter('The markets')).toHaveAccessibleName('1 of 5: Alarmed');
-    expect(within(markets).getAllByText(/The stability rule is missed/).length).toBe(2);
-    expect(within(markets).getAllByText(/Health and Social Care/).length).toBeGreaterThan(0);
+    expect(within(markets).getAllByText(/The day-to-day rule is missed/).length).toBe(2);
+    expect(within(markets).getAllByText(/the health budget/).length).toBeGreaterThan(0);
     expect(
       screen.getByText(/^Missed on these numbers: the day-to-day rule by £\d+\.\dbn/),
     ).toBeInTheDocument();
     // Every rule, its points, its reading and its sources sit behind "Why this rating".
-    fireEvent.click(within(markets).getByText('Why this rating'));
+    fireEvent.click(within(markets).getByText(/^Why this rating/));
     expect(
-      within(markets).getByText(/Headroom against the stability rule: −£/),
+      within(markets).getByText(/Headroom against the day-to-day rule: −£/),
     ).toBeInTheDocument();
     expect(within(markets).getAllByText(/Every audience starts at three/).length).toBe(1);
     expect(within(markets).getAllByRole('link').length).toBeGreaterThan(0);
@@ -125,9 +126,15 @@ describe('Budget day: what your Budget means', () => {
       within(card('Your backbenchers')).getAllByText(/manifesto red line is crossed/).length,
     ).toBeGreaterThanOrEqual(1);
     expect(
-      within(card('Your backbenchers')).getAllByText(/Because of The tax lock \(Basic rate\)/)
-        .length,
+      within(card('Your backbenchers')).getAllByText(
+        /Because of the tax lock \(the basic rate of income tax\)/,
+      ).length,
     ).toBeGreaterThan(0);
+    // The one reason agrees with the rating; the other side is one short line (Phase 25).
+    expect(within(card('The public')).getByText('Counted for: Priorities delivered')).toBeVisible();
+    expect(
+      within(card('The public')).getByText('Why this rating (1 for, 2 against)'),
+    ).toBeInTheDocument();
     open('Who feels it: five households');
     const couple = screen.getByText(/A couple on median earnings/).closest('li') as HTMLElement;
     expect(within(couple).getByText(/A penny on the basic rate/)).toBeInTheDocument();
@@ -136,7 +143,7 @@ describe('Budget day: what your Budget means', () => {
 
   it('marks the levy amber: the public is not pinned at the floor, and the strain is a reason', () => {
     at(`${BASE}&${GAME}&L=moj.10_hscl.1`);
-    fireEvent.click(within(card('The public')).getByText('Why this rating'));
+    fireEvent.click(within(card('The public')).getByText(/^Why this rating/));
     // The floor is for broken promises: its rule reads that every promise holds. What the levy
     // costs with the public comes from its size and its strain, both named (Phase 25 prices it at
     // about £26bn, 1.25 times the game's own National Insurance rows).
@@ -147,7 +154,7 @@ describe('Budget day: what your Budget means', () => {
     expect(
       within(card('The public')).getAllByText(/kept in the words and tested in the spirit/).length,
     ).toBeGreaterThan(0);
-    fireEvent.click(within(card('Your backbenchers')).getByText('Why this rating'));
+    fireEvent.click(within(card('Your backbenchers')).getByText(/^Why this rating/));
     expect(
       within(card('Your backbenchers')).getAllByText(/keeps the letter of the manifesto/).length,
     ).toBeGreaterThan(0);

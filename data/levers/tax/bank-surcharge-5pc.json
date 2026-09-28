@@ -8,6 +8,7 @@
   "order": 30,
   "title": "Raise the bank surcharge from 3% to 5%",
   "shortTitle": "Bank surcharge 5%",
+  "noun": "the bank surcharge",
   "headline": "Two points on the bank surcharge. Static, on HMRC's receipts: about £0.9bn.",
   "description": "Banks pay a surcharge on top of corporation tax on profits above a £100 million allowance: 3% since April 2023, when it was cut from 8%. HMRC's statistics put the surcharge's receipts at £1.0 billion in 2024-25. Two more points on a 3% surcharge is two thirds more, so the card takes two thirds of that £1.0 billion, £667 million in 2024-25, and grows it with the OBR's onshore corporation tax forecast: about £0.9bn by 2029-30. No behavioural response is allowed for.",
   "baselinePolicy": {

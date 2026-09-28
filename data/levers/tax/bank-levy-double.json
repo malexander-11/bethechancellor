@@ -8,6 +8,7 @@
   "order": 35,
   "title": "Double the bank levy",
   "shortTitle": "Bank levy",
+  "noun": "the bank levy",
   "headline": "Double the bank levy. Static, on HMRC’s 2024-25 receipts: about £1.3bn.",
   "description": "The bank levy is a charge on the balance sheets of the largest banks, created after the 2008 crisis. Its rate was halved in steps between 2015 and 2021, and receipts fell from £3.0 billion in 2016-17 to £1.3 billion in 2024-25. This card doubles the levy at HMRC’s 2024-25 receipts, so it raises what the levy raises today, grown with the OBR’s onshore corporation tax forecast. It is static: banks would shrink the chargeable balance sheet as they did when the rate fell. The bank surcharge, on profits, has its own card.",
   "baselinePolicy": {

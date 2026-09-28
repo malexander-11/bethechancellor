@@ -255,7 +255,7 @@ export function MethodologyPage() {
         Growth effects of your choices, what markets would actually do, Barnett consequentials
         (described, not computed), the effect on the debt measure of moving a company into the
         public sector, and depreciation on new investment. The OBR&rsquo;s typical five-year
-        forecast error for receipts is 0.9% of GDP, about £32 billion by 2030-31, larger than any
+        forecast error for receipts is 0.9% of GDP, about £33 billion by 2030-31, larger than any
         recent headroom; the verdict cards show it beside every figure.
       </p>
     </article>

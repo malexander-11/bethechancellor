@@ -8,6 +8,7 @@
   "order": 30,
   "title": "Insurance premium tax",
   "shortTitle": "Insurance premium tax",
+  "noun": "insurance premium tax",
   "headline": "12% on most general insurance. Each point raises about £0.65bn.",
   "description": "Change the 12% standard rate of insurance premium tax, paid on most home, motor, pet and health insurance, in percentage points. The rate has been raised four times since 2011, from 5% to 12%; a two-point rise raises about £1.3bn a year.",
   "baselinePolicy": {

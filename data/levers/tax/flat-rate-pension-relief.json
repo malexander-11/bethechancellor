@@ -8,6 +8,7 @@
   "order": 60,
   "title": "Give pension tax relief at a flat 30% for everyone",
   "shortTitle": "Flat-rate pension relief",
+  "noun": "flat-rate pension relief",
   "headline": "Our arithmetic on HMRC's figures: about £2.5bn a year, before anyone reacts.",
   "description": "Replace tax relief at your own marginal rate (20%, 40% or 45%) on pension contributions with a single 30% top-up for everyone. Basic-rate taxpayers gain, higher and additional-rate taxpayers lose. On HMRC's 2024-25 breakdown of relief by marginal rate the static saving is about £2.5bn: a quarter of the higher-rate relief and a third of the additional-rate relief, less half as much again on top of the basic-rate relief. Nobody has costed it officially, and the hard part is employer contributions.",
   "baselinePolicy": {

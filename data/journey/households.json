@@ -133,7 +133,7 @@
       "id": "mortgage-couple",
       "who": "A couple on median earnings with a mortgage",
       "fact": {
-        "text": "Ten-year gilt yields were 5.35% in September against the 4.5% the March forecast assumed; fixed mortgage rates follow gilts.",
+        "text": "Ten-year gilt yields were about 5.3% in September against the 4.5% the March forecast assumed; fixed mortgage rates follow gilts.",
         "sources": [
           {
             "sourceId": "boe-iadb-gilt-10y"

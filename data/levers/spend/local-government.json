@@ -8,6 +8,7 @@
   "order": 60,
   "title": "Local government grant (MHCLG)",
   "shortTitle": "Local government grant",
+  "noun": "council grants",
   "headline": "£15.8bn grant by 2028-29. Councils' own income is far larger.",
   "description": "Change the day-to-day (resource) budget of central government's local government grant in England (the Spending Review's 'MHCLG Local Government' line) from April 2027, as a percentage of its Spending Review 2025 settlement. A 1% change is about £0.2bn a year by 2028-29.",
   "baselinePolicy": {

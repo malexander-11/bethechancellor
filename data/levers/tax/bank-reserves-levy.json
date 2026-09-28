@@ -8,6 +8,7 @@
   "order": 37,
   "title": "A levy on banks’ reserve returns above 2%",
   "shortTitle": "Bank reserves levy",
+  "noun": "the bank reserves levy",
   "headline": "A levy on banks’ reserve returns above 2% from 2028-29: IPPR’s £5bn floor.",
   "description": "The Bank of England pays Bank Rate on the reserves it created when it bought gilts. IPPR proposes taxing the return on those reserves above 2%, only on banks with more than £25 billion of assets, so that the windfall from higher rates goes to the Treasury rather than to bank shareholders. IPPR puts the gain to current-budget headroom at £5 billion to £7 billion by the end of the parliament, depending on how fast the Bank runs down its gilt holdings. The lower figure is scored here, held flat in cash. The levy fades to nothing as the gilts leave the Bank’s balance sheet or if Bank Rate falls to 2%.",
   "baselinePolicy": {

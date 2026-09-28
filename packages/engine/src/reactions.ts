@@ -62,16 +62,39 @@ function at(values: Record<string, number>, year: string): number {
   return values[year] ?? 0;
 }
 
+/**
+ * A decision behind a reading (Phase 25): its name in running words, and, where the reading has a
+ * direction, how far the decision moved it (positive raises the reading). The reception keeps only
+ * the causes that pushed the way its reason says, so a saving is never blamed for more borrowing.
+ */
+export interface Cause {
+  title: string;
+  delta?: number;
+}
+
 export interface Readings {
   values: Record<string, number>;
-  causes: Record<string, string[]>;
+  causes: Record<string, Cause[]>;
+  /** Words the reception's sentences fill in: `{payers}`, the groups who pay the most. */
+  words: Record<string, string>;
+}
+
+/** "a, b and c" */
+function inWords(items: readonly string[]): string {
+  if (items.length <= 1) return items[0] ?? '';
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
+function lowerFirst(text: string): string {
+  return text.charAt(0).toLowerCase() + text.slice(1);
 }
 
 /** Every reading the signals can use, and the decisions behind each, computed once. */
 export function readingsWithCauses(input: ReadingsInput): Readings {
   const { outcome, levers, typicalErrorGbpm, status } = input;
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
-  const title = (code: string) => byCode.get(code)?.shortTitle ?? code;
+  // A cause is named as a sentence says it (Phase 25): "Because of the health and social care levy".
+  const title = (code: string) => byCode.get(code)?.noun ?? byCode.get(code)?.shortTitle ?? code;
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const investment = outcome.verdicts.find((v) => v.kind === 'stockFalling');
   const welfare = outcome.verdicts.find((v) => v.kind === 'welfareCap');
@@ -110,23 +133,39 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
     (l) => moved.has(l.code) && PRICE_RAISERS.has(l.code) && valueOf(l.code) > l.control.default,
   );
 
-  // The biggest movers of borrowing in the target year, macro rows included as one cause.
-  const movers = [
-    ...new Set(
-      [...outcome.attribution]
-        .filter((r) => r.kind !== 'debtInterest')
-        .sort((a, b) => Math.abs(b.psnbGbpm) - Math.abs(a.psnbGbpm))
-        .slice(0, 4)
-        .map((r) =>
-          r.kind === 'macro' ? 'the economy since March' : r.code ? title(r.code) : r.label,
+  // The decisions behind a reading, each with how far it moved it, biggest first. The economy is
+  // not the player's decision, so the macro rows are never a cause (Phase 25).
+  const signed = (rows: { code: string; delta: number }[]): Cause[] =>
+    rows
+      .filter((r) => Math.abs(r.delta) >= 0.5)
+      .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
+      .map((r) => ({ title: title(r.code), delta: r.delta }));
+  const leverRows = outcome.attribution.filter(
+    (r): r is typeof r & { code: string } => r.kind === 'lever' && r.code !== undefined,
+  );
+  // More borrowing, and more debt with it: positive when a decision adds to borrowing.
+  const borrowingMovers = signed(leverRows.map((r) => ({ code: r.code, delta: r.psnbGbpm })));
+  // Headroom: positive when a decision adds to it (the current budget improves).
+  const headroomMovers = signed(
+    leverRows.map((r) => ({ code: r.code, delta: -r.currentBudgetGbpm })),
+  );
+  const cumulativeMovers = signed(
+    outcome.leverEffects
+      .filter((e) => e.category !== 'macro')
+      .map((e) => ({
+        code: e.code,
+        delta: outcome.paths.policyYears.reduce(
+          (acc, y) =>
+            acc + (e.currentSpending[y] ?? 0) + (e.capitalSpending[y] ?? 0) - (e.receipts[y] ?? 0),
+          0,
         ),
-    ),
-  ].slice(0, 3);
-  const taxMovers = outcome.leverEffects
-    .filter((e) => e.category === 'tax' || (e.receipts[year] ?? 0) !== 0)
-    .sort((a, b) => Math.abs(b.receipts[year] ?? 0) - Math.abs(a.receipts[year] ?? 0))
-    .slice(0, 3)
-    .map((e) => title(e.code));
+      })),
+  );
+  const taxMovers = signed(
+    outcome.leverEffects
+      .filter((e) => e.category !== 'macro')
+      .map((e) => ({ code: e.code, delta: e.receipts[year] ?? 0 })),
+  );
 
   // Credibility: how much of what improves the current budget rests on figures nobody certified.
   // HMRC's cost of a relief counts, whatever its badge: HMRC says it is not what ending the relief
@@ -169,12 +208,7 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   const topBy = (
     list: typeof policyEffects,
     size: (e: (typeof policyEffects)[number]) => number,
-  ): string[] =>
-    [...list]
-      .filter((e) => size(e) !== 0)
-      .sort((a, b) => Math.abs(size(b)) - Math.abs(size(a)))
-      .slice(0, 3)
-      .map((e) => title(e.code));
+  ): Cause[] => signed(list.map((e) => ({ code: e.code, delta: size(e) })));
   const publicServiceSpending = policyEffects.reduce((acc, e) => acc + spendOf(e), 0);
   const capitalChange = policyEffects.reduce((acc, e) => acc + (e.capitalSpending[year] ?? 0), 0);
   const welfareEffects = policyEffects.filter((e) => e.category === 'welfare');
@@ -183,18 +217,29 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   const cuts = policyEffects.filter((e) => (e.receipts[year] ?? 0) < 0);
   const taxRises = rises.reduce((acc, e) => acc + (e.receipts[year] ?? 0), 0);
   const taxCuts = cuts.reduce((acc, e) => acc - (e.receipts[year] ?? 0), 0);
+  // Who pays: rises on the top and business count up, rises on everyone else count down.
   let progressive = 0;
-  const progressiveCauses: string[] = [];
+  const progressiveRows: { code: string; delta: number }[] = [];
+  const paidBy = new Map<string, number>();
   if (input.incidence) {
     for (const e of rises) {
       const group = input.incidence.levers[e.code];
       if (!group) continue;
-      if (PROGRESSIVE_GROUPS.has(group)) progressive += e.receipts[year] ?? 0;
-      else if (BROAD_GROUPS.has(group)) progressive -= e.receipts[year] ?? 0;
+      const raised = e.receipts[year] ?? 0;
+      let delta: number;
+      if (PROGRESSIVE_GROUPS.has(group)) delta = raised;
+      else if (BROAD_GROUPS.has(group)) delta = -raised;
       else continue;
-      progressiveCauses.push(title(e.code));
+      progressive += delta;
+      progressiveRows.push({ code: e.code, delta });
+      paidBy.set(group, (paidBy.get(group) ?? 0) + delta);
     }
   }
+  // The side that pays the most, named by its groups' own labels, biggest first.
+  const payers = [...paidBy.entries()]
+    .filter(([, gbpm]) => Math.sign(gbpm) === Math.sign(progressive) && gbpm !== 0)
+    .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+    .map(([group]) => lowerFirst(input.incidence?.groups[group]?.label ?? group));
   // Priorities: one priority ranked, delivered, with nothing partly done, is a clear story.
   const ranked = status?.priorities ?? [];
   const deliveredGbpm = funded.reduce((acc, p) => acc + Math.abs(p.spendingGbpm), 0);
@@ -246,52 +291,53 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       progressiveBalanceGbpm: progressive,
     },
     causes: {
-      stabilityHeadroomGbpm: movers,
-      stabilityHeadroomVsTypicalError: movers,
-      investmentRuleStatus: movers,
-      welfareCapStatus: welfareReversals.map((l) => l.shortTitle),
-      rulesMissed: missedRules,
-      borrowingChangeGbpm: movers,
-      cumulativeBorrowingChangeGbpm: movers,
-      debtChangePp: movers,
-      debtFallingPp: movers,
+      stabilityHeadroomGbpm: headroomMovers,
+      stabilityHeadroomVsTypicalError: headroomMovers,
+      investmentRuleStatus: borrowingMovers,
+      welfareCapStatus: welfareReversals.map((l) => ({ title: title(l.code) })),
+      rulesMissed: missedRules.map((name) => ({ title: name })),
+      borrowingChangeGbpm: borrowingMovers,
+      cumulativeBorrowingChangeGbpm: cumulativeMovers,
+      debtChangePp: borrowingMovers,
+      debtFallingPp: borrowingMovers,
       taxTakeChangePp: taxMovers,
-      budget2025Reversals: reversals.map((l) => l.shortTitle),
-      promisesBroken: broken.map(
-        (p) =>
-          `${p.promise.title}${p.brokenBy.length > 0 ? ` (${p.brokenBy.map((b) => title(b.code)).join(', ')})` : ''}`,
-      ),
-      manifestoBroken: manifestoBroken.map(
-        (p) => `${p.promise.title} (${p.brokenBy.map((b) => title(b.code)).join(', ')})`,
-      ),
-      manifestoStrained: strained.map(
-        (s) => `${s.promise.title} (${s.strainedBy.map((b) => title(b.code)).join(', ')})`,
-      ),
-      prioritiesUnfunded: unfunded.map((p) => p.priority.title),
-      prioritiesStarted: started.map((p) => p.priority.title),
-      prioritiesFunded: funded.map((p) => p.priority.title),
-      deliveredGbpm: funded.map((p) => p.priority.title),
-      clearPriorityGbpm: clearPriorityGbpm > 0 ? funded.map((p) => p.priority.title) : [],
-      welfareReversals: welfareReversals.map((l) => l.shortTitle),
+      budget2025Reversals: reversals.map((l) => ({ title: title(l.code) })),
+      promisesBroken: broken.map((p) => ({
+        title: `${lowerFirst(p.promise.title)}${p.brokenBy.length > 0 ? ` (${p.brokenBy.map((b) => title(b.code)).join(', ')})` : ''}`,
+      })),
+      manifestoBroken: manifestoBroken.map((p) => ({
+        title: `${lowerFirst(p.promise.title)} (${p.brokenBy.map((b) => title(b.code)).join(', ')})`,
+      })),
+      manifestoStrained: strained.map((s) => ({
+        title: `${lowerFirst(s.promise.title)} (${s.strainedBy.map((b) => title(b.code)).join(', ')})`,
+      })),
+      prioritiesUnfunded: unfunded.map((p) => ({ title: p.priority.noun })),
+      prioritiesStarted: started.map((p) => ({ title: p.priority.noun })),
+      prioritiesFunded: funded.map((p) => ({ title: p.priority.noun })),
+      deliveredGbpm: funded.map((p) => ({ title: p.priority.noun })),
+      clearPriorityGbpm:
+        clearPriorityGbpm > 0 ? funded.map((p) => ({ title: p.priority.noun })) : [],
+      welfareReversals: welfareReversals.map((l) => ({ title: title(l.code) })),
       welfareChangeGbpm: topBy(welfareEffects, (e) => e.currentSpending[year] ?? 0),
-      departmentsCut: cutDepartments.map((l) => l.shortTitle),
+      departmentsCut: cutDepartments.map((l) => ({ title: title(l.code) })),
       rebellionRisk: [
-        ...broken.map((p) => p.promise.title),
-        ...unfunded.map((p) => p.priority.title),
-        ...welfareReversals.map((l) => l.shortTitle),
+        ...broken.map((p) => ({ title: lowerFirst(p.promise.title) })),
+        ...unfunded.map((p) => ({ title: p.priority.noun })),
+        ...welfareReversals.map((l) => ({ title: title(l.code) })),
       ],
-      credibilityShare: uncertifiedTitles,
-      reliefShareOfUncertified: uncertifiedTitles,
-      priceRaisingMeasures: priceRaisers.map((l) => l.shortTitle),
-      thresholdFreezeKept: moved.has('rvfrz') ? [title('rvfrz')] : [],
-      efficienciesKept: moved.has('rveff') ? [title('rveff')] : [],
+      credibilityShare: uncertifiedTitles.map((t) => ({ title: t })),
+      reliefShareOfUncertified: uncertifiedTitles.map((t) => ({ title: t })),
+      priceRaisingMeasures: priceRaisers.map((l) => ({ title: title(l.code) })),
+      thresholdFreezeKept: moved.has('rvfrz') ? [{ title: title('rvfrz') }] : [],
+      efficienciesKept: moved.has('rveff') ? [{ title: title('rveff') }] : [],
       publicServiceSpendingGbpm: topBy(policyEffects, spendOf),
       capitalChangeGbpm: topBy(policyEffects, (e) => e.capitalSpending[year] ?? 0),
       taxRisesGbpm: topBy(rises, (e) => e.receipts[year] ?? 0),
-      taxCutsGbpm: topBy(cuts, (e) => e.receipts[year] ?? 0),
+      taxCutsGbpm: topBy(cuts, (e) => -(e.receipts[year] ?? 0)),
       netRevenueGbpm: taxMovers,
-      progressiveBalanceGbpm: progressiveCauses.slice(0, 3),
+      progressiveBalanceGbpm: signed(progressiveRows),
     },
+    words: { payers: inWords(payers) },
   };
   return out;
 }
