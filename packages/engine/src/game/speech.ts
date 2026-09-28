@@ -1,9 +1,11 @@
+import { prevFy } from '../calc/years.js';
 import { formatGbpBn } from '../format.js';
+import { isMissed, missedBy } from '../rules/words.js';
 import type { Lever, PmFile, SourceRef, SpeechFile, SpeechFragment } from '../types/data.js';
 import type { GamePermalink, Outcome } from '../types/engine.js';
 import type { AmbitionStatus } from './ambitions.js';
 import { rankedPriorities } from './options.js';
-import { priceMove, withDefaults, type OutcomeOf } from './prices.js';
+import { preBudget, priceMove, withDefaults, type OutcomeOf } from './prices.js';
 import { prioritiesInWords } from './verdict.js';
 
 /**
@@ -16,9 +18,11 @@ import { prioritiesInWords } from './verdict.js';
 
 export type SpeechParagraphKind =
   | 'opening'
+  | 'forecast'
   | 'priority'
   | 'spending'
   | 'cuts'
+  | 'welfare-cuts'
   | 'revenue'
   | 'giveaways'
   | 'lock-break'
@@ -33,10 +37,31 @@ export interface SpeechParagraph {
   figures: string[];
 }
 
+/** What the reply is about: the Budget's biggest weakness, in this order. */
+export type OppositionTopic =
+  'rulesMissed' | 'promiseBroken' | 'taxUp' | 'borrowingUp' | 'cuts' | 'default';
+
+/**
+ * The Leader of the Opposition replies (Phase 25): one line, chosen by the Budget's biggest
+ * weakness, in a voice from the other side of the House. A role, never a name; a judgement badged
+ * as one, with no figure in it.
+ */
+export interface OppositionReply {
+  who: string;
+  about: OppositionTopic;
+  text: string;
+  sources: SourceRef[];
+  badge: 'simulated';
+}
+
 export interface Speech {
   paragraphs: SpeechParagraph[];
   words: number;
+  reply: OppositionReply;
 }
+
+/** A tax rise, extra borrowing or a cut the Opposition would make a line of, £ million. */
+export const OPPOSITION_GBPM = 2_000;
 
 export interface SpeechInput {
   speech: SpeechFile;
@@ -148,6 +173,9 @@ function lower(s: string): string {
   return s.charAt(0).toLowerCase() + s.slice(1);
 }
 
+/** Below this a move in borrowing reads as none. */
+const UNCHANGED_GBPM = 50;
+
 export function assembleSpeech(input: SpeechInput): Speech {
   const { speech, outcome, levers, game, status, macroCodes } = input;
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
@@ -180,13 +208,57 @@ export function assembleSpeech(input: SpeechInput): Speech {
     };
   };
 
-  // Opening, keyed to the first priority ranked with the Prime Minister.
+  // Opening, keyed to the first priority delivered in full (Phase 25): the speech never claims a
+  // priority the Budget did not fund. A start is said as a start; with neither, the estimate.
   const ranked = game && input.pm ? rankedPriorities(game, input.pm) : [];
-  const first = ranked[0];
-  say('opening', (first && speech.opening[first.id]) ?? speech.opening.default, {
+  const fate = new Map((status?.priorities ?? []).map((p) => [p.priority.id, p.status] as const));
+  const firstDelivered = ranked.find((p) => fate.get(p.id) === 'delivered');
+  const firstStarted = ranked.find(
+    (p) => fate.get(p.id) === 'started' || fate.get(p.id) === 'settledLower',
+  );
+  const openingVars = {
     targetYear: year,
     priorities: input.pm ? prioritiesInWords(input.pm, game?.priorities ?? []) : '',
-  });
+  };
+  if (firstDelivered && speech.opening[firstDelivered.id]) {
+    say('opening', speech.opening[firstDelivered.id], openingVars);
+  } else if (firstStarted) {
+    say('opening', speech.openingStarted, { priority: firstStarted.noun });
+  } else {
+    say('opening', speech.opening.default, openingVars);
+  }
+
+  // The forecast, owned (Phase 25): borrowing before any measure, this year and in the target
+  // year, then what the Budget does to it. Worked out, so the fall already in the forecast is not
+  // credited to the Budget.
+  const values = outcome.settings.leverValues;
+  const pre = preBudget(input.outcomeOf, values, levers);
+  // The year the Budget is delivered in: the one before its measures start.
+  const policyYears = outcome.paths.policyYears;
+  const budgetYear = prevFy(outcome.settings.implementationYear);
+  const startYear = policyYears.includes(budgetYear) ? budgetYear : (policyYears[0] ?? year);
+  const borrowingThen = money(pre.paths.policy.psnb[startYear] ?? 0);
+  const borrowingTarget = money(pre.paths.policy.psnb[year] ?? 0);
+  const borrowingChange =
+    (outcome.paths.policy.psnb[year] ?? 0) - (pre.paths.policy.psnb[year] ?? 0);
+  const amount = money(Math.abs(borrowingChange));
+  const changeFragment =
+    borrowingChange >= UNCHANGED_GBPM
+      ? speech.forecastChange.up
+      : borrowingChange <= -UNCHANGED_GBPM
+        ? speech.forecastChange.down
+        : speech.forecastChange.same;
+  const changeText = fill(changeFragment, { amount, targetYear: year });
+  say(
+    'forecast',
+    speech.forecast,
+    { borrowingThen, startYear, borrowingTarget, targetYear: year, change: changeText },
+    [
+      borrowingThen,
+      borrowingTarget,
+      ...(Math.abs(borrowingChange) >= UNCHANGED_GBPM ? [amount] : []),
+    ],
+  );
 
   // One paragraph per priority delivered, in rank order, naming the options that deliver it.
   const delivered = (status?.priorities ?? [])
@@ -197,7 +269,6 @@ export function assembleSpeech(input: SpeechInput): Speech {
       p.options.filter((o) => o.state === 'on').flatMap((o) => Object.keys(o.option.values)),
     ),
   );
-  const values = outcome.settings.leverValues;
   for (const p of delivered) {
     const on = p.options.filter((o) => o.state === 'on');
     const codes = on.flatMap((o) => Object.keys(o.option.values));
@@ -207,23 +278,29 @@ export function assembleSpeech(input: SpeechInput): Speech {
       from: withDefaults(values, codes, levers),
       to: values,
     });
-    const cost = money(Math.abs(price.headroomChangeGbpm));
+    // The one price (Phase 25): what the options do to the headroom, costing or saving.
+    const change = price.headroomChangeGbpm;
+    const cost = money(Math.abs(change));
+    const priced = Math.abs(change) >= UNCHANGED_GBPM;
     say(
       'priority',
       speech.priority,
       {
         title: p.priority.title,
         options: list(on.map((o) => lower(o.option.title))),
-        cost,
+        price: !priced ? 'at no cost' : change < 0 ? `costing ${cost}` : `saving ${cost}`,
         targetYear: year,
       },
-      [cost],
+      priced ? [cost] : [],
     );
   }
 
-  // Other spending, cuts, revenue and giveaways, read off the package.
+  // Other spending, cuts, revenue and giveaways, read off the package. Each measure is named in
+  // running words, the lever's own noun (Phase 25); benefits are said apart from departments.
+  const nounOf = (lever: Lever) => lever.noun ?? lower(lever.shortTitle);
   const spending: string[] = [];
   const cuts: string[] = [];
+  const welfareCuts: string[] = [];
   const revenue = new Map<string, { titles: string[]; yieldGbpm: number }>();
   const giveaways: string[] = [];
   for (const effect of outcome.leverEffects) {
@@ -235,19 +312,22 @@ export function assembleSpeech(input: SpeechInput): Speech {
       if (receipts > 0) {
         const cls = REVENUE_CLASS[lever.code] ?? 'broad';
         const entry = revenue.get(cls) ?? { titles: [], yieldGbpm: 0 };
-        entry.titles.push(lower(lever.shortTitle));
+        entry.titles.push(nounOf(lever));
         entry.yieldGbpm += receipts;
         revenue.set(cls, entry);
       } else if (receipts < 0) {
-        giveaways.push(lower(lever.shortTitle));
+        giveaways.push(nounOf(lever));
       }
       continue;
     }
-    if (cost > 0) spending.push(lower(lever.shortTitle));
-    else if (cost < 0) cuts.push(lower(lever.shortTitle));
+    if (cost > 0) spending.push(nounOf(lever));
+    else if (cost < 0) (lever.category === 'welfare' ? welfareCuts : cuts).push(nounOf(lever));
   }
   if (spending.length > 0) say('spending', speech.spending, { measures: list(spending) });
   if (cuts.length > 0) say('cuts', speech.cuts, { measures: list(cuts) });
+  if (welfareCuts.length > 0) {
+    say('welfare-cuts', speech.welfareCuts, { measures: list(welfareCuts) });
+  }
   for (const [cls, entry] of [...revenue.entries()].sort(
     (a, b) => b[1].yieldGbpm - a[1].yieldGbpm,
   )) {
@@ -259,30 +339,61 @@ export function assembleSpeech(input: SpeechInput): Speech {
   }
   if (giveaways.length > 0) say('giveaways', speech.giveaways, { measures: list(giveaways) });
 
-  // Promises broken by choice are owned, once.
+  // Promises broken by choice are owned, once, by their names in running words.
   const broken = (status?.promises ?? []).filter(
     (p) => !p.kept && p.promise.judgedBy !== 'fiscalRules',
   );
   if (broken.length > 0) {
-    say('lock-break', speech.lockBreak, {
-      promises: list(broken.map((p) => lower(p.promise.title))),
-    });
+    say('lock-break', speech.lockBreak, { promises: list(broken.map((p) => p.promise.noun)) });
   }
 
-  // The last word.
-  const missed = outcome.verdicts.some((v) => v.status === 'notMet' || v.status === 'aboveMargin');
-  const perorationKey = missed ? 'missed' : 'met';
-  // A rule met is stated with its headroom; a rule missed is stated by how much, as a size.
-  const closing = missed
-    ? formatGbpBn(Math.abs(headroom), 1)
-    : formatGbpBn(headroom, 1, headroom < 0);
-  say(
-    'peroration',
-    speech.peroration[perorationKey] ?? speech.peroration.met,
-    { headroom: closing, targetYear: year },
-    [closing],
-  );
+  // The last word, on today's estimate (Phase 25): a rule met with its headroom, and the OBR's
+  // own verdict still to come; a rule missed by its plain name and its own margin, each one.
+  const missed = outcome.verdicts.filter(isMissed);
+  if (missed.length === 0) {
+    const closing = money(headroom);
+    say('peroration', speech.peroration.met, { headroom: closing, targetYear: year }, [closing]);
+  } else {
+    say(
+      'peroration',
+      speech.peroration.missed ?? speech.peroration.met,
+      { missed: list(missed.map(missedBy)), targetYear: year },
+      missed.map((v) => money(Math.abs(v.headroomGbpm))),
+    );
+  }
+
+  // The Opposition's reply, from the Budget's biggest weakness.
+  let rises = 0;
+  let taxCuts = 0;
+  let spendingCuts = 0;
+  for (const e of outcome.leverEffects) {
+    if (e.category === 'macro') continue;
+    const r = e.receipts[year] ?? 0;
+    if (r > 0) rises += r;
+    else taxCuts -= r;
+    const s = (e.currentSpending[year] ?? 0) + (e.capitalSpending[year] ?? 0);
+    if (s < 0) spendingCuts -= s;
+  }
+  const about: OppositionTopic = missed.some((v) => v.kind !== 'welfareCap')
+    ? 'rulesMissed'
+    : broken.length > 0
+      ? 'promiseBroken'
+      : rises - taxCuts >= OPPOSITION_GBPM
+        ? 'taxUp'
+        : borrowingChange >= OPPOSITION_GBPM
+          ? 'borrowingUp'
+          : spendingCuts >= OPPOSITION_GBPM
+            ? 'cuts'
+            : 'default';
+  const replyLine = speech.opposition[about];
+  const reply: OppositionReply = {
+    who: 'The Leader of the Opposition',
+    about,
+    text: replyLine.text,
+    sources: replyLine.sources,
+    badge: 'simulated',
+  };
 
   const words = paragraphs.reduce((acc, p) => acc + p.text.split(/\s+/).filter(Boolean).length, 0);
-  return { paragraphs, words };
+  return { paragraphs, words, reply };
 }

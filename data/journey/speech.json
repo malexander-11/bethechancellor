@@ -76,16 +76,42 @@
       ]
     }
   },
+  "openingStarted": {
+    "text": "Madam Deputy Speaker, this Budget makes a start on {priority}. It does not finish the job, and I will not pretend that it does.",
+    "sources": []
+  },
+  "forecast": {
+    "text": "On today’s estimate, before any measure in this Budget, we borrow {borrowingThen} in {startYear} and {borrowingTarget} in {targetYear}. {change}",
+    "sources": []
+  },
+  "forecastChange": {
+    "up": {
+      "text": "This Budget adds {amount} to borrowing in {targetYear}.",
+      "sources": []
+    },
+    "down": {
+      "text": "This Budget cuts borrowing in {targetYear} by {amount}.",
+      "sources": []
+    },
+    "same": {
+      "text": "This Budget leaves borrowing in {targetYear} about where it was.",
+      "sources": []
+    }
+  },
   "priority": {
-    "text": "{title}: {options}, {cost} in {targetYear}. A priority agreed in Downing Street, and a priority delivered.",
+    "text": "{title}: {options}, {price} in {targetYear}. A priority agreed in Downing Street, and a priority delivered.",
     "sources": []
   },
   "spending": {
-    "text": "Alongside it, this Budget provides more for {measures}.",
+    "text": "This Budget also spends more: {measures}.",
     "sources": []
   },
   "cuts": {
-    "text": "To pay for our priorities, {measures} will do more with less.",
+    "text": "Some budgets will get less than planned: {measures}.",
+    "sources": []
+  },
+  "welfareCuts": {
+    "text": "We will save on benefits: {measures}. I know who that falls on, and I say so.",
     "sources": []
   },
   "revenue": {
@@ -138,12 +164,68 @@
   },
   "peroration": {
     "met": {
-      "text": "The Office for Budget Responsibility confirms this Budget meets the fiscal rules, with {headroom} of headroom in {targetYear}. Stability first, then everything else. I commend this Budget to the House.",
+      "text": "On today’s estimate, this Budget meets the fiscal rules, with {headroom} of headroom in {targetYear}. The Office for Budget Responsibility publishes its own verdict today. I commend this Budget to the House.",
       "sources": []
     },
     "missed": {
-      "text": "The Office for Budget Responsibility will publish that this Budget misses a rule in {targetYear}, by {headroom}. I have heard its assessment and made my choice. I commend this Budget to the House.",
+      "text": "On today’s estimate, this Budget misses {missed}. The Office for Budget Responsibility publishes its own verdict today, and I will answer for mine. I commend this Budget to the House.",
       "sources": []
+    }
+  },
+  "opposition": {
+    "rulesMissed": {
+      "text": "This government wrote the fiscal rules, and today it breaks them. If it will not keep its own rules, why should anyone lend to it on trust?",
+      "sources": [
+        {
+          "sourceId": "hmt-charter-2025-autumn",
+          "paragraph": "3.6-3.11"
+        }
+      ]
+    },
+    "promiseBroken": {
+      "text": "They promised the country, in black and white, and they have broken that promise today. Why should anyone believe the next one?",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations"
+        },
+        {
+          "sourceId": "hmt-budget-2025-document"
+        }
+      ]
+    },
+    "taxUp": {
+      "text": "Another Budget of higher taxes, on top of a tax take the forecasters already call a historic high. No country taxes its way to growth.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "3.1"
+        }
+      ]
+    },
+    "borrowingUp": {
+      "text": "They are borrowing more and calling it a plan. Our children will pay the interest on today’s choices.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03"
+        }
+      ]
+    },
+    "cuts": {
+      "text": "Today’s Budget cuts what people rely on, on top of the squeeze already in the plans. That is not a plan; it is managed decline.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03",
+          "paragraph": "4.16"
+        }
+      ]
+    },
+    "default": {
+      "text": "A Budget of small steps from a government that promised change. The country deserved more ambition than this.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations"
+        }
+      ]
     }
   }
 }

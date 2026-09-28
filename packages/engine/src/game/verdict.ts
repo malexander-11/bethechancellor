@@ -9,7 +9,10 @@ import type {
   VerdictsFile,
 } from '../types/data.js';
 import type { GamePermalink, Outcome } from '../types/engine.js';
+import { isMissed } from '../rules/words.js';
 import { ambitionStatus, type AmbitionStatus, type PriorityReport } from './ambitions.js';
+import { blockedBy } from './options.js';
+import { groupsInWords, inWords, lowerFirst } from './words.js';
 import { priceMove, withDefaults, type OutcomeOf } from './prices.js';
 
 /**
@@ -31,6 +34,15 @@ export const THIN_HEADROOM_GBPM = 10_000;
  * published threshold, and badged as one wherever it is said.
  */
 export const AMPLE_HEADROOM_GBPM = 20_000;
+
+/** Spending cuts at least this large, and larger than the tax rises, pay for a Budget by cuts. */
+export const PAID_BY_CUTS_GBPM = 1_000;
+
+/** Every rise and cut counted: at least this much moving in the target year is a big Budget. */
+export const BIG_MOVES_GBPM = 5_000;
+
+/** A group given less than this is too small to name among the cuts, £ million. */
+const PAID_BY_CUTS_NAMED_GBPM = 100;
 
 /** Graded in Phase 25: a start is not delivery, and a trim on step 4 settles an ask lower. */
 export type PriorityFate = 'delivered' | 'settledLower' | 'started' | 'unfunded';
@@ -58,7 +70,11 @@ export interface BudgetVerdict {
   ambitions: AmbitionVerdict;
   paid: IncidenceRow[];
   benefited: IncidenceRow[];
-  kind: { title: string; line: SimulatedLine; id: string };
+  /**
+   * The kind of Budget, a judgement from data; `fact`, when the kind has one, is the worked-out
+   * sentence behind it (Phase 25), shown with its own badge.
+   */
+  kind: { title: string; line: SimulatedLine; id: string; fact?: string };
   targetYear: string;
   headroomGbpm: number;
 }
@@ -196,19 +212,92 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
   const ambitions = ambitionVerdict(status, levers, prices);
   const { paid, benefited } = incidenceRows(outcome, levers, input.incidence, year);
 
-  const rulesMet = !outcome.verdicts.some(
-    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
-  );
+  const rulesMet = !outcome.verdicts.some(isMissed);
   const delivered = status.delivered;
+  const byCode = new Map(levers.map((l) => [l.code, l] as const));
+  const nounOf = (code: string) => byCode.get(code)?.noun ?? byCode.get(code)?.shortTitle ?? code;
+  const money = (gbpm: number) => formatGbpBn(gbpm, 1, gbpm < 0);
+  const headroomOf = (o: Outcome) =>
+    o.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;
+
+  // Was the broken promise needed? Put the levers that break it back and re-run the engine on the
+  // same estimate (Phase 25, Worked out). A lever inside a priority's chosen way to deliver it is
+  // the programme itself, so a break there is never called avoidable.
+  const programme = new Set(
+    status.priorities.flatMap((p) =>
+      p.options
+        .filter((o) => o.state === 'on' || o.state === 'adjusted')
+        .flatMap((o) => Object.keys(o.option.values)),
+    ),
+  );
+  const breakers = [
+    ...new Set(
+      status.promises
+        .filter((p) => !p.kept && p.promise.judgedBy !== 'fiscalRules')
+        .flatMap((p) => p.brokenBy.map((b) => b.code)),
+    ),
+  ];
+  let withoutBreak: number | undefined;
+  if (rulesMet && breakers.length > 0 && breakers.every((code) => !programme.has(code))) {
+    const without = input.outcomeOf(withDefaults(values, breakers, levers));
+    if (!without.verdicts.some(isMissed)) withoutBreak = headroomOf(without);
+  }
+
+  // Cuts, rises and how much moved in the target year, every lever counted, never netted.
+  let cuts = 0;
+  let rises = 0;
+  let gross = 0;
+  for (const e of outcome.leverEffects) {
+    if (e.category === 'macro') continue;
+    const receipts = e.receipts[year] ?? 0;
+    const spending = (e.currentSpending[year] ?? 0) + (e.capitalSpending[year] ?? 0);
+    if (receipts > 0) rises += receipts;
+    if (spending < 0) cuts -= spending;
+    gross += Math.abs(receipts) + Math.abs(spending);
+  }
+  // Who gets less, by the groups' own labels: a lever's noun can read backwards here ("cutting
+  // the 2025 PIP cuts"), a group cannot.
+  const cutFrom = benefited
+    .filter((r) => r.gbpm <= -PAID_BY_CUTS_NAMED_GBPM)
+    .slice(0, 2)
+    .map((r) => lowerFirst(r.label));
+
+  // A priority left out with money to spare: the first unfunded priority, in rank order, whose
+  // way to deliver it in full would still meet the rules on the same estimate (Worked out).
+  let leftOut: { noun: string; option: string; headroomGbpm: number } | undefined;
+  if (rulesMet) {
+    for (const p of status.priorities) {
+      if (p.status !== 'notFunded') continue;
+      let best: { option: string; headroomGbpm: number } | undefined;
+      for (const o of p.options) {
+        if (o.option.scale.kind !== 'full') continue;
+        if (blockedBy(o.option, input.options, levers, values)) continue;
+        const trial = input.outcomeOf({ ...values, ...o.option.values });
+        if (trial.verdicts.some(isMissed)) continue;
+        const h = headroomOf(trial);
+        if (!best || h > best.headroomGbpm) best = { option: o.option.title, headroomGbpm: h };
+      }
+      if (best) {
+        leftOut = { noun: p.priority.noun, ...best };
+        break;
+      }
+    }
+  }
+
   const facts: Record<string, boolean> = {
     rulesMet,
     promisesAllKept: status.promises.every((p) => p.kept),
     prioritiesAllFunded: status.priorities.length > 0 && delivered === status.priorities.length,
     prioritiesNoneFunded: status.priorities.every((p) => p.status === 'notFunded'),
     headroomAmple: headroom >= AMPLE_HEADROOM_GBPM,
-    headroomThin: headroom < input.typicalErrorGbpm / 2,
+    // The markets' own line (Phase 25): the close, the statement and the reception agree.
+    headroomThin: headroom < THIN_HEADROOM_GBPM,
     certified: input.credibilityShare <= 0.1,
     restive: input.rebellionRisk >= 3,
+    breakAvoidable: withoutBreak !== undefined,
+    paidByCuts: cuts >= PAID_BY_CUTS_GBPM && cuts > rises,
+    bigMoves: gross >= BIG_MOVES_GBPM,
+    leftOutAffordable: leftOut !== undefined,
   };
   const chosen =
     input.kinds.kinds.find((k) => fits(k, facts)) ??
@@ -216,10 +305,19 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
     input.kinds.kinds[0]!;
   // The first priority ranked names the Budget: "A cost-of-living Budget that…".
   const priorityWords = prioritiesInWords(pm, game.priorities.slice(0, 1));
+  const words: Record<string, string> = {
+    priority: priorityWords,
+    headroom: money(headroom),
+    breakers: inWords(breakers.map(nounOf)),
+    withoutBreak: withoutBreak === undefined ? '' : money(withoutBreak),
+    cutFrom: groupsInWords(cutFrom),
+    leftOut: leftOut?.noun ?? '',
+    leftOutOption: leftOut?.option ?? '',
+    withRoom: leftOut ? money(leftOut.headroomGbpm) : '',
+  };
   const fillText = (s: string) =>
     s
-      .replace(/\{priority\}/g, priorityWords)
-      .replace(/\{headroom\}/g, formatGbpBn(headroom, 1, headroom < 0))
+      .replace(/\{(\w+)\}/g, (match, key: string) => words[key] ?? match)
       .replace(/\s+,/g, ',')
       .replace(/\s{2,}/g, ' ');
   return {
@@ -229,7 +327,12 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
     kind: {
       id: chosen.id,
       title: fillText(chosen.title),
-      line: { ...chosen.line, text: fillText(chosen.line.text) },
+      line: {
+        ...chosen.line,
+        text: fillText(chosen.line.text),
+        ...(chosen.line.short ? { short: fillText(chosen.line.short) } : {}),
+      },
+      ...(chosen.fact ? { fact: fillText(chosen.fact) } : {}),
     },
     targetYear: year,
     headroomGbpm: headroom,

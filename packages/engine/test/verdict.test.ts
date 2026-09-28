@@ -4,6 +4,7 @@ import {
   THIN_HEADROOM_GBPM,
   budgetVerdict,
   computeOutcome,
+  formatGbpBn,
   freshGame,
   suggestedSettings,
   type GamePermalink,
@@ -108,16 +109,19 @@ describe('the close', () => {
   it('names the kind of Budget from the closed list, first fit wins', () => {
     const missed = verdictOf(freshGame(), { def5: 1 });
     expect(missed.kind.id).toBe('rules-missed');
-    // Cautious: rules met with ample headroom, and nothing done for the priorities.
+    // Cautious: rules met with ample headroom from certified costings, and nothing done for the
+    // priorities. Employer National Insurance strains the tax lock and breaks nothing.
     const game = { ...freshGame(), priorities: ['safer-streets'] };
-    const cautious = close(game, { itbr: 2 });
+    const cautious = close(game, { nicer: 2 });
     const headroom = cautious.verdict.headroomGbpm;
     expect(headroom).toBeGreaterThanOrEqual(AMPLE_HEADROOM_GBPM);
     expect(cautious.verdict.kind.id).toBe('cautious');
-    // A penny raises less than the advisers’ twenty billion on today’s estimate: not cautious.
+    // Uncertified costings are not caution (Phase 25), and the line no longer speaks for markets.
+    expect(verdictOf(game, { nicer: 2 }, { credibilityShare: 1 }).kind.id).not.toBe('cautious');
+    expect(cautious.verdict.kind.title).not.toMatch(/markets/);
+    // A penny on the basic rate breaks the tax lock the rules did not need broken.
     const penny = verdictOf(game, { itbr: 1 });
-    expect(penny.headroomGbpm).toBeLessThan(AMPLE_HEADROOM_GBPM);
-    expect(penny.kind.id).not.toBe('cautious');
+    expect(penny.kind.id).toBe('broke-for-buffer');
     // Paid for by broadening the VAT base, which the tax lock does not name.
     const delivered = verdictOf(game, { moj: 10, vatfood: 1 });
     expect(delivered.kind.id).toBe('delivered-and-paid');
@@ -135,6 +139,68 @@ describe('the close', () => {
     const quiet = verdictOf(freshGame(), {});
     expect(quiet.kind.id).toBe('small-moves');
     expect(quiet.kind.line.badge).toBe('simulated');
+  });
+
+  it('checks the trade-offs it names by re-running the engine on the same estimate', () => {
+    const game: GamePermalink = { ...freshGame(), priorities: ['defence', 'safer-streets'] };
+    // The walk: the tax lock broken for a margin the rules did not need.
+    const walk = { dip47: 1, moj: 10, hscl: 1, itbr: 1, ipt: 1, dhsc: -0.5 };
+    const broke = close(game, walk);
+    expect(broke.verdict.kind.id).toBe('broke-for-buffer');
+    const without = outcomeOf({ ...walk, itbr: 0, ...ESTIMATE });
+    const withoutHeadroom = without.verdicts.find((v) => v.kind === 'currentBudget')!.headroomGbpm;
+    expect(without.verdicts.every((v) => v.status !== 'notMet' && v.status !== 'aboveMargin')).toBe(
+      true,
+    );
+    expect(broke.verdict.kind.fact).toBe(
+      `Without the change to the basic rate of income tax, you would still meet both rules, with ${formatGbpBn(withoutHeadroom, 1)} of headroom.`,
+    );
+    // A break the rules did need is the price of the programme, not a buffer.
+    const needed = verdictOf({ ...freshGame(), priorities: ['nhs'] }, { dhsc: 3, itbr: 1 });
+    expect(needed.kind.id).toBe('broke-the-lock');
+    // A priority left out though the rules would hold with it paid for, and what it would cost.
+    const left = close(game, { moj: 10 });
+    expect(left.verdict.kind.id).toBe('left-out-with-room');
+    expect(left.verdict.kind.line.short).toMatch(/^You named defence a priority/);
+    expect(left.verdict.kind.fact).toMatch(
+      /^Delivering defence in full with “Fill the funding gap in the defence investment plan” would still meet both rules, with £\d+\.\dbn of headroom\.$/,
+    );
+    // Paid for by cuts: named by who gets less, ahead of a cautious reading of the same margin.
+    const cuts = verdictOf({ ...freshGame(), priorities: ['nhs'] }, { dhsc: -5 });
+    expect(cuts.kind.id).toBe('paid-by-cuts');
+    expect(cuts.kind.line.short).toBe(
+      'The sums add up by giving less to patients and the NHS, not by taxing more.',
+    );
+    // A restive party outranks a thin margin kept with every promise.
+    const restive = verdictOf(
+      { ...freshGame(), priorities: ['safer-streets'] },
+      { moj: 10 },
+      { rebellionRisk: 3 },
+    );
+    expect(restive.kind.id).toBe('restive-party');
+    // Size is measured, not assumed: big moves and small ones, each without a claim it cannot keep.
+    const big = verdictOf(freshGame(), { itbr: 1, dhsc: 3 });
+    expect(big.kind.id).toBe('big-moves');
+    const small = verdictOf(freshGame(), { tob: 10 });
+    expect(small.kind.id).toBe('small-moves');
+    expect(small.kind.line.text).not.toMatch(/markets/i);
+    for (const kind of ds.verdicts.kinds) {
+      expect(`${kind.title} ${kind.line.text}`).not.toMatch(/OBR’s arithmetic|OBR’s test/);
+    }
+  });
+
+  it('calls a margin thin under ten billion, as the markets do, and not above it', () => {
+    const game: GamePermalink = { ...freshGame(), priorities: ['safer-streets'] };
+    // Every promise kept and the priority delivered; only the margin differs.
+    const thin = verdictOf(game, { moj: 10, vatkids: 1 });
+    expect(thin.headroomGbpm).toBeLessThan(THIN_HEADROOM_GBPM);
+    expect(thin.kind.id).toBe('kept-everything-thin');
+    // Over ten billion and under the old line (half the typical forecast error, about £16bn),
+    // which once called this thin too.
+    const modest = verdictOf(game, { moj: 10, vattrn: 1, vatkids: 1 });
+    expect(modest.headroomGbpm).toBeGreaterThan(THIN_HEADROOM_GBPM);
+    expect(modest.headroomGbpm).toBeLessThan(typicalErrorGbpm / 2);
+    expect(modest.kind.id).toBe('delivered-and-paid');
   });
 
   it('draws the thin and ample lines where the markets’ bands do', () => {

@@ -211,7 +211,7 @@ export function ReviewPage() {
       ? 'You meet both fiscal rules.'
       : fiscalMissed.length === 0
         ? `You meet both fiscal rules, but miss ${list(missed.map(missedBy))}.`
-        : `Missed: ${list(missed.map(missedBy))}. The OBR would say so on Budget day.`;
+        : `Missed on today’s estimate: ${list(missed.map(missedBy))}.`;
   // How the bar got from the estimate to here (Phase 25): the four parts sum to it exactly.
   const r = reconcile(outcome, preBudget(outcomeOf, state.leverValues, levers));
   const money = (gbpm: number) => formatGbpBn(Math.abs(gbpm), 1);

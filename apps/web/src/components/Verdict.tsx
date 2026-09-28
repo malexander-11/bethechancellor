@@ -18,16 +18,18 @@ const PROMISE: Record<BudgetVerdict['ambitions']['promises'][number]['fate'], st
 };
 
 /**
- * The close: what the playthrough came to. The kind of Budget is a judgement from data and wears
- * the badge, in one sentence with the rest a tap away; everything beneath it, folded under "The
- * close in full", is the engine's figures totalled and ranked.
+ * How your Budget went (the close): what the playthrough came to. The kind of Budget is a
+ * judgement from data and wears the badge, in one sentence with the rest a tap away; when the kind
+ * rests on a worked-out fact (Phase 25: the rules held without a broken promise, a priority would
+ * have fitted), that fact sits beneath it with its own badge. Everything in the fold is the
+ * engine's figures totalled and ranked.
  */
 export function Verdict({ verdict }: { verdict: BudgetVerdict }) {
   const { ambitions, paid, benefited, kind, targetYear } = verdict;
   return (
     <section className="verdict-close doc" aria-labelledby="verdict-heading">
       <p className="doc__head">
-        <span className="kicker">The close</span>
+        <span className="kicker">How your Budget went</span>
         <span className="doc__ref">
           Headroom, {targetYear}: {formatGbpBn(verdict.headroomGbpm, 1, verdict.headroomGbpm < 0)}
         </span>
@@ -43,9 +45,14 @@ export function Verdict({ verdict }: { verdict: BudgetVerdict }) {
         </details>
       ) : null}
       <SourceList refs={kind.line.sources} />
+      {kind.fact ? (
+        <p className="verdict-close__fact">
+          <LabelBadge badge="mechanical" /> {kind.fact}
+        </p>
+      ) : null}
 
       <details className="more">
-        <summary>The close in full</summary>
+        <summary>Priorities, promises and who paid</summary>
         <div className="more__body verdict-close__grid">
           <section aria-labelledby="ambitions-heading">
             <h3 id="ambitions-heading" className="section-label">

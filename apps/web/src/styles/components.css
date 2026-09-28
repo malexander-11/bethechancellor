@@ -965,6 +965,18 @@ label.choice {
   font-size: 0.875rem;
 }
 
+/* The Opposition's reply (Phase 25): one line beneath the speech, in the other voice. */
+.speech__reply {
+  margin: 16px 0 0;
+  padding: 8px 0 0 14px;
+  border-left: 2px solid var(--border);
+}
+
+.speech__reply p {
+  margin: 4px 0 0;
+  max-width: 68ch;
+}
+
 .delivery {
   margin: 4px 0 0;
   padding-left: 20px;
@@ -991,6 +1003,13 @@ label.choice {
   margin: 0 0 8px;
   font-size: 1.0625rem;
   line-height: 1.55;
+}
+
+/* The worked-out fact behind a kind of Budget (Phase 25), under its own badge. */
+.verdict-close__fact {
+  max-width: 68ch;
+  margin: 8px 0;
+  color: var(--ink-2);
 }
 
 .verdict-close__grid {

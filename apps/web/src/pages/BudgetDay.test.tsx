@@ -67,14 +67,31 @@ describe('Budget day: what your Budget means', () => {
   it('says the Budget in three sentences: what was prioritised, who pays, what was accepted', () => {
     at(`${BASE}&${GAME}&L=moj.10_itbr.1`);
     const statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
+    // Defence was agreed and left unfunded, and the first sentence says so (Phase 25).
     expect(
-      within(statement).getByText('I prioritised defence and safer streets.'),
+      within(statement).getByText(
+        'I prioritised safer streets, and named defence a priority but put nothing behind it.',
+      ),
     ).toBeInTheDocument();
     expect(
-      within(statement).getByText(/^I paid for it by asking everyone who earns or spends/),
+      within(statement).getByText(
+        'I paid for it by asking everyone who earns or spends to pay more, and kept the rest as headroom.',
+      ),
     ).toBeInTheDocument();
     // A broken promise outranks a thin margin as the thing accepted.
     expect(within(statement).getByText('I accepted breaking the tax lock.')).toBeInTheDocument();
+  });
+
+  it('says borrowing past the rules as borrowing, never as headroom', () => {
+    at(`${BASE}&${GAME}&L=itbr.-2`);
+    const statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
+    expect(
+      within(statement).getByText(
+        'I cut taxes for everyone who earns or spends, and paid for it by borrowing more than the rules allow.',
+      ),
+    ).toBeInTheDocument();
+    expect(within(statement).getByText(/^I accepted missing the day-to-day rule by/)).toBeVisible();
+    expect(within(statement).queryByText(/headroom I had/)).toBeNull();
   });
 
   it('says what was accepted when nothing was broken: a thin margin, or what was kept', () => {
@@ -202,21 +219,50 @@ describe('Budget day: what your Budget means', () => {
     expect(screen.queryByRole('link', { name: /Replay/ })).toBeNull();
   });
 
-  it('the speech follows the choices: the first priority, its options and what it cuts', () => {
+  it('the speech follows the choices: the first priority delivered, its options and its cuts', () => {
     at(`${BASE}&${GAME}&L=moj.10_alc.-5`);
     open('Read the speech');
     const speech = screen.getByRole('article', { name: 'The Budget speech' });
+    // Defence is ranked first and left unfunded: the speech opens on what it did fund (Phase 25).
     expect(
-      within(speech).getByText(/first duty of any government is the security/),
+      within(speech).getByText(/first duty of any government is the safety of its people/),
+    ).toBeInTheDocument();
+    expect(within(speech).queryByText(/security of its people/)).toBeNull();
+    // It owns the forecast before it spends a penny, in figures the engine worked out.
+    expect(
+      within(speech).getByText(
+        /^On today’s estimate, before any measure in this Budget, we borrow £\d+\.\dbn in 2026-27/,
+      ),
     ).toBeInTheDocument();
     // The one price (Phase 25): what the flagship does to the headroom, interest included, so
     // a little more than the lever's own £1.4bn.
     expect(
-      within(speech).getByText(/more money for prisons and courts, £1\.[5-9]bn in 2029-30/),
+      within(speech).getByText(/more money for prisons and courts, costing £1\.[5-9]bn in 2029-30/),
     ).toBeInTheDocument();
     expect(
       within(speech).getByText(/we cut taxes where we can: alcohol duties/),
     ).toBeInTheDocument();
+    // On today's estimate, not the OBR's confirmation; and the Opposition has its say.
+    expect(
+      within(speech).getByText(/^On today’s estimate, this Budget meets the fiscal rules/),
+    ).toBeInTheDocument();
+    const reply = within(speech).getByRole('region', {
+      name: /The Leader of the Opposition replies/,
+    });
+    expect(within(reply).getByText('Game judgement')).toBeInTheDocument();
+    expect(reply.textContent).not.toMatch(/£/);
+  });
+
+  it('names the trade-off it checked: a priority left out with money to spare', () => {
+    at(`${BASE}&${GAME}&L=moj.10`);
+    const close = screen.getByRole('region', { name: /A priority left out with money to spare/ });
+    expect(within(close).getByText('How your Budget went')).toBeInTheDocument();
+    // The judgement wears its badge; the fact behind it is worked out, and says so.
+    const fact = within(close).getByText(
+      /^Delivering defence in full with “Fill the funding gap in the defence investment plan” would still meet both rules, with £\d+\.\dbn of headroom\.$/,
+    );
+    expect(within(fact).getByText('Worked out')).toBeInTheDocument();
+    expect(within(close).getByText('Priorities, promises and who paid')).toBeInTheDocument();
   });
 
   it('offers the ways on: a link to copy, the review to change something, and a fresh start', () => {

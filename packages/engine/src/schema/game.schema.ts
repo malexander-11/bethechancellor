@@ -69,6 +69,16 @@ export const promiseOriginSchema = z.enum(['manifesto-2024', 'budget-2025', 'gov
 export const promiseSchema = z.strictObject({
   id: slug,
   title: z.string().min(1),
+  /**
+   * The promise in running words (Phase 25), for the sentences that name it: "I accepted breaking
+   * the tax lock", "Because of the promise on the two-child limit". Its title is a statement of
+   * the promise ("The two-child limit stays abolished"), which reads the wrong way in those places.
+   */
+  noun: z
+    .string()
+    .min(1)
+    .max(60)
+    .regex(/^[^A-Z]/, 'a noun follows "breaking" or "Because of", so it starts in lower case'),
   text: z.string().min(1),
   sources: z.array(sourceRefSchema).min(1),
   origin: promiseOriginSchema,
@@ -542,24 +552,71 @@ export const speechFragmentSchema = z.strictObject({
   sources: z.array(sourceRefSchema).default([]),
 });
 
+/**
+ * The Leader of the Opposition's reply (Phase 25): one line, chosen by the Budget's biggest
+ * weakness, in a voice from the other side of the House. A judgement in a role's voice, badged as
+ * one, with no figure in it.
+ */
+export const oppositionReplySchema = z
+  .strictObject({
+    rulesMissed: speechFragmentSchema,
+    promiseBroken: speechFragmentSchema,
+    taxUp: speechFragmentSchema,
+    borrowingUp: speechFragmentSchema,
+    cuts: speechFragmentSchema,
+    default: speechFragmentSchema,
+  })
+  .superRefine((reply, ctx) => {
+    for (const [key, line] of Object.entries(reply)) {
+      if (/\d/.test(line.text))
+        ctx.addIssue({
+          code: 'custom',
+          message: 'the Opposition makes no figure of its own',
+          path: [key, 'text'],
+        });
+    }
+  });
+
 export const speechFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
-  /** Keyed by the first priority's id, plus `default` for none: {priorities}, {targetYear}. */
+  /**
+   * Keyed by the first priority delivered in full (Phase 25), plus `default` when none is:
+   * {priorities}, {targetYear}.
+   */
   opening: z.record(z.string(), speechFragmentSchema),
-  /** One paragraph per priority delivered: {title}, {options}, {cost}, {targetYear}. */
+  /** When no priority is delivered in full but one has a start: {priority}. */
+  openingStarted: speechFragmentSchema,
+  /**
+   * The forecast before any measure, and what the Budget does to borrowing, all worked out
+   * (Phase 25): {startYear}, {borrowingThen}, {targetYear}, {borrowingTarget}, and one of the
+   * `change` lines: {change}.
+   */
+  forecast: speechFragmentSchema,
+  forecastChange: z.strictObject({
+    up: speechFragmentSchema,
+    down: speechFragmentSchema,
+    same: speechFragmentSchema,
+  }),
+  /** One paragraph per priority delivered: {title}, {options}, {price}, {targetYear}. */
   priority: speechFragmentSchema,
   /** Spending measures that are not flagships: {measures}. */
   spending: speechFragmentSchema,
-  /** Budgets cut: {measures}. */
+  /** Departments' budgets cut: {measures}. */
   cuts: speechFragmentSchema,
+  /** Benefits cut or reformed to save money (Phase 25): {measures}. */
+  welfareCuts: speechFragmentSchema,
   /** Revenue paragraphs by who pays: {measures}, {yield}. */
   revenue: z.record(z.string(), speechFragmentSchema),
   /** Tax cuts and reversals: {measures}. */
   giveaways: speechFragmentSchema,
   /** Said once if a promise made in Downing Street is broken: {promises}. */
   lockBreak: speechFragmentSchema,
-  /** The last word, keyed `met` or `missed`: {headroom}, {targetYear}. */
+  /**
+   * The last word, keyed `met` or `missed`: {headroom}, {targetYear} when met; {missed}, each
+   * missed rule by its plain name and its own margin, when missed (Phase 25).
+   */
   peroration: z.record(z.string(), speechFragmentSchema),
+  opposition: oppositionReplySchema,
 });
 
 /* --------------------------------------------------------------- the close */
@@ -638,7 +695,23 @@ export const verdictKindSchema = z.strictObject({
     headroomThin: z.boolean().optional(),
     certified: z.boolean().optional(),
     restive: z.boolean().optional(),
+    /**
+     * Phase 25, each worked out by re-running the engine on the same estimate. The promise-breaking
+     * levers put back, and the rules still met: the break bought headroom, not the programme.
+     */
+    breakAvoidable: z.boolean().optional(),
+    /** Spending cuts of at least £1bn, larger than the tax rises: the sums add up by cutting. */
+    paidByCuts: z.boolean().optional(),
+    /** Every rise and cut counted, at least £5bn moves in the target year. */
+    bigMoves: z.boolean().optional(),
+    /** A priority left unfunded whose way to deliver it in full would still meet the rules. */
+    leftOutAffordable: z.boolean().optional(),
   }),
+  /**
+   * A worked-out sentence shown beside the judgement with its own badge (Phase 25): the engine's
+   * figures behind the kind, never a judgement. Placeholders are filled by the engine.
+   */
+  fact: z.string().min(1).max(200).optional(),
 });
 
 export const verdictsFileSchema = z

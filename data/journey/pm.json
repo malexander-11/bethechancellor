@@ -243,7 +243,7 @@
     {
       "id": "welfare-bill",
       "title": "Get the welfare bill down",
-      "noun": "welfare",
+      "noun": "getting the welfare bill down",
       "purpose": "A smaller bill, honestly scored.",
       "pitch": {
         "text": "Council homes are the fair way to bring the welfare bill down. If you want to go faster than that, be honest about who loses.",
@@ -279,6 +279,7 @@
     {
       "id": "tax-lock",
       "title": "The tax lock",
+      "noun": "the tax lock",
       "text": "We will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT. The manifesto's words, repeated at Budget 2025.",
       "origin": "manifesto-2024",
       "sources": [
@@ -372,6 +373,7 @@
     {
       "id": "ct-cap",
       "title": "Corporation tax capped at 25%",
+      "noun": "the corporation tax cap",
       "text": "We will cap corporation tax at the current level of 25 per cent, the lowest in the G7, for the entire parliament.",
       "origin": "manifesto-2024",
       "sources": [
@@ -390,6 +392,7 @@
     {
       "id": "two-child",
       "title": "The two-child limit stays abolished",
+      "noun": "the promise on the two-child limit",
       "text": "Ending the two-child limit from April 2026 lifts 450,000 children out of poverty. A Budget 2025 decision, not a manifesto promise: bringing the limit back is a U-turn.",
       "origin": "budget-2025",
       "sources": [
@@ -411,6 +414,7 @@
     {
       "id": "fiscal-rules",
       "title": "The fiscal rules",
+      "noun": "the fiscal rules",
       "text": "We will abide by the fiscal rules, ensuring we retain a buffer to protect us against uncertainty. The Chancellor's own words to the Treasury Committee.",
       "origin": "government",
       "judgedBy": "fiscalRules",
@@ -428,6 +432,7 @@
     {
       "id": "defence-path",
       "title": "Defence on its path",
+      "noun": "the defence path",
       "text": "The manifesto set the path to 2.5% of GDP; the government has since committed to 3% in the next Parliament and 3.5% by 2035. A cut to day-to-day defence slows that path.",
       "origin": "manifesto-2024",
       "sources": [
@@ -452,6 +457,7 @@
     {
       "id": "triple-lock",
       "title": "The triple lock",
+      "noun": "the triple lock",
       "text": "Labour will retain the triple lock for the state pension: it rises each year by the highest of earnings growth, prices or 2.5%. The OBR's forecast assumes it.",
       "origin": "manifesto-2024",
       "sources": [
@@ -485,6 +491,7 @@
     {
       "id": "nhs-18-weeks",
       "title": "NHS waits within 18 weeks",
+      "noun": "the 18-week waiting target",
       "text": "Patients should expect to wait no longer than 18 weeks from referral for consultant-led treatment: the manifesto's words, for the NHS in England. The plan is 9 in 10 within 18 weeks by the end of the Parliament.",
       "origin": "manifesto-2024",
       "sources": [

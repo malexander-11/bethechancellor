@@ -8,12 +8,9 @@ import {
   formatGbpBn,
   formatPct,
   householdReactions,
-  rankedPriorities,
   readings,
   receptions,
-  THIN_HEADROOM_GBPM,
-  type BudgetVerdict,
-  type Outcome,
+  statementOf,
 } from '@btc/engine';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -57,54 +54,6 @@ import { onEstimate, useBudget } from '../state/budget';
 function list(items: readonly string[]): string {
   if (items.length <= 1) return items[0] ?? '';
   return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
-}
-
-function lowerFirst(s: string): string {
-  return s.replace(/^./, (c) => c.toLowerCase());
-}
-
-/**
- * The Budget in three sentences: what was prioritised, who pays, what was accepted or kept. Every
- * clause is read from the engine's figures and the player's own choices: the ranked priorities'
- * nouns, the largest payers by the incidence tags, and the most consequential thing given up, in
- * this order: a rule missed, a promise broken, a promise strained, a thin margin; with none of
- * those, what was kept.
- */
-function statementOf(
-  game: NonNullable<ReturnType<typeof useBudget>['state']['game']>,
-  outcome: Outcome,
-  verdict: BudgetVerdict,
-  status: ReturnType<typeof ambitionStatus>,
-): { prioritised: string; paid: string; accepted: string } {
-  const nouns = rankedPriorities(game, pm).map((p) => p.noun);
-  const prioritised =
-    nouns.length > 0
-      ? `I prioritised ${list(nouns)}.`
-      : 'I set no priorities with the Prime Minister.';
-  const payers = verdict.paid.filter((r) => r.gbpm > 0).slice(0, 2);
-  const losers = verdict.benefited.filter((r) => r.gbpm < 0).slice(0, 2);
-  const paid =
-    payers.length > 0
-      ? `I paid for it by asking ${list(payers.map((r) => lowerFirst(r.label)))}.`
-      : losers.length > 0
-        ? `I paid for it with less for ${list(losers.map((r) => lowerFirst(r.label)))}.`
-        : 'I paid for it out of the headroom I had.';
-  const missed = outcome.verdicts.filter(isMissed);
-  const broken = status.promises.filter((p) => !p.kept);
-  const brokenIds = new Set(broken.map((p) => p.promise.id));
-  const strained = status.strains.filter((s) => s.strained && !brokenIds.has(s.promise.id));
-  const headroom = formatGbpBn(verdict.headroomGbpm, 1);
-  const accepted =
-    missed.length > 0
-      ? `I accepted missing ${list(missed.map(missedBy))}.`
-      : broken.length > 0
-        ? `I accepted breaking ${list(broken.map((p) => lowerFirst(p.promise.title)))}.`
-        : strained.length > 0
-          ? `I accepted straining ${list(strained.map((p) => lowerFirst(p.promise.title)))}.`
-          : verdict.headroomGbpm < THIN_HEADROOM_GBPM
-            ? `I accepted a thin margin: ${headroom} of headroom.`
-            : `I kept every promise and ${headroom} of headroom.`;
-  return { prioritised, paid, accepted };
 }
 
 /**
@@ -240,7 +189,12 @@ export function BudgetDayPage() {
   // A game in play that jumps to Budget day is sent back to where it is; a sandbox link and a
   // finished, shared link both walk in.
   if (guard) return guard;
-  const statement = game && verdict && status ? statementOf(game, outcome, verdict, status) : null;
+  // The three sentences are the engine's (Phase 25): what was delivered, how it was paid for, and
+  // what was accepted, read from the same figures as the close and the rules line.
+  const statement =
+    game && verdict && status
+      ? statementOf({ game, pm, outcome, verdict, status, levers, outcomeOf })
+      : null;
 
   async function copyLink() {
     const url = `${window.location.origin}/budget-day?${query}`;

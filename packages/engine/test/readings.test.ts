@@ -116,6 +116,9 @@ describe('the readings of a Budget', () => {
     expect(r.headroomVsTargetGbpm).toBeUndefined();
     expect(r.rabbitGbpm).toBeUndefined();
     expect(r.rebellionRisk).toBe(2 + 1 + 0);
+    // A benefit cut by a slider counts with the benches as a U-turn does (Phase 25).
+    expect(read({ moj: 10, wuc: -5 }, game).rebellionRisk).toBe(0 + 1 + 1);
+    expect(read({ moj: 10, rv2ch: 1 }, game).rebellionRisk).toBe(2 + 1 + 1);
     // One priority ranked and delivered: a clear story worth what its options cost.
     const clear = read({ moj: 10 }, { ...game, priorities: ['safer-streets'] });
     expect(clear.clearPriorityGbpm).toBeCloseTo(clear.deliveredGbpm ?? 0, 6);
