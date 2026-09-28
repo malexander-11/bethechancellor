@@ -4,9 +4,12 @@
  * or predicts a market move: a reading is arithmetic over the outcome, and the words about it
  * live in data/journey/reception.json with their sources.
  */
+import { fyStart } from './calc/years.js';
+import { formatGbpBn } from './format.js';
 import type { IncidenceFile, Lever, PmFile, SourceRef } from './types/data.js';
 import type { GamePermalink, Outcome } from './types/engine.js';
 import type { AmbitionStatus } from './game/ambitions.js';
+import { preBudget, type OutcomeOf } from './game/prices.js';
 
 /** A distributional note carried straight from a lever the player moved. */
 export interface DistributionalNote {
@@ -22,6 +25,12 @@ export interface ReadingsInput {
   levers: readonly Lever[];
   /** The OBR's typical five-year receipts forecast error, £ million. */
   typicalErrorGbpm: number;
+  /**
+   * The engine re-run under the Budget's own settings (Phase 25). Borrowing, debt and the tax take
+   * are measured from the Budget before any measure, today's estimate with nothing moved, so the
+   * economy since March is never the player's doing.
+   */
+  outcomeOf: OutcomeOf;
   /** The playthrough, when there is one (Phase 8). Without it the game readings sit at nought. */
   game?: GamePermalink;
   /** Ambitions against the package, computed by the caller from the same outcome. */
@@ -43,7 +52,17 @@ const STATUS_ORDER: Record<string, number> = {
 
 const WELFARE_REVERSALS = new Set(['rv2ch', 'rvpip', 'rvwfp']);
 /** Incidence groups on the two sides of "who pays": the top and business, or everyone. */
-const PROGRESSIVE_GROUPS = new Set(['top', 'savers-owners', 'business']);
+const PROGRESSIVE_GROUPS = new Set(['top', 'higher-earners', 'savers-owners', 'business']);
+/** The services people use most (Phase 25): cuts to them count from a lower threshold. */
+const PROTECTED_GROUPS = new Set(['nhs', 'schools']);
+/**
+ * Paid for (Phase 25): the measures cost something worth paying for, at least this much in some
+ * year, and borrowing is no higher than before the Budget, give or take this much, in any year.
+ */
+const PAID_FOR_COST_GBPM = 1000;
+const PAID_FOR_TOLERANCE_GBPM = 500;
+/** A cut too small to name, £ million. */
+const NAMED_CUT_GBPM = 50;
 const BROAD_GROUPS = new Set(['broad-base', 'motorists', 'duties']);
 const PRICE_RAISERS = new Set([
   'vatfood',
@@ -75,7 +94,12 @@ export interface Cause {
 export interface Readings {
   values: Record<string, number>;
   causes: Record<string, Cause[]>;
-  /** Words the reception's sentences fill in: `{payers}`, the groups who pay the most. */
+  /**
+   * Words the reception's sentences fill in (Phase 25): `{payers}`, the groups who pay the most;
+   * `{feltHow}`, how households feel the tax rises that most of them feel; `{protected}` and
+   * `{protectedCut}`, the health and schools budgets cut and by how much; `{cutServices}`, the
+   * budgets cut.
+   */
   words: Record<string, string>;
 }
 
@@ -102,20 +126,41 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
     stability?.targetYear ?? outcome.paths.policyYears[outcome.paths.policyYears.length - 1] ?? '';
   const years = outcome.paths.years;
   const previous = years[years.indexOf(year) - 1] ?? year;
-  const { baseline, policy } = outcome.paths;
+  const { policy } = outcome.paths;
 
+  // Before the Budget (Phase 25): today's estimate with no measure moved. Every change below is
+  // measured from here, so what the economy did since March is never counted as the player's.
+  const pre = preBudget(input.outcomeOf, outcome.settings.leverValues, levers);
+  const before = pre.paths.policy;
   const headroom = stability?.headroomGbpm ?? 0;
-  const borrowingChange = at(policy.psnb, year) - at(baseline.psnb, year);
+  const headroomBefore = pre.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;
+  const moreBorrowing = (y: string) => at(policy.psnb, y) - at(before.psnb, y);
+  const borrowingChange = moreBorrowing(year);
   const cumulativeBorrowing = outcome.paths.policyYears.reduce(
-    (acc, y) => acc + at(policy.psnb, y) - at(baseline.psnb, y),
+    (acc, y) => acc + moreBorrowing(y),
     0,
   );
-  const debtChange = at(policy.psnflPctGdp, year) - at(baseline.psnflPctGdp, year);
+  const debtChange = at(policy.psnflPctGdp, year) - at(before.psnflPctGdp, year);
   const debtFalling = at(policy.psnflPctGdp, year) - at(policy.psnflPctGdp, previous);
   const taxTakeChange =
     (at(policy.receipts, year) / at(policy.nominalGdpFy, year) -
-      at(baseline.receipts, year) / at(baseline.nominalGdpFy, year)) *
+      at(before.receipts, year) / at(before.nominalGdpFy, year)) *
     100;
+  // The two fiscal rules, not the welfare cap: what the rules test (Phase 25).
+  const fiscalRulesMissed = outcome.verdicts.filter(
+    (v) => (v.kind === 'currentBudget' || v.kind === 'stockFalling') && v.status === 'notMet',
+  ).length;
+  // Borrowing higher in an earlier year than the target year shows: the rules test one year.
+  let frontLoaded = 0;
+  let frontYear: string | undefined;
+  for (const y of outcome.paths.policyYears) {
+    if (fyStart(y) >= fyStart(year)) continue;
+    const excess = moreBorrowing(y) - Math.max(0, borrowingChange);
+    if (excess > frontLoaded) {
+      frontLoaded = excess;
+      frontYear = y;
+    }
+  }
 
   const moved = new Set(outcome.leverEffects.map((e) => e.code));
   const values = outcome.settings.leverValues;
@@ -149,6 +194,8 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   const headroomMovers = signed(
     leverRows.map((r) => ({ code: r.code, delta: -r.currentBudgetGbpm })),
   );
+  // The debt rule's margin: positive when a decision borrows less, so debt falls faster.
+  const debtHeadroomMovers = signed(leverRows.map((r) => ({ code: r.code, delta: -r.psnbGbpm })));
   const cumulativeMovers = signed(
     outcome.leverEffects
       .filter((e) => e.category !== 'macro')
@@ -209,7 +256,23 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
     list: typeof policyEffects,
     size: (e: (typeof policyEffects)[number]) => number,
   ): Cause[] => signed(list.map((e) => ({ code: e.code, delta: size(e) })));
-  const publicServiceSpending = policyEffects.reduce((acc, e) => acc + spendOf(e), 0);
+  // Public services are the departments, not benefits (Phase 25): welfare has its own readings.
+  const departments = policyEffects.filter((e) => e.category === 'spend');
+  const publicServiceSpending = departments.reduce((acc, e) => acc + spendOf(e), 0);
+  // Cuts to departments' day-to-day budgets, each counted, never netted against a rise elsewhere.
+  const cutOf = (e: (typeof policyEffects)[number]) => Math.max(0, -(e.currentSpending[year] ?? 0));
+  const serviceCuts = departments.reduce((acc, e) => acc + cutOf(e), 0);
+  const isProtected = (code: string) => PROTECTED_GROUPS.has(input.incidence?.levers[code] ?? '');
+  const protectedEffects = departments.filter((e) => isProtected(e.code));
+  const protectedCuts = protectedEffects.reduce((acc, e) => acc + cutOf(e), 0);
+  const namesOf = (list: typeof policyEffects) =>
+    inWords(
+      list
+        .filter((e) => cutOf(e) >= NAMED_CUT_GBPM)
+        .sort((a, b) => cutOf(b) - cutOf(a))
+        .slice(0, 3)
+        .map((e) => title(e.code)),
+    );
   const capitalChange = policyEffects.reduce((acc, e) => acc + (e.capitalSpending[year] ?? 0), 0);
   const welfareEffects = policyEffects.filter((e) => e.category === 'welfare');
   const welfareChange = welfareEffects.reduce((acc, e) => acc + (e.currentSpending[year] ?? 0), 0);
@@ -217,6 +280,49 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   const cuts = policyEffects.filter((e) => (e.receipts[year] ?? 0) < 0);
   const taxRises = rises.reduce((acc, e) => acc + (e.receipts[year] ?? 0), 0);
   const taxCuts = cuts.reduce((acc, e) => acc - (e.receipts[year] ?? 0), 0);
+  // Taxes most households feel, and those they do not: levies on banks, energy producers and
+  // the very top, an authored list (Phase 25). Felt rises are named by how they are felt.
+  const notFelt = new Set(input.incidence?.notFelt ?? []);
+  const feltRises = rises.filter((e) => !notFelt.has(e.code));
+  const notFeltRises = rises.filter((e) => notFelt.has(e.code));
+  const raisedBy = (list: typeof policyEffects) =>
+    list.reduce((acc, e) => acc + (e.receipts[year] ?? 0), 0);
+  const feltBy = new Map<string, number>();
+  for (const e of feltRises) {
+    const group = input.incidence?.levers[e.code];
+    if (group) feltBy.set(group, (feltBy.get(group) ?? 0) + (e.receipts[year] ?? 0));
+  }
+  const feltMost = [...feltBy.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
+  const feltHow =
+    (feltMost ? input.incidence?.groups[feltMost]?.felt : undefined) ?? 'in pay packets and prices';
+  // Paid for (Phase 25): measures that cost something, and borrowing no higher than before the
+  // Budget in any year. 0 paid for; 1 nothing to pay for; 2 borrowed in some year.
+  const costIn = (y: string) =>
+    policyEffects.reduce(
+      (acc, e) =>
+        acc +
+        Math.max(
+          0,
+          (e.currentSpending[y] ?? 0) + (e.capitalSpending[y] ?? 0) - (e.receipts[y] ?? 0),
+        ),
+      0,
+    );
+  const somethingToPay = outcome.paths.policyYears.some((y) => costIn(y) >= PAID_FOR_COST_GBPM);
+  const borrowedSomeYear = outcome.paths.policyYears.some(
+    (y) => moreBorrowing(y) > PAID_FOR_TOLERANCE_GBPM,
+  );
+  const paidForStatus = !somethingToPay ? 1 : borrowedSomeYear ? 2 : 0;
+  const frontMovers = frontYear
+    ? signed(
+        policyEffects.map((e) => ({
+          code: e.code,
+          delta:
+            (e.currentSpending[frontYear] ?? 0) +
+            (e.capitalSpending[frontYear] ?? 0) -
+            (e.receipts[frontYear] ?? 0),
+        })),
+      )
+    : [];
   // Who pays: rises on the top and business count up, rises on everyone else count down.
   let progressive = 0;
   const progressiveRows: { code: string; delta: number }[] = [];
@@ -247,10 +353,21 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
     ranked.length === 1 && funded.length === 1 && unfunded.length === 0 && started.length === 0
       ? deliveredGbpm
       : 0;
-  const manifestoBroken = broken.filter((p) => p.promise.breaks.length > 0);
-  // Amber (Phase 23): the pledge's words kept, its spirit tested; a promise also broken counts once.
+  // Only the 2024 manifesto's own words are red lines (Phase 25). A Budget 2025 decision
+  // reversed is a broken commitment, a U-turn; the fiscal rules are read as the rules.
+  const byLevers = broken.filter((p) => p.promise.judgedBy !== 'fiscalRules');
+  const manifestoBroken = byLevers.filter((p) => p.promise.origin === 'manifesto-2024');
+  const commitmentsBroken = byLevers.filter((p) => p.promise.origin !== 'manifesto-2024');
+  // Amber (Phase 23): the pledge's words kept, its spirit tested; a promise also broken counts
+  // once. Only a scored strain of a manifesto promise counts (Phase 25): the others are shown.
   const strained = (status?.strains ?? []).filter(
-    (s) => s.strained && !broken.some((p) => p.promise.id === s.promise.id),
+    (s) =>
+      s.strained &&
+      s.promise.origin === 'manifesto-2024' &&
+      !broken.some((p) => p.promise.id === s.promise.id) &&
+      s.promise.strains.some(
+        (rule) => rule.scored && s.strainedBy.some((b) => b.code === rule.code),
+      ),
   );
 
   const out: Readings = {
@@ -289,6 +406,16 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       taxCutsGbpm: taxCuts,
       netRevenueGbpm: taxRises - taxCuts,
       progressiveBalanceGbpm: progressive,
+      headroomChangeGbpm: headroom - headroomBefore,
+      investmentHeadroomGbpm: investment?.headroomGbpm ?? 0,
+      fiscalRulesMissed,
+      serviceCutsGbpm: serviceCuts,
+      protectedCutsGbpm: protectedCuts,
+      feltTaxRisesGbpm: raisedBy(feltRises),
+      notFeltTaxRisesGbpm: raisedBy(notFeltRises),
+      paidForStatus,
+      frontLoadedBorrowingGbpm: frontLoaded,
+      commitmentsBroken: commitmentsBroken.length,
     },
     causes: {
       stabilityHeadroomGbpm: headroomMovers,
@@ -330,14 +457,32 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       priceRaisingMeasures: priceRaisers.map((l) => ({ title: title(l.code) })),
       thresholdFreezeKept: moved.has('rvfrz') ? [{ title: title('rvfrz') }] : [],
       efficienciesKept: moved.has('rveff') ? [{ title: title('rveff') }] : [],
-      publicServiceSpendingGbpm: topBy(policyEffects, spendOf),
+      publicServiceSpendingGbpm: topBy(departments, spendOf),
       capitalChangeGbpm: topBy(policyEffects, (e) => e.capitalSpending[year] ?? 0),
       taxRisesGbpm: topBy(rises, (e) => e.receipts[year] ?? 0),
       taxCutsGbpm: topBy(cuts, (e) => -(e.receipts[year] ?? 0)),
       netRevenueGbpm: taxMovers,
       progressiveBalanceGbpm: signed(progressiveRows),
+      headroomChangeGbpm: headroomMovers,
+      investmentHeadroomGbpm: debtHeadroomMovers,
+      fiscalRulesMissed: borrowingMovers,
+      serviceCutsGbpm: topBy(departments, cutOf),
+      protectedCutsGbpm: topBy(protectedEffects, cutOf),
+      feltTaxRisesGbpm: topBy(feltRises, (e) => e.receipts[year] ?? 0),
+      notFeltTaxRisesGbpm: topBy(notFeltRises, (e) => e.receipts[year] ?? 0),
+      paidForStatus: borrowingMovers,
+      frontLoadedBorrowingGbpm: frontMovers,
+      commitmentsBroken: commitmentsBroken.flatMap((p) =>
+        p.brokenBy.map((b) => ({ title: title(b.code) })),
+      ),
     },
-    words: { payers: inWords(payers) },
+    words: {
+      payers: inWords(payers),
+      feltHow,
+      protected: namesOf(protectedEffects),
+      protectedCut: formatGbpBn(protectedCuts, 1),
+      cutServices: namesOf(departments),
+    },
   };
   return out;
 }

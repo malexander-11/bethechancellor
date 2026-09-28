@@ -49,9 +49,9 @@ export const prioritySchema = z.strictObject({
 });
 
 /**
- * A manifesto red line. `breaks` is a detector: the promise is broken when any listed lever is
- * on the wrong side of its default (or on at all, for a toggle). The red lines are fixed: there
- * is no negotiating them away (Phase 9), only crossing them and being judged for it.
+ * A promise the government made. `breaks` is a detector: the promise is broken when any listed
+ * lever is on the wrong side of its default (or on at all, for a toggle). The promises are fixed:
+ * there is no negotiating them away (Phase 9), only crossing them and being judged for it.
  */
 /** A lever and the side of its default that crosses the promise: on (a toggle), above or below. */
 const promiseRuleSchema = z.strictObject({
@@ -59,19 +59,38 @@ const promiseRuleSchema = z.strictObject({
   when: z.enum(['above', 'below', 'on']),
 });
 
+/**
+ * Where a promise comes from (Phase 25). Only the 2024 manifesto's own words are red lines the
+ * public holds the government to on every doorstep; a Budget 2025 decision reversed is a U-turn,
+ * and the fiscal rules are the Chancellor's own word, judged by the rules themselves.
+ */
+export const promiseOriginSchema = z.enum(['manifesto-2024', 'budget-2025', 'government']);
+
 export const promiseSchema = z.strictObject({
   id: slug,
   title: z.string().min(1),
   text: z.string().min(1),
   sources: z.array(sourceRefSchema).min(1),
-  /** Empty for a promise the verdicts judge (the fiscal rules) rather than a lever. */
+  origin: promiseOriginSchema,
+  /**
+   * How the promise is judged: by the levers its lists name, or, for the fiscal rules, by the
+   * verdicts (a rule missed breaks it). A promise judged by the rules names no lever.
+   */
+  judgedBy: z.enum(['levers', 'fiscalRules']).default('levers'),
   breaks: z.array(promiseRuleSchema),
   /**
    * The cases that keep the promise's words and test its spirit (Phase 23): the same detector,
    * amber rather than red, each with a line saying why. A lever named here is not in `breaks`.
+   * A strain with `scored: false` is shown, amber, and scored by no audience, because another
+   * rule already counts what it is about (Phase 25: a health cut, counted as a service cut).
    */
   strains: z
-    .array(promiseRuleSchema.extend({ text: z.string().min(1).max(160).optional() }))
+    .array(
+      promiseRuleSchema.extend({
+        text: z.string().min(1).max(160).optional(),
+        scored: z.boolean().default(true),
+      }),
+    )
     .default([]),
 });
 
@@ -94,6 +113,19 @@ export const pmFileSchema = z
       ids.add(p.id);
     });
     file.promises.forEach((p, i) => {
+      const watched = p.breaks.length + p.strains.length;
+      if (p.judgedBy === 'fiscalRules' && watched > 0)
+        ctx.addIssue({
+          code: 'custom',
+          message: `promise ${p.id} is judged by the fiscal rules and names no lever`,
+          path: ['promises', i],
+        });
+      if (p.judgedBy === 'levers' && watched === 0)
+        ctx.addIssue({
+          code: 'custom',
+          message: `promise ${p.id} is judged by levers but names none`,
+          path: ['promises', i],
+        });
       const broken = new Set(p.breaks.map((r) => r.code));
       p.strains.forEach((r, j) => {
         if (broken.has(r.code))
@@ -415,6 +447,8 @@ export const ministersFileSchema = z
  */
 export const interventionWhenSchema = z.enum([
   'promise-broken',
+  // A promise from outside the manifesto reversed (Phase 25): a U-turn, not a red line.
+  'commitment-broken',
   'promise-strained',
   'priority-unfunded',
   'priority-part-funded',
@@ -538,6 +572,12 @@ export const speechFileSchema = z.strictObject({
 export const incidenceGroupSchema = z.strictObject({
   label: z.string().min(1),
   side: z.enum(['pays', 'benefits']),
+  /**
+   * How a household feels a tax on this group, in the words that follow "felt" (Phase 25): "in pay
+   * packets and prices", "through pay and prices". Words only, no figure; every paying group has
+   * one.
+   */
+  felt: z.string().min(1).max(60).optional(),
 });
 
 export const incidenceFileSchema = z
@@ -545,6 +585,11 @@ export const incidenceFileSchema = z
     schemaVersion: z.literal(1),
     groups: z.record(slug, incidenceGroupSchema),
     levers: z.record(z.string(), slug),
+    /**
+     * Taxes most households do not feel (Phase 25): levies on banks, on energy producers and on
+     * the very top. They leave the public's count of tax rises, and earn no point either way.
+     */
+    notFelt: z.array(z.string().min(1)).default([]),
   })
   .superRefine((file, ctx) => {
     for (const [code, group] of Object.entries(file.levers)) {
@@ -555,6 +600,23 @@ export const incidenceFileSchema = z
           path: ['levers', code],
         });
     }
+    for (const [id, group] of Object.entries(file.groups)) {
+      if (group.side === 'pays' && !group.felt)
+        ctx.addIssue({
+          code: 'custom',
+          message: `paying group ${id} says nothing of how it is felt`,
+          path: ['groups', id],
+        });
+    }
+    file.notFelt.forEach((code, i) => {
+      const group = file.levers[code];
+      if (!group || file.groups[group]?.side !== 'pays')
+        ctx.addIssue({
+          code: 'custom',
+          message: `${code} is not felt, but pays nothing on the incidence tags`,
+          path: ['notFelt', i],
+        });
+    });
   });
 
 /**
@@ -631,6 +693,13 @@ export const receptionBandSchema = z.strictObject({
   sources: z.array(sourceRefSchema).default([]),
   badge: simulatedBadgeSchema,
   variants: z.array(receptionVariantSchema).optional(),
+  /**
+   * The band also applies when a second reading passes a threshold, if the band lies further
+   * along the rule than the one the reading itself lands in (Phase 25): cuts to health and
+   * schools count from a lower threshold inside the public's rule on service cuts. The points,
+   * cap and words are the band's own; only which band applies changes.
+   */
+  alsoWhen: z.strictObject({ measure: readingMeasureSchema, above: z.number() }).optional(),
 });
 
 export const receptionRuleSchema = z

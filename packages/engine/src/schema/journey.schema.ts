@@ -117,4 +117,15 @@ export const readingMeasureSchema = z.enum([
   'taxCutsGbpm',
   'netRevenueGbpm',
   'progressiveBalanceGbpm',
+  // Recalibrated in Phase 25 (ADR-0026): measured from before the Budget, not from March.
+  'headroomChangeGbpm',
+  'investmentHeadroomGbpm',
+  'fiscalRulesMissed',
+  'serviceCutsGbpm',
+  'protectedCutsGbpm',
+  'feltTaxRisesGbpm',
+  'notFeltTaxRisesGbpm',
+  'paidForStatus',
+  'frontLoadedBorrowingGbpm',
+  'commitmentsBroken',
 ]);

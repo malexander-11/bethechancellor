@@ -203,6 +203,10 @@ export interface OptionRedLine {
   severity: 'breaks' | 'strains';
   /** Whether the Budget with this option in it crosses the line. */
   broken: boolean;
+  /** The 2024 manifesto's own words (Phase 25): a red line, not a promise made since. */
+  manifesto: boolean;
+  /** False for a strain shown and scored by no audience (Phase 25). */
+  scored: boolean;
 }
 
 /**
@@ -229,6 +233,8 @@ export function optionRedLines(
         when: rule.when,
         severity: 'breaks',
         broken: report?.brokenBy.some((b) => codes.has(b.code)) ?? false,
+        manifesto: promise.origin === 'manifesto-2024',
+        scored: true,
       });
     }
     const strain = promise.strains.find((r) => codes.has(r.code));
@@ -239,6 +245,8 @@ export function optionRedLines(
         when: strain.when,
         severity: 'strains',
         broken: report?.strainedBy.some((b) => codes.has(b.code)) ?? false,
+        manifesto: promise.origin === 'manifesto-2024',
+        scored: strain.scored,
       });
     }
   }

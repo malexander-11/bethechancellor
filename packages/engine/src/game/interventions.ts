@@ -38,6 +38,7 @@ export interface DeskReading {
 /** Most pressing first: a broken promise outranks a compliment. */
 const ORDER: readonly InterventionWhen[] = [
   'promise-broken',
+  'commitment-broken',
   'rule-missed',
   'priority-unfunded',
   'promise-strained',
@@ -73,14 +74,21 @@ export function interventionsFor(
     }
   };
   const brokenIds = new Set(status.promises.filter((p) => !p.kept).map((p) => p.promise.id));
+  // A manifesto red line and a reversed commitment get their own lines (Phase 25). The fiscal
+  // rules have theirs: a missed rule is said once, as a missed rule.
   for (const p of status.promises) {
-    if (!p.kept) say('promise-broken', p.promise.title, p.promise.id, p.promise.sources);
+    if (p.kept || p.promise.judgedBy === 'fiscalRules') continue;
+    const when = p.promise.origin === 'manifesto-2024' ? 'promise-broken' : 'commitment-broken';
+    say(when, p.promise.title, p.promise.id, p.promise.sources);
   }
-  // Amber (Phase 23): a promise strained and not broken gets its own, quieter line.
+  // Amber (Phase 23): a promise strained and not broken gets its own, quieter line, where the
+  // strain is scored; a strain shown for information only is left to its amber tag (Phase 25).
   for (const s of status.strains) {
-    if (s.strained && !brokenIds.has(s.promise.id)) {
-      say('promise-strained', s.promise.title, s.promise.id, s.promise.sources);
-    }
+    if (!s.strained || brokenIds.has(s.promise.id)) continue;
+    const scored = s.promise.strains.some(
+      (rule) => rule.scored && s.strainedBy.some((b) => b.code === rule.code),
+    );
+    if (scored) say('promise-strained', s.promise.title, s.promise.id, s.promise.sources);
   }
   if (reading.ruleMissed) say('rule-missed', undefined, undefined, []);
   for (const p of status.priorities) {

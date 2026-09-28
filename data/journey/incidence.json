@@ -3,31 +3,43 @@
   "groups": {
     "broad-base": {
       "label": "Everyone who earns or spends",
-      "side": "pays"
+      "side": "pays",
+      "felt": "in pay packets and prices"
     },
     "top": {
       "label": "The best-off",
-      "side": "pays"
+      "side": "pays",
+      "felt": "by the best-off"
+    },
+    "higher-earners": {
+      "label": "Higher earners",
+      "side": "pays",
+      "felt": "in higher earners’ pay packets"
     },
     "business": {
       "label": "Business",
-      "side": "pays"
+      "side": "pays",
+      "felt": "through pay and prices"
     },
     "motorists": {
       "label": "Motorists",
-      "side": "pays"
+      "side": "pays",
+      "felt": "at the pump and in car tax"
     },
     "flyers": {
       "label": "Air passengers",
-      "side": "pays"
+      "side": "pays",
+      "felt": "in air fares"
     },
     "savers-owners": {
       "label": "Savers, investors and homeowners",
-      "side": "pays"
+      "side": "pays",
+      "felt": "by homeowners and families with savings"
     },
     "duties": {
       "label": "Drinkers, smokers and gamblers",
-      "side": "pays"
+      "side": "pays",
+      "felt": "on drink, tobacco and gambling"
     },
     "nhs": {
       "label": "Patients and the NHS",
@@ -99,21 +111,24 @@
     },
     "tax-gap": {
       "label": "People and firms not paying what they owe",
-      "side": "pays"
+      "side": "pays",
+      "felt": "by those not paying what they owe"
     },
     "working-pensioners": {
       "label": "Working pensioners",
-      "side": "pays"
+      "side": "pays",
+      "felt": "by pensioners still in work"
     },
     "disabled-motorists": {
       "label": "Disabled people leasing a car",
-      "side": "pays"
+      "side": "pays",
+      "felt": "by disabled people leasing a car"
     }
   },
   "levers": {
     "itbr": "broad-base",
-    "ithr": "broad-base",
-    "itbrl": "broad-base",
+    "ithr": "higher-earners",
+    "itbrl": "higher-earners",
     "itpa": "broad-base",
     "nicm": "broad-base",
     "nica": "broad-base",
@@ -131,7 +146,7 @@
     "itar": "top",
     "it50": "top",
     "wealth": "top",
-    "pens30": "top",
+    "pens30": "higher-earners",
     "iinc2": "savers-owners",
     "gam2": "duties",
     "cgth": "savers-owners",
@@ -198,7 +213,7 @@
     "cgtl": "savers-owners",
     "cgtexit": "top",
     "cgtprr": "savers-owners",
-    "pens20": "top",
+    "pens20": "higher-earners",
     "banklevy": "business",
     "nicrent": "savers-owners",
     "qelevy": "business",
@@ -213,11 +228,27 @@
     "csjmh": "disabled-people",
     "dlakids": "disabled-people",
     "ctgh": "savers-owners",
-    "nicuel": "top",
+    "nicuel": "higher-earners",
     "vat1z": "broad-base",
     "pslump": "top",
     "sdltabol": "savers-owners",
     "cta": "broad-base",
     "vatmot": "disabled-motorists"
-  }
+  },
+  "notFelt": [
+    "bank5",
+    "banklevy",
+    "qelevy",
+    "epl2",
+    "wealth",
+    "wealth2",
+    "carried",
+    "cgtexit",
+    "nicllp",
+    "it50",
+    "itar",
+    "cgtalign",
+    "pslump",
+    "hvcts15"
+  ]
 }

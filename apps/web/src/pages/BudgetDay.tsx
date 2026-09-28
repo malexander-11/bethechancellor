@@ -151,12 +151,13 @@ export function BudgetDayPage() {
         levers,
         reception,
         typicalErrorGbpm,
+        outcomeOf,
         pm,
         incidence,
         ...(game ? { game } : {}),
         ...(status ? { status } : {}),
       }),
-    [outcome, typicalErrorGbpm, game, status],
+    [outcome, typicalErrorGbpm, game, status, outcomeOf],
   );
   const notes = distributionalNotes(outcome, levers, targetYear).slice(0, 3);
   // The one audience that is arithmetic: the rules, in a line above the three cards, by their
@@ -210,6 +211,7 @@ export function BudgetDayPage() {
       outcome,
       levers,
       typicalErrorGbpm,
+      outcomeOf,
       game,
       ...(status ? { status } : {}),
     });

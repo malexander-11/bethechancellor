@@ -227,13 +227,16 @@ export function MethodologyPage() {
       <p>
         Three audiences rate the Budget out of five and say why: your backbenchers ask whether this
         is a Labour Budget, the markets whether the headroom is enough and what it does to growth
-        and the tax burden, the public whether it made a difference to them. Each rating is three
-        plus the points of authored rules, clamped to one to five, and a manifesto promise broken
-        pins the public at one whatever else happens. Every threshold, point and sentence is written
-        in the data and labelled simulated; &ldquo;Why this rating&rdquo; on each card lists every
-        rule with its points, the figure it read, the decisions behind it and, with the workings on,
-        its sources. Nothing predicts what a market or a voter would actually do: the cards say what
-        a judgement leans on, and the thresholds are the game&rsquo;s own, written down in ADR-0013.
+        and the tax burden, the public whether it made a difference to them. Each rating starts at
+        three: one or two points either way move it a step, three or more move it two. A manifesto
+        red line crossed pins the public at one, and a missed fiscal rule holds every audience at
+        three or below, whatever else happens. Borrowing, debt and the tax take are measured from
+        before your Budget, today&rsquo;s estimate with nothing moved, so what the economy did since
+        March is never counted as yours. Every threshold, point and sentence is written in the data
+        and labelled simulated; &ldquo;Why this rating&rdquo; on each card lists every rule with its
+        points, the figure it read, the decisions behind it and, with the workings on, its sources.
+        Nothing predicts what a market or a voter would actually do: the cards say what a judgement
+        leans on, and the thresholds are the game&rsquo;s own, written down in ADR-0013.
       </p>
 
       <h2>Why it looks plain</h2>

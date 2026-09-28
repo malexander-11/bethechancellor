@@ -260,7 +260,9 @@ export function assembleSpeech(input: SpeechInput): Speech {
   if (giveaways.length > 0) say('giveaways', speech.giveaways, { measures: list(giveaways) });
 
   // Promises broken by choice are owned, once.
-  const broken = (status?.promises ?? []).filter((p) => !p.kept && p.promise.breaks.length > 0);
+  const broken = (status?.promises ?? []).filter(
+    (p) => !p.kept && p.promise.judgedBy !== 'fiscalRules',
+  );
   if (broken.length > 0) {
     say('lock-break', speech.lockBreak, {
       promises: list(broken.map((p) => lower(p.promise.title))),

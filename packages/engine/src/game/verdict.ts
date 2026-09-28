@@ -105,9 +105,9 @@ export function ambitionVerdict(
   const promises: AmbitionVerdict['promises'] = status.promises.map((p) => {
     const strain = p.kept ? strainedBy.get(p.promise.id) : undefined;
     const fate: PromiseFate = !p.kept
-      ? p.promise.breaks.length > 0
-        ? 'broken-by-choice'
-        : 'broken-by-arithmetic'
+      ? p.promise.judgedBy === 'fiscalRules'
+        ? 'broken-by-arithmetic'
+        : 'broken-by-choice'
       : strain
         ? 'strained'
         : 'kept';
@@ -202,7 +202,7 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
   const delivered = status.delivered;
   const facts: Record<string, boolean> = {
     rulesMet,
-    promisesAllKept: status.broken === 0,
+    promisesAllKept: status.promises.every((p) => p.kept),
     prioritiesAllFunded: status.priorities.length > 0 && delivered === status.priorities.length,
     prioritiesNoneFunded: status.priorities.every((p) => p.status === 'notFunded'),
     headroomAmple: headroom >= AMPLE_HEADROOM_GBPM,

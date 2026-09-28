@@ -19,7 +19,7 @@ import type { ReactNode } from 'react';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
-import { formatLeverValueShort } from '../components/LeverControl';
+import { formatLeverValueShort, promiseWords } from '../components/LeverControl';
 import {
   MACRO_CODES as MACRO_LIST,
   finetuneTitle,
@@ -259,7 +259,7 @@ export function ReviewPage() {
     );
   // The manifesto: broken by a lever (red), or kept in its words and strained (amber). A promise
   // with no lever of its own (the fiscal rules) is the rules line above it.
-  const broken = status.promises.filter((p) => !p.kept && p.promise.breaks.length > 0);
+  const broken = status.promises.filter((p) => !p.kept && p.promise.judgedBy !== 'fiscalRules');
   const brokenIds = new Set(broken.map((p) => p.promise.id));
   const strained = status.strains.filter((s) => s.strained && !brokenIds.has(s.promise.id));
 
@@ -386,12 +386,26 @@ export function ReviewPage() {
           <ul className="review__list">
             {broken.map((p) => (
               <li key={p.promise.id}>
-                <span className="tag tag--warn">Breaks the manifesto: {p.promise.title}</span>
+                <span className="tag tag--warn">
+                  Breaks {promiseWords({ manifesto: p.promise.origin === 'manifesto-2024' }).noun}:{' '}
+                  {p.promise.title}
+                </span>
               </li>
             ))}
             {strained.map((p) => (
               <li key={p.promise.id}>
-                <span className="tag tag--amber">Strains the manifesto: {p.promise.title}</span>
+                <span className="tag tag--amber">
+                  Strains{' '}
+                  {
+                    promiseWords({
+                      manifesto: p.promise.origin === 'manifesto-2024',
+                      scored: p.promise.strains.some(
+                        (rule) => rule.scored && p.strainedBy.some((b) => b.code === rule.code),
+                      ),
+                    }).noun
+                  }
+                  : {p.promise.title}
+                </span>
               </li>
             ))}
           </ul>

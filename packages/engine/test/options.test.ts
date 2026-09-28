@@ -103,12 +103,13 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
   it('names the red line a lever is watched by, and whether the Budget would cross it', () => {
     const lock = ds.pm.promises.find((p) => p.id === 'tax-lock');
     const bundle = (values: Record<string, number>) => ({ id: 'b', values });
+    const red = { manifesto: true, scored: true };
     expect(optionRedLines(bundle({ itbr: 1 }), ds.pm.promises, levers, {})).toEqual([
-      { promise: lock?.title, when: 'above', severity: 'breaks', broken: true },
+      { promise: lock?.title, when: 'above', severity: 'breaks', broken: true, ...red },
     ]);
     // The levy keeps the pledge's words and tests its spirit: amber (Phase 23).
     expect(optionRedLines(bundle({ hscl: 1 }), ds.pm.promises, levers, {})).toEqual([
-      { promise: lock?.title, when: 'on', severity: 'strains', broken: true },
+      { promise: lock?.title, when: 'on', severity: 'strains', broken: true, ...red },
     ]);
     expect(optionRedLines(bundle({ nicer: 1 }), ds.pm.promises, levers, {})[0]?.severity).toBe(
       'strains',
@@ -116,6 +117,11 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     // A saving that breaks a promise when switched on.
     const limit = optionRedLines(deliverOption('two-child-limit'), ds.pm.promises, levers, {});
     expect(limit.map((l) => l.broken)).toEqual([true]);
+    // A Budget 2025 decision, not the manifesto's words (Phase 25).
+    expect(limit.map((l) => l.manifesto)).toEqual([false]);
+    // A health cut strains the 18-week target, shown and scored by nobody.
+    const health = optionRedLines(bundle({ dhsc: -1 }), ds.pm.promises, levers, {});
+    expect(health.map((l) => [l.severity, l.scored])).toEqual([['strains', false]]);
   });
 
   it('warns when an option meets a lever already moved that it interacts with', () => {

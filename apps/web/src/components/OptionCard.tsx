@@ -16,15 +16,9 @@ import type { OptionPrice } from '../journey/prices';
 import { AdviceLine } from './AdviceLine';
 import { BlockedNotice } from './BlockedNotice';
 import { LabelBadge } from './LabelBadge';
-import { formatLeverValue } from './LeverControl';
+import { formatLeverValue, promiseWords, restingWords } from './LeverControl';
 import { SourceList } from './SourceLink';
 import { Term } from './Term';
-
-const RED_LINE_WORDS: Record<OptionRedLine['when'], string> = {
-  above: 'no rise',
-  below: 'no cut',
-  on: 'do not switch on',
-};
 
 /** What a card says about the option's levers: the badges of the costings behind it, once each. */
 export function badgesOf(levers: readonly Lever[]): Badge[] {
@@ -234,11 +228,11 @@ export function OptionCard({
                     : on
                       ? 'Breaks'
                       : 'Would break'}{' '}
-                  the manifesto: {r.promise}
+                  {promiseWords(r).noun}: {r.promise}
                 </span>
               ) : (
                 <span key={`${r.severity}-${r.promise}`} className="tag--manifesto">
-                  Manifesto: {r.severity === 'strains' ? 'contested' : RED_LINE_WORDS[r.when]}
+                  {promiseWords(r).label}: {restingWords(r)}
                   <span className="sr-only"> ({r.promise})</span>
                 </span>
               ),

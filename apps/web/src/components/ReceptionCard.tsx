@@ -79,9 +79,9 @@ export function ReceptionCard({
         <summary>{whySummary(tally)}</summary>
         <p className="reception__question kicker">{question}</p>
         <p className="panel__hint">
-          Every audience starts at three. Each line below adds or takes points; a red line can hold
-          the rating down whatever else happens. The thresholds are the game’s, and each says what
-          it leans on.
+          Every audience starts at three. One or two points either way move it a step; three or
+          more, two steps. A red line or a missed rule can hold the rating down whatever else
+          happens. The thresholds are the game’s, and each says what it leans on.
         </p>
         <ul>
           {all.map((r) => (

@@ -18,7 +18,9 @@ export function BudgetSummary({
   /** Off where a scorecard on the same screen already carries the headroom. */
   showHeadroom?: boolean;
 }) {
-  const kept = status.promises.length - status.broken;
+  // The fiscal rules are counted where the rules are shown, not here (Phase 25).
+  const watched = status.promises.filter((p) => p.promise.judgedBy !== 'fiscalRules');
+  const kept = watched.length - status.broken;
   return (
     <section className="summary" aria-label="Your Budget so far">
       {showHeadroom ? (
@@ -36,7 +38,7 @@ export function BudgetSummary({
       <div className="summary__cell">
         <span className="summary__label">Promises</span>
         <span className="summary__value">
-          {status.promises.length === 0
+          {watched.length === 0
             ? 'none yet'
             : status.broken === 0
               ? `all ${kept} kept`

@@ -86,6 +86,13 @@ const CHANGE_READINGS = new Set([
   'capitalChangeGbpm',
   'netRevenueGbpm',
   'progressiveBalanceGbpm',
+  // Phase 25: sizes of what the Budget changed, each named by the decisions behind it.
+  'headroomChangeGbpm',
+  'serviceCutsGbpm',
+  'protectedCutsGbpm',
+  'feltTaxRisesGbpm',
+  'notFeltTaxRisesGbpm',
+  'frontLoadedBorrowingGbpm',
 ]);
 
 /** A reading written out, the way the scorecard writes the same figure. */
@@ -164,14 +171,25 @@ function causesFor(
   ].slice(0, MAX_CAUSES);
 }
 
-function bandFor(rule: ReceptionRule, value: number): ReceptionBand {
-  for (const band of rule.bands) {
-    if (band.upTo === undefined || value <= band.upTo) return band;
-  }
-  // The schema requires a last band with no upTo, so this is unreachable in validated data.
-  const last = rule.bands[rule.bands.length - 1];
-  if (!last) throw new Error(`reception rule ${rule.id} has no bands`);
-  return last;
+/**
+ * The band a reading lands in: the first whose `upTo` it does not exceed, or a band further along
+ * whose second reading passes its threshold (Phase 25: health and schools cuts count from less).
+ */
+function bandFor(
+  rule: ReceptionRule,
+  value: number,
+  values: Record<string, number>,
+): ReceptionBand {
+  let at = rule.bands.findIndex((band) => band.upTo === undefined || value <= band.upTo);
+  // The schema requires a last band with no upTo, so every reading lands somewhere.
+  if (at < 0) at = rule.bands.length - 1;
+  rule.bands.forEach((band, i) => {
+    const also = band.alsoWhen;
+    if (i > at && also && (values[also.measure] ?? 0) > also.above) at = i;
+  });
+  const band = rule.bands[at];
+  if (!band) throw new Error(`reception rule ${rule.id} has no bands`);
+  return band;
 }
 
 /**
@@ -201,30 +219,51 @@ function wordsFor(
  * rule's authored sentence. Only for money and percentage-point readings, only when the rule
  * carries a nudge, and never for the best band there is.
  */
-function nudgeFor(rule: ReceptionRule, band: ReceptionBand, value: number): string | undefined {
+function nudgeFor(
+  rule: ReceptionRule,
+  band: ReceptionBand,
+  value: number,
+): { text: string; better: ReceptionBand } | undefined {
   const unit = rule.reading.unit;
   if (!rule.nudge || (unit !== 'GBPm' && unit !== 'pp')) return undefined;
   const i = rule.bands.indexOf(band);
-  const gaps: number[] = [];
+  const gaps: { gap: number; better: ReceptionBand }[] = [];
   const below = rule.bands[i - 1];
   if (below && below.points > band.points && below.upTo !== undefined)
-    gaps.push(value - below.upTo);
+    gaps.push({ gap: value - below.upTo, better: below });
   const above = rule.bands[i + 1];
-  if (above && above.points > band.points && band.upTo !== undefined) gaps.push(band.upTo - value);
-  const gap = gaps.filter((g) => g >= 0).sort((a, b) => a - b)[0];
-  if (gap === undefined) return undefined;
+  if (above && above.points > band.points && band.upTo !== undefined)
+    gaps.push({ gap: band.upTo - value, better: above });
+  const nearest = gaps.filter((g) => g.gap >= 0).sort((a, b) => a.gap - b.gap)[0];
+  if (nearest === undefined) return undefined;
   // Written to the resolution the reading is written in, so the sentence never says "£0.0bn".
-  const shown = unit === 'GBPm' ? Math.max(100, Math.ceil(gap / 100) * 100) : Math.max(0.01, gap);
-  return rule.nudge.replace(/\{gap\}/g, sizeOf(shown, unit));
+  const shown =
+    unit === 'GBPm'
+      ? Math.max(100, Math.ceil(nearest.gap / 100) * 100)
+      : Math.max(0.01, nearest.gap);
+  return { text: rule.nudge.replace(/\{gap\}/g, sizeOf(shown, unit)), better: nearest.better };
 }
 
 export function clampRating(n: number): Rating {
   return Math.max(1, Math.min(5, Math.round(n))) as Rating;
 }
 
-/** Three plus the points, clamped, then held under any cap in force. */
+/**
+ * The points to a rating (Phase 25): three at nought; four for one or two points up, five for
+ * three or more; two for one or two down, one for three or more. One ordinary minus is never the
+ * floor, and the top takes more than one good thing.
+ */
+export function ratingFromPoints(net: number): Rating {
+  if (net >= 3) return 5;
+  if (net >= 1) return 4;
+  if (net <= -3) return 1;
+  if (net <= -1) return 2;
+  return 3;
+}
+
+/** The points to a rating, then held under any cap in force. */
 export function ratingOf(reasons: readonly Pick<Reason, 'points' | 'cap'>[]): Rating {
-  let rating = clampRating(3 + reasons.reduce((acc, r) => acc + r.points, 0));
+  let rating = ratingFromPoints(reasons.reduce((acc, r) => acc + r.points, 0));
   for (const r of reasons) {
     if (r.cap !== undefined && r.cap < rating) rating = clampRating(r.cap);
   }
@@ -237,7 +276,7 @@ export function ratingOf(reasons: readonly Pick<Reason, 'points' | 'cap'>[]): Ra
  * biggest minus, if anything pulled down. Ties go to the order the rules are written in.
  */
 function leadOf(all: readonly Reason[], rating: Rating): Reason | undefined {
-  const uncapped = clampRating(3 + all.reduce((acc, r) => acc + r.points, 0));
+  const uncapped = ratingFromPoints(all.reduce((acc, r) => acc + r.points, 0));
   const byWeight = (a: Reason, b: Reason) => Math.abs(b.points) - Math.abs(a.points);
   if (rating < uncapped) {
     const capping = all
@@ -254,20 +293,32 @@ function leadOf(all: readonly Reason[], rating: Rating): Reason | undefined {
 export function receptions(input: ReceptionInput): Reception[] {
   const { values, causes, words: filled } = readingsWithCauses(input);
   const typicalError = formatGbpBn(input.typicalErrorGbpm, 0);
+  // Words from the Budget itself (Phase 25): who pays, how it is felt, what was cut.
+  const fill = (text: string) =>
+    text
+      .replace(/\{typicalError\}/g, typicalError)
+      .replace(/\{payers\}/g, filled.payers || 'everyone else')
+      .replace(/\{feltHow\}/g, filled.feltHow ?? '')
+      .replace(/\{protectedCut\}/g, filled.protectedCut ?? '')
+      .replace(/\{protected\}/g, filled.protected || 'health and schools')
+      .replace(/\{cutServices\}/g, filled.cutServices || 'some departments');
   return input.reception.audiences.map((audience) => {
+    const nudges = new Map<string, { text: string; better: ReceptionBand }>();
     const all: Reason[] = audience.rules.map((rule) => {
       const value = values[rule.measure] ?? 0;
-      const band = bandFor(rule, value);
+      const band = bandFor(rule, value, values);
       const unit = rule.reading.unit;
       const words = wordsFor(band, values);
+      const nudge = nudgeFor(rule, band, value);
+      if (nudge) nudges.set(rule.id, nudge);
       return {
         rule: rule.id,
         short: rule.short,
-        text: words.text
-          .replace(/\{value\}/g, formatReadingValue(value, unit))
-          .replace(/\{abs\}/g, sizeOf(value, unit))
-          .replace(/\{typicalError\}/g, typicalError)
-          .replace(/\{payers\}/g, filled.payers || 'everyone else'),
+        text: fill(
+          words.text
+            .replace(/\{value\}/g, formatReadingValue(value, unit))
+            .replace(/\{abs\}/g, sizeOf(value, unit)),
+        ),
         points: band.points,
         direction: band.points > 0 ? 'up' : band.points < 0 ? 'down' : 'flat',
         ...(band.cap !== undefined ? { cap: band.cap } : {}),
@@ -275,13 +326,24 @@ export function receptions(input: ReceptionInput): Reception[] {
         causes: causesFor(rule, band, value, causes[rule.measure] ?? []),
         sources: words.sources,
         note: rule.note,
-        ...(nudgeFor(rule, band, value) !== undefined
-          ? { nudge: nudgeFor(rule, band, value) }
-          : {}),
         badge: 'simulated',
       };
     });
     const rating = ratingOf(all);
+    // A nudge is said only when the better band would move the rating itself (Phase 25).
+    for (const reason of all) {
+      const nudge = nudges.get(reason.rule);
+      if (!nudge) continue;
+      const better = all.map((r) =>
+        r === reason
+          ? {
+              points: nudge.better.points,
+              ...(nudge.better.cap !== undefined ? { cap: nudge.better.cap } : {}),
+            }
+          : r,
+      );
+      if (ratingOf(better) > rating) reason.nudge = nudge.text;
+    }
     const lead = leadOf(all, rating);
     // Sort is stable, so among equal weights the authored order of the rules holds.
     const reasons = [

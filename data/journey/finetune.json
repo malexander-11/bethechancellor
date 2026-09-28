@@ -233,8 +233,12 @@
             "title": "Employer National Insurance",
             "move": 1,
             "advice": {
-              "text": "HMRC’s figure. Big; on the government’s reading, outside the lock.",
+              "text": "Firms pay it first; over time it reaches pay and prices.",
               "sources": [
+                {
+                  "sourceId": "hmrc-tiin-employer-nics-2024",
+                  "quote": "The OBR judged that the increase in costs to businesses would lead to lower wages and profits."
+                },
                 {
                   "sourceId": "hmrc-trr-2025-06",
                   "table": "Publication_Format"

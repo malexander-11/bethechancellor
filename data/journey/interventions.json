@@ -13,12 +13,27 @@
       }
     },
     {
+      "id": "pa-commitment-broken",
+      "adviser": "political-adviser",
+      "when": "commitment-broken",
+      "line": {
+        "text": "That is {name}, Chancellor: a decision from last year’s Budget, reversed. It is not a manifesto promise, but the benches fought for it, and a U-turn will be called one.",
+        "short": "{name}: last year’s Budget reversed, Chancellor. The benches fought for it.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-speech"
+          }
+        ],
+        "badge": "simulated"
+      }
+    },
+    {
       "id": "pa-promise-strained",
       "adviser": "political-adviser",
       "when": "promise-strained",
       "line": {
-        "text": "{name} is tested, not broken: a tax rise in all but name. The words are kept, and the benches and the public will still notice.",
-        "short": "{name} is tested, not broken: a tax rise in all but name.",
+        "text": "{name} is tested, not broken: its words are kept and its spirit is not. The benches and the public will still notice.",
+        "short": "{name} is tested, not broken: the words kept, the spirit not.",
         "sources": [
           {
             "sourceId": "labour-manifesto-2024-strong-foundations"

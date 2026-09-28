@@ -6,11 +6,13 @@ import {
   freshGame,
   readings,
   readingsWithCauses,
+  suggestedSettings,
   type GamePermalink,
 } from '../src/index.js';
-import { loadDataset } from './fixtures.js';
+import { loadDataset, outcomeOfFor } from './fixtures.js';
 
 const ds = loadDataset();
+const outcomeOf = outcomeOfFor(ds);
 const typicalErrorGbpm =
   (ds.vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
   (ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0);
@@ -27,6 +29,7 @@ const read = (leverValues: Record<string, number>, game?: GamePermalink) => {
     outcome,
     levers: ds.levers,
     typicalErrorGbpm,
+    outcomeOf,
     pm: ds.pm,
     incidence: ds.incidence,
     ...(game ? { game, status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers) } : {}),
@@ -45,6 +48,31 @@ describe('the readings of a Budget', () => {
     expect(base.rulesMissed).toBe(0);
     // Above the cap but inside the 5% margin, as the March forecast has it.
     expect(base.welfareCapStatus).toBe(1);
+  });
+
+  it('measures from before the Budget, today’s estimate, not from March (Phase 25)', () => {
+    const context = ds.contexts[ds.contexts.length - 1];
+    if (!context) throw new Error('no context');
+    const estimate = suggestedSettings(context.readings, ds.levers);
+    const nothing = read(estimate);
+    expect(nothing.borrowingChangeGbpm).toBeCloseTo(0, 6);
+    expect(nothing.cumulativeBorrowingChangeGbpm).toBeCloseTo(0, 6);
+    expect(nothing.taxTakeChangePp).toBeCloseTo(0, 6);
+    expect(nothing.headroomChangeGbpm).toBeCloseTo(0, 6);
+    expect(nothing.stabilityHeadroomGbpm).toBeCloseTo(6850, -2);
+    expect(nothing.fiscalRulesMissed).toBe(0);
+    expect(nothing.paidForStatus).toBe(1);
+    // A cut and a rise elsewhere are both counted, never netted; health counts as protected.
+    const both = read({ ...estimate, dhsc: -1, moj: 10 });
+    expect(both.serviceCutsGbpm).toBeGreaterThan(2000);
+    expect(both.protectedCutsGbpm).toBeCloseTo(both.serviceCutsGbpm ?? 0, 6);
+    expect(both.publicServiceSpendingGbpm).toBeLessThan(0);
+    // Benefits are not public services.
+    expect(read({ ...estimate, wuc: 5 }).publicServiceSpendingGbpm).toBe(0);
+    // A bank levy raises money most households do not feel.
+    const banks = read({ ...estimate, banklevy: 1 });
+    expect(banks.feltTaxRisesGbpm).toBe(0);
+    expect(banks.notFeltTaxRisesGbpm).toBeGreaterThan(1000);
   });
 
   it('counts what you reversed', () => {
@@ -115,6 +143,7 @@ describe('the readings of a Budget', () => {
       outcome,
       levers: ds.levers,
       typicalErrorGbpm,
+      outcomeOf,
       pm: ds.pm,
       incidence: ds.incidence,
       game,

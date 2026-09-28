@@ -62,9 +62,12 @@ export interface AmbitionStatus {
   started: number;
   /** Priorities with nothing behind them. */
   notFunded: number;
-  /** Manifesto promises broken. */
+  /**
+   * Promises broken by a lever. The fiscal-rules promise is left out: a missed rule is counted
+   * where the rules are shown, once (Phase 25).
+   */
   broken: number;
-  /** Manifesto promises strained and not also broken: a promise counts once, as broken. */
+  /** Promises strained and not also broken: a promise counts once, as broken. */
   strained: number;
 }
 
@@ -115,10 +118,10 @@ export function ambitionStatus(
       spendingGbpm: reports.reduce((acc, r) => acc + r.spendingGbpm, 0),
     };
   });
-  // The manifesto is fixed: every promise is in force from the first screen to the last.
+  // The promises are fixed: every one is in force from the first screen to the last.
   const promises = promiseBreaks(values, pm.promises, levers).map((report) => {
-    // A promise with no lever detector is judged by the rules themselves.
-    if (report.promise.breaks.length > 0) return report;
+    // The fiscal rules are judged by the rules themselves, not by a lever.
+    if (report.promise.judgedBy !== 'fiscalRules') return report;
     const missed = outcome.verdicts.some(
       (v) => v.status === 'notMet' || v.status === 'aboveMargin',
     );
@@ -126,6 +129,8 @@ export function ambitionStatus(
   });
   const strains = promiseStrains(values, pm.promises, levers);
   const brokenIds = new Set(promises.filter((p) => !p.kept).map((p) => p.promise.id));
+  // A missed rule is counted as a missed rule, once, where the rules are shown (Phase 25).
+  const brokenByLevers = promises.filter((p) => !p.kept && p.promise.judgedBy !== 'fiscalRules');
   return {
     priorities,
     promises,
@@ -134,7 +139,7 @@ export function ambitionStatus(
     settledLower: priorities.filter((p) => p.status === 'settledLower').length,
     started: priorities.filter((p) => p.status === 'started').length,
     notFunded: priorities.filter((p) => p.status === 'notFunded').length,
-    broken: brokenIds.size,
+    broken: brokenByLevers.length,
     strained: strains.filter((s) => s.strained && !brokenIds.has(s.promise.id)).length,
   };
 }

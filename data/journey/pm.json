@@ -280,6 +280,7 @@
       "id": "tax-lock",
       "title": "The tax lock",
       "text": "We will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT. The manifesto's words, repeated at Budget 2025.",
+      "origin": "manifesto-2024",
       "sources": [
         {
           "sourceId": "labour-manifesto-2024-strong-foundations",
@@ -372,6 +373,7 @@
       "id": "ct-cap",
       "title": "Corporation tax capped at 25%",
       "text": "We will cap corporation tax at the current level of 25 per cent, the lowest in the G7, for the entire parliament.",
+      "origin": "manifesto-2024",
       "sources": [
         {
           "sourceId": "labour-manifesto-2024-growth",
@@ -388,7 +390,8 @@
     {
       "id": "two-child",
       "title": "The two-child limit stays abolished",
-      "text": "Ending the two-child limit from April 2026 lifts 450,000 children out of poverty. It does not come back.",
+      "text": "Ending the two-child limit from April 2026 lifts 450,000 children out of poverty. A Budget 2025 decision, not a manifesto promise: bringing the limit back is a U-turn.",
+      "origin": "budget-2025",
       "sources": [
         {
           "sourceId": "hmt-budget-2025-speech",
@@ -409,6 +412,8 @@
       "id": "fiscal-rules",
       "title": "The fiscal rules",
       "text": "We will abide by the fiscal rules, ensuring we retain a buffer to protect us against uncertainty. The Chancellor's own words to the Treasury Committee.",
+      "origin": "government",
+      "judgedBy": "fiscalRules",
       "sources": [
         {
           "sourceId": "hmt-tsc-budget-2026-letter",
@@ -423,7 +428,8 @@
     {
       "id": "defence-path",
       "title": "Defence on its path",
-      "text": "2.5% of GDP, then 3% in the next Parliament, then 3.5% by 2035. The defence budget does not go backwards.",
+      "text": "The manifesto set the path to 2.5% of GDP; the government has since committed to 3% in the next Parliament and 3.5% by 2035. A cut to day-to-day defence slows that path.",
+      "origin": "manifesto-2024",
       "sources": [
         {
           "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -433,18 +439,26 @@
           "quote": "the UK has committed to reach 3.5% of GDP on defence spending by 2035"
         }
       ],
-      "breaks": [
+      "breaks": [],
+      "strains": [
         {
           "code": "mod",
-          "when": "below"
+          "when": "below",
+          "text": "A cut slows the path to 3.5% of GDP by 2035.",
+          "scored": false
         }
       ]
     },
     {
       "id": "triple-lock",
       "title": "The triple lock",
-      "text": "The state pension rises each year by the highest of earnings growth, prices or 2.5%. That is the government's policy and the OBR's forecast assumes it.",
+      "text": "Labour will retain the triple lock for the state pension: it rises each year by the highest of earnings growth, prices or 2.5%. The OBR's forecast assumes it.",
+      "origin": "manifesto-2024",
       "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-opportunity",
+          "quote": "Labour will retain the triple lock for the state pension."
+        },
         {
           "sourceId": "obr-efo-2026-03",
           "table": "Table 2.2"
@@ -465,6 +479,30 @@
           "code": "wpens",
           "when": "below",
           "text": "Mostly the state pension. A cut keeps the lock’s words only if it falls on pension credit or winter fuel."
+        }
+      ]
+    },
+    {
+      "id": "nhs-18-weeks",
+      "title": "NHS waits within 18 weeks",
+      "text": "Patients should expect to wait no longer than 18 weeks from referral for consultant-led treatment: the manifesto's words, for the NHS in England. The plan is 9 in 10 within 18 weeks by the end of the Parliament.",
+      "origin": "manifesto-2024",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-nhs",
+          "quote": "patients should expect to wait no longer than 18 weeks from referral for consultant-led treatment"
+        },
+        {
+          "sourceId": "govuk-elective-reform-plan-2025"
+        }
+      ],
+      "breaks": [],
+      "strains": [
+        {
+          "code": "dhsc",
+          "when": "below",
+          "text": "A cut to the health budget puts the 18-week target at risk.",
+          "scored": false
         }
       ]
     }

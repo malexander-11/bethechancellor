@@ -216,15 +216,14 @@ describe('build your Budget: the ways to deliver', () => {
     expect(h1(/^1st Get the welfare bill down/)).toBeInTheDocument();
     const twoChild = box(/Reinstate the two-child limit/);
     const twoChildCard = twoChild.closest('.choice') as HTMLElement;
+    // A Budget 2025 decision, not the manifesto's words: a promise, and red all the same (Phase 25).
     expect(
-      within(twoChildCard).getByText(
-        'Would break the manifesto: The two-child limit stays abolished',
-      ),
+      within(twoChildCard).getByText('Would break a promise: The two-child limit stays abolished'),
     ).toBeInTheDocument();
     fireEvent.click(twoChild);
     await waitFor(() =>
       expect(
-        within(twoChildCard).getByText('Breaks the manifesto: The two-child limit stays abolished'),
+        within(twoChildCard).getByText('Breaks a promise: The two-child limit stays abolished'),
       ).toBeInTheDocument(),
     );
     // The unemployment insurance limit cannot start before 2030-31: the card says so (ADR-0021).

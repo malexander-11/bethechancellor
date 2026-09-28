@@ -102,7 +102,42 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     // Everything expensive at once misses the stability rule.
     const broken = status(game, { def5: 1, freeuni: 1, ufsm: 1, socrent: 1, airet: 1 });
     expect(broken.promises.find((p) => p.promise.id === 'fiscal-rules')?.kept).toBe(false);
-    expect(broken.broken).toBe(1);
+    // A missed rule is counted as a missed rule, where the rules are shown, not also as a broken
+    // promise on the bar (Phase 25).
+    expect(broken.broken).toBe(0);
+  });
+
+  it('knows where each promise comes from: only the manifesto’s own words are red lines (Phase 25)', () => {
+    const origin = (id: string) => pm.promises.find((p) => p.id === id)?.origin;
+    expect(origin('tax-lock')).toBe('manifesto-2024');
+    expect(origin('ct-cap')).toBe('manifesto-2024');
+    expect(origin('triple-lock')).toBe('manifesto-2024');
+    expect(origin('two-child')).toBe('budget-2025');
+    expect(origin('fiscal-rules')).toBe('government');
+    // The triple lock now cites the manifesto's own words.
+    const lock = pm.promises.find((p) => p.id === 'triple-lock');
+    expect(lock?.sources.some((s) => s.sourceId === 'labour-manifesto-2024-opportunity')).toBe(
+      true,
+    );
+    // A cut to defence or health can only strain, and is scored by no audience: it is counted
+    // with the cuts it is.
+    for (const [id, code] of [
+      ['defence-path', 'mod'],
+      ['nhs-18-weeks', 'dhsc'],
+    ] as const) {
+      const promise = pm.promises.find((p) => p.id === id);
+      expect(promise?.breaks, id).toEqual([]);
+      expect(
+        promise?.strains.map((s) => [s.code, s.scored]),
+        id,
+      ).toEqual([[code, false]]);
+    }
+    const cut = status(freshGame(), { mod: -1, dhsc: -1 });
+    expect(cut.broken).toBe(0);
+    expect(cut.strains.filter((s) => s.strained).map((s) => s.promise.id)).toEqual([
+      'defence-path',
+      'nhs-18-weeks',
+    ]);
   });
 
   it('holds every manifesto promise in force from the first screen to the last', () => {

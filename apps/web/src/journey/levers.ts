@@ -36,6 +36,7 @@ export function redLinesOf(values: Record<string, number>): (code: string) => Re
           broken:
             breaks.find((b) => b.promise.id === p.id)?.brokenBy.some((b) => b.code === code) ??
             false,
+          manifesto: p.origin === 'manifesto-2024',
         })),
       ...p.strains
         .filter((rule) => rule.code === code)
@@ -46,6 +47,8 @@ export function redLinesOf(values: Record<string, number>): (code: string) => Re
           broken:
             strains.find((s) => s.promise.id === p.id)?.strainedBy.some((b) => b.code === code) ??
             false,
+          manifesto: p.origin === 'manifesto-2024',
+          scored: rule.scored,
         })),
     ]);
 }

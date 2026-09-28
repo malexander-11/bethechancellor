@@ -19,7 +19,7 @@ export const FINETUNE_SIDES: readonly FinetuneSideId[] = ['tax', 'spending'];
  */
 export const WHO_PAYS: Readonly<Record<string, readonly string[]>> = {
   everyone: ['broad-base', 'tax-gap', 'working-pensioners'],
-  'best-off': ['top'],
+  'best-off': ['top', 'higher-earners'],
   business: ['business'],
   'savers-owners': ['savers-owners'],
   duties: ['duties', 'motorists', 'flyers', 'disabled-motorists'],

@@ -10,6 +10,13 @@ import { useBudget } from '../state/budget';
 
 const RANK = ['1st', '2nd', '3rd'];
 
+/** Where each promise comes from (Phase 25): only the manifesto's own words are red lines. */
+const PROMISE_ORIGIN: Record<'manifesto-2024' | 'budget-2025' | 'government', string> = {
+  'manifesto-2024': 'Manifesto 2024',
+  'budget-2025': 'Budget 2025',
+  government: 'The Chancellor’s word',
+};
+
 /**
  * Step 3: set your priorities. One screen: the theme of the Budget, written by the game from the
  * ranking as it is made (what the Comms team will tell voters, and what the advisers will suggest
@@ -91,13 +98,15 @@ export function PMPage() {
         })}
       </ul>
       <p className="redlines-line">
-        The <Term id="manifesto">manifesto</Term>’s promises still apply.
+        Your government’s promises still apply, the <Term id="manifesto">manifesto</Term>’s among
+        them.
       </p>
       <details className="more">
         <summary>What the promises are</summary>
-        <ul className="redlines more__body" aria-label="The manifesto’s promises">
+        <ul className="redlines more__body" aria-label="Your government’s promises">
           {pm.promises.map((p) => (
             <li key={p.id}>
+              <span className="tag--quiet">{PROMISE_ORIGIN[p.origin]}</span>{' '}
               <strong>{p.title}.</strong> {p.text}
               <SourceList as="span" className="briefing__sources" refs={p.sources} />
             </li>

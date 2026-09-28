@@ -13,12 +13,27 @@
           "short": "Public services",
           "measure": "publicServiceSpendingGbpm",
           "reading": {
-            "label": "Change in public spending in the target year",
+            "label": "Change in spending on departments in the target year",
             "unit": "GBPm"
           },
-          "note": "A change of about a fifth of March’s £23.6bn headroom either way is the threshold: below that the benches do not feel it.",
-          "nudge": "{gap} more for public services would have moved the backbenchers up a band.",
+          "note": "Departments only: benefits have rules of their own. About a fifth of March’s £23.6bn headroom either way is felt; fifteen billion of cuts is a programme of them.",
+          "nudge": "{gap} more for public services would have lifted the backbenchers’ rating.",
           "bands": [
+            {
+              "id": "deep",
+              "upTo": -15000,
+              "points": -2,
+              "text": "Departments lose {abs} a year against their plans. The benches did not come into politics for cuts this deep.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            },
             {
               "id": "cut",
               "upTo": -5000,
@@ -45,7 +60,16 @@
                   "sourceId": "hmt-sr25-del-tables"
                 }
               ],
-              "badge": "simulated"
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "serviceCutsGbpm",
+                    "above": 1999
+                  },
+                  "text": "Spending on departments nets out near the plan ({value}), with cuts to {cutServices}."
+                }
+              ]
             },
             {
               "id": "more",
@@ -56,7 +80,16 @@
                   "sourceId": "hmt-sr25-del-tables"
                 }
               ],
-              "badge": "simulated"
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "serviceCutsGbpm",
+                    "above": 1999
+                  },
+                  "text": "Public services get {abs} more in all, but with cuts to {cutServices}."
+                }
+              ]
             }
           ]
         },
@@ -121,12 +154,24 @@
           "short": "Benefit cuts",
           "measure": "welfareChangeGbpm",
           "reading": {
-            "label": "Change in working-age and pensioner benefits in the target year",
+            "label": "Change in benefits in the target year",
             "unit": "GBPm"
           },
-          "note": "A cut of more than about £2bn a year is felt in benefit rates; smaller moves are absorbed in uprating.",
-          "nudge": "{gap} less off benefits would have moved this up a band.",
+          "note": "Two billion a year either way is felt in benefit rates; five billion of cuts is a programme of them. Smaller moves are absorbed in uprating.",
+          "nudge": "{gap} more on benefits would have lifted the backbenchers’ rating.",
           "bands": [
+            {
+              "id": "deep",
+              "upTo": -5000,
+              "points": -2,
+              "text": "Benefits are cut by {abs} a year. The benches will fight a programme of cuts this size.",
+              "sources": [
+                {
+                  "sourceId": "dwp-benefit-expenditure-2026"
+                }
+              ],
+              "badge": "simulated"
+            },
             {
               "id": "cut",
               "upTo": -2000,
@@ -141,8 +186,20 @@
             },
             {
               "id": "steady",
+              "upTo": 2000,
               "points": 0,
               "text": "Benefit spending is about where the forecast had it ({value}).",
+              "sources": [
+                {
+                  "sourceId": "dwp-benefit-expenditure-2026"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "more",
+              "points": 1,
+              "text": "Benefits rise by {abs} a year. The benches will be glad to defend that.",
               "sources": [
                 {
                   "sourceId": "dwp-benefit-expenditure-2026"
@@ -161,7 +218,7 @@
             "unit": "GBPm"
           },
           "note": "The balance of new revenue: the best-off, savers and business on one side; everyone who earns or spends, motorists and duties on the other. Two billion either way is the threshold.",
-          "nudge": "{gap} more from the best-off and business, rather than the broad base, would have moved this up.",
+          "nudge": "{gap} more from the best-off and business, rather than the broad base, would have lifted the backbenchers’ rating.",
           "bands": [
             {
               "id": "broad",
@@ -208,7 +265,7 @@
             "label": "Manifesto red lines crossed",
             "unit": "count"
           },
-          "note": "The tax lock, the corporation tax cap, the two-child limit, the defence path and the triple lock, as the PM file lists them.",
+          "note": "The tax lock, the corporation tax cap and the triple lock: the 2024 manifesto’s own words. A decision of last year’s Budget reversed is a U-turn, with rules of its own.",
           "bands": [
             {
               "id": "kept",
@@ -343,6 +400,42 @@
               "badge": "simulated"
             }
           ]
+        },
+        {
+          "id": "bb-rules-missed",
+          "short": "Rules missed",
+          "measure": "fiscalRulesMissed",
+          "reading": {
+            "label": "Fiscal rules missed: the day-to-day rule and the debt rule",
+            "unit": "count"
+          },
+          "note": "The Chancellor told the Treasury Committee the government will abide by the fiscal rules. A miss costs a point, and holds the benches at three whatever else the Budget does.",
+          "bands": [
+            {
+              "id": "met",
+              "upTo": 0,
+              "points": 0,
+              "text": "Both fiscal rules are met, as the Chancellor told the Treasury Committee they would be.",
+              "sources": [
+                {
+                  "sourceId": "hmt-tsc-budget-2026-letter"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "missed",
+              "points": -1,
+              "cap": 3,
+              "text": "A fiscal rule is missed. The Chancellor promised the Treasury Committee to abide by them; the benches will be asked to defend it.",
+              "sources": [
+                {
+                  "sourceId": "hmt-tsc-budget-2026-letter"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
         }
       ]
     },
@@ -360,15 +453,15 @@
             "label": "Headroom against the day-to-day rule",
             "unit": "GBPm"
           },
-          "note": "Ten billion is where commentators called the margin wafer-thin before the last Budget doubled it to £21.7bn; twenty is your advisers’ rule of thumb. Above about twenty-seven billion the margin is more than March left.",
-          "nudge": "{gap} more headroom would have moved the markets up a band.",
+          "note": "Ten billion is where commentators called the margin wafer-thin before the last Budget doubled it to £21.7bn; twenty is your advisers’ rule of thumb. Above about twenty-seven billion the margin is more than March left. The fall from March’s £23.6bn to today’s estimate came before any measure: dearer borrowing and prices since March.",
+          "nudge": "{gap} more headroom would have lifted the markets’ rating.",
           "bands": [
             {
               "id": "missed",
               "upTo": -1,
               "points": -2,
-              "cap": 2,
-              "text": "The day-to-day rule is missed, and the OBR will say so on Budget day. Gilt investors read that first.",
+              "cap": 1,
+              "text": "The day-to-day rule is missed by {abs}, and the OBR will say so on Budget day. Gilt investors read that first.",
               "sources": [
                 {
                   "sourceId": "hmt-charter-2025-autumn",
@@ -396,7 +489,24 @@
                   "sourceId": "boe-fsr-2026-07"
                 }
               ],
-              "badge": "simulated"
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "headroomChangeGbpm",
+                    "above": -500
+                  },
+                  "text": "Headroom of {abs} is below the ten billion commentators called wafer-thin. Dearer borrowing and prices since March took it, not your measures.",
+                  "sources": [
+                    {
+                      "sourceId": "obr-efo-2026-03"
+                    },
+                    {
+                      "sourceId": "boe-iadb-gilt-10y"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "id": "modest",
@@ -447,17 +557,17 @@
           "short": "Borrowing",
           "measure": "borrowingChangeGbpm",
           "reading": {
-            "label": "Change in borrowing in the target year",
+            "label": "Change in borrowing in the target year, from before your Budget",
             "unit": "GBPm"
           },
           "note": "Five billion less is a change in the financing remit the market notices; ten billion more is an issuance programme it prices.",
-          "nudge": "{gap} less borrowing in the target year would have moved this up a band.",
+          "nudge": "{gap} less borrowing in the target year would have lifted the markets’ rating.",
           "bands": [
             {
               "id": "less",
               "upTo": -5000,
               "points": 1,
-              "text": "Borrowing in the target year is {abs} lower than forecast: fewer gilts to sell into a nervous market.",
+              "text": "Borrowing in the target year is {abs} lower than before your Budget: fewer gilts to sell into a nervous market.",
               "sources": [
                 {
                   "sourceId": "boe-iadb-gilt-10y"
@@ -472,7 +582,7 @@
               "id": "flat",
               "upTo": 10000,
               "points": 0,
-              "text": "Borrowing is close to where the forecast had it ({value}). Yields at about 5.3% against the OBR’s 4.5% matter more.",
+              "text": "Borrowing is close to where it was before your Budget ({value}). Yields at about 5.3% against the OBR’s 4.5% matter more.",
               "sources": [
                 {
                   "sourceId": "boe-iadb-gilt-10y"
@@ -486,7 +596,7 @@
             {
               "id": "more",
               "points": -1,
-              "text": "Borrowing is {abs} higher than forecast: more gilts to sell where yields were already about 5.3% against 4.5%.",
+              "text": "Borrowing is {abs} higher than before your Budget: more gilts to sell where yields were already about 5.3% against 4.5%.",
               "sources": [
                 {
                   "sourceId": "boe-iadb-gilt-10y"
@@ -504,11 +614,11 @@
           "short": "Tax burden",
           "measure": "taxTakeChangePp",
           "reading": {
-            "label": "Change in the tax take as a share of the economy",
+            "label": "Change in the tax take as a share of the economy, from before your Budget",
             "unit": "pp"
           },
           "note": "Half a point of GDP on top of a tax take the OBR already calls a historic high.",
-          "nudge": "{gap} less on the tax take would have kept the markets neutral on it.",
+          "nudge": "{gap} less on the tax take would have lifted the markets’ rating.",
           "bands": [
             {
               "id": "steady",
@@ -529,6 +639,51 @@
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "mk-deep-cuts",
+          "short": "Deep cuts",
+          "measure": "serviceCutsGbpm",
+          "reading": {
+            "label": "Cuts to departments’ day-to-day budgets, counted one by one",
+            "unit": "GBPm"
+          },
+          "note": "Ten billion a year of cuts against plans, on top of the squeeze the forecast already assumes: it has unprotected day-to-day spending falling 4.4% a year in real terms in its last two years.",
+          "nudge": "{gap} less in cuts to departments would have lifted the markets’ rating.",
+          "bands": [
+            {
+              "id": "none",
+              "upTo": 499,
+              "points": 0,
+              "text": "No department’s day-to-day budget is cut against its plan.",
+              "sources": [],
+              "badge": "simulated"
+            },
+            {
+              "id": "some",
+              "upTo": 9999,
+              "points": 0,
+              "text": "Departments lose {abs} against their plans: not enough for the markets to doubt it.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "deep",
+              "points": -1,
+              "text": "Departments lose {abs} against their plans, on top of the squeeze the forecast already assumes. Cuts this deep are hard to hold.",
+              "sources": [
+                {
+                  "sourceId": "obr-efo-2026-03",
+                  "quote": "falling by 4.4 per cent a year in real terms in the final two years of the forecast"
                 }
               ],
               "badge": "simulated"
@@ -578,37 +733,36 @@
         {
           "id": "mk-debt-rule",
           "short": "Debt rule",
-          "measure": "investmentRuleStatus",
+          "measure": "investmentHeadroomGbpm",
           "reading": {
-            "label": "The debt rule",
-            "unit": "status"
+            "label": "Headroom against the debt rule",
+            "unit": "GBPm"
           },
-          "note": "Met, or missed: net financial liabilities falling as a share of GDP in the target year.",
+          "note": "Net financial liabilities falling as a share of GDP in the target year, or not. A miss is treated like a miss of the day-to-day rule.",
           "bands": [
             {
-              "id": "met",
-              "upTo": 1,
-              "points": 0,
-              "text": "Debt still falls as a share of the economy: the debt rule is met.",
+              "id": "missed",
+              "upTo": -1,
+              "points": -2,
+              "cap": 1,
+              "text": "The debt rule is missed by {abs}: debt no longer falls as a share of the economy. Gilt investors watch the debt path.",
               "sources": [
                 {
-                  "sourceId": "hmt-charter-2025-autumn",
-                  "paragraph": "3.33-3.44"
+                  "sourceId": "hmt-charter-2025-autumn"
+                },
+                {
+                  "sourceId": "obr-efo-2026-03"
                 }
               ],
               "badge": "simulated"
             },
             {
-              "id": "missed",
-              "points": -1,
-              "text": "Debt no longer falls in the target year: the debt rule is missed. Gilt investors watch the debt path.",
+              "id": "met",
+              "points": 0,
+              "text": "Debt still falls as a share of the economy: the debt rule is met.",
               "sources": [
                 {
-                  "sourceId": "hmt-charter-2025-autumn",
-                  "paragraph": "3.33-3.44"
-                },
-                {
-                  "sourceId": "obr-efo-2026-03"
+                  "sourceId": "hmt-charter-2025-autumn"
                 }
               ],
               "badge": "simulated"
@@ -667,6 +821,77 @@
               ]
             }
           ]
+        },
+        {
+          "id": "mk-paid-for",
+          "short": "Paid for",
+          "measure": "paidForStatus",
+          "reading": {
+            "label": "Whether what the Budget spends and gives away is paid for in every year",
+            "unit": "status"
+          },
+          "note": "Paid for: measures that cost something, with borrowing no higher than before the Budget in any year. The Resolution Foundation said new commitments must be fully funded from the start.",
+          "bands": [
+            {
+              "id": "paid",
+              "upTo": 0,
+              "points": 1,
+              "text": "Everything new is paid for in every year, as the Resolution Foundation said new commitments must be.",
+              "sources": [
+                {
+                  "sourceId": "rf-headroom-2026-07-21",
+                  "quote": "Any new spending commitments must be fully funded from the start."
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "nothing",
+              "upTo": 1,
+              "points": 0,
+              "text": "Nothing here needed paying for.",
+              "sources": [],
+              "badge": "simulated"
+            },
+            {
+              "id": "borrowed",
+              "points": 0,
+              "text": "Some of what the Budget spends or gives away is borrowed, in at least one year.",
+              "sources": [],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "mk-front-loaded",
+          "short": "Early borrowing",
+          "measure": "frontLoadedBorrowingGbpm",
+          "reading": {
+            "label": "Borrowing in an earlier year above what the target year shows",
+            "unit": "GBPm"
+          },
+          "note": "The rules test one year. Five billion a year more borrowing in an earlier year than the target year shows is issuance the market funds all the same.",
+          "bands": [
+            {
+              "id": "even",
+              "upTo": 5000,
+              "points": 0,
+              "text": "No earlier year borrows much more than the target year shows.",
+              "sources": [],
+              "badge": "simulated"
+            },
+            {
+              "id": "front",
+              "points": -1,
+              "text": "Borrowing is {abs} higher in an earlier year than the target year shows. The rules test one year; the market funds them all.",
+              "sources": [
+                {
+                  "sourceId": "hmt-charter-2025-autumn"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
         }
       ]
     },
@@ -684,13 +909,13 @@
             "label": "Manifesto promises broken",
             "unit": "count"
           },
-          "note": "One is enough. A broken promise on tax or welfare pins the rating at the floor whatever else the Budget does.",
+          "note": "One is enough. Crossing a manifesto red line, the 2024 manifesto’s own words, pins the rating at the floor whatever else the Budget does.",
           "bands": [
             {
               "id": "kept",
               "upTo": 0,
               "points": 0,
-              "text": "Every manifesto promise on tax and welfare holds.",
+              "text": "Every manifesto red line holds.",
               "sources": [
                 {
                   "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -757,6 +982,76 @@
                   "sourceId": "hmt-autumn-budget-2024-table-5-1",
                   "table": "Table 5.1",
                   "note": "line 26"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-commitments",
+          "short": "Budget U-turn",
+          "measure": "commitmentsBroken",
+          "reading": {
+            "label": "Decisions of last year’s Budget reversed, outside the manifesto",
+            "unit": "count"
+          },
+          "note": "Bringing back what last year’s Budget ended, such as the two-child limit: a U-turn, not a manifesto red line. One point, and no floor.",
+          "bands": [
+            {
+              "id": "kept",
+              "upTo": 0,
+              "points": 0,
+              "text": "Last year’s Budget decisions stand.",
+              "sources": [],
+              "badge": "simulated"
+            },
+            {
+              "id": "reversed",
+              "points": -1,
+              "text": "You reversed a decision from last year’s Budget. It was not a manifesto promise, but people notice a U-turn.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-speech"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-document"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-rules-missed",
+          "short": "Rules missed",
+          "measure": "fiscalRulesMissed",
+          "reading": {
+            "label": "Fiscal rules missed: the day-to-day rule and the debt rule",
+            "unit": "count"
+          },
+          "note": "The government promised to meet its fiscal rules. A miss costs a point and holds the public at three, whatever else the Budget does. The welfare cap is not counted here.",
+          "bands": [
+            {
+              "id": "met",
+              "upTo": 0,
+              "points": 0,
+              "text": "The government promised to meet its fiscal rules, and on these numbers it does.",
+              "sources": [
+                {
+                  "sourceId": "hmt-tsc-budget-2026-letter"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "missed",
+              "points": -1,
+              "cap": 3,
+              "text": "The government promised to meet its fiscal rules. On these numbers it does not.",
+              "sources": [
+                {
+                  "sourceId": "hmt-tsc-budget-2026-letter"
                 }
               ],
               "badge": "simulated"
@@ -878,36 +1173,150 @@
           ]
         },
         {
-          "id": "pb-tax-rises",
-          "short": "Tax rises",
-          "measure": "taxRisesGbpm",
+          "id": "pb-service-cuts",
+          "short": "Service cuts",
+          "measure": "serviceCutsGbpm",
           "reading": {
-            "label": "Tax rises in the target year",
+            "label": "Cuts to departments’ day-to-day budgets, counted one by one",
             "unit": "GBPm"
           },
-          "note": "Five billion a year passes quietly; twenty is felt by most households before the target year.",
-          "nudge": "{gap} less in tax rises would have moved this by a point.",
+          "note": "Three billion a year of cuts against plans is noticed and ten is felt widely; cuts to health and schools are noticed from two billion. A cut is counted even when another budget rises.",
+          "bands": [
+            {
+              "id": "none",
+              "upTo": 2999,
+              "points": 0,
+              "text": "No public service gets noticeably less than planned.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                }
+              ],
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "serviceCutsGbpm",
+                    "below": 1
+                  },
+                  "text": "Every public service gets at least what was planned."
+                }
+              ]
+            },
+            {
+              "id": "felt",
+              "upTo": 9999,
+              "points": -1,
+              "text": "Public services get {abs} less than planned. People notice cuts in the services they use.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                }
+              ],
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "protectedCutsGbpm",
+                    "above": 1999
+                  },
+                  "text": "Cuts to {protected}: {protectedCut} a year less than planned. These are the services people use most.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-sr25-del-tables"
+                    },
+                    {
+                      "sourceId": "labour-manifesto-2024-nhs"
+                    }
+                  ]
+                }
+              ],
+              "alsoWhen": {
+                "measure": "protectedCutsGbpm",
+                "above": 1999
+              }
+            },
+            {
+              "id": "deep",
+              "points": -2,
+              "text": "Public services get {abs} less than planned, and people will notice.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                }
+              ],
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "protectedCutsGbpm",
+                    "above": 1999
+                  },
+                  "text": "Cuts to {protected}: {protectedCut} a year less than planned, and {abs} across services in all. People will notice.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-sr25-del-tables"
+                    },
+                    {
+                      "sourceId": "labour-manifesto-2024-nhs"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pb-tax-rises",
+          "short": "Tax rises",
+          "measure": "feltTaxRisesGbpm",
+          "reading": {
+            "label": "Tax rises most households feel, in the target year",
+            "unit": "GBPm"
+          },
+          "note": "Five billion a year passes quietly; twenty is felt by most households before the target year. Levies on banks, energy producers and the very top are left out: most households do not feel them.",
+          "nudge": "{gap} less in tax rises would have lifted the public’s rating.",
           "bands": [
             {
               "id": "small",
               "upTo": 5000,
               "points": 0,
-              "text": "Tax rises of {abs} a year: small enough to pass without a fight.",
+              "text": "Tax rises of {abs} a year, felt {feltHow}: small enough to pass without a fight.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03"
+                },
+                {
+                  "sourceId": "hmrc-tiin-employer-nics-2024"
                 }
               ],
-              "badge": "simulated"
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "feltTaxRisesGbpm",
+                    "below": 500
+                  },
+                  "text": "No tax rise most households will feel.",
+                  "sources": [
+                    {
+                      "sourceId": "obr-efo-2026-03"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "id": "felt",
               "upTo": 20000,
               "points": -1,
-              "text": "Tax rises of {abs} a year, felt in pay packets and prices well before the target year.",
+              "text": "Tax rises of {abs} a year, felt {feltHow}, well before the target year.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03"
+                },
+                {
+                  "sourceId": "hmrc-tiin-employer-nics-2024"
                 }
               ],
               "badge": "simulated"
@@ -915,12 +1324,42 @@
             {
               "id": "heavy",
               "points": -2,
-              "text": "Tax rises of {abs} a year, on top of a tax take already at a historic high.",
+              "text": "Tax rises of {abs} a year, felt {feltHow}, on top of a tax take already at a historic high.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03"
+                },
+                {
+                  "sourceId": "hmrc-tiin-employer-nics-2024"
                 }
               ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-not-felt",
+          "short": "Not widely felt",
+          "measure": "notFeltTaxRisesGbpm",
+          "reading": {
+            "label": "Tax rises on banks, energy producers and the very top",
+            "unit": "GBPm"
+          },
+          "note": "No point either way: most households do not feel these, and the game has no published measure of how the public sees them.",
+          "bands": [
+            {
+              "id": "none",
+              "upTo": 499,
+              "points": 0,
+              "text": "Nothing here falls only on banks, energy producers or the very top.",
+              "sources": [],
+              "badge": "simulated"
+            },
+            {
+              "id": "some",
+              "points": 0,
+              "text": "{abs} a year falls on banks, energy producers or the very top: most households will not feel it.",
+              "sources": [],
               "badge": "simulated"
             }
           ]
@@ -946,8 +1385,13 @@
             {
               "id": "some",
               "points": 1,
-              "text": "Tax cuts worth {abs} a year. Money back in pockets is noticed before anything else in a Budget.",
-              "sources": [],
+              "text": "Tax cuts worth {abs} a year, with the cost of living back at the centre of politics.",
+              "sources": [
+                {
+                  "sourceId": "rf-policy-landscape-2026",
+                  "quote": "the cost-of-living crisis is back centre stage"
+                }
+              ],
               "badge": "simulated"
             }
           ]

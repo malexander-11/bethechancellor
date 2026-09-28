@@ -73,13 +73,17 @@ const POLICY_YEARS = policyYearsOf(vintage);
 const IMPLEMENTATION_YEAR = vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? '';
 const DEFLATOR = vintage.economy.gdpDeflator ? deflatorIndex(vintage) : null;
 
-/** A manifesto red line this lever is watched by, and whether the current setting crosses it. */
+/** A promise this lever is watched by, and whether the current setting crosses it. */
 export interface RedLine {
   promise: string;
   when: 'above' | 'below' | 'on';
   broken: boolean;
   /** Red (the promise's words) or amber (its spirit, Phase 23); red when unsaid. */
   severity?: 'breaks' | 'strains';
+  /** The 2024 manifesto's own words (Phase 25); a promise made since when false. */
+  manifesto?: boolean;
+  /** False for a strain shown and scored by no audience (Phase 25). */
+  scored?: boolean;
 }
 
 /** An option the player chose that this lever belongs to, and how it now stands (Phase 25). */
@@ -93,6 +97,33 @@ const RED_LINE_WORDS: Record<RedLine['when'], string> = {
   below: 'no cut',
   on: 'do not switch on',
 };
+
+/** A strain scored by nobody, at rest: what the move would put at risk (Phase 25). */
+const AT_RISK_WORDS: Record<RedLine['when'], string> = {
+  above: 'at risk if raised',
+  below: 'at risk if cut',
+  on: 'at risk if switched on',
+};
+
+/**
+ * What a promise is called on a tag (Phase 25): "the manifesto" only for the 2024 manifesto's own
+ * words, scored as such; "a promise" for a commitment made since, or a strain scored by nobody.
+ */
+export function promiseWords(r: Pick<RedLine, 'manifesto' | 'scored'>): {
+  noun: string;
+  label: string;
+} {
+  const manifesto = r.manifesto !== false && r.scored !== false;
+  return manifesto
+    ? { noun: 'the manifesto', label: 'Manifesto' }
+    : { noun: 'a promise', label: 'Promise' };
+}
+
+/** A watched lever at rest: the quiet words of its tag. */
+export function restingWords(r: Pick<RedLine, 'when' | 'severity' | 'scored'>): string {
+  if (r.severity !== 'strains') return RED_LINE_WORDS[r.when];
+  return r.scored === false ? AT_RISK_WORDS[r.when] : 'contested';
+}
 
 /**
  * The warnings on the lever. A watched lever always wears a quiet tag naming the promise, so a
@@ -123,11 +154,11 @@ export function LeverFlags({ redLines, chosen }: { redLines: RedLine[]; chosen?:
             key={`${r.severity ?? 'breaks'}-${r.promise}`}
             className={`tag--treasury ${r.severity === 'strains' ? 'tag--amber' : 'tag--warn'}`}
           >
-            {r.severity === 'strains' ? 'Strains' : 'Breaks'} the manifesto: {r.promise}
+            {r.severity === 'strains' ? 'Strains' : 'Breaks'} {promiseWords(r).noun}: {r.promise}
           </span>
         ) : (
           <span key={`${r.severity ?? 'breaks'}-${r.promise}`} className="tag--manifesto">
-            Manifesto: {r.severity === 'strains' ? 'contested' : RED_LINE_WORDS[r.when]}
+            {promiseWords(r).label}: {restingWords(r)}
             <span className="sr-only"> ({r.promise})</span>
           </span>
         ),

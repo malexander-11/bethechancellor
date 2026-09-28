@@ -6,12 +6,14 @@ import {
   freshGame,
   ratingOf,
   receptions,
+  suggestedSettings,
   type GamePermalink,
   type Reception,
 } from '../src/index.js';
-import { loadDataset, readJson } from './fixtures.js';
+import { loadDataset, outcomeOfFor, readJson } from './fixtures.js';
 
 const ds = loadDataset();
+const outcomeOf = outcomeOfFor(ds);
 const context = ds.contexts[ds.contexts.length - 1];
 if (!context) throw new Error('no context');
 const typicalErrorGbpm =
@@ -31,6 +33,7 @@ function room(leverValues: Record<string, number>, game?: GamePermalink): Recept
     levers: ds.levers,
     reception: ds.reception,
     typicalErrorGbpm,
+    outcomeOf,
     pm: ds.pm,
     incidence: ds.incidence,
     ...(game ? { game, status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers) } : {}),
@@ -174,6 +177,178 @@ describe('cards that agree with their ratings (Phase 25)', () => {
   });
 });
 
+describe('three audiences, recalibrated on today’s estimate (Phase 25)', () => {
+  /** Today's estimate: every game is played on it (Phase 24). */
+  const ESTIMATE = suggestedSettings(context.readings, ds.levers);
+  const PRIORITIES: GamePermalink = {
+    ...freshGame(),
+    priorities: ['nhs', 'defence', 'safer-streets'],
+  };
+  /** The three priorities, one way each, with nothing to pay for them. */
+  const THREE = { dhsc: 3, dip47: 1, moj: 10, home: 5 };
+  const at = (policy: Record<string, number>, game: GamePermalink = PRIORITIES) =>
+    room({ ...ESTIMATE, ...policy }, game);
+  const rule = (list: Reception[], audience: Reception['audience'], id: string) =>
+    by(list, audience).all.find((r) => r.rule === id);
+  const noun = (code: string) => ds.levers.find((l) => l.code === code)?.noun;
+
+  it('measures the markets from before the Budget: doing nothing is Nervous, not Alarmed', () => {
+    const nothing = at({});
+    expect(by(nothing, 'markets').rating).toBe(2);
+    expect(by(nothing, 'markets').label).toBe('Nervous');
+    // Nothing moved, so borrowing has not changed: the economy since March is not the player's.
+    expect(rule(nothing, 'markets', 'mk-borrowing')?.points).toBe(0);
+    const headroom = rule(nothing, 'markets', 'mk-headroom');
+    expect(headroom?.points).toBe(-1);
+    expect(headroom?.text).toMatch(/not your measures\.$/);
+    expect(headroom?.causes).toEqual([]);
+  });
+
+  it('makes a missed rule cost something with every audience', () => {
+    const missing: Record<string, number>[] = [
+      THREE,
+      { dhsc: 10, dfe: 10, moj: 10, cdel: 20 },
+      { itbr: -2 },
+    ];
+    for (const policy of missing) {
+      const r = at(policy);
+      const name = JSON.stringify(policy);
+      expect(by(r, 'markets').rating, name).toBe(1);
+      expect(by(r, 'backbenchers').rating, name).toBeLessThanOrEqual(3);
+      expect(by(r, 'public').rating, name).toBeLessThanOrEqual(3);
+      expect(rule(r, 'public', 'pb-rules-missed')?.points, name).toBe(-1);
+      expect(rule(r, 'backbenchers', 'bb-rules-missed')?.points, name).toBe(-1);
+    }
+    // Either rule, the same cap, and the size of the miss in the reason: the engine's own margin.
+    expect(rule(at(THREE), 'markets', 'mk-debt-rule')?.text).toMatch(
+      /^The debt rule is missed by £\d+\.\dbn/,
+    );
+    expect(rule(at(THREE), 'markets', 'mk-headroom')?.text).toMatch(
+      /^The day-to-day rule is missed by £\d+\.\dbn/,
+    );
+  });
+
+  it('never rewards borrowing past the rules over paying for the same priorities', () => {
+    const borrowed = at(THREE);
+    // Paid for from the top, crossing no red line.
+    const funded = at({ ...THREE, cgtalign: 1 });
+    expect(by(borrowed, 'markets').rating).toBeLessThan(by(funded, 'markets').rating);
+    expect(by(borrowed, 'backbenchers').rating).toBeLessThanOrEqual(
+      by(funded, 'backbenchers').rating,
+    );
+    expect(by(borrowed, 'public').rating).toBeLessThanOrEqual(3);
+    expect(by(borrowed, 'public').rating).toBeLessThanOrEqual(by(funded, 'public').rating);
+  });
+
+  it('sees cuts to services, counted one by one, never netted away', () => {
+    const nhs = at({ dhsc: -10 });
+    expect(by(nhs, 'public').rating).toBeLessThanOrEqual(3);
+    const cuts = rule(nhs, 'public', 'pb-service-cuts');
+    expect(cuts?.points).toBe(-2);
+    expect(cuts?.text).toMatch(/^Cuts to the health budget: £\d+\.\dbn a year less than planned/);
+    expect(rule(nhs, 'markets', 'mk-deep-cuts')?.points).toBe(-1);
+    // Health and schools count from two billion: the walk's half-point trim costs nothing.
+    expect(rule(at({ dhsc: -0.5 }), 'public', 'pb-service-cuts')?.points).toBe(0);
+    expect(rule(at({ dhsc: -1 }), 'public', 'pb-service-cuts')?.points).toBe(-1);
+    // Other services count from three billion.
+    expect(rule(at({ home: -10 }), 'public', 'pb-service-cuts')?.points).toBe(0);
+    // A cut is a cut even when another budget rises more, and the party hears both sides.
+    const mixed = rule(at({ dhsc: 3, moj: -10, home: -10 }), 'backbenchers', 'bb-public-services');
+    expect(mixed?.text).toMatch(/with cuts to the /);
+  });
+
+  it('keeps benefits out of public services, and hears welfare both ways', () => {
+    const welfare: Record<string, number>[] = [
+      { wuc: -5 },
+      { wuc: 5 },
+      { rvpip: 1 },
+      { lha30: 1 },
+      { csjmh: 1 },
+    ];
+    for (const policy of welfare) {
+      expect(
+        rule(at(policy), 'backbenchers', 'bb-public-services')?.points,
+        JSON.stringify(policy),
+      ).toBe(0);
+    }
+    expect(rule(at({ csjmh: 1 }), 'backbenchers', 'bb-welfare-cut')?.points).toBe(-2);
+    expect(rule(at({ wuc: 5 }), 'backbenchers', 'bb-welfare-cut')?.points).toBe(1);
+  });
+
+  it('counts the taxes most households feel, and gives no point either way for taxing the top', () => {
+    const banks = at({ bank5: 1, banklevy: 1, qelevy: 1 });
+    expect(rule(banks, 'public', 'pb-tax-rises')?.points).toBe(0);
+    const unfelt = rule(banks, 'public', 'pb-not-felt');
+    expect(unfelt?.points).toBe(0);
+    expect(unfelt?.text).toMatch(/most households will not feel it\.$/);
+    // Employer National Insurance is felt, through pay and prices.
+    const employers = rule(at({ nicer: 2 }), 'public', 'pb-tax-rises');
+    expect(employers?.points).toBeLessThan(0);
+    expect(employers?.text).toMatch(/felt through pay and prices/);
+    // A higher-rate rise is the better-off paying, as the benches see it.
+    expect(rule(at({ ithr: 2 }), 'backbenchers', 'bb-who-pays')?.points).toBe(1);
+  });
+
+  it('floors the public only for the manifesto’s own words; last year’s U-turn costs a point', () => {
+    const twoChild = at({ rv2ch: 1 });
+    expect(by(twoChild, 'public').rating).toBeGreaterThan(1);
+    expect(rule(twoChild, 'public', 'pb-commitments')?.points).toBe(-1);
+    expect(rule(twoChild, 'public', 'pb-manifesto')?.points).toBe(0);
+    expect(rule(twoChild, 'public', 'pb-commitments')?.causes).toEqual([noun('rv2ch')]);
+    // The benches still pay for it.
+    expect(rule(twoChild, 'backbenchers', 'bb-welfare-reversals')?.points).toBe(-1);
+    expect(rule(twoChild, 'backbenchers', 'bb-manifesto')?.points).toBe(0);
+    // A defence trim strains a promise and is scored by nobody: the public is not furious.
+    const trim = at({ mod: -1 });
+    expect(by(trim, 'public').rating).toBeGreaterThan(1);
+    expect(rule(trim, 'public', 'pb-manifesto-strain')?.points).toBe(0);
+    // The tax lock still floors it.
+    expect(by(at({ itbr: 1 }), 'public').rating).toBe(1);
+  });
+
+  it('credits a Budget paid for in every year, and marks borrowing that comes early', () => {
+    const paid = rule(at({ dip47: 1, moj: 10, itbr: 1 }), 'markets', 'mk-paid-for');
+    expect(paid?.points).toBe(1);
+    expect(paid?.causes).toContain(noun('itbr'));
+    // Nothing moved: nothing to pay for, and no point for it.
+    expect(rule(at({}), 'markets', 'mk-paid-for')?.points).toBe(0);
+    // Borrowed in some year: no point, and the borrowing says so elsewhere.
+    expect(rule(at(THREE), 'markets', 'mk-paid-for')?.points).toBe(0);
+    // Defence at 3% now costs most in 2027-28: the target year understates it.
+    const front = rule(at({ def3: 1 }), 'markets', 'mk-front-loaded');
+    expect(front?.points).toBe(-1);
+    expect(front?.causes).toContain(noun('def3'));
+  });
+
+  it('takes three points to reach either end of the scale; a strain alone is never the floor', () => {
+    expect(ratingOf([{ points: -2 }])).toBe(2);
+    expect(ratingOf([{ points: -3 }])).toBe(1);
+    expect(ratingOf([{ points: 2 }])).toBe(4);
+    expect(ratingOf([{ points: 3 }])).toBe(5);
+    expect(ratingOf([{ points: 2 }, { points: -1, cap: 3 }])).toBe(3);
+    // Partners' National Insurance strains the tax lock and is small: the strain is all there is.
+    const strained = at({ nicllp: 1 }, freshGame());
+    expect(rule(strained, 'public', 'pb-manifesto-strain')?.points).toBe(-1);
+    for (const r of strained) expect(r.rating, r.audience).toBeGreaterThan(1);
+  });
+
+  it('offers a nudge only when the better band would move the rating itself', () => {
+    // Both priorities delivered and a felt tax rise: four either way, so nothing is offered.
+    const four = at(
+      { dip47: 1, moj: 10, ipt: 8 },
+      { ...freshGame(), priorities: SECURITY.priorities },
+    );
+    expect(by(four, 'public').rating).toBe(4);
+    const rises = rule(four, 'public', 'pb-tax-rises');
+    expect(rises?.points).toBe(-1);
+    expect(rises?.nudge).toBeUndefined();
+    // Held at the floor by a red line, no other nudge can lift it.
+    for (const r of by(at({ itbr: 1, nicer: 2 }), 'public').all) {
+      if (r.rule !== 'pb-manifesto') expect(r.nudge, r.rule).toBeUndefined();
+    }
+  });
+});
+
 describe('graded delivery (Phase 25)', () => {
   const THREE: GamePermalink = { ...freshGame(), priorities: ['nhs', 'defence', 'schools-send'] };
   // One cheap way per priority: a care down-payment, the defence plan's gap, the Plan 2 threshold.
@@ -214,7 +389,7 @@ describe('what would have moved a rating', () => {
     const rises = pub.all.find((r) => r.rule === 'pb-tax-rises');
     expect(rises?.points).toBeLessThan(0);
     expect(rises?.nudge).toMatch(
-      /^£\d+\.\dbn less in tax rises would have moved this by a point\.$/,
+      /^£\d+\.\dbn less in tax rises would have lifted the public’s rating\.$/,
     );
     // The best band has nowhere better to go, so it says nothing.
     const small = by(room({ ved: 10 }), 'public').all.find((r) => r.rule === 'pb-tax-rises');
@@ -329,7 +504,10 @@ describe('three audiences, five steps', () => {
     const matches = (template: string, text: string) => {
       const pattern = template
         .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-        .replace(/\\\{(value|abs|typicalError|payers)\\\}/g, '.+?');
+        .replace(
+          /\\\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices)\\\}/g,
+          '.+?',
+        );
       return new RegExp(`^${pattern}$`).test(text);
     };
     for (const r of room({ itbr: 3, def5: 1, rv2ch: 1 }, SECURITY)) {
@@ -345,7 +523,10 @@ describe('three audiences, five steps', () => {
       for (const rule of a.rules) {
         for (const band of rule.bands) {
           expect(band.badge).toBe('simulated');
-          const words = band.text.replace(/\{(value|abs|typicalError|payers)\}/g, '');
+          const words = band.text.replace(
+            /\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices)\}/g,
+            '',
+          );
           if (FIGURE.test(words)) {
             expect(
               band.sources.length,
