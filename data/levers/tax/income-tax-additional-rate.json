@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "Income tax",
-  "order": 30,
   "title": "Additional rate of income tax",
   "shortTitle": "Additional rate",
   "noun": "the additional rate of income tax",

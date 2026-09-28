@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "assumption",
   "group": "Capital gains",
-  "order": 26,
   "title": "Tax capital gains like income: 20%, 40% and 45%",
   "shortTitle": "CGT aligned with income tax",
   "noun": "capital gains taxed like income",

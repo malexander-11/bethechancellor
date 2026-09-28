@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "National Insurance",
-  "order": 10,
   "title": "Employee and self-employed NICs main rate",
   "shortTitle": "Employee NICs main rate",
   "noun": "the National Insurance main rate",

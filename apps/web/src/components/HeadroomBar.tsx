@@ -3,8 +3,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { isMissed, ruleTitle } from '../journey/rules';
 
 /**
- * How long the bar waits after the last change before it speaks (Phase 25): long enough for a
- * slider being dragged to settle, so a screen reader hears where it stopped, not every step.
+ * How long the bar waits after the last change before it speaks (Phase 25): long enough for the
+ * arrow keys to settle on a size, so a screen reader hears where they stopped, not every step.
  */
 export const BAR_SETTLE_MS = 800;
 

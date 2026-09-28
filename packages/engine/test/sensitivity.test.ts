@@ -72,9 +72,9 @@ describe('macro assumption sliders use the OBR sensitivities', () => {
     expect(o.warnings.some((w) => w.includes('bogus'))).toBe(true);
   });
 
-  it('the September 2026 preset shrinks headroom by three-quarters of the 2029-30 sensitivity', () => {
-    const preset = ds.presets.presets.find((p) => p.id === 'higher-gilt-yields-2026-09');
-    const o = run(preset?.leverValues ?? {});
+  it('gilt yields three-quarters of a point up shrink headroom by three-quarters of the 2029-30 sensitivity', () => {
+    // September 2026's gilt yields against the March forecast's (the estimate's rates setting).
+    const o = run({ rate: 0.75 });
     const stability = o.verdicts.find((v) => v.ruleId === 'stability');
     expect(stability?.headroomGbpm).toBeCloseTo(23600 - 0.75 * 15000, 6);
   });

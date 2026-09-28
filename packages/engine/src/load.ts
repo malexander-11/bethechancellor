@@ -21,7 +21,6 @@ import {
   leverSchema,
   dwpBenefitExtractSchema,
   pesaExtractSchema,
-  presetsFileSchema,
   reliefExtractSchema,
   ruleSetSchema,
   scorecardExtractSchema,
@@ -50,7 +49,6 @@ import type {
   Lever,
   DwpBenefitExtract,
   PesaExtract,
-  PresetsFile,
   ReliefExtract,
   RuleSet,
   ScorecardExtract,
@@ -101,10 +99,6 @@ export function parseSources(json: unknown): SourcesFile {
   }
   if (dupes.length > 0) throw new DataError('sources registry has duplicates', dupes);
   return file;
-}
-
-export function parsePresets(json: unknown): PresetsFile {
-  return parseWith(presetsFileSchema, json, 'presets');
 }
 
 export function parseHouseholds(json: unknown): HouseholdsReference {
@@ -200,7 +194,6 @@ export interface Dataset {
   vintage: Vintage;
   rules: RuleSet;
   levers: Lever[];
-  presets?: PresetsFile;
   households?: HouseholdsReference;
   /** "What has changed since the forecast" files, newest last. */
   contexts?: ContextFile[];
@@ -247,7 +240,7 @@ function collectSourceIds(value: unknown, out: Set<string>): void {
   }
 }
 
-/** Cross-file checks: every source reference resolves, lever codes are unique, presets name real levers. */
+/** Cross-file checks: every source reference resolves, lever codes are unique, and so on. */
 export function validateDataset(ds: Dataset): string[] {
   const problems: string[] = [];
   const known = new Set(ds.sources.sources.map((s) => s.id));
@@ -257,7 +250,6 @@ export function validateDataset(ds: Dataset): string[] {
       ds.vintage,
       ds.rules,
       ds.levers,
-      ds.presets ?? null,
       ds.households ?? null,
       ds.contexts ?? null,
       ds.briefings ?? null,
@@ -352,20 +344,7 @@ export function validateDataset(ds: Dataset): string[] {
       }
     }
   }
-  for (const preset of ds.presets?.presets ?? []) {
-    for (const code of Object.keys(preset.leverValues)) {
-      if (!codes.has(code)) problems.push(`preset ${preset.id} sets unknown lever code ${code}`);
-    }
-  }
   const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
-  const groupsByStep = {
-    taxes: new Set(ds.levers.filter((l) => l.category === 'tax').map((l) => l.group ?? '')),
-    spending: new Set(
-      ds.levers
-        .filter((l) => l.category === 'spend' || l.category === 'welfare')
-        .map((l) => l.group ?? ''),
-    ),
-  };
   const briefingIds = new Set<string>();
   for (const briefing of ds.briefings?.briefings ?? []) {
     if (briefingIds.has(briefing.id)) problems.push(`duplicate briefing id ${briefing.id}`);
@@ -377,19 +356,6 @@ export function validateDataset(ds: Dataset): string[] {
       problems.push(
         `briefing ${briefing.id}: adviser ${adviser.id} does not speak on ${briefing.step}`,
       );
-    }
-    if (briefing.group) {
-      const groups =
-        briefing.step === 'taxes'
-          ? groupsByStep.taxes
-          : briefing.step === 'spending'
-            ? groupsByStep.spending
-            : undefined;
-      if (!groups || !groups.has(briefing.group)) {
-        problems.push(
-          `briefing ${briefing.id}: no lever group "${briefing.group}" on step ${briefing.step}`,
-        );
-      }
     }
   }
   for (const context of ds.contexts ?? []) {

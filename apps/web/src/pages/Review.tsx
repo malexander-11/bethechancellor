@@ -123,7 +123,7 @@ function lowerFirst(text: string): string {
 }
 
 /**
- * The adviser's line on a priority short of delivery (Phase 25), the one the desk's advisers say,
+ * The adviser's line on a priority short of delivery (Phase 25), the one step 4's advisers say,
  * here as an amber line under the priority: its name is already above it, so the line says "It".
  */
 function shortfallLine(p: PriorityReport): { text: string; badge: 'simulated' } | null {

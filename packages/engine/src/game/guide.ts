@@ -2,9 +2,8 @@ import type { GuideFile, GuideStage, JourneyStep } from '../types/data.js';
 
 /**
  * The guide: one entry per screen a player meets, in the order they meet them. The opening and
- * the briefing are step 1; the desk's two screens share step 4 with the curated screens they sit
- * behind. The two fine-tuning screens share one entry: each has its own heading and line, from
- * finetune.json.
+ * the briefing are step 1. The two fine-tuning screens share one entry: each has its own heading
+ * and line, from finetune.json.
  */
 export const GUIDED_STEPS: readonly JourneyStep[] = [
   'start',
@@ -12,8 +11,6 @@ export const GUIDED_STEPS: readonly JourneyStep[] = [
   'pm',
   'deliver',
   'finetune',
-  'taxes',
-  'spending',
   'review',
   'budget-day',
 ];

@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "assumption",
   "group": "VAT",
-  "order": 25,
   "title": "Take VAT off domestic gas as well as electricity",
   "shortTitle": "VAT off gas",
   "noun": "taking VAT off gas",

@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "Income tax",
-  "order": 50,
   "title": "Higher-rate threshold (basic rate band)",
   "shortTitle": "Higher-rate threshold",
   "noun": "the higher-rate threshold",

@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "VAT",
-  "order": 30,
   "title": "Charge VAT on food",
   "shortTitle": "VAT on food",
   "noun": "charging VAT on food",

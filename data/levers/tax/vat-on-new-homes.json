@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "VAT",
-  "order": 80,
   "title": "Charge VAT on new homes",
   "shortTitle": "VAT on new homes",
   "noun": "charging VAT on new homes",

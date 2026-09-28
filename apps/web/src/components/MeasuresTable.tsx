@@ -1,11 +1,16 @@
-import type { Lever, Outcome } from '@btc/engine';
-import { betterOrWorse } from './AttributionList';
+import { formatGbpBn, type Lever, type Outcome } from '@btc/engine';
 import { LabelBadge } from './LabelBadge';
 import { TableScroll } from './TableScroll';
 import { formatLeverValue, levelChange } from './LeverControl';
 
 function tone(v: number): string {
   return v > 0.5 ? 'amount--worse' : v < -0.5 ? 'amount--better' : '';
+}
+
+/** The engine's positive-is-worse figure, said the way a reader thinks: "£8.4bn worse". */
+function betterOrWorse(v: number): string {
+  const size = formatGbpBn(Math.abs(v), 1);
+  return v > 0.5 ? `${size} worse` : v < -0.5 ? `${size} better` : size;
 }
 
 /** Every policy measure in this Budget as the level it moves to, with its effect in the target year. */

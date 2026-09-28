@@ -4,8 +4,9 @@ import type { Lever } from '../types/data.js';
  * Two measures that count the same money (Phase 25): aligning capital gains with income already
  * ends the write-off at death, so the death card's figure would be banked twice. The pair is
  * authored once, on either lever, as an interaction whose severity is `excludes`; this reads it
- * from both sides. On the curated screens only one of a pair can be chosen at a time; the desk
- * keeps a free hand and warns. Nothing here prices anything or nets one figure against the other.
+ * from both sides. On the step-3 and step-4 screens only one of a pair can be chosen at a time; an
+ * old link that carries both warns. Nothing here prices anything or nets one figure against the
+ * other.
  */
 
 export interface ExcludesPartner {

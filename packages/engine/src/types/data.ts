@@ -18,11 +18,7 @@ import type {
   costingSchema,
   leverSchema,
 } from '../schema/lever.schema.js';
-import type {
-  householdsReferenceSchema,
-  presetSchema,
-  presetsFileSchema,
-} from '../schema/reference.schema.js';
+import type { householdsReferenceSchema } from '../schema/reference.schema.js';
 import type {
   hmrcExtractSchema,
   dwpBenefitExtractSchema,
@@ -165,8 +161,6 @@ export type TaxHead = z.infer<typeof taxHeadSchema>;
 export type SpendingHead = z.infer<typeof spendingHeadSchema>;
 export type GrowthHead = z.infer<typeof growthHeadSchema>;
 export type UpratingRule = z.infer<typeof upratingRuleSchema>;
-export type Preset = z.infer<typeof presetSchema>;
-export type PresetsFile = z.infer<typeof presetsFileSchema>;
 
 /** Values keyed by fiscal year, e.g. { "2029-30": 23600 }. Money is £ million. */
 export type YearValues = Record<string, number>;

@@ -19,8 +19,8 @@ const flagshipOf = new Map(
 /**
  * The manifesto red lines watching each lever, read from the same file the PM's promises come
  * from, and whether the package as it stands crosses each: red where a promise's words are
- * broken, amber where only its spirit is (Phase 23). Pure arithmetic over the levers, so the
- * desk and the fine-tuning screens read it alike, and it works without a game.
+ * broken, amber where only its spirit is (Phase 23). Pure arithmetic over the levers, so every
+ * screen reads it alike, and it works without a game.
  */
 export function redLinesOf(values: Record<string, number>): (code: string) => RedLine[] {
   const breaks = promiseBreaks(values, pm.promises, levers);
@@ -94,7 +94,7 @@ function nameOf(lever: Lever): string {
  * has moved, read from either side of the pair, once per partner. This is how two measures that
  * overlap say so (the fuel duty cut against restoring its uprating): both can be moved, and both
  * warn. A pair that counts the same money (`excludes`, Phase 25) is blocked on these screens; if
- * both are in from the desk, each says it is counted twice.
+ * both are in from an old link, each says it is counted twice.
  */
 export function leverNotes(lever: Lever, moved: ReadonlySet<string>): LeverNote[] {
   const out = new Map<string, LeverNote>();
@@ -104,7 +104,7 @@ export function leverNotes(lever: Lever, moved: ReadonlySet<string>): LeverNote[
     }
     out.set(other.code, {
       key: other.code,
-      // Both in from the desk: the pair that counts the same money says so plainly (Phase 25).
+      // Both in from an old link: the pair that counts the same money says so plainly (Phase 25).
       text:
         severity === 'excludes'
           ? `Counted twice with ${nameOf(other)}: ${text}`

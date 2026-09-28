@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "National Insurance",
-  "order": 35,
   "title": "Employer NICs threshold",
   "shortTitle": "Employer NICs threshold",
   "noun": "the employer National Insurance threshold",

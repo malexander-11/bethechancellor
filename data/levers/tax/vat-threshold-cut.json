@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "assumption",
   "group": "VAT",
-  "order": 28,
   "title": "Cut the VAT registration threshold to £30,000",
   "shortTitle": "VAT threshold to £30,000",
   "noun": "a lower VAT threshold",

@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "VAT",
-  "order": 40,
   "title": "Charge full VAT on domestic energy",
   "shortTitle": "VAT on domestic energy",
   "noun": "full VAT on home energy",

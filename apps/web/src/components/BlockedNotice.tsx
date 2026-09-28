@@ -19,7 +19,7 @@ export function BlockedNotice({
   id: string;
   /** What the other choice is called on screen. */
   other: string;
-  /** Untick a toggle or a card; put a slider back. */
+  /** Untick a toggle or a card; put a policy with sizes back. */
   untick: boolean;
   /** Why the two count the same money, as authored. */
   reason: string;

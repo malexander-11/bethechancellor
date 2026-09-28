@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "assumption",
   "group": "VAT",
-  "order": 29,
   "title": "Charge 1% VAT on everything now zero-rated",
   "shortTitle": "1% VAT on zero-rated goods",
   "noun": "1% VAT on zero-rated goods",

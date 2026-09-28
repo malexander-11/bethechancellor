@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "VAT",
-  "order": 60,
   "title": "Charge VAT on books, newspapers and magazines",
   "shortTitle": "VAT on printed matter",
   "noun": "charging VAT on books and newspapers",

@@ -41,7 +41,7 @@ export const STOPS: ReadonlyArray<{
   },
 ];
 
-/** Which step a screen belongs to. The cover is the briefing's; the desk is fine-tuning's. */
+/** Which step a screen belongs to. The cover is the briefing's. */
 export function stopFor(step: JourneyStep): Stop {
   switch (step) {
     case 'start':
@@ -52,26 +52,21 @@ export function stopFor(step: JourneyStep): Stop {
       return 'pm';
     case 'deliver':
       return 'flagships';
+    case 'finetune':
+      return 'finetune';
     case 'review':
       return 'review';
     case 'budget-day':
       return 'budget-day';
-    default:
-      return 'finetune';
   }
 }
 
-/**
- * Which screen of a step this is, when a step has more than one: "Build your Budget · 2 of 4". A
- * total of nought marks a side room off the step, named by its label alone: "· More policies".
- */
+/** Which screen of a step this is, when a step has more than one: "Fine-tune tax and spend · 2 of 2". */
 export interface SubStep {
   index: number;
   total: number;
   /** What this screen is, for the browser tab. */
   label: string;
-  /** Kept for the pages that still name their part; the bar no longer says it. */
-  noun?: string;
 }
 
 /**
@@ -105,11 +100,7 @@ export function Progress({
           {named ? (
             <span className="progress__name">
               {here?.label}
-              {part
-                ? part.total > 0
-                  ? ` · ${part.index} of ${part.total}`
-                  : ` · ${part.label}`
-                : ''}
+              {part ? ` · ${part.index} of ${part.total}` : ''}
             </span>
           ) : null}
         </p>

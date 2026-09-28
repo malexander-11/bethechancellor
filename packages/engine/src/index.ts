@@ -7,7 +7,6 @@ export {
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
-  parsePresets,
   parseRules,
   parseScorecardExtract,
   parseSources,

@@ -17,7 +17,6 @@ import {
   parseReception,
   parseHouseholds,
   parseLever,
-  parsePresets,
   parseRules,
   parseSources,
   parseVintage,
@@ -47,7 +46,6 @@ export function loadDataset(
   const levers = listFiles(path.join(DATA_DIR, 'levers'), isJson).map((f) =>
     parseLever(readJson(f)),
   );
-  const presets = parsePresets(readJson(path.join(DATA_DIR, 'presets', 'presets.json')));
   const households = parseHouseholds(
     readJson(path.join(DATA_DIR, 'reference', 'uk-households.json')),
   );
@@ -81,7 +79,6 @@ export function loadDataset(
     vintage,
     rules,
     levers,
-    presets,
     households,
     contexts,
     advisers,

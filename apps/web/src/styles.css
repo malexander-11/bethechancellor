@@ -339,25 +339,6 @@ hr {
   line-height: 1.3;
 }
 
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
-  gap: 24px;
-  align-items: start;
-}
-
-@media (max-width: 899px) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (min-width: 900px) {
-  .layout :is(.lever, .group-tab, .btn, .linklike, summary, input, select) {
-    scroll-margin-top: 220px;
-  }
-}
-
 /* --------------------------------------------------------------- buttons */
 
 .btn {
@@ -550,12 +531,6 @@ hr {
   line-height: 1.45;
 }
 
-.assumptions-line {
-  margin: 4px 0 12px;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-}
-
 /* ---------------------------------------------------------------- labels */
 
 /*
@@ -660,27 +635,6 @@ a.badge:hover {
   color: var(--muted);
 }
 
-.lever__assumes {
-  margin: 4px 0 0;
-  font-size: 0.9375rem;
-}
-
-.lever__assumes summary {
-  color: var(--accent);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.lever__assumes ul {
-  margin: 0 0 6px;
-  padding-left: 20px;
-  color: var(--ink-2);
-}
-
-.lever__assumes li + li {
-  margin-top: 4px;
-}
-
 .tag--treasury {
   display: inline-flex;
   align-items: center;
@@ -772,11 +726,6 @@ a.badge:hover {
   border-top: 0;
 }
 
-.lever--flush {
-  padding-top: 0;
-  border-top: 0;
-}
-
 .lever__head {
   display: flex;
   flex-wrap: wrap;
@@ -836,83 +785,12 @@ a.badge:hover {
   display: block;
 }
 
-.lever__cash {
-  display: block;
-  color: var(--muted);
-  font-size: 0.875rem;
-  font-variant-numeric: tabular-nums;
-}
-
 /* A spending line's growth after rising prices, in words (Phase 25): the card's lead figure. */
 .lever__growth {
   display: block;
   color: var(--ink);
   font-size: 1.0625rem;
   font-weight: 700;
-}
-
-/* The slider: a 4px track, a 20px thumb, a 44px hit area. */
-.lever input[type='range'] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 44px;
-  margin: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.lever input[type='range']::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--axis);
-}
-
-.lever input[type='range']::-moz-range-track {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--axis);
-}
-
-.lever input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  margin-top: -8px;
-  border: 0;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-.lever input[type='range']::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border: 0;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-.lever input[type='range']:focus-visible {
-  outline: none;
-}
-
-.lever input[type='range']:focus-visible::-webkit-slider-thumb {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-
-.lever input[type='range']:focus-visible::-moz-range-thumb {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-
-.lever__scale {
-  display: flex;
-  justify-content: space-between;
-  margin-top: -6px;
-  color: var(--muted);
-  font-size: 0.875rem;
-  font-variant-numeric: tabular-nums;
 }
 
 .lever__desc {
@@ -968,18 +846,6 @@ a.badge:hover {
   margin: 2px 0 0;
 }
 
-.lever__select {
-  display: block;
-  width: 100%;
-  min-height: 44px;
-  margin: 8px 0;
-  padding: 10px 12px;
-  border: 1px solid var(--axis);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--ink);
-}
-
 .milestones {
   margin: 4px 0 0;
   font-size: 0.9375rem;
@@ -1022,37 +888,6 @@ a.badge:hover {
   flex-basis: 100%;
   color: var(--muted);
   font-size: 0.875rem;
-}
-
-/* Who pays, who benefits: the engine's figures by the group each lever is tagged with. */
-.who-pays {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.who-pays li {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 6px 0;
-  border-top: 1px solid var(--border);
-  font-size: 0.9375rem;
-}
-
-.who-pays li:first-child {
-  border-top: 0;
-}
-
-.who-pays .amount {
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
-
-.attribution__comparator th,
-.attribution__comparator td {
-  color: var(--ink-2);
-  font-weight: 400;
 }
 
 .reception__nudge {
@@ -1197,44 +1032,6 @@ a.badge:hover {
 
 .measures tfoot th {
   font-weight: 700;
-}
-
-/* What you've changed: a table, with the change as each row's header. */
-.attribution {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9375rem;
-}
-
-.attribution th,
-.attribution td {
-  padding: 8px 0;
-  border-top: 1px solid var(--border);
-  text-align: left;
-  vertical-align: top;
-}
-
-.attribution thead th {
-  border-top: 0;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.attribution tbody th {
-  font-weight: 400;
-}
-
-.attribution tfoot th,
-.attribution tfoot td {
-  font-weight: 700;
-}
-
-.attribution .attribution__num {
-  min-width: 5.5em;
-  padding-left: 12px;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
 }
 
 /* -------------------------------------------------------------- verdicts */
@@ -1464,37 +1261,6 @@ details.table-view td:first-child {
 
 /* --------------------------------------------------------------- toolbar */
 
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 16px;
-  margin-bottom: 16px;
-}
-
-.toolbar label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  cursor: pointer;
-}
-
-.toolbar input[type='checkbox'] {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-}
-
-/* "Link copied", announced to a screen reader and shown beside the button, not swapped into it. */
-.toolbar__note {
-  color: var(--good);
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
 .footer-note {
   margin-top: 40px;
   padding-top: 16px;
@@ -1527,123 +1293,6 @@ details.table-view td:first-child {
 }
 
 /* ------------------------------------------------------------- scorecard */
-
-.scorecard {
-  display: grid;
-  grid-template-columns: minmax(220px, 1.6fr) repeat(5, minmax(120px, 1fr));
-  gap: 12px 16px;
-  margin: 12px 0;
-  padding: 16px 0;
-  border-top: 1px solid var(--brass);
-  border-bottom: 1px solid var(--border);
-  background: var(--page);
-}
-
-.scorecard--sticky {
-  position: sticky;
-  top: 8px;
-  z-index: 5;
-}
-
-.scorecard__hero {
-  padding-right: 16px;
-  border-right: 1px solid var(--border);
-}
-
-.scorecard__caption {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.scorecard__label {
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.scorecard__hint {
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.scorecard__big {
-  margin: 2px 0;
-  font-size: 2.25rem;
-  font-weight: 700;
-  line-height: 1.1;
-}
-
-.scorecard__value {
-  font-size: 1.375rem;
-  font-weight: 700;
-  line-height: 1.2;
-  font-variant-numeric: tabular-nums;
-}
-
-.scorecard__from {
-  color: var(--muted);
-  font-size: 0.875rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.scorecard .gauge {
-  max-width: 200px;
-  margin-top: 6px;
-}
-
-.pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 6px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.pill--good {
-  background: var(--good-wash);
-  color: var(--good);
-}
-
-.pill--warning {
-  background: var(--warning-wash);
-  color: var(--warning);
-}
-
-.pill--critical {
-  background: var(--critical-wash);
-  color: var(--critical);
-}
-
-.pill--muted {
-  color: var(--muted);
-}
-
-@media (max-width: 899px) {
-  .scorecard {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .scorecard--sticky {
-    position: static;
-  }
-
-  .scorecard__hero {
-    grid-column: span 2;
-    padding: 0 0 12px;
-    border-right: 0;
-    border-bottom: 1px solid var(--border);
-  }
-}
 
 /* ------------------------------------------------------------- briefings */
 

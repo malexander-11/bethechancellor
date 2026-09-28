@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "National Insurance",
-  "order": 20,
   "title": "Employee and self-employed NICs additional rate",
   "shortTitle": "Employee NICs additional rate",
   "noun": "the National Insurance additional rate",

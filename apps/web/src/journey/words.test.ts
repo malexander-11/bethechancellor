@@ -153,8 +153,8 @@ describe('word budgets: one line visible, the rest a click away', () => {
   });
 
   it('says what to do now in ten words, and a priority’s purpose in ten', () => {
-    // The desk is a side room and keeps its longer lines; every screen on the road is one breath.
-    const road = guide.stages.filter((s) => s.step !== 'taxes' && s.step !== 'spending');
+    // Every screen on the road is one breath.
+    const road = guide.stages;
     // The cover and the six steps (Phase 24).
     expect(road.map((s) => s.step)).toEqual([
       'start',
@@ -233,28 +233,21 @@ describe('word budgets: one line visible, the rest a click away', () => {
     }
   });
 
-  it('a step reads as a briefing, not a report', () => {
-    for (const step of ['taxes', 'spending'] as const) {
-      const stepBriefings = briefings.briefings.filter((b) => b.step === step);
+  it('gives every lever a headline of one line, not a paragraph', () => {
+    // The headline heads a policy's "More about this"; the description behind it is the drawer's.
+    for (const side of ['tax', 'spending'] as const) {
       const stepLevers = levers.filter(
         (l) =>
           !l.deprecated &&
-          (step === 'taxes'
+          (side === 'tax'
             ? l.category === 'tax'
             : l.category === 'spend' || l.category === 'welfare'),
       );
-      // Advisers speak in headlines; their paragraphs sit behind a disclosure.
-      const briefingWords = stepBriefings.reduce((acc, b) => acc + words(b.headline), 0);
-      expect(briefingWords, `${step} briefings show ${briefingWords} words`).toBeLessThanOrEqual(
-        160,
-      );
-      // Each control carries one line, not a paragraph.
       const leverWords = stepLevers.reduce((acc, l) => acc + words(l.headline ?? l.description), 0);
       const perLever = leverWords / stepLevers.length;
-      expect(
-        perLever,
-        `${step} averages ${perLever.toFixed(1)} words a control`,
-      ).toBeLessThanOrEqual(12);
+      expect(perLever, `${side} averages ${perLever.toFixed(1)} words a lever`).toBeLessThanOrEqual(
+        12,
+      );
       // Far less than the descriptions they replace, which are still in the drawer.
       const drawerWords = stepLevers.reduce((acc, l) => acc + words(l.description), 0);
       expect(leverWords).toBeLessThan(drawerWords / 2);

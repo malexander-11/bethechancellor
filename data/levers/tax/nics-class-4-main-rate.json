@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "National Insurance",
-  "order": 15,
   "title": "Self-employed National Insurance main rate (Class 4)",
   "shortTitle": "Self-employed NICs rate",
   "noun": "self-employed National Insurance",

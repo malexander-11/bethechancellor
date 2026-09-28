@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "assumption",
   "group": "VAT",
-  "order": 27,
   "title": "Keep VAT off electricity after March 2027",
   "shortTitle": "VAT off electricity",
   "noun": "keeping VAT off electricity",

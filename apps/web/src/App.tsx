@@ -82,7 +82,7 @@ function Shell() {
           <Route path="/assumptions" element={<RedirectKeepingQuery to="/outlook" />} />
           <Route path="/pm" element={<PMPage />} />
           <Route path="/budget" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-          {/* The flagship screens of the package; the desk's two screens catch everything else. */}
+          {/* The flagship screens; the desk's old addresses, below, open step 4. */}
           <Route path="/budget/deliver" element={<DeliverPage />} />
           <Route path="/budget/deliver/:n" element={<DeliverPage />} />
           {/* Paying for it became fine-tuning tax and spending (Phase 24). */}

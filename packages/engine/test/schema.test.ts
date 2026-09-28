@@ -38,7 +38,6 @@ describe('every JSON file under data/ validates against its schema', () => {
       'sources/sources.json',
       'vintages/obr-2026-03/vintage.json',
       'rules/charter-2026-02.json',
-      'presets/presets.json',
       'reference/uk-households.json',
       'journey/advisers.json',
       'journey/briefings.json',

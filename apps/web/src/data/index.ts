@@ -20,9 +20,7 @@ import {
   parseContext,
   parseHouseholds,
   parseLever,
-  parsePresets,
   parseRules,
-  parseScorecardExtract,
   parseSources,
   parseVintage,
   validateDataset,
@@ -47,9 +45,7 @@ import guideJson from '@data/journey/guide.json';
 import glossaryJson from '@data/journey/glossary.json';
 import receptionJson from '@data/journey/reception.json';
 import contextJson from '@data/context/2026-09.json';
-import budget2025Json from '@data/derived/hmt-budget-2025-table-4-1.raw.json';
 import householdsJson from '@data/reference/uk-households.json';
-import presetsJson from '@data/presets/presets.json';
 import rulesJson from '@data/rules/charter-2026-02.json';
 import sourcesJson from '@data/sources/sources.json';
 import vintageJson from '@data/vintages/obr-2026-03/vintage.json';
@@ -62,7 +58,6 @@ const leverModules = import.meta.glob('../../../../data/levers/**/*.json', {
 export const sources = parseSources(sourcesJson);
 export const vintage = parseVintage(vintageJson);
 export const rules = parseRules(rulesJson);
-export const presets = parsePresets(presetsJson);
 export const households = parseHouseholds(householdsJson);
 export const context = parseContext(contextJson);
 export const advisers = parseAdvisers(advisersJson);
@@ -80,13 +75,6 @@ export const incidence = parseIncidence(incidenceJson);
 export const verdicts = parseVerdicts(verdictsJson);
 export const guide = parseGuide(guideJson);
 export const glossary = parseGlossary(glossaryJson);
-/** HM Treasury's Budget 2025 scorecard, for scale: what a whole Budget's measures came to. */
-export const budget2025 = parseScorecardExtract(budget2025Json);
-
-/** The net of Budget 2025's measures in a year, £ million; positive reduces borrowing. */
-export function budget2025NetGbpm(year: string): number {
-  return budget2025.measures.reduce((acc, m) => acc + (m.values[year] ?? 0), 0);
-}
 export const levers: Lever[] = Object.keys(leverModules)
   .sort()
   .map((key) => parseLever(leverModules[key]))
@@ -95,7 +83,7 @@ export const levers: Lever[] = Object.keys(leverModules)
 /**
  * Today's estimate (Phase 24, ADR-0025): the OBR's March forecast on today's borrowing costs and
  * prices, each setting the advisers' stated rule applied to a published reading. Every game is
- * played on it; the sandbox may still set its own figures on the desk.
+ * played on it.
  */
 export const ESTIMATE: Readonly<Record<string, number>> = suggestedSettings(
   context.readings,
@@ -114,7 +102,6 @@ const problems = validateDataset({
   vintage,
   rules,
   levers,
-  presets,
   households,
   contexts: [context],
   advisers,
@@ -155,62 +142,7 @@ export function finetuneName(code: string): string | undefined {
   return FINETUNE_NAMES.get(code);
 }
 
-export const briefingById: ReadonlyMap<string, Briefing> = new Map(
-  briefings.briefings.map((b) => [b.id, b] as const),
-);
-
-/** Briefings for a step: the step's overviews (no group) or the briefings for one lever group. */
-export function briefingsFor(step: JourneyStep, group?: string): Briefing[] {
-  return briefings.briefings.filter((b) => b.step === step && (b.group ?? undefined) === group);
-}
-
-export const leversByCategory = {
-  tax: levers.filter((l) => l.category === 'tax'),
-  spend: levers.filter((l) => l.category === 'spend' || l.category === 'welfare'),
-  macro: levers.filter((l) => l.category === 'macro'),
-};
-
-export interface LeverGroup {
-  name: string;
-  levers: Lever[];
-}
-
-/** Group levers by their authored `group`, ordering groups and levers by `order`. */
-export function groupLevers(items: Lever[]): LeverGroup[] {
-  const byGroup = new Map<string, Lever[]>();
-  for (const lever of items) {
-    const name = lever.group ?? 'Other';
-    const list = byGroup.get(name) ?? [];
-    list.push(lever);
-    byGroup.set(name, list);
-  }
-  // Within a group, authored order; the options nobody proposes go to the foot, whatever their order.
-  const foot = (l: Lever) => (l.notOnTheTable ? 1 : 0);
-  const groups = [...byGroup.entries()].map(([name, levers]) => ({
-    name,
-    levers: [...levers].sort((a, b) => foot(a) - foot(b) || (a.order ?? 0) - (b.order ?? 0)),
-  }));
-  const rank = (g: LeverGroup) => Math.min(...g.levers.map((l) => l.order ?? 0));
-  const GROUP_ORDER = [
-    'Budget 2025 decisions',
-    'Income tax',
-    'National Insurance',
-    'Business',
-    'VAT',
-    'Capital gains',
-    'Wealth and property',
-    'Duties',
-    'Budget 2025 and Spending Review decisions',
-    'New programmes',
-    'Day-to-day departmental budgets',
-    'Public investment',
-    'Working-age benefits',
-    'Pensioners and disability',
-  ];
-  return groups.sort((a, b) => {
-    const ia = GROUP_ORDER.indexOf(a.name);
-    const ib = GROUP_ORDER.indexOf(b.name);
-    if (ia !== -1 || ib !== -1) return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
-    return rank(a) - rank(b);
-  });
+/** The briefings an adviser gives on a step: Budget day's, behind the workings. */
+export function briefingsFor(step: JourneyStep): Briefing[] {
+  return briefings.briefings.filter((b) => b.step === step);
 }

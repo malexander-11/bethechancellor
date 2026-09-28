@@ -87,10 +87,10 @@ export function priceWorkings(price: OptionPrice): string {
  * (amber), its earliest start,
  * the options it overlaps or counts the same money as, and the line of whoever proposes it.
  * Choosing it moves the levers inside; the state is read back from the levers, so a card can also
- * show that its levers were adjusted on the desk to somewhere else (ADR-0022). While an option it
+ * show that its levers were adjusted on step 4 to somewhere else (ADR-0022). While an option it
  * conflicts with is in the Budget the card is blocked: it says, in one plain sentence at full
  * contrast, what to untick and why, and offers a one-tap swap (Phase 25); its checkbox stays in
- * the tab order and will not tick. With both in from the desk, both warn and neither is blocked. On the surface a card is its title, its badge and its
+ * the tab order and will not tick. With both in from an old link, both warn and neither is blocked. On the surface a card is its title, its badge and its
  * figure, plus the tags that change what choosing it means, and one adviser's line saying who
  * proposed it and what it costs and does (Phase 23); the lever's headline, the options it quietly
  * overlaps and the proposer's line wait behind one fold, "More about this". A way that only makes

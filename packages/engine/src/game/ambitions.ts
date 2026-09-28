@@ -22,7 +22,7 @@ export {
  * full is on; settled lower when such a way was chosen and then trimmed on step 4 short of it;
  * started when only ways that make a start are in; not funded when nothing is. Whether an option
  * delivers in full or starts is authored on the option (`scale`, a judgement badged as one);
- * whether it is on follows from the lever values alone, so the desk and the guided screens can
+ * whether it is on follows from the lever values alone, so the flagship screens and step 4 can
  * never disagree.
  */
 

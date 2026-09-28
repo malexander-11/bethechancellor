@@ -27,8 +27,6 @@ describe('budget state', () => {
       const state = initialStateFromLocation(
         `?v=1&f=obr2603&r=ch2602&i=2027&M=rate.0.75&o=${flag}`,
       );
-      expect(state.debtInterestFeedback).toBe(true);
-      expect(state.assessAsOf).toBe('vintage');
       expect(state.warnings).toEqual([EXPERT_WARNING]);
       expect(permalinkQuery(state)).toBe('v=1&f=obr2603&r=ch2602&i=2027&M=rate.0.75');
     }
@@ -85,14 +83,11 @@ describe('budget state', () => {
     expect(reducer(playing, { type: 'startGame' }).game).toEqual(playing.game);
   });
 
-  it('puts every lever back without ending the game or touching the economy', () => {
+  it('ends the game on a reset, with every lever and the economy', () => {
+    // Budget day's "Play again" (Phase 26: the desk's "Put every lever back" went with it).
     const state = initialStateFromLocation(
       '?g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1_moj.10',
     );
-    const back = reducer(state, { type: 'resetPolicy' });
-    expect(back.leverValues).toEqual({ rate: 0.75, rpi: 0.5 });
-    expect(back.game).toEqual({ reached: 3, priorities: ['defence'] });
-    // A reset proper ends the game and the economy with it.
     const gone = reducer(state, { type: 'reset' });
     expect(gone.game).toBeUndefined();
     expect(gone.leverValues).toEqual({});

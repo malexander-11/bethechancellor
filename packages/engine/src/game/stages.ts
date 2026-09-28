@@ -5,8 +5,7 @@ import type { GamePermalink } from '../types/engine.js';
  * The six stages of a playthrough, in order (Phase 24, ADR-0025): the briefing, the priorities,
  * the flagship policies, fine-tuning tax and spending, delivering the Budget, and the feedback.
  * The index is what a shared link carries (`st.N`). Fine-tuning is one stage with its two screens;
- * `assumptions`, and the desk's `taxes` and `spending`, are older names that still appear in
- * authored data.
+ * `assumptions` is an older name that still appears in authored data.
  */
 export const GAME_STAGES: readonly JourneyStep[] = [
   'outlook',
@@ -21,9 +20,6 @@ export const FINAL_STAGE = GAME_STAGES.length - 1;
 
 const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   assumptions: 'outlook',
-  // The desk's two screens, retired in Phase 26: every lever they held is a policy on step 4.
-  taxes: 'finetune',
-  spending: 'finetune',
 };
 
 /** Where a step sits in the playthrough; the start page is before everything, at −1. */
@@ -31,7 +27,7 @@ export function stageIndex(step: JourneyStep): number {
   return GAME_STAGES.indexOf(ALIASES[step] ?? step);
 }
 
-/** The canonical stage a step belongs to: the desk's two screens are `finetune`, and so on. */
+/** The canonical stage a step belongs to: `assumptions` is the briefing's. */
 function canonical(step: JourneyStep): JourneyStep {
   return ALIASES[step] ?? step;
 }

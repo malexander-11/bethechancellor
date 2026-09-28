@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "National Insurance",
-  "order": 36,
   "title": "Charge National Insurance to workers over state pension age",
   "shortTitle": "NICs over pension age",
   "noun": "working pensioners' National Insurance",

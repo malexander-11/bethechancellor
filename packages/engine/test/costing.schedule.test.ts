@@ -36,10 +36,9 @@ describe('reversal toggles from the Budget 2025 scorecard', () => {
     expect(e?.receipts['2030-31']).toBeCloseTo(-2585, 6);
   });
 
-  it('a toggle off has no effect and the unwound preset moves headroom by the sum of the five', () => {
+  it('a toggle off has no effect and unwinding all five tax measures moves headroom by their sum', () => {
     expect(run({ rvfrz: 0 }).leverEffects).toHaveLength(0);
-    const preset = ds.presets.presets.find((p) => p.id === 'budget-2025-tax-measures-unwound');
-    const o = run(preset?.leverValues ?? {});
+    const o = run({ rvfrz: 1, rvinv: 1, rvsal: 1, rvfuel: 1, rvgam: 1 });
     const total = o.leverEffects.reduce((acc, e) => acc + (e.receipts['2029-30'] ?? 0), 0);
     expect(total).toBeCloseTo(-8395 - 2230 - 4845 + 850 - 1135, 6);
     expect(o.verdicts.find((v) => v.ruleId === 'stability')?.status).toBe('met');

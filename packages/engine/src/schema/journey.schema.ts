@@ -6,11 +6,10 @@ const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
 /**
  * The steps of the guided Budget journey, in order. `assumptions` is the Phase 4 name of what
  * became `outlook`; it stays so that advisers authored against it keep validating, and the app
- * routes it on. The package's third screen (`policies`, once `recommendations`) was retired in
- * Phase 12: its levers sit on `taxes` and `spending` (ADR-0017). `finetune` is step 4's curated
- * tax and spending screens (Phase 24, ADR-0025), which replaced `afford`; the forecast, the
- * compromises and the add-ons (`forecast`, `compromise`, `rabbit`) retired with it, and their old
- * addresses open the review.
+ * routes it on. `finetune` is step 4's two screens of policies (Phase 24, ADR-0025; every lever
+ * since Phase 26, ADR-0027). The desk's `taxes` and `spending` retired with the desk in Phase 26;
+ * the forecast, the compromises and the add-ons (`forecast`, `compromise`, `rabbit`) in Phase 24.
+ * The app still routes all their old addresses.
  */
 export const journeyStepSchema = z.enum([
   'start',
@@ -19,8 +18,6 @@ export const journeyStepSchema = z.enum([
   'pm',
   'deliver',
   'finetune',
-  'taxes',
-  'spending',
   'review',
   'budget-day',
 ]);
@@ -51,13 +48,12 @@ export const briefingFactSchema = z.strictObject({
 });
 
 /**
- * A briefing belongs to a step and, optionally, to one lever group within it (the step's
- * overview has no group). The adviser named must exist and speak on that step.
+ * A briefing belongs to a step. The adviser named must exist and speak on that step. The desk's
+ * briefings, one per group of levers, retired with it (Phase 26).
  */
 export const briefingSchema = z.strictObject({
   id: slug,
   step: journeyStepSchema,
-  group: z.string().min(1).optional(),
   adviser: slug,
   title: z.string().min(1),
   /** The one line the adviser says out loud. The paragraphs are the detail behind it. */

@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "VAT",
-  "order": 20,
   "title": "VAT reduced rate",
   "shortTitle": "VAT reduced rate",
   "noun": "the reduced VAT rate",

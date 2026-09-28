@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "VAT",
-  "order": 70,
   "title": "Charge VAT on public transport fares",
   "shortTitle": "VAT on passenger transport",
   "noun": "charging VAT on fares",

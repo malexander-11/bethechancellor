@@ -387,86 +387,6 @@
 
 /* ------------------------------------------------------- the lever groups */
 
-.lever-groups {
-  margin-bottom: 16px;
-}
-
-.group-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 4px;
-  margin: 0;
-  padding: 0;
-  border-bottom: 1px solid var(--border);
-  list-style: none;
-}
-
-.group-tab {
-  position: relative;
-  display: inline-flex;
-  flex: 0 1 auto;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2px 8px;
-  max-width: 100%;
-  min-height: 44px;
-  padding: 10px 14px;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  background: transparent;
-  color: var(--ink-2);
-  text-align: left;
-  cursor: pointer;
-}
-
-.group-tab:hover {
-  background: var(--surface-2);
-  color: var(--ink);
-}
-
-.group-tab[aria-selected='true'] {
-  border-bottom-color: var(--accent);
-  color: var(--ink);
-}
-
-.group-tab__name {
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-.group-tab[aria-selected='true'] .group-tab__name {
-  color: var(--accent);
-}
-
-.group-tab__count {
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.group-tab .tag--treasury {
-  align-self: center;
-}
-
-.group-panel {
-  padding: 8px 0 20px;
-  border-bottom: 1px solid var(--border);
-}
-
-.group-panel > .lever:first-of-type {
-  padding-top: 4px;
-  border-top: 0;
-}
-
-.group-panel > .briefing {
-  margin-bottom: 16px;
-}
-
-.pinned {
-  padding-top: 4px;
-  border-top: 2px solid var(--accent);
-}
-
 .interventions {
   margin: 8px 0 4px;
 }
@@ -490,36 +410,6 @@
 }
 
 /* ----------------------------------------------------- the summary strip */
-
-.summary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 24px;
-  margin: 12px 0;
-  padding: 12px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.summary__cell {
-  display: flex;
-  flex: 1 1 140px;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 140px;
-}
-
-.summary__label {
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.summary__value {
-  font-size: 1.375rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
 
 /* --------------------------------------------------------------- a note */
 
@@ -1133,7 +1023,7 @@ label.choice {
   margin-top: 6px;
 }
 
-/* An option card: the figure leads the meta line; an option adjusted on the desk is neither on nor off. */
+/* An option card: the figure leads the meta line; an option adjusted on step 4 is neither on nor off. */
 .choice--option .choice__title .badge {
   vertical-align: middle;
 }
@@ -1275,8 +1165,8 @@ label.choice {
 /* ------------------------------------------------ fine-tuning (Phase 24) */
 
 /*
- * A curated lever: the desk's own control under a plain title, then its price (at rest) or its
- * effect (moved), the adviser's line, any warning that applies now, and one fold for the rest.
+ * A policy on step 4: its title and sizes, then its price (at rest) or its effect (chosen), the
+ * adviser's line, any warning that applies now, and one fold for the rest.
  */
 .lever--curated .choice__advice {
   margin: 8px 0 0;
@@ -1414,18 +1304,6 @@ label.choice {
   line-height: 1.3;
 }
 
-/* "More policies": the way into the desk, one line. */
-.more-link {
-  margin: 4px 0 12px;
-  font-size: 0.9375rem;
-}
-
-.more-link a {
-  display: inline-block;
-  padding: 10px 0;
-  font-weight: 600;
-}
-
 /* ------------------------------------------------------------- the review */
 
 .review {
@@ -1557,9 +1435,8 @@ label.choice {
 
 /* ------------------------------------------ plain words on step 3 and 4 (Phase 25) */
 
-/* The fold's cash budget and the slider's reach: detail, in the quieter ink. */
-.lever__cash-note,
-.lever__range {
+/* The fold's cash budget: detail, in the quieter ink. */
+.lever__cash-note {
   margin: 8px 0 0;
   color: var(--ink-2);
   font-size: 0.9375rem;

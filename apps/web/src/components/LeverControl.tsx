@@ -66,12 +66,6 @@ export function formatLeverValueShort(lever: Lever, value: number): string {
   return formatLeverValue(lever, value).replace(/(\d)\.0(?!\d)/, '$1');
 }
 
-/** A move in words, with no sign to decode (Phase 25): "up 1p", "down 2 points", "up £10". */
-export function changeWords(lever: Lever, value: number): string {
-  const size = formatLeverValueShort(lever, Math.abs(value)).replace(/^\+/, '');
-  return `${value < 0 ? 'down' : 'up'} ${size}`;
-}
-
 /** A spending lever read as a share of its budget (Phase 25): "1% less", "10% more". */
 export function shareWords(lever: Lever, value: number): string {
   const size = formatLeverValueShort(lever, Math.abs(value)).replace(/^\+/, '');
@@ -284,25 +278,6 @@ export function levelChange(lever: Lever, value: number, summaryYear?: string): 
   return null;
 }
 
-/**
- * Slider end labels: the level at each end when the lever has level metadata; a spending line's
- * share in words ("10% less", "10% more", Phase 25); else the change.
- */
-function endLabel(lever: Lever, value: number): string {
-  const level = lever.control.level;
-  if (level) return formatLevel(level, levelValue(level, value));
-  if (isShareOfSpending(lever)) return shareWords(lever, value);
-  return formatLeverValueShort(lever, value);
-}
-
-function nearestOption(lever: Lever, value: number): string {
-  const options = Object.keys(lever.control.labels ?? {}).map(Number);
-  if (options.length === 0) return String(value);
-  return String(
-    options.reduce((best, v) => (Math.abs(v - value) < Math.abs(best - value) ? v : best)),
-  );
-}
-
 /** A warning that applies now, beside a curated lever: another lever it interacts with has moved. */
 export interface LeverNote {
   key: string;
@@ -314,7 +289,7 @@ export interface LeverNote {
 export interface Blocked {
   /** What the other lever is called on this screen. */
   other: string;
-  /** Untick a toggle; put a slider back. */
+  /** Untick a toggle; put a policy with sizes back. */
   untick: boolean;
   reason: string;
   onSwap?: () => void;
@@ -323,8 +298,8 @@ export interface Blocked {
 }
 
 /**
- * A policy's sizes on a step-4 card (Phase 26, ADR-0027), in place of a slider: the settings it
- * offers, smallest first and all one way, and what they are called.
+ * A policy's sizes on a step-4 card (Phase 26, ADR-0027): the settings it offers, smallest first
+ * and all one way, and what they are called.
  */
 export interface SizeChoice {
   /** Settings of the lever. One is a tick; two or three are radios. */
@@ -342,6 +317,13 @@ export interface SizeChoice {
 export const RELIEF_LINE =
   'HMRC’s cost of the tax break. The real sum would be less, as people change what they do.';
 
+/**
+ * A lever's card on step 4 (Phase 24; policies with sizes since Phase 26, ADR-0027), drawn by
+ * PolicyCard: the policy's title, its sizes as radios or one tick, the price at rest or the effect
+ * once chosen, the adviser's line, the tags that change what choosing it means, and the lever's own
+ * headline and caveats under "More about this". The desk's sliders, its select and its long card
+ * went with it (Phase 26).
+ */
 export function LeverControl({
   lever,
   value,
@@ -355,8 +337,6 @@ export function LeverControl({
   advice,
   notes = [],
   blocked,
-  compact = false,
-  range,
   sizes,
   headingLevel = 3,
   children,
@@ -391,19 +371,8 @@ export function LeverControl({
    * will not move, and says why and how to swap.
    */
   blocked?: Blocked;
-  /**
-   * The curated card (Phase 24): the lever's own headline, its milestones, the quieter tags and
-   * what the number assumes wait under one fold, "More about this"; the surface is the control,
-   * its price, the adviser's line and the tags that change what moving it means.
-   */
-  compact?: boolean;
-  /**
-   * A narrower range for a curated card (Phase 25): the part of the lever's range its source's
-   * figure covers. A setting already outside it, from the desk or a link, stays reachable.
-   */
-  range?: { min: number; max: number };
-  /** A step-4 policy's sizes (Phase 26): radios, or a tick, in place of the slider. */
-  sizes?: SizeChoice;
+  /** The policy's sizes (Phase 26): radios, or one tick. */
+  sizes: SizeChoice;
   /** The title's heading level: 4 under a family subhead in a fold (Phase 26), else 3. */
   headingLevel?: 3 | 4;
   /** Anything to show beneath the lever: the minister's line, on a spending lever that has moved. */
@@ -412,11 +381,7 @@ export function LeverControl({
   const id = useId();
   const [open, setOpen] = useState(false);
   const workings = useWorkings();
-  const { step } = lever.control;
-  const min = range ? Math.min(range.min, value) : lever.control.min;
-  const max = range ? Math.max(range.max, value) : lever.control.max;
   const isToggle = lever.control.kind === 'toggle';
-  const isSelect = lever.control.kind === 'select';
   const change = !isToggle ? levelChange(lever, value, summaryYear) : null;
   const isCapital = lever.classification?.currentOrCapital === 'capital';
   const isFinancialTransaction = lever.classification?.psnflTreatment === 'financialTransaction';
@@ -438,16 +403,12 @@ export function LeverControl({
   ];
   const isDefault = value === lever.control.default;
   const Heading = headingLevel === 4 ? 'h4' : 'h3';
-  // A step-4 policy (Phase 26): set the other way by the lever's other policy, a single setting
-  // (a tick), or moved its way to a setting none of its sizes is (an old link, or a flagship's
-  // value left behind when its priority was dropped).
-  const otherWay = sizes?.replaces !== undefined;
-  const tick = sizes !== undefined && sizes.values.length === 1;
-  const offGrid =
-    sizes !== undefined &&
-    !isDefault &&
-    !otherWay &&
-    !sizes.values.some((v) => Math.abs(v - value) < 1e-9);
+  // Set the other way by the lever's other policy, a single setting (a tick), or moved its way to
+  // a setting none of its sizes is (an old link, or a flagship's value left behind when its
+  // priority was dropped).
+  const otherWay = sizes.replaces !== undefined;
+  const tick = sizes.values.length === 1;
+  const offGrid = !isDefault && !otherWay && !sizes.values.some((v) => Math.abs(v - value) < 1e-9);
   const improvement =
     effect && summaryYear && !isFinancialTransaction
       ? isCapital
@@ -471,7 +432,7 @@ export function LeverControl({
       : null;
   const showHint = hint !== undefined && isDefault;
   // The control is described by the one-line headline and, once it has moved, by what it does;
-  // on a curated card at rest, by what the usual move would do.
+  // at rest, by what its smallest size would do.
   const hasEffectLine =
     (!otherWay && improvement !== null && summaryYear !== undefined) ||
     (!otherWay && isFinancialTransaction && cashOut !== 0) ||
@@ -493,18 +454,6 @@ export function LeverControl({
     const plain = effectWords(improvement, isCapital, lever.classification?.side === 'receipts');
     return relief ? reliefWords(plain) : plain;
   };
-  // What a screen reader hears as the slider moves (Phase 25): the same words the card leads
-  // with, and how far the setting is from the plan, never the other half of a pair it cannot see.
-  const pathWords = (pct: number) => growthWords(pct, pct, false).replace(/, as planned$/, '');
-  const valueText = change?.real
-    ? isDefault
-      ? `${pathWords(change.real.toPct)}, as planned`
-      : `${pathWords(change.real.toPct)}, ${shareWords(lever, value)} than planned`
-    : change
-      ? `${change.to}, ${isDefault ? 'as planned' : changeWords(lever, value)}`
-      : isDefault
-        ? 'As planned'
-        : changeWords(lever, value);
   const cashWords = change?.real
     ? `Cash: ${isDefault ? change.to : `${change.from} → ${change.to}`} ${change.note ?? ''}; growth measured from ${change.real.span}.`
     : '';
@@ -627,14 +576,12 @@ export function LeverControl({
   // The lever is set the other way (Phase 26): choosing a size here replaces that policy.
   const replacesLine = otherWay ? (
     <p className="lever__effect lever__replaces" id={`${id}-effect`}>
-      Choosing this replaces {sizes?.replaces}.
+      Choosing this replaces {sizes.replaces}.
     </p>
   ) : null;
   // Set its way, but at none of its sizes: what it is now, so no size reads as chosen.
   const nowLine = offGrid ? <p className="lever__now">Now {sizeWords(lever, value)}</p> : null;
-  // On the curated cards always; on the desk once the lever has moved, beside what it does.
-  const reliefLine =
-    relief && (compact || !isDefault) ? <p className="lever__relief">{RELIEF_LINE}</p> : null;
+  const reliefLine = relief ? <p className="lever__relief">{RELIEF_LINE}</p> : null;
   const blockedLine = blocked ? (
     <BlockedNotice
       id={`${id}-blocked`}
@@ -686,26 +633,24 @@ export function LeverControl({
 
   return (
     <div
-      className={`lever${isToggle || tick ? ' lever--toggle' : ''}${compact ? ' lever--curated' : ''}${blocked ? ' lever--blocked' : ''}`}
+      className={`lever lever--curated${tick ? ' lever--toggle' : ''}${blocked ? ' lever--blocked' : ''}`}
       role="group"
       aria-labelledby={`${id}-title`}
     >
       <div className="lever__head">
-        {isToggle || tick ? (
+        {tick ? (
           <Heading className="lever__title" id={`${id}-title`}>
             <label htmlFor={id} className="lever__toggle-label">
               <input
                 id={id}
                 type="checkbox"
-                checked={isToggle ? value === 1 : !isDefault && !otherWay}
+                checked={!isDefault && !otherWay}
                 aria-describedby={describedBy}
                 aria-disabled={blocked ? true : undefined}
                 onChange={(e) =>
                   change_(
                     e.target.checked
-                      ? isToggle
-                        ? 1
-                        : (sizes?.values[0] ?? lever.control.default)
+                      ? (sizes.values[0] ?? lever.control.default)
                       : lever.control.default,
                   )
                 }
@@ -713,14 +658,10 @@ export function LeverControl({
               {title}
             </label>
           </Heading>
-        ) : sizes ? (
+        ) : (
           // The sizes' fieldset names itself; the heading is the card's title.
           <Heading className="lever__title" id={`${id}-title`}>
             {title}
-          </Heading>
-        ) : (
-          <Heading className="lever__title" id={`${id}-title`}>
-            <label htmlFor={id}>{title}</label>
           </Heading>
         )}
         <span className="lever__flags">
@@ -732,14 +673,11 @@ export function LeverControl({
         <>
           <div className="lever__value">
             {change?.real ? (
-              // Spending: growth a year after rising prices, in words (Phase 25). The desk keeps
-              // the cash budget beside it; a curated card keeps it under "More about this".
-              <>
-                <strong className="lever__growth">
-                  {growthWords(change.real.fromPct, change.real.toPct, !isDefault)}
-                </strong>
-                {compact ? null : <span className="lever__cash">{cashWords}</span>}
-              </>
+              // Spending: growth a year after rising prices, in words (Phase 25); the cash budget
+              // waits under "More about this".
+              <strong className="lever__growth">
+                {growthWords(change.real.fromPct, change.real.toPct, !isDefault)}
+              </strong>
             ) : change ? (
               isDefault ? (
                 // No "20% → 20%" at rest (Phase 25): the level, as planned.
@@ -766,126 +704,56 @@ export function LeverControl({
               </>
             )}
           </div>
-          {sizes ? (
-            tick ? null : (
-              // Small, Medium and Large (Phase 26): native radios, so arrow keys move between
-              // them; the size and its setting on two lines, with no symbol read aloud between.
-              <fieldset className="lever__sizes" aria-describedby={describedBy}>
-                {/* The card already carries the title; its sizes are a group of their own. */}
-                <legend className="sr-only">Size</legend>
-                {sizes.values.map((v, i) => {
-                  const on = Math.abs(v - value) < 1e-9;
-                  return (
-                    <label key={v} className={`lever__size${on ? ' lever__size--on' : ''}`}>
-                      <input
-                        type="radio"
-                        name={`${id}-size`}
-                        value={v}
-                        checked={on}
-                        aria-disabled={blocked ? true : undefined}
-                        onChange={() => change_(v)}
-                      />
-                      <span className="lever__size-text">
-                        <span className="lever__size-name">{sizes.labels[i]}</span>{' '}
-                        <span className="lever__size-level">{sizeWords(lever, v)}</span>
-                      </span>
-                    </label>
-                  );
-                })}
-              </fieldset>
-            )
-          ) : isSelect ? (
-            <select
-              id={id}
-              className="lever__select"
-              value={nearestOption(lever, value)}
-              aria-describedby={describedBy}
-              aria-disabled={blocked ? true : undefined}
-              onChange={(e) => change_(Number(e.target.value))}
-            >
-              {Object.entries(lever.control.labels ?? {})
-                .sort((a, b) => Number(a[0]) - Number(b[0]))
-                .map(([v, label]) => (
-                  <option key={v} value={v}>
-                    {label}
-                  </option>
-                ))}
-            </select>
-          ) : (
-            <>
-              <input
-                id={id}
-                type="range"
-                min={min}
-                max={max}
-                step={step}
-                value={value}
-                onChange={(e) => change_(Number(e.target.value))}
-                aria-describedby={describedBy}
-                aria-disabled={blocked ? true : undefined}
-                aria-valuetext={valueText}
-              />
-              {compact ? null : (
-                // The ends only (Phase 25): a middle mark labelled "OBR" read as a place and sat
-                // wherever the middle was, not where the plan is.
-                <div className="lever__scale" aria-hidden="true">
-                  <span>{endLabel(lever, min)}</span>
-                  <span>{endLabel(lever, max)}</span>
-                </div>
-              )}
-            </>
+          {tick ? null : (
+            // Small, Medium and Large (Phase 26): native radios, so arrow keys move between them;
+            // the size and its setting on two lines, with no symbol read aloud between.
+            <fieldset className="lever__sizes" aria-describedby={describedBy}>
+              {/* The card already carries the title; its sizes are a group of their own. */}
+              <legend className="sr-only">Size</legend>
+              {sizes.values.map((v, i) => {
+                const on = Math.abs(v - value) < 1e-9;
+                return (
+                  <label key={v} className={`lever__size${on ? ' lever__size--on' : ''}`}>
+                    <input
+                      type="radio"
+                      name={`${id}-size`}
+                      value={v}
+                      checked={on}
+                      aria-disabled={blocked ? true : undefined}
+                      onChange={() => change_(v)}
+                    />
+                    <span className="lever__size-text">
+                      <span className="lever__size-name">{sizes.labels[i]}</span>{' '}
+                      <span className="lever__size-level">{sizeWords(lever, v)}</span>
+                    </span>
+                  </label>
+                );
+              })}
+            </fieldset>
           )}
         </>
       ) : null}
-      {compact ? (
-        <>
-          {blockedLine}
-          {nowLine}
-          {financialLine}
-          {effectLine}
-          {replacesLine}
-          {hintLine}
-          {reliefLine}
-          {adviceLine}
-          {settledEl}
-          {noteLines}
-          {children}
-          <details className="more more--quiet lever__more">
-            <summary>
-              More about this<span className="sr-only">: {title}</span>
-            </summary>
-            <div className="more__body">
-              {desc}
-              {/* The cash budget and the years live here on a phone (Phase 25). */}
-              {cashWords ? <p className="lever__cash-note">{cashWords}</p> : null}
-              {milestones}
-              {notOnTheTableTag || earliestTag || commitmentTag || lookupTag || barnettTag ? (
-                <p className="lever__tags">
-                  {notOnTheTableTag}
-                  {earliestTag}
-                  {commitmentTag}
-                  {lookupTag}
-                  {barnettTag}
-                </p>
-              ) : null}
-              {assumes.length > 0 ? (
-                <>
-                  <p className="lever__assumes-title">What this assumes</p>
-                  <ul className="lever__assumes-list">
-                    {assumes.map((text) => (
-                      <li key={text}>{text}</li>
-                    ))}
-                  </ul>
-                </>
-              ) : null}
-            </div>
-          </details>
-        </>
-      ) : (
-        <>
+      {blockedLine}
+      {nowLine}
+      {financialLine}
+      {effectLine}
+      {replacesLine}
+      {hintLine}
+      {reliefLine}
+      {adviceLine}
+      {settledEl}
+      {noteLines}
+      {children}
+      <details className="more more--quiet lever__more">
+        <summary>
+          More about this<span className="sr-only">: {title}</span>
+        </summary>
+        <div className="more__body">
           {desc}
+          {/* The cash budget and the years live here on a phone (Phase 25). */}
+          {cashWords ? <p className="lever__cash-note">{cashWords}</p> : null}
           {milestones}
-          {lookupPoints || barnett || commitment || notOnTheTable || earliest ? (
+          {notOnTheTableTag || earliestTag || commitmentTag || lookupTag || barnettTag ? (
             <p className="lever__tags">
               {notOnTheTableTag}
               {earliestTag}
@@ -895,26 +763,17 @@ export function LeverControl({
             </p>
           ) : null}
           {assumes.length > 0 ? (
-            <details className="lever__assumes">
-              <summary>What this assumes</summary>
-              <ul>
+            <>
+              <p className="lever__assumes-title">What this assumes</p>
+              <ul className="lever__assumes-list">
                 {assumes.map((text) => (
                   <li key={text}>{text}</li>
                 ))}
               </ul>
-            </details>
+            </>
           ) : null}
-          {blockedLine}
-          {financialLine}
-          {effectLine}
-          {hintLine}
-          {reliefLine}
-          {adviceLine}
-          {settledEl}
-          {noteLines}
-          {children}
-        </>
-      )}
+        </div>
+      </details>
       {actions}
       {open && workings ? <ProvenanceDrawer lever={lever} effect={effect} /> : null}
     </div>

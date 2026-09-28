@@ -32,7 +32,7 @@ function leverMap(levers: readonly Lever[]): Map<string, Lever> {
 
 /**
  * On when every lever in the bundle is at, or beyond, the option's value in its direction (a
- * player who went further on the desk has still chosen it); adjusted when some lever has moved
+ * player who went further on step 4 has still chosen it); adjusted when some lever has moved
  * towards the option's value but not to it; against when the only moves are the other way, below
  * where the lever rests (Phase 25); off when nothing has moved.
  */
@@ -273,18 +273,17 @@ export interface OptionOverlap {
 
 /**
  * The authored interactions between the option's levers and other levers, read from either side
- * of the pair. With the options file, every partner another option offers is listed, and so is
- * every partner in `offered` (the levers step 4 puts on show, Phase 24), so a card can say
- * "Overlaps with …" before either is chosen; a partner offered by neither is listed once it has
- * moved; a pair authored as a conflict is left out, because the conflict says it. Without the
- * file, only the partners already moved, as the desk read them.
+ * of the pair. With the options file, every partner is listed before either is chosen, so a card
+ * can say "Overlaps with …": another option offers it, or step 4 does, which offers every policy
+ * lever (Phase 26); a shelved lever is listed only once it has moved. A pair authored as a
+ * conflict is left out, because the conflict says it. Without the file, only the partners already
+ * moved.
  */
 export function optionOverlaps(
   option: Bundle,
   levers: readonly Lever[],
   moved: ReadonlySet<string>,
   options?: OptionsFile,
-  offered: ReadonlySet<string> = new Set(),
 ): OptionOverlap[] {
   const byCode = leverMap(levers);
   const byId = new Map(levers.map((l) => [l.id, l] as const));
@@ -326,7 +325,8 @@ export function optionOverlaps(
   for (const o of found.values()) {
     const partner = offering?.get(o.withLever.code);
     if (partner && conflicting.has(partner.id)) continue;
-    const named = partner !== undefined || offered.has(o.withLever.code);
+    const named =
+      partner !== undefined || (!o.withLever.deprecated && o.withLever.category !== 'macro');
     if (!o.active && (!options || !named)) continue;
     out.push(partner ? { ...o, option: partner } : o);
   }

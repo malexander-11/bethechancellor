@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "Capital gains",
-  "order": 90,
   "title": "Charge capital gains tax on main homes",
   "shortTitle": "CGT on main homes",
   "noun": "capital gains tax on main homes",

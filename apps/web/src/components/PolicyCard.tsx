@@ -139,7 +139,6 @@ export function PolicyCard({
       {...(blocked ? { blocked } : {})}
       sizes={sizes}
       {...(headingLevel ? { headingLevel } : {})}
-      compact
     >
       {mine && lever.category !== 'tax' ? <MinisterLine lever={lever} value={value} /> : null}
     </LeverControl>

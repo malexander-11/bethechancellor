@@ -1,8 +1,17 @@
-import { computeOutcome } from '@btc/engine';
+import { computeOutcome, finetuneItems, policyWay, sizeLabels } from '@btc/engine';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { levers, rules, vintage } from '../data';
+import { finetune, levers, rules, vintage } from '../data';
 import { formatLeverValue, formatLeverValueShort, LeverControl } from './LeverControl';
+
+/** A lever's sizes on step 4, the way up (1) or down (−1), as PolicyCard gives them (Phase 26). */
+function sizesOf(code: string, way: 1 | -1 = 1) {
+  const lever = levers.find((l) => l.code === code);
+  const item = finetuneItems(finetune).find((i) => i.code === code);
+  const policy = lever ? item?.policies.find((p) => policyWay(p, lever) === way) : undefined;
+  if (!policy) throw new Error(`no ${way > 0 ? 'rise' : 'cut'} on ${code}`);
+  return { values: policy.sizes, labels: sizeLabels(policy.sizes.length) };
+}
 
 describe('LeverControl', () => {
   it('reads a relief cost as the most it could raise, with one plain line on why (Phase 25)', () => {
@@ -15,10 +24,16 @@ describe('LeverControl', () => {
       settings: { leverValues: { vatfood: 1 } },
     });
     const { rerender } = render(
-      <LeverControl lever={food} value={0} summaryYear="2029-30" onChange={() => undefined} />,
+      <LeverControl
+        lever={food}
+        value={0}
+        summaryYear="2029-30"
+        onChange={() => undefined}
+        sizes={sizesOf('vatfood')}
+      />,
     );
-    // At rest on the desk the card keeps to its headline; the caveat waits for the move.
-    expect(screen.queryByText(/HMRC’s cost of the tax break/)).toBeNull();
+    // The plain line is on the card before it is chosen, where the choice is made.
+    expect(screen.getByText(/HMRC’s cost of the tax break/)).toBeInTheDocument();
     rerender(
       <LeverControl
         lever={food}
@@ -26,6 +41,7 @@ describe('LeverControl', () => {
         effect={outcome.leverEffects.find((e) => e.code === 'vatfood')}
         summaryYear="2029-30"
         onChange={() => undefined}
+        sizes={sizesOf('vatfood')}
       />,
     );
     // "Day-to-day budget", not "Current budget", which a newcomer reads as "now" (Phase 25).
@@ -49,6 +65,7 @@ describe('LeverControl', () => {
         lever={death}
         value={0}
         onChange={onChange}
+        sizes={sizesOf('cgtdth')}
         blocked={{
           other: 'Tax capital gains at the same rates as income',
           untick: true,
@@ -73,7 +90,7 @@ describe('LeverControl', () => {
     const lever = levers.find((l) => l.code === 'rvfrz');
     if (!lever) throw new Error('missing toggle lever');
     const onChange = vi.fn();
-    render(<LeverControl lever={lever} value={0} onChange={onChange} />);
+    render(<LeverControl lever={lever} value={0} onChange={onChange} sizes={sizesOf('rvfrz')} />);
     const box = screen.getByRole('checkbox', { name: /End the personal tax threshold freeze/ });
     fireEvent.click(box);
     expect(onChange).toHaveBeenCalledWith(1);
@@ -98,6 +115,7 @@ describe('LeverControl', () => {
         effect={outcome.leverEffects.find((e) => e.code === 'cdel')}
         summaryYear="2029-30"
         onChange={() => undefined}
+        sizes={sizesOf('cdel')}
       />,
     );
     // A spending line moved reads as money against its plan, in the card's one year (Phase 25).
@@ -114,6 +132,7 @@ describe('LeverControl', () => {
         effect={outcome.leverEffects.find((e) => e.code === 'dhsc')}
         summaryYear="2029-30"
         onChange={() => undefined}
+        sizes={sizesOf('dhsc')}
       />,
     );
     const scope = within(container);
@@ -136,6 +155,7 @@ describe('LeverControl', () => {
         lever={itbr}
         value={0}
         onChange={() => undefined}
+        sizes={sizesOf('itbr')}
         redLines={[{ promise: 'The tax lock', when: 'above', broken: false }]}
       />,
     );
@@ -149,6 +169,7 @@ describe('LeverControl', () => {
         lever={itbr}
         value={0}
         onChange={() => undefined}
+        sizes={sizesOf('itbr')}
         redLines={[
           {
             promise: 'The tax lock',
@@ -170,6 +191,7 @@ describe('LeverControl', () => {
         lever={itbr}
         value={1}
         onChange={() => undefined}
+        sizes={sizesOf('itbr')}
         redLines={[{ promise: 'The tax lock', when: 'above', broken: true }]}
       />,
     );
@@ -185,6 +207,7 @@ describe('LeverControl', () => {
         lever={hscl}
         value={1}
         onChange={() => undefined}
+        sizes={sizesOf('hscl')}
         redLines={[{ promise: 'The tax lock', when: 'on', broken: true, severity: 'strains' }]}
       />,
     );
@@ -197,6 +220,7 @@ describe('LeverControl', () => {
         lever={moj}
         value={10}
         onChange={() => undefined}
+        sizes={sizesOf('moj')}
         chosen={{ title: 'More money for prisons and courts', state: 'on' }}
       />,
     );
@@ -209,6 +233,7 @@ describe('LeverControl', () => {
         lever={moj}
         value={4}
         onChange={() => undefined}
+        sizes={sizesOf('moj')}
         chosen={{ title: 'More money for prisons and courts', state: 'adjusted' }}
       />,
     );
@@ -226,6 +251,7 @@ describe('LeverControl', () => {
         lever={moj}
         value={-2}
         onChange={() => undefined}
+        sizes={sizesOf('moj', -1)}
         chosen={{ title: 'More money for prisons and courts', state: 'against' }}
       />,
     );
@@ -261,7 +287,6 @@ describe('LeverControl', () => {
           { key: 'x', text: 'Overlaps with Something: both move the same base.', warn: true },
         ]}
         sizes={sizes}
-        compact
       >
         <p>From the minister</p>
       </LeverControl>,
@@ -319,7 +344,6 @@ describe('LeverControl', () => {
         displayTitle="Put up the basic rate of income tax"
         hint={{ text: 'Small: would raise £8.6bn', headroom: '£32.2bn' }}
         sizes={sizes}
-        compact
       />,
     );
     expect(screen.queryByText(/^Small: would raise/)).toBeNull();
@@ -347,7 +371,6 @@ describe('LeverControl', () => {
           labels: ['Small', 'Medium', 'Large'],
           replaces: 'Put up the basic rate of income tax (22%)',
         }}
-        compact
       />,
     );
     // No price and no effect of its own: choosing a size here replaces the other policy.
@@ -367,7 +390,6 @@ describe('LeverControl', () => {
         onChange={() => undefined}
         displayTitle="Put up the basic rate of income tax"
         sizes={{ values: [1, 2, 5], labels: ['Small', 'Medium', 'Large'] }}
-        compact
       />,
     );
     expect(screen.getByText('Now 23%')).toBeInTheDocument();
@@ -390,6 +412,7 @@ describe('LeverControl', () => {
           }).leverEffects.find((e) => e.code === 'itbr')}
           summaryYear="2029-30"
           onChange={() => undefined}
+          sizes={sizesOf('itbr')}
         />,
       );
     const two = at(2);
@@ -400,20 +423,6 @@ describe('LeverControl', () => {
       /Beyond 2p the game scales it in a straight line/,
     );
     expect(note.closest('.lever__effect')?.textContent).toMatch(/Worked out/);
-    five.unmount();
-    // The curated card stops where the source does, and keeps a setting already past it in reach.
-    const curated = render(
-      <LeverControl
-        lever={itbr}
-        value={4}
-        onChange={() => undefined}
-        range={{ min: -2, max: 2 }}
-        compact
-      />,
-    );
-    const slider = within(curated.container).getByRole('slider');
-    expect(slider).toHaveAttribute('min', '-2');
-    expect(slider).toHaveAttribute('max', '4');
   });
 
   it('formats pence, points, per cent and pounds', () => {
@@ -430,61 +439,81 @@ describe('LeverControl', () => {
     expect(formatLeverValue(nicpt, 1040)).toBe('+£1,040');
   });
 
-  it('shows the level a setting moves to, a select for inheritance tax and £bn for departments', () => {
+  it('shows the level a setting moves to, each size by its level, and growth for a budget', () => {
     const itbr = levers.find((l) => l.code === 'itbr');
     const iht = levers.find((l) => l.code === 'iht');
     const dhsc = levers.find((l) => l.code === 'dhsc');
     if (!itbr || !iht || !dhsc) throw new Error('missing levers');
-    const first = render(<LeverControl lever={itbr} value={1} onChange={() => undefined} />);
-    expect(within(first.container).getByText('20%')).toBeInTheDocument();
-    expect(within(first.container).getByText('21%')).toBeInTheDocument();
-    // A screen reader hears the level and the move in words (Phase 25).
-    expect(within(first.container).getByRole('slider')).toHaveAttribute(
-      'aria-valuetext',
-      '21%, up 1p',
+    const valueOf = (c: HTMLElement) => c.querySelector('.lever__value')?.textContent ?? '';
+    const first = render(
+      <LeverControl lever={itbr} value={1} onChange={() => undefined} sizes={sizesOf('itbr')} />,
     );
+    expect(valueOf(first.container)).toMatch(/^20% → 21%/);
+    // A screen reader hears each size and its level, and which is chosen (Phase 26).
+    expect(within(first.container).getByRole('radio', { name: 'Small 21%' })).toBeChecked();
     first.unmount();
-    const second = render(<LeverControl lever={iht} value={-40} onChange={() => undefined} />);
-    const select = within(second.container).getByRole('combobox');
-    expect(select).toHaveValue('-40');
+    // Inheritance tax's sizes read by the select's old labels: abolition is a size.
+    const second = render(
+      <LeverControl
+        lever={iht}
+        value={-40}
+        onChange={() => undefined}
+        sizes={sizesOf('iht', -1)}
+      />,
+    );
+    expect(valueOf(second.container)).toMatch(/→ 0%/);
     expect(
-      within(second.container).getByRole('option', { name: 'Abolish (0%)' }),
-    ).toBeInTheDocument();
-    expect(within(second.container).getByText('0%')).toBeInTheDocument();
+      within(second.container).getByRole('radio', { name: 'Large Abolish (0%)' }),
+    ).toBeChecked();
     second.unmount();
-    const third = render(<LeverControl lever={dhsc} value={2} onChange={() => undefined} />);
+    const third = render(
+      <LeverControl lever={dhsc} value={2} onChange={() => undefined} sizes={sizesOf('dhsc')} />,
+    );
     // Spending leads with growth after rising prices, in words, and the plan beside it (Phase
-    // 25); the desk keeps the cash budget beneath it.
+    // 25); the cash budget waits under "More about this".
     expect(
       within(third.container).getByText('Grows 3.9% a year after rising prices (planned: 2.9%)'),
     ).toBeInTheDocument();
-    expect(third.container.querySelector('.lever__cash')?.textContent).toMatch(
+    expect(third.container.querySelector('.lever__cash-note')?.textContent).toMatch(
       /£232\.0bn → £236\.6bn in 2028-29; growth measured from 2026-27 to 2028-29/,
     );
-    expect(within(third.container).getByRole('slider')).toHaveAttribute(
-      'aria-valuetext',
-      'Grows 3.9% a year after rising prices, 2% more than planned',
-    );
     third.unmount();
-    // At rest: one plain line, as planned, and no pair of equal figures.
-    const fourth = render(<LeverControl lever={dhsc} value={0} onChange={() => undefined} />);
+    // At rest: one plain line, as planned, and no pair of equal figures; the cut's sizes say how
+    // much less each would be.
+    const fourth = render(
+      <LeverControl
+        lever={dhsc}
+        value={0}
+        onChange={() => undefined}
+        sizes={sizesOf('dhsc', -1)}
+      />,
+    );
     expect(
       within(fourth.container).getByText('Grows 2.9% a year after rising prices, as planned'),
     ).toBeInTheDocument();
-    expect(within(fourth.container).getByText('10% less')).toBeInTheDocument();
-    expect(within(fourth.container).getByText('10% more')).toBeInTheDocument();
+    expect(
+      within(fourth.container)
+        .getAllByRole('radio')
+        .map((r) => r.closest('label')?.textContent),
+    ).toEqual(['Small 1% less', 'Medium 2% less', 'Large 5% less']);
     fourth.unmount();
     // A cut to a growing budget cannot read as a rise.
-    const fifth = render(<LeverControl lever={dhsc} value={-1} onChange={() => undefined} />);
+    const fifth = render(
+      <LeverControl
+        lever={dhsc}
+        value={-1}
+        onChange={() => undefined}
+        sizes={sizesOf('dhsc', -1)}
+      />,
+    );
     expect(
       within(fifth.container).getByText(
         'Still grows 2.4% a year after rising prices (planned: 2.9%)',
       ),
     ).toBeInTheDocument();
-    const third_ = fifth;
-    // The Spending Review's own figure and the 2010s record sit beside the control, one click
-    // away whatever the workings switch says.
-    const milestones = third_.container.querySelector('.milestones')?.textContent ?? '';
+    // The Spending Review's own figure and the 2010s record are under "More about this",
+    // whatever the workings switch says.
+    const milestones = fifth.container.querySelector('.milestones')?.textContent ?? '';
     expect(milestones).toMatch(/For comparison/);
     expect(milestones).toMatch(/This Spending Review\+2\.8% a year/);
     expect(milestones).toMatch(/2010-11 to 2019-20\+1\.8% a year/);
@@ -506,6 +535,7 @@ describe('LeverControl', () => {
         effect={outcome.leverEffects.find((e) => e.code === 'wealth2')}
         summaryYear="2029-30"
         onChange={() => undefined}
+        sizes={sizesOf('wealth2')}
       />,
     );
     const scope = within(container);
@@ -515,8 +545,8 @@ describe('LeverControl', () => {
     expect(tag?.textContent).toMatch(/January 2031/);
     const line = scope.getByText(/Day-to-day budget in 2029-30/);
     expect(line.textContent).toMatch(/nothing yet; from 2030-31 raises £18\.5bn/);
-    fireEvent.click(scope.getByText('What this assumes'));
-    // The reason appears twice on purpose: read aloud inside the tag, and listed under the disclosure.
+    // The reason appears twice on purpose: read aloud inside the tag, and listed under "What this
+    // assumes", both under "More about this".
     expect(
       scope.getAllByText(/Tax Policy Associates expects it to apply first in 2029-30/),
     ).toHaveLength(2);

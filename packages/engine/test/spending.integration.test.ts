@@ -40,8 +40,8 @@ describe('Budget 2025 spending decisions and the welfare cap', () => {
     const both = run({ rvpip: 1, rv2ch: 1 });
     expect(both.paths.policy.welfareInCap['2029-30']).toBeCloseTo(199200 - 4495 - 3095, 6);
     expect(capStatus(both)).toBe('withinCap');
-    const preset = ds.presets.presets.find((p) => p.id === 'reverse-welfare-u-turns');
-    const all = run(preset?.leverValues ?? {});
+    // All three of last year's welfare U-turns reversed.
+    const all = run({ rv2ch: 1, rvpip: 1, rvwfp: 1 });
     expect(capStatus(all)).toBe('withinCap');
     expect(all.paths.deltas.welfareInCap['2029-30']).toBeCloseTo(-4495 - 3095 - 1340, 6);
   });
@@ -92,7 +92,7 @@ describe('Budget 2025 spending decisions and the welfare cap', () => {
     expect(shifted.steps.some((s) => s.formula.includes('childBenefit spending'))).toBe(true);
   });
 
-  it('spending presets add up and interactions fire for overlapping levers', () => {
+  it('spending changes add up and interactions fire for overlapping levers', () => {
     const nhs = run({ dhsc: 2, otherd: -3 });
     const dhsc = effectOf(nhs, 'dhsc').currentSpending['2028-29'] ?? 0;
     const other = effectOf(nhs, 'otherd').currentSpending['2028-29'] ?? 0;

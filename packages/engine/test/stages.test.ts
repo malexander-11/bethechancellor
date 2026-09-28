@@ -24,17 +24,15 @@ describe('the road through the game (Phase 24: six steps)', () => {
     expect(enterable('deliver', game(2))).toBe(true);
     expect(enterable('finetune', game(2))).toBe(false);
     expect(enterable('finetune', game(3))).toBe(true);
-    // The desk is fine-tuning's side room: it opens with it.
-    expect(enterable('taxes', game(2))).toBe(false);
-    expect(enterable('spending', game(3))).toBe(true);
-    expect(stageIndex('taxes')).toBe(stageIndex('finetune'));
-    expect(stageIndex('spending')).toBe(3);
+    expect(stageIndex('finetune')).toBe(3);
     expect(enterable('review', game(3))).toBe(false);
     expect(enterable('review', game(4))).toBe(true);
   });
 
-  it('has no step for what Phase 24 retired: their old addresses open the review', () => {
-    for (const step of ['afford', 'forecast', 'compromise', 'rabbit']) {
+  it('has no step for what Phase 24 and Phase 26 retired: the app routes their old addresses', () => {
+    // The forecast, the compromises and the add-ons open the review; the desk's two screens open
+    // step 4, which took their levers.
+    for (const step of ['afford', 'forecast', 'compromise', 'rabbit', 'taxes', 'spending']) {
       expect(journeyStepSchema.safeParse(step).success, step).toBe(false);
     }
   });
@@ -51,7 +49,7 @@ describe('the road through the game (Phase 24: six steps)', () => {
       expect(enterable('outlook', game(reached))).toBe(true);
       expect(enterable('assumptions', game(reached))).toBe(true);
     }
-    expect(enterable('taxes', game(FINAL_STAGE))).toBe(true);
+    expect(enterable('finetune', game(FINAL_STAGE))).toBe(true);
     expect(enterable('pm', game(FINAL_STAGE))).toBe(true);
   });
 
@@ -60,15 +58,7 @@ describe('the road through the game (Phase 24: six steps)', () => {
     // game it starts, and a finished game carries its own g= to Budget day.
     expect(enterable('outlook', undefined)).toBe(true);
     expect(enterable('assumptions', undefined)).toBe(true);
-    for (const step of [
-      'pm',
-      'deliver',
-      'finetune',
-      'taxes',
-      'spending',
-      'review',
-      'budget-day',
-    ] as const) {
+    for (const step of ['pm', 'deliver', 'finetune', 'review', 'budget-day'] as const) {
       expect(enterable(step, undefined), step).toBe(false);
     }
   });

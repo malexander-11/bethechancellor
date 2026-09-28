@@ -2,7 +2,6 @@ import {
   ambitionStatus,
   assembleSpeech,
   budgetVerdict,
-  describeAssumptions,
   distributionalNotes,
   FINAL_STAGE,
   formatGbpBn,
@@ -23,7 +22,6 @@ import { Households } from '../components/Households';
 import { InteractionsNotice } from '../components/InteractionsNotice';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
-import { formatLeverValue } from '../components/LeverControl';
 import { MeasuresTable } from '../components/MeasuresTable';
 import { PathChart } from '../components/PathChart';
 import { ReceptionCard, type EconomyLine } from '../components/ReceptionCard';
@@ -31,14 +29,12 @@ import { Speech } from '../components/Speech';
 import { Verdict } from '../components/Verdict';
 import { VerdictCard } from '../components/VerdictCard';
 import {
-  ESTIMATE,
   MACRO_CODES,
   briefingsFor,
   electorate,
   households,
   incidence,
   levers,
-  leversByCategory,
   pm,
   reception,
   speech as speechFile,
@@ -51,7 +47,7 @@ import { StepLink } from '../journey/links';
 import { useOutcomeOf } from '../journey/outcome';
 import { isMissed, missedBy } from '../journey/rules';
 import { WorkingsOnly } from '../journey/workings';
-import { onEstimate, useBudget } from '../state/budget';
+import { useBudget } from '../state/budget';
 
 /** "a, b and c" */
 function list(items: readonly string[]): string {
@@ -81,15 +77,6 @@ export function BudgetDayPage() {
   const typicalErrorGbpm =
     (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
     (paths.baseline.nominalGdpFy[lastYear] ?? 0);
-  // The economy the Budget was built on: today's estimate in a game; a sandbox may set its own.
-  const economy = describeAssumptions(state.leverValues, ESTIMATE, MACRO_CODES);
-  const ownFigures = onEstimate(state.leverValues)
-    ? ''
-    : leversByCategory.macro
-        .map((l) => ({ lever: l, value: state.leverValues[l.code] ?? l.control.default }))
-        .filter((x) => x.value !== x.lever.control.default)
-        .map((x) => `${x.lever.shortTitle} ${formatLeverValue(x.lever, x.value)}`)
-        .join(' · ');
 
   // The game's readings: ambitions against the package, and the package as the OBR saw it.
   const status = useMemo(
@@ -220,8 +207,8 @@ export function BudgetDayPage() {
       dispatch({ type: 'updateGame', patch: { reached: FINAL_STAGE } });
     }
   }, [guard, game, reached, dispatch]);
-  // A game in play that jumps to Budget day is sent back to where it is; a sandbox link and a
-  // finished, shared link both walk in.
+  // A game in play that jumps to Budget day is sent back to where it is; a finished, shared link
+  // walks in. With no game there is no Budget day: the guard sends the link to the briefing.
   if (guard) return guard;
   // The three sentences are the engine's (Phase 25): what was delivered, how it was paid for, and
   // what was accepted, read from the same figures as the close and the rules line.
@@ -311,14 +298,12 @@ export function BudgetDayPage() {
             </p>
             <h4 className="section-label">Table 4.1: your policy decisions</h4>
             <MeasuresTable outcome={outcome} levers={levers} targetYear={targetYear} />
-            <p className="source">
-              Economic assumptions: {economy}
-              {ownFigures ? ` (${ownFigures})` : ''}.
-            </p>
+            {/* Every game is played on today's estimate (ADR-0025). */}
+            <p className="source">Economic assumptions: today’s estimate.</p>
             <ul className="documents">
               <li>
                 <strong>Economic and fiscal outlook.</strong> The OBR publishes its own forecast
-                beside the Budget; this game uses {economy} in its place.
+                beside the Budget; this game uses today’s estimate in its place.
               </li>
               <li>
                 <strong>Policy costings.</strong> One note per measure with the method behind it:
@@ -419,7 +404,7 @@ export function BudgetDayPage() {
         <button type="button" className="btn btn--primary" onClick={copyLink}>
           Copy a link to this Budget
         </button>
-        <StepLink to={game ? '/review' : '/budget/taxes'} className="btn">
+        <StepLink to="/review" className="btn">
           Change something
         </StepLink>
         <button

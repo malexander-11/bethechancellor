@@ -22,7 +22,7 @@ import { loadDataset } from './fixtures.js';
 const ds = loadDataset();
 const options = ds.options;
 const levers = ds.levers;
-/** The levers step 4 puts on show (Phase 24): a flagship card may name one as its partner. */
+/** The levers step 4 offers: every policy lever, since Phase 26. */
 const offered = new Set(finetuneItems(ds.finetune).map((i) => i.code));
 const deliverOption = (id: string) => {
   const o = options.deliver.find((x) => x.id === id);
@@ -138,23 +138,18 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     // The freeze and the basic rate interact; the basic rate is on the fine-tuning screen, so the
     // card names it before anything moves, and quotes the interaction once it has.
     const freeze = deliverOption('freeze-early');
-    const quiet = optionOverlaps(freeze, levers, new Set(), options, offered);
+    const quiet = optionOverlaps(freeze, levers, new Set(), options);
     expect(quiet.map((o) => [o.withLever.code, o.active, o.option])).toEqual([
       ['itbr', false, undefined],
     ]);
-    expect(optionOverlaps(freeze, levers, new Set(), options)).toEqual([]);
-    const loud = optionOverlaps(freeze, levers, new Set(['itbr']), options, offered);
+    // Without the options file, nothing is named before it moves.
+    expect(optionOverlaps(freeze, levers, new Set())).toEqual([]);
+    const loud = optionOverlaps(freeze, levers, new Set(['itbr']), options);
     expect(loud[0]?.active).toBe(true);
     // Restoring fuel duty's uprating and cutting it, the old conflict (ADR-0022), is now a
     // warning the card names at once, because the uprating is one of step 4's levers; so is the
     // April 2027 freeze (Phase 25), read from its own side of the pair.
-    const fuel = optionOverlaps(
-      deliverOption('fuel-duty-cut'),
-      levers,
-      new Set(),
-      options,
-      offered,
-    );
+    const fuel = optionOverlaps(deliverOption('fuel-duty-cut'), levers, new Set(), options);
     expect(fuel.map((o) => [o.withLever.code, o.severity])).toEqual([
       ['rvfuel', 'warn'],
       ['fuelfrz', 'warn'],
@@ -168,16 +163,13 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     expect(live.filter((l) => !offered.has(l.code)).map((l) => l.code)).toEqual([]);
     const gas = deliverOption('vat-off-gas');
     expect(
-      optionOverlaps(gas, levers, new Set(), options, offered).map((o) => [
-        o.withLever.code,
-        o.active,
-      ]),
+      optionOverlaps(gas, levers, new Set(), options).map((o) => [o.withLever.code, o.active]),
     ).toEqual([
       ['vatnrg', false],
       ['vatr', false],
       ['vatelec', false],
     ]);
-    const moved = optionOverlaps(gas, levers, new Set(['vatr']), options, offered);
+    const moved = optionOverlaps(gas, levers, new Set(['vatr']), options);
     expect(moved.filter((o) => o.active).map((o) => o.withLever.code)).toEqual(['vatr']);
     // A pair authored as a conflict is not an overlap as well: the conflict says it.
     expect(three.some((o) => o.withLever.code === 'dip47')).toBe(false);

@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "assumption",
   "group": "Income tax",
-  "order": 64,
   "title": "Cap the tax-free pension lump sum",
   "shortTitle": "Pension lump-sum cap",
   "noun": "the pension lump-sum cap",

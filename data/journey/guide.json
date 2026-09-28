@@ -32,18 +32,6 @@
       "now": "Move the levers until the numbers add up."
     },
     {
-      "step": "taxes",
-      "number": 4,
-      "title": "Build the package",
-      "now": "Move any tax you want, then go back. Your flagship policies are pinned at the top of their groups."
-    },
-    {
-      "step": "spending",
-      "number": 4,
-      "title": "Build the package",
-      "now": "Set the departments, the [flagship] programmes, investment and welfare, then go back. Ministers will tell you what each change means."
-    },
-    {
       "step": "review",
       "number": 5,
       "title": "Deliver your Budget",

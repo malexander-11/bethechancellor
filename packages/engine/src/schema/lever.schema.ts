@@ -496,9 +496,8 @@ export const leverSchema = z
     code: z.string().regex(/^[a-z][a-z0-9]{1,7}$/),
     category: z.enum(['tax', 'spend', 'welfare', 'macro']),
     badge: badgeSchema,
-    /** UI grouping within a category, e.g. "Income tax"; ordered by `order`. */
+    /** The lever's family, e.g. "Income tax": step 4's folds set its policies under it. */
     group: z.string().min(1).optional(),
-    order: z.number().int().optional(),
     title: z.string().min(1),
     shortTitle: z.string().min(1),
     /**

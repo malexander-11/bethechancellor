@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "VAT",
-  "order": 50,
   "title": "Charge VAT on children's clothes",
   "shortTitle": "VAT on children's clothes",
   "noun": "charging VAT on children's clothes",

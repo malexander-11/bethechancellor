@@ -3,7 +3,6 @@ import {
   decodePermalink,
   encodePermalink,
   freshGame,
-  type AssessAsOf,
   type GamePermalink,
   type Outcome,
 } from '@btc/engine';
@@ -12,27 +11,27 @@ import { ESTIMATE, MACRO_CODES, levers, rules, vintage } from '../data';
 
 export interface BudgetState {
   leverValues: Record<string, number>;
-  debtInterestFeedback: boolean;
-  assessAsOf: AssessAsOf;
   warnings: string[];
   /**
-   * The playthrough (ADR-0011, ADR-0025): how far it has got and the priorities agreed. Absent in
-   * the sandbox, and until the briefing's "Set your priorities" starts it on today's estimate.
+   * The playthrough (ADR-0011, ADR-0025): how far it has got and the priorities agreed. Absent
+   * until the briefing's "Set your priorities" starts it on today's estimate.
    */
   game?: GamePermalink;
 }
 
 export type BudgetAction =
   | { type: 'setLever'; code: string; value: number }
-  | { type: 'applyPreset'; leverValues: Record<string, number> }
   | { type: 'setLevers'; values: Record<string, number> }
   | { type: 'reset' }
-  | { type: 'resetPolicy' }
-  | { type: 'setFeedback'; value: boolean }
-  | { type: 'setAssessAsOf'; value: AssessAsOf }
   | { type: 'dismissWarnings' }
   | { type: 'startGame' }
   | { type: 'updateGame'; patch: Partial<GamePermalink> };
+
+/**
+ * The settings every Budget is worked out under (Phase 26): the interest on its own borrowing is
+ * counted, and it is judged by the rules as they stand. The desk's two switches for them are gone.
+ */
+export const SETTINGS = { debtInterestFeedback: true, assessAsOf: 'vintage' } as const;
 
 export const IMPLEMENTATION_YEAR =
   vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? vintage.years.inYear;
@@ -80,12 +79,7 @@ function hasMeasures(values: Readonly<Record<string, number>>): boolean {
 
 export function initialStateFromLocation(search: string): BudgetState {
   const { state, warnings } = decodePermalink(search, levers);
-  const out: BudgetState = {
-    leverValues: state.leverValues,
-    debtInterestFeedback: true,
-    assessAsOf: 'vintage',
-    warnings,
-  };
+  const out: BudgetState = { leverValues: state.leverValues, warnings };
   // The expert switches went with the desk (Phase 26): every Budget counts the interest on its own
   // borrowing and is judged by the rules as they stand. A link that set either is read without it.
   if (state.debtInterestFeedback === false || state.assessAsOf === 'nextBudget') {
@@ -116,29 +110,11 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
       else leverValues[action.code] = action.value;
       return { ...state, leverValues };
     }
-    case 'applyPreset':
-      return { ...state, leverValues: { ...action.leverValues } };
     case 'setLevers':
       return { ...state, leverValues: withValues(state.leverValues, action.values) };
-    case 'reset': {
+    case 'reset':
       // A reset ends the game too: every choice goes with the levers, and what the link said.
-      const next: BudgetState = {
-        leverValues: {},
-        debtInterestFeedback: true,
-        assessAsOf: 'vintage',
-        warnings: [],
-      };
-      return next;
-    }
-    case 'resetPolicy': {
-      // "Put every lever back": the policy goes, the economy and the game stay.
-      const leverValues: Record<string, number> = {};
-      for (const code of MACRO_CODES) {
-        const value = state.leverValues[code];
-        if (value !== undefined) leverValues[code] = value;
-      }
-      return { ...state, leverValues };
-    }
+      return { leverValues: {}, warnings: [] };
     case 'startGame':
       // Every game starts on today's estimate; one already under way keeps its choices. The link's
       // measures are in it now, so the line promising them has done its job.
@@ -150,10 +126,6 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
       };
     case 'updateGame':
       return state.game ? { ...state, game: { ...state.game, ...action.patch } } : state;
-    case 'setFeedback':
-      return { ...state, debtInterestFeedback: action.value };
-    case 'setAssessAsOf':
-      return { ...state, assessAsOf: action.value };
     case 'dismissWarnings':
       return { ...state, warnings: [] };
   }
@@ -171,8 +143,7 @@ export function permalinkQuery(state: BudgetState): string {
       rulesCode: rules.permalinkCode,
       implementationYear: IMPLEMENTATION_YEAR,
       leverValues: state.leverValues,
-      debtInterestFeedback: state.debtInterestFeedback,
-      assessAsOf: state.assessAsOf,
+      ...SETTINGS,
       ...(state.game ? { game: state.game } : {}),
     },
     levers,
@@ -203,11 +174,10 @@ export function BudgetProvider({ children, search }: { children: ReactNode; sear
         settings: {
           leverValues: state.leverValues,
           implementationYear: IMPLEMENTATION_YEAR,
-          debtInterestFeedback: state.debtInterestFeedback,
-          assessAsOf: state.assessAsOf,
+          ...SETTINGS,
         },
       }),
-    [state.leverValues, state.debtInterestFeedback, state.assessAsOf],
+    [state.leverValues],
   );
   const query = useMemo(() => permalinkQuery(state), [state]);
 

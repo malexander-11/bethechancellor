@@ -1,7 +1,6 @@
 import {
   ambitionStatus,
   blockedBy,
-  finetuneItems,
   optionConflicts,
   optionEarliestStart,
   optionOff,
@@ -19,7 +18,7 @@ import { LabelBadge } from '../components/LabelBadge';
 import { MinisterLine } from '../components/MinisterLine';
 import { OptionCard } from '../components/OptionCard';
 import { SourceList } from '../components/SourceLink';
-import { adviserById, finetune, levers, options, pm } from '../data';
+import { adviserById, levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { useOptionPrices } from '../journey/prices';
@@ -27,8 +26,6 @@ import { useBudget } from '../state/budget';
 
 const RANK = ['1st', '2nd', '3rd'];
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
-/** The levers step 4 puts on show: a card may name one of them as a partner before it moves. */
-const OFFERED: ReadonlySet<string> = new Set(finetuneItems(finetune).map((i) => i.code));
 
 /** The route of the n-th priority's screen (1-based): the first has the bare route. */
 export function deliverPath(n: number): string {
@@ -40,8 +37,8 @@ export function deliverPath(n: number): string {
  * rank order: its costed options, each a bundle of the game's own levers priced against the Budget
  * as it stands (ADR-0022), chosen with a tick, each with one adviser's line on who proposed it and
  * what it costs and does (Phase 23); two that count the same money cannot both be on. The headroom
- * bar keeps score as you tick. Step 4 is next, and it is where every other lever is; a sandbox
- * with no game is sent to the briefing, which starts one, because it has no priorities to deliver.
+ * bar keeps score as you tick. Step 4 is next, and it is where every other lever is; a link with
+ * no game is sent to the briefing, which starts one, because it has no priorities to deliver.
  */
 export function DeliverPage() {
   const { n: nParam } = useParams();
@@ -51,7 +48,7 @@ export function DeliverPage() {
   const game = state.game;
   const guard = useStageGuard('deliver');
   if (guard) return guard;
-  // The guard has sent a sandbox to the briefing already; this only satisfies the types.
+  // The guard has sent a link with no game to the briefing already; this only satisfies the types.
   if (!game) return <Navigate to={{ pathname: '/outlook', search }} replace />;
 
   const ranked = rankedPriorities(game, pm);
@@ -163,7 +160,7 @@ export function DeliverPage() {
               onChange={(on) => choose(option, on)}
               redLines={optionRedLines(option, pm.promises, levers, state.leverValues)}
               earliestStart={optionEarliestStart(option, levers)}
-              overlaps={optionOverlaps(option, levers, moved, options, OFFERED)}
+              overlaps={optionOverlaps(option, levers, moved, options)}
               {...(blocked ? { blocked, onSwap: () => swap(option, blocked.option) } : {})}
               clashes={clashes}
               line={option.line}

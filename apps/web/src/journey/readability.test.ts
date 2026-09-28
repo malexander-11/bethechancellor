@@ -88,13 +88,11 @@ const all = options.deliver;
 const curated = finetuneItems(finetune);
 
 /**
- * Every set of words a player meets with the folds closed, by where it is met. The desk's own
- * lines are left out: it is the side room, and its levers speak in the Treasury's terms.
+ * Every set of words a player meets with the folds closed, by where it is met. A lever's own
+ * headline is left out: it waits under "More about this", in the Treasury's terms.
  */
 const SETS: Record<string, readonly string[]> = {
-  'the guide': guide.stages
-    .filter((s) => s.step !== 'taxes' && s.step !== 'spending')
-    .flatMap((s) => [s.title, s.now]),
+  'the guide': guide.stages.flatMap((s) => [s.title, s.now]),
   'option titles': all.map((o) => o.title),
   'option advice': all.map((o) => o.advice.text),
   // Graded delivery (Phase 25): why a way only makes a start, and the Chief Secretary's line.

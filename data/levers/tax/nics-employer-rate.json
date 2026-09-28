@@ -5,7 +5,6 @@
   "category": "tax",
   "badge": "direct",
   "group": "National Insurance",
-  "order": 30,
   "title": "Employer NICs rate",
   "shortTitle": "Employer NICs",
   "noun": "employer National Insurance",

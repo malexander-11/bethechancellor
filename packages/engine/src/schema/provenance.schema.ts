@@ -74,7 +74,7 @@ export const seriesSchema = z
  * The honesty badges (ADR-0002, amended by ADR-0011). Four describe facts and arithmetic. The
  * fifth, `simulated`, marks a judgement nobody published: what a minister says, how a market
  * reads a Budget, what a household feels. It may quote sources and read engine numbers, but it
- * never produces a number of its own, and no lever or preset may carry it.
+ * never produces a number of its own, and no lever may carry it.
  */
 export const badgeSchema = z.enum([
   'direct',

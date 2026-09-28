@@ -26,9 +26,9 @@ describe('the guide and the glossary', () => {
     }
     // The old step names still find their screen.
     expect(guideFor(ds.guide, 'assumptions')?.step).toBe('outlook');
-    // Step 4 is fine-tuning, with the desk as its side room.
+    // Step 4 is fine-tuning: every lever is a policy there, and the desk has gone (Phase 26).
     expect(guideFor(ds.guide, 'finetune')?.number).toBe(4);
-    expect(guideFor(ds.guide, 'taxes')?.number).toBe(4);
+    expect(ds.guide.stages.map((s) => s.title)).not.toContain('Build the package');
     expect(guideFor(ds.guide, 'review')?.title).toBe('Deliver your Budget');
     expect(validateDataset(ds).filter((p) => /guide|glossary/.test(p))).toEqual([]);
   });

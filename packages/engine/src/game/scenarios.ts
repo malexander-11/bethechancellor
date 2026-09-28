@@ -106,38 +106,3 @@ export function suggestedSettings(
 export function macroCodesOf(readings: readonly ContextReading[]): string[] {
   return readings.map((r) => r.leverCode).filter((c): c is string => !!c);
 }
-
-/** Two sets of lever values are the same budget when every code they mention agrees. */
-export function sameValues(a: Record<string, number>, b: Record<string, number>): boolean {
-  const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
-  for (const k of keys) if ((a[k] ?? 0) !== (b[k] ?? 0)) return false;
-  return true;
-}
-
-/** The subset of a budget that a given set of codes covers, with defaults dropped. */
-export function pick(
-  values: Record<string, number>,
-  codes: readonly string[],
-): Record<string, number> {
-  const out: Record<string, number> = {};
-  for (const code of codes) if (values[code] !== undefined) out[code] = values[code] as number;
-  return out;
-}
-
-/**
- * How to name the economy a Budget plans on, in a sentence elsewhere in the journey (Phase 24,
- * ADR-0025): "the OBR’s March forecast" when every macro setting is the OBR's own, "today’s
- * estimate" when they are the estimate every game plans on (the suggestion rule applied to every
- * reading, `suggestedSettings`), and "your own figures" for anything else, which only a sandbox
- * link can carry.
- */
-export function describeAssumptions(
-  leverValues: Record<string, number>,
-  estimate: Record<string, number>,
-  codes: readonly string[],
-): string {
-  const current = pick(leverValues, codes);
-  if (Object.values(current).every((v) => v === 0)) return 'the OBR’s March forecast';
-  if (sameValues(current, pick(estimate, codes))) return 'today’s estimate';
-  return 'your own figures';
-}

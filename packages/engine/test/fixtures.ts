@@ -21,7 +21,6 @@ import {
   parseHmrcExtract,
   parseHouseholds,
   parseLever,
-  parsePresets,
   parseRules,
   parseDwpBenefitExtract,
   parsePesaExtract,
@@ -62,7 +61,6 @@ export function loadDataset(): Required<Dataset> {
     vintage: parseVintage(readJson('vintages/obr-2026-03/vintage.json')),
     rules: parseRules(readJson('rules/charter-2026-02.json')),
     levers,
-    presets: parsePresets(readJson('presets/presets.json')),
     households: parseHouseholds(readJson('reference/uk-households.json')),
     contexts: listJsonFiles(path.join(DATA_DIR, 'context')).map((f) =>
       parseContext(JSON.parse(readFileSync(f, 'utf8'))),

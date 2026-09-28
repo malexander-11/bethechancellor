@@ -100,7 +100,7 @@ function main(): void {
     process.exit(1);
   }
   process.stdout.write(
-    `data ok: ${ds.vintages.length} vintage(s), ${ds.ruleSets.length} rule set(s), ${ds.levers.length} lever(s), ${ds.presets.presets.length} preset(s), ${ds.contexts.length} context file(s), ${ds.sources.sources.length} source(s)\n`,
+    `data ok: ${ds.vintages.length} vintage(s), ${ds.ruleSets.length} rule set(s), ${ds.levers.length} lever(s), ${ds.contexts.length} context file(s), ${ds.sources.sources.length} source(s)\n`,
   );
 }
 

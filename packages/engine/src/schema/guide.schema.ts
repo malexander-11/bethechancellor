@@ -6,8 +6,8 @@ const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
 
 /**
  * The guide (Phase 9, cut to one line in Phase 23): the heading of each screen and what to do
- * now, in plain English, plus a glossary of the words a newcomer will not know, for the hover on
- * the desk. Both are chrome: no badge, and no figure unless it carries a source (guide.test.ts).
+ * now, in plain English, plus a glossary of the words a newcomer will not know, opened where the
+ * word is used. Both are chrome: no badge, and no figure unless it carries a source (guide.test.ts).
  *
  * A term in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary reference; the page
  * renders it with the definition to hand.

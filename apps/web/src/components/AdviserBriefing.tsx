@@ -55,13 +55,10 @@ function Facts({ facts }: { facts: NonNullable<Briefing['facts']> }) {
 export function AdviserBriefing({
   briefing,
   compact = false,
-  variant = 'full',
   children,
 }: {
   briefing: Briefing;
   compact?: boolean;
-  /** "body" drops the role and headline: the caller has already shown them. */
-  variant?: 'full' | 'body';
   /** Anything the page hangs beneath the facts: readings, the red lines. */
   children?: ReactNode;
 }) {
@@ -69,24 +66,14 @@ export function AdviserBriefing({
   const workings = useWorkings();
   const roleId = useId();
   return (
-    <article
-      className={`briefing${compact ? ' briefing--compact' : ''}`}
-      aria-labelledby={variant === 'full' ? roleId : undefined}
-    >
-      {variant === 'full' ? (
-        <>
-          <header className="briefing__head">
-            <h3 className="briefing__role" id={roleId}>
-              {adviser?.role ?? briefing.adviser}
-            </h3>
-            <LabelBadge badge="commentary" />
-          </header>
-          <p className="briefing__headline">{briefing.headline}</p>
-        </>
-      ) : (
-        // The caller has shown who is speaking; the one-line headline still orients a newcomer.
-        <p className="briefing__headline">{briefing.headline}</p>
-      )}
+    <article className={`briefing${compact ? ' briefing--compact' : ''}`} aria-labelledby={roleId}>
+      <header className="briefing__head">
+        <h3 className="briefing__role" id={roleId}>
+          {adviser?.role ?? briefing.adviser}
+        </h3>
+        <LabelBadge badge="commentary" />
+      </header>
+      <p className="briefing__headline">{briefing.headline}</p>
       {briefing.facts?.length ? <Facts facts={briefing.facts} /> : null}
       {children}
       {workings ? (
