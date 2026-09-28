@@ -1,6 +1,16 @@
-import type { DistributionalNote, Reason, Reception } from '@btc/engine';
+import type { Badge, DistributionalNote, Reason, Reception, SourceRef } from '@btc/engine';
 import { LabelBadge } from './LabelBadge';
 import { SourceList } from './SourceLink';
+
+/** A line on the wider economy for the markets' fold (Phase 25): growth in words, debt interest. */
+export interface EconomyLine {
+  key: string;
+  /** Whose note it is, when it is a measure's own: "Corporation tax". */
+  lead?: string;
+  text: string;
+  badge: Badge;
+  sources: SourceRef[];
+}
 
 const MARK: Record<Reason['direction'], string> = { up: '▲', down: '▼', flat: '•' };
 
@@ -23,15 +33,20 @@ function whySummary(tally: Reception['tally']): string {
  * something pulled the other way, one short line names it: "Counted against: Tax burden ·
  * Uncertified costings". A "why this rating" disclosure holds the question the audience asks and
  * every rule with its points, its reading, the decisions behind it and, with the workings on, its
- * sources. Every sentence is a game judgement from data and wears the badge.
+ * sources. Every sentence is a game judgement from data and wears the badge. The markets' fold also
+ * says, in words, what the Budget may do to growth and, worked out, what its borrowing costs in
+ * interest (Phase 25).
  */
 export function ReceptionCard({
   reception,
   notes,
+  economy,
 }: {
   reception: Reception;
   /** For the public: who feels the measures, carried straight from the levers moved. */
   notes?: DistributionalNote[];
+  /** For the markets: what the Budget may do to growth, and what its borrowing costs in interest. */
+  economy?: EconomyLine[];
 }) {
   const { audience, title, question, rating, label, lead: first, counted, tally, all } = reception;
   const id = `reception-${audience}`;
@@ -103,6 +118,20 @@ export function ReceptionCard({
             </li>
           ))}
         </ul>
+        {economy?.length ? (
+          <>
+            <p className="reception__notes-title">Growth and debt interest</p>
+            <ul>
+              {economy.map((line) => (
+                <li key={line.key}>
+                  {line.lead ? <strong>{line.lead}. </strong> : null}
+                  {line.text} <LabelBadge badge={line.badge} />
+                  <SourceList as="span" className="briefing__sources" refs={line.sources} />
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : null}
         {notes?.length ? (
           <>
             <p className="reception__notes-title">Who feels these measures</p>

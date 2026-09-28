@@ -319,4 +319,39 @@ describe('fine-tune tax and spend: the curated levers', () => {
     at(`/finetune/tax?${BASE}&g=st.1`);
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
+
+  it('lets one adviser speak above the cards, the most pressing, one at a time (Phase 25)', () => {
+    // Nothing delivers defence yet: the Director of Public Spending says so.
+    const quiet = at(`/finetune/tax?${BASE}&${GAME}&L=moj.10`);
+    let advisers = screen.getByRole('region', { name: 'Your advisers' });
+    expect(
+      within(advisers).getByText(/^Defence on the NATO path is an agreed priority\./),
+    ).toBeInTheDocument();
+    quiet.unmount();
+    // A penny on the basic rate breaks the tax lock, which comes first: one line, and no chorus.
+    at(`/finetune/tax?${BASE}&${GAME}&L=moj.10_itbr.1`);
+    advisers = screen.getByRole('region', { name: 'Your advisers' });
+    expect(
+      within(advisers).getByText(/^The tax lock is a manifesto red line, Chancellor\./),
+    ).toBeInTheDocument();
+    expect(within(advisers).queryByText(/agreed priority/)).toBeNull();
+    expect(within(advisers).queryByText(/What the advisers say/)).toBeNull();
+  });
+
+  it('has the bar say what changed, once a slider settles (Phase 25)', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    const status = within(bar()).getByRole('status');
+    // Mounted empty: nothing is said on arrival.
+    expect(status).toBeEmptyDOMElement();
+    fireEvent.change(screen.getByRole('slider', { name: 'The basic rate of income tax' }), {
+      target: { value: '1' },
+    });
+    // Nothing while the slider may still be moving; then only what changed, in the bar's words.
+    expect(status).toBeEmptyDOMElement();
+    await waitFor(() => expect(status.textContent).toMatch(/^Headroom, 2029-30: £\d+\.\dbn\./), {
+      timeout: 3000,
+    });
+    expect(status.textContent).toMatch(/1 promise broken\.$/);
+    expect(status.textContent).not.toMatch(/rules met/);
+  });
 });

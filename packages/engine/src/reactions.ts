@@ -63,6 +63,8 @@ const PAID_FOR_COST_GBPM = 1000;
 const PAID_FOR_TOLERANCE_GBPM = 500;
 /** A cut too small to name, £ million. */
 const NAMED_CUT_GBPM = 50;
+/** Below this a measure raises nothing yet in a year, £ million: the cards' "unchanged". */
+const NOTHING_YET_GBPM = 50;
 const BROAD_GROUPS = new Set(['broad-base', 'motorists', 'duties']);
 const PRICE_RAISERS = new Set([
   'vatfood',
@@ -98,7 +100,7 @@ export interface Readings {
    * Words the reception's sentences fill in (Phase 25): `{payers}`, the groups who pay the most;
    * `{feltHow}`, how households feel the tax rises that most of them feel; `{protected}` and
    * `{protectedCut}`, the health and schools budgets cut and by how much; `{cutServices}`, the
-   * budgets cut.
+   * budgets cut; `{year}`, the target year, and `{lateFrom}`, the year before it.
    */
   words: Record<string, string>;
 }
@@ -290,6 +292,14 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   const cuts = policyEffects.filter((e) => (e.receipts[year] ?? 0) < 0);
   const taxRises = rises.reduce((acc, e) => acc + (e.receipts[year] ?? 0), 0);
   const taxCuts = cuts.reduce((acc, e) => acc - (e.receipts[year] ?? 0), 0);
+  // Money that arrives late (Phase 25): of the new tax money in the target year, the share from
+  // measures that raise nothing in any policy year before the one ahead of it.
+  const lateFrom = outcome.paths.policyYears.find((y) => fyStart(y) === fyStart(year) - 1) ?? year;
+  const early = outcome.paths.policyYears.filter((y) => fyStart(y) < fyStart(lateFrom));
+  const late = rises.filter((e) =>
+    early.every((y) => Math.abs(e.receipts[y] ?? 0) < NOTHING_YET_GBPM),
+  );
+  const lateYield = late.reduce((acc, e) => acc + (e.receipts[year] ?? 0), 0);
   // Taxes most households feel, and those they do not: levies on banks, energy producers and
   // the very top, an authored list (Phase 25). Felt rises are named by how they are felt.
   const notFelt = new Set(input.incidence?.notFelt ?? []);
@@ -427,6 +437,7 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       paidForStatus,
       frontLoadedBorrowingGbpm: frontLoaded,
       commitmentsBroken: commitmentsBroken.length,
+      lateYieldShare: taxRises > 0 ? lateYield / taxRises : 0,
     },
     causes: {
       stabilityHeadroomGbpm: headroomMovers,
@@ -487,6 +498,7 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       commitmentsBroken: commitmentsBroken.flatMap((p) =>
         p.brokenBy.map((b) => ({ title: title(b.code) })),
       ),
+      lateYieldShare: topBy(late, (e) => e.receipts[year] ?? 0),
     },
     words: {
       payers: inWords(payers),
@@ -494,6 +506,8 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       protected: namesOf(protectedEffects),
       protectedCut: formatGbpBn(protectedCuts, 1),
       cutServices: namesOf(departments),
+      year,
+      lateFrom,
     },
   };
   return out;
@@ -508,6 +522,52 @@ export function readings(input: ReadingsInput): Record<string, number> {
  * What the public feels is not a band: it is the distributional consideration each moved lever
  * already carries, with its own sources. Ordered by the size of the lever's effect.
  */
+/**
+ * What the Budget may do to growth, in words (Phase 25): the note on the wider economy carried by
+ * the biggest measure moved that has one; else the tool's own note that choices can affect growth
+ * but the game does not model it. Commentary with its sources; never a number of the game's own.
+ */
+export function growthNote(
+  outcome: Outcome,
+  levers: readonly Lever[],
+  year: string,
+): DistributionalNote | null {
+  const byCode = new Map(levers.map((l) => [l.code, l] as const));
+  const noteOf = (lever: Lever): DistributionalNote | null => {
+    const c = lever.considerations.find((x) => x.kind === 'macro' && x.growth);
+    return c
+      ? {
+          leverId: lever.id,
+          leverTitle: lever.shortTitle,
+          text: c.text,
+          magnitudeWords: c.magnitudeWords ?? '',
+          sources: c.sources,
+        }
+      : null;
+  };
+  const moved = outcome.leverEffects
+    .map((e) => ({
+      lever: byCode.get(e.code),
+      size:
+        Math.abs(at(e.receipts, year)) +
+        Math.abs(at(e.currentSpending, year)) +
+        Math.abs(at(e.capitalSpending, year)),
+    }))
+    .filter((x): x is { lever: Lever; size: number } => x.lever !== undefined)
+    .filter((x) => x.lever.category !== 'macro')
+    .sort((a, b) => b.size - a.size);
+  for (const { lever } of moved) {
+    const note = noteOf(lever);
+    if (note) return note;
+  }
+  for (const lever of levers) {
+    if (lever.category !== 'macro') continue;
+    const note = noteOf(lever);
+    if (note) return note;
+  }
+  return null;
+}
+
 export function distributionalNotes(
   outcome: Outcome,
   levers: readonly Lever[],

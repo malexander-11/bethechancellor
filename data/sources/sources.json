@@ -1449,6 +1449,28 @@
       "retrievedOn": "2026-09-28",
       "licence": "OGL-3.0",
       "notes": "Fetched 2026-09-28. \"You pay Scottish Income Tax if you live in Scotland. It’s paid to the Scottish Government. Scottish Income Tax applies to your wages, pension and most other taxable income. You’ll pay the same tax as the rest of the UK on dividends and savings interest.\""
+    },
+    {
+      "id": "hmrc-tiin-fuel-duty-2026-27",
+      "org": "HMRC",
+      "title": "Fuel duty rates: 2026 to 2027",
+      "edition": "Tax information and impact note, 26 February 2026",
+      "url": "https://www.gov.uk/government/publications/fuel-duty-rates-for-2026-to-2027/fuel-duty-rates-2026-to-2027",
+      "publishedOn": "2026-02-26",
+      "retrievedOn": "2026-09-28",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-28. Other impacts: \"This measure is being introduced to provide continued support to individuals, households and businesses, which will likely maintain any marginal impact of carbon emissions from increased consumption of fossil fuels that this measure may cause.\" Why keeping fuel duty down adds a little to emissions, and raising it takes a little off."
+    },
+    {
+      "id": "hmrc-tiin-apd-2026-27",
+      "org": "HMRC",
+      "title": "Air Passenger Duty: rates from 1 April 2026 to 31 March 2027",
+      "edition": "Tax information and impact note, 30 October 2024",
+      "url": "https://www.gov.uk/government/publications/changes-to-air-passenger-duty-rates-from-1-april-2026/air-passenger-duty-rates-from-1-april-2026-to-31-march-2027",
+      "publishedOn": "2024-10-30",
+      "retrievedOn": "2026-09-28",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-09-28. Other impacts: \"We expect the measure to have a negligible impact on the environment.\" A change of a few pounds a ticket is too small to change emissions."
     }
   ]
 }

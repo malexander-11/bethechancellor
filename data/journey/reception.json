@@ -892,6 +892,41 @@
               "badge": "simulated"
             }
           ]
+        },
+        {
+          "id": "mk-late-yield",
+          "short": "Late money",
+          "measure": "lateYieldShare",
+          "reading": {
+            "label": "Share of the new tax money in the target year that raises nothing in the first year",
+            "unit": "ratio"
+          },
+          "note": "A quarter of the new tax money: beyond that, much of what the rules count has yet to be collected when the markets judge the Budget. The line is the game’s, and it moves no rating.",
+          "bands": [
+            {
+              "id": "none",
+              "upTo": 0,
+              "points": 0,
+              "text": "No new tax money waits until {lateFrom} or later to arrive.",
+              "sources": [],
+              "badge": "simulated"
+            },
+            {
+              "id": "some",
+              "upTo": 0.25,
+              "points": 0,
+              "text": "{value} of the new tax money in {year} waits until {lateFrom} or later. Most of it arrives from the start.",
+              "sources": [],
+              "badge": "simulated"
+            },
+            {
+              "id": "late",
+              "points": 0,
+              "text": "{value} of the new tax money in {year} waits until {lateFrom} or later. The markets will want to see it arrive.",
+              "sources": [],
+              "badge": "simulated"
+            }
+          ]
         }
       ]
     },

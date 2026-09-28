@@ -118,12 +118,44 @@ export const promiseSchema = z.strictObject({
     .default([]),
 });
 
+/**
+ * The Prime Minister at sign-off (Phase 25): one line on the review, chosen by first match: a rule
+ * missed, a promise broken when the rules would hold without it, a promise broken, a promise
+ * strained; nothing when all is well. In the PM's voice and badged as a judgement: twenty words or
+ * fewer and no figure. `{rules}` is filled with the rules' plain names, `{promises}` with the
+ * promises' nouns.
+ */
+export const signOffSchema = z
+  .strictObject({
+    rulesMissed: simulatedLineSchema,
+    brokenWithRoom: simulatedLineSchema,
+    broken: simulatedLineSchema,
+    strained: simulatedLineSchema,
+  })
+  .superRefine((lines, ctx) => {
+    for (const [key, line] of Object.entries(lines)) {
+      if (/\d/.test(line.text))
+        ctx.addIssue({
+          code: 'custom',
+          message: 'the Prime Minister signs off with no figure',
+          path: [key, 'text'],
+        });
+      if (line.text.split(/\s+/).filter(Boolean).length > 20)
+        ctx.addIssue({
+          code: 'custom',
+          message: 'a sign-off line is twenty words or fewer',
+          path: [key, 'text'],
+        });
+    }
+  });
+
 export const pmFileSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
     /** What this Budget could be for; the Chancellor ranks up to three. */
     priorities: z.array(prioritySchema).min(6).max(10),
     promises: z.array(promiseSchema).min(1),
+    signOff: signOffSchema,
   })
   .superRefine((file, ctx) => {
     const ids = new Set<string>();
@@ -542,6 +574,13 @@ export const householdSchema = z.strictObject({
   who: z.string().min(1),
   fact: simulatedLineSchema,
   touches: z.array(householdTouchSchema).min(1),
+  /**
+   * The incidence groups whose levers reach this household at all (Phase 25): its pay, its shop,
+   * its benefits, the services it uses. The untouched line is said only when nothing in these
+   * groups moved; otherwise, with no touch of its own fired, the file's `unnamed` line is.
+   */
+  exposure: z.array(slug).min(1),
+  /** Said only when nothing in the household's groups moved, so it can never be wrong. */
   untouched: simulatedLineSchema,
   /** Whether they could tell what the Budget was for: a theme delivered, or not. */
   understood: simulatedLineSchema,
@@ -552,6 +591,16 @@ export const householdsFileSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
     households: z.array(householdSchema).min(3),
+    /**
+     * What a household says when something in its groups moved but nothing aimed at it by name
+     * (Phase 25): a line that claims nothing specific, so a tax rise on everyone is never "untouched".
+     */
+    unnamed: simulatedLineSchema,
+    /**
+     * Levers that reach none of the households by name (Phase 25): a bank levy, a wealth tax
+     * above £10 million, defence. Every curated and flagship lever touches a household or is here.
+     */
+    reachesNone: z.array(z.string().min(1)).default([]),
   })
   .superRefine((file, ctx) => {
     const ids = new Set<string>();
@@ -563,6 +612,15 @@ export const householdsFileSchema = z
           path: ['households', i],
         });
       ids.add(h.id);
+    });
+    const touched = new Set(file.households.flatMap((h) => h.touches.map((t) => t.code)));
+    file.reachesNone.forEach((code, i) => {
+      if (touched.has(code))
+        ctx.addIssue({
+          code: 'custom',
+          message: `${code} reaches none of the households, yet one is touched by it`,
+          path: ['reachesNone', i],
+        });
     });
   });
 

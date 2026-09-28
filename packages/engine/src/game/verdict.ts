@@ -186,6 +186,46 @@ export function prioritiesInWords(pm: PmFile, ids: readonly string[]): string {
   return `${nouns.slice(0, -1).join(', ')} and ${nouns[nouns.length - 1]}`;
 }
 
+/** The levers that break a promise with levers of its own, each once. */
+function breakingCodes(status: AmbitionStatus): string[] {
+  return [
+    ...new Set(
+      status.promises
+        .filter((p) => !p.kept && p.promise.judgedBy !== 'fiscalRules')
+        .flatMap((p) => p.brokenBy.map((b) => b.code)),
+    ),
+  ];
+}
+
+/**
+ * Was the broken promise needed (Phase 25, Worked out)? Put the levers that break it back and
+ * re-run the engine on the same estimate: the headroom without the break when both rules would
+ * still be met, else undefined. A lever inside a priority's chosen way to deliver it is the
+ * programme itself, so a break there is never called avoidable; nor is one in a Budget that
+ * already misses a rule.
+ */
+export function headroomWithoutBreak(input: {
+  status: AmbitionStatus;
+  outcome: Outcome;
+  levers: readonly Lever[];
+  outcomeOf: OutcomeOf;
+}): number | undefined {
+  const { status, outcome, levers } = input;
+  if (outcome.verdicts.some(isMissed)) return undefined;
+  const programme = new Set(
+    status.priorities.flatMap((p) =>
+      p.options
+        .filter((o) => o.state === 'on' || o.state === 'adjusted')
+        .flatMap((o) => Object.keys(o.option.values)),
+    ),
+  );
+  const breakers = breakingCodes(status);
+  if (breakers.length === 0 || breakers.some((code) => programme.has(code))) return undefined;
+  const without = input.outcomeOf(withDefaults(outcome.settings.leverValues, breakers, levers));
+  if (without.verdicts.some(isMissed)) return undefined;
+  return without.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;
+}
+
 export function budgetVerdict(input: VerdictInput): BudgetVerdict {
   const { game, outcome, levers, pm } = input;
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
@@ -220,28 +260,13 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
   const headroomOf = (o: Outcome) =>
     o.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;
 
-  // Was the broken promise needed? Put the levers that break it back and re-run the engine on the
-  // same estimate (Phase 25, Worked out). A lever inside a priority's chosen way to deliver it is
-  // the programme itself, so a break there is never called avoidable.
-  const programme = new Set(
-    status.priorities.flatMap((p) =>
-      p.options
-        .filter((o) => o.state === 'on' || o.state === 'adjusted')
-        .flatMap((o) => Object.keys(o.option.values)),
-    ),
-  );
-  const breakers = [
-    ...new Set(
-      status.promises
-        .filter((p) => !p.kept && p.promise.judgedBy !== 'fiscalRules')
-        .flatMap((p) => p.brokenBy.map((b) => b.code)),
-    ),
-  ];
-  let withoutBreak: number | undefined;
-  if (rulesMet && breakers.length > 0 && breakers.every((code) => !programme.has(code))) {
-    const without = input.outcomeOf(withDefaults(values, breakers, levers));
-    if (!without.verdicts.some(isMissed)) withoutBreak = headroomOf(without);
-  }
+  const breakers = breakingCodes(status);
+  const withoutBreak = headroomWithoutBreak({
+    status,
+    outcome,
+    levers,
+    outcomeOf: input.outcomeOf,
+  });
 
   // Cuts, rises and how much moved in the target year, every lever counted, never netted.
   let cuts = 0;

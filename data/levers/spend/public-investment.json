@@ -88,6 +88,7 @@
       "direction": "ambiguous",
       "magnitudeWords": "unknown",
       "alreadyInDirectCosting": false,
+      "growth": true,
       "text": "Any effect of public investment on the economy's capacity, and so on receipts, is not modelled here; the OBR's forecast is not re-run when you change the lever.",
       "sources": [
         {

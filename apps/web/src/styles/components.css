@@ -276,6 +276,16 @@
   color: var(--ink-2);
 }
 
+/* The scale before choosing (Phase 25): what one priority costs against the headroom. */
+.theme__scale {
+  max-width: 44em;
+  margin: 8px 0 0;
+}
+
+.choice__title .tag--quiet {
+  margin-left: 6px;
+}
+
 /* ------------------------------------------------------------ the opening */
 
 .opening {
@@ -1476,4 +1486,17 @@ label.choice {
 
 .review__taxtake {
   margin: 8px 0 0;
+}
+
+/* The sign-off (Phase 25): the Prime Minister's line, and one reaction read out with no rating. */
+.review .spoken {
+  margin: 12px 0 0;
+}
+
+.review__reaction {
+  margin: 12px 0 0;
+}
+
+.review__reaction .kicker {
+  margin-right: 4px;
 }

@@ -570,5 +570,32 @@
         }
       ]
     }
-  ]
+  ],
+  "signOff": {
+    "rulesMissed": {
+      "text": "You’d miss {rules}? We promised to meet them. Find the money, or tell me what goes.",
+      "sources": [
+        {
+          "sourceId": "hmt-tsc-budget-2026-letter",
+          "quote": "we will abide by the fiscal rules, ensuring we retain a buffer to protect us against uncertainty and the impact of instability in the Middle East"
+        }
+      ],
+      "badge": "simulated"
+    },
+    "brokenWithRoom": {
+      "text": "You’d break {promises} with room to spare? Tell me what it buys that nothing else could.",
+      "sources": [],
+      "badge": "simulated"
+    },
+    "broken": {
+      "text": "Breaking {promises} will follow us to the next election. Make sure it buys something people can see.",
+      "sources": [],
+      "badge": "simulated"
+    },
+    "strained": {
+      "text": "The words of {promises} still hold. Expect the benches to ask about the spirit.",
+      "sources": [],
+      "badge": "simulated"
+    }
+  }
 }

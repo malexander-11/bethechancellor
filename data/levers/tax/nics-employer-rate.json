@@ -102,6 +102,7 @@
       "kind": "macro",
       "direction": "ambiguous",
       "alreadyInDirectCosting": false,
+      "growth": true,
       "text": "HMRC's figure is the direct effect on employer contributions. Who ultimately bears the cost (through wages, prices or profits) and the knock-on to income tax and other receipts sits in the OBR's wider economy forecast, not in this number.",
       "sources": [
         {

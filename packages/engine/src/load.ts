@@ -635,6 +635,15 @@ export function validateDataset(ds: Dataset): string[] {
           problems.push(`household ${household.id} is touched by unknown lever "${touch.code}"`);
         }
       }
+      // A group the incidence tags do not have would leave the household untouched by anything.
+      for (const group of household.exposure) {
+        if (ds.incidence && !ds.incidence.groups[group]) {
+          problems.push(`household ${household.id} is exposed to unknown group "${group}"`);
+        }
+      }
+    }
+    for (const code of ds.electorate.reachesNone) {
+      if (!codes.has(code)) problems.push(`unknown lever "${code}" reaches no household`);
     }
   }
   if (ds.speech) {

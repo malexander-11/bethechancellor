@@ -1,5 +1,5 @@
 import { fyStart } from '../calc/years.js';
-import type { Lever } from '../types/data.js';
+import type { Lever, OptionsFile, PmFile } from '../types/data.js';
 import type { LeverEffect, Outcome } from '../types/engine.js';
 
 /**
@@ -272,5 +272,56 @@ export function reconcile(outcome: Outcome, pre: Outcome): Reconciliation {
     interestGbpm: interest,
     endGbpm: headroomOn(outcome, 'currentBudget'),
     taxTakeChangePp: share(outcome) - share(pre),
+  };
+}
+
+export interface PriorityScale {
+  year: string;
+  /**
+   * The cheapest way to deliver each priority in full, on the day-to-day rule, against the Budget
+   * as it stands: the smallest and largest of those across the priorities, £ million. Null when
+   * no priority costs anything to deliver.
+   */
+  costs: { minGbpm: number; maxGbpm: number } | null;
+  /** The priorities whose every way to deliver in full saves money on the day-to-day rule. */
+  saves: string[];
+}
+
+/**
+ * The scale of the priorities, before any is chosen (Phase 25, R21, Worked out): what the cheapest
+ * way to deliver each one in full would do to the headroom the bar shows, one price per option as
+ * everywhere else. A priority whose full ways all save money is said to save it. Investment on its
+ * own is priced on the debt rule, so it does not enter a range read against the day-to-day rule.
+ */
+export function priorityScale(input: {
+  pm: PmFile;
+  options: OptionsFile;
+  levers: readonly Lever[];
+  outcomeOf: OutcomeOf;
+  current: Record<string, number>;
+}): PriorityScale {
+  const { pm, options, levers, outcomeOf, current } = input;
+  let year = '';
+  const cheapest: number[] = [];
+  const saves: string[] = [];
+  for (const priority of pm.priorities) {
+    const prices = options.deliver
+      .filter((o) => o.priority === priority.id && o.scale.kind === 'full')
+      .map((o) => optionPrice({ outcomeOf, levers, current, values: o.values }))
+      .filter((p) => p.rule === 'currentBudget');
+    if (prices.length === 0) continue;
+    year = prices[0]?.year ?? year;
+    const costs = prices.map((p) => -p.headroomChangeGbpm);
+    if (costs.every((c) => c < 0)) saves.push(priority.id);
+    const least = Math.min(...costs.filter((c) => c > 0));
+    if (Number.isFinite(least)) cheapest.push(least);
+  }
+  return {
+    year,
+    costs:
+      cheapest.length > 0
+        ? { minGbpm: Math.min(...cheapest), maxGbpm: Math.max(...cheapest) }
+        : null,
+    saves,
   };
 }

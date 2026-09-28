@@ -111,7 +111,152 @@
             "sources": [],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "dfe",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "Less for schools. The children notice that before we do.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "dfe",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "More for schools. With two children in them, we should see it.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "rvpip",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The PIP cuts go ahead after all. My partner’s award is what keeps us afloat.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2025-table-4-1"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "csjmh",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "PIP and the health top-up end for milder anxiety and depression. That is my partner’s claim.",
+            "sources": [
+              {
+                "sourceId": "csj-benefits-budget-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "wdis",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "Disability benefits cut. My partner’s PIP is part of that line.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "wdis",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "More for disability benefits. My partner’s PIP is part of that line.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vatelec",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "VAT stays off the electricity. On a prepayment meter, you feel every bit of that.",
+            "sources": [
+              {
+                "sourceId": "govuk-vat-electricity-cut-2026"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vatgas",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "VAT off the gas too. The heating was the first bill we cut.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "sugsalt",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "A tax on sugar and salt in food. Some of it will reach the price of the weekly shop.",
+            "sources": [
+              {
+                "sourceId": "rf-call-of-duties-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "lha30",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "Housing support rises to meet local rents again. The gap had been coming out of everything else.",
+            "sources": [
+              {
+                "sourceId": "rf-saving-private-renters-2026"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "ucfloor",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "A floor on what can be taken off universal credit. We are still paying back the advance.",
+            "sources": [
+              {
+                "sourceId": "jrf-uc-floor-2026"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
+      ],
+      "exposure": [
+        "broad-base",
+        "duties",
+        "families-on-benefits",
+        "disabled-people",
+        "schools",
+        "renters",
+        "transport",
+        "motorists",
+        "nhs"
       ],
       "untouched": {
         "text": "Nothing in it for us either way. The rent is the same, the shop is the same, the statement is the same.",
@@ -260,7 +405,113 @@
             ],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "hscl",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "A health and care levy on our pay. National Insurance by another name, and we both pay it.",
+            "sources": [
+              {
+                "sourceId": "hmt-build-back-better-2021"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "ipt",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Insurance premium tax up. The car, the house, the contents: every policy costs more.",
+            "sources": [
+              {
+                "sourceId": "govuk-ipt-guidance"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nicer",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Employer National Insurance up. The firm pays it first; over time it comes out of pay rises.",
+            "sources": [
+              {
+                "sourceId": "hmrc-tiin-employer-nics-2024",
+                "quote": "The OBR judged that the increase in costs to businesses would lead to lower wages and profits."
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nicpen",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "National Insurance on what the firm pays into our pensions. It will come back out of pay or the pension.",
+            "sources": [
+              {
+                "sourceId": "hmrc-tiin-employer-nics-2024",
+                "quote": "The OBR judged that the increase in costs to businesses would lead to lower wages and profits."
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "pens30",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "Pension relief at one flat rate. As basic-rate savers, we get a bit more on what we put in.",
+            "sources": [
+              {
+                "sourceId": "hmrc-private-pensions-2026-07-tidy"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "dhsc",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "Less for the NHS. We are still waiting for that appointment.",
+            "sources": [
+              {
+                "sourceId": "hmt-sr25-del-tables"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "apd",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Air passenger duty up. The one holiday abroad costs a bit more.",
+            "sources": [],
+            "badge": "simulated"
+          }
         }
+      ],
+      "exposure": [
+        "broad-base",
+        "duties",
+        "business",
+        "motorists",
+        "flyers",
+        "savers-owners",
+        "schools",
+        "nhs"
       ],
       "untouched": {
         "text": "It left us alone. The mortgage is the thing that decides our year, and the Budget did not move it.",
@@ -372,8 +623,89 @@
             "sources": [],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "pensmth",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The triple lock goes, for a link to average earnings. My pension will grow more slowly than it would have.",
+            "sources": [
+              {
+                "sourceId": "rf-what-a-ratchet-2026"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "dhsc",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "Less money for the health service. At my age that is the Budget, and it got smaller.",
+            "sources": [
+              {
+                "sourceId": "hmt-sr25-del-tables"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vatelec",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "VAT stays off the electricity after March. That helps through the winter.",
+            "sources": [
+              {
+                "sourceId": "govuk-vat-electricity-cut-2026"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vatgas",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "No VAT on the gas either. The heating can stay on a little longer.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "mhclg",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "More for councils, which is where social care comes from. At my age, that matters.",
+            "sources": [
+              {
+                "sourceId": "no10-social-care-speech-2026-07-29"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "mhclg",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "Less for councils means less social care. That is who looks after people like me.",
+            "sources": [
+              {
+                "sourceId": "no10-social-care-speech-2026-07-29"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
       ],
+      "exposure": ["broad-base", "duties", "pensioners", "councils-care", "nhs"],
       "untouched": {
         "text": "Nothing for us and nothing against us. The lock held and the winter payment held; we will take that.",
         "sources": [],
@@ -503,8 +835,67 @@
             "sources": [],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "hscl",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "A health and care levy on my profits. National Insurance by another name.",
+            "sources": [
+              {
+                "sourceId": "hmt-build-back-better-2021"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "ipt",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Insurance premium tax up. The van cover and the liability cover both cost more.",
+            "sources": [
+              {
+                "sourceId": "govuk-ipt-guidance"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itbr",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "The basic rate goes up. It comes off the profit on every job.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itbr",
+          "when": "below",
+          "effect": "gains",
+          "line": {
+            "text": "The basic rate comes down. Across a year’s profits, I will notice it.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nic4",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "Class 4 National Insurance up. It comes out of my profits, with nobody to share it.",
+            "sources": [],
+            "badge": "simulated"
+          }
         }
       ],
+      "exposure": ["broad-base", "duties", "business", "motorists", "investment", "nhs"],
       "untouched": {
         "text": "It did not touch the van, the diesel or the invoices. That is a good Budget as far as I am concerned.",
         "sources": [],
@@ -649,20 +1040,6 @@
           }
         },
         {
-          "code": "wealth",
-          "when": "on",
-          "effect": "pays",
-          "line": {
-            "text": "A wealth tax above £10 million. Not me, but I know the argument about who leaves.",
-            "sources": [
-              {
-                "sourceId": "wtc-final-report-2020"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
           "code": "rnrb",
           "when": "on",
           "effect": "pays",
@@ -671,7 +1048,120 @@
             "sources": [],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "hscl",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "A health and care levy on top of National Insurance. On my salary, that is a real slice.",
+            "sources": [
+              {
+                "sourceId": "hmt-build-back-better-2021"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itbr",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "The basic rate goes up. It hits the first slice of my pay, as it does everyone’s.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itbr",
+          "when": "below",
+          "effect": "gains",
+          "line": {
+            "text": "The basic rate comes down. Everyone gets it, me included.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "cgtalign",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "Capital gains taxed like income. The shares I sell will be taxed at my top rate.",
+            "sources": [
+              {
+                "sourceId": "centax-taxes-at-the-top-2026"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "pens30",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "Pension tax relief at one flat rate. Mine falls, and the pension was the plan.",
+            "sources": [
+              {
+                "sourceId": "hmrc-private-pensions-2026-07-tidy"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nicuel",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "National Insurance at the full rate all the way up my pay. A pay cut in all but name.",
+            "sources": [
+              {
+                "sourceId": "ifs-green-budget-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "cgtdth",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "Gains taxed when someone dies. What my parents leave in shares will carry a bigger bill.",
+            "sources": [
+              {
+                "sourceId": "rf-call-of-duties-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "iinc2",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "Another rise on dividend and savings tax. What the savings earn is taxed harder again.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2025-table-4-1"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
+      ],
+      "exposure": [
+        "broad-base",
+        "duties",
+        "higher-earners",
+        "top",
+        "savers-owners",
+        "flyers",
+        "nhs"
       ],
       "untouched": {
         "text": "Nothing in it for me and nothing out of me, beyond the freeze that was already there.",
@@ -689,5 +1179,37 @@
         "badge": "simulated"
       }
     }
+  ],
+  "unnamed": {
+    "text": "Nothing aimed at us by name that we could see.",
+    "sources": [],
+    "badge": "simulated"
+  },
+  "reachesNone": [
+    "airet",
+    "banklevy",
+    "brates",
+    "cta",
+    "ctgh",
+    "def3",
+    "dft",
+    "dip47",
+    "fcdo",
+    "gam2",
+    "hmrc2",
+    "home",
+    "mod",
+    "moj",
+    "nicrent",
+    "otherd",
+    "qelevy",
+    "rveff",
+    "rvplan2",
+    "socrent",
+    "tob",
+    "uitime",
+    "wealth",
+    "wealth2",
+    "woth"
   ]
 }

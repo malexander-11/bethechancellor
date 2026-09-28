@@ -120,6 +120,10 @@ const SETS: Record<string, readonly string[]> = {
     (d) =>
       `${d.title}: £5bn. Paid for by ${d.paidFor.charAt(0).toLowerCase()}${d.paidFor.slice(1)}.`,
   ),
+  // Phase 25: the Prime Minister at sign-off, as the review reads a line out.
+  'the sign-off': Object.values(pm.signOff).map((l) =>
+    l.text.replace('{rules}', 'the debt rule').replace('{promises}', 'the tax lock'),
+  ),
   'the promises': pm.promises.flatMap((p) => [
     p.title,
     ...p.strains.map((s) => s.text).filter((t): t is string => t !== undefined),
@@ -139,7 +143,7 @@ const SETS: Record<string, readonly string[]> = {
 
 describe('readability: a reading age of about twelve, one idea a sentence', () => {
   it('reads every set a newcomer meets', () => {
-    expect(Object.keys(SETS).length).toBe(15);
+    expect(Object.keys(SETS).length).toBe(16);
     for (const [name, texts] of Object.entries(SETS)) expect(texts.length, name).toBeGreaterThan(0);
   });
 

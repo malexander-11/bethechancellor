@@ -160,6 +160,11 @@ export const considerationSchema = z.strictObject({
     .strictObject({ above: z.number().optional(), below: z.number().optional() })
     .optional(),
   alreadyInDirectCosting: z.boolean(),
+  /**
+   * A macro note on what the measure may do to growth and the wider economy (Phase 25): the
+   * markets' fold on Budget day reads the biggest moved measure's, in words. Macro notes only.
+   */
+  growth: z.literal(true).optional(),
   text: z.string().min(1),
   sources: z.array(sourceRefSchema).min(1),
 });
@@ -596,6 +601,14 @@ export const leverSchema = z
         path: ['badge'],
       });
     }
+    lever.considerations.forEach((c, i) => {
+      if (c.growth && c.kind !== 'macro')
+        ctx.addIssue({
+          code: 'custom',
+          message: 'only a macro note speaks to growth',
+          path: ['considerations', i, 'growth'],
+        });
+    });
     const raw = 'rawSource' in lever.costing ? lever.costing.rawSource : undefined;
     if (raw?.kind === 'hmrcReliefCost' && !lever.reliefCost) {
       ctx.addIssue({

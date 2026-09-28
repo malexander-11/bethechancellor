@@ -398,7 +398,7 @@
             "title": "Freeze fuel duty in April 2027",
             "move": 1,
             "advice": {
-              "text": "Not raised since 2011. Small money, felt at every pump.",
+              "text": "Small money, felt at every pump; emissions edge up a little.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03"
@@ -406,6 +406,10 @@
                 {
                   "sourceId": "hmt-budget-2025-policy-costings",
                   "quote": "From 1 April 2027, fuel duty rates will be uprated annually in line with the Retail Price Index."
+                },
+                {
+                  "sourceId": "hmrc-tiin-fuel-duty-2026-27",
+                  "quote": "which will likely maintain any marginal impact of carbon emissions from increased consumption of fossil fuels that this measure may cause"
                 }
               ],
               "badge": "simulated"
@@ -446,11 +450,15 @@
             "title": "Car tax",
             "move": 10,
             "advice": {
-              "text": "Small money, spread across every car and van.",
+              "text": "Small money, spread across every car and van, whatever it emits.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
                   "table": "Publication_Format"
+                },
+                {
+                  "sourceId": "govuk-ved-rate-tables",
+                  "quote": "Rates for second tax payment onwards Petrol or diesel, Electric & Alternative Fuel Single 12 month payment £200"
                 }
               ],
               "badge": "simulated"
@@ -461,11 +469,15 @@
             "title": "Air passenger duty",
             "move": 2,
             "advice": {
-              "text": "Small money from every flight.",
+              "text": "Small money from every flight, too small to change emissions either way.",
               "sources": [
                 {
                   "sourceId": "hmrc-trr-2025-06",
                   "table": "Publication_Format"
+                },
+                {
+                  "sourceId": "hmrc-tiin-apd-2026-27",
+                  "quote": "We expect the measure to have a negligible impact on the environment."
                 }
               ],
               "badge": "simulated"
@@ -476,11 +488,15 @@
             "title": "Add back last year’s cancelled fuel duty rise",
             "move": 1,
             "advice": {
-              "text": "Small money; drivers pay the rise last year’s Budget cancelled.",
+              "text": "Small money; drivers pay the cancelled rise, and emissions dip a little.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
                   "table": "Table 4.1"
+                },
+                {
+                  "sourceId": "hmrc-tiin-fuel-duty-2026-27",
+                  "quote": "which will likely maintain any marginal impact of carbon emissions from increased consumption of fossil fuels that this measure may cause"
                 }
               ],
               "badge": "simulated"
@@ -689,7 +705,7 @@
             "title": "All other departments",
             "move": -1,
             "advice": {
-              "text": "Mostly the block grants to Scotland, Wales and Northern Ireland.",
+              "text": "Mostly Scotland, Wales and Northern Ireland’s grants; also energy and net zero.",
               "sources": [
                 {
                   "sourceId": "hmt-statement-of-funding-policy-2025"

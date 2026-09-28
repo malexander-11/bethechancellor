@@ -301,7 +301,9 @@ export function receptions(input: ReceptionInput): Reception[] {
       .replace(/\{feltHow\}/g, filled.feltHow ?? '')
       .replace(/\{protectedCut\}/g, filled.protectedCut ?? '')
       .replace(/\{protected\}/g, filled.protected || 'health and schools')
-      .replace(/\{cutServices\}/g, filled.cutServices || 'some departments');
+      .replace(/\{cutServices\}/g, filled.cutServices || 'some departments')
+      .replace(/\{year\}/g, filled.year ?? '')
+      .replace(/\{lateFrom\}/g, filled.lateFrom ?? '');
   return input.reception.audiences.map((audience) => {
     const nudges = new Map<string, { text: string; better: ReceptionBand }>();
     const all: Reason[] = audience.rules.map((rule) => {

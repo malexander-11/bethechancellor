@@ -1,5 +1,12 @@
 import { formatGbpBn, type AmbitionStatus, type Outcome } from '@btc/engine';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { isMissed, ruleTitle } from '../journey/rules';
+
+/**
+ * How long the bar waits after the last change before it speaks (Phase 25): long enough for a
+ * slider being dragged to settle, so a screen reader hears where it stopped, not every step.
+ */
+export const BAR_SETTLE_MS = 800;
 
 /**
  * The score while you build, in one slim line that stays in view: headroom in the target year,
@@ -9,6 +16,10 @@ import { isMissed, ruleTitle } from '../journey/rules';
  * player's own choices read back. It sits under the header and never covers a control, and
  * nothing on it is said again on the screen below. There is no target: the rules are the line
  * (Phase 24).
+ *
+ * The bar speaks (Phase 25): one visually hidden polite status region, mounted empty, says the
+ * facts that changed, in the bar's own words, once the Budget has settled. While the bar is
+ * sticky, the page keeps the height it covers clear, so a focused control never hides under it.
  */
 export function HeadroomBar({ outcome, status }: { outcome: Outcome; status: AmbitionStatus }) {
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
@@ -39,11 +50,22 @@ export function HeadroomBar({ outcome, status }: { outcome: Outcome; status: Amb
       warn: true,
     });
   }
+  const figure = formatGbpBn(headroom, 1, headroom < 0);
+  const said = {
+    headroom: `Headroom, ${year}: ${figure}`,
+    rules,
+    delivered: facts.find((f) => f.id === 'delivered')?.text ?? '',
+    promises:
+      facts.find((f) => f.id === 'promises')?.text ??
+      (status.broken === 0 ? 'no promise broken' : ''),
+  };
+  const announcement = useChangedFacts(said);
+  const ref = useStickyClearance();
   return (
-    <section className="bar" aria-label="Your Budget so far">
+    <section className="bar" aria-label="Your Budget so far" ref={ref}>
       <p className="bar__headroom">
         <span className="bar__label">Headroom, {year}</span>
-        <span className={`bar__figure${tone}`}>{formatGbpBn(headroom, 1, headroom < 0)}</span>
+        <span className={`bar__figure${tone}`}>{figure}</span>
         <span className={`bar__target${missed.length > 0 ? ' bar__missed' : ''}`}>{rules}</span>
         {facts.map((f) => (
           <span
@@ -54,8 +76,63 @@ export function HeadroomBar({ outcome, status }: { outcome: Outcome; status: Amb
           </span>
         ))}
       </p>
+      <p className="sr-only" role="status" aria-live="polite">
+        {announcement}
+      </p>
     </section>
   );
+}
+
+/**
+ * The facts that changed since the bar last spoke, joined into one sentence, once they have held
+ * still for BAR_SETTLE_MS. Empty on arrival: the bar says nothing until the Budget moves.
+ */
+function useChangedFacts(said: Record<string, string>): string {
+  const [message, setMessage] = useState('');
+  const last = useRef(said);
+  const key = JSON.stringify(said);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const before = last.current;
+      last.current = said;
+      const changed = Object.keys(said)
+        .filter((k) => said[k] !== before[k] && said[k] !== '')
+        .map((k) => said[k]);
+      if (changed.length > 0) setMessage(`${changed.join('. ')}.`);
+    }, BAR_SETTLE_MS);
+    return () => window.clearTimeout(timer);
+    // The facts are compared by their words; the object itself is new on every render.
+  }, [key]);
+  return message;
+}
+
+/**
+ * While the bar is sticky, the page scrolls a focused control clear of it (Phase 25): the root's
+ * scroll padding is the bar's own measured height. Put back when the bar goes.
+ */
+function useStickyClearance() {
+  const ref = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const bar = ref.current;
+    const root = document.documentElement;
+    if (!bar) return undefined;
+    const measure = () => {
+      const sticky = getComputedStyle(bar).position === 'sticky';
+      root.style.scrollPaddingTop = sticky
+        ? `${Math.ceil(bar.getBoundingClientRect().height) + 8}px`
+        : '';
+    };
+    measure();
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
+    observer?.observe(bar);
+    window.addEventListener('resize', measure);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', measure);
+      root.style.scrollPaddingTop = '';
+    };
+  }, []);
+  return ref;
 }
 
 /**

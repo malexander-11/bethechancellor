@@ -1,6 +1,7 @@
 import {
   ambitionStatus,
   formatGbpBn,
+  interventionsFor,
   rankedPriorities,
   stageIndex,
   type FinetuneGroup,
@@ -12,15 +13,17 @@ import { useState } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { CuratedLever } from '../components/CuratedLever';
 import { HeadroomBar } from '../components/HeadroomBar';
+import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { SourceList } from '../components/SourceLink';
-import { adviserById, finetune, levers, options, pm } from '../data';
+import { adviserById, finetune, interventions, levers, options, pm } from '../data';
 import { UNCHANGED_BELOW_GBPM } from '../journey/effects';
 import { useStageGuard } from '../journey/guard';
 import { chosenByLever, redLinesOf } from '../journey/levers';
 import { StepLink } from '../journey/links';
 import { useLeverHints } from '../journey/prices';
+import { isMissed } from '../journey/rules';
 import { useBudget } from '../state/budget';
 import { deliverPath } from './Deliver';
 
@@ -142,6 +145,12 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const redLinesFor = redLinesOf(state.leverValues);
   const who = adviserById.get(spec.adviser)?.role ?? spec.adviser;
   const index = side === 'tax' ? 1 : 2;
+  // The advisers who remember (Phase 25): the most pressing line that fires, one at a time, so the
+  // screen has one voice above the cards and never a chorus.
+  const advice = interventionsFor(interventions, status, {
+    headroomGbpm: stability?.headroomGbpm ?? 0,
+    ruleMissed: outcome.verdicts.some(isMissed),
+  }).slice(0, 1);
 
   const card = (item: FinetuneItem) => {
     const lever = byCode.get(item.code);
@@ -182,6 +191,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       lead={`${spec.lead} Your ${who}’s view is on each lever.`}
     >
       <HeadroomBar outcome={outcome} status={status} />
+      <Interventions items={advice} />
       {spec.notes.length > 0 ? (
         <ul className="tune__notes">
           {spec.notes.map((note) => (

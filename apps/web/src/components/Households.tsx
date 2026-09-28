@@ -7,6 +7,7 @@ const NET: Record<HouseholdReaction['net'], string> = {
   gains: 'better off',
   pays: 'worse off',
   mixed: 'gains and pays',
+  unnamed: 'nothing by name',
   untouched: 'untouched',
 };
 
@@ -14,6 +15,7 @@ const NET: Record<HouseholdReaction['net'], string> = {
  * The electorate as five households. Each says what changed for them, from the levers that
  * touched them, and whether they could tell what the Budget was for. Simulated throughout: the
  * one fact each carries has its source, and nothing here is a number the engine did not compute.
+ * A household says "untouched" only when nothing in its groups moved (Phase 25).
  */
 export function Households({ reactions }: { reactions: HouseholdReaction[] }) {
   const workings = useWorkings();
@@ -28,8 +30,8 @@ export function Households({ reactions }: { reactions: HouseholdReaction[] }) {
             </span>{' '}
             <LabelBadge badge="simulated" />
           </p>
-          {r.said.length === 0 ? (
-            <p className="household__line">“{r.household.untouched.text}”</p>
+          {r.quiet ? (
+            <p className="household__line">“{r.quiet.text}”</p>
           ) : (
             r.said.slice(0, 3).map(({ touch, lever }) => (
               <p key={`${lever.code}-${touch.when}`} className="household__line">

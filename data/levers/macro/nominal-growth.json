@@ -53,6 +53,7 @@
       "direction": "ambiguous",
       "magnitudeWords": "unknown",
       "alreadyInDirectCosting": false,
+      "growth": true,
       "text": "Your own choices can affect growth, for example through public investment or the design of taxes, but the size and timing are uncertain and contested. This tool does not translate policy into growth; it lets you state a growth assumption explicitly instead.",
       "sources": [
         {

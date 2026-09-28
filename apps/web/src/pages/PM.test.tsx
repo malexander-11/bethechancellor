@@ -98,4 +98,17 @@ describe('agreeing the priorities with the Prime Minister', () => {
       screen.getAllByRole('checkbox').filter((b) => (b as HTMLInputElement).checked),
     ).toHaveLength(1);
   });
+
+  it('gives the scale before anything is chosen, and says which priority saves money (Phase 25)', () => {
+    at(`/pm?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
+    // Worked out, one price per option: the cheapest full way to deliver each, against headroom.
+    expect(
+      screen.getByText(
+        /^Delivering one priority in full costs from £0\.8bn to £8\.1bn a year by 2029-30\. Your headroom is £6\.8bn\.$/,
+      ),
+    ).toBeInTheDocument();
+    const saving = screen.getAllByText('Saves money');
+    expect(saving).toHaveLength(1);
+    expect(saving[0]?.closest('.choice__title')?.textContent).toMatch(/Get the welfare bill down/);
+  });
 });

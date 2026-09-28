@@ -186,10 +186,14 @@
       },
       "advice": {
         "adviser": "political-adviser",
-        "text": "Felt at the pump within days; paid for every year after.",
+        "text": "Felt at pumps within days, paid for every year; emissions edge up.",
         "sources": [
           {
             "sourceId": "govuk-fuel-duty-rates"
+          },
+          {
+            "sourceId": "hmrc-tiin-fuel-duty-2026-27",
+            "quote": "which will likely maintain any marginal impact of carbon emissions from increased consumption of fossil fuels that this measure may cause"
           }
         ],
         "badge": "simulated"

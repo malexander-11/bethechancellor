@@ -91,10 +91,14 @@ describe('step 5: deliver the Budget', () => {
       ),
     ).toBeInTheDocument();
     expect(within(position).getByText('You meet both fiscal rules.')).toBeInTheDocument();
-    // The levy keeps the tax lock's words and strains its spirit: amber, not red.
-    expect(within(position).getByText('Strains the manifesto: The tax lock')).toHaveClass(
-      'tag--amber',
-    );
+    // The levy keeps the tax lock's words and strains its spirit: the Prime Minister says so, in
+    // place of the bare amber tag (Phase 25).
+    expect(
+      within(position).getByText(
+        'The words of the tax lock still hold. Expect the benches to ask about the spirit.',
+      ),
+    ).toBeInTheDocument();
+    expect(within(position).queryByText('Strains the manifesto: The tax lock')).toBeNull();
     expect(changeIn(position, 'Change')).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/finetune\/tax\?/),
@@ -153,6 +157,30 @@ describe('step 5: deliver the Budget', () => {
     expect(within(position).getByText('Breaks the manifesto: The tax lock')).toHaveClass(
       'tag--warn',
     );
+  });
+
+  it('has the Prime Minister sign off, and reads out one reaction with no rating (Phase 25)', () => {
+    // A penny on the basic rate the rules did not need: the Prime Minister asks why.
+    const room = at(`/review?${BASE}&${G}&L=moj.10_dip47.1_itbr.1`);
+    let position = part(/^Where that leaves you/);
+    expect(within(position).getByText('The Prime Minister')).toBeInTheDocument();
+    expect(
+      within(position).getByText(
+        'You’d break the tax lock with room to spare? Tell me what it buys that nothing else could.',
+      ),
+    ).toBeInTheDocument();
+    // The line names the promise, so the red tag does not say it again.
+    expect(within(position).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
+    // One reaction already in train, in its own words, with no rating beside it.
+    const reaction = position.querySelector('.review__reaction');
+    expect(reaction?.textContent).toMatch(/Tax rises of £\d+\.\dbn a year/);
+    expect(reaction?.textContent).not.toMatch(/of 5/);
+    room.unmount();
+    // All well: nothing from the Prime Minister, and nothing read out.
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1`);
+    position = part(/^Where that leaves you/);
+    expect(within(position).queryByText('The Prime Minister')).toBeNull();
+    expect(position.querySelector('.review__reaction')).toBeNull();
   });
 
   it('adds up: the headroom it ends on is the bar, to the pound', () => {

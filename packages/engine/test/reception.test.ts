@@ -505,7 +505,7 @@ describe('three audiences, five steps', () => {
       const pattern = template
         .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
         .replace(
-          /\\\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices)\\\}/g,
+          /\\\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices|year|lateFrom)\\\}/g,
           '.+?',
         );
       return new RegExp(`^${pattern}$`).test(text);
@@ -524,7 +524,7 @@ describe('three audiences, five steps', () => {
         for (const band of rule.bands) {
           expect(band.badge).toBe('simulated');
           const words = band.text.replace(
-            /\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices)\}/g,
+            /\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices|year|lateFrom)\}/g,
             '',
           );
           if (FIGURE.test(words)) {

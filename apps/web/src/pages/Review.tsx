@@ -8,7 +8,10 @@ import {
   optionPrice,
   preBudget,
   rankedPriorities,
+  reactionPreview,
+  receptions,
   reconcile,
+  signOffLine,
   stageIndex,
   THIN_HEADROOM_GBPM,
   type Lever,
@@ -27,6 +30,7 @@ import {
   promiseWords,
   shareWords,
 } from '../components/LeverControl';
+import { Spoken } from '../components/Conversation';
 import { SourceList } from '../components/SourceLink';
 import { Yardstick } from '../components/Yardstick';
 import {
@@ -38,6 +42,8 @@ import {
   levers,
   options,
   pm,
+  reception,
+  vintage,
 } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
@@ -185,7 +191,8 @@ function Part({
  * and every other budget you moved, and where that leaves you against the rules and the manifesto,
  * in words (the bar above already says the figure). Every part has a way back to the screen that
  * set it, carrying the Budget, so nothing is final until the red button. Every figure is the
- * engine's for the target year.
+ * engine's for the target year. The Prime Minister signs off in one line when something needs
+ * saying, and one reaction already in train is read out with no rating (Phase 25).
  */
 export function ReviewPage() {
   const { state, dispatch, outcome } = useBudget();
@@ -281,11 +288,34 @@ export function ReviewPage() {
       Object.keys(o.option.values),
       true,
     );
+  // The Prime Minister signs off (Phase 25): one line, by first match, naming what it is about; a
+  // promise it names is not tagged again below it.
+  const signOff = signOffLine({ pm, outcome, status, levers, outcomeOf });
+  const named = new Set(signOff?.names ?? []);
   // The manifesto: broken by a lever (red), or kept in its words and strained (amber). A promise
   // with no lever of its own (the fiscal rules) is the rules line above it.
   const broken = status.promises.filter((p) => !p.kept && p.promise.judgedBy !== 'fiscalRules');
   const brokenIds = new Set(broken.map((p) => p.promise.id));
   const strained = status.strains.filter((s) => s.strained && !brokenIds.has(s.promise.id));
+  const brokenTags = broken.filter((p) => !named.has(p.promise.id));
+  const strainedTags = strained.filter((s) => !named.has(s.promise.id));
+  // One reaction already in train, read out with no rating (Phase 25): the rest is Budget day's.
+  const lastYear = outcome.paths.years[outcome.paths.years.length - 1] ?? year;
+  const preview = reactionPreview(
+    receptions({
+      outcome,
+      levers,
+      reception,
+      typicalErrorGbpm:
+        (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
+        (outcome.paths.baseline.nominalGdpFy[lastYear] ?? 0),
+      outcomeOf,
+      pm,
+      incidence,
+      game,
+      status,
+    }),
+  );
 
   /** The red button: the game has reached Budget day; a link shared from there opens everything. */
   const deliver = () =>
@@ -422,9 +452,10 @@ export function ReviewPage() {
         {missed.length === 0 && r.endGbpm < THIN_HEADROOM_GBPM ? (
           <Yardstick className="review__yardstick" />
         ) : null}
-        {broken.length > 0 || strained.length > 0 ? (
+        {signOff ? <Spoken line={signOff.line} who="The Prime Minister" tone="pm" /> : null}
+        {brokenTags.length > 0 || strainedTags.length > 0 ? (
           <ul className="review__list">
-            {broken.map((p) => (
+            {brokenTags.map((p) => (
               <li key={p.promise.id}>
                 <span className="tag tag--warn">
                   Breaks {promiseWords({ manifesto: p.promise.origin === 'manifesto-2024' }).noun}:{' '}
@@ -432,7 +463,7 @@ export function ReviewPage() {
                 </span>
               </li>
             ))}
-            {strained.map((p) => (
+            {strainedTags.map((p) => (
               <li key={p.promise.id}>
                 <span className="tag tag--amber">
                   Strains{' '}
@@ -449,6 +480,12 @@ export function ReviewPage() {
               </li>
             ))}
           </ul>
+        ) : null}
+        {preview ? (
+          <p className="review__reaction">
+            <span className="kicker">{preview.audience}</span> {preview.reason.text}{' '}
+            <LabelBadge badge={preview.reason.badge} />
+          </p>
         ) : null}
         {stillOnDesk.length > 0 ? (
           <>

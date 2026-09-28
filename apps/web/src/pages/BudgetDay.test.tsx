@@ -274,4 +274,45 @@ describe('Budget day: what your Budget means', () => {
     );
     expect(screen.getByRole('button', { name: 'Play again' })).toBeInTheDocument();
   });
+
+  it('weighs growth, debt interest and money that arrives late, in the markets’ fold (Phase 25)', () => {
+    // Corporation tax up and CGT like income: the biggest measure with a note on growth speaks.
+    at(`${BASE}&${GAME}&L=dip47.1_moj.10_ct.1_cgtalign.1`);
+    const markets = card('The markets');
+    const why = within(markets).getByText(/^Why this rating/);
+    fireEvent.click(why);
+    expect(within(markets).getByText('Growth and debt interest')).toBeInTheDocument();
+    expect(
+      within(markets).getByText(/leaves out effects on investment and the wider economy/),
+    ).toBeInTheDocument();
+    // CGT like income raises nothing before 2028-29: most of the new tax money comes late.
+    expect(
+      within(markets).getByText(
+        /^\d+% of the new tax money in 2029-30 waits until 2028-29 or later\. The markets will want to see it arrive\.$/,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('says what extra borrowing costs in interest, worked out, when borrowing rises (Phase 25)', () => {
+    at(`${BASE}&${GAME}&L=dip47.1_moj.10_dhsc.3`);
+    const markets = card('The markets');
+    fireEvent.click(within(markets).getByText(/^Why this rating/));
+    expect(
+      within(markets).getByText(
+        /^Extra borrowing adds about £\d+\.\dbn a year to debt interest by 2029-30\.$/,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('never calls a household untouched when something in its groups moved (Phase 25)', () => {
+    at(`${BASE}&${GAME}&L=dip47.1_moj.10_wealth2.1`);
+    open('Who feels it: five households');
+    const professional = screen
+      .getByText('A higher-rate professional with savings')
+      .closest('.household') as HTMLElement;
+    expect(within(professional).getByText('nothing by name')).toBeInTheDocument();
+    expect(
+      within(professional).getByText('“Nothing aimed at us by name that we could see.”'),
+    ).toBeInTheDocument();
+  });
 });

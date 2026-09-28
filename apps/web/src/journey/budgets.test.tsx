@@ -46,15 +46,15 @@ function screenWords(): number {
 const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/', 40, GAME],
   ['/outlook', 255, GAME],
-  ['/pm', 175, GAME],
+  ['/pm', 195, GAME],
   ['/budget/deliver', 220, WIDEST],
   ['/budget/deliver/2', 220, WIDEST],
   ['/budget/deliver/3', 220, WIDEST],
-  ['/finetune/tax', 650, GAME],
-  ['/finetune/tax', 810, TUNED],
-  ['/finetune/spending', 630, GAME],
-  ['/finetune/spending', 810, TUNED],
-  ['/review', 190, GAME],
+  ['/finetune/tax', 665, GAME],
+  ['/finetune/tax', 835, TUNED],
+  ['/finetune/spending', 645, GAME],
+  ['/finetune/spending', 830, TUNED],
+  ['/review', 235, GAME],
   ['/budget-day', 210, GAME],
 ];
 
@@ -106,7 +106,10 @@ describe('the word budgets', () => {
     // and its adviser's name on every card, and its hints went into the conditional: tax 589 and
     // 736, spending 573 and 736. The priorities gained purposes of up to ten words (158); the
     // first flagship screen the badges' key and each its England line (200, 178, 161); the review
-    // the tax take in words (173).
+    // the tax take in words (173). Then the sign-off (Phase 25): the priorities gained a worked-out
+    // line on scale and the welfare priority its tag (178); step 4 its one adviser's line above the
+    // cards (tax 605 and 759, spending 588 and 753); the review the Prime Minister's line and one
+    // reaction read out with no rating (213).
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();
