@@ -103,9 +103,9 @@ describe('the package in two parts', () => {
   it('puts the flagship programmes on the spending screen with a minister under each', () => {
     at('/budget/spending');
     expect(screen.getByText(/Fine-tune tax and spend · 2 of 2/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('tab', { name: /Flagship programmes/ }));
+    fireEvent.click(screen.getByRole('tab', { name: /New programmes/ }));
     const panel = screen.getByRole('tabpanel');
-    const flagships = leversByCategory.spend.filter((l) => l.group === 'Flagship programmes');
+    const flagships = leversByCategory.spend.filter((l) => l.group === 'New programmes');
     expect(flagships.length).toBeGreaterThanOrEqual(6);
     for (const lever of flagships) {
       expect(within(panel).getByRole('group', { name: lever.title })).toBeInTheDocument();

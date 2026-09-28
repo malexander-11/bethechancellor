@@ -36,7 +36,7 @@ import { Yardstick } from '../components/Yardstick';
 import {
   MACRO_CODES as MACRO_LIST,
   context,
-  finetuneTitle,
+  finetuneName,
   incidence,
   interventions,
   levers,
@@ -227,7 +227,7 @@ export function ReviewPage() {
     )
     .map(({ effect, lever }) => ({
       lever,
-      title: finetuneTitle(lever.code) ?? lever.shortTitle,
+      title: finetuneName(lever.code) ?? lever.shortTitle,
       ...(standing(lever, value(lever)) ? { at: standing(lever, value(lever)) } : {}),
       amount: amountOf(lever, effect, year),
     }));
@@ -388,7 +388,7 @@ export function ReviewPage() {
                               {lever.category === 'tax'
                                 ? 'Works against this priority'
                                 : 'Cuts against this priority'}
-                              : {finetuneTitle(code) ?? lever.shortTitle}
+                              : {finetuneName(code) ?? lever.shortTitle}
                               {at ? ` · ${at}` : ''}
                             </li>,
                           ];

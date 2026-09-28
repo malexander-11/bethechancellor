@@ -8,7 +8,7 @@ import {
   type SimulatedLine,
 } from '@btc/engine';
 import type { LeverNote, RedLine } from '../components/LeverControl';
-import { finetuneTitle, levers, ministers, options, pm } from '../data';
+import { finetuneName, levers, ministers, options, pm } from '../data';
 
 const byId = new Map(levers.map((l) => [l.id, l] as const));
 /** The flagship option each lever belongs to, if any: what a note names it by. */
@@ -86,7 +86,7 @@ export function settledLine(lever: Lever): { who: string; line: SimulatedLine } 
 
 /** What a note calls another lever: its plain title on these screens, its flagship, or its short title. */
 function nameOf(lever: Lever): string {
-  return finetuneTitle(lever.code) ?? flagshipOf.get(lever.code) ?? lever.shortTitle;
+  return finetuneName(lever.code) ?? flagshipOf.get(lever.code) ?? lever.shortTitle;
 }
 
 /**

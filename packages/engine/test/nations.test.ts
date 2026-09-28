@@ -56,9 +56,13 @@ describe('the nations, where the choice is made (Phase 25)', () => {
       ).toContain(source);
     }
     // The basic rate's line on step 4 says Scotland sets its own rates, on gov.uk's authority.
+    // Both ways (Phase 26): a cut in the basic rate does not reach Scotland's either.
     const itbr = finetuneItems(ds.finetune).find((i) => i.code === 'itbr');
-    expect(itbr?.advice.text).toMatch(/Scotland sets its own rates on wages and pensions/);
-    expect(itbr?.advice.sources.map((s) => s.sourceId)).toContain('govuk-scottish-income-tax');
+    expect(itbr?.policies).toHaveLength(2);
+    for (const policy of itbr?.policies ?? []) {
+      expect(policy.advice.text).toMatch(/Scotland sets its own rates on wages and pensions/);
+      expect(policy.advice.sources.map((s) => s.sourceId)).toContain('govuk-scottish-income-tax');
+    }
     // Plan 2 is England and Wales's, and the line on it says so.
     expect(ds.options.deliver.find((o) => o.id === 'plan2-threshold')?.advice.text).toMatch(
       /England and Wales/,

@@ -235,10 +235,11 @@ describe('LeverControl', () => {
     expect(within(against.container).queryByText(/Settled lower/)).toBeNull();
   });
 
-  it('wears a curated title, a price at rest, an adviser line and a fold for the rest', () => {
-    // The fine-tuning screens' card (Phase 24): the desk's control with a plain name, the numbers
-    // in view before anything moves, one adviser's line, the warnings that apply now, and the
-    // lever's own headline and caveats under one fold.
+  it('wears a policy’s title, its sizes, a price at rest, an adviser line and a fold for the rest', () => {
+    // The fine-tuning screens' card (Phase 24; sizes since Phase 26): a plain title, the policy's
+    // sizes as radios with their settings, the numbers in view before anything is chosen, one
+    // adviser's line, the warnings that apply now, and the lever's own headline and caveats under
+    // one fold.
     const itbr = levers.find((l) => l.code === 'itbr');
     if (!itbr) throw new Error('missing basic rate');
     const line = {
@@ -246,30 +247,40 @@ describe('LeverControl', () => {
       sources: [{ sourceId: 'hmrc-trr-2025-06' }],
       badge: 'simulated' as const,
     };
+    const sizes = { values: [1, 2, 5], labels: ['Small', 'Medium', 'Large'] };
     const rest = render(
       <LeverControl
         lever={itbr}
         value={0}
         summaryYear="2029-30"
         onChange={() => undefined}
-        displayTitle="The basic rate of income tax"
-        hint={{ text: 'Up 1p to 21%: would raise £8.6bn', headroom: '£32.2bn' }}
+        displayTitle="Put up the basic rate of income tax"
+        hint={{ text: 'Small: would raise £8.6bn', headroom: '£32.2bn' }}
         advice={{ line }}
         notes={[
           { key: 'x', text: 'Overlaps with Something: both move the same base.', warn: true },
         ]}
+        sizes={sizes}
         compact
       >
         <p>From the minister</p>
       </LeverControl>,
     );
-    const slider = screen.getByRole('slider', { name: 'The basic rate of income tax' });
-    // The price at rest describes the control, with the lever's own headline, folded. It is in
+    // No slider: three sizes, each with its setting, none chosen, in a group of their own.
+    expect(screen.queryByRole('slider')).toBeNull();
+    const group = screen.getByRole('group', { name: 'Size' });
+    expect(
+      within(group)
+        .getAllByRole('radio')
+        .map((r) => r.closest('label')?.textContent),
+    ).toEqual(['Small 21%', 'Medium 22%', 'Large 25%']);
+    for (const radio of within(group).getAllByRole('radio')) expect(radio).not.toBeChecked();
+    // The price at rest describes the sizes, with the lever's own headline, folded. It is in
     // the conditional and in plain ink (Phase 25): not money already in the Budget.
-    expect(slider).toHaveAccessibleDescription(
-      expect.stringContaining('Up 1p to 21%: would raise £8.6bn · headroom would be £32.2bn'),
+    expect(group).toHaveAccessibleDescription(
+      expect.stringContaining('Small: would raise £8.6bn · headroom would be £32.2bn'),
     );
-    const hint = screen.getByText(/^Up 1p to 21%: would raise £8\.6bn/);
+    const hint = screen.getByText(/^Small: would raise £8\.6bn/);
     expect(hint).toHaveClass('lever__hint');
     expect(hint).not.toHaveClass('amount--better');
     // The screen's lead names the adviser once; the card's line carries its badge after it.
@@ -286,34 +297,81 @@ describe('LeverControl', () => {
     const fold = screen.getByText(/^More about this/).closest('details') as HTMLElement;
     expect(within(fold).getByText(itbr.headline ?? '')).toBeInTheDocument();
     expect(within(fold).getByText('What this assumes')).toBeInTheDocument();
-    // The slider's ends wait in the fold on a phone (Phase 25).
-    expect(within(fold).getByText('The slider runs from 17% to 25%.')).toBeInTheDocument();
+    // No slider, so nothing says where one would run (Phase 26).
+    expect(within(fold).queryByText(/The slider runs from/)).toBeNull();
     rest.unmount();
-    // Moved, the hint gives way to the lever's own effect line.
+    // Chosen, the hint gives way to the lever's own effect line, the size is checked, and Undo
+    // puts the lever back.
     const outcome = computeOutcome({
       vintage,
       rules,
       levers,
-      settings: { leverValues: { itbr: 1 } },
+      settings: { leverValues: { itbr: 2 } },
     });
+    const chosen: number[] = [];
     render(
       <LeverControl
         lever={itbr}
-        value={1}
+        value={2}
         effect={outcome.leverEffects.find((e) => e.code === 'itbr')}
         summaryYear="2029-30"
-        onChange={() => undefined}
-        displayTitle="The basic rate of income tax"
-        hint={{ text: 'Up 1p to 21%: would raise £8.6bn', headroom: '£32.2bn' }}
+        onChange={(v) => chosen.push(v)}
+        displayTitle="Put up the basic rate of income tax"
+        hint={{ text: 'Small: would raise £8.6bn', headroom: '£32.2bn' }}
+        sizes={sizes}
         compact
       />,
     );
-    expect(screen.queryByText(/^Up 1p to 21%/)).toBeNull();
-    expect(screen.getByText(/Day-to-day budget in 2029-30: raises £8\.\dbn/)).toBeInTheDocument();
-    // Undo, not "Back to OBR" (Phase 25).
+    expect(screen.queryByText(/^Small: would raise/)).toBeNull();
+    expect(screen.getByRole('radio', { name: 'Medium 22%' })).toBeChecked();
+    expect(screen.getByText(/Day-to-day budget in 2029-30: raises £1\d\.\dbn/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('radio', { name: 'Large 25%' }));
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Undo for Put up the basic rate of income tax' }),
+    );
+    expect(chosen).toEqual([5, 0]);
+  });
+
+  it('says what it would replace when the lever is set the other way, and what a stray setting is (Phase 26)', () => {
+    const itbr = levers.find((l) => l.code === 'itbr');
+    if (!itbr) throw new Error('missing basic rate');
+    const other = render(
+      <LeverControl
+        lever={itbr}
+        value={2}
+        summaryYear="2029-30"
+        onChange={() => undefined}
+        displayTitle="Cut the basic rate of income tax"
+        sizes={{
+          values: [-1, -2, -3],
+          labels: ['Small', 'Medium', 'Large'],
+          replaces: 'Put up the basic rate of income tax (22%)',
+        }}
+        compact
+      />,
+    );
+    // No price and no effect of its own: choosing a size here replaces the other policy.
     expect(
-      screen.getByRole('button', { name: 'Undo for The basic rate of income tax' }),
+      screen.getByText('Choosing this replaces Put up the basic rate of income tax (22%).'),
     ).toBeInTheDocument();
+    expect(screen.queryByText(/Day-to-day budget/)).toBeNull();
+    expect(screen.queryByRole('button', { name: /^Undo/ })).toBeNull();
+    for (const radio of screen.getAllByRole('radio')) expect(radio).not.toBeChecked();
+    other.unmount();
+    // Set its way at none of its sizes (an old link): what it is now, and nothing checked.
+    render(
+      <LeverControl
+        lever={itbr}
+        value={3}
+        summaryYear="2029-30"
+        onChange={() => undefined}
+        displayTitle="Put up the basic rate of income tax"
+        sizes={{ values: [1, 2, 5], labels: ['Small', 'Medium', 'Large'] }}
+        compact
+      />,
+    );
+    expect(screen.getByText('Now 23%')).toBeInTheDocument();
+    for (const radio of screen.getAllByRole('radio')) expect(radio).not.toBeChecked();
   });
 
   it('badges a move past its source’s range Worked out, and says why (Phase 25)', () => {

@@ -13,7 +13,7 @@ import {
   parseGuide,
   parseGlossary,
   guideFor as guideStageFor,
-  finetuneTitles,
+  finetuneNames,
   macroCodesOf,
   suggestedSettings,
   parseReception,
@@ -145,11 +145,14 @@ export function guideFor(step: JourneyStep) {
   return guideStageFor(guide, step);
 }
 
-const FINETUNE_TITLES = finetuneTitles(finetune);
+const FINETUNE_NAMES = finetuneNames(finetune);
 
-/** The plain title a lever wears on the fine-tuning screens, when it is one of theirs. */
-export function finetuneTitle(code: string): string | undefined {
-  return FINETUNE_TITLES.get(code);
+/**
+ * The plain name a lever goes by on the fine-tuning screens, when it is one of theirs ("The main
+ * rate of VAT"; a toggle's policy title): what the review and the notes call it (Phase 26).
+ */
+export function finetuneName(code: string): string | undefined {
+  return FINETUNE_NAMES.get(code);
 }
 
 export const briefingById: ReadonlyMap<string, Briefing> = new Map(
@@ -198,7 +201,7 @@ export function groupLevers(items: Lever[]): LeverGroup[] {
     'Wealth and property',
     'Duties',
     'Budget 2025 and Spending Review decisions',
-    'Flagship programmes',
+    'New programmes',
     'Day-to-day departmental budgets',
     'Public investment',
     'Working-age benefits',

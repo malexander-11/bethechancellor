@@ -8,7 +8,7 @@ import {
   type Outcome,
   type Price,
 } from '@btc/engine';
-import { useMemo } from 'react';
+import { useDeferredValue, useMemo } from 'react';
 import { levers, vintage } from '../data';
 import { useBudget } from '../state/budget';
 import {
@@ -212,7 +212,9 @@ export function useLeverHints(): (
     outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ??
     POLICY_YEARS[POLICY_YEARS.length - 1] ??
     '';
-  const current = state.leverValues;
+  // Priced from a deferred copy of the Budget (Phase 26): a chosen size answers at once, and the
+  // resting hints, one engine run each, catch up a moment later.
+  const current = useDeferredValue(state.leverValues);
   return useMemo(() => {
     const live = outcomeOf(current);
     return (values, swapOut) => {

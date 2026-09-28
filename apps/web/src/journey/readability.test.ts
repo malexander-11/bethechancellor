@@ -6,6 +6,7 @@ import {
   finetune,
   guide,
   interventions,
+  levers,
   ministers,
   options,
   pm,
@@ -105,9 +106,11 @@ const SETS: Record<string, readonly string[]> = {
       ...s.groups.map((g) => g.label),
       ...s.notes.map((n) => n.text),
     ]),
-    ...curated.map((i) => i.title),
+    ...curated.flatMap((i) => [...(i.name ? [i.name] : []), ...i.policies.map((p) => p.title)]),
+    // A fold's subheads (Phase 26): the families of the levers it holds.
+    ...new Set(curated.map((i) => levers.find((l) => l.code === i.code)?.group ?? '')),
   ],
-  'the fine-tuning advice': curated.map((i) => i.advice.text),
+  'the fine-tuning advice': curated.flatMap((i) => i.policies.map((p) => p.advice.text)),
   'the priorities': pm.priorities.flatMap((p) => [
     p.title,
     p.purpose,

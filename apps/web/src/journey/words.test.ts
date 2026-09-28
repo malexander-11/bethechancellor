@@ -105,9 +105,10 @@ describe('word budgets: one line visible, the rest a click away', () => {
     for (const o of all) expect(words(o.title), o.title).toBeLessThanOrEqual(12);
   });
 
-  it('gives every curated lever a plain title and one adviser line that the engine bears out', () => {
-    // The fine-tuning screens (Phase 24): the same rule as the options' lines, judged at the move
-    // the line has in mind. Big is £5bn or more, small £1bn or less, on the engine's arithmetic.
+  it('gives every step-4 policy a plain title and one adviser line the engine bears out at every size', () => {
+    // The fine-tuning screens (Phase 24): the same rule as the options' lines, judged at every size
+    // a policy offers (Phase 26). Big is £5bn or more even at the smallest size; small is £1bn or
+    // less even at the largest, on the engine's arithmetic.
     const headroomOf = (leverValues: Record<string, number>) =>
       computeOutcome({ vintage, rules, levers, settings: { leverValues } }).verdicts.find(
         (v) => v.kind === 'currentBudget',
@@ -119,16 +120,30 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const items = finetuneItems(finetune);
     expect(items).toHaveLength(48);
     for (const item of items) {
-      const text = item.advice.text;
-      expect(words(text), `${item.code}: "${text}"`).toBeLessThanOrEqual(12);
-      expect(text, item.code).not.toMatch(FIGURE);
-      expect(words(item.title), item.title).toBeLessThanOrEqual(12);
-      const size = Math.abs(headroomOf({ [item.code]: item.move }) - base);
-      const bn = (size / 1000).toFixed(1);
-      if (BIG.test(text))
-        expect(size, `${item.code} says big at £${bn}bn`).toBeGreaterThanOrEqual(5000);
-      if (SMALL.test(text))
-        expect(size, `${item.code} says small at £${bn}bn`).toBeLessThanOrEqual(1000);
+      if (item.name) expect(words(item.name), item.name).toBeLessThanOrEqual(12);
+      for (const policy of item.policies) {
+        const text = policy.advice.text;
+        expect(words(text), `${policy.title}: "${text}"`).toBeLessThanOrEqual(12);
+        expect(text, policy.title).not.toMatch(FIGURE);
+        expect(words(policy.title), policy.title).toBeLessThanOrEqual(12);
+        const sizes = policy.sizes.map((size) =>
+          Math.abs(headroomOf({ [item.code]: size }) - base),
+        );
+        const least = Math.min(...sizes);
+        const most = Math.max(...sizes);
+        if (BIG.test(text)) {
+          expect(
+            least,
+            `${policy.title} says big at £${(least / 1000).toFixed(1)}bn`,
+          ).toBeGreaterThanOrEqual(5000);
+        }
+        if (SMALL.test(text)) {
+          expect(
+            most,
+            `${policy.title} says small at £${(most / 1000).toFixed(1)}bn`,
+          ).toBeLessThanOrEqual(1000);
+        }
+      }
     }
     for (const side of [finetune.tax, finetune.spending]) {
       expect(words(side.title), side.title).toBeLessThanOrEqual(4);
@@ -165,7 +180,7 @@ describe('word budgets: one line visible, the rest a click away', () => {
       /\b(static|rows?|penny row|Bank Rate|front-loaded|steady-state|settlement|the benches)\b/i;
     const LOCK = /\bthe lock\b/i;
     const lines: string[] = [
-      ...finetuneItems(finetune).map((i) => i.advice.text),
+      ...finetuneItems(finetune).flatMap((i) => i.policies.map((p) => p.advice.text)),
       ...options.deliver.map((o) => o.advice.text),
       ...options.deliver.flatMap((o) => (o.conflicts ?? []).map((c) => c.text)),
     ];
@@ -185,8 +200,8 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const all = options.deliver;
     const curated = finetuneItems(finetune);
     const read: string[] = [
-      ...curated.map((i) => i.title),
-      ...curated.map((i) => i.advice.text),
+      ...curated.flatMap((i) => [...(i.name ? [i.name] : []), ...i.policies.map((p) => p.title)]),
+      ...curated.flatMap((i) => i.policies.map((p) => p.advice.text)),
       ...[finetune.tax, finetune.spending].flatMap((s) => [
         s.title,
         s.lead,

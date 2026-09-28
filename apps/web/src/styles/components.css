@@ -1323,6 +1323,97 @@ label.choice {
   margin-top: 4px;
 }
 
+/*
+ * A policy's sizes (Phase 26): Small, Medium and Large as native radios, each a box of at least
+ * 44px with its setting beneath its name; the chosen one takes the accent, as a picked choice does.
+ */
+.lever__sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  margin: 8px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.lever__size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 96px;
+  min-height: 44px;
+  padding: 4px 12px 4px 10px;
+  border: 1px solid var(--axis);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.lever__size--on {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  background: var(--accent-wash);
+}
+
+.lever__size input[type='radio'] {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+.lever__size-name,
+.lever__size-level {
+  display: block;
+  line-height: 1.25;
+}
+
+.lever__size-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.lever__size-level {
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The lever set the other way: what choosing here would replace, in plain ink, with no price. */
+.lever__replaces {
+  color: var(--ink-2);
+  font-weight: 400;
+}
+
+/* Set its way at none of its sizes (an old link, a flagship left behind): what it is now. */
+.lever__now {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+/* A lever a flagship the player chose holds (Phase 26): one line, and the way back to it. */
+.lever__held {
+  margin: 6px 0 0;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+/* A fold's families (Phase 26): small-caps subheads, so twenty-odd policies stay scannable. */
+.tune__family + .tune__family {
+  margin-top: 8px;
+}
+
+.tune__family-title {
+  margin: 12px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
 /* "More policies": the way into the desk, one line. */
 .more-link {
   margin: 4px 0 12px;

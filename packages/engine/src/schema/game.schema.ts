@@ -359,20 +359,32 @@ export const optionsFileSchema = z
 /* --------------------------------------------------------- fine-tuning */
 
 /**
- * One lever on the fine-tuning screens (Phase 24, ADR-0025): a real control the player moves,
- * hand-picked, under a plain title, with one line from the screen's adviser judging the move the
- * adviser has in mind. `move` is that move: a toggle switched on (1), or a slider's usual step. It
- * is never applied for the player; it is what the line's judgement is tested against (a size word
- * must match the engine's own figure at `move`, words.test.ts), and what the card's price reads
- * before the lever has moved. No figure is typed, and the line cites what it rests on.
+ * One policy on the fine-tuning screens (Phase 26, ADR-0027): a way to move a lever, under a plain
+ * title that says what it does ("Put up VAT"), with the sizes it comes in and one line from the
+ * screen's adviser. `sizes` are settings of the lever, smallest first and all on one side of where
+ * it rests: one is a tick (a toggle switched on, or a single setting), two are Small and Large,
+ * three are Small, Medium and Large. By default they are the usual step, twice it and five times
+ * it, capped at the lever's range; where HMRC publishes points, they sit on those. The line is
+ * tested at every size (a size word must hold for all of them, words.test.ts); no figure is typed,
+ * and it cites what it rests on.
+ */
+export const finetunePolicySchema = z.strictObject({
+  title: z.string().min(1).max(80),
+  sizes: z.array(z.number()).min(1).max(3),
+  advice: simulatedLineSchema.extend({ sources: z.array(sourceRefSchema).min(1) }),
+});
+
+/**
+ * One lever on the fine-tuning screens (Phase 24, ADR-0025; policies since Phase 26): the policies
+ * it offers, the usual direction first, and the other way (if the lever moves both ways) second.
+ * Choosing one clears the other, since both set the same lever. `name` is the lever itself, plainly,
+ * for the review and the notes ("The main rate of VAT"); a toggle's is its policy's title.
  */
 export const finetuneItemSchema = z.strictObject({
   /** The lever's code: a live tax lever on the tax side, a spending or welfare one on the other. */
   code: z.string().min(1),
-  /** What the lever is, plainly: "The basic rate of income tax". */
-  title: z.string().min(1).max(80),
-  move: z.number(),
-  advice: simulatedLineSchema.extend({ sources: z.array(sourceRefSchema).min(1) }),
+  name: z.string().min(1).max(80).optional(),
+  policies: z.array(finetunePolicySchema).min(1).max(2),
 });
 
 /** A group of levers on one screen: who pays, on the tax side; what the money is for, on the other. */

@@ -553,10 +553,12 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   if (ds.finetune) {
-    // Step 4's curated levers (Phase 24, ADR-0025). Each is a live lever on its own screen's side
-    // of the Budget; the move its adviser's line judges is a setting the control can reach and
-    // not where the lever rests; a tax sits in the who-pays group its incidence tag names; and
-    // the screen's adviser exists and speaks on that step.
+    // Step 4's levers (Phase 24, ADR-0025), chosen as policies since Phase 26 (ADR-0027). Each is
+    // a live lever on its own screen's side of the Budget; every size a policy offers is a setting
+    // the lever can reach, not where it rests, and a policy's sizes go one way and grow; two
+    // policies on a lever go opposite ways; a lever that is not a toggle has a plain name; a tax
+    // sits in the who-pays group its incidence tag names; a lever not on the table comes after the
+    // rest of its group; and the screen's adviser exists and speaks on that step.
     const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
     const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
     for (const side of FINETUNE_SIDES) {
@@ -572,6 +574,7 @@ export function validateDataset(ds: Dataset): string[] {
         if (side === 'tax' && !payers) {
           problems.push(`tax group ${group.id} is not one of the who-pays groups`);
         }
+        let pastTheTable: string | undefined;
         for (const item of group.items) {
           const lever = byCode.get(item.code);
           if (!lever) {
@@ -583,15 +586,40 @@ export function validateDataset(ds: Dataset): string[] {
           if (finetuneSideOf(lever) !== side) {
             problems.push(`the ${side} screen offers ${item.code}, a ${lever.category} lever`);
           }
-          const setting = settingProblem(lever, item.move);
-          if (setting === 'range') {
-            problems.push(
-              `the line on ${item.code} judges ${item.move}, outside the lever's range`,
-            );
-          } else if (setting === 'default') {
-            problems.push(`the line on ${item.code} judges ${item.move}, where the lever rests`);
-          } else if (setting === 'steps') {
-            problems.push(`the line on ${item.code} judges ${item.move}, off the control's steps`);
+          if (lever.notOnTheTable) pastTheTable ??= item.code;
+          else if (pastTheTable) {
+            problems.push(`${item.code} comes after ${pastTheTable}, which is not on the table`);
+          }
+          const isToggle = lever.control.kind === 'toggle';
+          if (!isToggle && !item.name) problems.push(`lever ${item.code} needs a plain name`);
+          const ways = item.policies.map((policy) => {
+            const said = `policy “${policy.title}”`;
+            let way = 0;
+            let reach = 0;
+            for (const size of policy.sizes) {
+              const setting = settingProblem(lever, size);
+              if (setting === 'range') {
+                problems.push(`${said} offers ${size}, outside the lever's range`);
+              } else if (setting === 'default') {
+                problems.push(`${said} offers ${size}, where the lever rests`);
+              } else if (setting === 'steps') {
+                problems.push(`${said} offers ${size}, off the control's steps`);
+              }
+              const moved = size - lever.control.default;
+              if (way !== 0 && Math.sign(moved) !== way) {
+                problems.push(`${said} goes both ways`);
+              }
+              if (Math.abs(moved) <= reach) problems.push(`${said} has sizes that do not grow`);
+              way = way || Math.sign(moved);
+              reach = Math.abs(moved);
+            }
+            if (isToggle && policy.sizes.length !== 1) {
+              problems.push(`${said} is a toggle: it is switched on, in one size`);
+            }
+            return way;
+          });
+          if (ways.length === 2 && ways[0] === ways[1]) {
+            problems.push(`lever ${item.code} has two policies the same way`);
           }
           if (side === 'tax' && payers && ds.incidence) {
             const pays = ds.incidence.levers[item.code];

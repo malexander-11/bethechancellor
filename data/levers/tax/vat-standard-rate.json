@@ -23,7 +23,7 @@
     "kind": "slider",
     "unit": "pp",
     "min": -5,
-    "max": 3,
+    "max": 5,
     "step": 1,
     "default": 0,
     "formatLabel": "percentage points",

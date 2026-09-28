@@ -89,7 +89,7 @@ describe('wider feedback (Phase 25, R21)', () => {
 
   it('says a word on climate where a registered source does, both ways', () => {
     const advice = (code: string) =>
-      finetuneItems(ds.finetune).find((i) => i.code === code)?.advice;
+      finetuneItems(ds.finetune).find((i) => i.code === code)?.policies[0]?.advice;
     const cites = (code: string, id: string) =>
       expect(
         advice(code)?.sources.map((s) => s.sourceId),
@@ -103,8 +103,8 @@ describe('wider feedback (Phase 25, R21)', () => {
     const cut = ds.options.deliver.find((o) => o.id === 'fuel-duty-cut');
     expect(cut?.advice.text).toMatch(/emissions edge up/);
     expect(cut?.advice.sources.map((s) => s.sourceId)).toContain('hmrc-tiin-fuel-duty-2026-27');
-    // A few pounds a ticket is too small to change emissions (HMRC).
-    expect(advice('apd')?.text).toMatch(/too small to change emissions either way/);
+    // A few pounds a ticket barely changes emissions (HMRC).
+    expect(advice('apd')?.text).toMatch(/barely changes emissions either way/);
     cites('apd', 'hmrc-tiin-apd-2026-27');
     // Car tax's standard rate is the same whatever a car emits (gov.uk).
     expect(advice('ved')?.text).toMatch(/whatever it emits/);

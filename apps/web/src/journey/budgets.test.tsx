@@ -8,7 +8,7 @@ const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 // A game at the review on today's estimate, two priorities delivered and the levy raised: every
 // screen renders in its working state, and the review and the close have something to say.
 const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_hscl.1';
-// The same game with one folded lever moved in every group of the fine-tuning screens, so each
+// The same game with one folded lever chosen in every group of the fine-tuning screens, so each
 // group shows four: the widest those screens get on arrival.
 const TUNED = GAME.replace(
   'L=moj.10_dip47.1_hscl.1',
@@ -50,10 +50,11 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/budget/deliver', 220, WIDEST],
   ['/budget/deliver/2', 220, WIDEST],
   ['/budget/deliver/3', 220, WIDEST],
-  ['/finetune/tax', 665, GAME],
-  ['/finetune/tax', 835, TUNED],
-  ['/finetune/spending', 645, GAME],
-  ['/finetune/spending', 830, TUNED],
+  // Measured after Phase 26's sizes (613, 778, 543 and 724 words), with a tenth to spare.
+  ['/finetune/tax', 675, GAME],
+  ['/finetune/tax', 860, TUNED],
+  ['/finetune/spending', 600, GAME],
+  ['/finetune/spending', 800, TUNED],
   ['/review', 235, GAME],
   ['/budget-day', 210, GAME],
 ];
