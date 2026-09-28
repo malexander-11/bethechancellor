@@ -24,39 +24,78 @@ const lever = (code: string) => {
 };
 
 /**
- * The twenty-eight taxes, in the order the tax screen shows them (Phase 24, ADR-0025). Phase 25
- * added the two cuts a Chancellor actually faces this autumn: keeping VAT off electricity (third in
- * "Everyone", the main VAT rate folded) and freezing fuel duty (first for drivers, last year's
- * cancelled rise folded).
+ * The taxes, in the order the tax screen shows them (Phase 24, ADR-0025). Phase 25 added the two
+ * cuts a Chancellor actually faces this autumn: keeping VAT off electricity (third in "Everyone",
+ * the main VAT rate folded) and freezing fuel duty (first for drivers, last year's cancelled rise
+ * folded). Phase 26 folds every other tax toggle into its who-pays group, after the hand-picked
+ * ones and before any lever not on the table (ADR-0027).
  */
 const TAX_CODES = [
-  ['everyone', ['hscl', 'itbr', 'vatelec', 'vats', 'sugsalt', 'ipt', 'hmrc2']],
-  ['best-off', ['cgtalign', 'nicuel', 'pens30', 'it50', 'wealth2']],
-  ['business', ['nicpen', 'nicer', 'qelevy', 'ct', 'banklevy']],
-  ['savers-owners', ['ctgh', 'cgtdth', 'rnrb', 'nicrent', 'iinc2']],
-  ['duties', ['fuelfrz', 'gam2', 'tob', 'ved', 'apd', 'rvfuel']],
-] as const;
+  [
+    'everyone',
+    // prettier-ignore
+    [
+      'hscl', 'itbr', 'vatelec', 'vats', 'sugsalt', 'ipt', 'hmrc2',
+      'cta', 'nicspa', 'vatgas', 'vat1z', 'rvfrz', 'rvsal',
+      'vatfood', 'vatnrg', 'vattrn', 'vatkids', 'vatbook',
+    ],
+  ],
+  [
+    'best-off',
+    // prettier-ignore
+    [
+      'cgtalign', 'nicuel', 'pens30', 'it50', 'wealth2',
+      'pens20', 'pslump', 'nicllp', 'carried', 'cgtexit', 'wealth',
+    ],
+  ],
+  ['business', ['nicpen', 'nicer', 'qelevy', 'ct', 'banklevy', 'bank5', 'epl2', 'vatthr']],
+  [
+    'savers-owners',
+    // prettier-ignore
+    [
+      'ctgh', 'cgtdth', 'rnrb', 'nicrent', 'iinc2',
+      'sdltabol', 'hvcts15', 'rvcgt', 'rvinv', 'rvapr', 'rvhrad',
+      'cgtprr', 'vathome',
+    ],
+  ],
+  ['duties', ['fuelfrz', 'gam2', 'tob', 'ved', 'apd', 'rvfuel', 'rvgam', 'vatmot']],
+];
 
 const SPENDING_CODES = [
-  ['services', ['dhsc', 'dfe', 'mod', 'home', 'moj', 'mhclg', 'dft', 'fcdo', 'otherd']],
-  // Phase 25: the defence plan's gap, already on the desk, joins investment.
-  ['investment', ['cdel', 'dip47']],
-  ['benefits', ['wpens', 'wuc', 'wdis', 'woth']],
+  [
+    'services',
+    // prettier-ignore
+    [
+      'dhsc', 'dfe', 'mod', 'home', 'moj', 'mhclg', 'dft', 'fcdo', 'otherd',
+      'ufsm', 'bus2', 'airet',
+    ],
+  ],
+  // Phase 25: the defence plan's gap, already on the desk, joins investment; Phase 26: council
+  // homes fill its third place on show, and the 3% path waits in the fold.
+  ['investment', ['cdel', 'dip47', 'socrent', 'def3']],
+  [
+    'benefits',
+    // prettier-ignore
+    [
+      'wpens', 'wuc', 'wdis', 'woth',
+      'ucfloor', 'lha30', 'uitime', 'csjmh', 'dlakids', 'cpilock', 'pensmth',
+    ],
+  ],
   ['decisions', ['rvpip', 'rveff', 'rv2ch', 'rvwfp', 'rvplan2']],
-] as const;
+];
 
 describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
-  it('offers twenty-eight taxes in five who-pays groups, and twenty spending levers in four', () => {
+  it('offers fifty-eight taxes in five who-pays groups, and thirty-two spending levers in four', () => {
     expect(file.tax.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(TAX_CODES);
     expect(file.spending.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(
       SPENDING_CODES,
     );
-    expect(finetuneItems(file, 'tax')).toHaveLength(28);
-    expect(finetuneItems(file, 'spending')).toHaveLength(20);
+    expect(finetuneItems(file, 'tax')).toHaveLength(58);
+    expect(finetuneItems(file, 'spending')).toHaveLength(32);
     // The spending screen says how long the settlements run, the squeeze already after them, and
     // whose budgets most of these are (Phase 25).
     expect(file.spending.notes.map((n) => n.badge)).toEqual(['simulated', 'direct', 'commentary']);
-    expect(finetuneItems(file)).toHaveLength(48);
+    expect(finetuneItems(file)).toHaveLength(90);
     expect(FINETUNE_SIDES).toEqual(['tax', 'spending']);
   });
 

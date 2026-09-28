@@ -133,13 +133,6 @@
       ]
     }
   ],
-  "interactions": [
-    {
-      "withLever": "wealth-tax-above-ten-million",
-      "text": "Two wealth taxes on the same £10 million threshold. Pick one design: 1% on the Commission’s figures or 2% on the campaign’s.",
-      "severity": "warn"
-    }
-  ],
   "status": "reviewed",
   "reviewedOn": "2026-09-23"
 }

@@ -121,11 +121,6 @@
       "withLever": "vat-standard-rate",
       "text": "The relief cost is valued at today's 20% standard rate; changing the standard rate changes what these toggles would raise.",
       "severity": "info"
-    },
-    {
-      "withLever": "vat-off-domestic-gas",
-      "text": "They pull opposite ways: this takes all domestic fuel and power to 20%, that takes gas to 0%. Switch on one or the other.",
-      "severity": "warn"
     }
   ]
 }

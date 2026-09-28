@@ -54,9 +54,10 @@ describe('fine-tune tax and spend: the curated levers', () => {
       'tune-savers-owners',
       'tune-duties',
     ]);
-    // A lever that moves both ways offers two policies, one each way (Phase 26).
-    expect(group(/^Everyone 10 policies/)).toBeInTheDocument();
-    expect(group(/^Drivers, smokers, gamblers and flyers 7 policies/)).toBeInTheDocument();
+    // A lever that moves both ways offers two policies, one each way, and every other tax toggle
+    // waits in its group's fold (Phase 26).
+    expect(group(/^Everyone 21 policies/)).toBeInTheDocument();
+    expect(group(/^Drivers, smokers, gamblers and flyers 9 policies/)).toBeInTheDocument();
     // Stacked, not tabbed; one primary button; every lever with its adviser's line.
     expect(screen.queryByRole('tab')).toBeNull();
     expect(container.querySelectorAll('.btn--primary')).toHaveLength(1);
@@ -92,10 +93,16 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(
       within(fold).getByRole('heading', { name: 'Cut the basic rate of income tax' }),
     ).toBeInTheDocument();
-    // Its policies sit under their levers' families.
+    // Its policies sit under their levers' families, the toggles that joined among them.
     expect(within(fold).getByRole('heading', { name: 'Income tax' })).toBeInTheDocument();
     expect(within(fold).getByRole('heading', { name: 'VAT' })).toBeInTheDocument();
-    expect(container.querySelectorAll('.lever--curated')).toHaveLength(22);
+    expect(
+      within(fold).getByRole('heading', { name: 'Budget 2025 decisions' }),
+    ).toBeInTheDocument();
+    expect(
+      within(fold).getByRole('checkbox', { name: 'End the threshold freeze early' }),
+    ).toBeInTheDocument();
+    expect(container.querySelectorAll('.lever--curated')).toHaveLength(33);
   });
 
   it('prices a policy before it is chosen, then says what it does, and the bar keeps score', async () => {
@@ -169,7 +176,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
   it('keeps a policy chosen inside the fold where it is, and shows it at the top next time', () => {
     const first = at(`/finetune/tax?${BASE}&${GAME}`);
     const fold = openFold(/^Everyone/);
-    expect(within(fold).getByText('7 more policies')).toBeInTheDocument();
+    expect(within(fold).getByText('18 more policies')).toBeInTheDocument();
     const premium = cardOf(
       within(fold).getByRole('heading', { name: 'Put up insurance premium tax' }),
     );
@@ -182,7 +189,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     // The next visit finds it chosen, and on show; its other way stays in the fold.
     at(`/finetune/tax?${BASE}&${GAME}&L=ipt.2`);
     const again = group(/^Everyone 1 chosen/);
-    expect(within(again).getByText('6 more policies')).toBeInTheDocument();
+    expect(within(again).getByText('17 more policies')).toBeInTheDocument();
     expect(
       within(policy('Put up insurance premium tax')).getByRole('radio', { name: 'Small 14%' }),
     ).toBeChecked();
@@ -269,10 +276,16 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(h1('Fine-tune spending')).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
     expect(group(/^Public services 1 chosen · costs £\d\.\dbn/)).toBeInTheDocument();
-    expect(group(/^Investment 3 policies/)).toBeInTheDocument();
-    // The defence plan's gap is on show before any priority is chosen (Phase 25).
+    expect(group(/^Investment 5 policies/)).toBeInTheDocument();
+    // The defence plan's gap is on show before any priority is chosen (Phase 25), and council
+    // homes fill the group's third place (Phase 26).
     expect(
       screen.getByRole('checkbox', { name: 'Fund the defence plan’s gap' }),
+    ).toBeInTheDocument();
+    expect(
+      within(group(/^Investment/)).getByRole('checkbox', {
+        name: 'More council and social rent homes',
+      }),
     ).toBeInTheDocument();
     // The lead's hundred and twenty characters cannot say how long the deals run: a note does.
     expect(
@@ -283,7 +296,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(
       screen.getByText(/^Most public services here are England’s budgets\./),
     ).toBeInTheDocument();
-    expect(group(/^Benefits 8 policies/)).toBeInTheDocument();
+    expect(group(/^Benefits 15 policies/)).toBeInTheDocument();
     expect(group(/^Last year’s decisions 5 policies/)).toBeInTheDocument();
     // The prisons budget is where the flagship the player chose set it: one line, and the way
     // back to that flagship; no card that could quietly undo it (Phase 26).
@@ -348,6 +361,29 @@ describe('fine-tune tax and spend: the curated levers', () => {
     const stray = policy('Spend more on health and social care');
     expect(within(stray).getByText('Now 3% more')).toBeInTheDocument();
     for (const radio of within(stray).getAllByRole('radio')) expect(radio).not.toBeChecked();
+  });
+
+  it('offers the way back to a flagship, not a swap, when the flagship holds the other of a pair', () => {
+    // The 3% path, chosen for defence on step 3, holds its lever; the plan's gap counts some of the
+    // same money, so step 4 cannot swap it in behind the flagship's back (Phase 26).
+    at(`/finetune/spending?${BASE}&${GAME}&L=def3.1`);
+    const gap = screen.getByRole('checkbox', { name: 'Fund the defence plan’s gap' });
+    const card = cardOf(gap);
+    expect(gap).toHaveAttribute('aria-disabled', 'true');
+    expect(gap).toHaveAccessibleDescription(
+      /^You can’t have both\. “Defence at 3% of GDP now, not in 2030-31” is in your flagship policies\./,
+    );
+    expect(within(card).queryByRole('button', { name: /Swap them/ })).toBeNull();
+    expect(within(card).getByRole('link', { name: /Change it/ })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/budget\/deliver\/2\?/),
+    );
+    // Nothing to price: there is no swap.
+    expect(within(card).queryByText(/would (cost|save|raise)/)).toBeNull();
+    // The 3% path itself is one line in the group, not a card.
+    const held = group(/^Investment/).querySelector('.lever--held');
+    expect(held?.textContent).toMatch(/In your flagship policies/);
+    expect(held && within(held as HTMLElement).queryAllByRole('checkbox')).toHaveLength(0);
   });
 
   it('leads from the spending screen to the review, the package intact', async () => {

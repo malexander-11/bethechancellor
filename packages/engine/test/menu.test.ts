@@ -262,17 +262,17 @@ describe('the Budget 2026 menu', () => {
     if (align.costing.kind !== 'schedule') throw new Error('alignment is a schedule');
     expect(align.costing.caveats.some((c) => /package, not a rate change/.test(c))).toBe(true);
     // The cards that count the same money cannot be chosen with it (Phase 25); the ones that only
-    // overlap warn.
+    // overlap warn. Reversing the 2024 rise sets the same rates the other way, so it is one or the
+    // other on step 4 (Phase 26).
     const severity = (s: string) =>
       (align.interactions ?? []).filter((i) => i.severity === s).map((i) => i.withLever);
     expect(severity('excludes').sort()).toEqual([
       'cgt-exit-charge',
       'cgt-lower-rate',
       'cgt-on-death',
+      'reverse-cgt-rate-rise',
     ]);
-    expect(severity('warn')).toEqual(
-      expect.arrayContaining(['cgt-higher-rate', 'reverse-cgt-rate-rise']),
-    );
+    expect(severity('warn')).toEqual(expect.arrayContaining(['cgt-higher-rate']));
     expect(align.considerations.some((c) => c.id === 'cgt-behaviour')).toBe(true);
   });
 
@@ -338,13 +338,13 @@ describe('the Budget 2026 menu', () => {
     expect(got).toBeCloseTo(want, -1);
     expect(got).toBeGreaterThan(effectOf({ pens30: 1 }, 'pens30', '2029-30').receipts * 5);
     expect(effectOf({ pens20: 1 }, 'pens20', '2026-27').receipts).toBe(0);
-    // Two designs for one relief: each warns against the other.
-    expect(
-      (lever('pens20').interactions ?? []).some((i) => i.withLever === 'flat-rate-pension-relief'),
-    ).toBe(true);
-    expect(
-      (lever('pens30').interactions ?? []).some((i) => i.withLever === 'basic-rate-pension-relief'),
-    ).toBe(true);
+    // Two designs for one relief: one or the other (Phase 26), authored once and read from both.
+    expect(excludesPartners(lever('pens20'), ds.levers).map((p) => p.lever.code)).toEqual([
+      'pens30',
+    ]);
+    expect(excludesPartners(lever('pens30'), ds.levers).map((p) => p.lever.code)).toEqual([
+      'pens20',
+    ]);
   });
 
   it('doubling the bank levy is HMRC’s 2024-25 receipts once more, grown with corporation tax', () => {
@@ -395,15 +395,13 @@ describe('the Budget 2026 menu', () => {
     expect(lock({ wealth2: 1 })?.kept).toBe(true);
   });
 
-  it('the two wealth-tax designs warn against each other and the 2% card is drawn on by the OBR draw', () => {
+  it('the two wealth-tax designs are one or the other, and the 2% card is drawn on by the OBR draw', () => {
     const two = lever('wealth2');
     const one = lever('wealth');
-    expect(
-      (two.interactions ?? []).some((i) => i.withLever === one.id && i.severity === 'warn'),
-    ).toBe(true);
-    expect(
-      (one.interactions ?? []).some((i) => i.withLever === two.id && i.severity === 'warn'),
-    ).toBe(true);
+    // One tax on the same wealth, two designs (Phase 26): authored once, read from both cards.
+    expect(excludesPartners(one, ds.levers).map((p) => p.lever.code)).toEqual(['wealth2']);
+    expect(excludesPartners(two, ds.levers).map((p) => p.lever.code)).toEqual(['wealth']);
+    expect(two.interactions ?? []).toEqual([]);
     expect(two.considerations.some((c) => c.id === 'avoidance-and-emigration')).toBe(true);
     expect(two.headline).toMatch(/^Contested\./);
     expect(lever('nicrent').considerations.some((c) => c.id === 'static-not-yield')).toBe(true);
@@ -457,14 +455,14 @@ describe('the Budget 2026 menu', () => {
     );
   });
 
-  it('a smoothed earnings link breaks the triple-lock promise and warns against prices-only uprating', () => {
+  it('a smoothed earnings link breaks the triple-lock promise and is one or the other with prices-only uprating', () => {
     const lock = promiseBreaks({ pensmth: 1 }, ds.pm.promises, ds.levers).find(
       (p) => p.promise.id === 'triple-lock',
     );
     expect(lock?.kept).toBe(false);
     expect(
       (lever('pensmth').interactions ?? []).some(
-        (i) => i.withLever === lever('cpilock').id && i.severity === 'warn',
+        (i) => i.withLever === lever('cpilock').id && i.severity === 'excludes',
       ),
     ).toBe(true);
     expect(lever('pensmth').classification?.insideWelfareCap).toBe(false);
@@ -518,15 +516,13 @@ describe('the Budget 2026 menu', () => {
   it('the overlapping designs warn each other and the static figures are drawn on by the OBR draw', () => {
     const warns = (code: string) =>
       (lever(code).interactions ?? []).filter((i) => i.severity === 'warn').map((i) => i.withLever);
-    expect(warns('vat1z')).toEqual(
-      expect.arrayContaining([
-        lever('vatfood').id,
-        lever('vathome').id,
-        lever('vatkids').id,
-        lever('vatbook').id,
-        lever('vattrn').id,
-      ]),
+    // A 1% rate on every zero-rated good and 20% on one of them count the same goods twice: one
+    // or the other on step 4 (Phase 26), and the reason names the goods from either card.
+    const oneRate = excludesPartners(lever('vat1z'), ds.levers);
+    expect(oneRate.map((p) => p.lever.code).sort()).toEqual(
+      ['vatbook', 'vatfood', 'vathome', 'vatkids', 'vattrn'].sort(),
     );
+    expect(oneRate.find((p) => p.lever.code === 'vatfood')?.text).toMatch(/already covers food/);
     expect(warns('ctgh')).toContain(lever('hvcts15').id);
     expect(warns('nicuel')).toContain(lever('nica').id);
     expect(warns('sdltabol')).toContain(lever('sdlt5').id);

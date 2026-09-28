@@ -162,17 +162,21 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     // Another option is named as the option: the 3% path and a day-to-day uplift add up.
     const three = optionOverlaps(deliverOption('three-per-cent-now'), levers, new Set(), options);
     expect(three.find((o) => o.withLever.code === 'mod')?.option?.id).toBe('defence-uplift');
-    // Keeping VAT off electricity is on step 4 since Phase 25, so the gas card names it at once; a
-    // lever nobody offers is mentioned once it has moved, read from either side of the pair.
+    // Keeping VAT off electricity (Phase 25) and full VAT on home energy (Phase 26) are on step 4,
+    // so the gas card names both at once; a lever step 4 does not offer is mentioned once it has
+    // moved, read from either side of the pair.
     const gas = deliverOption('vat-off-gas');
     expect(
       optionOverlaps(gas, levers, new Set(), options, offered).map((o) => [
         o.withLever.code,
         o.active,
       ]),
-    ).toEqual([['vatelec', false]]);
-    const moved = optionOverlaps(gas, levers, new Set(['vatnrg', 'vatelec']), options, offered);
-    expect(moved.map((o) => o.withLever.code).sort()).toEqual(['vatelec', 'vatnrg']);
+    ).toEqual([
+      ['vatnrg', false],
+      ['vatelec', false],
+    ]);
+    const moved = optionOverlaps(gas, levers, new Set(['vatr', 'vatelec']), options, offered);
+    expect(moved.map((o) => o.withLever.code).sort()).toEqual(['vatelec', 'vatnrg', 'vatr']);
     // A pair authored as a conflict is not an overlap as well: the conflict says it.
     expect(three.some((o) => o.withLever.code === 'dip47')).toBe(false);
   });

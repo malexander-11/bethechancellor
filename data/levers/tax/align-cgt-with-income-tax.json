@@ -139,8 +139,8 @@
     },
     {
       "withLever": "reverse-cgt-rate-rise",
-      "text": "Reversing the 2024 rise while aligning rates is contradictory: the £2.5bn netted off here would come back.",
-      "severity": "warn"
+      "text": "Both set the main rates of capital gains tax from opposite ends: one takes them back to 10% and 20%, the other up to income tax rates.",
+      "severity": "excludes"
     },
     {
       "withLever": "badr-rate",

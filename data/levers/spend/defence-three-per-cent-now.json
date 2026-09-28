@@ -66,7 +66,7 @@
           "2027-28": 2.64,
           "2028-29": 2.76,
           "2029-30": 2.88,
-          "2030-31": 3.0
+          "2030-31": 3
         }
       },
       "note": "The OBR publishes the two ends of the path, 2.4% in 2025-26 and 3.0% in 2030-31, not the years between. Those are filled in by straight-line interpolation, which is our assumption, not the OBR's. The cost is then (3% − that share) × nominal GDP, which reaches nought in 2030-31 because the forecast gets there anyway."
@@ -139,7 +139,7 @@
     {
       "withLever": "defence-investment-plan-gap",
       "text": "The £4.7bn the plan's explainer still has to find is part of getting to 3%; funding both counts some of the same money twice.",
-      "severity": "info"
+      "severity": "excludes"
     }
   ],
   "status": "reviewed",

@@ -160,7 +160,7 @@
     {
       "withLever": "proceed-with-pip-changes",
       "text": "Two PIP reforms on the same caseload; the CSJ package includes the people the Spring 2025 changes would have affected.",
-      "severity": "warn"
+      "severity": "excludes"
     },
     {
       "withLever": "disability-benefits",

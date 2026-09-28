@@ -119,8 +119,8 @@
   "interactions": [
     {
       "withLever": "triple-lock-to-cpi",
-      "text": "Two replacements for the triple lock. Pick one: prices alone saves more; a smoothed earnings link keeps pensions rising with pay.",
-      "severity": "warn"
+      "text": "Two replacements for the triple lock: prices alone saves more; a smoothed earnings link keeps pensions rising with pay.",
+      "severity": "excludes"
     }
   ],
   "status": "reviewed",

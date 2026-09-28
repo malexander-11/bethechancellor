@@ -142,7 +142,7 @@
     {
       "withLever": "reverse-investment-income-rises",
       "text": "Reversing the first 2 points and adding a second makes no sense together; the two cancel.",
-      "severity": "warn"
+      "severity": "excludes"
     }
   ]
 }

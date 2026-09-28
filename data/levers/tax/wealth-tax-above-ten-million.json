@@ -165,8 +165,8 @@
   "interactions": [
     {
       "withLever": "wealth-tax-two-per-cent",
-      "text": "Two wealth taxes on the same £10 million threshold. Pick one design: 1% on the Commission’s figures or 2% on the campaign’s.",
-      "severity": "warn"
+      "text": "Two wealth taxes on the same £10 million threshold: 1% on the Commission’s figures or 2% on the campaign’s. Together they would tax the same wealth twice.",
+      "severity": "excludes"
     }
   ]
 }

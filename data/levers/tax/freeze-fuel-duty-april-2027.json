@@ -134,7 +134,7 @@
     {
       "withLever": "reverse-fuel-duty-freeze",
       "text": "Adding back last year's cancelled rise while freezing this year's pulls the same duty both ways.",
-      "severity": "warn"
+      "severity": "excludes"
     }
   ],
   "status": "reviewed",

@@ -206,6 +206,216 @@
                 }
               }
             ]
+          },
+          {
+            "code": "cta",
+            "policies": [
+              {
+                "title": "A child tax allowance for under-fives",
+                "sizes": [1],
+                "advice": {
+                  "text": "Starts in 2028; parents who pay no income tax gain nothing.",
+                  "sources": [
+                    {
+                      "sourceId": "onward-family-support-2026"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "nicspa",
+            "policies": [
+              {
+                "title": "Charge National Insurance to workers over state pension age",
+                "sizes": [1],
+                "advice": {
+                  "text": "Some older workers would cut their hours or stop.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-tax-reliefs-quality-report"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vatgas",
+            "policies": [
+              {
+                "title": "Take VAT off gas too",
+                "sizes": [1],
+                "advice": {
+                  "text": "Small; every home heated by gas or oil gains.",
+                  "sources": [
+                    {
+                      "sourceId": "govuk-vat-electricity-cut-2026"
+                    },
+                    {
+                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vat1z",
+            "policies": [
+              {
+                "title": "Charge 1% VAT on everything now zero-rated",
+                "sizes": [1],
+                "advice": {
+                  "text": "A new VAT rate on food and children’s clothes, paid by everyone.",
+                  "sources": [
+                    {
+                      "sourceId": "ifs-green-budget-2025"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "rvfrz",
+            "policies": [
+              {
+                "title": "End the threshold freeze early",
+                "sizes": [1],
+                "advice": {
+                  "text": "Big money back to every taxpayer, from 2028.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-budget-2025-table-4-1"
+                    },
+                    {
+                      "sourceId": "obr-efo-2026-03"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "rvsal",
+            "policies": [
+              {
+                "title": "Drop the £2,000 cap on salary-sacrifice pension contributions",
+                "sizes": [1],
+                "advice": {
+                  "text": "Nothing changes until 2029; then pension savers keep their tax break.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-budget-2025-table-4-1"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vatfood",
+            "policies": [
+              {
+                "title": "Charge VAT on food",
+                "sizes": [1],
+                "advice": {
+                  "text": "Big money; food is a bigger share of poorer families’ spending.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                    },
+                    {
+                      "sourceId": "ifs-green-budget-2025"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vatnrg",
+            "policies": [
+              {
+                "title": "Charge full VAT on home energy",
+                "sizes": [1],
+                "advice": {
+                  "text": "Big money, and it reverses this autumn’s cut on electricity.",
+                  "sources": [
+                    {
+                      "sourceId": "govuk-vat-electricity-cut-2026"
+                    },
+                    {
+                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vattrn",
+            "policies": [
+              {
+                "title": "Charge VAT on public transport fares",
+                "sizes": [1],
+                "advice": {
+                  "text": "Big money; bus and train users pay it on every fare.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vatkids",
+            "policies": [
+              {
+                "title": "Charge VAT on children’s clothes",
+                "sizes": [1],
+                "advice": {
+                  "text": "Parents pay it on every size their children outgrow.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vatbook",
+            "policies": [
+              {
+                "title": "Charge VAT on books, newspapers and magazines",
+                "sizes": [1],
+                "advice": {
+                  "text": "Readers pay it on every book and newspaper.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
           }
         ]
       },
@@ -303,6 +513,114 @@
                   "sources": [
                     {
                       "sourceId": "tpa-wealth-tax-2025"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "pens20",
+            "policies": [
+              {
+                "title": "Give pension tax relief at the basic rate only",
+                "sizes": [1],
+                "advice": {
+                  "text": "Big on paper; higher earners would put less into pensions.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-private-pensions-2026-07-tidy"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "pslump",
+            "policies": [
+              {
+                "title": "Cap the tax-free pension lump sum",
+                "sizes": [1],
+                "advice": {
+                  "text": "Savers would rush to take lump sums before it starts.",
+                  "sources": [
+                    {
+                      "sourceId": "demos-solving-the-tax-puzzle-2025"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "nicllp",
+            "policies": [
+              {
+                "title": "Charge National Insurance on partnership profits",
+                "sizes": [1],
+                "advice": {
+                  "text": "Most falls on the best-paid partners; some would restructure.",
+                  "sources": [
+                    {
+                      "sourceId": "centax-partnership-nics-2025"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "carried",
+            "policies": [
+              {
+                "title": "Tax fund managers’ carried interest as income",
+                "sizes": [1],
+                "advice": {
+                  "text": "Small money from a few thousand fund managers, who can move.",
+                  "sources": [
+                    {
+                      "sourceId": "tjuk-ten-tax-reforms-2026"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "cgtexit",
+            "policies": [
+              {
+                "title": "Charge capital gains tax on people who leave the UK",
+                "sizes": [1],
+                "advice": {
+                  "text": "Small, and a handful of people leaving decide what it raises.",
+                  "sources": [
+                    {
+                      "sourceId": "centax-business-owners-emigrate-2024"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "wealth",
+            "policies": [
+              {
+                "title": "A 1% yearly tax on wealth above £10 million",
+                "sizes": [1],
+                "advice": {
+                  "text": "Nothing until 2030-31, and nobody knows how the very rich would respond.",
+                  "sources": [
+                    {
+                      "sourceId": "wtc-revenue-modelling-2020"
                     }
                   ],
                   "badge": "simulated"
@@ -458,6 +776,66 @@
                 }
               }
             ]
+          },
+          {
+            "code": "bank5",
+            "policies": [
+              {
+                "title": "Raise the bank surcharge from 3% to 5%",
+                "sizes": [1],
+                "advice": {
+                  "text": "Only the largest banks pay, and they choose where profits land.",
+                  "sources": [
+                    {
+                      "sourceId": "legislation-cta-2010-s269de"
+                    },
+                    {
+                      "sourceId": "hmrc-banking-sector-receipts-2025"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "epl2",
+            "policies": [
+              {
+                "title": "Raise the energy profits levy again, as in 2024",
+                "sizes": [1],
+                "advice": {
+                  "text": "Raises less than the first round, and moves with oil prices.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-autumn-budget-2024-table-5-1"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vatthr",
+            "policies": [
+              {
+                "title": "Cut the VAT registration threshold to £30,000",
+                "sizes": [1],
+                "advice": {
+                  "text": "Over a million more traders would have to charge VAT.",
+                  "sources": [
+                    {
+                      "sourceId": "rf-call-of-duties-2025"
+                    },
+                    {
+                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
           }
         ]
       },
@@ -553,6 +931,150 @@
                     {
                       "sourceId": "hmt-budget-2025-table-4-1",
                       "table": "Table 4.1"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "sdltabol",
+            "policies": [
+              {
+                "title": "Abolish stamp duty on main homes",
+                "sizes": [1],
+                "advice": {
+                  "text": "Expensive; buyers gain, though some of it ends up in prices.",
+                  "sources": [
+                    {
+                      "sourceId": "asi-stamped-out-2025"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "hvcts15",
+            "policies": [
+              {
+                "title": "Extend the council tax surcharge to homes over £1.5 million",
+                "sizes": [1],
+                "advice": {
+                  "text": "Small money, mostly from homeowners in London and the South East.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-budget-2025-policy-costings"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "rvcgt",
+            "policies": [
+              {
+                "title": "Undo the 2024 rise in capital gains tax",
+                "sizes": [1],
+                "advice": {
+                  "text": "Sellers of shares and businesses pay less on their gains.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-autumn-budget-2024-table-5-1"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "rvinv",
+            "policies": [
+              {
+                "title": "Undo last year’s rises on dividend, savings and property income",
+                "sizes": [1],
+                "advice": {
+                  "text": "Shareholders, savers and landlords keep more of what they earn.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-budget-2025-table-4-1"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "rvapr",
+            "policies": [
+              {
+                "title": "Reverse the 2026 farm and family-business inheritance tax changes",
+                "sizes": [1],
+                "advice": {
+                  "text": "Small; farms and family firms go back to full relief.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-autumn-budget-2024-table-5-1"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "rvhrad",
+            "policies": [
+              {
+                "title": "Cut the stamp duty surcharge on additional homes back to 3%",
+                "sizes": [1],
+                "advice": {
+                  "text": "Small; landlords and second-home buyers pay less stamp duty.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-autumn-budget-2024-table-5-1"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "cgtprr",
+            "policies": [
+              {
+                "title": "Charge capital gains tax on main homes",
+                "sizes": [1],
+                "advice": {
+                  "text": "Big on paper; homeowners would move less and hold on longer.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-tax-reliefs-quality-report"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vathome",
+            "policies": [
+              {
+                "title": "Charge VAT on new homes",
+                "sizes": [1],
+                "advice": {
+                  "text": "Big money, but buyers of new homes would pay it.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-tax-reliefs-2026-01"
                     }
                   ],
                   "badge": "simulated"
@@ -711,6 +1233,45 @@
                     {
                       "sourceId": "hmrc-tiin-fuel-duty-2026-27",
                       "quote": "which will likely maintain any marginal impact of carbon emissions from increased consumption of fossil fuels that this measure may cause"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "rvgam",
+            "policies": [
+              {
+                "title": "Undo last year’s rises in online gambling duties",
+                "sizes": [1],
+                "advice": {
+                  "text": "Online casinos and betting firms pay less again.",
+                  "sources": [
+                    {
+                      "sourceId": "hmt-budget-2025-table-4-1"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "vatmot",
+            "policies": [
+              {
+                "title": "End the VAT relief on Motability cars",
+                "sizes": [1],
+                "advice": {
+                  "text": "Disabled people would pay more to lease a Motability car.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                    },
+                    {
+                      "sourceId": "onward-budget-response-2025"
                     }
                   ],
                   "badge": "simulated"
@@ -1110,6 +1671,60 @@
                 }
               }
             ]
+          },
+          {
+            "code": "ufsm",
+            "policies": [
+              {
+                "title": "Free school meals for every child",
+                "sizes": [1],
+                "advice": {
+                  "text": "England only. It pays for every place, not just meals eaten.",
+                  "sources": [
+                    {
+                      "sourceId": "dfe-school-pupils-2025-26"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "bus2",
+            "policies": [
+              {
+                "title": "Keep the £2 bus fare cap running",
+                "sizes": [1],
+                "advice": {
+                  "text": "Small, and only for buses in England outside London.",
+                  "sources": [
+                    {
+                      "sourceId": "govuk-bus-fare-cap-2027"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "airet",
+            "policies": [
+              {
+                "title": "An AI retraining programme",
+                "sizes": [1],
+                "advice": {
+                  "text": "A sum set aside; whether it works depends on delivery.",
+                  "sources": [
+                    {
+                      "sourceId": "obr-efo-2026-03"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
           }
         ]
       },
@@ -1163,6 +1778,48 @@
                   "sources": [
                     {
                       "sourceId": "govuk-dip-funding-explainer"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "socrent",
+            "policies": [
+              {
+                "title": "More council and social rent homes",
+                "sizes": [1],
+                "advice": {
+                  "text": "Counts against the debt rule only; the homes arrive over a decade.",
+                  "sources": [
+                    {
+                      "sourceId": "mhclg-sahp-2026-2036"
+                    },
+                    {
+                      "sourceId": "hmt-strong-fiscal-framework-2024-10"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "def3",
+            "policies": [
+              {
+                "title": "Defence at 3% of GDP now, not in 2030-31",
+                "sizes": [1],
+                "advice": {
+                  "text": "Costs most at first; the bill fades by 2030.",
+                  "sources": [
+                    {
+                      "sourceId": "govuk-dip-funding-explainer"
+                    },
+                    {
+                      "sourceId": "obr-efo-2026-03"
                     }
                   ],
                   "badge": "simulated"
@@ -1315,6 +1972,135 @@
                       "sourceId": "govuk-carers-allowance-scotland"
                     }
                   ]
+                }
+              }
+            ]
+          },
+          {
+            "code": "ucfloor",
+            "policies": [
+              {
+                "title": "A protected floor in Universal Credit",
+                "sizes": [1],
+                "advice": {
+                  "text": "Small, and it reaches the poorest households first.",
+                  "sources": [
+                    {
+                      "sourceId": "jrf-uc-floor-2026"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "lha30",
+            "policies": [
+              {
+                "title": "Raise housing benefit to match local rents",
+                "sizes": [1],
+                "advice": {
+                  "text": "Renters feel it, though some of it ends up with landlords.",
+                  "sources": [
+                    {
+                      "sourceId": "rf-saving-private-renters-2026"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "uitime",
+            "policies": [
+              {
+                "title": "Time-limit the new unemployment insurance to six months",
+                "sizes": [1],
+                "advice": {
+                  "text": "Saves nothing until 2030-31, then the same each year.",
+                  "sources": [
+                    {
+                      "sourceId": "ifs-green-budget-2025"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "csjmh",
+            "policies": [
+              {
+                "title": "Stop disability benefits for milder mental health conditions",
+                "sizes": [1],
+                "advice": {
+                  "text": "Big on paper; past disability reforms saved less than planned.",
+                  "sources": [
+                    {
+                      "sourceId": "dwp-timms-review-evidence-pack"
+                    },
+                    {
+                      "sourceId": "obr-efo-2026-03"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "dlakids",
+            "policies": [
+              {
+                "title": "Assess children in person for Disability Living Allowance",
+                "sizes": [1],
+                "advice": {
+                  "text": "Nothing until 2030-31; some new autism and ADHD claims would fail.",
+                  "sources": [
+                    {
+                      "sourceId": "csj-change-the-prescription-2026"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "cpilock",
+            "policies": [
+              {
+                "title": "Link the state pension to prices only, ending the triple lock",
+                "sizes": [1],
+                "advice": {
+                  "text": "Every pensioner feels it, and the gap widens each year.",
+                  "sources": [
+                    {
+                      "sourceId": "dwp-benefit-expenditure-2026"
+                    }
+                  ],
+                  "badge": "simulated"
+                }
+              }
+            ]
+          },
+          {
+            "code": "pensmth",
+            "policies": [
+              {
+                "title": "Replace the pension triple lock with an earnings link",
+                "sizes": [1],
+                "advice": {
+                  "text": "Small now and growing; pensions still rise with pay over time.",
+                  "sources": [
+                    {
+                      "sourceId": "rf-what-a-ratchet-2026"
+                    }
+                  ],
+                  "badge": "simulated"
                 }
               }
             ]

@@ -113,7 +113,7 @@
     {
       "withLever": "reverse-gambling-duty-rise",
       "text": "Reversing the first round and adding a second makes no sense together; the two cancel.",
-      "severity": "warn"
+      "severity": "excludes"
     }
   ]
 }

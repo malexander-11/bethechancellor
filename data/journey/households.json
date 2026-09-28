@@ -245,6 +245,48 @@
             ],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "vatkids",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "VAT on children’s clothes and shoes. They grow out of everything, and now all of it carries VAT.",
+            "sources": [
+              {
+                "sourceId": "hmrc-tax-reliefs-2026-01"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vattrn",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "VAT on bus and train fares. The bus is how I get to work, and every ticket costs more.",
+            "sources": [
+              {
+                "sourceId": "hmrc-tax-reliefs-2026-01"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vat1z",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "A penny in the pound of VAT on food and the children’s clothes. It is on the things we cannot cut.",
+            "sources": [
+              {
+                "sourceId": "ifs-green-budget-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
       ],
       "exposure": [
@@ -499,6 +541,34 @@
           "line": {
             "text": "Air passenger duty up. The one holiday abroad costs a bit more.",
             "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "sdltabol",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "Stamp duty scrapped on the home you live in. We were hoping to move next year; that just got easier.",
+            "sources": [
+              {
+                "sourceId": "asi-stamped-out-2025"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "cgtprr",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "Capital gains tax on our own home. If we sell to move, part of what it gained goes in tax.",
+            "sources": [
+              {
+                "sourceId": "hmrc-tax-reliefs-2026-01"
+              }
+            ],
             "badge": "simulated"
           }
         }
@@ -1152,6 +1222,20 @@
             ],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "pens20",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "Pension relief at the basic rate only. Mine halves, and the pension was the plan.",
+            "sources": [
+              {
+                "sourceId": "hmrc-private-pensions-2026-07-tidy"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
       ],
       "exposure": [
@@ -1187,27 +1271,44 @@
   },
   "reachesNone": [
     "airet",
+    "bank5",
     "banklevy",
     "brates",
+    "carried",
+    "cgtexit",
     "cta",
     "ctgh",
     "def3",
     "dft",
     "dip47",
+    "dlakids",
+    "epl2",
     "fcdo",
     "gam2",
     "hmrc2",
     "home",
+    "hvcts15",
     "mod",
     "moj",
+    "nicllp",
     "nicrent",
+    "nicspa",
     "otherd",
+    "pslump",
     "qelevy",
+    "rvapr",
     "rveff",
+    "rvgam",
+    "rvhrad",
     "rvplan2",
+    "rvsal",
     "socrent",
     "tob",
     "uitime",
+    "vatbook",
+    "vathome",
+    "vatmot",
+    "vatthr",
     "wealth",
     "wealth2",
     "woth"

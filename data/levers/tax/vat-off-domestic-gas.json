@@ -118,8 +118,8 @@
   "interactions": [
     {
       "withLever": "vat-on-domestic-energy",
-      "text": "They pull opposite ways: this takes gas to 0%, that takes all domestic fuel and power to 20%. Switch on one or the other.",
-      "severity": "warn"
+      "text": "They pull opposite ways: one takes gas to 0%, the other takes all domestic fuel and power to 20%.",
+      "severity": "excludes"
     },
     {
       "withLever": "vat-reduced-rate",
