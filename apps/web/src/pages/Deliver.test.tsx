@@ -94,7 +94,7 @@ describe('build your Budget: the ways to deliver', () => {
 
   it('choosing an option moves its levers and the bar keeps score; putting it back restores them', async () => {
     at(`/budget/deliver/2?${BASE}&${GAME}`);
-    expect(within(bar()).getByText('0 of 2 delivered')).toBeInTheDocument();
+    expect(within(bar()).getByText('0 of 2 priorities delivered')).toHaveClass('bar__short');
     expect(within(bar()).getByText(/Headroom, 2029-30/)).toBeInTheDocument();
     // No target (Phase 24): the rules are the line.
     expect(within(bar()).getByText('rules met')).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe('build your Budget: the ways to deliver', () => {
     fireEvent.click(gap());
     await waitFor(() => expect(L()).toMatch(/dip47\.1/));
     expect(barFigure()).toBe(promised);
-    expect(within(bar()).getByText('1 of 2 delivered')).toBeInTheDocument();
+    expect(within(bar()).getByText('1 of 2 priorities delivered')).toBeInTheDocument();
     expect(gap()).toBeChecked();
     // Once on, the minister behind the lever reacts, and the card prices what putting it back would
     // undo: the headroom the Budget would have without it.
@@ -119,16 +119,51 @@ describe('build your Budget: the ways to deliver', () => {
     expect(within(card).getByText(/Costs £\d+\.\dbn · without it (−|£)/)).toBeInTheDocument();
     fireEvent.click(gap());
     await waitFor(() => expect(L()).not.toMatch(/dip47/));
-    expect(within(bar()).getByText('0 of 2 delivered')).toBeInTheDocument();
+    expect(within(bar()).getByText('0 of 2 priorities delivered')).toBeInTheDocument();
   });
 
-  it('shows a lever adjusted elsewhere as neither on nor off, with where it stands', () => {
-    at(`/budget/deliver?${BASE}&${GAME}&L=moj.5`);
+  it('says which ways only make a start, and counts a ticked start as started, not delivered', async () => {
+    // Graded delivery (Phase 25): the care down-payment starts the NHS priority; the health uplift
+    // delivers it. The reason is a judgement, badged, one fold away.
+    at(`/budget/deliver?${BASE}&g=st.2_pr.nhs`);
+    const card = (name: RegExp) => box(name).closest('.choice') as HTMLElement;
+    const care = card(/^A down-payment on the National Care Service/);
+    expect(within(care).getByText('Makes a start')).toBeInTheDocument();
+    expect(
+      within(care).getByText(/^Makes a start, not delivery: the Prime Minister calls it/),
+    ).toBeInTheDocument();
+    expect(
+      within(card(/^Give the NHS more than the Spending Review planned/)).queryByText(
+        'Makes a start',
+      ),
+    ).toBeNull();
+    fireEvent.click(box(/^A down-payment on the National Care Service/));
+    await waitFor(() => expect(L()).toMatch(/mhclg\.5/));
+    expect(within(bar()).getByText('0 of 1 priority delivered · 1 started')).toHaveClass(
+      'bar__short',
+    );
+    fireEvent.click(box(/^Give the NHS more than the Spending Review planned/));
+    await waitFor(() => expect(L()).toMatch(/dhsc\.3/));
+    expect(within(bar()).getByText('1 of 1 priority delivered')).not.toHaveClass('bar__short');
+  });
+
+  it('shows a lever trimmed elsewhere as settled lower, and one moved the other way as against it', () => {
+    // Graded delivery (Phase 25): trimmed short of what was chosen, the priority is started, not
+    // delivered, and the bar says so in amber.
+    const first = at(`/budget/deliver?${BASE}&${GAME}&L=moj.5`);
     const prisons = box(/More money for prisons and courts/);
     expect(prisons).not.toBeChecked();
     const card = prisons.closest('.choice') as HTMLElement;
-    expect(within(card).getByText(/^Adjusted: /)).toBeInTheDocument();
+    expect(within(card).getByText(/^Settled lower: /)).toHaveClass('tag--amber');
     expect(card.className).toMatch(/choice--adjusted/);
+    expect(within(bar()).getByText('0 of 2 priorities delivered · 1 started')).toHaveClass(
+      'bar__short',
+    );
+    first.unmount();
+    at(`/budget/deliver?${BASE}&${GAME}&L=moj.-2`);
+    const against = box(/More money for prisons and courts/).closest('.choice') as HTMLElement;
+    expect(within(against).getByText(/^Moved the other way: /)).toHaveClass('tag--warn');
+    expect(within(bar()).getByText('0 of 2 priorities delivered')).toBeInTheDocument();
   });
 
   it('wears the red lines, the earliest starts and a later start on the options that carry them', async () => {

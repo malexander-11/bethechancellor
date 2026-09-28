@@ -179,7 +179,9 @@ describe('LeverControl', () => {
     );
     expect(within(funded.container).getByText('In your flagship policies')).toBeInTheDocument();
     funded.unmount();
-    const pulled = render(
+    // Trimmed short of what was chosen (Phase 25): still the flagship's, settled lower, in the
+    // Chief Secretary's words, naming whoever asked.
+    const settled = render(
       <LeverControl
         lever={moj}
         value={4}
@@ -187,9 +189,27 @@ describe('LeverControl', () => {
         chosen={{ title: 'More money for prisons and courts', state: 'adjusted' }}
       />,
     );
-    expect(within(pulled.container).getByText('Adjusted from what you chose')).toHaveClass(
+    expect(within(settled.container).getByText('In your flagship policies')).toBeInTheDocument();
+    expect(
+      within(settled.container).getByText('Chief Secretary to the Treasury'),
+    ).toBeInTheDocument();
+    expect(
+      within(settled.container).getByText(/^Settled lower: the Justice Secretary asked for more/),
+    ).toBeInTheDocument();
+    settled.unmount();
+    // Moved the other way: a red tag, and no line about settling.
+    const against = render(
+      <LeverControl
+        lever={moj}
+        value={-2}
+        onChange={() => undefined}
+        chosen={{ title: 'More money for prisons and courts', state: 'against' }}
+      />,
+    );
+    expect(within(against.container).getByText('Against your flagship policy')).toHaveClass(
       'tag--warn',
     );
+    expect(within(against.container).queryByText(/Settled lower/)).toBeNull();
   });
 
   it('wears a curated title, a price at rest, an adviser line and a fold for the rest', () => {

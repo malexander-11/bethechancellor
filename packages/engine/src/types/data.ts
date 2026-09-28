@@ -68,6 +68,7 @@ import type {
   receptionRuleSchema,
   optionsFileSchema,
   deliverOptionSchema,
+  optionScaleSchema,
   finetuneFileSchema,
   finetuneGroupSchema,
   finetuneItemSchema,
@@ -131,6 +132,7 @@ export type InterventionSpec = z.infer<typeof interventionSchema>;
 export type InterventionWhen = z.infer<typeof interventionWhenSchema>;
 export type OptionsFile = z.infer<typeof optionsFileSchema>;
 export type DeliverOption = z.infer<typeof deliverOptionSchema>;
+export type OptionScale = z.infer<typeof optionScaleSchema>;
 export type FinetuneFile = z.infer<typeof finetuneFileSchema>;
 export type FinetuneSide = z.infer<typeof finetuneSideSchema>;
 export type FinetuneGroup = z.infer<typeof finetuneGroupSchema>;

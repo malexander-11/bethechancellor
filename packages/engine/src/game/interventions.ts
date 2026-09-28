@@ -84,9 +84,9 @@ export function interventionsFor(
   }
   if (reading.ruleMissed) say('rule-missed', undefined, undefined, []);
   for (const p of status.priorities) {
-    if (p.status === 'undelivered') {
+    if (p.status === 'notFunded') {
       say('priority-unfunded', p.priority.title, p.priority.id, p.priority.sources);
-    } else if (p.status === 'part') {
+    } else if (p.status === 'settledLower' || p.status === 'started') {
       say('priority-part-funded', p.priority.title, p.priority.id, p.priority.sources);
     }
   }

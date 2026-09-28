@@ -14,7 +14,12 @@ import { deliversTarget, promiseBreaks, promiseStrains } from './promises.js';
  * priority: the ways to pay became step 4's levers and the add-ons went (ADR-0025).
  */
 
-export type OptionState = 'on' | 'adjusted' | 'off';
+/**
+ * On: chosen. Adjusted: moved towards the option's setting without reaching it (a step-4 trim that
+ * settles the ask lower). Against: moved the other way, below where it rests, so it cuts what the
+ * option would fund (Phase 25). Off: untouched.
+ */
+export type OptionState = 'on' | 'adjusted' | 'against' | 'off';
 
 interface Bundle {
   id: string;
@@ -28,7 +33,8 @@ function leverMap(levers: readonly Lever[]): Map<string, Lever> {
 /**
  * On when every lever in the bundle is at, or beyond, the option's value in its direction (a
  * player who went further on the desk has still chosen it); adjusted when some lever has moved
- * but not to there; off when nothing has moved.
+ * towards the option's value but not to it; against when the only moves are the other way, below
+ * where the lever rests (Phase 25); off when nothing has moved.
  */
 export function optionState(
   option: Bundle,
@@ -37,17 +43,23 @@ export function optionState(
 ): OptionState {
   const byCode = leverMap(levers);
   let delivered = 0;
-  let moved = 0;
+  let toward = 0;
+  let away = 0;
   const codes = Object.keys(option.values);
   for (const code of codes) {
     const lever = byCode.get(code);
     const base = lever?.control.default ?? 0;
     const current = values[code] ?? base;
-    if (current !== base) moved += 1;
-    if (deliversTarget(lever, current, option.values[code] ?? base)) delivered += 1;
+    const target = option.values[code] ?? base;
+    if (deliversTarget(lever, current, target)) delivered += 1;
+    if (current === base) continue;
+    // Towards the target is the side of the default the target is on.
+    if (Math.sign(current - base) === Math.sign(target - base)) toward += 1;
+    else away += 1;
   }
   if (codes.length > 0 && delivered === codes.length) return 'on';
-  return moved > 0 ? 'adjusted' : 'off';
+  if (toward > 0) return 'adjusted';
+  return away > 0 ? 'against' : 'off';
 }
 
 /** The lever values that switch an option off: each of its levers back at its default. */
@@ -137,7 +149,9 @@ export function blockedBy(
   values: Record<string, number>,
 ): OptionConflict | undefined {
   if (optionState(option, values, levers) === 'on') return undefined;
-  return optionConflicts(option, options, levers, values).find((c) => c.partner !== 'off');
+  return optionConflicts(option, options, levers, values).find(
+    (c) => c.partner === 'on' || c.partner === 'adjusted',
+  );
 }
 
 /** How many priorities a Chancellor may rank with the Prime Minister. */

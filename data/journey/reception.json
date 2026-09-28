@@ -287,7 +287,7 @@
             "label": "Flagships agreed with the Prime Minister no longer funded",
             "unit": "count"
           },
-          "note": "Any priority agreed in Downing Street with nothing behind it.",
+          "note": "Any priority agreed in Downing Street with nothing behind it. A priority only started is said in words and scores nothing (Phase 25).",
           "bands": [
             {
               "id": "delivered",
@@ -302,7 +302,24 @@
                   "sourceId": "no10-commons-statement-2026-09-01"
                 }
               ],
-              "badge": "simulated"
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "prioritiesStarted",
+                    "above": 0
+                  },
+                  "text": "Every priority has something behind it, but some only make a start. No. 10 will ask for more.",
+                  "sources": [
+                    {
+                      "sourceId": "no10-first-speech-2026-07-20"
+                    },
+                    {
+                      "sourceId": "no10-commons-statement-2026-09-01"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "id": "pulled",
@@ -720,39 +737,67 @@
           "id": "pb-priorities",
           "measure": "prioritiesFunded",
           "reading": {
-            "label": "Priorities with a way to deliver them on",
+            "label": "Priorities delivered in full",
             "unit": "count"
           },
-          "note": "A priority counts when at least one way to deliver it is on in the package.",
+          "note": "A priority counts when a way to deliver it in full is on. A start or a trimmed ask is said in words and scores nothing (Phase 25).",
           "bands": [
             {
               "id": "none",
               "upTo": 0,
               "points": 0,
-              "text": "No priority was carried through to something people can point at.",
+              "text": "No priority was delivered in full: nothing people can point at yet.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
                 }
               ],
-              "badge": "simulated"
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "prioritiesStarted",
+                    "above": 0
+                  },
+                  "text": "Your priorities are started, not delivered. People notice a start far less than a result.",
+                  "sources": [
+                    {
+                      "sourceId": "no10-first-speech-2026-07-20"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "id": "one",
               "upTo": 1,
               "points": 1,
-              "text": "One of the Budget’s priorities shows up in something people will notice.",
+              "text": "One of the Budget’s priorities is delivered in full. People will notice it.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"
                 }
               ],
-              "badge": "simulated"
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "prioritiesStarted",
+                    "above": 0
+                  },
+                  "text": "One priority is delivered in full; the others only make a start. People will notice the one.",
+                  "sources": [
+                    {
+                      "sourceId": "no10-first-speech-2026-07-20"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "id": "all",
               "points": 2,
-              "text": "Two or more of the Budget’s priorities are funded. People can see what it was for.",
+              "text": "Two or more of the Budget’s priorities are delivered in full. People can see what it was for.",
               "sources": [
                 {
                   "sourceId": "no10-first-speech-2026-07-20"

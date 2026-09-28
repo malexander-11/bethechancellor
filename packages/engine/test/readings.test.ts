@@ -92,6 +92,14 @@ describe('the readings of a Budget', () => {
     const clear = read({ moj: 10 }, { ...game, priorities: ['safer-streets'] });
     expect(clear.clearPriorityGbpm).toBeCloseTo(clear.deliveredGbpm ?? 0, 6);
     expect(clear.clearPriorityGbpm).toBeGreaterThan(1000);
+    // Graded delivery (Phase 25): a way that only makes a start is started, not funded, and a
+    // single started priority is not a clear story.
+    const started = read({ mhclg: 5 }, { ...game, priorities: ['nhs'] });
+    expect(started.prioritiesStarted).toBe(1);
+    expect(started.prioritiesFunded).toBe(0);
+    expect(started.prioritiesUnfunded).toBe(0);
+    expect(started.clearPriorityGbpm).toBe(0);
+    expect(r.prioritiesStarted).toBe(0);
     // Missing the stability rule breaks the fiscal-rules promise but crosses no manifesto red line.
     const missed = read({ def5: 1 }, game);
     expect(missed.rulesMissed).toBeGreaterThan(0);

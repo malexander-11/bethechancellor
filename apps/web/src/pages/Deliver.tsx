@@ -155,6 +155,7 @@ export function DeliverPage() {
                 who: adviserById.get(option.advice.adviser)?.role ?? option.advice.adviser,
                 line: option.advice,
               }}
+              scale={option.scale}
             >
               {optionLevers
                 .filter((l) => l.category !== 'tax')

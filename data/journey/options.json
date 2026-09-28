@@ -1,5 +1,15 @@
 {
   "schemaVersion": 1,
+  "settled": {
+    "role": "Chief Secretary to the Treasury",
+    "text": "Settled lower: the {minister} asked for more, and will say the promise is only part kept.",
+    "sources": [
+      {
+        "sourceId": "hmt-sr25-del-tables"
+      }
+    ],
+    "badge": "simulated"
+  },
   "deliver": [
     {
       "id": "freeze-early",
@@ -27,6 +37,16 @@
       },
       "values": {
         "rvfrz": 1
+      },
+      "scale": {
+        "kind": "full",
+        "why": "A tax cut for every basic-rate payer, the biggest on this list.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-speech"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -62,6 +82,16 @@
       },
       "values": {
         "vatgas": 1
+      },
+      "scale": {
+        "kind": "start",
+        "why": "One bill a little lower; the cost of living is many bills.",
+        "sources": [
+          {
+            "sourceId": "hmrc-tax-reliefs-2026-01"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -90,6 +120,16 @@
       },
       "values": {
         "ufsm": 1
+      },
+      "scale": {
+        "kind": "full",
+        "why": "Every child in every state school in England, every school day.",
+        "sources": [
+          {
+            "sourceId": "dfe-school-pupils-2025-26"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -118,6 +158,16 @@
       },
       "values": {
         "bus2": 1
+      },
+      "scale": {
+        "kind": "start",
+        "why": "Keeps an existing cap for a year; nothing new on other bills.",
+        "sources": [
+          {
+            "sourceId": "govuk-bus-fare-cap-2027"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -146,6 +196,16 @@
       },
       "values": {
         "fuel": -10
+      },
+      "scale": {
+        "kind": "full",
+        "why": "Felt by every driver at every fill-up, every year it lasts.",
+        "sources": [
+          {
+            "sourceId": "govuk-fuel-duty-rates"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -174,6 +234,16 @@
       },
       "values": {
         "dhsc": 3
+      },
+      "scale": {
+        "kind": "full",
+        "why": "More for the NHS itself, above its settlement, every year.",
+        "sources": [
+          {
+            "sourceId": "govuk-elective-reform-plan-2025"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -202,6 +272,16 @@
       },
       "values": {
         "mhclg": 5
+      },
+      "scale": {
+        "kind": "start",
+        "why": "The Prime Minister calls it a down-payment: pay first, not yet a service.",
+        "sources": [
+          {
+            "sourceId": "no10-social-care-speech-2026-07-29"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -230,6 +310,16 @@
       },
       "values": {
         "rveff": 1
+      },
+      "scale": {
+        "kind": "start",
+        "why": "It spares the NHS a squeeze; it adds nothing new to it.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -258,6 +348,17 @@
       },
       "values": {
         "dip47": 1
+      },
+      "scale": {
+        "kind": "full",
+        "why": "Pays the whole gap the published defence plan left to this Budget.",
+        "sources": [
+          {
+            "sourceId": "govuk-dip-funding-explainer",
+            "quote": "A further £4.7 billion over four years will be confirmed at Budget 2026."
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -295,6 +396,16 @@
       "values": {
         "def3": 1
       },
+      "scale": {
+        "kind": "full",
+        "why": "Reaches the manifesto’s next step, 3% of GDP, now.",
+        "sources": [
+          {
+            "sourceId": "govuk-dip-funding-explainer"
+          }
+        ],
+        "badge": "simulated"
+      },
       "conflicts": [
         {
           "with": "dip-gap",
@@ -328,6 +439,16 @@
       },
       "values": {
         "mod": 5
+      },
+      "scale": {
+        "kind": "full",
+        "why": "A real rise in what the forces spend every day, every year.",
+        "sources": [
+          {
+            "sourceId": "govuk-submarine-investment-2026-07-30"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -362,6 +483,16 @@
       },
       "values": {
         "dfe": 5
+      },
+      "scale": {
+        "kind": "full",
+        "why": "Closes the special needs deficits the NAO counts.",
+        "sources": [
+          {
+            "sourceId": "nao-send-2024"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -402,6 +533,16 @@
       },
       "values": {
         "rvplan2": 1
+      },
+      "scale": {
+        "kind": "start",
+        "why": "Helps graduates repaying loans; it does not reach schools or special needs.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-policy-costings"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -430,6 +571,16 @@
       },
       "values": {
         "airet": 1
+      },
+      "scale": {
+        "kind": "start",
+        "why": "A budget for a programme that does not exist yet.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -458,6 +609,16 @@
       },
       "values": {
         "cdel": 10
+      },
+      "scale": {
+        "kind": "full",
+        "why": "A tenth more on every capital budget, every year.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -486,6 +647,16 @@
       },
       "values": {
         "socrent": 1
+      },
+      "scale": {
+        "kind": "full",
+        "why": "More homes in Homes England’s own programme; they arrive over a decade.",
+        "sources": [
+          {
+            "sourceId": "mhclg-sahp-2026-2036"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -514,6 +685,16 @@
       },
       "values": {
         "otherd": 2
+      },
+      "scale": {
+        "kind": "start",
+        "why": "Spread across the nations and every other department; no one programme.",
+        "sources": [
+          {
+            "sourceId": "hmt-sr25-del-tables"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -547,6 +728,17 @@
       },
       "values": {
         "brates": -5
+      },
+      "scale": {
+        "kind": "full",
+        "why": "Every business rates bill in England cut, every year.",
+        "sources": [
+          {
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "paragraph": "3.27-3.29"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -577,6 +769,16 @@
       },
       "values": {
         "ucfloor": 1
+      },
+      "scale": {
+        "kind": "start",
+        "why": "Protects the poorest from deductions; it raises no one’s award.",
+        "sources": [
+          {
+            "sourceId": "jrf-uc-floor-2026"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -605,6 +807,16 @@
       },
       "values": {
         "cta": 1
+      },
+      "scale": {
+        "kind": "full",
+        "why": "A new allowance for every family with a child under five.",
+        "sources": [
+          {
+            "sourceId": "onward-family-support-2026"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -635,6 +847,16 @@
       },
       "values": {
         "lha30": 1
+      },
+      "scale": {
+        "kind": "full",
+        "why": "Housing support that follows local rents again, for every renter on it.",
+        "sources": [
+          {
+            "sourceId": "rf-saving-private-renters-2026"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -669,6 +891,16 @@
       },
       "values": {
         "wuc": 2
+      },
+      "scale": {
+        "kind": "full",
+        "why": "A rise in every universal credit award.",
+        "sources": [
+          {
+            "sourceId": "labour-manifesto-2024-opportunity"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -697,6 +929,16 @@
       },
       "values": {
         "moj": 10
+      },
+      "scale": {
+        "kind": "full",
+        "why": "The Justice Secretary’s ask, met in full, every year.",
+        "sources": [
+          {
+            "sourceId": "no10-commons-statement-2026-09-01"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -725,6 +967,16 @@
       },
       "values": {
         "home": 5
+      },
+      "scale": {
+        "kind": "full",
+        "why": "The Home Secretary’s ask, met in full, every year.",
+        "sources": [
+          {
+            "sourceId": "nao-asylum-system-2025"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -755,6 +1007,17 @@
       },
       "values": {
         "csjmh": 1
+      },
+      "scale": {
+        "kind": "full",
+        "why": "The largest saving on this list, if it arrives.",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.13"
+          }
+        ],
+        "badge": "simulated"
       },
       "conflicts": [
         {
@@ -804,6 +1067,18 @@
       },
       "values": {
         "rvpip": 1
+      },
+      "scale": {
+        "kind": "full",
+        "why": "Savings that grow to billions a year.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 83"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -842,6 +1117,18 @@
       },
       "values": {
         "rv2ch": 1
+      },
+      "scale": {
+        "kind": "full",
+        "why": "Billions a year, from the first year.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 6"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -872,6 +1159,16 @@
       },
       "values": {
         "uitime": 1
+      },
+      "scale": {
+        "kind": "start",
+        "why": "Nothing until 2030-31, after this Budget’s target year.",
+        "sources": [
+          {
+            "sourceId": "ifs-green-budget-2025"
+          }
+        ],
+        "badge": "simulated"
       }
     },
     {
@@ -902,6 +1199,16 @@
       },
       "values": {
         "pensmth": 1
+      },
+      "scale": {
+        "kind": "start",
+        "why": "A small saving now that grows over the years.",
+        "sources": [
+          {
+            "sourceId": "rf-what-a-ratchet-2026"
+          }
+        ],
+        "badge": "simulated"
       }
     }
   ]

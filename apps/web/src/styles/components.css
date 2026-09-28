@@ -1012,9 +1012,8 @@ label.choice {
   color: var(--good);
 }
 
-.fate--narrowed,
-.fate--delayed,
-.fate--released {
+.fate--settledLower,
+.fate--started {
   color: var(--warning);
 }
 
@@ -1166,6 +1165,12 @@ label.choice {
 
 .bar__missed {
   color: var(--critical);
+  font-weight: 600;
+}
+
+/* Priorities short of delivered in full (Phase 25): amber, with the words saying how short. */
+.bar__short {
+  color: var(--warning);
   font-weight: 600;
 }
 

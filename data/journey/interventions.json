@@ -64,8 +64,8 @@
       "adviser": "director-of-public-spending",
       "when": "priority-part-funded",
       "line": {
-        "text": "{name} is only partly delivered: an option has been adjusted on the desk below what it needs.",
-        "short": "{name} is only partly delivered: an option was adjusted below what it needs.",
+        "text": "{name} is started, not delivered: nothing in your Budget delivers it in full yet. A start that was trimmed counts the same.",
+        "short": "{name} is started, not delivered: nothing delivers it in full yet.",
         "sources": [],
         "badge": "simulated"
       }

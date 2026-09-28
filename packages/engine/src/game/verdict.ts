@@ -31,12 +31,13 @@ export const THIN_HEADROOM_GBPM = 10_000;
  */
 export const AMPLE_HEADROOM_GBPM = 20_000;
 
-export type PriorityFate = 'delivered' | 'narrowed' | 'unfunded';
+/** Graded in Phase 25: a start is not delivery, and a trim on step 4 settles an ask lower. */
+export type PriorityFate = 'delivered' | 'settledLower' | 'started' | 'unfunded';
 /** `strained` (Phase 23): kept in its words, tested in its spirit; amber, not red. */
 export type PromiseFate = 'kept' | 'strained' | 'broken-by-choice' | 'broken-by-arithmetic';
 
 export interface AmbitionVerdict {
-  priorities: { title: string; fate: PriorityFate; costGbpm: number }[];
+  priorities: { title: string; fate: PriorityFate; spendingGbpm: number }[];
   promises: { title: string; fate: PromiseFate; by?: string[] }[];
 }
 
@@ -72,9 +73,8 @@ export interface VerdictInput {
 }
 
 function priorityFate(p: PriorityReport): PriorityFate {
-  if (p.status === 'delivered') return 'delivered';
-  if (p.status === 'part') return 'narrowed';
-  return 'unfunded';
+  if (p.status === 'notFunded') return 'unfunded';
+  return p.status;
 }
 
 /** Which ambitions survived, and how each promise fared and why. */
@@ -83,7 +83,7 @@ export function ambitionVerdict(status: AmbitionStatus, levers: readonly Lever[]
   const priorities = status.priorities.map((p) => ({
     title: p.priority.title,
     fate: priorityFate(p),
-    costGbpm: p.costGbpm,
+    spendingGbpm: p.spendingGbpm,
   }));
   const strainedBy = new Map(
     status.strains.filter((s) => s.strained).map((s) => [s.promise.id, s.strainedBy] as const),
@@ -173,7 +173,7 @@ export function budgetVerdict(input: VerdictInput): BudgetVerdict {
     rulesMet,
     promisesAllKept: status.broken === 0,
     prioritiesAllFunded: status.priorities.length > 0 && delivered === status.priorities.length,
-    prioritiesNoneFunded: delivered === 0,
+    prioritiesNoneFunded: status.priorities.every((p) => p.status === 'notFunded'),
     headroomAmple: headroom >= AMPLE_HEADROOM_GBPM,
     headroomThin: headroom < input.typicalErrorGbpm / 2,
     certified: input.credibilityShare <= 0.1,

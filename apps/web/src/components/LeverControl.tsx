@@ -23,6 +23,7 @@ import { LabelBadge } from './LabelBadge';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
 import { Term } from './Term';
 import { useWorkings } from '../journey/workings';
+import { settledLine } from '../journey/levers';
 import {
   borrowingImprovement,
   currentBudgetImprovement,
@@ -81,7 +82,7 @@ export interface RedLine {
   severity?: 'breaks' | 'strains';
 }
 
-/** An option the player chose that this lever belongs to, and whether it is still on or adjusted. */
+/** An option the player chose that this lever belongs to, and how it now stands (Phase 25). */
 export interface Chosen {
   title: string;
   state: OptionState;
@@ -96,22 +97,23 @@ const RED_LINE_WORDS: Record<RedLine['when'], string> = {
 /**
  * The warnings on the lever. A watched lever always wears a quiet tag naming the promise, so a
  * newcomer learns it before touching the control; a crossed line turns red, or amber where the
- * promise's words are kept and its spirit tested (Phase 23). A lever inside an
- * option the player chose wears the option's title while the option is on, and a red tag once the
- * desk has adjusted it away from what was chosen. Which promise, and which option, is in the tag's
- * text for a screen reader; a tooltip would reach only a mouse.
+ * promise's words are kept and its spirit tested (Phase 23). A lever inside an option the player
+ * chose wears the option's tag while it counts towards it, delivered or settled lower (the Chief
+ * Secretary's line says which), and a red tag once it has moved the other way (Phase 25). Which
+ * promise, and which option, is in the tag's text for a screen reader; a tooltip would reach only
+ * a mouse.
  */
 export function LeverFlags({ redLines, chosen }: { redLines: RedLine[]; chosen?: Chosen }) {
   return (
     <>
       {chosen ? (
-        chosen.state === 'on' ? (
-          <span className="tag--treasury">
-            In your flagship policies<span className="sr-only">: {chosen.title}</span>
+        chosen.state === 'against' ? (
+          <span className="tag--treasury tag--warn">
+            Against your flagship policy<span className="sr-only">: {chosen.title}</span>
           </span>
         ) : (
-          <span className="tag--treasury tag--warn">
-            Adjusted from what you chose<span className="sr-only">: {chosen.title}</span>
+          <span className="tag--treasury">
+            In your flagship policies<span className="sr-only">: {chosen.title}</span>
           </span>
         )
       ) : null}
@@ -453,6 +455,10 @@ export function LeverControl({
     />
   ) : null;
   const adviceLine = advice ? <AdviceLine who={advice.who} line={advice.line} /> : null;
+  // A flagship ask trimmed short of what was chosen is settled lower, in the Chief Secretary's
+  // words (Phase 25): the option still counts, as a start, and its minister will say so.
+  const settled = chosen?.state === 'adjusted' ? settledLine(lever) : null;
+  const settledEl = settled ? <AdviceLine who={settled.who} line={settled.line} /> : null;
   const noteLines =
     notes.length > 0 ? (
       <ul className="lever__notes">
@@ -603,6 +609,7 @@ export function LeverControl({
           {hintLine}
           {reliefLine}
           {adviceLine}
+          {settledEl}
           {noteLines}
           {earliestTag ? <p className="lever__tags">{earliestTag}</p> : null}
           {children}
@@ -663,6 +670,7 @@ export function LeverControl({
           {hintLine}
           {reliefLine}
           {adviceLine}
+          {settledEl}
           {noteLines}
           {children}
         </>

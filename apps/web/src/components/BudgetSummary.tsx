@@ -1,4 +1,5 @@
 import { formatGbpBn, type AmbitionStatus } from '@btc/engine';
+import { priorityCount } from './HeadroomBar';
 
 /**
  * The running score of the game, in one strip: headroom, priorities delivered against the number
@@ -29,9 +30,7 @@ export function BudgetSummary({
       <div className="summary__cell">
         <span className="summary__label">Priorities</span>
         <span className="summary__value">
-          {status.priorities.length === 0
-            ? 'none agreed yet'
-            : `${status.delivered} of ${status.priorities.length} delivered`}
+          {status.priorities.length === 0 ? 'none agreed yet' : priorityCount(status)}
         </span>
       </div>
       <div className="summary__cell">

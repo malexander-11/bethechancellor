@@ -193,7 +193,7 @@ export function assembleSpeech(input: SpeechInput): Speech {
   );
   for (const p of delivered) {
     const on = p.options.filter((o) => o.state === 'on');
-    const cost = money(Math.abs(on.reduce((acc, o) => acc + o.costGbpm, 0)));
+    const cost = money(Math.abs(on.reduce((acc, o) => acc + o.spendingGbpm, 0)));
     say(
       'priority',
       speech.priority,

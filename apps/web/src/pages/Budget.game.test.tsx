@@ -30,7 +30,7 @@ describe('the package, with a game under way', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Economic assumptions: today’s estimate.')).toBeInTheDocument();
     expect(within(box).queryByText(/Headroom/)).toBeNull();
-    expect(within(box).getByText('0 of 2 delivered')).toBeInTheDocument();
+    expect(within(box).getByText('0 of 2 priorities delivered')).toBeInTheDocument();
     expect(within(box).getByText('all 6 kept')).toBeInTheDocument();
   });
 
@@ -51,22 +51,29 @@ describe('the package, with a game under way', () => {
   });
 
   it('pins a chosen option’s lever to the top of its group, tagged with how it stands', () => {
-    // Adjusted on the desk below what was chosen, the lever wears a red tag; on, the accent one.
+    // Trimmed on the desk below what was chosen, the lever is settled lower and the Chief Secretary
+    // says so; moved the other way, it wears a red tag; on, the accent one (Phase 25).
     const first = at(`/budget/spending?${BASE}&${GAME}&L=moj.5`);
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
     let panel = screen.getByRole('tabpanel');
-    const adjusted = within(panel).getAllByText('Adjusted from what you chose');
-    expect(adjusted).toHaveLength(1);
+    const tagged = within(panel).getAllByText('In your flagship policies');
+    expect(tagged).toHaveLength(1);
     // Which option, is in the tag's text, where a screen reader finds it.
-    expect(adjusted[0]?.textContent).toMatch(/More money for prisons and courts/);
+    expect(tagged[0]?.textContent).toMatch(/More money for prisons and courts/);
+    expect(within(panel).getByText(/^Settled lower: the Justice Secretary/)).toBeInTheDocument();
     // The pinned lever is the first control in the group, ahead of Health in the authored order.
     expect(within(panel).getAllByRole('slider')[0]).toHaveAccessibleName('Justice');
     first.unmount();
+    const second = at(`/budget/spending?${BASE}&${GAME}&L=moj.-2`);
+    fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
+    panel = screen.getByRole('tabpanel');
+    expect(within(panel).getByText('Against your flagship policy')).toHaveClass('tag--warn');
+    second.unmount();
     at(`/budget/spending?${BASE}&${GAME}&L=moj.10`);
     fireEvent.click(screen.getByRole('tab', { name: /Day-to-day departmental budgets/ }));
     panel = screen.getByRole('tabpanel');
     expect(within(panel).getAllByText('In your flagship policies')).toHaveLength(1);
-    expect(within(panel).queryByText('Adjusted from what you chose')).toBeNull();
+    expect(within(panel).queryByText(/Settled lower/)).toBeNull();
   });
 
   it('wears the manifesto red lines on the levers they watch, red once crossed', () => {

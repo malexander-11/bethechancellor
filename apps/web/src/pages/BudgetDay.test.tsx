@@ -154,7 +154,8 @@ describe('Budget day: what your Budget means', () => {
     at(`${BASE}&${GAME.replace('pr.defence+safer-streets', 'pr.safer-streets')}&L=moj.10`);
     expect(meter('The public')).toHaveAccessibleName('4 of 5: Approving');
     expect(
-      within(card('The public')).getAllByText(/One of the Budget’s priorities shows up/).length,
+      within(card('The public')).getAllByText(/One of the Budget’s priorities is delivered in full/)
+        .length,
     ).toBe(2);
     open('Who feels it: five households');
     expect(screen.getAllByText(/A family on universal credit/).length).toBeGreaterThan(0);

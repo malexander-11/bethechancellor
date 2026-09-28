@@ -5,7 +5,8 @@ import { SourceList } from './SourceLink';
 
 const PRIORITY: Record<BudgetVerdict['ambitions']['priorities'][number]['fate'], string> = {
   delivered: 'delivered',
-  narrowed: 'narrowed',
+  settledLower: 'settled lower',
+  started: 'started',
   unfunded: 'not funded',
 };
 
@@ -57,8 +58,8 @@ export function Verdict({ verdict }: { verdict: BudgetVerdict }) {
                 {ambitions.priorities.map((p) => (
                   <li key={p.title} className={`fate fate--${p.fate}`}>
                     <strong>{p.title}</strong> · {PRIORITY[p.fate]}
-                    {p.fate === 'delivered' || p.fate === 'narrowed'
-                      ? ` · ${formatGbpBn(Math.abs(p.costGbpm), 1)} in ${targetYear}`
+                    {p.fate !== 'unfunded'
+                      ? ` · ${formatGbpBn(Math.abs(p.spendingGbpm), 1)} in ${targetYear}`
                       : ''}
                   </li>
                 ))}

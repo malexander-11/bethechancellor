@@ -1,12 +1,14 @@
 import {
+  ministerFor,
   promiseBreaks,
   promiseStrains,
   type AmbitionStatus,
   type Lever,
   type OptionReport,
+  type SimulatedLine,
 } from '@btc/engine';
 import type { LeverNote, RedLine } from '../components/LeverControl';
-import { finetuneTitle, levers, options, pm } from '../data';
+import { finetuneTitle, levers, ministers, options, pm } from '../data';
 
 const byId = new Map(levers.map((l) => [l.id, l] as const));
 /** The flagship option each lever belongs to, if any: what a note names it by. */
@@ -50,8 +52,8 @@ export function redLinesOf(values: Record<string, number>): (code: string) => Re
 
 /**
  * The flagship options the player chose, by the levers they move, so a lever can say it belongs
- * to one. Lever values are the only state: a flagship lever moved elsewhere shows the option as
- * adjusted, which is what it now is.
+ * to one. Lever values are the only state: a flagship lever trimmed elsewhere shows the option as
+ * settled lower, and one moved the other way as against it (Phase 25), which is what each now is.
  */
 export function chosenByLever(status: AmbitionStatus | null): Map<string, OptionReport> {
   return new Map(
@@ -60,6 +62,19 @@ export function chosenByLever(status: AmbitionStatus | null): Map<string, Option
       .filter((o) => o.state !== 'off')
       .flatMap((o) => Object.keys(o.option.values).map((code) => [code, o] as const)),
   );
+}
+
+/**
+ * The Chief Secretary's line when a flagship ask is trimmed short of what was chosen (Phase 25):
+ * the ask is settled lower, and whoever made it will say so. The asker is the lever's minister,
+ * or the Prime Minister, who agreed the priority, where the lever has none of its own (or the
+ * Chief Secretary is its minister). A judgement in a role's voice, with no figure of its own.
+ */
+export function settledLine(lever: Lever): { who: string; line: SimulatedLine } {
+  const { role, text, sources, badge } = options.settled;
+  const minister = ministerFor(lever.code, ministers)?.role;
+  const asker = minister && minister !== role ? minister : 'Prime Minister';
+  return { who: role, line: { text: text.replace('{minister}', asker), sources, badge } };
 }
 
 /** What a note calls another lever: its plain title on these screens, its flagship, or its short title. */

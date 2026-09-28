@@ -206,11 +206,18 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(within(cardOf(schools)).getByText(/^At −1%: saves £\d\.\dbn/)).toBeInTheDocument();
     fireEvent.change(schools, { target: { value: '-1' } });
     expect(within(cardOf(schools)).getByText('Education Secretary')).toBeInTheDocument();
-    // A flagship budget cut below what was chosen shows the flagship as adjusted.
+    // A flagship budget cut below what was chosen is settled lower, and the Chief Secretary says
+    // so (Phase 25); cut below where it started, it is against the flagship.
     fireEvent.change(screen.getByRole('slider', { name: 'Prisons and courts' }), {
       target: { value: '5' },
     });
-    expect(within(prisons).getByText('Adjusted from what you chose')).toHaveClass('tag--warn');
+    expect(
+      within(prisons).getByText(/^Settled lower: the Justice Secretary asked for more/),
+    ).toBeInTheDocument();
+    fireEvent.change(screen.getByRole('slider', { name: 'Prisons and courts' }), {
+      target: { value: '-2' },
+    });
+    expect(within(prisons).getByText('Against your flagship policy')).toHaveClass('tag--warn');
   });
 
   it('leads from the spending screen to the review, the package intact', async () => {

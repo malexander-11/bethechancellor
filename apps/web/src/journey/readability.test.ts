@@ -85,6 +85,8 @@ const SETS: Record<string, readonly string[]> = {
     .flatMap((s) => [s.title, s.now]),
   'option titles': all.map((o) => o.title),
   'option advice': all.map((o) => o.advice.text),
+  // Graded delivery (Phase 25): why a way only makes a start, and the Chief Secretary's line.
+  'the delivery scales': [...all.map((o) => o.scale.why), options.settled.text],
   'the fine-tuning screens': [
     ...[finetune.tax, finetune.spending].flatMap((s) => [
       s.title,
@@ -101,7 +103,9 @@ const SETS: Record<string, readonly string[]> = {
   ]),
   'the reception labels': reception.audiences.flatMap((a) => [a.title, a.question, ...a.labels]),
   'the reception bands': reception.audiences.flatMap((a) =>
-    a.rules.flatMap((r) => r.bands.map((b) => b.text)),
+    a.rules.flatMap((r) =>
+      r.bands.flatMap((b) => [b.text, ...(b.variants ?? []).map((v) => v.text)]),
+    ),
   ),
   'the verdicts': verdicts.kinds.flatMap((k) => [k.title, short(k.line)]),
   'the interventions': interventions.interventions.map((x) => short(x.line)),
@@ -112,7 +116,7 @@ const SETS: Record<string, readonly string[]> = {
 
 describe('readability: a reading age of about twelve, one idea a sentence', () => {
   it('reads every set a newcomer meets', () => {
-    expect(Object.keys(SETS).length).toBe(12);
+    expect(Object.keys(SETS).length).toBe(13);
     for (const [name, texts] of Object.entries(SETS)) expect(texts.length, name).toBeGreaterThan(0);
   });
 

@@ -45,6 +45,39 @@ const SECURITY: GamePermalink = {
   priorities: ['defence', 'safer-streets'],
 };
 
+describe('graded delivery (Phase 25)', () => {
+  const THREE: GamePermalink = { ...freshGame(), priorities: ['nhs', 'defence', 'schools-send'] };
+  // One cheap way per priority: a care down-payment, the defence plan's gap, the Plan 2 threshold.
+  const TOKEN = { mhclg: 5, dip47: 1, rvplan2: 1 };
+
+  it('a token three-tick earns no more with the public or the party than delivering the same priorities in full', () => {
+    const token = room(TOKEN, THREE);
+    const full = room({ dhsc: 3, dip47: 1, dfe: 5 }, THREE);
+    for (const audience of ['public', 'backbenchers'] as const) {
+      expect(by(token, audience).rating, audience).toBeLessThanOrEqual(by(full, audience).rating);
+    }
+    const priorities = (list: Reception[]) =>
+      by(list, 'public').all.find((r) => r.rule === 'pb-priorities');
+    expect(priorities(token)?.points).toBeLessThan(priorities(full)?.points ?? 0);
+    // It says so in words, and the words score nothing of their own.
+    expect(priorities(token)?.text).toMatch(/only make a start/);
+    const downing = by(token, 'backbenchers').all.find((r) => r.rule === 'bb-downing-street');
+    expect(downing?.points).toBe(0);
+    expect(downing?.text).toMatch(/some only make a start/);
+    expect(by(full, 'backbenchers').all.find((r) => r.rule === 'bb-downing-street')?.text).toBe(
+      'Everything agreed in Downing Street has something behind it in the Budget.',
+    );
+  });
+
+  it('a token three-tick rates no better than the funded walk, audience by audience', () => {
+    const token = room(TOKEN, THREE);
+    const walk = room({ moj: 10, dip47: 1 }, SECURITY);
+    for (const audience of ['backbenchers', 'markets', 'public'] as const) {
+      expect(by(token, audience).rating, audience).toBeLessThanOrEqual(by(walk, audience).rating);
+    }
+  });
+});
+
 describe('what would have moved a rating', () => {
   it('says how far the reading was from the next better band, in the reading’s own unit', () => {
     // Employer NICs on pension contributions: a large tax rise that breaks no red line.

@@ -143,6 +143,19 @@ export const optionAdviceSchema = simulatedLineSchema.extend({
   sources: z.array(sourceRefSchema).min(1),
 });
 
+/**
+ * Whether an option delivers its priority in full or makes a start on it (Phase 25): a judgement
+ * in one line, with its source, badged as one. A priority with only starts in the Budget reads
+ * "started", not "delivered", on the bar, on the review and on Budget day, and the scoring counts
+ * only what is delivered in full.
+ */
+export const optionScaleSchema = z.strictObject({
+  kind: z.enum(['full', 'start']),
+  why: z.string().min(1).max(140),
+  sources: z.array(sourceRefSchema).min(1),
+  badge: simulatedBadgeSchema,
+});
+
 /** A way to deliver a priority, proposed by the minister or adviser who leads on it. */
 export const deliverOptionSchema = z.strictObject({
   id: slug,
@@ -154,15 +167,39 @@ export const deliverOptionSchema = z.strictObject({
   line: simulatedLineSchema,
   advice: optionAdviceSchema,
   values: optionBundleSchema,
+  scale: optionScaleSchema,
   conflicts: z.array(optionConflictSchema).min(1).optional(),
+});
+
+/**
+ * The Chief Secretary's line when a step-4 trim settles a flagship's ask lower than chosen (Phase
+ * 25): `{minister}` is the lever's own minister. It names no figure; the bar and the card do that.
+ */
+export const settledLineSchema = simulatedLineSchema.extend({
+  role: z.string().min(1),
+  sources: z.array(sourceRefSchema).min(1),
 });
 
 export const optionsFileSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
+    settled: settledLineSchema,
     deliver: z.array(deliverOptionSchema).min(1),
   })
   .superRefine((file, ctx) => {
+    // Every priority can be delivered in full: a screen of starts only would leave it unreachable.
+    const full = new Set(
+      file.deliver.filter((o) => o.scale.kind === 'full').map((o) => o.priority),
+    );
+    const priorities = new Set(file.deliver.map((o) => o.priority));
+    for (const priority of priorities) {
+      if (!full.has(priority))
+        ctx.addIssue({
+          code: 'custom',
+          message: `priority ${priority} has no way to deliver it in full`,
+          path: ['deliver'],
+        });
+    }
     // One list since Phase 24 (the ways to pay became step 4's levers and the add-ons went), kept
     // in this shape so the checks read the same whichever lists the file carries.
     const lists = [['deliver', file.deliver]] as const;

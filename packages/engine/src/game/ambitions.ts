@@ -18,20 +18,25 @@ export {
 
 /**
  * What the Chancellor agreed with the Prime Minister, against what the package actually does
- * (Phase 18, ADR-0022). A priority is delivered when one of its ways to deliver is on, partly
- * delivered when an option has been adjusted on the desk without getting there, and undelivered
- * when nothing has moved. Whether an option is on follows from the lever values alone: nothing
- * is stored, so the desk and the guided screens can never disagree. Nothing here is a judgement;
- * the words about it come later and wear the simulated badge.
+ * (Phase 18, ADR-0022; graded in Phase 25). A priority is delivered when a way to deliver it in
+ * full is on; settled lower when such a way was chosen and then trimmed on step 4 short of it;
+ * started when only ways that make a start are in; not funded when nothing is. Whether an option
+ * delivers in full or starts is authored on the option (`scale`, a judgement badged as one);
+ * whether it is on follows from the lever values alone, so the desk and the guided screens can
+ * never disagree.
  */
 
-export type PriorityStatus = 'delivered' | 'part' | 'undelivered';
+export type PriorityStatus = 'delivered' | 'settledLower' | 'started' | 'notFunded';
 
 export interface OptionReport {
   option: DeliverOption;
   state: OptionState;
-  /** The option's effect on borrowing in the target year, £ million, positive = more borrowing. */
-  costGbpm: number;
+  /**
+   * What the option puts behind its priority in the target year, £ million: spending, current
+   * and capital, plus any tax cut. A reading, not the option's price: the price is what it does
+   * to headroom, which the cards and the review show.
+   */
+  spendingGbpm: number;
 }
 
 export interface PriorityReport {
@@ -40,8 +45,8 @@ export interface PriorityReport {
   rank: number;
   status: PriorityStatus;
   options: OptionReport[];
-  /** What the options on or adjusted for this priority add to borrowing in the target year. */
-  costGbpm: number;
+  /** What the options on or trimmed for this priority put behind it in the target year. */
+  spendingGbpm: number;
 }
 
 export interface AmbitionStatus {
@@ -49,8 +54,14 @@ export interface AmbitionStatus {
   promises: PromiseReport[];
   /** The promises' amber cases (Phase 23): the words kept, the spirit tested. */
   strains: PromiseStrainReport[];
-  /** Priorities with at least one way to deliver them on. */
+  /** Priorities delivered in full. */
   delivered: number;
+  /** Priorities chosen in full and then trimmed short of it on step 4. */
+  settledLower: number;
+  /** Priorities with only a start in the Budget. */
+  started: number;
+  /** Priorities with nothing behind them. */
+  notFunded: number;
   /** Manifesto promises broken. */
   broken: number;
   /** Manifesto promises strained and not also broken: a promise counts once, as broken. */
@@ -84,19 +95,24 @@ export function ambitionStatus(
     const reports = deliverOptionsFor(priority.id, options).map((option): OptionReport => {
       const state = optionState(option, values, levers);
       const codes = Object.keys(option.values);
-      return { option, state, costGbpm: state === 'off' ? 0 : costOf(codes) };
+      const counts = state === 'on' || state === 'adjusted';
+      return { option, state, spendingGbpm: counts ? costOf(codes) : 0 };
     });
-    const status: PriorityStatus = reports.some((r) => r.state === 'on')
+    const full = reports.filter((r) => r.option.scale.kind === 'full');
+    const starts = reports.filter((r) => r.option.scale.kind === 'start');
+    const status: PriorityStatus = full.some((r) => r.state === 'on')
       ? 'delivered'
-      : reports.some((r) => r.state === 'adjusted')
-        ? 'part'
-        : 'undelivered';
+      : full.some((r) => r.state === 'adjusted')
+        ? 'settledLower'
+        : starts.some((r) => r.state === 'on' || r.state === 'adjusted')
+          ? 'started'
+          : 'notFunded';
     return {
       priority,
       rank: i + 1,
       status,
       options: reports,
-      costGbpm: reports.reduce((acc, r) => acc + r.costGbpm, 0),
+      spendingGbpm: reports.reduce((acc, r) => acc + r.spendingGbpm, 0),
     };
   });
   // The manifesto is fixed: every promise is in force from the first screen to the last.
@@ -115,6 +131,9 @@ export function ambitionStatus(
     promises,
     strains,
     delivered: priorities.filter((p) => p.status === 'delivered').length,
+    settledLower: priorities.filter((p) => p.status === 'settledLower').length,
+    started: priorities.filter((p) => p.status === 'started').length,
+    notFunded: priorities.filter((p) => p.status === 'notFunded').length,
     broken: brokenIds.size,
     strained: strains.filter((s) => s.strained && !brokenIds.has(s.promise.id)).length,
   };

@@ -63,8 +63,14 @@ describe('advisers who remember', () => {
       'safer-streets',
       'defence',
     ]);
+    // Trimmed short of what was chosen, or with only a start behind it, a priority is started,
+    // not delivered, and the line says so either way (Phase 25).
     const half = advice(game, { moj: 5 });
-    expect(half.find((x) => x.about === 'safer-streets')?.when).toBe('priority-part-funded');
+    const started = half.find((x) => x.about === 'safer-streets');
+    expect(started?.when).toBe('priority-part-funded');
+    expect(started?.short).toMatch(/is started, not delivered: nothing delivers it in full/);
+    const care = advice({ ...game, priorities: ['nhs'] }, { mhclg: 5 });
+    expect(care.find((x) => x.about === 'nhs')?.when).toBe('priority-part-funded');
     const done = advice(game, { moj: 10, dip47: 1 });
     expect(done.some((x) => x.when === 'priority-unfunded')).toBe(false);
     expect(done.some((x) => x.when === 'all-priorities-funded')).toBe(true);

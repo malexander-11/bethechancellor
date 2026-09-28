@@ -215,19 +215,54 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
       sources: [{ sourceId: 'obr-efo-2026-03' }],
       badge: 'simulated' as const,
     };
-    const option = (id: string, title: string, values: Record<string, number>) => ({
+    const scale = (kind: 'full' | 'start') => ({
+      kind,
+      why: 'x',
+      sources: [{ sourceId: 'obr-efo-2026-03' }],
+      badge: 'simulated' as const,
+    });
+    const option = (
+      id: string,
+      title: string,
+      values: Record<string, number>,
+      kind: 'full' | 'start' = 'full',
+    ) => ({
       id,
       priority: 'p',
       title,
       line,
       advice,
       values,
+      scale: scale(kind),
     });
+    const settled = {
+      role: 'Chief Secretary to the Treasury',
+      text: 'x',
+      sources: [{ sourceId: 'hmt-sr25-del-tables' }],
+      badge: 'simulated' as const,
+    };
     const base = {
       schemaVersion: 1 as const,
-      deliver: [option('a', 'A', { dhsc: 3 }), option('b', 'B', { dfe: 5 })],
+      settled,
+      deliver: [option('a', 'A', { dhsc: 3 }), option('b', 'B', { dfe: 5 }, 'start')],
     };
     expect(optionsFileSchema.safeParse(base).success).toBe(true);
+    // Graded delivery (Phase 25): every option says whether it delivers in full or makes a start,
+    // and every priority has at least one way to deliver it in full.
+    const unscaled: Record<string, unknown> = { ...option('a', 'A', { dhsc: 3 }) };
+    delete unscaled.scale;
+    expect(
+      optionsFileSchema.safeParse({ ...base, deliver: [unscaled, base.deliver[1]] }).success,
+    ).toBe(false);
+    expect(
+      optionsFileSchema.safeParse({
+        ...base,
+        deliver: [option('a', 'A', { dhsc: 3 }, 'start'), base.deliver[1]],
+      }).success,
+    ).toBe(false);
+    const unsettled: Record<string, unknown> = { ...base };
+    delete unsettled.settled;
+    expect(optionsFileSchema.safeParse(unsettled).success).toBe(false);
     // Two options on one lever.
     expect(
       optionsFileSchema.safeParse({
@@ -258,7 +293,14 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
         deliver: [base.deliver[0], { ...base.deliver[1], title: 'A' }],
       }).success,
     ).toBe(false);
-    const silent = { id: 'b', priority: 'p', title: 'B', line, values: { dfe: 5 } };
+    const silent = {
+      id: 'b',
+      priority: 'p',
+      title: 'B',
+      line,
+      values: { dfe: 5 },
+      scale: scale('start'),
+    };
     expect(
       optionsFileSchema.safeParse({ ...base, deliver: [base.deliver[0], silent] }).success,
     ).toBe(false);

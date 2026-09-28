@@ -122,14 +122,22 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     expect(status(game, {}).priorities.map((p) => p.rank)).toEqual([1, 2, 3]);
   });
 
-  it('reads a priority delivered, part or undelivered from the state of its options', () => {
+  it('reads a priority delivered, settled lower, started or not funded from its options (Phase 25)', () => {
     const game = { ...freshGame(), priorities: ['nhs', 'schools-send', 'families'] };
     const s = status(game, { dhsc: 3, dfe: 2 });
     const by = new Map(s.priorities.map((p) => [p.priority.id, p] as const));
     expect(by.get('nhs')?.status).toBe('delivered');
-    expect(by.get('schools-send')?.status).toBe('part');
-    expect(by.get('families')?.status).toBe('undelivered');
+    // Chosen in full and trimmed short of it on step 4: settled lower, not delivered.
+    expect(by.get('schools-send')?.status).toBe('settledLower');
+    expect(by.get('families')?.status).toBe('notFunded');
     expect(s.delivered).toBe(1);
+    expect(s.settledLower).toBe(1);
+    expect(s.notFunded).toBe(1);
+    // A way that only makes a start is a start, however it is ticked.
+    const starts = status(game, { mhclg: 5, rvplan2: 1, ucfloor: 1 });
+    expect(starts.priorities.map((p) => p.status)).toEqual(['started', 'started', 'started']);
+    expect(starts.delivered).toBe(0);
+    expect(starts.started).toBe(3);
     const health = by.get('nhs')?.options.find((o) => o.option.id === 'health-above-sr');
     expect(health?.state).toBe('on');
     const send = by.get('schools-send')?.options.find((o) => o.option.id === 'send-settlement');
@@ -139,17 +147,44 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     // A cut is delivered by going at least as far down.
     expect(deliversTarget(lever('fuel'), -10, -10)).toBe(true);
     expect(deliversTarget(lever('fuel'), -5, -10)).toBe(false);
+    // Cutting a flagship's own budget is against it, and funds nothing.
+    const cut = status(game, { dhsc: -2 });
+    const cutHealth = cut.priorities[0]?.options.find((o) => o.option.id === 'health-above-sr');
+    expect(cutHealth?.state).toBe('against');
+    expect(cut.priorities[0]?.status).toBe('notFunded');
+    expect(cutHealth?.spendingGbpm).toBe(0);
   });
 
-  it('reads each option’s cost off the outcome in the target year, and sums it by priority', () => {
+  it('reads what each option puts behind its priority in the target year, and sums it', () => {
     const game = { ...freshGame(), priorities: ['cost-of-living', 'defence'] };
     const s = status(game, { bus2: 1, dip47: 1 });
     const options = new Map(
-      s.priorities.flatMap((p) => p.options).map((o) => [o.option.id, o.costGbpm] as const),
+      s.priorities.flatMap((p) => p.options).map((o) => [o.option.id, o.spendingGbpm] as const),
     );
     expect(options.get('bus-cap')).toBeCloseTo(400, 6);
     expect(options.get('dip-gap')).toBeCloseTo(1175, 6);
     expect(options.get('free-school-meals')).toBe(0);
-    expect(s.priorities.find((p) => p.priority.id === 'defence')?.costGbpm).toBeCloseTo(1175, 6);
+    expect(s.priorities.find((p) => p.priority.id === 'defence')?.spendingGbpm).toBeCloseTo(
+      1175,
+      6,
+    );
+    // The bus cap only makes a start on the cost of living; the defence plan's gap is the bill.
+    expect(s.priorities.map((p) => p.status)).toEqual(['started', 'delivered']);
+  });
+
+  it('gives every option a sourced scale, and every priority a way to deliver it in full', () => {
+    for (const option of ds.options.deliver) {
+      expect(option.scale.badge).toBe('simulated');
+      expect(option.scale.sources.length).toBeGreaterThan(0);
+      expect(option.scale.why.split(/\s+/).length, option.id).toBeLessThanOrEqual(14);
+    }
+    for (const priority of pm.priorities) {
+      expect(
+        ds.options.deliver.some((o) => o.priority === priority.id && o.scale.kind === 'full'),
+        priority.id,
+      ).toBe(true);
+    }
+    // The defence plan's gap is the whole published bill: in full, whatever its size.
+    expect(ds.options.deliver.find((o) => o.id === 'dip-gap')?.scale.kind).toBe('full');
   });
 });

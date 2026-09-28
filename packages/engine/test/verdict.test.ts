@@ -54,9 +54,9 @@ describe('the close', () => {
     const game: GamePermalink = { ...freshGame(), priorities: ['safer-streets', 'nhs'] };
     const v = verdictOf(game, { moj: 10, dhsc: 1, itbr: 1 });
     const fates = Object.fromEntries(v.ambitions.priorities.map((p) => [p.title, p.fate]));
-    // Prisons are funded as chosen; health has moved without getting there.
+    // Prisons are funded as chosen; health has moved without getting there: settled lower.
     expect(fates['Safer streets: prisons, police, borders']).toBe('delivered');
-    expect(fates['Bring down NHS waiting lists']).toBe('narrowed');
+    expect(fates['Bring down NHS waiting lists']).toBe('settledLower');
     const lock = v.ambitions.promises.find((p) => p.title === 'The tax lock');
     expect(lock?.fate).toBe('broken-by-choice');
     expect(lock?.by).toEqual(['Basic rate']);

@@ -95,6 +95,8 @@ export const readingMeasureSchema = z.enum([
   'manifestoBroken',
   'manifestoStrained',
   'prioritiesUnfunded',
+  // Priorities only started, or settled lower on step 4 (Phase 25).
+  'prioritiesStarted',
   'prioritiesFunded',
   'deliveredGbpm',
   'clearPriorityGbpm',

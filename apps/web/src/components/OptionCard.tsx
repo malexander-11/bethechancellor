@@ -6,6 +6,7 @@ import {
   type Lever,
   type OptionConflict,
   type OptionOverlap,
+  type OptionScale,
   type OptionRedLine,
   type OptionState,
   type SimulatedLine,
@@ -65,7 +66,9 @@ export function priceLine(price: OptionPrice): string {
  * the tab order and will not tick. With both in from the desk, both warn and neither is blocked. On the surface a card is its title, its badge and its
  * figure, plus the tags that change what choosing it means, and one adviser's line saying who
  * proposed it and what it costs and does (Phase 23); the lever's headline, the options it quietly
- * overlaps and the proposer's line wait behind one fold, "More about this".
+ * overlaps and the proposer's line wait behind one fold, "More about this". A way that only makes
+ * a start on its priority says so in a quiet tag, with the reason in the fold (Phase 25): ticking
+ * it starts the priority, it does not deliver it.
  */
 export function OptionCard({
   id,
@@ -88,6 +91,7 @@ export function OptionCard({
   note,
   tag,
   advice,
+  scale,
   children,
 }: {
   id: string;
@@ -120,16 +124,20 @@ export function OptionCard({
   tag?: string;
   /** The adviser's line on this option (Phase 23): who proposed it, one plain judgement. */
   advice?: { who: string; line: SimulatedLine };
+  /** Whether the option delivers its priority in full or makes a start, and why (Phase 25). */
+  scale?: OptionScale;
   /** Anything to show once the option is on: the minister's reaction, for one. */
   children?: ReactNode;
 }) {
   const on = state === 'on';
   const adjusted = state === 'adjusted';
+  const against = state === 'against';
   const blockedId = `${useId()}-blocked`;
   const badges = badgesOf(levers);
   const quiet = overlaps.filter((o) => !o.active);
   const active = overlaps.filter((o) => o.active);
-  const more = Boolean(note || quiet.length > 0 || (line && who));
+  const start = scale?.kind === 'start' ? scale : undefined;
+  const more = Boolean(note || quiet.length > 0 || (line && who) || start);
   const classes = [
     'choice',
     'choice--option',
@@ -167,12 +175,19 @@ export function OptionCard({
               <span className="sr-only">, in {price.year}</span>
             </span>
             {tag ? <span className="tag tag--quiet">{tag}</span> : null}
-            {adjusted
-              ? levers.map((lever) => (
-                  <span key={lever.code} className="tag--treasury tag--warn">
-                    Adjusted: {standing(lever, values[lever.code] ?? 0)}
-                  </span>
-                ))
+            {start ? <span className="tag tag--quiet">Makes a start</span> : null}
+            {adjusted || against
+              ? levers
+                  .filter((lever) => (values[lever.code] ?? 0) !== lever.control.default)
+                  .map((lever) => (
+                    <span
+                      key={lever.code}
+                      className={`tag--treasury ${adjusted ? 'tag--amber' : 'tag--warn'}`}
+                    >
+                      {adjusted ? 'Settled lower' : 'Moved the other way'}:{' '}
+                      {standing(lever, values[lever.code] ?? 0)}
+                    </span>
+                  ))
               : null}
             {redLines.map((r) =>
               r.broken ? (
@@ -236,6 +251,13 @@ export function OptionCard({
         <details className="more more--quiet choice__more">
           <summary>More about this</summary>
           <div className="more__body">
+            {start ? (
+              <span className="choice__line">
+                Makes a start, not delivery: {lowerFirst(start.why)}{' '}
+                <LabelBadge badge={start.badge} />
+                <SourceList as="span" refs={start.sources} className="choice__sources" />
+              </span>
+            ) : null}
             {note ? <span className="choice__line">{note}</span> : null}
             {quiet.map((o) => (
               <span key={o.withLever.code} className="choice__line choice__overlap">

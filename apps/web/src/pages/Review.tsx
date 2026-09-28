@@ -8,6 +8,7 @@ import {
   stageIndex,
   type Lever,
   type LeverEffect,
+  type OptionReport,
 } from '@btc/engine';
 import type { ReactNode } from 'react';
 import { HeadroomBar } from '../components/HeadroomBar';
@@ -120,10 +121,12 @@ export function ReviewPage() {
   const value = (lever: Lever) => state.leverValues[lever.code] ?? lever.control.default;
 
   // Every tax and every budget moved, except those a flagship policy already accounts for: they
-  // are read back under their own names above.
+  // are read back under their own names above. A lever moved against its flagship is not the
+  // flagship; it reads back as the cut it is (Phase 25).
+  const counts = (o: OptionReport) => o.state === 'on' || o.state === 'adjusted';
   const owned = new Set<string>(
     status.priorities.flatMap((p) =>
-      p.options.filter((o) => o.state !== 'off').flatMap((o) => Object.keys(o.option.values)),
+      p.options.filter(counts).flatMap((o) => Object.keys(o.option.values)),
     ),
   );
   const rows: Row[] = outcome.leverEffects
@@ -193,7 +196,7 @@ export function ReviewPage() {
         ) : (
           <ul className="review__list">
             {status.priorities.map((p) => {
-              const on = p.options.filter((o) => o.state !== 'off');
+              const on = p.options.filter(counts);
               return (
                 <li key={p.priority.id}>
                   <strong>{p.priority.title}</strong>
@@ -204,9 +207,9 @@ export function ReviewPage() {
                       {on.map((o) => (
                         <li key={o.option.id}>
                           {o.option.title}
-                          {o.state === 'adjusted' ? ' (adjusted)' : ''} ·{' '}
+                          {o.state === 'adjusted' ? ' (settled lower)' : ''} ·{' '}
                           <span className="amount amount--worse">
-                            costs {formatGbpBn(Math.abs(o.costGbpm), 1)}
+                            costs {formatGbpBn(Math.abs(o.spendingGbpm), 1)}
                           </span>
                         </li>
                       ))}

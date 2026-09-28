@@ -153,7 +153,10 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
 
   // The game's own readings.
   const broken = status?.promises.filter((p) => !p.kept) ?? [];
-  const unfunded = status?.priorities.filter((p) => p.status !== 'delivered') ?? [];
+  // Graded delivery (Phase 25): in full, started (or settled lower on step 4), or nothing.
+  const unfunded = status?.priorities.filter((p) => p.status === 'notFunded') ?? [];
+  const started =
+    status?.priorities.filter((p) => p.status === 'started' || p.status === 'settledLower') ?? [];
   const funded = status?.priorities.filter((p) => p.status === 'delivered') ?? [];
   const missedRules = outcome.verdicts
     .filter((v) => v.status === 'notMet' || v.status === 'aboveMargin')
@@ -194,9 +197,11 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   }
   // Priorities: one priority ranked, delivered, with nothing partly done, is a clear story.
   const ranked = status?.priorities ?? [];
-  const deliveredGbpm = funded.reduce((acc, p) => acc + Math.abs(p.costGbpm), 0);
+  const deliveredGbpm = funded.reduce((acc, p) => acc + Math.abs(p.spendingGbpm), 0);
   const clearPriorityGbpm =
-    ranked.length === 1 && funded.length === 1 && unfunded.length === 0 ? deliveredGbpm : 0;
+    ranked.length === 1 && funded.length === 1 && unfunded.length === 0 && started.length === 0
+      ? deliveredGbpm
+      : 0;
   const manifestoBroken = broken.filter((p) => p.promise.breaks.length > 0);
   // Amber (Phase 23): the pledge's words kept, its spirit tested; a promise also broken counts once.
   const strained = (status?.strains ?? []).filter(
@@ -220,6 +225,7 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       manifestoBroken: manifestoBroken.length,
       manifestoStrained: strained.length,
       prioritiesUnfunded: unfunded.length,
+      prioritiesStarted: started.length,
       prioritiesFunded: funded.length,
       deliveredGbpm,
       clearPriorityGbpm,
@@ -262,6 +268,7 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
         (s) => `${s.promise.title} (${s.strainedBy.map((b) => title(b.code)).join(', ')})`,
       ),
       prioritiesUnfunded: unfunded.map((p) => p.priority.title),
+      prioritiesStarted: started.map((p) => p.priority.title),
       prioritiesFunded: funded.map((p) => p.priority.title),
       deliveredGbpm: funded.map((p) => p.priority.title),
       clearPriorityGbpm: clearPriorityGbpm > 0 ? funded.map((p) => p.priority.title) : [],
