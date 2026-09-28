@@ -162,9 +162,10 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     // Another option is named as the option: the 3% path and a day-to-day uplift add up.
     const three = optionOverlaps(deliverOption('three-per-cent-now'), levers, new Set(), options);
     expect(three.find((o) => o.withLever.code === 'mod')?.option?.id).toBe('defence-uplift');
-    // Keeping VAT off electricity (Phase 25) and full VAT on home energy (Phase 26) are on step 4,
-    // so the gas card names both at once; a lever step 4 does not offer is mentioned once it has
-    // moved, read from either side of the pair.
+    // Every policy lever is on step 4 (Phase 26), so the gas card names each partner at once,
+    // read from either side of the pair, and quotes the one that has moved.
+    const live = levers.filter((l) => !l.deprecated && l.category !== 'macro');
+    expect(live.filter((l) => !offered.has(l.code)).map((l) => l.code)).toEqual([]);
     const gas = deliverOption('vat-off-gas');
     expect(
       optionOverlaps(gas, levers, new Set(), options, offered).map((o) => [
@@ -173,10 +174,11 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
       ]),
     ).toEqual([
       ['vatnrg', false],
+      ['vatr', false],
       ['vatelec', false],
     ]);
-    const moved = optionOverlaps(gas, levers, new Set(['vatr', 'vatelec']), options, offered);
-    expect(moved.map((o) => o.withLever.code).sort()).toEqual(['vatelec', 'vatnrg', 'vatr']);
+    const moved = optionOverlaps(gas, levers, new Set(['vatr']), options, offered);
+    expect(moved.filter((o) => o.active).map((o) => o.withLever.code)).toEqual(['vatr']);
     // A pair authored as a conflict is not an overlap as well: the conflict says it.
     expect(three.some((o) => o.withLever.code === 'dip47')).toBe(false);
   });

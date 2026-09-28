@@ -571,6 +571,62 @@
             ],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "nicpt",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "The National Insurance threshold goes up. We both pay a bit less on every payslip.",
+            "sources": [
+              {
+                "sourceId": "govuk-nics-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nicpt",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "The National Insurance threshold comes down. We both pay a bit more on every payslip.",
+            "sources": [
+              {
+                "sourceId": "govuk-nics-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nicst",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "Employer National Insurance starts sooner on our pay. The firm pays it first; over time it comes out of pay rises.",
+            "sources": [
+              {
+                "sourceId": "hmrc-tiin-employer-nics-2024"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "itpa",
+          "when": "above",
+          "effect": "gains",
+          "line": {
+            "text": "The personal allowance goes up. We both keep a bit more of every payslip.",
+            "sources": [
+              {
+                "sourceId": "govuk-income-tax-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
       ],
       "exposure": [
@@ -769,6 +825,34 @@
             "sources": [
               {
                 "sourceId": "no10-social-care-speech-2026-07-29"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vatr",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "VAT on the gas bill goes up. In winter that is the bill that matters.",
+            "sources": [
+              {
+                "sourceId": "hmrc-vat-notice-701-19"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "vatr",
+          "when": "below",
+          "effect": "gains",
+          "line": {
+            "text": "VAT on the gas bill comes down. Winter costs a bit less.",
+            "sources": [
+              {
+                "sourceId": "hmrc-vat-notice-701-19"
               }
             ],
             "badge": "simulated"
@@ -1236,6 +1320,34 @@
             ],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "nica",
+          "when": "above",
+          "effect": "pays",
+          "line": {
+            "text": "National Insurance up on pay above £50,270. As a higher-rate taxpayer, I pay it on every pound over.",
+            "sources": [
+              {
+                "sourceId": "govuk-nics-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nica",
+          "when": "below",
+          "effect": "gains",
+          "line": {
+            "text": "National Insurance down on pay above £50,270. Every pound I earn over it keeps a bit more.",
+            "sources": [
+              {
+                "sourceId": "govuk-nics-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
       ],
       "exposure": [
@@ -1271,11 +1383,14 @@
   },
   "reachesNone": [
     "airet",
+    "alc",
+    "badr",
     "bank5",
     "banklevy",
     "brates",
     "carried",
     "cgtexit",
+    "cgtl",
     "cta",
     "ctgh",
     "def3",

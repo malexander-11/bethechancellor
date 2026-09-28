@@ -27,8 +27,8 @@ const lever = (code: string) => {
  * The taxes, in the order the tax screen shows them (Phase 24, ADR-0025). Phase 25 added the two
  * cuts a Chancellor actually faces this autumn: keeping VAT off electricity (third in "Everyone",
  * the main VAT rate folded) and freezing fuel duty (first for drivers, last year's cancelled rise
- * folded). Phase 26 folds every other tax toggle into its who-pays group, after the hand-picked
- * ones and before any lever not on the table (ADR-0027).
+ * folded). Phase 26 folds every other tax into its who-pays group, the toggles and then the
+ * rates, after the hand-picked ones and before any lever not on the table (ADR-0027).
  */
 const TAX_CODES = [
   [
@@ -37,6 +37,7 @@ const TAX_CODES = [
     [
       'hscl', 'itbr', 'vatelec', 'vats', 'sugsalt', 'ipt', 'hmrc2',
       'cta', 'nicspa', 'vatgas', 'vat1z', 'rvfrz', 'rvsal',
+      'itpa', 'nicm', 'nica', 'nicpt', 'nic4', 'vatr',
       'vatfood', 'vatnrg', 'vattrn', 'vatkids', 'vatbook',
     ],
   ],
@@ -46,19 +47,37 @@ const TAX_CODES = [
     [
       'cgtalign', 'nicuel', 'pens30', 'it50', 'wealth2',
       'pens20', 'pslump', 'nicllp', 'carried', 'cgtexit', 'wealth',
+      'ithr', 'itar', 'itbrl',
     ],
   ],
-  ['business', ['nicpen', 'nicer', 'qelevy', 'ct', 'banklevy', 'bank5', 'epl2', 'vatthr']],
+  [
+    'business',
+    // prettier-ignore
+    [
+      'nicpen', 'nicer', 'qelevy', 'ct', 'banklevy',
+      'bank5', 'epl2', 'vatthr',
+      'nicst', 'brates',
+    ],
+  ],
   [
     'savers-owners',
     // prettier-ignore
     [
       'ctgh', 'cgtdth', 'rnrb', 'nicrent', 'iinc2',
       'sdltabol', 'hvcts15', 'rvcgt', 'rvinv', 'rvapr', 'rvhrad',
+      'iht', 'sdlt5', 'cgth', 'cgtl', 'badr',
       'cgtprr', 'vathome',
     ],
   ],
-  ['duties', ['fuelfrz', 'gam2', 'tob', 'ved', 'apd', 'rvfuel', 'rvgam', 'vatmot']],
+  [
+    'duties',
+    // prettier-ignore
+    [
+      'fuelfrz', 'gam2', 'tob', 'ved', 'apd', 'rvfuel',
+      'rvgam', 'vatmot',
+      'fuel', 'alc',
+    ],
+  ],
 ];
 
 const SPENDING_CODES = [
@@ -85,17 +104,17 @@ const SPENDING_CODES = [
 ];
 
 describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
-  it('offers fifty-eight taxes in five who-pays groups, and thirty-two spending levers in four', () => {
+  it('offers seventy-six taxes in five who-pays groups, and thirty-two spending levers in four', () => {
     expect(file.tax.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(TAX_CODES);
     expect(file.spending.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(
       SPENDING_CODES,
     );
-    expect(finetuneItems(file, 'tax')).toHaveLength(58);
+    expect(finetuneItems(file, 'tax')).toHaveLength(76);
     expect(finetuneItems(file, 'spending')).toHaveLength(32);
     // The spending screen says how long the settlements run, the squeeze already after them, and
     // whose budgets most of these are (Phase 25).
     expect(file.spending.notes.map((n) => n.badge)).toEqual(['simulated', 'direct', 'commentary']);
-    expect(finetuneItems(file)).toHaveLength(90);
+    expect(finetuneItems(file)).toHaveLength(108);
     expect(FINETUNE_SIDES).toEqual(['tax', 'spending']);
   });
 

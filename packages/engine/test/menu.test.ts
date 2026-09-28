@@ -261,18 +261,19 @@ describe('the Budget 2026 menu', () => {
     const align = lever('cgtalign');
     if (align.costing.kind !== 'schedule') throw new Error('alignment is a schedule');
     expect(align.costing.caveats.some((c) => /package, not a rate change/.test(c))).toBe(true);
-    // The cards that count the same money cannot be chosen with it (Phase 25); the ones that only
-    // overlap warn. Reversing the 2024 rise sets the same rates the other way, so it is one or the
-    // other on step 4 (Phase 26).
+    // The cards that count the same money cannot be chosen with it (Phase 25). Reversing the 2024
+    // rise sets the same rates the other way, and a rise on today's higher rate cannot apply on
+    // top of the package's own rates: each is one or the other on step 4 (Phase 26).
     const severity = (s: string) =>
       (align.interactions ?? []).filter((i) => i.severity === s).map((i) => i.withLever);
     expect(severity('excludes').sort()).toEqual([
       'cgt-exit-charge',
+      'cgt-higher-rate',
       'cgt-lower-rate',
       'cgt-on-death',
       'reverse-cgt-rate-rise',
     ]);
-    expect(severity('warn')).toEqual(expect.arrayContaining(['cgt-higher-rate']));
+    expect(severity('warn')).toEqual([]);
     expect(align.considerations.some((c) => c.id === 'cgt-behaviour')).toBe(true);
   });
 
@@ -524,7 +525,9 @@ describe('the Budget 2026 menu', () => {
     );
     expect(oneRate.find((p) => p.lever.code === 'vatfood')?.text).toMatch(/already covers food/);
     expect(warns('ctgh')).toContain(lever('hvcts15').id);
-    expect(warns('nicuel')).toContain(lever('nica').id);
+    // Charging the full rate above £50,270 and moving today's 2% there are one or the other, a cut
+    // as much as a rise (Phase 26).
+    expect(excludesPartners(lever('nica'), ds.levers).map((p) => p.lever.code)).toEqual(['nicuel']);
     expect(warns('sdltabol')).toContain(lever('sdlt5').id);
     for (const code of ['ctgh', 'nicuel', 'vat1z', 'vatmot']) {
       expect(

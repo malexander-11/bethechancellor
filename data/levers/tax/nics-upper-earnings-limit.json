@@ -120,8 +120,8 @@
   "interactions": [
     {
       "withLever": "nics-employee-additional-rate",
-      "text": "Abolishing the upper earnings limit replaces the 2% additional rate altogether; raising that rate as well double counts.",
-      "severity": "warn"
+      "text": "Both set National Insurance on pay above £50,270: one charges the full rate there, the other moves today’s 2%.",
+      "severity": "excludes"
     },
     {
       "withLever": "nics-employee-main-rate",

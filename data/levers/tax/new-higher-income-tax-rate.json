@@ -141,8 +141,8 @@
   "interactions": [
     {
       "withLever": "income-tax-additional-rate",
-      "text": "This is the additional-rate slider at +5p. Setting both stacks two rate rises on the same income.",
-      "severity": "warn"
+      "text": "Both set the rate on income above £125,140: one makes it 50%, the other moves today’s 45% up or down.",
+      "severity": "excludes"
     }
   ],
   "status": "reviewed",

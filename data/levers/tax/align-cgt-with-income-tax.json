@@ -119,8 +119,8 @@
   "interactions": [
     {
       "withLever": "cgt-higher-rate",
-      "text": "The package already sets the rates at 20%, 40% and 45%; a further rise on top of it is not what CenTax costed.",
-      "severity": "warn"
+      "text": "The alignment package sets its own rates of 20%, 40% and 45%; a rise on today’s 24% cannot also apply.",
+      "severity": "excludes"
     },
     {
       "withLever": "cgt-lower-rate",

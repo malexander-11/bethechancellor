@@ -56,8 +56,8 @@ describe('fine-tune tax and spend: the curated levers', () => {
     ]);
     // A lever that moves both ways offers two policies, one each way, and every other tax toggle
     // waits in its group's fold (Phase 26).
-    expect(group(/^Everyone 21 policies/)).toBeInTheDocument();
-    expect(group(/^Drivers, smokers, gamblers and flyers 9 policies/)).toBeInTheDocument();
+    expect(group(/^Everyone 31 policies/)).toBeInTheDocument();
+    expect(group(/^Drivers, smokers, gamblers and flyers 13 policies/)).toBeInTheDocument();
     // Stacked, not tabbed; one primary button; every lever with its adviser's line.
     expect(screen.queryByRole('tab')).toBeNull();
     expect(container.querySelectorAll('.btn--primary')).toHaveLength(1);
@@ -102,7 +102,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(
       within(fold).getByRole('checkbox', { name: 'End the threshold freeze early' }),
     ).toBeInTheDocument();
-    expect(container.querySelectorAll('.lever--curated')).toHaveLength(33);
+    expect(container.querySelectorAll('.lever--curated')).toHaveLength(43);
   });
 
   it('prices a policy before it is chosen, then says what it does, and the bar keeps score', async () => {
@@ -176,7 +176,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
   it('keeps a policy chosen inside the fold where it is, and shows it at the top next time', () => {
     const first = at(`/finetune/tax?${BASE}&${GAME}`);
     const fold = openFold(/^Everyone/);
-    expect(within(fold).getByText('18 more policies')).toBeInTheDocument();
+    expect(within(fold).getByText('28 more policies')).toBeInTheDocument();
     const premium = cardOf(
       within(fold).getByRole('heading', { name: 'Put up insurance premium tax' }),
     );
@@ -189,7 +189,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     // The next visit finds it chosen, and on show; its other way stays in the fold.
     at(`/finetune/tax?${BASE}&${GAME}&L=ipt.2`);
     const again = group(/^Everyone 1 chosen/);
-    expect(within(again).getByText('17 more policies')).toBeInTheDocument();
+    expect(within(again).getByText('27 more policies')).toBeInTheDocument();
     expect(
       within(policy('Put up insurance premium tax')).getByRole('radio', { name: 'Small 14%' }),
     ).toBeChecked();
@@ -204,14 +204,16 @@ describe('fine-tune tax and spend: the curated levers', () => {
 
   it('warns when two levers overlap: last year’s cancelled rise against a fuel duty cut', () => {
     at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&L=fuel.-10`);
+    // The cut is the cost-of-living flagship's own, so fuel duty is one line in the drivers'
+    // group with the way back to that flagship, not a card that could undo it (Phase 26).
+    const held = group(/^Drivers/).querySelector('.lever--held');
+    expect(held?.querySelector('.lever__held')?.textContent).toMatch(/^Cut fuel duty by 10%/);
     openFold(/^Drivers/);
     const restore = cardOf(
       screen.getByRole('checkbox', { name: 'Add back last year’s cancelled fuel duty rise' }),
     );
     expect(
-      within(restore).getByText(
-        /^Warning: Overlaps with Cut fuel duty by 10%: Both change fuel duty rates/,
-      ),
+      within(restore).getByText(/^Warning: Overlaps with Fuel duty: Both change fuel duty rates/),
     ).toHaveClass('choice__overlap--warn');
     // The freeze a Chancellor faces this autumn is on show, and costs money (Phase 25).
     const freeze = cardOf(screen.getByRole('checkbox', { name: 'Freeze fuel duty in April 2027' }));
