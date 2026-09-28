@@ -1,6 +1,6 @@
 # ADR-0005: Debt interest on extra borrowing is modelled, labelled mechanical
 
-**Status:** accepted, 2026-09-15
+**Status:** accepted, 2026-09-15; revised 2026-09-28 (below, ADR-0027)
 
 ## Context
 
@@ -23,3 +23,10 @@ judgement.
 
 The current budget and PSNFL respond to capital spending through interest only, which is
 the framework's intent and the game's central lesson.
+
+## Revision (2026-09-28): always counted (ADR-0027)
+
+The toggle has gone from the game with the desk that held it. Every Budget counts the interest on
+its own borrowing, as the bar, the review and Budget day already assumed; a shared link that
+switched it off is read with it on, and a note on the screen it opens says so. The engine keeps
+the option, and its tests, so the arithmetic above can still be checked with the feedback off.

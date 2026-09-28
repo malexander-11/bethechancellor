@@ -51,9 +51,9 @@ export function MethodologyPage() {
               <LabelBadge badge="assumption" />
             </td>
             <td>
-              A number you or the tool chooses, using published sensitivities where they exist: the
-              interest-rate, growth and inflation sliders, and the year-by-year path of their
-              effects.
+              A number the tool chooses, using published sensitivities where they exist:
+              today&rsquo;s estimate of interest rates, growth and inflation, and the year-by-year
+              path of their effects.
             </td>
           </tr>
           <tr>
@@ -129,51 +129,55 @@ export function MethodologyPage() {
         The game walks through six steps, one screen at a time, with one primary button on each:
         your briefing (the headroom you have on today&rsquo;s estimate, the two rules, what has been
         promised since March); set your priorities with the Prime Minister; flagship policies, one
-        screen per priority; fine-tune tax and spend, two screens of hand-picked levers, the taxes
-        in five groups by who pays and the spending in four by what the money is for; deliver the
-        Budget, a review of the whole of it with one red button; and feedback. There is no forecast
-        to guess and no headroom target: every game plans on one figure, today&rsquo;s estimate, and
-        the rules are the line to meet. The road runs one way: a stage opens once the one before it
-        has been left, going back is always allowed and keeps every choice, because the Budget lives
-        in the link, and a link that jumps ahead is sent back to where the game has got. The
-        progress line at the top of every page and the guard on every page read the same rule. Every
-        flagship policy is a bundle of the game&rsquo;s own levers that no other option moves,
-        priced by the engine against the Budget as it stands with the headroom it would leave, two
-        that count the same money never both chosen. On the fine-tuning screens each lever is the
-        desk&rsquo;s own control under a plain title, with one adviser&rsquo;s line and, before it
-        moves, what its usual move would do and the headroom that would leave. The desk of every
-        lever sits one link away and returns to the screen that opened it (a sandbox with no game
-        still walks the desk&rsquo;s two screens in sequence). Every screen opens with one heading
-        and one instruction, and the tables sit behind the Show workings switch; the guide is
-        chrome, carries no badge and quotes no figure that is not sourced. The advisers, the Prime
-        Minister and the ministers are roles, not people; a briefing that cites a public document is
-        labelled commentary, and a judgement nobody published is labelled simulated and never
-        produces a number. Today&rsquo;s estimate follows a stated rule: the latest market or
-        independent reading minus the OBR&rsquo;s March assumption, rounded to the slider&rsquo;s
-        step (interest rates up three-quarters of a point, RPI inflation up half a point, growth on
-        the OBR&rsquo;s path), turned into headroom by the OBR&rsquo;s own sensitivities: about £6.8
-        billion in 2029-30, against £23.6 billion in March. Controls show the level a setting moves
-        to (20% to 21%, £12,570 to £13,070), but the engine costs the change, exactly as before:
-        levels are display only. VAT base-broadening toggles use HMRC&rsquo;s cost-of-relief
-        estimates, which HMRC says do not represent what abolishing a relief would raise; abolishing
-        inheritance tax removes the OBR&rsquo;s whole receipts line; reversing the October 2024
-        capital gains tax rise uses the Treasury&rsquo;s own costing of the package. The revenue
-        menu a Chancellor actually weighs is in the package too, each option a published figure: the
-        employer National Insurance threshold, vehicle excise duty, air passenger duty, tobacco
-        duties, the Business Asset Disposal Relief rate, the residence nil-rate band, insurance
-        premium tax, and employer National Insurance on pension contributions from HMRC&rsquo;s
-        private pension statistics (£14.3 billion in 2024-25, less the £6.5 billion on public sector
-        schemes, which would only move money from departments to the Treasury, taken to
-        today&rsquo;s 15% rate). Every card built on HMRC&rsquo;s cost of a relief reads
-        &ldquo;raises at most&rdquo; and says why, and the markets count it as a figure nobody has
-        certified. The health and social care levy is 1.25 times HMRC&rsquo;s own one-point figures
-        for every National Insurance rate, the same figures the National Insurance sliders use; two
-        measures that count the same money (aligning capital gains with income and taxing gains at
-        death, for one) cannot both be chosen on the curated screens. Employer-side National
-        Insurance is not a manifesto red line here, on the government&rsquo;s own reading of the
-        lock; the Political Adviser says on each such lever that the reading is contested. Phase 12
-        added the menu the Budget 2026 reporting says is on the table: ending the capital gains
-        write-off at death, a £1.5 million council tax surcharge band, reversing the farm and
+        screen per priority; fine-tune tax and spend, two screens on which every lever is a policy,
+        the taxes in five groups by who pays and the spending in four by what the money is for;
+        deliver the Budget, a review of the whole of it with one red button; and feedback. There is
+        no forecast to guess and no headroom target: every game plans on one figure, today&rsquo;s
+        estimate, and the rules are the line to meet. The road runs one way: a stage opens once the
+        one before it has been left, going back is always allowed and keeps every choice, because
+        the Budget lives in the link, and a link that jumps ahead is sent back to where the game has
+        got. The progress line at the top of every page and the guard on every page read the same
+        rule. Every flagship policy is a bundle of the game&rsquo;s own levers that no other option
+        moves, priced by the engine against the Budget as it stands with the headroom it would
+        leave, two that count the same money never both chosen. On the fine-tuning screens every
+        lever is a policy under a title that says what it does, a tick or a choice of small, medium
+        and large sizes (putting up VAT is 21%, 22% or 25%), with one adviser&rsquo;s line and,
+        before it is chosen, what its smallest size would do and the headroom that would leave. A
+        lever that moves both ways is two policies, and choosing one clears the other; a lever a
+        chosen flagship already sets shows once, as a line with a way back to that flagship. There
+        is no slider anywhere and no desk: every lever the desk once held is a policy on these two
+        screens, and with no game only the cover and the briefing open. Every screen opens with one
+        heading and one instruction, and the tables sit behind the Show workings switch; the guide
+        is chrome, carries no badge and quotes no figure that is not sourced. The advisers, the
+        Prime Minister and the ministers are roles, not people; a briefing that cites a public
+        document is labelled commentary, and a judgement nobody published is labelled simulated and
+        never produces a number. Today&rsquo;s estimate follows a stated rule: the latest market or
+        independent reading minus the OBR&rsquo;s March assumption, rounded to the step the
+        assumption moves in (interest rates up three-quarters of a point, RPI inflation up half a
+        point, growth on the OBR&rsquo;s path), turned into headroom by the OBR&rsquo;s own
+        sensitivities: about £6.8 billion in 2029-30, against £23.6 billion in March. Each size
+        shows the level it moves to (21% on VAT, £12,670 on the personal allowance), but the engine
+        costs the change, exactly as before: levels are display only. VAT base-broadening toggles
+        use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not represent what abolishing
+        a relief would raise; abolishing inheritance tax removes the OBR&rsquo;s whole receipts
+        line; reversing the October 2024 capital gains tax rise uses the Treasury&rsquo;s own
+        costing of the package. The revenue menu a Chancellor actually weighs is on the fine-tuning
+        screens too, each option a published figure: the employer National Insurance threshold,
+        vehicle excise duty, air passenger duty, tobacco duties, the Business Asset Disposal Relief
+        rate, the residence nil-rate band, insurance premium tax, and employer National Insurance on
+        pension contributions from HMRC&rsquo;s private pension statistics (£14.3 billion in
+        2024-25, less the £6.5 billion on public sector schemes, which would only move money from
+        departments to the Treasury, taken to today&rsquo;s 15% rate). Every card built on
+        HMRC&rsquo;s cost of a relief reads &ldquo;raises at most&rdquo; and says why, and the
+        markets count it as a figure nobody has certified. The health and social care levy is 1.25
+        times HMRC&rsquo;s own one-point figures for every National Insurance rate, the same figures
+        the National Insurance rate policies use; two measures that count the same money (aligning
+        capital gains with income and taxing gains at death, for one) cannot both be chosen, and
+        there are twenty-two such pairs, each with a text that reads from either card. Employer-side
+        National Insurance is not a manifesto red line here, on the government&rsquo;s own reading
+        of the lock; the Political Adviser says on each such lever that the reading is contested.
+        Phase 12 added the menu the Budget 2026 reporting says is on the table: ending the capital
+        gains write-off at death, a £1.5 million council tax surcharge band, reversing the farm and
         family-business relief reform, two points on the bank surcharge, the energy profits levy
         package again, the self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance
         package, unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and
@@ -183,17 +187,16 @@ export function MethodologyPage() {
 
       <h2>Spending levers</h2>
       <p>
-        Departmental sliders scale the Spending Review 2025 settlements (resource budgets excluding
-        depreciation) for 2025-26 to 2028-29. The Spending Review stops there, so 2029-30 and
-        2030-31 carry the last settlement forward in line with the OBR&rsquo;s total day-to-day
-        spending path; the drawer marks that as an assumption. The investment slider scales the
+        Departmental policies trim or top up the Spending Review 2025 settlements (resource budgets
+        excluding depreciation) for 2025-26 to 2028-29. The Spending Review stops there, so 2029-30
+        and 2030-31 carry the last settlement forward in line with the OBR&rsquo;s total day-to-day
+        spending path; the drawer marks that as an assumption. The investment policies scale the
         OBR&rsquo;s capital budget forecast and moves borrowing and net financial liabilities but
-        not the current budget. Welfare sliders scale the OBR&rsquo;s welfare lines, with
+        not the current budget. Welfare policies scale the OBR&rsquo;s welfare lines, with
         welfare-cap membership approximated line by line (pensioner spending outside, the rest
-        inside). Child benefit uses HMRC&rsquo;s ready reckoner and the four Budget 2025 spending
-        decisions use the Treasury&rsquo;s scorecard, both on the spending side. Barnett
-        consequentials for Scotland, Wales and Northern Ireland are described under each department,
-        never added to the number.
+        inside). The five Budget 2025 spending decisions use the Treasury&rsquo;s scorecard, on the
+        spending side. Barnett consequentials for Scotland, Wales and Northern Ireland are described
+        under each department, never added to the number.
       </p>
 
       <h2>Where nobody has published a costing</h2>

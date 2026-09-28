@@ -7,16 +7,15 @@ Everything the engine reads lives here as JSON validated by the schemas in
 sources/sources.json      registry of every source document (id, org, title, url, dates, licence)
 vintages/<id>/vintage.json  one OBR forecast: years, economy, fiscal aggregates, sensitivities, checks
 rules/<id>.json           a Charter for Budget Responsibility rule set
-levers/<category>/*.json  policy levers (tax, spend, welfare) and assumption sliders (macro)
+levers/<category>/*.json  policy levers (tax, spend, welfare) and the economy's assumptions (macro)
 reference/*.json          non-forecast reference numbers (e.g. UK households)
-presets/presets.json      named combinations of lever settings
 context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the latest figures, with
                           the suggestion rules that make today's estimate (ADR-0025)
 journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/briefings.json    sourced adviser briefings per step and lever group
 journey/pm.json           the Prime Minister: the eight priorities, the manifesto red lines
 journey/options.json      the ways to deliver each priority (ADR-0022)
-journey/finetune.json     the fine-tuning screens: hand-picked tax and spending levers (ADR-0025)
+journey/finetune.json     the fine-tuning screens: every policy lever, as policies with sizes (ADR-0027)
 journey/ministers.json    a minister's lines for every spending and welfare lever
 journey/interventions.json adviser lines with a closed predicate over the ambitions
 journey/speech.json       the speech fragments the assembler fills
@@ -65,8 +64,9 @@ vintage in the web app, and keep the old vintage so existing permalinks still re
 4. State the baseline (`baselinePolicy`, `alreadyIncludes`) from Budget 2025 Table 4.1 or the EFO.
 5. Add considerations only from documents readable in this repository's sources registry, with
    `alreadyInDirectCosting: true` when the published figure already contains the behaviour.
-6. Give the lever a `group`, an `order`, a unique stable `code`, and set `status: reviewed` with
-   `reviewedOn` once the above is checked.
+6. Give the lever a `group` (its family, which heads it in step 4's folds) and a unique stable
+   `code`, and set `status: reviewed` with `reviewedOn` once the above is checked. A live lever
+   also needs its place on step 4 (`finetune.json`, below).
 
 ### Levels and the journey
 
@@ -74,7 +74,8 @@ vintage in the web app, and keep the old vintage so existing permalinks still re
 pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows "20% → 21%".
   The level never enters the costing; percentage-of-baseline levers need no level metadata.
 - **Selects.** `control.kind: "select"` with `labels` keyed by value ("-40": "Abolish (0%)");
-  the engine snaps to the nearest offered option.
+  the engine snaps to the nearest offered option, and step 4's sizes read their levels from the
+  labels ("Large: Abolish (0%)").
 - **Relief-cost toggles.** `rawSource.kind: "hmrcReliefCost"` cites rows of a relief-cost
   extract by `sourceId`: `derived/hmrc-tax-reliefs-2026-01.raw.json` (HMRC's tax reliefs, Table 2)
   or `derived/hmrc-private-pensions-2026-07.raw.json` (HMRC's pension statistics, Table 6, with
@@ -91,14 +92,16 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   requires `badge: "mechanical"`.
 - **The range the source covers.** `control.sourceRange: { min, max, text }` (Phase 25): HMRC
   vouches for scaling a 1p row to about 2p, not beyond. It must hold the default and sit inside
-  the control's range. The curated screens stop there; the desk goes on, badges the effect Worked
-  out past it and shows `text` (at most 140 characters).
+  the control's range. A step-4 size may go past it (Phase 26, ADR-0027): the effect is then
+  badged Worked out and shows `text` (at most 140 characters).
 - **The lever's noun.** `noun`, in lower case ("the basic rate of income tax", "the health
   budget"): how a Budget-day reason names its causes after "Because of", and how the speech names
   the measure.
 - **Two levers that count the same money.** An interaction with `severity: "excludes"`, authored
-  once per pair (the validator checks): the curated screens let only one be chosen at a time and
-  offer a swap; the desk allows both and says "counted twice". `info` and `warn` remain notes.
+  once per pair (the validator checks): step 4 and the flagship screens let only one be chosen at a
+  time and offer a swap. The text must read from either card and in either direction (Phase 26).
+  A link that carries both still opens, and each card says it is counted twice. `info` and `warn`
+  remain notes.
 - **A note on growth.** A `macro` consideration may carry `growth: true`: what the measure may do
   to growth and the wider economy, in words. The markets' fold on Budget day reads the biggest
   moved measure's; the schema refuses the flag on any other kind of note.
@@ -147,8 +150,8 @@ lever lives in the folder of its real category and the group of the screen it be
 (`tax` · `Capital gains`, `spend` · `New programmes`); the badge, not the folder, keeps it apart
 from the certified rows beside it (ADR-0017).
 
-- **Category and group.** The lever's real `category` and the `group` of the tab it sits in,
-  ordered by `order`; `control.kind: "toggle"` unless a published line supports a scale (business
+- **Category and group.** The lever's real `category`, its family `group`, and its place in a
+  step-4 group in `finetune.json`; `control.kind: "toggle"` unless a published line supports a scale (business
   rates scales the OBR's line and is `mechanical`, see the spending notes above).
 - **Badge.** `assumption`, never `direct`. A `repeat` of a scorecard line, a `statedProduct`, a
   `weightedSum`, a `gdpShareGap`, and a multiple of an HMRC row beyond the small change HMRC
@@ -175,7 +178,7 @@ from the certified rows beside it (ADR-0017).
   timetable (legislation, systems, valuation, transitional protection), the sentence that says why,
   and the sources that say so. The effect map stays as the method reproduces it; the engine zeroes
   the earlier years at run time and a player's delay can only push the start later. The year must
-  be one the vintage covers (`validate:data`), a macro slider may not carry one, and the headline
+  be one the vintage covers (`validate:data`), a macro lever may not carry one, and the headline
   names the year. A `linearPerUnit` or `lookupTable` costing with a floor would shift its published
   profile to the floor year rather than zero it; none carries one today.
 - **Press for words only.** A press or professional-firm page may be registered (org `Other`)
@@ -206,7 +209,7 @@ from the certified rows beside it (ADR-0017).
   `legal`, `behavioural` or `administrative` consideration, cited. State the alternative
   published figure in the caveats where there is one.
 - **Shelving.** A lever nobody is considering stays in the data with `deprecated: true`,
-  `group: "Shelved"`, `order: 900` and the headline "Kept for the record; not on offer at this
+  `group: "Shelved"` and the headline "Kept for the record; not on offer at this
   Budget. Old links still work." Its costing, raw source and considerations stay, so
   `validate:data` and the engine tests keep reproducing it; the app filters it out at load, the
   incidence, minister and suggestion checks skip it, and an old link decodes it as an unknown
@@ -265,12 +268,12 @@ leaves as they are; the validator refuses an unknown lever.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
-One guide entry per screen: `step`, `number` (one to seven; the package's screens, the two
-forecast screens and the two final-choices screens each share a number), `title` (the page's
+One guide entry per step, with the cover and the briefing each their own: `step`, `number` (one to
+six; the cover and the briefing share the first), `title` (the page's
 heading, unless the page names itself, as each priority screen does) and `now`, the one line under
 it saying what to do, at most ten words on the road. A word in square brackets, `[headroom]` or
-`[the OBR](obr)`, is a glossary reference and must exist in `glossary.json`; the desk's tooltips
-read the glossary too. Guide and glossary are chrome: no badge, and no figure unless the glossary
+`[the OBR](obr)`, is a glossary reference and must exist in `glossary.json`; the policy cards'
+tags read the glossary too. Guide and glossary are chrome: no badge, and no figure unless the glossary
 entry carries a source. (The `doing`, `why` and `terms` fields, and the "Why this matters" fold
 they filled, went in Phase 23.)
 
@@ -333,26 +336,49 @@ enforces:
   the headroom the move would leave. Titles say what the option does, in at most twelve words and
   eighty characters.
 
-### Fine-tuning (`data/journey/finetune.json`, ADR-0025)
+### Fine-tuning (`data/journey/finetune.json`, ADR-0025, ADR-0027)
 
 Two sides, `tax` and `spending`, each with its screen's `title` (at most four words) and `lead` (at
-most ten), the `adviser` who speaks there, and `groups` of `items`. An item is a live lever's
-`code`, a plain `title` (at most twelve words), the `move` the adviser's line judges (a toggle's
-1; a slider's usual step) and the `advice`, a `SimulatedLine` with at least one source. Rules the
-validator enforces:
+most ten), the `adviser` who speaks there, and `groups` of `items`. Since Phase 26 every live policy
+lever is an item, once: 76 on the tax side and 32 on the spending side. An item is the lever's
+`code`, its plain `name` for the review and the notes ("The main rate of VAT"; a toggle may leave it
+out and go by its policy's title), and one or two `policies`, each `{ title, sizes, advice }`: a
+title that says what the policy does ("Put up VAT", at most twelve words), the settings it comes in,
+smallest first, and the adviser's line, a `SimulatedLine` with at least one source. The first
+policy is the usual way, the one that improves the public finances (taxes up, spending down); a
+lever that moves both ways may carry a second policy the other way, and choosing one clears the
+other. Rules the validator enforces:
 
 - **A live lever on its own side, once.** Tax items are tax levers; spending items are spend or
-  welfare levers; no code appears twice in the file.
-- **A move the control can reach**, inside its range and on its grid, and never the setting the
-  lever rests at.
+  welfare levers; no code appears twice in the file, so both ways of a lever share a group.
+- **Sizes the lever can reach**, each inside its range and on its grid and never the setting it
+  rests at, all on one side of that setting and growing away from it. A toggle's policy has one
+  size, the switch turned on.
+- **One policy each way.** Two policies only where they go opposite ways.
+- **A plain name** for every lever that is not a toggle.
+- **Not on the table comes last.** A lever tagged not on the table follows every other lever in its
+  group.
 - **Every tax sits with the people who pay it**: its group is the who-pays group (`WHO_PAYS` in the
   engine) its incidence pays-group maps to.
 - **The adviser exists and speaks on this step** (`finetune` in `advisers.json`).
 
-The words test holds every title and line to twelve words with no figure, and checks each size
-word against the engine's own figure for the lever at its `move` (big at £5bn or more in the
-target year, small at £1bn or less). The page prices the move against the Budget as it stands; no
-figure is authored.
+Labels follow the count of sizes: one is a tick, two are Small and Large, three are Small, Medium
+and Large, each shown with its level. By default the small size is the lever's usual step (a penny,
+a point, £2 a week, £100, 5% on a duty), medium twice it and large five times it, capped at the
+range, with a repeated size dropped. A test holds every sized policy to that rule, except where
+HMRC publishes points and the sizes sit on them: the personal allowance, the higher-rate threshold,
+the additional rate, the two capital gains rates, the rate on selling a business, and inheritance
+tax.
+
+The words test holds every title and line to twelve words with no figure, and checks each size word
+at every size a policy offers: "big" (or expensive, large, costly) only where the engine's own
+figure is £5bn or more in the target year even at the smallest size, "small" (or cheap, little,
+modest, tiny) only where it is £1bn or less even at the largest. The page prices the smallest size
+against the Budget as it stands; no figure is authored.
+
+Where two levers' own texts say they double count, cancel or are "pick one", the pair is an
+`excludes` interaction (above), with a text that reads from either card; twenty-two pairs today.
+Pairs whose texts say only that the combined figure is approximate stay `warn`.
 
 A side may carry `notes` (Phase 25): lines under the screen's lead that its 120 characters cannot
 hold, such as how long the spending settlements run, each `{ text, badge, sources }` with the text
@@ -365,7 +391,7 @@ at most 160 characters and its own badge.
   `untouched` line only when nothing in those groups moved. When something did and none of its own
   touches fired, it says the file's `unnamed` line ("Nothing aimed at us by name that we could
   see."), so a tax rise on everyone is never "untouched". `reachesNone` lists the levers that reach
-  none of the five by name (the bank levies, defence, a wealth tax on the very top); every curated
+  none of the five by name (the bank levies, defence, a wealth tax on the very top); every step-4
   and flagship lever touches a household or is on it, a test checks it, and the validator refuses a
   code on the list that a household is touched by, or an exposure group that does not exist.
 - **Who pays** (`incidence.json`). A paying group carries `felt`, the words that follow "felt" in a
@@ -390,9 +416,9 @@ badged per item so no line inherits honesty from its file. `short` is the same l
 words, shown first with the full `text` one click behind. Every line a newcomer meets on the road
 has one when the line is over its budget, and the words test pins each kind: a minister's asking
 line and any band over eighteen words; the Prime Minister's reactions twelve; the advisers' notes
-fourteen; the verdicts' close and an option's line eighteen; an option's or a curated lever's
+fourteen; the verdicts' close and an option's line eighteen; an option's or a step-4 policy's
 adviser line (`advice`) twelve, with no figure and a size word only where the engine's figure bears
-it out; every reception band twenty words in all (Phase 23). A figure in the short line must be a figure in the long one, so the sources cover both
+it out (at every size, for a policy); every reception band twenty words in all (Phase 23). A figure in the short line must be a figure in the long one, so the sources cover both
 (a test checks it). A readability test reads every set a player meets with the folds closed: no
 sentence over twenty words, and a Flesch-Kincaid grade of seven or below per set (ADR-0024).
 Rules for authoring one:

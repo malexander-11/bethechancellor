@@ -1,7 +1,7 @@
 # ADR-0026: A review against four goals, and the fixes
 
-Date: 2026-09-28. Status: accepted. Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023 and ADR-0025,
-each of which carries a dated revision pointing here.
+Date: 2026-09-28. Status: accepted; revised 2026-09-28 (below, ADR-0027). Revises ADR-0007,
+ADR-0013, ADR-0015, ADR-0023 and ADR-0025, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -343,3 +343,11 @@ Not done here: a check at 200% zoom on a real phone, which needs a person with o
   Opposition's reply and the climate clauses are Game judgement. Each quotes a registered source,
   carries no figure of its own, and passes the words and readability tests. A claim whose source
   could not be fetched was left out.
+
+## Revision (2026-09-28): the clamp gives way to sizes (ADR-0027)
+
+R22 held the curated rate sliders to the range their sources vouch for (2p on the basic rate, two
+points of VAT), while the desk went further, badged Worked out. Phase 26 replaces the sliders with
+sizes and reverses the clamp on step 4: the user's own example asks for VAT at 25%, so a large size
+may pass a source's range, and its effect then wears Worked out with the caveat, as the desk's did.
+Step 4 on a phone is still about 7.5 to 7.7 screens tall.

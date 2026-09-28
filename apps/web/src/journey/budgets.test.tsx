@@ -51,7 +51,8 @@ const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/budget/deliver/2', 220, WIDEST],
   ['/budget/deliver/3', 220, WIDEST],
   // Measured after Phase 26's sizes (613, 778, 543 and 724 words), with a tenth to spare; then
-  // council homes took Investment's third place on show (spending 580 and 761).
+  // council homes took Investment's third place on show (spending 580 and 761), and the links to
+  // the desk went with it (tax 611 and 776, spending 578 and 759; ADR-0027).
   ['/finetune/tax', 675, GAME],
   ['/finetune/tax', 860, TUNED],
   ['/finetune/spending', 640, GAME],

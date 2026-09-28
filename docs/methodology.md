@@ -114,10 +114,10 @@ baseline caused by the player's choices.
    by its setting. The growth slider also compounds both nominal GDP denominators; the
    interest-rate slider also raises the marginal rate used in step 4.
 3. **Primary borrowing.** ΔB^prim = ΔC + ΔK − ΔR + ΔPSNB^macro.
-4. **Debt-interest feedback** (mechanical, toggle, default on). With marginal rate r and a
-   half-year convention, ΔB_t = (ΔB^prim_t + r_t·ΔD_{t−1}) / (1 − r_t/2), and the stock of
-   extra debt ΔD_t = ΔD_{t−1} + ΔB_t. The interest line ΔI_t = ΔB_t − ΔB^prim_t is shown
-   separately and never folded into a lever's costing.
+4. **Debt-interest feedback** (mechanical; always on in the game since Phase 26, §27, and a switch
+   in the engine). With marginal rate r and a half-year convention, ΔB_t = (ΔB^prim_t +
+   r_t·ΔD_{t−1}) / (1 − r_t/2), and the stock of extra debt ΔD_t = ΔD_{t−1} + ΔB_t. The interest
+   line ΔI_t = ΔB_t − ΔB^prim_t is shown separately and never folded into a lever's costing.
 5. **Aggregates.** PSNB = baseline + ΔB. PSNI = baseline + ΔK. Current budget deficit =
    PSNB − PSNI, so capital spending changes the current budget only through interest.
 6. **PSNFL.** PSNFL_t = baseline PSNFL_t + Σ_{s≤t} ΔB_s. The baseline already contains the
@@ -588,7 +588,9 @@ undelivered from the states of its options, and each promise kept or broken, wit
 
 Every spending and welfare lever has a minister (`ministers.json`): asking while it is untouched,
 saying what stops happening at a cut, making the case for more. The Prime Minister's schemes sit in
-a Flagship programmes group on the spending screen, each with a minister of its own (ADR-0017).
+a Flagship programmes group on the spending screen, each with a minister of its own (ADR-0017); the
+group became the New programmes family in Phase 26, so it does not collide with step 3's flagship
+policies (§27).
 Advisers intervene from a closed list of predicates (`interventions.json`): a promise broken, a
 priority undelivered, headroom below the target, a rule missed. From Phase 18 the package opens on
 two guided screens (§22) and the desk is a side room behind them: the levers of a chosen option
@@ -747,7 +749,7 @@ certified row, an HMRC statistic or a stated calculation on one, and the card sa
 | `vatgas`  | VAT                       | assumption | A third of HMRC's relief cost less the annualised electricity cut, grown with VAT                          |
 | `hmrc2`   | Budget 2025 decisions     | assumption | Budget 2025 line 59 repeated                                                                               |
 | `rvplan2` | Spending Review decisions | direct     | Budget 2025 line 48 reversed on the spending side                                                          |
-| `def3`    | Flagship programmes       | assumption | (3% − the OBR's defence share) × nominal GDP, nought once the OBR's path reaches 3% in 2030-31             |
+| `def3`    | New programmes            | assumption | (3% − the OBR's defence share) × nominal GDP, nought once the OBR's path reaches 3% in 2030-31             |
 
 The employer threshold slider reaches the £6,000 being floated. The measures the reporting names
 that no reachable document costs (a pension lump-sum cap, a social care levy, an ISA cap, holiday
@@ -1146,3 +1148,33 @@ the backbenchers and the public, though never above paying from the top, and alw
 with the markets. ADR-0026 has the before-and-after ratings of sixteen Budgets, the word budgets,
 the readability grades (sixteen sets, all at grade seven or below), the playtime (about ten and a
 half minutes at the midpoint, from about nine) and the walk.
+
+## 27. Policies all the way through (ADR-0027)
+
+Phase 26 made every choice in the game a policy: a tick, or a size. The user asked for no sliders,
+and for a policy to come in small, medium and large where a size makes sense.
+
+- **Every lever on step 4.** All 108 policy levers are on the two fine-tuning screens, 76 taxes in
+  the five who-pays groups and 32 spending levers in four, as 141 policies. A lever that moves both
+  ways has one policy each way, the way that improves the public finances first; its other way waits
+  in the group's fold, and choosing one clears the other. The hand-picked levers keep their places
+  on show; the rest are one fold away, under their family ("Income tax", "VAT"), and a fold's cards
+  mount only while it is open.
+- **Sizes** (`finetune.json`) are settings of the lever, checked by the validator: in range, on its
+  steps, all one way. Small is the usual step, medium twice it, large five times it, capped at the
+  range; where HMRC publishes points the sizes sit on them. VAT's range reaches +5 points, so putting
+  it up reads 21%, 22% and 25%. A size past the range its source vouches for is straight-line
+  arithmetic on HMRC's row, badged Worked out with its caveat.
+- **The card** prices its smallest size at rest, in the conditional, and the lever's own effect
+  once chosen. A lever a chosen flagship holds shows once, as a line with the way back to change the
+  flagship, so step 4 never undoes one silently.
+- **Pick one.** Where two levers' own texts say they count the same money or cancel, the pair is
+  `excludes`: 22 pairs, each authored once, read from either card, with a one-tap swap.
+- **What went**: the desk and its sandbox, the ready-made Budgets, the two expert switches (every
+  Budget counts the interest on its own borrowing, §5, and is judged by the rules as they stand),
+  the levers' `order`, the desk's briefings and its two step names. A link with measures and no game
+  opens the briefing and starts the game with them; what a link could not carry is said once, on
+  the screen it opens. The desk's old addresses open the step-4 screen that took their levers.
+- **Measured** (ADR-0027): step 4 on a phone is 6,010px for tax and 5,874px for spending, 7.7 and
+  7.5 screens; the fine-tuning screens read at grade 5.7; the playtime estimate is about ten and a
+  half minutes at the midpoint, as before.

@@ -1,6 +1,6 @@
 # ADR-0025: One estimate, six steps, curated levers
 
-Date: 2026-09-27. Status: accepted; revised 2026-09-28 (below, ADR-0026). Revises ADR-0010,
+Date: 2026-09-27. Status: accepted; revised 2026-09-28 (below, ADR-0026 and ADR-0027). Revises ADR-0010,
 ADR-0012, ADR-0022, ADR-0023 and ADR-0024, each of which carries a dated revision pointing here.
 
 ## Context
@@ -217,3 +217,13 @@ missed rule and its margin. Two details above have moved on. A resting fine-tuni
 the conditional ("Up 1p to 21%: would raise £8.6bn · headroom would be £X"), and every price is the
 change to the bar's headroom, interest included. The re-run playtime of this build, with a race in
 the script fixed, reproduces the 11m 11s and 6m 52s above exactly.
+
+## Revision (2026-09-28): policies, not sliders, and no desk behind them (ADR-0027)
+
+Step 4 was hand-picked sliders and toggles, with the desk of every lever one link away and a
+sandbox that ran with no game. Phase 26 makes every policy lever a policy on step 4: a tick, or two
+or three sizes, the way that improves the public finances first and the other way in the group's
+fold. The hand-picked levers keep their places on show and the rest wait in their group's fold;
+the desk, the sandbox and the "Every tax lever" and "Every spending lever" links are gone. A link
+with no game now opens the briefing rather than the desk, and a game link that carried other
+economic figures says so on whatever screen it opens, not on the desk.

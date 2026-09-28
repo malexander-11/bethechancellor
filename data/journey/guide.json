@@ -29,7 +29,7 @@
       "step": "finetune",
       "number": 4,
       "title": "Fine-tune tax and spend",
-      "now": "Move the levers until the numbers add up."
+      "now": "Choose policies until the numbers add up."
     },
     {
       "step": "review",

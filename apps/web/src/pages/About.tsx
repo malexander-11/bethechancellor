@@ -56,8 +56,8 @@ export function AboutPage() {
       <h2>What the game does not do</h2>
       <p>
         It does not model how your choices change growth, or how markets would actually move.
-        Costings are official estimates; the economic sliders are assumptions; the rest is
-        arithmetic; the reactions are judgements, and say so. Forecasts are uncertain: the
+        Costings are official estimates; today&rsquo;s estimate of the economy is an assumption; the
+        rest is arithmetic; the reactions are judgements, and say so. Forecasts are uncertain: the
         OBR&rsquo;s typical five-year error on receipts is 0.9% of GDP, more than any recent
         headroom.
       </p>

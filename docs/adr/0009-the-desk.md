@@ -1,6 +1,6 @@
 # ADR-0009: The game is paperwork
 
-**Status:** accepted, 2026-09-16
+**Status:** accepted, 2026-09-16; revised 2026-09-19 and 2026-09-28 (below)
 
 ## Context
 
@@ -114,3 +114,10 @@ are never decoration. What it got wrong was the premise that a sense of place ha
 stepper, the summary strip and the status words carry the game's pace and score without any
 furniture. The stylesheets named above (`tokens.css` and `objects.css`) became `tokens.css`,
 `styles.css` and `components.css`; the open group is `.group-panel`.
+
+## Revision (2026-09-28): the desk is retired (ADR-0027)
+
+The desk outlived its furniture (ADR-0016) as the side room of every lever, one link from the
+guided screens, with a sandbox that opened it with no game. Phase 26 folds every lever it held into
+step 4 as a policy with sizes, and retires the desk, its tabs, its ready-made Budgets, its expert
+switches and its sandbox. Its old addresses open the step-4 screen that took their levers.
