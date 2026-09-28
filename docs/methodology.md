@@ -20,6 +20,13 @@ added in Phase 8 under ADR-0011):
 The names on the badges were made plainer on 2026-09-27 (Phase 23, for a reading age of ten to
 twelve); the ids in the data, the classes on the page and what each badge means are unchanged.
 
+Phase 25 (ADR-0026) added three rules at the edges of the contract. A relief cost is an official
+figure but not a yield, so its card says the most the measure could raise ("raises at most £X"),
+never what it raises. A choice has one price everywhere: the change it makes to the bar's headroom
+in the target year, with the interest on borrowing in it, found by re-running the engine with and
+without the choice (`optionPrice`). And a spoken Game judgement line (the Prime Minister's sign-off,
+the Opposition's reply) holds no figure at all: the schema refuses a digit.
+
 The engine never adds a behavioural or macroeconomic knock-on of its own. Where HMRC's
 direct costings already include a standard behavioural response (they do, for example, for
 income tax and CGT), the lever says so.
@@ -87,6 +94,13 @@ can preview that form on the March baseline (`assessAsOf: nextBudget`).
 **Headroom is shown two ways once rolling:** against zero (a surplus) and against the 0.5%
 tolerance. Which one the OBR will headline has not been settled publicly.
 
+**Plain names** (Phase 25, ADR-0026). On screen the stability rule is "the day-to-day rule" and the
+investment rule "the debt rule": a `shortName` on each rule in the Charter file, carried into every
+verdict. The briefing's fold ties each plain name to its official one. The bar names a missed rule
+with the engine's own margin ("Debt rule missed by £4.5bn"), and Budget day names the welfare cap
+only when it is missed. At a fiscal event the stability test is a surplus; the 0.5% range of
+balance applies only between fiscal events.
+
 ## 5. Calculation spine
 
 All internal arithmetic is in £ million by fiscal year. `Δ` means the change from the
@@ -139,7 +153,10 @@ differs, so the numbers in the app cannot drift from the published ones.
 
 - **Linear per unit.** Effect = setting ÷ unit size × published effect per unit. Asymmetric
   rows (a rise "yield" and a cut "cost") are kept separate and chosen by the sign of the setting.
-  Combined levers (employee plus self-employed NICs, petrol plus diesel) sum their rows.
+  Combined levers (employee plus self-employed NICs, petrol plus diesel) sum their rows. A summed
+  lever may scale its rows by a stated multiplier, and is then badged Worked out: the health and
+  social care levy is 1.25 times the one-point rows for the employer, employee and self-employed
+  rates, main and additional, about £26bn in 2029-30 (Phase 25).
 - **Lookup table.** Where HMRC says changes are non-linear (capital gains tax, the personal
   allowance, the higher-rate threshold), the lever uses HMRC's published points only, interpolates
   in a straight line between them and never goes beyond the largest published change.
@@ -152,7 +169,11 @@ differs, so the numbers in the app cannot drift from the published ones.
   start year and grown with the relevant receipts head, with HMRC's caveat that the cost of a
   relief is not the yield from removing it. Two extracts back them: HMRC's tax relief statistics
   (Table 2) and HMRC's private pension statistics (Table 6, with Tables 6.1 and 6.2 by marginal
-  rate); a lever cites one by source id and row id.
+  rate); a lever cites one by source id and row id. Since Phase 25 (ADR-0026) each lever built on a
+  relief cost carries `reliefCost`: its card reads "raises at most £X" with one plain line on why,
+  and the markets count it among the costings nobody has certified. National Insurance on employer
+  pension contributions is now a weighted sum over the pension statistics, the private sector's
+  part only (§26).
 
 ### Uprating (ADR-0004)
 
@@ -194,6 +215,12 @@ excise duty, air passenger duty, tobacco duties, inheritance tax, capital gains 
 HMRC notes that rate and threshold changes are only approximately additive, and two levers can
 touch the same tax (fuel duty rates and the fuel duty freeze reversal). Authored interaction
 notes appear when both levers of a pair are moved; they change no numbers.
+
+A pair that counts the same money is authored once with the severity `excludes`, and the
+validator checks it (Phase 25): capital gains taxed like income with CGT at death, the exit charge
+and the lower rate; the exit charge with CGT at death. On the curated screens only one of a pair
+can be chosen, with a one-tap swap priced as the swap; the desk keeps a free hand and says
+"counted twice".
 
 ### Spending levers (ADR-0006)
 
@@ -424,10 +451,11 @@ tampered HMRC row does.
 
 All of these are badged **assumption**, never direct, and the badge is the quarantine (ADR-0017):
 an assumption sits in the tax or spending group its subject belongs to, beside the HMRC row or
-Treasury line it resembles, so the reader sees both badges side by side. Two exceptions keep a
-different badge for a stated reason: the 50% income tax rate is five one-penny steps of HMRC's own
-additional-rate row and is direct; business rates is a percentage of the OBR's own receipts line
-and is mechanical (§6).
+Treasury line it resembles, so the reader sees both badges side by side. Two exceptions are badged
+Worked out for a stated reason: business rates is a percentage of the OBR's own receipts line
+(§6), and National Insurance on employer pension contributions is a weighted sum of HMRC's own
+rows with no judgement in it (§26). The 50% income tax rate, five one-penny steps of HMRC's
+additional-rate row, was direct until Phase 13 made it an assumption (§18).
 
 **Kept for the record.** Five policies nobody is considering at this Budget (defence at 5% of
 GDP, aid at 0.7%, free tuition, buying the water companies, withdrawing benefits from foreign
@@ -472,6 +500,17 @@ spending, capital, tax rises and cuts, the balance of new revenue between the to
 base by incidence tag, priorities ranked and delivered, manifesto red lines crossed and rules missed.
 Each reading carries the decisions behind it, as the levers' own short titles. The Phase 5 reaction
 bands that read these figures were replaced in Phase 9 by the reception (§15).
+
+Since Phase 25 (ADR-0026) the readings take the engine re-run (`outcomeOf`) as an input.
+Borrowing, cumulative borrowing, debt and the tax take are measured from `preBudget`, today's
+estimate with nothing moved, so the economy since March is never the player's doing. New readings:
+the headroom change and the debt rule's own headroom; the fiscal rules missed (the day-to-day and
+debt rules, not the welfare cap); departments' day-to-day cuts, counted one by one and never
+netted, with health and schools apart; the tax rises most households feel and those they do not
+(`felt` and `notFelt` in `incidence.json`); whether what the Budget spends and gives away is paid
+for in every year; borrowing that comes early; commitments broken outside the manifesto; priorities
+only started; and the share of new tax money that arrives late. Each cause carries how far it moved
+its reading, so a reason names only the decisions that pushed its way, by the lever's `noun`.
 
 The public's card also carries the distributional considerations of the levers the player moved,
 in their own words and with their own citations, ordered by the size of the measure.
@@ -623,25 +662,33 @@ Budget people notice and a manifesto that ties your hands, with the red lines li
 
 ### The warnings on the lever
 
-A lever a red line watches wears a quiet "Manifesto: no rise" (or "no cut", "do not switch on")
-so the line is learnt before it is tested; a crossed line turns the tag red. A lever inside an
-option the player chose wears "In your package" while the option is on and "Adjusted from what you
-chose" once the desk has moved it elsewhere (§22). Both are read through `promiseBreaks` and
-`ambitionStatus`, pure arithmetic over the package.
+A lever a red line watches wears a quiet tag that names the promise by its short name, a glossary
+word ("Tax lock: no rise"; "Tax lock: keeps its words, strains its spirit" where a move would strain
+it), so the line is learnt before it is tested; a crossed line turns the tag red, or amber where the
+words are kept and the spirit tested. A lever inside a flagship the player chose wears "In your
+flagship policies" while it counts towards it. Trimmed short of the ask, the Chief Secretary to the
+Treasury says it is settled lower; moved the other way, it wears a red "Against your flagship
+policy" (Phase 25). All are read through `promiseBreaks`, `promiseStrains` and `ambitionStatus`,
+pure arithmetic over the package.
 
 ### The reception
 
 `receptions` in `packages/engine/src/game/reception.ts` rates the Budget for three audiences. For
 each rule of an audience it reads one figure from §12's readings, picks the first authored band
-whose `upTo` the figure does not exceed, and takes the band's points; the rating is
-`clamp(3 + Σ points, 1, 5)`, then held under any fired band's `cap`. The two or three reasons with
-the most points are shown; every rule, with its points, its reading, the decisions behind it and
-its sources, sits behind "Why this rating". Every threshold, point and sentence is authored in
+whose `upTo` the figure does not exceed, and takes the band's points. Since Phase 25 (ADR-0026) the
+rating starts at three: one or two points either way move it one step, three or more two steps,
+and it is then held under any fired band's `cap`. One reason is shown and it always agrees with the
+rating: the capping rule when a cap binds, otherwise the biggest minus below three and at three,
+and the biggest plus above three. When something pulled the other way, one line of eight words or
+fewer names up to two rules by their `short` labels ("Counted against: Tax burden · Uncertified
+costings"). Every rule, with its points, its reading, the decisions behind it and its sources,
+sits behind "Why this rating (2 for, 1 against)". Every threshold, point and sentence is authored in
 `data/journey/reception.json`, badged simulated, and each rule names the published anchor its
-thresholds lean on; the table is in ADR-0013. A test checks that every reason on screen is a band
+thresholds lean on; ADR-0013 records the first table and ADR-0026 the recalibration. A test checks that every reason on screen is a band
 in the file with its placeholders filled, that a band quoting a figure carries a source, that a
-broken manifesto pins the public at one whatever else happens, and, by property, that ratings stay
-in one to five over random points and caps and over random packages.
+broken manifesto pins the public at one whatever else happens, that the shown reason never
+contradicts the rating, and, by property, that ratings stay in one to five over random points and
+caps and over random packages.
 
 ## 16. One road, and the revenue menu (ADR-0014, ADR-0015)
 
@@ -1041,3 +1088,61 @@ that hold every screen to the same shape:
 - **Measured** (ADR-0025): word budgets from 27 words (the cover) to 711 (fine-tuning tax with a
   folded lever moved in every group); readability grades from 3.2 to 6.7; playtime nine screens and
   eight decisions, about nine minutes at the midpoint, an estimate and not user testing.
+
+## 26. A review against four goals, and the fixes (ADR-0026)
+
+Phase 25 reviewed the Phase 24 game against four goals the user set: that it reflects how a
+Budget is made, that most of the British electorate can understand it, that it shows trade-offs
+and makes the player think in the round, and that its feedback shows a Budget's pros and cons.
+Ten reviewers and a completeness critic found 108 findings that survived two independent checks.
+The fixes, in nine commits:
+
+- **Prices.** Ten relief-cost levers read "raises at most". Two costings are stated arithmetic,
+  badged Worked out: National Insurance on employer pension contributions counts the private
+  sector's part only, HMRC's £14.3bn less its £6.5bn on public sector schemes, times 15 ÷ 13.8,
+  grown with nominal GDP (about £10.1bn in 2029-30, where it read £20.0bn); the levy is 1.25 times
+  the game's own one-point NICs rows (about £26bn, where it read £16.8bn). A fuel duty freeze
+  toggle (HMRC's 1% rows times the April 2027 rise the baseline plans); keeping VAT off electricity
+  on the curated tax screen; `excludes` pairs (§6).
+- **One price.** `optionPrice` gives a choice's change to the bar's headroom in the target year,
+  interest included, and the card, the review, the speech and the close all read it. A move made
+  only of investment is priced on the debt rule. `reconcile` takes the headroom from the estimate
+  to the bar through taxes, day-to-day spending and interest, exactly, and the review says so in
+  one line.
+- **Graded delivery.** Each flagship way says whether it delivers its priority in full or makes a
+  start, with a sourced reason (Game judgement): 19 in full, 10 a start. A priority is delivered,
+  settled lower, started or not funded, and the bar reads "1 of 2 priorities delivered · 1
+  started". Only a full delivery scores with the public.
+- **The audiences** read from before the Budget, see cuts one by one, count felt taxes, hold at
+  one (markets) or three (the others) when a rule is missed, and rate on the scale of §15. The card
+  shows one reason that agrees with its rating and a counted line for the other side.
+- **Budget day.** The three sentences, the close and the speech are built from the engine's
+  figures and the player's choices (`statement.ts`, `verdict.ts`, `speech.ts`); a consistency test
+  runs seven Budgets through them. The speech owns the forecast; the Leader of the Opposition
+  replies in one line with no figure.
+- **The briefing** says what headroom means, its year, about £240 for each household (Worked out)
+  and the advisers' yardstick in words (Game judgement, scored by nothing). "Already on your desk"
+  lists the defence plan's last £4.7bn and the electricity VAT cut ending in March 2027. A glossary
+  word opens by tap or keyboard.
+- **Step 4** shows one figure line on a resting card, in the conditional and in plain ink, growth
+  in words, and sliders held to the 2p their sources vouch for (`sourceRange`; the desk goes on,
+  badged Worked out past it). England-only budgets are said once a screen, with Scotland's own
+  income tax and benefits noted where they apply.
+- **Households** name the groups whose levers reach them (`exposure`) and say "Nothing aimed at
+  us by name that we could see" rather than "untouched" when a measure in those groups moved.
+  **The Prime Minister** signs off the review in one line, first match: a rule missed, a promise
+  broken with room to spare (worked out by putting the breaking levers back), a promise broken, a
+  scored strain. **The markets' fold** says what the biggest measure may do to growth (a `growth`
+  note, macro only) and, worked out, what extra borrowing adds to debt interest. A 0-point band
+  marks new tax money that arrives late. Climate is said where a registered source says it: fuel
+  duty, air passenger duty, car tax. The priorities screen gives the scale of one priority in full
+  before anything is chosen.
+- **The bar** announces what changed, once a slider settles, through one polite status region, and
+  while it is sticky the page's scroll padding keeps a focused control clear of it.
+
+**What it did not do.** Step 4 is still about 7.7 phone screens tall; fewer cards on show at rest
+would be needed for two or three. Borrowing past the rules still rates above a felt tax rise with
+the backbenchers and the public, though never above paying from the top, and always below paying
+with the markets. ADR-0026 has the before-and-after ratings of sixteen Budgets, the word budgets,
+the readability grades (sixteen sets, all at grade seven or below), the playtime (about ten and a
+half minutes at the midpoint, from about nine) and the walk.

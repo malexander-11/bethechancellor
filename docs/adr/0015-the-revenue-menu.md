@@ -2,7 +2,8 @@
 
 **Status:** accepted, 2026-09-18. Revised by ADR-0017 (2026-09-19): decision 1's folder rule is
 withdrawn. A lever costed by our own arithmetic sits in the tax group its subject belongs to,
-beside the certified rows, and the assumption badge does the quarantining.
+beside the certified rows, and the assumption badge does the quarantining. Revised again by
+ADR-0026 (2026-09-28): decision 4 is withdrawn (below).
 
 ## Context
 
@@ -72,3 +73,13 @@ marginal rate.
   the uprating factor.
 - The two pension CSVs join `data/raw/` with their hashes; `npm run derive` writes the extract and
   the manifest, and `check:derived` guards them.
+
+## Revision (2026-09-28): the pension contributions charge, re-costed (ADR-0026)
+
+Decision 4 is withdrawn. HMRC's £14,300m counted the relief on public sector schemes too, about
+£6.5bn of it: the state would be paying National Insurance to itself. The lever now counts the
+private sector's part only, as a weighted sum badged Worked out: HMRC's £14,300m less its £6,500m
+on public sector schemes (net pay arrangements £6,300m, relief at source £200m, from HMRC's own
+split), times 15 ÷ 13.8 for the April 2025 rate, grown with nominal GDP. That is about £10.1bn in
+2029-30, not £20.0bn. It carries `reliefCost`, so its card reads "raises at most". It no longer
+heads any list of the biggest yields, as the consequences below describe.

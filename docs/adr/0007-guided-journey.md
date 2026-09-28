@@ -1,6 +1,6 @@
 # ADR-0007: A guided journey with advisers; levels shown, changes costed
 
-**Status:** accepted, 2026-09-15
+**Status:** accepted, 2026-09-15; decision 5 revised 2026-09-28 (below, ADR-0026)
 
 ## Context
 
@@ -35,3 +35,11 @@ The tool reads as a game without becoming fiction: the framing is the player's, 
 the OBR's, HMRC's and the Treasury's, and the advisers only ever quote. Authoring cost rises
 (every briefing paragraph needs a source), and the September 2026 readings date the assumptions
 step; both are refreshed by editing data files, not code.
+
+## Revision (2026-09-28): relief costs are not yields (ADR-0026)
+
+Decision 5 stands for the figure and falls for the words. HMRC's cost of a relief is still shown
+as the official figure it is, but a card no longer says it "raises" that sum. It says "raises at
+most £X", with one plain line: "HMRC's cost of the tax break. The real sum would be less, as
+people change what they do." Every lever built on a relief cost carries `reliefCost` (ten of
+them), and the markets count those levers among the costings nobody has certified.

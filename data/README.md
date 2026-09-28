@@ -80,6 +80,28 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   or `derived/hmrc-private-pensions-2026-07.raw.json` (HMRC's pension statistics, Table 6, with
   Tables 6.1 and 6.2 by marginal rate); `perUnit` is the published cost for the cited year,
   uprated with the tax head. Quote HMRC's caveat in the caveats.
+- **Relief costs are flagged** (Phase 25, ADR-0026). `reliefCost: true` on every lever built on
+  HMRC's cost of a relief, whether it cites the relief rows or does stated arithmetic on them (ten
+  today). The schema refuses a relief-cost raw source without it, and allows it only on a receipts
+  lever. The card then reads "raises at most £X" with one plain line on why, and the markets count
+  the lever among the costings nobody has certified.
+- **A multiple of HMRC rows.** `rawSource.multiplier` scales the summed rows of a `linearPerUnit`
+  lever: 1.25 for the health and social care levy over the one-point NICs rows, minus three for
+  the fuel duty freeze over the 1% rows. It is our arithmetic on HMRC's figures, so the schema
+  requires `badge: "mechanical"`.
+- **The range the source covers.** `control.sourceRange: { min, max, text }` (Phase 25): HMRC
+  vouches for scaling a 1p row to about 2p, not beyond. It must hold the default and sit inside
+  the control's range. The curated screens stop there; the desk goes on, badges the effect Worked
+  out past it and shows `text` (at most 140 characters).
+- **The lever's noun.** `noun`, in lower case ("the basic rate of income tax", "the health
+  budget"): how a Budget-day reason names its causes after "Because of", and how the speech names
+  the measure.
+- **Two levers that count the same money.** An interaction with `severity: "excludes"`, authored
+  once per pair (the validator checks): the curated screens let only one be chosen at a time and
+  offer a swap; the desk allows both and says "counted twice". `info` and `warn` remain notes.
+- **A note on growth.** A `macro` consideration may carry `growth: true`: what the measure may do
+  to growth and the wider economy, in words. The markets' fold on Budget day reads the biggest
+  moved measure's; the schema refuses the flag on any other kind of note.
 - **Scorecard-backed toggles.** A `linearPerUnit` toggle may cite `hmtScorecard` lines from any
   extracted scorecard (Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is minus the
   summed lines for the cited years on the receipts side. `direction: "repeat"` makes it plus the
@@ -199,9 +221,19 @@ reads off the outcome (the closed list in `readingMeasureSchema`), a `reading` l
 `note` naming the published anchor its thresholds lean on, and `bands` in ascending order of `upTo`
 with the last carrying none. A band holds `points` (−3 to +3), an optional `cap` on the audience's
 rating, a `text` with `{value}` (the reading, signed) and `{abs}` (its size) placeholders, its
-sources and `badge: "simulated"`. The rating is three plus the points, clamped to one to five, then
-held under any fired cap. A band that quotes a figure must carry a source; a test checks it, and
-that every reason on screen is one of these bands with its placeholders filled.
+sources and `badge: "simulated"`. The rating starts at three: one or two points either way move it
+one step, three or more two steps (Phase 25), and it is then held under any fired cap. A band that
+quotes a figure must carry a source; a test checks it, and that every reason on screen is one of
+these bands with its placeholders filled.
+
+Since Phase 25 (ADR-0026) a rule also carries a `short` label of three words or fewer ("Tax
+burden"), which is how a card names it on the other side of its rating: "Counted against: Tax
+burden · Borrowing". A band may carry `alsoWhen: { measure, above }`: it also applies when a second
+reading passes a threshold, as cuts to health and schools count from £2bn inside the public's rule
+on service cuts; the points, cap and words stay the band's own. A band may vary its words on a
+second reading (`variants`). Readings are measured from before the Budget (today's estimate with
+nothing moved), and the placeholders now include `{typicalError}`, `{payers}`, `{feltHow}`,
+`{protected}`, `{protectedCut}`, `{cutServices}`, `{year}` and `{lateFrom}`.
 
 Bands describe what an audience watches and cite the evidence. They never predict a market move
 or a vote; they say what a judgement leans on.
@@ -211,6 +243,12 @@ for the distance from the reading to the nearest neighbouring band with more poi
 reading's own unit. The engine fills the gap and shows the sentence under "Why this rating"; it
 invents no threshold, and says nothing for the best band there is (ADR-0018).
 
+### The rules' plain names (`data/rules/*.json`)
+
+Each rule carries a `shortName`, the plain name the game uses on screen ("the day-to-day rule",
+"the debt rule", "the welfare cap"), carried into every rule verdict (Phase 25). The briefing's
+fold ties it to the Charter's own name.
+
 ### Decisions since the forecast (`data/context/*.json`)
 
 `decisionsSinceForecast` lists what the government has decided since the vintage was published:
@@ -218,6 +256,12 @@ invents no threshold, and says nothing for the best band there is (ADR-0018).
 (negative costs money), the year or period as the source states it, and what paid for it. Context,
 not levers: none of it enters the arithmetic, the OBR has not certified any of it, and the outlook
 says so above the table.
+
+`inTray` (Phase 25) lists what is already on the Chancellor's desk: a bill or a cliff edge the
+Budget inherits, `{ id, text, badge, leverCode, sources }`. The text is one sentence of at most 140
+characters; `{cost}` in it is the named lever's own figure in the target year, filled by the
+engine. `leverCode` names the lever that deals with it, so the review can list the items a Budget
+leaves as they are; the validator refuses an unknown lever.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
@@ -237,7 +281,27 @@ plain `purpose`, the PM's `pitch` and `reaction`, and the `lead` (an adviser's o
 role, as the data names it), with sources. Each `promise` has `breaks`, the levers that break its
 words, and may have `strains` (Phase 23): the levers that keep its words and test its spirit, each
 with a line saying why; the game marks a strain amber and a break red, and a lever is in one list
-or the other, never both.
+or the other, never both. Since Phase 25 (ADR-0026) a promise also carries:
+
+- `noun`, in lower case, for running sentences ("I accepted breaking the tax lock");
+- `tag`, its short name on a lever's resting tag, at most 24 characters ("Tax lock: no rise");
+- `origin`: `manifesto-2024`, `budget-2025` or `government`. Only the 2024 manifesto's own words
+  are red lines the public holds the government to (the tax lock, the corporation tax cap, the
+  triple lock); a Budget 2025 decision reversed is a U-turn;
+- `judgedBy`: `levers` (the default), or `fiscalRules` for the fiscal rules, which are judged by the
+  verdicts and name no lever;
+- on a strain, `scored` (default true). A strain with `scored: false` is shown in amber and scored
+  by no audience, because another rule already counts it: a cut to health strains England's
+  18-week target, and the public's rule on service cuts counts the cut.
+
+A priority may carry `reach` (Phase 25): commentary, sourced, saying once on its flagship screen
+where its spending reaches when that is not the whole UK ("Health and care budgets here are
+England's…").
+
+`pm.json` also carries `signOff`: four lines the Prime Minister signs the review off with, chosen
+by first match (`rulesMissed`, with `{rules}`; `brokenWithRoom`, `broken` and `strained`, with
+`{promises}`). Each is a `SimulatedLine` of twenty words or fewer with no figure: the schema refuses
+either.
 `options.json` holds one list, the ways to deliver (the ways to afford and the add-ons went in
 Phase 24; the ways to pay are now levers on the fine-tuning screens, below). Every option's
 `values` is a bundle of one or two levers at stated values: codes that exist and are not deprecated
@@ -254,6 +318,10 @@ enforces:
   side, named on the card before either option is chosen and quoted once the other moves.
 - **Every priority has two to five ways to deliver it** (`deliver[].priority`); safer streets has
   two because the game has only two levers there, and its brief says so.
+- **Every option says whether it delivers its priority in full or makes a start** (`scale`, Phase
+  25): `{ kind: "full" | "start", why, sources, badge: "simulated" }`, the reason in at most 140
+  characters. Every priority keeps at least one way to deliver it in full, which the schema checks.
+  A priority with only starts in the Budget reads "started"; only a full delivery scores.
 - **Every option carries one adviser's line** (`advice`, Phase 23): a `SimulatedLine` of at most
   twelve words with an `adviser` id who speaks on that screen and at least one source, saying who
   proposed it and one plain judgement of its cost and effect. No figure is typed; "big" (or
@@ -285,6 +353,35 @@ The words test holds every title and line to twelve words with no figure, and ch
 word against the engine's own figure for the lever at its `move` (big at £5bn or more in the
 target year, small at £1bn or less). The page prices the move against the Budget as it stands; no
 figure is authored.
+
+A side may carry `notes` (Phase 25): lines under the screen's lead that its 120 characters cannot
+hold, such as how long the spending settlements run, each `{ text, badge, sources }` with the text
+at most 160 characters and its own badge.
+
+### Households, who pays, the speech and the close (Phase 25, ADR-0026)
+
+- **Households** (`households.json`). Each household names its `exposure`: the incidence groups
+  whose levers reach its pay, its shop, its benefits or the services it uses. It says its
+  `untouched` line only when nothing in those groups moved. When something did and none of its own
+  touches fired, it says the file's `unnamed` line ("Nothing aimed at us by name that we could
+  see."), so a tax rise on everyone is never "untouched". `reachesNone` lists the levers that reach
+  none of the five by name (the bank levies, defence, a wealth tax on the very top); every curated
+  and flagship lever touches a household or is on it, a test checks it, and the validator refuses a
+  code on the list that a household is touched by, or an exposure group that does not exist.
+- **Who pays** (`incidence.json`). A paying group carries `felt`, the words that follow "felt" in a
+  sentence ("in pay packets and prices", "through pay and prices"), at most sixty characters and
+  no figure. `notFelt` lists the taxes most households do not feel: levies on banks, on energy
+  producers and on the very top. They leave the public's count of tax rises and earn no point
+  either way.
+- **The speech** (`speech.json`). `forecast` says the forecast before any measure and what the
+  Budget does to borrowing, all worked out (`{startYear}`, `{borrowingThen}`, `{targetYear}`,
+  `{borrowingTarget}`, `{change}`). `opposition` holds the Leader of the Opposition's one-line
+  reply, keyed by the Budget's biggest weakness (`rulesMissed`, `promiseBroken`, `taxUp`,
+  `borrowingUp`, `cuts`, `default`): a role, never a name, and the schema refuses a digit.
+- **The close** (`verdicts.json`). A kind may carry a `fact`: a worked-out sentence of at most 200
+  characters shown beside the judgement with its own badge, its placeholders filled from the
+  engine's figures ("Without the change to the basic rate of income tax, you would still meet both
+  rules, with £36.1bn of headroom").
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 

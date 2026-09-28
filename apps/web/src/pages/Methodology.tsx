@@ -243,11 +243,13 @@ export function MethodologyPage() {
         red line crossed pins the public at one, and a missed fiscal rule holds every audience at
         three or below, whatever else happens. Borrowing, debt and the tax take are measured from
         before your Budget, today&rsquo;s estimate with nothing moved, so what the economy did since
-        March is never counted as yours. Every threshold, point and sentence is written in the data
-        and labelled simulated; &ldquo;Why this rating&rdquo; on each card lists every rule with its
-        points, the figure it read, the decisions behind it and, with the workings on, its sources.
-        Nothing predicts what a market or a voter would actually do: the cards say what a judgement
-        leans on, and the thresholds are the game&rsquo;s own, written down in ADR-0013.
+        March is never counted as yours. Each card shows one reason, which always agrees with its
+        rating, and one short line for anything that pulled the other way. Every threshold, point
+        and sentence is written in the data and labelled simulated; &ldquo;Why this rating&rdquo; on
+        each card lists every rule with its points, the figure it read, the decisions behind it and,
+        with the workings on, its sources. Nothing predicts what a market or a voter would actually
+        do: the cards say what a judgement leans on, and the thresholds are the game&rsquo;s own,
+        written down in ADR-0013 and revised in ADR-0026.
       </p>
 
       <h2>Why it looks plain</h2>

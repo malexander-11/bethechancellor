@@ -1,4 +1,5 @@
 import { finetuneItems } from '@btc/engine';
+import { appendFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   context,
@@ -163,9 +164,15 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // titles 5.1, option advice 4.6, the fine-tuning screens 5.1 and their advisers' lines 4.9,
     // the priorities 3.5, the promises 6.7, the reception labels 4.9 and bands 5.3, the verdicts
     // 5.9, the interventions 4.4, the ministers 5.5. Proper nouns (National Insurance, the
-    // manifesto, the Chancellor) hold the promises highest.
+    // manifesto, the Chancellor) hold the promises highest. Re-measured on 2026-09-28 after
+    // Phase 25 (ADR-0026), with acronyms read letter by letter and four new sets: the guide 3.2,
+    // option titles 5.4, option advice 4.8, the delivery scales 6.1, the fine-tuning screens 5.2
+    // and their advisers' lines 5.0, the priorities 4.1, the conflicts 3.3, since March 6.4, the
+    // sign-off 1.6, the promises 5.6, the reception labels 4.9 and bands 5.1, the verdicts 4.9,
+    // the interventions 4.2, the ministers 5.8. Set GRADES to a file path to write them out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
+      if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);
       expect(g, `${name} reads at grade ${g.toFixed(1)}`).toBeLessThanOrEqual(GRADE_MAX);
     }
   });

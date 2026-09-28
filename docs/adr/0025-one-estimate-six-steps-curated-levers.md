@@ -1,7 +1,7 @@
 # ADR-0025: One estimate, six steps, curated levers
 
-Date: 2026-09-27. Status: accepted. Revises ADR-0010, ADR-0012, ADR-0022, ADR-0023 and ADR-0024,
-each of which carries a dated revision pointing here.
+Date: 2026-09-27. Status: accepted; revised 2026-09-28 (below, ADR-0026). Revises ADR-0010,
+ADR-0012, ADR-0022, ADR-0023 and ADR-0024, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -206,3 +206,14 @@ The stage guard then sends an early game back to where it has got.
   link opened at the review changes the economy without saying so on that screen. The nineteen new
   spending lines are the honesty risk of the phase: each restates a claim already sourced in the
   data, wears the Game judgement badge and passes the size-word test.
+
+## Revision (2026-09-28): the yardsticks in words, still no target (ADR-0026)
+
+The briefing now puts the advisers' yardstick beside the figure, badged Game judgement and scored
+by nothing: "Your advisers call headroom under £10bn thin. The markets notice." The review repeats
+it when a Budget meets the rules on a margin under £10bn. There is still no target: nothing asks
+the player to choose one, and the bar still says only whether the rules are met, now naming a
+missed rule and its margin. Two details above have moved on. A resting fine-tuning card reads in
+the conditional ("Up 1p to 21%: would raise £8.6bn · headroom would be £X"), and every price is the
+change to the bar's headroom, interest included. The re-run playtime of this build, with a race in
+the script fixed, reproduces the 11m 11s and 6m 52s above exactly.

@@ -1,7 +1,7 @@
 # ADR-0023: The Westminster journey
 
-Status: Accepted, 2026-09-26; revised since (below), last on 2026-09-27 (six steps, ADR-0025). Follows
-ADR-0022 (advice and direction) and its revision.
+Status: Accepted, 2026-09-26; revised since (below), last on 2026-09-28 (the counted line,
+ADR-0026). Follows ADR-0022 (advice and direction) and its revision.
 
 ## Context
 
@@ -260,3 +260,13 @@ compromise screens and the add-ons (so "respond to the forecast" and "final choi
 the review is a step of its own), and the target on the bar, which now says "rules met" or what is
 missed. "Pay for it" became two curated screens of real levers. The desk's hand-back links return
 to fine-tuning.
+
+## Revision (2026-09-28): the one reason, and the other side (ADR-0026)
+
+"Half the words" showed each audience its rating and one reason, the strongest. The strongest
+could point the other way from the rating: a minus on a card rated four. Now the one reason always
+agrees with the rating. It is the capping rule when a cap binds; otherwise the biggest minus below
+three and at three, and the biggest plus above three. When something pulled the other way, one
+short line names it: "Counted against: Tax burden · Uncertified costings", eight words at most.
+The fold says how many rules pulled each way: "Why this rating (2 for, 1 against)". One voice a
+screen still holds; on the review, that voice is the Prime Minister's sign-off.

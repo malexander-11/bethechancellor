@@ -1,6 +1,6 @@
 # ADR-0013: Show workings, a fixed manifesto, three audiences
 
-**Status:** accepted, 2026-09-18
+**Status:** accepted, 2026-09-18; the reception revised 2026-09-28 (below, ADR-0026)
 
 ## Context
 
@@ -104,3 +104,25 @@ them in the open.
   is on is a bug.
 - The tension the game once drew from promised-but-unfunded flagships now comes from the desk and
   the forecast: the flagships are paid for at once, and the question is what else gives.
+
+## Revision (2026-09-28): the recalibration (ADR-0026)
+
+The thresholds table above is a record of Phase 9. The rules have moved since (the themes and the
+rabbit went in Phases 18 and 24), and `data/journey/reception.json` holds the ones in force, each
+with its note. Phase 25 changed how they add up and what they read:
+
+- **The scale.** Every audience starts at three. One or two points either way move it one step;
+  three or more, two steps. Caps hold as before, so one ordinary minus is never the floor, and the
+  top takes more than one good thing. Before, every point was a step.
+- **From before the Budget.** Borrowing, debt and the tax take are measured against today's
+  estimate with nothing moved, so the economy since March is never the player's doing.
+- **A missed rule** (the day-to-day or the debt rule) holds the markets at one, and the
+  backbenchers and the public at three.
+- **Cuts are counted, never netted**: department by department, with health and schools counting
+  for the public from £2bn.
+- **The public counts the taxes most households feel.** Levies on banks, energy producers and the
+  very top score nothing with them.
+- **Only the manifesto's own words floor the public**: the tax lock, the corporation tax cap and
+  the triple lock.
+
+The ratings of sixteen Budgets before and after are in ADR-0026.
