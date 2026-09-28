@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ESTIMATE, MACRO_CODES } from '../data';
 import { useWorkingsSwitch } from '../journey/workings';
 import { permalinkQuery, reducer, useBudget } from '../state/budget';
-import { BADGE_LABELS, LabelBadge } from './LabelBadge';
+import { BADGE_KEY_ID, BADGE_LABELS, LabelBadge } from './LabelBadge';
 
 const BADGES = Object.keys(BADGE_LABELS) as Badge[];
 
@@ -70,13 +70,13 @@ export function Disclaimer() {
         ) : null}
         <Link to="/about">Sources and licence</Link>
       </div>
-      <details className="more more--quiet">
+      <details className="more more--quiet" id={BADGE_KEY_ID}>
         <summary>What the badges mean</summary>
         <dl className="more__body badges-key">
           {BADGES.map((badge) => (
-            <div key={badge}>
+            <div key={badge} data-badge={badge}>
               <dt>
-                <LabelBadge badge={badge} />
+                <LabelBadge badge={badge} plain />
               </dt>
               <dd>{BADGE_LABELS[badge].title}</dd>
             </div>

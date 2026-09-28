@@ -104,6 +104,25 @@ describe('step 5: deliver the Budget', () => {
     expect(screen.queryByText(/target/)).toBeNull();
   });
 
+  it('lists what is still on the desk, and says a thin margin is thin (Phase 25)', () => {
+    const thin = at(`/review?${BASE}&${G}&L=moj.10`);
+    let position = part(/^Where that leaves you/);
+    expect(
+      within(position).getByText(/Your advisers call headroom under £10bn thin/),
+    ).toBeInTheDocument();
+    expect(within(position).getByText('Still on your desk:')).toBeInTheDocument();
+    expect(within(position).getByText(/The defence plan’s last £4\.7bn/)).toBeInTheDocument();
+    expect(
+      within(position).getByText(/VAT on home electricity goes back to 5% in April 2027/),
+    ).toBeInTheDocument();
+    thin.unmount();
+    // Each dealt with, and a margin to spare: nothing left on the desk, and no yardstick said.
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_vatelec.1_cgtalign.1`);
+    position = part(/^Where that leaves you/);
+    expect(within(position).queryByText('Still on your desk:')).toBeNull();
+    expect(within(position).queryByText(/call headroom under/)).toBeNull();
+  });
+
   it('says so when no tax or other budget moved, and names a missed rule and a broken promise', () => {
     const quiet = at(`/review?${BASE}&${G}&L=moj.10`);
     expect(within(part(/^Tax/)).getByText('No tax changed.')).toBeInTheDocument();

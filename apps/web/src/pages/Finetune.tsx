@@ -13,6 +13,8 @@ import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { CuratedLever } from '../components/CuratedLever';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
+import { LabelBadge } from '../components/LabelBadge';
+import { SourceList } from '../components/SourceLink';
 import { adviserById, finetune, levers, options, pm } from '../data';
 import { UNCHANGED_BELOW_GBPM } from '../journey/effects';
 import { useStageGuard } from '../journey/guard';
@@ -180,6 +182,16 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       lead={spec.lead}
     >
       <HeadroomBar outcome={outcome} status={status} />
+      {spec.notes.length > 0 ? (
+        <ul className="tune__notes">
+          {spec.notes.map((note) => (
+            <li key={note.text}>
+              <LabelBadge badge={note.badge} /> {note.text}{' '}
+              <SourceList as="span" className="briefing__sources" refs={note.sources} />
+            </li>
+          ))}
+        </ul>
+      ) : null}
       <p className="panel__hint tune__interest">{words.interest}</p>
       {spec.groups.map((group) => {
         const id = `tune-${group.id}`;

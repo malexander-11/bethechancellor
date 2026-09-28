@@ -1410,3 +1410,26 @@ label.choice {
 .more--inset > .more__body {
   padding-top: 4px;
 }
+
+/* What the Budget inherits (Phase 25): a short list on the briefing, and what is left on the review. */
+.tray__list,
+.tune__notes {
+  margin: 8px 0 0;
+  padding-left: 1.2em;
+}
+
+.tray__list li,
+.tune__notes li {
+  margin: 4px 0;
+  max-width: 68ch;
+}
+
+.tune__notes {
+  color: var(--ink-2);
+}
+
+.brief__source,
+.brief__yardstick {
+  max-width: 68ch;
+  margin: 8px 0;
+}

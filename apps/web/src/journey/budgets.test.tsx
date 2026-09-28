@@ -45,16 +45,16 @@ function screenWords(): number {
 /** Every screen of the main road, in order, with the game that renders it at its widest. */
 const ROAD: readonly [path: string, limit: number, game: string][] = [
   ['/', 40, GAME],
-  ['/outlook', 225, GAME],
+  ['/outlook', 255, GAME],
   ['/pm', 155, GAME],
   ['/budget/deliver', 205, WIDEST],
   ['/budget/deliver/2', 205, WIDEST],
   ['/budget/deliver/3', 205, WIDEST],
   ['/finetune/tax', 660, GAME],
   ['/finetune/tax', 860, TUNED],
-  ['/finetune/spending', 570, GAME],
-  ['/finetune/spending', 775, TUNED],
-  ['/review', 140, GAME],
+  ['/finetune/spending', 670, GAME],
+  ['/finetune/spending', 880, TUNED],
+  ['/review', 165, GAME],
   ['/budget-day', 210, GAME],
 ];
 
@@ -98,7 +98,11 @@ describe('the word budgets', () => {
     // One price per choice (Phase 25): each fine-tuning card now says the headroom it would leave,
     // and each screen says once why that moves with interest; the review says how the headroom got
     // from the estimate to the bar, who pays most, and which priorities fall short: tax 599 and
-    // 782, spending 515 and 704, the review 125.
+    // 782, spending 515 and 704, the review 125. Then the briefing put the one figure's meaning
+    // beside it, the advisers' yardstick and what is already on the desk, and folded the decisions
+    // since March; step 4's spending screen gained its two notes and the defence plan's gap; the
+    // review says what is still on the desk (Phase 25): the briefing 234, spending 612 and 801,
+    // the review 148.
     for (const [path, limit, game] of ROAD) {
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();

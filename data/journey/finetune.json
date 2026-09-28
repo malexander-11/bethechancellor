@@ -489,6 +489,31 @@
   "spending": {
     "title": "Fine-tune spending",
     "lead": "Trim or top up any budget. Watch your headroom move.",
+    "notes": [
+      {
+        "text": "Departments’ day-to-day budgets are set to 2028-29. Cutting one reopens a minister’s deal.",
+        "badge": "simulated",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.14"
+          },
+          {
+            "sourceId": "hmt-sr25-del-tables"
+          }
+        ]
+      },
+      {
+        "text": "After that, the forecast already has the budgets it does not protect falling 4.4% a year after inflation.",
+        "badge": "direct",
+        "sources": [
+          {
+            "sourceId": "obr-efo-2026-03",
+            "paragraph": "4.16"
+          }
+        ]
+      }
+    ],
     "adviser": "director-of-public-spending",
     "groups": [
       {
@@ -681,6 +706,20 @@
                 },
                 {
                   "sourceId": "obr-efo-2026-03"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "dip47",
+            "title": "Fund the defence plan’s gap",
+            "move": 1,
+            "advice": {
+              "text": "The defence plan counts on this money, and nothing funds it yet.",
+              "sources": [
+                {
+                  "sourceId": "govuk-dip-funding-explainer"
                 }
               ],
               "badge": "simulated"

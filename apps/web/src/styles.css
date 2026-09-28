@@ -590,6 +590,40 @@ hr {
   cursor: help;
 }
 
+/* A badge is a link to the key at the foot of the page (Phase 25): tap it to read what it means. */
+a.badge {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a.badge:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+/* A glossary word in running text: a button that reads as the word (Phase 25, a toggletip). */
+.term__word {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+}
+
+.term__word[aria-expanded='true'] {
+  text-decoration-style: solid;
+}
+
+.term__tip {
+  color: var(--ink-2);
+}
+
 .badge--direct {
   color: var(--badge-direct-fg);
 }

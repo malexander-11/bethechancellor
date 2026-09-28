@@ -413,6 +413,14 @@ export function validateDataset(ds: Dataset): string[] {
         );
       }
     }
+    // What is already on the desk is dealt with by a lever the player can move (Phase 25).
+    for (const item of context.inTray) {
+      if (!codes.has(item.leverCode)) {
+        problems.push(
+          `context ${context.id} in-tray ${item.id} names unknown lever ${item.leverCode}`,
+        );
+      }
+    }
   }
   if (ds.pm) {
     // A priority is led by a role the game has a voice for; a promise that names a lever the game

@@ -10,6 +10,7 @@ import {
   rankedPriorities,
   reconcile,
   stageIndex,
+  THIN_HEADROOM_GBPM,
   type Lever,
   type LeverEffect,
   type OptionReport,
@@ -17,11 +18,14 @@ import {
 } from '@btc/engine';
 import type { ReactNode } from 'react';
 import { HeadroomBar } from '../components/HeadroomBar';
+import { inTrayText, leftAsIs } from '../components/InTray';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { formatLeverValueShort, promiseWords } from '../components/LeverControl';
+import { Yardstick } from '../components/Yardstick';
 import {
   MACRO_CODES as MACRO_LIST,
+  context,
   finetuneTitle,
   incidence,
   interventions,
@@ -237,6 +241,8 @@ export function ReviewPage() {
       : null,
   ].filter((x): x is string => x !== null);
   const { paid, benefited } = incidenceRows(outcome, levers, incidence, r.year);
+  // The bills and cliff edges on the desk that this Budget leaves as it found them (Phase 25).
+  const stillOnDesk = context.inTray.filter((item) => leftAsIs(item, state.leverValues));
   const payer = paid.find((row) => row.gbpm >= 50);
   const loser = benefited.find((row) => row.gbpm <= -50);
   const whoPays = payer
@@ -382,6 +388,9 @@ export function ReviewPage() {
         </p>
         {whoPays ? <p>{whoPays}</p> : null}
         <p className={missed.length > 0 ? 'review__missed' : undefined}>{rulesLine}</p>
+        {missed.length === 0 && r.endGbpm < THIN_HEADROOM_GBPM ? (
+          <Yardstick className="review__yardstick" />
+        ) : null}
         {broken.length > 0 || strained.length > 0 ? (
           <ul className="review__list">
             {broken.map((p) => (
@@ -409,6 +418,18 @@ export function ReviewPage() {
               </li>
             ))}
           </ul>
+        ) : null}
+        {stillOnDesk.length > 0 ? (
+          <>
+            <p className="review__tray">Still on your desk:</p>
+            <ul className="review__list">
+              {stillOnDesk.map((item) => (
+                <li key={item.id}>
+                  <LabelBadge badge={item.badge} /> {inTrayText(item, outcomeOf, state.leverValues)}
+                </li>
+              ))}
+            </ul>
+          </>
         ) : null}
       </Part>
 

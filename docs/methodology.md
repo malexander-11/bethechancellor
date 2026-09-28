@@ -607,9 +607,10 @@ source still holds.
 
 `data/journey/guide.json` gives every screen a step number, a title (the page's heading), and three
 plain sentences: what you are doing, why it matters, what to do now, at most sixty words in all.
-Words in square brackets are glossary references (`data/journey/glossary.json`), rendered with their
-definition to hand and listed under "Words on this page". Both are chrome and carry no badge; a test
-forbids a figure in either unless it is sourced.
+Words in square brackets are glossary references (`data/journey/glossary.json`). Since Phase 25 a
+glossary word is a tap-to-open toggletip: a button that opens the glossary's short line beside the
+word and closes on a second tap or Escape, so a phone reaches it as well as a mouse. Both are chrome
+and carry no badge; a test forbids a figure in either unless it is sourced.
 
 ### The appointment
 

@@ -241,7 +241,7 @@
   "decisionsSinceForecast": [
     {
       "id": "vat-off-electricity",
-      "title": "VAT taken off domestic electricity from 1 October 2026 to 31 March 2027",
+      "title": "VAT taken off home electricity, October 2026 to March 2027",
       "amountGbpm": -850,
       "year": "2026-27, part year",
       "paidFor": "Cancelling the Digital ID programme",
@@ -275,6 +275,35 @@
       "sources": [
         {
           "sourceId": "govuk-disabled-bus-travel-2026"
+        }
+      ]
+    }
+  ],
+  "inTray": [
+    {
+      "id": "defence-plan-gap",
+      "text": "The defence plan’s last £4.7bn, over four years, is still to be found at this Budget.",
+      "badge": "direct",
+      "leverCode": "dip47",
+      "sources": [
+        {
+          "sourceId": "govuk-dip-funding-explainer",
+          "quote": "A further £4.7 billion over four years will be confirmed at Budget 2026"
+        }
+      ]
+    },
+    {
+      "id": "vat-electricity-cliff",
+      "text": "VAT on home electricity goes back to 5% in April 2027 unless you keep the cut: about {cost} a year.",
+      "badge": "assumption",
+      "leverCode": "vatelec",
+      "sources": [
+        {
+          "sourceId": "hmrc-vat-notice-701-19",
+          "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027"
+        },
+        {
+          "sourceId": "govuk-vat-electricity-cut-2026"
         }
       ]
     }

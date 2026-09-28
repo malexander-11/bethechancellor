@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { readingMeasureSchema } from './journey.schema.js';
-import { sourceRefSchema } from './provenance.schema.js';
+import { badgeSchema, sourceRefSchema } from './provenance.schema.js';
 
 /**
  * The game layer (ADR-0011, ADR-0012). Everything in these files is a judgement nobody published,
@@ -337,9 +337,20 @@ export const finetuneGroupSchema = z.strictObject({
 });
 
 /** One of the two screens: its heading, its one line, whose voice speaks on it, and its groups. */
+/**
+ * A line under a screen's lead (Phase 25): what the lead's hundred and twenty characters cannot
+ * hold, such as how long the spending settlements run. Each wears its own badge and sources.
+ */
+export const finetuneNoteSchema = z.strictObject({
+  text: z.string().min(1).max(160),
+  badge: badgeSchema,
+  sources: z.array(sourceRefSchema).min(1),
+});
+
 export const finetuneSideSchema = z.strictObject({
   title: z.string().min(1).max(40),
   lead: z.string().min(1).max(120),
+  notes: z.array(finetuneNoteSchema).default([]),
   /** The adviser who speaks every line on the screen (an id in advisers.json, on `finetune`). */
   adviser: slug,
   groups: z.array(finetuneGroupSchema).min(1),

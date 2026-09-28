@@ -32,8 +32,27 @@ describe('the head of every screen', () => {
 
   it('explains a word where it is used, and the badges at the foot of every page', () => {
     at(`/budget/spending?${BASE}`);
-    const abbr = within(intro()).getByText('flagship', { selector: 'abbr.term' });
-    expect(abbr).toHaveAttribute('title', glossary.terms.flagship?.short);
+    // A tap opens the definition beside the word, and Escape closes it (Phase 25): a phone has
+    // no hover, so a tooltip alone was out of reach.
+    const word = within(intro()).getByRole('button', { name: 'flagship' });
+    expect(word).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(word);
+    expect(word).toHaveAttribute('aria-expanded', 'true');
+    expect(within(intro()).getByText(`(${glossary.terms.flagship?.short})`)).toBeInTheDocument();
+    fireEvent.keyDown(word, { key: 'Escape' });
+    expect(word).toHaveAttribute('aria-expanded', 'false');
+    expect(within(intro()).queryByText(`(${glossary.terms.flagship?.short})`)).toBeNull();
+    // A badge opens the key at the foot of the page on its own line.
+    const badge = document.querySelector('main a.badge--direct') as HTMLAnchorElement | null;
+    const key = document.getElementById('badge-key') as HTMLDetailsElement;
+    expect(key.open).toBe(false);
+    if (badge) {
+      expect(badge).toHaveAttribute('href', '#badge-key');
+      expect(badge).toHaveAttribute('tabindex', '-1');
+      fireEvent.click(badge);
+      expect(key.open).toBe(true);
+      key.open = false;
+    }
     // The five badges, in plain words, so "Official figure" is never only a tooltip.
     fireEvent.click(screen.getByText('What the badges mean'));
     const badges = screen.getByText('What the badges mean').closest('details') as HTMLElement;

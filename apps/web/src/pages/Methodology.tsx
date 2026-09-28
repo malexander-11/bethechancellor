@@ -1,8 +1,16 @@
 import { LabelBadge } from '../components/LabelBadge';
+import { ESTIMATE, vintage } from '../data';
 import { usePageTitle } from '../journey/title';
 
 export function MethodologyPage() {
   usePageTitle('How the numbers work');
+  // The marginal rate on new borrowing: the OBR's assumption plus today's estimate (Phase 25).
+  const base =
+    Object.values(vintage.assumptions.marginalInterestRateOnNewBorrowingPct.values)[0] ?? 0;
+  const setting = ESTIMATE.rate ?? 0;
+  const basePct = base.toFixed(1);
+  const estimatePct = setting.toFixed(2);
+  const marginalPct = (base + setting).toFixed(2);
   return (
     <article className="prose">
       <h1>How the numbers work</h1>
@@ -86,11 +94,12 @@ export function MethodologyPage() {
         The <strong>stability rule</strong> requires the current budget (day-to-day spending against
         revenue) to be in surplus in 2029-30. Once 2029-30 becomes the third year of the forecast,
         from the Budget of 28 October 2026, the rule becomes rolling: the current budget must be in
-        balance or surplus in the third year, where balance allows a deficit of up to 0.5% of GDP.
-        The <strong>investment rule</strong> requires public sector net financial liabilities to
-        fall as a share of GDP in the same target year. The <strong>welfare cap</strong> limits
-        spending on most working-age and child benefits to a cash cap plus a 5% margin in 2029-30.
-        The OBR assesses the rules once a year, at the autumn Budget.
+        balance or surplus in the third year. Balance allows a deficit of up to 0.5% of GDP between
+        fiscal events only; at a fiscal event the test is a surplus. The{' '}
+        <strong>investment rule</strong> requires public sector net financial liabilities to fall as
+        a share of GDP in the same target year. The <strong>welfare cap</strong> limits spending on
+        most working-age and child benefits to a cash cap plus a 5% margin in 2029-30. The OBR
+        assesses the rules once a year, at the autumn Budget.
       </p>
 
       <h2>How your choices flow through</h2>
@@ -100,8 +109,10 @@ export function MethodologyPage() {
           year.
         </li>
         <li>
-          Extra borrowing accrues interest at the OBR&rsquo;s gilt-yield assumption (4.5%), with a
-          half-year convention. This line is shown separately and can be switched off.
+          Extra borrowing accrues interest at the OBR&rsquo;s gilt-yield assumption of {basePct}%
+          plus the interest-rate setting: {estimatePct} of a point more on today&rsquo;s estimate,
+          so {marginalPct}%, with a half-year convention. This line is shown separately and can be
+          switched off.
         </li>
         <li>
           Borrowing, investment and the current budget are updated; investment changes the current

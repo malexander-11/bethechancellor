@@ -36,11 +36,11 @@
       "direction": "ambiguous",
       "magnitudeWords": "moderate",
       "alreadyInDirectCosting": true,
-      "text": "Higher inflation raises accrued interest on index-linked gilts immediately and pushes up benefit uprating and public sector pay pressures with a lag; it also raises cash tax receipts. The OBR's sensitivity nets these off and finds the debt-interest effect dominates, which is why higher RPI worsens borrowing.",
+      "text": "Higher inflation raises the interest paid on index-linked gilts at once, and reaches benefit uprating and public pay with a lag. The OBR puts one point more RPI at £11 billion more borrowing in 2030-31, and one point less at £10 billion less; it does not split the channels out.",
       "sources": [
         {
           "sourceId": "obr-efo-2026-03",
-          "table": "Table 4.8"
+          "paragraph": "6.17"
         }
       ]
     }

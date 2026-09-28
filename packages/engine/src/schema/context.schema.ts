@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { isoDateSchema, sourceRefSchema } from './provenance.schema.js';
+import { badgeSchema, isoDateSchema, sourceRefSchema } from './provenance.schema.js';
 
 /** One side of a comparison: a scalar or a series by year, with where it comes from. */
 const readingValueSchema = z
@@ -49,6 +49,20 @@ export const decisionSinceForecastSchema = z.strictObject({
   sources: z.array(sourceRefSchema).min(1),
 });
 
+/**
+ * Already on the Chancellor's desk (Phase 25): a bill or a cliff edge the Budget inherits, said in
+ * one sentence with its badge. `leverCode` names the lever that deals with it, so the review can
+ * say which are left as they are; `{cost}` in the text is that lever's own figure in the target
+ * year, filled by the engine.
+ */
+export const inTrayItemSchema = z.strictObject({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
+  text: z.string().min(1).max(140),
+  badge: badgeSchema,
+  leverCode: z.string().min(1),
+  sources: z.array(sourceRefSchema).min(1),
+});
+
 /** "What has changed since the forecast": dated readings compared with the vintage's assumptions. */
 export const contextFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
@@ -60,4 +74,5 @@ export const contextFileSchema = z.strictObject({
   intro: z.string().min(1),
   readings: z.array(contextReadingSchema).min(1),
   decisionsSinceForecast: z.array(decisionSinceForecastSchema).default([]),
+  inTray: z.array(inTrayItemSchema).default([]),
 });

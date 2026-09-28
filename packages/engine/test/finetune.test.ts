@@ -35,20 +35,23 @@ const TAX_CODES = [
 
 const SPENDING_CODES = [
   ['services', ['dhsc', 'dfe', 'mod', 'home', 'moj', 'mhclg', 'dft', 'fcdo', 'otherd']],
-  ['investment', ['cdel']],
+  // Phase 25: the defence plan's gap, already on the desk, joins investment.
+  ['investment', ['cdel', 'dip47']],
   ['benefits', ['wpens', 'wuc', 'wdis', 'woth']],
   ['decisions', ['rvpip', 'rveff', 'rv2ch', 'rvwfp', 'rvplan2']],
 ] as const;
 
 describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
-  it('offers twenty-eight taxes in five who-pays groups, and nineteen spending levers in four', () => {
+  it('offers twenty-eight taxes in five who-pays groups, and twenty spending levers in four', () => {
     expect(file.tax.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(TAX_CODES);
     expect(file.spending.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(
       SPENDING_CODES,
     );
     expect(finetuneItems(file, 'tax')).toHaveLength(28);
-    expect(finetuneItems(file, 'spending')).toHaveLength(19);
-    expect(finetuneItems(file)).toHaveLength(47);
+    expect(finetuneItems(file, 'spending')).toHaveLength(20);
+    // The spending screen says how long the settlements run and the squeeze already after them.
+    expect(file.spending.notes.map((n) => n.badge)).toEqual(['simulated', 'direct']);
+    expect(finetuneItems(file)).toHaveLength(48);
     expect(FINETUNE_SIDES).toEqual(['tax', 'spending']);
   });
 

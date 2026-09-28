@@ -1,13 +1,24 @@
-import { AMPLE_HEADROOM_GBPM, formatGbpBn, stageIndex, type ContextReading } from '@btc/engine';
+import {
+  AMPLE_HEADROOM_GBPM,
+  THIN_HEADROOM_GBPM,
+  formatGbp,
+  formatGbpBn,
+  fyStart,
+  perHousehold,
+  stageIndex,
+  type ContextReading,
+} from '@btc/engine';
 import { useNavigate } from 'react-router-dom';
 import { EstimateRow, summariseReading } from '../components/AssumptionsTable';
+import { InTray } from '../components/InTray';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { Papers } from '../components/Motifs';
 import { SourceList } from '../components/SourceLink';
 import { TableScroll } from '../components/TableScroll';
 import { Term } from '../components/Term';
-import { ESTIMATE, context, levers, rules, vintage } from '../data';
+import { Yardstick } from '../components/Yardstick';
+import { ESTIMATE, context, households, levers, rules, vintage } from '../data';
 import { StepLink } from '../journey/links';
 import { headroomOfOutcome, useOutcomeOf } from '../journey/outcome';
 import { suggestSetting } from '../journey/suggest';
@@ -15,18 +26,25 @@ import { WorkingsOnly, useWorkings } from '../journey/workings';
 import { permalinkQuery, reducer, useBudget } from '../state/budget';
 
 const COUNT = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
+
+/** A sum as the government states it: under a billion in millions, "£850 million" (Phase 25). */
+function sumInWords(gbpm: number): string {
+  const abs = Math.abs(gbpm);
+  return abs < 1000 ? `${formatGbp(abs)} million` : formatGbpBn(abs, 1);
+}
 const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
 const reading = (id: string): ContextReading | undefined =>
   context.readings.find((r) => r.id === id);
 
 /**
- * Step 1: your briefing (Phase 24, ADR-0025). One figure to plan on: the headroom on today's
- * estimate, the OBR's March forecast brought up to date for today's borrowing costs and prices
- * with the OBR's own sensitivities. Then the two rules in one line, what has been promised since
- * March and why the headroom fell, and what headroom is, one fold away. Nothing is chosen here:
- * the primary starts the game on the estimate and goes to the priorities. With the workings on,
- * the table the estimate is made from.
+ * Step 1: your briefing (Phase 24, ADR-0025; Phase 25). One figure to plan on, with its meaning
+ * beside it: the headroom on today's estimate, what headroom is, the year it is for and what it is
+ * worth a household. The advisers' yardstick in words, the two rules in one line, what is already
+ * on the desk, and why the headroom fell since March, with the decisions one fold away. What
+ * headroom is, and how the OBR works in a real Budget, one fold away; with the workings on, the
+ * table the estimate is made from. Nothing is chosen here: the primary starts the game on the
+ * estimate and goes to the priorities.
  */
 export function OutlookPage() {
   const { state, dispatch, outcome } = useBudget();
@@ -45,9 +63,12 @@ export function OutlookPage() {
   const estimate = headroomOfOutcome(outcomeOf({ ...ESTIMATE }));
   const estimateText = formatGbpBn(estimate, 1, estimate < 0);
   const gilts = reading('gilt-10y');
-  const borrowing = reading('psnb-ytd');
   const prices = context.readings.find((r) => r.leverCode === 'rpi');
   const decisions = context.decisionsSinceForecast;
+  // The year the rules test, in months (Phase 25): "April 2029 to March 2030".
+  const start = fyStart(targetYear);
+  const yearInMonths = `April ${start} to March ${start + 1}`;
+  const perHome = formatGbp(perHousehold(estimate, households.value));
 
   const begin = () => {
     const started = reducer(state, { type: 'startGame' });
@@ -70,43 +91,21 @@ export function OutlookPage() {
             <dd>
               <strong>{estimateText}</strong> <LabelBadge badge="assumption" />
               <span>
-                our estimate for {targetYear}: the OBR’s March forecast on today’s borrowing costs
-                and prices.
+                <Term id="headroom">Headroom</Term> is how much you can spend, or cut in tax, and
+                still meet the rules.
+              </span>
+              <span>
+                It is for {targetYear} ({yearInMonths}), the year the rules are tested: about{' '}
+                {perHome} for each household <LabelBadge badge="mechanical" />.
               </span>
             </dd>
           </div>
-          {gilts ? (
-            <div className="brief__fact">
-              <dt>Borrowing costs</dt>
-              <dd>
-                <strong>{summariseReading(gilts.latest, gilts.unit)}</strong>
-                <span>
-                  on ten-year <Term id="gilts">gilts</Term>; the OBR assumed{' '}
-                  {summariseReading(gilts.obr, gilts.unit)}.
-                </span>
-              </dd>
-            </div>
-          ) : null}
-          {borrowing ? (
-            <div className="brief__fact">
-              <dt>Borrowed so far this year</dt>
-              <dd>
-                <strong>{summariseReading(borrowing.latest, borrowing.unit)}</strong>
-                <span>
-                  April to August; the OBR pencilled in{' '}
-                  {summariseReading(borrowing.obr, borrowing.unit)}.
-                </span>
-              </dd>
-            </div>
-          ) : null}
         </dl>
-        <SourceList
-          className="briefing__sources"
-          refs={[
-            ...(gilts ? [gilts.latest.source, gilts.obr.source] : []),
-            ...(borrowing ? [borrowing.latest.source] : []),
-          ]}
-        />
+        <p className="brief__source">
+          Our estimate: the March forecast of the Office for Budget Responsibility (OBR), the
+          official forecaster, brought up to date for today’s borrowing costs and prices.
+        </p>
+        <Yardstick />
         <p className="brief__rules">
           Two <Term id="fiscal-rules">rules</Term>: pay for day-to-day spending with tax by{' '}
           {targetYear}, and have debt falling by then. Miss one and the <Term id="obr">OBR</Term>{' '}
@@ -139,36 +138,30 @@ export function OutlookPage() {
         </details>
       </section>
 
+      <InTray values={ESTIMATE} />
+
       {decisions.length > 0 ? (
         <section className="since doc" aria-labelledby="since-heading">
           <h2 id="since-heading" className="section-label">
             Since March
           </h2>
           <p>
-            Since March the government has made {COUNT[decisions.length] ?? decisions.length}{' '}
-            spending promises:
-          </p>
-          <ul className="since__list">
-            {decisions.map((d) => (
-              <li key={d.id}>
-                {d.title}: {formatGbpBn(Math.abs(d.amountGbpm), 1)} ({d.year}), paid for by{' '}
-                {lowerFirst(d.paidFor)}.
-                <SourceList as="span" className="briefing__sources" refs={d.sources} />
-              </li>
-            ))}
-          </ul>
-          <p>
-            Each was paid for by moving money, so none used the headroom. What has cut the headroom
-            is dearer borrowing{prices ? ' and higher inflation' : ''}.
+            Since March the government has taken {COUNT[decisions.length] ?? decisions.length}{' '}
+            decisions that cost money. Each was paid for by moving money, so none used the headroom.
+            What cut it is dearer borrowing{prices ? ' and prices' : ''}.
             {gilts ? (
               <>
                 {' '}
                 Gilts pay {summariseReading(gilts.latest, gilts.unit)} against the{' '}
-                {summariseReading(gilts.obr, gilts.unit)} the OBR assumed
-                {prices
-                  ? `; inflation is ${summariseReading(prices.latest, prices.unit)} against ${summariseReading(prices.obr, prices.unit)}`
-                  : ''}
-                .
+                {summariseReading(gilts.obr, gilts.unit)} the OBR assumed.
+              </>
+            ) : null}
+            {prices ? (
+              <>
+                {' '}
+                Forecasters expect prices to rise {summariseReading(prices.latest, prices.unit)} a
+                year on average to 2030, not the OBR’s {summariseReading(prices.obr, prices.unit)},
+                and some government debt costs more when prices rise.
               </>
             ) : null}{' '}
             That is why your headroom is about {estimateText}, not the {formatGbpBn(march, 1)} March
@@ -181,6 +174,17 @@ export function OutlookPage() {
               ...(prices ? [prices.latest.source, prices.obr.source] : []),
             ]}
           />
+          <details className="more">
+            <summary>What was decided since March</summary>
+            <ul className="more__body since__list">
+              {decisions.map((d) => (
+                <li key={d.id}>
+                  {d.title}: {sumInWords(d.amountGbpm)}, paid for by {lowerFirst(d.paidFor)}.
+                  <SourceList as="span" className="briefing__sources" refs={d.sources} />
+                </li>
+              ))}
+            </ul>
+          </details>
         </section>
       ) : null}
 
@@ -195,8 +199,17 @@ export function OutlookPage() {
             will borrow. It is your safety margin. In March it was {formatGbpBn(march, 1)}; on
             today’s estimate it is {estimateText}. Forecasts move: over five years the OBR’s have
             been out by about {formatGbpBn(typicalErrorGbpm, 0)} on average. Your advisers think the
-            markets get nervous below about {formatGbpBn(AMPLE_HEADROOM_GBPM, 0)}. Nobody has
-            published that number: it is their judgement.
+            markets get nervous below about {formatGbpBn(AMPLE_HEADROOM_GBPM, 0)}, and call anything
+            under {formatGbpBn(THIN_HEADROOM_GBPM, 0)} thin. Nobody has published those numbers:
+            they are their judgement.
+          </p>
+          <p>
+            Others put it differently. The Resolution Foundation said about £10bn in July; the
+            independent forecasts the Treasury collects imply less.
+          </p>
+          <p>
+            In a real Budget the OBR sends the Chancellor several rounds of forecast, and checks the
+            costing of each measure, before the day. Here one estimate stays fixed.
           </p>
           <SourceList
             refs={[
@@ -206,6 +219,8 @@ export function OutlookPage() {
               { sourceId: 'rf-headroom-2026-07-21' },
               { sourceId: 'boe-fsr-2026-07' },
               { sourceId: 'rf-policy-landscape-2026' },
+              { sourceId: 'hmt-forecasts-2026-08' },
+              { sourceId: 'obr-efo-2026-03', note: 'Foreword: how the forecast was produced' },
             ]}
           />
         </aside>
@@ -218,6 +233,16 @@ export function OutlookPage() {
             <p className="panel__hint">
               Each setting is the latest reading less the OBR’s March figure, rounded to the step
               the game uses. The OBR’s own sensitivities turn the settings into headroom.
+            </p>
+            <p className="panel__hint">
+              <LabelBadge badge="assumption" /> The OBR’s figure is for Bank Rate and gilt yields
+              moving together; we apply it to the rise in gilt yields alone, so the estimate leans
+              cautious.{' '}
+              <SourceList
+                as="span"
+                className="briefing__sources"
+                refs={[{ sourceId: 'obr-efo-2026-03', paragraph: '6.17' }]}
+              />
             </p>
             <TableScroll label="How the estimate is made">
               <table className="measures">

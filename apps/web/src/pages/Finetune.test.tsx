@@ -202,7 +202,16 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(h1('Fine-tune spending')).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
     expect(group(/^Public services 1 moved · costs £\d\.\dbn/)).toBeInTheDocument();
-    expect(group(/^Investment 1 lever/)).toBeInTheDocument();
+    expect(group(/^Investment 2 levers/)).toBeInTheDocument();
+    // The defence plan's gap is on the desk before any priority is chosen (Phase 25).
+    expect(
+      screen.getByRole('checkbox', { name: 'Fund the defence plan’s gap' }),
+    ).toBeInTheDocument();
+    // The lead's hundred and twenty characters cannot say how long the deals run: a note does.
+    expect(
+      screen.getByText(/Departments’ day-to-day budgets are set to 2028-29\. Cutting one reopens/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/falling 4\.4% a year after inflation/)).toBeInTheDocument();
     expect(group(/^Benefits 4 levers/)).toBeInTheDocument();
     expect(group(/^Last year’s decisions 5 levers/)).toBeInTheDocument();
     // The prisons budget belongs to a flagship the player chose; moved before arrival, it is on show.
