@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { appendFileSync } from 'node:fs';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -120,26 +120,6 @@ describe('the word budgets', () => {
       expect(n, `${path} shows ${n} words`).toBeLessThanOrEqual(limit);
       // A floor against an empty render: the opening screen is the shortest, at about thirty.
       expect(n, `${path} shows ${n} words`).toBeGreaterThan(20);
-      view.unmount();
-    }
-  });
-
-  it('keeps the desk’s screens inside a budget, whichever group is open', () => {
-    // The side room: the bar, the folded briefing, the tabs, the open group with its ministers,
-    // the running list: everything a player sees while they work, before any fold is opened.
-    const limits = { '/budget/taxes': 500, '/budget/spending': 700 } as const;
-    for (const [path, limit] of Object.entries(limits)) {
-      const view = at(`${path}?${BASE}&${GAME}`);
-      let widest = 0;
-      for (const tab of screen.getAllByRole('tab')) {
-        fireEvent.click(tab);
-        const n = screenWords();
-        widest = Math.max(widest, n);
-        expect(n, `${path} shows ${n} words with ${tab.textContent} open`).toBeLessThanOrEqual(
-          limit,
-        );
-      }
-      expect(widest).toBeGreaterThan(100);
       view.unmount();
     }
   });

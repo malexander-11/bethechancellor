@@ -16,7 +16,7 @@ function at(path: string) {
 
 describe('the progress bar', () => {
   it('says which step this is, links the steps behind you, and leaves the road ahead inert', () => {
-    at(`/finetune/spending?${BASE}&g=st.3_pr.defence`);
+    at(`/finetune/spending?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
     expect(screen.getByText('Step 4 of 6')).toBeInTheDocument();
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     // Spending is the second of fine-tuning's two screens, and the line says so.
@@ -39,7 +39,7 @@ describe('the progress bar', () => {
   });
 
   it('names the six steps the player was promised, in order', () => {
-    at(`/review?${BASE}&g=st.4_pr.defence`);
+    at(`/review?${BASE}&g=st.4_pr.defence&M=rate.0.75_rpi.0.5`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     const names = within(bar)
       .getAllByRole('listitem')
@@ -75,7 +75,7 @@ describe('the progress bar', () => {
   });
 
   it('carries the budget with every link it offers', () => {
-    at(`/pm?${BASE}&g=st.1`);
+    at(`/pm?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     const briefing = within(bar).getByRole('link', { name: /Briefing/ });
     expect(briefing).toHaveAttribute('href', expect.stringContaining('/outlook?'));

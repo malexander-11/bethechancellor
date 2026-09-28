@@ -31,17 +31,20 @@ describe('the head of every screen', () => {
   });
 
   it('explains a word where it is used, and the badges at the foot of every page', () => {
-    at(`/budget/spending?${BASE}`);
+    at(`/outlook?${BASE}`);
     // A tap opens the definition beside the word, and Escape closes it (Phase 25): a phone has
-    // no hover, so a tooltip alone was out of reach.
-    const word = within(intro()).getByRole('button', { name: 'flagship' });
+    // no hover, so a tooltip alone was out of reach. Headroom is the first word a newcomer must
+    // know, and the briefing explains it where it is used.
+    const word = screen.getByRole('button', { name: 'Headroom' });
+    const term = word.closest('.term') as HTMLElement;
+    const short = `(${glossary.terms.headroom?.short})`;
     expect(word).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(word);
     expect(word).toHaveAttribute('aria-expanded', 'true');
-    expect(within(intro()).getByText(`(${glossary.terms.flagship?.short})`)).toBeInTheDocument();
+    expect(within(term).getByText(short)).toBeInTheDocument();
     fireEvent.keyDown(word, { key: 'Escape' });
     expect(word).toHaveAttribute('aria-expanded', 'false');
-    expect(within(intro()).queryByText(`(${glossary.terms.flagship?.short})`)).toBeNull();
+    expect(within(term).queryByText(short)).toBeNull();
     // A badge opens the key at the foot of the page on its own line.
     const badge = document.querySelector('main a.badge--direct') as HTMLAnchorElement | null;
     const key = document.getElementById('badge-key') as HTMLDetailsElement;
@@ -62,11 +65,13 @@ describe('the head of every screen', () => {
     expect(within(badges).getByText(/The game’s opinion/)).toBeInTheDocument();
   });
 
-  it('follows the package’s screens, and the opening has a head of its own', () => {
-    const first = at(`/budget/spending?${BASE}`);
+  it('follows step 4’s screens, and the opening has a head of its own', () => {
+    const first = at(`/finetune/spending?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
     expect(screen.getByText('Step 4 of 6')).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
-    expect(screen.getByText(/Ministers will tell you/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Your Director of Public Spending’s view is on each lever\./),
+    ).toBeInTheDocument();
     first.unmount();
     at(`/?${BASE}`);
     expect(screen.getByText('Step 1 of 6')).toBeInTheDocument();
@@ -86,27 +91,23 @@ describe('the head of every screen', () => {
     expect(screen.queryByRole('switch', { name: 'Dark mode' })).toBeNull();
     const footer = document.querySelector('footer.footer-note') as HTMLElement;
     expect(within(footer).getByRole('switch', { name: 'Show workings' })).toBeInTheDocument();
-    const every = within(footer).getByRole('link', { name: 'Every lever' });
-    expect(every).toHaveAttribute('href', expect.stringMatching(/^\/budget\/taxes\?/));
-    // A Budget with no economy of its own opens the desk on today's estimate (Phase 24).
-    expect(every).toHaveAttribute('href', expect.stringContaining('M=rate.0.75_rpi.0.5'));
     expect(within(footer).getByRole('link', { name: 'Sources and licence' })).toBeInTheDocument();
   });
 
-  it('offers every lever only where the desk would open, and not from the desk or fine-tuning', () => {
-    const desk = at(`/budget/taxes?${BASE}`);
-    const footer = () => document.querySelector('footer.footer-note') as HTMLElement;
-    expect(within(footer()).queryByRole('link', { name: 'Every lever' })).toBeNull();
-    expect(within(footer()).getByRole('switch', { name: 'Show workings' })).toBeInTheDocument();
-    desk.unmount();
-    // A game reaches the desk at step 4: not from the priorities, and not twice on fine-tuning.
-    const early = at(`/pm?${BASE}&g=st.1`);
-    expect(within(footer()).queryByRole('link', { name: 'Every lever' })).toBeNull();
-    early.unmount();
-    const tuning = at(`/finetune/tax?${BASE}&g=st.3_pr.defence`);
-    expect(within(footer()).queryByRole('link', { name: 'Every lever' })).toBeNull();
-    tuning.unmount();
-    at(`/review?${BASE}&g=st.4_pr.defence`);
-    expect(within(footer()).getByRole('link', { name: 'Every lever' })).toBeInTheDocument();
+  it('offers no way round step 4: no screen links to every lever (Phase 26)', () => {
+    // Every lever is a policy on step 4, so the desk and the links to it have gone: from the
+    // footer, from fine-tuning and from everywhere else.
+    const estimate = 'M=rate.0.75_rpi.0.5';
+    for (const path of [
+      `/outlook?${BASE}`,
+      `/pm?${BASE}&g=st.1&${estimate}`,
+      `/finetune/tax?${BASE}&g=st.3_pr.defence&${estimate}`,
+      `/finetune/spending?${BASE}&g=st.3_pr.defence&${estimate}`,
+      `/review?${BASE}&g=st.4_pr.defence&${estimate}`,
+    ]) {
+      const view = at(path);
+      expect(screen.queryByRole('link', { name: /Every (tax |spending )?lever/ }), path).toBeNull();
+      view.unmount();
+    }
   });
 });

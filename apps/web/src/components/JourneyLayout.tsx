@@ -1,7 +1,39 @@
 import type { JourneyStep } from '@btc/engine';
 import type { ReactNode } from 'react';
+import { useBudget } from '../state/budget';
 import { PageIntro } from './PageIntro';
 import { Progress, type SubStep } from './Progress';
+
+/**
+ * What a shared link could not carry, or carries into a game not yet started, said once on
+ * whatever screen it opens (Phase 26): the desk, which used to say it, has gone. A note, not a
+ * status, so it never talks over the bar's announcements; dismissed, it is gone for the visit.
+ */
+function LinkNote() {
+  const { state, dispatch } = useBudget();
+  const lines = state.warnings;
+  if (lines.length === 0) return null;
+  return (
+    <div className="warnings warnings--link" role="note" aria-label="About this link">
+      {lines.length === 1 ? (
+        <p className="warnings__line">{lines[0]}</p>
+      ) : (
+        <ul>
+          {lines.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      )}
+      <button
+        type="button"
+        className="linklike"
+        onClick={() => dispatch({ type: 'dismissWarnings' })}
+      >
+        Dismiss<span className="sr-only"> the note about this link</span>
+      </button>
+    </div>
+  );
+}
 
 /** The road and the head of the screen, shared by every page of the journey. */
 export function JourneyLayout({
@@ -30,6 +62,7 @@ export function JourneyLayout({
       {intro ? (
         <PageIntro step={step} part={part} title={title} lead={lead} tabTitle={tabTitle} />
       ) : null}
+      <LinkNote />
       {children}
     </div>
   );

@@ -66,23 +66,43 @@ export function onEstimate(values: Readonly<Record<string, number>>): boolean {
 export const ESTIMATE_WARNING =
   'Every game now plays on today’s estimate of the economy, so this link’s own economic figures were replaced.';
 
+/** Said of a link that switched off the interest on its own borrowing, or judged it by next year's rule. */
+export const EXPERT_WARNING =
+  'This link changed a setting that has gone. Every Budget now counts the interest on its own borrowing, and is judged by the rules as they stand.';
+
+/** Said on the briefing of a link that carries measures but no game (Phase 26). */
+export const MEASURES_NOTE = 'This link’s measures will be in your Budget when you start.';
+
+/** True when a set of lever values moves anything but the economy. */
+function hasMeasures(values: Readonly<Record<string, number>>): boolean {
+  return Object.keys(values).some((code) => !MACRO_CODES.includes(code));
+}
+
 export function initialStateFromLocation(search: string): BudgetState {
   const { state, warnings } = decodePermalink(search, levers);
   const out: BudgetState = {
     leverValues: state.leverValues,
-    debtInterestFeedback: state.debtInterestFeedback ?? true,
-    assessAsOf: state.assessAsOf ?? 'vintage',
+    debtInterestFeedback: true,
+    assessAsOf: 'vintage',
     warnings,
   };
+  // The expert switches went with the desk (Phase 26): every Budget counts the interest on its own
+  // borrowing and is judged by the rules as they stand. A link that set either is read without it.
+  if (state.debtInterestFeedback === false || state.assessAsOf === 'nextBudget') {
+    out.warnings = [...out.warnings, EXPERT_WARNING];
+  }
   if (state.game) {
     // Every game is played on today's estimate (ADR-0025). A link from before Phase 24 may carry
-    // the forecast its seed drew or figures of its own; it opens on the estimate, with a warning
-    // the desk shows beside the link's other warnings.
+    // the forecast its seed drew or figures of its own; it opens on the estimate, and says so.
     out.game = state.game;
     if (!onEstimate(out.leverValues)) {
       out.leverValues = withValues(out.leverValues, ESTIMATE);
-      out.warnings = [...warnings, ESTIMATE_WARNING];
+      out.warnings = [...out.warnings, ESTIMATE_WARNING];
     }
+  } else if (hasMeasures(out.leverValues)) {
+    // With no game a link opens on the briefing (Phase 26), whose button starts the game with the
+    // link's measures in it; the one line says they are not lost.
+    out.warnings = [...out.warnings, MEASURES_NOTE];
   }
   return out;
 }
@@ -101,12 +121,12 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
     case 'setLevers':
       return { ...state, leverValues: withValues(state.leverValues, action.values) };
     case 'reset': {
-      // A reset ends the game too: every choice goes with the levers.
+      // A reset ends the game too: every choice goes with the levers, and what the link said.
       const next: BudgetState = {
         leverValues: {},
         debtInterestFeedback: true,
         assessAsOf: 'vintage',
-        warnings: state.warnings,
+        warnings: [],
       };
       return next;
     }
@@ -120,11 +140,13 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
       return { ...state, leverValues };
     }
     case 'startGame':
-      // Every game starts on today's estimate; one already under way keeps its choices.
+      // Every game starts on today's estimate; one already under way keeps its choices. The link's
+      // measures are in it now, so the line promising them has done its job.
       return {
         ...state,
         leverValues: withValues(state.leverValues, ESTIMATE),
         game: state.game ?? freshGame(),
+        warnings: state.warnings.filter((w) => w !== MEASURES_NOTE),
       };
     case 'updateGame':
       return state.game ? { ...state, game: { ...state.game, ...action.patch } } : state;

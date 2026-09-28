@@ -55,11 +55,20 @@ describe('the road through the game (Phase 24: six steps)', () => {
     expect(enterable('pm', game(FINAL_STAGE))).toBe(true);
   });
 
-  it('treats a link with no game as a sandbox: the desk and Budget day open, the story shut', () => {
-    for (const step of ['outlook', 'finetune', 'taxes', 'spending', 'budget-day'] as const) {
-      expect(enterable(step, undefined), step).toBe(true);
-    }
-    for (const step of ['pm', 'deliver', 'review'] as const) {
+  it('opens only the briefing to a link with no game: the desk and its sandbox have gone', () => {
+    // Every lever is a policy on step 4 (Phase 26); a link's measures wait on the briefing for the
+    // game it starts, and a finished game carries its own g= to Budget day.
+    expect(enterable('outlook', undefined)).toBe(true);
+    expect(enterable('assumptions', undefined)).toBe(true);
+    for (const step of [
+      'pm',
+      'deliver',
+      'finetune',
+      'taxes',
+      'spending',
+      'review',
+      'budget-day',
+    ] as const) {
       expect(enterable(step, undefined), step).toBe(false);
     }
   });

@@ -5,7 +5,7 @@ import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 /** A game that has agreed two priorities with the PM and reached the package. */
-const GAME = 'g=st.2_pr.safer-streets+defence';
+const GAME = 'g=st.2_pr.safer-streets+defence&M=rate.0.75_rpi.0.5';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -32,7 +32,7 @@ describe('build your Budget: the ways to deliver', () => {
     const sandbox = at(`/budget/deliver?${BASE}&L=itbr.1`);
     expect(h1('Your briefing')).toBeInTheDocument();
     sandbox.unmount();
-    at(`/budget/deliver?${BASE}&g=st.1`);
+    at(`/budget/deliver?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 
@@ -176,7 +176,7 @@ describe('build your Budget: the ways to deliver', () => {
   });
 
   it('prices investment on the debt rule, which it touches', () => {
-    at(`/budget/deliver?${BASE}&g=st.2_pr.homes-growth`);
+    at(`/budget/deliver?${BASE}&g=st.2_pr.homes-growth&M=rate.0.75_rpi.0.5`);
     const invest = box(/^Spend 10% more on public investment/).closest('.choice') as HTMLElement;
     expect(
       within(invest).getByText(/^On the debt rule: costs £\d+\.\dbn · leaves (−|£)/),
@@ -187,7 +187,7 @@ describe('build your Budget: the ways to deliver', () => {
   it('says which ways only make a start, and counts a ticked start as started, not delivered', async () => {
     // Graded delivery (Phase 25): the care down-payment starts the NHS priority; the health uplift
     // delivers it. The reason is a judgement, badged, one fold away.
-    at(`/budget/deliver?${BASE}&g=st.2_pr.nhs`);
+    at(`/budget/deliver?${BASE}&g=st.2_pr.nhs&M=rate.0.75_rpi.0.5`);
     const card = (name: RegExp) => box(name).closest('.choice') as HTMLElement;
     const care = card(/^A down-payment on the National Care Service/);
     expect(within(care).getByText('Makes a start')).toBeInTheDocument();
@@ -229,7 +229,7 @@ describe('build your Budget: the ways to deliver', () => {
   });
 
   it('wears the red lines, the earliest starts and a later start on the options that carry them', async () => {
-    at(`/budget/deliver?${BASE}&g=st.2_pr.welfare-bill+families`);
+    at(`/budget/deliver?${BASE}&g=st.2_pr.welfare-bill+families&M=rate.0.75_rpi.0.5`);
     expect(h1(/^1st Get the welfare bill down/)).toBeInTheDocument();
     const twoChild = box(/Reinstate the two-child limit/);
     const twoChildCard = twoChild.closest('.choice') as HTMLElement;
@@ -320,7 +320,7 @@ describe('build your Budget: the ways to deliver', () => {
   });
 
   it('names the options it overlaps before either is chosen, and quotes the interaction once the other moves', () => {
-    const cost = 'g=st.2_pr.cost-of-living';
+    const cost = 'g=st.2_pr.cost-of-living&M=rate.0.75_rpi.0.5';
     const quiet = at(`/budget/deliver?${BASE}&${cost}`);
     const freeze = () => box(/^End the threshold freeze early/).closest('.choice') as HTMLElement;
     // Fine-tuning offers the basic rate; the two interact, so the card says so, quietly.

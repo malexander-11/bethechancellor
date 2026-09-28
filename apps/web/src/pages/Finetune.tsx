@@ -40,30 +40,15 @@ export function finetunePath(side: FinetuneSideId): string {
   return `/finetune/${side}`;
 }
 
-/** Each screen's own words: its foot link into the desk, and what the desk's way back says. */
 /**
- * Each screen's links, and its one sentence on interest (Phase 25): a card gives the lever's own
- * figure, and the headroom it would leave moves by the interest on borrowing too, said once here
- * rather than on every card.
+ * Each screen's one sentence on interest (Phase 25): a card gives the lever's own figure, and the
+ * headroom it would leave moves by the interest on borrowing too, said once here rather than on
+ * every card.
  */
-const SIDES: Record<
-  FinetuneSideId,
-  { desk: string; every: string; back: string; interest: string }
-> = {
-  tax: {
-    desk: '/budget/taxes',
-    every: 'Every tax lever',
-    back: 'Back to fine-tuning tax',
-    interest:
-      'Headroom also moves with the interest on borrowing, so it can move more than a tax raises.',
-  },
-  spending: {
-    desk: '/budget/spending',
-    every: 'Every spending lever',
-    back: 'Back to fine-tuning spending',
-    interest:
-      'Headroom also moves with the interest on borrowing, so it can move more than a budget saves.',
-  },
+const INTEREST: Record<FinetuneSideId, string> = {
+  tax: 'Headroom also moves with the interest on borrowing, so it can move more than a tax raises.',
+  spending:
+    'Headroom also moves with the interest on borrowing, so it can move more than a budget saves.',
 };
 
 /**
@@ -112,19 +97,18 @@ export function groupCount(
  * levers show their usual policy, with any lever already chosen showing the policy its way; the
  * rest wait under one fold, grouped by the lever's family, and a policy chosen inside the fold
  * stays where it is until the next visit, so a card never jumps from under the pointer. A lever a
- * flagship the player chose holds is one line, with the way back to that flagship.
+ * flagship the player chose holds is one line, with the way back to that flagship. Every policy
+ * lever the game has is here (Phase 26): there is no desk behind it.
  */
 export function FinetunePage() {
   const { side: param } = useParams();
-  const { state } = useBudget();
   const { search } = useLocation();
+  // A link with no game is sent to the briefing, measures and all, by the guard.
   const guard = useStageGuard('finetune');
   if (guard) return guard;
   if (param !== 'tax' && param !== 'spending') {
     return <Navigate to={{ pathname: finetunePath('tax'), search }} replace />;
   }
-  // A sandbox has no priorities and no road: every lever is on the desk.
-  if (!state.game) return <Navigate to={{ pathname: SIDES[param].desk, search }} replace />;
   // One screen per side, remounted on the way from one to the other, so each visit begins with a
   // fresh reading of which levers have moved.
   return <FinetuneScreen key={param} side={param} />;
@@ -132,7 +116,6 @@ export function FinetunePage() {
 
 function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const { state, dispatch, outcome } = useBudget();
-  const { pathname } = useLocation();
   const hintOf = useLeverHints();
   // The Budget as it stood when the screen was opened: a lever chosen then shows the policy its
   // way among those on show, and a lever a flagship held then is a line; anything chosen inside the
@@ -151,7 +134,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   if (!game) return null;
 
   const spec = finetune[side];
-  const words = SIDES[side];
   const status = ambitionStatus(game, pm, options, outcome, levers);
   const ranked = rankedPriorities(game, pm);
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
@@ -259,7 +241,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
           ))}
         </ul>
       ) : null}
-      <p className="panel__hint tune__interest">{words.interest}</p>
+      <p className="panel__hint tune__interest">{INTEREST[side]}</p>
       {spec.groups.map((group) => {
         const id = `tune-${group.id}`;
         // On show: the usual policy of the group's first levers, and of any chosen on arrival the
@@ -295,14 +277,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
           </section>
         );
       })}
-      <p className="more-link">
-        <StepLink
-          to={words.desk}
-          state={{ from: 'finetune', returnTo: pathname, returnLabel: words.back }}
-        >
-          {words.every}
-        </StepLink>
-      </p>
       <p className="actions">
         <StepLink
           to={onward.to}

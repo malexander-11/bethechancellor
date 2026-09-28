@@ -22,10 +22,15 @@ const open = (summary: string) => fireEvent.click(screen.getByText(summary));
 
 /** Two priorities agreed, delivered from the review, on today's estimate (Phase 24). */
 const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5';
+/**
+ * A game delivered with nothing agreed and nothing changed. Budget day needs a game (Phase 26):
+ * the sandbox that once opened it with none has gone.
+ */
+const EMPTY = 'g=st.4&M=rate.0.75_rpi.0.5';
 
 describe('Budget day: what your Budget means', () => {
   it('is one screen: the rules line, three rated audiences, and the rest behind folds', () => {
-    at(BASE);
+    at(`${BASE}&${EMPTY}`);
     expect(
       screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
     ).toBeInTheDocument();
@@ -35,33 +40,34 @@ describe('Budget day: what your Budget means', () => {
     for (const title of ['Your backbenchers', 'The markets', 'The public']) {
       expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
     }
-    // An empty Budget: the benches and the public shrug; the markets take March's headroom well.
+    // An empty Budget: the benches and the public shrug; the markets find today's £6.8bn thin,
+    // and say the economy since March took it, not the player's measures (Phase 25).
     expect(meter('Your backbenchers')).toHaveAccessibleName('3 of 5: Divided');
     expect(meter('The public')).toHaveAccessibleName('3 of 5: Shrugging');
-    expect(meter('The markets')).toHaveAccessibleName('4 of 5: Reassured');
-    // March's £23.6bn is above twenty billion and close to what March left, and says so (Phase 25).
-    expect(within(card('The markets')).getAllByText(/close to what March left/).length).toBe(2);
+    expect(meter('The markets')).toHaveAccessibleName('2 of 5: Nervous');
+    expect(within(card('The markets')).getAllByText(/not your measures/).length).toBe(2);
     // The speech, the households and the documents wait behind their folds, closed.
     for (const fold of ['Read the speech', 'Who feels it: five households', 'Budget documents']) {
       expect(screen.getByText(fold).closest('details')).not.toHaveAttribute('open');
     }
-    // No game: nothing to say in three sentences, and "change something" means the desk.
-    expect(screen.queryByText(/Your Budget, in three sentences/)).toBeNull();
+    // Nothing changed, and the three sentences say so; "change something" means the review.
+    const statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
+    expect(within(statement).getByText('I changed no taxes and no spending.')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Change something' })).toHaveAttribute(
       'href',
-      expect.stringMatching(/^\/budget\/taxes/),
+      expect.stringMatching(/^\/review\?/),
     );
   });
 
   it('reads the speech one fold away, every sentence badged as a game judgement', () => {
-    at(BASE);
+    at(`${BASE}&${EMPTY}`);
     open('Read the speech');
     const speech = screen.getByRole('article', { name: 'The Budget speech' });
     expect(within(speech).getByText(/Madam Deputy Speaker/)).toBeInTheDocument();
     expect(within(speech).getByText(/I commend this Budget to the House/)).toBeInTheDocument();
     expect(within(speech).getByText(/nobody said these words/)).toBeInTheDocument();
-    // The baseline meets the rules with the March forecast's own headroom, and the speech says so.
-    expect(within(speech).getByText(/£23\.6bn of headroom/)).toBeInTheDocument();
+    // An empty Budget meets the rules with today's estimate's headroom, and the speech says so.
+    expect(within(speech).getByText(/£6\.8bn of headroom/)).toBeInTheDocument();
   });
 
   it('says the Budget in three sentences: what was prioritised, who pays, what was accepted', () => {
@@ -114,8 +120,8 @@ describe('Budget day: what your Budget means', () => {
   });
 
   it('gives the reasons and the decisions behind them, and shows its workings on request', () => {
-    // Health, schools and prisons all up a tenth: about £35bn a year against £23.6bn of headroom.
-    at(`${BASE}&L=dhsc.10_dfe.10_moj.10`);
+    // Health, schools and prisons all up a tenth: about £35bn a year against £6.8bn of headroom.
+    at(`${BASE}&${EMPTY}&L=dhsc.10_dfe.10_moj.10`);
     const markets = card('The markets');
     expect(meter('The markets')).toHaveAccessibleName('1 of 5: Alarmed');
     expect(within(markets).getAllByText(/The day-to-day rule is missed/).length).toBe(2);

@@ -1138,6 +1138,10 @@ a.badge:hover {
   border-left-color: var(--ink-2);
 }
 
+.warnings__line {
+  margin: 0;
+}
+
 /* ---------------------------------------------------------------- tables */
 
 .table-scroll {

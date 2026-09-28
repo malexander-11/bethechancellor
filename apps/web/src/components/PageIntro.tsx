@@ -50,7 +50,11 @@ export function PageIntro({
 }) {
   const stage = guideFor(step);
   const own = tabTitle ?? (typeof title === 'string' ? title : stage?.title);
-  const plainTitle = own && part && !tabTitle ? `${own.replace(/\.$/, '')} (${part.label})` : own;
+  // A screen whose heading already is its part's name says it once: "Fine-tune tax", not twice.
+  const plainTitle =
+    own && part && !tabTitle && part.label !== own
+      ? `${own.replace(/\.$/, '')} (${part.label})`
+      : own;
   usePageTitle(
     stage && plainTitle
       ? `${plainTitle.replace(/\.$/, '')} · Step ${stage.number} of ${STEP_COUNT}`

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   ESTIMATE_WARNING,
+  EXPERT_WARNING,
+  MEASURES_NOTE,
   initialStateFromLocation,
   isJourneyPath,
   onEstimate,
@@ -10,10 +12,26 @@ import {
 
 describe('budget state', () => {
   it('hydrates from a permalink and encodes back to the same query', () => {
-    const state = initialStateFromLocation('?v=1&f=obr2603&r=ch2602&i=2027&M=rate.0.75&o=nb1');
-    expect(state.leverValues).toEqual({ rate: 0.75 });
-    expect(state.assessAsOf).toBe('nextBudget');
-    expect(permalinkQuery(state)).toBe('v=1&f=obr2603&r=ch2602&i=2027&M=rate.0.75&o=nb1');
+    const query = 'v=1&f=obr2603&r=ch2602&i=2027&L=itbr.1&M=rate.0.75_rpi.0.5&g=st.3_pr.defence';
+    const state = initialStateFromLocation(`?${query}`);
+    expect(state.leverValues).toEqual({ itbr: 1, rate: 0.75, rpi: 0.5 });
+    expect(state.game).toEqual({ reached: 3, priorities: ['defence'] });
+    expect(state.warnings).toEqual([]);
+    expect(permalinkQuery(state)).toBe(query);
+  });
+
+  it('reads a link that set a retired expert switch without it, and says so', () => {
+    // Interest on the Budget's own borrowing is always counted, and the rules are the rules as
+    // they stand (Phase 26): an old link's o= flags are dropped, with one line to say why.
+    for (const flag of ['nb1', 'dif0']) {
+      const state = initialStateFromLocation(
+        `?v=1&f=obr2603&r=ch2602&i=2027&M=rate.0.75&o=${flag}`,
+      );
+      expect(state.debtInterestFeedback).toBe(true);
+      expect(state.assessAsOf).toBe('vintage');
+      expect(state.warnings).toEqual([EXPERT_WARNING]);
+      expect(permalinkQuery(state)).toBe('v=1&f=obr2603&r=ch2602&i=2027&M=rate.0.75');
+    }
   });
 
   it('drops a lever from the URL when it returns to the OBR default', () => {
@@ -55,7 +73,10 @@ describe('budget state', () => {
 
   it('starts a game on today’s estimate, and keeps a game under way as it is', () => {
     const sandbox = initialStateFromLocation('?L=itbr.1&M=rate.0.25');
+    expect(sandbox.warnings).toEqual([MEASURES_NOTE]);
     const started = reducer(sandbox, { type: 'startGame' });
+    // The measures are in the game now, so the note that promised them has done its job.
+    expect(started.warnings).toEqual([]);
     expect(started.game).toEqual({ reached: 0, priorities: [] });
     // Whatever economy the sandbox had, the game plays on the estimate; the policy stays.
     expect(started.leverValues).toEqual({ itbr: 1, rate: 0.75, rpi: 0.5 });
@@ -90,9 +111,11 @@ describe('budget state', () => {
     expect(old.leverValues).toEqual({ moj: 10, rate: 0.75, rpi: 0.5 });
     expect(old.warnings).toEqual([ESTIMATE_WARNING]);
     expect(permalinkQuery(old)).not.toContain('S=');
-    // A sandbox link keeps whatever economy it carried, the March forecast included.
-    const sandbox = initialStateFromLocation('?L=itbr.1');
-    expect(sandbox.leverValues).toEqual({ itbr: 1 });
-    expect(sandbox.warnings).toEqual([]);
+    // A link with no game opens the briefing (Phase 26): its measures wait for the game it
+    // starts, and one line says so. An economy alone is not a measure, and needs no line.
+    const measures = initialStateFromLocation('?L=itbr.1');
+    expect(measures.leverValues).toEqual({ itbr: 1 });
+    expect(measures.warnings).toEqual([MEASURES_NOTE]);
+    expect(initialStateFromLocation('?M=rate.0.25').warnings).toEqual([]);
   });
 });

@@ -4,9 +4,9 @@ import type { GamePermalink } from '../types/engine.js';
 /**
  * The six stages of a playthrough, in order (Phase 24, ADR-0025): the briefing, the priorities,
  * the flagship policies, fine-tuning tax and spending, delivering the Budget, and the feedback.
- * The index is what a shared link carries (`st.N`). Fine-tuning is one stage with its two
- * curated screens and the desk's two screens behind them; `assumptions` is the Phase 4 name that
- * still appears in authored data.
+ * The index is what a shared link carries (`st.N`). Fine-tuning is one stage with its two screens;
+ * `assumptions`, and the desk's `taxes` and `spending`, are older names that still appear in
+ * authored data.
  */
 export const GAME_STAGES: readonly JourneyStep[] = [
   'outlook',
@@ -21,7 +21,7 @@ export const FINAL_STAGE = GAME_STAGES.length - 1;
 
 const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
   assumptions: 'outlook',
-  // The desk's two screens are fine-tuning's side room: every tax and every spending lever.
+  // The desk's two screens, retired in Phase 26: every lever they held is a policy on step 4.
   taxes: 'finetune',
   spending: 'finetune',
 };
@@ -37,11 +37,12 @@ function canonical(step: JourneyStep): JourneyStep {
 }
 
 /**
- * With no game the desk and Budget day are a sandbox, and the briefing is open to read; the stages
- * that tell the story are not. The curated screens need a game to have anything to show, so they
- * send a sandbox on to the desk themselves; the stage stays open so the redirect lands.
+ * With no game only the briefing is open (Phase 26, ADR-0027). The desk and its sandbox have gone:
+ * every lever is a policy on step 4, and a link that carries measures but no game opens on the
+ * briefing, whose button starts the game with those measures in it. A finished game is shared
+ * with its `g=`, so its link still opens Budget day.
  */
-const SANDBOX_OPEN: ReadonlySet<JourneyStep> = new Set(['outlook', 'finetune', 'budget-day']);
+const SANDBOX_OPEN: ReadonlySet<JourneyStep> = new Set(['outlook']);
 
 /**
  * Whether a step may be opened, given how far the game has got. The road runs one way: a stage is

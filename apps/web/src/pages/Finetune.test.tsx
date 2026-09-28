@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
-/** A game that has agreed two priorities with the PM and reached fine-tuning. */
-const GAME = 'g=st.3_pr.safer-streets+defence';
+/** A game that has agreed two priorities with the PM and reached fine-tuning, on today's estimate. */
+const GAME = 'g=st.3_pr.safer-streets+defence&M=rate.0.75_rpi.0.5';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -203,7 +203,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
   });
 
   it('warns when two levers overlap: last year’s cancelled rise against a fuel duty cut', () => {
-    at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&L=fuel.-10`);
+    at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&M=rate.0.75_rpi.0.5&L=fuel.-10`);
     // The cut is the cost-of-living flagship's own, so fuel duty is one line in the drivers'
     // group with the way back to that flagship, not a card that could undo it (Phase 26).
     const held = group(/^Drivers/).querySelector('.lever--held');
@@ -354,7 +354,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     against.unmount();
     // Past its flagship's value, a top-up stays a card that shows its own size; a setting no size
     // matches says what it is (Phase 26).
-    const past = at(`/finetune/spending?${BASE}&g=st.3_pr.nhs&L=dhsc.5`);
+    const past = at(`/finetune/spending?${BASE}&g=st.3_pr.nhs&M=rate.0.75_rpi.0.5&L=dhsc.5`);
     const nhs = policy('Spend more on health and social care');
     expect(within(nhs).getByRole('radio', { name: 'Large 5% more' })).toBeChecked();
     expect(within(nhs).getByText('In your flagship policies')).toBeInTheDocument();
@@ -403,15 +403,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     });
   });
 
-  it('opens every lever on the desk, and comes back', () => {
-    at(`/finetune/tax?${BASE}&${GAME}`);
-    fireEvent.click(screen.getByRole('link', { name: 'Every tax lever' }));
-    expect(screen.getByText('Build the package')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('link', { name: 'Back to fine-tuning tax' }));
-    expect(h1('Fine-tune tax')).toBeInTheDocument();
-  });
-
-  it('sends the old and odd addresses to the right screen, and a sandbox to the desk', () => {
+  it('sends the old and odd addresses to the right screen, and a link with no game to the briefing', () => {
     const old = at(`/budget/afford?${BASE}&${GAME}`);
     expect(h1('Fine-tune tax')).toBeInTheDocument();
     old.unmount();
@@ -421,12 +413,20 @@ describe('fine-tune tax and spend: the curated levers', () => {
     const odd = at(`/finetune/nothing?${BASE}&${GAME}`);
     expect(h1('Fine-tune tax')).toBeInTheDocument();
     odd.unmount();
+    // The desk's spending screen is step 4's now (Phase 26), and there is no link to a desk.
+    const desk = at(`/budget/spending?${BASE}&${GAME}`);
+    expect(h1('Fine-tune spending')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /Every (tax|spending) lever/ })).toBeNull();
+    desk.unmount();
+    // With no game there is no sandbox: the briefing, and the link's measures wait for the game.
     const sandbox = at(`/finetune/spending?${BASE}&L=dfe.-2`);
-    expect(screen.getByText('Build the package')).toBeInTheDocument();
-    expect(screen.getByText(/The Director of Public Spending’s briefing/)).toBeInTheDocument();
+    expect(h1('Your briefing')).toBeInTheDocument();
+    expect(screen.getByRole('note', { name: 'About this link' })).toHaveTextContent(
+      'This link’s measures will be in your Budget when you start.',
+    );
     sandbox.unmount();
     // A game that has not yet agreed its priorities is sent back to them.
-    at(`/finetune/tax?${BASE}&g=st.1`);
+    at(`/finetune/tax?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 

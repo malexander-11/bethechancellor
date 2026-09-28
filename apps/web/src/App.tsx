@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { WorkingsProvider, useWorkingsSwitch } from './journey/workings';
 import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
-import { BudgetPage } from './pages/Budget';
 import { BudgetDayPage } from './pages/BudgetDay';
 import { DeliverPage } from './pages/Deliver';
 import { FinetunePage } from './pages/Finetune';
@@ -18,6 +17,17 @@ import { Disclaimer } from './components/Disclaimer';
 function RedirectKeepingQuery({ to }: { to: string }) {
   const { search } = useLocation();
   return <Navigate to={{ pathname: to, search }} replace />;
+}
+
+/**
+ * The desk's old addresses (Phase 26, ADR-0027): its spending screen, and the letters' and the
+ * recommendations' screens before it, open step 4's spending; anything else opens its tax screen.
+ * The stage guard does the rest: a game lands on step 4, a link with no game on the briefing.
+ */
+function DeskRedirect() {
+  const { tab } = useParams();
+  const spending = tab === 'spending' || tab === 'policies' || tab === 'recommendations';
+  return <RedirectKeepingQuery to={spending ? '/finetune/spending' : '/finetune/tax'} />;
 }
 
 /**
@@ -43,8 +53,8 @@ function RouteFocus() {
 /**
  * The brass plate: the name (which is the way home) and the two reference pages. The journey
  * itself is not in the header: one road, entered at the start and walked by the button at the
- * foot of each page. The utilities (the workings switch, every lever, the sources) sit in the
- * footer, where a reader looks for them, not above the story.
+ * foot of each page. The utilities (the workings switch, the sources) sit in the footer, where a
+ * reader looks for them, not above the story.
  */
 function Shell() {
   const { workings } = useWorkingsSwitch();
@@ -71,16 +81,19 @@ function Shell() {
           <Route path="/outlook" element={<OutlookPage />} />
           <Route path="/assumptions" element={<RedirectKeepingQuery to="/outlook" />} />
           <Route path="/pm" element={<PMPage />} />
-          <Route path="/budget" element={<RedirectKeepingQuery to="/budget/taxes" />} />
+          <Route path="/budget" element={<RedirectKeepingQuery to="/finetune/tax" />} />
           {/* The flagship screens of the package; the desk's two screens catch everything else. */}
           <Route path="/budget/deliver" element={<DeliverPage />} />
           <Route path="/budget/deliver/:n" element={<DeliverPage />} />
           {/* Paying for it became fine-tuning tax and spending (Phase 24). */}
           <Route path="/budget/afford" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-          <Route path="/budget/:tab" element={<BudgetPage />} />
+          <Route path="/budget/:tab" element={<DeskRedirect />} />
           <Route path="/finetune" element={<RedirectKeepingQuery to="/finetune/tax" />} />
           <Route path="/finetune/:side" element={<FinetunePage />} />
-          <Route path="/recommendations" element={<RedirectKeepingQuery to="/budget/spending" />} />
+          <Route
+            path="/recommendations"
+            element={<RedirectKeepingQuery to="/finetune/spending" />}
+          />
           {/*
             The forecast that arrived later, the compromises and the add-ons retired in Phase 24:
             their old addresses open the review, and the stage guard sends an early game back.
@@ -91,7 +104,7 @@ function Shell() {
           <Route path="/rabbit" element={<RedirectKeepingQuery to="/review" />} />
           <Route path="/review" element={<ReviewPage />} />
           <Route path="/budget-day" element={<BudgetDayPage />} />
-          <Route path="/b" element={<RedirectKeepingQuery to="/budget/taxes" />} />
+          <Route path="/b" element={<RedirectKeepingQuery to="/finetune/tax" />} />
           <Route path="/methodology" element={<MethodologyPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<RedirectKeepingQuery to="/" />} />

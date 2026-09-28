@@ -3,6 +3,21 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
+const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+/** A game at fine-tuning, on today's estimate, with a penny on the basic rate. */
+const TUNING = `${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1`;
+
+function at(path: string) {
+  // The provider reads the Budget out of the real location, so set it before rendering.
+  window.history.replaceState(null, '', path);
+  return render(
+    <MemoryRouter initialEntries={[path]}>
+      <App />
+    </MemoryRouter>,
+  );
+}
+const h1 = (name: string) => screen.getByRole('heading', { level: 1, name });
+
 describe('journey routes', () => {
   it('opens on one sentence, the playtime and the one button', () => {
     render(
@@ -19,19 +34,27 @@ describe('journey routes', () => {
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
   });
 
-  it('redirects old /b links into the package with the scorecard, on the first of its two parts', () => {
-    render(
-      <MemoryRouter initialEntries={['/b?v=1&f=obr2603&r=ch2602&i=2027&L=itbr.1']}>
-        <App />
-      </MemoryRouter>,
+  it('sends the desk’s old addresses to step 4 in a game, and to the briefing without one', () => {
+    // Every lever is a policy on step 4 (Phase 26): the desk's screens open the ones that took
+    // their levers, the Budget carried over.
+    for (const [path, name] of [
+      ['/b', 'Fine-tune tax'],
+      ['/budget', 'Fine-tune tax'],
+      ['/budget/taxes', 'Fine-tune tax'],
+      ['/budget/spending', 'Fine-tune spending'],
+      ['/budget/policies', 'Fine-tune spending'],
+      ['/recommendations', 'Fine-tune spending'],
+    ] as const) {
+      const view = at(`${path}?${TUNING}`);
+      expect(h1(name), path).toBeInTheDocument();
+      view.unmount();
+    }
+    // With no game, the briefing: its button starts the game, and the link's measures go into it.
+    at(`/b?${BASE}&L=itbr.1`);
+    expect(h1('Your briefing')).toBeInTheDocument();
+    expect(screen.getByRole('note', { name: 'About this link' })).toHaveTextContent(
+      'This link’s measures will be in your Budget when you start.',
     );
-    expect(screen.getByText('Build the package')).toBeInTheDocument();
-    // No tab bar: one road. The progress line says which part this is, the button says what is next.
-    expect(screen.queryByRole('link', { name: 'Taxes' })).toBeNull();
-    expect(screen.getByText(/^Fine-tune tax and spend · 1 of 2$/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Next: the spending' })).toBeInTheDocument();
-    expect(screen.getByText(/Headroom, 2029-30/)).toBeInTheDocument();
-    expect(screen.getByText('Budget 2025 decisions')).toBeInTheDocument();
   });
 
   it('names each screen in the tab title and puts a skip link first in the tab order', () => {
@@ -46,24 +69,15 @@ describe('journey routes', () => {
     expect(document.body.querySelector('a, button, input, [tabindex]')).toBe(skip);
     expect(document.getElementById('main')).toHaveAttribute('tabindex', '-1');
     unmount();
-    render(
-      <MemoryRouter initialEntries={['/budget/taxes']}>
-        <App />
-      </MemoryRouter>,
-    );
-    expect(document.title).toBe('Build the package (the taxes) · Step 4 of 6 · Be the Chancellor');
+    at(`/finetune/tax?${TUNING}`);
+    // The heading is the part's name, so the tab says it once.
+    expect(document.title).toBe('Fine-tune tax · Step 4 of 6 · Be the Chancellor');
   });
 
   it('moves focus to the new screen when a step link is followed', () => {
-    render(
-      <MemoryRouter initialEntries={['/budget/taxes?v=1&f=obr2603&r=ch2602&i=2027&L=itbr.1']}>
-        <App />
-      </MemoryRouter>,
-    );
-    fireEvent.click(screen.getByRole('link', { name: 'Next: the spending' }));
-    expect(document.title).toBe(
-      'Build the package (the spending) · Step 4 of 6 · Be the Chancellor',
-    );
+    at(`/finetune/tax?${TUNING}`);
+    fireEvent.click(screen.getByRole('link', { name: 'Next: spending' }));
+    expect(document.title).toBe('Fine-tune spending · Step 4 of 6 · Be the Chancellor');
     expect(document.activeElement).toBe(document.getElementById('main'));
   });
 
@@ -80,11 +94,8 @@ describe('journey routes', () => {
     expect(screen.queryByRole('radio')).toBeNull();
     expect(screen.getByRole('button', { name: 'Set your priorities' })).toBeInTheDocument();
     unmount();
-    render(
-      <MemoryRouter initialEntries={['/budget-day']}>
-        <App />
-      </MemoryRouter>,
-    );
+    // Budget day opens for a game that has reached it; a finished game's link carries its g=.
+    at(`/budget-day?${BASE}&g=st.5_pr.defence&M=rate.0.75_rpi.0.5`);
     expect(
       screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
     ).toBeInTheDocument();

@@ -15,12 +15,10 @@ function at(path: string) {
   );
 }
 
+/** A game at step 4 on today's estimate, with a penny on the basic rate chosen. */
+const TUNING = `/finetune/tax?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1`;
+
 const sourceLinks = () => document.querySelectorAll('.source a').length;
-/** A link that carries a Budget opens every beat; a bare one asks for a Continue first. */
-function cont() {
-  const go = screen.queryByRole('button', { name: /Continue/ });
-  if (go) fireEvent.click(go);
-}
 const theSwitch = () => screen.getByRole('switch', { name: 'Show workings' });
 
 describe('the "Show workings" switch', () => {
@@ -29,52 +27,46 @@ describe('the "Show workings" switch', () => {
   beforeEach(() => window.localStorage.removeItem(KEY));
 
   it('is off by default: plain numbers and badges, no source links, no drawers', () => {
-    at(`/budget/taxes?${BASE}&L=itbr.1`);
-    cont();
+    at(TUNING);
     expect(theSwitch()).not.toBeChecked();
     expect(document.querySelector('main')?.getAttribute('data-workings')).toBe('off');
     expect(sourceLinks()).toBe(0);
     expect(screen.queryByRole('button', { name: /Detail and sources/ })).toBeNull();
     // The badges that say what kind of number something is stay whatever the switch says.
     expect(screen.getAllByText('Official figure').length).toBeGreaterThan(0);
-    // The expert controls and the ready-made Budgets are workings too.
-    expect(screen.queryByText(/Charge interest on extra borrowing/)).toBeNull();
-    expect(screen.queryByText('Try a ready-made Budget')).toBeNull();
     // The footer says where the sources went, beside the switch that shows them.
     expect(screen.getByText(/Turn on Show workings/)).toBeInTheDocument();
   });
 
   it('puts everything back when switched on, and remembers the choice', () => {
-    at(`/budget/taxes?${BASE}&L=itbr.1`);
-    cont();
+    at(TUNING);
     fireEvent.click(theSwitch());
     expect(theSwitch()).toBeChecked();
     expect(document.querySelector('main')?.getAttribute('data-workings')).toBe('on');
     expect(sourceLinks()).toBeGreaterThan(0);
     expect(screen.getAllByRole('button', { name: /Detail and sources/ }).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Charge interest on extra borrowing/)).toBeInTheDocument();
+    // The expert switches went with the desk (Phase 26): the workings show sources, not settings.
+    expect(screen.queryByText(/Charge interest on extra borrowing/)).toBeNull();
     expect(screen.queryByText(/Turn on Show workings/)).toBeNull();
     expect(window.localStorage.getItem(KEY)).toBe('on');
   });
 
   it('comes back as it was left', () => {
     window.localStorage.setItem(KEY, 'on');
-    const view = at(`/budget/taxes?${BASE}&L=itbr.1`);
-    cont();
+    const view = at(TUNING);
     expect(theSwitch()).toBeChecked();
     expect(sourceLinks()).toBeGreaterThan(0);
     view.unmount();
     window.localStorage.setItem(KEY, 'off');
-    at(`/budget/taxes?${BASE}&L=itbr.1`);
-    cont();
+    at(TUNING);
     expect(theSwitch()).not.toBeChecked();
     expect(sourceLinks()).toBe(0);
   });
 
   it('hides the close’s tables on Budget day until it is switched on', () => {
-    at(`/budget-day?${BASE}&L=itbr.1`);
-    // A sandbox link opens every beat, so the close is on the page at once. The Red Book's
-    // table of decisions is part of the story and stays; the rules in full and the charts wait.
+    at(`/budget-day?${BASE}&g=st.5_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1`);
+    // A finished game's link opens Budget day whole. The Red Book's table of decisions is part of
+    // the story and stays; the rules in full and the charts wait.
     expect(screen.getByText('Table 4.1: your policy decisions')).toBeInTheDocument();
     expect(screen.queryByText('The rules in full')).toBeNull();
     expect(screen.queryByText('Five-year paths')).toBeNull();
