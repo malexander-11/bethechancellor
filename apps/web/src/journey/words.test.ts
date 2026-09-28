@@ -117,7 +117,7 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const SMALL = /\b(small|cheap|little|modest|tiny)\b/i;
     const FIGURE = /£\d|\d+%|\d+bn|\d{3},\d{3}/;
     const items = finetuneItems(finetune);
-    expect(items).toHaveLength(45);
+    expect(items).toHaveLength(47);
     for (const item of items) {
       const text = item.advice.text;
       expect(words(text), `${item.code}: "${text}"`).toBeLessThanOrEqual(12);

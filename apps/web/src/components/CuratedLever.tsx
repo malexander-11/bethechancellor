@@ -1,10 +1,13 @@
 import {
+  excludedBy,
   formatLevel,
   levelValue,
   type FinetuneItem,
   type Lever,
   type OptionReport,
 } from '@btc/engine';
+import { levers, finetuneTitle } from '../data';
+import { reliefWords } from '../journey/effects';
 import { leverNotes, type redLinesOf } from '../journey/levers';
 import type { useOptionPrices } from '../journey/prices';
 import { useBudget } from '../state/budget';
@@ -29,7 +32,8 @@ export function moveWords(lever: Lever, move: number): string {
  * that would leave; once moved, the control's own effect line takes over. The red and amber
  * manifesto tags, the flagship it belongs to, the warnings that apply now and, on a spending
  * lever that has moved, its minister's line, are all on the card; the lever's own headline and
- * caveats wait under "More about this".
+ * caveats wait under "More about this". A relief cost reads "raises at most" (Phase 25). While a
+ * lever that counts the same money is in the Budget, the card will not move and offers a swap.
  */
 export function CuratedLever({
   item,
@@ -54,13 +58,38 @@ export function CuratedLever({
   const { state, dispatch, outcome } = useBudget();
   const value = state.leverValues[lever.code] ?? lever.control.default;
   const resting = value === lever.control.default;
-  const price = resting ? priceOf({ values: { [lever.code]: item.move } }) : null;
+  const excluder = excludedBy(lever, levers, state.leverValues);
+  // A blocked card is priced as the swap it offers, never as both at once.
+  const price = resting
+    ? priceOf({
+        values: excluder
+          ? { [excluder.lever.code]: excluder.lever.control.default, [lever.code]: item.move }
+          : { [lever.code]: item.move },
+      })
+    : null;
+  const line = price ? lowerFirst(priceLine(price)) : '';
   const hint = price
     ? {
-        text: `${moveWords(lever, item.move)}: ${lowerFirst(priceLine(price))}`,
+        text: `${excluder ? 'Swap them' : moveWords(lever, item.move)}: ${lever.reliefCost ? reliefWords(line) : line}`,
         tone: price.tone,
       }
     : undefined;
+  const blocked = excluder
+    ? {
+        other: finetuneTitle(excluder.lever.code) ?? excluder.lever.shortTitle,
+        untick: excluder.lever.control.kind === 'toggle',
+        reason: excluder.text,
+        onSwap: () =>
+          dispatch({
+            type: 'setLevers',
+            values: {
+              [excluder.lever.code]: excluder.lever.control.default,
+              [lever.code]: item.move,
+            },
+          }),
+      }
+    : undefined;
+  const notes = leverNotes(lever, moved).filter((n) => n.key !== excluder?.lever.code);
   return (
     <LeverControl
       lever={lever}
@@ -73,7 +102,8 @@ export function CuratedLever({
       displayTitle={item.title}
       {...(hint ? { hint } : {})}
       advice={{ who, line: item.advice }}
-      notes={leverNotes(lever, moved)}
+      notes={notes}
+      {...(blocked ? { blocked } : {})}
       compact
     >
       {!resting && lever.category !== 'tax' ? <MinisterLine lever={lever} value={value} /> : null}

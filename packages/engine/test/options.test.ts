@@ -139,7 +139,8 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     const loud = optionOverlaps(freeze, levers, new Set(['itbr']), options, offered);
     expect(loud[0]?.active).toBe(true);
     // Restoring fuel duty's uprating and cutting it, the old conflict (ADR-0022), is now a
-    // warning the card names at once, because the uprating is one of step 4's levers.
+    // warning the card names at once, because the uprating is one of step 4's levers; so is the
+    // April 2027 freeze (Phase 25), read from its own side of the pair.
     const fuel = optionOverlaps(
       deliverOption('fuel-duty-cut'),
       levers,
@@ -147,13 +148,22 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
       options,
       offered,
     );
-    expect(fuel.map((o) => [o.withLever.code, o.severity])).toEqual([['rvfuel', 'warn']]);
+    expect(fuel.map((o) => [o.withLever.code, o.severity])).toEqual([
+      ['rvfuel', 'warn'],
+      ['fuelfrz', 'warn'],
+    ]);
     // Another option is named as the option: the 3% path and a day-to-day uplift add up.
     const three = optionOverlaps(deliverOption('three-per-cent-now'), levers, new Set(), options);
     expect(three.find((o) => o.withLever.code === 'mod')?.option?.id).toBe('defence-uplift');
-    // A lever nobody offers is mentioned once it has moved, read from either side of the pair.
+    // Keeping VAT off electricity is on step 4 since Phase 25, so the gas card names it at once; a
+    // lever nobody offers is mentioned once it has moved, read from either side of the pair.
     const gas = deliverOption('vat-off-gas');
-    expect(optionOverlaps(gas, levers, new Set(), options, offered)).toEqual([]);
+    expect(
+      optionOverlaps(gas, levers, new Set(), options, offered).map((o) => [
+        o.withLever.code,
+        o.active,
+      ]),
+    ).toEqual([['vatelec', false]]);
     const moved = optionOverlaps(gas, levers, new Set(['vatnrg', 'vatelec']), options, offered);
     expect(moved.map((o) => o.withLever.code).sort()).toEqual(['vatelec', 'vatnrg']);
     // A pair authored as a conflict is not an overlap as well: the conflict says it.

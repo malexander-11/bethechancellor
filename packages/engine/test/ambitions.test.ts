@@ -68,6 +68,25 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     expect(status(game, { hscl: 1, itbr: 1 }).strained).toBe(0);
   });
 
+  it('strains the triple lock when pensioner benefits are cut below plan, and breaks it only by the lock levers (Phase 25)', () => {
+    const lock = pm.promises.find((p) => p.id === 'triple-lock');
+    if (!lock) throw new Error('no triple lock');
+    // Most of the line is the state pension, but a cut could fall on pension credit or winter
+    // fuel: the words of the lock may be kept, so amber, never red.
+    for (const cut of [-0.5, -1, -5]) {
+      expect(promiseBreaks({ wpens: cut }, [lock], ds.levers)[0]?.kept).toBe(true);
+      const strain = promiseStrains({ wpens: cut }, [lock], ds.levers)[0];
+      expect(strain?.strained).toBe(true);
+      expect(strain?.strainedBy[0]?.text).toMatch(/state pension/);
+    }
+    expect(promiseStrains({ wpens: 1 }, [lock], ds.levers)[0]?.strained).toBe(false);
+    expect(promiseBreaks({ cpilock: 1 }, [lock], ds.levers)[0]?.kept).toBe(false);
+    expect(promiseBreaks({ pensmth: 1 }, [lock], ds.levers)[0]?.kept).toBe(false);
+    const game = { ...freshGame(), priorities: [] };
+    expect(status(game, { wpens: -1 }).strained).toBe(1);
+    expect(status(game, { wpens: -1 }).broken).toBe(0);
+  });
+
   it('breaks the two-child promise when the limit is reinstated, and no other way', () => {
     const promise = pm.promises.find((p) => p.id === 'two-child');
     if (!promise) throw new Error('no two-child promise');

@@ -41,8 +41,8 @@ describe('fine-tune tax and spend: the curated levers', () => {
       'tune-savers-owners',
       'tune-duties',
     ]);
-    expect(group(/^Everyone 6 levers/)).toBeInTheDocument();
-    expect(group(/^Drivers, smokers, gamblers and flyers 5 levers/)).toBeInTheDocument();
+    expect(group(/^Everyone 7 levers/)).toBeInTheDocument();
+    expect(group(/^Drivers, smokers, gamblers and flyers 6 levers/)).toBeInTheDocument();
     // Stacked, not tabbed; one primary button; every lever with its adviser's line.
     expect(screen.queryByRole('tab')).toBeNull();
     expect(container.querySelectorAll('.btn--primary')).toHaveLength(1);
@@ -55,7 +55,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
       expect.stringMatching(/^\/budget\/deliver\/2\?/),
     );
     const levers = container.querySelectorAll('.lever--curated');
-    expect(levers).toHaveLength(26);
+    expect(levers).toHaveLength(28);
     for (const lever of levers) {
       expect(lever.querySelector('.choice__advice .kicker')?.textContent).toBe('Director of Tax');
     }
@@ -106,9 +106,9 @@ describe('fine-tune tax and spend: the curated levers', () => {
   it('keeps a lever moved inside the fold where it is, and shows it at the top next time', () => {
     const first = at(`/finetune/tax?${BASE}&${GAME}`);
     const everyone = group(/^Everyone/);
-    const fold = within(everyone).getByText('3 more levers').closest('details') as HTMLElement;
+    const fold = within(everyone).getByText('4 more levers').closest('details') as HTMLElement;
     const premium = within(fold).getByRole('slider', { name: 'Insurance premium tax' });
-    fireEvent.click(within(fold).getByText('3 more levers'));
+    fireEvent.click(within(fold).getByText('4 more levers'));
     fireEvent.change(premium, { target: { value: '2' } });
     // Still in the fold: the slider never jumps from under the pointer.
     expect(within(fold).getByRole('slider', { name: 'Insurance premium tax' })).toBe(premium);
@@ -116,23 +116,73 @@ describe('fine-tune tax and spend: the curated levers', () => {
     // The next visit finds it moved, and on show.
     at(`/finetune/tax?${BASE}&${GAME}&L=ipt.2`);
     const again = group(/^Everyone 1 moved/);
-    const folded = within(again).getByText('2 more levers').closest('details') as HTMLElement;
+    const folded = within(again).getByText('3 more levers').closest('details') as HTMLElement;
     expect(within(folded).queryByRole('slider', { name: 'Insurance premium tax' })).toBeNull();
     expect(
       within(again).getByRole('slider', { name: 'Insurance premium tax' }),
     ).toBeInTheDocument();
   });
 
-  it('warns when two levers count the same money: restoring fuel duty against a fuel duty cut', () => {
+  it('warns when two levers overlap: last year’s cancelled rise against a fuel duty cut', () => {
     at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&L=fuel.-10`);
     const restore = cardOf(
-      screen.getByRole('checkbox', { name: 'Put fuel duty up with inflation from April 2027' }),
+      screen.getByRole('checkbox', { name: 'Add back last year’s cancelled fuel duty rise' }),
     );
     expect(
       within(restore).getByText(
         /^Warning: Overlaps with Cut fuel duty by 10%: Both change fuel duty rates/,
       ),
     ).toHaveClass('choice__overlap--warn');
+    // The freeze a Chancellor faces this autumn is on show, and costs money (Phase 25).
+    const freeze = cardOf(screen.getByRole('checkbox', { name: 'Freeze fuel duty in April 2027' }));
+    expect(within(freeze).getByText(/^Switched on: costs £0\.\dbn · leaves/)).toBeInTheDocument();
+  });
+
+  it('reads a relief cost as the most it could raise, and says why in plain words', () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    const pensions = cardOf(
+      screen.getByRole('checkbox', {
+        name: 'Charge employer National Insurance on pension contributions',
+      }),
+    );
+    expect(
+      within(pensions).getByText(/^Switched on: raises at most £1\d\.\dbn · leaves/),
+    ).toBeInTheDocument();
+    expect(
+      within(pensions).getByText(
+        'HMRC’s cost of the tax break. The real sum would be less, as people change what they do.',
+      ),
+    ).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: 'Charge employer National Insurance on pension contributions',
+      }),
+    );
+    expect(
+      within(pensions).getByText(/Current budget in 2029-30: raises at most £1\d\.\dbn/),
+    ).toBeInTheDocument();
+  });
+
+  it('will not let two taxes that count the same money both in, and swaps them in one tap', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}&L=cgtalign.1`);
+    const death = screen.getByRole('checkbox', { name: 'Tax capital gains when someone dies' });
+    const card = cardOf(death);
+    expect(death).toHaveAttribute('aria-disabled', 'true');
+    expect(death).toHaveAccessibleDescription(
+      /You can’t have both\. Untick “Tax capital gains at the same rates as income” to choose this\./,
+    );
+    expect(card.className).toMatch(/lever--blocked/);
+    // Priced as the swap it offers, never as both at once.
+    expect(within(card).getByText(/^Swap them: costs £\d+\.\dbn · leaves/)).toBeInTheDocument();
+    fireEvent.click(death);
+    expect(search().get('L')).toMatch(/cgtalign\.1/);
+    expect(search().get('L') ?? '').not.toMatch(/cgtdth/);
+    fireEvent.click(within(card).getByRole('button', { name: /Swap them/ }));
+    await waitFor(() => expect(search().get('L')).toMatch(/cgtdth\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/cgtalign/);
+    expect(
+      screen.getByRole('checkbox', { name: 'Tax capital gains at the same rates as income' }),
+    ).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('lays out the spending screen, with a minister once a budget moves and the flagships tagged', () => {

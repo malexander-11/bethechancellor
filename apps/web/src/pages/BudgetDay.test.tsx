@@ -133,8 +133,14 @@ describe('Budget day: what your Budget means', () => {
 
   it('marks the levy amber: the public is not pinned at the floor, and the strain is a reason', () => {
     at(`${BASE}&${GAME}&L=moj.10_hscl.1`);
-    expect(meter('The public')).not.toHaveAccessibleName(/Furious/);
     fireEvent.click(within(card('The public')).getByText('Why this rating'));
+    // The floor is for broken promises: its rule reads that every promise holds. What the levy
+    // costs with the public comes from its size and its strain, both named (Phase 25 prices it at
+    // about £26bn, 1.25 times the game's own National Insurance rows).
+    expect(
+      within(card('The public')).getAllByText(/Every manifesto promise on tax and welfare holds/)
+        .length,
+    ).toBeGreaterThan(0);
     expect(
       within(card('The public')).getAllByText(/kept in the words and tested in the spirit/).length,
     ).toBeGreaterThan(0);

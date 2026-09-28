@@ -71,6 +71,12 @@ export function DeliverPage() {
       .filter((l): l is Lever => l !== undefined);
   const choose = (option: DeliverOption, on: boolean) =>
     dispatch({ type: 'setLevers', values: on ? option.values : optionOff(option, levers) });
+  // One tap from a blocked card: the option that counts the same money out, this one in.
+  const swap = (option: DeliverOption, out: { id: string; values: Record<string, number> }) =>
+    dispatch({
+      type: 'setLevers',
+      values: { ...optionOff(out, levers), ...option.values },
+    });
 
   if (!report) {
     return (
@@ -127,7 +133,12 @@ export function DeliverPage() {
               name="deliver"
               title={option.title}
               state={optionState}
-              price={priceOf(option, optionState === 'on')}
+              price={
+                blocked
+                  ? // A blocked card is priced as the swap it offers, never as both at once.
+                    priceOf({ values: { ...optionOff(blocked.option, levers), ...option.values } })
+                  : priceOf(option, optionState === 'on')
+              }
               levers={optionLevers}
               values={Object.fromEntries(
                 optionLevers.map((l) => [l.code, state.leverValues[l.code] ?? l.control.default]),
@@ -136,7 +147,7 @@ export function DeliverPage() {
               redLines={optionRedLines(option, pm.promises, levers, state.leverValues)}
               earliestStart={optionEarliestStart(option, levers)}
               overlaps={optionOverlaps(option, levers, moved, options, OFFERED)}
-              {...(blocked ? { blocked } : {})}
+              {...(blocked ? { blocked, onSwap: () => swap(option, blocked.option) } : {})}
               clashes={clashes}
               line={option.line}
               who={priority.lead}

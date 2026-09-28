@@ -19,13 +19,18 @@ const lever = (code: string) => {
   return l;
 };
 
-/** The twenty-six ways to pay, in the order the tax screen shows them (Phase 24, ADR-0025). */
+/**
+ * The twenty-eight taxes, in the order the tax screen shows them (Phase 24, ADR-0025). Phase 25
+ * added the two cuts a Chancellor actually faces this autumn: keeping VAT off electricity (third in
+ * "Everyone", the main VAT rate folded) and freezing fuel duty (first for drivers, last year's
+ * cancelled rise folded).
+ */
 const TAX_CODES = [
-  ['everyone', ['hscl', 'itbr', 'vats', 'sugsalt', 'ipt', 'hmrc2']],
+  ['everyone', ['hscl', 'itbr', 'vatelec', 'vats', 'sugsalt', 'ipt', 'hmrc2']],
   ['best-off', ['cgtalign', 'nicuel', 'pens30', 'it50', 'wealth2']],
   ['business', ['nicpen', 'nicer', 'qelevy', 'ct', 'banklevy']],
   ['savers-owners', ['ctgh', 'cgtdth', 'rnrb', 'nicrent', 'iinc2']],
-  ['duties', ['gam2', 'rvfuel', 'tob', 'ved', 'apd']],
+  ['duties', ['fuelfrz', 'gam2', 'tob', 'ved', 'apd', 'rvfuel']],
 ] as const;
 
 const SPENDING_CODES = [
@@ -36,14 +41,14 @@ const SPENDING_CODES = [
 ] as const;
 
 describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
-  it('offers twenty-six ways to pay in five who-pays groups, and nineteen spending levers in four', () => {
+  it('offers twenty-eight taxes in five who-pays groups, and nineteen spending levers in four', () => {
     expect(file.tax.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(TAX_CODES);
     expect(file.spending.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(
       SPENDING_CODES,
     );
-    expect(finetuneItems(file, 'tax')).toHaveLength(26);
+    expect(finetuneItems(file, 'tax')).toHaveLength(28);
     expect(finetuneItems(file, 'spending')).toHaveLength(19);
-    expect(finetuneItems(file)).toHaveLength(45);
+    expect(finetuneItems(file)).toHaveLength(47);
     expect(FINETUNE_SIDES).toEqual(['tax', 'spending']);
   });
 

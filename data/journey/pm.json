@@ -459,6 +459,13 @@
           "code": "pensmth",
           "when": "on"
         }
+      ],
+      "strains": [
+        {
+          "code": "wpens",
+          "when": "below",
+          "text": "Mostly the state pension. A cut keeps the lock’s words only if it falls on pension credit or winter fuel."
+        }
       ]
     }
   ]

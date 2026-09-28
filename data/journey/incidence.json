@@ -148,6 +148,7 @@
     "nicpen": "business",
     "fuel": "motorists",
     "rvfuel": "motorists",
+    "fuelfrz": "motorists",
     "alc": "duties",
     "rvgam": "duties",
     "tob": "duties",

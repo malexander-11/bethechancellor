@@ -70,19 +70,24 @@ function nameOf(lever: Lever): string {
 /**
  * The warnings that apply to a lever now: every authored interaction between it and a lever that
  * has moved, read from either side of the pair, once per partner. This is how two measures that
- * count the same money say so (the fuel duty cut against restoring its uprating; aligning capital
- * gains with income against taxing gains at death): both can be moved, and both warn.
+ * overlap say so (the fuel duty cut against restoring its uprating): both can be moved, and both
+ * warn. A pair that counts the same money (`excludes`, Phase 25) is blocked on these screens; if
+ * both are in from the desk, each says it is counted twice.
  */
 export function leverNotes(lever: Lever, moved: ReadonlySet<string>): LeverNote[] {
   const out = new Map<string, LeverNote>();
-  const add = (other: Lever | undefined, text: string, severity: 'info' | 'warn') => {
+  const add = (other: Lever | undefined, text: string, severity: 'info' | 'warn' | 'excludes') => {
     if (!other || other.code === lever.code || !moved.has(other.code) || out.has(other.code)) {
       return;
     }
     out.set(other.code, {
       key: other.code,
-      text: `Overlaps with ${nameOf(other)}: ${text}`,
-      warn: severity === 'warn',
+      // Both in from the desk: the pair that counts the same money says so plainly (Phase 25).
+      text:
+        severity === 'excludes'
+          ? `Counted twice with ${nameOf(other)}: ${text}`
+          : `Overlaps with ${nameOf(other)}: ${text}`,
+      warn: severity !== 'info',
     });
   };
   for (const i of lever.interactions ?? []) add(byId.get(i.withLever), i.text, i.severity);

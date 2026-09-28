@@ -434,7 +434,17 @@
           "when": "on",
           "effect": "pays",
           "line": {
-            "text": "The fuel duty rises are back on from April. Fifteen years of freezes and they picked now.",
+            "text": "Last year’s cancelled fuel duty rise is added back on top. The van costs a bit more to run.",
+            "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "fuelfrz",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "No fuel duty rise in April after all. On the miles I do, that adds up.",
             "sources": [],
             "badge": "simulated"
           }

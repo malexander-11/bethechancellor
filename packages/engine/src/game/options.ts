@@ -237,7 +237,7 @@ export interface OptionOverlap {
   /** The option that offers that lever, when one does. */
   option?: OptionRef;
   text: string;
-  severity: 'info' | 'warn';
+  severity: 'info' | 'warn' | 'excludes';
   /** True once the partner lever has moved: the card then shows the text, not only the name. */
   active: boolean;
 }

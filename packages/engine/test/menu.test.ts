@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   checkRawSourceConsistency,
   computeOutcome,
+  excludedBy,
+  excludesPartners,
   headSeries,
   prevFy,
   promiseBreaks,
@@ -51,7 +53,6 @@ const MENU = {
     'dlakids',
     'epl2',
     'hmrc2',
-    'hscl',
     'hvcts15',
     'lha30',
     'nicllp',
@@ -72,7 +73,7 @@ const MENU = {
     'vatthr',
     'wealth2',
   ],
-  mechanical: ['brates'],
+  mechanical: ['brates', 'fuelfrz', 'hscl'],
 };
 const ALL = [...MENU.direct, ...MENU.assumption, ...MENU.mechanical];
 
@@ -153,16 +154,25 @@ describe('the Budget 2026 menu', () => {
     expect(effectOf({ bank5: 1 }, 'bank5', '2029-30').receipts).toBeLessThan(950);
   });
 
-  it('the 2021 levy is HM Treasury’s £12 billion, taken as 2024-25 and grown with National Insurance', () => {
-    const nics = headSeries(ds.vintage, 'nics');
-    const want = (12000 * (nics['2029-30'] ?? 0)) / (nics['2024-25'] ?? 1);
-    expect(effectOf({ hscl: 1 }, 'hscl', '2029-30').receipts).toBeCloseTo(want, -1);
+  it('the levy is 1.25 times the game’s own National Insurance figures, point for point (Phase 25)', () => {
+    // The same HMRC rows the three National Insurance sliders use, so the levy and a slider never
+    // disagree about the size of the base: employer, employee main and employee additional (the
+    // employee rows already carry the self-employed).
+    for (const year of ['2027-28', '2028-29', '2029-30', '2030-31']) {
+      const perPoint = ['nicer', 'nicm', 'nica'].reduce(
+        (acc, code) => acc + effectOf({ [code]: 1 }, code, year).receipts,
+        0,
+      );
+      expect(effectOf({ hscl: 1 }, 'hscl', year).receipts).toBeCloseTo(1.25 * perPoint, 6);
+    }
+    expect(effectOf({ hscl: 1 }, 'hscl', '2029-30').receipts).toBeGreaterThan(25000);
     expect(effectOf({ hscl: 1 }, 'hscl', '2026-27').receipts).toBe(0);
-    // The published rate only: the card scores 1.25%, and says a higher rate has no costing.
+    // The published rate only; HM Treasury's 2021 figure stays as history in the words.
     const levy = lever('hscl');
-    expect(levy.badge).toBe('assumption');
-    if (levy.costing.kind !== 'schedule') throw new Error('the levy is a schedule');
-    expect(levy.costing.caveats.some((c) => /legislated rate only/.test(c))).toBe(true);
+    expect(levy.badge).toBe('mechanical');
+    if (levy.costing.kind !== 'linearPerUnit') throw new Error('the levy is per unit');
+    expect(levy.costing.caveats.some((c) => /the legislated rate/.test(c))).toBe(true);
+    expect(levy.description).toMatch(/£12 billion/);
     // Not a red line, but the lock is on the card as a consideration.
     expect(levy.considerations.some((c) => c.kind === 'legal')).toBe(true);
     expect(
@@ -251,14 +261,18 @@ describe('the Budget 2026 menu', () => {
     const align = lever('cgtalign');
     if (align.costing.kind !== 'schedule') throw new Error('alignment is a schedule');
     expect(align.costing.caveats.some((c) => /package, not a rate change/.test(c))).toBe(true);
-    // Every overlapping CGT card warns, so the package is never counted twice by accident.
-    const warned = (align.interactions ?? [])
-      .filter((i) => i.severity === 'warn')
-      .map((i) => i.withLever);
-    expect(warned).toEqual(
-      expect.arrayContaining(['cgt-on-death', 'cgt-exit-charge', 'reverse-cgt-rate-rise']),
+    // The cards that count the same money cannot be chosen with it (Phase 25); the ones that only
+    // overlap warn.
+    const severity = (s: string) =>
+      (align.interactions ?? []).filter((i) => i.severity === s).map((i) => i.withLever);
+    expect(severity('excludes').sort()).toEqual([
+      'cgt-exit-charge',
+      'cgt-lower-rate',
+      'cgt-on-death',
+    ]);
+    expect(severity('warn')).toEqual(
+      expect.arrayContaining(['cgt-higher-rate', 'reverse-cgt-rate-rise']),
     );
-    // The OBR draw may re-score it: its caveat is one the harsher outcomes name.
     expect(align.considerations.some((c) => c.id === 'cgt-behaviour')).toBe(true);
   });
 
@@ -275,17 +289,20 @@ describe('the Budget 2026 menu', () => {
     expect(lever('cgtl').control.level?.baseline).toBe(18);
   });
 
-  it('a charge on leavers is CenTax’s floor of £0.5 billion, flat, and warns against the death card', () => {
+  it('a charge on leavers is CenTax’s floor of £0.5 billion, flat, and cannot sit beside the death card', () => {
     expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2029-30').receipts).toBeCloseTo(500, 6);
     expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2028-29').receipts).toBeCloseTo(500, 6);
     expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2027-28').receipts).toBe(0);
     expect(effectOf({ cgtexit: 1 }, 'cgtexit', '2026-27').receipts).toBe(0);
-    expect((lever('cgtexit').interactions ?? []).some((i) => i.withLever === 'cgt-on-death')).toBe(
-      true,
-    );
+    // Each pair is authored once, and read from either side.
     expect(
-      (lever('cgtdth').interactions ?? []).some((i) => i.withLever === 'cgt-exit-charge'),
-    ).toBe(true);
+      excludesPartners(lever('cgtexit'), ds.levers)
+        .map((p) => p.lever.code)
+        .sort(),
+    ).toEqual(['cgtalign', 'cgtdth']);
+    expect(excludedBy(lever('cgtexit'), ds.levers, { cgtdth: 1 })?.lever.code).toBe('cgtdth');
+    // A card already chosen is never blocked: it can always be put back.
+    expect(excludedBy(lever('cgtexit'), ds.levers, { cgtdth: 1, cgtexit: 1 })).toBeUndefined();
   });
 
   it('CGT on main homes is the whole relief, uprated, and tagged as not on the table', () => {

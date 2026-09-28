@@ -5,6 +5,69 @@ import { levers, rules, vintage } from '../data';
 import { formatLeverValue, LeverControl } from './LeverControl';
 
 describe('LeverControl', () => {
+  it('reads a relief cost as the most it could raise, with one plain line on why (Phase 25)', () => {
+    const food = levers.find((l) => l.code === 'vatfood');
+    if (!food) throw new Error('missing vatfood');
+    const outcome = computeOutcome({
+      vintage,
+      rules,
+      levers,
+      settings: { leverValues: { vatfood: 1 } },
+    });
+    const { rerender } = render(
+      <LeverControl lever={food} value={0} summaryYear="2029-30" onChange={() => undefined} />,
+    );
+    // At rest on the desk the card keeps to its headline; the caveat waits for the move.
+    expect(screen.queryByText(/HMRC’s cost of the tax break/)).toBeNull();
+    rerender(
+      <LeverControl
+        lever={food}
+        value={1}
+        effect={outcome.leverEffects.find((e) => e.code === 'vatfood')}
+        summaryYear="2029-30"
+        onChange={() => undefined}
+      />,
+    );
+    expect(screen.getByText(/Current budget in 2029-30/).textContent).toMatch(
+      /raises at most £\d+\.\dbn/,
+    );
+    expect(
+      screen.getByText(
+        'HMRC’s cost of the tax break. The real sum would be less, as people change what they do.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('keeps a blocked lever in reach but still, and says what to untick and why', () => {
+    const death = levers.find((l) => l.code === 'cgtdth');
+    if (!death) throw new Error('missing cgtdth');
+    const onChange = vi.fn();
+    const onSwap = vi.fn();
+    render(
+      <LeverControl
+        lever={death}
+        value={0}
+        onChange={onChange}
+        blocked={{
+          other: 'Tax capital gains at the same rates as income',
+          untick: true,
+          reason: 'The alignment package already ends the tax-free uplift at death.',
+          onSwap,
+        }}
+      />,
+    );
+    const box = screen.getByRole('checkbox');
+    expect(box).toBeEnabled();
+    expect(box).toHaveAttribute('aria-disabled', 'true');
+    expect(box).toHaveAccessibleDescription(
+      /^You can’t have both\. Untick “Tax capital gains at the same rates as income” to choose this\. The alignment package/,
+    );
+    fireEvent.click(box);
+    expect(onChange).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: /Swap them/ }));
+    expect(onSwap).toHaveBeenCalledTimes(1);
+  });
+
   it('renders a reversal toggle as a checkbox that reports 1 or 0', () => {
     const lever = levers.find((l) => l.code === 'rvfrz');
     if (!lever) throw new Error('missing toggle lever');

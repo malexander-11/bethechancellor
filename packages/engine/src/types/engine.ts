@@ -92,7 +92,8 @@ export interface InteractionNotice {
   codes: [string, string];
   titles: [string, string];
   text: string;
-  severity: 'info' | 'warn';
+  /** `excludes`: the two count the same money (Phase 25); both in, the total counts it twice. */
+  severity: 'info' | 'warn' | 'excludes';
 }
 
 export interface Deltas {

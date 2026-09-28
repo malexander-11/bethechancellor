@@ -173,6 +173,12 @@ export const rawSourceSchema = z.discriminatedUnion('kind', [
     years: z.array(fiscalYearSchema).length(3),
     rows: z.array(hmrcRowRefSchema).min(1),
     combine: z.enum(['sum']).optional(),
+    /**
+     * The per-unit table is this many times the signed sum of the rows: 1.25 points of every
+     * National Insurance rate for the levy, or the 3% a freeze leaves fuel duty below plan. A
+     * multiple of HMRC's rows is our arithmetic on them, so the lever is Worked out, not Official.
+     */
+    multiplier: z.number().optional(),
     note: z.string().optional(),
   }),
   z.strictObject({
@@ -528,12 +534,22 @@ export const leverSchema = z
       })
       .optional(),
     considerations: z.array(considerationSchema),
+    /**
+     * HMRC's cost of a tax relief as it stands, shown as what ending it would raise. HMRC says the
+     * two are not the same, so the card reads "at most" and says why, and the markets count it as
+     * a figure nobody has certified (Phase 25).
+     */
+    reliefCost: z.literal(true).optional(),
     interactions: z
       .array(
         z.strictObject({
           withLever: z.string().min(1),
           text: z.string().min(1),
-          severity: z.enum(['info', 'warn']),
+          /**
+           * `info` and `warn` are notes; `excludes` means the two count the same money, so the
+           * curated screens let only one be chosen at a time (Phase 25). A pair is authored once.
+           */
+          severity: z.enum(['info', 'warn', 'excludes']),
         }),
       )
       .optional(),
@@ -546,6 +562,44 @@ export const leverSchema = z
       ctx.addIssue({
         code: 'custom',
         message: 'a lever is arithmetic; it cannot wear the simulated badge (ADR-0011)',
+        path: ['badge'],
+      });
+    }
+    const raw = 'rawSource' in lever.costing ? lever.costing.rawSource : undefined;
+    if (raw?.kind === 'hmrcReliefCost' && !lever.reliefCost) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'a lever costed on HMRC relief rows must say so with reliefCost: true',
+        path: ['reliefCost'],
+      });
+    }
+    if (lever.reliefCost && lever.classification?.side !== 'receipts') {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'a relief cost is receipts forgone: only a receipts lever can carry one',
+        path: ['reliefCost'],
+      });
+    }
+    if (
+      raw?.kind === 'hmrcReadyReckoner' &&
+      raw.multiplier !== undefined &&
+      lever.costing.kind !== 'linearPerUnit'
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'a multiple of HMRC rows scales a per-unit table; lookup points carry their own',
+        path: ['costing', 'rawSource', 'multiplier'],
+      });
+    }
+    if (
+      raw?.kind === 'hmrcReadyReckoner' &&
+      raw.multiplier !== undefined &&
+      raw.multiplier !== 1 &&
+      lever.badge !== 'mechanical'
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'a multiple of HMRC rows is our arithmetic on them: badge it mechanical',
         path: ['badge'],
       });
     }

@@ -32,16 +32,17 @@
     {
       "id": "vat-off-gas",
       "priority": "cost-of-living",
-      "title": "Take VAT off gas as well as electricity",
+      "title": "Take VAT off gas too",
       "line": {
-        "text": "Gas to 0%, as electricity already is since October. HMRC’s relief figures put the cost at about £0.8bn a year, before anyone changes their behaviour.",
-        "short": "Gas to 0%, as electricity already is: about £0.8bn a year on HMRC’s figures.",
+        "text": "Gas to 0%. Electricity is 0% only until March 2027, when it goes back to 5% unless the Budget keeps it off. HMRC’s relief figures put gas at about £0.8bn a year, before anyone changes their behaviour.",
+        "short": "Gas to 0%. Electricity is 0% only until March 2027.",
         "sources": [
           {
             "sourceId": "hmrc-tax-reliefs-2026-01"
           },
           {
-            "sourceId": "govuk-vat-electricity-cut-2026"
+            "sourceId": "hmrc-vat-notice-701-19",
+            "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027."
           }
         ],
         "badge": "simulated"
@@ -520,21 +521,26 @@
       "priority": "homes-growth",
       "title": "Cut business rates by 5%",
       "line": {
-        "text": "Every business rates bill down 5%, about £2bn a year on the OBR’s receipts line. That line includes the devolved administrations’ rates, so the cut reaches further than England’s high streets.",
-        "short": "Every bill down 5%, about £2bn a year; the OBR line includes the devolved administrations’ rates.",
+        "text": "England’s business rates bills down 5%: high streets, offices and factories alike. Scotland, Wales and Northern Ireland set and keep their own rates.",
+        "short": "England’s bills down 5%; the nations set their own rates.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03"
+          },
+          {
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "paragraph": "3.27-3.29"
           }
         ],
         "badge": "simulated"
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "Every business rates bill down, high streets and the nations included.",
+        "text": "England’s bills only; Scotland, Wales and Northern Ireland set their own.",
         "sources": [
           {
-            "sourceId": "obr-efo-2026-03"
+            "sourceId": "hmt-statement-of-funding-policy-2025",
+            "paragraph": "3.27-3.29"
           }
         ],
         "badge": "simulated"
@@ -636,21 +642,27 @@
       "priority": "families",
       "title": "Universal credit up 2%",
       "line": {
-        "text": "Every pound here reaches the poorest households first. That is what a child poverty strategy costs.",
-        "short": "Every pound here reaches the poorest households first.",
+        "text": "Every pound here reaches the poorest households first. It also adds to welfare spending that the forecast already puts above the cap.",
+        "short": "Every pound reaches the poorest households first, and adds to welfare above the cap.",
         "sources": [
           {
             "sourceId": "labour-manifesto-2024-opportunity"
+          },
+          {
+            "sourceId": "obr-efo-2026-03"
           }
         ],
         "badge": "simulated"
       },
       "advice": {
         "adviser": "director-of-public-spending",
-        "text": "Every pound reaches the poorest households first. That is the point.",
+        "text": "Reaches the poorest families first, and pushes further over the welfare cap.",
         "sources": [
           {
             "sourceId": "labour-manifesto-2024-opportunity"
+          },
+          {
+            "sourceId": "obr-efo-2026-03"
           }
         ],
         "badge": "simulated"
@@ -720,7 +732,7 @@
       "priority": "welfare-bill",
       "title": "Stop disability benefits for milder mental health conditions",
       "line": {
-        "text": "You have taken the CSJ route. The £6.4 billion net is a think tank’s static figure for 2029-30; it needs an Act, a reassessment programme and a wait for the Timms review, and the savings from the last eligibility reform did not arrive. The OBR would score it down, and this game’s harsher forecasts do.",
+        "text": "You have taken the CSJ route. The £6.4 billion net is a think tank’s static figure for 2029-30; it needs an Act, a reassessment programme and a wait for the Timms review, and the savings from the last eligibility reform did not arrive. This game counts the full figure; the OBR would likely score it lower, so treat it as a best case.",
         "short": "Taken. A static think-tank figure needing an Act and reassessments; the last such reform missed its savings.",
         "sources": [
           {
@@ -772,8 +784,13 @@
       },
       "advice": {
         "adviser": "political-adviser",
-        "text": "The 2025 plan, revived. Takes PIP from people who qualify today.",
+        "text": "Savings grow each year, but some who qualify today lose PIP.",
         "sources": [
+          {
+            "sourceId": "hmt-budget-2025-table-4-1",
+            "table": "Table 4.1",
+            "note": "line 83"
+          },
           {
             "sourceId": "dwp-timms-review-evidence-pack",
             "quote": "even with quite large reductions in new awards to PIP, there would still be considerable growth in caseload and spending over the next few years"

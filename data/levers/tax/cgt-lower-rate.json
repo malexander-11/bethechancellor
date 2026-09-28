@@ -196,11 +196,6 @@
       "withLever": "cgt-higher-rate",
       "text": "The two rates move separately; HMRC publishes a row for each and neither allows for the other moving.",
       "severity": "info"
-    },
-    {
-      "withLever": "align-cgt-with-income-tax",
-      "text": "The alignment package already takes the lower rate to 20%; stacking a rise here double counts.",
-      "severity": "warn"
     }
   ],
   "status": "reviewed",

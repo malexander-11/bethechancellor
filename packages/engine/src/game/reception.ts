@@ -85,6 +85,27 @@ function bandFor(rule: ReceptionRule, value: number): ReceptionBand {
 }
 
 /**
+ * The band's words: its own, or the first variant whose second reading holds (Phase 25). A variant
+ * changes the sentence and its sources only; the points and the cap stay the band's.
+ */
+function wordsFor(
+  band: ReceptionBand,
+  values: Record<string, number>,
+): { text: string; sources: SourceRef[] } {
+  for (const variant of band.variants ?? []) {
+    const reading = values[variant.when.measure] ?? 0;
+    const { above, below } = variant.when;
+    if ((above === undefined || reading > above) && (below === undefined || reading < below)) {
+      return {
+        text: variant.text,
+        sources: variant.sources.length > 0 ? variant.sources : band.sources,
+      };
+    }
+  }
+  return { text: band.text, sources: band.sources };
+}
+
+/**
  * "£1.2bn less in tax rises would have moved this by a point": the distance from the reading to
  * the nearest neighbouring band with more points, in the reading's own unit, dropped into the
  * rule's authored sentence. Only for money and percentage-point readings, only when the rule
@@ -128,9 +149,10 @@ export function receptions(input: ReceptionInput): Reception[] {
       const value = values[rule.measure] ?? 0;
       const band = bandFor(rule, value);
       const unit = rule.reading.unit;
+      const words = wordsFor(band, values);
       return {
         rule: rule.id,
-        text: band.text
+        text: words.text
           .replace(/\{value\}/g, formatReadingValue(value, unit))
           .replace(/\{abs\}/g, sizeOf(value, unit)),
         points: band.points,
@@ -138,7 +160,7 @@ export function receptions(input: ReceptionInput): Reception[] {
         ...(band.cap !== undefined ? { cap: band.cap } : {}),
         reading: { label: rule.reading.label, value, unit, text: formatReadingValue(value, unit) },
         causes: causes[rule.measure] ?? [],
-        sources: band.sources,
+        sources: words.sources,
         note: rule.note,
         ...(nudgeFor(rule, band, value) !== undefined
           ? { nudge: nudgeFor(rule, band, value) }

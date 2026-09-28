@@ -730,7 +730,7 @@ the arithmetic changed; what changed is who can reach it and how much they must 
   costings; the breach route quotes the Charter's escape clause; the nine department levers carry a
   `commitment`, protected or unprotected, sourced to EFO paragraphs 4.15 to 4.16.
 - **Realistic options.** The 50p rate (`it50`) is an assumption: five times HMRC's one-penny row,
-  which HMRC calls approximate beyond small changes, so the harder forecast outcomes revise it. A
+  which HMRC calls approximate beyond small changes. A
   lever may be `notOnTheTable`, worn as a quiet tag and sorted to the foot of its group (the six VAT
   base toggles); every card has "What this assumes". The health and social care levy (`hscl`) is a
   `statedProduct` on HM Treasury's 2021 figure for the legislated 1.25% levy, £12 billion a year
@@ -739,8 +739,8 @@ the arithmetic changed; what changed is who can reach it and how much they must 
 - **Trade-offs in view.** Effects are verbs (raises, costs, saves; borrowing up or down); tables say
   worse or better; the package shows who pays and who benefits by the incidence tags, the
   interactions, milestones one click away, and Budget 2025's measures for scale (the net of the
-  extracted Table 4.1 in the target year); the compromise screen re-runs the package under every
-  forecast the draw could have produced; a reception rule may carry a `nudge`, the distance to the
+  extracted Table 4.1 in the target year); the compromise screen re-ran the package under every
+  forecast the draw could produce (both retired in Phase 24, §25); a reception rule may carry a `nudge`, the distance to the
   next better band in the reading's own unit, filled by the engine from an authored sentence.
 
 ## 19. The menu against the reporting, again (ADR-0019)
@@ -792,7 +792,7 @@ nineteen cards, every one a stated figure from the primary source, badged assump
 - **Cautious where the source hedges.** An "up to" figure is scored at the lower published number
   (the 2% wealth tax at Tax Policy Associates' £18.5 billion, the reserves levy at IPPR's £5 billion
   floor, the child DLA assessment at the CSJ's lower bound) and the ceiling is named in words.
-  Static figures say so and carry `static-not-yield`, which the harsher forecast outcomes revise.
+  Static figures say so and carry `static-not-yield`.
 - **The alignment card re-costed.** CenTax's September 2026 figure, £19.7 billion in 2029-30 after
   behaviour on the OBR's current forecast, replaces the 2024 estimate net of the 2024 rise.
 - **The lock.** Rental NICs, abolishing the upper earnings limit and a 1% rate on zero-rated goods

@@ -3,13 +3,13 @@
   "id": "health-and-social-care-levy",
   "code": "hscl",
   "category": "tax",
-  "badge": "assumption",
+  "badge": "mechanical",
   "group": "National Insurance",
   "order": 38,
   "title": "A health and social care levy: 1.25% on employers and employees",
   "shortTitle": "Health and social care levy",
-  "headline": "Bring back the 2021 levy. HM Treasury’s own figure then: about £12bn a year.",
-  "description": "Reintroduce the Health and Social Care Levy legislated in 2021 and repealed before it took effect as a separate tax: 1.25% on employers, employees and the self-employed on the National Insurance base, with the money for health and social care. HM Treasury said the levy, together with the dividend tax rise announced beside it, would make available around £12 billion a year on average over 2022-23 to 2024-25. The card takes that £12 billion as a 2024-25 figure and grows it with the OBR’s National Insurance forecast. A higher rate has been reported since; no costing of one has been published, so the card scores the legislated rate only.",
+  "headline": "The 2021 levy again: 1.25 points on every NICs rate. About £26bn, static.",
+  "description": "Reintroduce the Health and Social Care Levy legislated in 2021: 1.25% on employers, employees and the self-employed on the National Insurance base, with the money for health and social care. This card adds up HMRC's figures for a one-point rise in each rate (employer, employee and self-employed, main and additional) and takes 1.25 times the total: the same figures the National Insurance sliders use. In 2021 HM Treasury put the levy together with the dividend tax rise announced beside it at about £12 billion a year; the dividend rise is already in today's baseline, and the employer rate and the earnings it falls on have grown since.",
   "baselinePolicy": {
     "text": "No levy. Employee NICs 8% and 2%, employer NICs 15% above a frozen secondary threshold; the 2021 levy was repealed before its first separate year.",
     "source": {
@@ -35,43 +35,94 @@
     "psnflTreatment": "standard"
   },
   "costing": {
-    "kind": "schedule",
-    "effect": {
-      "2027-28": 15459,
-      "2028-29": 16005,
-      "2029-30": 16825,
-      "2030-31": 17408
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": 24043.75,
+      "2027-28": 24287.5,
+      "2028-29": 24706.25
     },
+    "basis": "accruals",
+    "symmetric": true,
     "source": {
-      "sourceId": "hmt-build-back-better-2021"
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
     },
     "rawSource": {
-      "kind": "derivedFromPublished",
-      "sourceId": "hmt-build-back-better-2021",
-      "method": {
-        "name": "statedProduct",
-        "baseYear": "2024-25",
-        "resultGbpm": 12000,
-        "growWith": "nics",
-        "terms": [
-          {
-            "label": "HM Treasury’s figure for the 1.25% levy with the dividend rise, £ million a year on average, 2022-23 to 2024-25",
-            "value": 12000,
-            "unit": "£ million",
-            "source": {
-              "sourceId": "hmt-build-back-better-2021",
-              "quote": "Together with the increase to the rates of dividend tax, the Levy will make available around an additional £12 billion per year on average for health and social care across the UK"
-            }
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "national-insurance-contributions-rates--change-class-1-employee-main-rate-by-1-percentage-point",
+          "label": "Change Class 1 employee main rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 5350,
+            "2027-28": 5300,
+            "2028-29": 5400
           }
-        ]
-      },
-      "note": "HM Treasury’s 2021 figure, taken as 2024-25 and grown with the OBR’s National Insurance receipts. The average over three years understates the final year, and the figure includes the dividend rise announced beside the levy."
+        },
+        {
+          "rowId": "national-insurance-contributions-rates--change-class-4-main-rate-by-1-percentage-point",
+          "label": "Change Class 4 main rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 440,
+            "2027-28": 525,
+            "2028-29": 445
+          }
+        },
+        {
+          "rowId": "national-insurance-contributions-rates--change-class-1-employee-additional-rate-by-1-percentage-point",
+          "label": "Change Class 1 employee additional rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 2000,
+            "2027-28": 2000,
+            "2028-29": 2050
+          }
+        },
+        {
+          "rowId": "national-insurance-contributions-rates--change-class-4-additional-rate-by-1-percentage-point",
+          "label": "Change Class 4 additional rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 295,
+            "2027-28": 355,
+            "2028-29": 320
+          }
+        },
+        {
+          "rowId": "national-insurance-contributions-rates--change-class-1-employer-rate-by-1-percentage-point",
+          "label": "Change Class 1 employer rate by 1 percentage point",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 11150,
+            "2027-28": 11250,
+            "2028-29": 11550
+          }
+        }
+      ],
+      "combine": "sum",
+      "multiplier": 1.25,
+      "note": "HMRC's figures for a one-point rise in the employer, employee and self-employed rates, main and additional, added up and multiplied by 1.25: our arithmetic on official figures. The employee rows already include the self-employed (Class 4), so nothing is counted twice."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "nics",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for National Insurance receipts, as the National Insurance sliders are (ADR-0004)."
     },
     "caveats": [
-      "HM Treasury’s £12 billion includes the dividend tax rise announced beside the levy, so the levy alone raised less; the split was not published.",
-      "An average over 2022-23 to 2024-25 is taken as a 2024-25 figure, which understates it; the card grows it with the OBR’s National Insurance forecast.",
-      "Static: no behavioural response is allowed for. Nobody has certified this number for 2027-28 onward.",
-      "A higher rate than 1.25% has been reported; no costing of one has been published, so the card scores the legislated rate only.",
+      "HMRC's figures for a one-point rise in each rate, added up and multiplied by 1.25: our arithmetic on official figures, with HMRC's usual allowance for behaviour and nothing more. HMRC calls larger changes approximate.",
+      "The employer share falls on public employers too. If the Treasury tops up public sector budgets for it, as it did in 2022 and 2025, the net yield is lower.",
+      "In 2021 HM Treasury put the levy with the dividend tax rise at around £12 billion a year on average over 2022-23 to 2024-25. That dividend rise is already in today's baseline, and the employer rate and the earnings it falls on have grown since.",
+      "A higher rate than 1.25% has been reported; the card scores the legislated rate.",
       "The manifesto rules out increasing National Insurance. A levy on the National Insurance base is National Insurance by another name to most readers; whether it counts is contested."
     ]
   },
@@ -82,8 +133,11 @@
       "direction": "raisesLess",
       "magnitudeWords": "moderate",
       "alreadyInDirectCosting": false,
-      "text": "HM Treasury’s 2021 figure was a Treasury estimate for the levy as legislated, before any certified outturn. Employers and employees would respond to a 2.5 point rise in the combined rate on pay, and part of the employer share would show up as lower pay and profits over time.",
+      "text": "HMRC's rows carry its standard response to a one-point change. A 2.5 point rise in the combined rate on pay is well beyond that: part of the employer share would show up as lower pay and profits over time, and some earnings would move to forms the levy misses.",
       "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06"
+        },
         {
           "sourceId": "hmt-build-back-better-2021"
         }
@@ -113,11 +167,16 @@
       "severity": "info"
     },
     {
+      "withLever": "nics-employee-additional-rate",
+      "text": "Both fall on earnings above the upper limit: the levy is 1.25 points there on top of any change here.",
+      "severity": "info"
+    },
+    {
       "withLever": "nics-employer-rate",
       "text": "Both fall on the same payroll: the levy is 1.25 points on the employer side on top of any change here.",
       "severity": "info"
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-20"
+  "reviewedOn": "2026-09-28"
 }

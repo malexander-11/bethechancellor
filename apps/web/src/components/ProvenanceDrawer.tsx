@@ -73,6 +73,12 @@ function PublishedRows({ lever }: { lever: Lever }) {
             </tbody>
           </table>
         </TableScroll>
+        {raw.multiplier !== undefined ? (
+          <p className="source">
+            Used here: {formatMultiplier(raw.multiplier)} the sum of these rows, our arithmetic on
+            HMRC’s figures <LabelBadge badge="mechanical" />
+          </p>
+        ) : null}
         {source ? (
           <p>
             <SourceLink ref={source} />
@@ -387,6 +393,11 @@ function UpratingTable({ lever, effect }: { lever: Lever; effect: LeverEffect })
       <Caveats caveats={detail.caveats} />
     </>
   );
+}
+
+/** "1.25 ×" or "−3 ×": a multiple of HMRC's rows, as the drawer states it (Phase 25). */
+function formatMultiplier(k: number): string {
+  return `${k < 0 ? '−' : ''}${Math.abs(k).toLocaleString('en-GB')} ×`;
 }
 
 export function ProvenanceDrawer({ lever, effect }: { lever: Lever; effect?: LeverEffect }) {

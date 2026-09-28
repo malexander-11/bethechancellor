@@ -3,7 +3,7 @@
   "id": "abolish-residence-nil-rate-band",
   "code": "rnrb",
   "category": "tax",
-  "badge": "direct",
+  "badge": "assumption",
   "group": "Wealth and property",
   "order": 25,
   "title": "Abolish the residence nil-rate band",
@@ -61,12 +61,12 @@
           }
         }
       ],
-      "note": "HMRC's estimate of the cost of the relief in 2025-26 (its latest year), carried forward with the OBR's inheritance tax receipts path."
+      "note": "HMRC's estimate of the cost of the relief in 2025-26 (its latest year), carried forward with the OBR's nominal GDP forecast."
     },
     "uprating": {
       "method": "growWithSeries",
-      "head": "receiptsByTax.inheritanceTax",
-      "note": "The 2025-26 relief cost is applied from the start year and scaled by the OBR's inheritance tax receipts forecast (Table A.5) (ADR-0004). That forecast also carries measures that do not bear on this relief, such as pensions coming into estates from 2027, so the later years are an upper bound."
+      "head": "nominalGdp",
+      "note": "The 2025-26 relief cost is applied from the start year and grown with the OBR's nominal GDP forecast (ADR-0004). The inheritance tax receipts line would carry measures that do not bear on this relief, such as pensions coming into estates from 2027; growing with the economy is our choice of a neutral path, so the card is badged Assumption."
     },
     "caveats": [
       "HMRC: \"These figures should be interpreted as estimates of the amount of relief which is claimed and subsequently granted each year. These estimates do not represent the gain to the exchequer should a relief be abolished.\" The toggle shows that static cost as revenue; the true yield would be lower once estates are planned around the change.",
@@ -104,8 +104,9 @@
       ]
     }
   ],
+  "reliefCost": true,
   "status": "reviewed",
-  "reviewedOn": "2026-09-18",
+  "reviewedOn": "2026-09-28",
   "interactions": [
     {
       "withLever": "inheritance-tax-rate",

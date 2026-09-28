@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   checkRawSourceConsistency,
@@ -8,7 +10,7 @@ import {
   parseLever,
   type Lever,
 } from '../src/index.js';
-import { loadDataset, loadExtracts } from './fixtures.js';
+import { DATA_DIR, loadDataset, loadExtracts } from './fixtures.js';
 
 const ds = loadDataset();
 const extracted = loadExtracts();
@@ -110,6 +112,7 @@ describe("relief-cost toggles reproduce from HMRC's relief statistics", () => {
       uprating: { method: 'growWithSeries', head: 'vat', note: 'grows with VAT receipts' },
       caveats: [],
     },
+    reliefCost: true,
     interactions: undefined,
   });
 
@@ -262,26 +265,55 @@ describe('inheritance tax with abolition: lookup points from HMRC rows and the O
   });
 });
 
-describe("a second relief-cost extract: HMRC's pension statistics", () => {
+describe('employer NICs on pension contributions: the private-sector part of HMRC’s relief (Phase 25)', () => {
   const nicpen = lever('nicpen');
 
-  it('reproduces the employer NICs relief row and rejects a tampered figure or source', () => {
+  it('reproduces its stated sum and rejects a tampered term', () => {
     expect(checkRawSourceConsistency(nicpen, extracted, ds.vintage)).toEqual([]);
     const tampered = structuredClone(nicpen);
-    if (tampered.costing.kind === 'linearPerUnit') tampered.costing.perUnit['2024-25'] = 17700;
-    expect(checkRawSourceConsistency(tampered, extracted, ds.vintage).length).toBeGreaterThan(0);
-    const wrongSource = structuredClone(nicpen);
     if (
-      wrongSource.costing.kind === 'linearPerUnit' &&
-      wrongSource.costing.rawSource?.kind === 'hmrcReliefCost'
+      tampered.costing.kind === 'schedule' &&
+      tampered.costing.rawSource?.kind === 'derivedFromPublished' &&
+      tampered.costing.rawSource.method.name === 'weightedSum'
     ) {
-      wrongSource.costing.rawSource.sourceId = 'hmrc-tax-reliefs-2026-01';
+      const first = tampered.costing.rawSource.method.terms[0];
+      if (first) first.value = 17700;
     }
-    expect(checkRawSourceConsistency(wrongSource, extracted, ds.vintage).length).toBeGreaterThan(0);
+    expect(checkRawSourceConsistency(tampered, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 
-  it('costs the charge as the 2024-25 relief grown with National Insurance receipts', () => {
-    const nics = headSeries(ds.vintage, 'nics');
+  it('takes the public-sector part from HMRC’s own sector split, salary sacrifice left out', () => {
+    const csv = readFileSync(
+      path.join(DATA_DIR, 'raw/hmrc-private-pensions-2026-07/Tables_6_1_and_6_2.csv'),
+      'utf8',
+    );
+    const cells = (line: string) => line.split('","').map((c) => c.replace(/^"|"$/g, ''));
+    const publicSector = csv
+      .split(/\r?\n/)
+      .map(cells)
+      .filter(
+        (c) =>
+          c[1] === 'NICs' &&
+          c[3] === 'Class 1 Secondary (employer)' &&
+          c[4] === 'Public sector occupational scheme' &&
+          c[2] !== 'Salary sacrificed contributions',
+      )
+      .reduce((acc, c) => acc + Number(c[7]), 0);
+    expect(publicSector).toBe(6500);
+    if (
+      nicpen.costing.kind !== 'schedule' ||
+      nicpen.costing.rawSource?.kind !== 'derivedFromPublished' ||
+      nicpen.costing.rawSource.method.name !== 'weightedSum'
+    )
+      throw new Error('nicpen is a weighted sum');
+    const terms = nicpen.costing.rawSource.method.terms;
+    expect(terms.map((t) => t.value)).toEqual([14300, publicSector]);
+    expect(terms.map((t) => Math.sign(t.factor))).toEqual([1, -1]);
+    expect(Math.abs(terms[0]?.factor ?? 0)).toBeCloseTo(15 / 13.8, 5);
+  });
+
+  it('grows the private part with the economy, and stays a relief cost badged Worked out', () => {
+    const gdp = headSeries(ds.vintage, 'nominalGdp');
     const o = computeOutcome({
       vintage: ds.vintage,
       rules: ds.rules,
@@ -291,10 +323,12 @@ describe("a second relief-cost extract: HMRC's pension statistics", () => {
     const e = o.leverEffects.find((x) => x.code === 'nicpen');
     expect(e?.receipts['2026-27']).toBe(0);
     expect(e?.receipts['2029-30']).toBeCloseTo(
-      14300 * ((nics['2029-30'] ?? 0) / (nics['2024-25'] ?? 1)),
-      6,
+      8478 * ((gdp['2029-30'] ?? 0) / (gdp['2024-25'] ?? 1)),
+      -1,
     );
-    expect(e?.receipts['2029-30'] ?? 0).toBeGreaterThan(19000);
+    expect(e?.receipts['2029-30'] ?? 0).toBeLessThan(11000);
+    expect(nicpen.badge).toBe('mechanical');
+    expect(nicpen.reliefCost).toBe(true);
   });
 });
 

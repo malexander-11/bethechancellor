@@ -60,7 +60,7 @@ describe('step 5: deliver the Budget', () => {
     expect(
       within(tax).getByText(/^Bring back the health and social care levy/),
     ).toBeInTheDocument();
-    expect(within(tax).getByText(/raises £1\d\.\dbn/)).toBeInTheDocument();
+    expect(within(tax).getByText(/raises £2\d\.\dbn/)).toBeInTheDocument();
     expect(changeIn(tax, 'Change')).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/finetune\/tax\?/),

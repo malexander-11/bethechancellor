@@ -129,8 +129,11 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
     .map((e) => title(e.code));
 
   // Credibility: how much of what improves the current budget rests on figures nobody certified.
+  // HMRC's cost of a relief counts, whatever its badge: HMRC says it is not what ending the relief
+  // would raise (Phase 25). The relief part is kept apart so the words can say which it is.
   let improving = 0;
   let uncertified = 0;
+  let reliefs = 0;
   const uncertifiedTitles: string[] = [];
   for (const effect of outcome.leverEffects) {
     if (effect.category === 'macro') continue;
@@ -140,8 +143,10 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       (effect.macroCurrent[year] ?? 0);
     if (improvement <= 0) continue;
     improving += improvement;
-    if (effect.badge === 'assumption' || effect.badge === 'simulated') {
+    const relief = byCode.get(effect.code)?.reliefCost === true;
+    if (relief || effect.badge === 'assumption' || effect.badge === 'simulated') {
       uncertified += improvement;
+      if (relief) reliefs += improvement;
       uncertifiedTitles.push(title(effect.code));
     }
   }
@@ -223,6 +228,7 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       departmentsCut: cutDepartments.length,
       rebellionRisk: broken.length * 2 + unfunded.length + welfareReversals.length,
       credibilityShare: improving > 0 ? uncertified / improving : 0,
+      reliefShareOfUncertified: uncertified > 0 ? reliefs / uncertified : 0,
       priceRaisingMeasures: priceRaisers.length,
       thresholdFreezeKept: moved.has('rvfrz') ? 0 : 1,
       efficienciesKept: moved.has('rveff') ? 0 : 1,
@@ -268,6 +274,7 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
         ...welfareReversals.map((l) => l.shortTitle),
       ],
       credibilityShare: uncertifiedTitles,
+      reliefShareOfUncertified: uncertifiedTitles,
       priceRaisingMeasures: priceRaisers.map((l) => l.shortTitle),
       thresholdFreezeKept: moved.has('rvfrz') ? [title('rvfrz')] : [],
       efficienciesKept: moved.has('rveff') ? [title('rveff')] : [],

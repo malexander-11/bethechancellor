@@ -45,6 +45,24 @@
             }
           },
           {
+            "code": "vatelec",
+            "title": "Keep VAT off electricity after March 2027",
+            "move": 1,
+            "advice": {
+              "text": "The zero rate ends in March; keeping it holds bills down.",
+              "sources": [
+                {
+                  "sourceId": "hmrc-vat-notice-701-19",
+                  "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027."
+                },
+                {
+                  "sourceId": "govuk-vat-electricity-cut-2026"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
             "code": "vats",
             "title": "The main rate of VAT",
             "move": 1,
@@ -200,7 +218,7 @@
             "title": "Charge employer National Insurance on pension contributions",
             "move": 1,
             "advice": {
-              "text": "HMRC’s static cost of the relief. Big, and employers would respond.",
+              "text": "The private-sector share of HMRC’s relief figure. Big; employers would respond.",
               "sources": [
                 {
                   "sourceId": "hmrc-private-pensions-2026-07",
@@ -368,26 +386,29 @@
         "label": "Drivers, smokers, gamblers and flyers",
         "items": [
           {
-            "code": "gam2",
-            "title": "Put gambling duties up again",
+            "code": "fuelfrz",
+            "title": "Freeze fuel duty in April 2027",
             "move": 1,
             "advice": {
-              "text": "The Treasury’s costing, repeated. Bookmakers pay again; a second helping.",
+              "text": "Not raised since 2011. Small money, felt at every pump.",
               "sources": [
                 {
-                  "sourceId": "hmt-budget-2025-table-4-1",
-                  "table": "Table 4.1"
+                  "sourceId": "obr-efo-2026-03"
+                },
+                {
+                  "sourceId": "hmt-budget-2025-policy-costings",
+                  "quote": "From 1 April 2027, fuel duty rates will be uprated annually in line with the Retail Price Index."
                 }
               ],
               "badge": "simulated"
             }
           },
           {
-            "code": "rvfuel",
-            "title": "Put fuel duty up with inflation from April 2027",
+            "code": "gam2",
+            "title": "Put gambling duties up again",
             "move": 1,
             "advice": {
-              "text": "The Treasury’s own costing. Drivers pay, and it ends a fifteen-year freeze.",
+              "text": "The Treasury’s costing, repeated. Bookmakers pay again; a second helping.",
               "sources": [
                 {
                   "sourceId": "hmt-budget-2025-table-4-1",
@@ -437,6 +458,21 @@
                 {
                   "sourceId": "hmrc-trr-2025-06",
                   "table": "Publication_Format"
+                }
+              ],
+              "badge": "simulated"
+            }
+          },
+          {
+            "code": "rvfuel",
+            "title": "Add back last year’s cancelled fuel duty rise",
+            "move": 1,
+            "advice": {
+              "text": "Adds back the rise Budget 2025 cancelled. Small money; drivers pay.",
+              "sources": [
+                {
+                  "sourceId": "hmt-budget-2025-table-4-1",
+                  "table": "Table 4.1"
                 }
               ],
               "badge": "simulated"

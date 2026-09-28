@@ -595,7 +595,7 @@
             {
               "id": "doubted",
               "points": -1,
-              "text": "More than two-fifths of the yield rests on figures nobody certified. HMRC says a relief’s cost is not a yield.",
+              "text": "More than two-fifths of the yield rests on figures nobody has certified. The OBR may score them lower.",
               "sources": [
                 {
                   "sourceId": "hmrc-tax-reliefs-quality-report"
@@ -604,7 +604,22 @@
                   "sourceId": "osr-trr-review-2025-12"
                 }
               ],
-              "badge": "simulated"
+              "badge": "simulated",
+              "variants": [
+                {
+                  "when": {
+                    "measure": "reliefShareOfUncertified",
+                    "above": 0.5
+                  },
+                  "text": "More than two-fifths of the yield is what tax breaks cost today. HMRC says ending them raises less.",
+                  "sources": [
+                    {
+                      "sourceId": "hmrc-tax-reliefs-quality-report",
+                      "paragraph": "4"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

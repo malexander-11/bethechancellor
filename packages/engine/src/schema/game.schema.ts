@@ -564,6 +564,25 @@ export const verdictsFileSchema = z
  * sentence is authored here and badged simulated: the engine compares figures with authored
  * thresholds and picks authored sentences, and invents no number of its own (ADR-0013).
  */
+/**
+ * The same band in other words when a second reading says so (Phase 25): what the doubted yield
+ * rests on, relief costs or others' figures. The first variant whose condition holds is read; the
+ * points, cap and threshold are the band's own, so a variant changes the words and nothing else.
+ */
+export const receptionVariantSchema = z
+  .strictObject({
+    when: z.strictObject({
+      measure: readingMeasureSchema,
+      above: z.number().optional(),
+      below: z.number().optional(),
+    }),
+    text: z.string().min(1).max(260),
+    sources: z.array(sourceRefSchema).default([]),
+  })
+  .refine((v) => v.when.above !== undefined || v.when.below !== undefined, {
+    message: 'a variant says when: above or below a reading',
+  });
+
 export const receptionBandSchema = z.strictObject({
   id: slug,
   upTo: z.number().optional(),
@@ -574,6 +593,7 @@ export const receptionBandSchema = z.strictObject({
   text: z.string().min(1).max(260),
   sources: z.array(sourceRefSchema).default([]),
   badge: simulatedBadgeSchema,
+  variants: z.array(receptionVariantSchema).optional(),
 });
 
 export const receptionRuleSchema = z

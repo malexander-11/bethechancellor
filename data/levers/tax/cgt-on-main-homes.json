@@ -112,6 +112,7 @@
       ]
     }
   ],
+  "reliefCost": true,
   "interactions": [
     {
       "withLever": "align-cgt-with-income-tax",

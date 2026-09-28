@@ -40,6 +40,14 @@ export function effectWords(improvement: number, capital: boolean, receipts: boo
 }
 
 /**
+ * A relief cost read into words (Phase 25): HMRC's cost of a tax break is the most ending it could
+ * raise, never the forecast yield, so the verb says so.
+ */
+export function reliefWords(words: string): string {
+  return words.replace(/^raises /, 'raises at most ');
+}
+
+/**
  * When a measure moves nothing in the summary year, the first later policy year in which it does
  * (ADR-0021: a card that cannot start before the summary year says so and names the year).
  */

@@ -643,8 +643,40 @@ label.choice {
   line-height: 1.45;
 }
 
-.choice--blocked {
-  opacity: 0.6;
+/* A choice another in the Budget rules out (Phase 25): marked by a dashed rule and a quiet wash,
+   never by fading, so every word keeps its contrast; the reason sits in .blocked beneath. */
+.choice--blocked,
+.lever--blocked {
+  border: 1px dashed var(--ink-2);
+  background: var(--surface-2);
+}
+
+.choice--blocked input[type='checkbox'],
+.lever--blocked input {
+  filter: grayscale(1);
+  cursor: not-allowed;
+}
+
+.lever__relief {
+  margin: 4px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.blocked {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.blocked strong {
+  font-weight: 700;
+}
+
+.blocked__swap {
+  margin-left: 2px;
 }
 
 /* ------------------------------------------------------------ budget day */

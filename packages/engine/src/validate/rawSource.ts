@@ -243,10 +243,13 @@ function checkHmrcRows(
     }
     signedRow.set(row.rowId, signed);
   }
+  // A lever may cite a multiple of the rows (Worked out): 1.25 points of each rate, say.
+  const multiplier = raw.multiplier ?? 1;
   const sumRows = (rowIds: string[]): YearValues => {
     const out: YearValues = {};
     for (const id of rowIds) {
-      for (const [y, v] of Object.entries(signedRow.get(id) ?? {})) out[y] = (out[y] ?? 0) + v;
+      for (const [y, v] of Object.entries(signedRow.get(id) ?? {}))
+        out[y] = (out[y] ?? 0) + v * multiplier;
     }
     return out;
   };

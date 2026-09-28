@@ -112,6 +112,7 @@
       ]
     }
   ],
+  "reliefCost": true,
   "status": "reviewed",
   "reviewedOn": "2026-09-15",
   "interactions": [

@@ -114,18 +114,6 @@
       ]
     }
   ],
-  "interactions": [
-    {
-      "withLever": "cgt-on-death",
-      "text": "The Resolution Foundation’s £4bn on that card already includes a charge on leavers, so the two together count it twice.",
-      "severity": "warn"
-    },
-    {
-      "withLever": "align-cgt-with-income-tax",
-      "text": "CenTax’s alignment package already includes a charge on leavers.",
-      "severity": "warn"
-    }
-  ],
   "status": "reviewed",
   "reviewedOn": "2026-09-22"
 }

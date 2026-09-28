@@ -132,7 +132,8 @@ describe('three audiences, five steps', () => {
     const base = by(room({}), 'markets');
     const thin = by(room({ dhsc: 8 }), 'markets');
     const missed = by(room({ def5: 1 }), 'markets');
-    const ample = by(room({ vatfood: 1 }), 'markets');
+    // A certified saving, not a relief cost: the markets doubt those (Phase 25).
+    const ample = by(room({ dhsc: -5 }), 'markets');
     expect(thin.rating).toBeLessThan(base.rating);
     expect(missed.rating).toBeLessThanOrEqual(2);
     expect(missed.label).toBe('Alarmed');
@@ -141,9 +142,27 @@ describe('three audiences, five steps', () => {
     expect(ample.rating).toBeGreaterThanOrEqual(base.rating);
   });
 
+  it('doubts a yield that rests on HMRC’s cost of a relief, and says which kind of figure it is', () => {
+    // Employer NICs on pensions is Worked out, but its base is HMRC's cost of a relief.
+    const relief = by(room({ nicpen: 1 }), 'markets');
+    const doubted = relief.all.find((r) => r.rule === 'mk-credibility');
+    expect(doubted?.points).toBe(-1);
+    expect(doubted?.text).toMatch(/what tax breaks cost today/);
+    expect(doubted?.causes).toContain(ds.levers.find((l) => l.code === 'nicpen')?.shortTitle);
+    // A think tank's figure is doubted in other words.
+    const other = by(room({ qelevy: 1 }), 'markets');
+    const doubtedOther = other.all.find((r) => r.rule === 'mk-credibility');
+    expect(doubtedOther?.text).toMatch(/nobody has certified/);
+    // HMRC's certified rows raise no doubt.
+    const certified = by(room({ itbr: 1 }), 'markets');
+    expect(certified.all.find((r) => r.rule === 'mk-credibility')?.points).toBe(0);
+  });
+
   it('says nothing that is not in the data, and quotes no figure a band cannot source', () => {
     const templates = ds.reception.audiences.flatMap((a) =>
-      a.rules.flatMap((r) => r.bands.map((b) => b.text)),
+      a.rules.flatMap((r) =>
+        r.bands.flatMap((b) => [b.text, ...(b.variants ?? []).map((v) => v.text)]),
+      ),
     );
     const matches = (template: string, text: string) => {
       const pattern = template

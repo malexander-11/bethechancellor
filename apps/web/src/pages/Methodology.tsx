@@ -151,16 +151,22 @@ export function MethodologyPage() {
         employer National Insurance threshold, vehicle excise duty, air passenger duty, tobacco
         duties, the Business Asset Disposal Relief rate, the residence nil-rate band, insurance
         premium tax, and employer National Insurance on pension contributions from HMRC&rsquo;s
-        private pension statistics (£14.3 billion in 2024-25, a static cost, with HMRC&rsquo;s
-        caveat and the public sector&rsquo;s share on the card). Employer-side National Insurance is
-        not a manifesto red line here, on the government&rsquo;s own reading of the lock; the
-        Political Adviser says on each such lever that the reading is contested. Phase 12 added the
-        menu the Budget 2026 reporting says is on the table: ending the capital gains write-off at
-        death, a £1.5 million council tax surcharge band, reversing the farm and family-business
-        relief reform, two points on the bank surcharge, the energy profits levy package again, the
-        self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance package,
-        unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and business
-        rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated
+        private pension statistics (£14.3 billion in 2024-25, less the £6.5 billion on public sector
+        schemes, which would only move money from departments to the Treasury, taken to
+        today&rsquo;s 15% rate). Every card built on HMRC&rsquo;s cost of a relief reads
+        &ldquo;raises at most&rdquo; and says why, and the markets count it as a figure nobody has
+        certified. The health and social care levy is 1.25 times HMRC&rsquo;s own one-point figures
+        for every National Insurance rate, the same figures the National Insurance sliders use; two
+        measures that count the same money (aligning capital gains with income and taxing gains at
+        death, for one) cannot both be chosen on the curated screens. Employer-side National
+        Insurance is not a manifesto red line here, on the government&rsquo;s own reading of the
+        lock; the Political Adviser says on each such lever that the reading is contested. Phase 12
+        added the menu the Budget 2026 reporting says is on the table: ending the capital gains
+        write-off at death, a £1.5 million council tax surcharge band, reversing the farm and
+        family-business relief reform, two points on the bank surcharge, the energy profits levy
+        package again, the self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance
+        package, unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and
+        business rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated
         calculation on one, and each card is badged for what it is.
       </p>
 

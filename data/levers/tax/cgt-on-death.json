@@ -135,13 +135,8 @@
     },
     {
       "withLever": "cgt-exit-charge",
-      "text": "The £4bn here already includes a charge on leavers; that card counts it again.",
-      "severity": "warn"
-    },
-    {
-      "withLever": "align-cgt-with-income-tax",
-      "text": "CenTax’s package already removes the write-off at death.",
-      "severity": "warn"
+      "text": "The Resolution Foundation’s £4bn for gains at death already includes a charge on people who leave, so the exit charge would count it again.",
+      "severity": "excludes"
     }
   ],
   "status": "reviewed",

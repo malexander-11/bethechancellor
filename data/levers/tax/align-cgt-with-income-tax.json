@@ -123,18 +123,18 @@
     },
     {
       "withLever": "cgt-lower-rate",
-      "text": "The package already takes the lower rate to 20%; stacking a rise here double counts.",
-      "severity": "warn"
+      "text": "The alignment package already takes the lower rate to 20%, so a rise in the lower rate on top would count the same money twice.",
+      "severity": "excludes"
     },
     {
       "withLever": "cgt-on-death",
-      "text": "CenTax’s package already removes the write-off at death; that card’s £4bn would be counted twice.",
-      "severity": "warn"
+      "text": "CenTax’s alignment package already ends the tax-free uplift at death, so taxing gains at death as well would count the same £4bn twice.",
+      "severity": "excludes"
     },
     {
       "withLever": "cgt-exit-charge",
-      "text": "CenTax’s package already charges people who leave; that card’s £0.5bn would be counted twice.",
-      "severity": "warn"
+      "text": "CenTax’s alignment package already charges people who leave, so the exit charge’s £0.5bn would be counted twice.",
+      "severity": "excludes"
     },
     {
       "withLever": "reverse-cgt-rate-rise",

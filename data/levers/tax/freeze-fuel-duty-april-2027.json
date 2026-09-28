@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "id": "freeze-fuel-duty-april-2027",
+  "code": "fuelfrz",
+  "category": "tax",
+  "badge": "mechanical",
+  "group": "Duties",
+  "order": 12,
+  "title": "Freeze fuel duty in April 2027",
+  "shortTitle": "Fuel duty freeze",
+  "headline": "Cancel April 2027's planned inflation rise, which is already in the forecast.",
+  "description": "Hold fuel duty at 57.95p in April 2027 instead of raising it with RPI inflation, as Budget 2025 plans and the forecast assumes. Later rises go ahead from the lower rate, so the cost carries on every year. The cost is HMRC's figure for a 1% change in petrol and diesel duty, times the 3% the freeze leaves the rate below plan: the OBR forecasts RPI inflation of 3.1% in 2026, and 57.95p is 3% below 57.95p grown by 3.1%. Freezing every year, as recent Chancellors have, would cost more each year.",
+  "baselinePolicy": {
+    "text": "Budget 2025 returns the main rate to 57.95p a litre by March 2027 and then uprates fuel duty with RPI inflation from 1 April 2027 (Table 4.1 line 3).",
+    "source": {
+      "sourceId": "hmt-budget-2025-policy-costings",
+      "quote": "From 1 April 2027, fuel duty rates will be uprated annually in line with the Retail Price Index."
+    },
+    "alreadyIncludes": [
+      "Fuel duty: 2026-27 uprating cancelled, the 5p cut phased out by March 2027, and RPI uprating from April 2027 (Budget 2025, Table 4.1 line 3)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "fuelDuties",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "linearPerUnit",
+    "unitDelta": 1,
+    "perUnit": {
+      "2026-27": -720,
+      "2027-28": -705,
+      "2028-29": -690
+    },
+    "basis": "accruals",
+    "symmetric": true,
+    "source": {
+      "sourceId": "hmrc-trr-2025-06",
+      "table": "Publication_Format"
+    },
+    "rawSource": {
+      "kind": "hmrcReadyReckoner",
+      "sourceId": "hmrc-trr-2025-06",
+      "years": ["2026-27", "2027-28", "2028-29"],
+      "rows": [
+        {
+          "rowId": "1-pct-change-in-various-duties--petrol",
+          "label": "Petrol",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 100,
+            "2027-28": 100,
+            "2028-29": 100
+          }
+        },
+        {
+          "rowId": "1-pct-change-in-various-duties--diesel",
+          "label": "Diesel",
+          "hmrcSign": "yield",
+          "role": "increase",
+          "values": {
+            "2026-27": 140,
+            "2027-28": 135,
+            "2028-29": 130
+          }
+        }
+      ],
+      "combine": "sum",
+      "multiplier": -3,
+      "note": "HMRC's rows for a 1% change in petrol and diesel duty, times minus 3: a freeze in April 2027 leaves the rate 3% below the planned 57.95p grown by the OBR's RPI inflation forecast for 2026 (3.1%). Our arithmetic on official figures."
+    },
+    "uprating": {
+      "method": "growWithSeries",
+      "head": "fuelDuties",
+      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for fuel duty receipts, as the fuel duty slider is (ADR-0004)."
+    },
+    "caveats": [
+      "Freezes the April 2027 rise only; the rises after it go ahead from the lower rate, so the cost carries on. The Resolution Foundation puts the cost of freezing every year at over £5 billion a year by 2029-30.",
+      "The OBR's RPI inflation forecast for 2026 stands for the rise in April 2027; the rate that applies will be set from the RPI figure published before it.",
+      "HMRC's rows are for a 1% change, scaled here to 3%; HMRC calls larger changes approximate."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmrc-direct",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": true,
+      "text": "HMRC's figure is a direct effect on fuel duty. It includes HMRC's standard response of drivers to pump prices, but not wider effects on the economy such as inflation, which HMRC says are captured in the OBR's economy forecast instead.",
+      "sources": [
+        {
+          "sourceId": "hmrc-trr-2025-06-bulletin"
+        }
+      ],
+      "magnitudeWords": "small"
+    },
+    {
+      "id": "freeze-who-gains",
+      "kind": "distributional",
+      "direction": "ambiguous",
+      "alreadyInDirectCosting": false,
+      "text": "Drivers gain, most of all those who drive furthest, often in rural areas; households without a car gain nothing directly. Fuel duty has not risen since 2011, so a freeze is what drivers have come to expect.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-03"
+        },
+        {
+          "sourceId": "rf-call-of-duties-2025",
+          "quote": "by 2029-30 the cost of continued freezes would be over £5 billion annually"
+        }
+      ],
+      "magnitudeWords": "small"
+    }
+  ],
+  "interactions": [
+    {
+      "withLever": "fuel-duty",
+      "text": "Both change fuel duty rates: a freeze is a cut of about 3% against the plan, so moving the rate as well counts from a different starting point.",
+      "severity": "warn"
+    },
+    {
+      "withLever": "reverse-fuel-duty-freeze",
+      "text": "Adding back last year's cancelled rise while freezing this year's pulls the same duty both ways.",
+      "severity": "warn"
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-09-28"
+}

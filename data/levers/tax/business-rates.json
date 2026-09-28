@@ -8,7 +8,7 @@
   "order": 20,
   "title": "Business rates",
   "shortTitle": "Business rates",
-  "headline": "Scale every business rates bill. Each 1% moves about £0.4bn.",
+  "headline": "Scale England's business rates bills. Each 1% moves about £0.4bn.",
   "description": "Change business rates by a percentage from April 2027, applied to the OBR's forecast of what they raise: £37.9bn in 2027-28 rising to £42.1bn in 2029-30 (EFO Table A.5). Bills are assumed to move in proportion to receipts, so a 1% change is about £0.4bn a year. No behavioural response is added, and the OBR's line covers the whole United Kingdom, although the devolved governments set their own rates.",
   "baselinePolicy": {
     "text": "Business rates receipts of £33.7bn in 2025-26, £37.1bn in 2026-27, £37.9bn in 2027-28, £38.8bn in 2028-29 and £42.1bn in 2029-30 on the OBR's March 2026 forecast (Table A.5).",

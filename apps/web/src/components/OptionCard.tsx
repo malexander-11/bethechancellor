@@ -10,9 +10,10 @@ import {
   type OptionState,
   type SimulatedLine,
 } from '@btc/engine';
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import type { OptionPrice } from '../journey/prices';
 import { AdviceLine } from './AdviceLine';
+import { BlockedNotice } from './BlockedNotice';
 import { LabelBadge } from './LabelBadge';
 import { formatLeverValue } from './LeverControl';
 import { SourceList } from './SourceLink';
@@ -41,6 +42,10 @@ function partnerOf(o: OptionOverlap): string {
   return o.option?.shortTitle ?? o.withLever.shortTitle;
 }
 
+function lowerFirst(text: string): string {
+  return text.charAt(0).toLowerCase() + text.slice(1);
+}
+
 /** "Costs £2.2bn · leaves £4.5bn" or "Costs £2.2bn · without it £6.7bn", one text node for one figure. */
 export function priceLine(price: OptionPrice): string {
   const headroom = formatGbpBn(price.headroomGbpm, 1, price.headroomGbpm < 0);
@@ -55,8 +60,9 @@ export function priceLine(price: OptionPrice): string {
  * the options it overlaps or counts the same money as, and the line of whoever proposes it.
  * Choosing it moves the levers inside; the state is read back from the levers, so a card can also
  * show that its levers were adjusted on the desk to somewhere else (ADR-0022). While an option it
- * conflicts with is in the Budget the card is blocked and says by what; with both in from the
- * desk, both warn and neither is blocked. On the surface a card is its title, its badge and its
+ * conflicts with is in the Budget the card is blocked: it says, in one plain sentence at full
+ * contrast, what to untick and why, and offers a one-tap swap (Phase 25); its checkbox stays in
+ * the tab order and will not tick. With both in from the desk, both warn and neither is blocked. On the surface a card is its title, its badge and its
  * figure, plus the tags that change what choosing it means, and one adviser's line saying who
  * proposed it and what it costs and does (Phase 23); the lever's headline, the options it quietly
  * overlaps and the proposer's line wait behind one fold, "More about this".
@@ -75,6 +81,7 @@ export function OptionCard({
   earliestStart,
   overlaps = [],
   blocked,
+  onSwap,
   clashes = [],
   line,
   who,
@@ -100,6 +107,8 @@ export function OptionCard({
   overlaps?: readonly OptionOverlap[];
   /** The option in the Budget that counts the same money, while this one is not on. */
   blocked?: OptionConflict;
+  /** Take the blocking option out and put this one in, in one tap. */
+  onSwap?: () => void;
   /** Options in the Budget that count the same money as this one, which is in the Budget too. */
   clashes?: readonly OptionConflict[];
   /** The proposer's line, simulated and sourced, folded under "More about this". */
@@ -116,6 +125,7 @@ export function OptionCard({
 }) {
   const on = state === 'on';
   const adjusted = state === 'adjusted';
+  const blockedId = `${useId()}-blocked`;
   const badges = badgesOf(levers);
   const quiet = overlaps.filter((o) => !o.active);
   const active = overlaps.filter((o) => o.active);
@@ -137,8 +147,12 @@ export function OptionCard({
           name={name}
           value={id}
           checked={on}
-          disabled={disabled || blocked !== undefined}
-          onChange={(e) => onChange(e.target.checked)}
+          disabled={disabled}
+          aria-disabled={blocked ? true : undefined}
+          aria-describedby={blocked ? blockedId : undefined}
+          onChange={(e) => {
+            if (!blocked) onChange(e.target.checked);
+          }}
         />
         <span className="choice__body">
           <span className="choice__title">
@@ -149,13 +163,10 @@ export function OptionCard({
           </span>
           <span className="choice__meta">
             <span className={`choice__figure amount amount--${price.tone}`}>
-              {priceLine(price)}
+              {blocked ? `Swap them: ${lowerFirst(priceLine(price))}` : priceLine(price)}
               <span className="sr-only">, in {price.year}</span>
             </span>
             {tag ? <span className="tag tag--quiet">{tag}</span> : null}
-            {blocked ? (
-              <span className="tag--treasury">Instead of {blocked.option.title}</span>
-            ) : null}
             {adjusted
               ? levers.map((lever) => (
                   <span key={lever.code} className="tag--treasury tag--warn">
@@ -193,14 +204,13 @@ export function OptionCard({
               </span>
             ) : null}
           </span>
-          {blocked ? <span className="choice__line choice__overlap">{blocked.text}</span> : null}
           {clashes.map((c) => (
             <span key={c.option.id} className="choice__line choice__overlap choice__overlap--warn">
               Warning: both this and {c.option.title} are in your Budget: {c.text}
             </span>
           ))}
           {active.map((o) => {
-            const warn = o.severity === 'warn';
+            const warn = o.severity !== 'info';
             return (
               <span
                 key={o.withLever.code}
@@ -212,6 +222,15 @@ export function OptionCard({
           })}
         </span>
       </label>
+      {blocked ? (
+        <BlockedNotice
+          id={blockedId}
+          other={blocked.option.title}
+          untick
+          reason={blocked.text}
+          {...(onSwap ? { onSwap } : {})}
+        />
+      ) : null}
       {advice ? <AdviceLine who={advice.who} line={advice.line} /> : null}
       {more ? (
         <details className="more more--quiet choice__more">

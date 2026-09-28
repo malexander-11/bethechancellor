@@ -18,6 +18,7 @@ import { vintage } from '../data';
 import { Milestones } from './Milestones';
 import { useId, useState, type ReactNode } from 'react';
 import { AdviceLine } from './AdviceLine';
+import { BlockedNotice } from './BlockedNotice';
 import { LabelBadge } from './LabelBadge';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
 import { Term } from './Term';
@@ -27,6 +28,7 @@ import {
   currentBudgetImprovement,
   effectWords,
   laterStartYear,
+  reliefWords,
 } from '../journey/effects';
 
 const MINUS = '−';
@@ -220,6 +222,20 @@ export interface LeverNote {
   warn: boolean;
 }
 
+/** Another lever in the Budget counts the same money as this one (Phase 25): what it is, and why. */
+export interface Blocked {
+  /** What the other lever is called on this screen. */
+  other: string;
+  /** Untick a toggle; put a slider back. */
+  untick: boolean;
+  reason: string;
+  onSwap?: () => void;
+}
+
+/** The plain line a relief cost carries on its card (Phase 25): no number of its own. */
+export const RELIEF_LINE =
+  'HMRC’s cost of the tax break. The real sum would be less, as people change what they do.';
+
 export function LeverControl({
   lever,
   value,
@@ -232,6 +248,7 @@ export function LeverControl({
   hint,
   advice,
   notes = [],
+  blocked,
   compact = false,
   children,
 }: {
@@ -255,6 +272,11 @@ export function LeverControl({
   advice?: { who: string; line: SimulatedLine };
   /** Warnings that apply now: a lever this one interacts with has moved. */
   notes?: readonly LeverNote[];
+  /**
+   * Another lever in the Budget counts the same money (Phase 25): the control stays reachable but
+   * will not move, and says why and how to swap.
+   */
+  blocked?: Blocked;
   /**
    * The curated card (Phase 24): the lever's own headline, its milestones, the quieter tags and
    * what the number assumes wait under one fold, "More about this"; the surface is the control,
@@ -318,9 +340,22 @@ export function LeverControl({
     (improvement !== null && summaryYear !== undefined) ||
     (isFinancialTransaction && cashOut !== 0) ||
     showHint;
-  const describedBy = [`${id}-desc`, hasEffectLine ? `${id}-effect` : null]
+  const describedBy = [
+    blocked ? `${id}-blocked` : null,
+    `${id}-desc`,
+    hasEffectLine ? `${id}-effect` : null,
+  ]
     .filter(Boolean)
     .join(' ');
+  const relief = lever.reliefCost === true;
+  // A blocked lever stays in the tab order but does not move: the notice says why.
+  const change_ = (next: number) => {
+    if (!blocked) onChange(next);
+  };
+  const words = (improvement: number) => {
+    const plain = effectWords(improvement, isCapital, lever.classification?.side === 'receipts');
+    return relief ? reliefWords(plain) : plain;
+  };
 
   const notOnTheTableTag = notOnTheTable ? (
     <span className="tag tag--quiet">Not on the table</span>
@@ -383,15 +418,10 @@ export function LeverControl({
         {isCapital ? 'Borrowing' : 'Current budget'} in {summaryYear}:{' '}
         {laterStart && effect ? (
           <>
-            nothing yet; from {laterStart}{' '}
-            {effectWords(
-              improve(effect, laterStart),
-              isCapital,
-              lever.classification?.side === 'receipts',
-            )}
+            nothing yet; from {laterStart} {words(improve(effect, laterStart))}
           </>
         ) : (
-          effectWords(improvement, isCapital, lever.classification?.side === 'receipts')
+          words(improvement)
         )}
         {isCapital ? (
           <span className="lever__effect-note">
@@ -410,6 +440,18 @@ export function LeverControl({
         {hint.text}
       </p>
     ) : null;
+  // On the curated cards always; on the desk once the lever has moved, beside what it does.
+  const reliefLine =
+    relief && (compact || !isDefault) ? <p className="lever__relief">{RELIEF_LINE}</p> : null;
+  const blockedLine = blocked ? (
+    <BlockedNotice
+      id={`${id}-blocked`}
+      other={blocked.other}
+      untick={blocked.untick}
+      reason={blocked.reason}
+      {...(blocked.onSwap ? { onSwap: blocked.onSwap } : {})}
+    />
+  ) : null;
   const adviceLine = advice ? <AdviceLine who={advice.who} line={advice.line} /> : null;
   const noteLines =
     notes.length > 0 ? (
@@ -437,11 +479,7 @@ export function LeverControl({
           </button>
         ) : null}
         {!isDefault ? (
-          <button
-            type="button"
-            className="linklike"
-            onClick={() => onChange(lever.control.default)}
-          >
+          <button type="button" className="linklike" onClick={() => change_(lever.control.default)}>
             Back to OBR
             <span className="sr-only"> for {lever.shortTitle}</span>
           </button>
@@ -451,7 +489,7 @@ export function LeverControl({
 
   return (
     <div
-      className={`lever${isToggle ? ' lever--toggle' : ''}${compact ? ' lever--curated' : ''}`}
+      className={`lever${isToggle ? ' lever--toggle' : ''}${compact ? ' lever--curated' : ''}${blocked ? ' lever--blocked' : ''}`}
       role="group"
       aria-labelledby={`${id}-title`}
     >
@@ -464,7 +502,8 @@ export function LeverControl({
                 type="checkbox"
                 checked={value === 1}
                 aria-describedby={describedBy}
-                onChange={(e) => onChange(e.target.checked ? 1 : 0)}
+                aria-disabled={blocked ? true : undefined}
+                onChange={(e) => change_(e.target.checked ? 1 : 0)}
               />
               {title}
             </label>
@@ -518,7 +557,8 @@ export function LeverControl({
               className="lever__select"
               value={nearestOption(lever, value)}
               aria-describedby={describedBy}
-              onChange={(e) => onChange(Number(e.target.value))}
+              aria-disabled={blocked ? true : undefined}
+              onChange={(e) => change_(Number(e.target.value))}
             >
               {Object.entries(lever.control.labels ?? {})
                 .sort((a, b) => Number(a[0]) - Number(b[0]))
@@ -537,8 +577,9 @@ export function LeverControl({
                 max={max}
                 step={step}
                 value={value}
-                onChange={(e) => onChange(Number(e.target.value))}
+                onChange={(e) => change_(Number(e.target.value))}
                 aria-describedby={describedBy}
+                aria-disabled={blocked ? true : undefined}
                 aria-valuetext={
                   change
                     ? `${change.to} (${formatLeverValue(lever, value)})`
@@ -556,9 +597,11 @@ export function LeverControl({
       ) : null}
       {compact ? (
         <>
+          {blockedLine}
           {financialLine}
           {effectLine}
           {hintLine}
+          {reliefLine}
           {adviceLine}
           {noteLines}
           {earliestTag ? <p className="lever__tags">{earliestTag}</p> : null}
@@ -614,9 +657,11 @@ export function LeverControl({
               </ul>
             </details>
           ) : null}
+          {blockedLine}
           {financialLine}
           {effectLine}
           {hintLine}
+          {reliefLine}
           {adviceLine}
           {noteLines}
           {children}

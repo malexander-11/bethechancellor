@@ -335,8 +335,20 @@ export function validateDataset(ds: Dataset): string[] {
       }
     }
     for (const interaction of lever.interactions ?? []) {
-      if (!ds.levers.some((l) => l.id === interaction.withLever)) {
+      const other = ds.levers.find((l) => l.id === interaction.withLever);
+      if (!other) {
         problems.push(`lever ${lever.id} interacts with unknown lever ${interaction.withLever}`);
+        continue;
+      }
+      // Two measures that count the same money are one fact about the pair: authored once, so
+      // the reason a card gives is never contradicted by its partner's.
+      if (
+        interaction.severity === 'excludes' &&
+        (other.interactions ?? []).some((i) => i.withLever === lever.id)
+      ) {
+        problems.push(
+          `levers ${lever.id} and ${other.id} both author their pair; an excludes pair is authored once`,
+        );
       }
     }
   }

@@ -121,6 +121,7 @@
       ]
     }
   ],
+  "reliefCost": true,
   "interactions": [
     {
       "withLever": "nics-employee-main-rate",

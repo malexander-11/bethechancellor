@@ -170,19 +170,36 @@ describe('build your Budget: the ways to deliver', () => {
     expect(gap()).toBeEnabled();
     fireEvent.click(three());
     await waitFor(() => expect(L()).toMatch(/def3\.1/));
-    // The gap is blocked while the 3% option is in: the card is disabled and names the reason.
-    expect(gap()).toBeDisabled();
+    // The gap is blocked while the 3% option is in (Phase 25): its checkbox stays in the tab
+    // order but will not tick, and one plain sentence at full contrast says what to untick and
+    // why; the price is the swap it offers, never both at once.
+    expect(gap()).toBeEnabled();
+    expect(gap()).toHaveAttribute('aria-disabled', 'true');
+    expect(gap()).toHaveAccessibleDescription(
+      /You can’t have both\. Untick “Defence at 3% of GDP now, not in 2030-31” to choose this\./,
+    );
     const gapCard = gap().closest('.choice') as HTMLElement;
     expect(gapCard.className).toMatch(/choice--blocked/);
-    expect(
-      within(gapCard).getByText('Instead of Defence at 3% of GDP now, not in 2030-31'),
-    ).toBeInTheDocument();
     expect(within(gapCard).getByText(/counts some of the same money twice/)).toBeInTheDocument();
+    expect(within(gapCard).getByText(/^Swap them: /)).toBeInTheDocument();
+    fireEvent.click(gap());
+    expect(L()).toMatch(/def3\.1/);
+    expect(L()).not.toMatch(/dip47/);
     // The 3% option itself is not blocked by the pair it is in.
-    expect(three()).toBeEnabled();
+    expect(three()).not.toHaveAttribute('aria-disabled');
+    // One tap swaps them.
+    fireEvent.click(within(gapCard).getByRole('button', { name: /Swap them/ }));
+    await waitFor(() => expect(L()).toMatch(/dip47\.1/));
+    expect(L()).not.toMatch(/def3/);
+    expect(three()).toHaveAttribute('aria-disabled', 'true');
+    fireEvent.click(
+      within(three().closest('.choice') as HTMLElement).getByRole('button', { name: /Swap them/ }),
+    );
+    await waitFor(() => expect(L()).toMatch(/def3\.1/));
+    expect(L()).not.toMatch(/dip47/);
     fireEvent.click(three());
     await waitFor(() => expect(L()).not.toMatch(/def3/));
-    expect(gap()).toBeEnabled();
+    expect(gap()).not.toHaveAttribute('aria-disabled');
     expect(gapCard.className).not.toMatch(/choice--blocked/);
   });
 
