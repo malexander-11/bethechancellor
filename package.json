@@ -2,7 +2,7 @@
   "name": "bethechancellor",
   "version": "0.1.0",
   "private": true,
-  "description": "Be the Chancellor: a sourced, transparent UK fiscal trade-offs game",
+  "description": "A sourced, transparent game about the trade-offs in a UK Budget: What’s your Budget?",
   "license": "MIT",
   "type": "module",
   "engines": {

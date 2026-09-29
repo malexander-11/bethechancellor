@@ -1,8 +1,11 @@
-# Be the Chancellor
+# What’s your Budget?
 
-A web game about the trade-offs facing the UK Chancellor. You set tax, spending and economic
-assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
-with every number traced to an official source.
+A web game about the trade-offs facing the UK Chancellor. You choose who pays and what to fund;
+the game shows what happens to borrowing, debt and the government's fiscal rules, with every
+number traced to an official source.
+
+Formerly _Be the Chancellor_. It was renamed in September 2026 so that it is not mistaken for the
+Institute for Fiscal Studies and Nesta tool of that name, which inspired it (ADR-0029).
 
 Status: **Phase 27 (basic and advanced)**. You are appointed Chancellor in a Labour
 government with a Budget to deliver on 28 October 2026, and the game walks you through it in six

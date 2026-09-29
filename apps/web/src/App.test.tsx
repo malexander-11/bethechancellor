@@ -63,7 +63,7 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(document.title).toBe('Your briefing · Step 1 of 6 · Be the Chancellor');
+    expect(document.title).toBe('Your briefing · Step 1 of 6 · What’s your Budget?');
     const skip = screen.getByRole('link', { name: 'Skip to the step' });
     expect(skip).toHaveAttribute('href', '#main');
     expect(document.body.querySelector('a, button, input, [tabindex]')).toBe(skip);
@@ -71,13 +71,13 @@ describe('journey routes', () => {
     unmount();
     at(`/finetune/tax?${TUNING}`);
     // The heading is the part's name, so the tab says it once.
-    expect(document.title).toBe('Fine-tune tax · Step 4 of 6 · Be the Chancellor');
+    expect(document.title).toBe('Fine-tune tax · Step 4 of 6 · What’s your Budget?');
   });
 
   it('moves focus to the new screen when a step link is followed', () => {
     at(`/finetune/tax?${TUNING}`);
     fireEvent.click(screen.getByRole('link', { name: 'Next: spending' }));
-    expect(document.title).toBe('Fine-tune spending · Step 4 of 6 · Be the Chancellor');
+    expect(document.title).toBe('Fine-tune spending · Step 4 of 6 · What’s your Budget?');
     expect(document.activeElement).toBe(document.getElementById('main'));
   });
 

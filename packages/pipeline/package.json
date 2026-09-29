@@ -2,7 +2,7 @@
   "name": "@btc/pipeline",
   "version": "0.1.0",
   "private": true,
-  "description": "Scripts that fetch, extract, derive and validate the sourced data for Be the Chancellor",
+  "description": "Scripts that fetch, extract, derive and validate the sourced data for What’s your Budget?",
   "license": "MIT",
   "type": "module",
   "scripts": {

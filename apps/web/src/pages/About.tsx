@@ -7,14 +7,15 @@ export function AboutPage() {
     <article className="prose">
       <h1>About this project</h1>
       <p className="lede">
-        Be the Chancellor is an open-source game about the trade-offs in a UK Budget. It exists
-        because the argument about &ldquo;headroom&rdquo; is usually conducted without the
-        arithmetic. Here the arithmetic is the game.
+        <em>What&rsquo;s your Budget?</em> is an open-source game about the trade-offs in a UK
+        Budget. It exists because the argument about &ldquo;headroom&rdquo; is usually conducted
+        without the arithmetic. Here the arithmetic is the game.
       </p>
       <p>
         It is inspired by the Institute for Fiscal Studies and Nesta&rsquo;s{' '}
-        <em>Be the Chancellor</em> tool. Unlike a think-tank model it shows, for every number, which
-        official document it came from and every step taken to get from that document to the screen.
+        <em>Be the Chancellor</em> tool, whose name it shared until September 2026. Unlike a
+        think-tank model it shows, for every number, which official document it came from and every
+        step taken to get from that document to the screen.
       </p>
       <h2>Current baseline</h2>
       <p>

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const SITE = 'Be the Chancellor';
+const SITE = 'What’s your Budget?';
 
 /**
  * The browser tab, the history entry and the first thing a screen reader announces on a new

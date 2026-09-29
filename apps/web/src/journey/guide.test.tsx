@@ -85,7 +85,7 @@ describe('the head of every screen', () => {
   it('keeps the header to the name and the two reference pages, and the utilities in the footer', () => {
     at(`/pm?${BASE}`);
     const header = document.querySelector('.site-header') as HTMLElement;
-    expect(within(header).getByRole('link', { name: 'Be the Chancellor' })).toBeInTheDocument();
+    expect(within(header).getByRole('link', { name: 'What’s your Budget?' })).toBeInTheDocument();
     expect(within(header).queryByText('Every number sourced')).toBeNull();
     expect(within(header).queryByRole('switch')).toBeNull();
     expect(screen.queryByRole('switch', { name: 'Dark mode' })).toBeNull();

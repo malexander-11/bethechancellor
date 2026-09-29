@@ -1,6 +1,6 @@
 # Methodology
 
-This document is the single description of how Be the Chancellor turns choices into
+This document is the single description of how _What’s your Budget?_ turns choices into
 numbers. Anything the app displays should be explainable from here; if it is not, the
 methodology is wrong or the app is.
 

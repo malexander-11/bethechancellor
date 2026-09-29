@@ -69,7 +69,7 @@ function Shell() {
       <header className="site-header">
         <div className="site-header__inner">
           <NavLink to="/" className="brand" end>
-            Be the Chancellor
+            What’s your Budget?
           </NavLink>
           <nav className="site-nav" aria-label="Main">
             <NavLink to="/methodology">Methodology</NavLink>

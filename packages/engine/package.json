@@ -2,7 +2,7 @@
   "name": "@btc/engine",
   "version": "0.1.0",
   "private": true,
-  "description": "Pure TypeScript fiscal engine for Be the Chancellor: schemas, arithmetic, rule verdicts, permalinks",
+  "description": "Pure TypeScript fiscal engine (schemas, arithmetic, rule verdicts, permalinks) for What’s your Budget?",
   "license": "MIT",
   "type": "module",
   "exports": {

@@ -2,7 +2,7 @@
   "name": "@btc/web",
   "version": "0.1.0",
   "private": true,
-  "description": "Be the Chancellor web app",
+  "description": "The web app for What’s your Budget?",
   "license": "MIT",
   "type": "module",
   "scripts": {
