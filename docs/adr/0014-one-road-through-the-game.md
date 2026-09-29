@@ -55,3 +55,12 @@ had a route but no road.
   Budget day; both are tested. Test fixtures that opened the forecast with `st.2` now use `st.3`,
   which is what leaving the desk writes.
 - The only tab-like control left on a game page is the folder drawer, which is deliberate.
+
+## Revision (2026-09-29): the road starts after the cover, in four marked states (ADR-0033)
+
+The rail is now a running head on every screen after the cover, which is the invitation to play and
+shows no road. It always names the step ("Step 2 of 6 · Set your priorities"), and its six square
+marks say each step’s state by shape as well as colour: a tick for a step done, a filled numeral for
+the step you are on, an outlined numeral for a step opened ahead, a dashed numeral for one not yet
+open. The rule of this decision is unchanged: the marks read `enterable`, so a mark is a link only
+where the guard would let you through.

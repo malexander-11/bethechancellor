@@ -1,7 +1,8 @@
 import type { Badge } from '@btc/engine';
 
 /**
- * The five badges and what each means, in plain words (Phase 23); the Methodology page lists them.
+ * The five badges and what each means, in plain words (Phase 23); the About and Methodology pages
+ * list them.
  * The ids and the classes are the honesty contract's (ADR-0002, ADR-0011) and do not move.
  */
 export const BADGE_LABELS: Record<Badge, { text: string; title: string }> = {
@@ -29,8 +30,8 @@ export const BADGE_LABELS: Record<Badge, { text: string; title: string }> = {
 
 /**
  * A badge: a plain label, its meaning in its title for a mouse. It opened a key at the foot of the
- * page until the footer became one row of links (ADR-0032); the Methodology page, linked from
- * that row, says what each badge means.
+ * page until the footer lost its switches (ADR-0032); the About page, the footer's one link, says
+ * what each badge means (ADR-0033).
  */
 export function LabelBadge({ badge }: { badge: Badge }) {
   const { text, title } = BADGE_LABELS[badge];

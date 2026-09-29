@@ -1172,7 +1172,7 @@ details.table-view td:first-child {
 
 /* ---------------------------------------------------------------- footer */
 
-/* The foot of every screen (ADR-0032): one flat row of links, no switches, no key. */
+/* The foot of every screen (ADR-0033): one quiet link, set small and plain beneath a hairline. */
 .site-footer {
   margin-top: 40px;
   padding-top: 4px;
@@ -1181,28 +1181,91 @@ details.table-view td:first-child {
 
 .site-footer__links {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0 16px;
 }
 
 .site-footer__links a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  border-bottom: 2px solid transparent;
   color: var(--ink-2);
   font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: var(--axis);
+  text-underline-offset: 3px;
 }
 
 .site-footer__links a:hover {
   color: var(--accent);
+  text-decoration-color: currentColor;
 }
 
 .site-footer__links a[aria-current='page'] {
-  border-bottom-color: var(--accent);
   color: var(--ink);
+  text-decoration: none;
+}
+
+/* ------------------------------------------------------ the About page (ADR-0033) */
+
+/* The contents: the page's parts between two hairlines, each a full-height target on a phone. */
+.contents {
+  margin: 20px 0 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.contents__title {
+  margin: 0;
+  color: var(--brass-ink);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.05em;
+}
+
+.contents ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contents a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+@media (min-width: 720px) {
+  .contents ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 24px;
+  }
+}
+
+/* The five kinds of number: each badge beside its meaning. */
+.kinds {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.kinds .badge {
+  margin-right: 6px;
+}
+
+/* The way back from the full methodology to the page that leads to it. */
+.crumb {
+  margin: 0 0 4px;
+  font-size: 0.9375rem;
+}
+
+.crumb a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 /* ------------------------------------------------------------- scorecard */

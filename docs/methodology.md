@@ -698,16 +698,16 @@ caps and over random packages.
 ### The road
 
 `enterable(step, game)` in the engine says whether a stage may be opened: once the stage before it
-has been left, always backwards, Budget day from the rabbit, and with no game only the sandbox
-(the package and Budget day). Every page calls `useStageGuard`, which redirects an early arrival to
+has been left, always backwards, Budget day from the rabbit, and with no game only the sandbox (the
+package and Budget day). Every page calls `useStageGuard`, which redirects an early arrival to
 `furthestStep(game)` with the budget's query string; the progress rail at the top of every page
-reads the same rule, so a stop is a link only when the guard would let it through. With a game
-under way the package is two guided screens (the ways to deliver, the ways to afford it) with the
-desk one link behind them (§22); in the sandbox it is the desk's two screens in sequence (taxes,
-spending) with a button forward and a link back, and the progress line says which screen ("Build
-your Budget · 2 of 2"), as it does for the forecast and the sums. The third screen of Phase 10, the
-colleagues' letters, was retired in Phase 12 (ADR-0017). Since Phase 20 the journey asks no
-Continues at all: every screen is a decision with one primary button (§23).
+after the cover (§32) reads the same rule, so a stop is a link only when the guard would let it
+through. With a game under way the package is two guided screens (the ways to deliver, the ways to
+afford it) with the desk one link behind them (§22); in the sandbox it is the desk's two screens in
+sequence (taxes, spending) with a button forward and a link back, and the progress line says which
+screen ("Build your Budget · 2 of 2"), as it does for the forecast and the sums. The third screen of
+Phase 10, the colleagues' letters, was retired in Phase 12 (ADR-0017). Since Phase 20 the journey
+asks no Continues at all: every screen is a decision with one primary button (§23).
 
 ### The revenue menu
 
@@ -996,14 +996,14 @@ that hold every screen to the same shape:
   Every clause is read from the engine or the player's own choices and the card wears the
   mechanical badge; the reactions and the close beneath it are unchanged.
 - **Identity.** Commons green (`--accent`), warm paper, charcoal ink, restrained brass, Budget red
-  for the one button that delivers and for the Budget box on the opening (gone since §31); the page
-  set like an official paper (ADR-0023, revised): Source Serif 4 (self-hosted, OFL) for the body and
-  Fraunces (self-hosted, OFL) for the headings, the three sentences and the step numerals; hairline
-  rules instead of boxed cards, square corners, small-capital labels instead of pills, a paper
-  header under a green rule, and seven numerals on a rule for the road. Every text pairing holds
-  4.5:1 (re-audited after the change: the badge inks sit at 6.3:1 or better on the paper, green at
-  6.2:1, brass ink and the muted numerals at 5.6:1), every control 44px, and the reduced-motion rule
-  stands.
+  for the one button that delivers and for the Budget box on the opening (gone in §31, drawn afresh
+  in §32); the page set like an official paper (ADR-0023, revised): Source Serif 4 (self-hosted,
+  OFL) for the body and Fraunces (self-hosted, OFL) for the headings, the three sentences and the
+  step numerals; hairline rules instead of boxed cards, square corners, small-capital labels instead
+  of pills, a paper header under a green rule, and seven numerals on a rule for the road. Every text
+  pairing holds 4.5:1 (re-audited after the change: the badge inks sit at 6.3:1 or better on the
+  paper, green at 6.2:1, brass ink and the muted numerals at 5.6:1), every control 44px, and the
+  reduced-motion rule stands.
 - **Word budgets, measured then pinned** (`apps/web/src/journey/budgets.test.tsx`): visible words
   with the folds closed, the road and the footer left out, on 2026-09-26: the opening 60, the
   starting position 267, the priorities 192, a priority screen 244 to 316, paying for it 564, the
@@ -1022,11 +1022,11 @@ that hold every screen to the same shape:
   rate of income tax"). Nothing is for the player to discover: the fact a screen turns on is on the
   screen, and folds hold detail, never the point. The badges read Official figure, Worked out,
   Assumption, Commentary and Game judgement; their meanings and the honesty contract are unchanged.
-- **The chrome.** The header is the name of the game and the two reference pages; the footer is
-  the utility row (one line on the figures, the Show workings switch, the way to every lever,
-  Sources and licence, what the badges mean). The dark theme, the dateline and the countdown are
-  gone. (Since §31 the header is the name alone, and the footer one row of links.) The guide is a
-  heading and one line per step.
+- **The chrome.** The header is the name of the game and the two reference pages; the footer is the
+  utility row (one line on the figures, the Show workings switch, the way to every lever, Sources
+  and licence, what the badges mean). The dark theme, the dateline and the countdown are gone.
+  (Since §31 the header is the name alone; since §32 the footer is one link.) The guide is a heading
+  and one line per step.
 - **The starting position** briefs in three figures and one line on the rules, with the Charter's
   words one fold away; says what has been promised since March and, honestly, what has cut the
   headroom (dearer borrowing and higher inflation; the three promises moved money); asks two
@@ -1328,3 +1328,29 @@ switches for advanced mode and the workings withdrawn for now.
 - **Measured** (ADR-0032): the cover reads 19 words; on a phone it is one screen, the footer 93px
   at 360px (two rows) and 49px from about 400px wide (one), and the briefing 1,549px (2.0
   screens).
+
+(Since §32 the cover carries a new Budget box and no road, and the footer is one link, to the About
+page, which names the five kinds of number and links on to the Methodology page.)
+
+## 32. An invitation, then the road, and one link (ADR-0033)
+
+The user asked for a more inviting cover: progress shown only once the game starts, and clear about
+where you are; the red Budget box as the cover’s focal point; and one understated footer link to the
+information behind the game, organised.
+
+- **The cover** is the invitation, not a step: the Budget box, "It’s your Budget now.", the premise
+  and "Build my Budget", with no step count and no road. On a phone the box stands above the words
+  with the button in view; from 720px the words take the left and the box the right.
+- **The Budget box** is inline SVG coloured by six tokens: a flat despatch box in red leather with
+  gilt tooling, a brass handle, lock and corners, tilted on a disc of Commons green with three
+  flashes. It carries no emblem, no words and no motion, and is hidden from screen readers.
+- **The road** starts on the briefing. Every screen after the cover names its step ("Step 2 of 6 ·
+  Set your priorities") above six square marks. A step done is a tick, the step you are on a filled
+  numeral, a step opened ahead an outlined numeral, and a step not yet open a dashed one; the rule
+  between them is solid behind you and dashed ahead. A step is done when it is behind you or short
+  of the furthest step reached, and the marks read the guard’s own rule.
+- **The footer** is one link, "About the game & sources", to the About page. Under a contents list
+  it sets out the game, how the numbers work (the five kinds of number and a link to the Methodology
+  page), what the game does not do, the licence and every source.
+- **Measured** (ADR-0033): at 390×664 the button ends 471px down, and at 360×640 498px down. On a
+  phone the road is 67px and the footer 49px, and the briefing is 1,500px (1.9 screens).

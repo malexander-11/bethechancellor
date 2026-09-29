@@ -246,3 +246,9 @@ The footer this phase made the utility row is now one row of three links: "Metho
 sources" and "Sources and licence". Its line on the figures, the switches and the badges' key
 went; the About page says what kind of numbers these are, and the Methodology page what each badge
 means.
+
+## Revision (2026-09-29, later): the footer, one link (ADR-0033)
+
+The footer’s three links are one, "About the game & sources". The About page it opens sets out the
+game, how the numbers work (the five kinds of number, and a link on to the Methodology page), what
+the game does not do, the licence and every source.

@@ -11,103 +11,164 @@
 /* ---------------------------------------------------------- the progress */
 
 /*
- * "Step 3 of 7 · Set your priorities" and seven numerals on a brass rule, like a document's
- * running head. A numeral behind you is a link, the one you are at is set in green
- * with the rule thickened beneath it, the ones ahead are muted (ADR-0014, ADR-0023).
+ * "Step 2 of 6 · Set your priorities" over six marks on a rule, like a document's running head,
+ * on every screen after the cover (ADR-0033). Each state has its own shape as well as its colour:
+ * a step behind you is a tick on a green wash, the step you are at a filled numeral, a step ahead
+ * you have opened an outlined numeral, one not yet open a dashed numeral; the rule is solid
+ * behind you and dashed ahead. Square marks, like the rest of the paper (ADR-0014, ADR-0023).
  */
 .progress {
   margin: 0 0 20px;
 }
 
-.progress__line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 2px 16px;
-  font-size: 0.875rem;
-}
-
 .progress__where {
   margin: 0;
   color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.4;
 }
 
 .progress__step {
   color: var(--brass-ink);
-  font-size: 0.9375rem;
   font-weight: 700;
 }
 
 .progress__name {
-  margin-left: 8px;
   color: var(--ink);
   font-weight: 600;
+}
+
+/* The dot between the count and the name is drawn, so a screen reader hears the two as one line. */
+.progress__name::before {
+  content: '·';
+  margin: 0 6px 0 2px;
+  color: var(--ink-2);
+  font-weight: 400;
 }
 
 .progress__stops {
   display: flex;
-  margin: 4px 0 0;
+  margin: 2px 0 0;
   padding: 0;
-  border-top: 1px solid var(--brass);
   list-style: none;
 }
 
 .progress__stop {
-  flex: 0 0 auto;
+  position: relative;
+  flex: 1 1 0;
   min-width: 0;
 }
 
-/* Each numeral sits in a 44px hit area on the rule, so a step behind you is easy to go back to. */
+/* The rule from the mark before to this one: dashed on the road ahead, solid where you have been. */
+.progress__stop + .progress__stop::before {
+  content: '';
+  position: absolute;
+  top: 21px;
+  right: calc(50% + 18px);
+  left: calc(-50% + 18px);
+  border-top: 2px dashed var(--axis);
+}
+
+.progress__stop + .progress__stop--done::before,
+.progress__stop + .progress__stop--current::before {
+  border-top-style: solid;
+  border-top-color: var(--accent);
+}
+
+/* Each mark sits in a hit area at least 44px square, so a step behind you is easy to go back to. */
 .progress__stop > a,
 .progress__stop > span {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   min-width: 44px;
   min-height: 44px;
-  margin-top: -1px;
-  padding-top: 6px;
-  border-top: 2px solid transparent;
-  color: var(--muted);
+  padding-top: 8px;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.progress__num {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--muted);
+  background: var(--page);
+  color: var(--ink);
   font-family: var(--font-display);
   font-size: 0.9375rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  text-decoration: none;
+  line-height: 1;
 }
 
-.progress__stop--open > a {
-  color: var(--ink);
+.progress__tick {
+  width: 16px;
+  height: 16px;
 }
 
-.progress__stop--open > a:hover {
+/* Behind you: a tick, on the green wash. */
+.progress__stop--done .progress__num {
+  border-color: var(--accent);
+  background: var(--accent-wash);
   color: var(--accent);
 }
 
+/* Here: the numeral, filled, a little larger than the rest. */
 .progress__stop--current > span {
-  border-top-color: var(--accent);
-  color: var(--accent);
+  padding-top: 6px;
+}
+
+.progress__stop--current .progress__num {
+  width: 32px;
+  height: 32px;
+  margin-bottom: -2px;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
-/* The steps' short names (Phase 25): on a wide screen there is room, so the numerals say where
-   they go; on a phone the numerals stand alone and the heading names the step you are on. */
+/* Ahead, not yet open: dashed and muted, and inert. */
+.progress__stop--ahead .progress__num {
+  border-style: dashed;
+  color: var(--muted);
+}
+
+.progress__stop--open > a:hover .progress__num,
+.progress__stop--done > a:hover .progress__num {
+  border-color: var(--accent-hover);
+  border-width: 2px;
+}
+
+/* The steps' short names (Phase 25): on a wide screen there is room, so each mark says where it
+   goes; on a phone the marks stand alone and the line above them names the step you are on. */
 .progress__label {
   display: none;
 }
 
-@media (min-width: 900px) {
-  .progress__stop > a,
-  .progress__stop > span {
-    gap: 6px;
-    padding-right: 16px;
+@media (min-width: 720px) {
+  .progress__label {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .progress__label {
-    display: inline;
-    font-family: var(--font);
-    font-size: 0.875rem;
+  .progress__stop--current .progress__label {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .progress__stop--ahead .progress__label {
+    color: var(--muted);
   }
 }
 
@@ -290,31 +351,71 @@
 
 /* ------------------------------------------------------------ the opening */
 
+/*
+ * The invitation (ADR-0033): the red Budget box, the heading, the premise and the button as one
+ * composition. On a phone the box stands above the words, all on one centre line, drawn at a size
+ * that leaves the button in view; on a wide screen the words take the left and the box the right.
+ */
 .opening {
-  padding: 24px 0 8px;
+  display: grid;
+  grid-template-areas:
+    'art'
+    'words';
+  justify-items: center;
+  gap: 8px;
+  padding: 0 0 8px;
+  text-align: center;
 }
 
-@media (min-width: 720px) {
-  .opening {
-    padding: 40px 0 16px;
-  }
+.opening__art {
+  grid-area: art;
+  width: min(100%, 250px);
+}
+
+.opening__words {
+  grid-area: words;
 }
 
 .opening__title {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
   line-height: 1.02;
 }
 
 .opening__lede {
-  max-width: 34em;
-  margin: 0 0 20px;
+  max-width: 24em;
+  margin: 0 auto 20px;
   font-size: 1.125rem;
   line-height: 1.5;
 }
 
 .opening__actions {
   margin: 0 0 12px;
+}
+
+@media (min-width: 720px) {
+  .opening {
+    grid-template-areas: 'words art';
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    justify-items: stretch;
+    gap: 24px 40px;
+    padding: 24px 0 16px;
+    text-align: left;
+  }
+
+  .opening__art {
+    justify-self: center;
+    width: min(100%, 440px);
+  }
+
+  .opening__title {
+    margin-bottom: 16px;
+  }
+
+  .opening__lede {
+    margin: 0 0 24px;
+  }
 }
 
 .motif {

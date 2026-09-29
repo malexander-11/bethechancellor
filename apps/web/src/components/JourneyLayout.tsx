@@ -35,7 +35,10 @@ function LinkNote() {
   );
 }
 
-/** The road and the head of the screen, shared by every page of the journey. */
+/**
+ * The road and the head of the screen, shared by every page of the journey. The cover is the
+ * invitation to play, not a step, so the road starts on the screen its button opens (ADR-0033).
+ */
 export function JourneyLayout({
   step,
   part,
@@ -58,7 +61,7 @@ export function JourneyLayout({
 }) {
   return (
     <div className="journey">
-      <Progress step={step} part={part} named={!intro || part !== undefined} />
+      {step === 'start' ? null : <Progress step={step} part={part} />}
       {intro ? (
         <PageIntro step={step} part={part} title={title} lead={lead} tabTitle={tabTitle} />
       ) : null}

@@ -62,10 +62,26 @@ describe('the head of every screen', () => {
     expect(document.getElementById('badge-key')).toBeNull();
     expect(screen.queryByText('What the badges mean')).toBeNull();
     view.unmount();
-    // The five badges, in plain words, one link away in the footer.
+    // The five badges, in plain words, on the page the footer links to (ADR-0033), which links on
+    // to the Methodology page's fuller account.
+    const about = at('/about');
+    const kinds = [...document.querySelectorAll('.kinds li')];
+    expect(kinds.map((li) => li.querySelector('.badge')?.textContent)).toEqual([
+      'Official figure',
+      'Worked out',
+      'Assumption',
+      'Commentary',
+      'Game judgement',
+    ]);
+    expect(kinds[0]).toHaveTextContent(/A figure HMRC, HM Treasury or the OBR published/);
+    expect(screen.getByRole('link', { name: 'How the numbers work, in full' })).toHaveAttribute(
+      'href',
+      '/methodology',
+    );
+    about.unmount();
     at('/methodology');
-    const kinds = screen.getByRole('heading', { name: 'Five kinds of number' });
-    const table = kinds.nextElementSibling as HTMLElement;
+    const heading = screen.getByRole('heading', { name: 'Five kinds of number' });
+    const table = heading.nextElementSibling as HTMLElement;
     for (const label of [
       'Official figure',
       'Worked out',
@@ -75,9 +91,14 @@ describe('the head of every screen', () => {
     ]) {
       expect(within(table).getByText(label), label).toBeInTheDocument();
     }
+    // And the way back to the page that leads to it.
+    expect(screen.getByRole('link', { name: 'Back to About the game & sources' })).toHaveAttribute(
+      'href',
+      '/about',
+    );
   });
 
-  it('follows step 4’s screens, and the opening has a head of its own', () => {
+  it('follows step 4’s screens, and the cover is an invitation with no road', () => {
     const first = at(`/finetune/spending?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
     expect(screen.getByText('Step 4 of 6')).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
@@ -86,22 +107,27 @@ describe('the head of every screen', () => {
     ).toBeInTheDocument();
     first.unmount();
     at(`/?${BASE}`);
-    expect(screen.getByText('Step 1 of 6')).toBeInTheDocument();
+    // The invitation to play, not a step (ADR-0033): no count, no step's name and no road.
+    expect(screen.queryByRole('navigation', { name: 'Budget steps' })).toBeNull();
+    expect(screen.queryByText(/Step \d of 6/)).toBeNull();
     expect(screen.getByRole('heading', { level: 1, name: 'It’s your Budget now.' })).toBeVisible();
     expect(screen.getByRole('link', { name: 'Build my Budget' })).toBeInTheDocument();
-    // The premise and the button, nothing else (ADR-0032): no line above the heading, no bullets
-    // and no picture.
+    // The Budget box, the premise and the button, nothing else: no line above the heading and no
+    // bullets (ADR-0032), and the box a drawing with no words, hidden from a screen reader.
     const opening = document.querySelector('.opening') as HTMLElement;
     expect(opening.textContent).toBe(
       'It’s your Budget now.Choose what matters, decide who pays, and see what the country makes of it.Build my Budget',
     );
-    expect(opening.querySelector('svg')).toBeNull();
+    const art = opening.querySelectorAll('svg');
+    expect(art).toHaveLength(1);
+    expect(art[0]).toHaveAttribute('aria-hidden', 'true');
+    expect(art[0]?.querySelector('text, title')).toBeNull();
     expect(screen.queryByText(/minutes/)).toBeNull();
     expect(screen.queryByText('No right answer')).toBeNull();
     expect(document.querySelector('.intro')).toBeNull();
   });
 
-  it('keeps the header to the name, and the footer to one row of links', () => {
+  it('keeps the header to the name, and the footer to one quiet link', () => {
     at(`/pm?${BASE}`);
     // The header is the name, the way home, and nothing else (ADR-0032).
     const header = document.querySelector('.site-header') as HTMLElement;
@@ -111,16 +137,14 @@ describe('the head of every screen', () => {
         .map((a) => a.textContent),
     ).toEqual(['What’s your Budget?']);
     expect(within(header).queryByRole('navigation')).toBeNull();
-    // The footer: the two reference pages and the sources and licence, with no switch, no key
-    // and no line of its own.
+    // The footer: one link, to the page about the game, its numbers, sources and licence
+    // (ADR-0033), with no switch, no key and no line of its own.
     const footer = document.querySelector('footer.site-footer') as HTMLElement;
     const links = within(footer).getAllByRole('link');
     expect(links.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([
-      ['Methodology', '/methodology'],
-      ['About & sources', '/about'],
-      ['Sources and licence', '/about#licences'],
+      ['About the game & sources', '/about'],
     ]);
-    expect(footer.textContent).toBe('MethodologyAbout & sourcesSources and licence');
+    expect(footer.textContent).toBe('About the game & sources');
     expect(screen.queryByRole('switch')).toBeNull();
   });
 

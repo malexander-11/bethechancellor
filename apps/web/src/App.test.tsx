@@ -26,8 +26,14 @@ describe('journey routes', () => {
       </MemoryRouter>,
     );
     expect(screen.getByRole('heading', { level: 1, name: 'It’s your Budget now.' })).toBeVisible();
-    // No date above the heading, no playtime and no picture (ADR-0032).
+    // No date above the heading and no playtime (ADR-0032); the red Budget box, drawn with no
+    // words, and no road: the steps start on the screen the button opens (ADR-0033).
     expect(screen.queryByText(/minutes|28 October/)).toBeNull();
+    expect(document.querySelector('.opening svg.motif--box')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
+    expect(screen.queryByRole('navigation', { name: 'Budget steps' })).toBeNull();
     const go = screen.getByRole('link', { name: 'Build my Budget' });
     expect(go).toHaveAttribute('href', expect.stringMatching(/^\/outlook/));
     // No tutorial, no adviser essays: the advisers wait for the screens where they matter.

@@ -14,6 +14,17 @@ function at(path: string) {
   );
 }
 
+/** Each stop's state, from its class: done, current, open or ahead. */
+const kinds = (bar: HTMLElement) =>
+  [...bar.querySelectorAll('.progress__stop')].map(
+    (li) => /progress__stop--(\w+)/.exec(li.className)?.[1],
+  );
+/** What each stop's mark shows: a drawn tick, or its numeral. */
+const marks = (bar: HTMLElement) =>
+  [...bar.querySelectorAll('.progress__num')].map((m) =>
+    m.querySelector('svg') ? 'tick' : m.textContent,
+  );
+
 describe('the progress bar', () => {
   it('says which step this is, links the steps behind you, and leaves the road ahead inert', () => {
     at(`/finetune/spending?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
@@ -36,6 +47,29 @@ describe('the progress bar', () => {
     expect(within(bar).getByText(/Deliver the Budget \(not yet open\)/)).toBeInTheDocument();
     expect(within(bar).queryByRole('link', { name: /Feedback/ })).toBeNull();
     expect(within(bar).getAllByRole('link')).toHaveLength(3);
+    // Each state has its own mark, not just its own colour (ADR-0033): a tick behind you, the
+    // numeral here and ahead, and a screen reader hears which steps are done.
+    expect(kinds(bar)).toEqual(['done', 'done', 'done', 'current', 'ahead', 'ahead']);
+    expect(marks(bar)).toEqual(['tick', 'tick', 'tick', '4', '5', '6']);
+    expect(within(bar).getByRole('link', { name: '1. Briefing (done)' })).toBeInTheDocument();
+  });
+
+  it('tells the steps behind you from a step you opened ahead and one not yet open', () => {
+    // Back at the priorities in a game that had reached fine-tuning: the flagship screens were
+    // finished on the way, fine-tuning was opened and not finished, and the review is not open.
+    at(`/pm?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
+    const bar = screen.getByRole('navigation', { name: 'Budget steps' });
+    expect(within(bar).getByText('Step 2 of 6')).toBeInTheDocument();
+    expect(bar.querySelector('.progress__name')?.textContent).toBe('Set your priorities');
+    expect(kinds(bar)).toEqual(['done', 'current', 'done', 'open', 'ahead', 'ahead']);
+    expect(marks(bar)).toEqual(['tick', '2', 'tick', '4', '5', '6']);
+    expect(
+      within(bar).getByRole('link', { name: '3. Flagship policies (done)' }),
+    ).toBeInTheDocument();
+    expect(
+      within(bar).getByRole('link', { name: '4. Fine-tune tax and spend' }),
+    ).toBeInTheDocument();
+    expect(within(bar).queryByRole('link', { name: /Deliver the Budget/ })).toBeNull();
   });
 
   it('names the six steps the player was promised, in order', () => {
@@ -43,7 +77,9 @@ describe('the progress bar', () => {
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     const names = within(bar)
       .getAllByRole('listitem')
-      .map((li) => li.querySelector('.sr-only')?.textContent?.replace(/ \(not yet open\)$/, ''));
+      .map((li) =>
+        li.querySelector('.sr-only')?.textContent?.replace(/ \((done|not yet open)\)$/, ''),
+      );
     expect(names).toEqual([
       '1. Briefing',
       '2. Set your priorities',
@@ -66,12 +102,21 @@ describe('the progress bar', () => {
     for (const s of shorts) expect(s).toHaveAttribute('aria-hidden', 'true');
   });
 
-  it('offers nothing ahead of you without a game, even where a shared link could go', () => {
-    at(`/?${BASE}`);
+  it('leaves the cover to the invitation: the road starts on the briefing', () => {
+    // The cover is the invitation to play, so it shows no step and no road (ADR-0033).
+    const cover = at(`/?${BASE}`);
+    expect(screen.queryByRole('navigation', { name: 'Budget steps' })).toBeNull();
+    expect(screen.queryByText(/Step \d of 6/)).toBeNull();
+    cover.unmount();
+    // Its button opens the briefing, where the road starts, and with no game yet it offers
+    // nothing ahead of you, even where a shared link could go.
+    at(`/outlook?${BASE}`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
+    expect(within(bar).getByText('Step 1 of 6')).toBeInTheDocument();
+    expect(bar.querySelector('.progress__name')?.textContent).toBe('Briefing');
     expect(within(bar).queryAllByRole('link')).toHaveLength(0);
-    // The cover is the briefing's first screen.
     expect(bar.querySelector('[aria-current="step"]')?.textContent).toMatch(/Briefing/);
+    expect(kinds(bar)).toEqual(['current', 'ahead', 'ahead', 'ahead', 'ahead', 'ahead']);
   });
 
   it('carries the budget with every link it offers', () => {

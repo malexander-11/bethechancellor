@@ -1,18 +1,16 @@
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 /**
- * The foot of every screen (ADR-0032): one flat row of links, to the two reference pages and to
- * the sources and licence, and nothing else. The switches for the workings and for advanced mode
- * are withdrawn for now; the badges' key went with them, since the Methodology page says what each
- * badge means; and the line on what kind of numbers these are is the About page's to say.
+ * The foot of every screen (ADR-0033): one quiet link, to the page about the game, how its numbers
+ * work, its sources and its licence. The three links it carried before (ADR-0032) competed with
+ * the one button each screen is built around; the About page now sets out what they led to, and
+ * links on to the full methodology.
  */
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <nav className="site-footer__links" aria-label="About the game">
-        <NavLink to="/methodology">Methodology</NavLink>
-        <NavLink to="/about">About &amp; sources</NavLink>
-        <Link to="/about#licences">Sources and licence</Link>
+        <NavLink to="/about">About the game &amp; sources</NavLink>
       </nav>
     </footer>
   );

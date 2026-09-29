@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { LabelBadge } from '../components/LabelBadge';
 import { ESTIMATE, vintage } from '../data';
 import { usePageTitle } from '../journey/title';
@@ -13,6 +14,10 @@ export function MethodologyPage() {
   const marginalPct = (base + setting).toFixed(2);
   return (
     <article className="prose">
+      {/* The full methodology sits behind the About page, the footer's one link (ADR-0033). */}
+      <p className="crumb">
+        <Link to="/about">Back to About the game &amp; sources</Link>
+      </p>
       <h1>How the numbers work</h1>
       <p className="lede">
         The full methodology, with formulas, lives in the repository as{' '}
@@ -136,16 +141,17 @@ export function MethodologyPage() {
         estimate, and the rules are the line to meet. The road runs one way: a stage opens once the
         one before it has been left, going back is always allowed and keeps every choice, because
         the Budget lives in the link, and a link that jumps ahead is sent back to where the game has
-        got. The progress line at the top of every page and the guard on every page read the same
-        rule. Every flagship policy is a bundle of the game&rsquo;s own levers that no other option
-        moves, priced by the engine against the Budget as it stands with the headroom it would
-        leave, two that count the same money never both chosen. On the fine-tuning screens every
-        lever is a policy under a title that says what it does, a tick or a choice of small, medium
-        and large sizes (putting up VAT is 21%, 22% or 25%), with one adviser&rsquo;s line and,
-        before it is chosen, what its smallest size would do and the headroom that would leave. A
-        lever that moves both ways is two policies, and choosing one clears the other; a lever a
-        chosen flagship already sets shows once, as a line with a way back to that flagship. There
-        is no slider anywhere and no desk: every lever the desk once held is a policy on these two
+        got. The progress line at the top of every screen after the cover, which marks each step
+        done, current, opened or not yet open, and the guard on every page read the same rule. Every
+        flagship policy is a bundle of the game&rsquo;s own levers that no other option moves,
+        priced by the engine against the Budget as it stands with the headroom it would leave, two
+        that count the same money never both chosen. On the fine-tuning screens every lever is a
+        policy under a title that says what it does, a tick or a choice of small, medium and large
+        sizes (putting up VAT is 21%, 22% or 25%), with one adviser&rsquo;s line and, before it is
+        chosen, what its smallest size would do and the headroom that would leave. A lever that
+        moves both ways is two policies, and choosing one clears the other; a lever a chosen
+        flagship already sets shows once, as a line with a way back to that flagship. There is no
+        slider anywhere and no desk: every lever the desk once held is a policy on these two
         screens, and with no game only the cover and the briefing open. Every screen opens with one
         heading and one instruction, and for now the sources are listed on the About page rather
         than beside each figure; the guide is chrome, carries no badge and quotes no figure that is
@@ -275,16 +281,16 @@ export function MethodologyPage() {
 
       <h2>Why it looks plain</h2>
       <p>
-        One page colour, one accent, one type family and nothing smaller than 14px: the page is
-        built to be read the way a news article is, not learnt like a game. There are no images and
-        no downloaded fonts, so nothing here costs you a network request or hides behind a picture.
-        Badges never become status marks: those five words are how you tell a certified costing from
-        our own arithmetic, and they stay plain. A rule&rsquo;s verdict is an icon beside a word,
-        which the engine computes; nowhere does colour carry a judgement on its own. Moving to the
-        next part of a step never removes what you have already read, so an adviser&rsquo;s
-        citations stay on the page behind you. The guide&rsquo;s words are the only things on screen
-        we did not calculate, and they carry no badge, because chrome must not borrow the vocabulary
-        of a costing.
+        One page colour, one accent, two serif typefaces and nothing smaller than 14px: the page is
+        built to be read the way a news article is, not learnt like a game. The one picture, the
+        Budget box on the cover, is drawn in the page, and the two typefaces are served with it, so
+        nothing waits on another site and nothing hides behind a picture. Badges never become status
+        marks: those five words are how you tell a certified costing from our own arithmetic, and
+        they stay plain. A rule&rsquo;s verdict is an icon beside a word, which the engine computes;
+        nowhere does colour carry a judgement on its own. Moving to the next part of a step never
+        removes what you have already read, so an adviser&rsquo;s citations stay on the page behind
+        you. The guide&rsquo;s words are the only things on screen we did not calculate, and they
+        carry no badge, because chrome must not borrow the vocabulary of a costing.
       </p>
 
       <h2>What is not modelled</h2>

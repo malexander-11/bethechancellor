@@ -34,17 +34,19 @@ through: every screen is a decision with a primary button and a way back, and th
 the link, so going back keeps every choice. The identity is Westminster's: Commons green, warm
 paper, charcoal, restrained brass, Budget red for the one button that delivers, and the page is set
 like an official paper: a serif body under editorial headings in Fraunces, hairline rules rather
-than boxes, small-capital labels; the cover is the premise and one button, the header the name alone
-and the footer one row of links (ADR-0032). The words are plain (ADR-0024): no sentence a player
-meets runs past twenty words, and a readability test holds every set of them at a reading age of
-about twelve. Every number still comes from an official source or a stated calculation on one,
-badged for what it is (Official figure, Worked out, Assumption, Commentary, Game judgement). For now
-the game's screens show no sources or breakdowns: the "Show workings" switch that showed them is
-withdrawn, and the About page lists every source (ADR-0032). The briefing reads as plain copy, with
-no badges (ADR-0031). A first playthrough's required reading and decisions come to about eight and a
-half minutes in basic mode and ten and a half in advanced (an estimate from the rendered screens,
-not user testing; ADR-0028). Every screen names itself, can be reached by keyboard and screen
-reader, holds 4.5:1 contrast, keeps every control at 44px and says met or missed in words.
+than boxes, small-capital labels; the cover is an invitation, the red Budget box beside the premise
+and one button, with the steps shown from the screen that button opens (ADR-0033); the header is the
+name alone and the footer one link, to the page about the game and its sources (ADR-0032, ADR-0033).
+The words are plain (ADR-0024): no sentence a player meets runs past twenty words, and a readability
+test holds every set of them at a reading age of about twelve. Every number still comes from an
+official source or a stated calculation on one, badged for what it is (Official figure, Worked out,
+Assumption, Commentary, Game judgement). For now the game's screens show no sources or breakdowns:
+the "Show workings" switch that showed them is withdrawn, and the About page lists every source
+(ADR-0032). The briefing reads as plain copy, with no badges (ADR-0031). A first playthrough's
+required reading and decisions come to about eight and a half minutes in basic mode and ten and a
+half in advanced (an estimate from the rendered screens, not user testing; ADR-0028). Every screen
+names itself, can be reached by keyboard and screen reader, holds 4.5:1 contrast, keeps every
+control at 44px and says met or missed in words.
 
 Six steps. **Briefing**: one sentence and the button; then your briefing in three parts, in the
 user's own words and as plain copy (ADR-0030, ADR-0031). Your headroom: you start with £6.8bn of
@@ -140,10 +142,11 @@ the rebase to the 28 October 2026 forecast.
   inputs by a test. Where the base is contested, the card says so before it shows the number; where
   no published figure exists at all, there is no lever.
 - **The page is plain, and the plainness is honest.** One accent, two self-hosted serifs under the
-  OFL, nothing under 14px, every text colour checked for contrast; there are no images.
-  The badges never become decoration, a verdict is always a word beside an icon and never a colour
-  alone, the provenance drawer never loses a table, and the guide's words, the only text on screen the
-  engine did not compute, carry no badge.
+  OFL, nothing under 14px, every text colour checked for contrast; the one picture, the Budget box
+  on the cover, is drawn in the page and says nothing the heading beside it does not. The badges
+  never become decoration, a verdict is always a word beside an icon and never a colour alone, the
+  provenance drawer never loses a table, and the guide's words, the only text on screen the engine
+  did not compute, carry no badge.
 - **Rebasing is a data refresh.** The baseline forecast is a versioned "vintage". When the OBR
   publishes a new forecast (next: Budget, 28 October 2026) the data is regenerated and the app
   re-reads it.

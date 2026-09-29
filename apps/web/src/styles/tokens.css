@@ -43,6 +43,14 @@
   --red-ink: #ffffff;
   --red-wash: rgba(163, 32, 42, 0.1);
 
+  /* The Budget box on the cover (ADR-0033): an object's colours, never a word's */
+  --box: #a3202a;
+  --box-top: #bb3740;
+  --box-side: #7d1820;
+  --box-edge: #5a0f15;
+  --gilt: #c9a85a;
+  --gilt-light: #e8d39a;
+
   /* Status, always beside an icon or a word */
   --good: #166a30;
   --warning: #7a4f00;

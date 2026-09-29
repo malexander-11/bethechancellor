@@ -41,7 +41,7 @@ export const STOPS: ReadonlyArray<{
   },
 ];
 
-/** Which step a screen belongs to. The cover is the briefing's. */
+/** Which step a screen belongs to. The cover shows no road, but it opens the briefing's step. */
 export function stopFor(step: JourneyStep): Stop {
   switch (step) {
     case 'start':
@@ -69,54 +69,72 @@ export interface SubStep {
   label: string;
 }
 
+/** A tick, drawn: the mark of a step behind you, in place of its numeral. */
+function Tick() {
+  return (
+    <svg className="progress__tick" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path d="M3 8.5 6.5 12 13 4.5" fill="none" stroke="currentColor" strokeWidth="2.25" />
+    </svg>
+  );
+}
+
+type StopKind = 'done' | 'current' | 'open' | 'ahead';
+
+/** What a screen reader hears after a step's name; the step you are at says so by aria-current. */
+const HEARD: Record<StopKind, string> = {
+  done: ' (done)',
+  current: '',
+  open: '',
+  ahead: ' (not yet open)',
+};
+
 /**
- * The road, as a running head: "Step 2 of 6 · Set your priorities" and six numerals on a
- * rule, one per step. A step you have reached is a link, so you can go back; the one
- * you are at is marked; the ones ahead are inert. It reads the same `enterable` rule as the guard
- * on every page, so it never offers a link that would only bounce (ADR-0014). The numerals carry
- * their names for a screen reader; sighted readers get the name of the step they are on.
+ * The road, as a running head on every screen after the cover (ADR-0033): "Step 2 of 6 · Set your
+ * priorities", then six marks on a rule, one per step. The cover is the invitation to play, so it
+ * carries none. A step behind you is done: a tick, and a link back to it. The step you are at is a
+ * filled numeral, named on the line above it. A step ahead you have already opened is an outlined
+ * numeral and a link; one not yet open is a dashed numeral, inert. The tick, the fill and the
+ * dashes say which is which, and so does the rule, solid behind you and dashed ahead, so nothing
+ * rests on colour; a screen reader hears each step's full name and whether it is done. It reads the
+ * same `enterable` rule as the guard on every page, so it never offers a link that would only
+ * bounce (ADR-0014).
  */
-export function Progress({
-  step,
-  part,
-  named = false,
-}: {
-  step: JourneyStep;
-  part?: SubStep;
-  /** Name the step on the line too: for a screen whose own heading is not the step's name. */
-  named?: boolean;
-}) {
+export function Progress({ step, part }: { step: JourneyStep; part?: SubStep }) {
   const { state } = useBudget();
   const current = stopFor(step);
   const at = STOPS.findIndex((s) => s.id === current);
   const here = STOPS[at];
+  // The furthest step the game has opened: the steps short of it were finished on the way there.
+  const reached = state.game?.reached ?? 0;
   return (
     <nav className="progress" aria-label="Budget steps">
-      <div className="progress__line">
-        <p className="progress__where">
-          <span className="progress__step">
-            Step {at + 1} of {STOPS.length}
-          </span>
-          {named ? (
-            <span className="progress__name">
-              {here?.label}
-              {part ? ` · ${part.index} of ${part.total}` : ''}
-            </span>
-          ) : null}
-        </p>
-      </div>
+      <p className="progress__where">
+        <span className="progress__step">
+          Step {at + 1} of {STOPS.length}
+        </span>{' '}
+        <span className="progress__name">
+          {here?.label}
+          {part ? ` · ${part.index} of ${part.total}` : ''}
+        </span>
+      </p>
       <ol className="progress__stops">
         {STOPS.map((s, i) => {
-          const isCurrent = s.id === current;
+          const isCurrent = i === at;
           const open =
             !isCurrent && enterable(s.step, state.game) && (state.game !== undefined || i < at);
-          const kind = isCurrent ? 'current' : open ? 'open' : 'ahead';
-          // The numeral and, on a wide screen, the step's short name; a screen reader hears the
-          // full name once, below.
-          const num = (
+          const kind: StopKind = isCurrent
+            ? 'current'
+            : open && (i < at || i < reached)
+              ? 'done'
+              : open
+                ? 'open'
+                : 'ahead';
+          // The mark and, on a wide screen, the step's short name; a screen reader hears the full
+          // name once, below.
+          const mark = (
             <>
               <span className="progress__num" aria-hidden="true">
-                {i + 1}
+                {kind === 'done' ? <Tick /> : i + 1}
               </span>
               <span className="progress__label" aria-hidden="true">
                 {s.short}
@@ -126,24 +144,24 @@ export function Progress({
           const name = (
             <span className="sr-only">
               {i + 1}. {s.label}
-              {kind === 'ahead' ? ' (not yet open)' : ''}
+              {HEARD[kind]}
             </span>
           );
           return (
             <li key={s.id} className={`progress__stop progress__stop--${kind}`}>
               {isCurrent ? (
                 <span aria-current="step">
-                  {num}
+                  {mark}
                   {name}
                 </span>
               ) : open ? (
                 <StepLink to={s.to}>
-                  {num}
+                  {mark}
                   {name}
                 </StepLink>
               ) : (
                 <span className="progress__ahead">
-                  {num}
+                  {mark}
                   {name}
                 </span>
               )}

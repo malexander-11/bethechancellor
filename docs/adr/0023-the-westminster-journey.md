@@ -277,3 +277,12 @@ The cover lost the line above its heading (the Budget's date), its two bullets (
 the six steps) and the Budget box: it is the premise and the button. The header is the name alone;
 its two links moved to the footer, which is one row of links. The Budget box's drawing and its
 colours went; the benches and the papers stay.
+
+## Revision (2026-09-29, later): an invitation, then the road, and one link (ADR-0033)
+
+The cover is the invitation: the red Budget box, drawn afresh as a flat despatch box with gilt
+tooling on a disc of Commons green, beside the heading, the premise and the button, with no running
+head. The running head starts on the briefing, names its step on every screen and marks each step
+done, current, opened or not yet open by shape as well as colour. The footer is one link, "About the
+game & sources", to the page that sets out the game, the numbers, the limits, the licence and the
+sources.

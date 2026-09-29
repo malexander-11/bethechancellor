@@ -102,3 +102,12 @@ takes the tap: the tap reaches the card's control.
   licence" at its licence.
 - **Advanced mode stays one button away** on steps 3 and 4. A player who chose it keeps it until
   they press the button again.
+
+## Revision (2026-09-29, later): a new Budget box, no road on the cover, one link (ADR-0033)
+
+At the user’s next request the cover became an invitation to play: the running head ("Step 1 of 6 ·
+Briefing") left it, and a new drawing of the red Budget box came back as its focal point, a flat
+despatch box set beside the heading, the premise and the button rather than under them. The cover
+still says only the premise and the button. The footer’s three links became one, "About the game &
+sources"; the About page sets out what the three led to, with the licence under its own heading and
+a contents list in place of the link that landed on it.

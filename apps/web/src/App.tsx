@@ -35,9 +35,9 @@ function DeskRedirect() {
  * A screen change in a single-page app moves nothing by itself: the reader is left wherever they
  * were scrolled, and a screen reader hears nothing at all. So on every change of path the page
  * goes back to the top and focus lands on the main region, whose new title the guide has just
- * set. A link to a part of a page, such as the footer's sources and licence (ADR-0032), lands on
- * that part instead. Not on first paint: the browser has placed focus already, and taking it
- * would be rude.
+ * set. A link to a part of a page, such as a line of the About page's contents (ADR-0033), lands
+ * on that part instead, and focus with it, so the next Tab carries on from there. Not on first
+ * paint: the browser has placed focus already, and taking it would be rude.
  */
 function RouteFocus() {
   const { pathname, hash } = useLocation();
@@ -49,8 +49,13 @@ function RouteFocus() {
       target?.scrollIntoView?.();
       return;
     }
-    if (target?.scrollIntoView) target.scrollIntoView();
-    else document.documentElement.scrollTop = 0;
+    if (target) {
+      target.scrollIntoView?.();
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      return;
+    }
+    document.documentElement.scrollTop = 0;
     document.getElementById('main')?.focus({ preventScroll: true });
   }, [pathname, hash]);
   return null;
@@ -59,8 +64,8 @@ function RouteFocus() {
 /**
  * The brass plate: the name, which is the way home, and nothing else (ADR-0032). The journey
  * itself is not in the header: one road, entered at the start and walked by the button at the
- * foot of each page. The two reference pages and the sources sit in the footer, where a reader
- * looks for them once they want them, not above the story.
+ * foot of each page. The page about the game and its sources is the footer's one link (ADR-0033),
+ * where a reader looks for it once they want it, not above the story.
  */
 function Shell() {
   const { workings } = useWorkingsSwitch();

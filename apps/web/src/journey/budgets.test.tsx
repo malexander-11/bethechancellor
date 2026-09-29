@@ -51,7 +51,7 @@ type Mode = 'basic' | 'advanced';
  */
 const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] = [
   // The cover: the premise and the button, 19 words since its date, bullets and picture went
-  // (ADR-0032).
+  // (ADR-0032). The Budget box came back as a drawing with no words (ADR-0033): still 19.
   ['/', 25, GAME, 'basic'],
   // The briefing in three parts (Phase 28): 205 words in either mode, since advanced mode's
   // explanations are folds. Basic mode's short briefing was 159 words, the full one 237. Then the
