@@ -52,10 +52,16 @@ type Mode = 'basic' | 'advanced';
 const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] = [
   ['/', 40, GAME, 'basic'],
   ['/outlook', 255, GAME, 'advanced'],
+  // Basic mode's short briefing (Phase 27): 159 words, against 237.
+  ['/outlook', 175, GAME, 'basic'],
   ['/pm', 195, GAME, 'basic'],
   ['/budget/deliver', 220, WIDEST, 'advanced'],
   ['/budget/deliver/2', 220, WIDEST, 'advanced'],
   ['/budget/deliver/3', 220, WIDEST, 'advanced'],
+  // The best one or two ways a priority (Phase 27): 130, 54 and 110 words, against 205, 182, 165.
+  ['/budget/deliver', 145, WIDEST, 'basic'],
+  ['/budget/deliver/2', 145, WIDEST, 'basic'],
+  ['/budget/deliver/3', 145, WIDEST, 'basic'],
   // Measured after Phase 26's sizes (613, 778, 543 and 724 words), with a tenth to spare; then
   // council homes took Investment's third place on show (spending 580 and 761), and the links to
   // the desk went with it (tax 611 and 776, spending 578 and 759; ADR-0027).
@@ -132,8 +138,10 @@ describe('the word budgets', () => {
     // line on scale and the welfare priority its tag (178); step 4 its one adviser's line above the
     // cards (tax 605 and 759, spending 588 and 753); the review the Prime Minister's line and one
     // reaction read out with no rating (213). Then basic and advanced (Phase 27): in advanced mode
-    // step 4 gains its one line offering the shortlist back (tax 615 and 780, spending 582 and
-    // 763); in basic mode it shows the shortlist (tax 343 and 492, spending 424 and 589).
+    // the trimmed screens gain one line offering the shortlist back (the briefing 237, the
+    // flagship screens 205, 182 and 165, tax 615 and 780, spending 582 and 763); in basic mode
+    // they are shorter (the briefing 159, the flagship screens 130, 54 and 110, tax 343 and 492,
+    // spending 424 and 589).
     for (const [path, limit, game, mode] of ROAD) {
       inMode(mode);
       const view = at(`${path}?${BASE}&${game}`);

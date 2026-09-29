@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
@@ -182,5 +182,43 @@ describe('the briefing: one estimate to plan on (Phase 24)', () => {
       expect(search().get('g')).toBe('st.3_pr.defence');
       expect(search().get('L')).toBe('moj.10');
     });
+  });
+});
+
+describe('the short briefing: basic mode (Phase 27, ADR-0028)', () => {
+  // A newcomer's game: the shared setup's advanced mode is cleared, as a fresh browser has it.
+  beforeEach(() => window.localStorage.removeItem('btc.mode.v1'));
+
+  it('keeps the headroom, the rules in one line and the desk, and leaves the explanations out', () => {
+    at(`/outlook?${BASE}`);
+    expect(document.querySelector('main')?.getAttribute('data-mode')).toBe('basic');
+    const facts = document.querySelector('.brief__facts') as HTMLElement;
+    expect(within(facts).getByText('£6.8bn')).toBeInTheDocument();
+    expect(screen.getByText(/Your advisers call headroom under £10bn thin/)).toBeInTheDocument();
+    expect(screen.getByText(/pay for day-to-day spending with tax by 2029-30/)).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Already on your desk' })).toBeInTheDocument();
+    expect(screen.queryByText('About the fiscal rules')).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Since March' })).toBeNull();
+    expect(screen.queryByText('What is headroom?')).toBeNull();
+    // With the workings on, the table the estimate is made from, as in advanced mode.
+    expect(screen.getByText('How the estimate is made')).toBeInTheDocument();
+    // One primary, still: the way on to the priorities.
+    expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
+  });
+
+  it('reads the full briefing with one button, which keeps the focus', () => {
+    at(`/outlook?${BASE}`);
+    const button = screen.getByRole('button', { name: 'Read the full briefing' });
+    button.focus();
+    fireEvent.click(button);
+    expect(screen.getByText('About the fiscal rules')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Since March' })).toBeInTheDocument();
+    expect(screen.getByText('What is headroom?')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Show the short briefing' })).toBe(button);
+    expect(document.activeElement).toBe(button);
+    const line = document.querySelector('.mode-line') as HTMLElement;
+    expect(within(line).getByRole('status')).toHaveTextContent('The full briefing is on show.');
+    // A briefing is explanations, not ideas: no shortlist and no badge on this line.
+    expect(within(line).queryByText('Game judgement')).toBeNull();
   });
 });

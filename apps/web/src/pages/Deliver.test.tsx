@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
@@ -94,6 +94,18 @@ describe('build your Budget: the ways to deliver', () => {
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/budget\/deliver\?/),
+    );
+  });
+
+  it('says there is nothing to deliver when no priority is ranked, and leads back to the PM', () => {
+    at(`/budget/deliver?${BASE}&g=st.2&M=rate.0.75_rpi.0.5`);
+    expect(h1('Flagship policies')).toBeInTheDocument();
+    expect(
+      screen.getByText('Nothing is ranked yet, so there is nothing to deliver.'),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to the Prime Minister' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/pm\?/),
     );
   });
 
@@ -342,5 +354,52 @@ describe('build your Budget: the ways to deliver', () => {
     await waitFor(() =>
       expect(new URLSearchParams(window.location.search).get('g')).toMatch(/^st\.3/),
     );
+  });
+});
+
+/** The ways on show, by option id, in order. */
+const shownWays = () =>
+  [...document.querySelectorAll('[data-option]')].map((e) => e.getAttribute('data-option'));
+
+describe('flagship policies in basic mode: the best ways first (Phase 27, ADR-0028)', () => {
+  // A newcomer's game: the shared setup's advanced mode is cleared, as a fresh browser has it.
+  beforeEach(() => window.localStorage.removeItem('btc.mode.v1'));
+
+  it('shows defence’s pick and the plan’s gap on the desk, then every way, keeping the focus', () => {
+    at(`/budget/deliver/2?${BASE}&${GAME}`);
+    // The uplift is the pick; the gap shows because the briefing puts it on the desk.
+    expect(shownWays()).toEqual(['dip-gap', 'defence-uplift']);
+    const line = document.querySelector('.mode-line') as HTMLElement;
+    expect(within(line).getByText('Game judgement')).toBeInTheDocument();
+    const button = screen.getByRole('button', { name: 'See every idea (all 3 ways)' });
+    button.focus();
+    fireEvent.click(button);
+    expect(shownWays()).toEqual(['dip-gap', 'three-per-cent-now', 'defence-uplift']);
+    expect(screen.getByRole('button', { name: 'Show only the best ideas' })).toBe(button);
+    expect(document.activeElement).toBe(button);
+    // The bar counts every way in either mode.
+    expect(within(bar()).getByText('0 of 2 priorities delivered')).toBeInTheDocument();
+  });
+
+  it('has no line where nothing is hidden: safer streets offers two ways, both picked', () => {
+    at(`/budget/deliver?${BASE}&${GAME}`);
+    expect(shownWays()).toEqual(['prisons', 'borders']);
+    expect(document.querySelector('.mode-line')).toBeNull();
+  });
+
+  it('keeps a way chosen before the screen opened on show, beside the one it blocks', () => {
+    at(`/budget/deliver/2?${BASE}&${GAME}&L=def3.1`);
+    expect(shownWays()).toEqual(['dip-gap', 'three-per-cent-now', 'defence-uplift']);
+    expect(box(/^Defence at 3% of GDP now/)).toBeChecked();
+    expect(box(/^Fill the funding gap in the defence investment plan/)).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
+  });
+
+  it('offers one way to bring the welfare bill down: going ahead with the PIP cuts', () => {
+    at(`/budget/deliver?${BASE}&g=st.2_pr.welfare-bill&M=rate.0.75_rpi.0.5`);
+    expect(shownWays()).toEqual(['pip-changes']);
+    expect(screen.getByRole('button', { name: 'See every idea (all 5 ways)' })).toBeInTheDocument();
   });
 });

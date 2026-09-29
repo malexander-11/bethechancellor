@@ -1,31 +1,40 @@
 import {
   ambitionStatus,
   blockedBy,
+  deliverOptionsFor,
+  deskLevers,
+  onShowInBasic,
   optionConflicts,
   optionEarliestStart,
   optionOff,
   optionOverlaps,
   optionRedLines,
+  optionState,
   rankedPriorities,
   stageIndex,
   type DeliverOption,
   type Lever,
 } from '@btc/engine';
+import { useState } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { MinisterLine } from '../components/MinisterLine';
+import { ModeLine } from '../components/ModeLine';
 import { OptionCard } from '../components/OptionCard';
 import { SourceList } from '../components/SourceLink';
-import { adviserById, levers, options, pm } from '../data';
+import { adviserById, context, levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
+import { useMode } from '../journey/mode';
 import { useOptionPrices } from '../journey/prices';
 import { useBudget } from '../state/budget';
 
 const RANK = ['1st', '2nd', '3rd'];
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
+/** Already on the desk: basic mode shows a way that moves one of these (Phase 27). */
+const DESK = deskLevers(context);
 
 /** The route of the n-th priority's screen (1-based): the first has the bare route. */
 export function deliverPath(n: number): string {
@@ -38,13 +47,14 @@ export function deliverPath(n: number): string {
  * as it stands (ADR-0022), chosen with a tick, each with one adviser's line on who proposed it and
  * what it costs and does (Phase 23); two that count the same money cannot both be on. The headroom
  * bar keeps score as you tick. Step 4 is next, and it is where every other lever is; a link with
- * no game is sent to the briefing, which starts one, because it has no priorities to deliver.
+ * no game is sent to the briefing, which starts one, because it has no priorities to deliver. In
+ * basic mode (Phase 27, ADR-0028) a screen shows the best one or two ways, a way that deals with
+ * something already on the desk, and anything already chosen; the bar still counts every way.
  */
 export function DeliverPage() {
   const { n: nParam } = useParams();
-  const { state, dispatch, outcome } = useBudget();
+  const { state } = useBudget();
   const { search } = useLocation();
-  const priceOf = useOptionPrices();
   const game = state.game;
   const guard = useStageGuard('deliver');
   if (guard) return guard;
@@ -61,23 +71,7 @@ export function DeliverPage() {
   if (nParam !== undefined && (String(n) !== nParam || n === 1)) {
     return <Navigate to={{ pathname: deliverPath(n), search }} replace />;
   }
-  const status = ambitionStatus(game, pm, options, outcome, levers);
-  const report = status.priorities.find((p) => p.rank === n);
-  const moved = new Set(outcome.leverEffects.map((e) => e.code));
-  const leversOf = (option: DeliverOption) =>
-    Object.keys(option.values)
-      .map((code) => byCode.get(code))
-      .filter((l): l is Lever => l !== undefined);
-  const choose = (option: DeliverOption, on: boolean) =>
-    dispatch({ type: 'setLevers', values: on ? option.values : optionOff(option, levers) });
-  // One tap from a blocked card: the option that counts the same money out, this one in.
-  const swap = (option: DeliverOption, out: { id: string; values: Record<string, number> }) =>
-    dispatch({
-      type: 'setLevers',
-      values: { ...optionOff(out, levers), ...option.values },
-    });
-
-  if (!report) {
+  if (ranked.length === 0) {
     return (
       <JourneyLayout
         step="deliver"
@@ -92,8 +86,51 @@ export function DeliverPage() {
       </JourneyLayout>
     );
   }
+  // One screen per priority, remounted on the way from one to the next: the router keeps this
+  // page from one priority to the next, so each screen's reading of what was chosen on arrival
+  // belongs to the screen, not to the page (Phase 27).
+  return <DeliverScreen key={n} n={n} />;
+}
+
+function DeliverScreen({ n }: { n: number }) {
+  const { state, dispatch, outcome } = useBudget();
+  const priceOf = useOptionPrices();
+  const mode = useMode();
+  // The Budget as it stood when the screen was opened, or when the mode last changed (Phase 27):
+  // a way chosen then is on show in basic mode, and one chosen here never vanishes from under the
+  // pointer.
+  const [seen, setSeen] = useState(() => ({ mode, values: state.leverValues }));
+  if (seen.mode !== mode) setSeen({ mode, values: state.leverValues });
+  const start = seen.mode === mode ? seen.values : state.leverValues;
+  const game = state.game;
+  if (!game) return null;
+
+  const ranked = rankedPriorities(game, pm);
+  const status = ambitionStatus(game, pm, options, outcome, levers);
+  const report = status.priorities.find((p) => p.rank === n);
+  if (!report) return null;
+  const moved = new Set(outcome.leverEffects.map((e) => e.code));
+  const leversOf = (option: DeliverOption) =>
+    Object.keys(option.values)
+      .map((code) => byCode.get(code))
+      .filter((l): l is Lever => l !== undefined);
+  const choose = (option: DeliverOption, on: boolean) =>
+    dispatch({ type: 'setLevers', values: on ? option.values : optionOff(option, levers) });
+  // One tap from a blocked card: the option that counts the same money out, this one in.
+  const swap = (option: DeliverOption, out: { id: string; values: Record<string, number> }) =>
+    dispatch({
+      type: 'setLevers',
+      values: { ...optionOff(out, levers), ...option.values },
+    });
 
   const { priority } = report;
+  const basic = mode === 'basic';
+  // Whether basic mode hides any way at rest: the data's alone, so the line's place never moves.
+  const every = deliverOptionsFor(priority.id, options);
+  const trimmed = every.some((o) => !onShowInBasic(o, 'off', DESK));
+  const shown = report.options.filter(
+    ({ option }) => !basic || onShowInBasic(option, optionState(option, start, levers), DESK),
+  );
   const rank = RANK[n - 1] ?? `${n}th`;
   const nextPriority = ranked[n];
   const back = n > 1 ? deliverPath(n - 1) : '/pm';
@@ -126,16 +163,17 @@ export function DeliverPage() {
           <SourceList as="span" className="briefing__sources" refs={priority.reach.sources} />
         </p>
       ) : null}
+      {trimmed ? <ModeLine kind="ideas" every={`${every.length} ways`} /> : null}
       <div
         className="choices choices--list"
         role="group"
         aria-label={`Ways to deliver: ${priority.title}`}
       >
-        {report.options.map(({ option, state: optionState }) => {
+        {shown.map(({ option, state: standing }) => {
           const optionLevers = leversOf(option);
           const blocked = blockedBy(option, options, levers, state.leverValues);
           const clashes =
-            optionState === 'off'
+            standing === 'off'
               ? []
               : optionConflicts(option, options, levers, state.leverValues).filter(
                   (c) => c.partner !== 'off',
@@ -146,12 +184,12 @@ export function DeliverPage() {
               id={option.id}
               name="deliver"
               title={option.title}
-              state={optionState}
+              state={standing}
               price={
                 blocked
                   ? // A blocked card is priced as the swap it offers, never as both at once.
                     priceOf({ values: option.values, swapOut: optionOff(blocked.option, levers) })
-                  : priceOf(option, optionState === 'on')
+                  : priceOf(option, standing === 'on')
               }
               levers={optionLevers}
               values={Object.fromEntries(

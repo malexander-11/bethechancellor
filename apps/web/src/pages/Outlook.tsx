@@ -13,6 +13,7 @@ import { EstimateRow, summariseReading } from '../components/AssumptionsTable';
 import { InTray } from '../components/InTray';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
+import { ModeLine } from '../components/ModeLine';
 import { Papers } from '../components/Motifs';
 import { SourceList } from '../components/SourceLink';
 import { TableScroll } from '../components/TableScroll';
@@ -20,6 +21,7 @@ import { Term } from '../components/Term';
 import { Yardstick } from '../components/Yardstick';
 import { ESTIMATE, context, households, levers, rules, vintage } from '../data';
 import { StepLink } from '../journey/links';
+import { useMode } from '../journey/mode';
 import { headroomOfOutcome, useOutcomeOf } from '../journey/outcome';
 import { suggestSetting } from '../journey/suggest';
 import { WorkingsOnly, useWorkings } from '../journey/workings';
@@ -44,12 +46,15 @@ const reading = (id: string): ContextReading | undefined =>
  * on the desk, and why the headroom fell since March, with the decisions one fold away. What
  * headroom is, and how the OBR works in a real Budget, one fold away; with the workings on, the
  * table the estimate is made from. Nothing is chosen here: the primary starts the game on the
- * estimate and goes to the priorities.
+ * estimate and goes to the priorities. In basic mode (Phase 27, ADR-0028) the briefing is short:
+ * the headroom and what it means, the advisers' yardstick, the rules in one line and what is
+ * already on the desk; the explanations wait for advanced mode, one button away.
  */
 export function OutlookPage() {
   const { state, dispatch, outcome } = useBudget();
   const navigate = useNavigate();
   const workings = useWorkings();
+  const basic = useMode() === 'basic';
   const outcomeOf = useOutcomeOf();
   const targetYear =
     outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '2029-30';
@@ -111,36 +116,38 @@ export function OutlookPage() {
           {targetYear}, and have debt falling by then. Miss one and the <Term id="obr">OBR</Term>{' '}
           says so on Budget day.
         </p>
-        <details className="more">
-          <summary>About the fiscal rules</summary>
-          <dl className="more__body rules-key">
-            {rules.rules.map((r) => (
-              <div key={r.id}>
-                <dt>
-                  {r.shortName.charAt(0).toUpperCase() + r.shortName.slice(1)}
-                  {r.shortName.replace(/^the /, '').toLowerCase() !== r.name.toLowerCase() ? (
-                    <span className="rules-key__official"> (officially the {r.name})</span>
-                  ) : null}
-                </dt>
-                <dd>
-                  {r.plainEnglish}
-                  {workings ? (
-                    <>
-                      {' '}
-                      <span className="source">The Charter says: “{r.charterText}”</span>{' '}
-                      <SourceList as="span" className="briefing__sources" refs={[r.source]} />
-                    </>
-                  ) : null}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </details>
+        {basic ? null : (
+          <details className="more">
+            <summary>About the fiscal rules</summary>
+            <dl className="more__body rules-key">
+              {rules.rules.map((r) => (
+                <div key={r.id}>
+                  <dt>
+                    {r.shortName.charAt(0).toUpperCase() + r.shortName.slice(1)}
+                    {r.shortName.replace(/^the /, '').toLowerCase() !== r.name.toLowerCase() ? (
+                      <span className="rules-key__official"> (officially the {r.name})</span>
+                    ) : null}
+                  </dt>
+                  <dd>
+                    {r.plainEnglish}
+                    {workings ? (
+                      <>
+                        {' '}
+                        <span className="source">The Charter says: “{r.charterText}”</span>{' '}
+                        <SourceList as="span" className="briefing__sources" refs={[r.source]} />
+                      </>
+                    ) : null}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+        )}
       </section>
 
       <InTray values={ESTIMATE} />
 
-      {decisions.length > 0 ? (
+      {!basic && decisions.length > 0 ? (
         <section className="since doc" aria-labelledby="since-heading">
           <h2 id="since-heading" className="section-label">
             Since March
@@ -189,43 +196,46 @@ export function OutlookPage() {
         </section>
       ) : null}
 
-      <details className="more">
-        <summary>What is headroom?</summary>
-        <aside className="note more__body" aria-label="Headroom, explained by your advisers">
-          <p>
-            <span className="kicker">Chief Economic Adviser</span> <LabelBadge badge="simulated" />
-          </p>
-          <p>
-            Headroom is the gap between what the rules let you borrow and what the forecast says you
-            will borrow. It is your safety margin. In March it was {formatGbpBn(march, 1)}; on
-            today’s estimate it is {estimateText}. Forecasts move: over five years the OBR’s have
-            been out by about {formatGbpBn(typicalErrorGbpm, 0)} on average. Your advisers think the
-            markets get nervous below about {formatGbpBn(AMPLE_HEADROOM_GBPM, 0)}, and call anything
-            under {formatGbpBn(THIN_HEADROOM_GBPM, 0)} thin. Nobody has published those numbers:
-            they are their judgement.
-          </p>
-          <p>
-            Others put it differently. The Resolution Foundation said about £10bn in July; the
-            independent forecasts the Treasury collects imply less.
-          </p>
-          <p>
-            In a real Budget the OBR sends the Chancellor several rounds of forecast, and checks the
-            costing of each measure, before the day. Here one estimate stays fixed.
-          </p>
-          <SourceList
-            refs={[
-              { sourceId: 'obr-efo-2026-03', paragraph: '3.4' },
-              { sourceId: 'hmt-budget-2025-speech' },
-              { sourceId: 'hmt-tsc-budget-2026-letter' },
-              { sourceId: 'rf-headroom-2026-07-21' },
-              { sourceId: 'boe-fsr-2026-07' },
-              { sourceId: 'rf-policy-landscape-2026' },
-              { sourceId: 'hmt-forecasts-2026-08' },
-              { sourceId: 'obr-efo-2026-03', note: 'Foreword: how the forecast was produced' },
-            ]}
-          />
-        </aside>
-      </details>
+      {basic ? null : (
+        <details className="more">
+          <summary>What is headroom?</summary>
+          <aside className="note more__body" aria-label="Headroom, explained by your advisers">
+            <p>
+              <span className="kicker">Chief Economic Adviser</span>{' '}
+              <LabelBadge badge="simulated" />
+            </p>
+            <p>
+              Headroom is the gap between what the rules let you borrow and what the forecast says
+              you will borrow. It is your safety margin. In March it was {formatGbpBn(march, 1)}; on
+              today’s estimate it is {estimateText}. Forecasts move: over five years the OBR’s have
+              been out by about {formatGbpBn(typicalErrorGbpm, 0)} on average. Your advisers think
+              the markets get nervous below about {formatGbpBn(AMPLE_HEADROOM_GBPM, 0)}, and call
+              anything under {formatGbpBn(THIN_HEADROOM_GBPM, 0)} thin. Nobody has published those
+              numbers: they are their judgement.
+            </p>
+            <p>
+              Others put it differently. The Resolution Foundation said about £10bn in July; the
+              independent forecasts the Treasury collects imply less.
+            </p>
+            <p>
+              In a real Budget the OBR sends the Chancellor several rounds of forecast, and checks
+              the costing of each measure, before the day. Here one estimate stays fixed.
+            </p>
+            <SourceList
+              refs={[
+                { sourceId: 'obr-efo-2026-03', paragraph: '3.4' },
+                { sourceId: 'hmt-budget-2025-speech' },
+                { sourceId: 'hmt-tsc-budget-2026-letter' },
+                { sourceId: 'rf-headroom-2026-07-21' },
+                { sourceId: 'boe-fsr-2026-07' },
+                { sourceId: 'rf-policy-landscape-2026' },
+                { sourceId: 'hmt-forecasts-2026-08' },
+                { sourceId: 'obr-efo-2026-03', note: 'Foreword: how the forecast was produced' },
+              ]}
+            />
+          </aside>
+        </details>
+      )}
 
       <WorkingsOnly>
         <details className="more">
@@ -282,6 +292,7 @@ export function OutlookPage() {
         </details>
       </WorkingsOnly>
 
+      <ModeLine kind="briefing" />
       <p className="actions">
         <button type="button" className="btn btn--primary" onClick={begin}>
           Set your priorities
