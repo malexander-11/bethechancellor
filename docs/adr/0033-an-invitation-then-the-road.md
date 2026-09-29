@@ -161,3 +161,26 @@ every number "can be traced to the official document it came from".
   screen is set left: the cover is a cover.
 - **An opened step ahead is a link.** On the review, Feedback is open, because Budget day opens from
   the review (ADR-0014), so it shows as an outlined numeral and a link. It was a link before, too.
+
+## Revision (2026-09-29, later): the cover fills the screen
+
+Seeing the cover on a phone 412 by 788 CSS pixels, the user wrote: "On phone that looks bad, gotta
+like fit the screen or something". The invitation sat in the top 470px, with the footer’s link under
+it and about 200px of empty paper below; on the smallest phones the cover scrolled a little.
+
+- **The cover fills the screen**: the header, then the invitation centred in the height that is
+  left, then the footer’s link at the foot of the screen. Every other screen is as long as its
+  content.
+- **Sized by the screen’s height as well as its width.** On a phone the box is up to 340px wide, 42%
+  of the screen’s height, and smaller where the height is short. On a tall phone the heading grows
+  with the height too, up to 48px and within the width. So a tall phone is filled and a short one
+  fits the whole cover without scrolling.
+- **Measured**: on 412×788 the box is 331×243px and the button ends 620px down, with 91px above the
+  box and 116px between the button and the footer’s link, which ends 8px from the foot of the
+  screen. At 390×664, 375×553 and 360×640 nothing scrolls, and the button ends 531, 445 and 529px
+  down. At 1300×900 the words and the box are centred, 242px below the header and 261px above the
+  footer’s link.
+- **Checked**: the page tests find the full-screen layout on the cover alone. The walk
+  (`walk34.mjs`) checks at 412×788, 390×664, 375×553 and 360×640, and at its own 1300px and 360px
+  widths, that the cover does not scroll, that the footer’s link ends within 24px of the foot of the
+  screen, and that the space above the box and below the button differ by no more than 60px.

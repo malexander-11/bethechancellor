@@ -5,10 +5,11 @@ import { usePageTitle } from '../journey/title';
 
 /**
  * The cover: an invitation to play, not a step, so it shows no road (ADR-0033). The red Budget box,
- * the premise in one sentence and the one button, as one composition: the box above the words on a
- * phone, beside them on a wide screen, and the button in view either way. No tutorial: each screen
- * says what to do when you reach it. The advisers, the rules, the figures and the red lines wait
- * for the screens where they matter.
+ * the premise in one sentence and the one button, as one composition that fills the screen: the box
+ * above the words on a phone, beside them on a wide screen, centred between the header and the
+ * footer, and the button in view either way. No tutorial: each screen says what to do when you
+ * reach it. The advisers, the rules, the figures and the red lines wait for the screens where they
+ * matter.
  */
 export function StartPage() {
   usePageTitle('Become Chancellor');

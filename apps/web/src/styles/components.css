@@ -353,8 +353,9 @@
 
 /*
  * The invitation (ADR-0033): the red Budget box, the heading, the premise and the button as one
- * composition. On a phone the box stands above the words, all on one centre line, drawn at a size
- * that leaves the button in view; on a wide screen the words take the left and the box the right.
+ * composition, centred in the screen it fills (styles.css, `.shell--cover`). On a phone the box
+ * stands above the words, all on one centre line, drawn at a size that leaves the button in view;
+ * on a wide screen the words take the left and the box the right.
  */
 .opening {
   display: grid;
@@ -367,9 +368,12 @@
   text-align: center;
 }
 
+/* The box grows with the screen's height as well as its width, so a tall phone is filled and a
+   short one keeps the button in view. */
 .opening__art {
   grid-area: art;
-  width: min(100%, 250px);
+  width: min(100%, 340px, 42vh);
+  width: min(100%, 340px, 42svh, max(120px, calc((100svh - 410px) * 1.36)));
 }
 
 .opening__words {
@@ -393,6 +397,13 @@
   margin: 0 0 12px;
 }
 
+/* On a tall phone the heading grows with the screen's height, up to the width it has. */
+@media (max-width: 719px) {
+  .opening__title {
+    font-size: clamp(2.5rem, min(6svh, 11.5vw), 3rem);
+  }
+}
+
 @media (min-width: 720px) {
   .opening {
     grid-template-areas: 'words art';
@@ -406,7 +417,8 @@
 
   .opening__art {
     justify-self: center;
-    width: min(100%, 440px);
+    width: min(100%, 440px, 56vh);
+    width: min(100%, 440px, 56svh);
   }
 
   .opening__title {

@@ -1354,3 +1354,7 @@ information behind the game, organised.
   page), what the game does not do, the licence and every source.
 - **Measured** (ADR-0033): at 390×664 the button ends 471px down, and at 360×640 498px down. On a
   phone the road is 67px and the footer 49px, and the briefing is 1,500px (1.9 screens).
+- **Revised the same day**: the cover fills the screen, the invitation centred between the header
+  and the footer’s link at the foot of the screen, with the box and, on a tall phone, the heading
+  sized by the screen’s height. Nothing scrolls on a 375×553 phone, and on 412×788 the button ends
+  620px down.

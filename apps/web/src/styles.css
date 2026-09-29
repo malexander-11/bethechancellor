@@ -211,6 +211,38 @@ hr {
   padding: 16px 16px 48px;
 }
 
+/*
+ * The cover fills the screen (ADR-0033, revised): the header, then the invitation centred in the
+ * height that is left, and the footer's one link at the foot of the screen, so a tall phone shows
+ * one composed page rather than a band of empty paper. Every other screen is as long as its
+ * content.
+ */
+.shell--cover {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+.shell--cover > .page {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 8px;
+}
+
+.shell--cover .journey {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.shell--cover .site-footer {
+  margin-top: 16px;
+}
+
 @media (min-width: 640px) {
   .page {
     padding: 24px 24px 64px;

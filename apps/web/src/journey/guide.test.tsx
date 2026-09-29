@@ -125,6 +125,15 @@ describe('the head of every screen', () => {
     expect(screen.queryByText(/minutes/)).toBeNull();
     expect(screen.queryByText('No right answer')).toBeNull();
     expect(document.querySelector('.intro')).toBeNull();
+    // The cover alone fills the screen, its invitation centred above the footer (ADR-0033,
+    // revised); the screens of the game are as long as what they hold.
+    expect(document.querySelector('.shell--cover main')).not.toBeNull();
+  });
+
+  it('fills the screen on the cover alone', () => {
+    at(`/outlook?${BASE}`);
+    expect(document.querySelector('.shell main')).not.toBeNull();
+    expect(document.querySelector('.shell--cover')).toBeNull();
   });
 
   it('keeps the header to the name, and the footer to one quiet link', () => {
