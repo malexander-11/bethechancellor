@@ -197,7 +197,7 @@ export function shortlistedWays(options: OptionsFile, priority?: string): Delive
 
 /**
  * Whether a way to deliver a priority is on show in basic mode (Phase 27): it is on the
- * shortlist; or it moves a lever already on the desk, which the briefing names; or it was not off
+ * shortlist; or it moves a lever already on the desk, which the review names; or it was not off
  * when the screen opened (or when the mode last changed), so nothing chosen ever hides.
  */
 export function onShowInBasic(

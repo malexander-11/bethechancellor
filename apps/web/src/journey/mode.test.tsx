@@ -31,8 +31,9 @@ describe('basic and advanced (Phase 27, ADR-0028)', () => {
     at(TUNING);
     expect(theSwitch()).not.toBeChecked();
     expect(modeOf()).toBe('basic');
+    // The briefing is the same in both modes (ADR-0031), so the note speaks of policies alone.
     expect(theSwitch()).toHaveAccessibleDescription(
-      'Shows every policy and the full briefing, not only your advisers’ best ideas.',
+      'Shows every policy, not only your advisers’ best ideas.',
     );
     // Never disabled: unlike the workings, no page forces a mode.
     expect(theSwitch()).toBeEnabled();

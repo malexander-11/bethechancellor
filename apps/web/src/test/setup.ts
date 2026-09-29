@@ -12,8 +12,8 @@ beforeEach(() => {
   try {
     window.localStorage.setItem('btc.workings.v1', 'on');
     // Likewise basic mode is the default (Phase 27): the page tests were written against the
-    // whole game, every policy and the full briefing, so they run in advanced mode; basic mode
-    // has its own tests, which clear this key first.
+    // whole game, every policy and every way, so they run in advanced mode; basic mode has its
+    // own tests, which clear this key first.
     window.localStorage.setItem('btc.mode.v1', 'advanced');
   } catch {
     // Blocked storage: the tests that need the switch will say so themselves.

@@ -1,7 +1,7 @@
 # ADR-0028: Basic and advanced
 
-Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0030). Revises ADR-0013 and
-ADR-0027, each of which carries a dated revision pointing here.
+Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0030 and ADR-0031). Revises
+ADR-0013 and ADR-0027, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -183,3 +183,11 @@ rules in the Charter's words, what changed since March and why forecasts move. T
 stands, since "Already on your desk" follows the three parts in both modes. Basic mode's briefing
 now reads 205 words, against 159; advanced mode's the same 205, against 237, since "Since March" is
 a fold.
+
+## Revision (2026-09-29): the briefing the same in both modes (ADR-0031)
+
+Basic mode no longer trims the briefing, and the line that switched it went: the briefing has no
+folds of its own but the debt rule, which both modes show. The mode line is steps 3 and 4's alone,
+and the footer's note says so: "Shows every policy, not only your advisers' best ideas." The desk
+rule stands on a different footing: the briefing no longer names the desk, but the review lists
+what a Budget leaves on it, so the levers on the desk stay on show in basic mode.

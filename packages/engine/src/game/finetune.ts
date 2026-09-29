@@ -155,9 +155,10 @@ export function policyCount(file: FinetuneFile, side: FinetuneSideId): number {
 }
 
 /**
- * The levers already on the Chancellor's desk: the ones the briefing's "Already on your desk"
- * names (Phase 25). Basic mode always shows them, wherever they appear, so the briefing never
- * points at something it hides (Phase 27, the desk rule). They are not picks.
+ * The levers already on the Chancellor's desk: the ones the context's in-tray names (Phase 25),
+ * which the review lists while a Budget leaves them as it found them. Basic mode always shows them,
+ * wherever they appear, so the review never points at something the screens hide (Phase 27, the
+ * desk rule; the briefing named them too until it became plain copy, ADR-0031). Not picks.
  */
 export function deskLevers(context: Pick<ContextFile, 'inTray'> | undefined): ReadonlySet<string> {
   return new Set((context?.inTray ?? []).map((item) => item.leverCode));

@@ -232,26 +232,27 @@ export function MethodologyPage() {
       <p>
         The sources, the provenance drawers and the breakdown tables sit behind one switch at the
         foot of every page, off by default and remembered in your browser. Nothing is removed: every
-        figure is still an official number or arithmetic on one, the badges that say which never go
-        away, and the sources are one click away on every page. This page and the sources page keep
-        the switch on, because they are the workings.
+        figure is still an official number or arithmetic on one, the badges that say which stay on
+        every screen but the briefing, which reads as plain copy and shows its badges with the
+        workings, and the sources are one click away on every page. This page and the sources page
+        keep the switch on, because they are the workings.
       </p>
 
       <h2>Basic and advanced</h2>
       <p>
         A first game is played in basic mode, which suggests only the best ideas: on the fine-tuning
         screens each adviser&rsquo;s shortlist, eight taxes and seven spending policies with no
-        folds; on the flagship screens the best one or two ways to deliver each priority; and a
-        briefing with no folds. &ldquo;Best&rdquo; is a judgement, badged Game judgement, and each
-        pick&rsquo;s reason is its own adviser&rsquo;s line. Rules keep it checkable: a pick moves
-        the 2029-30 headroom by £1 billion or more at its smallest size on today&rsquo;s estimate,
-        counts by 2029-30, is on the table, breaks no promise at any size, and never counts the same
-        money as another pick or as something already on your desk, which basic mode always shows.
-        &ldquo;Advanced mode&rdquo;, a second switch at the foot of every page, shows every policy,
-        every way and the full briefing; a button on each trimmed screen does the same. Anything you
-        have chosen stays on show in either mode, and the bar, the review and Budget day count every
-        idea whichever mode you are in. The mode is remembered in your browser, never in the link,
-        so a Budget you share opens in the reader&rsquo;s own mode.
+        folds; and on the flagship screens the best one or two ways to deliver each priority. The
+        briefing is the same in both modes. &ldquo;Best&rdquo; is a judgement, badged Game
+        judgement, and each pick&rsquo;s reason is its own adviser&rsquo;s line. Rules keep it
+        checkable: a pick moves the 2029-30 headroom by £1 billion or more at its smallest size on
+        today&rsquo;s estimate, counts by 2029-30, is on the table, breaks no promise at any size,
+        and never counts the same money as another pick or as something already on your desk, which
+        basic mode always shows. &ldquo;Advanced mode&rdquo;, a second switch at the foot of every
+        page, shows every policy and every way; a button on each trimmed screen does the same.
+        Anything you have chosen stays on show in either mode, and the bar, the review and Budget
+        day count every idea whichever mode you are in. The mode is remembered in your browser,
+        never in the link, so a Budget you share opens in the reader&rsquo;s own mode.
       </p>
 
       <h2>Budget day</h2>

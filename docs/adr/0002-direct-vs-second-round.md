@@ -50,3 +50,11 @@ The words on the badges were made plainer, for a reading age of ten to twelve: *
 (`direct`), **Worked out** (`mechanical`), **Assumption**, **Commentary** and **Game judgement**
 (`simulated`). The ids in the data, the classes on the page and what each badge means are
 unchanged; only the label and its tooltip moved.
+
+## Revision, 2026-09-29 (ADR-0031)
+
+On the briefing, and only there, the badges now wait for the Show workings switch, as the sources
+do: the user asked for a page of plain copy. The figures are the same figures, and the words say
+which is the OBR's and which is ours ("The OBR's March forecast", "Today's estimate"); with the
+switch on, every figure and judgement wears its badge again. Every other screen keeps its badges
+whatever the switch says, as the revision of 2026-09-18 set out.

@@ -263,7 +263,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       ) : null}
       <p className="panel__hint tune__interest">{INTEREST[side]}</p>
       <ModeLine
-        kind="ideas"
         every={`${policyCount(finetune, side)} ${side === 'tax' ? 'tax' : 'spending'} policies`}
       />
       {spec.groups.map((group) => {

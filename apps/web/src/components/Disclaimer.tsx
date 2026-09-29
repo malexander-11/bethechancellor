@@ -35,8 +35,8 @@ function WorkingsSwitch() {
 }
 
 /**
- * The switch between basic and advanced (Phase 27, ADR-0028): off, the advisers' best ideas and
- * the short briefing; on, every policy and the full briefing. Remembered, never forced.
+ * The switch between basic and advanced (Phase 27, ADR-0028): off, the advisers' best ideas; on,
+ * every policy. The briefing is the same either way (ADR-0031). Remembered, never forced.
  */
 function ModeSwitch() {
   const { mode, setMode } = useModeSwitch();

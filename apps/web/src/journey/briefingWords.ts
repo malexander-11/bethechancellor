@@ -3,12 +3,10 @@ import type { SourceRef } from '@btc/engine';
 /**
  * The briefing's words (Phase 28, ADR-0030): three parts, each a heading and a few sentences, in
  * the order the player asked for them. Your headroom; what headroom is; how it is calculated. The
- * wording is the player's own, as they rewrote it on 29 September 2026. Glossary words are marked
- * [word](id), as in the guide, and open where they are used. No figure is typed here: every sum,
- * rate and year is a {placeholder} the page fills from the data or the engine, so a rebase re-reads
- * them. The one exception is the Resolution Foundation's July figure in the fold on why forecasts
- * move, a quotation dated in the sentence that gives it. Exported so the readability and words
- * tests read what the player reads.
+ * wording is the player's own, as they rewrote it on 29 September 2026, and it is plain: no word
+ * opens a definition (ADR-0031). No figure is typed here: every sum, rate and year is a
+ * {placeholder} the page fills from the data or the engine, so a rebase re-reads them. Exported so
+ * the readability and words tests read what the player reads.
  */
 export const BRIEFING_WORDS = {
   headroom: {
@@ -30,16 +28,23 @@ export const BRIEFING_WORDS = {
   what: {
     heading: 'What is headroom?',
     rules:
-      'Two [rules](fiscal-rules): pay for day-to-day spending with tax by {year}, and have debt falling by then.',
-    meaning:
-      '[Headroom](headroom) is how much you can spend, or cut in tax, and still meet the rules.',
+      'Two rules: pay for day-to-day spending with tax by {year}, and have debt falling by then.',
+    meaning: 'Headroom is how much you can spend, or cut in tax, and still meet the rules.',
     /** What lenders must buy this year, an Official figure: gross sales, so not "borrows". */
     gilts:
-      'This year the government plans to sell {gilts} of [gilts](gilts), to fund its borrowing and repay old ones.',
+      'This year the government plans to sell {gilts} of gilts, to fund its borrowing and repay old ones.',
     /** Why that matters, in words with their sources: Commentary. */
     lenders:
       'Lenders charge more when they doubt the sums. Meeting the rules with headroom to spare keeps their trust.',
-    rulesFold: 'About the fiscal rules',
+    /**
+     * The debt rule, one fold away in both modes: the player's words, with its year the rule's own
+     * and said as the Charter and the rules' own plain words have it (the year before, not "in five
+     * years"). The investment it counts is the lesson: the day-to-day rule leaves it out.
+     */
+    debtRule: {
+      heading: 'The debt rule',
+      text: 'Government debt must be a smaller share of the economy in {year} than the year before. Critically, this includes any borrowing for investment as well as day-to-day spending.',
+    },
   },
   calc: {
     heading: 'How the headroom is calculated',
@@ -50,8 +55,7 @@ export const BRIEFING_WORDS = {
      */
     intro:
       'Since March, interest rates and inflation have been higher than expected. This means the government is paying more money to borrow, and paying more on debt linked to inflation.',
-    /** A basic page names the OBR first here, so its full name is a tap away, the possessive kept. */
-    forecast: 'The [OBR’s](obr) March forecast',
+    forecast: 'The OBR’s March forecast',
     /** What each economic setting of the estimate is called, by the way it moved from March. */
     steps: {
       rate: { up: 'Higher interest rates', down: 'Lower interest rates' },
@@ -59,25 +63,6 @@ export const BRIEFING_WORDS = {
       ngdp: { up: 'Faster growth', down: 'Slower growth' },
     } as Record<string, { up: string; down: string }>,
     estimate: 'Today’s estimate',
-  },
-  since: {
-    fold: 'What changed since March',
-    rates: 'Gilts pay {giltsNow} against the {giltsObr} the OBR assumed.',
-    prices:
-      'Forecasters expect prices to rise {pricesNow} a year on average to {pricesTo}, not the OBR’s {pricesObr}. Some government debt costs more when prices rise.',
-    decisions:
-      'Since March the government has taken {count} decisions that cost money. Each was paid for by moving money, so none used the headroom.',
-  },
-  forecasts: {
-    fold: 'Why forecasts move',
-    who: 'Chief Economic Adviser',
-    error:
-      'Forecasts move: over five years the OBR’s tax forecasts have been out by about {error} on average.',
-    /** The one typed figure: the Resolution Foundation's, quoted with its month. */
-    others:
-      'Others put it differently. The Resolution Foundation said about £10bn in July; the independent forecasts the Treasury collects imply less.',
-    process:
-      'In a real Budget the OBR sends the Chancellor several rounds of forecast before the day. It also checks the costing of each measure. Here one estimate stays fixed.',
   },
   workings: 'How the estimate is made',
 } as const;
@@ -136,13 +121,6 @@ export const BRIEFING_SOURCES = {
       quote:
         'Debt interest spending is forecast to be, on average, £2.8 billion lower than November 2025, largely reflecting weaker RPI inflation',
     },
-  ],
-  /** Why forecasts move: the OBR's record, estimates on both sides, and how a Budget is made. */
-  forecasts: [
-    { sourceId: 'obr-efo-2026-03', paragraph: '3.4' },
-    { sourceId: 'rf-headroom-2026-07-21' },
-    { sourceId: 'hmt-forecasts-2026-08' },
-    { sourceId: 'obr-efo-2026-03', note: 'Foreword: how the forecast was produced' },
   ],
 } as const satisfies Record<string, readonly SourceRef[]>;
 

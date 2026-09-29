@@ -34,14 +34,14 @@ describe('the head of every screen', () => {
     expect(screen.queryByText(/days to the Budget/)).toBeNull();
   });
 
-  it('explains a word where it is used, and the badges at the foot of every page', () => {
-    at(`/outlook?${BASE}`);
+  it('explains a word where it is used', () => {
     // A tap opens the definition beside the word, and Escape closes it (Phase 25): a phone has
-    // no hover, so a tooltip alone was out of reach. Headroom is the first word a newcomer must
-    // know, and the briefing explains it where it is used.
-    const word = screen.getByRole('button', { name: 'Headroom' });
+    // no hover, so a tooltip alone was out of reach. The briefing is plain copy (ADR-0031); the
+    // priorities explain the manifesto where they name it.
+    at(`/pm?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
+    const word = screen.getByRole('button', { name: 'manifesto' });
     const term = word.closest('.term') as HTMLElement;
-    const short = `(${glossary.terms.headroom?.short})`;
+    const short = `(${glossary.terms.manifesto?.short})`;
     expect(word).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(word);
     expect(word).toHaveAttribute('aria-expanded', 'true');
@@ -49,6 +49,11 @@ describe('the head of every screen', () => {
     fireEvent.keyDown(word, { key: 'Escape' });
     expect(word).toHaveAttribute('aria-expanded', 'false');
     expect(within(term).queryByText(short)).toBeNull();
+  });
+
+  it('explains the badges at the foot of every page', () => {
+    // With the workings on, as the shared setup has them, the briefing wears its badges.
+    at(`/outlook?${BASE}`);
     // A badge opens the key at the foot of the page on its own line.
     const badge = document.querySelector('main a.badge--direct') as HTMLAnchorElement | null;
     const key = document.getElementById('badge-key') as HTMLDetailsElement;

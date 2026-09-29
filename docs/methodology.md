@@ -651,7 +651,8 @@ plain sentences: what you are doing, why it matters, what to do now, at most six
 Words in square brackets are glossary references (`data/journey/glossary.json`). Since Phase 25 a
 glossary word is a tap-to-open toggletip: a button that opens the glossary's short line beside the
 word and closes on a second tap or Escape, so a phone reaches it as well as a mouse. Both are chrome
-and carry no badge; a test forbids a figure in either unless it is sourced.
+and carry no badge; a test forbids a figure in either unless it is sourced. The briefing's words
+mark no glossary word since ADR-0031 (§30).
 
 ### The appointment
 
@@ -1125,7 +1126,8 @@ The fixes, in nine commits:
 - **The briefing** says what headroom means, its year, about £240 for each household (Worked out)
   and the advisers' yardstick in words (Game judgement, scored by nothing). "Already on your desk"
   lists the defence plan's last £4.7bn and the electricity VAT cut ending in March 2027. A glossary
-  word opens by tap or keyboard. (Phase 28 set the briefing in three parts: §29.)
+  word opens by tap or keyboard. (Phase 28 set the briefing in three parts: §29; ADR-0031 made
+  it plain copy: §30.)
 - **Step 4** shows one figure line on a resting card, in the conditional and in plain ink, growth
   in words, and sliders held to the 2p their sources vouch for (`sourceRange`; the desk goes on,
   badged Worked out past it). England-only budgets are said once a screen, with Scotland's own
@@ -1195,13 +1197,15 @@ can then go to an advanced mode if they'd like. Basic mode, only suggest the bes
   never counts the same money as another pick or a lever already on the desk. Step 4 picks one way
   per lever, six to ten a screen, one in every group; step 3 one or two a priority, at least one in
   full. `validate:data` names each way a pick can break a rule.
-- **The desk rule.** The levers the briefing puts on the desk (keeping VAT off electricity, the
-  defence plan's gap) are always on show in basic mode, so the briefing never points at something
-  hidden. They are not picks.
+- **The desk rule.** The levers on the desk (keeping VAT off electricity, the defence plan's gap)
+  are always on show in basic mode, so nothing that names them points at something hidden: the
+  briefing did until ADR-0031, and the review still lists the ones a Budget leaves. They are not
+  picks.
 - **What basic mode shows.** Step 4: the picks, with no folds. Step 3: the picks and a way that
   moves a lever on the desk. The briefing: the headroom and what it means, the yardstick, the rules
   in one line and the desk; the explanations wait for advanced mode (Phase 28 puts them in both
-  modes: §29). On every trimmed screen one button swaps the modes and keeps its focus.
+  modes: §29; ADR-0031 makes the briefing the same in both: §30). On every trimmed screen one
+  button swaps the modes and keeps its focus.
 - **Nothing chosen hides, and nothing is uncounted.** A screen shows whatever was chosen when it
   opened or when the mode last changed. The bar, the review, the priorities' price line and Budget
   day read every idea in either mode.
@@ -1214,8 +1218,9 @@ can then go to an advanced mode if they'd like. Basic mode, only suggest the bes
 ## 29. The briefing in three parts (ADR-0030)
 
 Phase 28 set the briefing out as the user asked, in three parts and in both modes: your headroom,
-what headroom is, and how it is calculated. "Already on your desk" follows. The same day the user
-rewrote its words; what follows is the page as it now reads (ADR-0030's revision). Its line under
+what headroom is, and how it is calculated. "Already on your desk" followed, until ADR-0031
+(§30). The same day the user rewrote its words; what follows is the page as it then read (ADR-0030's
+revision), before the plain copy of §30. Its line under
 the heading: "The headroom you have to play with, and the rules you need to meet to keep markets
 onside."
 
@@ -1249,10 +1254,10 @@ onside."
   full name, since a basic page names the OBR first there. Nothing is scored against the buffer
   line or anything else here; the £10bn line stays the markets' thin line on Budget day and the
   review's yardstick.
-- **Advanced mode** adds three folds: the rules in the Charter's words; what changed since March
-  (the gilt yield and prices against what the OBR assumed, and the three decisions each paid for by
-  moving money); and why forecasts move (the Chief Economic Adviser's note, with estimates on both
-  sides).
+- **Advanced mode** added three folds, until ADR-0031 (§30): the rules in the Charter's words;
+  what changed since March (the gilt yield and prices against what the OBR assumed, and the three
+  decisions each paid for by moving money); and why forecasts move (the Chief Economic Adviser's
+  note, with estimates on both sides).
 - **The figures are data, the words templates.** The context file's `briefing` object holds the
   two published figures, each with its paragraph, page and quote; `validate:data` refuses a figure
   without a quote, and gilt sales for any year but the one the context is dated in (`fyOfDate`).
@@ -1266,3 +1271,32 @@ onside."
 - **Measured** (ADR-0030): 205 words in either mode, against 159 in basic mode and 237 in advanced;
   on a phone, 2.6 screens of 780px in basic mode and 2.7 in advanced. In the user's words: 232 in
   either mode, and 2.7 and 2.9 screens.
+
+## 30. The briefing as plain copy (ADR-0031)
+
+Later on the same day the user asked for a plainer briefing: no badges, no dotted words that open
+a definition, "The debt rule" in place of "About the fiscal rules", and without the folds on March
+and on forecasts, "Already on your desk" and the line that switched to the short briefing. The
+request is read as the briefing's alone; every other screen is as it was.
+
+- **The badges wait for the workings.** On the briefing a badge shows only with Show workings on,
+  beside its sources, exactly as before; with the switch off the page is plain copy, and its words
+  say which figure is the OBR's and which is ours. The contract is unchanged: every figure is still
+  an official number or a stated calculation, one switch away from its badge and its source.
+- **No word opens a definition.** The briefing's words carry no glossary marks, and a test fails on
+  one. The glossary and its toggletips elsewhere (the manifesto, the tax lock and the rest) are
+  unchanged. The OBR's name is no longer a tap away in the first row.
+- **The debt rule**, a fold under the rules line in both modes: "Government debt must be a smaller
+  share of the economy in 2029-30 than the year before. Critically, this includes any borrowing for
+  investment as well as day-to-day spending." The user wrote "in 5 years or end of parliament"; the
+  line gives the rule's own target year from the verdict, which the Charter sets as 2029-30 until
+  that is the forecast's third year, then the third year (paragraph 3.7), and "than the year
+  before" is the rules file's plain English for "falling". With the workings on, the fold quotes
+  the Charter.
+- **What went.** The folds on what changed since March and on why forecasts move: the calculation's
+  opening line and rows carry the first, and the OBR's typical error the second, on Budget day. The
+  three decisions since March stay in the context file but on no screen, and the readability set
+  that read them went. "Already on your desk": the review still lists what a Budget leaves on it, so
+  basic mode's desk rule stands. The line that switched the briefing: it is the same in both modes.
+- **Measured** (ADR-0031): 175 words, against 232; grade 4.6, against 5.1; on a phone 1,752px in
+  both modes, 2.2 screens of 780px, against 2.7 and 2.9 (4.1 screens with the workings on).

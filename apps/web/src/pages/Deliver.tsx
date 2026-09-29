@@ -163,7 +163,7 @@ function DeliverScreen({ n }: { n: number }) {
           <SourceList as="span" className="briefing__sources" refs={priority.reach.sources} />
         </p>
       ) : null}
-      {trimmed ? <ModeLine kind="ideas" every={`${every.length} ways`} /> : null}
+      {trimmed ? <ModeLine every={`${every.length} ways`} /> : null}
       <div
         className="choices choices--list"
         role="group"

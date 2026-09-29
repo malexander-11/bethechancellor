@@ -1,6 +1,6 @@
 import { plainText, segments } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
-import { context, glossary, levers, sourcesById } from '../data';
+import { context, levers, sourcesById } from '../data';
 import {
   BRIEFING_SOURCES,
   BRIEFING_WORDS,
@@ -10,21 +10,27 @@ import {
 } from './briefingWords';
 
 describe('the briefing’s words (Phase 28, ADR-0030)', () => {
-  it('marks only words the glossary defines, and headroom once', () => {
-    const ids = briefingTemplates().flatMap((t) =>
-      segments(t).flatMap((s) => (s.kind === 'term' ? [s.id] : [])),
-    );
-    for (const id of ids) expect(glossary.terms[id], id).toBeDefined();
-    expect(ids).toEqual(expect.arrayContaining(['fiscal-rules', 'obr', 'headroom', 'gilts']));
-    // One Headroom a player can tap on the page: the line that says what it is.
-    expect(ids.filter((id) => id === 'headroom')).toHaveLength(1);
+  it('is plain copy: no word opens a definition (ADR-0031)', () => {
+    for (const t of briefingTemplates()) {
+      expect(
+        segments(t).every((s) => s.kind === 'text'),
+        t,
+      ).toBe(true);
+    }
   });
 
   it('types no figure: every sum, rate and year is filled from the data or the engine', () => {
-    // The one exception: the Resolution Foundation's July figure, a quotation dated where it is given.
-    const typed = briefingTemplates().filter((t) => t !== BRIEFING_WORDS.forecasts.others);
+    const typed = briefingTemplates();
     expect(typed.length).toBeGreaterThan(20);
     for (const t of typed) expect(plainText(t), t).not.toMatch(/\d/);
+  });
+
+  it('says the debt rule as the Charter has it, with the year filled in', () => {
+    // The player's words, with the rule's own year and "the year before" in place of "in five
+    // years": the Charter's rule is debt falling by 2029-30, and the rules' own plain words say so.
+    expect(fillIn(BRIEFING_WORDS.what.debtRule.text, { year: '2029-30' })).toBe(
+      'Government debt must be a smaller share of the economy in 2029-30 than the year before. Critically, this includes any borrowing for investment as well as day-to-day spending.',
+    );
   });
 
   it('names every economic setting today’s estimate can move, whichever way it moves', () => {

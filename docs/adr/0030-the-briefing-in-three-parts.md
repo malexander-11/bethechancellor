@@ -1,7 +1,7 @@
 # ADR-0030: The briefing in three parts
 
-Date: 2026-09-29. Status: accepted; revised the same day (below). Revises ADR-0025, ADR-0026 and
-ADR-0028, each of which carries a dated revision pointing here.
+Date: 2026-09-29. Status: accepted; revised the same day (below), then by ADR-0031. Revises
+ADR-0025, ADR-0026 and ADR-0028, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -296,3 +296,13 @@ reduced motion, with the audits on.
   scoring, but a player may notice the difference.
 - **The £22bn moves with the data.** A rebase that changes the estimate or the record changes it,
   and the line goes if the estimate ever passes the record.
+
+## Revision (2026-09-29): plain copy (ADR-0031)
+
+Later the same day the user asked for a plainer page. On the briefing the badges now wait for the
+workings, as the sources do, and no word opens a definition, the OBR's name in the first row
+included. "About the fiscal rules" became "The debt rule", a fold in both modes that gives the rule
+in the user's words with the Charter's year. The folds on what changed since March and on why
+forecasts move went, and so did "Already on your desk" and the line that switched the briefing
+between its short and full forms: the briefing is the same in both modes. It reads 175 words and
+is 2.2 phone screens tall.

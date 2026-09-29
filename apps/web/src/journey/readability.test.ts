@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest';
 import { MODE_WORDS } from '../components/ModeLine';
 import { briefingTemplates, fillIn } from './briefingWords';
 import {
-  context,
   finetune,
   guide,
   interventions,
@@ -119,13 +118,8 @@ const SETS: Record<string, readonly string[]> = {
     short(p.reaction),
     ...(p.reach ? [p.reach.text] : []),
   ]),
-  // Phase 25: the lines that say why two options cannot both be on, and the briefing's decisions
-  // since March, as its fold reads them.
+  // Phase 25: the lines that say why two options cannot both be on.
   'the conflicts': all.flatMap((o) => (o.conflicts ?? []).map((c) => c.text)),
-  'since March': context.decisionsSinceForecast.map(
-    (d) =>
-      `${d.title}: £5bn. Paid for by ${d.paidFor.charAt(0).toLowerCase()}${d.paidFor.slice(1)}.`,
-  ),
   // Phase 25: the Prime Minister at sign-off, as the review reads a line out.
   'the sign-off': Object.values(pm.signOff).map((l) =>
     l.text.replace('{rules}', 'the debt rule').replace('{promises}', 'the tax lock'),
@@ -150,14 +144,12 @@ const SETS: Record<string, readonly string[]> = {
   'the modes': [
     `${MODE_WORDS.shortlist} ${MODE_WORDS.ideas.basic}.`,
     `${MODE_WORDS.ideas.advanced}.`,
-    `${MODE_WORDS.briefing.basic}.`,
-    `${MODE_WORDS.briefing.advanced}.`,
     ...Object.values(MODE_WORDS.said).flatMap((s) => [s.basic, s.advanced]),
     `${MODE_WORDS.switch}.`,
     MODE_WORDS.note,
   ],
   // The briefing in three parts (Phase 28): every heading, line and fold, filled as the page
-  // fills them, with the glossary's marks read as the words they show.
+  // fills them.
   'the briefing': briefingTemplates().map((t) =>
     plainText(
       fillIn(t, {
@@ -167,13 +159,6 @@ const SETS: Record<string, readonly string[]> = {
         average: '£29bn',
         gap: '£22bn',
         gilts: '£246bn',
-        giltsNow: '5.29%',
-        giltsObr: '4.5%',
-        pricesNow: '3.3%',
-        pricesObr: '2.8%',
-        pricesTo: '2030',
-        count: 'three',
-        error: '£33bn',
       }),
     ),
   ),
@@ -181,7 +166,7 @@ const SETS: Record<string, readonly string[]> = {
 
 describe('readability: a reading age of about twelve, one idea a sentence', () => {
   it('reads every set a newcomer meets', () => {
-    expect(Object.keys(SETS).length).toBe(18);
+    expect(Object.keys(SETS).length).toBe(17);
     for (const [name, texts] of Object.entries(SETS)) expect(texts.length, name).toBeGreaterThan(0);
   });
 
@@ -211,8 +196,10 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // lines 4.8, the guide 3.4 (step 4's line says "Choose policies"), the rest unchanged. Then
     // basic and advanced (Phase 27): the fine-tuning screens, with basic mode's leads, stay at 5.7;
     // the modes read at 3.4. Then the briefing in three parts (Phase 28), its folds included,
-    // reads at 5.1, and at 5.1 again in the player's own words. Set GRADES to a file path to write
-    // them out.
+    // reads at 5.1, and at 5.1 again in the player's own words. Then plain copy (ADR-0031), the
+    // debt rule its one fold: 4.6; the modes, without the briefing's switch, 5.2; the decisions
+    // since March, on no screen now, are no longer read. Set GRADES to a file path to write them
+    // out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);

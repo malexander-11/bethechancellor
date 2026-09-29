@@ -56,3 +56,9 @@ hundred of them, and each one is labelled.
 The badge reads **Game judgement** on the page now, not "Simulated", with the tooltip "The game’s
 opinion, in a role’s voice. It quotes sources and never makes a number." The id `simulated`, the
 class and every rule above are unchanged (ADR-0002, revised the same day).
+
+## Revision, 2026-09-29 (ADR-0031)
+
+On the briefing a judgement's badge now shows only with the workings on (ADR-0002, revised the same
+day): the buffer line is still the game's judgement, and says so with the switch on. Everywhere
+else a Game judgement wears its badge whatever the switch says.

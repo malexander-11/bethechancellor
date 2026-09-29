@@ -260,8 +260,8 @@ fold ties it to the Charter's own name.
 `decisionsSinceForecast` lists what the government has decided since the vintage was published:
 `{ id, title, amountGbpm, year, paidFor, sources }`, the amount on the government's own figure
 (negative costs money), the year or period as the source states it, and what paid for it. Context,
-not levers: none of it enters the arithmetic, the OBR has not certified any of it, and the outlook
-says so above the table.
+not levers: none of it enters the arithmetic and the OBR has not certified any of it. No screen
+shows it since the briefing became plain copy (ADR-0031); the validator still checks its sources.
 
 `inTray` (Phase 25) lists what is already on the Chancellor's desk: a bill or a cliff edge the
 Budget inherits, `{ id, text, badge, leverCode, sources }`. The text is one sentence of at most 140
@@ -275,9 +275,9 @@ have left against their rules (the OBR's record), and `giltSales { gbpm, year, s
 the government plans to sell in a fiscal year (HM Treasury's remit for the Debt Management Office).
 Each source names its paragraph and page and must quote the passage the figure is read from; the
 validator refuses a figure that quotes nothing, and gilt sales for any year but the one `asOf`
-falls in, since the page says "this year". The page badges both Official figure. The briefing's
-words are not data: they are templates in `apps/web/src/journey/briefingWords.ts`, with no figure
-typed in them.
+falls in, since the page says "this year". The page badges both Official figure, with the
+workings on (ADR-0031). The briefing's words are not data: they are templates in
+`apps/web/src/journey/briefingWords.ts`, with no figure typed in them and no glossary word marked.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 

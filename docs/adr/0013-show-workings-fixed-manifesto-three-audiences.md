@@ -1,7 +1,8 @@
 # ADR-0013: Show workings, a fixed manifesto, three audiences
 
 **Status:** accepted, 2026-09-18; the reception revised 2026-09-28 (below, ADR-0026); a second
-switch beside the workings 2026-09-29 (below, ADR-0028)
+switch beside the workings 2026-09-29 (below, ADR-0028); the briefing's badges with the workings
+2026-09-29 (below, ADR-0031)
 
 ## Context
 
@@ -137,3 +138,10 @@ the workings still show where the numbers come from, and never how many ideas ar
 the workings, the mode is remembered in the browser and never carried in a link. The tests seed
 both, advanced and the workings on, so the page tests keep their meaning; each switch's off state
 has its own tests.
+
+## Revision (2026-09-29): the briefing's badges wait for the workings (ADR-0031)
+
+The badges stay whatever the switch says on every screen but the briefing. There, at the user's
+request for a page of plain copy, they show with the workings, as its sources do; with the switch
+off its words still say which figure is the OBR's and which is ours. The briefing is also the same
+in both modes now: "Advanced mode" no longer lengthens it.

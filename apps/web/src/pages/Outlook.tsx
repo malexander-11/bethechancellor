@@ -1,20 +1,17 @@
 import {
-  formatGbp,
   formatGbpBn,
   fromForecast,
   stageIndex,
+  type Badge,
   type ContextReading,
   type SourceRef,
 } from '@btc/engine';
 import { Fragment, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { EstimateRow, summariseReading } from '../components/AssumptionsTable';
-import { InTray } from '../components/InTray';
+import { EstimateRow } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
-import { ModeLine } from '../components/ModeLine';
 import { Papers } from '../components/Motifs';
-import { Marked } from '../components/PageIntro';
 import { SourceList } from '../components/SourceLink';
 import { TableScroll } from '../components/TableScroll';
 import { ESTIMATE, context, levers, rules, vintage } from '../data';
@@ -25,20 +22,10 @@ import {
   templateParts,
 } from '../journey/briefingWords';
 import { StepLink } from '../journey/links';
-import { useMode } from '../journey/mode';
 import { useOutcomeOf } from '../journey/outcome';
 import { suggestSetting } from '../journey/suggest';
 import { WorkingsOnly, useWorkings } from '../journey/workings';
 import { permalinkQuery, reducer, useBudget } from '../state/budget';
-
-const COUNT = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
-
-/** A sum as the government states it: under a billion in millions, "£850 million" (Phase 25). */
-function sumInWords(gbpm: number): string {
-  const abs = Math.abs(gbpm);
-  return abs < 1000 ? `${formatGbp(abs)} million` : formatGbpBn(abs, 1);
-}
-const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
 const reading = (id: string): ContextReading | undefined =>
   context.readings.find((r) => r.id === id);
@@ -47,13 +34,11 @@ const reading = (id: string): ContextReading | undefined =>
 function Filled({ template, values }: { template: string; values: Record<string, ReactNode> }) {
   return (
     <>
-      {templateParts(template).map((part, i) =>
-        'key' in part ? (
-          <Fragment key={i}>{values[part.key] ?? `{${part.key}}`}</Fragment>
-        ) : (
-          <Marked key={i} text={part.text} />
-        ),
-      )}
+      {templateParts(template).map((part, i) => (
+        <Fragment key={i}>
+          {'key' in part ? (values[part.key] ?? `{${part.key}}`) : part.text}
+        </Fragment>
+      ))}
     </>
   );
 }
@@ -73,45 +58,44 @@ function distinct(refs: readonly SourceRef[]): SourceRef[] {
  * Step 1: your briefing, in three parts (Phase 28, ADR-0030), in the player's own words. Your
  * headroom: the one figure to plan on, what Chancellors have kept since 2010 and why, and what
  * reaching that record would take. What headroom is: the two rules, the word itself, what the
- * government must sell to lenders this year and why they care. How it is calculated: what dearer
- * borrowing and dearer prices have done since March, then the OBR's March forecast less each of
- * them, coming to today's estimate. What is already on the desk follows, in both modes. In advanced
- * mode (Phase 27, ADR-0028) three folds add the rules in the Charter's words, what changed since
- * March and why forecasts move; with the workings on, the table the estimate is made from. Nothing
- * is chosen here and nothing is scored: the primary starts the game on the estimate.
+ * government must sell to lenders this year and why they care, and the debt rule one fold away. How
+ * it is calculated: what dearer borrowing and dearer prices have done since March, then the OBR's
+ * March forecast less each of them, coming to today's estimate. The page is the same in both modes
+ * and reads as plain copy (ADR-0031): each figure's badge, like its source, waits for the workings,
+ * and with them on the table the estimate is made from. Nothing is chosen here and nothing is
+ * scored: the primary starts the game on the estimate.
  */
 export function OutlookPage() {
   const { state, dispatch } = useBudget();
   const navigate = useNavigate();
   const workings = useWorkings();
-  const basic = useMode() === 'basic';
   const outcomeOf = useOutcomeOf();
   // The starting position: today's estimate with no policy of the player's own, from the forecast.
   const pre = outcomeOf({ ...ESTIMATE });
   const path = fromForecast(pre);
   const { year } = path;
   // A fiscal year reads as one word: "2029-30" never breaks at its hyphen.
-  const yearNode = <span className="brief__year">{year}</span>;
+  const yearOf = (fy: string) => <span className="brief__year">{fy}</span>;
   const short = path.estimateGbpm < 0;
   const estimateText = formatGbpBn(path.estimateGbpm, 1, short);
   const figures = context.briefing;
-  const lastYear = pre.paths.years.at(-1) ?? year;
-  const typicalErrorGbpm =
-    (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
-    (pre.paths.baseline.nominalGdpFy[lastYear] ?? 0);
-  const gilts = reading('gilt-10y');
-  const prices = context.readings.find((r) => r.leverCode === 'rpi');
-  const decisions = context.decisionsSinceForecast;
   // What reaching the record would take: the record less the estimate, both on show beside it.
   const gapGbpm = figures ? figures.averageHeadroom.gbpm - path.estimateGbpm : 0;
+  // The debt rule, in the fold beneath the rules: its own year, and the Charter's words.
+  const debtRule = rules.rules.find((r) => r.kind === 'stockFalling');
+  const debtYear = pre.verdicts.find((v) => v.kind === 'stockFalling')?.targetYear ?? year;
   // What the calculation's opening line rests on: the gilt yield and prices against what the OBR
   // assumed, and the OBR tying RPI to debt interest.
+  const gilts = reading('gilt-10y');
   const cpi = reading('cpi-latest');
   const introSources = distinct([
     ...(gilts ? [gilts.latest.source, gilts.obr.source] : []),
     ...(cpi ? [cpi.latest.source, cpi.obr.source] : []),
     ...BRIEFING_SOURCES.calc,
   ]);
+  // Each figure's badge waits for the workings, as its source does: with them off the briefing
+  // reads as plain copy (ADR-0031).
+  const tag = (badge: Badge) => (workings ? <LabelBadge badge={badge} /> : null);
 
   // The rows' sources, with the workings on: the March forecast's own table, then for each setting
   // the OBR's sensitivity that turns it into money and the reading it is taken from.
@@ -152,14 +136,14 @@ export function OutlookPage() {
             template={short ? WORDS.headroom.shortfall : WORDS.headroom.figure}
             values={{
               estimate: <strong>{formatGbpBn(Math.abs(path.estimateGbpm), 1)}</strong>,
-              year: yearNode,
+              year: yearOf(year),
             }}
           />{' '}
-          <LabelBadge badge="assumption" />
+          {tag('assumption')}
         </p>
         {figures ? (
           <p className="brief__line">
-            <LabelBadge badge="direct" />{' '}
+            {tag('direct')}{' '}
             {fillIn(WORDS.headroom.history, {
               since: figures.averageHeadroom.since,
               average: formatGbpBn(figures.averageHeadroom.gbpm, 0),
@@ -169,14 +153,13 @@ export function OutlookPage() {
               className="briefing__sources"
               refs={[figures.averageHeadroom.source]}
             />{' '}
-            <LabelBadge badge="commentary" /> {WORDS.headroom.safety}{' '}
+            {tag('commentary')} {WORDS.headroom.safety}{' '}
             <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.safety} />
           </p>
         ) : null}
         {figures && gapGbpm > 0 ? (
           <p className="brief__line">
-            <LabelBadge badge="simulated" />{' '}
-            {fillIn(WORDS.headroom.buffer, { gap: formatGbpBn(gapGbpm, 0) })}{' '}
+            {tag('simulated')} {fillIn(WORDS.headroom.buffer, { gap: formatGbpBn(gapGbpm, 0) })}{' '}
             <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.buffer} />
           </p>
         ) : null}
@@ -187,19 +170,15 @@ export function OutlookPage() {
           {WORDS.what.heading}
         </h2>
         <p className="brief__line">
-          <Filled template={WORDS.what.rules} values={{ year: yearNode }} />
+          <Filled template={WORDS.what.rules} values={{ year: yearOf(year) }} />
         </p>
-        <p className="brief__line">
-          <Marked text={WORDS.what.meaning} />
-        </p>
+        <p className="brief__line">{WORDS.what.meaning}</p>
         {/* What lenders must buy and why they care, as one paragraph; each part keeps its badge. */}
         <p className="brief__line">
           {figures ? (
             <>
-              <LabelBadge badge="direct" />{' '}
-              <Marked
-                text={fillIn(WORDS.what.gilts, { gilts: formatGbpBn(figures.giltSales.gbpm, 0) })}
-              />{' '}
+              {tag('direct')}{' '}
+              {fillIn(WORDS.what.gilts, { gilts: formatGbpBn(figures.giltSales.gbpm, 0) })}{' '}
               <SourceList
                 as="span"
                 className="briefing__sources"
@@ -207,36 +186,23 @@ export function OutlookPage() {
               />{' '}
             </>
           ) : null}
-          <LabelBadge badge="commentary" /> {WORDS.what.lenders}{' '}
+          {tag('commentary')} {WORDS.what.lenders}{' '}
           <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.lenders} />
         </p>
-        {basic ? null : (
-          <details className="more">
-            <summary>{WORDS.what.rulesFold}</summary>
-            <dl className="more__body rules-key">
-              {rules.rules.map((r) => (
-                <div key={r.id}>
-                  <dt>
-                    {r.shortName.charAt(0).toUpperCase() + r.shortName.slice(1)}
-                    {r.shortName.replace(/^the /, '').toLowerCase() !== r.name.toLowerCase() ? (
-                      <span className="rules-key__official"> (officially the {r.name})</span>
-                    ) : null}
-                  </dt>
-                  <dd>
-                    {r.plainEnglish}
-                    {workings ? (
-                      <>
-                        {' '}
-                        <span className="source">The Charter says: “{r.charterText}”</span>{' '}
-                        <SourceList as="span" className="briefing__sources" refs={[r.source]} />
-                      </>
-                    ) : null}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </details>
-        )}
+        <details className="more">
+          <summary>{WORDS.what.debtRule.heading}</summary>
+          <div className="more__body">
+            <p>
+              <Filled template={WORDS.what.debtRule.text} values={{ year: yearOf(debtYear) }} />
+            </p>
+            {workings && debtRule ? (
+              <p>
+                <span className="source">The Charter says: “{debtRule.charterText}”</span>{' '}
+                <SourceList as="span" className="briefing__sources" refs={[debtRule.source]} />
+              </p>
+            ) : null}
+          </div>
+        </details>
       </section>
 
       <section className="brief doc" aria-labelledby="brief-calc">
@@ -249,94 +215,30 @@ export function OutlookPage() {
         </p>
         <dl className="calc">
           <div className="calc__row">
-            <dt>
-              <Marked text={WORDS.calc.forecast} />
-            </dt>
+            <dt>{WORDS.calc.forecast}</dt>
             <dd>
-              <span className="calc__figure">{formatGbpBn(path.forecastGbpm, 1)}</span>{' '}
-              <LabelBadge badge="direct" />
+              <span className="calc__figure">{formatGbpBn(path.forecastGbpm, 1)}</span>
+              {tag('direct')}
             </dd>
           </div>
           {path.steps.map((step) => (
             <div key={step.code} className="calc__row">
               <dt>{stepName(step.code)}</dt>
               <dd>
-                <span className="calc__figure">{formatGbpBn(step.headroomGbpm, 1, true)}</span>{' '}
-                <LabelBadge badge={step.badge} />
+                <span className="calc__figure">{formatGbpBn(step.headroomGbpm, 1, true)}</span>
+                {tag(step.badge)}
               </dd>
             </div>
           ))}
           <div className="calc__row calc__row--total">
             <dt>{WORDS.calc.estimate}</dt>
             <dd>
-              <span className="calc__figure">{estimateText}</span> <LabelBadge badge="assumption" />
+              <span className="calc__figure">{estimateText}</span>
+              {tag('assumption')}
             </dd>
           </div>
         </dl>
         <SourceList className="briefing__sources" refs={calcSources} />
-        {basic ? null : (
-          <>
-            <details className="more">
-              <summary>{WORDS.since.fold}</summary>
-              <div className="more__body since">
-                <p>
-                  {gilts
-                    ? `${fillIn(WORDS.since.rates, {
-                        giltsNow: summariseReading(gilts.latest, gilts.unit),
-                        giltsObr: summariseReading(gilts.obr, gilts.unit),
-                      })} `
-                    : null}
-                  {prices
-                    ? fillIn(WORDS.since.prices, {
-                        pricesNow: summariseReading(prices.latest, prices.unit),
-                        pricesObr: summariseReading(prices.obr, prices.unit),
-                        pricesTo: Object.keys(prices.latest.series ?? {}).at(-1) ?? '',
-                      })
-                    : null}
-                </p>
-                <SourceList
-                  className="briefing__sources"
-                  refs={[
-                    ...(gilts ? [gilts.latest.source, gilts.obr.source] : []),
-                    ...(prices ? [prices.latest.source, prices.obr.source] : []),
-                  ]}
-                />
-                {decisions.length > 0 ? (
-                  <>
-                    <p>
-                      {fillIn(WORDS.since.decisions, {
-                        count: COUNT[decisions.length] ?? String(decisions.length),
-                      })}
-                    </p>
-                    <ul className="since__list">
-                      {decisions.map((d) => (
-                        <li key={d.id}>
-                          {/* Two sentences, each one breath (Phase 25). */}
-                          {d.title}: {sumInWords(d.amountGbpm)}. Paid for by {lowerFirst(d.paidFor)}
-                          .
-                          <SourceList as="span" className="briefing__sources" refs={d.sources} />
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                ) : null}
-              </div>
-            </details>
-            <details className="more">
-              <summary>{WORDS.forecasts.fold}</summary>
-              <aside className="note more__body" aria-label="Why forecasts move, by your adviser">
-                <p>
-                  <span className="kicker">{WORDS.forecasts.who}</span>{' '}
-                  <LabelBadge badge="simulated" />
-                </p>
-                <p>{fillIn(WORDS.forecasts.error, { error: formatGbpBn(typicalErrorGbpm, 0) })}</p>
-                <p>{WORDS.forecasts.others}</p>
-                <p>{WORDS.forecasts.process}</p>
-                <SourceList refs={BRIEFING_SOURCES.forecasts} />
-              </aside>
-            </details>
-          </>
-        )}
         <WorkingsOnly>
           <details className="more">
             <summary>{WORDS.workings}</summary>
@@ -395,9 +297,6 @@ export function OutlookPage() {
         </WorkingsOnly>
       </section>
 
-      <InTray values={ESTIMATE} />
-
-      <ModeLine kind="briefing" />
       <p className="actions">
         <button type="button" className="btn btn--primary" onClick={begin}>
           Set your priorities

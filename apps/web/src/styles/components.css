@@ -136,9 +136,8 @@
   margin: 0;
 }
 
-/* Each part's heading starts its section, as the desk's does beneath them. */
-.brief > .section-label,
-.tray > .section-label {
+/* Each part's heading starts its section. */
+.brief > .section-label {
   margin-top: 0;
 }
 
@@ -248,31 +247,7 @@
 
 /* ------------------------------------------------ the briefing and theme */
 
-/* The rules in full, in the fold beneath the line that names them. */
-.rules-key {
-  display: grid;
-  gap: 8px;
-}
-
-.rules-key dt {
-  font-weight: 600;
-}
-
-.rules-key__official {
-  color: var(--ink-2);
-  font-weight: 400;
-}
-
-.rules-key dd {
-  margin: 0;
-}
-
-/* What changed since March, in its fold: what cut the headroom, and the decisions that did not. */
-.since p {
-  max-width: 44em;
-  margin: 0 0 8px;
-}
-
+/* The readings' rationale, in the workings' fold beneath the calculation. */
 .since__list {
   margin: 0 0 8px;
   padding-left: 1.2em;
@@ -1437,21 +1412,16 @@ label.choice {
   padding-top: 4px;
 }
 
-/* What the Budget inherits (Phase 25): a short list on the briefing, and what is left on the review. */
-.tray__list,
+/* Step 4's notes: a short list under the lead, in the quieter ink. */
 .tune__notes {
   margin: 8px 0 0;
   padding-left: 1.2em;
+  color: var(--ink-2);
 }
 
-.tray__list li,
 .tune__notes li {
   margin: 4px 0;
   max-width: 68ch;
-}
-
-.tune__notes {
-  color: var(--ink-2);
 }
 
 /* ------------------------------------------ plain words on step 3 and 4 (Phase 25) */
