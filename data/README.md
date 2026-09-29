@@ -335,11 +335,14 @@ enforces:
   authored: the page prices the bundle with the engine against the Budget as it stands, and shows
   the headroom the move would leave. Titles say what the option does, in at most twelve words and
   eighty characters.
+- **One or two ways a priority are on the advisers' shortlist** (`shortlist: true`, Phase 27), the
+  ones basic mode shows; see the shortlist's rules below.
 
 ### Fine-tuning (`data/journey/finetune.json`, ADR-0025, ADR-0027)
 
-Two sides, `tax` and `spending`, each with its screen's `title` (at most four words) and `lead` (at
-most ten), the `adviser` who speaks there, and `groups` of `items`. Since Phase 26 every live policy
+Two sides, `tax` and `spending`, each with its screen's `title` (at most four words), its `lead`
+and its `shortlistLead` (basic mode's lead, Phase 27; each at most fourteen words and 120
+characters), the `adviser` who speaks there, and `groups` of `items`. Since Phase 26 every live policy
 lever is an item, once: 76 on the tax side and 32 on the spending side. An item is the lever's
 `code`, its plain `name` for the review and the notes ("The main rate of VAT"; a toggle may leave it
 out and go by its policy's title), and one or two `policies`, each `{ title, sizes, advice }`: a
@@ -383,6 +386,28 @@ Pairs whose texts say only that the combined figure is approximate stay `warn`.
 A side may carry `notes` (Phase 25): lines under the screen's lead that its 120 characters cannot
 hold, such as how long the spending settlements run, each `{ text, badge, sources }` with the text
 at most 160 characters and its own badge.
+
+### The advisers' shortlist (`shortlist`, Phase 27, ADR-0028)
+
+Basic mode, a first game's, shows only the best ideas: a policy on step 4 or a way to deliver a
+priority on step 3 marked `"shortlist": true`. "Best" is a judgement, badged Game judgement on the
+screen, and each pick's reason is its own adviser line; these rules keep it checkable, and
+`validate:data` names each way a pick can break them:
+
+- **Counts by the stability rule's target year**: no earliest start after it.
+- **On the table**: no lever tagged not on the table.
+- **Breaks no promise at any size it comes in**, every promise in `pm.json`. A strain is allowed,
+  and its card still shows it.
+- **Never two that count the same money**: no `excludes` pair and no option conflict among the
+  step-4 picks, the step-3 picks and the levers already on the desk (the context file's `inTray`).
+- **How many.** Step 4: at most one way per lever, six to ten picks a screen, at least one in every
+  group. Step 3: one or two picks a priority, at least one of which delivers it in full.
+- **Every lever on the desk is on step 4.** Basic mode always shows a lever the briefing puts on the
+  desk, pick or not, so the briefing never points at something hidden.
+
+One more rule needs the engine, so the tests hold it: at its smallest size, on today's estimate,
+every pick moves the target year's headroom by £1bn or more, priced as its card prices it
+(interest included, and a move made only of investment priced on the debt rule).
 
 ### Households, who pays, the speech and the close (Phase 25, ADR-0026)
 

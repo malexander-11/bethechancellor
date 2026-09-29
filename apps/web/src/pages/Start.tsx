@@ -8,15 +8,19 @@ const BUDGET_DAY = new Date(
   `${rules.assessment.nextFormalAssessmentOn}T12:00:00Z`,
 ).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
-/** The reading and deciding a first Budget takes, as a round number of minutes. */
-export const PLAYTIME_MINUTES = 10;
+/**
+ * The reading and deciding a first Budget takes, as a round number of minutes: basic mode's, the
+ * mode a first game is played in (Phase 27). The estimate reads the rendered screens at 200 words
+ * a minute, 10 seconds a decision; it is not a measurement of real players.
+ */
+export const PLAYTIME_MINUTES = 9;
 
 /**
  * The cover, the first screen of step 1 (the briefing follows it). The premise in one sentence,
  * how long it takes, and the one button.
  * No tutorial: each screen says what to do when you reach it. The advisers, the rules, the
- * figures and the red lines wait for the screens where they matter; the way to every lever is in
- * the footer, with the other utilities.
+ * figures and the red lines wait for the screens where they matter; the switches, basic or advanced
+ * and the workings, are in the footer, with the other utilities.
  */
 export function StartPage() {
   usePageTitle('Become Chancellor');

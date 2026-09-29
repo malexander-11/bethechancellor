@@ -4,7 +4,7 @@ A web game about the trade-offs facing the UK Chancellor. You set tax, spending 
 assumptions; the game shows what happens to borrowing, debt and the government's fiscal rules,
 with every number traced to an official source.
 
-Status: **Phase 26 (policies all the way through)**. You are appointed Chancellor in a Labour
+Status: **Phase 27 (basic and advanced)**. You are appointed Chancellor in a Labour
 government with a Budget to deliver on 28 October 2026, and the game walks you through it in six
 steps with one clear action on every screen: your briefing; set your priorities; flagship policies;
 fine-tune tax and spend; deliver the Budget; feedback. There is no forecast to guess: every game
@@ -14,7 +14,13 @@ as an assumption), and the fiscal rules are the line to meet (ADR-0025). Every c
 there is no slider anywhere, and where a size makes sense a policy comes small, medium or large
 (putting up VAT is 21%, 22% or 25%). The desk that held every lever as a slider has gone, with its
 ready-made Budgets and its expert switches, and every lever it held is now a policy on step 4
-(ADR-0027). Phase 25 reviewed the game against four goals (that it reflects how a Budget is made,
+(ADR-0027). A first game is played in basic mode, which suggests only the best ideas: each screen's
+adviser picks a few, badged as their judgement and held to rules (worth £1bn or more, counting by
+2029-30, on the table, breaking no promise, never two that count the same money). Step 4 then shows
+eight tax and seven spending ideas with no folds, step 3 the best one or two ways to deliver each
+priority, and the briefing only the headroom, the rules and what is already on the desk. "Advanced
+mode", a switch in the footer and a button on each trimmed screen, shows the whole game, and
+anything chosen stays on show in either mode (ADR-0028). Phase 25 reviewed the game against four goals (that it reflects how a Budget is made,
 that most voters can follow it, that it shows the trade-offs, and that its feedback shows a Budget's
 pros and cons) and fixed what the review found (ADR-0026): prices corrected, one price for every
 choice, delivery graded, audiences that read from before the Budget and see cuts, Budget-day words
@@ -29,8 +35,9 @@ words are plain (ADR-0024): no sentence a player meets runs past twenty words, a
 test holds every set of them at a reading age of about twelve. Every number still comes from an
 official source or a stated calculation on one, badged for what it is (Official figure, Worked out,
 Assumption, Commentary, Game judgement), and the sources and breakdowns sit behind a "Show workings"
-switch in the footer, off by default. A first playthrough's required reading and decisions come to
-about ten and a half minutes (an estimate from the rendered screens, not user testing; ADR-0027).
+switch in the footer, off by default, beside "Advanced mode". A first playthrough's required reading
+and decisions come to about eight and a half minutes in basic mode and ten and a half in advanced
+(an estimate from the rendered screens, not user testing; ADR-0028).
 Every screen names itself, can be reached by keyboard and screen reader, holds 4.5:1 contrast, keeps
 every control at 44px and says met or missed in words.
 
@@ -38,20 +45,23 @@ Six steps. **Briefing**: one sentence, the playtime and the button; then the Tre
 your headroom on today's estimate, what it means and about what it comes to for each household, the
 advisers' yardstick, the two rules in one line (the Charter's words one fold away), what is already
 on your desk, why the headroom is £6.8bn rather than March's £23.6bn, and "What is headroom?"
-beneath; with the workings on, how the estimate is made. **Set your priorities**: rank up to three
+beneath; with the workings on, how the estimate is made. Basic mode's briefing is the headroom, the
+yardstick, the rules and the desk. **Set your priorities**: rank up to three
 of eight with the Prime Minister, who reacts to each, and the game writes the theme of the Budget
 from the ranking; the promises are one fold away, and one line gives the price of a priority in full
 before anything is chosen; nothing is funded yet. **Flagship policies**: one screen per priority,
 its costed options, each named for what it does and carrying its adviser's line, with one price (its
 change to the headroom, interest included), whether it delivers the priority in full or makes a
-start, and a slim bar keeping score. No two options share a lever, and two that count the same money
+start, and a slim bar keeping score; in basic mode, the best one or two ways and any way that deals
+with something already on the desk. No two options share a lever, and two that count the same money
 cannot both be chosen. **Fine-tune tax and spend**: two screens on which every lever is a policy,
 ninety-five ways to change tax in five groups by who pays and forty-six ways to change spending in
 four, each a tick or a choice of sizes shown with their levels, carrying its adviser's line and
 saying before it is chosen what its smallest size would do and the headroom that would leave; one
 adviser above the cards when something needs saying; red and amber manifesto tags, a minister on
 every budget you move, the usual policy of each group's first three levers on show and the rest a
-fold away under their families. A lever that moves both ways has a policy each way, and choosing one
+fold away under their families. In basic mode each screen shows its adviser's shortlist instead,
+with no folds. A lever that moves both ways has a policy each way, and choosing one
 clears the other; two policies that count the same money cannot both be chosen; a lever a chosen
 flagship already sets shows once, as a line with a way back to that flagship. Every lever is there,
 and the menu is the one a Chancellor actually weighs: employer National Insurance, pensions, the

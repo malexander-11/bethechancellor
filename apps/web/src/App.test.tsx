@@ -26,7 +26,7 @@ describe('journey routes', () => {
       </MemoryRouter>,
     );
     expect(screen.getByRole('heading', { level: 1, name: 'It’s your Budget now.' })).toBeVisible();
-    expect(screen.getByText(/About 10 minutes/)).toBeInTheDocument();
+    expect(screen.getByText(/About 9 minutes/)).toBeInTheDocument();
     const go = screen.getByRole('link', { name: 'Build my Budget' });
     expect(go).toHaveAttribute('href', expect.stringMatching(/^\/outlook/));
     // No tutorial, no adviser essays: the advisers wait for the screens where they matter.

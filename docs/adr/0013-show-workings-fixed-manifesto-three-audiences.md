@@ -1,6 +1,7 @@
 # ADR-0013: Show workings, a fixed manifesto, three audiences
 
-**Status:** accepted, 2026-09-18; the reception revised 2026-09-28 (below, ADR-0026)
+**Status:** accepted, 2026-09-18; the reception revised 2026-09-28 (below, ADR-0026); a second
+switch beside the workings 2026-09-29 (below, ADR-0028)
 
 ## Context
 
@@ -126,3 +127,13 @@ with its note. Phase 25 changed how they add up and what they read:
   the triple lock.
 
 The ratings of sixteen Budgets before and after are in ADR-0026.
+
+## Revision (2026-09-29): a second switch (ADR-0028)
+
+"Show workings" is no longer the only switch. "Advanced mode" sits beside it in the footer: off, a
+first game shows each adviser's best ideas and a short briefing; on, every policy, every way to
+deliver a priority and the full briefing. The two do different things and neither moves the other:
+the workings still show where the numbers come from, and never how many ideas are on offer. Like
+the workings, the mode is remembered in the browser and never carried in a link. The tests seed
+both, advanced and the workings on, so the page tests keep their meaning; each switch's off state
+has its own tests.

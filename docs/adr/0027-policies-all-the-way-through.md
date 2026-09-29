@@ -1,7 +1,8 @@
 # ADR-0027: Policies all the way through
 
-Date: 2026-09-28. Status: accepted. Revises ADR-0005, ADR-0009, ADR-0025 and ADR-0026, each of
-which carries a dated revision pointing here.
+Date: 2026-09-28. Status: accepted; step 4 in basic mode revised 2026-09-29 (below, ADR-0028).
+Revises ADR-0005, ADR-0009, ADR-0025 and ADR-0026, each of which carries a dated revision pointing
+here.
 
 ## Context
 
@@ -165,3 +166,13 @@ day.
   gone, the move would have added churn and removed nothing, so `LeverControl` keeps its name as the
   card `PolicyCard` draws. And four more briefings went with the desk's: the opening's three and the
   flagship screen's one, which nothing has shown since earlier phases.
+
+## Revision (2026-09-29): step 4 in basic mode (ADR-0028)
+
+Step 4 as this record describes it is now advanced mode. A first game starts in basic mode, where
+each screen shows its adviser's shortlist, badged Game judgement: eight taxes of ninety-five and
+seven spending policies of forty-six, with the defence plan's gap beside them because the briefing
+puts it on the desk, and no folds. A policy chosen in either mode stays on show in both. On a phone
+basic mode's tax screen is 3,704px and its spending screen 4,263px, against 6,066px and 5,930px in
+advanced mode: the shorter screen this record said step 4 still needed, though not yet two or three
+phone screens. Advanced mode is unchanged but for one line offering the shortlist back.

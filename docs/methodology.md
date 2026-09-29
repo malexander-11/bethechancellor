@@ -1178,3 +1178,35 @@ and for a policy to come in small, medium and large where a size makes sense.
 - **Measured** (ADR-0027): step 4 on a phone is 6,010px for tax and 5,874px for spending, 7.7 and
   7.5 screens; the fine-tuning screens read at grade 5.7; the playtime estimate is about ten and a
   half minutes at the midpoint, as before.
+
+## 28. Basic and advanced (ADR-0028)
+
+Phase 27 gave the game two modes. A first game is played in basic mode, which suggests only the
+best ideas; advanced mode is the whole game. The user asked for it: "Default to a basic mode, they
+can then go to an advanced mode if they'd like. Basic mode, only suggest the best ideas."
+
+- **The shortlist is a judgement**, and says so: each screen's adviser picks a few ideas, badged
+  Game judgement, and each pick's reason is its own sourced adviser line. Step 4 picks eight taxes
+  of ninety-five and seven spending policies of forty-six; step 3 picks one or two ways to deliver
+  each priority, thirteen of twenty-nine (`shortlist: true` in `finetune.json` and `options.json`).
+- **The rules make it checkable.** A pick moves 2029-30 headroom by at least £1bn at its smallest
+  size on today's estimate, priced as its card prices it (a test, since it needs the engine); counts
+  by 2029-30; is on the table; breaks no promise at any size (a strain is allowed, and shown); and
+  never counts the same money as another pick or a lever already on the desk. Step 4 picks one way
+  per lever, six to ten a screen, one in every group; step 3 one or two a priority, at least one in
+  full. `validate:data` names each way a pick can break a rule.
+- **The desk rule.** The levers the briefing puts on the desk (keeping VAT off electricity, the
+  defence plan's gap) are always on show in basic mode, so the briefing never points at something
+  hidden. They are not picks.
+- **What basic mode shows.** Step 4: the picks, with no folds. Step 3: the picks and a way that
+  moves a lever on the desk. The briefing: the headroom and what it means, the yardstick, the rules
+  in one line and the desk; the explanations wait for advanced mode. On every trimmed screen one
+  button swaps the modes and keeps its focus.
+- **Nothing chosen hides, and nothing is uncounted.** A screen shows whatever was chosen when it
+  opened or when the mode last changed. The bar, the review, the priorities' price line and Budget
+  day read every idea in either mode.
+- **The mode is the viewer's**, remembered in the browser and never in a link; "Advanced mode"
+  sits in the footer beside "Show workings", and neither moves the other.
+- **Measured** (ADR-0028): step 4 on a phone is 3,704px for tax and 4,263px for spending in basic
+  mode, against 6,066px and 5,930px in advanced; a first game in basic mode is an estimated 8½
+  minutes at the midpoint, against 10½ in advanced, so the cover now says "About 9 minutes".

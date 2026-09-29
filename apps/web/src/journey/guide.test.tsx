@@ -77,7 +77,7 @@ describe('the head of every screen', () => {
     expect(screen.getByText('Step 1 of 6')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: 'It’s your Budget now.' })).toBeVisible();
     expect(screen.getByRole('link', { name: 'Build my Budget' })).toBeInTheDocument();
-    expect(screen.getByText(/About 10 minutes/)).toBeInTheDocument();
+    expect(screen.getByText(/About 9 minutes/)).toBeInTheDocument();
     expect(screen.queryByText('No right answer')).toBeNull();
     expect(document.querySelector('.intro')).toBeNull();
   });
