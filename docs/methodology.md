@@ -1125,7 +1125,7 @@ The fixes, in nine commits:
 - **The briefing** says what headroom means, its year, about £240 for each household (Worked out)
   and the advisers' yardstick in words (Game judgement, scored by nothing). "Already on your desk"
   lists the defence plan's last £4.7bn and the electricity VAT cut ending in March 2027. A glossary
-  word opens by tap or keyboard.
+  word opens by tap or keyboard. (Phase 28 set the briefing in three parts: §29.)
 - **Step 4** shows one figure line on a resting card, in the conditional and in plain ink, growth
   in words, and sliders held to the 2p their sources vouch for (`sourceRange`; the desk goes on,
   badged Worked out past it). England-only budgets are said once a screen, with Scotland's own
@@ -1200,8 +1200,8 @@ can then go to an advanced mode if they'd like. Basic mode, only suggest the bes
   hidden. They are not picks.
 - **What basic mode shows.** Step 4: the picks, with no folds. Step 3: the picks and a way that
   moves a lever on the desk. The briefing: the headroom and what it means, the yardstick, the rules
-  in one line and the desk; the explanations wait for advanced mode. On every trimmed screen one
-  button swaps the modes and keeps its focus.
+  in one line and the desk; the explanations wait for advanced mode (Phase 28 puts them in both
+  modes: §29). On every trimmed screen one button swaps the modes and keeps its focus.
 - **Nothing chosen hides, and nothing is uncounted.** A screen shows whatever was chosen when it
   opened or when the mode last changed. The bar, the review, the priorities' price line and Budget
   day read every idea in either mode.
@@ -1210,3 +1210,40 @@ can then go to an advanced mode if they'd like. Basic mode, only suggest the bes
 - **Measured** (ADR-0028): step 4 on a phone is 3,704px for tax and 4,263px for spending in basic
   mode, against 6,066px and 5,930px in advanced; a first game in basic mode is an estimated 8½
   minutes at the midpoint, against 10½ in advanced, so the cover now says "About 9 minutes".
+
+## 29. The briefing in three parts (ADR-0030)
+
+Phase 28 set the briefing out as the user asked, in three parts and in both modes: your headroom,
+what headroom is, and how it is calculated. "Already on your desk" follows.
+
+- **Your headroom.** Today's estimate, "£6.8bn of breathing space in 2029-30, the year the rules are
+  tested" (Assumption), and the OBR's record: "Since 2010, Chancellors have kept about £29bn on
+  average" (Official figure; the November 2025 outlook, paragraphs 7.6 and 7.11, with past margins
+  put in today's terms by the OBR's own rescaling in Chart 7.3).
+- **What headroom is.** The two rules in one line, with the OBR spelt out; what headroom is; what
+  the government plans to sell to lenders this year, £246bn of gilts (Official figure: HM
+  Treasury's revision of the Debt Management Office's remit, April 2026, paragraph 2.3), said as
+  funding its borrowing and repaying old gilts, since gilt sales are gross financing, not
+  borrowing; and why lenders care, in words with their sources (Commentary).
+- **How it is calculated.** `fromForecast` reads the estimate's outcome: the March forecast's own
+  headroom (the vintage's, checked against the OBR's Table 5.1; Official figure), then each economic
+  setting's attribution row turned into a change of headroom (Assumption: the setting is ours, the
+  sensitivity the OBR's), coming to the estimate exactly. On today's data: £23.6bn, less £11.3bn for
+  higher interest rates and £5.5bn for higher inflation, is £6.8bn, and the rounded rows add up as
+  shown. Each step is named by the way its setting moved. Then the advisers' advice: "aim to keep
+  more than £10bn. Below that, the markets get nervous" (Game judgement). The £10bn is the markets'
+  own thin line on Budget day; nothing new is scored and there is still no target.
+- **Advanced mode** adds three folds: the rules in the Charter's words; what changed since March
+  (the gilt yield and prices against what the OBR assumed, and the three decisions each paid for by
+  moving money); and why forecasts move (the Chief Economic Adviser's note, with estimates on both
+  sides).
+- **The figures are data, the words templates.** The context file's `briefing` object holds the
+  two published figures, each with its paragraph, page and quote; `validate:data` refuses a figure
+  without a quote, and gilt sales for any year but the one the context is dated in (`fyOfDate`).
+  The words are in `briefingWords.ts`, with glossary marks and placeholders and no figure typed in;
+  the readability test reads them (grade 5.1).
+- **What went**: the heading "The Treasury's briefing", the source line, what the headroom comes to
+  for each household, the "Since March" section (now a fold) and the advisers' £20bn sentence. The
+  yardstick is the review's alone.
+- **Measured** (ADR-0030): 205 words in either mode, against 159 in basic mode and 237 in advanced;
+  on a phone, 2.6 screens of 780px in basic mode and 2.7 in advanced.

@@ -1,7 +1,8 @@
 # ADR-0025: One estimate, six steps, curated levers
 
-Date: 2026-09-27. Status: accepted; revised 2026-09-28 (below, ADR-0026 and ADR-0027). Revises ADR-0010,
-ADR-0012, ADR-0022, ADR-0023 and ADR-0024, each of which carries a dated revision pointing here.
+Date: 2026-09-27. Status: accepted; revised 2026-09-28 and 2026-09-29 (below, ADR-0026, ADR-0027 and
+ADR-0030). Revises ADR-0010, ADR-0012, ADR-0022, ADR-0023 and ADR-0024, each of which carries a
+dated revision pointing here.
 
 ## Context
 
@@ -227,3 +228,15 @@ fold. The hand-picked levers keep their places on show and the rest wait in thei
 the desk, the sandbox and the "Every tax lever" and "Every spending lever" links are gone. A link
 with no game now opens the briefing rather than the desk, and a game link that carried other
 economic figures says so on whatever screen it opens, not on the desk.
+
+## Revision (2026-09-29): the briefing in three parts, and still no target (ADR-0030)
+
+The briefing is now three parts, in the player's own format: your headroom, what headroom is, and
+how it is calculated. The advisers' "£20bn rule of thumb" has left it: the old fold said the
+markets get nervous below about £20bn, which would contradict the new advice to keep more than
+£10bn, since the markets score £10bn to £20bn as neither thin nor ample. The advice is the
+yardstick of ADR-0026 in other words, badged Game judgement and scored by nothing: there is still
+no target, nothing asks the player to choose one, and the bar still says only whether the rules are
+met. £20bn still scores as ample on Budget day. The estimate is the one this ADR set, and the
+briefing now shows how it is made: the OBR's March £23.6bn, less what higher interest rates and
+higher inflation take, row by row.

@@ -1,7 +1,7 @@
 # ADR-0028: Basic and advanced
 
-Date: 2026-09-29. Status: accepted. Revises ADR-0013 and ADR-0027, each of which carries a dated
-revision pointing here.
+Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0030). Revises ADR-0013 and
+ADR-0027, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -172,3 +172,14 @@ good ways to deliver a priority, not free ones.
   because nothing chosen ever hides, and every count reads every way.
 - **Two preferences instead of one.** The test setup seeds both, advanced and the workings on, so
   the page tests keep their meaning; basic mode has its own tests, which clear the key.
+
+## Revision (2026-09-29): the briefing's explanations on show in both modes (ADR-0030)
+
+Basic mode's briefing was the headroom, the yardstick, the rules and the desk, with the
+explanations waiting for advanced mode. Phase 28 puts the briefing in three parts in both modes:
+what headroom is, and how the OBR's March figure became today's estimate, are on show to every
+player now, because the player asked for them in that order. Advanced mode keeps three folds: the
+rules in the Charter's words, what changed since March and why forecasts move. The desk rule
+stands, since "Already on your desk" follows the three parts in both modes. Basic mode's briefing
+now reads 205 words, against 159; advanced mode's the same 205, against 237, since "Since March" is
+a fold.

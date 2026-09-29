@@ -31,3 +31,8 @@ Every number in `data/` carries a `source` reference to one of these documents, 
 Commentary from the Institute for Government, the Institute for Fiscal Studies, Nesta and
 press reports is cited by URL as qualitative context only. No figures are reproduced from
 those sources without attribution, and none of them are used in the engine's arithmetic.
+
+HM Treasury's _Revision to the DMO Financing Remit 2026-27_ (23 April 2026), published by the
+Debt Management Office, is Crown copyright. The Office's terms of use could not be read from
+where the game is built, so the briefing quotes its one figure, the year's gilt sales, briefly
+and with attribution; it is not used in the engine's arithmetic.

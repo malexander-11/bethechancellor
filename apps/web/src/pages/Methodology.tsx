@@ -127,8 +127,8 @@ export function MethodologyPage() {
       <h2>The journey and the advisers</h2>
       <p>
         The game walks through six steps, one screen at a time, with one primary button on each:
-        your briefing (the headroom you have on today&rsquo;s estimate, the two rules, what has been
-        promised since March); set your priorities with the Prime Minister; flagship policies, one
+        your briefing in three parts (your headroom on today&rsquo;s estimate, what headroom is, how
+        it is calculated); set your priorities with the Prime Minister; flagship policies, one
         screen per priority; fine-tune tax and spend, two screens on which every lever is a policy,
         the taxes in five groups by who pays and the spending in four by what the money is for;
         deliver the Budget, a review of the whole of it with one red button; and feedback. There is
@@ -242,7 +242,7 @@ export function MethodologyPage() {
         A first game is played in basic mode, which suggests only the best ideas: on the fine-tuning
         screens each adviser&rsquo;s shortlist, eight taxes and seven spending policies with no
         folds; on the flagship screens the best one or two ways to deliver each priority; and a
-        short briefing. &ldquo;Best&rdquo; is a judgement, badged Game judgement, and each
+        briefing with no folds. &ldquo;Best&rdquo; is a judgement, badged Game judgement, and each
         pick&rsquo;s reason is its own adviser&rsquo;s line. Rules keep it checkable: a pick moves
         the 2029-30 headroom by £1 billion or more at its smallest size on today&rsquo;s estimate,
         counts by 2029-30, is on the table, breaks no promise at any size, and never counts the same

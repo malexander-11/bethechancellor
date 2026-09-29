@@ -7,7 +7,7 @@ number traced to an official source.
 Formerly _Be the Chancellor_. It was renamed in September 2026 so that it is not mistaken for the
 Institute for Fiscal Studies and Nesta tool of that name, which inspired it (ADR-0029).
 
-Status: **Phase 27 (basic and advanced)**. You are appointed Chancellor in a Labour
+Status: **Phase 28 (the briefing in three parts)**. You are appointed Chancellor in a Labour
 government with a Budget to deliver on 28 October 2026, and the game walks you through it in six
 steps with one clear action on every screen: your briefing; set your priorities; flagship policies;
 fine-tune tax and spend; deliver the Budget; feedback. There is no forecast to guess: every game
@@ -21,7 +21,7 @@ ready-made Budgets and its expert switches, and every lever it held is now a pol
 adviser picks a few, badged as their judgement and held to rules (worth £1bn or more, counting by
 2029-30, on the table, breaking no promise, never two that count the same money). Step 4 then shows
 eight tax and seven spending ideas with no folds, step 3 the best one or two ways to deliver each
-priority, and the briefing only the headroom, the rules and what is already on the desk. "Advanced
+priority, and the briefing its three parts without the folds. "Advanced
 mode", a switch in the footer and a button on each trimmed screen, shows the whole game, and
 anything chosen stays on show in either mode (ADR-0028). Phase 25 reviewed the game against four goals (that it reflects how a Budget is made,
 that most voters can follow it, that it shows the trade-offs, and that its feedback shows a Budget's
@@ -44,12 +44,15 @@ and decisions come to about eight and a half minutes in basic mode and ten and a
 Every screen names itself, can be reached by keyboard and screen reader, holds 4.5:1 contrast, keeps
 every control at 44px and says met or missed in words.
 
-Six steps. **Briefing**: one sentence, the playtime and the button; then the Treasury's briefing:
-your headroom on today's estimate, what it means and about what it comes to for each household, the
-advisers' yardstick, the two rules in one line (the Charter's words one fold away), what is already
-on your desk, why the headroom is £6.8bn rather than March's £23.6bn, and "What is headroom?"
-beneath; with the workings on, how the estimate is made. Basic mode's briefing is the headroom, the
-yardstick, the rules and the desk. **Set your priorities**: rank up to three
+Six steps. **Briefing**: one sentence, the playtime and the button; then your briefing in three
+parts (ADR-0030). Your headroom: £6.8bn of breathing space in 2029-30, and about £29bn, what
+Chancellors have kept on average since 2010 (the OBR's record). What headroom is: the two rules in
+one line, the word itself, the £246bn of gilts the government plans to sell this year and why
+lenders care. How it is calculated: the OBR's March £23.6bn, less £11.3bn for higher interest rates
+and £5.5bn for higher inflation, and the advice to keep more than £10bn. Then what is already on
+your desk. Advanced mode adds the rules in the Charter's words, what changed since March and why
+forecasts move, each one fold away; with the workings on, how the estimate is made.
+**Set your priorities**: rank up to three
 of eight with the Prime Minister, who reacts to each, and the game writes the theme of the Budget
 from the ranking; the promises are one fold away, and one line gives the price of a priority in full
 before anything is chosen; nothing is funded yet. **Flagship policies**: one screen per priority,

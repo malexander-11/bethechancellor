@@ -46,7 +46,10 @@ paragraph?, quote?, note? }`) pointing into `sources/sources.json`.
 ## Rebasing to a new forecast
 
 Create `vintages/<new-id>/vintage.json`, run `npm run validate:data`, update the default
-vintage in the web app, and keep the old vintage so existing permalinks still render.
+vintage in the web app, and keep the old vintage so existing permalinks still render. Re-read the
+two figures the briefing states (the context file's `briefing`, below): HM Treasury revises the
+Debt Management Office's remit at every fiscal event, so the gilt sales change with the Budget, and
+the validator refuses gilt sales for any year but the one the context is dated in.
 
 ## Authoring a lever
 
@@ -265,6 +268,16 @@ Budget inherits, `{ id, text, badge, leverCode, sources }`. The text is one sent
 characters; `{cost}` in it is the named lever's own figure in the target year, filled by the
 engine. `leverCode` names the lever that deals with it, so the review can list the items a Budget
 leaves as they are; the validator refuses an unknown lever.
+
+`briefing` (Phase 28, ADR-0030) holds the two published figures the briefing states, as data so a
+rebase re-reads them: `averageHeadroom { gbpm, since, source }`, the average margin Chancellors
+have left against their rules (the OBR's record), and `giltSales { gbpm, year, source }`, the gilts
+the government plans to sell in a fiscal year (HM Treasury's remit for the Debt Management Office).
+Each source names its paragraph and page and must quote the passage the figure is read from; the
+validator refuses a figure that quotes nothing, and gilt sales for any year but the one `asOf`
+falls in, since the page says "this year". The page badges both Official figure. The briefing's
+words are not data: they are templates in `apps/web/src/journey/briefingWords.ts`, with no figure
+typed in them.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 

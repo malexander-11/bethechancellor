@@ -1,7 +1,8 @@
 # ADR-0026: A review against four goals, and the fixes
 
-Date: 2026-09-28. Status: accepted; revised 2026-09-28 (below, ADR-0027). Revises ADR-0007,
-ADR-0013, ADR-0015, ADR-0023 and ADR-0025, each of which carries a dated revision pointing here.
+Date: 2026-09-28. Status: accepted; revised 2026-09-28 and 2026-09-29 (below, ADR-0027 and
+ADR-0030). Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023 and ADR-0025, each of which carries a
+dated revision pointing here.
 
 ## Context
 
@@ -351,3 +352,13 @@ points of VAT), while the desk went further, badged Worked out. Phase 26 replace
 sizes and reverses the clamp on step 4: the user's own example asks for VAT at 25%, so a large size
 may pass a source's range, and its effect then wears Worked out with the caveat, as the desk's did.
 Step 4 on a phone is still about 7.5 to 7.7 screens tall.
+
+## Revision (2026-09-29): the briefing in three parts (ADR-0030)
+
+R9 explained the briefing's one figure beside it. Phase 28 keeps the meaning line and the OBR
+spelt out, and changes the rest to the player's own format. The line on what the headroom comes to
+for each household goes, since the OBR's record of what Chancellors have kept, about £29bn since
+2010, now gives the scale; so does the source line, since the calculation's rows now say where the
+figure comes from. The yardstick moves to the review only: the briefing gives the same line as
+advice under the calculation, "aim to keep more than £10bn", still badged Game judgement and
+scored by nothing. The briefing reads 205 words in either mode, against R9's 234.
