@@ -1,6 +1,7 @@
 import { finetuneItems } from '@btc/engine';
 import { appendFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { MODE_WORDS } from '../components/ModeLine';
 import {
   context,
   finetune,
@@ -143,11 +144,22 @@ const SETS: Record<string, readonly string[]> = {
   'the ministers': ministers.ministers.flatMap((m) =>
     [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)].map(short),
   ),
+  // Basic and advanced (Phase 27): the line on a trimmed screen, what it says once pressed, and
+  // the footer's switch with its note.
+  'the modes': [
+    `${MODE_WORDS.shortlist} ${MODE_WORDS.ideas.basic}.`,
+    `${MODE_WORDS.ideas.advanced}.`,
+    `${MODE_WORDS.briefing.basic}.`,
+    `${MODE_WORDS.briefing.advanced}.`,
+    ...Object.values(MODE_WORDS.said).flatMap((s) => [s.basic, s.advanced]),
+    `${MODE_WORDS.switch}.`,
+    MODE_WORDS.note,
+  ],
 };
 
 describe('readability: a reading age of about twelve, one idea a sentence', () => {
   it('reads every set a newcomer meets', () => {
-    expect(Object.keys(SETS).length).toBe(16);
+    expect(Object.keys(SETS).length).toBe(17);
     for (const [name, texts] of Object.entries(SETS)) expect(texts.length, name).toBeGreaterThan(0);
   });
 
@@ -174,8 +186,9 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // sign-off 1.6, the promises 5.6, the reception labels 4.9 and bands 5.1, the verdicts 4.9,
     // the interventions 4.2, the ministers 5.8. Re-measured after Phase 26 (ADR-0027), with every
     // lever a policy and the folds' subheads read: the fine-tuning screens 5.7 and their advisers'
-    // lines 4.8, the guide 3.4 (step 4's line says "Choose policies"), the rest unchanged. Set
-    // GRADES to a file path to write them out.
+    // lines 4.8, the guide 3.4 (step 4's line says "Choose policies"), the rest unchanged. Then
+    // basic and advanced (Phase 27): the fine-tuning screens, with basic mode's leads, stay at 5.7;
+    // the modes read at 3.4. Set GRADES to a file path to write them out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);

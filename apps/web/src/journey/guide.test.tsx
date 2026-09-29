@@ -91,6 +91,8 @@ describe('the head of every screen', () => {
     expect(screen.queryByRole('switch', { name: 'Dark mode' })).toBeNull();
     const footer = document.querySelector('footer.footer-note') as HTMLElement;
     expect(within(footer).getByRole('switch', { name: 'Show workings' })).toBeInTheDocument();
+    // Basic and advanced (Phase 27): a second switch, beside the workings.
+    expect(within(footer).getByRole('switch', { name: 'Advanced mode' })).toBeInTheDocument();
     expect(within(footer).getByRole('link', { name: 'Sources and licence' })).toBeInTheDocument();
   });
 

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
@@ -466,5 +466,142 @@ describe('fine-tune tax and spend: the curated levers', () => {
     });
     expect(status.textContent).toMatch(/1 promise broken\.$/);
     expect(status.textContent).not.toMatch(/rules met/);
+  });
+});
+
+/** The titles of the cards on show, in order: policies and flagship lines alike. */
+const cardTitles = () =>
+  [...document.querySelectorAll('.lever--curated .lever__title')].map((h) => h.textContent ?? '');
+const modeLine = () => document.querySelector('.mode-line') as HTMLElement;
+
+describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-0028)', () => {
+  // A newcomer's game: the shared setup's advanced mode is cleared, as a fresh browser has it.
+  beforeEach(() => window.localStorage.removeItem('btc.mode.v1'));
+
+  it('shows the Director of Tax’s eight picks and nothing else, badged as a judgement', () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    expect(document.querySelector('main')?.getAttribute('data-mode')).toBe('basic');
+    expect(
+      screen.getByText('Your Director of Tax’s best ideas. Watch your headroom move.'),
+    ).toBeInTheDocument();
+    expect(within(modeLine()).getByText('Game judgement')).toBeInTheDocument();
+    expect(modeLine().textContent).toMatch(/A shortlist\./);
+    expect(
+      screen.getByRole('button', { name: 'See every idea (all 95 tax policies)' }),
+    ).toBeInTheDocument();
+    expect(cardTitles()).toEqual([
+      'Bring back the health and social care levy',
+      'Keep VAT off electricity after March 2027',
+      'Tax capital gains at the same rates as income',
+      'Give everyone the same 30% pension tax relief',
+      'Charge employer National Insurance on pension contributions',
+      'Double council tax on the biggest homes (bands G and H)',
+      'End the extra inheritance tax allowance for family homes',
+      'Put gambling duties up again',
+    ]);
+    // No folds, and a group at rest names no count of policies that are not on show.
+    expect(screen.queryByText(/more polic(y|ies)$/)).toBeNull();
+    expect(group(/^Everyone$/)).toBeInTheDocument();
+    // Still one primary button, and the cards still price themselves.
+    expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
+    expect(
+      within(policy('Put gambling duties up again')).getByText(/^If you switch it on: would raise/),
+    ).toBeInTheDocument();
+    // Chosen, a group says so as it does in advanced mode.
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Put gambling duties up again' }));
+    expect(
+      group(/^Drivers, smokers, gamblers and flyers 1 chosen · raises £\d\.\dbn/),
+    ).toBeInTheDocument();
+  });
+
+  it('swaps to every idea and back with one button, which keeps the focus', () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    const button = screen.getByRole('button', { name: /^See every idea/ });
+    button.focus();
+    fireEvent.click(button);
+    // The same button, still focused, now offering the shortlist back; the screen is advanced
+    // mode's, exactly.
+    expect(screen.getByRole('button', { name: 'Show only the best ideas' })).toBe(button);
+    expect(document.activeElement).toBe(button);
+    expect(within(modeLine()).getByRole('status')).toHaveTextContent('Every idea is on show.');
+    expect(within(modeLine()).queryByText('Game judgement')).toBeNull();
+    expect(document.querySelectorAll('.lever--curated')).toHaveLength(15);
+    expect(group(/^Everyone 31 policies/)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Raise or cut any tax. Watch your headroom move. Your Director of Tax’s view is on each lever.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('switch', { name: 'Advanced mode' })).toBeChecked();
+    fireEvent.click(button);
+    expect(screen.getByRole('button', { name: /^See every idea/ })).toBe(button);
+    expect(within(modeLine()).getByRole('status')).toHaveTextContent(
+      'Only the best ideas are on show.',
+    );
+    expect(cardTitles()).toHaveLength(8);
+    expect(window.localStorage.getItem('btc.mode.v1')).toBe('basic');
+  });
+
+  it('never hides what was chosen: a policy picked in advanced mode stays on show in basic', () => {
+    window.localStorage.setItem('btc.mode.v1', 'advanced');
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    const fold = openFold(/^Everyone/);
+    const premium = cardOf(
+      within(fold).getByRole('heading', { name: 'Put up insurance premium tax' }),
+    );
+    fireEvent.click(within(premium).getByRole('radio', { name: 'Small 14%' }));
+    fireEvent.click(screen.getByRole('switch', { name: 'Advanced mode' }));
+    expect(document.querySelector('main')?.getAttribute('data-mode')).toBe('basic');
+    expect(cardTitles()).toContain('Put up insurance premium tax');
+    expect(
+      within(policy('Put up insurance premium tax')).getByRole('radio', { name: 'Small 14%' }),
+    ).toBeChecked();
+    expect(cardTitles()).toHaveLength(9);
+  });
+
+  it('shows a lever a link chose, and keeps it on show after Undo until the next visit', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}&L=ipt.2`);
+    const premium = policy('Put up insurance premium tax');
+    expect(within(premium).getByRole('radio', { name: 'Small 14%' })).toBeChecked();
+    expect(group(/^Everyone 1 chosen · raises/)).toBeInTheDocument();
+    fireEvent.click(
+      within(premium).getByRole('button', { name: 'Undo for Put up insurance premium tax' }),
+    );
+    await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/ipt/));
+    // Still on show: a card never vanishes from under the pointer.
+    expect(policy('Put up insurance premium tax')).toBe(premium);
+    expect(group(/^Everyone$/)).toBeInTheDocument();
+  });
+
+  it('shows the flagships’ lines and the defence plan’s gap, which the briefing puts on the desk', () => {
+    at(`/finetune/spending?${BASE}&${GAME}&L=moj.10`);
+    expect(
+      screen.getByText(
+        'Your Director of Public Spending’s best ideas. A top-up costs what a trim saves.',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'See every idea (all 46 spending policies)' }),
+    ).toBeInTheDocument();
+    // The prisons flagship holds its lever: its line shows in basic mode as in advanced.
+    const prisons = cardOf(screen.getByRole('heading', { name: 'Prisons and courts' }));
+    expect(prisons.querySelector('.lever__held')?.textContent).toMatch(
+      /^More money for prisons and courts: 10% more\. Change/,
+    );
+    expect(cardTitles()).toEqual([
+      'Spend more on health and social care',
+      'Spend more on schools and education',
+      'Prisons and courts',
+      'Spend more on public investment',
+      'Fund the defence plan’s gap',
+      'More council and social rent homes',
+      'Raise housing benefit to match local rents',
+      'Go ahead with the 2025 cuts to PIP',
+      'Limit winter fuel payments to pensioners on pension credit',
+    ]);
+    // The screen's notes stay: how long the settlements run, and whose budgets these are.
+    expect(
+      screen.getByText(/Departments’ day-to-day budgets are set to 2028-29\. Cutting one reopens/),
+    ).toBeInTheDocument();
   });
 });

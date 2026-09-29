@@ -1468,3 +1468,18 @@ label.choice {
 .review__reaction .kicker {
   margin-right: 4px;
 }
+
+/*
+ * Basic and advanced (Phase 27): the line on a trimmed screen. The shortlist is a judgement, so
+ * its badge leads; the button that swaps the screen sits in the same place in either mode.
+ */
+.mode-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 8px;
+  max-width: 40em;
+  margin: 0 0 12px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}

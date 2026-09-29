@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Navigate, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { ModeProvider, useMode } from './journey/mode';
 import { WorkingsProvider, useWorkingsSwitch } from './journey/workings';
 import { BudgetProvider } from './state/budget';
 import { AboutPage } from './pages/About';
@@ -58,6 +59,7 @@ function RouteFocus() {
  */
 function Shell() {
   const { workings } = useWorkingsSwitch();
+  const mode = useMode();
   return (
     <>
       <a href="#main" className="skip-link">
@@ -75,7 +77,13 @@ function Shell() {
           </nav>
         </div>
       </header>
-      <main id="main" tabIndex={-1} className="page" data-workings={workings ? 'on' : 'off'}>
+      <main
+        id="main"
+        tabIndex={-1}
+        className="page"
+        data-workings={workings ? 'on' : 'off'}
+        data-mode={mode}
+      >
         <Routes>
           <Route path="/" element={<StartPage />} />
           <Route path="/outlook" element={<OutlookPage />} />
@@ -120,10 +128,13 @@ export function App() {
     <BudgetProvider>
       {/*
         The workings switch lives above the routes: one preference for the whole journey, read by
-        every citation on every page.
+        every citation on every page. Basic and advanced (Phase 27) sit beside it: another
+        preference, read by the screens that trim their ideas.
       */}
       <WorkingsProvider>
-        <Shell />
+        <ModeProvider>
+          <Shell />
+        </ModeProvider>
       </WorkingsProvider>
     </BudgetProvider>
   );

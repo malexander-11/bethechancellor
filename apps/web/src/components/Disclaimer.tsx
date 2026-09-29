@@ -1,7 +1,9 @@
 import type { Badge } from '@btc/engine';
 import { Link } from 'react-router-dom';
+import { useModeSwitch } from '../journey/mode';
 import { useWorkingsSwitch } from '../journey/workings';
 import { BADGE_KEY_ID, BADGE_LABELS, LabelBadge } from './LabelBadge';
+import { MODE_WORDS } from './ModeLine';
 
 const BADGES = Object.keys(BADGE_LABELS) as Badge[];
 
@@ -33,10 +35,36 @@ function WorkingsSwitch() {
 }
 
 /**
+ * The switch between basic and advanced (Phase 27, ADR-0028): off, the advisers' best ideas and
+ * the short briefing; on, every policy and the full briefing. Remembered, never forced.
+ */
+function ModeSwitch() {
+  const { mode, setMode } = useModeSwitch();
+  return (
+    <>
+      <label className="workings-switch" title={MODE_WORDS.note}>
+        <input
+          type="checkbox"
+          role="switch"
+          checked={mode === 'advanced'}
+          aria-describedby="mode-switch-note"
+          onChange={(e) => setMode(e.target.checked ? 'advanced' : 'basic')}
+        />
+        <span>{MODE_WORDS.switch}</span>
+      </label>
+      <span id="mode-switch-note" className="sr-only">
+        {MODE_WORDS.note}
+      </span>
+    </>
+  );
+}
+
+/**
  * The foot of every screen: what kind of numbers these are, then the utilities in one row (the
  * workings switch, the sources and licence) and what the badges mean, one tap away. The utilities
  * live here rather than in the header, where a reader looks for them once they want them (Phase
  * 23). The way to every lever went with the desk (Phase 26): every lever is a policy on step 4.
+ * Advanced mode joined the utilities in Phase 27: two switches, each doing one thing.
  */
 export function Disclaimer() {
   const { workings } = useWorkingsSwitch();
@@ -47,6 +75,7 @@ export function Disclaimer() {
         opinion.
       </p>
       <div className="footer-note__tools">
+        <ModeSwitch />
         <WorkingsSwitch />
         {!workings ? (
           <span className="footer-note__hint">

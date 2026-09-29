@@ -1,10 +1,13 @@
 import {
   FINETUNE_SHOWN,
   ambitionStatus,
+  basicPolicy,
+  deskLevers,
   formatGbpBn,
   interventionsFor,
   itemName,
   leadPolicy,
+  policyCount,
   rankedPriorities,
   setByFlagship,
   stageIndex,
@@ -21,19 +24,23 @@ import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { LabelBadge } from '../components/LabelBadge';
 import { sizeWords } from '../components/LeverControl';
+import { ModeLine } from '../components/ModeLine';
 import { HeldLever, PolicyCard, type Held } from '../components/PolicyCard';
 import { SourceList } from '../components/SourceLink';
-import { adviserById, finetune, interventions, levers, options, pm } from '../data';
+import { adviserById, context, finetune, interventions, levers, options, pm } from '../data';
 import { UNCHANGED_BELOW_GBPM } from '../journey/effects';
 import { useStageGuard } from '../journey/guard';
 import { chosenByLever, redLinesOf } from '../journey/levers';
 import { StepLink } from '../journey/links';
 import { useLeverHints } from '../journey/prices';
+import { useMode } from '../journey/mode';
 import { isMissed } from '../journey/rules';
 import { useBudget } from '../state/budget';
 import { deliverPath } from './Deliver';
 
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
+/** Already on the desk: basic mode shows these levers though they are no pick (Phase 27). */
+const DESK = deskLevers(context);
 
 /** The route of one of the two screens. */
 export function finetunePath(side: FinetuneSideId): string {
@@ -54,7 +61,9 @@ const INTEREST: Record<FinetuneSideId, string> = {
 /**
  * The head of a group: at rest, how many policies it offers; once any is chosen, how many of its
  * levers are chosen and what they do in the target year: on the tax screen what they raise (or
- * cost), on the spending screen what they cost (or save), day-to-day and investment together.
+ * cost), on the spending screen what they cost (or save), day-to-day and investment together. In
+ * basic mode a group at rest says nothing (`atRest` false, Phase 27): its count would be of
+ * policies that are not on show.
  */
 export function groupCount(
   group: FinetuneGroup,
@@ -62,6 +71,7 @@ export function groupCount(
   values: Record<string, number>,
   effects: readonly LeverEffect[],
   year: string,
+  atRest = true,
 ): string {
   const moved = group.items.filter((item) => {
     const lever = byCode.get(item.code);
@@ -70,6 +80,7 @@ export function groupCount(
     );
   });
   if (moved.length === 0) {
+    if (!atRest) return '';
     const count = group.items.reduce((n, item) => n + item.policies.length, 0);
     return `${count} ${count === 1 ? 'policy' : 'policies'}`;
   }
@@ -98,7 +109,9 @@ export function groupCount(
  * rest wait under one fold, grouped by the lever's family, and a policy chosen inside the fold
  * stays where it is until the next visit, so a card never jumps from under the pointer. A lever a
  * flagship the player chose holds is one line, with the way back to that flagship. Every policy
- * lever the game has is here (Phase 26): there is no desk behind it.
+ * lever the game has is here (Phase 26): there is no desk behind it. That is advanced mode; basic
+ * mode, a first game's, shows the screen adviser's shortlist and no folds (Phase 27, ADR-0028),
+ * and anything chosen before the screen opened, in either mode, stays on show.
  */
 export function FinetunePage() {
   const { side: param } = useParams();
@@ -117,10 +130,16 @@ export function FinetunePage() {
 function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const { state, dispatch, outcome } = useBudget();
   const hintOf = useLeverHints();
+  const mode = useMode();
   // The Budget as it stood when the screen was opened: a lever chosen then shows the policy its
   // way among those on show, and a lever a flagship held then is a line; anything chosen inside the
-  // fold stays in it until the next visit.
-  const [start] = useState(() => state.leverValues);
+  // fold stays in it until the next visit. A change of mode reads it again (Phase 27), without
+  // remounting, so what was chosen in one mode is on show in the other, and a card chosen in this
+  // mode never vanishes from under the pointer.
+  const [seen, setSeen] = useState(() => ({ mode, values: state.leverValues }));
+  if (seen.mode !== mode) setSeen({ mode, values: state.leverValues });
+  const start = seen.mode === mode ? seen.values : state.leverValues;
+  const basic = mode === 'basic';
   const [held] = useState(() => {
     const status0 = state.game ? ambitionStatus(state.game, pm, options, outcome, levers) : null;
     return new Map(
@@ -226,8 +245,9 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       step="finetune"
       part={{ index, total: 2, label: spec.title }}
       title={spec.title}
-      // The adviser is named once, here, not on every card (Phase 25).
-      lead={`${spec.lead} Your ${who}’s view is on each lever.`}
+      // The adviser is named once, here, not on every card (Phase 25); in basic mode, as the one
+      // whose best ideas these are (Phase 27).
+      lead={basic ? spec.shortlistLead : `${spec.lead} Your ${who}’s view is on each lever.`}
     >
       <HeadroomBar outcome={outcome} status={status} />
       <Interventions items={advice} />
@@ -242,6 +262,10 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         </ul>
       ) : null}
       <p className="panel__hint tune__interest">{INTEREST[side]}</p>
+      <ModeLine
+        kind="ideas"
+        every={`${policyCount(finetune, side)} ${side === 'tax' ? 'tax' : 'spending'} policies`}
+      />
       {spec.groups.map((group) => {
         const id = `tune-${group.id}`;
         // On show: the usual policy of the group's first levers, and of any chosen on arrival the
@@ -257,6 +281,12 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
             return;
           }
           const arrivedAt = start[item.code];
+          if (basic) {
+            // Basic mode: what was chosen, else the adviser's pick, else a lever on the desk.
+            const policy = basicPolicy(item, lever, arrivedAt, DESK.has(item.code));
+            if (policy) shown.push(card(item, policy));
+            return;
+          }
           const lead = leadPolicy(item, lever, arrivedAt ?? lever.control.default);
           const onShow = i < FINETUNE_SHOWN || arrivedAt !== undefined;
           for (const policy of item.policies) {
@@ -264,13 +294,27 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
             else folded.push({ item, policy });
           }
         });
+        // A group with nothing on show is left out; the shortlist has a pick in every group, so on
+        // arrival none is.
+        if (shown.length === 0 && folded.length === 0) return null;
+        const count = groupCount(
+          group,
+          side,
+          state.leverValues,
+          outcome.leverEffects,
+          year,
+          !basic,
+        );
         return (
           <section key={group.id} className="who tune" aria-labelledby={id}>
             <h2 id={id} className="section-label who__title">
-              {group.label}{' '}
-              <span className="who__count">
-                {groupCount(group, side, state.leverValues, outcome.leverEffects, year)}
-              </span>
+              {group.label}
+              {count ? (
+                <>
+                  {' '}
+                  <span className="who__count">{count}</span>
+                </>
+              ) : null}
             </h2>
             <div className="tune__levers">{shown}</div>
             {folded.length > 0 ? <Fold count={folded.length}>{() => foldBody(folded)}</Fold> : null}

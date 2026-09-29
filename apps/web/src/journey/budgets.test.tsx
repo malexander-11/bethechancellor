@@ -42,31 +42,50 @@ function screenWords(): number {
   return words(clone.textContent ?? '');
 }
 
-/** Every screen of the main road, in order, with the game that renders it at its widest. */
-const ROAD: readonly [path: string, limit: number, game: string][] = [
-  ['/', 40, GAME],
-  ['/outlook', 255, GAME],
-  ['/pm', 195, GAME],
-  ['/budget/deliver', 220, WIDEST],
-  ['/budget/deliver/2', 220, WIDEST],
-  ['/budget/deliver/3', 220, WIDEST],
+type Mode = 'basic' | 'advanced';
+
+/**
+ * Every screen of the main road, in order, with the game that renders it at its widest and the
+ * mode it is read in (Phase 27): a screen basic mode trims is measured in both, the rest in basic,
+ * the mode a first game is played in.
+ */
+const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] = [
+  ['/', 40, GAME, 'basic'],
+  ['/outlook', 255, GAME, 'advanced'],
+  ['/pm', 195, GAME, 'basic'],
+  ['/budget/deliver', 220, WIDEST, 'advanced'],
+  ['/budget/deliver/2', 220, WIDEST, 'advanced'],
+  ['/budget/deliver/3', 220, WIDEST, 'advanced'],
   // Measured after Phase 26's sizes (613, 778, 543 and 724 words), with a tenth to spare; then
   // council homes took Investment's third place on show (spending 580 and 761), and the links to
   // the desk went with it (tax 611 and 776, spending 578 and 759; ADR-0027).
-  ['/finetune/tax', 675, GAME],
-  ['/finetune/tax', 860, TUNED],
-  ['/finetune/spending', 640, GAME],
-  ['/finetune/spending', 840, TUNED],
-  ['/review', 235, GAME],
-  ['/budget-day', 210, GAME],
+  ['/finetune/tax', 675, GAME, 'advanced'],
+  ['/finetune/tax', 860, TUNED, 'advanced'],
+  ['/finetune/spending', 640, GAME, 'advanced'],
+  ['/finetune/spending', 840, TUNED, 'advanced'],
+  // Basic mode (Phase 27): the advisers' shortlist, and whatever the game has chosen besides
+  // (tax 343 and 492, spending 424 and 589).
+  ['/finetune/tax', 380, GAME, 'basic'],
+  ['/finetune/tax', 545, TUNED, 'basic'],
+  ['/finetune/spending', 470, GAME, 'basic'],
+  ['/finetune/spending', 650, TUNED, 'basic'],
+  ['/review', 235, GAME, 'basic'],
+  ['/budget-day', 210, GAME, 'basic'],
 ];
+
+/** A fresh browser is in basic mode; advanced is remembered once chosen. */
+function inMode(mode: Mode) {
+  if (mode === 'basic') window.localStorage.removeItem('btc.mode.v1');
+  else window.localStorage.setItem('btc.mode.v1', 'advanced');
+}
 
 describe('the word budgets', () => {
   // The budgets are what a newcomer sees, and a newcomer sees the game with the workings off.
   beforeEach(() => window.localStorage.removeItem('btc.workings.v1'));
 
   it('has no Continue anywhere, no tab on the main road, and one primary action a screen', () => {
-    for (const [path, , game] of ROAD) {
+    for (const [path, , game, mode] of ROAD) {
+      inMode(mode);
       const view = at(`${path}?${BASE}&${game}`);
       expect(
         screen.queryByRole('button', { name: /Continue/ }),
@@ -112,12 +131,19 @@ describe('the word budgets', () => {
     // the tax take in words (173). Then the sign-off (Phase 25): the priorities gained a worked-out
     // line on scale and the welfare priority its tag (178); step 4 its one adviser's line above the
     // cards (tax 605 and 759, spending 588 and 753); the review the Prime Minister's line and one
-    // reaction read out with no rating (213).
-    for (const [path, limit, game] of ROAD) {
+    // reaction read out with no rating (213). Then basic and advanced (Phase 27): in advanced mode
+    // step 4 gains its one line offering the shortlist back (tax 615 and 780, spending 582 and
+    // 763); in basic mode it shows the shortlist (tax 343 and 492, spending 424 and 589).
+    for (const [path, limit, game, mode] of ROAD) {
+      inMode(mode);
       const view = at(`${path}?${BASE}&${game}`);
       const n = screenWords();
+      const tuned = game === TUNED ? ' (tuned)' : '';
       if (process.env.WORDS)
-        appendFileSync(process.env.WORDS, `${path}: ${n} words (limit ${limit})\n`);
+        appendFileSync(
+          process.env.WORDS,
+          `${path}${tuned}, ${mode}: ${n} words (limit ${limit})\n`,
+        );
       expect(n, `${path} shows ${n} words`).toBeLessThanOrEqual(limit);
       // A floor against an empty render: the opening screen is the shortest, at about thirty.
       expect(n, `${path} shows ${n} words`).toBeGreaterThan(20);
