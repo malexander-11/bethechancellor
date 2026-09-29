@@ -1,6 +1,6 @@
 # ADR-0002: Direct costings are numbers; second-round effects are words
 
-**Status:** accepted, 2026-09-15
+**Status:** accepted, 2026-09-15; revised since (below), last by ADR-0032
 
 ## Context
 
@@ -58,3 +58,12 @@ do: the user asked for a page of plain copy. The figures are the same figures, a
 which is the OBR's and which is ours ("The OBR's March forecast", "Today's estimate"); with the
 switch on, every figure and judgement wears its badge again. Every other screen keeps its badges
 whatever the switch says, as the revision of 2026-09-18 set out.
+
+## Revision, 2026-09-29, later (ADR-0032)
+
+The "Show workings" switch is withdrawn for now, at the user's request, with the rest of the
+footer's utilities. So no game screen offers its sources, which the revision of 2026-09-18 said
+would break this decision. It is a deliberate departure for now, not a change to the contract:
+every figure is still the engine's or a document's and badged for what it is on every screen but
+the briefing, the About page lists every source, and the code and its tests stay for the switch's
+return.

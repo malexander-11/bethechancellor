@@ -7,9 +7,9 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
  * step 3 the best one or two ways to deliver each priority. Advanced mode is the whole game: every
  * policy and every way. The briefing is the same in both (ADR-0031). The choice is the viewer's
  * own, remembered in the browser and never carried in a link, so a shared Budget opens in the
- * recipient's mode; every lever it moves is on show anyway, because nothing chosen ever hides. It
- * is a second switch beside "Show workings", which shows where the numbers come from, not how many
- * ideas are on offer.
+ * recipient's mode; every lever it moves is on show anyway, because nothing chosen ever hides. The
+ * way between the modes is the button on each screen basic mode trims; the footer's switch for it
+ * is withdrawn for now (ADR-0032).
  */
 
 export type Mode = 'basic' | 'advanced';
@@ -56,7 +56,7 @@ export function useMode(): Mode {
   return useContext(ModeContext)?.mode ?? 'advanced';
 }
 
-/** The mode and the way to change it: for the footer's switch and the line on a trimmed screen. */
+/** The mode and the way to change it: for the line on a trimmed screen. */
 export function useModeSwitch(): ModeValue {
   return useContext(ModeContext) ?? { mode: 'advanced', setMode: () => undefined };
 }

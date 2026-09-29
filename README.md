@@ -21,40 +21,41 @@ on step 4 (ADR-0027). A first game is played in basic mode, which suggests only 
 screen's adviser picks a few, badged as their judgement and held to rules (worth £1bn or more,
 counting by 2029-30, on the table, breaking no promise, never two that count the same money). Step 4
 then shows eight tax and seven spending ideas with no folds, and step 3 the best one or two ways to
-deliver each priority; the briefing is the same in both modes (ADR-0031). "Advanced mode", a switch
-in the footer and a button on each trimmed screen, shows the whole game, and anything chosen stays
-on show in either mode (ADR-0028). Phase 25 reviewed the game against four goals (that it reflects
-how a Budget is made, that most voters can follow it, that it shows the trade-offs, and that its
-feedback shows a Budget's pros and cons) and fixed what the review found (ADR-0026): prices
-corrected, one price for every choice, delivery graded, audiences that read from before the Budget
-and see cuts, Budget-day words that say what the sums say, a briefing that explains its one figure,
-a plainer step 4, households that notice what reaches them, the Prime Minister's sign-off and a bar
-that speaks. There are no tabs and no hand-off to click through: every screen is a decision with a
-primary button and a way back, and the Budget lives in the link, so going back keeps every choice.
-The identity is Westminster's: Commons green, warm paper, charcoal, restrained brass, Budget red for
-the one button that delivers, and the page is set like an official paper: a serif body under
-editorial headings in Fraunces, hairline rules rather than boxes, small-capital labels, the Budget
-box on the opening. The words are plain (ADR-0024): no sentence a player meets runs past twenty
-words, and a readability test holds every set of them at a reading age of about twelve. Every number
-still comes from an official source or a stated calculation on one, badged for what it is (Official
-figure, Worked out, Assumption, Commentary, Game judgement), and the sources and breakdowns sit
-behind a "Show workings" switch in the footer, off by default, beside "Advanced mode". The briefing
-reads as plain copy, its badges waiting for that switch too (ADR-0031). A first playthrough's
-required reading and decisions come to about eight and a half minutes in basic mode and ten and a
-half in advanced (an estimate from the rendered screens, not user testing; ADR-0028). Every screen
-names itself, can be reached by keyboard and screen reader, holds 4.5:1 contrast, keeps every
-control at 44px and says met or missed in words.
+deliver each priority; the briefing is the same in both modes (ADR-0031). A button on each trimmed
+screen shows the whole game, and anything chosen stays on show in either mode (ADR-0028; the
+footer's switch that did the same is withdrawn for now, ADR-0032). Phase 25 reviewed the game
+against four goals (that it reflects how a Budget is made, that most voters can follow it, that it
+shows the trade-offs, and that its feedback shows a Budget's pros and cons) and fixed what the
+review found (ADR-0026): prices corrected, one price for every choice, delivery graded, audiences
+that read from before the Budget and see cuts, Budget-day words that say what the sums say, a
+briefing that explains its one figure, a plainer step 4, households that notice what reaches them,
+the Prime Minister's sign-off and a bar that speaks. There are no tabs and no hand-off to click
+through: every screen is a decision with a primary button and a way back, and the Budget lives in
+the link, so going back keeps every choice. The identity is Westminster's: Commons green, warm
+paper, charcoal, restrained brass, Budget red for the one button that delivers, and the page is set
+like an official paper: a serif body under editorial headings in Fraunces, hairline rules rather
+than boxes, small-capital labels; the cover is the premise and one button, the header the name alone
+and the footer one row of links (ADR-0032). The words are plain (ADR-0024): no sentence a player
+meets runs past twenty words, and a readability test holds every set of them at a reading age of
+about twelve. Every number still comes from an official source or a stated calculation on one,
+badged for what it is (Official figure, Worked out, Assumption, Commentary, Game judgement). For now
+the game's screens show no sources or breakdowns: the "Show workings" switch that showed them is
+withdrawn, and the About page lists every source (ADR-0032). The briefing reads as plain copy, with
+no badges (ADR-0031). A first playthrough's required reading and decisions come to about eight and a
+half minutes in basic mode and ten and a half in advanced (an estimate from the rendered screens,
+not user testing; ADR-0028). Every screen names itself, can be reached by keyboard and screen
+reader, holds 4.5:1 contrast, keeps every control at 44px and says met or missed in words.
 
-Six steps. **Briefing**: one sentence, the playtime and the button; then your briefing in three
-parts, in the user's own words and as plain copy (ADR-0030, ADR-0031). Your headroom: you start with
-£6.8bn of breathing space in 2029-30, against about £29bn that Chancellors have kept on average
-since 2010 (the OBR's record), so this Budget would need to find around £22bn to build in a sensible
-buffer (a judgement). What headroom is: the two rules in one line, the word itself, the £246bn of
-gilts the government plans to sell this year and why lenders care, and the debt rule one fold away
-(debt a smaller share of the economy in 2029-30 than the year before, investment included). How it
-is calculated: dearer borrowing and dearer prices since March, then the OBR's March £23.6bn, less
+Six steps. **Briefing**: one sentence and the button; then your briefing in three parts, in the
+user's own words and as plain copy (ADR-0030, ADR-0031). Your headroom: you start with £6.8bn of
+breathing space in 2029-30, against about £29bn that Chancellors have kept on average since 2010
+(the OBR's record), so this Budget would need to find around £22bn to build in a sensible buffer (a
+judgement). What headroom is: the two rules in one line, the word itself, the £246bn of gilts the
+government plans to sell this year and why lenders care, and the debt rule one fold away (debt a
+smaller share of the economy in 2029-30 than the year before, investment included). How it is
+calculated: dearer borrowing and dearer prices since March, then the OBR's March £23.6bn, less
 £11.3bn for higher interest rates and £5.5bn for higher inflation. The page is the same in both
-modes; with the workings on, every figure's badge and source, and how the estimate is made.
+modes, and its badges, sources and table of how the estimate is made wait for the workings.
 **Set your priorities**: rank up to three
 of eight with the Prime Minister, who reacts to each, and the game writes the theme of the Budget
 from the ranking; the promises are one fold away, and one line gives the price of a priority in full
@@ -121,7 +122,8 @@ the rebase to the 28 October 2026 forecast.
 
 - **Direct costings are official.** Fiscal effects come from HMRC ready reckoners, HM Treasury
   policy costings and OBR forecast lines. They are shown as numbers, with the source and every
-  transformation step visible.
+  transformation step visible; for now those are off the game's screens, with the switch that
+  showed them withdrawn, and the About page lists every source (ADR-0032).
 - **Second-round effects are words, not numbers.** Behavioural and macroeconomic knock-on
   effects are described qualitatively with sources. The interface labels every figure as an
   official figure, worked out, an assumption, or commentary.

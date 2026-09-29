@@ -23,7 +23,15 @@ export function AboutPage() {
         Budget on 28 October 2026; the data will be rebased when it appears and this version will
         remain available for old links.
       </p>
-      <h2>Sources</h2>
+      {/* The footer's "Sources and licence" lands here, above the long table (ADR-0032). */}
+      <h2 id="licences">Licences</h2>
+      <p>
+        Code is MIT licensed. Public sector data is reproduced under the Open Government Licence
+        v3.0; see <code>DATA-LICENCE.md</code> in the repository. Commentary from other
+        organisations is cited by link and never enters the arithmetic. Not affiliated with HM
+        Treasury, the OBR, HMRC, the IFS or Nesta.
+      </p>
+      <h2 id="sources">Sources</h2>
       <table>
         <thead>
           <tr>
@@ -47,13 +55,6 @@ export function AboutPage() {
           ))}
         </tbody>
       </table>
-      <h2>Licences</h2>
-      <p>
-        Code is MIT licensed. Public sector data is reproduced under the Open Government Licence
-        v3.0; see <code>DATA-LICENCE.md</code> in the repository. Commentary from other
-        organisations is cited by link and never enters the arithmetic. Not affiliated with HM
-        Treasury, the OBR, HMRC, the IFS or Nesta.
-      </p>
       <h2>What the game does not do</h2>
       <p>
         It does not model how your choices change growth, or how markets would actually move.

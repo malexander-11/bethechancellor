@@ -291,25 +291,13 @@
 /* ------------------------------------------------------------ the opening */
 
 .opening {
-  display: grid;
-  gap: 24px;
-  align-items: center;
   padding: 24px 0 8px;
 }
 
 @media (min-width: 720px) {
   .opening {
-    grid-template-columns: minmax(0, 1.25fr) minmax(200px, 0.75fr);
-    gap: 40px;
     padding: 40px 0 16px;
   }
-}
-
-.opening__kicker {
-  margin: 0 0 8px;
-  color: var(--brass-ink);
-  font-size: 0.9375rem;
-  font-weight: 600;
 }
 
 .opening__title {
@@ -320,37 +308,13 @@
 
 .opening__lede {
   max-width: 34em;
-  margin: 0 0 16px;
+  margin: 0 0 20px;
   font-size: 1.125rem;
   line-height: 1.5;
 }
 
-.opening__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 20px;
-  margin: 0 0 20px;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-}
-
-.opening__meta span::before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin: 0 8px 2px 0;
-  border-radius: 50%;
-  background: var(--brass);
-}
-
 .opening__actions {
   margin: 0 0 12px;
-}
-
-.opening__art {
-  justify-self: center;
-  width: min(100%, 300px);
 }
 
 .motif {

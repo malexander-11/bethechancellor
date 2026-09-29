@@ -2,7 +2,7 @@
 
 **Status:** accepted, 2026-09-18; the reception revised 2026-09-28 (below, ADR-0026); a second
 switch beside the workings 2026-09-29 (below, ADR-0028); the briefing's badges with the workings
-2026-09-29 (below, ADR-0031)
+2026-09-29 (below, ADR-0031); both switches withdrawn for now 2026-09-29 (below, ADR-0032)
 
 ## Context
 
@@ -145,3 +145,11 @@ The badges stay whatever the switch says on every screen but the briefing. There
 request for a page of plain copy, they show with the workings, as its sources do; with the switch
 off its words still say which figure is the OBR's and which is ours. The briefing is also the same
 in both modes now: "Advanced mode" no longer lengthens it.
+
+## Revision (2026-09-29, later): the switches withdrawn for now (ADR-0032)
+
+The footer is one row of links, and both switches are withdrawn for now. The game's screens show
+no workings; the reference pages, which are the workings, still do. The preference moved to a new
+key, so a player who had turned the workings on cannot keep them with no way to turn them off; the
+page tests set the new key to keep the code tested for the switch's return. Advanced mode is
+changed by the button on each screen basic mode trims, as it was beside the footer's switch.

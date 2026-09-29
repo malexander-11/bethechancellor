@@ -1,7 +1,7 @@
 # ADR-0026: A review against four goals, and the fixes
 
-Date: 2026-09-28. Status: accepted; revised 2026-09-28 and 2026-09-29 (below, ADR-0027 and
-ADR-0030). Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023 and ADR-0025, each of which carries a
+Date: 2026-09-28. Status: accepted; revised 2026-09-28 and 2026-09-29 (below, ADR-0027, ADR-0030 and
+ADR-0032). Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023 and ADR-0025, each of which carries a
 dated revision pointing here.
 
 ## Context
@@ -364,3 +364,10 @@ advice under the calculation, "aim to keep more than £10bn", still badged Game 
 scored by nothing. The briefing reads 205 words in either mode, against R9's 234. Later the same
 day the user's own words replaced that advice with a line on what reaching Chancellors' average
 margin would take (ADR-0030's revision); the review's yardstick is unchanged.
+
+## Revision (2026-09-29): badges are plain labels again (ADR-0032)
+
+A tapped badge opened the key at the foot of the page, so its meaning was reachable on a phone.
+The key went when the footer became one row of links; a badge is a plain label, its meaning in its
+title for a mouse, and the Methodology page, linked from the footer, explains all five. The
+glossary's toggletips are unchanged.

@@ -37,14 +37,11 @@
   --brass: #b3934c;
   --brass-ink: #745a1f;
 
-  /* Budget red: the Budget box, the one Budget-day action */
+  /* Budget red: the one Budget-day action */
   --red: #a3202a;
   --red-hover: #83171f;
   --red-ink: #ffffff;
   --red-wash: rgba(163, 32, 42, 0.1);
-  /* The Budget box itself: an object's colour, never a word's */
-  --box: #a3202a;
-  --box-edge: #7a161e;
 
   /* Status, always beside an icon or a word */
   --good: #166a30;

@@ -532,7 +532,7 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
         'Raise or cut any tax. Watch your headroom move. Your Director of Tax’s view is on each lever.',
       ),
     ).toBeInTheDocument();
-    expect(screen.getByRole('switch', { name: 'Advanced mode' })).toBeChecked();
+    expect(document.querySelector('main')?.getAttribute('data-mode')).toBe('advanced');
     fireEvent.click(button);
     expect(screen.getByRole('button', { name: /^See every idea/ })).toBe(button);
     expect(within(modeLine()).getByRole('status')).toHaveTextContent(
@@ -550,7 +550,9 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
       within(fold).getByRole('heading', { name: 'Put up insurance premium tax' }),
     );
     fireEvent.click(within(premium).getByRole('radio', { name: 'Small 14%' }));
-    fireEvent.click(screen.getByRole('switch', { name: 'Advanced mode' }));
+    // The way back to the shortlist is the screen's own button (the footer's switch is withdrawn
+    // for now, ADR-0032).
+    fireEvent.click(screen.getByRole('button', { name: 'Show only the best ideas' }));
     expect(document.querySelector('main')?.getAttribute('data-mode')).toBe('basic');
     expect(cardTitles()).toContain('Put up insurance premium tax');
     expect(

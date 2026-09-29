@@ -51,27 +51,30 @@ describe('the head of every screen', () => {
     expect(within(term).queryByText(short)).toBeNull();
   });
 
-  it('explains the badges at the foot of every page', () => {
+  it('names each badge in plain words, and the Methodology page says what each means', () => {
     // With the workings on, as the shared setup has them, the briefing wears its badges.
-    at(`/outlook?${BASE}`);
-    // A badge opens the key at the foot of the page on its own line.
-    const badge = document.querySelector('main a.badge--direct') as HTMLAnchorElement | null;
-    const key = document.getElementById('badge-key') as HTMLDetailsElement;
-    expect(key.open).toBe(false);
-    if (badge) {
-      expect(badge).toHaveAttribute('href', '#badge-key');
-      expect(badge).toHaveAttribute('tabindex', '-1');
-      fireEvent.click(badge);
-      expect(key.open).toBe(true);
-      key.open = false;
+    const view = at(`/outlook?${BASE}`);
+    // A badge is a plain label with its meaning in its title: the key it opened at the foot of
+    // the page went when the footer became one row of links (ADR-0032).
+    const badge = document.querySelector('main .badge--direct') as HTMLElement;
+    expect(badge.tagName).toBe('SPAN');
+    expect(badge).toHaveAttribute('title', expect.stringMatching(/^A figure HMRC/));
+    expect(document.getElementById('badge-key')).toBeNull();
+    expect(screen.queryByText('What the badges mean')).toBeNull();
+    view.unmount();
+    // The five badges, in plain words, one link away in the footer.
+    at('/methodology');
+    const kinds = screen.getByRole('heading', { name: 'Five kinds of number' });
+    const table = kinds.nextElementSibling as HTMLElement;
+    for (const label of [
+      'Official figure',
+      'Worked out',
+      'Assumption',
+      'Commentary',
+      'Game judgement',
+    ]) {
+      expect(within(table).getByText(label), label).toBeInTheDocument();
     }
-    // The five badges, in plain words, so "Official figure" is never only a tooltip.
-    fireEvent.click(screen.getByText('What the badges mean'));
-    const badges = screen.getByText('What the badges mean').closest('details') as HTMLElement;
-    expect(within(badges).getByText('Official figure')).toBeInTheDocument();
-    expect(within(badges).getByText('Worked out')).toBeInTheDocument();
-    expect(within(badges).getByText('Game judgement')).toBeInTheDocument();
-    expect(within(badges).getByText(/The game’s opinion/)).toBeInTheDocument();
   });
 
   it('follows step 4’s screens, and the opening has a head of its own', () => {
@@ -86,23 +89,39 @@ describe('the head of every screen', () => {
     expect(screen.getByText('Step 1 of 6')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: 'It’s your Budget now.' })).toBeVisible();
     expect(screen.getByRole('link', { name: 'Build my Budget' })).toBeInTheDocument();
-    expect(screen.getByText(/About 9 minutes/)).toBeInTheDocument();
+    // The premise and the button, nothing else (ADR-0032): no line above the heading, no bullets
+    // and no picture.
+    const opening = document.querySelector('.opening') as HTMLElement;
+    expect(opening.textContent).toBe(
+      'It’s your Budget now.Choose what matters, decide who pays, and see what the country makes of it.Build my Budget',
+    );
+    expect(opening.querySelector('svg')).toBeNull();
+    expect(screen.queryByText(/minutes/)).toBeNull();
     expect(screen.queryByText('No right answer')).toBeNull();
     expect(document.querySelector('.intro')).toBeNull();
   });
 
-  it('keeps the header to the name and the two reference pages, and the utilities in the footer', () => {
+  it('keeps the header to the name, and the footer to one row of links', () => {
     at(`/pm?${BASE}`);
+    // The header is the name, the way home, and nothing else (ADR-0032).
     const header = document.querySelector('.site-header') as HTMLElement;
-    expect(within(header).getByRole('link', { name: 'What’s your Budget?' })).toBeInTheDocument();
-    expect(within(header).queryByText('Every number sourced')).toBeNull();
-    expect(within(header).queryByRole('switch')).toBeNull();
-    expect(screen.queryByRole('switch', { name: 'Dark mode' })).toBeNull();
-    const footer = document.querySelector('footer.footer-note') as HTMLElement;
-    expect(within(footer).getByRole('switch', { name: 'Show workings' })).toBeInTheDocument();
-    // Basic and advanced (Phase 27): a second switch, beside the workings.
-    expect(within(footer).getByRole('switch', { name: 'Advanced mode' })).toBeInTheDocument();
-    expect(within(footer).getByRole('link', { name: 'Sources and licence' })).toBeInTheDocument();
+    expect(
+      within(header)
+        .getAllByRole('link')
+        .map((a) => a.textContent),
+    ).toEqual(['What’s your Budget?']);
+    expect(within(header).queryByRole('navigation')).toBeNull();
+    // The footer: the two reference pages and the sources and licence, with no switch, no key
+    // and no line of its own.
+    const footer = document.querySelector('footer.site-footer') as HTMLElement;
+    const links = within(footer).getAllByRole('link');
+    expect(links.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([
+      ['Methodology', '/methodology'],
+      ['About & sources', '/about'],
+      ['Sources and licence', '/about#licences'],
+    ]);
+    expect(footer.textContent).toBe('MethodologyAbout & sourcesSources and licence');
+    expect(screen.queryByRole('switch')).toBeNull();
   });
 
   it('offers no way round step 4: no screen links to every lever (Phase 26)', () => {

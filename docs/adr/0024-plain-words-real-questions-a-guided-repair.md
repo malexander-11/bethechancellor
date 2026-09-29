@@ -1,8 +1,8 @@
 # ADR-0024: Plain words, real questions, a guided repair
 
-Date: 2026-09-27. Status: accepted; revised the same day by ADR-0025 (see the revision at the
-foot). Builds on ADR-0002, ADR-0011, ADR-0016, ADR-0022 and ADR-0023, each of which carries a
-dated revision pointing here.
+Date: 2026-09-27. Status: accepted; revised the same day by ADR-0025 and on 2026-09-29 by ADR-0032
+(see the revisions at the foot). Builds on ADR-0002, ADR-0011, ADR-0016, ADR-0022 and ADR-0023, each
+of which carries a dated revision pointing here.
 
 ## Context
 
@@ -239,3 +239,10 @@ spending, which keeps this record's order. The readability test now reads twelve
 targets, the forecast outcomes, the compromise questions and routes and the add-ons' lines left
 with their screens, and the fine-tuning screens' titles and advisers' lines joined. The grades as
 re-measured are in ADR-0025.
+
+## Revision (2026-09-29): the footer, flattened (ADR-0032)
+
+The footer this phase made the utility row is now one row of three links: "Methodology", "About &
+sources" and "Sources and licence". Its line on the figures, the switches and the badges' key
+went; the About page says what kind of numbers these are, and the Methodology page what each badge
+means.

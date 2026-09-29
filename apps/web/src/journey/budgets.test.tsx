@@ -50,7 +50,9 @@ type Mode = 'basic' | 'advanced';
  * the mode a first game is played in.
  */
 const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] = [
-  ['/', 40, GAME, 'basic'],
+  // The cover: the premise and the button, 19 words since its date, bullets and picture went
+  // (ADR-0032).
+  ['/', 25, GAME, 'basic'],
   // The briefing in three parts (Phase 28): 205 words in either mode, since advanced mode's
   // explanations are folds. Basic mode's short briefing was 159 words, the full one 237. Then the
   // player's own words (revised 2026-09-29): 232 in either mode. Then plain copy, the same in both
@@ -89,7 +91,7 @@ function inMode(mode: Mode) {
 
 describe('the word budgets', () => {
   // The budgets are what a newcomer sees, and a newcomer sees the game with the workings off.
-  beforeEach(() => window.localStorage.removeItem('btc.workings.v1'));
+  beforeEach(() => window.localStorage.removeItem('btc.workings.v2'));
 
   it('has no Continue anywhere, no tab on the main road, and one primary action a screen', () => {
     for (const [path, , game, mode] of ROAD) {
@@ -161,8 +163,8 @@ describe('the word budgets', () => {
           `${path}${tuned}, ${mode}: ${n} words (limit ${limit})\n`,
         );
       expect(n, `${path} shows ${n} words`).toBeLessThanOrEqual(limit);
-      // A floor against an empty render: the opening screen is the shortest, at about thirty.
-      expect(n, `${path} shows ${n} words`).toBeGreaterThan(20);
+      // A floor against an empty render: the opening screen is the shortest, at nineteen.
+      expect(n, `${path} shows ${n} words`).toBeGreaterThan(15);
       view.unmount();
     }
   });

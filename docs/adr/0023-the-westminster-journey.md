@@ -1,7 +1,7 @@
 # ADR-0023: The Westminster journey
 
-Status: Accepted, 2026-09-26; revised since (below), last on 2026-09-28 (the counted line,
-ADR-0026). Follows ADR-0022 (advice and direction) and its revision.
+Status: Accepted, 2026-09-26; revised since (below), last on 2026-09-29 (a plain cover,
+ADR-0032). Follows ADR-0022 (advice and direction) and its revision.
 
 ## Context
 
@@ -270,3 +270,10 @@ three and at three, and the biggest plus above three. When something pulled the 
 short line names it: "Counted against: Tax burden · Uncertified costings", eight words at most.
 The fold says how many rules pulled each way: "Why this rating (2 for, 1 against)". One voice a
 screen still holds; on the review, that voice is the Prime Minister's sign-off.
+
+## Revision (2026-09-29): a plain cover and a flat footer (ADR-0032)
+
+The cover lost the line above its heading (the Budget's date), its two bullets (the playtime and
+the six steps) and the Budget box: it is the premise and the button. The header is the name alone;
+its two links moved to the footer, which is one row of links. The Budget box's drawing and its
+colours went; the benches and the papers stay.

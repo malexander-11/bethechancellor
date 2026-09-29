@@ -1,6 +1,7 @@
 # ADR-0028: Basic and advanced
 
-Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0030 and ADR-0031). Revises
+Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0030, ADR-0031 and
+ADR-0032). Revises
 ADR-0013 and ADR-0027, each of which carries a dated revision pointing here.
 
 ## Context
@@ -191,3 +192,8 @@ folds of its own but the debt rule, which both modes show. The mode line is step
 and the footer's note says so: "Shows every policy, not only your advisers' best ideas." The desk
 rule stands on a different footing: the briefing no longer names the desk, but the review lists
 what a Budget leaves on it, so the levers on the desk stay on show in basic mode.
+
+## Revision (2026-09-29, later): the footer's switch withdrawn (ADR-0032)
+
+The footer's "Advanced mode" switch is withdrawn for now. The button on each screen basic mode
+trims is the way between the modes, and the choice is remembered in the browser as before.

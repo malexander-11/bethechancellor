@@ -19,14 +19,15 @@ function at(path: string) {
 const h1 = (name: string) => screen.getByRole('heading', { level: 1, name });
 
 describe('journey routes', () => {
-  it('opens on one sentence, the playtime and the one button', () => {
+  it('opens on one sentence and the one button', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>,
     );
     expect(screen.getByRole('heading', { level: 1, name: 'It’s your Budget now.' })).toBeVisible();
-    expect(screen.getByText(/About 9 minutes/)).toBeInTheDocument();
+    // No date above the heading, no playtime and no picture (ADR-0032).
+    expect(screen.queryByText(/minutes|28 October/)).toBeNull();
     const go = screen.getByRole('link', { name: 'Build my Budget' });
     expect(go).toHaveAttribute('href', expect.stringMatching(/^\/outlook/));
     // No tutorial, no adviser essays: the advisers wait for the screens where they matter.

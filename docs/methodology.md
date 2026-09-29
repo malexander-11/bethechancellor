@@ -642,7 +642,7 @@ behind one "Show workings" switch in the header, off by default and remembered i
 `btc.workings.v1`. The badges stay on show whatever the switch says; the footer says where the
 sources went; the methodology and sources pages force the switch on. The contract of §1 is
 unchanged: nothing is removed, and the tests run with the switch on so every assertion about a
-source still holds.
+source still holds. (The switch moved to the footer in Phase 23 and is withdrawn for now: §31.)
 
 ### The guide and the glossary
 
@@ -996,13 +996,14 @@ that hold every screen to the same shape:
   Every clause is read from the engine or the player's own choices and the card wears the
   mechanical badge; the reactions and the close beneath it are unchanged.
 - **Identity.** Commons green (`--accent`), warm paper, charcoal ink, restrained brass, Budget red
-  for the one button that delivers and for the Budget box on the opening; the page set like an
-  official paper (ADR-0023, revised): Source Serif 4 (self-hosted, OFL) for the body and Fraunces
-  (self-hosted, OFL) for the headings, the three sentences and the step numerals; hairline rules
-  instead of boxed cards, square corners, small-capital labels instead of pills, a paper header
-  under a green rule, and seven numerals on a rule for the road. Every text pairing holds 4.5:1 (re-audited after the change: the badge inks sit at 6.3:1 or better on the paper,
-  green at 6.2:1, brass ink and the muted numerals at 5.6:1), every control 44px, and the
-  reduced-motion rule stands.
+  for the one button that delivers and for the Budget box on the opening (gone since §31); the page
+  set like an official paper (ADR-0023, revised): Source Serif 4 (self-hosted, OFL) for the body and
+  Fraunces (self-hosted, OFL) for the headings, the three sentences and the step numerals; hairline
+  rules instead of boxed cards, square corners, small-capital labels instead of pills, a paper
+  header under a green rule, and seven numerals on a rule for the road. Every text pairing holds
+  4.5:1 (re-audited after the change: the badge inks sit at 6.3:1 or better on the paper, green at
+  6.2:1, brass ink and the muted numerals at 5.6:1), every control 44px, and the reduced-motion rule
+  stands.
 - **Word budgets, measured then pinned** (`apps/web/src/journey/budgets.test.tsx`): visible words
   with the folds closed, the road and the footer left out, on 2026-09-26: the opening 60, the
   starting position 267, the priorities 192, a priority screen 244 to 316, paying for it 564, the
@@ -1024,7 +1025,8 @@ that hold every screen to the same shape:
 - **The chrome.** The header is the name of the game and the two reference pages; the footer is
   the utility row (one line on the figures, the Show workings switch, the way to every lever,
   Sources and licence, what the badges mean). The dark theme, the dateline and the countdown are
-  gone. The guide is a heading and one line per step.
+  gone. (Since §31 the header is the name alone, and the footer one row of links.) The guide is a
+  heading and one line per step.
 - **The starting position** briefs in three figures and one line on the rules, with the Charter's
   words one fold away; says what has been promised since March and, honestly, what has cut the
   headroom (dearer borrowing and higher inflation; the three promises moved money); asks two
@@ -1210,10 +1212,12 @@ can then go to an advanced mode if they'd like. Basic mode, only suggest the bes
   opened or when the mode last changed. The bar, the review, the priorities' price line and Budget
   day read every idea in either mode.
 - **The mode is the viewer's**, remembered in the browser and never in a link; "Advanced mode"
-  sits in the footer beside "Show workings", and neither moves the other.
+  sat in the footer beside "Show workings", and neither moved the other, until both switches were
+  withdrawn for now (§31); the screens' own buttons change the mode.
 - **Measured** (ADR-0028): step 4 on a phone is 3,704px for tax and 4,263px for spending in basic
   mode, against 6,066px and 5,930px in advanced; a first game in basic mode is an estimated 8½
-  minutes at the midpoint, against 10½ in advanced, so the cover now says "About 9 minutes".
+  minutes at the midpoint, against 10½ in advanced, so the cover said "About 9 minutes" (until
+  §31).
 
 ## 29. The briefing in three parts (ADR-0030)
 
@@ -1282,7 +1286,8 @@ request is read as the briefing's alone; every other screen is as it was.
 - **The badges wait for the workings.** On the briefing a badge shows only with Show workings on,
   beside its sources, exactly as before; with the switch off the page is plain copy, and its words
   say which figure is the OBR's and which is ours. The contract is unchanged: every figure is still
-  an official number or a stated calculation, one switch away from its badge and its source.
+  an official number or a stated calculation, one switch away from its badge and its source. (The
+  switch is withdrawn for now: §31.)
 - **No word opens a definition.** The briefing's words carry no glossary marks, and a test fails on
   one. The glossary and its toggletips elsewhere (the manifesto, the tax lock and the rest) are
   unchanged. The OBR's name is no longer a tap away in the first row.
@@ -1300,3 +1305,26 @@ request is read as the briefing's alone; every other screen is as it was.
   basic mode's desk rule stands. The line that switched the briefing: it is the same in both modes.
 - **Measured** (ADR-0031): 175 words, against 232; grade 4.6, against 5.1; on a phone 1,752px in
   both modes, 2.2 screens of 780px, against 2.7 and 2.9 (4.1 screens with the workings on).
+
+## 31. A plain cover and a flat footer (ADR-0032)
+
+Looking at the cover on a phone, the user asked for the Methodology and About links in the footer
+only, the cover without its eyebrow, bullets and "silly image", and a much flatter footer, the
+switches for advanced mode and the workings withdrawn for now.
+
+- **The cover** is "It's your Budget now.", the premise in one sentence and "Build my Budget". The
+  Budget's date above the heading, the playtime and "Six steps", and the Budget box went.
+- **The header** is the name alone, the way home.
+- **The footer** is one row: "Methodology", "About & sources" and "Sources and licence", which
+  lands on the About page's licence, moved above the long table of sources. A link to part of a
+  page now scrolls to that part.
+- **The workings** are off on every game screen, with no switch to turn them on; the reference
+  pages still show them. The preference moved to `btc.workings.v2`, so an old "on" cannot stick
+  with no way off; the page tests set it, keeping the code tested for the switch's return.
+- **The modes** change by the button on each screen basic mode trims, remembered as before; the
+  footer's switch went.
+- **The badges** are plain labels, their meaning in their title; the Methodology page's "Five
+  kinds of number" explains them, one link away in the footer.
+- **Measured** (ADR-0032): the cover reads 19 words; on a phone it is one screen, the footer 93px
+  at 360px (two rows) and 49px from about 400px wide (one), and the briefing 1,549px (2.0
+  screens).

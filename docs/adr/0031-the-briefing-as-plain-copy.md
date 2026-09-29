@@ -1,6 +1,7 @@
 # ADR-0031: The briefing as plain copy
 
-Date: 2026-09-29. Status: accepted. Revises ADR-0030 and ADR-0028, and narrows where the badges
+Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0032). Revises ADR-0030 and
+ADR-0028, and narrows where the badges
 of ADR-0002, ADR-0011 and ADR-0013 show; each carries a dated revision pointing here.
 
 ## Context
@@ -132,3 +133,9 @@ the paragraphs on March and the in-tray's heading went.
 - **The debt rule's line is simpler than the rule.** Debt is measured as net financial liabilities;
   the fold's plain words say "government debt", and the Charter's own words, with the workings on,
   say which measure.
+
+## Revision (2026-09-29, later): no switch for the workings (ADR-0032)
+
+The "Show workings" switch is withdrawn for now, so the briefing shows no badges and no sources at
+all: they waited for a switch nothing now offers. Its words still say which figure is the OBR's and
+which is ours.

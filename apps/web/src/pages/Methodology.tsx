@@ -147,42 +147,42 @@ export function MethodologyPage() {
         chosen flagship already sets shows once, as a line with a way back to that flagship. There
         is no slider anywhere and no desk: every lever the desk once held is a policy on these two
         screens, and with no game only the cover and the briefing open. Every screen opens with one
-        heading and one instruction, and the tables sit behind the Show workings switch; the guide
-        is chrome, carries no badge and quotes no figure that is not sourced. The advisers, the
-        Prime Minister and the ministers are roles, not people; a briefing that cites a public
-        document is labelled commentary, and a judgement nobody published is labelled simulated and
-        never produces a number. Today&rsquo;s estimate follows a stated rule: the latest market or
-        independent reading minus the OBR&rsquo;s March assumption, rounded to the step the
-        assumption moves in (interest rates up three-quarters of a point, RPI inflation up half a
-        point, growth on the OBR&rsquo;s path), turned into headroom by the OBR&rsquo;s own
-        sensitivities: about £6.8 billion in 2029-30, against £23.6 billion in March. Each size
-        shows the level it moves to (21% on VAT, £12,670 on the personal allowance), but the engine
-        costs the change, exactly as before: levels are display only. VAT base-broadening toggles
-        use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not represent what abolishing
-        a relief would raise; abolishing inheritance tax removes the OBR&rsquo;s whole receipts
-        line; reversing the October 2024 capital gains tax rise uses the Treasury&rsquo;s own
-        costing of the package. The revenue menu a Chancellor actually weighs is on the fine-tuning
-        screens too, each option a published figure: the employer National Insurance threshold,
-        vehicle excise duty, air passenger duty, tobacco duties, the Business Asset Disposal Relief
-        rate, the residence nil-rate band, insurance premium tax, and employer National Insurance on
-        pension contributions from HMRC&rsquo;s private pension statistics (£14.3 billion in
-        2024-25, less the £6.5 billion on public sector schemes, which would only move money from
-        departments to the Treasury, taken to today&rsquo;s 15% rate). Every card built on
-        HMRC&rsquo;s cost of a relief reads &ldquo;raises at most&rdquo; and says why, and the
-        markets count it as a figure nobody has certified. The health and social care levy is 1.25
-        times HMRC&rsquo;s own one-point figures for every National Insurance rate, the same figures
-        the National Insurance rate policies use; two measures that count the same money (aligning
-        capital gains with income and taxing gains at death, for one) cannot both be chosen, and
-        there are twenty-two such pairs, each with a text that reads from either card. Employer-side
-        National Insurance is not a manifesto red line here, on the government&rsquo;s own reading
-        of the lock; the Political Adviser says on each such lever that the reading is contested.
-        Phase 12 added the menu the Budget 2026 reporting says is on the table: ending the capital
-        gains write-off at death, a £1.5 million council tax surcharge band, reversing the farm and
-        family-business relief reform, two points on the bank surcharge, the energy profits levy
-        package again, the self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance
-        package, unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and
-        business rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated
-        calculation on one, and each card is badged for what it is.
+        heading and one instruction, and for now the sources are listed on the About page rather
+        than beside each figure; the guide is chrome, carries no badge and quotes no figure that is
+        not sourced. The advisers, the Prime Minister and the ministers are roles, not people; a
+        briefing that cites a public document is labelled commentary, and a judgement nobody
+        published is labelled simulated and never produces a number. Today&rsquo;s estimate follows
+        a stated rule: the latest market or independent reading minus the OBR&rsquo;s March
+        assumption, rounded to the step the assumption moves in (interest rates up three-quarters of
+        a point, RPI inflation up half a point, growth on the OBR&rsquo;s path), turned into
+        headroom by the OBR&rsquo;s own sensitivities: about £6.8 billion in 2029-30, against £23.6
+        billion in March. Each size shows the level it moves to (21% on VAT, £12,670 on the personal
+        allowance), but the engine costs the change, exactly as before: levels are display only. VAT
+        base-broadening toggles use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not
+        represent what abolishing a relief would raise; abolishing inheritance tax removes the
+        OBR&rsquo;s whole receipts line; reversing the October 2024 capital gains tax rise uses the
+        Treasury&rsquo;s own costing of the package. The revenue menu a Chancellor actually weighs
+        is on the fine-tuning screens too, each option a published figure: the employer National
+        Insurance threshold, vehicle excise duty, air passenger duty, tobacco duties, the Business
+        Asset Disposal Relief rate, the residence nil-rate band, insurance premium tax, and employer
+        National Insurance on pension contributions from HMRC&rsquo;s private pension statistics
+        (£14.3 billion in 2024-25, less the £6.5 billion on public sector schemes, which would only
+        move money from departments to the Treasury, taken to today&rsquo;s 15% rate). Every card
+        built on HMRC&rsquo;s cost of a relief reads &ldquo;raises at most&rdquo; and says why, and
+        the markets count it as a figure nobody has certified. The health and social care levy is
+        1.25 times HMRC&rsquo;s own one-point figures for every National Insurance rate, the same
+        figures the National Insurance rate policies use; two measures that count the same money
+        (aligning capital gains with income and taxing gains at death, for one) cannot both be
+        chosen, and there are twenty-two such pairs, each with a text that reads from either card.
+        Employer-side National Insurance is not a manifesto red line here, on the government&rsquo;s
+        own reading of the lock; the Political Adviser says on each such lever that the reading is
+        contested. Phase 12 added the menu the Budget 2026 reporting says is on the table: ending
+        the capital gains write-off at death, a £1.5 million council tax surcharge band, reversing
+        the farm and family-business relief reform, two points on the bank surcharge, the energy
+        profits levy package again, the self-employed Class 4 rate, VAT off domestic gas, another
+        HMRC compliance package, unfreezing the Plan 2 student loan threshold, defence at 3% of GDP
+        from 2027, and business rates as a share of the OBR&rsquo;s own line. Each is a published
+        row or a stated calculation on one, and each card is badged for what it is.
       </p>
 
       <h2>Spending levers</h2>
@@ -228,14 +228,14 @@ export function MethodologyPage() {
         fiscal rules actually measure.
       </p>
 
-      <h2>Show workings</h2>
+      <h2>The workings</h2>
       <p>
-        The sources, the provenance drawers and the breakdown tables sit behind one switch at the
-        foot of every page, off by default and remembered in your browser. Nothing is removed: every
-        figure is still an official number or arithmetic on one, the badges that say which stay on
-        every screen but the briefing, which reads as plain copy and shows its badges with the
-        workings, and the sources are one click away on every page. This page and the sources page
-        keep the switch on, because they are the workings.
+        The sources, the provenance drawers and the breakdown tables sat behind a &ldquo;Show
+        workings&rdquo; switch at the foot of every page, off by default. For now the switch is
+        withdrawn and the game&rsquo;s screens show none of them. Nothing else changes: every figure
+        is still an official number or arithmetic on one, badged for what it is on every screen but
+        the briefing, which reads as plain copy. This page and the About page, which lists every
+        source, are the workings.
       </p>
 
       <h2>Basic and advanced</h2>
@@ -248,11 +248,11 @@ export function MethodologyPage() {
         checkable: a pick moves the 2029-30 headroom by £1 billion or more at its smallest size on
         today&rsquo;s estimate, counts by 2029-30, is on the table, breaks no promise at any size,
         and never counts the same money as another pick or as something already on your desk, which
-        basic mode always shows. &ldquo;Advanced mode&rdquo;, a second switch at the foot of every
-        page, shows every policy and every way; a button on each trimmed screen does the same.
-        Anything you have chosen stays on show in either mode, and the bar, the review and Budget
-        day count every idea whichever mode you are in. The mode is remembered in your browser,
-        never in the link, so a Budget you share opens in the reader&rsquo;s own mode.
+        basic mode always shows. A button on each trimmed screen shows every policy and every way,
+        and offers the shortlist back; the footer&rsquo;s switch that did the same is withdrawn for
+        now. Anything you have chosen stays on show in either mode, and the bar, the review and
+        Budget day count every idea whichever mode you are in. The mode is remembered in your
+        browser, never in the link, so a Budget you share opens in the reader&rsquo;s own mode.
       </p>
 
       <h2>Budget day</h2>

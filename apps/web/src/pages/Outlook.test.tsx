@@ -184,7 +184,7 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
 
   it('reads as plain copy with the workings off: no badge, no source, every figure still there', () => {
     // A newcomer's browser: the shared setup's workings are cleared (ADR-0031).
-    window.localStorage.removeItem('btc.workings.v1');
+    window.localStorage.removeItem('btc.workings.v2');
     at(`/outlook?${BASE}`);
     expect(briefing()).toHaveLength(3);
     for (const brief of briefing()) {

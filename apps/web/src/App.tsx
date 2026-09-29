@@ -12,7 +12,7 @@ import { OutlookPage } from './pages/Outlook';
 import { PMPage } from './pages/PM';
 import { ReviewPage } from './pages/Review';
 import { StartPage } from './pages/Start';
-import { Disclaimer } from './components/Disclaimer';
+import { SiteFooter } from './components/SiteFooter';
 
 /** Old and shorthand paths redirect into the journey with the budget's query string intact. */
 function RedirectKeepingQuery({ to }: { to: string }) {
@@ -35,27 +35,32 @@ function DeskRedirect() {
  * A screen change in a single-page app moves nothing by itself: the reader is left wherever they
  * were scrolled, and a screen reader hears nothing at all. So on every change of path the page
  * goes back to the top and focus lands on the main region, whose new title the guide has just
- * set. Not on first paint: the browser has placed focus already, and taking it would be rude.
+ * set. A link to a part of a page, such as the footer's sources and licence (ADR-0032), lands on
+ * that part instead. Not on first paint: the browser has placed focus already, and taking it
+ * would be rude.
  */
 function RouteFocus() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const first = useRef(true);
   useEffect(() => {
+    const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null;
     if (first.current) {
       first.current = false;
+      target?.scrollIntoView?.();
       return;
     }
-    document.documentElement.scrollTop = 0;
+    if (target?.scrollIntoView) target.scrollIntoView();
+    else document.documentElement.scrollTop = 0;
     document.getElementById('main')?.focus({ preventScroll: true });
-  }, [pathname]);
+  }, [pathname, hash]);
   return null;
 }
 
 /**
- * The brass plate: the name (which is the way home) and the two reference pages. The journey
+ * The brass plate: the name, which is the way home, and nothing else (ADR-0032). The journey
  * itself is not in the header: one road, entered at the start and walked by the button at the
- * foot of each page. The utilities (the workings switch, the sources) sit in the footer, where a
- * reader looks for them, not above the story.
+ * foot of each page. The two reference pages and the sources sit in the footer, where a reader
+ * looks for them once they want them, not above the story.
  */
 function Shell() {
   const { workings } = useWorkingsSwitch();
@@ -71,10 +76,6 @@ function Shell() {
           <NavLink to="/" className="brand" end>
             What’s your Budget?
           </NavLink>
-          <nav className="site-nav" aria-label="Main">
-            <NavLink to="/methodology">Methodology</NavLink>
-            <NavLink to="/about">About &amp; sources</NavLink>
-          </nav>
         </div>
       </header>
       <main
@@ -117,7 +118,7 @@ function Shell() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<RedirectKeepingQuery to="/" />} />
         </Routes>
-        <Disclaimer />
+        <SiteFooter />
       </main>
     </>
   );
@@ -127,9 +128,9 @@ export function App() {
   return (
     <BudgetProvider>
       {/*
-        The workings switch lives above the routes: one preference for the whole journey, read by
-        every citation on every page. Basic and advanced (Phase 27) sit beside it: another
-        preference, read by the screens that trim their ideas.
+        The workings live above the routes: one preference for the whole journey, read by every
+        citation on every page, though no switch offers it for now (ADR-0032). Basic and advanced
+        (Phase 27) sit beside it: another preference, read by the screens that trim their ideas.
       */}
       <WorkingsProvider>
         <ModeProvider>

@@ -139,14 +139,12 @@ const SETS: Record<string, readonly string[]> = {
   'the ministers': ministers.ministers.flatMap((m) =>
     [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)].map(short),
   ),
-  // Basic and advanced (Phase 27): the line on a trimmed screen, what it says once pressed, and
-  // the footer's switch with its note.
+  // Basic and advanced (Phase 27): the line on a trimmed screen and what it says once pressed.
+  // The footer's switch and its note went with ADR-0032.
   'the modes': [
     `${MODE_WORDS.shortlist} ${MODE_WORDS.ideas.basic}.`,
     `${MODE_WORDS.ideas.advanced}.`,
     ...Object.values(MODE_WORDS.said).flatMap((s) => [s.basic, s.advanced]),
-    `${MODE_WORDS.switch}.`,
-    MODE_WORDS.note,
   ],
   // The briefing in three parts (Phase 28): every heading, line and fold, filled as the page
   // fills them.
@@ -198,8 +196,8 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // the modes read at 3.4. Then the briefing in three parts (Phase 28), its folds included,
     // reads at 5.1, and at 5.1 again in the player's own words. Then plain copy (ADR-0031), the
     // debt rule its one fold: 4.6; the modes, without the briefing's switch, 5.2; the decisions
-    // since March, on no screen now, are no longer read. Set GRADES to a file path to write them
-    // out.
+    // since March, on no screen now, are no longer read. Then the footer's switch went (ADR-0032):
+    // the modes 3.8. Set GRADES to a file path to write them out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);

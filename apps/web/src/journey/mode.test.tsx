@@ -18,8 +18,9 @@ function at(path: string) {
   );
 }
 
-const theSwitch = () => screen.getByRole('switch', { name: 'Advanced mode' });
-const workings = () => screen.getByRole('switch', { name: 'Show workings' });
+/** The way between the modes: the button on a screen basic mode trims (ADR-0032). */
+const everyIdea = () => screen.getByRole('button', { name: /^See every idea/ });
+const bestIdeas = () => screen.getByRole('button', { name: 'Show only the best ideas' });
 const modeOf = () => document.querySelector('main')?.getAttribute('data-mode');
 
 describe('basic and advanced (Phase 27, ADR-0028)', () => {
@@ -27,32 +28,27 @@ describe('basic and advanced (Phase 27, ADR-0028)', () => {
   // meets it.
   beforeEach(() => window.localStorage.removeItem(KEY));
 
-  it('starts in basic mode, and says what advanced mode adds', () => {
+  it('starts in basic mode, with every idea one button away and no switch in the footer', () => {
     at(TUNING);
-    expect(theSwitch()).not.toBeChecked();
     expect(modeOf()).toBe('basic');
-    // The briefing is the same in both modes (ADR-0031), so the note speaks of policies alone.
-    expect(theSwitch()).toHaveAccessibleDescription(
-      'Shows every policy, not only your advisers’ best ideas.',
-    );
-    // Never disabled: unlike the workings, no page forces a mode.
-    expect(theSwitch()).toBeEnabled();
+    expect(everyIdea()).toBeEnabled();
+    // The footer's switch is withdrawn for now (ADR-0032): the screen's button is the way.
+    expect(screen.queryByRole('switch')).toBeNull();
   });
 
   it('remembers the choice, and comes back as it was left', () => {
     const view = at(TUNING);
-    fireEvent.click(theSwitch());
-    expect(theSwitch()).toBeChecked();
+    fireEvent.click(everyIdea());
     expect(modeOf()).toBe('advanced');
     expect(window.localStorage.getItem(KEY)).toBe('advanced');
     view.unmount();
     const again = at(TUNING);
-    expect(theSwitch()).toBeChecked();
     expect(modeOf()).toBe('advanced');
+    expect(bestIdeas()).toBeInTheDocument();
     again.unmount();
     window.localStorage.setItem(KEY, 'basic');
     const third = at(TUNING);
-    expect(theSwitch()).not.toBeChecked();
+    expect(modeOf()).toBe('basic');
     third.unmount();
     // Anything but advanced reads as basic.
     window.localStorage.setItem(KEY, 'expert');
@@ -60,29 +56,25 @@ describe('basic and advanced (Phase 27, ADR-0028)', () => {
     expect(modeOf()).toBe('basic');
   });
 
-  it('is a switch of its own: it leaves the workings as they were, and they leave it', () => {
-    window.localStorage.setItem('btc.workings.v1', 'off');
+  it('is a preference of its own: it leaves the workings as they were', () => {
+    window.localStorage.setItem('btc.workings.v2', 'off');
     at(TUNING);
-    fireEvent.click(theSwitch());
-    expect(workings()).not.toBeChecked();
+    fireEvent.click(everyIdea());
     expect(document.querySelector('main')?.getAttribute('data-workings')).toBe('off');
-    fireEvent.click(workings());
-    expect(theSwitch()).toBeChecked();
-    fireEvent.click(theSwitch());
-    expect(workings()).toBeChecked();
-    expect(window.localStorage.getItem('btc.workings.v1')).toBe('on');
+    expect(window.localStorage.getItem('btc.workings.v2')).toBe('off');
+    fireEvent.click(bestIdeas());
     expect(window.localStorage.getItem(KEY)).toBe('basic');
   });
 
-  it('is never in the link: a switch leaves the query string as it was', async () => {
+  it('is never in the link: a change of mode leaves the query string as it was', async () => {
     at(TUNING);
-    // The budget writes its own address once it settles; a switch must not touch it after.
+    // The budget writes its own address once it settles; a change of mode must not touch it after.
     const settle = () => new Promise((resolve) => setTimeout(resolve, 400));
     await settle();
     const before = window.location.search;
     expect(before).toMatch(/L=itbr\.1/);
-    fireEvent.click(theSwitch());
-    fireEvent.click(screen.getByRole('button', { name: 'Show only the best ideas' }));
+    fireEvent.click(everyIdea());
+    fireEvent.click(bestIdeas());
     await settle();
     expect(window.location.search).toBe(before);
     expect(window.location.search).not.toMatch(/mode|basic|advanced/);

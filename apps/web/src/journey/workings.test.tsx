@@ -1,10 +1,10 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
-const KEY = 'btc.workings.v1';
+const KEY = 'btc.workings.v2';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -19,51 +19,34 @@ function at(path: string) {
 const TUNING = `/finetune/tax?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1`;
 
 const sourceLinks = () => document.querySelectorAll('.source a').length;
-const theSwitch = () => screen.getByRole('switch', { name: 'Show workings' });
+const workingsOf = () => document.querySelector('main')?.getAttribute('data-workings');
 
-describe('the "Show workings" switch', () => {
+describe('the workings, with the switch withdrawn for now (ADR-0032)', () => {
   // The shared setup turns the workings on for every other test; here the app is met as a
-  // newcomer meets it.
+  // player meets it now: nothing on the page can turn them on.
   beforeEach(() => window.localStorage.removeItem(KEY));
 
-  it('is off by default: plain numbers and badges, no source links, no drawers', () => {
+  it('shows no switch and no workings on the game’s screens: plain numbers and badges', () => {
     at(TUNING);
-    expect(theSwitch()).not.toBeChecked();
-    expect(document.querySelector('main')?.getAttribute('data-workings')).toBe('off');
+    expect(screen.queryByRole('switch')).toBeNull();
+    expect(workingsOf()).toBe('off');
     expect(sourceLinks()).toBe(0);
     expect(screen.queryByRole('button', { name: /Detail and sources/ })).toBeNull();
-    // The badges that say what kind of number something is stay whatever the switch says.
+    // The badges that say what kind of number something is stay on step 4.
     expect(screen.getAllByText('Official figure').length).toBeGreaterThan(0);
-    // The footer says where the sources went, beside the switch that shows them.
-    expect(screen.getByText(/Turn on Show workings/)).toBeInTheDocument();
-  });
-
-  it('puts everything back when switched on, and remembers the choice', () => {
-    at(TUNING);
-    fireEvent.click(theSwitch());
-    expect(theSwitch()).toBeChecked();
-    expect(document.querySelector('main')?.getAttribute('data-workings')).toBe('on');
-    expect(sourceLinks()).toBeGreaterThan(0);
-    expect(screen.getAllByRole('button', { name: /Detail and sources/ }).length).toBeGreaterThan(0);
-    // The expert switches went with the desk (Phase 26): the workings show sources, not settings.
-    expect(screen.queryByText(/Charge interest on extra borrowing/)).toBeNull();
     expect(screen.queryByText(/Turn on Show workings/)).toBeNull();
-    expect(window.localStorage.getItem(KEY)).toBe('on');
   });
 
-  it('comes back as it was left', () => {
-    window.localStorage.setItem(KEY, 'on');
-    const view = at(TUNING);
-    expect(theSwitch()).toBeChecked();
-    expect(sourceLinks()).toBeGreaterThan(0);
-    view.unmount();
-    window.localStorage.setItem(KEY, 'off');
+  it('ignores a preference left from when the switch was on offer', () => {
+    // A player who turned the workings on before the switch went would have no way to turn them
+    // off, so the old key no longer counts.
+    window.localStorage.setItem('btc.workings.v1', 'on');
     at(TUNING);
-    expect(theSwitch()).not.toBeChecked();
+    expect(workingsOf()).toBe('off');
     expect(sourceLinks()).toBe(0);
   });
 
-  it('hides the close’s tables on Budget day until it is switched on', () => {
+  it('keeps Budget day’s story and leaves its tables for the switch’s return', () => {
     at(`/budget-day?${BASE}&g=st.5_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1`);
     // A finished game's link opens Budget day whole. The Red Book's table of decisions is part of
     // the story and stays; the rules in full and the charts wait.
@@ -71,26 +54,21 @@ describe('the "Show workings" switch', () => {
     expect(screen.queryByText('The rules in full')).toBeNull();
     expect(screen.queryByText('Five-year paths')).toBeNull();
     expect(screen.getByRole('button', { name: /Copy a link/ })).toBeInTheDocument();
-    fireEvent.click(theSwitch());
-    expect(screen.getByText('The rules in full')).toBeInTheDocument();
-    expect(screen.getByText('Five-year paths')).toBeInTheDocument();
   });
 
-  it('is off on the opening screen, and the footer switch is the one way to turn it on', () => {
-    at('/');
-    // The opening carries no toggles of its own: one sentence, the playtime and the button.
-    expect(screen.queryByRole('checkbox', { name: /Show the workings/ })).toBeNull();
-    expect(theSwitch()).not.toBeChecked();
-    fireEvent.click(theSwitch());
-    expect(theSwitch()).toBeChecked();
-    expect(window.localStorage.getItem(KEY)).toBe('on');
+  it('puts everything back when the preference is on, for the switch’s return', () => {
+    window.localStorage.setItem(KEY, 'on');
+    at(TUNING);
+    expect(workingsOf()).toBe('on');
+    expect(sourceLinks()).toBeGreaterThan(0);
+    expect(screen.getAllByRole('button', { name: /Detail and sources/ }).length).toBeGreaterThan(0);
   });
 
-  it('is always on, and cannot be moved, on the pages that are the workings', () => {
-    window.localStorage.setItem(KEY, 'off');
+  it('is always on the pages that are the workings, which list every source', () => {
     at('/about');
-    expect(theSwitch()).toBeChecked();
-    expect(theSwitch()).toBeDisabled();
-    expect(document.querySelector('main')?.getAttribute('data-workings')).toBe('on');
+    expect(workingsOf()).toBe('on');
+    expect(screen.getByRole('heading', { name: 'Sources' })).toBeInTheDocument();
+    expect(document.querySelectorAll('main table tbody tr').length).toBeGreaterThan(10);
+    expect(screen.queryByRole('switch')).toBeNull();
   });
 });
