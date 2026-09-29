@@ -130,62 +130,95 @@
   line-height: 1.5;
 }
 
-/* ------------------------------------------------ the Treasury's briefing */
+/* -------------------------------------- the briefing, in three parts (Phase 28, ADR-0030) */
 
 .brief {
-  margin: 0 0 20px;
+  margin: 0;
 }
 
-.brief__title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 12px;
+/* Each part's heading starts its section, as the desk's does beneath them. */
+.brief > .section-label,
+.tray > .section-label {
+  margin-top: 0;
+}
+
+.brief .motif--papers {
   color: var(--brass-ink);
-  font-family: var(--font);
-  font-size: 0.9375rem;
-  font-weight: 700;
-  letter-spacing: 0;
 }
 
-.brief__facts {
-  display: grid;
-  gap: 16px;
-  margin: 0;
+/* The one figure to plan on, large, with the words after it at reading size. */
+.brief__figure {
+  max-width: 44em;
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  line-height: 1.5;
 }
 
-@media (min-width: 720px) {
-  .brief__facts {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-  }
-}
-
-.brief__fact dt {
-  margin: 0 0 2px;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.brief__fact dd {
-  margin: 0;
-}
-
-.brief__fact dd strong {
-  display: block;
+.brief__figure strong {
   font-size: 1.75rem;
   font-weight: 700;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
 
-.brief__fact dd span {
-  display: block;
-  margin-top: 4px;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  line-height: 1.45;
+.brief__line {
+  max-width: 44em;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.brief__year {
+  white-space: nowrap;
+}
+
+/*
+ * How the headroom is calculated: the forecast, what moved it, and the estimate, row by row. One
+ * grid of three columns, label, figure and badge, shared by every row through subgrid, so the
+ * figures line up as a sum does; a label may wrap, the figures never do. A browser without subgrid
+ * lays each row out on its own.
+ */
+.calc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  column-gap: 12px;
+  max-width: 34em;
+  margin: 0 0 8px;
+}
+
+.calc__row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.calc__row dd {
+  display: grid;
+  grid-column: 2 / 4;
+  grid-template-columns: auto auto;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.calc__figure {
+  justify-self: end;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.calc__row--total {
+  border-top: 2px solid var(--ink);
+  border-bottom: 0;
+}
+
+.calc__row--total dt,
+.calc__row--total .calc__figure {
+  font-weight: 700;
 }
 
 /* The one primary action, the way back beside it, and a hint under both when the action waits. */
@@ -215,13 +248,7 @@
 
 /* ------------------------------------------------ the briefing and theme */
 
-/* The Treasury's one line on the rules, and the rules in full in the fold beneath it. */
-.brief__rules {
-  max-width: 44em;
-  margin: 16px 0 0;
-  line-height: 1.5;
-}
-
+/* The rules in full, in the fold beneath the line that names them. */
 .rules-key {
   display: grid;
   gap: 8px;
@@ -240,7 +267,7 @@
   margin: 0;
 }
 
-/* Since March: the promises made, and what has cut the headroom. */
+/* What changed since March, in its fold: what cut the headroom, and the decisions that did not. */
 .since p {
   max-width: 44em;
   margin: 0 0 8px;
@@ -1425,12 +1452,6 @@ label.choice {
 
 .tune__notes {
   color: var(--ink-2);
-}
-
-.brief__source,
-.brief__yardstick {
-  max-width: 68ch;
-  margin: 8px 0;
 }
 
 /* ------------------------------------------ plain words on step 3 and 4 (Phase 25) */

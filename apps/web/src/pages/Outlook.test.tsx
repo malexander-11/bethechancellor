@@ -14,66 +14,135 @@ function at(path: string) {
   );
 }
 const search = () => new URLSearchParams(window.location.search);
+const part = (name: string) => screen.getByRole('region', { name });
+const headings = () =>
+  [...document.querySelectorAll('main section > h2')].map((h) => h.textContent?.trim());
+/** Each row of the calculation: its label, its figure and its badge. */
+const rows = () =>
+  [...document.querySelectorAll('.calc__row')].map((row) => [
+    row.querySelector('dt')?.textContent,
+    row.querySelector('.calc__figure')?.textContent,
+    row.querySelector('.badge')?.textContent,
+  ]);
+/** "£6.8bn" and "−£11.3bn" as numbers of billions, signed. */
+const bn = (text: string | null | undefined) =>
+  Number((text ?? '').replace('−', '-').replace(/[£bn]/g, ''));
 
-describe('the briefing: one estimate to plan on (Phase 24)', () => {
+describe('the briefing, in three parts (Phase 28, ADR-0030)', () => {
   it('is where the old assumptions link now lands', () => {
     at(`/assumptions?${BASE}`);
     expect(screen.getByRole('heading', { level: 1, name: 'Your briefing' })).toBeInTheDocument();
   });
 
-  it('gives the headroom you have as one figure, with its meaning beside it and the rules', () => {
+  it('reads in the three parts the player asked for, then the desk', () => {
     at(`/outlook?${BASE}`);
-    const facts = document.querySelector('.brief__facts') as HTMLElement;
-    const headroom = within(facts).getByText('Your headroom').closest('div') as HTMLElement;
-    expect(within(headroom).getByText('£6.8bn')).toBeInTheDocument();
+    expect(headings()).toEqual([
+      'Your headroom',
+      'What is headroom?',
+      'How the headroom is calculated',
+      'Already on your desk',
+    ]);
+    expect(screen.queryByText(/The Treasury’s briefing/)).toBeNull();
+  });
+
+  it('gives your headroom: one figure to plan on, and what Chancellors have kept since 2010', () => {
+    at(`/outlook?${BASE}`);
+    const first = part('Your headroom');
+    const figure = within(first).getByText(/of breathing space in/);
     // Our estimate, not a published figure: it wears the Assumption badge and says so.
-    expect(within(headroom).getByText('Assumption')).toBeInTheDocument();
-    // What headroom is, where the figure is (Phase 25), with the word a tap away.
-    expect(within(headroom).getByRole('button', { name: 'Headroom' })).toBeInTheDocument();
-    expect(
-      within(headroom).getByText(
-        /is how much you can spend, or cut in tax, and still meet the rules\./,
-      ),
-    ).toBeInTheDocument();
-    // The year, once, in months; and what the figure is worth to a household, worked out.
-    const year = within(headroom).getByText(/^It is for 2029-30/);
-    expect(year).toHaveTextContent(
-      /^It is for 2029-30 \(April 2029 to March 2030\), the year the rules are tested: about £2\d0 for each household Worked out\.$/,
+    expect(figure).toHaveTextContent(
+      /^£6\.8bn of breathing space in 2029-30, the year the rules are tested\. Assumption$/,
+    );
+    expect(within(figure).getByText('£6.8bn').tagName).toBe('STRONG');
+    // The OBR's own record, an official figure, with its source when the workings are on.
+    const history = within(first).getByText(/Chancellors have kept/);
+    expect(history).toHaveTextContent(
+      /^Official figure Since 2010, Chancellors have kept about £29bn on average\./,
     );
     expect(
-      screen.getByText(
-        /^Our estimate: the March forecast of the Office for Budget Responsibility \(OBR\), the official forecaster/,
-      ),
+      within(history).getByRole('link', {
+        name: /OBR, Economic and fiscal outlook – November 2025/,
+      }),
     ).toBeInTheDocument();
-    // One figure on the surface: the tiles for borrowing costs and borrowing so far went to the
-    // workings table.
-    expect(within(facts).queryByText('Borrowing costs')).toBeNull();
-    expect(within(facts).queryByText('Borrowed so far this year')).toBeNull();
-    // The advisers' yardstick, in words, and a judgement: no target to meet (ADR-0025).
-    const yardstick = screen.getByText(/Your advisers call headroom under £10bn thin/);
-    expect(yardstick).toHaveTextContent(/The markets notice\./);
-    expect(within(yardstick).getByText('Game judgement')).toBeInTheDocument();
-    // The line carries glossary terms, so it is matched on a plain run and read whole.
-    expect(screen.getByText(/pay for day-to-day spending with tax by 2029-30/)).toHaveTextContent(
-      /^Two rules: pay for day-to-day spending with tax by 2029-30, and have debt falling by then\. Miss one and the OBR says so on Budget day\.$/,
+    expect(history).toHaveTextContent(/around £29 billion/);
+    // The household line and the source line went: the rows below say where the figure comes from.
+    expect(screen.queryByText(/for each household/)).toBeNull();
+    expect(screen.queryByText(/Our estimate: the March forecast/)).toBeNull();
+  });
+
+  it('says what headroom is: the rules, the word, what lenders must buy this year and why they care', () => {
+    at(`/outlook?${BASE}`);
+    const second = part('What is headroom?');
+    // The line carries glossary terms, so it is matched on a plain run and read whole. The OBR is
+    // named in full where the briefing first uses it.
+    expect(within(second).getByText(/pay for day-to-day spending with tax by/)).toHaveTextContent(
+      /^Two rules: pay for day-to-day spending with tax by 2029-30, and have debt falling by then\. Miss one and the Office for Budget Responsibility \(OBR\), the official forecaster, says so on Budget day\.$/,
     );
-    fireEvent.click(screen.getByText('About the fiscal rules'));
-    const fold = screen.getByText('About the fiscal rules').closest('details') as HTMLElement;
-    // The plain names the rest of the game uses, tied to the official ones (Phase 25).
-    expect(within(fold).getByText(/^The day-to-day rule/)).toHaveTextContent(
-      'The day-to-day rule (officially the Stability rule)',
+    expect(within(second).getByRole('button', { name: 'rules' })).toBeInTheDocument();
+    expect(within(second).getByRole('button', { name: 'OBR' })).toBeInTheDocument();
+    // What headroom is, with the word a tap away: the page's one Headroom button.
+    const meaning = within(second).getByText(/is how much you can spend, or cut in tax/);
+    expect(meaning).toHaveTextContent(
+      /^Headroom is how much you can spend, or cut in tax, and still meet the rules\.$/,
     );
-    expect(within(fold).getByText(/^The debt rule/)).toHaveTextContent(
-      'The debt rule (officially the Investment rule)',
+    expect(within(meaning).getByRole('button', { name: 'Headroom' })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Headroom' })).toHaveLength(1);
+    // What the government must sell to lenders this year: an official figure, and its source.
+    const gilts = within(second).getByText(/plans to sell/);
+    expect(gilts).toHaveTextContent(
+      /^Official figure This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\./,
     );
-    expect(within(fold).getByText(/^The welfare cap/)).toHaveTextContent(/^The welfare cap$/);
-    // With the workings on, the Charter's own words and their source sit beside each rule.
-    expect(within(fold).getAllByText(/The Charter says:/).length).toBe(3);
+    expect(within(gilts).getByRole('button', { name: 'gilts' })).toBeInTheDocument();
+    expect(
+      within(gilts).getByRole('link', { name: /HMT, Revision to the DMO Financing Remit 2026-27/ }),
+    ).toBeInTheDocument();
+    expect(gilts).toHaveTextContent(/gilt sales of £246\.2 billion/);
+    // Why lenders care, in words with their sources.
+    const lenders = within(second).getByText(/Lenders charge more when they doubt the sums\./);
+    expect(lenders).toHaveTextContent(
+      /^Commentary Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\./,
+    );
+    expect(within(lenders).getByRole('link', { name: /BoE, Bank Insights/ })).toBeInTheDocument();
+    expect(
+      within(lenders).getByRole('link', { name: /HMT, Chancellor letter to the Treasury/ }),
+    ).toBeInTheDocument();
+  });
+
+  it('shows how the headroom is calculated: the forecast, what moved it and the estimate, adding up', () => {
+    at(`/outlook?${BASE}`);
+    const third = part('How the headroom is calculated');
+    expect(rows()).toEqual([
+      ['The OBR’s March forecast', '£23.6bn', 'Official figure'],
+      ['Higher interest rates', '−£11.3bn', 'Assumption'],
+      ['Higher inflation', '−£5.5bn', 'Assumption'],
+      ['Today’s estimate', '£6.8bn', 'Assumption'],
+    ]);
+    // The rows add up as shown, and the last is the figure the briefing opens with.
+    const shown = rows().map(([, figure]) => bn(figure));
+    expect(shown[0]! + shown[1]! + shown[2]!).toBeCloseTo(shown[3]!, 9);
+    expect(rows()[3]![1]).toBe(within(part('Your headroom')).getByRole('strong').textContent);
+    // Where the rows come from, with the workings on: the forecast, the sensitivities, the readings.
+    const sources = third.querySelector('.calc + .briefing__sources') as HTMLElement;
+    expect(sources).toHaveTextContent(/Table 5\.1/);
+    expect(sources).toHaveTextContent(/A sustained 1 percentage point increase in Bank Rate/);
+    expect(sources).toHaveTextContent(/A 1 percentage point increase in RPI inflation/);
+    // The advice: keep more than the markets' thin line. A judgement, and no target to meet.
+    const advice = within(third).getByText(/aim to keep more than/);
+    expect(advice).toHaveTextContent(
+      /^Game judgement As you choose your policies, aim to keep more than £10bn\. Below that, the markets get nervous\./,
+    );
+    expect(advice).toHaveTextContent(/wafer-thin/);
+    const main = document.querySelector('main')?.textContent ?? '';
+    // Every placeholder filled, the folds' included: they are on the page, closed.
+    expect(main).not.toMatch(/\{[a-zA-Z]+\}/);
+    expect(main).not.toMatch(/your target|headroom target|want to keep/i);
+    expect(main).not.toMatch(/£20bn|markets get nervous below about/);
+    expect(main).not.toMatch(/That is why your headroom/);
   });
 
   it('says what is already on the desk: a bill promised and a cliff edge set', () => {
     at(`/outlook?${BASE}`);
-    const tray = screen.getByRole('region', { name: 'Already on your desk' });
+    const tray = part('Already on your desk');
     const items = within(tray).getAllByRole('listitem');
     expect(items).toHaveLength(2);
     expect(items[0]).toHaveTextContent(
@@ -85,25 +154,42 @@ describe('the briefing: one estimate to plan on (Phase 24)', () => {
     );
   });
 
-  it('says why the headroom fell since March, with the decisions one fold away', () => {
+  it('keeps the rules in full, what changed since March and why forecasts move one fold away', () => {
     at(`/outlook?${BASE}`);
-    const since = screen.getByRole('region', { name: 'Since March' });
-    // The honest reading: the decisions moved money; dearer borrowing and prices ate the headroom.
-    const why = within(since).getByText(/Since March the government has taken three decisions/);
-    expect(why).toHaveTextContent(/Each was paid for by moving money, so none used the headroom/);
-    expect(why).toHaveTextContent(/dearer borrowing and prices/);
-    expect(why).toHaveTextContent(/Gilts pay 5\.29% against the 4\.5% the OBR assumed/);
+    for (const name of [
+      'About the fiscal rules',
+      'What changed since March',
+      'Why forecasts move',
+    ]) {
+      expect(screen.getByText(name).closest('details'), name).not.toHaveAttribute('open');
+    }
+    fireEvent.click(screen.getByText('About the fiscal rules'));
+    const rulesFold = screen.getByText('About the fiscal rules').closest('details') as HTMLElement;
+    // The plain names the rest of the game uses, tied to the official ones (Phase 25).
+    expect(within(rulesFold).getByText(/^The day-to-day rule/)).toHaveTextContent(
+      'The day-to-day rule (officially the Stability rule)',
+    );
+    expect(within(rulesFold).getByText(/^The debt rule/)).toHaveTextContent(
+      'The debt rule (officially the Investment rule)',
+    );
+    expect(within(rulesFold).getByText(/^The welfare cap/)).toHaveTextContent(/^The welfare cap$/);
+    // With the workings on, the Charter's own words and their source sit beside each rule.
+    expect(within(rulesFold).getAllByText(/The Charter says:/).length).toBe(3);
+
+    // What changed since March: the honest reading. Dearer borrowing and prices ate the headroom;
+    // the decisions moved money.
+    fireEvent.click(screen.getByText('What changed since March'));
+    const since = screen.getByText('What changed since March').closest('details') as HTMLElement;
+    const why = within(since).getByText(/Gilts pay/);
+    expect(why).toHaveTextContent(/^Gilts pay 5\.29% against the 4\.5% the OBR assumed\./);
     // An average to 2030, said as one, so it never reads as today's inflation.
     expect(why).toHaveTextContent(
-      /Forecasters expect prices to rise 3\.3% a year on average to 2030, not the OBR’s 2\.8%/,
+      /Forecasters expect prices to rise 3\.3% a year on average to 2030, not the OBR’s 2\.8%\. Some government debt costs more when prices rise\.$/,
     );
-    expect(why).toHaveTextContent(
-      /That is why your headroom is about £6\.8bn, not the £23\.6bn March showed\./,
-    );
-    // The three decisions are folded, in millions where they are under a billion.
-    const fold = within(since).getByText('What was decided since March').closest('details');
-    expect(fold).not.toHaveAttribute('open');
-    const items = within(fold as HTMLElement).getAllByRole('listitem', { hidden: true });
+    expect(
+      within(since).getByText(/^Since March the government has taken three decisions/),
+    ).toHaveTextContent(/Each was paid for by moving money, so none used the headroom\.$/);
+    const items = within(since).getAllByRole('listitem');
     expect(items).toHaveLength(3);
     expect(items[0]).toHaveTextContent(
       /£850 million\. Paid for by cancelling the Digital ID programme\./,
@@ -113,33 +199,29 @@ describe('the briefing: one estimate to plan on (Phase 24)', () => {
     );
     // No bracketed periods, and no sum under a billion rounded to "£0.1bn".
     for (const item of items) expect(item.textContent).not.toMatch(/\((20\d\d|from )|£0\.\dbn/);
-  });
 
-  it('asks nothing: no forecasts to choose, no target, no sliders; headroom explained one fold away', () => {
-    at(`/outlook?${BASE}`);
-    expect(screen.queryByRole('radiogroup')).toBeNull();
-    expect(screen.queryByRole('radio')).toBeNull();
-    expect(screen.queryByRole('slider')).toBeNull();
-    expect(screen.queryByText(/your target|headroom target|want to keep/i)).toBeNull();
-    expect(screen.queryByText(/October forecast|October’s forecast/)).toBeNull();
-    fireEvent.click(screen.getByText('What is headroom?'));
-    const note = screen.getByRole('complementary', { name: /Headroom, explained/ });
+    // Why forecasts move: the adviser's note, a judgement, with estimates on both sides.
+    fireEvent.click(screen.getByText('Why forecasts move'));
+    const note = screen.getByRole('complementary', { name: /Why forecasts move/ });
+    expect(within(note).getByText('Chief Economic Adviser')).toBeInTheDocument();
     expect(within(note).getByText('Game judgement')).toBeInTheDocument();
     expect(
-      within(note).getByText(/Headroom is the gap between what the rules let you borrow/),
+      within(note).getByText(/the OBR’s tax forecasts have been out by about £3\dbn on average/),
     ).toBeInTheDocument();
-    expect(within(note).getByText(/on today’s estimate it is £6\.8bn/)).toBeInTheDocument();
-    expect(within(note).getByText(/out by about £3\dbn on average/)).toBeInTheDocument();
-    expect(within(note).getByText(/below about £20bn/)).toBeInTheDocument();
-    expect(within(note).getByText(/Nobody has published those numbers/)).toBeInTheDocument();
-    // Estimates on both sides, and how a real Budget differs: the OBR's rounds and checks.
     expect(
       within(note).getByText(/The Resolution Foundation said about £10bn in July/),
     ).toBeInTheDocument();
     expect(
-      within(note).getByText(/In a real Budget the OBR sends the Chancellor several rounds/),
-    ).toHaveTextContent(/Here one estimate stays fixed\./);
-    // One primary action, and a way back.
+      within(note).getByText(/^In a real Budget the OBR sends the Chancellor several rounds/),
+    ).toHaveTextContent(/Here one estimate stays fixed\.$/);
+  });
+
+  it('asks nothing: no forecasts to choose, no sliders, one primary action and a way back', () => {
+    at(`/outlook?${BASE}`);
+    expect(screen.queryByRole('radiogroup')).toBeNull();
+    expect(screen.queryByRole('radio')).toBeNull();
+    expect(screen.queryByRole('slider')).toBeNull();
+    expect(screen.queryByText(/October forecast|October’s forecast/)).toBeNull();
     expect(document.querySelectorAll('.btn--primary')).toHaveLength(1);
     expect(screen.getByRole('button', { name: 'Set your priorities' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
@@ -159,7 +241,6 @@ describe('the briefing: one estimate to plan on (Phase 24)', () => {
     const method = screen.getByText(/we apply it to the rise in gilt yields alone/);
     expect(method).toHaveTextContent(/so the estimate leans cautious\./);
     expect(within(method).getByText('Assumption')).toBeInTheDocument();
-    // The two readings that left the surface are in the table.
     expect(within(table).getByText('10-year gilt yield')).toBeInTheDocument();
     expect(within(table).getByText('Borrowing so far in 2026-27')).toBeInTheDocument();
   });
@@ -176,6 +257,8 @@ describe('the briefing: one estimate to plan on (Phase 24)', () => {
 
   it('keeps the game’s choices if the player comes back and sets off again', async () => {
     at(`/outlook?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=moj.10`);
+    // The briefing is the start of the road: a Budget already under way leaves it as it was.
+    expect(rows()[3]![1]).toBe('£6.8bn');
     fireEvent.click(screen.getByRole('button', { name: 'Set your priorities' }));
     expect(await screen.findByText('What is this Budget for?')).toBeInTheDocument();
     await waitFor(() => {
@@ -185,24 +268,29 @@ describe('the briefing: one estimate to plan on (Phase 24)', () => {
   });
 });
 
-describe('the short briefing: basic mode (Phase 27, ADR-0028)', () => {
+describe('the briefing in basic mode (Phase 27, ADR-0028; Phase 28)', () => {
   // A newcomer's game: the shared setup's advanced mode is cleared, as a fresh browser has it.
   beforeEach(() => window.localStorage.removeItem('btc.mode.v1'));
 
-  it('keeps the headroom, the rules in one line and the desk, and leaves the explanations out', () => {
+  it('keeps the three parts and the desk, and leaves the folds for advanced mode', () => {
     at(`/outlook?${BASE}`);
     expect(document.querySelector('main')?.getAttribute('data-mode')).toBe('basic');
-    const facts = document.querySelector('.brief__facts') as HTMLElement;
-    expect(within(facts).getByText('£6.8bn')).toBeInTheDocument();
-    expect(screen.getByText(/Your advisers call headroom under £10bn thin/)).toBeInTheDocument();
-    expect(screen.getByText(/pay for day-to-day spending with tax by 2029-30/)).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: 'Already on your desk' })).toBeInTheDocument();
+    expect(headings()).toEqual([
+      'Your headroom',
+      'What is headroom?',
+      'How the headroom is calculated',
+      'Already on your desk',
+    ]);
+    expect(rows()).toHaveLength(4);
+    expect(screen.getByText(/Chancellors have kept about £29bn/)).toBeInTheDocument();
+    expect(screen.getByText(/plans to sell £246bn/)).toBeInTheDocument();
+    expect(screen.getByText(/Lenders charge more/)).toBeInTheDocument();
+    expect(screen.getByText(/aim to keep more than £10bn/)).toBeInTheDocument();
     expect(screen.queryByText('About the fiscal rules')).toBeNull();
-    expect(screen.queryByRole('heading', { name: 'Since March' })).toBeNull();
-    expect(screen.queryByText('What is headroom?')).toBeNull();
+    expect(screen.queryByText('What changed since March')).toBeNull();
+    expect(screen.queryByText('Why forecasts move')).toBeNull();
     // With the workings on, the table the estimate is made from, as in advanced mode.
     expect(screen.getByText('How the estimate is made')).toBeInTheDocument();
-    // One primary, still: the way on to the priorities.
     expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
   });
 
@@ -212,8 +300,8 @@ describe('the short briefing: basic mode (Phase 27, ADR-0028)', () => {
     button.focus();
     fireEvent.click(button);
     expect(screen.getByText('About the fiscal rules')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Since March' })).toBeInTheDocument();
-    expect(screen.getByText('What is headroom?')).toBeInTheDocument();
+    expect(screen.getByText('What changed since March')).toBeInTheDocument();
+    expect(screen.getByText('Why forecasts move')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Show the short briefing' })).toBe(button);
     expect(document.activeElement).toBe(button);
     const line = document.querySelector('.mode-line') as HTMLElement;

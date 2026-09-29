@@ -21,9 +21,9 @@
       "url": "https://obr.uk/docs/dlm_uploads/OBR_Economic_and_fiscal_outlook_November_2025.pdf",
       "landingUrl": "https://obr.uk/efo/economic-and-fiscal-outlook-november-2025/",
       "publishedOn": "2025-11-26",
-      "retrievedOn": "2026-09-15",
+      "retrievedOn": "2026-09-29",
       "licence": "OGL-3.0",
-      "notes": "Used for the interest-rate sensitivity stated for 2029-30 and the November headroom of £22bn."
+      "notes": "Used for the interest-rate sensitivity stated for 2029-30 and the November headroom of £22bn. Re-read 2026-09-29 for the briefing's record of past headroom: paragraph 7.6 (p. 162), \"The £22 billion margin by which the current balance is in surplus in 2029-30 is around three-quarters of the average margin (around £29 billion) that previous Chancellors have left themselves against meeting their fiscal mandates\", and March 2025's margin, \"0.3 per cent of GDP (£10 billion)\"; paragraph 7.11 (p. 165), \"around three-quarters of the average margin that previous Chancellors have left against their fiscal mandate since 2010\"; Chart 7.3 (p. 166), whose note says past margins \"have been calculated in per cent of GDP as forecast at the time and multiplied by our latest forecast for nominal GDP\"."
     },
     {
       "id": "hmt-charter-2025-autumn",
@@ -680,6 +680,7 @@
       "title": "Financial Stability Report",
       "edition": "July 2026",
       "url": "https://www.bankofengland.co.uk/financial-stability-report/2026/july-2026",
+      "publishedOn": "2026-07-07",
       "retrievedOn": "2026-09-16",
       "licence": "Other",
       "notes": "Fetched 2026-09-16. Quoted: moves in gilt yields were \"amplified by hedge fund deleveraging\" during the most volatile period after the onset of the Middle East conflict; global sovereign issuance at historically high levels with higher proportions at shorter maturities; \"any negative change in expectations could have wider consequences for sovereign debt markets\". Bank of England material; quoted briefly with attribution."
@@ -690,9 +691,10 @@
       "title": "Bank Insights: What were the drivers of UK long-term interest rates in 2025?",
       "edition": "2026",
       "url": "https://www.bankofengland.co.uk/bank-insights/2026/what-were-the-drivers-of-uk-long-term-interest-rates-in-2025",
+      "publishedOn": "2026-01-23",
       "retrievedOn": "2026-09-16",
       "licence": "Other",
-      "notes": "Fetched 2026-09-16. Quoted: \"the primary driver of the increases in long rates was higher term premia\"; rises \"can largely be attributed to global factors, such as geopolitical uncertainty and concerns around fiscal sustainability\"; 30-year yields at their highest since the turn of the century. Bank of England material; quoted briefly with attribution."
+      "notes": "Fetched 2026-09-16. Quoted: \"the primary driver of the increases in long rates was higher term premia\"; rises \"can largely be attributed to global factors, such as geopolitical uncertainty and concerns around fiscal sustainability\"; 30-year yields at their highest since the turn of the century. Re-read 2026-09-29: \"for much of 2025, market participants pointed to uncertainty about the extent of the Government’s fiscal headroom and issuance needs as being potential drivers of higher term premia in the UK\". Published on 23 January 2026. Bank of England material; quoted briefly with attribution."
     },
     {
       "id": "rf-policy-landscape-2026",
@@ -721,6 +723,7 @@
       "title": "Chancellor letter to the Treasury Select Committee: Budget 2026 date",
       "edition": "31 July 2026",
       "url": "https://www.gov.uk/government/publications/chancellor-letter-to-the-treasury-select-committee-tsc-budget-2026-date/chancellor-letter-to-the-treasury-select-committee-tsc",
+      "publishedOn": "2026-07-31",
       "retrievedOn": "2026-09-16",
       "licence": "OGL-3.0",
       "notes": "Fetched 2026-09-16. The Chancellor commissioned the OBR to \"prepare an economic and fiscal forecast for publication on 28 October 2026. This will be accompanied by the Budget.\" Also: \"Fiscal credibility is the bedrock of economic stability and national security. That is why we will abide by the fiscal rules, ensuring we retain a buffer to protect us against uncertainty and the impact of instability in the Middle East.\""
@@ -916,9 +919,10 @@
       "org": "IfG",
       "title": "John Healey, tax and Budget 2026",
       "url": "https://www.instituteforgovernment.org.uk/publication/john-healey-tax-budget-2026",
+      "publishedOn": "2026-09-07",
       "retrievedOn": "2026-09-16",
       "licence": "Other",
-      "notes": "Fetched 2026-09-16. Notes \"Labour's manifesto commitments not to raise rates of income tax, national insurance or VAT\"; that the previous Chancellor \"left a wafer-thin amount of headroom against her fiscal rules which evaporated post-budget\"; and that \"The OBR's forecasts that will accompany the budget are likely to have deteriorated since March\". Quoted briefly with attribution."
+      "notes": "Fetched 2026-09-16. Notes \"Labour's manifesto commitments not to raise rates of income tax, national insurance or VAT\"; that the previous Chancellor, in 2024, chose to \"leave a wafer-thin amount of headroom against her fiscal rules which evaporated post-budget\"; and that \"The OBR's forecasts that will accompany the budget are likely to have deteriorated since March\". Quoted briefly with attribution."
     },
     {
       "id": "govuk-chancellor-growth-speech-2026-09-07",
@@ -1471,6 +1475,17 @@
       "retrievedOn": "2026-09-28",
       "licence": "OGL-3.0",
       "notes": "Fetched 2026-09-28. Other impacts: \"We expect the measure to have a negligible impact on the environment.\" A change of a few pounds a ticket is too small to change emissions."
+    },
+    {
+      "id": "dmo-remit-2026-04",
+      "org": "HMT",
+      "title": "Revision to the DMO Financing Remit 2026-27",
+      "edition": "23 April 2026",
+      "url": "https://www.dmo.gov.uk/media/ajmifgdv/pr230426_2.pdf",
+      "publishedOn": "2026-04-23",
+      "retrievedOn": "2026-09-29",
+      "licence": "Other",
+      "notes": "Fetched 2026-09-29. HM Treasury sets the remit; the Debt Management Office carries it out. Paragraph 1.1: \"The UK Debt Management Office’s (DMO’s) financing remit for 2026-27 has been revised by HM Treasury today.\" Footnote 1: \"The DMO is an Executive Agency of HM Treasury, which is responsible for debt and cash management on behalf of the UK government.\" Paragraph 2.3 (p. 2): the net financing requirement \"is forecast to be £251.2 billion\"; \"This will be financed by gilt sales of £246.2 billion (including planned green gilt sales of £12.0 billion) and a net contribution made by Treasury bills for debt financing of £5.0 billion\". Annex C (p. 12), 2026-27, £ billion: central government net cash requirement 137.2, gilt redemptions 140.2, gross financing requirement 268.0, total gilt sales for debt financing 246.2. The remit is revised at each fiscal event, so re-read it after the Budget on 28 October 2026. Crown copyright; the DMO's terms of use sit behind a captcha that could not be passed from here, so the figure is quoted briefly with attribution."
     }
   ]
 }

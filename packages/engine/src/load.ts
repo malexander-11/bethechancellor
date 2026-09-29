@@ -57,7 +57,7 @@ import type {
   Vintage,
 } from './types/data.js';
 import { policyYearsOf } from './calc/arithmetic.js';
-import { fyStart } from './calc/years.js';
+import { fyOfDate, fyStart } from './calc/years.js';
 import {
   FINETUNE_SIDES,
   WHO_PAYS,
@@ -517,6 +517,26 @@ export function validateDataset(ds: Dataset): string[] {
       if (!codes.has(item.leverCode)) {
         problems.push(
           `context ${context.id} in-tray ${item.id} names unknown lever ${item.leverCode}`,
+        );
+      }
+    }
+    // The briefing's two published figures (Phase 28, ADR-0030): each read from a quoted passage,
+    // and the gilt sales for the year the context is dated in, since the page says "this year".
+    if (context.briefing) {
+      const { averageHeadroom, giltSales } = context.briefing;
+      const figures = [
+        ['average headroom', averageHeadroom.source],
+        ['gilt sales', giltSales.source],
+      ] as const;
+      for (const [name, source] of figures) {
+        if (!source.quote) {
+          problems.push(`context ${context.id} briefing ${name} quotes nothing from its source`);
+        }
+      }
+      const year = fyOfDate(context.asOf);
+      if (giltSales.year !== year) {
+        problems.push(
+          `context ${context.id} briefing gilt sales are for ${giltSales.year}, not ${year}, the year it is dated in`,
         );
       }
     }

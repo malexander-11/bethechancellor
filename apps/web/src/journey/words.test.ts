@@ -1,4 +1,4 @@
-import { computeOutcome, finetuneItems } from '@btc/engine';
+import { computeOutcome, finetuneItems, plainText } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import {
   advisers,
@@ -16,6 +16,7 @@ import {
   verdicts,
   vintage,
 } from '../data';
+import { briefingTemplates } from './briefingWords';
 
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 
@@ -225,6 +226,8 @@ describe('word budgets: one line visible, the rest a click away', () => {
         ),
       ),
       ...reception.audiences.flatMap((a) => a.rules.flatMap((r) => r.bands.map((b) => b.text))),
+      // The briefing in three parts (Phase 28): the OBR's own words say "fiscal mandate"; ours do not.
+      ...briefingTemplates().map(plainText),
     ];
     const defined = Object.values(glossary.terms).map((t) => t.short);
     expect(read.length).toBeGreaterThan(300);

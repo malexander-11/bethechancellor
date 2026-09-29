@@ -449,9 +449,7 @@ export function ReviewPage() {
           </p>
         ) : null}
         <p className={missed.length > 0 ? 'review__missed' : undefined}>{rulesLine}</p>
-        {missed.length === 0 && r.endGbpm < THIN_HEADROOM_GBPM ? (
-          <Yardstick className="review__yardstick" />
-        ) : null}
+        {missed.length === 0 && r.endGbpm < THIN_HEADROOM_GBPM ? <Yardstick /> : null}
         {signOff ? <Spoken line={signOff.line} who="The Prime Minister" tone="pm" /> : null}
         {brokenTags.length > 0 || strainedTags.length > 0 ? (
           <ul className="review__list">

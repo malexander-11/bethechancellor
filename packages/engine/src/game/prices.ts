@@ -1,5 +1,5 @@
 import { fyStart } from '../calc/years.js';
-import type { Lever, OptionsFile, PmFile } from '../types/data.js';
+import type { Badge, Lever, OptionsFile, PmFile } from '../types/data.js';
 import type { LeverEffect, Outcome } from '../types/engine.js';
 
 /**
@@ -272,6 +272,40 @@ export function reconcile(outcome: Outcome, pre: Outcome): Reconciliation {
     interestGbpm: interest,
     endGbpm: headroomOn(outcome, 'currentBudget'),
     taxTakeChangePp: share(outcome) - share(pre),
+  };
+}
+
+/**
+ * How the headroom got from the OBR's March forecast to today's estimate (Phase 28, ADR-0030): the
+ * forecast's own margin on the day-to-day rule, then what each economic setting of the estimate
+ * does to it in the target year. `pre` is the Budget before any measure (today's estimate: the
+ * macro settings alone), so the steps are the rows the engine attributes to those settings, signed
+ * as changes to the headroom, and the forecast and the steps come to the estimate exactly. Each
+ * step keeps the badge its row wears: the settings are an assumption, the OBR's sensitivities
+ * turn them into money.
+ */
+export interface FromForecast {
+  year: string;
+  /** The March forecast's headroom, £ million: the vintage's own figure, with nothing moved. */
+  forecastGbpm: number;
+  /** What each economic setting does to the headroom, £ million: negative takes it away. */
+  steps: { code: string; headroomGbpm: number; badge: Badge }[];
+  /** Today's estimate of the headroom, £ million. */
+  estimateGbpm: number;
+}
+
+export function fromForecast(pre: Outcome): FromForecast {
+  const verdict = pre.verdicts.find((v) => v.kind === 'currentBudget');
+  const steps = pre.attribution.flatMap((row) =>
+    row.kind === 'macro' && row.code
+      ? [{ code: row.code, headroomGbpm: -row.currentBudgetGbpm, badge: row.badge }]
+      : [],
+  );
+  return {
+    year: targetYearOf(pre),
+    forecastGbpm: verdict?.baseline.headroomGbpm ?? 0,
+    steps,
+    estimateGbpm: verdict?.headroomGbpm ?? 0,
   };
 }
 

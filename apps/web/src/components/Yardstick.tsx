@@ -5,9 +5,10 @@ import { SourceList } from './SourceLink';
 /**
  * The advisers' yardstick, in words (Phase 25): what they call thin, the markets' own line. A
  * judgement, badged as one; nothing is scored against it, and there is no target to meet
- * (ADR-0025). The briefing says it once, and the review says it again when the Budget ends thin.
+ * (ADR-0025). The review says it when the Budget ends thin; the briefing gives the same line as
+ * advice, beside the calculation it follows from (Phase 28, ADR-0030).
  */
-export function Yardstick({ className = 'brief__yardstick' }: { className?: string }) {
+export function Yardstick({ className = 'review__yardstick' }: { className?: string }) {
   return (
     <p className={className}>
       <LabelBadge badge="simulated" /> Your advisers call headroom under{' '}

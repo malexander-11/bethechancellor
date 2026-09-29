@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { badgeSchema, isoDateSchema, sourceRefSchema } from './provenance.schema.js';
+import {
+  badgeSchema,
+  fiscalYearSchema,
+  isoDateSchema,
+  sourceRefSchema,
+} from './provenance.schema.js';
 
 /** One side of a comparison: a scalar or a series by year, with where it comes from. */
 const readingValueSchema = z
@@ -63,6 +68,28 @@ export const inTrayItemSchema = z.strictObject({
   sources: z.array(sourceRefSchema).min(1),
 });
 
+/**
+ * The two published figures the briefing states (Phase 28, ADR-0030), kept as data so a rebase
+ * re-reads them rather than a page repeating them: the headroom Chancellors have kept on average,
+ * the OBR's own record, and the gilts the government plans to sell this year. Each is read from a
+ * quoted passage; the validator checks the quote is there and that the gilt sales are for the year
+ * the context is dated in, so "this year" stays true when the context is.
+ */
+export const briefingFiguresSchema = z.strictObject({
+  /** The average margin Chancellors have left against their rules, £ million, and since when. */
+  averageHeadroom: z.strictObject({
+    gbpm: z.number().positive(),
+    since: z.string().regex(/^\d{4}$/),
+    source: sourceRefSchema,
+  }),
+  /** The gilts the government plans to sell in a fiscal year, £ million: its gross financing. */
+  giltSales: z.strictObject({
+    gbpm: z.number().positive(),
+    year: fiscalYearSchema,
+    source: sourceRefSchema,
+  }),
+});
+
 /** "What has changed since the forecast": dated readings compared with the vintage's assumptions. */
 export const contextFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
@@ -75,4 +102,5 @@ export const contextFileSchema = z.strictObject({
   readings: z.array(contextReadingSchema).min(1),
   decisionsSinceForecast: z.array(decisionSinceForecastSchema).default([]),
   inTray: z.array(inTrayItemSchema).default([]),
+  briefing: briefingFiguresSchema.optional(),
 });

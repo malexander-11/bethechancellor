@@ -307,5 +307,29 @@
         }
       ]
     }
-  ]
+  ],
+  "briefing": {
+    "averageHeadroom": {
+      "gbpm": 29000,
+      "since": "2010",
+      "source": {
+        "sourceId": "obr-efo-2025-11",
+        "paragraph": "7.6",
+        "page": "162",
+        "quote": "the average margin (around £29 billion) that previous Chancellors have left themselves against meeting their fiscal mandates",
+        "note": "Paragraph 7.11 (p. 165) dates the record: the margin \"that previous Chancellors have left against their fiscal mandate since 2010\". Chart 7.3's note: past margins are calculated in per cent of GDP as forecast at the time and multiplied by the OBR's latest forecast for nominal GDP."
+      }
+    },
+    "giltSales": {
+      "gbpm": 246200,
+      "year": "2026-27",
+      "source": {
+        "sourceId": "dmo-remit-2026-04",
+        "paragraph": "2.3",
+        "page": "2",
+        "quote": "This will be financed by gilt sales of £246.2 billion",
+        "note": "Annex C (p. 12): the net financing requirement of £251.2 billion covers the central government net cash requirement (£137.2 billion) and gilt redemptions (£140.2 billion), less other financing; gilt sales meet £246.2 billion of it and Treasury bills £5.0 billion. Paragraph 2.4 calls them \"planned gross gilt sales\"."
+      }
+    }
+  }
 }

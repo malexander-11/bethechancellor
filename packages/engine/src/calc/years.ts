@@ -44,3 +44,17 @@ export function fyRange(from: string, to: string): string[] {
 export function fyStartYearLabel(fy: string): string {
   return String(fyStart(fy));
 }
+
+const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+/**
+ * The fiscal year a date falls in (Phase 28): a UK fiscal year runs from 1 April to 31 March, so
+ * 31 March 2027 is in 2026-27 and 1 April 2027 in 2027-28.
+ */
+export function fyOfDate(date: string): string {
+  const match = ISO_DATE.exec(date);
+  if (!match) throw new EngineError(`invalid date "${date}"`);
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  return fyFromStart(month >= 4 ? year : year - 1);
+}

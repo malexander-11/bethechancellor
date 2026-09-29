@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  formatGbpBn,
+  fromForecast,
   optionPrice,
   preBudget,
   preBudgetValues,
@@ -145,5 +147,47 @@ describe('the review adds up (Phase 25)', () => {
     );
     expect(saved.spendingGbpm).toBeLessThan(0);
     expect(saved.taxesGbpm).toBe(0);
+  });
+});
+
+describe('from the March forecast to today’s estimate (Phase 28)', () => {
+  // The March forecast's own headroom, with the tolerance the vintage checks it to.
+  const check = ds.vintage.checks.stabilityHeadroomGbpm;
+
+  it('is the OBR’s March figure, less what rates and prices do, coming to the estimate', () => {
+    const f = fromForecast(outcomeOf(ESTIMATE));
+    expect(f.year).toBe('2029-30');
+    expect(f.year).toBe(check.year);
+    // The March forecast, as the vintage checks it: what earns the Official figure badge.
+    expect(Math.abs(f.forecastGbpm - check.value)).toBeLessThanOrEqual(check.toleranceGbpm);
+    // Dearer borrowing and dearer prices, each the OBR's own sensitivity on today's settings.
+    expect(f.steps.map((s) => s.code)).toEqual(['rate', 'rpi']);
+    expect(f.steps[0]?.headroomGbpm).toBeCloseTo(-11_250, 6);
+    expect(f.steps[1]?.headroomGbpm).toBeCloseTo(-5_500, 6);
+    for (const step of f.steps) expect(step.badge).toBe('assumption');
+    // Exactly, and as the page shows them: 23.6 − 11.3 − 5.5 = 6.8.
+    const sum = f.forecastGbpm + f.steps.reduce((a, s) => a + s.headroomGbpm, 0);
+    expect(sum).toBeCloseTo(f.estimateGbpm, 6);
+    expect(f.estimateGbpm).toBeCloseTo(headroom(outcomeOf(ESTIMATE)), 6);
+    const shown = (gbpm: number) => Number(formatGbpBn(gbpm, 1).replace(/[^\d.]/g, ''));
+    const signed = (gbpm: number) => Math.sign(gbpm) * shown(gbpm);
+    expect(
+      signed(f.forecastGbpm) + f.steps.reduce((a, s) => a + signed(s.headroomGbpm), 0),
+    ).toBeCloseTo(signed(f.estimateGbpm), 9);
+    expect(formatGbpBn(f.estimateGbpm, 1)).toBe('£6.8bn');
+  });
+
+  it('has no steps with nothing set, and one for each setting that moves', () => {
+    const march = fromForecast(outcomeOf({}));
+    expect(march.steps).toEqual([]);
+    expect(march.estimateGbpm).toBeCloseTo(march.forecastGbpm, 6);
+    // Slower growth too: three steps, still adding up exactly.
+    const three = fromForecast(outcomeOf({ ...ESTIMATE, ngdp: -0.1 }));
+    expect(three.steps.map((s) => s.code).sort()).toEqual(['ngdp', 'rate', 'rpi']);
+    expect(three.forecastGbpm + three.steps.reduce((a, s) => a + s.headroomGbpm, 0)).toBeCloseTo(
+      three.estimateGbpm,
+      6,
+    );
+    expect(three.estimateGbpm).toBeLessThan(fromForecast(outcomeOf(ESTIMATE)).estimateGbpm);
   });
 });

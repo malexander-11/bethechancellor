@@ -91,6 +91,7 @@ export { growthFactors, pctOfGdp } from './calc/ratios.js';
 export {
   compareFy,
   fyFromStart,
+  fyOfDate,
   fyRange,
   fyStart,
   fyStartYearLabel,
