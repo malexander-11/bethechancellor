@@ -52,9 +52,10 @@ type Mode = 'basic' | 'advanced';
 const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] = [
   ['/', 40, GAME, 'basic'],
   // The briefing in three parts (Phase 28): 205 words in either mode, since advanced mode's
-  // explanations are folds. Basic mode's short briefing was 159 words, the full one 237.
-  ['/outlook', 225, GAME, 'advanced'],
-  ['/outlook', 225, GAME, 'basic'],
+  // explanations are folds. Basic mode's short briefing was 159 words, the full one 237. Then the
+  // player's own words (revised 2026-09-29): 232 in either mode.
+  ['/outlook', 255, GAME, 'advanced'],
+  ['/outlook', 255, GAME, 'basic'],
   ['/pm', 195, GAME, 'basic'],
   ['/budget/deliver', 220, WIDEST, 'advanced'],
   ['/budget/deliver/2', 220, WIDEST, 'advanced'],
@@ -144,7 +145,9 @@ describe('the word budgets', () => {
     // they are shorter (the briefing 159, the flagship screens 130, 54 and 110, tax 343 and 492,
     // spending 424 and 589). Then the briefing became three parts (Phase 28, ADR-0030): 205 words
     // in either mode, the figure, the record, the rules, the gilts, the calculation's four rows and
-    // the advice on show, and advanced mode's explanations folded.
+    // the advice on show, and advanced mode's explanations folded. Then the player rewrote its
+    // words: why Chancellors keep a margin and what reaching the record would take in place of the
+    // advice, and a line on what moved the forecast before the rows (232 in either mode).
     for (const [path, limit, game, mode] of ROAD) {
       inMode(mode);
       const view = at(`${path}?${BASE}&${game}`);

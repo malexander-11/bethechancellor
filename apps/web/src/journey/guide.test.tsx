@@ -21,7 +21,11 @@ describe('the head of every screen', () => {
     at(`/outlook?${BASE}`);
     expect(screen.getByText('Step 1 of 6')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: 'Your briefing' })).toBeVisible();
-    expect(screen.getByText('The headroom you have, and the rules to meet.')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'The headroom you have to play with, and the rules you need to meet to keep markets onside.',
+      ),
+    ).toBeInTheDocument();
     // The reason a screen matters is on the screen or nowhere (Phase 23).
     expect(screen.queryByText('Why this matters')).toBeNull();
     expect(intro().querySelector('details')).toBeNull();

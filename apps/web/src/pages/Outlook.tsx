@@ -1,5 +1,4 @@
 import {
-  THIN_HEADROOM_GBPM,
   formatGbp,
   formatGbpBn,
   fromForecast,
@@ -71,15 +70,15 @@ function distinct(refs: readonly SourceRef[]): SourceRef[] {
 }
 
 /**
- * Step 1: your briefing, in three parts (Phase 28, ADR-0030), as the player asked for it. Your
- * headroom: the one figure to plan on, and what Chancellors have kept since 2010. What headroom
- * is: the two rules, the word itself, what the government must borrow from lenders this year and
- * why they care. How it is calculated: the OBR's March forecast, less what dearer borrowing and
- * dearer prices have done to it, coming to today's estimate, and the advisers' advice to keep more
- * than the markets' thin line. What is already on the desk follows, in both modes. In advanced mode
- * (Phase 27, ADR-0028) three folds add the rules in the Charter's words, what changed since March
- * and why forecasts move; with the workings on, the table the estimate is made from. Nothing is
- * chosen here, and nothing is set as a target: the primary starts the game on the estimate.
+ * Step 1: your briefing, in three parts (Phase 28, ADR-0030), in the player's own words. Your
+ * headroom: the one figure to plan on, what Chancellors have kept since 2010 and why, and what
+ * reaching that record would take. What headroom is: the two rules, the word itself, what the
+ * government must sell to lenders this year and why they care. How it is calculated: what dearer
+ * borrowing and dearer prices have done since March, then the OBR's March forecast less each of
+ * them, coming to today's estimate. What is already on the desk follows, in both modes. In advanced
+ * mode (Phase 27, ADR-0028) three folds add the rules in the Charter's words, what changed since
+ * March and why forecasts move; with the workings on, the table the estimate is made from. Nothing
+ * is chosen here and nothing is scored: the primary starts the game on the estimate.
  */
 export function OutlookPage() {
   const { state, dispatch } = useBudget();
@@ -103,6 +102,16 @@ export function OutlookPage() {
   const gilts = reading('gilt-10y');
   const prices = context.readings.find((r) => r.leverCode === 'rpi');
   const decisions = context.decisionsSinceForecast;
+  // What reaching the record would take: the record less the estimate, both on show beside it.
+  const gapGbpm = figures ? figures.averageHeadroom.gbpm - path.estimateGbpm : 0;
+  // What the calculation's opening line rests on: the gilt yield and prices against what the OBR
+  // assumed, and the OBR tying RPI to debt interest.
+  const cpi = reading('cpi-latest');
+  const introSources = distinct([
+    ...(gilts ? [gilts.latest.source, gilts.obr.source] : []),
+    ...(cpi ? [cpi.latest.source, cpi.obr.source] : []),
+    ...BRIEFING_SOURCES.calc,
+  ]);
 
   // The rows' sources, with the workings on: the March forecast's own table, then for each setting
   // the OBR's sensitivity that turns it into money and the reading it is taken from.
@@ -159,7 +168,16 @@ export function OutlookPage() {
               as="span"
               className="briefing__sources"
               refs={[figures.averageHeadroom.source]}
-            />
+            />{' '}
+            <LabelBadge badge="commentary" /> {WORDS.headroom.safety}{' '}
+            <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.safety} />
+          </p>
+        ) : null}
+        {figures && gapGbpm > 0 ? (
+          <p className="brief__line">
+            <LabelBadge badge="simulated" />{' '}
+            {fillIn(WORDS.headroom.buffer, { gap: formatGbpBn(gapGbpm, 0) })}{' '}
+            <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.buffer} />
           </p>
         ) : null}
       </section>
@@ -174,16 +192,21 @@ export function OutlookPage() {
         <p className="brief__line">
           <Marked text={WORDS.what.meaning} />
         </p>
-        {figures ? (
-          <p className="brief__line">
-            <LabelBadge badge="direct" />{' '}
-            <Marked
-              text={fillIn(WORDS.what.gilts, { gilts: formatGbpBn(figures.giltSales.gbpm, 0) })}
-            />{' '}
-            <SourceList as="span" className="briefing__sources" refs={[figures.giltSales.source]} />
-          </p>
-        ) : null}
+        {/* What lenders must buy and why they care, as one paragraph; each part keeps its badge. */}
         <p className="brief__line">
+          {figures ? (
+            <>
+              <LabelBadge badge="direct" />{' '}
+              <Marked
+                text={fillIn(WORDS.what.gilts, { gilts: formatGbpBn(figures.giltSales.gbpm, 0) })}
+              />{' '}
+              <SourceList
+                as="span"
+                className="briefing__sources"
+                refs={[figures.giltSales.source]}
+              />{' '}
+            </>
+          ) : null}
           <LabelBadge badge="commentary" /> {WORDS.what.lenders}{' '}
           <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.lenders} />
         </p>
@@ -220,9 +243,15 @@ export function OutlookPage() {
         <h2 id="brief-calc" className="section-label">
           {WORDS.calc.heading}
         </h2>
+        <p className="brief__line">
+          {WORDS.calc.intro}{' '}
+          <SourceList as="span" className="briefing__sources" refs={introSources} />
+        </p>
         <dl className="calc">
           <div className="calc__row">
-            <dt>{WORDS.calc.forecast}</dt>
+            <dt>
+              <Marked text={WORDS.calc.forecast} />
+            </dt>
             <dd>
               <span className="calc__figure">{formatGbpBn(path.forecastGbpm, 1)}</span>{' '}
               <LabelBadge badge="direct" />
@@ -245,11 +274,6 @@ export function OutlookPage() {
           </div>
         </dl>
         <SourceList className="briefing__sources" refs={calcSources} />
-        <p className="brief__line">
-          <LabelBadge badge="simulated" />{' '}
-          {fillIn(WORDS.calc.advice, { thin: formatGbpBn(THIN_HEADROOM_GBPM, 0) })}{' '}
-          <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.advice} />
-        </p>
         {basic ? null : (
           <>
             <details className="more">

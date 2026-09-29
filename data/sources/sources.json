@@ -9,9 +9,9 @@
       "url": "https://assets.publishing.service.gov.uk/media/69a6d7b62e1f4fbda4252208/economic-and-fiscal-outlook-march-2026-web-accessible.pdf",
       "landingUrl": "https://obr.uk/efo/economic-and-fiscal-outlook-march-2026/",
       "publishedOn": "2026-03-03",
-      "retrievedOn": "2026-09-15",
+      "retrievedOn": "2026-09-29",
       "licence": "OGL-3.0",
-      "notes": "Web-accessible PDF mirrored on gov.uk. Supplementary tables are on obr.uk and not yet committed; figures here are read from the PDF tables."
+      "notes": "Web-accessible PDF mirrored on gov.uk. Supplementary tables are on obr.uk and not yet committed; figures here are read from the PDF tables. Re-read 2026-09-29 for the briefing: paragraph 4.27 (p. 72), \"Debt interest spending is forecast to be, on average, £2.8 billion lower than November 2025, largely reflecting weaker RPI inflation\", with Table 4.8 carrying RPI inflation as a line of debt interest; paragraph 6.17 (p. 99) states the sensitivities without splitting their channels."
     },
     {
       "id": "obr-efo-2025-11",
@@ -23,7 +23,7 @@
       "publishedOn": "2025-11-26",
       "retrievedOn": "2026-09-29",
       "licence": "OGL-3.0",
-      "notes": "Used for the interest-rate sensitivity stated for 2029-30 and the November headroom of £22bn. Re-read 2026-09-29 for the briefing's record of past headroom: paragraph 7.6 (p. 162), \"The £22 billion margin by which the current balance is in surplus in 2029-30 is around three-quarters of the average margin (around £29 billion) that previous Chancellors have left themselves against meeting their fiscal mandates\", and March 2025's margin, \"0.3 per cent of GDP (£10 billion)\"; paragraph 7.11 (p. 165), \"around three-quarters of the average margin that previous Chancellors have left against their fiscal mandate since 2010\"; Chart 7.3 (p. 166), whose note says past margins \"have been calculated in per cent of GDP as forecast at the time and multiplied by our latest forecast for nominal GDP\"."
+      "notes": "Used for the interest-rate sensitivity stated for 2029-30 and the November headroom of £22bn. Re-read 2026-09-29 for the briefing's record of past headroom: paragraph 7.6 (p. 162), \"The £22 billion margin by which the current balance is in surplus in 2029-30 is around three-quarters of the average margin (around £29 billion) that previous Chancellors have left themselves against meeting their fiscal mandates\", and March 2025's margin, \"0.3 per cent of GDP (£10 billion)\"; paragraph 7.11 (p. 165), \"around three-quarters of the average margin that previous Chancellors have left against their fiscal mandate since 2010\"; Chart 7.3 (p. 166), whose note says past margins \"have been calculated in per cent of GDP as forecast at the time and multiplied by our latest forecast for nominal GDP\". Re-read 2026-09-29 for why a margin matters: paragraph 1.3 (p. 5), the £22bn margin \"is close to the £21 billion average absolute revision in the fourth year of our pre-measures forecast between fiscal events, and around three-quarters of the £29 billion average margin set aside by previous Chancellors\"; paragraph 1.30 (p. 18), \"While this Budget addresses some fiscal risks and increases the margin held against the Government’s fiscal targets, it still leaves the UK public finances relatively vulnerable to future shocks.\""
     },
     {
       "id": "hmt-charter-2025-autumn",

@@ -55,14 +55,19 @@ describe('the briefing’s words (Phase 28, ADR-0030)', () => {
     );
     // Should a rebase ever leave the estimate below zero, the line says so rather than "breathing".
     expect(fillIn(BRIEFING_WORDS.headroom.shortfall, { estimate: '£2.0bn', year: '2029-30' })).toBe(
-      '£2.0bn short of the rules in 2029-30, the year they are tested.',
+      'You start £2.0bn short of the rules in 2029-30.',
     );
     expect(fillIn('{estimate} of breathing space', {})).toBe('{estimate} of breathing space');
     expect(templateParts(BRIEFING_WORDS.headroom.figure)).toEqual([
+      { text: 'You start with ' },
       { key: 'estimate' },
       { text: ' of breathing space in ' },
       { key: 'year' },
-      { text: ', the year the rules are tested.' },
+      { text: '.' },
     ]);
+    // What reaching the record would take is filled from the two figures, never typed.
+    expect(fillIn(BRIEFING_WORDS.headroom.buffer, { gap: '£22bn' })).toBe(
+      'This means this Budget will need to find around £22bn to build in a sensible buffer.',
+    );
   });
 });

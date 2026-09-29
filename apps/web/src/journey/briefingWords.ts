@@ -2,27 +2,35 @@ import type { SourceRef } from '@btc/engine';
 
 /**
  * The briefing's words (Phase 28, ADR-0030): three parts, each a heading and a few sentences, in
- * the order the player asked for them. Your headroom; what headroom is; how it is calculated.
- * Glossary words are marked [word](id), as in the guide, and open where they are used. No figure
- * is typed here: every sum, rate and year is a {placeholder} the page fills from the data or the
- * engine, so a rebase re-reads them. The one exception is the Resolution Foundation's July figure
- * in the fold on why forecasts move, a quotation dated in the sentence that gives it. Exported so
- * the readability and words tests read what the player reads.
+ * the order the player asked for them. Your headroom; what headroom is; how it is calculated. The
+ * wording is the player's own, as they rewrote it on 29 September 2026. Glossary words are marked
+ * [word](id), as in the guide, and open where they are used. No figure is typed here: every sum,
+ * rate and year is a {placeholder} the page fills from the data or the engine, so a rebase re-reads
+ * them. The one exception is the Resolution Foundation's July figure in the fold on why forecasts
+ * move, a quotation dated in the sentence that gives it. Exported so the readability and words
+ * tests read what the player reads.
  */
 export const BRIEFING_WORDS = {
   headroom: {
     heading: 'Your headroom',
     /** The one figure to plan on. {estimate} is the engine's, and wears the Assumption badge. */
-    figure: '{estimate} of breathing space in {year}, the year the rules are tested.',
+    figure: 'You start with {estimate} of breathing space in {year}.',
     /** The same line should a rebase ever leave the estimate below zero. */
-    shortfall: '{estimate} short of the rules in {year}, the year they are tested.',
+    shortfall: 'You start {estimate} short of the rules in {year}.',
     /** The OBR's record of what Chancellors have kept, an Official figure. */
     history: 'Since {since}, Chancellors have kept about {average} on average.',
+    /** Why they keep it, in words with their sources: Commentary. */
+    safety: 'This builds in some safety for adverse economic impact.',
+    /**
+     * What reaching that record would take. {gap} is the record less the estimate, both on show
+     * above it; "sensible" is a judgement, so the line is a Game judgement, and nothing scores it.
+     */
+    buffer: 'This means this Budget will need to find around {gap} to build in a sensible buffer.',
   },
   what: {
     heading: 'What is headroom?',
     rules:
-      'Two [rules](fiscal-rules): pay for day-to-day spending with tax by {year}, and have debt falling by then. Miss one and the Office for Budget Responsibility ([OBR](obr)), the official forecaster, says so on Budget day.',
+      'Two [rules](fiscal-rules): pay for day-to-day spending with tax by {year}, and have debt falling by then.',
     meaning:
       '[Headroom](headroom) is how much you can spend, or cut in tax, and still meet the rules.',
     /** What lenders must buy this year, an Official figure: gross sales, so not "borrows". */
@@ -35,7 +43,15 @@ export const BRIEFING_WORDS = {
   },
   calc: {
     heading: 'How the headroom is calculated',
-    forecast: 'The OBR’s March forecast',
+    /**
+     * What moved the forecast, in words; the rows give the sums. The inflation row is interest on
+     * index-linked gilts, which moves with RPI (the OBR, March 2026, paragraph 4.27), not the
+     * benefits that rise with CPI, so the line says debt, not spending.
+     */
+    intro:
+      'Since March, interest rates and inflation have been higher than expected. This means the government is paying more money to borrow, and paying more on debt linked to inflation.',
+    /** A basic page names the OBR first here, so its full name is a tap away, the possessive kept. */
+    forecast: 'The [OBR’s](obr) March forecast',
     /** What each economic setting of the estimate is called, by the way it moved from March. */
     steps: {
       rate: { up: 'Higher interest rates', down: 'Lower interest rates' },
@@ -43,9 +59,6 @@ export const BRIEFING_WORDS = {
       ngdp: { up: 'Faster growth', down: 'Slower growth' },
     } as Record<string, { up: string; down: string }>,
     estimate: 'Today’s estimate',
-    /** The advisers' advice, a Game judgement; {thin} is the markets' own thin line. */
-    advice:
-      'As you choose your policies, aim to keep more than {thin}. Below that, the markets get nervous.',
   },
   since: {
     fold: 'What changed since March',
@@ -74,6 +87,31 @@ export const BRIEFING_WORDS = {
  * figures carry their own sources in the data; these are the sources of the words around them.
  */
 export const BRIEFING_SOURCES = {
+  /** Why Chancellors keep a margin: the OBR on shocks, and the Chancellor's own letter. */
+  safety: [
+    {
+      sourceId: 'obr-efo-2025-11',
+      paragraph: '1.30',
+      page: '18',
+      quote:
+        'increases the margin held against the Government’s fiscal targets, it still leaves the UK public finances relatively vulnerable to future shocks',
+    },
+    {
+      sourceId: 'hmt-tsc-budget-2026-letter',
+      quote:
+        'ensuring we retain a buffer to protect us against uncertainty and the impact of instability in the Middle East',
+    },
+  ],
+  /** A buffer the size of the record: the OBR sets a margin beside its typical revision. */
+  buffer: [
+    {
+      sourceId: 'obr-efo-2025-11',
+      paragraph: '1.3',
+      page: '5',
+      quote:
+        'close to the £21 billion average absolute revision in the fourth year of our pre-measures forecast between fiscal events, and around three-quarters of the £29 billion average margin set aside by previous Chancellors',
+    },
+  ],
   /** Lenders and the sums: the Bank on 2025's long rates, and the Chancellor's own letter. */
   lenders: [
     {
@@ -86,19 +124,18 @@ export const BRIEFING_SOURCES = {
       quote: 'Fiscal credibility is the bedrock of economic stability',
     },
   ],
-  /** The advice: a margin of £10bn, as March 2025 left, called wafer-thin once it evaporated. */
-  advice: [
+  /**
+   * What moved the forecast: the readings behind "higher than expected" are the context file's, and
+   * this is why the inflation row is debt, the OBR tying RPI to debt interest.
+   */
+  calc: [
     {
-      sourceId: 'obr-efo-2025-11',
-      paragraph: '7.6',
-      quote: '0.3 per cent of GDP (£10 billion) in March',
-    },
-    {
-      sourceId: 'ifg-healey-tax-budget-2026',
+      sourceId: 'obr-efo-2026-03',
+      paragraph: '4.27',
+      page: '72',
       quote:
-        'a wafer-thin amount of headroom against her fiscal rules which evaporated post-budget',
+        'Debt interest spending is forecast to be, on average, £2.8 billion lower than November 2025, largely reflecting weaker RPI inflation',
     },
-    { sourceId: 'boe-fsr-2026-07' },
   ],
   /** Why forecasts move: the OBR's record, estimates on both sides, and how a Budget is made. */
   forecasts: [

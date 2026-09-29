@@ -239,4 +239,6 @@ yardstick of ADR-0026 in other words, badged Game judgement and scored by nothin
 no target, nothing asks the player to choose one, and the bar still says only whether the rules are
 met. £20bn still scores as ample on Budget day. The estimate is the one this ADR set, and the
 briefing now shows how it is made: the OBR's March £23.6bn, less what higher interest rates and
-higher inflation take, row by row.
+higher inflation take, row by row. Later the same day the user's own words replaced the £10bn advice
+with a line on what reaching Chancellors' average margin would take, badged Game judgement and
+still scored by nothing (ADR-0030's revision).

@@ -165,8 +165,8 @@ const SETS: Record<string, readonly string[]> = {
         year: '2029-30',
         since: '2010',
         average: '£29bn',
+        gap: '£22bn',
         gilts: '£246bn',
-        thin: '£10bn',
         giltsNow: '5.29%',
         giltsObr: '4.5%',
         pricesNow: '3.3%',
@@ -211,7 +211,8 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // lines 4.8, the guide 3.4 (step 4's line says "Choose policies"), the rest unchanged. Then
     // basic and advanced (Phase 27): the fine-tuning screens, with basic mode's leads, stay at 5.7;
     // the modes read at 3.4. Then the briefing in three parts (Phase 28), its folds included,
-    // reads at 5.1. Set GRADES to a file path to write them out.
+    // reads at 5.1, and at 5.1 again in the player's own words. Set GRADES to a file path to write
+    // them out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);

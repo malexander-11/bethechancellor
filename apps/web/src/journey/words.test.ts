@@ -168,7 +168,11 @@ describe('word budgets: one line visible, the rest a click away', () => {
       'review',
       'budget-day',
     ]);
-    for (const s of road) expect(words(s.now), `${s.step}: "${s.now}"`).toBeLessThanOrEqual(10);
+    // The briefing's line is the player's own (Phase 28, revised 2026-09-29): what the headroom is
+    // for, in one sentence of eighteen words. Every other screen keeps to ten.
+    const limit = (step: string) => (step === 'outlook' ? 18 : 10);
+    for (const s of road)
+      expect(words(s.now), `${s.step}: "${s.now}"`).toBeLessThanOrEqual(limit(s.step));
     // Ten words, not five (Phase 25): "Fund the plan, reach 3%" named no plan and no 3% of what.
     for (const p of pm.priorities) expect(words(p.purpose), p.id).toBeLessThanOrEqual(10);
   });

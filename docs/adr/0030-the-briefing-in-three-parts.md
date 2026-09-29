@@ -1,7 +1,7 @@
 # ADR-0030: The briefing in three parts
 
-Date: 2026-09-29. Status: accepted. Revises ADR-0025, ADR-0026 and ADR-0028, each of which carries
-a dated revision pointing here.
+Date: 2026-09-29. Status: accepted; revised the same day (below). Revises ADR-0025, ADR-0026 and
+ADR-0028, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -205,3 +205,94 @@ down a point on Budget day. It is not added to the bar or the review.
   screen. It is the user's phrase, so it stays.
 - **Below zero.** Should a rebase leave the estimate negative, part 1 says "£X short of the rules"
   rather than "breathing space", and the last row shows the minus sign.
+
+## Revision (2026-09-29): the briefing in the user's own words
+
+Later the same day the user rewrote the briefing's words, part by part:
+
+> Changed copy: Your briefing
+> The headroom you have to play with, and the rules you need to meet to keep markets onside.
+>
+> Your headroom
+> You start with £6.8bn of breathing space in 2029-30.
+>
+> Since 2010, Chancellors have kept about £29bn on average. This builds in some safety for adverse
+> economic impact.
+>
+> This means this budget will need to find around £22bn to build in a sensible buffer.
+>
+> What is headroom?
+> Two rules: pay for day-to-day spending with tax by 2029-30, and have debt falling by then.
+>
+> Headroom is how much you can spend, or cut in tax, and still meet the rules.
+>
+> This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old
+> ones. Lenders charge more when they doubt the sums. Meeting the rules with headroom to spare
+> keeps their trust.
+>
+> How the headroom is calculated
+> Since March, interest rates and inflation have been higher than expected. This means government
+> are paying more money to borrow, and are paying more for spending linked to inflation.
+> The OBR’s March forecast
+> £23.6bn
+> Official figure
+> Higher interest rates
+> −£11.3bn
+> Assumption
+> Higher inflation
+> −£5.5bn
+> Assumption
+> Today’s estimate
+> £6.8bn
+
+The page now reads as written, with one change of fact, two of house style and two of layout:
+
+- **"Debt linked to inflation", not "spending linked to inflation".** The calculation's inflation
+  row is the OBR's RPI sensitivity, and the OBR ties RPI to debt interest: its March 2026 outlook
+  puts debt interest "on average, £2.8 billion lower than November 2025, largely reflecting weaker
+  RPI inflation" (paragraph 4.27, p. 72), and its Table 4.8 carries RPI inflation as a line of
+  debt interest. The debt is index-linked gilts. Benefits rise with CPI, which the estimate does
+  not move, so "spending" would have told the player the row counts benefits when it does not.
+- **"The government is"** for "government are", as the page already says "the government plans";
+  and **"this Budget"** with a capital B, as all the copy writes the fiscal event.
+- **The OBR's name.** The rules line's second sentence went, and with it the one place the page
+  spelt the OBR out. A basic page now names it first in the calculation's first row, so "OBR's"
+  there opens the glossary's line, "The Office for Budget Responsibility: the independent body
+  that produces the official forecast and checks the Chancellor's sums."
+- **Badges.** The copy's sentences carry none; the page keeps one on every figure and every
+  judgement, the estimate's row included, which the pasted rows left bare. Where the user joined
+  lines, each part keeps its own badge inside the one paragraph: the record (Official figure) then
+  why it is kept (Commentary); the gilts (Official figure) then why lenders care (Commentary).
+
+The new lines and their sources:
+
+| Line                                                                                                                                                                               | Badge                                                             | Sources                                                                                                                                                                                                                                                                                                                                                                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "This builds in some safety for adverse economic impact."                                                                                                                          | Commentary                                                        | The OBR, November 2025, paragraph 1.30 (p. 18): the Budget "increases the margin held against the Government’s fiscal targets, it still leaves the UK public finances relatively vulnerable to future shocks"; the Chancellor's letter to the Treasury Committee: "retain a buffer to protect us against uncertainty".                                                                |
+| "This means this Budget will need to find around £22bn to build in a sensible buffer."                                                                                             | Game judgement                                                    | The record less the estimate, £29bn less £6.85bn, to the nearest billion, filled from the data and never typed. "Sensible" is the judgement. The OBR, November 2025, paragraph 1.3 (p. 5), puts a margin of £22bn "close to the £21 billion average absolute revision in the fourth year of our pre-measures forecast" and "around three-quarters of the £29 billion average margin". |
+| "Since March, interest rates and inflation have been higher than expected. This means the government is paying more money to borrow, and paying more on debt linked to inflation." | None: it says in words what the badged rows below give in figures | The 10-year gilt yield, 5.29% against the 4.5% the OBR assumed; CPI, 2.9% in July against the OBR's 2.3% for 2026; the OBR, March 2026, paragraph 4.27.                                                                                                                                                                                                                               |
+
+What went, besides the rules line's second sentence and "the year the rules are tested": **the
+advice**, "As you choose your policies, aim to keep more than £10bn. Below that, the markets get
+nervous." The user's third part ends at the rows, and the buffer line now says how much to aim for.
+The £10bn stays where it counts: the markets' thin band on Budget day and the review's yardstick
+when a Budget ends thin.
+
+**Still no target, but a level to aim for.** Where the advice named a floor, the buffer line names
+the record. It is advice in words: nothing asks the player to choose a target, the bar is
+unchanged, and nothing new is scored. The markets already reward it: a Budget that finds the £22bn
+ends near £29bn, which they score as a wide buffer (+1).
+
+**Measured.** The line under the heading is eighteen words, and the words test now allows the
+briefing's line eighteen, every other screen's ten. The briefing is 232 words in either mode,
+pinned at 255; it reads at grade 5.1; on a phone it is 2,119px tall in basic mode and 2,255px in
+advanced, 2.7 and 2.9 screens of 780px. `walk30.mjs` is clean at 1300px and 360px in light and
+reduced motion, with the audits on.
+
+**Risks.**
+
+- **Two advisers' levels.** Budget day's markets band calls twenty billion "comfortable"; the
+  briefing now aims at about twenty-nine. Both are Game judgements and neither contradicts the
+  scoring, but a player may notice the difference.
+- **The £22bn moves with the data.** A rebase that changes the estimate or the record changes it,
+  and the line goes if the estimate ever passes the record.

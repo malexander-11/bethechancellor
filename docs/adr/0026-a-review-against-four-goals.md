@@ -361,4 +361,6 @@ for each household goes, since the OBR's record of what Chancellors have kept, a
 2010, now gives the scale; so does the source line, since the calculation's rows now say where the
 figure comes from. The yardstick moves to the review only: the briefing gives the same line as
 advice under the calculation, "aim to keep more than £10bn", still badged Game judgement and
-scored by nothing. The briefing reads 205 words in either mode, against R9's 234.
+scored by nothing. The briefing reads 205 words in either mode, against R9's 234. Later the same
+day the user's own words replaced that advice with a line on what reaching Chancellors' average
+margin would take (ADR-0030's revision); the review's yardstick is unchanged.

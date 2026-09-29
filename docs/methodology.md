@@ -1214,25 +1214,41 @@ can then go to an advanced mode if they'd like. Basic mode, only suggest the bes
 ## 29. The briefing in three parts (ADR-0030)
 
 Phase 28 set the briefing out as the user asked, in three parts and in both modes: your headroom,
-what headroom is, and how it is calculated. "Already on your desk" follows.
+what headroom is, and how it is calculated. "Already on your desk" follows. The same day the user
+rewrote its words; what follows is the page as it now reads (ADR-0030's revision). Its line under
+the heading: "The headroom you have to play with, and the rules you need to meet to keep markets
+onside."
 
-- **Your headroom.** Today's estimate, "£6.8bn of breathing space in 2029-30, the year the rules are
-  tested" (Assumption), and the OBR's record: "Since 2010, Chancellors have kept about £29bn on
-  average" (Official figure; the November 2025 outlook, paragraphs 7.6 and 7.11, with past margins
-  put in today's terms by the OBR's own rescaling in Chart 7.3).
-- **What headroom is.** The two rules in one line, with the OBR spelt out; what headroom is; what
+- **Your headroom.** Today's estimate, "You start with £6.8bn of breathing space in 2029-30"
+  (Assumption), and the OBR's record: "Since 2010, Chancellors have kept about £29bn on average"
+  (Official figure; the November 2025 outlook, paragraphs 7.6 and 7.11, with past margins put in
+  today's terms by the OBR's own rescaling in Chart 7.3). Then why: "This builds in some safety for
+  adverse economic impact" (Commentary: the same outlook, paragraph 1.30, and the Chancellor's
+  letter to the Treasury Committee). Then what reaching the record would take: "This means this
+  Budget will need to find around £22bn to build in a sensible buffer" (Game judgement). The £22bn
+  is the record less the estimate, filled from the data; the line goes should a rebase put the
+  estimate above the record.
+- **What headroom is.** The two rules in one line; what headroom is; and one paragraph on what
   the government plans to sell to lenders this year, £246bn of gilts (Official figure: HM
   Treasury's revision of the Debt Management Office's remit, April 2026, paragraph 2.3), said as
   funding its borrowing and repaying old gilts, since gilt sales are gross financing, not
-  borrowing; and why lenders care, in words with their sources (Commentary).
-- **How it is calculated.** `fromForecast` reads the estimate's outcome: the March forecast's own
+  borrowing, and why lenders care, in words with their sources (Commentary). Each part of the
+  paragraph wears its own badge.
+- **How it is calculated.** First in words: "Since March, interest rates and inflation have been
+  higher than expected. This means the government is paying more money to borrow, and paying more
+  on debt linked to inflation." Debt, not spending: the inflation row is the OBR's RPI
+  sensitivity, which the OBR ties to debt interest on index-linked gilts (the March 2026 outlook,
+  paragraph 4.27 and Table 4.8), while benefits rise with CPI, which the estimate does not move.
+  The line's sources are the gilt yield and prices against what the OBR assumed, and that
+  paragraph. Then the rows. `fromForecast` reads the estimate's outcome: the March forecast's own
   headroom (the vintage's, checked against the OBR's Table 5.1; Official figure), then each economic
   setting's attribution row turned into a change of headroom (Assumption: the setting is ours, the
   sensitivity the OBR's), coming to the estimate exactly. On today's data: £23.6bn, less £11.3bn for
   higher interest rates and £5.5bn for higher inflation, is £6.8bn, and the rounded rows add up as
-  shown. Each step is named by the way its setting moved. Then the advisers' advice: "aim to keep
-  more than £10bn. Below that, the markets get nervous" (Game judgement). The £10bn is the markets'
-  own thin line on Budget day; nothing new is scored and there is still no target.
+  shown. Each step is named by the way its setting moved. The first row's "OBR's" opens the OBR's
+  full name, since a basic page names the OBR first there. Nothing is scored against the buffer
+  line or anything else here; the £10bn line stays the markets' thin line on Budget day and the
+  review's yardstick.
 - **Advanced mode** adds three folds: the rules in the Charter's words; what changed since March
   (the gilt yield and prices against what the OBR assumed, and the three decisions each paid for by
   moving money); and why forecasts move (the Chief Economic Adviser's note, with estimates on both
@@ -1241,9 +1257,12 @@ what headroom is, and how it is calculated. "Already on your desk" follows.
   two published figures, each with its paragraph, page and quote; `validate:data` refuses a figure
   without a quote, and gilt sales for any year but the one the context is dated in (`fyOfDate`).
   The words are in `briefingWords.ts`, with glossary marks and placeholders and no figure typed in;
-  the readability test reads them (grade 5.1).
+  the readability test reads them (grade 5.1). The line under the heading is the guide's, and the
+  briefing's alone may run to eighteen words.
 - **What went**: the heading "The Treasury's briefing", the source line, what the headroom comes to
-  for each household, the "Since March" section (now a fold) and the advisers' £20bn sentence. The
-  yardstick is the review's alone.
+  for each household, the "Since March" section (now a fold) and the advisers' £20bn sentence; then,
+  in the user's rewrite, the advice to keep more than £10bn and the rules line's second sentence.
+  The yardstick is the review's alone.
 - **Measured** (ADR-0030): 205 words in either mode, against 159 in basic mode and 237 in advanced;
-  on a phone, 2.6 screens of 780px in basic mode and 2.7 in advanced.
+  on a phone, 2.6 screens of 780px in basic mode and 2.7 in advanced. In the user's words: 232 in
+  either mode, and 2.7 and 2.9 screens.

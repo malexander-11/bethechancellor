@@ -45,13 +45,15 @@ Every screen names itself, can be reached by keyboard and screen reader, holds 4
 every control at 44px and says met or missed in words.
 
 Six steps. **Briefing**: one sentence, the playtime and the button; then your briefing in three
-parts (ADR-0030). Your headroom: £6.8bn of breathing space in 2029-30, and about £29bn, what
-Chancellors have kept on average since 2010 (the OBR's record). What headroom is: the two rules in
-one line, the word itself, the £246bn of gilts the government plans to sell this year and why
-lenders care. How it is calculated: the OBR's March £23.6bn, less £11.3bn for higher interest rates
-and £5.5bn for higher inflation, and the advice to keep more than £10bn. Then what is already on
-your desk. Advanced mode adds the rules in the Charter's words, what changed since March and why
-forecasts move, each one fold away; with the workings on, how the estimate is made.
+parts, in the user's own words (ADR-0030). Your headroom: you start with £6.8bn of breathing space
+in 2029-30, against about £29bn that Chancellors have kept on average since 2010 (the OBR's record),
+so this Budget would need to find around £22bn to build in a sensible buffer (a judgement). What
+headroom is: the two rules in one line, the word itself, the £246bn of gilts the government plans
+to sell this year and why lenders care. How it is calculated: dearer borrowing and dearer prices
+since March, then the OBR's March £23.6bn, less £11.3bn for higher interest rates and £5.5bn for
+higher inflation. Then what is already on your desk. Advanced mode adds the rules in the
+Charter's words, what changed since March and why forecasts move, each one fold away; with the
+workings on, how the estimate is made.
 **Set your priorities**: rank up to three
 of eight with the Prime Minister, who reacts to each, and the game writes the theme of the Budget
 from the ranking; the promises are one fold away, and one line gives the price of a priority in full
