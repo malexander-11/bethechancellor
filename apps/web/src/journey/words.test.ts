@@ -149,6 +149,8 @@ describe('word budgets: one line visible, the rest a click away', () => {
       expect(words(side.title), side.title).toBeLessThanOrEqual(4);
       // Room for one more short sentence (Phase 25): a top-up costs what a trim saves.
       expect(words(side.lead), side.lead).toBeLessThanOrEqual(14);
+      // Basic mode's lead says whose best ideas these are, in the same room (Phase 27).
+      expect(words(side.shortlistLead), side.shortlistLead).toBeLessThanOrEqual(14);
     }
   });
 
@@ -205,6 +207,7 @@ describe('word budgets: one line visible, the rest a click away', () => {
       ...[finetune.tax, finetune.spending].flatMap((s) => [
         s.title,
         s.lead,
+        s.shortlistLead,
         ...s.groups.map((g) => g.label),
       ]),
       ...guide.stages.map((s) => s.now),

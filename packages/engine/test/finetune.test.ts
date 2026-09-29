@@ -2,18 +2,26 @@ import { describe, expect, it } from 'vitest';
 import {
   FINETUNE_SIDES,
   WHO_PAYS,
+  basicPolicy,
+  deskLevers,
   finetuneFileSchema,
   finetuneItems,
   finetuneNames,
   finetuneSideOf,
   leadPolicy,
+  policyCount,
+  priceMove,
   setByFlagship,
+  shortlistOf,
+  shortlistPolicy,
   sizeIndex,
   sizeLabels,
+  suggestedSettings,
   validateDataset,
+  type ContextFile,
   type FinetuneFile,
 } from '../src/index.js';
-import { loadDataset } from './fixtures.js';
+import { loadDataset, outcomeOfFor } from './fixtures.js';
 
 const ds = loadDataset();
 const file = ds.finetune;
@@ -278,5 +286,178 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     expect(tamper((f) => (f.tax.adviser = 'permanent-secretary'))).toMatch(
       /adviser permanent-secretary does not speak on finetune/,
     );
+  });
+});
+
+/**
+ * The advisers' shortlist (Phase 27, ADR-0028): each screen's adviser picks the few best ideas
+ * basic mode shows. "Best" is a judgement, badged as one on the screen; these pins and rules keep
+ * it checkable. Each pick's reason is its own adviser line, already on its card.
+ */
+const TAX_PICKS = [
+  ['everyone', 'hscl', 'Bring back the health and social care levy'],
+  ['everyone', 'vatelec', 'Keep VAT off electricity after March 2027'],
+  ['best-off', 'cgtalign', 'Tax capital gains at the same rates as income'],
+  ['best-off', 'pens30', 'Give everyone the same 30% pension tax relief'],
+  ['business', 'nicpen', 'Charge employer National Insurance on pension contributions'],
+  ['savers-owners', 'ctgh', 'Double council tax on the biggest homes (bands G and H)'],
+  ['savers-owners', 'rnrb', 'End the extra inheritance tax allowance for family homes'],
+  ['duties', 'gam2', 'Put gambling duties up again'],
+];
+
+const SPENDING_PICKS = [
+  ['services', 'dhsc', 'Spend more on health and social care'],
+  ['services', 'dfe', 'Spend more on schools and education'],
+  ['investment', 'cdel', 'Spend more on public investment'],
+  ['investment', 'socrent', 'More council and social rent homes'],
+  ['benefits', 'lha30', 'Raise housing benefit to match local rents'],
+  ['decisions', 'rvpip', 'Go ahead with the 2025 cuts to PIP'],
+  ['decisions', 'rvwfp', 'Limit winter fuel payments to pensioners on pension credit'],
+];
+
+describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
+  const context = ds.contexts[ds.contexts.length - 1];
+  if (!context) throw new Error('no context');
+  const item = (code: string) => {
+    const found = finetuneItems(file).find((i) => i.code === code);
+    if (!found) throw new Error(`no step-4 lever ${code}`);
+    return found;
+  };
+
+  it('picks eight taxes of ninety-five and seven spending policies of forty-six', () => {
+    const picked = (side: 'tax' | 'spending') =>
+      shortlistOf(file, side).map((p) => [p.group.id, p.code, p.pick.title]);
+    expect(picked('tax')).toEqual(TAX_PICKS);
+    expect(picked('spending')).toEqual(SPENDING_PICKS);
+    expect(policyCount(file, 'tax')).toBe(95);
+    expect(policyCount(file, 'spending')).toBe(46);
+    // One way per lever, and on the spending side the top-ups, not the trims, of the services.
+    for (const entry of shortlistOf(file)) {
+      expect(
+        entry.policies.filter((p) => p.shortlist),
+        entry.code,
+      ).toHaveLength(1);
+      expect(shortlistPolicy(entry)).toBe(entry.pick);
+    }
+    expect(item('dhsc').policies[1]?.shortlist).toBe(true);
+    // Every group has a pick, so basic mode never shows an empty group on arrival.
+    for (const side of FINETUNE_SIDES) {
+      for (const group of file[side].groups) {
+        expect(
+          shortlistOf(file, side).some((p) => p.group.id === group.id),
+          group.id,
+        ).toBe(true);
+      }
+    }
+    expect(file.tax.shortlistLead).toBe(
+      'Your Director of Tax’s best ideas. Watch your headroom move.',
+    );
+    expect(file.spending.shortlistLead).toBe(
+      'Your Director of Public Spending’s best ideas. A top-up costs what a trim saves.',
+    );
+  });
+
+  it('holds every pick to £1bn of headroom in 2029-30 at its smallest size, on today’s estimate', () => {
+    // The price a card already shows (priceMove): interest included, and an all-investment move
+    // priced on the debt rule, which it touches. Under the web's own settings.
+    const estimate = suggestedSettings(context.readings, ds.levers);
+    const outcomeOf = outcomeOfFor(ds, {
+      implementationYear: ds.vintage.years.forecast[1],
+      debtInterestFeedback: true,
+      assessAsOf: 'vintage',
+    });
+    const priceOf = (code: string, size: number) =>
+      priceMove({
+        outcomeOf,
+        levers: ds.levers,
+        from: estimate,
+        to: { ...estimate, [code]: size },
+      });
+    const onTheDebtRule: string[] = [];
+    for (const { code, pick } of shortlistOf(file)) {
+      const price = priceOf(code, pick.sizes[0] ?? 1);
+      expect(price.year).toBe('2029-30');
+      expect(Math.abs(price.headroomChangeGbpm), pick.title).toBeGreaterThanOrEqual(1000);
+      if (price.rule === 'stockFalling') onTheDebtRule.push(code);
+    }
+    expect(onTheDebtRule).toEqual(['cdel', 'socrent']);
+    // Left out on purpose: last year's cancelled fuel duty rise is under the bar. The defence
+    // plan's gap is too, and shows only because the briefing puts it on the desk: not a pick.
+    expect(Math.abs(priceOf('rvfuel', 1).headroomChangeGbpm)).toBeLessThan(1000);
+    expect(Math.abs(priceOf('dip47', 1).headroomChangeGbpm)).toBeLessThan(1000);
+  });
+
+  it('shows in basic mode what was chosen, else the pick, else what is already on the desk', () => {
+    const desk = deskLevers(context);
+    expect([...desk].sort()).toEqual(['dip47', 'vatelec']);
+    const dhsc = item('dhsc');
+    expect(basicPolicy(dhsc, lever('dhsc'), undefined, false)?.title).toBe(
+      'Spend more on health and social care',
+    );
+    // A trim chosen before the screen opened shows the way it was chosen.
+    expect(basicPolicy(dhsc, lever('dhsc'), -1, false)?.title).toBe('Cut health and social care');
+    // Neither a pick nor on the desk: nothing, until it is chosen elsewhere.
+    expect(basicPolicy(item('itbr'), lever('itbr'), undefined, false)).toBeUndefined();
+    expect(basicPolicy(item('itbr'), lever('itbr'), 2, false)?.title).toBe(
+      'Put up the basic rate of income tax',
+    );
+    // The briefing names the defence plan's gap, so basic mode shows it though it is no pick.
+    expect(basicPolicy(item('dip47'), lever('dip47'), undefined, desk.has('dip47'))?.title).toBe(
+      'Fund the defence plan’s gap',
+    );
+  });
+
+  it('validate:data names each way a pick can break the shortlist’s rules', () => {
+    const tamper = (patch: (f: FinetuneFile) => void, contexts?: ContextFile[]) => {
+      const copy: FinetuneFile = structuredClone(file);
+      patch(copy);
+      return validateDataset({ ...ds, finetune: copy, contexts: contexts ?? ds.contexts }).join(
+        '\n',
+      );
+    };
+    const find = (f: FinetuneFile, code: string) => {
+      const found = [...f.tax.groups, ...f.spending.groups]
+        .flatMap((g) => g.items)
+        .find((i) => i.code === code);
+      if (!found) throw new Error(`no step-4 lever ${code}`);
+      return found;
+    };
+    const pick =
+      (code: string, way = 0) =>
+      (f: FinetuneFile) => {
+        find(f, code).policies[way]!.shortlist = true;
+      };
+    const unpick =
+      (...codes: string[]) =>
+      (f: FinetuneFile) => {
+        for (const code of codes) for (const p of find(f, code).policies) delete p.shortlist;
+      };
+    expect(tamper(pick('dhsc'))).toMatch(/the spending screen picks both ways of lever dhsc/);
+    expect(tamper(unpick('dfe', 'socrent'))).toMatch(
+      /the spending screen picks 5 policies, not six to ten/,
+    );
+    expect(tamper((f) => ['sugsalt', 'hmrc2', 'ipt'].forEach((code) => pick(code)(f)))).toMatch(
+      /the tax screen picks 11 policies, not six to ten/,
+    );
+    expect(tamper(unpick('gam2'))).toMatch(/tax group duties has no pick/);
+    expect(tamper(pick('cgtprr'))).toMatch(
+      /picks “Charge capital gains tax on main homes”, which is not on the table/,
+    );
+    expect(tamper(pick('uitime'))).toMatch(
+      /picks “Time-limit the new unemployment insurance to six months”, which starts in 2030-31, after 2029-30/,
+    );
+    expect(tamper(pick('itbr'))).toMatch(
+      /picks “Put up the basic rate of income tax”, which breaks The tax lock/,
+    );
+    expect(tamper(pick('rvcgt'))).toMatch(
+      /“Tax capital gains at the same rates as income” and “Undo the 2024 rise in capital gains tax” count the same money/,
+    );
+    // A pick may not count the same money as a lever already on the desk.
+    expect(tamper(pick('def3'))).toMatch(
+      /“Defence at 3% of GDP now, not in 2030-31” and “Fund the defence plan’s gap” \(on the desk\) count the same money/,
+    );
+    const moved = structuredClone(ds.contexts);
+    moved[moved.length - 1]!.inTray[0]!.leverCode = 'nosuch';
+    expect(tamper(() => undefined, moved)).toMatch(/the desk's lever nosuch is not on step 4/);
   });
 });

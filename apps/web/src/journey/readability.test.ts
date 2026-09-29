@@ -101,6 +101,8 @@ const SETS: Record<string, readonly string[]> = {
     ...[finetune.tax, finetune.spending].flatMap((s) => [
       s.title,
       s.lead,
+      // Basic mode's lead (Phase 27): the adviser's best ideas.
+      s.shortlistLead,
       ...s.groups.map((g) => g.label),
       ...s.notes.map((n) => n.text),
     ]),

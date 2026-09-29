@@ -5,7 +5,12 @@ import {
   blockedBy,
   computeOutcome,
   deliverOptionsFor,
+  deskLevers,
   finetuneItems,
+  onShowInBasic,
+  optionPrice,
+  shortlistedWays,
+  suggestedSettings,
   optionByLever,
   optionConflicts,
   optionEarliestStart,
@@ -17,7 +22,7 @@ import {
   policyYearsOf,
   validateDataset,
 } from '../src/index.js';
-import { loadDataset } from './fixtures.js';
+import { loadDataset, outcomeOfFor } from './fixtures.js';
 
 const ds = loadDataset();
 const options = ds.options;
@@ -328,5 +333,105 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     expect(tamper({ mhclg: 0 }).join('\n')).toMatch(/leaves lever mhclg where it is/);
     expect(tamper({ mhclg: 0.3 }).join('\n')).toMatch(/off the control's steps/);
     expect(tamper({ mhclg: 40 }).join('\n')).toMatch(/outside the lever's range/);
+  });
+});
+
+describe('the advisers’ shortlist on step 3 (Phase 27, ADR-0028)', () => {
+  const context = ds.contexts[ds.contexts.length - 1];
+  if (!context) throw new Error('no context');
+  const desk = deskLevers(context);
+
+  it('picks one or two ways to deliver each priority, at least one in full', () => {
+    const picks = Object.fromEntries(
+      [...new Set(options.deliver.map((o) => o.priority))].map((p) => [
+        p,
+        shortlistedWays(options, p).map((o) => o.id),
+      ]),
+    );
+    expect(picks).toEqual({
+      'cost-of-living': ['freeze-early', 'free-school-meals'],
+      nhs: ['health-above-sr', 'drop-efficiencies'],
+      defence: ['defence-uplift'],
+      'schools-send': ['send-settlement'],
+      'homes-growth': ['invest-push', 'council-homes'],
+      families: ['relink-housing-support', 'uc-up'],
+      'safer-streets': ['prisons', 'borders'],
+      'welfare-bill': ['pip-changes'],
+    });
+    expect(shortlistedWays(options)).toHaveLength(13);
+    for (const ways of Object.values(picks)) {
+      expect(ways.some((id) => deliverOption(id).scale.kind === 'full')).toBe(true);
+    }
+  });
+
+  it('holds every pick to £1bn of headroom in 2029-30, on today’s estimate', () => {
+    // Each card's own price (optionPrice), under the web's settings: interest included, and an
+    // all-investment way priced on the debt rule.
+    const estimate = suggestedSettings(context.readings, levers);
+    const outcomeOf = outcomeOfFor(ds, {
+      implementationYear: ds.vintage.years.forecast[1],
+      debtInterestFeedback: true,
+      assessAsOf: 'vintage',
+    });
+    const onTheDebtRule: string[] = [];
+    for (const o of shortlistedWays(options)) {
+      const price = optionPrice({ outcomeOf, levers, current: estimate, values: o.values });
+      expect(price.year).toBe('2029-30');
+      expect(Math.abs(price.headroomChangeGbpm), o.title).toBeGreaterThanOrEqual(1000);
+      if (price.rule === 'stockFalling') onTheDebtRule.push(o.id);
+    }
+    expect(onTheDebtRule).toEqual(['invest-push', 'council-homes']);
+  });
+
+  it('shows in basic mode the picks, a way that moves a lever on the desk, and anything chosen', () => {
+    const shown = (priority: string, values: Record<string, number> = {}) =>
+      deliverOptionsFor(priority, options)
+        .filter((o) => onShowInBasic(o, optionState(o, values, levers), desk))
+        .map((o) => o.id);
+    // The defence plan's gap is on the desk, so it shows beside the pick; 3% now waits.
+    expect(shown('defence')).toEqual(['dip-gap', 'defence-uplift']);
+    expect(shown('welfare-bill')).toEqual(['pip-changes']);
+    expect(shown('safer-streets')).toEqual(['prisons', 'borders']);
+    // Chosen, trimmed or cut the other way before the screen opened, a way stays on show.
+    expect(shown('defence', { def3: 1 })).toEqual([
+      'dip-gap',
+      'three-per-cent-now',
+      'defence-uplift',
+    ]);
+    expect(shown('welfare-bill', { rv2ch: 1 })).toEqual(['pip-changes', 'two-child-limit']);
+  });
+
+  it('validate:data names each way a step-3 pick can break the shortlist’s rules', () => {
+    const tamper = (patch: (list: typeof options.deliver) => void) => {
+      const deliver = structuredClone(options.deliver);
+      patch(deliver);
+      return validateDataset({ ...ds, options: { ...options, deliver } }).join('\n');
+    };
+    const set = (id: string, on: boolean) => (list: typeof options.deliver) => {
+      const o = list.find((x) => x.id === id);
+      if (!o) throw new Error(`no option ${id}`);
+      if (on) o.shortlist = true;
+      else delete o.shortlist;
+    };
+    expect(tamper(set('two-child-limit', true))).toMatch(
+      /step 3 picks “Reinstate the two-child limit”, which breaks The two-child limit stays abolished/,
+    );
+    expect(tamper(set('mental-health-reset', true))).toMatch(
+      /step 3 shows “Stop disability benefits for milder mental health conditions” and “Go ahead with the 2025 cuts to PIP”, which count the same money/,
+    );
+    expect(tamper(set('unemployment-insurance-limit', true))).toMatch(
+      /which starts in 2030-31, after 2029-30/,
+    );
+    expect(tamper(set('vat-off-gas', true))).toMatch(
+      /priority cost-of-living has 3 picks, not one or two/,
+    );
+    expect(
+      tamper((list) => {
+        set('relink-housing-support', false)(list);
+        set('uc-up', false)(list);
+        set('uc-floor', true)(list);
+      }),
+    ).toMatch(/priority families has no pick that delivers it in full/);
+    expect(tamper(set('pip-changes', false))).toMatch(/priority welfare-bill has no pick/);
   });
 });

@@ -3,6 +3,7 @@
   "tax": {
     "title": "Fine-tune tax",
     "lead": "Raise or cut any tax. Watch your headroom move.",
+    "shortlistLead": "Your Director of Tax’s best ideas. Watch your headroom move.",
     "adviser": "director-of-tax",
     "groups": [
       {
@@ -14,6 +15,7 @@
             "policies": [
               {
                 "title": "Bring back the health and social care levy",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Big money, and National Insurance in all but name.",
@@ -78,6 +80,7 @@
             "policies": [
               {
                 "title": "Keep VAT off electricity after March 2027",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "The zero rate ends in March; keeping it holds bills down.",
@@ -621,6 +624,7 @@
             "policies": [
               {
                 "title": "Tax capital gains at the same rates as income",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Big money, but nothing arrives before 2028.",
@@ -660,6 +664,7 @@
             "policies": [
               {
                 "title": "Give everyone the same 30% pension tax relief",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Higher-rate savers pay more; basic-rate savers gain.",
@@ -946,6 +951,7 @@
             "policies": [
               {
                 "title": "Charge employer National Insurance on pension contributions",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Big, but employers would cut what they pay in.",
@@ -1231,6 +1237,7 @@
             "policies": [
               {
                 "title": "Double council tax on the biggest homes (bands G and H)",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Steady money from the biggest homes, in England only.",
@@ -1267,6 +1274,7 @@
             "policies": [
               {
                 "title": "End the extra inheritance tax allowance for family homes",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Steady money from larger estates passing on a home.",
@@ -1644,6 +1652,7 @@
             "policies": [
               {
                 "title": "Put gambling duties up again",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Betting firms pay again, on top of last year’s rise.",
@@ -1881,6 +1890,7 @@
   "spending": {
     "title": "Fine-tune spending",
     "lead": "Trim or top up any budget. A top-up costs what a trim saves.",
+    "shortlistLead": "Your Director of Public Spending’s best ideas. A top-up costs what a trim saves.",
     "notes": [
       {
         "text": "Departments’ day-to-day budgets are set to 2028-29. Cutting one reopens a minister’s deal.",
@@ -1949,6 +1959,7 @@
               },
               {
                 "title": "Spend more on health and social care",
+                "shortlist": true,
                 "sizes": [1, 2, 5],
                 "advice": {
                   "text": "Waiting lists fall slowly; strikes and pay awards are the risks.",
@@ -1988,6 +1999,7 @@
               },
               {
                 "title": "Spend more on schools and education",
+                "shortlist": true,
                 "sizes": [1, 2, 5],
                 "advice": {
                   "text": "Special needs demand keeps rising and would take much of it.",
@@ -2349,6 +2361,7 @@
               },
               {
                 "title": "Spend more on public investment",
+                "shortlist": true,
                 "sizes": [5, 10, 20],
                 "advice": {
                   "text": "Counts against the debt rule only, and departments often underspend.",
@@ -2385,6 +2398,7 @@
             "policies": [
               {
                 "title": "More council and social rent homes",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Counts against the debt rule only; the homes arrive over a decade.",
@@ -2594,6 +2608,7 @@
             "policies": [
               {
                 "title": "Raise housing benefit to match local rents",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Renters feel it, though some of it ends up with landlords.",
@@ -2711,6 +2726,7 @@
             "policies": [
               {
                 "title": "Go ahead with the 2025 cuts to PIP",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Undoes last year’s U-turn; your own MPs will fight it.",
@@ -2774,6 +2790,7 @@
             "policies": [
               {
                 "title": "Limit winter fuel payments to pensioners on pension credit",
+                "shortlist": true,
                 "sizes": [1],
                 "advice": {
                   "text": "Brings back a cut the government reversed last year.",

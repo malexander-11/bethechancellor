@@ -57,9 +57,22 @@ import type {
   Vintage,
 } from './types/data.js';
 import { policyYearsOf } from './calc/arithmetic.js';
-import { FINETUNE_SIDES, WHO_PAYS, finetuneSideOf } from './game/finetune.js';
+import { fyStart } from './calc/years.js';
+import {
+  FINETUNE_SIDES,
+  WHO_PAYS,
+  deskLevers,
+  finetuneItems,
+  finetuneNames,
+  finetuneSideOf,
+  shortlistOf,
+} from './game/finetune.js';
+import { excludesPartners } from './game/excludes.js';
+import { optionEarliestStart, shortlistedWays } from './game/options.js';
+import { promiseBreaks } from './game/promises.js';
 import { hasHead } from './costing/taxHead.js';
 import { GUIDED_STEPS, stageTerms } from './game/guide.js';
+import { resolveTargetYear } from './rules/targetYear.js';
 import { validateVintage } from './validate/validateVintage.js';
 
 function parseWith<T>(schema: ZodType<T>, json: unknown, label: string): T {
@@ -238,6 +251,126 @@ function collectSourceIds(value: unknown, out: Set<string>): void {
       else collectSourceIds(v, out);
     }
   }
+}
+
+/**
+ * The advisers' shortlist (Phase 27, ADR-0028): the few best ideas basic mode shows. "Best" is a
+ * judgement, badged as one on the screen; these are the rules that keep it checkable. A pick
+ * counts by the stability rule's target year, is on the table, and breaks no promise at any size
+ * it comes in (a strain, amber, is allowed and still shown); no two picks, and no pick and lever
+ * already on the desk, count the same money. Step 4 picks one way per lever, six to ten a screen,
+ * at least one in every group; step 3 picks one or two ways a priority, at least one in full.
+ * Every lever on the desk is on step 4. Whether a pick is worth £1bn needs the engine, so the
+ * tests check that.
+ */
+function shortlistProblems(ds: Dataset): string[] {
+  const problems: string[] = [];
+  const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
+  const stability = ds.rules.rules.find((r) => r.kind === 'currentBudget');
+  const target = stability
+    ? resolveTargetYear(stability, ds.vintage.years, 'vintage').targetYear
+    : undefined;
+  const promises = ds.pm?.promises ?? [];
+  const desk = deskLevers(ds.contexts?.[ds.contexts.length - 1]);
+  // What basic mode is sure to show, by lever, with the name it goes by in a message.
+  const shown = new Map<string, string>();
+  // A pick at every setting it comes in: a step-4 policy's sizes, a step-3 way's one bundle.
+  const judge = (said: string, settings: readonly Record<string, number>[]) => {
+    const codes = [...new Set(settings.flatMap((values) => Object.keys(values)))];
+    if (codes.some((code) => byCode.get(code)?.notOnTheTable)) {
+      problems.push(`${said}, which is not on the table`);
+    }
+    const values = Object.fromEntries(codes.map((code) => [code, 0]));
+    const year = optionEarliestStart({ id: said, values }, ds.levers);
+    if (target && year && fyStart(year) > fyStart(target)) {
+      problems.push(`${said}, which starts in ${year}, after ${target}`);
+    }
+    const broken = new Set<string>();
+    for (const setting of settings) {
+      for (const report of promiseBreaks(setting, promises, ds.levers)) {
+        if (!report.kept) broken.add(report.promise.title);
+      }
+    }
+    for (const title of broken) problems.push(`${said}, which breaks ${title}`);
+  };
+
+  if (ds.finetune) {
+    const names = finetuneNames(ds.finetune);
+    for (const side of FINETUNE_SIDES) {
+      for (const item of finetuneItems(ds.finetune, side)) {
+        if (item.policies.filter((p) => p.shortlist).length > 1) {
+          problems.push(`the ${side} screen picks both ways of lever ${item.code}`);
+        }
+      }
+      const picks = shortlistOf(ds.finetune, side);
+      if (picks.length < 6 || picks.length > 10) {
+        problems.push(`the ${side} screen picks ${picks.length} policies, not six to ten`);
+      }
+      for (const group of ds.finetune[side].groups) {
+        if (!picks.some((p) => p.group.id === group.id)) {
+          problems.push(`${side} group ${group.id} has no pick`);
+        }
+      }
+      for (const { code, pick } of picks) {
+        judge(
+          `the ${side} screen picks “${pick.title}”`,
+          pick.sizes.map((size) => ({ [code]: size })),
+        );
+        shown.set(code, `“${pick.title}”`);
+      }
+    }
+    for (const code of desk) {
+      const name = names.get(code);
+      if (!name) problems.push(`the desk's lever ${code} is not on step 4`);
+      else if (!shown.has(code)) shown.set(code, `“${name}” (on the desk)`);
+    }
+  }
+
+  if (ds.options) {
+    const priorities = [...new Set(ds.options.deliver.map((o) => o.priority))];
+    for (const priority of priorities) {
+      const picks = shortlistedWays(ds.options, priority);
+      if (picks.length === 0) problems.push(`priority ${priority} has no pick`);
+      else if (picks.length > 2) {
+        problems.push(`priority ${priority} has ${picks.length} picks, not one or two`);
+      } else if (!picks.some((o) => o.scale.kind === 'full')) {
+        problems.push(`priority ${priority} has no pick that delivers it in full`);
+      }
+    }
+    const basic = ds.options.deliver.filter(
+      (o) => o.shortlist === true || Object.keys(o.values).some((code) => desk.has(code)),
+    );
+    const ids = new Set(basic.map((o) => o.id));
+    for (const o of basic) {
+      for (const c of o.conflicts ?? []) {
+        if (!ids.has(c.with)) continue;
+        const other = ds.options.deliver.find((x) => x.id === c.with);
+        problems.push(
+          `step 3 shows “${o.title}” and “${other?.title ?? c.with}”, which count the same money`,
+        );
+      }
+      if (o.shortlist !== true) continue;
+      judge(`step 3 picks “${o.title}”`, [o.values]);
+      for (const code of Object.keys(o.values)) {
+        if (!shown.has(code)) shown.set(code, `“${o.title}”`);
+      }
+    }
+  }
+
+  // No two levers basic mode is sure to show count the same money.
+  const reported = new Set<string>();
+  for (const [code, name] of shown) {
+    const lever = byCode.get(code);
+    if (!lever) continue;
+    for (const partner of excludesPartners(lever, ds.levers)) {
+      const other = shown.get(partner.lever.code);
+      const key = [code, partner.lever.code].sort().join('|');
+      if (!other || reported.has(key)) continue;
+      reported.add(key);
+      problems.push(`${name} and ${other} count the same money`);
+    }
+  }
+  return problems;
 }
 
 /** Cross-file checks: every source reference resolves, lever codes are unique, and so on. */
@@ -599,6 +732,7 @@ export function validateDataset(ds: Dataset): string[] {
       }
     }
   }
+  if (ds.finetune || ds.options) problems.push(...shortlistProblems(ds));
   if (ds.incidence) {
     // Every lever that moves money has someone it falls on; a tag for a lever that does not exist
     // is a typo waiting to hide a real one.

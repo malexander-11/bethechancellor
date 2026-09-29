@@ -13,6 +13,7 @@
   "deliver": [
     {
       "id": "freeze-early",
+      "shortlist": true,
       "priority": "cost-of-living",
       "title": "End the threshold freeze early",
       "line": {
@@ -96,6 +97,7 @@
     },
     {
       "id": "free-school-meals",
+      "shortlist": true,
       "priority": "cost-of-living",
       "title": "Free school meals for every child",
       "line": {
@@ -214,6 +216,7 @@
     },
     {
       "id": "health-above-sr",
+      "shortlist": true,
       "priority": "nhs",
       "title": "Give the NHS more than the Spending Review planned",
       "line": {
@@ -290,6 +293,7 @@
     },
     {
       "id": "drop-efficiencies",
+      "shortlist": true,
       "priority": "nhs",
       "title": "Cancel the extra efficiency savings planned from 2028",
       "line": {
@@ -419,6 +423,7 @@
     },
     {
       "id": "defence-uplift",
+      "shortlist": true,
       "priority": "defence",
       "title": "Defence day-to-day budget up 5%",
       "line": {
@@ -457,6 +462,7 @@
     },
     {
       "id": "send-settlement",
+      "shortlist": true,
       "priority": "schools-send",
       "title": "A special needs settlement",
       "line": {
@@ -589,6 +595,7 @@
     },
     {
       "id": "invest-push",
+      "shortlist": true,
       "priority": "homes-growth",
       "title": "Spend 10% more on public investment",
       "line": {
@@ -627,6 +634,7 @@
     },
     {
       "id": "council-homes",
+      "shortlist": true,
       "priority": "homes-growth",
       "title": "More council and social rent homes",
       "line": {
@@ -825,6 +833,7 @@
     },
     {
       "id": "relink-housing-support",
+      "shortlist": true,
       "priority": "families",
       "title": "Raise housing benefit to match local rents",
       "line": {
@@ -865,6 +874,7 @@
     },
     {
       "id": "uc-up",
+      "shortlist": true,
       "priority": "families",
       "title": "Universal credit up 2%",
       "line": {
@@ -909,6 +919,7 @@
     },
     {
       "id": "prisons",
+      "shortlist": true,
       "priority": "safer-streets",
       "title": "More money for prisons and courts",
       "line": {
@@ -947,6 +958,7 @@
     },
     {
       "id": "borders",
+      "shortlist": true,
       "priority": "safer-streets",
       "title": "More money for the Home Office and borders",
       "line": {
@@ -1032,6 +1044,7 @@
     },
     {
       "id": "pip-changes",
+      "shortlist": true,
       "priority": "welfare-bill",
       "title": "Go ahead with the 2025 cuts to PIP",
       "line": {

@@ -1,4 +1,5 @@
 import type {
+  ContextFile,
   DeliverOption,
   FinetuneFile,
   FinetuneGroup,
@@ -34,7 +35,10 @@ export const WHO_PAYS: Readonly<Record<string, readonly string[]>> = {
   duties: ['duties', 'motorists', 'flyers', 'disabled-motorists'],
 };
 
-/** How many of a group's levers are on show before its fold: the hand-picked ones. */
+/**
+ * How many of a group's levers are on show before its fold in advanced mode: the hand-picked
+ * ones. Basic mode has no fold; it shows the adviser's shortlist (Phase 27, ADR-0028).
+ */
 export const FINETUNE_SHOWN = 3;
 
 /** One lever on step 4 with the screen and the group it sits in. */
@@ -122,6 +126,60 @@ export function setByFlagship(
     }
   }
   return held;
+}
+
+/**
+ * The way the screen's adviser picked for a lever (Phase 27, ADR-0028), if any: one of the few
+ * best ideas basic mode shows. At most one way per lever, which the validator checks.
+ */
+export function shortlistPolicy(item: FinetuneItem): FinetunePolicy | undefined {
+  return item.policies.find((p) => p.shortlist === true);
+}
+
+/** A lever on the shortlist, with the way that was picked. */
+export interface ShortlistEntry extends FinetuneEntry {
+  pick: FinetunePolicy;
+}
+
+/** The picks on one screen, or on both, in the order the screens show them. */
+export function shortlistOf(file: FinetuneFile, side?: FinetuneSideId): ShortlistEntry[] {
+  return finetuneItems(file, side).flatMap((item) => {
+    const pick = shortlistPolicy(item);
+    return pick ? [{ ...item, pick }] : [];
+  });
+}
+
+/** How many policies a screen offers in advanced mode: every way of every lever on it. */
+export function policyCount(file: FinetuneFile, side: FinetuneSideId): number {
+  return finetuneItems(file, side).reduce((n, item) => n + item.policies.length, 0);
+}
+
+/**
+ * The levers already on the Chancellor's desk: the ones the briefing's "Already on your desk"
+ * names (Phase 25). Basic mode always shows them, wherever they appear, so the briefing never
+ * points at something it hides (Phase 27, the desk rule). They are not picks.
+ */
+export function deskLevers(context: Pick<ContextFile, 'inTray'> | undefined): ReadonlySet<string> {
+  return new Set((context?.inTray ?? []).map((item) => item.leverCode));
+}
+
+/**
+ * The policy a lever shows in basic mode (Phase 27, ADR-0028), when no chosen flagship holds it
+ * (the screen shows a held lever as its line in either mode): the way it had been chosen when the
+ * screen opened, so nothing chosen ever hides; else the adviser's pick; else, for a lever already
+ * on the desk, its usual policy; else nothing. `arrivedAt` is the lever's value when the screen
+ * opened, or when the mode last changed.
+ */
+export function basicPolicy(
+  item: FinetuneItem,
+  lever: Pick<Lever, 'control'>,
+  arrivedAt: number | undefined,
+  onDesk: boolean,
+): FinetunePolicy | undefined {
+  if (arrivedAt !== undefined && arrivedAt !== lever.control.default) {
+    return leadPolicy(item, lever, arrivedAt);
+  }
+  return shortlistPolicy(item) ?? (onDesk ? item.policies[0] : undefined);
 }
 
 /** Which screen a lever belongs on: taxes on the first, spending and welfare on the second. */

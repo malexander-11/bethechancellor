@@ -185,6 +185,33 @@ export function deliverOptionsFor(priorityId: string, options: OptionsFile): Del
   return options.deliver.filter((o) => o.priority === priorityId);
 }
 
+/**
+ * The advisers' shortlist on step 3 (Phase 27, ADR-0028): the one or two best ways to deliver
+ * each priority, the ones basic mode shows, in the file's order; for one priority when named.
+ */
+export function shortlistedWays(options: OptionsFile, priority?: string): DeliverOption[] {
+  return options.deliver.filter(
+    (o) => o.shortlist === true && (priority === undefined || o.priority === priority),
+  );
+}
+
+/**
+ * Whether a way to deliver a priority is on show in basic mode (Phase 27): it is on the
+ * shortlist; or it moves a lever already on the desk, which the briefing names; or it was not off
+ * when the screen opened (or when the mode last changed), so nothing chosen ever hides.
+ */
+export function onShowInBasic(
+  option: Pick<DeliverOption, 'shortlist' | 'values'>,
+  arrived: OptionState,
+  desk: ReadonlySet<string>,
+): boolean {
+  return (
+    option.shortlist === true ||
+    arrived !== 'off' ||
+    Object.keys(option.values).some((code) => desk.has(code))
+  );
+}
+
 /** The latest earliest start among the option's levers (ADR-0021), if any carries one. */
 export function optionEarliestStart(option: Bundle, levers: readonly Lever[]): string | undefined {
   const byCode = leverMap(levers);
