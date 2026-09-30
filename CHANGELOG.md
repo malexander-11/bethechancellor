@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The engine tests hold step 4, the shortlists and the badges to rules instead of copies of the
+  data: every live policy lever sits on step 4 once, a tax in its family's section, a decision in
+  six words and eight levers, the way that improves the public finances first, a direct badge only
+  on a published figure as it stands, and nothing still in play naming a retired lever. Tamper tests
+  find their levers by role, so moving, re-sizing or retiring one no longer breaks them.
 - Undo on a row a chosen flagship holds, which cannot move, no longer leaves focus to jump to that
   row the next time it changes.
 - The fine-tuning screens' tests are three files (tax, spending, basic mode) that run side by side,

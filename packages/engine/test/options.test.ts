@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Settings } from '../src/index.js';
+import type { CurrentBudgetRule, DeliverOption, Settings } from '../src/index.js';
 import {
   allOptions,
   blockedBy,
@@ -7,8 +7,11 @@ import {
   deliverOptionsFor,
   deskLevers,
   finetuneItems,
+  fyStart,
   onShowInBasic,
   optionPrice,
+  promiseBreaks,
+  resolveTargetYear,
   shortlistedWays,
   suggestedSettings,
   optionByLever,
@@ -29,11 +32,29 @@ const options = ds.options;
 const levers = ds.levers;
 /** The levers step 4 offers: every policy lever, since Phase 26. */
 const offered = new Set(finetuneItems(ds.finetune).map((i) => i.code));
-const deliverOption = (id: string) => {
-  const o = options.deliver.find((x) => x.id === id);
-  if (!o) throw new Error(`no deliver option ${id}`);
-  return o;
-};
+/** The value, or a failure that says what the data no longer has for a test to use. */
+function must<T>(value: T | undefined, what: string): T {
+  if (value === undefined) throw new Error(`the data has no ${what} to test with`);
+  return value;
+}
+const deliverOption = (id: string) =>
+  must(
+    options.deliver.find((x) => x.id === id),
+    `option ${id}`,
+  );
+const lever = (code: string) =>
+  must(
+    levers.find((l) => l.code === code),
+    `lever ${code}`,
+  );
+/** The ways that set one lever, beyond where it rests by more than a step, and the lever's values. */
+const singles = options.deliver.flatMap((o) => {
+  const [entry, ...more] = Object.entries(o.values);
+  if (!entry || more.length > 0) return [];
+  const [code, target] = entry;
+  const { default: base, step } = lever(code).control;
+  return Math.abs(target - base) > step ? [{ option: o, code, target, base, step }] : [];
+});
 const run = (values: Record<string, number>, settings: Partial<Settings> = {}) =>
   computeOutcome({
     vintage: ds.vintage,
@@ -64,16 +85,22 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     expect(new Set(codes).size).toBe(codes.length);
     const byLever = optionByLever(options);
     expect(byLever.size).toBe(codes.length);
-    expect(byLever.get('moj')?.title).toBe('More money for prisons and courts');
-    // The ways to pay became step 4's levers and the add-ons went (ADR-0025).
+    for (const o of options.deliver) {
+      for (const code of Object.keys(o.values))
+        expect(byLever.get(code)?.title, code).toBe(o.title);
+    }
+    // The ways to pay became step 4's levers and the add-ons went (ADR-0025): a lever no option
+    // sets belongs to none.
     expect(allOptions(options)).toHaveLength(options.deliver.length);
-    expect(byLever.get('itbr')).toBeUndefined();
+    const unset = must(
+      levers.find((l) => !codes.includes(l.code)),
+      'lever no option sets',
+    );
+    expect(byLever.get(unset.code)).toBeUndefined();
   });
 
   it('every priority named has two to five ways to deliver it', () => {
-    const priorities = new Set(options.deliver.map((o) => o.priority));
-    expect(priorities.size).toBe(8);
-    for (const id of priorities) {
+    for (const { id } of ds.pm.priorities) {
       const n = deliverOptionsFor(id, options).length;
       expect(n, id).toBeGreaterThanOrEqual(2);
       expect(n, id).toBeLessThanOrEqual(5);
@@ -81,28 +108,41 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
   });
 
   it('reads on, adjusted and off from the lever values', () => {
-    const health = deliverOption('health-above-sr');
-    expect(optionState(health, {}, levers)).toBe('off');
-    expect(optionState(health, { dhsc: 3 }, levers)).toBe('on');
-    expect(optionState(health, { dhsc: 4 }, levers)).toBe('on');
-    expect(optionState(health, { dhsc: 1 }, levers)).toBe('adjusted');
-    expect(optionState(health, { dfe: 5 }, levers)).toBe('off');
-    const pair = { id: 'pair', values: { dhsc: 3, dfe: 5 } };
-    expect(optionState(pair, { dhsc: 3 }, levers)).toBe('adjusted');
-    expect(optionState(pair, { dhsc: 3, dfe: 5 }, levers)).toBe('on');
-    expect(optionOff(pair, levers)).toEqual({ dhsc: 0, dfe: 0 });
+    const [one, two] = singles;
+    if (!one || !two) throw new Error('the data has no two ways that each set one lever');
+    const way = one.option;
+    const toward = one.base + Math.sign(one.target - one.base) * one.step;
+    expect(optionState(way, {}, levers)).toBe('off');
+    expect(optionState(way, { [one.code]: one.target }, levers)).toBe('on');
+    // Past the target still delivers it; short of it is a way adjusted.
+    expect(optionState(way, { [one.code]: one.target + (one.target - one.base) }, levers)).toBe(
+      'on',
+    );
+    expect(optionState(way, { [one.code]: toward }, levers)).toBe('adjusted');
+    expect(optionState(way, { [two.code]: two.target }, levers)).toBe('off');
+    const pair = { id: 'pair', values: { [one.code]: one.target, [two.code]: two.target } };
+    expect(optionState(pair, { [one.code]: one.target }, levers)).toBe('adjusted');
+    expect(optionState(pair, pair.values, levers)).toBe('on');
+    expect(optionOff(pair, levers)).toEqual({ [one.code]: one.base, [two.code]: two.base });
   });
 
   it('carries the latest earliest start of its levers', () => {
-    expect(optionEarliestStart(deliverOption('unemployment-insurance-limit'), levers)).toBe(
-      '2030-31',
-    );
-    expect(optionEarliestStart(deliverOption('mental-health-reset'), levers)).toBe('2029-30');
-    expect(optionEarliestStart(deliverOption('child-tax-allowance'), levers)).toBe('2028-29');
-    expect(optionEarliestStart(deliverOption('prisons'), levers)).toBeUndefined();
-    expect(optionEarliestStart({ id: 'both', values: { cgtdth: 1, wealth2: 1 } }, levers)).toBe(
-      '2030-31',
-    );
+    const floor = (code: string) => lever(code).earliestStart?.year;
+    for (const o of options.deliver) {
+      const floors = Object.keys(o.values)
+        .map(floor)
+        .filter((y): y is string => y !== undefined)
+        .sort((a, b) => fyStart(b) - fyStart(a));
+      expect(optionEarliestStart(o, levers), o.id).toBe(floors[0]);
+    }
+    // A bundle of two waits for the later of their floors.
+    const floored = levers
+      .filter((l) => l.earliestStart)
+      .sort((a, b) => fyStart(floor(a.code) ?? '') - fyStart(floor(b.code) ?? ''));
+    const [early, late] = [floored[0], floored[floored.length - 1]];
+    if (!early || !late) throw new Error('the data has no lever with an earliest start');
+    const both = { id: 'both', values: { [early.code]: 1, [late.code]: 1 } };
+    expect(optionEarliestStart(both, levers)).toBe(floor(late.code));
   });
 
   it('names the red line a lever is watched by, and whether the Budget would cross it', () => {
@@ -314,7 +354,7 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
   });
 
   it('validate:data refuses an unknown lever, a default value and a value off the steps', () => {
-    const template = deliverOption('health-above-sr');
+    const template = must(options.deliver[0], 'option');
     const tamper = (values: Record<string, number>) =>
       validateDataset({
         ...ds,
@@ -322,11 +362,19 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
           ...options,
           deliver: [...options.deliver, { ...template, id: 'zz', title: 'Z', values }],
         },
-      });
-    expect(tamper({ nosuch: 1 }).join('\n')).toMatch(/unknown lever "nosuch"/);
-    expect(tamper({ mhclg: 0 }).join('\n')).toMatch(/leaves lever mhclg where it is/);
-    expect(tamper({ mhclg: 0.3 }).join('\n')).toMatch(/off the control's steps/);
-    expect(tamper({ mhclg: 40 }).join('\n')).toMatch(/outside the lever's range/);
+      }).join('\n');
+    const code = must(Object.keys(template.values)[0], 'lever an option sets');
+    const { default: base, step, max } = lever(code).control;
+    expect(tamper({ nosuch: 1 })).toContain('deliver option zz names unknown lever "nosuch"');
+    expect(tamper({ [code]: base })).toContain(
+      `deliver option zz leaves lever ${code} where it is`,
+    );
+    expect(tamper({ [code]: base + step / 2 })).toContain(
+      `deliver option zz sets ${code} to ${base + step / 2}, off the control's steps`,
+    );
+    expect(tamper({ [code]: max + step })).toContain(
+      `deliver option zz sets ${code} to ${max + step}, outside the lever's range`,
+    );
   });
 });
 
@@ -336,45 +384,37 @@ describe('the advisers’ shortlist on step 3 (Phase 27, ADR-0028)', () => {
   const desk = deskLevers(context);
 
   it('picks one or two ways to deliver each priority, at least one in full', () => {
-    const picks = Object.fromEntries(
-      [...new Set(options.deliver.map((o) => o.priority))].map((p) => [
-        p,
-        shortlistedWays(options, p).map((o) => o.id),
-      ]),
-    );
-    expect(picks).toEqual({
-      'cost-of-living': ['freeze-early', 'free-school-meals'],
-      nhs: ['health-above-sr', 'drop-efficiencies'],
-      defence: ['defence-uplift'],
-      'schools-send': ['send-settlement'],
-      'homes-growth': ['invest-push', 'council-homes'],
-      families: ['relink-housing-support', 'uc-up'],
-      'safer-streets': ['prisons', 'borders'],
-      'welfare-bill': ['pip-changes'],
-    });
-    expect(shortlistedWays(options)).toHaveLength(13);
-    for (const ways of Object.values(picks)) {
-      expect(ways.some((id) => deliverOption(id).scale.kind === 'full')).toBe(true);
+    for (const { id } of ds.pm.priorities) {
+      const picks = shortlistedWays(options, id);
+      expect(picks.length, id).toBeGreaterThanOrEqual(1);
+      expect(picks.length, id).toBeLessThanOrEqual(2);
+      expect(
+        picks.some((o) => o.scale.kind === 'full'),
+        id,
+      ).toBe(true);
     }
+    expect(shortlistedWays(options)).toEqual(options.deliver.filter((o) => o.shortlist));
   });
 
-  it('holds every pick to £1bn of headroom in 2029-30, on today’s estimate', () => {
+  it('holds every pick to £1bn of headroom in the target year, on today’s estimate', () => {
     // Each card's own price (optionPrice), under the web's settings: interest included, and an
-    // all-investment way priced on the debt rule.
+    // all-investment way priced on the debt rule, which it touches.
     const estimate = suggestedSettings(context.readings, levers);
     const outcomeOf = outcomeOfFor(ds, {
       implementationYear: ds.vintage.years.forecast[1],
       debtInterestFeedback: true,
       assessAsOf: 'vintage',
     });
-    const onTheDebtRule: string[] = [];
+    const target = outcomeOf(estimate).verdicts.find((v) => v.kind === 'currentBudget')?.targetYear;
     for (const o of shortlistedWays(options)) {
       const price = optionPrice({ outcomeOf, levers, current: estimate, values: o.values });
-      expect(price.year).toBe('2029-30');
+      expect(price.year).toBe(target);
       expect(Math.abs(price.headroomChangeGbpm), o.title).toBeGreaterThanOrEqual(1000);
-      if (price.rule === 'stockFalling') onTheDebtRule.push(o.id);
+      const investment = Object.keys(o.values).every(
+        (code) => lever(code).classification?.currentOrCapital === 'capital',
+      );
+      expect(price.rule, o.id).toBe(investment ? 'stockFalling' : 'currentBudget');
     }
-    expect(onTheDebtRule).toEqual(['invest-push', 'council-homes']);
   });
 
   it('shows in basic mode the picks, a way that moves a lever on the desk, and anything chosen', () => {
@@ -382,17 +422,22 @@ describe('the advisers’ shortlist on step 3 (Phase 27, ADR-0028)', () => {
       deliverOptionsFor(priority, options)
         .filter((o) => onShowInBasic(o, optionState(o, values, levers), desk))
         .map((o) => o.id);
-    // The defence plan's gap is on the desk, so it shows beside the pick; 3% now waits.
-    expect(shown('defence')).toEqual(['dip-gap', 'defence-uplift']);
-    expect(shown('welfare-bill')).toEqual(['pip-changes']);
-    expect(shown('safer-streets')).toEqual(['prisons', 'borders']);
-    // Chosen, trimmed or cut the other way before the screen opened, a way stays on show.
-    expect(shown('defence', { def3: 1 })).toEqual([
-      'dip-gap',
-      'three-per-cent-now',
-      'defence-uplift',
-    ]);
-    expect(shown('welfare-bill', { rv2ch: 1 })).toEqual(['pip-changes', 'two-child-limit']);
+    const onDesk = (o: DeliverOption) => Object.keys(o.values).some((code) => desk.has(code));
+    for (const { id } of ds.pm.priorities) {
+      const ways = deliverOptionsFor(id, options);
+      expect(shown(id), id).toEqual(ways.filter((o) => o.shortlist || onDesk(o)).map((o) => o.id));
+      // Chosen, or cut the other way, before the screen opened, a way stays on show.
+      for (const way of ways) {
+        expect(shown(id, way.values), way.id).toContain(way.id);
+        const against = Object.fromEntries(
+          Object.entries(way.values).map(([code, v]) => {
+            const base = lever(code).control.default;
+            return [code, base - (v - base)];
+          }),
+        );
+        expect(shown(id, against), way.id).toContain(way.id);
+      }
+    }
   });
 
   it('validate:data names each way a step-3 pick can break the shortlist’s rules', () => {
@@ -401,31 +446,106 @@ describe('the advisers’ shortlist on step 3 (Phase 27, ADR-0028)', () => {
       patch(deliver);
       return validateDataset({ ...ds, options: { ...options, deliver } }).join('\n');
     };
-    const set = (id: string, on: boolean) => (list: typeof options.deliver) => {
-      const o = list.find((x) => x.id === id);
-      if (!o) throw new Error(`no option ${id}`);
-      if (on) o.shortlist = true;
-      else delete o.shortlist;
-    };
-    expect(tamper(set('two-child-limit', true))).toMatch(
-      /step 3 picks “Reinstate the two-child limit”, which breaks The two-child limit stays abolished/,
+    const set =
+      (on: boolean, ...ids: string[]) =>
+      (list: typeof options.deliver) => {
+        for (const id of ids) {
+          const o = must(
+            list.find((x) => x.id === id),
+            `option ${id}`,
+          );
+          if (on) o.shortlist = true;
+          else delete o.shortlist;
+        }
+      };
+    const lines = (result: string) => result.split('\n');
+    const unpicked = options.deliver.filter((o) => !o.shortlist);
+    const stability = must(
+      ds.rules.rules.find((r): r is CurrentBudgetRule => r.kind === 'currentBudget'),
+      'stability rule',
     );
-    expect(tamper(set('mental-health-reset', true))).toMatch(
-      /step 3 shows “Stop disability benefits for milder mental health conditions” and “Go ahead with the 2025 cuts to PIP”, which count the same money/,
+    const target = resolveTargetYear(stability, ds.vintage.years, 'vintage').targetYear;
+
+    // A pick breaks no promise, and counts by the target year.
+    const breaker = must(
+      unpicked
+        .map((o) => ({
+          o,
+          broken: promiseBreaks(o.values, ds.pm.promises, levers).find((r) => !r.kept),
+        }))
+        .find((x) => x.broken),
+      'way that breaks a promise',
     );
-    expect(tamper(set('unemployment-insurance-limit', true))).toMatch(
-      /which starts in 2030-31, after 2029-30/,
+    expect(tamper(set(true, breaker.o.id))).toContain(
+      `step 3 picks “${breaker.o.title}”, which breaks ${breaker.broken?.promise.title}`,
     );
-    expect(tamper(set('vat-off-gas', true))).toMatch(
-      /priority cost-of-living has 3 picks, not one or two/,
+    const late = must(
+      unpicked.find((o) => {
+        const year = optionEarliestStart(o, levers);
+        return year !== undefined && fyStart(year) > fyStart(target);
+      }),
+      'way that starts after the target year',
+    );
+    expect(tamper(set(true, late.id))).toContain(
+      `step 3 picks “${late.title}”, which starts in ${optionEarliestStart(late, levers)}, after ${target}`,
+    );
+    // Nor do two ways basic mode shows count the same money.
+    const shownInBasic = (o: DeliverOption) =>
+      o.shortlist === true || Object.keys(o.values).some((code) => desk.has(code));
+    const [rival, shown] = must(
+      options.deliver.flatMap((o) =>
+        (o.conflicts ?? []).flatMap((c) => {
+          const other = deliverOption(c.with);
+          if (shownInBasic(other) && !shownInBasic(o)) return [[o, other] as const];
+          if (shownInBasic(o) && !shownInBasic(other)) return [[other, o] as const];
+          return [];
+        }),
+      )[0],
+      'two ways that count the same money, one shown in basic mode',
+    );
+    expect(
+      lines(tamper(set(true, rival.id))).some(
+        (line) =>
+          line.includes(`“${rival.title}”`) &&
+          line.includes(`“${shown.title}”`) &&
+          line.endsWith('which count the same money'),
+      ),
+    ).toBe(true);
+    // One or two picks a priority, at least one of them in full.
+    const pair = must(
+      ds.pm.priorities.find(
+        (p) =>
+          shortlistedWays(options, p.id).length === 2 &&
+          deliverOptionsFor(p.id, options).length > 2,
+      ),
+      'priority with two picks and a third way',
+    );
+    const third = must(
+      deliverOptionsFor(pair.id, options).find((o) => !o.shortlist),
+      'third way',
+    );
+    expect(tamper(set(true, third.id))).toContain(
+      `priority ${pair.id} has 3 picks, not one or two`,
+    );
+    const starting = must(
+      ds.pm.priorities.find((p) =>
+        deliverOptionsFor(p.id, options).some((o) => o.scale.kind === 'start'),
+      ),
+      'priority with a way that only makes a start',
+    );
+    const start = must(
+      deliverOptionsFor(starting.id, options).find((o) => o.scale.kind === 'start'),
+      'way that only makes a start',
     );
     expect(
       tamper((list) => {
-        set('relink-housing-support', false)(list);
-        set('uc-up', false)(list);
-        set('uc-floor', true)(list);
+        set(false, ...shortlistedWays(options, starting.id).map((o) => o.id))(list);
+        set(true, start.id)(list);
       }),
-    ).toMatch(/priority families has no pick that delivers it in full/);
-    expect(tamper(set('pip-changes', false))).toMatch(/priority welfare-bill has no pick/);
+    ).toContain(`priority ${starting.id} has no pick that delivers it in full`);
+    const any = must(ds.pm.priorities[0], 'priority');
+    expect(
+      lines(tamper(set(false, ...shortlistedWays(options, any.id).map((o) => o.id)))),
+    ).toContain(`priority ${any.id} has no pick`);
   });
 });

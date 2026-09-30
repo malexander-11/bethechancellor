@@ -1,65 +1,90 @@
 import { describe, expect, it } from 'vitest';
-import { checkRawSourceConsistency } from '../src/index.js';
+import { checkRawSourceConsistency, type Lever, type RawSource } from '../src/index.js';
 import { loadDataset, loadExtracts } from './fixtures.js';
 
 const ds = loadDataset();
 const extracted = loadExtracts();
 
+/** What a lever's figures cite: its costing's published rows or lines, or its baseline's. */
+function rawSourceOf(lever: Lever): RawSource | undefined {
+  const costing = lever.costing;
+  if (costing.kind === 'pctOfBaseline') {
+    return costing.baseline.from === 'published' ? costing.baseline.rawSource : undefined;
+  }
+  return 'rawSource' in costing ? costing.rawSource : undefined;
+}
+
+/**
+ * A published row or line reproduced as it stands: HMRC's ready reckoner once over, HMRC's cost of
+ * a relief, a Treasury scorecard line reversed, a Spending Review settlement.
+ */
+function reproducesAPublishedFigure(raw: RawSource | undefined): boolean {
+  switch (raw?.kind) {
+    case 'hmrcReadyReckoner':
+      return (raw.multiplier ?? 1) === 1;
+    case 'hmtScorecard':
+      return raw.direction === 'reverse';
+    case 'hmrcReliefCost':
+    case 'hmtSr25':
+      return true;
+    default:
+      return false;
+  }
+}
+
+describe('every lever is badged for what its costing is (ADR-0017)', () => {
+  const policyLevers = ds.levers.filter((l) => l.category !== 'macro');
+
+  it('calls a figure direct only when it reproduces a published row or line as it stands', () => {
+    // A certified row is direct; a share of an OBR line, or a stated sum or multiple of official
+    // figures with no judgement in it, is mechanical; our own arithmetic that rests on a choice
+    // is an assumption, and a repeat of a Treasury measure assumes it raises what it raised.
+    for (const l of policyLevers) {
+      const raw = rawSourceOf(l);
+      if (l.badge === 'direct') expect(reproducesAPublishedFigure(raw), l.code).toBe(true);
+      if (l.costing.kind === 'pctOfBaseline') expect(l.badge, l.code).toBe('mechanical');
+      if (raw?.kind === 'hmtScorecard' && raw.direction === 'repeat') {
+        expect(l.badge, l.code).toBe('assumption');
+      }
+    }
+    // Our own arithmetic, or a multiple of HMRC's rows, would not pass for a published figure.
+    const ours = policyLevers
+      .map(rawSourceOf)
+      .filter((raw) => raw?.kind === 'derivedFromPublished');
+    expect(ours.length).toBeGreaterThan(0);
+    for (const raw of ours) expect(reproducesAPublishedFigure(raw)).toBe(false);
+    expect(
+      reproducesAPublishedFigure({
+        kind: 'hmrcReadyReckoner',
+        sourceId: 'hmrc-trr-2025-06',
+        years: ['2026-27', '2027-28', '2028-29'],
+        rows: [],
+        multiplier: 1.25,
+      }),
+    ).toBe(false);
+  });
+
+  it('names what every figure assumes, and sources every consideration', () => {
+    for (const l of policyLevers) {
+      expect(l.group, l.code).toBeTruthy();
+      if (l.costing.kind !== 'sensitivity' && l.badge !== 'direct') {
+        expect(l.costing.caveats.length, l.code).toBeGreaterThan(0);
+      }
+      if (!l.deprecated) expect(l.considerations.length, l.code).toBeGreaterThan(0);
+      for (const c of l.considerations)
+        expect(c.sources.length, `${l.code} ${c.id}`).toBeGreaterThan(0);
+    }
+  });
+
+  it('keeps every spending and welfare lever on the spending side', () => {
+    for (const l of policyLevers) {
+      if (l.category !== 'tax') expect(l.classification?.side, l.code).toBe('spending');
+    }
+  });
+});
+
 describe('every direct costing reproduces from the extracted published tables', () => {
   const taxLevers = ds.levers.filter((l) => l.category === 'tax');
-
-  it('covers the planned core set', () => {
-    expect(taxLevers.length).toBe(76);
-    expect(taxLevers.every((l) => l.group)).toBe(true);
-    // A share of an OBR receipts line is mechanical arithmetic, and so, since Phase 25, is a stated
-    // sum or multiple of official figures with no judgement in it (the levy, the fuel freeze,
-    // employer NICs on private pensions); a certified row is direct; our own arithmetic that rests
-    // on a choice is an assumption and says so on the card (ADR-0017).
-    const mechanical = taxLevers.filter((l) => l.badge === 'mechanical').map((l) => l.code);
-    expect(mechanical.sort()).toEqual(['brates', 'fuelfrz', 'hscl', 'nicpen']);
-    for (const l of taxLevers) {
-      if (l.costing.kind === 'pctOfBaseline') expect(l.badge, l.code).toBe('mechanical');
-    }
-    expect(taxLevers.filter((l) => l.badge === 'direct')).toHaveLength(41);
-    expect(
-      taxLevers
-        .filter((l) => l.badge === 'assumption')
-        .map((l) => l.code)
-        .sort(),
-    ).toEqual([
-      'bank5',
-      'banklevy',
-      'carried',
-      'cgtalign',
-      'cgtdth',
-      'cgtexit',
-      'cta',
-      'ctgh',
-      'epl2',
-      'gam2',
-      'hmrc2',
-      'hvcts15',
-      'iinc2',
-      'it50',
-      'nicllp',
-      'nicrent',
-      'nicuel',
-      'pens20',
-      'pens30',
-      'pslump',
-      'qelevy',
-      'rnrb',
-      'sdltabol',
-      'sugsalt',
-      'vat1z',
-      'vatelec',
-      'vatgas',
-      'vatmot',
-      'vatthr',
-      'wealth',
-      'wealth2',
-    ]);
-  });
 
   it.each(taxLevers.map((l) => [l.id, l] as const))(
     '%s matches its cited rows or lines',
@@ -71,29 +96,6 @@ describe('every direct costing reproduces from the extracted published tables', 
   const spendingLevers = ds.levers.filter(
     (l) => l.category === 'spend' || l.category === 'welfare',
   );
-
-  it('covers the planned spending set', () => {
-    // Every file in the two folders, the five kept for the record included (ADR-0017).
-    expect(spendingLevers.length).toBe(38);
-    expect(spendingLevers.every((l) => l.group && l.classification?.side === 'spending')).toBe(
-      true,
-    );
-    expect(
-      spendingLevers
-        .filter((l) => l.deprecated)
-        .map((l) => l.code)
-        .sort(),
-    ).toEqual(['aid07', 'chb', 'def5', 'freeuni', 'nonuk', 'water']);
-    expect(spendingLevers.filter((l) => l.group === 'Shelved').every((l) => l.deprecated)).toBe(
-      true,
-    );
-    expect(
-      spendingLevers
-        .filter((l) => l.badge === 'direct')
-        .map((l) => l.code)
-        .sort(),
-    ).toEqual(['chb', 'rv2ch', 'rveff', 'rvpip', 'rvplan2', 'rvwfp']);
-  });
 
   it.each(spendingLevers.map((l) => [l.id, l] as const))(
     '%s matches its cited Spending Review rows, HMRC rows or scorecard lines',
