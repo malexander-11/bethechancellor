@@ -5,48 +5,53 @@ import {
   budgetVerdict,
   computeOutcome,
   formatGbpBn,
-  freshGame,
   isMissed,
   macroCodesOf,
   missedBy,
   readings,
   statementOf,
-  suggestedSettings,
-  type GamePermalink,
 } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
+import {
+  BASIC_RATE_CUT,
+  DEBT_RULE_MISSED,
+  HEALTH_CUT,
+  NICS_WALK,
+  PRISONS,
+  SECURITY,
+  WALK,
+  gameWith,
+  latestContext,
+  todaysEstimate,
+  typicalError,
+  type Budget,
+} from './scenarios.js';
 
 const ds = loadDataset();
-const context = ds.contexts[ds.contexts.length - 1];
-if (!context) throw new Error('no context');
-const ESTIMATE = suggestedSettings(context.readings, ds.levers);
-const MACRO = macroCodesOf(context.readings);
+const ESTIMATE = todaysEstimate(ds);
+const MACRO = macroCodesOf(latestContext(ds).readings);
 const outcomeOf = outcomeOfFor(ds);
-const typicalErrorGbpm =
-  (ds.vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
-  (ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0);
+const typicalErrorGbpm = typicalError(ds);
 
 /**
  * The review's seven Budgets (Phase 25, R3): the walk, the walk paid by employer National
- * Insurance, a 2p cut to the
- * basic rate, doing nothing, a priority left unfunded, a 5% cut to health, and investment that
- * misses the debt rule alone. On each, no sentence, no close and no speech figure may say the
- * opposite of the sums: the rules result, a priority's fate or the sign of a change.
+ * Insurance, a 2p cut to the basic rate, doing nothing, a priority left unfunded, a 5% cut to
+ * health, and investment that misses the debt rule alone. On each, no sentence, no close and no
+ * speech figure may say the opposite of the sums: the rules result, a priority's fate or the sign
+ * of a change.
  */
-const WALK = { dip47: 1, moj: 10, nicer: 2, itbr: 1, dhsc: -0.5 };
-const NICS_WALK = { dip47: 1, moj: 10, nicer: 2, dhsc: -0.5 };
-const BUDGETS: [string, string[], Record<string, number>][] = [
-  ['the walk', ['defence', 'safer-streets'], WALK],
-  ['the employer NICs walk', ['defence', 'safer-streets'], NICS_WALK],
-  ['a 2p basic-rate cut', ['defence', 'safer-streets'], { itbr: -2 }],
-  ['doing nothing', ['defence', 'safer-streets'], {}],
-  ['an unfunded priority', ['defence', 'safer-streets'], { moj: 10 }],
-  ['a 5% cut to health', ['nhs'], { dhsc: -5 }],
-  ['investment past the debt rule', ['defence'], { cdel: 20 }],
+const BUDGETS: [string, readonly string[], Budget][] = [
+  ['the walk', SECURITY, WALK],
+  ['the employer NICs walk', SECURITY, NICS_WALK],
+  ['a 2p basic-rate cut', SECURITY, BASIC_RATE_CUT],
+  ['doing nothing', SECURITY, {}],
+  ['an unfunded priority', SECURITY, PRISONS],
+  ['a 5% cut to health', ['nhs'], HEALTH_CUT],
+  ['investment past the debt rule', ['defence'], DEBT_RULE_MISSED],
 ];
 
-function deliver(priorities: string[], policy: Record<string, number>) {
-  const game: GamePermalink = { ...freshGame(), priorities };
+function deliver(priorities: readonly string[], policy: Budget) {
+  const game = gameWith(priorities);
   const outcome = computeOutcome({
     vintage: ds.vintage,
     rules: ds.rules,
@@ -181,19 +186,19 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
   });
 
   it('reads as the review said each should', () => {
-    const walk = deliver(['defence', 'safer-streets'], WALK);
+    const walk = deliver(SECURITY, WALK);
     expect(walk.verdict.kind.id).toBe('broke-for-buffer');
     expect(walk.statement.accepted).toBe('I accepted breaking the tax lock.');
-    const employer = deliver(['defence', 'safer-streets'], NICS_WALK);
+    const employer = deliver(SECURITY, NICS_WALK);
     expect(employer.verdict.kind.id).toBe('delivered-and-paid');
-    const cut = deliver(['defence', 'safer-streets'], { itbr: -2 });
+    const cut = deliver(SECURITY, BASIC_RATE_CUT);
     expect(cut.statement.paid).toMatch(/^I cut taxes for everyone who earns or spends/);
-    const nothing = deliver(['defence', 'safer-streets'], {});
+    const nothing = deliver(SECURITY, {});
     expect(nothing.statement.paid).toBe('I changed no taxes and no spending.');
     expect(nothing.verdict.kind.id).toBe('left-out-with-room');
-    const health = deliver(['nhs'], { dhsc: -5 });
+    const health = deliver(['nhs'], HEALTH_CUT);
     expect(health.verdict.kind.id).toBe('paid-by-cuts');
-    const debt = deliver(['defence'], { cdel: 20 });
+    const debt = deliver(['defence'], DEBT_RULE_MISSED);
     expect(debt.speech.paragraphs.at(-1)?.text).toMatch(/misses the debt rule by £18\.8bn\./);
   });
 });

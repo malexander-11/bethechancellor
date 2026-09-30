@@ -3,27 +3,45 @@ import {
   ambitionStatus,
   computeOutcome,
   distributionalNotes,
-  freshGame,
   readings,
   readingsWithCauses,
-  suggestedSettings,
   type GamePermalink,
 } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
+import {
+  DAY_TO_DAY_RULE_MISSED,
+  EMPLOYER_NICS,
+  HEALTH_ABOVE_PLAN,
+  INVESTMENT,
+  NHS_START,
+  PENNY,
+  PRISONS,
+  SECURITY,
+  TAXES_AT_THE_TOP,
+  TWO_CHILD_LIMIT,
+  gameWith,
+  todaysEstimate,
+  typicalError,
+  type Budget,
+} from './scenarios.js';
 
 const ds = loadDataset();
 const outcomeOf = outcomeOfFor(ds);
-const typicalErrorGbpm =
-  (ds.vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
-  (ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0);
-const run = (leverValues: Record<string, number>) =>
+const typicalErrorGbpm = typicalError(ds);
+/** What a reading's causes call the levers of a Budget. */
+const causes = (budget: Budget) =>
+  Object.keys(budget).map((code) => {
+    const lever = ds.levers.find((l) => l.code === code);
+    return lever?.noun ?? lever?.shortTitle ?? code;
+  });
+const run = (leverValues: Budget) =>
   computeOutcome({
     vintage: ds.vintage,
     rules: ds.rules,
     levers: ds.levers,
     settings: { leverValues },
   });
-const read = (leverValues: Record<string, number>, game?: GamePermalink) => {
+const read = (leverValues: Budget, game?: GamePermalink) => {
   const outcome = run(leverValues);
   return readings({
     outcome,
@@ -51,9 +69,7 @@ describe('the readings of a Budget', () => {
   });
 
   it('measures from before the Budget, today’s estimate, not from March (Phase 25)', () => {
-    const context = ds.contexts[ds.contexts.length - 1];
-    if (!context) throw new Error('no context');
-    const estimate = suggestedSettings(context.readings, ds.levers);
+    const estimate = todaysEstimate(ds);
     const nothing = read(estimate);
     expect(nothing.borrowingChangeGbpm).toBeCloseTo(0, 6);
     expect(nothing.cumulativeBorrowingChangeGbpm).toBeCloseTo(0, 6);
@@ -63,7 +79,7 @@ describe('the readings of a Budget', () => {
     expect(nothing.fiscalRulesMissed).toBe(0);
     expect(nothing.paidForStatus).toBe(1);
     // A cut and a rise elsewhere are both counted, never netted; health counts as protected.
-    const both = read({ ...estimate, dhsc: -1, moj: 10 });
+    const both = read({ ...estimate, dhsc: -1, ...PRISONS });
     expect(both.serviceCutsGbpm).toBeGreaterThan(2000);
     expect(both.protectedCutsGbpm).toBeCloseTo(both.serviceCutsGbpm ?? 0, 6);
     expect(both.publicServiceSpendingGbpm).toBeLessThan(0);
@@ -82,7 +98,7 @@ describe('the readings of a Budget', () => {
   });
 
   it('totals spending, tax rises and tax cuts in the target year, and who the rises fall on', () => {
-    const r = read({ dhsc: 3, cdel: 10, itbr: 1, it50: 1, fuel: -10 });
+    const r = read({ ...HEALTH_ABOVE_PLAN, ...INVESTMENT, ...PENNY, it50: 1, fuel: -10 });
     expect(r.publicServiceSpendingGbpm).toBeGreaterThan(15000);
     expect(r.capitalChangeGbpm).toBeCloseTo(13420, -1);
     expect(r.taxRisesGbpm).toBeGreaterThan(8000);
@@ -90,23 +106,23 @@ describe('the readings of a Budget', () => {
     expect(r.netRevenueGbpm).toBeCloseTo((r.taxRisesGbpm ?? 0) - (r.taxCutsGbpm ?? 0), 6);
     // A penny on the basic rate is broad-based and dwarfs the new top rate: the balance is negative.
     expect(r.progressiveBalanceGbpm).toBeLessThan(0);
-    expect(read({ it50: 1, wealth: 1 }).progressiveBalanceGbpm).toBeGreaterThan(0);
+    expect(read(TAXES_AT_THE_TOP).progressiveBalanceGbpm).toBeGreaterThan(0);
     // Cutting welfare rates reads as a welfare cut; the reversals are counted separately.
     expect(read({ wuc: -5 }).welfareChangeGbpm).toBeLessThan(-2000);
     expect(read({ wuc: -5 }).welfareReversals).toBe(0);
   });
 
   it('reads the game: red lines and priorities', () => {
-    const game: GamePermalink = { ...freshGame(), priorities: ['defence', 'safer-streets'] };
-    const r = read({ itbr: 1, moj: 10 }, game);
+    const game = gameWith(SECURITY);
+    const r = read({ ...PENNY, ...PRISONS }, game);
     expect(r.promisesBroken).toBe(1);
     expect(r.manifestoBroken).toBe(1);
     expect(r.manifestoStrained).toBe(0);
     // Amber (Phase 23): employer National Insurance strains the lock; with the lock already broken
     // it counts once.
-    expect(read({ nicer: 1, moj: 10 }, game).manifestoStrained).toBe(1);
-    expect(read({ nicer: 1, moj: 10 }, game).manifestoBroken).toBe(0);
-    expect(read({ nicer: 1, itbr: 1, moj: 10 }, game).manifestoStrained).toBe(0);
+    expect(read({ ...EMPLOYER_NICS, ...PRISONS }, game).manifestoStrained).toBe(1);
+    expect(read({ ...EMPLOYER_NICS, ...PRISONS }, game).manifestoBroken).toBe(0);
+    expect(read({ ...EMPLOYER_NICS, ...PENNY, ...PRISONS }, game).manifestoStrained).toBe(0);
     expect(r.prioritiesUnfunded).toBe(1);
     expect(r.prioritiesFunded).toBe(1);
     // Two priorities ranked: not a single story, whatever the money behind either.
@@ -118,32 +134,32 @@ describe('the readings of a Budget', () => {
     expect(r.rabbitGbpm).toBeUndefined();
     expect(r.rebellionRisk).toBe(2 + 1 + 0);
     // A benefit cut by a slider counts with the benches as a U-turn does (Phase 25).
-    expect(read({ moj: 10, wuc: -5 }, game).rebellionRisk).toBe(0 + 1 + 1);
-    expect(read({ moj: 10, rv2ch: 1 }, game).rebellionRisk).toBe(2 + 1 + 1);
+    expect(read({ ...PRISONS, wuc: -5 }, game).rebellionRisk).toBe(0 + 1 + 1);
+    expect(read({ ...PRISONS, ...TWO_CHILD_LIMIT }, game).rebellionRisk).toBe(2 + 1 + 1);
     // One priority ranked and delivered: a clear story worth what its options cost.
-    const clear = read({ moj: 10 }, { ...game, priorities: ['safer-streets'] });
+    const clear = read(PRISONS, gameWith(['safer-streets']));
     expect(clear.clearPriorityGbpm).toBeCloseTo(clear.deliveredGbpm ?? 0, 6);
     expect(clear.clearPriorityGbpm).toBeGreaterThan(1000);
     // Graded delivery (Phase 25): a way that only makes a start is started, not funded, and a
     // single started priority is not a clear story.
-    const started = read({ mhclg: 5 }, { ...game, priorities: ['nhs'] });
+    const started = read(NHS_START, gameWith(['nhs']));
     expect(started.prioritiesStarted).toBe(1);
     expect(started.prioritiesFunded).toBe(0);
     expect(started.prioritiesUnfunded).toBe(0);
     expect(started.clearPriorityGbpm).toBe(0);
     expect(r.prioritiesStarted).toBe(0);
     // Missing the stability rule breaks the fiscal-rules promise but crosses no manifesto red line.
-    const missed = read({ def5: 1 }, game);
+    const missed = read(DAY_TO_DAY_RULE_MISSED, game);
     expect(missed.rulesMissed).toBeGreaterThan(0);
     expect(missed.promisesBroken).toBe(1);
     expect(missed.manifestoBroken).toBe(0);
   });
 
   it('names the decisions behind each reading', () => {
-    const game: GamePermalink = { ...freshGame(), priorities: ['safer-streets'] };
-    const outcome = run({ itbr: 1, moj: 10, def5: 1 });
+    const game = gameWith(['safer-streets']);
+    const outcome = run({ ...PENNY, ...PRISONS, ...DAY_TO_DAY_RULE_MISSED });
     const status = ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers);
-    const { causes } = readingsWithCauses({
+    const { causes: found } = readingsWithCauses({
       outcome,
       levers: ds.levers,
       typicalErrorGbpm,
@@ -155,14 +171,19 @@ describe('the readings of a Budget', () => {
     });
     // Causes carry how far each decision moved the reading, and are named in running words
     // (Phase 25): a lever's noun, a promise or a priority in lower case.
-    const titles = (m: string) => (causes[m] ?? []).map((c) => c.title);
-    expect(titles('borrowingChangeGbpm')).toContain('Defence to 5% of GDP');
-    const tax = causes.borrowingChangeGbpm?.find((c) => c.title === 'the basic rate of income tax');
+    const titles = (m: string) => (found[m] ?? []).map((c) => c.title);
+    const [miss] = causes(DAY_TO_DAY_RULE_MISSED);
+    const [penny] = causes(PENNY);
+    expect(titles('borrowingChangeGbpm')).toContain(miss);
+    const tax = found.borrowingChangeGbpm?.find((c) => c.title === penny);
     expect(tax?.delta).toBeLessThan(0);
-    expect(titles('manifestoBroken')[0]).toMatch(/^the tax lock \(the basic rate of income tax\)/);
-    expect(titles('taxRisesGbpm')).toEqual(['the basic rate of income tax']);
-    expect(titles('prioritiesFunded')).toEqual(['safer streets']);
-    expect(titles('publicServiceSpendingGbpm')[0]).toBe('Defence to 5% of GDP');
+    const lock = ds.pm.promises.find((p) => p.id === 'tax-lock')?.noun;
+    expect(titles('manifestoBroken')[0]?.startsWith(`${lock} (${penny})`)).toBe(true);
+    expect(titles('taxRisesGbpm')).toEqual(causes(PENNY));
+    expect(titles('prioritiesFunded')).toEqual(
+      ds.pm.priorities.filter((p) => p.id === 'safer-streets').map((p) => p.noun),
+    );
+    expect(titles('publicServiceSpendingGbpm')[0]).toBe(miss);
     // The economy is not the player's decision: never a cause.
     expect(titles('borrowingChangeGbpm')).not.toContain('the economy since March');
   });

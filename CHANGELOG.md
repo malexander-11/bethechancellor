@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The engine tests take their Budgets from one module, `packages/engine/test/scenarios.ts`, each
+  named for the part it plays (the review's walk, a penny that breaks the tax lock, a big broad tax
+  rise, thin headroom, a rule missed) with today's estimate and the typical forecast error beside
+  them; a test checks each still plays its part. Retiring a lever now means mending its Budget once.
 - The engine tests hold step 4, the shortlists and the badges to rules instead of copies of the
   data: every live policy lever sits on step 4 once, a tax in its family's section, a decision in
   six words and eight levers, the way that improves the public finances first, a direct badge only

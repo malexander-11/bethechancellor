@@ -1,16 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { finetuneItems, householdReactions } from '../src/index.js';
 import { loadDataset } from './fixtures.js';
+import { NICS_WALK, PENNY, WALK } from './scenarios.js';
 
 const ds = loadDataset();
 const react = (values: Record<string, number>, themed = false) =>
   householdReactions(ds.electorate, values, ds.levers, () => 1, null, themed, ds.incidence);
 const of = (values: Record<string, number>, id: string) =>
   react(values).find((r) => r.household.id === id);
-
-/** The review's walk (Phase 25): two flagships, employer National Insurance, a penny, a health trim. */
-const WALK = { dip47: 1, moj: 10, nicer: 2, itbr: 1, dhsc: -0.5 };
-const NICS_WALK = { dip47: 1, moj: 10, nicer: 2, dhsc: -0.5 };
 
 describe('the electorate as five households', () => {
   it('leaves everyone untouched by an empty Budget, and puzzled without a theme', () => {
@@ -39,7 +36,7 @@ describe('the electorate as five households', () => {
     const couple = of({ itbr: -1 }, 'mortgage-couple');
     expect(couple?.net).toBe('gains');
     expect(couple?.said[0]?.touch.line.text).toMatch(/penny off/);
-    expect(of({ itbr: 1 }, 'mortgage-couple')?.net).toBe('pays');
+    expect(of(PENNY, 'mortgage-couple')?.net).toBe('pays');
   });
 
   it('says nothing aimed at it by name when its groups moved and none of its touches did', () => {

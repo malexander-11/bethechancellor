@@ -9,14 +9,29 @@ import {
   type GamePermalink,
 } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
+import {
+  CORPORATION_TAX_RISE,
+  DAY_TO_DAY_RULE_MISSED,
+  DEBT_RULE_MISSED,
+  DEFENCE_GAP,
+  HEALTH_ABOVE_PLAN,
+  HEALTH_CUT,
+  HIGHER_EARNERS_PAY,
+  INVESTMENT_WITHIN_RULES,
+  NHS_START,
+  PENNY,
+  PRISONS,
+  SECURITY,
+  gameWith,
+  latestContext,
+  type Budget,
+} from './scenarios.js';
 
 const ds = loadDataset();
-const context = ds.contexts[ds.contexts.length - 1];
-if (!context) throw new Error('no context');
-const MACRO = macroCodesOf(context.readings);
+const MACRO = macroCodesOf(latestContext(ds).readings);
 const outcomeOf = outcomeOfFor(ds, { implementationYear: '2027-28' });
 
-function speak(values: Record<string, number>, game?: GamePermalink) {
+function speak(values: Budget, game?: GamePermalink) {
   const outcome = computeOutcome({
     vintage: ds.vintage,
     rules: ds.rules,
@@ -59,7 +74,7 @@ describe('the speech', () => {
 
   it('quotes only figures the engine produced, formatted as the scorecard formats them', () => {
     const game: GamePermalink = { ...freshGame(), priorities: ['safer-streets'] };
-    const s = speak({ moj: 10, itbr: 2, vats: 1 }, game);
+    const s = speak({ ...PRISONS, itbr: 2, vats: 1 }, game);
     const figures = new Set(s.paragraphs.flatMap((p) => p.figures));
     for (const p of s.paragraphs) {
       for (const match of p.text.match(/[+−-]?£\d[\d,]*\.?\d*bn/g) ?? []) {
@@ -95,30 +110,29 @@ describe('the speech', () => {
   });
 
   it('opens on the first priority delivered, a start as a start, and the estimate otherwise', () => {
-    const game: GamePermalink = { ...freshGame(), priorities: ['defence', 'cost-of-living'] };
-    const s = speak({ dip47: 1 }, game);
+    const s = speak(DEFENCE_GAP, gameWith(['defence', 'cost-of-living']));
     expect(s.paragraphs[0]?.kind).toBe('opening');
     expect(s.paragraphs[0]?.text).toMatch(/security of its people/);
     // Defence ranked first and left unfunded: the speech opens on what it did fund (Phase 25).
-    const second: GamePermalink = { ...freshGame(), priorities: ['defence', 'safer-streets'] };
-    const prisons = speak({ moj: 10 }, second);
+    const second = gameWith(SECURITY);
+    const prisons = speak(PRISONS, second);
     expect(prisons.paragraphs[0]?.text).toMatch(/safety of its people: prisons that hold/);
     expect(prisons.paragraphs[0]?.text).not.toMatch(/security/);
     // A priority only started is said as a start, not as a priority delivered.
-    const started = speak({ mhclg: 5 }, { ...freshGame(), priorities: ['nhs'] });
+    const started = speak(NHS_START, gameWith(['nhs']));
     expect(started.paragraphs[0]?.text).toMatch(/makes a start on the NHS\. It does not finish/);
     expect(started.paragraphs.some((p) => p.kind === 'priority')).toBe(false);
     // Nothing funded, or no game: the opening names what the Budget is built on, the March
     // forecast brought up to date, never a forecast that arrived later.
     const nothing = speak({}, second);
     expect(nothing.paragraphs[0]?.text).toMatch(/brought up to date/);
-    const sandbox = speak({ itbr: 1 });
+    const sandbox = speak(PENNY);
     expect(sandbox.paragraphs[0]?.text).toMatch(/brought up to date/);
     expect(sandbox.paragraphs[0]?.text).not.toMatch(/this morning/);
   });
 
   it('owns the forecast: borrowing before any measure, then what the Budget does to it', () => {
-    const cut = speak({ itbr: 1 });
+    const cut = speak(PENNY);
     const forecast = cut.paragraphs.find((p) => p.kind === 'forecast');
     expect(cut.paragraphs[1]).toBe(forecast);
     // The Budget is delivered in 2026-27, the year before its measures start.
@@ -126,14 +140,14 @@ describe('the speech', () => {
       /^On today’s estimate, before any measure in this Budget, we borrow £\d+\.\dbn in 2026-27 and £\d+\.\dbn in 2029-30\. This Budget cuts borrowing in 2029-30 by £\d+\.\dbn\.$/,
     );
     expect(forecast?.figures).toHaveLength(3);
-    expect(speak({ dhsc: 3 }).paragraphs[1]?.text).toMatch(
+    expect(speak(HEALTH_ABOVE_PLAN).paragraphs[1]?.text).toMatch(
       /This Budget adds £\d+\.\dbn to borrowing/,
     );
     expect(speak({}).paragraphs[1]?.text).toMatch(/leaves borrowing in 2029-30 about where it was/);
   });
 
   it('owns a missed rule by its own name and margin, and says so plainly when every rule is met', () => {
-    const missed = speak({ def5: 1 }, { ...freshGame() });
+    const missed = speak(DAY_TO_DAY_RULE_MISSED, freshGame());
     expect(missed.paragraphs.at(-1)?.text).toMatch(
       /^On today’s estimate, this Budget misses the day-to-day rule by £\d+\.\dbn/,
     );
@@ -143,17 +157,17 @@ describe('the speech', () => {
       vintage: ds.vintage,
       rules: ds.rules,
       levers: ds.levers,
-      settings: { leverValues: { cdel: 20 }, implementationYear: '2027-28' },
+      settings: { leverValues: DEBT_RULE_MISSED, implementationYear: '2027-28' },
     });
     const debt = outcome.verdicts.find((v) => v.kind === 'stockFalling');
     expect(debt?.status).toBe('notMet');
     expect(outcome.verdicts.find((v) => v.kind === 'currentBudget')?.status).toBe('met');
-    const investment = speak({ cdel: 20 });
+    const investment = speak(DEBT_RULE_MISSED);
     const last = investment.paragraphs.at(-1);
     expect(last?.text).toMatch(/misses the debt rule by £\d+\.\dbn\./);
     expect(last?.text).not.toMatch(/day-to-day/);
     expect(last?.figures).toEqual([formatGbpBn(Math.abs(debt?.headroomGbpm ?? 0), 1)]);
-    const met = speak({ itbr: 1 });
+    const met = speak(PENNY);
     expect(met.paragraphs.at(-1)?.text).toMatch(
       /^On today’s estimate, this Budget meets the fiscal rules, with £\d+\.\dbn of headroom in 2029-30\. The Office for Budget Responsibility publishes its own verdict today\./,
     );
@@ -183,13 +197,13 @@ describe('the speech', () => {
   });
 
   it('lets the Leader of the Opposition reply, on the Budget’s biggest weakness, with no figure', () => {
-    const game: GamePermalink = { ...freshGame(), priorities: ['safer-streets'] };
-    const cases: [Record<string, number>, string][] = [
-      [{ def5: 1 }, 'rulesMissed'],
-      [{ moj: 10, ct: 1 }, 'promiseBroken'],
-      [{ moj: 10, pens20: 1 }, 'taxUp'],
-      [{ moj: 10, dhsc: -5 }, 'cuts'],
-      [{ moj: 10 }, 'default'],
+    const game = gameWith(['safer-streets']);
+    const cases: [Budget, string][] = [
+      [DAY_TO_DAY_RULE_MISSED, 'rulesMissed'],
+      [{ ...PRISONS, ...CORPORATION_TAX_RISE }, 'promiseBroken'],
+      [{ ...PRISONS, ...HIGHER_EARNERS_PAY }, 'taxUp'],
+      [{ ...PRISONS, ...HEALTH_CUT }, 'cuts'],
+      [PRISONS, 'default'],
     ];
     for (const [values, about] of cases) {
       const { reply } = speak(values, game);
@@ -200,6 +214,6 @@ describe('the speech', () => {
       expect(reply.sources.length).toBeGreaterThan(0);
     }
     // Borrowing up inside the rules: investment the debt rule still allows.
-    expect(speak({ cdel: 5 }).reply.about).toBe('borrowingUp');
+    expect(speak(INVESTMENT_WITHIN_RULES).reply.about).toBe('borrowingUp');
   });
 });

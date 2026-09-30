@@ -7,26 +7,22 @@ import {
   parsePm,
   priorityScale,
   receptions,
-  suggestedSettings,
 } from '../src/index.js';
 import { loadDataset, outcomeOfFor, readJson } from './fixtures.js';
+import { PENNY, PRISONS, todaysEstimate, typicalError, type Budget } from './scenarios.js';
 
 const ds = loadDataset();
 const outcomeOf = outcomeOfFor(ds);
-const context = ds.contexts[ds.contexts.length - 1];
-if (!context) throw new Error('no context');
-const ESTIMATE = suggestedSettings(context.readings, ds.levers);
-const typicalErrorGbpm =
-  (ds.vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
-  (ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0);
-const run = (policy: Record<string, number>) =>
+const ESTIMATE = todaysEstimate(ds);
+const typicalErrorGbpm = typicalError(ds);
+const run = (policy: Budget) =>
   computeOutcome({
     vintage: ds.vintage,
     rules: ds.rules,
     levers: ds.levers,
     settings: { leverValues: { ...policy, ...ESTIMATE } },
   });
-const lateBand = (policy: Record<string, number>) =>
+const lateBand = (policy: Budget) =>
   receptions({
     outcome: run(policy),
     levers: ds.levers,
@@ -46,7 +42,7 @@ describe('wider feedback (Phase 25, R21)', () => {
     expect(ct?.leverTitle).toBe('Corporation tax');
     expect(ct?.text).toMatch(/effects on investment and the wider economy/);
     // No moved measure has a note on growth: the tool's own note says it is not modelled.
-    const none = growthNote(run({ moj: 10 }), ds.levers, '2029-30');
+    const none = growthNote(run(PRISONS), ds.levers, '2029-30');
     expect(none?.text).toMatch(/^Your own choices can affect growth/);
     // Only a macro note speaks to growth.
     const json = readJson('levers/tax/corporation-tax-rate.json') as {
@@ -61,14 +57,12 @@ describe('wider feedback (Phase 25, R21)', () => {
 
   it('marks money that arrives late with the markets, and moves no rating by it', () => {
     // CGT at death raises nothing before 2028-29; the penny raises from the first year.
-    const late = lateBand({ cgtdth: 1, itbr: 1 });
+    const late = lateBand({ cgtdth: 1, ...PENNY });
     expect(late?.points).toBe(0);
     expect(late?.text).toMatch(
       /^\d+% of the new tax money in 2029-30 waits until 2028-29 or later\. The markets will want to see it arrive\.$/,
     );
-    expect(lateBand({ itbr: 1 })?.text).toBe(
-      'No new tax money waits until 2028-29 or later to arrive.',
-    );
+    expect(lateBand(PENNY)?.text).toBe('No new tax money waits until 2028-29 or later to arrive.');
     expect(lateBand({})?.points).toBe(0);
   });
 

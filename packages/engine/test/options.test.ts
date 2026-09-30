@@ -13,7 +13,6 @@ import {
   promiseBreaks,
   resolveTargetYear,
   shortlistedWays,
-  suggestedSettings,
   optionByLever,
   optionConflicts,
   optionEarliestStart,
@@ -26,6 +25,7 @@ import {
   validateDataset,
 } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
+import { EMPLOYER_NICS, PENNY, latestContext, todaysEstimate } from './scenarios.js';
 
 const ds = loadDataset();
 const options = ds.options;
@@ -147,14 +147,14 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
 
   it('names the red line a lever is watched by, and whether the Budget would cross it', () => {
     const lock = ds.pm.promises.find((p) => p.id === 'tax-lock');
-    const bundle = (values: Record<string, number>) => ({ id: 'b', values });
+    const bundle = (values: Record<string, number>) => ({ id: 'b', values: { ...values } });
     // Each carries the promise's id and short name for its resting tag (Phase 25).
     const red = { manifesto: true, scored: true, id: 'tax-lock', tag: 'Tax lock' };
-    expect(optionRedLines(bundle({ itbr: 1 }), ds.pm.promises, levers, {})).toEqual([
+    expect(optionRedLines(bundle(PENNY), ds.pm.promises, levers, {})).toEqual([
       { promise: lock?.title, when: 'above', severity: 'breaks', broken: true, ...red },
     ]);
     // Employer National Insurance keeps the pledge's words and tests its spirit: amber (Phase 23).
-    expect(optionRedLines(bundle({ nicer: 1 }), ds.pm.promises, levers, {})).toEqual([
+    expect(optionRedLines(bundle(EMPLOYER_NICS), ds.pm.promises, levers, {})).toEqual([
       { promise: lock?.title, when: 'above', severity: 'strains', broken: true, ...red },
     ]);
     // A saving that breaks a promise when switched on.
@@ -379,9 +379,7 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
 });
 
 describe('the advisers’ shortlist on step 3 (Phase 27, ADR-0028)', () => {
-  const context = ds.contexts[ds.contexts.length - 1];
-  if (!context) throw new Error('no context');
-  const desk = deskLevers(context);
+  const desk = deskLevers(latestContext(ds));
 
   it('picks one or two ways to deliver each priority, at least one in full', () => {
     for (const { id } of ds.pm.priorities) {
@@ -399,7 +397,7 @@ describe('the advisers’ shortlist on step 3 (Phase 27, ADR-0028)', () => {
   it('holds every pick to £1bn of headroom in the target year, on today’s estimate', () => {
     // Each card's own price (optionPrice), under the web's settings: interest included, and an
     // all-investment way priced on the debt rule, which it touches.
-    const estimate = suggestedSettings(context.readings, levers);
+    const estimate = todaysEstimate(ds);
     const outcomeOf = outcomeOfFor(ds, {
       implementationYear: ds.vintage.years.forecast[1],
       debtInterestFeedback: true,

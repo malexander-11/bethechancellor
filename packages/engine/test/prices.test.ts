@@ -7,20 +7,27 @@ import {
   preBudgetValues,
   priceMove,
   reconcile,
-  suggestedSettings,
   type Outcome,
 } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
+import {
+  DEFENCE_GAP,
+  FRONT_LOADED,
+  HEALTH_ABOVE_PLAN,
+  INVESTMENT,
+  PENNY,
+  WALK,
+  todaysEstimate,
+  type Budget,
+} from './scenarios.js';
 
 const ds = loadDataset();
-const context = ds.contexts[ds.contexts.length - 1];
-if (!context) throw new Error('no context');
 /** Today's estimate: every game is played on it (Phase 24). */
-const ESTIMATE = suggestedSettings(context.readings, ds.levers);
+const ESTIMATE = todaysEstimate(ds);
 const outcomeOf = outcomeOfFor(ds, { implementationYear: '2027-28' });
 const headroom = (o: Outcome, kind: 'currentBudget' | 'stockFalling' = 'currentBudget') =>
   o.verdicts.find((v) => v.kind === kind)?.headroomGbpm ?? Number.NaN;
-const price = (values: Record<string, number>, current: Record<string, number> = {}) =>
+const price = (values: Budget, current: Budget = {}) =>
   optionPrice({
     outcomeOf,
     levers: ds.levers,
@@ -30,9 +37,9 @@ const price = (values: Record<string, number>, current: Record<string, number> =
 
 describe('one price per choice (Phase 25)', () => {
   it('is the change to the bar, interest included, so the price and what it leaves add up', () => {
-    const gap = price({ dip47: 1 });
+    const gap = price(DEFENCE_GAP);
     const before = headroom(outcomeOf(ESTIMATE));
-    const after = headroom(outcomeOf({ ...ESTIMATE, dip47: 1 }));
+    const after = headroom(outcomeOf({ ...ESTIMATE, ...DEFENCE_GAP }));
     expect(gap.rule).toBe('currentBudget');
     expect(gap.headroomChangeGbpm).toBeCloseTo(after - before, 6);
     expect(gap.headroomGbpm).toBeCloseTo(after, 6);
@@ -49,22 +56,22 @@ describe('one price per choice (Phase 25)', () => {
   });
 
   it('prices a chosen option as what it is doing: the same figure as choosing it', () => {
-    const off = price({ dip47: 1 });
+    const off = price(DEFENCE_GAP);
     const on = optionPrice({
       outcomeOf,
       levers: ds.levers,
-      current: { ...ESTIMATE, dip47: 1 },
-      values: { dip47: 1 },
+      current: { ...ESTIMATE, ...DEFENCE_GAP },
+      values: DEFENCE_GAP,
       on: true,
     });
     expect(on.headroomChangeGbpm).toBeCloseTo(off.headroomChangeGbpm, 6);
   });
 
   it('prices investment on its own against the debt rule, which it touches', () => {
-    const invest = price({ cdel: 10 });
+    const invest = price(INVESTMENT);
     expect(invest.rule).toBe('stockFalling');
     const before = headroom(outcomeOf(ESTIMATE), 'stockFalling');
-    const after = headroom(outcomeOf({ ...ESTIMATE, cdel: 10 }), 'stockFalling');
+    const after = headroom(outcomeOf({ ...ESTIMATE, ...INVESTMENT }), 'stockFalling');
     expect(invest.headroomChangeGbpm).toBeCloseTo(after - before, 6);
     expect(invest.headroomChangeGbpm).toBeLessThan(-10_000);
     // The day-to-day rule barely moves: interest only.
@@ -72,26 +79,26 @@ describe('one price per choice (Phase 25)', () => {
   });
 
   it('says when an earlier year costs well above the target year', () => {
-    const now = price({ def3: 1 });
+    const now = price(FRONT_LOADED);
     expect(now.earlier?.year).toBe('2027-28');
     expect(now.earlier?.costGbpm).toBeGreaterThan(
       1.5 * (now.split.currentGbpm + now.split.capitalGbpm),
     );
     // A steady cost is not front-loaded.
-    expect(price({ dip47: 1 }).earlier).toBeUndefined();
+    expect(price(DEFENCE_GAP).earlier).toBeUndefined();
   });
 
   it('prices a swap with the option it replaces put back, never both at once', () => {
-    const current = { dip47: 1 };
+    const current = DEFENCE_GAP;
     const swap = optionPrice({
       outcomeOf,
       levers: ds.levers,
       current: { ...ESTIMATE, ...current },
-      values: { def3: 1 },
-      swapOut: { dip47: 0 },
+      values: FRONT_LOADED,
+      swapOut: Object.fromEntries(Object.keys(current).map((code) => [code, 0])),
     });
-    expect(swap.headroomGbpm).toBeCloseTo(headroom(outcomeOf({ ...ESTIMATE, def3: 1 })), 6);
-    const both = price({ def3: 1 }, current);
+    expect(swap.headroomGbpm).toBeCloseTo(headroom(outcomeOf({ ...ESTIMATE, ...FRONT_LOADED })), 6);
+    const both = price(FRONT_LOADED, current);
     expect(both.headroomGbpm).toBeLessThan(swap.headroomGbpm);
   });
 
@@ -103,7 +110,7 @@ describe('one price per choice (Phase 25)', () => {
   });
 
   it('prices any move, not only an option: a lever back to its default is the move undone', () => {
-    const from = { ...ESTIMATE, itbr: 1 };
+    const from = { ...ESTIMATE, ...PENNY };
     const undo = priceMove({ outcomeOf, levers: ds.levers, from, to: ESTIMATE });
     const make = priceMove({ outcomeOf, levers: ds.levers, from: ESTIMATE, to: from });
     expect(undo.headroomChangeGbpm).toBeCloseTo(-make.headroomChangeGbpm, 6);
@@ -111,17 +118,19 @@ describe('one price per choice (Phase 25)', () => {
 });
 
 describe('the review adds up (Phase 25)', () => {
-  const budgets: Record<string, Record<string, number>> = {
-    walk: { dip47: 1, moj: 10, nicer: 2, itbr: 1, dhsc: -0.5 },
+  const budgets: Record<string, Budget> = {
+    walk: WALK,
     'welfare savings': { rvpip: 1, csjmh: 1 },
-    'investment alone': { cdel: 10 },
-    'a front-loaded rise': { def3: 1 },
+    'investment alone': INVESTMENT,
+    'a front-loaded rise': FRONT_LOADED,
     nothing: {},
   };
 
   it('starts from the estimate before any measure: the macro settings alone', () => {
-    expect(preBudgetValues({ ...ESTIMATE, itbr: 1, dhsc: 3 }, ds.levers)).toEqual(ESTIMATE);
-    const pre = preBudget(outcomeOf, { ...ESTIMATE, itbr: 1 }, ds.levers);
+    expect(preBudgetValues({ ...ESTIMATE, ...PENNY, ...HEALTH_ABOVE_PLAN }, ds.levers)).toEqual(
+      ESTIMATE,
+    );
+    const pre = preBudget(outcomeOf, { ...ESTIMATE, ...PENNY }, ds.levers);
     expect(headroom(pre)).toBeCloseTo(headroom(outcomeOf(ESTIMATE)), 6);
   });
 
@@ -136,7 +145,7 @@ describe('the review adds up (Phase 25)', () => {
         6,
       );
     }
-    const walk = reconcile(outcomeOf({ ...ESTIMATE, ...budgets.walk }), outcomeOf(ESTIMATE));
+    const walk = reconcile(outcomeOf({ ...ESTIMATE, ...WALK }), outcomeOf(ESTIMATE));
     expect(walk.startGbpm).toBeCloseTo(6850, -1);
     expect(walk.taxesGbpm).toBeGreaterThan(30_000);
     // Less borrowing saves interest; savings read as negative spending.

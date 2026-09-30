@@ -9,6 +9,7 @@ import {
   promiseBreaks,
 } from '../src/index.js';
 import { loadDataset, loadExtracts } from './fixtures.js';
+import { EVERYTHING_EXPENSIVE } from './scenarios.js';
 
 const ds = loadDataset();
 const extracted = loadExtracts();
@@ -675,7 +676,7 @@ describe('the policies that came in the post', () => {
   });
 
   it('adopting everything expensive misses the stability rule', () => {
-    const outcome = run({ def5: 1, freeuni: 1, ufsm: 1, socrent: 1, airet: 1 });
+    const outcome = run(EVERYTHING_EXPENSIVE);
     expect(outcome.verdicts.find((v) => v.kind === 'currentBudget')?.status).toBe('notMet');
   });
 

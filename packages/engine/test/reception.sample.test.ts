@@ -4,11 +4,18 @@ import {
   ambitionStatus,
   freshGame,
   receptions,
-  suggestedSettings,
   type GamePermalink,
   type Reception,
 } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
+import {
+  MOVES,
+  SECURITY,
+  gameWith,
+  todaysEstimate,
+  typicalError,
+  type Budget,
+} from './scenarios.js';
 
 /**
  * The recalibrated audiences over a seeded sample of Budgets (Phase 25, ADR-0026). The sample pins
@@ -16,63 +23,18 @@ import { loadDataset, outcomeOfFor } from './fixtures.js';
  * never pleases the markets more than doing nothing.
  */
 const ds = loadDataset();
-const context = ds.contexts[ds.contexts.length - 1];
-if (!context) throw new Error('no context');
-const ESTIMATE = suggestedSettings(context.readings, ds.levers);
+const ESTIMATE = todaysEstimate(ds);
 const outcomeOf = outcomeOfFor(ds);
-const typicalErrorGbpm =
-  (ds.vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
-  (ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0);
+const typicalErrorGbpm = typicalError(ds);
 
-/** Moves a player can make on the way through, one to five at a time. */
-const MOVES: Record<string, number>[] = [
-  { itbr: 1 },
-  { itbr: -2 },
-  { ithr: 2 },
-  { vats: 1 },
-  { nicer: 1 },
-  { nicer: 2 },
-  // Four taxes at the top that most households never feel: the part CGT alignment played here
-  // before it was taken off the table (ADR-0035).
-  { qelevy: 1, pslump: 1, banklevy: 1, epl2: 1 },
-  { iht: 10 },
-  { bank5: 1, banklevy: 1 },
-  { fuel: -10 },
-  { fuel: 10 },
-  { ved: 20 },
-  { dhsc: 3 },
-  { dhsc: -5 },
-  { dhsc: -10 },
-  { dfe: 5 },
-  { dfe: -5 },
-  { mod: -5 },
-  { home: -10 },
-  { moj: 10 },
-  { cdel: 10 },
-  { cdel: -10 },
-  { cdel: 20 },
-  { def3: 1 },
-  { dip47: 1 },
-  { wuc: 5 },
-  { wuc: -5 },
-  { rvpip: 1 },
-  { rv2ch: 1 },
-  { csjmh: 1 },
-  { lha30: 1 },
-  { itpa: 1000 },
-];
-const GAMES: GamePermalink[] = [
-  { ...freshGame(), priorities: ['defence', 'safer-streets'] },
-  { ...freshGame(), priorities: ['nhs'] },
-  freshGame(),
-];
+const GAMES: GamePermalink[] = [gameWith(SECURITY), gameWith(['nhs']), freshGame()];
 const budget = fc.record({
-  moves: fc.subarray(MOVES, { minLength: 1, maxLength: 5 }),
+  moves: fc.subarray([...MOVES], { minLength: 1, maxLength: 5 }),
   game: fc.constantFrom(...GAMES),
 });
 const SAMPLE = fc.sample(budget, { numRuns: 300, seed: 20260928 });
 
-function rate(policy: Record<string, number>, game: GamePermalink): Reception[] {
+function rate(policy: Budget, game: GamePermalink): Reception[] {
   const outcome = outcomeOf({ ...ESTIMATE, ...policy });
   return receptions({
     outcome,

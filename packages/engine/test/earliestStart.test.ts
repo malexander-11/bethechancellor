@@ -9,6 +9,7 @@ import {
   validateDataset,
 } from '../src/index.js';
 import { loadDataset } from './fixtures.js';
+import { PENNY } from './scenarios.js';
 
 const ds = loadDataset();
 const lever = (code: string): Lever => {
@@ -118,7 +119,9 @@ describe('nothing before it can start (ADR-0021)', () => {
     expect(row?.fromYear).toBe('2030-31');
     expect(row?.psnbGbpm).toBe(0);
     // A card that starts in the game's first year has no "from".
-    expect(run({ itbr: 1 }).attribution.find((r) => r.code === 'itbr')?.fromYear).toBeUndefined();
+    for (const code of Object.keys(PENNY)) {
+      expect(run(PENNY).attribution.find((r) => r.code === code)?.fromYear, code).toBeUndefined();
+    }
   });
 });
 
