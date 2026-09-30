@@ -733,11 +733,10 @@ export function validateDataset(ds: Dataset): string[] {
         }
       }
     }
-    // Ticks that contradict each other in one decision are one choice (ADR-0036). A set of
+    // Ticks that contradict each other in one decision may be one choice (ADR-0036). A set of
     // alternatives is ticks that exclude one another and no live lever beyond, none of them a
-    // lever a flagship sets (the screen shows those as a line); and two ticks that exclude only each
-    // other, in one decision, are a set, unless a flagship sets either, when choosing one takes the
-    // other out (the spending screen's three pairs, ADR-0037).
+    // lever a flagship sets (the screen shows those as a line). Which pairs are a set is the data's
+    // to say (ADR-0038): two ticks left apart stay ticks, and choosing one takes the other out.
     const live = (lever: Lever) =>
       excludesPartners(lever, ds.levers)
         .filter((p) => !p.lever.deprecated)
@@ -773,29 +772,6 @@ export function validateDataset(ds: Dataset): string[] {
           }
         });
       }
-      const ticks = decision.items.filter(
-        (item) => byCode.get(item.code)?.control.kind === 'toggle',
-      );
-      ticks.forEach((a, k) => {
-        const la = byCode.get(a.code);
-        if (!la) return;
-        for (const b of ticks.slice(k + 1)) {
-          const lb = byCode.get(b.code);
-          if (!lb) continue;
-          const pa = live(la);
-          const pb = live(lb);
-          const onlyEachOther = pa.length === 1 && pa[0] === b.code && pb.length === 1;
-          const together = sets.some(
-            (alt) => alt.codes.includes(a.code) && alt.codes.includes(b.code),
-          );
-          const flagship = flagshipSets.has(a.code) || flagshipSets.has(b.code);
-          if (onlyEachOther && !together && !flagship) {
-            problems.push(
-              `${a.code} and ${b.code} contradict each other in decision ${decision.id}: make them alternatives`,
-            );
-          }
-        }
-      });
     }
   }
   if (ds.finetune || ds.options) problems.push(...shortlistProblems(ds));

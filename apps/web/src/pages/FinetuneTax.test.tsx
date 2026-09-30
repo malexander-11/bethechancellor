@@ -322,41 +322,40 @@ describe('fine-tune tax and spend: one card a decision', () => {
   });
 
   it('makes two ticks that contradict each other one choice, As planned first (ADR-0036)', async () => {
-    at(`/finetune/tax?${BASE}&${GAME}&L=cgtexit.1`);
-    // The charge on leavers was chosen before the screen opened, so its decision is open.
-    expect(decision('Tax gains that go untaxed')).toHaveAttribute('aria-expanded', 'true');
-    const set = screen.getByRole('group', { name: 'Capital gains that go untaxed' });
+    at(`/finetune/tax?${BASE}&${GAME}&L=rvinv.1`);
+    // Undoing last year's rises was chosen before the screen opened, so its decision is open.
+    const title = 'Tax on dividends, savings and rent';
+    expect(decision(title)).toHaveAttribute('aria-expanded', 'true');
+    const set = screen.getByRole('group', { name: 'The rates on dividends, savings and rent' });
     const radio = (name: string) => within(set).getByRole('radio', { name });
-    const death = radio('When someone dies');
+    const more = radio('Another 2p');
     expect(within(set).getAllByRole('radio')).toHaveLength(3);
-    expect(radio('When someone leaves the UK')).toBeChecked();
+    expect(radio('Undo last year’s rises')).toBeChecked();
     expect(radio('As planned')).not.toBeChecked();
-    expect(death).not.toBeChecked();
+    expect(more).not.toBeChecked();
     // One group, so the arrow keys move between them as they do along a scale.
     const names = within(set)
       .getAllByRole('radio')
       .map((r) => r.getAttribute('name'));
     expect(new Set(names).size).toBe(1);
     // Nothing is blocked and nothing asks to be unticked: the other radio is the swap, priced as one.
-    const row = rowOf(death);
-    expect(death).not.toHaveAttribute('aria-disabled');
+    const row = rowOf(more);
+    expect(more).not.toHaveAttribute('aria-disabled');
     expect(row).not.toHaveClass('tune__row--blocked');
     expect(within(row).queryByText(/can’t have both|takes out|Counted twice/)).toBeNull();
     expect(priceOf(row)).toMatch(/^would raise £\d+\.\dbn instead$/);
-    fireEvent.click(death);
-    await waitFor(() => expect(search().get('L')).toMatch(/cgtdth\.1/));
-    expect(search().get('L') ?? '').not.toMatch(/cgtexit/);
-    expect(radio('When someone dies')).toBeChecked();
-    expect(statusOf('Tax gains that go untaxed')).toMatch(/^1 chosen · raises £\d\.\dbn$/);
+    fireEvent.click(more);
+    await waitFor(() => expect(search().get('L')).toMatch(/iinc2\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/rvinv/);
+    expect(radio('Another 2p')).toBeChecked();
+    expect(statusOf(title)).toMatch(/^1 chosen · raises £\d\.\dbn$/);
     // As planned puts both back.
     fireEvent.click(radio('As planned'));
-    await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/cgtdth|cgtexit/));
-    expect(statusOf('Tax gains that go untaxed')).toBe('3 choices');
-    // Capital gains on main homes is no part of the choice: a tick of its own beside it.
-    expect(screen.getByRole('checkbox', { name: 'On main homes' })).toBeInTheDocument();
+    await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/iinc2|rvinv/));
+    expect(statusOf(title)).toBe('2 choices');
   });
 
-  it('makes the wealth tax, gains that go untaxed and the rates on dividends one choice each', async () => {
+  it('makes the wealth tax and the rates on dividends one choice each', async () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     // The wealth tax is its card's whole question: the set's name is heard, not shown again.
     const wealthPanel = openDecision('Tax wealth above £10 million');
@@ -369,18 +368,6 @@ describe('fine-tune tax and spend: one card a decision', () => {
     await waitFor(() => expect(search().get('L')).toMatch(/wealth2\.1/));
     expect(search().get('L') ?? '').not.toMatch(/(^|_)wealth\.1/);
     expect(statusOf('Tax wealth above £10 million')).toMatch(/^1 chosen/);
-
-    const gains = openDecision('Tax gains that go untaxed');
-    const untaxed = within(gains).getByRole('group', { name: 'Capital gains that go untaxed' });
-    expect(within(untaxed).getByText('Capital gains that go untaxed')).not.toHaveClass('sr-only');
-    fireEvent.click(within(untaxed).getByRole('radio', { name: 'When someone dies' }));
-    // Gains on main homes are no part of the choice: a tick beside it, chosen with either.
-    fireEvent.click(within(gains).getByRole('checkbox', { name: 'On main homes' }));
-    await waitFor(() => expect(search().get('L')).toMatch(/cgtdth\.1/));
-    fireEvent.click(within(untaxed).getByRole('radio', { name: 'When someone leaves the UK' }));
-    await waitFor(() => expect(search().get('L')).toMatch(/cgtexit\.1/));
-    expect(search().get('L')).toMatch(/cgtprr\.1/);
-    expect(search().get('L') ?? '').not.toMatch(/cgtdth/);
 
     const income = openDecision('Tax on dividends, savings and rent');
     const rates = within(income).getByRole('group', {
@@ -399,6 +386,25 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(within(set).getByRole('radio', { name: '1% a year' })).toBeChecked();
     expect(within(set).getByRole('radio', { name: '2% a year' })).not.toBeChecked();
     expect(within(set).getAllByText(/^Warning: Counted twice with/)).toHaveLength(2);
+  });
+
+  it('leaves gains at death and on leaving as ticks, one taking the other out (ADR-0038)', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    const gains = openDecision('Tax gains that go untaxed');
+    expect(within(gains).queryByRole('radio')).toBeNull();
+    fireEvent.click(within(gains).getByRole('checkbox', { name: 'When someone dies' }));
+    fireEvent.click(within(gains).getByRole('checkbox', { name: 'On main homes' }));
+    await waitFor(() => expect(search().get('L')).toMatch(/cgtdth\.1/));
+    // The death card's figure already has a charge on leavers in it: the other tick says so first.
+    const leavers = within(gains).getByRole('checkbox', { name: 'When someone leaves the UK' });
+    expect(leavers).toHaveAccessibleDescription(
+      /^Choosing this takes out “When someone dies”\. would (raise|cost) £\d+\.\dbn instead$/,
+    );
+    fireEvent.click(leavers);
+    await waitFor(() => expect(search().get('L')).toMatch(/cgtexit\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/cgtdth/);
+    // Main homes count other money: chosen with either.
+    expect(search().get('L')).toMatch(/cgtprr\.1/);
   });
 
   it('says first what the 1% rate on zero-rated goods would take out, and takes it out', async () => {

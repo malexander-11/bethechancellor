@@ -106,11 +106,11 @@ refuses gilt sales for any year but the one the context is dated in.
   how a Budget-day reason names its causes after "Because of", and how the speech names the measure.
 - **Two levers that count the same money.** An interaction with `severity: "excludes"`, authored
   once per pair (the validator checks): only one can be chosen at a time. The flagship screens offer
-  a swap; on step 4 two ticks in one tax decision are one choice among radios (`alternatives`,
-  below), and anywhere else choosing one takes the other out and says so first (ADR-0036). The text
-  must read from either card and in either direction (Phase 26), each sentence at most twenty words,
-  since it leads a card. A link that carries both still opens, and each card says it is counted
-  twice. `info` and `warn` remain notes.
+  a swap; on step 4 ticks that a decision declares a set are one choice among radios
+  (`alternatives`, below), and anywhere else choosing one takes the other out and says so first
+  (ADR-0036, ADR-0038). The text must read from either card and in either direction (Phase 26), each
+  sentence at most twenty words, since it leads a card. A link that carries both still opens, and
+  each card says it is counted twice. `info` and `warn` remain notes.
 - **A note on growth.** A `macro` consideration may carry `growth: true`: what the measure may do to
   growth and the wider economy, in words. The markets' fold on Budget day reads the biggest moved
   measure's; the schema refuses the flag on any other kind of note.
@@ -386,14 +386,13 @@ enforces:
 - **A tax sits in its family's section**: a tax section's `label` is the family (`group`) of every
   lever in it, so each family has one section (`tax lever X is in the F family, not S`). Who pays a
   tax is its incidence tag, read on the review and on Budget day.
-- **Ticks that contradict each other in a decision are one choice** (`alternatives`, ADR-0036). A
+- **Ticks that contradict each other in a decision may be one choice** (`alternatives`, ADR-0036). A
   decision may list sets `{ name, codes }`, each two to four of its ticks, named for the question
   the set answers (“The wealth tax”, at most 60 characters). Every member excludes every other
   member and nothing outside the set, none is set by a flagship, the members sit side by side in the
-  decision’s order, and no tick is in two sets. The validator also names two ticks in one decision
-  that exclude only each other but are not a set, unless a flagship sets either, as on the spending
-  screen, where each of the three pairs is taken out instead (ADR-0037). The screen draws a set as
-  radios with “As planned” first.
+  decision’s order, and no tick is in two sets. The screen draws a set as radios with “As planned”
+  first. Whether a pair is a set is the data's choice (ADR-0038): a pair left as ticks, like capital
+  gains tax at death and on people who leave, or a pair a flagship sets, is taken out instead.
 - **Each choice has a name of its own in its decision**: no two items in one decision share a short
   name.
 - **The adviser exists and speaks on this step** (`finetune` in `advisers.json`).

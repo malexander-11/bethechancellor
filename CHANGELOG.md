@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- Capital gains tax at death and on people who leave the UK are tick boxes, not radios. They still
+  count the same money, so ticking one takes the other out and says so first. Whether contradicting
+  ticks are radios is now the data's choice: the validator no longer insists on it (ADR-0038).
 - Stamp duty's "Cut it for some buyers" is off the tax screen: abolishing stamp duty on main homes
   and taking the additional-homes surcharge back to 3% are shelved like the other retired levers,
   and nothing live names them. Stamp duty keeps its 5% band.

@@ -1089,12 +1089,6 @@
           {
             "id": "cgt-untaxed-gains",
             "title": "Tax gains that go untaxed",
-            "alternatives": [
-              {
-                "name": "Capital gains that go untaxed",
-                "codes": ["cgtdth", "cgtexit"]
-              }
-            ],
             "items": [
               {
                 "code": "cgtdth",

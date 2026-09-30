@@ -503,9 +503,10 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
 });
 
 /**
- * Contradictions come under one decision (ADR-0036): ticks there that contradict each other are one
- * choice, radios under one name; wherever a choice contradicts a scale, several choices, or a
- * choice in another decision, choosing it takes the others out, and says so first.
+ * Contradictions come under one decision (ADR-0036): ticks there that contradict each other may be
+ * one choice, radios under one name, where the data declares them a set (ADR-0038); wherever else a
+ * choice contradicts a tick, a scale, several choices, or a choice in another decision, choosing it
+ * takes the others out, and says so first.
  */
 describe('contradictions come under one decision (ADR-0036)', () => {
   const where = new Map(finetuneItems(file).map((e) => [e.code, e.decision] as const));
@@ -597,11 +598,8 @@ describe('contradictions come under one decision (ADR-0036)', () => {
 
   it('refuses a set of alternatives outside its decision, in two sets, or apart', () => {
     const decision = must(
-      decisionsOf(file).find((d) => {
-        const alt = d.alternatives?.[0];
-        return alt !== undefined && d.items.length > alt.codes.length;
-      }),
-      'set of alternatives beside another lever',
+      decisionsOf(file).find((d) => d.alternatives?.[0] !== undefined),
+      'set of alternatives',
     );
     const alt = must(decision.alternatives?.[0], 'set of alternatives');
     const outsider = must(
@@ -617,14 +615,13 @@ describe('contradictions come under one decision (ADR-0036)', () => {
         decisionIn(f, decision.id).alternatives!.push({ name: 'Again', codes: [...alt.codes] }),
       ),
     ).toContain(`${alt.codes[0]} is in two sets of alternatives`);
-    // Another lever of the decision between the first two of the set.
+    // Another lever between the first two of the set.
     expect(
       refusal((f) => {
         const d = decisionIn(f, decision.id);
-        const other = d.items.find((i) => !alt.codes.includes(i.code))!;
-        const rest = d.items.filter((i) => i !== other);
-        const after = rest.findIndex((i) => i.code === alt.codes[0]) + 1;
-        d.items = [...rest.slice(0, after), other, ...rest.slice(after)];
+        const after = d.items.findIndex((i) => i.code === alt.codes[0]) + 1;
+        const other = structuredClone(itemIn(f, outsider));
+        d.items = [...d.items.slice(0, after), other, ...d.items.slice(after)];
       }),
     ).toContain(
       `the alternatives “${alt.name}” are not side by side, in decision ${decision.id}’s order`,
@@ -632,7 +629,7 @@ describe('contradictions come under one decision (ADR-0036)', () => {
     expect(refusal(() => undefined)).toBe('');
   });
 
-  it('validate:data holds a set to ticks that exclude only each other, and every such pair to a set', () => {
+  it('validate:data holds a set to ticks that exclude only each other, and no pair to a set', () => {
     const setOf = (id: string, name: string, codes: string[]) => (f: FinetuneFile) => {
       decisionIn(f, id).alternatives = [{ name, codes }];
     };
@@ -678,17 +675,13 @@ describe('contradictions come under one decision (ADR-0036)', () => {
     expect(tamper(setOf(reaching.decision.id, 'Reach', [reaching.code, companion]))).toContain(
       `the alternatives “Reach” hold ${reaching.code}, which also excludes ${partnersOf(reaching.code)[0]}`,
     );
-    // Ticks that exclude only each other, in one decision, are a set.
+    // Which pairs are a set is the data's to say (ADR-0038): a pair left as ticks is no problem.
     const pairSet = must(
       decisionsOf(file).find((d) => (d.alternatives ?? []).some((a) => a.codes.length === 2)),
       'set of two',
     );
-    const [a, b] = pairSet.alternatives!.find((alt) => alt.codes.length === 2)!.codes;
-    expect(tamper((f) => delete decisionIn(f, pairSet.id).alternatives)).toContain(
-      `${a} and ${b} contradict each other in decision ${pairSet.id}: make them alternatives`,
-    );
-    // Unless a flagship sets either: a flagship's lever is a line on the screen, never a radio, so
-    // choosing one takes the other out.
+    expect(tamper((f) => delete decisionIn(f, pairSet.id).alternatives)).toBe('');
+    // A lever a flagship sets is a line on the screen, never a radio, so it is in no set.
     const pair = must(
       FINETUNE_SIDES.flatMap(pairsOn).find(
         ([p, q]) =>
