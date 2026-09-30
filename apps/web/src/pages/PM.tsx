@@ -101,7 +101,7 @@ export function PMPage() {
           const rank = rankOf(p.id);
           const picked = rank >= 0;
           return (
-            <li key={p.id} className={`choice${picked ? ' choice--picked' : ''}`}>
+            <li key={p.id} role="none" className={`choice${picked ? ' choice--picked' : ''}`}>
               <label>
                 <input
                   type="checkbox"

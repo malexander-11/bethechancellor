@@ -4,7 +4,17 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['**/dist/**', '**/node_modules/**', '**/coverage/**', 'data/**', '.vercel/**', '.claude/**'],
+    ignores: [
+      '**/dist/**',
+      '**/node_modules/**',
+      '**/coverage/**',
+      'data/**',
+      '.vercel/**',
+      'test-results/**',
+      'playwright-report/**',
+      'blob-report/**',
+      '.claude/**',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -15,6 +25,11 @@ export default tseslint.config(
   {
     files: ['packages/pipeline/**/*.ts', '*.config.{js,ts}', 'apps/web/vite.config.ts'],
     languageOptions: { globals: { ...globals.node } },
+  },
+  {
+    // The suite runs in Node and hands functions to the page, which run in the browser.
+    files: ['e2e/**/*.ts'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
   {
     rules: {

@@ -5,6 +5,12 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- An end-to-end and accessibility suite in `e2e/` (`npm run e2e`: Playwright against the production
+  build, on a desktop and a phone) replaces the walk scripts written outside the repository each
+  round: the journey by the primary buttons, the fine-tune screen's decisions, and on each main
+  screen axe's WCAG 2.1 A and AA rules, 44px targets, no text under 14px and nothing moving when
+  less motion is asked for. The priorities are no longer list items outside a list; Budget day's
+  reception meters still are, and fail axe's `listitem` rule until the app changes.
 - Focus no longer falls to the top of the page when a button removes itself. Undo moves it to the
   control it put back (the box, or the plan on a scale), and dismissing the note about a link moves
   it to the start of the screen.

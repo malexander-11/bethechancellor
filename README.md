@@ -171,6 +171,7 @@ data/               sourced JSON: vintages, rules, levers, context readings, adv
                     the Prime Minister's priorities, the options, the fine-tuning policies,
                     ministers, the speech, households, Budget day reaction bands, raw source files
 docs/               methodology and architecture decision records
+e2e/                end-to-end and accessibility suite (Playwright, on the production build)
 ```
 
 ## Develop
@@ -184,6 +185,7 @@ npm run lint
 npm run validate:data  # Zod validation of everything under data/
 npm run check:derived  # regenerates data/derived and fails on drift
 npm run build
+npm run e2e            # the build in Chromium (npx playwright install chromium, once)
 ```
 
 Node 22 or later (see `.nvmrc`). The repository pins `legacy-peer-deps` in `.npmrc` because npm 10's
