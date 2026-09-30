@@ -108,23 +108,23 @@ until 2028-29, so each of the thirteen wears a sourced earliest start and counts
 On 30 September 2026 the user took nine taxes off the table, among them the health and social care
 levy, insurance premium tax, CenTax's package for taxing gains like income and National Insurance on
 rents, so eleven cards with an earliest start are left; each retired tax is kept for the record, and
-an old link carrying one opens without it (ADR-0035).
+an old link carrying one opens without it (ADR-0035). Pension tax relief went the same way later
+that day: relief at a flat 30%, relief at the basic rate only and the lump-sum cap.
 
-Under the hood: the OBR March 2026 baseline, 67 tax levers (HMRC ready reckoner, Budget 2025 and
+Under the hood: the OBR March 2026 baseline, the tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options and
 the residence nil-rate band, HMRC's pension statistics for National Insurance on employer pension
 contributions, HMRC's banking-sector receipts, inheritance tax up to abolition, a share of the OBR's
 business rates line, CenTax's estimates for an exit charge and partnership National Insurance,
 HMRC's cost of the National Insurance exemption over pension age and of private residence relief,
-HMRC's pension relief by marginal rate for relief at a flat 30% or the basic rate, HMRC's bank levy
-receipts, the government's six-month figure for the electricity zero rate, the think tanks' own
-figures for their proposals (the Resolution Foundation, IPPR, CenTax, Tax Justice UK, the IFS Green
-Budget, Demos, the Adam Smith Institute, Onward), and our own stated arithmetic where nobody has
-published a costing, recorded as such), 32 spending levers (Spending Review 2025 settlements, OBR
-welfare lines, Budget 2025 spending decisions, the Prime Minister's schemes, six welfare cards from
-the think tanks) with milestones from PESA, fifteen more levers kept for the record on no screen,
-eight priorities with 29 ways to deliver them (every option a bundle of those levers), all 99 of
-those levers on the fine-tuning screens as 133 policies, one estimate of the economy today from the
+HMRC's bank levy receipts, the government's six-month figure for the electricity zero rate, the
+think tanks' own figures for their proposals (the Resolution Foundation, IPPR, CenTax, Tax Justice
+UK, the IFS Green Budget, Demos, the Adam Smith Institute, Onward), and our own stated arithmetic
+where nobody has published a costing, recorded as such), 32 spending levers (Spending Review 2025
+settlements, OBR welfare lines, Budget 2025 spending decisions, the Prime Minister's schemes, six
+welfare cards from the think tanks) with milestones from PESA, more levers kept for the record on no
+screen, eight priorities with 29 ways to deliver them (every option a bundle of those levers), all
+of those levers on the fine-tuning screens as policies, one estimate of the economy today from the
 Bank of England's gilt yields and HM Treasury's comparison of independent forecasts, and simulated
 lines in the voices of roles, every fact in them sourced. Next: the rebase to the 28 October 2026
 forecast.

@@ -118,7 +118,7 @@ describe('step 5: deliver the Budget', () => {
     ).toBeInTheDocument();
     thin.unmount();
     // Each dealt with, and a margin to spare: nothing left on the desk, and no yardstick said.
-    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_vatelec.1_pens20.1`);
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_vatelec.1_itbrl.-10`);
     position = part(/^Where that leaves you/);
     expect(within(position).queryByText('Still on your desk:')).toBeNull();
     expect(within(position).queryByText(/call headroom under/)).toBeNull();

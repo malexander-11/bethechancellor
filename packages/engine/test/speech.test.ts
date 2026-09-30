@@ -133,7 +133,7 @@ describe('the speech', () => {
       ufsm: 1,
       itbr: 1,
       ct: 1,
-      pens20: 1,
+      itbrl: -10,
       fuel: -5,
       mod: -2,
     };

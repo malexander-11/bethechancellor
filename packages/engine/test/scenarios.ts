@@ -92,8 +92,8 @@ export const BIG_BROAD_TAX_RISE: Budget = { nicer: 2 };
  */
 export const NEEDED_LOCK_BREAK: Budget = { ...HEALTH_ABOVE_PLAN, ...PENNY };
 
-/** Pension relief at the basic rate only: higher earners pay more, and no promise is broken. */
-export const HIGHER_EARNERS_PAY: Budget = { pens20: 1 };
+/** The higher-rate threshold 10% lower: higher earners pay more, and no promise is broken. */
+export const HIGHER_EARNERS_PAY: Budget = { itbrl: -10 };
 
 /** The 50% rate and a wealth tax: more asked of the best-off than of anyone else. */
 export const TAXES_AT_THE_TOP: Budget = { it50: 1, wealth: 1 };
@@ -154,7 +154,7 @@ export const MOVES: readonly Budget[] = [
   { nicer: 1 },
   { nicer: 2 },
   // Four taxes at the top that most households never feel.
-  { qelevy: 1, pslump: 1, banklevy: 1, epl2: 1 },
+  { qelevy: 1, ctgh: 1, banklevy: 1, epl2: 1 },
   { iht: 10 },
   { bank5: 1, banklevy: 1 },
   { fuel: -10 },

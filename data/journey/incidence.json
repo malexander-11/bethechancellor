@@ -145,7 +145,6 @@
     "itar": "top",
     "it50": "top",
     "wealth": "top",
-    "pens30": "higher-earners",
     "iinc2": "savers-owners",
     "gam2": "duties",
     "cgth": "savers-owners",
@@ -206,7 +205,6 @@
     "cgtl": "savers-owners",
     "cgtexit": "top",
     "cgtprr": "savers-owners",
-    "pens20": "higher-earners",
     "banklevy": "business",
     "qelevy": "business",
     "carried": "top",
@@ -221,7 +219,6 @@
     "ctgh": "savers-owners",
     "nicuel": "higher-earners",
     "vat1z": "broad-base",
-    "pslump": "top",
     "sdltabol": "savers-owners",
     "cta": "broad-base",
     "vatmot": "disabled-motorists"
@@ -238,7 +235,6 @@
     "nicllp",
     "it50",
     "itar",
-    "pslump",
     "hvcts15"
   ]
 }

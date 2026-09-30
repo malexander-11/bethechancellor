@@ -65,17 +65,15 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
   });
 
   it('says in basic mode too what a pick would take out, with no radios and no decisions', () => {
-    at(`/finetune/tax?${BASE}&${GAME}&L=pens20.1`);
-    // Chosen before the screen opened, relief at the basic rate is on show beside the pick.
+    at(`/finetune/tax?${BASE}&${GAME}&L=cgtexit.1`);
+    // Chosen before the screen opened, the charge on leavers is on show beside the pick.
     expect(
-      screen.getByRole('checkbox', { name: 'Give pension tax relief at the basic rate only' }),
+      screen.getByRole('checkbox', { name: 'Charge capital gains tax on people who leave the UK' }),
     ).toBeChecked();
-    const pick = screen.getByRole('checkbox', {
-      name: 'Give everyone the same 30% pension tax relief',
-    });
+    const pick = screen.getByRole('checkbox', { name: 'Tax capital gains when someone dies' });
     expect(pick).not.toHaveAttribute('aria-disabled');
     expect(pick).toHaveAccessibleDescription(
-      /^Choosing this takes out “Give pension tax relief at the basic rate only”\. would (raise|cost) £\d+\.\dbn instead$/,
+      /^Choosing this takes out “Charge capital gains tax on people who leave the UK”\. would (raise|cost) £\d+\.\dbn instead$/,
     );
     expect(screen.queryByRole('radio', { name: 'As planned' })).toBeNull();
   });
@@ -97,7 +95,7 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
       [...document.querySelectorAll('.tune__decision-toggle')].map((b) =>
         b.getAttribute('aria-expanded'),
       ),
-    ).toEqual(Array(26).fill('false'));
+    ).toEqual(finetune.tax.groups.flatMap((g) => g.decisions).map(() => 'false'));
     expect(group(/^Wealth tax$/)).toBeInTheDocument();
     expect(
       screen.getByText(

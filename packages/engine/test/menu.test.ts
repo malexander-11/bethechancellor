@@ -49,7 +49,7 @@ describe('the Budget 2026 menu', () => {
     for (const code of ['nicspa', 'nicuel', 'vat1z']) {
       expect(promise({ [code]: 1 }, 'tax-lock')?.kept, code).toBe(false);
     }
-    for (const code of ['qelevy', 'carried', 'wealth2', 'ctgh', 'pslump', 'cta']) {
+    for (const code of ['qelevy', 'carried', 'wealth2', 'ctgh', 'cta']) {
       expect(promise({ [code]: 1 }, 'tax-lock')?.kept, code).toBe(true);
     }
     // Neither the levy nor National Insurance on partnerships is a red line.
@@ -62,8 +62,7 @@ describe('the Budget 2026 menu', () => {
     const pairs: [string, string][] = [
       // A charge on leavers cannot sit beside the death card.
       ['cgtexit', 'cgtdth'],
-      // Two designs for one relief, and two for one tax on the same wealth: one or the other.
-      ['pens20', 'pens30'],
+      // Two designs for one tax on the same wealth: one or the other.
       ['wealth', 'wealth2'],
       // The full rate above £50,270 and today's 2% there, a cut as much as a rise (Phase 26).
       ['nica', 'nicuel'],

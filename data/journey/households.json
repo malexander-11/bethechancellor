@@ -479,20 +479,6 @@
           }
         },
         {
-          "code": "pens30",
-          "when": "on",
-          "effect": "gains",
-          "line": {
-            "text": "Pension relief at one flat rate. As basic-rate savers, we get a bit more on what we put in.",
-            "sources": [
-              {
-                "sourceId": "hmrc-private-pensions-2026-07-tidy"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
           "code": "dhsc",
           "when": "below",
           "effect": "pays",
@@ -1200,20 +1186,6 @@
           }
         },
         {
-          "code": "pens30",
-          "when": "on",
-          "effect": "pays",
-          "line": {
-            "text": "Pension tax relief at one flat rate. Mine falls, and the pension was the plan.",
-            "sources": [
-              {
-                "sourceId": "hmrc-private-pensions-2026-07-tidy"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
           "code": "nicuel",
           "when": "on",
           "effect": "pays",
@@ -1250,20 +1222,6 @@
             "sources": [
               {
                 "sourceId": "hmt-budget-2025-table-4-1"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
-          "code": "pens20",
-          "when": "on",
-          "effect": "pays",
-          "line": {
-            "text": "Pension relief at the basic rate only. Mine halves, and the pension was the plan.",
-            "sources": [
-              {
-                "sourceId": "hmrc-private-pensions-2026-07-tidy"
               }
             ],
             "badge": "simulated"
@@ -1355,7 +1313,6 @@
     "nicllp",
     "nicspa",
     "otherd",
-    "pslump",
     "qelevy",
     "rvapr",
     "rveff",

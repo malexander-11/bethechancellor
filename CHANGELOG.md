@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- Pension tax relief is off the tax screen: relief at a flat 30%, relief at the basic rate only and
+  the cap on the tax-free lump sum are shelved like the other retired levers, with their costings
+  kept for the record, and nothing live names them. The tests that used them take live stand-ins: a
+  lower higher-rate threshold for higher earners paying more, capital gains tax's untaxed gains for
+  a set of radios beside a tick, and council tax on the top bands in the sampled Budgets.
 - The VAT rate's headline reads "20% since 2011. A point is worth about £9.5bn.", like the other
   rates: it was the one headline longer than its description, and it called VAT the biggest single
   lever, which nothing checked. A test now holds every headline shorter than its description.

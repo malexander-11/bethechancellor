@@ -4,11 +4,11 @@
   "code": "pslump",
   "category": "tax",
   "badge": "assumption",
-  "group": "Income tax",
+  "group": "Shelved",
   "title": "Cap the tax-free pension lump sum",
   "shortTitle": "Pension lump-sum cap",
   "noun": "the pension lump-sum cap",
-  "headline": "Cap the withdrawals that earn tax-free lump-sum relief at £400,000: Demos, £2bn.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "A quarter of pension withdrawals can be taken tax-free, up to £1,073,100 of withdrawals, so up to £268,275 escapes income tax. Demos proposes limiting the withdrawals that qualify to £400,000, a tax-free lump sum of at most £100,000, and puts the yield at £2 billion. Only a fifth of pensioners have pots above £400,000, and the relief is worth most to those who would otherwise pay 40% or 45%. Reported as under consideration for this Budget; held flat in cash here.",
   "baselinePolicy": {
     "text": "Up to 25% of a pension can be taken tax-free, capped at £268,275 (a quarter of £1,073,100).",
@@ -114,5 +114,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-23"
+  "reviewedOn": "2026-09-23",
+  "deprecated": true
 }

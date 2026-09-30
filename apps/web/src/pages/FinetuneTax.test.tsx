@@ -356,7 +356,7 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(screen.getByRole('checkbox', { name: 'On main homes' })).toBeInTheDocument();
   });
 
-  it('makes the wealth tax, pension relief and the rates on dividends one choice each', async () => {
+  it('makes the wealth tax, gains that go untaxed and the rates on dividends one choice each', async () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     // The wealth tax is its card's whole question: the set's name is heard, not shown again.
     const wealthPanel = openDecision('Tax wealth above £10 million');
@@ -370,17 +370,17 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(search().get('L') ?? '').not.toMatch(/(^|_)wealth\.1/);
     expect(statusOf('Tax wealth above £10 million')).toMatch(/^1 chosen/);
 
-    const pensions = openDecision('Change pension tax relief');
-    const rate = within(pensions).getByRole('group', { name: 'The rate of pension tax relief' });
-    expect(within(rate).getByText('The rate of pension tax relief')).not.toHaveClass('sr-only');
-    fireEvent.click(within(rate).getByRole('radio', { name: '30% for everyone' }));
-    // The cap on the lump sum is no part of the choice: a tick beside it, chosen with either.
-    fireEvent.click(within(pensions).getByRole('checkbox', { name: 'Cap the tax-free lump sum' }));
-    await waitFor(() => expect(search().get('L')).toMatch(/pens30\.1/));
-    fireEvent.click(within(rate).getByRole('radio', { name: 'The basic rate only' }));
-    await waitFor(() => expect(search().get('L')).toMatch(/pens20\.1/));
-    expect(search().get('L')).toMatch(/pslump\.1/);
-    expect(search().get('L') ?? '').not.toMatch(/pens30/);
+    const gains = openDecision('Tax gains that go untaxed');
+    const untaxed = within(gains).getByRole('group', { name: 'Capital gains that go untaxed' });
+    expect(within(untaxed).getByText('Capital gains that go untaxed')).not.toHaveClass('sr-only');
+    fireEvent.click(within(untaxed).getByRole('radio', { name: 'When someone dies' }));
+    // Gains on main homes are no part of the choice: a tick beside it, chosen with either.
+    fireEvent.click(within(gains).getByRole('checkbox', { name: 'On main homes' }));
+    await waitFor(() => expect(search().get('L')).toMatch(/cgtdth\.1/));
+    fireEvent.click(within(untaxed).getByRole('radio', { name: 'When someone leaves the UK' }));
+    await waitFor(() => expect(search().get('L')).toMatch(/cgtexit\.1/));
+    expect(search().get('L')).toMatch(/cgtprr\.1/);
+    expect(search().get('L') ?? '').not.toMatch(/cgtdth/);
 
     const income = openDecision('Tax on dividends, savings and rent');
     const rates = within(income).getByRole('group', {

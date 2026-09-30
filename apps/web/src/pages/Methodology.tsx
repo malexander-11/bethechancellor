@@ -191,8 +191,9 @@ export function MethodologyPage() {
         salary-sacrifice cap, taxing capital gains at income tax rates, a lower VAT threshold,
         National Insurance on landlords&rsquo; rent, a higher tax on selling a business, adding back
         last year&rsquo;s cancelled fuel duty rise and undoing last year&rsquo;s gambling duty
-        rises. Their costings are kept for the record, and an old link that carries one opens
-        without it.
+        rises. Pension tax relief followed the same day: relief at a flat 30%, relief at the basic
+        rate only and a cap on the tax-free lump sum. Their costings are kept for the record, and an
+        old link that carries one opens without it.
       </p>
 
       <h2>Spending levers</h2>
@@ -217,12 +218,12 @@ export function MethodologyPage() {
         certified rows: each card names the method, the published figures it rests on and what it
         assumes, and a test reproduces the figure from those inputs. Where the base itself is
         contested, as with a tax on wealth above £10 million, the card says so before it shows the
-        number. The kinds of arithmetic: a weighted sum of HMRC&rsquo;s pension relief by marginal
-        rate, a repeat of a certified Budget 2025 line that assumes the second round raises what the
-        Treasury costed for the first, a stated product of published quantities, and a gap between a
-        target share of GDP and the OBR&rsquo;s path. The policies MPs once campaigned for that
-        nobody is now considering are kept in the data for the record and offered on no screen; an
-        old link to one still opens, with a warning.
+        number. The kinds of arithmetic: a weighted sum of published figures, a repeat of a
+        certified Budget 2025 line that assumes the second round raises what the Treasury costed for
+        the first, a stated product of published quantities, and a gap between a target share of GDP
+        and the OBR&rsquo;s path. The policies MPs once campaigned for that nobody is now
+        considering are kept in the data for the record and offered on no screen; an old link to one
+        still opens, with a warning.
       </p>
 
       <h2>Buying things is not spending</h2>
