@@ -1,12 +1,13 @@
 import type { Lever } from '../types/data.js';
 
 /**
- * Two measures that count the same money (Phase 25): aligning capital gains with income already
- * ends the write-off at death, so the death card's figure would be banked twice. The pair is
- * authored once, on either lever, as an interaction whose severity is `excludes`; this reads it
- * from both sides. On the step-3 and step-4 screens only one of a pair can be chosen at a time; an
- * old link that carries both warns. Nothing here prices anything or nets one figure against the
- * other.
+ * Two measures that count the same money, or set the same rate (Phase 25): the 1% and the 2%
+ * wealth tax, say, or undoing the 2024 rise in capital gains tax and moving today's rates. The pair
+ * is authored once, on either lever, as an interaction whose severity is `excludes`; this reads it
+ * from both sides. On step 4 only one of a pair can be in the Budget: ticks that contradict in one
+ * decision are one choice, and anywhere else choosing one takes the others out, saying so first
+ * (ADR-0036). An old link that carries both warns. Nothing here prices anything or nets one figure
+ * against the other.
  */
 
 export interface ExcludesPartner {
@@ -36,15 +37,25 @@ export function excludesPartners(lever: Lever, levers: readonly Lever[]): Exclud
 }
 
 /**
- * The lever that blocks this one: a partner that counts the same money has moved and this one
- * has not. A lever already moved is never blocked; it can always be put back.
+ * What choosing this lever would take out (ADR-0036): every partner that counts the same money and
+ * has moved, while this one rests. A lever already moved takes nothing out; it can always be put
+ * back.
  */
+export function movedPartners(
+  lever: Lever,
+  levers: readonly Lever[],
+  values: Record<string, number>,
+): ExcludesPartner[] {
+  const at = (l: Lever) => values[l.code] ?? l.control.default;
+  if (at(lever) !== lever.control.default) return [];
+  return excludesPartners(lever, levers).filter((p) => at(p.lever) !== p.lever.control.default);
+}
+
+/** The first of those: the partner a card names when only one is in the way. */
 export function excludedBy(
   lever: Lever,
   levers: readonly Lever[],
   values: Record<string, number>,
 ): ExcludesPartner | undefined {
-  const at = (l: Lever) => values[l.code] ?? l.control.default;
-  if (at(lever) !== lever.control.default) return undefined;
-  return excludesPartners(lever, levers).find((p) => at(p.lever) !== p.lever.control.default);
+  return movedPartners(lever, levers, values)[0];
 }

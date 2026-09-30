@@ -65,6 +65,7 @@ import type {
   optionsFileSchema,
   deliverOptionSchema,
   optionScaleSchema,
+  finetuneAlternativesSchema,
   finetuneDecisionSchema,
   finetuneFileSchema,
   finetuneGroupSchema,
@@ -139,6 +140,7 @@ export type FinetuneTaxSide = z.infer<typeof finetuneTaxSideSchema>;
 export type FinetuneGroup = z.infer<typeof finetuneGroupSchema>;
 export type FinetuneTaxGroup = z.infer<typeof finetuneTaxGroupSchema>;
 export type FinetuneDecision = z.infer<typeof finetuneDecisionSchema>;
+export type FinetuneAlternatives = z.infer<typeof finetuneAlternativesSchema>;
 export type FinetuneItem = z.infer<typeof finetuneItemSchema>;
 export type FinetunePolicy = z.infer<typeof finetunePolicySchema>;
 export type HouseholdsFile = z.infer<typeof householdsFileSchema>;

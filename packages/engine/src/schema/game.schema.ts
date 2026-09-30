@@ -407,14 +407,28 @@ export const finetuneGroupSchema = z.strictObject({
 });
 
 /**
+ * Ticks in one decision that contradict each other (ADR-0036): the 1% and the 2% wealth tax. The
+ * screen draws them as one choice, radios under this name with where the tax is planned to be
+ * among them, so only one can ever be in the Budget. Its levers sit side by side in the decision;
+ * the validator holds them to being ticks that exclude each other and nothing else.
+ */
+export const finetuneAlternativesSchema = z.strictObject({
+  name: z.string().min(1).max(60),
+  codes: z.array(z.string().min(1)).min(2).max(4),
+});
+
+/**
  * One decision about one tax (ADR-0035): a question a Chancellor answers ("Change the headline
  * rate", "Remove an exemption"), holding the levers that answer it, in the order they are weighed.
- * Its title is at most six words; at most seven levers keep an open decision to one screenful.
+ * Its title is at most six words; at most eight levers keep an open decision to about a screenful
+ * (seven until "1% on everything now zero-rated" joined the exemptions it contradicts, ADR-0036).
+ * Ticks in it that contradict each other are its `alternatives`, one choice each.
  */
 export const finetuneDecisionSchema = z.strictObject({
   id: slug,
   title: z.string().min(1).max(48),
-  items: z.array(finetuneItemSchema).min(1).max(7),
+  alternatives: z.array(finetuneAlternativesSchema).optional(),
+  items: z.array(finetuneItemSchema).min(1).max(8),
 });
 
 /**
@@ -506,6 +520,35 @@ export const finetuneFileSchema = z
         d.items.forEach((item, k) =>
           offer(item.code, ['tax', 'groups', i, 'decisions', j, 'items', k, 'code']),
         );
+        // A set of alternatives is drawn where its first lever sits, so its levers are in this
+        // decision, side by side and in its order, and each is in one set at most (ADR-0036).
+        const order = d.items.map((item) => item.code);
+        const alternated = new Set<string>();
+        (d.alternatives ?? []).forEach((alt, a) => {
+          const path = ['tax', 'groups', i, 'decisions', j, 'alternatives', a, 'codes'];
+          for (const code of alt.codes) {
+            if (!order.includes(code))
+              ctx.addIssue({
+                code: 'custom',
+                message: `the alternatives “${alt.name}” name ${code}, which is not in decision ${d.id}`,
+                path,
+              });
+            if (alternated.has(code))
+              ctx.addIssue({
+                code: 'custom',
+                message: `${code} is in two sets of alternatives`,
+                path,
+              });
+            alternated.add(code);
+          }
+          const at = alt.codes.map((code) => order.indexOf(code));
+          if (!at.includes(-1) && at.some((x, k) => k > 0 && x !== (at[k - 1] ?? -2) + 1))
+            ctx.addIssue({
+              code: 'custom',
+              message: `the alternatives “${alt.name}” are not side by side, in decision ${d.id}’s order`,
+              path,
+            });
+        });
       });
     });
     const spendingIds = new Set<string>();

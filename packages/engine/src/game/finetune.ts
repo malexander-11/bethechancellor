@@ -1,6 +1,7 @@
 import type {
   ContextFile,
   DeliverOption,
+  FinetuneAlternatives,
   FinetuneDecision,
   FinetuneFile,
   FinetuneGroup,
@@ -15,9 +16,10 @@ import type { AmbitionStatus } from './ambitions.js';
  * Step 4's levers (Phase 24, ADR-0025), chosen as policies since Phase 26 (ADR-0027): the tax and
  * spending levers a Chancellor fine-tunes the Budget with, each offering one or two policies (one
  * each way) in one to three sizes, with one adviser's line on each (data/journey/finetune.json).
- * The tax screen is laid out tax by tax, each tax's levers in the decisions about it (ADR-0035);
- * the spending screen by what the money is for. Nothing here prices anything: choosing a size sets
- * the lever itself, so every screen that reads the lever agrees.
+ * The tax screen is laid out tax by tax, each tax's levers in the decisions about it (ADR-0035),
+ * ticks that contradict each other in one decision as one choice (ADR-0036); the spending screen by
+ * what the money is for. Nothing here prices anything: choosing a size sets the lever itself, so
+ * every screen that reads the lever agrees.
  */
 
 export type FinetuneSideId = 'tax' | 'spending';
@@ -45,6 +47,36 @@ export interface FinetuneEntry extends FinetuneItem {
 /** A section's levers in the order it shows them: a tax's across its decisions, in turn. */
 export function groupItems(group: FinetuneSection): FinetuneItem[] {
   return 'decisions' in group ? group.decisions.flatMap((d) => d.items) : group.items;
+}
+
+/**
+ * What an open decision draws, in its order (ADR-0036): a card for each lever, except that ticks
+ * which contradict each other are one choice, drawn once, where the first of them sits.
+ */
+export type DecisionUnit =
+  | { kind: 'item'; item: FinetuneItem }
+  | { kind: 'alternatives'; name: string; items: FinetuneItem[] };
+
+export function decisionUnits(decision: FinetuneDecision): DecisionUnit[] {
+  const sets = decision.alternatives ?? [];
+  const setOf = new Map(sets.flatMap((alt) => alt.codes.map((code) => [code, alt] as const)));
+  const drawn = new Set<FinetuneAlternatives>();
+  const units: DecisionUnit[] = [];
+  for (const item of decision.items) {
+    const alt = setOf.get(item.code);
+    if (!alt) {
+      units.push({ kind: 'item', item });
+      continue;
+    }
+    if (drawn.has(alt)) continue;
+    drawn.add(alt);
+    units.push({
+      kind: 'alternatives',
+      name: alt.name,
+      items: decision.items.filter((i) => alt.codes.includes(i.code)),
+    });
+  }
+  return units;
 }
 
 /** Every curated lever on one screen, or on both, in the order the screens show them. */

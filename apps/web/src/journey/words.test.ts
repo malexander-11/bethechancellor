@@ -158,6 +158,10 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const decisions = finetune.tax.groups.flatMap((g) => g.decisions);
     expect(decisions).toHaveLength(26);
     for (const d of decisions) expect(words(d.title), d.title).toBeLessThanOrEqual(6);
+    // Ticks that contradict each other are one choice under one name, as short (ADR-0036).
+    const alternatives = decisions.flatMap((d) => d.alternatives ?? []);
+    expect(alternatives).toHaveLength(4);
+    for (const a of alternatives) expect(words(a.name), a.name).toBeLessThanOrEqual(7);
   });
 
   it('says what to do now in ten words, and a priority’s purpose in ten', () => {
@@ -221,6 +225,9 @@ describe('word budgets: one line visible, the rest a click away', () => {
         ...s.groups.map((g) => g.label),
       ]),
       ...finetune.tax.groups.flatMap((g) => g.decisions.map((d) => d.title)),
+      ...finetune.tax.groups.flatMap((g) =>
+        g.decisions.flatMap((d) => (d.alternatives ?? []).map((a) => a.name)),
+      ),
       ...guide.stages.map((s) => s.now),
       ...guide.stages.map((s) => s.title),
       ...all.map((o) => o.title),

@@ -2,13 +2,17 @@ import { describe, expect, it } from 'vitest';
 import {
   FINETUNE_SIDES,
   basicPolicy,
+  decisionUnits,
   deskLevers,
+  excludedBy,
+  excludesPartners,
   finetuneFileSchema,
   finetuneItems,
   finetuneNames,
   finetuneSideOf,
   groupItems,
   leadPolicy,
+  movedPartners,
   policyCount,
   priceMove,
   scaleLevels,
@@ -37,7 +41,8 @@ const lever = (code: string) => {
  * its levers' family and holding the decisions a Chancellor takes about that tax, each decision its
  * levers, realistic choices before any not on the table. Until 30 September 2026 the screen grouped
  * taxes by who pays them (Phase 24, ADR-0025); that day nine went, kept for the record and offered
- * nowhere, and the rest were sorted by tax.
+ * nowhere, and the rest were sorted by tax. Later that day 1% on everything now zero-rated joined
+ * the exemptions it contradicts, so each contradiction but one sits in one decision (ADR-0036).
  */
 type TaxTable = [section: string, label: string, decisions: [string, string, string[]][]][];
 // prettier-ignore
@@ -55,9 +60,9 @@ const TAX: TaxTable = [
   ]],
   ['vat', 'VAT', [
     ['vat-rate', 'Change the headline rate', ['vats']],
-    ['vat-small-changes', 'Make small changes', ['vatgas', 'vatelec', 'vatr', 'vat1z']],
+    ['vat-small-changes', 'Make small changes', ['vatgas', 'vatelec', 'vatr']],
     ['vat-exemptions', 'Remove an exemption',
-      ['vatmot', 'vatfood', 'vatnrg', 'vattrn', 'vatkids', 'vathome', 'vatbook']],
+      ['vatmot', 'vat1z', 'vatfood', 'vatnrg', 'vattrn', 'vatkids', 'vathome', 'vatbook']],
   ]],
   ['capital-gains-tax', 'Capital gains tax', [
     ['cgt-rates', 'Change the rates on gains', ['cgth', 'cgtl', 'rvcgt', 'carried']],
@@ -172,18 +177,20 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     expect(groupItems(file.spending.groups[1]!).map((i) => i.code)).toEqual(SPENDING_CODES[1]![1]);
   });
 
-  it('keeps each decision to seven levers, and a lever not on the table at the end of it', () => {
+  it('keeps each decision to eight levers, and a lever not on the table at the end of it', () => {
     for (const decision of file.tax.groups.flatMap((g) => g.decisions)) {
-      expect(decision.items.length, decision.id).toBeLessThanOrEqual(7);
+      expect(decision.items.length, decision.id).toBeLessThanOrEqual(8);
       const off = decision.items.map((i) => lever(i.code).notOnTheTable !== undefined);
       expect(off, decision.id).toEqual([...off].sort((a, b) => Number(a) - Number(b)));
     }
-    // The user's own list of exemptions: Motability first, the one a Chancellor might end; the
-    // six nobody proposes to tax after it, marked as not on the table, books among them.
+    // The user's own list of exemptions: Motability first, the one a Chancellor might end, then
+    // 1% on everything now zero-rated, which contradicts the rest (ADR-0036); the six nobody
+    // proposes to tax after them, marked as not on the table, books among them.
     const exemptions = file.tax.groups
       .flatMap((g) => g.decisions)
       .find((d) => d.id === 'vat-exemptions');
     expect(exemptions?.items.map((i) => Boolean(lever(i.code).notOnTheTable))).toEqual([
+      false,
       false,
       true,
       true,
@@ -340,13 +347,13 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     expect(refusal((f) => (decisions(f)[5]!.id = decisions(f)[0]!.id))).toMatch(
       /two tax decisions are called income-tax-rates/,
     );
-    // Eight levers in one decision: VAT's gas moved in among the exemptions.
+    // Nine levers in one decision: VAT's gas moved in among the exemptions.
     expect(
       refusal((f) => {
         const [small, exemptions] = [decisions(f)[8]!, decisions(f)[9]!];
         exemptions.items.push(small.items.shift()!);
       }),
-    ).toMatch(/expected array to have <=7 items/);
+    ).toMatch(/expected array to have <=8 items/);
     expect(refusal(() => undefined)).toBe('');
   });
 
@@ -408,6 +415,180 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     );
     expect(tamper((f) => (f.tax.adviser = 'permanent-secretary'))).toMatch(
       /adviser permanent-secretary does not speak on finetune/,
+    );
+  });
+});
+
+/**
+ * Contradictions come under one decision (ADR-0036): ticks there that contradict each other are one
+ * choice, radios under one name; wherever a choice contradicts a scale, several choices, or a
+ * choice in another decision, choosing it takes the others out, and says so first.
+ */
+// prettier-ignore
+const ALTERNATIVES: [decision: string, name: string, codes: string[]][] = [
+  ['pension-relief', 'The rate of pension tax relief', ['pens30', 'pens20']],
+  ['investment-income', 'The rates on dividends, savings and rent', ['iinc2', 'rvinv']],
+  ['cgt-untaxed-gains', 'Capital gains that go untaxed', ['cgtdth', 'cgtexit']],
+  ['wealth-above-10m', 'The wealth tax', ['wealth', 'wealth2']],
+];
+
+describe('contradictions come under one decision (ADR-0036)', () => {
+  const taxDecisions = file.tax.groups.flatMap((g) => g.decisions);
+  const decision = (id: string) => {
+    const d = taxDecisions.find((x) => x.id === id);
+    if (!d) throw new Error(`no decision ${id}`);
+    return d;
+  };
+  const live = (code: string) =>
+    excludesPartners(lever(code), ds.levers)
+      .filter((p) => !p.lever.deprecated)
+      .map((p) => p.lever.code)
+      .sort();
+
+  it('draws the ticks that contradict in one decision as one choice', () => {
+    expect(
+      taxDecisions.flatMap((d) =>
+        (d.alternatives ?? []).map((alt) => [d.id, alt.name, alt.codes] as const),
+      ),
+    ).toEqual(ALTERNATIVES);
+    // One card for each set, where its first lever sits, and a card for every other lever.
+    expect(decisionUnits(decision('pension-relief'))).toEqual([
+      {
+        kind: 'alternatives',
+        name: 'The rate of pension tax relief',
+        items: decision('pension-relief').items.slice(0, 2),
+      },
+      { kind: 'item', item: decision('pension-relief').items[2] },
+    ]);
+    expect(decisionUnits(decision('wealth-above-10m')).map((u) => u.kind)).toEqual([
+      'alternatives',
+    ]);
+    expect(decisionUnits(decision('vat-exemptions')).map((u) => u.kind)).toEqual(
+      decision('vat-exemptions').items.map(() => 'item'),
+    );
+  });
+
+  it('takes the others out wherever the choice is not one set of ticks', () => {
+    // Every contradiction on the tax screen, and how it is resolved.
+    const pairs = new Map<string, string>();
+    for (const item of finetuneItems(file, 'tax')) {
+      for (const other of live(item.code)) {
+        const key = [item.code, other].sort().join(' × ');
+        const together = taxDecisions.some((d) =>
+          (d.alternatives ?? []).some(
+            (a) => a.codes.includes(item.code) && a.codes.includes(other),
+          ),
+        );
+        pairs.set(key, together ? 'one choice' : 'takes out');
+      }
+    }
+    expect(Object.fromEntries([...pairs].sort())).toEqual({
+      'cgtdth × cgtexit': 'one choice',
+      'cgth × rvcgt': 'takes out',
+      'cgtl × rvcgt': 'takes out',
+      'iinc2 × rvinv': 'one choice',
+      'it50 × itar': 'takes out',
+      'nica × nicuel': 'takes out',
+      'pens20 × pens30': 'one choice',
+      'vat1z × vatbook': 'takes out',
+      'vat1z × vatfood': 'takes out',
+      'vat1z × vathome': 'takes out',
+      'vat1z × vatkids': 'takes out',
+      'vat1z × vattrn': 'takes out',
+      'vatgas × vatnrg': 'takes out',
+      'wealth × wealth2': 'one choice',
+    });
+    // Undoing the 2024 rise sets both rates on gains back, so it contradicts moving either.
+    expect(live('rvcgt')).toEqual(['cgth', 'cgtl']);
+    expect(live('cgtl')).toEqual(['rvcgt']);
+    // All but gas and home energy sit in one decision: the user put those two in different ones.
+    const where = new Map(taxDecisions.flatMap((d) => d.items.map((i) => [i.code, d.id] as const)));
+    const apart = [...pairs.keys()].filter((k) => {
+      const [a, b] = k.split(' × ') as [string, string];
+      return where.get(a) !== where.get(b);
+    });
+    expect(apart).toEqual(['vatgas × vatnrg']);
+  });
+
+  it('names everything choosing a lever would take out, and nothing once it has moved', () => {
+    const values = { vatfood: 1, vatkids: 1 };
+    expect(movedPartners(lever('vat1z'), ds.levers, values).map((p) => p.lever.code)).toEqual([
+      'vatfood',
+      'vatkids',
+    ]);
+    expect(excludedBy(lever('vat1z'), ds.levers, values)?.lever.code).toBe('vatfood');
+    expect(movedPartners(lever('vat1z'), ds.levers, { ...values, vat1z: 1 })).toEqual([]);
+    expect(
+      movedPartners(lever('rvcgt'), ds.levers, { cgth: 5, cgtl: 1 }).map((p) => p.lever.code),
+    ).toEqual(['cgth', 'cgtl']);
+    expect(movedPartners(lever('vat1z'), ds.levers, {})).toEqual([]);
+  });
+
+  it('refuses a set of alternatives outside its decision, in two sets, or apart', () => {
+    const refusal = (patch: (f: FinetuneFile) => void) => {
+      const copy: FinetuneFile = structuredClone(file);
+      patch(copy);
+      const parsed = finetuneFileSchema.safeParse(copy);
+      return parsed.success ? '' : parsed.error.issues.map((i) => i.message).join('\n');
+    };
+    const of = (f: FinetuneFile, id: string) =>
+      f.tax.groups.flatMap((g) => g.decisions).find((d) => d.id === id)!;
+    expect(refusal((f) => of(f, 'pension-relief').alternatives![0]!.codes.push('itbr'))).toMatch(
+      /the alternatives “The rate of pension tax relief” name itbr, which is not in decision pension-relief/,
+    );
+    expect(
+      refusal((f) =>
+        of(f, 'pension-relief').alternatives!.push({ name: 'Again', codes: ['pens20', 'pslump'] }),
+      ),
+    ).toMatch(/pens20 is in two sets of alternatives/);
+    expect(
+      refusal((f) => {
+        const d = of(f, 'pension-relief');
+        d.items = [d.items[0]!, d.items[2]!, d.items[1]!];
+      }),
+    ).toMatch(
+      /the alternatives “The rate of pension tax relief” are not side by side, in decision pension-relief’s order/,
+    );
+    expect(refusal(() => undefined)).toBe('');
+  });
+
+  it('validate:data holds a set to ticks that exclude only each other, and every such pair to a set', () => {
+    const tamper = (patch: (f: FinetuneFile) => void) => {
+      const copy: FinetuneFile = structuredClone(file);
+      patch(copy);
+      return validateDataset({ ...ds, finetune: copy }).join('\n');
+    };
+    const of = (f: FinetuneFile, id: string) =>
+      f.tax.groups.flatMap((g) => g.decisions).find((d) => d.id === id)!;
+    // A scale is no tick, and the 50% rate contradicts it: choosing one takes the other out.
+    const rates = tamper(
+      (f) => (of(f, 'income-tax-rates').alternatives = [{ name: 'Top', codes: ['itar', 'it50'] }]),
+    );
+    expect(rates).toMatch(/the alternatives “Top” hold itar, not a tick/);
+    // Two ticks that do not contradict each other are no choice between them.
+    expect(
+      tamper(
+        (f) =>
+          (of(f, 'pension-relief').alternatives = [
+            { name: 'Relief', codes: ['pens30', 'pens20', 'pslump'] },
+          ]),
+      ),
+    ).toMatch(/the alternatives “Relief” hold pens30 and pslump, which do not exclude each other/);
+    // Gas off VAT: a flagship sets it, it contradicts home energy elsewhere, and not electricity.
+    const gas = tamper(
+      (f) =>
+        (of(f, 'vat-small-changes').alternatives = [
+          { name: 'Energy', codes: ['vatgas', 'vatelec'] },
+        ]),
+    );
+    expect(gas).toMatch(/the alternatives “Energy” hold vatgas, which a flagship sets/);
+    expect(gas).toMatch(
+      /the alternatives “Energy” hold vatgas and vatelec, which do not exclude each other/,
+    );
+    expect(gas).toMatch(/the alternatives “Energy” hold vatgas, which also excludes vatnrg/);
+    // Ticks that exclude only each other, in one decision, are a set.
+    expect(tamper((f) => delete of(f, 'wealth-above-10m').alternatives)).toMatch(
+      /wealth and wealth2 contradict each other in decision wealth-above-10m: make them alternatives/,
     );
   });
 });

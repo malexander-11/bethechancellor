@@ -281,6 +281,12 @@
           {
             "id": "pension-relief",
             "title": "Change pension tax relief",
+            "alternatives": [
+              {
+                "name": "The rate of pension tax relief",
+                "codes": ["pens30", "pens20"]
+              }
+            ],
             "items": [
               {
                 "code": "pens30",
@@ -342,6 +348,12 @@
           {
             "id": "investment-income",
             "title": "Tax on dividends, savings and rent",
+            "alternatives": [
+              {
+                "name": "The rates on dividends, savings and rent",
+                "codes": ["iinc2", "rvinv"]
+              }
+            ],
             "items": [
               {
                 "code": "iinc2",
@@ -855,24 +867,6 @@
                     }
                   }
                 ]
-              },
-              {
-                "code": "vat1z",
-                "policies": [
-                  {
-                    "title": "Charge 1% VAT on everything now zero-rated",
-                    "sizes": [1],
-                    "advice": {
-                      "text": "A new VAT rate on food and children’s clothes, paid by everyone.",
-                      "sources": [
-                        {
-                          "sourceId": "ifs-green-budget-2025"
-                        }
-                      ],
-                      "badge": "simulated"
-                    }
-                  }
-                ]
               }
             ]
           },
@@ -894,6 +888,24 @@
                         },
                         {
                           "sourceId": "onward-budget-response-2025"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "vat1z",
+                "policies": [
+                  {
+                    "title": "Charge 1% VAT on everything now zero-rated",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "A new VAT rate on food and children’s clothes, paid by everyone.",
+                      "sources": [
+                        {
+                          "sourceId": "ifs-green-budget-2025"
                         }
                       ],
                       "badge": "simulated"
@@ -1112,6 +1124,12 @@
           {
             "id": "cgt-untaxed-gains",
             "title": "Tax gains that go untaxed",
+            "alternatives": [
+              {
+                "name": "Capital gains that go untaxed",
+                "codes": ["cgtdth", "cgtexit"]
+              }
+            ],
             "items": [
               {
                 "code": "cgtdth",
@@ -1273,6 +1291,12 @@
           {
             "id": "wealth-above-10m",
             "title": "Tax wealth above £10 million",
+            "alternatives": [
+              {
+                "name": "The wealth tax",
+                "codes": ["wealth", "wealth2"]
+              }
+            ],
             "items": [
               {
                 "code": "wealth",

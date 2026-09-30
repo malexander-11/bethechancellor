@@ -87,8 +87,8 @@ describe('fine-tune tax and spend: the curated levers', () => {
         .map((b) => b.textContent),
     ).toEqual([
       'Change the headline rate 20% as planned',
-      'Make small changes 4 choices',
-      'Remove an exemption 7 choices',
+      'Make small changes 3 choices',
+      'Remove an exemption 8 choices',
     ]);
     expect(statusOf('Change the rate')).toBe('40% as planned');
     expect(statusOf('Change business rates')).toBe('As planned');

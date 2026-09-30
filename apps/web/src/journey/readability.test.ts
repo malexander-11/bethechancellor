@@ -107,8 +107,12 @@ const SETS: Record<string, readonly string[]> = {
       ...s.groups.map((g) => g.label),
       ...s.notes.map((n) => n.text),
     ]),
-    // The questions each tax asks (ADR-0035), read before any is opened.
+    // The questions each tax asks (ADR-0035), read before any is opened, and the name over each
+    // set of ticks that contradict each other (ADR-0036).
     ...finetune.tax.groups.flatMap((g) => g.decisions.map((d) => d.title)),
+    ...finetune.tax.groups.flatMap((g) =>
+      g.decisions.flatMap((d) => (d.alternatives ?? []).map((a) => a.name)),
+    ),
     ...curated.flatMap((i) => [...(i.name ? [i.name] : []), ...i.policies.map((p) => p.title)]),
     // A spending fold's subheads (Phase 26): the families of the levers it holds. A tax's family is
     // its section's own heading now, read above.

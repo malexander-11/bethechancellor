@@ -754,6 +754,66 @@ export function validateDataset(ds: Dataset): string[] {
         }
       }
     }
+    // Ticks that contradict each other in one decision are one choice (ADR-0036). A set of
+    // alternatives is ticks that exclude one another and no live lever beyond, none of them a
+    // lever a flagship sets (the screen shows those as a line); and two ticks that exclude only each
+    // other, in one decision, are a set.
+    const live = (lever: Lever) =>
+      excludesPartners(lever, ds.levers)
+        .filter((p) => !p.lever.deprecated)
+        .map((p) => p.lever.code);
+    const flagshipSets = new Set(
+      (ds.options?.deliver ?? []).flatMap((option) => Object.keys(option.values)),
+    );
+    for (const section of ds.finetune.tax.groups) {
+      for (const decision of section.decisions) {
+        const sets = decision.alternatives ?? [];
+        for (const alt of sets) {
+          const said = `the alternatives “${alt.name}”`;
+          alt.codes.forEach((code, k) => {
+            const lever = byCode.get(code);
+            if (!lever) return;
+            if (lever.control.kind !== 'toggle') problems.push(`${said} hold ${code}, not a tick`);
+            if (flagshipSets.has(code)) {
+              problems.push(`${said} hold ${code}, which a flagship sets`);
+            }
+            const partners = live(lever);
+            for (const other of alt.codes.slice(k + 1)) {
+              if (!partners.includes(other)) {
+                problems.push(`${said} hold ${code} and ${other}, which do not exclude each other`);
+              }
+            }
+            for (const other of partners) {
+              if (!alt.codes.includes(other)) {
+                problems.push(`${said} hold ${code}, which also excludes ${other}`);
+              }
+            }
+          });
+        }
+        const ticks = decision.items.filter(
+          (item) => byCode.get(item.code)?.control.kind === 'toggle',
+        );
+        ticks.forEach((a, k) => {
+          const la = byCode.get(a.code);
+          if (!la) return;
+          for (const b of ticks.slice(k + 1)) {
+            const lb = byCode.get(b.code);
+            if (!lb) continue;
+            const pa = live(la);
+            const pb = live(lb);
+            const onlyEachOther = pa.length === 1 && pa[0] === b.code && pb.length === 1;
+            const together = sets.some(
+              (alt) => alt.codes.includes(a.code) && alt.codes.includes(b.code),
+            );
+            if (onlyEachOther && !together) {
+              problems.push(
+                `${a.code} and ${b.code} contradict each other in decision ${decision.id}: make them alternatives`,
+              );
+            }
+          }
+        });
+      }
+    }
   }
   if (ds.finetune || ds.options) problems.push(...shortlistProblems(ds));
   if (ds.incidence) {

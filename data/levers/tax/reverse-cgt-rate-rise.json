@@ -111,8 +111,13 @@
   "interactions": [
     {
       "withLever": "cgt-higher-rate",
-      "text": "Both change capital gains tax rates: HMRC's points assume today's 24% rate, while the reversal is costed on the October 2024 forecast, so the combination is approximate.",
-      "severity": "warn"
+      "text": "Both set the higher rate on gains: one takes it back to 20%, the other moves today’s 24%.",
+      "severity": "excludes"
+    },
+    {
+      "withLever": "cgt-lower-rate",
+      "text": "Both set the lower rate on gains: one takes it back to 10%, the other moves today’s 18%.",
+      "severity": "excludes"
     }
   ]
 }
