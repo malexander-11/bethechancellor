@@ -111,8 +111,8 @@ describe('Budget day: what your Budget means', () => {
       within(statement).getByText(/^I accepted a thin margin: £\d\.\dbn of headroom\.$/),
     ).toBeInTheDocument();
     thin.unmount();
-    // Paid for by broadening the VAT base, which the tax lock does not name: every promise kept.
-    at(`${BASE}&${GAME}&L=moj.10_vatfood.1`);
+    // Paid for by taxes no promise names: every promise kept.
+    at(`${BASE}&${GAME}&L=moj.10_rnrb.1_ctgh.1`);
     statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
     expect(
       within(statement).getByText(/^I kept every promise and £\d+\.\dbn of headroom\.$/),

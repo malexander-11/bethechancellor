@@ -123,8 +123,8 @@ describe('the close', () => {
     // A penny on the basic rate breaks the tax lock the rules did not need broken.
     const penny = verdictOf(game, { itbr: 1 });
     expect(penny.kind.id).toBe('broke-for-buffer');
-    // Paid for by broadening the VAT base, which the tax lock does not name.
-    const delivered = verdictOf(game, { moj: 10, vatfood: 1 });
+    // Paid for by taxes no promise names: the family-home allowance and the biggest homes.
+    const delivered = verdictOf(game, { moj: 10, rnrb: 1, ctgh: 1 });
     expect(delivered.kind.id).toBe('delivered-and-paid');
     expect(delivered.kind.title).toBe(
       'A Budget for safer streets that delivered what it promised and paid for it',
@@ -132,7 +132,7 @@ describe('the close', () => {
     // The first priority ranked names the Budget.
     const both = verdictOf(
       { ...freshGame(), priorities: ['defence', 'safer-streets'] },
-      { moj: 10, dip47: 1, vatfood: 1 },
+      { moj: 10, dip47: 1, rnrb: 1, ctgh: 1 },
     );
     expect(both.kind.title).toBe(
       'A Budget for defence that delivered what it promised and paid for it',
@@ -193,12 +193,12 @@ describe('the close', () => {
   it('calls a margin thin under ten billion, as the markets do, and not above it', () => {
     const game: GamePermalink = { ...freshGame(), priorities: ['safer-streets'] };
     // Every promise kept and the priority delivered; only the margin differs.
-    const thin = verdictOf(game, { moj: 10, vatkids: 1 });
+    const thin = verdictOf(game, { moj: 10, rnrb: 1 });
     expect(thin.headroomGbpm).toBeLessThan(THIN_HEADROOM_GBPM);
     expect(thin.kind.id).toBe('kept-everything-thin');
     // Over ten billion and under the old line (half the typical forecast error, about £16bn),
     // which once called this thin too.
-    const modest = verdictOf(game, { moj: 10, vattrn: 1, vatkids: 1 });
+    const modest = verdictOf(game, { moj: 10, rnrb: 1, ctgh: 1 });
     expect(modest.headroomGbpm).toBeGreaterThan(THIN_HEADROOM_GBPM);
     expect(modest.headroomGbpm).toBeLessThan(typicalErrorGbpm / 2);
     expect(modest.kind.id).toBe('delivered-and-paid');

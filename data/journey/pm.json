@@ -382,6 +382,38 @@
         {
           "code": "vat1z",
           "when": "on"
+        },
+        {
+          "code": "vatr",
+          "when": "above"
+        },
+        {
+          "code": "vatmot",
+          "when": "on"
+        },
+        {
+          "code": "vatfood",
+          "when": "on"
+        },
+        {
+          "code": "vatnrg",
+          "when": "on"
+        },
+        {
+          "code": "vattrn",
+          "when": "on"
+        },
+        {
+          "code": "vatkids",
+          "when": "on"
+        },
+        {
+          "code": "vathome",
+          "when": "on"
+        },
+        {
+          "code": "vatbook",
+          "when": "on"
         }
       ],
       "strains": [

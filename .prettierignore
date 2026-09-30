@@ -5,3 +5,4 @@ package-lock.json
 data/raw
 data/derived
 .vercel
+.claude
