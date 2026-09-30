@@ -12,7 +12,8 @@ export default defineConfig({
   testDir: 'e2e',
   fullyParallel: true,
   forbidOnly: ci,
-  retries: ci ? 2 : 0,
+  // A test that fails is a failure: a retry would hide a flaky one.
+  retries: 0,
   reporter: ci ? [['list'], ['github']] : 'list',
   use: {
     baseURL,

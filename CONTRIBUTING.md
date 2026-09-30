@@ -14,4 +14,7 @@
 
 - While working: `npx vitest --changed` runs the tests touched by uncommitted changes, and
   `npm run typecheck` checks types.
-- Before pushing: `npm run gate` runs everything CI runs.
+- Before pushing: `npm run gate` runs everything CI runs, the independent checks side by side, and
+  prints the output of whatever failed. The end-to-end suite needs Chromium
+  (`npx playwright install chromium`, once).
+- A test that fails is a failure. Nothing retries it, locally or in CI.

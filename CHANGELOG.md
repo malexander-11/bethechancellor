@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- `npm run gate` runs the static checks, the data checks and the unit tests side by side, then the
+  build and the end-to-end suite, and prints the output of whatever failed: about 90 seconds where
+  running each in turn took over two. CI no longer retries a failed browser test.
 - Budget day's reception meters are one picture each, named in words, rather than list items with no
   list, so every screen now passes the end-to-end suite's accessibility checks.
 - CI runs five jobs in parallel, each from a clean install: the static checks (lint, format, types),

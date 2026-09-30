@@ -23,7 +23,12 @@ export default tseslint.config(
     languageOptions: { globals: { ...globals.browser } },
   },
   {
-    files: ['packages/pipeline/**/*.ts', '*.config.{js,ts}', 'apps/web/vite.config.ts'],
+    files: [
+      'packages/pipeline/**/*.ts',
+      '*.config.{js,ts}',
+      'apps/web/vite.config.ts',
+      'scripts/**',
+    ],
     languageOptions: { globals: { ...globals.node } },
   },
   {

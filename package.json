@@ -25,7 +25,7 @@
     "e2e": "playwright test",
     "validate:data": "npm run validate -w @btc/pipeline",
     "check:derived": "npm run check-drift -w @btc/pipeline",
-    "gate": "npm run lint && npm run format:check && npm run typecheck && npm run validate:data && npm run check:derived && npm run test:coverage && npm run build && npm run e2e",
+    "gate": "node scripts/gate.mjs",
     "fetch:sources": "npm run fetch -w @btc/pipeline"
   },
   "devDependencies": {
