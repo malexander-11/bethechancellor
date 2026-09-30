@@ -49,18 +49,6 @@ describe('real terms', () => {
     expect(after - before).toBeLessThan(1.1);
   });
 
-  it('every milestone that cites a published table reproduces from it', () => {
-    const withMilestones = ds.levers.filter((l) => (l.milestones?.length ?? 0) > 0);
-    expect(withMilestones.length).toBeGreaterThanOrEqual(12);
-    const health = lever('dhsc').milestones ?? [];
-    expect(health.find((m) => m.label === 'This Spending Review')?.value).toBeCloseTo(2.79, 2);
-    expect(health.find((m) => m.label === '2010-11 to 2019-20')?.value).toBeCloseTo(1.77, 2);
-    expect(health.find((m) => m.label === '2010-11 to 2024-25')?.value).toBeCloseTo(2.41, 2);
-    const defence = lever('mod').milestones ?? [];
-    expect(defence.find((m) => m.label === '2010-11 to 2019-20')?.value).toBeLessThan(0);
-    expect(defence.find((m) => m.unit === 'pctGDP')?.value).toBeCloseTo(2.2, 2);
-  });
-
   it('child benefit is retired and no longer offered', () => {
     expect(lever('chb').deprecated).toBe(true);
   });

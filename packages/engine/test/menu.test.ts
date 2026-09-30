@@ -9,10 +9,11 @@ import { loadDataset, loadExtracts } from './fixtures.js';
 
 /**
  * The Budget 2026 menu (ADR-0017, ADR-0019, ADR-0020): the ways the reporting says are on the
- * table, each built from a published row. Each lever's figures are held to their sources lever by
- * lever, and the arithmetic of each kind of costing is tested on made-up levers; what is left here
- * are the menu's own rules: which promise each way breaks, which designs count the same money,
- * which must agree with another, and what a card must say about its own arithmetic.
+ * table, each built from a published row. Each lever's figures are held to their sources by the one
+ * source trace (rawSource.consistency.test.ts), and the arithmetic of each kind of costing is
+ * tested on made-up levers; what is left here are the menu's own rules: which promise each way
+ * breaks, which designs count the same money, which must agree with another, what a card must say
+ * about its own arithmetic, and that the trace catches a tampered figure in the menu's own kinds.
  */
 const ds = loadDataset();
 const extracted = loadExtracts();
@@ -40,17 +41,7 @@ const breaksNothing = (values: Record<string, number>) =>
 const partners = (code: string) =>
   excludesPartners(lever(code), ds.levers).map((p) => p.lever.code);
 
-/** Every lever on offer: its badge, assumptions and considerations are held to rules elsewhere. */
-const LIVE = ds.levers.filter((l) => !l.deprecated && l.category !== 'macro');
-
 describe('the Budget 2026 menu', () => {
-  it.each(LIVE.map((l) => [l.code, l] as const))(
-    '%s reproduces from its published rows',
-    (_code, l) => {
-      expect(checkRawSourceConsistency(l, extracted, ds.vintage)).toEqual([]);
-    },
-  );
-
   it('breaks the tax lock where the manifesto’s words reach, and on a rise, not a cut', () => {
     // Class 4 up breaks it; down, to as little as the lever allows, breaks nothing (ADR-0035).
     expect(promise({ nic4: 0.5 }, 'tax-lock')?.kept).toBe(false);
@@ -223,45 +214,17 @@ describe('the Budget 2026 menu', () => {
  * screen at all. Codes and costings are unchanged, so old links still open (ADR-0017).
  */
 describe('the policies that came in the post', () => {
-  const POST = [
-    'it50',
-    'cpilock',
-    'def5',
-    'dip47',
-    'aid07',
-    'airet',
-    'ufsm',
-    'bus2',
-    'freeuni',
-    'water',
-    'socrent',
-    'wealth',
-    'nonuk',
-    'pens30',
-    'iinc2',
-    'gam2',
-  ];
-  const byCode = new Map(POST.map((c) => [c, lever(c)] as const));
-
-  it.each(POST.map((code) => [code, lever(code)] as const))(
-    '%s still reproduces from its sources',
-    (_code, l) => {
-      expect(checkRawSourceConsistency(l, extracted, ds.vintage)).toEqual([]);
-    },
-  );
-
   it('detects a tampered figure in the policies that came in the post', () => {
-    const def = structuredClone(byCode.get('def5'));
-    if (!def || def.costing.kind !== 'schedule') throw new Error('missing def5');
+    const def = structuredClone(lever('def5'));
+    if (def.costing.kind !== 'schedule') throw new Error('missing def5');
     def.costing.effect['2029-30'] = 74000;
     expect(checkRawSourceConsistency(def, extracted, ds.vintage).length).toBeGreaterThan(0);
-    const pension = structuredClone(byCode.get('cpilock'));
-    if (!pension || pension.costing.kind !== 'schedule') throw new Error('missing cpilock');
+    const pension = structuredClone(lever('cpilock'));
+    if (pension.costing.kind !== 'schedule') throw new Error('missing cpilock');
     pension.costing.effect['2029-30'] = -5000;
     expect(checkRawSourceConsistency(pension, extracted, ds.vintage).length).toBeGreaterThan(0);
-    const tuition = structuredClone(byCode.get('freeuni'));
+    const tuition = structuredClone(lever('freeuni'));
     if (
-      !tuition ||
       tuition.costing.kind !== 'schedule' ||
       tuition.costing.rawSource?.kind !== 'derivedFromPublished' ||
       tuition.costing.rawSource.method.name !== 'seriesProduct'

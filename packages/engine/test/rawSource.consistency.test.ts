@@ -4,6 +4,12 @@ import { loadDataset, loadExtracts } from './fixtures.js';
 
 const ds = loadDataset();
 const extracted = loadExtracts();
+/** A lever's own copy, for a test to tamper with. */
+const copyOf = (code: string): Lever => {
+  const found = ds.levers.find((l) => l.code === code);
+  if (!found) throw new Error(`missing lever ${code}`);
+  return structuredClone(found);
+};
 
 /** What a lever's figures cite: its costing's published rows or lines, or its baseline's. */
 function rawSourceOf(lever: Lever): RawSource | undefined {
@@ -83,61 +89,45 @@ describe('every lever is badged for what its costing is (ADR-0017)', () => {
   });
 });
 
-describe('every direct costing reproduces from the extracted published tables', () => {
-  const taxLevers = ds.levers.filter((l) => l.category === 'tax');
-
-  it.each(taxLevers.map((l) => [l.id, l] as const))(
-    '%s matches its cited rows or lines',
-    (_id, lever) => {
-      expect(checkRawSourceConsistency(lever, extracted, ds.vintage)).toEqual([]);
-    },
-  );
-
-  const spendingLevers = ds.levers.filter(
-    (l) => l.category === 'spend' || l.category === 'welfare',
-  );
-
-  it.each(spendingLevers.map((l) => [l.id, l] as const))(
-    '%s matches its cited Spending Review rows, HMRC rows or scorecard lines',
-    (_id, lever) => {
+/**
+ * The one source trace (ADR-0017): every lever, on offer or retired, against the published rows,
+ * lines and tables it cites, its figures, its baseline and its milestones alike. The tests below
+ * and elsewhere tamper with a lever to show the trace catches it; none runs it again.
+ */
+describe('every lever reproduces from the extracted published tables', () => {
+  it.each(ds.levers.map((l) => [l.code, l] as const))(
+    '%s matches the rows, lines and tables it cites',
+    (_code, lever) => {
       expect(checkRawSourceConsistency(lever, extracted, ds.vintage)).toEqual([]);
     },
   );
 
   it('detects a tampered Spending Review baseline, a sign-flipped spending toggle and a wrong-sign HMRC spending row', () => {
-    const health = structuredClone(spendingLevers.find((l) => l.code === 'dhsc'));
-    if (
-      !health ||
-      health.costing.kind !== 'pctOfBaseline' ||
-      health.costing.baseline.from !== 'published'
-    )
+    const health = copyOf('dhsc');
+    if (health.costing.kind !== 'pctOfBaseline' || health.costing.baseline.from !== 'published')
       throw new Error('missing dhsc');
     health.costing.baseline.values['2028-29'] =
       (health.costing.baseline.values['2028-29'] ?? 0) + 10;
     expect(checkRawSourceConsistency(health, extracted, ds.vintage).length).toBeGreaterThan(0);
-    const other = structuredClone(spendingLevers.find((l) => l.code === 'otherd'));
-    if (
-      !other ||
-      other.costing.kind !== 'pctOfBaseline' ||
-      other.costing.baseline.from !== 'published'
-    )
+    const other = copyOf('otherd');
+    if (other.costing.kind !== 'pctOfBaseline' || other.costing.baseline.from !== 'published')
       throw new Error('missing otherd');
     if (other.costing.baseline.rawSource.kind === 'hmtSr25')
       other.costing.baseline.rawSource.rows.pop();
     expect(checkRawSourceConsistency(other, extracted, ds.vintage).length).toBeGreaterThan(0);
-    const toggle = structuredClone(spendingLevers.find((l) => l.code === 'rv2ch'));
-    if (!toggle || toggle.costing.kind !== 'schedule') throw new Error('missing rv2ch');
+    const toggle = copyOf('rv2ch');
+    if (toggle.costing.kind !== 'schedule') throw new Error('missing rv2ch');
     toggle.costing.effect['2029-30'] = 3095;
     expect(checkRawSourceConsistency(toggle, extracted, ds.vintage).length).toBeGreaterThan(0);
-    const cb = structuredClone(spendingLevers.find((l) => l.code === 'chb'));
-    if (!cb || cb.costing.kind !== 'linearPerUnit') throw new Error('missing chb');
+    const cb = copyOf('chb');
+    if (cb.costing.kind !== 'linearPerUnit') throw new Error('missing chb');
     cb.costing.perUnit['2026-27'] = -565;
     expect(checkRawSourceConsistency(cb, extracted, ds.vintage).length).toBeGreaterThan(0);
   });
 
   it('detects a tampered milestone', () => {
-    const health = structuredClone(ds.levers.find((l) => l.code === 'dhsc'));
-    if (!health?.milestones) throw new Error('missing dhsc milestones');
+    const health = copyOf('dhsc');
+    if (!health.milestones) throw new Error('missing dhsc milestones');
     const cited = health.milestones.find((m) => m.from);
     if (!cited) throw new Error('no milestone cites a table');
     cited.value += 1;
@@ -145,12 +135,12 @@ describe('every direct costing reproduces from the extracted published tables', 
   });
 
   it('detects a tampered figure', () => {
-    const lever = structuredClone(taxLevers.find((l) => l.code === 'itbr'));
-    if (!lever || lever.costing.kind !== 'linearPerUnit') throw new Error('missing itbr');
+    const lever = copyOf('itbr');
+    if (lever.costing.kind !== 'linearPerUnit') throw new Error('missing itbr');
     lever.costing.perUnit['2028-29'] = 9000;
     expect(checkRawSourceConsistency(lever, extracted, ds.vintage).length).toBeGreaterThan(0);
-    const toggle = structuredClone(taxLevers.find((l) => l.code === 'rvfrz'));
-    if (!toggle || toggle.costing.kind !== 'schedule') throw new Error('missing rvfrz');
+    const toggle = copyOf('rvfrz');
+    if (toggle.costing.kind !== 'schedule') throw new Error('missing rvfrz');
     toggle.costing.effect['2029-30'] = -1;
     expect(checkRawSourceConsistency(toggle, extracted, ds.vintage).length).toBeGreaterThan(0);
   });

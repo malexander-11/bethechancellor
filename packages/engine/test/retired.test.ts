@@ -1,8 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { checkRawSourceConsistency } from '../src/index.js';
-import { DATA_DIR, listJsonFiles, loadDataset, loadExtracts } from './fixtures.js';
+import { DATA_DIR, listJsonFiles, loadDataset } from './fixtures.js';
 
 /**
  * Words from mechanisms the game no longer has (Phase 25). Phase 24 retired the seeded forecast
@@ -43,20 +42,17 @@ describe('no words from retired mechanisms', () => {
 
 /**
  * Levers taken off the table (ADR-0017, ADR-0035): deprecated, their costings kept so the record
- * can be checked, and offered nowhere. Nothing still in play names one, so the web, which leaves
- * them out, never meets a dangling reference; an old link carrying one opens without it and says
- * so. Which levers are retired is the data's to say.
+ * can be checked (the one source trace checks them with every other lever), and offered nowhere.
+ * Nothing still in play names one, so the web, which leaves them out, never meets a dangling
+ * reference; an old link carrying one opens without it and says so. Which levers are retired is
+ * the data's to say.
  */
 describe('levers taken off the table', () => {
   const ds = loadDataset();
   const retired = ds.levers.filter((l) => l.deprecated);
-  const extracted = loadExtracts();
 
-  it('are kept for the record, each still reproducing from its sources', () => {
-    for (const l of retired) {
-      expect(l.status, l.code).toBe('reviewed');
-      expect(checkRawSourceConsistency(l, extracted, ds.vintage), l.code).toEqual([]);
-    }
+  it('are kept for the record, reviewed', () => {
+    for (const l of retired) expect(l.status, l.code).toBe('reviewed');
     // The Shelved group holds nothing still on offer.
     for (const l of ds.levers.filter((x) => x.group === 'Shelved')) {
       expect(l.deprecated, l.code).toBe(true);

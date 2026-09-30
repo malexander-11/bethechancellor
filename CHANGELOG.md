@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The engine tests trace each lever to its published sources once: one run over every lever, on
+  offer or retired, its figures, baseline and milestones alike, with tamper tests showing a changed
+  figure is caught. The menu's two re-runs of it, the retired levers' own, and the figures copied
+  from a few levers and milestones are gone.
 - The engine's generated sentences, from the three-sentence statement, the speech, the close and the
   audiences' reasons, are held in snapshots with their sums masked, so rewording one is
   `npx vitest -u` and a reviewed diff. The tests still check what the words must carry: the band or

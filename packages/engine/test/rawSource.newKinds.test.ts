@@ -271,8 +271,7 @@ describe('inheritance tax with abolition: lookup points from HMRC rows and the O
 describe('employer NICs on pension contributions: the private-sector part of HMRC’s relief (Phase 25)', () => {
   const nicpen = lever('nicpen');
 
-  it('reproduces its stated sum and rejects a tampered term', () => {
-    expect(checkRawSourceConsistency(nicpen, extracted, ds.vintage)).toEqual([]);
+  it('rejects a tampered term in its stated sum', () => {
     const tampered = structuredClone(nicpen);
     if (
       tampered.costing.kind === 'schedule' &&
@@ -338,14 +337,6 @@ describe('employer NICs on pension contributions: the private-sector part of HMR
 describe('a weighted sum of published figures backs a schedule', () => {
   const pens30 = lever('pens30');
 
-  it('reproduces the flat-rate saving from the by-rate relief, grown with income tax receipts', () => {
-    expect(checkRawSourceConsistency(pens30, extracted, ds.vintage)).toEqual([]);
-    const incomeTax = headSeries(ds.vintage, 'incomeTax');
-    if (pens30.costing.kind !== 'schedule') throw new Error('schedule expected');
-    const grown = (2542 * (incomeTax['2029-30'] ?? 0)) / (incomeTax['2024-25'] ?? 1);
-    expect(Math.abs((pens30.costing.effect['2029-30'] ?? 0) - grown)).toBeLessThanOrEqual(1);
-  });
-
   it('rejects a tampered factor, a wrong result and a tampered schedule', () => {
     const factor = structuredClone(pens30);
     if (
@@ -374,14 +365,6 @@ describe('a weighted sum of published figures backs a schedule', () => {
 
 describe('a repeated scorecard measure is plus the lines, and says it is an assumption', () => {
   const iinc2 = lever('iinc2');
-
-  it('reproduces the Budget 2025 lines with their published sign', () => {
-    expect(iinc2.badge).toBe('assumption');
-    expect(iinc2.category).toBe('tax');
-    expect(checkRawSourceConsistency(iinc2, extracted, ds.vintage)).toEqual([]);
-    if (iinc2.costing.kind !== 'schedule') throw new Error('schedule expected');
-    expect(iinc2.costing.effect['2029-30']).toBe(435 + 1325 + 470);
-  });
 
   it('rejects a repeat authored with the reversal sign, and defaults to reverse when unsaid', () => {
     const flipped = structuredClone(iinc2);
