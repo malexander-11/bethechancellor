@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The readability and plain-words tests read one list of what a player meets
+  (`apps/web/src/test/onScreen.ts`) instead of keeping two, and check rules rather than copies: no
+  pinned count of sets, items, decisions or steps, and no history of past measures in the comments.
 - Word budgets are one cap for each kind of screen: 30 words for the cover, 250 for a screen with
   one thing to read or decide, and 450 for a fine-tuning screen (700 with its decisions open). They
   used to be a count for each screen, pinned a tenth above its last measure, so every change of
