@@ -5,6 +5,7 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- `CONTRIBUTING.md` says how to update the engine's sentence snapshots, and to read their diff.
 - The two Budget-day adviser briefings are deleted with their file, schema, loader and checks: only
   the workings view showed them. The advisers still speak through the lines on options and policies,
   which the validator checks as before.

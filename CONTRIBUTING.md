@@ -18,3 +18,6 @@
   prints the output of whatever failed. The end-to-end suite needs Chromium
   (`npx playwright install chromium`, once).
 - A test that fails is a failure. Nothing retries it, locally or in CI.
+- The engine's generated sentences are held in snapshots (`__snapshots__/`), their £bn figures
+  masked. After a deliberate rewording or a new vintage, `npx vitest -u` updates them; read the diff
+  before committing it.
