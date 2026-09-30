@@ -36,11 +36,11 @@ nothing:
 A completeness critic added four more: accessibility; Scotland, Wales and Northern Ireland; whether
 a player understands more after playing; and an independent re-check of the simulated claims.
 
-Every finding then had two independent checks. The first tried to refute its facts against the
-code, the data, the screenshots and the engine. The second asked whether it mattered to most
-voters, and whether its fix was honest and within the decisions already taken. 108 findings
-survived: 14 high, 62 medium and 32 low. Most (94) survived only as corrected, so no claim below
-rests on one reviewer's first reading.
+Every finding then had two independent checks. The first tried to refute its facts against the code,
+the data, the screenshots and the engine. The second asked whether it mattered to most voters, and
+whether its fix was honest and within the decisions already taken. 108 findings survived: 14 high,
+62 medium and 32 low. Most (94) survived only as corrected, so no claim below rests on one
+reviewer's first reading.
 
 ### The verdict on Phase 24
 
@@ -54,9 +54,9 @@ rests on one reviewer's first reading.
 What worked, and was kept: the briefing reads like a Treasury note and says honestly why headroom
 fell; the rules behave like the 2025 Charter; the player inherits the real settlements and last
 year's decisions; badges and earliest starts stop timing tricks; red and amber tags warn before a
-line is crossed; taxes are grouped by who pays; one live score; a short review with a Change link
-on every part; Budget day layered, reproducible and badged; proposals from across the spectrum;
-solid accessibility basics.
+line is crossed; taxes are grouped by who pays; one live score; a short review with a Change link on
+every part; Budget day layered, reproducible and badged; proposals from across the spectrum; solid
+accessibility basics.
 
 ## Decisions
 
@@ -69,9 +69,9 @@ solid accessibility basics.
 | The yardsticks   | **In words on the briefing**, badged Game judgement: "Your advisers call headroom under £10bn thin. The markets notice." Nothing is scored against it; there is still no target.                          |
 | Delivery         | **Graded**: delivered, settled lower, started, not funded. Each flagship way says whether it delivers in full or makes a start, with a sourced reason (Game judgement).                                   |
 
-One call was ours, from the review's own re-test: missing the day-to-day or the debt rule costs
-the public a point **and holds it at three**. Only the hold stops a rule-missing Budget rating
-four or five with the public.
+One call was ours, from the review's own re-test: missing the day-to-day or the debt rule costs the
+public a point **and holds it at three**. Only the hold stops a rule-missing Budget rating four or
+five with the public.
 
 Unchanged: one estimate (£6.8bn), no target, six steps, roles only, the honesty contract, plain
 English, one primary button a screen.
@@ -106,34 +106,34 @@ English, one primary button a screen.
 ### What each commit did
 
 1. **Prices and promises** (`6cabfb6`). Ten levers built on HMRC's cost of a tax relief carry
-   `reliefCost`: their cards read "raises at most £X", with "HMRC's cost of the tax break. The
-   real sum would be less, as people change what they do." The markets count them as uncertified.
-   Two costings were redone as stated arithmetic, badged Worked out. Employer NI on pension
+   `reliefCost`: their cards read "raises at most £X", with "HMRC's cost of the tax break. The real
+   sum would be less, as people change what they do." The markets count them as uncertified. Two
+   costings were redone as stated arithmetic, badged Worked out. Employer NI on pension
    contributions counts only the private sector's part (HMRC's £14.3bn less its £6.5bn on public
    schemes, scaled from 13.8% to 15%, grown with nominal GDP): about £10.1bn in 2029-30, not
-   £20.0bn. The health and social care levy is 1.25 times the game's own one-point NICs rows:
-   about £26.0bn, not £16.8bn. A new fuel duty freeze toggle; keeping VAT off electricity joins
-   the curated tax screen; `excludes` pairs for measures that count the same money; one accessible
+   £20.0bn. The health and social care levy is 1.25 times the game's own one-point NICs rows: about
+   £26.0bn, not £16.8bn. A new fuel duty freeze toggle; keeping VAT off electricity joins the
+   curated tax screen; `excludes` pairs for measures that count the same money; one accessible
    blocked notice ("You can't have both. Untick X to choose this.") with a one-tap swap.
 2. **Graded delivery** (`323724e`). 19 ways deliver in full and 10 make a start. A priority is
-   delivered, settled lower, started or not funded. The bar reads "1 of 2 priorities delivered ·
-   1 started". Option state reads direction, so a cut is never a "trimmed" uplift.
+   delivered, settled lower, started or not funded. The bar reads "1 of 2 priorities delivered · 1
+   started". Option state reads direction, so a cut is never a "trimmed" uplift.
 3. **One price** (`a295cb0`). `optionPrice` is the engine re-run with and without a choice: its
    change to the bar's headroom in 2029-30, interest included, on the card, the review, the speech
    and the close alike. `reconcile` takes the headroom from the estimate to the bar through taxes,
    day-to-day spending and interest, exactly. The rules go by plain names ("the day-to-day rule",
    "the debt rule"), and the bar says "Debt rule missed by £4.5bn".
-4. **Cards that agree with their ratings** (`35c2d5c`). The one reason agrees with the rating;
-   the other side is one short line; causes point the way their reason says; the economy since
-   March is never the player's doing.
-5. **The recalibration** (`eeef6c7`). Readings are measured from `preBudget` (today's estimate
-   with nothing moved). A missed rule holds the markets at one and the others at three. Cuts to
-   departments are counted one by one, never netted, with health and schools from £2bn. The
-   public counts the taxes most households feel. The scale: three at nought, one or two points a
-   step, three or more two steps.
+4. **Cards that agree with their ratings** (`35c2d5c`). The one reason agrees with the rating; the
+   other side is one short line; causes point the way their reason says; the economy since March is
+   never the player's doing.
+5. **The recalibration** (`eeef6c7`). Readings are measured from `preBudget` (today's estimate with
+   nothing moved). A missed rule holds the markets at one and the others at three. Cuts to
+   departments are counted one by one, never netted, with health and schools from £2bn. The public
+   counts the taxes most households feel. The scale: three at nought, one or two points a step,
+   three or more two steps.
 6. **Summaries that say what the sums say** (`9783ddc`). The three sentences, the close and the
-   speech are built from the engine's figures and the player's choices, and a consistency test
-   runs seven Budgets through them. The Leader of the Opposition replies in one line.
+   speech are built from the engine's figures and the player's choices, and a consistency test runs
+   seven Budgets through them. The Leader of the Opposition replies in one line.
 7. **The briefing explains its figure** (`81a532f`). What headroom means, its year and about £240
    for each household; the OBR spelt out; the yardstick; "Already on your desk"; a glossary word
    opens by tap or keyboard; the workings say how the estimate is made.
@@ -159,20 +159,20 @@ English, one primary button a screen.
    set to 2028-29 and that the forecast already squeezes the unprotected ones (EFO 4.16). No new
    lever, which would count the departments' paths twice.
 8. **The defence plan's gap** is a line in the in-tray, not a promise strained. England's 18-week
-   target is a strain shown in amber and scored by no audience (`scored: false`), so it cannot
-   stack with the public's rule on service cuts.
+   target is a strain shown in amber and scored by no audience (`scored: false`), so it cannot stack
+   with the public's rule on service cuts.
 9. **No plus point for taxing the top.** Levies on banks, energy producers and the very top score
    nothing with the public, from an authored list in `incidence.json`.
 10. **Relief costs** are keyed on a `reliefCost` lever flag, so a re-costed lever keeps it.
 11. **The fuel freeze** is a Worked-out toggle, HMRC's 1% rows times the planned April 2027 rise.
 12. **Keeping VAT off electricity** is a curated tax cut, the third lever shown for everyone.
-13. **Pins move with their rules**: the readability sets grew to sixteen and read acronyms letter
-    by letter; where that pushed a set up, the words changed, not the limit.
+13. **Pins move with their rules**: the readability sets grew to sixteen and read acronyms letter by
+    letter; where that pushed a set up, the words changed, not the limit.
 14. **Nudges** are recomputed on the new scale and shown only when the rating itself would move.
 15. **Word budgets**: the briefing folds its since-March decisions; the review carries at most one
     voice (the Prime Minister's); every screen is re-measured and pinned with a tenth to spare.
-16. **The 2p clamp** is on the curated screens only; the desk keeps its full range, and past 2p
-    the effect is badged Worked out with the limit said.
+16. **The 2p clamp** is on the curated screens only; the desk keeps its full range, and past 2p the
+    effect is badged Worked out with the limit said.
 17. **Leaks stay out.**
 
 ## Consequences
@@ -211,8 +211,8 @@ What moved, and why:
   Approving with the public, and borrowing past the rules no longer wins over the party.
 - **Cuts are seen.** A health cut costs with the public, and a deep one with the markets.
 - **Two prices moved.** The levy, re-costed at about £26bn, lifts its Budgets' headroom by about
-  £10bn; NI on pension contributions, at about £10bn, lowers its by about £11bn, which the
-  markets now read as thin.
+  £10bn; NI on pension contributions, at about £10bn, lowers its by about £11bn, which the markets
+  now read as thin.
 - **Felt taxes count with the public**: the levy is felt through pay and prices, so it costs a
   point.
 - **Graded delivery**: the token Budget's care down-payment only makes a start.
@@ -222,28 +222,27 @@ What moved, and why:
 ### What the tests pin, and what they do not
 
 The engine tests pin these on today's estimate: doing nothing rates the markets 2; any missed rule
-rates the markets 1 and the others at most 3; a 10% health cut rates the public at most 3; the
-shown reason never contradicts the rating; the counted line appears exactly when the other side
-has a rule, in eight words or fewer; across 300 seeded Budgets every audience uses the whole
-scale, and no rule-missing Budget pleases the markets more than doing nothing; no Budget-day
-sentence, close line or speech figure contradicts the rules result, a priority's fate or the sign
-of a change (seven named Budgets); the review's reconciliation equals the bar; the levy equals
-1.25 times its rows.
+rates the markets 1 and the others at most 3; a 10% health cut rates the public at most 3; the shown
+reason never contradicts the rating; the counted line appears exactly when the other side has a
+rule, in eight words or fewer; across 300 seeded Budgets every audience uses the whole scale, and no
+rule-missing Budget pleases the markets more than doing nothing; no Budget-day sentence, close line
+or speech figure contradicts the rules result, a priority's fate or the sign of a change (seven
+named Budgets); the review's reconciliation equals the bar; the levy equals 1.25 times its rows.
 
 Two properties are narrower than the plan's wording, and we say so rather than tune them away:
 
-- **Borrowing past the rules against paying.** The tests pin that borrowing never rates above
-  paying _from the top_ (capital gains taxed like income: 4 / 2 / 4 against the borrowed 3 / 1 /
-  3), and rates below it with the markets. Against a tax most households feel, borrowing still
-  rates higher with the party and the public: the levy 2 / 4 / 2, 2p on the basic rate 2 / 2 / 1.
-  The markets prefer the levy by three steps, and the borrowed Budget misses both rules. The
-  game's judgement is that a party and a public dislike a felt tax rise a little more than broken
-  rules they cannot see, and that the price of borrowing is paid with the markets and the rules.
-  That is a judgement, recorded here.
-- **The token three ticks.** The tests pin that a token Budget earns no more with the public or
-  the party than delivering the same priorities in full, and no more than the funded walk, audience
-  by audience. It can still out-rate a Budget that raises a felt tax with the public: 4 against 3
-  for defence and prisons paid by employer NI.
+- **Borrowing past the rules against paying.** The tests pin that borrowing never rates above paying
+  _from the top_ (capital gains taxed like income: 4 / 2 / 4 against the borrowed 3 / 1 / 3), and
+  rates below it with the markets. Against a tax most households feel, borrowing still rates higher
+  with the party and the public: the levy 2 / 4 / 2, 2p on the basic rate 2 / 2 / 1. The markets
+  prefer the levy by three steps, and the borrowed Budget misses both rules. The game's judgement is
+  that a party and a public dislike a felt tax rise a little more than broken rules they cannot see,
+  and that the price of borrowing is paid with the markets and the rules. That is a judgement,
+  recorded here.
+- **The token three ticks.** The tests pin that a token Budget earns no more with the public or the
+  party than delivering the same priorities in full, and no more than the funded walk, audience by
+  audience. It can still out-rate a Budget that raises a felt tax with the public: 4 against 3 for
+  defence and prisons paid by employer NI.
 
 No independent re-review has been run on the Phase 25 build. The ratings table, the tests and the
 walk are the evidence; they are not a new score against the four goals.
@@ -264,34 +263,34 @@ half on spending. The height did not fall. Commit 8 took the tax screen to 5,858
 adviser line above the cards added 185px back; the spending screen gained its three notes and the
 defence plan's gap. (Commit 8's message set its 5,858px against 5,834px, which is Phase 24 with two
 flagships chosen: not the same state.) The plan aimed at two to three screens. That needs fewer
-cards on show at rest (fifteen on the tax screen, each with its price and its adviser's line),
-which Phase 25 did not do.
+cards on show at rest (fifteen on the tax screen, each with its price and its adviser's line), which
+Phase 25 did not do.
 
 ### Word budgets
 
-The budgets test, folds closed, measured 2026-09-28 and pinned with about a tenth to spare
-(Phase 24 in brackets): the cover 27 (27), the briefing 234 (201), the priorities 178 (138), the
-flagship screens 161 to 201 (139 to 177), fine-tuning tax 605 on arrival and 759 with a folded
-lever moved in every group (528 and 711), spending 588 and 753 (476 and 665), the review 213
-(88), Budget day 199 (188). The words bought: the meaning of headroom and the yardstick, the
-in-tray, the price of the priorities, one adviser line on step 4, the review's reconciliation and
-sign-off, and the counted line. The desk's budgets are unchanged.
+The budgets test, folds closed, measured 2026-09-28 and pinned with about a tenth to spare (Phase 24
+in brackets): the cover 27 (27), the briefing 234 (201), the priorities 178 (138), the flagship
+screens 161 to 201 (139 to 177), fine-tuning tax 605 on arrival and 759 with a folded lever moved in
+every group (528 and 711), spending 588 and 753 (476 and 665), the review 213 (88), Budget day 199
+(188). The words bought: the meaning of headroom and the yardstick, the in-tray, the price of the
+priorities, one adviser line on step 4, the review's reconciliation and sign-off, and the counted
+line. The desk's budgets are unchanged.
 
 ### Readability
 
 Sixteen sets now, every sentence within twenty words and every set at a Flesch-Kincaid grade of
-seven or below, with acronyms read letter by letter: the guide 3.2, option titles 5.4, option
-advice 4.8, the delivery scales 6.1, the fine-tuning screens 5.2 and their advisers' lines 5.0,
-the priorities 4.1, the conflicts 3.3, since March 6.4, the sign-off 1.6, the promises 5.6, the
-reception labels 4.9 and bands 5.1, the verdicts 4.9, the interventions 4.2, the ministers 5.8.
-The test writes the grades to a file when `GRADES` names one.
+seven or below, with acronyms read letter by letter: the guide 3.2, option titles 5.4, option advice
+4.8, the delivery scales 6.1, the fine-tuning screens 5.2 and their advisers' lines 5.0, the
+priorities 4.1, the conflicts 3.3, since March 6.4, the sign-off 1.6, the promises 5.6, the
+reception labels 4.9 and bands 5.1, the verdicts 4.9, the interventions 4.2, the ministers 5.8. The
+test writes the grades to a file when `GRADES` names one.
 
 ### Playtime
 
 The Phase 20 method, unchanged (visible words at 200 a minute, ten seconds a decision, three a
-screen change): an estimate from the rendered screens, not user testing. `playtime25.mjs` fixes
-a race in its predecessor, which counted the priorities while the briefing was still on screen;
-with the fix, Phase 24's build reproduces ADR-0025's figures exactly. Both builds, same script:
+screen change): an estimate from the rendered screens, not user testing. `playtime25.mjs` fixes a
+race in its predecessor, which counted the priorities while the briefing was still on screen; with
+the fix, Phase 24's build reproduces ADR-0025's figures exactly. Both builds, same script:
 
 | Screen                 | Phase 24 words (skim) | Phase 25 words (skim) |
 | ---------------------- | --------------------- | --------------------- |
@@ -320,16 +319,15 @@ animation audits on. A glossary word inside a sentence is exempt from the 44px h
 - the briefing's meaning line, the scale per household, the yardstick and the in-tray;
 - the glossary toggletip opening and closing by tap, by keyboard and by Escape;
 - the priorities' price line and the one "Saves money" tag;
-- "1 of 2 priorities delivered" on the bar, and "0 of 1 priority delivered · 1 started" for a
-  start;
+- "1 of 2 priorities delivered" on the bar, and "0 of 1 priority delivered · 1 started" for a start;
 - the blocked card's notice, `aria-disabled` and `aria-describedby`, and that it cannot be ticked;
 - the conditional hint and the named resting tags on step 4, one adviser line at a time, the bar's
-  status region (silent on arrival, then "Headroom, 2029-30: £X. 1 promise broken." once the
-  slider settles), and a focused control scrolled clear of the sticky bar;
+  status region (silent on arrival, then "Headroom, 2029-30: £X. 1 promise broken." once the slider
+  settles), and a focused control scrolled clear of the sticky bar;
 - the tax screen's height at 360px;
 - the review's rules line, its reconciliation ending on the bar's own figure, the Prime Minister's
-  line in place of the tag, and one reaction with no rating; a missed rule named on the bar with
-  its margin, and the Prime Minister asking for the money;
+  line in place of the tag, and one reaction with no rating; a missed rule named on the bar with its
+  margin, and the Prime Minister asking for the money;
 - the counted lines on Budget day (eight words or fewer), no household untouched by the walk's
   Budget, the debt interest line in the markets' fold, and "nothing by name" for the professional
   under a wealth tax.
@@ -355,22 +353,22 @@ Step 4 on a phone is still about 7.5 to 7.7 screens tall.
 
 ## Revision (2026-09-29): the briefing in three parts (ADR-0030)
 
-R9 explained the briefing's one figure beside it. Phase 28 keeps the meaning line and the OBR
-spelt out, and changes the rest to the player's own format. The line on what the headroom comes to
-for each household goes, since the OBR's record of what Chancellors have kept, about £29bn since
-2010, now gives the scale; so does the source line, since the calculation's rows now say where the
-figure comes from. The yardstick moves to the review only: the briefing gives the same line as
-advice under the calculation, "aim to keep more than £10bn", still badged Game judgement and
-scored by nothing. The briefing reads 205 words in either mode, against R9's 234. Later the same
-day the user's own words replaced that advice with a line on what reaching Chancellors' average
-margin would take (ADR-0030's revision); the review's yardstick is unchanged.
+R9 explained the briefing's one figure beside it. Phase 28 keeps the meaning line and the OBR spelt
+out, and changes the rest to the player's own format. The line on what the headroom comes to for
+each household goes, since the OBR's record of what Chancellors have kept, about £29bn since 2010,
+now gives the scale; so does the source line, since the calculation's rows now say where the figure
+comes from. The yardstick moves to the review only: the briefing gives the same line as advice under
+the calculation, "aim to keep more than £10bn", still badged Game judgement and scored by nothing.
+The briefing reads 205 words in either mode, against R9's 234. Later the same day the user's own
+words replaced that advice with a line on what reaching Chancellors' average margin would take
+(ADR-0030's revision); the review's yardstick is unchanged.
 
 ## Revision (2026-09-29): badges are plain labels again (ADR-0032)
 
-A tapped badge opened the key at the foot of the page, so its meaning was reachable on a phone.
-The key went when the footer became one row of links; a badge is a plain label, its meaning in its
-title for a mouse, and the Methodology page, linked from the footer, explains all five. The
-glossary's toggletips are unchanged.
+A tapped badge opened the key at the foot of the page, so its meaning was reachable on a phone. The
+key went when the footer became one row of links; a badge is a plain label, its meaning in its title
+for a mouse, and the Methodology page, linked from the footer, explains all five. The glossary's
+toggletips are unchanged.
 
 ## Revision (2026-09-30): the levy and insurance premium tax retired (ADR-0035)
 
@@ -387,8 +385,8 @@ re-costing and every other fix here stand.
 R18.5’s accessible blocked notice stays on step 3, where a way to deliver a priority conflicts with
 one already chosen. On step 4 it now appears only where a flagship the player chose holds the other
 of a pair, and it points back to that flagship. Everywhere else on step 4 a choice says first what
-it would take out, in plain text at full contrast that describes its control, and still moves;
-ticks that contradict each other in one decision are radios.
+it would take out, in plain text at full contrast that describes its control, and still moves; ticks
+that contradict each other in one decision are radios.
 
 ## Revision (2026-09-30): no headroom on a row (ADR-0037)
 

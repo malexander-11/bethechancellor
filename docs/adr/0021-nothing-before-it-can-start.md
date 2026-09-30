@@ -5,14 +5,14 @@ Status: Accepted, 2026-09-23. Follows ADR-0020 (the think tanks' lists). Revised
 
 ## Context
 
-Playing the Phase 16 build, the user said: _"I think the wealth taxes need some extra scrutiny.
-They would take ages to put in place so I doubt they'd raise money this parliament?"_
+Playing the Phase 16 build, the user said: _"I think the wealth taxes need some extra scrutiny. They
+would take ages to put in place so I doubt they'd raise money this parliament?"_
 
 They were right, and the game contradicted them. Both wealth-tax cards paid their full yield from
-April 2027, the game's first implementation year, as if an annual wealth tax announced on
-28 October 2026 could be legislated, valued and collected in six months. Every costing zeroes the
-years before the game's start year, but nothing let a card say "and not before this year either".
-The same overstatement sat on eight other Phase 16 cards that create a new tax or reform a benefit.
+April 2027, the game's first implementation year, as if an annual wealth tax announced on 28 October
+2026 could be legislated, valued and collected in six months. Every costing zeroes the years before
+the game's start year, but nothing let a card say "and not before this year either". The same
+overstatement sat on eight other Phase 16 cards that create a new tax or reform a benefit.
 
 What the sources say:
 
@@ -33,9 +33,9 @@ What the sources say:
 - **The proposers themselves**: the Resolution Foundation says its sugar and salt tax "would take
   several years to design and roll out" and gives its £3.5bn for 2029-30; IPPR calls its reserves
   levy "relatively straightforward to implement"; the IFS gives its unemployment insurance saving
-  "in the long run, after any transitional protections are exhausted"; the Centre for Social
-  Justice dates its savings "by 2029/30" and "annually by 2030"; Budget 2025 Table 4.1 line 54
-  announced the £2m council tax surcharge 28 months ahead, with set-up costs before it.
+  "in the long run, after any transitional protections are exhausted"; the Centre for Social Justice
+  dates its savings "by 2029/30" and "annually by 2030"; Budget 2025 Table 4.1 line 54 announced the
+  £2m council tax surcharge 28 months ahead, with set-up costs before it.
 
 The OBR scores a tax paid the January after its tax year in the fiscal year the cash arrives (the
 capital gains rows in Autumn Budget 2024 line 27 show a small first year for that reason), so TPA's
@@ -65,9 +65,9 @@ take effect on its source's own timetable, the sentence that says why, and the s
   aloud for screen readers), the reason under "What this assumes", the headline naming the year, and
   an effect line that reads "nothing yet; from 2030-31 raises £18.5bn" instead of "unchanged". The
   running list and the Budget-day measures table say "from 2030-31" beside the honest £0.0bn.
-- **Downstream, nothing pretends.** The Director of Tax never suggests a measure that yields
-  nothing in the target year; the OBR's re-scored table skips one; the speech, which speaks of the
-  target year, says nothing about it (a "starts later" fragment is a follow-up, not built here).
+- **Downstream, nothing pretends.** The Director of Tax never suggests a measure that yields nothing
+  in the target year; the OBR's re-scored table skips one; the speech, which speaks of the target
+  year, says nothing about it (a "starts later" fragment is a follow-up, not built here).
 
 The cards, ten at acceptance and three more after the revision below:
 
@@ -87,22 +87,22 @@ The cards, ten at acceptance and three more after the revision below:
 
 - The two wealth taxes raise nothing in the year the rules test. A Chancellor can announce one and
   cannot book it against the target, which is the lesson the user asked for.
-- Counts: 116 lever files and, after the revision below, 135 sources; 75 tax and 32 spending
-  levers on offer, unchanged.
+- Counts: 116 lever files and, after the revision below, 135 sources; 75 tax and 32 spending levers
+  on offer, unchanged.
 - The Director of Tax's list opens with the alignment package and the pension reliefs again; the
   credibility rule (ADR-0013) no longer counts a wealth tax that improves nothing.
 - Tests that needed a re-scored measure yielding in 2029-30 use the death write-off card, which
-  carries the same draw factors as the wealth cards; a new suite pins every floor, the
-  max-of-three rule and the refusals.
-- The compromise step's delay control counts from a lever's floor; no card on offer reaches it
-  today (tax cards and savings never get the control), so the change is for correctness.
+  carries the same draw factors as the wealth cards; a new suite pins every floor, the max-of-three
+  rule and the refusals.
+- The compromise step's delay control counts from a lever's floor; no card on offer reaches it today
+  (tax cards and savings never get the control), so the change is for correctness.
 - `appliesFrom` remains set on every lever and read by nothing; left alone.
 
 ## Revision (2026-09-23, evening): the payment lag
 
-The user then pointed at the alignment card, "Tax capital gains like income: 20%, 40% and 45%",
-and asked "What about this one?" Its problem is not legislation but collection. Capital gains tax on
-a year's gains is paid the following January: gov.uk (`govuk-cgt-report-and-pay`, now registered),
+The user then pointed at the alignment card, "Tax capital gains like income: 20%, 40% and 45%", and
+asked "What about this one?" Its problem is not legislation but collection. Capital gains tax on a
+year's gains is paid the following January: gov.uk (`govuk-cgt-report-and-pay`, now registered),
 "You must report by 31 December in the tax year after you made your gain and pay by 31 January. For
 example, if you made a gain in the 2025 to 2026 tax year, you need to report it by 31 December 2026
 and pay by 31 January 2027." The OBR scores the cash when it arrives: Autumn Budget 2024 Table 5.1

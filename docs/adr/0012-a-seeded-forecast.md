@@ -4,8 +4,8 @@
 
 ## Context
 
-The brief asks for a consequential, random-but-seeded OBR forecast that arrives after the player
-has built their package, independent of the outlook they planned on, weighted to the centre,
+The brief asks for a consequential, random-but-seeded OBR forecast that arrives after the player has
+built their package, independent of the outlook they planned on, weighted to the centre,
 foreshadowed, decomposed into what the economy did and what the OBR made of the player's own
 costings, and replayable under the same conditions.
 
@@ -21,8 +21,8 @@ figures alone.
   the link. A 32-bit mixer (mulberry32) turns it into one of five outcomes with weights 10, 25, 30,
   25 and 10. The centre is the adviser's own reading, because the OBR conditions its forecast on
   market gilt yields and today's yield is the best published guess at October's.
-- Each outcome names a **published candidate** for each macro slider — `obr`, `adviser`, `lowest`
-  or `highest` — and the value is derived by the same rounding rule the assumption cards use
+- Each outcome names a **published candidate** for each macro slider — `obr`, `adviser`, `lowest` or
+  `highest` — and the value is derived by the same rounding rule the assumption cards use
   (ADR-0010). The draw decides _which_ published figure arrives, never _what_ the figure is. A test
   asserts every drawn value is a candidate the context file carries.
 - **Growth never moves.** No published range reaches the growth slider (the comparison's lowest real
@@ -37,8 +37,8 @@ figures alone.
   never revised; the validator refuses a draw that names a certified caveat. The factors are
   illustrative and badged simulated.
 - **The draw knows nothing of the plan.** The outcome is a function of the seed alone. A player who
-  planned on the adviser's view and drew the adviser's outcome sees an economy line of nought,
-  which is the honest reward for reading the room; one who planned on the optimist pays for it.
+  planned on the adviser's view and drew the adviser's outcome sees an economy line of nought, which
+  is the honest reward for reading the room; one who planned on the optimist pays for it.
 - **Decomposition without double counting.** Three engine runs: the plan's macro with measures as
   scored, the draw's macro with measures as scored, the draw's macro with measures revised. Economy
   is the second minus the first, costings the third minus the second, and they sum exactly to the
@@ -64,6 +64,6 @@ The user asked for "None of the reveal and tinkering". The seeded draw is gone: 
 outcomes, the clue, the envelope, the decomposition, the costing revisions and the snapshot the OBR
 re-scored (`draws.json`, `game/draw.ts`, `game/forecast.ts`, `Settings.revisions`, `S=`). Every game
 now plans on today's estimate and nothing arrives later to change it. With the draw went the one
-place a game judgement moved the arithmetic, so no simulated element moves a number any more. An
-old link that carries a seed still opens: its stage is read through `LEGACY_STAGE` and its economy
-is replaced by the estimate, with a warning on the desk.
+place a game judgement moved the arithmetic, so no simulated element moves a number any more. An old
+link that carries a seed still opens: its stage is read through `LEGACY_STAGE` and its economy is
+replaced by the estimate, with a warning on the desk.

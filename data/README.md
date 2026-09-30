@@ -40,22 +40,22 @@ derived/                  pipeline outputs (regenerated in CI and compared with 
 - Money is in **£ million** (`unit: "GBPm"`). Shares of GDP are in per cent (`pctGDP`).
 - Fiscal years are `YYYY-YY` strings; calendar years are `YYYY`. A series declares which
   (`periodicity: "FY" | "CY"`).
-- Every series, sensitivity and costing has a `source` (`{ sourceId, table?, page?,
-paragraph?, quote?, note? }`) pointing into `sources/sources.json`.
-- A number that was transformed from its source carries `derivation: [DerivationStep]` and,
-  if it rests on rounded inputs or an interim assumption, `provisional: true`.
-- Signs: receipts positive = more revenue; spending positive = more spending; PSNB positive
-  = borrowing. Convert source conventions at extraction and record a `signFlip` step.
+- Every series, sensitivity and costing has a `source`
+  (`{ sourceId, table?, page?, paragraph?, quote?, note? }`) pointing into `sources/sources.json`.
+- A number that was transformed from its source carries `derivation: [DerivationStep]` and, if it
+  rests on rounded inputs or an interim assumption, `provisional: true`.
+- Signs: receipts positive = more revenue; spending positive = more spending; PSNB positive =
+  borrowing. Convert source conventions at extraction and record a `signFlip` step.
 - Lever `code`s are short, stable and never reused; they appear in permalinks.
 - A lever is shown in production only when `status` is `reviewed`.
 
 ## Rebasing to a new forecast
 
-Create `vintages/<new-id>/vintage.json`, run `npm run validate:data`, update the default
-vintage in the web app, and keep the old vintage so existing permalinks still render. Re-read the
-two figures the briefing states (the context file's `briefing`, below): HM Treasury revises the
-Debt Management Office's remit at every fiscal event, so the gilt sales change with the Budget, and
-the validator refuses gilt sales for any year but the one the context is dated in.
+Create `vintages/<new-id>/vintage.json`, run `npm run validate:data`, update the default vintage in
+the web app, and keep the old vintage so existing permalinks still render. Re-read the two figures
+the briefing states (the context file's `briefing`, below): HM Treasury revises the Debt Management
+Office's remit at every fiscal event, so the gilt sales change with the Budget, and the validator
+refuses gilt sales for any year but the one the context is dated in.
 
 ## Authoring a lever
 
@@ -79,17 +79,17 @@ the validator refuses gilt sales for any year but the one the context is dated i
 
 ### Levels and the journey
 
-- **Levels.** Give a rate or threshold lever `control.level` (`baseline`, `unit`, `apply: add |
-pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows "20% → 21%".
-  The level never enters the costing; percentage-of-baseline levers need no level metadata.
-- **Selects.** `control.kind: "select"` with `labels` keyed by value ("-40": "Abolish (0%)");
-  the engine snaps to the nearest offered option, and step 4's sizes read their levels from the
-  labels ("Large: Abolish (0%)").
-- **Relief-cost toggles.** `rawSource.kind: "hmrcReliefCost"` cites rows of a relief-cost
-  extract by `sourceId`: `derived/hmrc-tax-reliefs-2026-01.raw.json` (HMRC's tax reliefs, Table 2)
-  or `derived/hmrc-private-pensions-2026-07.raw.json` (HMRC's pension statistics, Table 6, with
-  Tables 6.1 and 6.2 by marginal rate); `perUnit` is the published cost for the cited year,
-  uprated with the tax head. Quote HMRC's caveat in the caveats.
+- **Levels.** Give a rate or threshold lever `control.level` (`baseline`, `unit`,
+  `apply: add | pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows "20%
+  → 21%". The level never enters the costing; percentage-of-baseline levers need no level metadata.
+- **Selects.** `control.kind: "select"` with `labels` keyed by value ("-40": "Abolish (0%)"); the
+  engine snaps to the nearest offered option, and step 4's sizes read their levels from the labels
+  ("Large: Abolish (0%)").
+- **Relief-cost toggles.** `rawSource.kind: "hmrcReliefCost"` cites rows of a relief-cost extract by
+  `sourceId`: `derived/hmrc-tax-reliefs-2026-01.raw.json` (HMRC's tax reliefs, Table 2) or
+  `derived/hmrc-private-pensions-2026-07.raw.json` (HMRC's pension statistics, Table 6, with Tables
+  6.1 and 6.2 by marginal rate); `perUnit` is the published cost for the cited year, uprated with
+  the tax head. Quote HMRC's caveat in the caveats.
 - **Relief costs are flagged** (Phase 25, ADR-0026). `reliefCost: true` on every lever built on
   HMRC's cost of a relief, whether it cites the relief rows or does stated arithmetic on them (ten
   today). The schema refuses a relief-cost raw source without it, and allows it only on a receipts
@@ -97,16 +97,14 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   the lever among the costings nobody has certified.
 - **A multiple of HMRC rows.** `rawSource.multiplier` scales the summed rows of a `linearPerUnit`
   lever: 1.25 for the health and social care levy over the one-point NICs rows (retired in ADR-0035,
-  its costing kept), minus three for
-  the fuel duty freeze over the 1% rows. It is our arithmetic on HMRC's figures, so the schema
-  requires `badge: "mechanical"`.
+  its costing kept), minus three for the fuel duty freeze over the 1% rows. It is our arithmetic on
+  HMRC's figures, so the schema requires `badge: "mechanical"`.
 - **The range the source covers.** `control.sourceRange: { min, max, text }` (Phase 25): HMRC
-  vouches for scaling a 1p row to about 2p, not beyond. It must hold the default and sit inside
-  the control's range. A step-4 size may go past it (Phase 26, ADR-0027): the effect is then
-  badged Worked out and shows `text` (at most 140 characters).
-- **The lever's noun.** `noun`, in lower case ("the basic rate of income tax", "the health
-  budget"): how a Budget-day reason names its causes after "Because of", and how the speech names
-  the measure.
+  vouches for scaling a 1p row to about 2p, not beyond. It must hold the default and sit inside the
+  control's range. A step-4 size may go past it (Phase 26, ADR-0027): the effect is then badged
+  Worked out and shows `text` (at most 140 characters).
+- **The lever's noun.** `noun`, in lower case ("the basic rate of income tax", "the health budget"):
+  how a Budget-day reason names its causes after "Because of", and how the speech names the measure.
 - **Two levers that count the same money.** An interaction with `severity: "excludes"`, authored
   once per pair (the validator checks): only one can be chosen at a time. The flagship screens offer
   a swap; on step 4 two ticks in one tax decision are one choice among radios (`alternatives`,
@@ -114,43 +112,43 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   must read from either card and in either direction (Phase 26), each sentence at most twenty words,
   since it leads a card. A link that carries both still opens, and each card says it is counted
   twice. `info` and `warn` remain notes.
-- **A note on growth.** A `macro` consideration may carry `growth: true`: what the measure may do
-  to growth and the wider economy, in words. The markets' fold on Budget day reads the biggest
-  moved measure's; the schema refuses the flag on any other kind of note.
+- **A note on growth.** A `macro` consideration may carry `growth: true`: what the measure may do to
+  growth and the wider economy, in words. The markets' fold on Budget day reads the biggest moved
+  measure's; the schema refuses the flag on any other kind of note.
 - **Scorecard-backed toggles.** A `linearPerUnit` toggle may cite `hmtScorecard` lines from any
   extracted scorecard (Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is minus the
   summed lines for the cited years on the receipts side. `direction: "repeat"` makes it plus the
   lines: the measure done again, on the assumption that the second round raises what the Treasury
-  costed for the first. A repeat is an assumption, so it wears `badge: "assumption"`, says so in
-  its caveats and sits in its tax group beside the certified rows (ADR-0017).
+  costed for the first. A repeat is an assumption, so it wears `badge: "assumption"`, says so in its
+  caveats and sits in its tax group beside the certified rows (ADR-0017).
 - **Vintage-series lookup points.** `points[].from.vintageSeries` ("receiptsByTax.inheritanceTax")
   with a `multiplier`; checked against the vintage.
 - **Briefings** need an existing adviser who speaks on the step, a real lever group for group
-  briefings, and at least one source per paragraph. **Context readings** that name a
-  `leverCode` need a `suggestion` rule (`gap` or `authored`).
-- **Today's estimate** (ADR-0025) is the `gap` rule run over every reading that names a
-  `leverCode`, with the `authored` rule for growth: the one economy every game plans on. The
-  published forecast ranges (`reading.alternatives`) and the forecast cards (`context.scenarios`)
-  that Phases 7 to 23 read are retired, and the schema no longer accepts them.
+  briefings, and at least one source per paragraph. **Context readings** that name a `leverCode`
+  need a `suggestion` rule (`gap` or `authored`).
+- **Today's estimate** (ADR-0025) is the `gap` rule run over every reading that names a `leverCode`,
+  with the `authored` rule for growth: the one economy every game plans on. The published forecast
+  ranges (`reading.alternatives`) and the forecast cards (`context.scenarios`) that Phases 7 to 23
+  read are retired, and the schema no longer accepts them.
 
 ### Spending levers
 
 - **Sides and signs.** Spending levers carry `classification.side: "spending"`; spending positive
   means more spending. An HMRC `cost` row is then positive and a `yield` row negative, and a
-  scorecard reversal's schedule equals plus the summed lines. `validate:data` applies the
-  side-aware rule, so authoring the tax-side sign fails.
+  scorecard reversal's schedule equals plus the summed lines. `validate:data` applies the side-aware
+  rule, so authoring the tax-side sign fails.
 - **Percentage-of-baseline costings** (`kind: "pctOfBaseline"`, badge `mechanical`, control unit
   `pct`) scale either a vintage series (`baseline.from: "vintage"`, e.g. `cdel`,
-  `disabilityBenefits`) or a published plan (`baseline.from: "published"`) with `years`, `values`
-  in £ million, `extendWith` (the vintage series that carries the last plan year forward) and a
-  `rawSource` of kind `hmtSr25` citing rows of `derived/hmt-sr25-del.raw.json` by `rowId`, label
-  and values. Rows with `role: "subtract"` build a residual; memo rows ("of which", "Memo:") are
+  `disabilityBenefits`) or a published plan (`baseline.from: "published"`) with `years`, `values` in
+  £ million, `extendWith` (the vintage series that carries the last plan year forward) and a
+  `rawSource` of kind `hmtSr25` citing rows of `derived/hmt-sr25-del.raw.json` by `rowId`, label and
+  values. Rows with `role: "subtract"` build a residual; memo rows ("of which", "Memo:") are
   rejected. A receipts line can be scaled the same way: `baseline.from: "vintage"` with a
-  `receiptsByTax.*` series on a `side: "receipts"` lever (business rates, `brates`). The schema
-  ties the line to the side, a published plan is always a spending baseline, and the badge stays
+  `receiptsByTax.*` series on a `side: "receipts"` lever (business rates, `brates`). The schema ties
+  the line to the side, a published plan is always a spending baseline, and the badge stays
   `mechanical`: a share of an OBR line is arithmetic, whichever side it sits on.
-- **Welfare cap.** Set `insideWelfareCap: true` on current spending levers whose line is inside
-  the cap and state the by-line approximation in the caveats.
+- **Welfare cap.** Set `insideWelfareCap: true` on current spending levers whose line is inside the
+  cap and state the by-line approximation in the caveats.
 - **Barnett.** Set `classification.barnettConsequential: true` on comparable departments and add
   `devolution` considerations (with `appliesWhen` above/below 0) citing the Statement of Funding
   Policy; never add a numeric knock-on.
@@ -158,9 +156,9 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
 ### Our own arithmetic (any folder)
 
 Where nobody has published a costing, the arithmetic is ours and the card has to show it. Such a
-lever lives in the folder of its real category and the group of the screen it belongs to
-(`tax` · `Capital gains tax`, `spend` · `New programmes`); the badge, not the folder, keeps it apart
-from the certified rows beside it (ADR-0017).
+lever lives in the folder of its real category and the group of the screen it belongs to (`tax` ·
+`Capital gains tax`, `spend` · `New programmes`); the badge, not the folder, keeps it apart from the
+certified rows beside it (ADR-0017).
 
 - **Category and group.** The lever's real `category`, its family `group`, and its place on step 4
   in `finetune.json` (a decision on its screen); `control.kind: "toggle"` unless a published line
@@ -175,33 +173,33 @@ from the certified rows beside it (ADR-0017).
 - **A cost as a product.** A `statedProduct` term may be negative: the electricity card multiplies
   the government's six-month £850 million by −2, so the result is a cost to receipts and the
   validator still reproduces it.
-- **Netting a certified line.** A `weightedSum` may carry a published scorecard value with a
-  factor of −1 where a published figure overlaps a change the Treasury has since scored (the
-  Motability card nets Budget 2025 line 14 off HMRC's relief row); the note says whose step that is.
-  When the source re-costs on the new baseline, the netting goes (the alignment card, ADR-0020).
+- **Netting a certified line.** A `weightedSum` may carry a published scorecard value with a factor
+  of −1 where a published figure overlaps a change the Treasury has since scored (the Motability
+  card nets Budget 2025 line 14 off HMRC's relief row); the note says whose step that is. When the
+  source re-costs on the new baseline, the netting goes (the alignment card, ADR-0020).
 - **Think-tank figures.** A think tank's costing may be a card when its own document is fetched,
   registered (org `Other`, or `RF`; licence `Other`) with the sentence quoted in its `notes`, and
   cited as the `statedProduct` or `weightedSum` term. The card is badged `assumption`, says static
   or after behaviour, scores an "up to" range at the cautious published figure with the ceiling in
-  words, carries the `static-not-yield` consideration where the figure is static, and names any
-  step of ours (growing, placing, netting). Party documents are context, never a
-  card. A figure quoted second-hand says so.
+  words, carries the `static-not-yield` consideration where the figure is static, and names any step
+  of ours (growing, placing, netting). Party documents are context, never a card. A figure quoted
+  second-hand says so.
 - **Earliest start.** A card whose measure cannot take effect from the game's first year carries
   `earliestStart: { year, text, sources }`: the first fiscal year it can start on its source's own
   timetable (legislation, systems, valuation, transitional protection), the sentence that says why,
   and the sources that say so. The effect map stays as the method reproduces it; the engine zeroes
-  the earlier years at run time and a player's delay can only push the start later. The year must
-  be one the vintage covers (`validate:data`), a macro lever may not carry one, and the headline
-  names the year. A `linearPerUnit` or `lookupTable` costing with a floor would shift its published
+  the earlier years at run time and a player's delay can only push the start later. The year must be
+  one the vintage covers (`validate:data`), a macro lever may not carry one, and the headline names
+  the year. A `linearPerUnit` or `lookupTable` costing with a floor would shift its published
   profile to the floor year rather than zero it; none carries one today.
-- **Press for words only.** A press or professional-firm page may be registered (org `Other`)
-  to source a sentence on a card or in a briefing, never a figure in a costing; its `notes` say so.
+- **Press for words only.** A press or professional-firm page may be registered (org `Other`) to
+  source a sentence on a card or in a briefing, never a figure in a costing; its `notes` say so.
 - **Protected or unprotected.** A department lever carries `commitment: { kind, text, sources }`,
   `protected` or `unprotected`, sourced to the paragraph of the OBR's forecast that says so. The
   card wears the word as a glossary tag and the text under "What this assumes".
 - **Raw source.** `kind: "derivedFromPublished"` with a `method`, a `sourceId` and a `note` that
-  says where the inputs come from and what the arithmetic assumes. `validate:data` reproduces
-  the schedule from the method, so an edited figure fails.
+  says where the inputs come from and what the arithmetic assumes. `validate:data` reproduces the
+  schedule from the method, so an edited figure fails.
 
 | Method          | Fields                                                                                      | Reproduces                                                                       |
 | --------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
@@ -211,24 +209,23 @@ from the certified rows beside it (ADR-0017).
 | `seriesProduct` | two or more `terms`, each with `values` by year                                             | the terms multiplied year by year                                                |
 | `weightedSum`   | `terms` (label, value, factor, unit, source), `resultGbpm`, `baseYear`, optional `growWith` | the sum of value × factor over the terms, then flat in cash or grown with a head |
 
-- **One-off payments** set `costing.once: true` on the schedule with exactly one amount; it falls
-  in the implementation year and nothing after.
-- **Financial transactions** set `classification.psnflTreatment: "financialTransaction"`. The
-  amount is borrowed and carries interest but is not spending, so borrowing and net financial
-  liabilities do not move. Say so in the caveats.
+- **One-off payments** set `costing.once: true` on the schedule with exactly one amount; it falls in
+  the implementation year and nothing after.
+- **Financial transactions** set `classification.psnflTreatment: "financialTransaction"`. The amount
+  is borrowed and carries interest but is not spending, so borrowing and net financial liabilities
+  do not move. Say so in the caveats.
 - **Mixed current and capital** set `classification.capitalShare` with the published split in a
   caveat. Capital escapes the stability rule, so the split is not cosmetic.
 - **Contested figures** open the `headline` with the word "contested" and carry the reason as a
-  `legal`, `behavioural` or `administrative` consideration, cited. State the alternative
-  published figure in the caveats where there is one.
+  `legal`, `behavioural` or `administrative` consideration, cited. State the alternative published
+  figure in the caveats where there is one.
 - **Shelving.** A lever nobody is considering, or one the user takes off the table (the nine of
-  ADR-0035), stays in the data with `deprecated: true`,
-  `group: "Shelved"` and the headline "Kept for the record; not on offer at this
-  Budget. Old links still work." Its costing, raw source and considerations stay, so
-  `validate:data` and the engine tests keep reproducing it; the app filters it out at load, the
-  incidence, minister and suggestion checks skip it, and an old link decodes it as an unknown
-  code with a warning. Nothing live may name it: no incidence tag, no option, no fine-tuning
-  item, no household touch.
+  ADR-0035), stays in the data with `deprecated: true`, `group: "Shelved"` and the headline "Kept
+  for the record; not on offer at this Budget. Old links still work." Its costing, raw source and
+  considerations stay, so `validate:data` and the engine tests keep reproducing it; the app filters
+  it out at load, the incidence, minister and suggestion checks skip it, and an old link decodes it
+  as an unknown code with a warning. Nothing live may name it: no incidence tag, no option, no
+  fine-tuning item, no household touch.
 
 ### Budget day reception (`data/journey/reception.json`, ADR-0013)
 
@@ -244,16 +241,16 @@ quotes a figure must carry a source; a test checks it, and that every reason on 
 these bands with its placeholders filled.
 
 Since Phase 25 (ADR-0026) a rule also carries a `short` label of three words or fewer ("Tax
-burden"), which is how a card names it on the other side of its rating: "Counted against: Tax
-burden · Borrowing". A band may carry `alsoWhen: { measure, above }`: it also applies when a second
-reading passes a threshold, as cuts to health and schools count from £2bn inside the public's rule
-on service cuts; the points, cap and words stay the band's own. A band may vary its words on a
-second reading (`variants`). Readings are measured from before the Budget (today's estimate with
-nothing moved), and the placeholders now include `{typicalError}`, `{payers}`, `{feltHow}`,
-`{protected}`, `{protectedCut}`, `{cutServices}`, `{year}` and `{lateFrom}`.
+burden"), which is how a card names it on the other side of its rating: "Counted against: Tax burden
+· Borrowing". A band may carry `alsoWhen: { measure, above }`: it also applies when a second reading
+passes a threshold, as cuts to health and schools count from £2bn inside the public's rule on
+service cuts; the points, cap and words stay the band's own. A band may vary its words on a second
+reading (`variants`). Readings are measured from before the Budget (today's estimate with nothing
+moved), and the placeholders now include `{typicalError}`, `{payers}`, `{feltHow}`, `{protected}`,
+`{protectedCut}`, `{cutServices}`, `{year}` and `{lateFrom}`.
 
-Bands describe what an audience watches and cite the evidence. They never predict a market move
-or a vote; they say what a judgement leans on.
+Bands describe what an audience watches and cite the evidence. They never predict a market move or a
+vote; they say what a judgement leans on.
 
 A rule whose reading is money or percentage points may carry a `nudge`: one sentence with `{gap}`
 for the distance from the reading to the nearest neighbouring band with more points, in the
@@ -262,9 +259,9 @@ invents no threshold, and says nothing for the best band there is (ADR-0018).
 
 ### The rules' plain names (`data/rules/*.json`)
 
-Each rule carries a `shortName`, the plain name the game uses on screen ("the day-to-day rule",
-"the debt rule", "the welfare cap"), carried into every rule verdict (Phase 25). The briefing's
-fold ties it to the Charter's own name.
+Each rule carries a `shortName`, the plain name the game uses on screen ("the day-to-day rule", "the
+debt rule", "the welfare cap"), carried into every rule verdict (Phase 25). The briefing's fold ties
+it to the Charter's own name.
 
 ### Decisions since the forecast (`data/context/*.json`)
 
@@ -276,61 +273,59 @@ shows it since the briefing became plain copy (ADR-0031); the validator still ch
 
 `inTray` (Phase 25) lists what is already on the Chancellor's desk: a bill or a cliff edge the
 Budget inherits, `{ id, text, badge, leverCode, sources }`. The text is one sentence of at most 140
-characters; `{cost}` in it is the named lever's own figure in the target year, filled by the
-engine. `leverCode` names the lever that deals with it, so the review can list the items a Budget
-leaves as they are; the validator refuses an unknown lever.
+characters; `{cost}` in it is the named lever's own figure in the target year, filled by the engine.
+`leverCode` names the lever that deals with it, so the review can list the items a Budget leaves as
+they are; the validator refuses an unknown lever.
 
 `briefing` (Phase 28, ADR-0030) holds the two published figures the briefing states, as data so a
-rebase re-reads them: `averageHeadroom { gbpm, since, source }`, the average margin Chancellors
-have left against their rules (the OBR's record), and `giltSales { gbpm, year, source }`, the gilts
-the government plans to sell in a fiscal year (HM Treasury's remit for the Debt Management Office).
-Each source names its paragraph and page and must quote the passage the figure is read from; the
-validator refuses a figure that quotes nothing, and gilt sales for any year but the one `asOf`
-falls in, since the page says "this year". The page badges both Official figure, with the
-workings on (ADR-0031). The briefing's words are not data: they are templates in
+rebase re-reads them: `averageHeadroom { gbpm, since, source }`, the average margin Chancellors have
+left against their rules (the OBR's record), and `giltSales { gbpm, year, source }`, the gilts the
+government plans to sell in a fiscal year (HM Treasury's remit for the Debt Management Office). Each
+source names its paragraph and page and must quote the passage the figure is read from; the
+validator refuses a figure that quotes nothing, and gilt sales for any year but the one `asOf` falls
+in, since the page says "this year". The page badges both Official figure, with the workings on
+(ADR-0031). The briefing's words are not data: they are templates in
 `apps/web/src/journey/briefingWords.ts`, with no figure typed in them and no glossary word marked.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
 One guide entry per step, with the cover and the briefing each their own: `step`, `number` (one to
-six; the cover and the briefing share the first), `title` (the page's
-heading, unless the page names itself, as each priority screen does) and `now`, the one line under
-it saying what to do, at most ten words on the road. A word in square brackets, `[headroom]` or
-`[the OBR](obr)`, is a glossary reference and must exist in `glossary.json`; the policy cards'
-tags read the glossary too. Guide and glossary are chrome: no badge, and no figure unless the glossary
-entry carries a source. (The `doing`, `why` and `terms` fields, and the "Why this matters" fold
-they filled, went in Phase 23.)
+six; the cover and the briefing share the first), `title` (the page's heading, unless the page names
+itself, as each priority screen does) and `now`, the one line under it saying what to do, at most
+ten words on the road. A word in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary
+reference and must exist in `glossary.json`; the policy cards' tags read the glossary too. Guide and
+glossary are chrome: no badge, and no figure unless the glossary entry carries a source. (The
+`doing`, `why` and `terms` fields, and the "Why this matters" fold they filled, went in Phase 23.)
 
 ### Priorities and options (`data/journey/pm.json`, `options.json`, ADR-0022)
 
 `pm.json` names eight `priorities`: `id`, `title` and `noun` (at most forty characters each), a
-plain `purpose`, the PM's `pitch` and `reaction`, and the `lead` (an adviser's or a minister's
-role, as the data names it), with sources. Each `promise` has `breaks`, the levers that break its
-words, and may have `strains` (Phase 23): the levers that keep its words and test its spirit, each
-with a line saying why; the game marks a strain amber and a break red, and a lever is in one list
-or the other, never both. Since Phase 25 (ADR-0026) a promise also carries:
+plain `purpose`, the PM's `pitch` and `reaction`, and the `lead` (an adviser's or a minister's role,
+as the data names it), with sources. Each `promise` has `breaks`, the levers that break its words,
+and may have `strains` (Phase 23): the levers that keep its words and test its spirit, each with a
+line saying why; the game marks a strain amber and a break red, and a lever is in one list or the
+other, never both. Since Phase 25 (ADR-0026) a promise also carries:
 
 - `noun`, in lower case, for running sentences ("I accepted breaking the tax lock");
 - `tag`, its short name on a lever's resting tag, at most 24 characters ("Tax lock: no rise");
-- `origin`: `manifesto-2024`, `budget-2025` or `government`. Only the 2024 manifesto's own words
-  are red lines the public holds the government to (the tax lock, the corporation tax cap, the
-  triple lock); a Budget 2025 decision reversed is a U-turn;
+- `origin`: `manifesto-2024`, `budget-2025` or `government`. Only the 2024 manifesto's own words are
+  red lines the public holds the government to (the tax lock, the corporation tax cap, the triple
+  lock); a Budget 2025 decision reversed is a U-turn;
 - `judgedBy`: `levers` (the default), or `fiscalRules` for the fiscal rules, which are judged by the
   verdicts and name no lever;
 - on a strain, `scored` (default true). A strain with `scored: false` is shown in amber and scored
-  by no audience, because another rule already counts it: a cut to health strains England's
-  18-week target, and the public's rule on service cuts counts the cut.
+  by no audience, because another rule already counts it: a cut to health strains England's 18-week
+  target, and the public's rule on service cuts counts the cut.
 
 A priority may carry `reach` (Phase 25): commentary, sourced, saying once on its flagship screen
 where its spending reaches when that is not the whole UK ("Health and care budgets here are
 England's…").
 
-`pm.json` also carries `signOff`: four lines the Prime Minister signs the review off with, chosen
-by first match (`rulesMissed`, with `{rules}`; `brokenWithRoom`, `broken` and `strained`, with
+`pm.json` also carries `signOff`: four lines the Prime Minister signs the review off with, chosen by
+first match (`rulesMissed`, with `{rules}`; `brokenWithRoom`, `broken` and `strained`, with
 `{promises}`). Each is a `SimulatedLine` of twenty words or fewer with no figure: the schema refuses
-either.
-`options.json` holds one list, the ways to deliver (the ways to afford and the add-ons went in
-Phase 24; the ways to pay are now levers on the fine-tuning screens, below). Every option's
+either. `options.json` holds one list, the ways to deliver (the ways to afford and the add-ons went
+in Phase 24; the ways to pay are now levers on the fine-tuning screens, below). Every option's
 `values` is a bundle of one or two levers at stated values: codes that exist and are not deprecated
 or macro, values inside the control's range and on its grid, none the default. Rules the validator
 enforces:
@@ -338,11 +333,11 @@ enforces:
 - **No lever in more than one option**, so an option's state (on, adjusted, off) is read from the
   levers alone, is never ambiguous, and no screen can light or undo another's option.
 - **An option may name the options it counts the same money as**: `conflicts: [{ with, text }]`,
-  `with` another option's id, `text` the reason in at most two hundred characters, best
-  quoted from the levers' own interactions. Author each pair once, on one side; never on the option
-  itself; never for an unknown id. While one is in the Budget the other's card is blocked and says
-  why. Softer overlaps need no authoring: they are the levers' `interactions`, read from either
-  side, named on the card before either option is chosen and quoted once the other moves.
+  `with` another option's id, `text` the reason in at most two hundred characters, best quoted from
+  the levers' own interactions. Author each pair once, on one side; never on the option itself;
+  never for an unknown id. While one is in the Budget the other's card is blocked and says why.
+  Softer overlaps need no authoring: they are the levers' `interactions`, read from either side,
+  named on the card before either option is chosen and quoted once the other moves.
 - **Every priority has two to five ways to deliver it** (`deliver[].priority`); safer streets has
   two because the game has only two levers there, and its brief says so.
 - **Every option says whether it delivers its priority in full or makes a start** (`scale`, Phase
@@ -352,9 +347,9 @@ enforces:
 - **Every option carries one adviser's line** (`advice`, Phase 23): a `SimulatedLine` of at most
   twelve words with an `adviser` id who speaks on that screen and at least one source, saying who
   proposed it and one plain judgement of its cost and effect. No figure is typed; "big" (or
-  expensive, large, costly) may be said only where the engine's own figure for the option is £5bn
-  or more in the target year, "small" (cheap, little, modest, tiny) only at £1bn or less, and the
-  words test checks both. Titles are unique.
+  expensive, large, costly) may be said only where the engine's own figure for the option is £5bn or
+  more in the target year, "small" (cheap, little, modest, tiny) only at £1bn or less, and the words
+  test checks both. Titles are unique.
 - **The words are the proposer's** (`line`, a `SimulatedLine` with a `short`); the figure is never
   authored: the page prices the bundle with the engine against the Budget as it stands, and shows
   the headroom the move would leave. Titles say what the option does, in at most twelve words and
@@ -452,8 +447,8 @@ screen, and each pick's reason is its own adviser line; these rules keep it chec
   desk, pick or not, so the briefing never points at something hidden.
 
 One more rule needs the engine, so the tests hold it: at its smallest size, on today's estimate,
-every pick moves the target year's headroom by £1bn or more, priced as its card prices it
-(interest included, and a move made only of investment priced on the debt rule).
+every pick moves the target year's headroom by £1bn or more, priced as its card prices it (interest
+included, and a move made only of investment priced on the debt rule).
 
 ### Households, who pays, the speech and the close (Phase 25, ADR-0026)
 
@@ -466,10 +461,10 @@ every pick moves the target year's headroom by £1bn or more, priced as its card
   and flagship lever touches a household or is on it, a test checks it, and the validator refuses a
   code on the list that a household is touched by, or an exposure group that does not exist.
 - **Who pays** (`incidence.json`). A paying group carries `felt`, the words that follow "felt" in a
-  sentence ("in pay packets and prices", "through pay and prices"), at most sixty characters and
-  no figure. `notFelt` lists the taxes most households do not feel: levies on banks, on energy
-  producers and on the very top. They leave the public's count of tax rises and earn no point
-  either way.
+  sentence ("in pay packets and prices", "through pay and prices"), at most sixty characters and no
+  figure. `notFelt` lists the taxes most households do not feel: levies on banks, on energy
+  producers and on the very top. They leave the public's count of tax rises and earn no point either
+  way.
 - **The speech** (`speech.json`). `forecast` says the forecast before any measure and what the
   Budget does to borrowing, all worked out (`{startYear}`, `{borrowingThen}`, `{targetYear}`,
   `{borrowingTarget}`, `{change}`). `opposition` holds the Leader of the Opposition's one-line
@@ -482,17 +477,17 @@ every pick moves the target year's headroom by £1bn or more, priced as its card
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 
-Everything a role says is a `SimulatedLine`: `{ text, short?, sources, badge: "simulated" }`,
-badged per item so no line inherits honesty from its file. `short` is the same line in fewer
-words, shown first with the full `text` one click behind. Every line a newcomer meets on the road
-has one when the line is over its budget, and the words test pins each kind: a minister's asking
-line and any band over eighteen words; the Prime Minister's reactions twelve; the advisers' notes
-fourteen; the verdicts' close and an option's line eighteen; an option's or a step-4 policy's
-adviser line (`advice`) twelve, with no figure and a size word only where the engine's figure bears
-it out (at every size, for a policy); every reception band twenty words in all (Phase 23). A figure in the short line must be a figure in the long one, so the sources cover both
-(a test checks it). A readability test reads every set a player meets with the folds closed: no
-sentence over twenty words, and a Flesch-Kincaid grade of seven or below per set (ADR-0024).
-Rules for authoring one:
+Everything a role says is a `SimulatedLine`: `{ text, short?, sources, badge: "simulated" }`, badged
+per item so no line inherits honesty from its file. `short` is the same line in fewer words, shown
+first with the full `text` one click behind. Every line a newcomer meets on the road has one when
+the line is over its budget, and the words test pins each kind: a minister's asking line and any
+band over eighteen words; the Prime Minister's reactions twelve; the advisers' notes fourteen; the
+verdicts' close and an option's line eighteen; an option's or a step-4 policy's adviser line
+(`advice`) twelve, with no figure and a size word only where the engine's figure bears it out (at
+every size, for a policy); every reception band twenty words in all (Phase 23). A figure in the
+short line must be a figure in the long one, so the sources cover both (a test checks it). A
+readability test reads every set a player meets with the folds closed: no sentence over twenty
+words, and a Flesch-Kincaid grade of seven or below per set (ADR-0024). Rules for authoring one:
 
 - **Never type a number the engine or a document did not produce.** A line may quote a published
   figure (with the source beside it) and the page may print an engine figure next to the line; the
@@ -500,7 +495,7 @@ Rules for authoring one:
   a source.
 - **Roles only.** "The Prime Minister", "the Justice Secretary", "MPs in marginal seats". No real
   person's name, and no description that identifies one.
-- **Predicates are closed.** Interventions, verdict kinds and household touches choose from enums the
-  engine evaluates; a new condition needs code, not a string.
+- **Predicates are closed.** Interventions, verdict kinds and household touches choose from enums
+  the engine evaluates; a new condition needs code, not a string.
 - The speech's `{…}` placeholders are filled from data and the outcome; a test checks every pound
   sign in the assembled text against the engine.

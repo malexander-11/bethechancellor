@@ -10,33 +10,33 @@ badges 2026-09-30 (below, ADR-0034)
 Phase 8 (ADR-0011, ADR-0012) turned the desk into a seven-stage game, and the game was honest.
 Played by a newcomer it was also illegible: every screen led with citations, the Prime Minister's
 stage carried a negotiation sub-game with political capital, and Budget day was twenty-seven
-reaction bands in three columns. A clever geography graduate who does not follow politics could
-not tell what they were being asked to do on a screen, or why it mattered.
+reaction bands in three columns. A clever geography graduate who does not follow politics could not
+tell what they were being asked to do on a screen, or why it mattered.
 
-The brief for Phase 9 named the fix: a rigid seven-step process, explained plainly, with the
-sources and breakdowns hidden from view. Two things in that brief needed a decision rather than
-a rewrite. Hiding the sources touches the honesty contract (ADR-0002). Judging a Budget out of
-five for three audiences is an opinion the tool must hold without inventing a number.
+The brief for Phase 9 named the fix: a rigid seven-step process, explained plainly, with the sources
+and breakdowns hidden from view. Two things in that brief needed a decision rather than a rewrite.
+Hiding the sources touches the honesty contract (ADR-0002). Judging a Budget out of five for three
+audiences is an opinion the tool must hold without inventing a number.
 
 ## Decision
 
-1. **A "Show workings" switch, off by default.** Sources, provenance drawers, breakdown tables,
-   the expert switches and the ready-made Budgets sit behind one switch in the header, remembered
-   in the browser. The badges stay whatever the switch says, because they are the contract, not the
-   detail. The two reference pages force it on: they are the workings. A footer line says where the
-   sources went. Nothing is removed; every number on screen is still the engine's or a document's,
-   and the sources are one click away. The tests run with the switch on so every assertion about a
-   source still holds, and the off state has its own tests.
+1. **A "Show workings" switch, off by default.** Sources, provenance drawers, breakdown tables, the
+   expert switches and the ready-made Budgets sit behind one switch in the header, remembered in the
+   browser. The badges stay whatever the switch says, because they are the contract, not the detail.
+   The two reference pages force it on: they are the workings. A footer line says where the sources
+   went. Nothing is removed; every number on screen is still the engine's or a document's, and the
+   sources are one click away. The tests run with the switch on so every assertion about a source
+   still holds, and the off state has its own tests.
 
 2. **A guide at the head of every screen**, in plain English: which step this is, what you are
-   doing, why it matters, what to do now, in at most sixty words, with a glossary of the dozen
-   words a newcomer will not know. Guide and glossary are chrome, like the dateline: they carry no
-   badge and may quote no figure that is not sourced.
+   doing, why it matters, what to do now, in at most sixty words, with a glossary of the dozen words
+   a newcomer will not know. Guide and glossary are chrome, like the dateline: they carry no badge
+   and may quote no figure that is not sourced.
 
 3. **The appointment is step 1.** Three advisers brief the new Chancellor on one screen: the rules
-   and why they matter, the economy since March (reading chips from the context file's own
-   figures), and the politics, with the manifesto's red lines listed from the PM file the desk
-   reads, so they can never drift from what is enforced.
+   and why they matter, the economy since March (reading chips from the context file's own figures),
+   and the politics, with the manifesto's red lines listed from the PM file the desk reads, so they
+   can never drift from what is enforced.
 
 4. **Themes as a list, flagships funded on the spot, the manifesto fixed.** The player ticks every
    theme that applies and then the flagships under each. Ticking a flagship moves its lever and the
@@ -46,9 +46,9 @@ five for three audiences is an opinion the tool must hold without inventing a nu
    `themes[]`; `protectedPromises`, `concessions`, `capital` and `dropped` are gone and their link
    keys `pp`, `cn`, `cp`, `dp` are retired and never reused.
 
-5. **The warning is on the lever.** A lever a red line watches wears a quiet tag naming it; move
-   it across and the tag turns red. A flagship promised to the PM wears its promise while funded
-   and a red tag once the desk pulls it back.
+5. **The warning is on the lever.** A lever a red line watches wears a quiet tag naming it; move it
+   across and the tag turns red. A flagship promised to the PM wears its promise while funded and a
+   red tag once the desk pulls it back.
 
 6. **Three audiences, five steps.** Budget day rates the Budget for the backbenchers ("Is this a
    Labour Budget?"), the markets ("Is the headroom enough? What about growth and the tax burden?")
@@ -87,15 +87,15 @@ five for three audiences is an opinion the tool must hold without inventing a nu
 | Public       | Tax cuts in the target year                                       | +1 above £1bn                                                           | the least a cut can be and still be noticed                                                                                |
 | Public       | A rabbit that costs money                                         | +1                                                                      | the headline, at the cost of the headroom                                                                                  |
 
-These are judgements. They are written down here, shown in the "Why this rating" disclosure on
-every card with the reading that fired them, and badged simulated, so a player can disagree with
-them in the open.
+These are judgements. They are written down here, shown in the "Why this rating" disclosure on every
+card with the reading that fired them, and badged simulated, so a player can disagree with them in
+the open.
 
 ## Consequences
 
 - A Phase 8 link still opens. `th.security` decodes as a list of one; `pp`, `cn`, `cp` and `dp`
-  decode to nothing, without a warning. A Budget that had negotiated away the tax lock now shows
-  it broken, because the manifesto is fixed.
+  decode to nothing, without a warning. A Budget that had negotiated away the tax lock now shows it
+  broken, because the manifesto is fixed.
 - `data/journey/reactions.json` (about 1,400 lines of sourced copy) is deleted. The best sentences
   and their sources moved into the reception bands in the same commit, so no source was lost.
 - The journey asks eight Continues (the PM two, the desk three, the forecast one, Budget day two),
@@ -117,16 +117,16 @@ with its note. Phase 25 changed how they add up and what they read:
 - **The scale.** Every audience starts at three. One or two points either way move it one step;
   three or more, two steps. Caps hold as before, so one ordinary minus is never the floor, and the
   top takes more than one good thing. Before, every point was a step.
-- **From before the Budget.** Borrowing, debt and the tax take are measured against today's
-  estimate with nothing moved, so the economy since March is never the player's doing.
-- **A missed rule** (the day-to-day or the debt rule) holds the markets at one, and the
-  backbenchers and the public at three.
-- **Cuts are counted, never netted**: department by department, with health and schools counting
-  for the public from £2bn.
+- **From before the Budget.** Borrowing, debt and the tax take are measured against today's estimate
+  with nothing moved, so the economy since March is never the player's doing.
+- **A missed rule** (the day-to-day or the debt rule) holds the markets at one, and the backbenchers
+  and the public at three.
+- **Cuts are counted, never netted**: department by department, with health and schools counting for
+  the public from £2bn.
 - **The public counts the taxes most households feel.** Levies on banks, energy producers and the
   very top score nothing with them.
-- **Only the manifesto's own words floor the public**: the tax lock, the corporation tax cap and
-  the triple lock.
+- **Only the manifesto's own words floor the public**: the tax lock, the corporation tax cap and the
+  triple lock.
 
 The ratings of sixteen Budgets before and after are in ADR-0026.
 
@@ -135,10 +135,10 @@ The ratings of sixteen Budgets before and after are in ADR-0026.
 "Show workings" is no longer the only switch. "Advanced mode" sits beside it in the footer: off, a
 first game shows each adviser's best ideas and a short briefing; on, every policy, every way to
 deliver a priority and the full briefing. The two do different things and neither moves the other:
-the workings still show where the numbers come from, and never how many ideas are on offer. Like
-the workings, the mode is remembered in the browser and never carried in a link. The tests seed
-both, advanced and the workings on, so the page tests keep their meaning; each switch's off state
-has its own tests.
+the workings still show where the numbers come from, and never how many ideas are on offer. Like the
+workings, the mode is remembered in the browser and never carried in a link. The tests seed both,
+advanced and the workings on, so the page tests keep their meaning; each switch's off state has its
+own tests.
 
 ## Revision (2026-09-29): the briefing's badges wait for the workings (ADR-0031)
 
@@ -149,11 +149,11 @@ in both modes now: "Advanced mode" no longer lengthens it.
 
 ## Revision (2026-09-29, later): the switches withdrawn for now (ADR-0032)
 
-The footer is one row of links, and both switches are withdrawn for now. The game's screens show
-no workings; the reference pages, which are the workings, still do. The preference moved to a new
-key, so a player who had turned the workings on cannot keep them with no way to turn them off; the
-page tests set the new key to keep the code tested for the switch's return. Advanced mode is
-changed by the button on each screen basic mode trims, as it was beside the footer's switch.
+The footer is one row of links, and both switches are withdrawn for now. The game's screens show no
+workings; the reference pages, which are the workings, still do. The preference moved to a new key,
+so a player who had turned the workings on cannot keep them with no way to turn them off; the page
+tests set the new key to keep the code tested for the switch's return. Advanced mode is changed by
+the button on each screen basic mode trims, as it was beside the footer's switch.
 
 ## Revision (2026-09-30): no badges (ADR-0034)
 

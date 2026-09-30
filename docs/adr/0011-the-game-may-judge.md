@@ -4,10 +4,10 @@
 
 ## Context
 
-Phases 1 to 7 carried four badges, and all four describe **facts and arithmetic**: a direct
-costing is a published number, a mechanical figure follows from one by stated arithmetic, an
-assumption is a setting the player chose, commentary is sourced words about a second-round effect.
-Nothing in the tool had an opinion.
+Phases 1 to 7 carried four badges, and all four describe **facts and arithmetic**: a direct costing
+is a published number, a mechanical figure follows from one by stated arithmetic, an assumption is a
+setting the player chose, commentary is sourced words about a second-round effect. Nothing in the
+tool had an opinion.
 
 Turning the desk into a game about _delivering_ a Budget needs opinions. What the Prime Minister
 wants; what a minister says when their budget is cut; how "the markets" read a thin margin; what a
@@ -33,14 +33,14 @@ sourced words beside them, and the first quiet lie in the tool would be a costum
 5. The sourced fact inside a simulated line keeps its own `SourceLink`. A minister who says the
    asylum system cost £4.0 billion last year cites the National Audit Office in the same breath.
 
-**Roles, not people.** The Prime Minister, the Justice Secretary, the Chief Economic Adviser, MPs
-in marginal seats. Their positions come from manifesto text, gov.uk statements and official
-statistics, all fetched and registered; no invented words go into a named person's mouth, and the
-copy never describes a real minister identifiably. This extends the rule the advisers have carried
-since Phase 4.
+**Roles, not people.** The Prime Minister, the Justice Secretary, the Chief Economic Adviser, MPs in
+marginal seats. Their positions come from manifesto text, gov.uk statements and official statistics,
+all fetched and registered; no invented words go into a named person's mouth, and the copy never
+describes a real minister identifiably. This extends the rule the advisers have carried since
+Phase 4.
 
-**The one place a judgement moves a number is the forecast draw** (ADR-0012), and it does so only
-by choosing among published figures.
+**The one place a judgement moves a number is the forecast draw** (ADR-0012), and it does so only by
+choosing among published figures.
 
 ## Consequences
 
@@ -60,8 +60,8 @@ class and every rule above are unchanged (ADR-0002, revised the same day).
 ## Revision, 2026-09-29 (ADR-0031)
 
 On the briefing a judgement's badge now shows only with the workings on (ADR-0002, revised the same
-day): the buffer line is still the game's judgement, and says so with the switch on. Everywhere
-else a Game judgement wears its badge whatever the switch says.
+day): the buffer line is still the game's judgement, and says so with the switch on. Everywhere else
+a Game judgement wears its badge whatever the switch says.
 
 ## Revision, 2026-09-30 (ADR-0034)
 

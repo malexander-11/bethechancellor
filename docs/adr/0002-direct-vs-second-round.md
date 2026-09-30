@@ -4,25 +4,25 @@
 
 ## Context
 
-The user wants a realistic tool whose figures come from the OBR, HMRC, HM Treasury and
-similar bodies. Behavioural and macroeconomic feedback is real but contested, and any number
-we attached to it would be our judgement dressed as an official figure.
+The user wants a realistic tool whose figures come from the OBR, HMRC, HM Treasury and similar
+bodies. Behavioural and macroeconomic feedback is real but contested, and any number we attached to
+it would be our judgement dressed as an official figure.
 
 ## Decision
 
-- Fiscal effects of levers use official direct costings only, with sources and derivation
-  steps displayed.
-- Second-round effects are recorded as `considerations`: kind, direction, magnitude in words
-  and sources. They never change a number.
+- Fiscal effects of levers use official direct costings only, with sources and derivation steps
+  displayed.
+- Second-round effects are recorded as `considerations`: kind, direction, magnitude in words and
+  sources. They never change a number.
 - Every displayed figure carries one of four badges: direct costing, mechanical, assumption,
   second-round commentary.
-- The engine may add mechanical consequences (debt interest on extra borrowing, ratios) but
-  no behavioural or macro feedback.
+- The engine may add mechanical consequences (debt interest on extra borrowing, ratios) but no
+  behavioural or macro feedback.
 
 ## Consequences
 
-Players see clearly what is official and what is our framing. The tool understates dynamic
-effects and says so in a standing footer.
+Players see clearly what is official and what is our framing. The tool understates dynamic effects
+and says so in a standing footer.
 
 ## Revision, 2026-09-16 (ADR-0011)
 
@@ -48,8 +48,8 @@ break this decision. The reference pages force the switch on, because they are t
 
 The words on the badges were made plainer, for a reading age of ten to twelve: **Official figure**
 (`direct`), **Worked out** (`mechanical`), **Assumption**, **Commentary** and **Game judgement**
-(`simulated`). The ids in the data, the classes on the page and what each badge means are
-unchanged; only the label and its tooltip moved.
+(`simulated`). The ids in the data, the classes on the page and what each badge means are unchanged;
+only the label and its tooltip moved.
 
 ## Revision, 2026-09-29 (ADR-0031)
 
@@ -63,9 +63,9 @@ whatever the switch says, as the revision of 2026-09-18 set out.
 
 The "Show workings" switch is withdrawn for now, at the user's request, with the rest of the
 footer's utilities. So no game screen offers its sources, which the revision of 2026-09-18 said
-would break this decision. It is a deliberate departure for now, not a change to the contract:
-every figure is still the engine's or a document's and badged for what it is on every screen but
-the briefing, the About page lists every source, and the code and its tests stay for the switch's
+would break this decision. It is a deliberate departure for now, not a change to the contract: every
+figure is still the engine's or a document's and badged for what it is on every screen but the
+briefing, the About page lists every source, and the code and its tests stay for the switch's
 return.
 
 ## Revision, 2026-09-30 (ADR-0034)

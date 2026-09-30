@@ -1,8 +1,8 @@
 # Data licence and attribution
 
-The code in this repository is MIT licensed (see `LICENSE`). The figures under `data/`
-are a different matter: they are reproduced or derived from publications of UK public
-bodies and carry their own licences.
+The code in this repository is MIT licensed (see `LICENSE`). The figures under `data/` are a
+different matter: they are reproduced or derived from publications of UK public bodies and carry
+their own licences.
 
 ## Open Government Licence v3.0
 
@@ -13,14 +13,14 @@ Sources used under OGL v3.0 include:
 
 - Office for Budget Responsibility, _Economic and fiscal outlook_, March 2026, and its published
   sensitivities and forecast-error statistics.
-- HM Treasury, _Charter for Budget Responsibility: Autumn 2025_ (in force February 2026) and
-  _A strong fiscal framework_ (October 2024).
-- HM Treasury, _Budget 2025_ documents, including Table 4.1 policy decisions and the policy
-  costings document.
+- HM Treasury, _Charter for Budget Responsibility: Autumn 2025_ (in force February 2026) and _A
+  strong fiscal framework_ (October 2024).
+- HM Treasury, _Budget 2025_ documents, including Table 4.1 policy decisions and the policy costings
+  document.
 - HM Treasury, _Spending Review 2025_ departmental DEL tables.
 - HM Revenue and Customs, _Direct effects of illustrative tax changes_, June 2025 edition.
-- Office for National Statistics, _Public sector finances_ time series and
-  _Families and households in the UK: 2024_.
+- Office for National Statistics, _Public sector finances_ time series and _Families and households
+  in the UK: 2024_.
 - Bank of England, Interactive Statistical Database (Bank Rate series).
 
 Every number in `data/` carries a `source` reference to one of these documents, recorded in
@@ -28,11 +28,11 @@ Every number in `data/` carries a `source` reference to one of these documents, 
 
 ## Other material
 
-Commentary from the Institute for Government, the Institute for Fiscal Studies, Nesta and
-press reports is cited by URL as qualitative context only. No figures are reproduced from
-those sources without attribution, and none of them are used in the engine's arithmetic.
+Commentary from the Institute for Government, the Institute for Fiscal Studies, Nesta and press
+reports is cited by URL as qualitative context only. No figures are reproduced from those sources
+without attribution, and none of them are used in the engine's arithmetic.
 
-HM Treasury's _Revision to the DMO Financing Remit 2026-27_ (23 April 2026), published by the
-Debt Management Office, is Crown copyright. The Office's terms of use could not be read from
-where the game is built, so the briefing quotes its one figure, the year's gilt sales, briefly
-and with attribution; it is not used in the engine's arithmetic.
+HM Treasury's _Revision to the DMO Financing Remit 2026-27_ (23 April 2026), published by the Debt
+Management Office, is Crown copyright. The Office's terms of use could not be read from where the
+game is built, so the briefing quotes its one figure, the year's gilt sales, briefly and with
+attribution; it is not used in the engine's arithmetic.

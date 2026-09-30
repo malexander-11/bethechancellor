@@ -1,7 +1,7 @@
 # ADR-0017: The Budget 2026 menu, and no more letters
 
-**Status:** accepted, 2026-09-19. Revises ADR-0008 (the letters' screen) and ADR-0015 (the
-folder quarantine of our own arithmetic).
+**Status:** accepted, 2026-09-19. Revises ADR-0008 (the letters' screen) and ADR-0015 (the folder
+quarantine of our own arithmetic).
 
 ## Context
 
@@ -31,17 +31,16 @@ data.
 - Reported but not addable honestly, because no published costing was reachable: a cap on the
   pension tax-free lump sum, a 1.8% social care levy, a cap on ISA holdings, holiday lets moved to
   council tax, machine games duty. They are named here as gaps and not built.
-- Ruled out by the government and therefore not added: a land value tax, an exit charge, a flat
-  levy at death.
+- Ruled out by the government and therefore not added: a land value tax, an exit charge, a flat levy
+  at death.
 
-**The letters.** ADR-0008 put the policies colleagues campaign for on a third screen of the
-package, "Recommendations from Parliament", each costed by our own arithmetic and badged an
-assumption; ADR-0015 then made that folder the quarantine for our arithmetic, so the tax groups
-held only direct-badged levers. By Phase 11 the screen carried sixteen levers, five of the Prime
-Minister's fifteen flagships and two of the four rabbit cards pointed at them, and the screen was
-the one part of the package that read as a story device rather than a Budget. The user's
-instruction on the content was: _"Keep them stored in back-end but remove the concept of letters
-from MPs."_
+**The letters.** ADR-0008 put the policies colleagues campaign for on a third screen of the package,
+"Recommendations from Parliament", each costed by our own arithmetic and badged an assumption;
+ADR-0015 then made that folder the quarantine for our arithmetic, so the tax groups held only
+direct-badged levers. By Phase 11 the screen carried sixteen levers, five of the Prime Minister's
+fifteen flagships and two of the four rabbit cards pointed at them, and the screen was the one part
+of the package that read as a story device rather than a Budget. The user's instruction on the
+content was: _"Keep them stored in back-end but remove the concept of letters from MPs."_
 
 ## Decision
 
@@ -51,17 +50,17 @@ from MPs."_
    are retired from the schemas. No copy, group, adviser line or document mentions letters or
    Parliament's recommendations.
 
-2. **The badge quarantines, not the folder.** A lever costed by our own arithmetic sits in the
-   group its subject belongs to, beside the HMRC row or Treasury line it resembles, and wears the
+2. **The badge quarantines, not the folder.** A lever costed by our own arithmetic sits in the group
+   its subject belongs to, beside the HMRC row or Treasury line it resembles, and wears the
    assumption badge there. The reader sees "Direct costing" and "Assumption" side by side in the
    same tab and can compare them; the consistency test now requires every tax lever to be direct,
    mechanical or assumption for a stated reason, rather than every tax lever to be direct. The
    Director of Tax's suggestions at the sums rank every live tax lever, each with its badge.
 
 3. **A share of an OBR line is mechanical, whichever side.** The percentage-of-baseline costing may
-   scale a `receiptsByTax.*` line on a receipts-side lever; the schema ties the line to the side
-   and keeps a published plan a spending baseline. Business rates (`brates`) is the first: a slider
-   on the OBR's Table A.5 line, about £0.4 billion a point, read in cash rather than real terms.
+   scale a `receiptsByTax.*` line on a receipts-side lever; the schema ties the line to the side and
+   keeps a published plan a spending baseline. Business rates (`brates`) is the first: a slider on
+   the OBR's Table A.5 line, about £0.4 billion a point, read in cash rather than real terms.
 
 4. **Eleven re-homed, five shelved.** Codes and costings are unchanged, so every old link still
    works.
@@ -75,11 +74,11 @@ from MPs."_
    | `cpilock`                                    | welfare · Welfare, with a minister                             |
    | `def5`, `aid07`, `freeuni`, `water`, `nonuk` | kept for the record: `deprecated`, group Shelved, on no screen |
 
-   A shelved lever keeps its description, costing, raw source and considerations, so
-   `validate:data` and the engine tests keep reproducing it; the app filters it out, the incidence,
-   minister and suggestion checks skip it, and an old link decodes it as an unknown code with a
-   warning, exactly as child benefit has since Phase 5. The seeded draw's revision that named a
-   shelved lever's caveat now names the CGT-at-death caveat instead.
+   A shelved lever keeps its description, costing, raw source and considerations, so `validate:data`
+   and the engine tests keep reproducing it; the app filters it out, the incidence, minister and
+   suggestion checks skip it, and an old link decodes it as an unknown code with a warning, exactly
+   as child benefit has since Phase 5. The seeded draw's revision that named a shelved lever's
+   caveat now names the CGT-at-death caveat instead.
 
 5. **The menu, lever by lever, with its assumption.**
 
@@ -107,17 +106,17 @@ from MPs."_
 
 - 52 tax levers (41 direct, 10 assumption, 1 mechanical), 26 spending and welfare levers on offer
   and six kept for the record, 87 lever files. Three sources registered (the Resolution Foundation
-  paper, HMRC's banking-sector receipts with the ODS committed and hashed, Corporation Tax Act
-  2010 section 269DE); the Autumn Budget 2024 entry notes lines 24 and 29.
+  paper, HMRC's banking-sector receipts with the ODS committed and hashed, Corporation Tax Act 2010
+  section 269DE); the Autumn Budget 2024 entry notes lines 24 and 29.
 - The journey asks seven Continues, not eight; ADR-0013 and ADR-0014 quote eight as the record of
   their day. The word budgets hold: the taxes average under twelve words a control.
 - The markets' credibility rule (`credibilityShare`) bites more often, because assumption-badged
   revenue now sits on the tax screen where a player reaches for it. That is intended: a Chancellor
   who funds a package on repeats and static costs should hear about it.
 - The web filters deprecated levers at load, so the engine tests that need a very large package to
-  miss the stability rule still switch on defence at 5%: the fixture loads every file, shelved
-  ones included, and the arithmetic is kept for exactly that reason.
+  miss the stability rule still switch on defence at 5%: the fixture loads every file, shelved ones
+  included, and the arithmetic is kept for exactly that reason.
 - Risks, stated on the cards: `cgtdth` is an upper bound by construction; `bank5` rests on receipts
-  rounded to £0.1bn and a 2026 edition is due; `vatgas` annualises a part-year figure the Budget
-  may replace; `hvcts15` and `epl2` repeat certified lines as assumptions; `brates` scales a line
-  that includes the devolved administrations' rates.
+  rounded to £0.1bn and a 2026 edition is due; `vatgas` annualises a part-year figure the Budget may
+  replace; `hvcts15` and `epl2` repeat certified lines as assumptions; `brates` scales a line that
+  includes the devolved administrations' rates.

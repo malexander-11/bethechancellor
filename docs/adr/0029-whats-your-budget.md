@@ -5,9 +5,9 @@ Date: 2026-09-29. Status: accepted.
 ## Context
 
 The game was called Be the Chancellor. That is also the name of the tool that inspired it: the
-Institute for Fiscal Studies and Nesta's interactive tool, credited on the About page and listed
-in the source registry under that title. Two things with one name leave a reader unsure who made
-which. The user asked:
+Institute for Fiscal Studies and Nesta's interactive tool, credited on the About page and listed in
+the source registry under that title. Two things with one name leave a reader unsure who made which.
+The user asked:
 
 > Let's rebrand this. Help me with the name. I'm thinking what's your budget?
 
@@ -15,10 +15,10 @@ which. The user asked:
 
 The game is called **What’s your Budget?**
 
-- **It is the game's own question.** The cover says "It’s your Budget now.", step 5 is "Deliver
-  the Budget" and the one red button says "Deliver my Budget".
-- **It is written the way the game writes everything:** sentence case, like every heading; a
-  capital B for the fiscal event, as in all the copy; a curly apostrophe.
+- **It is the game's own question.** The cover says "It’s your Budget now.", step 5 is "Deliver the
+  Budget" and the one red button says "Deliver my Budget".
+- **It is written the way the game writes everything:** sentence case, like every heading; a capital
+  B for the fiscal event, as in all the copy; a curly apostrophe.
 - **Where it appears:**
   - the header, which is also the way home;
   - every tab title, after the screen's own ("Your briefing · Step 1 of 6 · What’s your Budget?");
@@ -26,8 +26,8 @@ The game is called **What’s your Budget?**
   - the About page, whose credit to the IFS and Nesta tool now says the game shared its name until
     September 2026;
   - the README, the methodology and the package descriptions.
-- **In running text the name is set in italics**, as a title, so its question mark reads as part
-  of the name. Where a line allows, the name comes last.
+- **In running text the name is set in italics**, as a title, so its question mark reads as part of
+  the name. Where a line allows, the name comes last.
 
 What does not change:
 
@@ -42,10 +42,10 @@ What does not change:
 
 ## Consequences
 
-- **A common phrase.** Shops, estate agents and budgeting apps all ask it, so search results will
-  be crowded. The capital B helps, and the page description names the Chancellor and the UK's
-  fiscal rules. A web search on 29 September 2026 found no game or app with this name. It was not
-  a trademark or domain search, which should come before buying a domain.
+- **A common phrase.** Shops, estate agents and budgeting apps all ask it, so search results will be
+  crowded. The capital B helps, and the page description names the Chancellor and the UK's fiscal
+  rules. A web search on 29 September 2026 found no game or app with this name. It was not a
+  trademark or domain search, which should come before buying a domain.
 - **The name no longer says "Chancellor".** The description says "You are the Chancellor", and the
   cover's tab still reads "Become Chancellor".
 - **Two stale lines are brought up to date.** The page description and the README's opening line

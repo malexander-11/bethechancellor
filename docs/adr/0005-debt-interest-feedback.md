@@ -4,29 +4,28 @@
 
 ## Context
 
-Extra borrowing accrues interest. The OBR adds this indirect effect when assessing policy
-packages against the rules. Omitting it flatters borrowing-heavy budgets by several
-£ billion in the target year. It is arithmetic given a rate assumption, not a behavioural
-judgement.
+Extra borrowing accrues interest. The OBR adds this indirect effect when assessing policy packages
+against the rules. Omitting it flatters borrowing-heavy budgets by several £ billion in the target
+year. It is arithmetic given a rate assumption, not a behavioural judgement.
 
 ## Decision
 
-- Include the feedback by default, behind a toggle, as its own line labelled "Debt interest
-  on extra borrowing (mechanical)".
+- Include the feedback by default, behind a toggle, as its own line labelled "Debt interest on extra
+  borrowing (mechanical)".
 - Marginal rate: the vintage's 10-year gilt yield assumption (4.5% for March 2026, flagged
   provisional) plus any interest-rate slider setting.
-- Half-year convention: interest in year t accrues on last year's extra debt plus half of
-  this year's extra borrowing, so ΔB_t = (ΔB^prim_t + r_t·ΔD_{t−1}) / (1 − r_t/2).
+- Half-year convention: interest in year t accrues on last year's extra debt plus half of this
+  year's extra borrowing, so ΔB_t = (ΔB^prim_t + r_t·ΔD_{t−1}) / (1 − r_t/2).
 - No market reaction to the fiscal stance is modelled; that is a `market` consideration.
 
 ## Consequences
 
-The current budget and PSNFL respond to capital spending through interest only, which is
-the framework's intent and the game's central lesson.
+The current budget and PSNFL respond to capital spending through interest only, which is the
+framework's intent and the game's central lesson.
 
 ## Revision (2026-09-28): always counted (ADR-0027)
 
 The toggle has gone from the game with the desk that held it. Every Budget counts the interest on
 its own borrowing, as the bar, the review and Budget day already assumed; a shared link that
-switched it off is read with it on, and a note on the screen it opens says so. The engine keeps
-the option, and its tests, so the arithmetic above can still be checked with the feedback off.
+switched it off is read with it on, and a note on the screen it opens says so. The engine keeps the
+option, and its tests, so the arithmetic above can still be checked with the feedback off.

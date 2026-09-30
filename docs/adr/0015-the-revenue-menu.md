@@ -26,9 +26,9 @@ marginal rate.
 
 2. **Seven new direct levers from committed rows.** The employer NICs threshold (HMRC's £2 a week
    row), vehicle excise duty (£5 on every vehicle), air passenger duty (£1 on every economy ticket),
-   tobacco duties on top of the escalator, the Business Asset Disposal Relief rate (HMRC's +1 and
-   +5 point rows as a lookup), abolishing the residence nil-rate band (HMRC's static relief cost),
-   and insurance premium tax, retired in Phase 4 and revived with its level shown. Each carries an
+   tobacco duties on top of the escalator, the Business Asset Disposal Relief rate (HMRC's +1 and +5
+   point rows as a lookup), abolishing the residence nil-rate band (HMRC's static relief cost), and
+   insurance premium tax, retired in Phase 4 and revived with its level shown. Each carries an
    incidence tag, a speech class, a behavioural consideration and, where the manifesto is in play, a
    Political Adviser note.
 
@@ -55,14 +55,14 @@ marginal rate.
    less half as much again on the basic-rate relief, about £2.5bn before anyone reacts.
 
 7. **A repeat is a direction.** A scorecard-backed lever can say `direction: "repeat"`: the
-   Treasury's certified costing taken as the yield of doing the measure again, plus the lines. It
-   is an assumption, so it lives in the letters folder badged as one: another 2p on dividend,
-   savings and property income, and a second round of the Budget 2025 gambling duty rise.
+   Treasury's certified costing taken as the yield of doing the measure again, plus the lines. It is
+   an assumption, so it lives in the letters folder badged as one: another 2p on dividend, savings
+   and property income, and a second round of the Budget 2025 gambling duty rise.
 
 8. **The letters can raise money at the sums.** The Director of Tax's suggestions rank every
    revenue-side policy in the letters that raises money alongside the taxes, each wearing its own
-   badge, so the new options are reachable when the forecast bites. A spending saving in the
-   letters is a cut and stays with the spending route.
+   badge, so the new options are reachable when the forecast bites. A spending saving in the letters
+   is a cut and stays with the spending route.
 
 ## Consequences
 
@@ -79,11 +79,11 @@ marginal rate.
 
 Decision 4 is withdrawn. HMRC's £14,300m counted the relief on public sector schemes too, about
 £6.5bn of it: the state would be paying National Insurance to itself. The lever now counts the
-private sector's part only, as a weighted sum badged Worked out: HMRC's £14,300m less its £6,500m
-on public sector schemes (net pay arrangements £6,300m, relief at source £200m, from HMRC's own
-split), times 15 ÷ 13.8 for the April 2025 rate, grown with nominal GDP. That is about £10.1bn in
-2029-30, not £20.0bn. It carries `reliefCost`, so its card reads "raises at most". It no longer
-heads any list of the biggest yields, as the consequences below describe.
+private sector's part only, as a weighted sum badged Worked out: HMRC's £14,300m less its £6,500m on
+public sector schemes (net pay arrangements £6,300m, relief at source £200m, from HMRC's own split),
+times 15 ÷ 13.8 for the April 2025 rate, grown with nominal GDP. That is about £10.1bn in 2029-30,
+not £20.0bn. It carries `reliefCost`, so its card reads "raises at most". It no longer heads any
+list of the biggest yields, as the consequences below describe.
 
 ## Revision (2026-09-30): two of the seven retired (ADR-0035)
 

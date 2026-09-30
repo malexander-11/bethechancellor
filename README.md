@@ -1,8 +1,8 @@
 # What’s your Budget?
 
-A web game about the trade-offs facing the UK Chancellor. You choose who pays and what to fund;
-the game shows what happens to borrowing, debt and the government's fiscal rules, with every
-number traced to an official source.
+A web game about the trade-offs facing the UK Chancellor. You choose who pays and what to fund; the
+game shows what happens to borrowing, debt and the government's fiscal rules, with every number
+traced to an official source.
 
 Formerly _Be the Chancellor_. It was renamed in September 2026 so that it is not mistaken for the
 Institute for Fiscal Studies and Nesta tool of that name, which inspired it (ADR-0029).
@@ -115,26 +115,26 @@ Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-br
 the residence nil-rate band, HMRC's pension statistics for National Insurance on employer pension
 contributions, HMRC's banking-sector receipts, inheritance tax up to abolition, a share of the OBR's
 business rates line, CenTax's estimates for an exit charge and partnership National Insurance,
-HMRC's cost of the National Insurance exemption over pension age and of private residence
-relief, HMRC's pension relief by marginal rate for relief at a flat 30% or the basic rate, HMRC's
-bank levy receipts, the government's six-month figure for the electricity zero rate, the think
-tanks' own figures for their proposals (the Resolution Foundation, IPPR, CenTax, Tax Justice UK, the
-IFS Green Budget, Demos, the Adam Smith Institute, Onward), and our own stated arithmetic where
-nobody has published a costing, recorded as such), 32 spending levers (Spending Review 2025
-settlements, OBR welfare lines, Budget 2025 spending decisions, the Prime Minister's schemes, six
-welfare cards from the think tanks) with milestones from PESA, fifteen more levers kept for the
-record on no screen, eight priorities with 29 ways to deliver them (every option a bundle of those
-levers), all 99 of those levers on the fine-tuning screens as 133 policies, one estimate of the
-economy today from the Bank of England's gilt yields and HM Treasury's comparison of independent
-forecasts, and simulated lines in the voices of roles, every fact in them sourced. Next: the rebase
-to the 28 October 2026 forecast.
+HMRC's cost of the National Insurance exemption over pension age and of private residence relief,
+HMRC's pension relief by marginal rate for relief at a flat 30% or the basic rate, HMRC's bank levy
+receipts, the government's six-month figure for the electricity zero rate, the think tanks' own
+figures for their proposals (the Resolution Foundation, IPPR, CenTax, Tax Justice UK, the IFS Green
+Budget, Demos, the Adam Smith Institute, Onward), and our own stated arithmetic where nobody has
+published a costing, recorded as such), 32 spending levers (Spending Review 2025 settlements, OBR
+welfare lines, Budget 2025 spending decisions, the Prime Minister's schemes, six welfare cards from
+the think tanks) with milestones from PESA, fifteen more levers kept for the record on no screen,
+eight priorities with 29 ways to deliver them (every option a bundle of those levers), all 99 of
+those levers on the fine-tuning screens as 133 policies, one estimate of the economy today from the
+Bank of England's gilt yields and HM Treasury's comparison of independent forecasts, and simulated
+lines in the voices of roles, every fact in them sourced. Next: the rebase to the 28 October 2026
+forecast.
 
 ## Principles
 
 - **Direct costings are official.** Fiscal effects come from HMRC ready reckoners, HM Treasury
   policy costings and OBR forecast lines. They are shown as numbers, with the source and every
-  transformation step visible; for now those are off the game's screens, with the switch that
-  showed them withdrawn, and the About page lists every source (ADR-0032).
+  transformation step visible; for now those are off the game's screens, with the switch that showed
+  them withdrawn, and the About page lists every source (ADR-0032).
 - **Second-round effects are words, not numbers.** Behavioural and macroeconomic knock-on effects
   are described qualitatively with sources. Every figure is recorded as an official figure, worked
   out, an assumption, or commentary, though since ADR-0034 no screen labels which.
@@ -193,6 +193,6 @@ automatically.
 
 ## Data provenance
 
-`data/sources/sources.json` lists every source document. Each series and costing carries a
-`source` reference into that registry, and derived numbers carry a `derivation` chain. Data
-licensing and attribution are in `DATA-LICENCE.md`.
+`data/sources/sources.json` lists every source document. Each series and costing carries a `source`
+reference into that registry, and derived numbers carry a `derivation` chain. Data licensing and
+attribution are in `DATA-LICENCE.md`.

@@ -38,12 +38,12 @@ The header is the game's name, which is the way home, and nothing else.
 
 ### The footer: one row of links
 
-The footer is three links: "Methodology", "About & sources" and "Sources and licence". Nothing
-else: the line on the figures went (the About page's "What the game does not do" says the same),
-and so did both switches, the hint and the badges' key. "Sources and licence" lands on the About
-page's licence, which moved above the long table of sources so that the link lands on both; a link
-to part of a page now scrolls to that part. On a phone the row fits on one line from about 400px
-wide and wraps to two below: 49px against 93px.
+The footer is three links: "Methodology", "About & sources" and "Sources and licence". Nothing else:
+the line on the figures went (the About page's "What the game does not do" says the same), and so
+did both switches, the hint and the badges' key. "Sources and licence" lands on the About page's
+licence, which moved above the long table of sources so that the link lands on both; a link to part
+of a page now scrolls to that part. On a phone the row fits on one line from about 400px wide and
+wraps to two below: 49px against 93px.
 
 ### The switches, withdrawn for now
 
@@ -51,19 +51,19 @@ wide and wraps to two below: 49px against 93px.
   provenance drawers or breakdown tables. The two reference pages, which are the workings, still
   show them: the About page lists every source. The preference moved to a new key
   (`btc.workings.v2`), so that a player who had turned the workings on before cannot keep them on
-  with no way to turn them off. The code stays, and the page tests set the key to keep it tested,
-  so the switch can come back as it was: it last lived in `apps/web/src/components/Disclaimer.tsx`
-  at `05170ed`.
+  with no way to turn them off. The code stays, and the page tests set the key to keep it tested, so
+  the switch can come back as it was: it last lived in `apps/web/src/components/Disclaimer.tsx` at
+  `05170ed`.
 - **Advanced mode.** The footer's switch went. The button on each screen basic mode trims ("See
   every idea", then "Show only the best ideas") stays the way between the modes, remembered in the
   browser as before, since without it a player could never see most of the policies. "Remove the
-  option of advanced mode" could also mean removing that button, and with it advanced mode; that
-  was not done.
+  option of advanced mode" could also mean removing that button, and with it advanced mode; that was
+  not done.
 
 ### The badges: plain labels
 
-A badge opened the key at the foot of the page when tapped (ADR-0026). With the key gone, a badge
-is a plain label, its meaning in its title for a mouse, and the Methodology page's "Five kinds of
+A badge opened the key at the foot of the page when tapped (ADR-0026). With the key gone, a badge is
+a plain label, its meaning in its title for a mouse, and the Methodology page's "Five kinds of
 number", one link away in the footer, says what each means. A badge inside a card's label no longer
 takes the tap: the tap reaches the card's control.
 
@@ -83,18 +83,18 @@ takes the tap: the tap reaches the card's control.
   ignore the old key, on for the reference pages and for the preference the page tests set; the
   modes change by the screen's button, are remembered, leave the workings and the link alone.
 - **The walk** (`walk32.mjs`, 1300px and 360px, light and reduced motion, with the contrast, size,
-  family, hit-box, radius and animation audits): clean in both runs. It checks the cover's words
-  and that it has no picture, the header's one link, the footer's three and nothing else, no
-  switch and no source on any game screen, the modes changed by the screens' own buttons, and the
-  footer's "Sources and licence" landing on the licence, above the sources.
+  family, hit-box, radius and animation audits): clean in both runs. It checks the cover's words and
+  that it has no picture, the header's one link, the footer's three and nothing else, no switch and
+  no source on any game screen, the modes changed by the screens' own buttons, and the footer's
+  "Sources and licence" landing on the licence, above the sources.
 
 ### Risks
 
-- **Sources off the game's screens.** ADR-0002 held that a page offering no way to its sources
-  with the switch on would break the honesty contract. For now no game screen offers its sources;
-  every figure is still an official number or a stated calculation, badged for what it is on every
-  screen but the briefing, and the About page lists every source. This is a deliberate departure
-  for now, at the user's request.
+- **Sources off the game's screens.** ADR-0002 held that a page offering no way to its sources with
+  the switch on would break the honesty contract. For now no game screen offers its sources; every
+  figure is still an official number or a stated calculation, badged for what it is on every screen
+  but the briefing, and the About page lists every source. This is a deliberate departure for now,
+  at the user's request.
 - **Badge meanings on a phone.** A tap no longer opens a badge's meaning. Its words are plain
   ("Official figure", "Assumption") and the Methodology page explains them.
 - **The cover no longer gives the date or the playtime.**

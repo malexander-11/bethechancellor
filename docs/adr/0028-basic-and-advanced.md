@@ -114,13 +114,13 @@ good ways to deliver a priority, not free ones.
 - **Step 4** shows, for each lever: a flagship's line where a chosen flagship holds it; else the
   policy it was chosen with; else the adviser's pick; else, for a lever on the desk, its usual
   policy; else nothing. No fold. A group at rest names no count of policies that are not on show.
-  The lead names whose best ideas these are: "Your Director of Tax's best ideas. Watch your
-  headroom move."
+  The lead names whose best ideas these are: "Your Director of Tax's best ideas. Watch your headroom
+  move."
 - **Step 3** shows the picks, a way that moves a lever on the desk, and any way not off when the
   screen opened. The line appears only on a priority that has ways to hide, so its place never
   moves; safer streets offers two ways, both picked, and has none. The page now renders one screen
-  per priority, keyed by its number, because the router keeps the page from one priority to the
-  next and each screen's reading of what was chosen belongs to that screen.
+  per priority, keyed by its number, because the router keeps the page from one priority to the next
+  and each screen's reading of what was chosen belongs to that screen.
 - **The briefing** keeps the headroom and what it means, the line on what it comes to for each
   household, its source, the advisers' yardstick, the rules in one line and what is already on the
   desk. "About the fiscal rules", "Since March" and "What is headroom?" wait for advanced mode. "How
@@ -133,42 +133,42 @@ good ways to deliver a priority, not free ones.
 
 ### Measured
 
-- **Word budgets**, folds closed (`budgets.test.tsx`, which now measures each trimmed screen in
-  both modes): basic mode's briefing 159 words (advanced 237), the widest flagship screens 130, 54
-  and 110 (205, 182 and 165), fine-tuning tax 343 on arrival and 492 with one more measure chosen
-  in every group (615 and 780), spending 424 and 589 (582 and 763). Each is pinned with a tenth to
+- **Word budgets**, folds closed (`budgets.test.tsx`, which now measures each trimmed screen in both
+  modes): basic mode's briefing 159 words (advanced 237), the widest flagship screens 130, 54 and
+  110 (205, 182 and 165), fine-tuning tax 343 on arrival and 492 with one more measure chosen in
+  every group (615 and 780), spending 424 and 589 (582 and 763). Each is pinned with a tenth to
   spare; advanced mode keeps its limits after gaining its one line.
 - **Readability** (`readability.test.ts`): a seventeenth set, the modes, reads at grade 3.4; the
   fine-tuning screens, with the two new leads, stay at 5.7.
 - **Step 4 on a phone** (`measure27.mjs` in the session scratchpad, 360px, two priorities agreed,
-  nothing chosen): tax 3,704px, 4.7 screens of 780px, with 24 figures, against 6,066px, 7.8
-  screens and 60 figures in advanced mode; spending 4,263px, 5.5 screens, with 38 figures, against
-  5,930px, 7.6 screens and 70 figures.
+  nothing chosen): tax 3,704px, 4.7 screens of 780px, with 24 figures, against 6,066px, 7.8 screens
+  and 60 figures in advanced mode; spending 4,263px, 5.5 screens, with 38 figures, against 5,930px,
+  7.6 screens and 70 figures.
 - **Playtime** (`playtime27.mjs`, an estimate from the rendered screens, not user testing): basic
   mode 10m 52s reading everything visible and 6m 13s skimming, a midpoint of 8m 32s; advanced mode
   13m 40s and 7m 32s, a midpoint of 10m 36s. The cover now reads "About 9 minutes", basic mode's
   midpoint rounded, since a first game is played in it.
-- **The walk** (`walk27.mjs`, 1300px and 360px, light and reduced motion, with the contrast,
-  size, family, hit-box, radius and animation audits): clean. The Phase 26 journey runs in advanced
-  mode; a fresh browser then finds every trimmed screen in basic mode, step 4 showing only the
-  picks with no fold, "See every idea" showing advanced mode's screen with the focus kept, a policy
-  chosen in a fold staying on show back in basic mode, the footer switch flipping all three screens
-  and remembered on reload, the link unchanged by either switch, "Show workings" leaving the mode
-  alone, and a shared link's measures on show in basic mode.
-- **Tests**: 662 across 63 files, among them one tampered file for each validator message, the
-  £1bn bar for all 28 picks, and basic mode on every trimmed screen.
+- **The walk** (`walk27.mjs`, 1300px and 360px, light and reduced motion, with the contrast, size,
+  family, hit-box, radius and animation audits): clean. The Phase 26 journey runs in advanced mode;
+  a fresh browser then finds every trimmed screen in basic mode, step 4 showing only the picks with
+  no fold, "See every idea" showing advanced mode's screen with the focus kept, a policy chosen in a
+  fold staying on show back in basic mode, the footer switch flipping all three screens and
+  remembered on reload, the link unchanged by either switch, "Show workings" leaving the mode alone,
+  and a shared link's measures on show in basic mode.
+- **Tests**: 662 across 63 files, among them one tampered file for each validator message, the £1bn
+  bar for all 28 picks, and basic mode on every trimmed screen.
 
 ### What it costs, and what was not done
 
-- **Basic mode is shorter, not short.** Step 4 on a phone is about two fifths shorter for tax and
-  a little over a quarter shorter for spending, not the half the plan expected: each card still
+- **Basic mode is shorter, not short.** Step 4 on a phone is about two fifths shorter for tax and a
+  little over a quarter shorter for spending, not the half the plan expected: each card still
   carries its sizes, its adviser's line, its tags and its price. Two to three phone screens,
   ADR-0026's aim, is still not met.
 - **"Best" is on screen as a judgement.** It is badged, each pick's reason is its sourced adviser
   line, and the rules make the list checkable; advanced mode is one button away.
-- **Two picks strain the tax lock** (the levy and National Insurance on pension contributions),
-  and both spending savings are welfare decisions last year's Budget reversed (PIP and winter
-  fuel). Their cards say so, and their adviser lines say MPs would fight them.
+- **Two picks strain the tax lock** (the levy and National Insurance on pension contributions), and
+  both spending savings are welfare decisions last year's Budget reversed (PIP and winter fuel).
+  Their cards say so, and their adviser lines say MPs would fight them.
 - **A step-4 choice can switch on a flagship way basic mode would hide** on step 3. It shows,
   because nothing chosen ever hides, and every count reads every way.
 - **Two preferences instead of one.** The test setup seeds both, advanced and the workings on, so
@@ -176,27 +176,26 @@ good ways to deliver a priority, not free ones.
 
 ## Revision (2026-09-29): the briefing's explanations on show in both modes (ADR-0030)
 
-Basic mode's briefing was the headroom, the yardstick, the rules and the desk, with the
-explanations waiting for advanced mode. Phase 28 puts the briefing in three parts in both modes:
-what headroom is, and how the OBR's March figure became today's estimate, are on show to every
-player now, because the player asked for them in that order. Advanced mode keeps three folds: the
-rules in the Charter's words, what changed since March and why forecasts move. The desk rule
-stands, since "Already on your desk" follows the three parts in both modes. Basic mode's briefing
-now reads 205 words, against 159; advanced mode's the same 205, against 237, since "Since March" is
-a fold.
+Basic mode's briefing was the headroom, the yardstick, the rules and the desk, with the explanations
+waiting for advanced mode. Phase 28 puts the briefing in three parts in both modes: what headroom
+is, and how the OBR's March figure became today's estimate, are on show to every player now, because
+the player asked for them in that order. Advanced mode keeps three folds: the rules in the Charter's
+words, what changed since March and why forecasts move. The desk rule stands, since "Already on your
+desk" follows the three parts in both modes. Basic mode's briefing now reads 205 words, against 159;
+advanced mode's the same 205, against 237, since "Since March" is a fold.
 
 ## Revision (2026-09-29): the briefing the same in both modes (ADR-0031)
 
 Basic mode no longer trims the briefing, and the line that switched it went: the briefing has no
 folds of its own but the debt rule, which both modes show. The mode line is steps 3 and 4's alone,
 and the footer's note says so: "Shows every policy, not only your advisers' best ideas." The desk
-rule stands on a different footing: the briefing no longer names the desk, but the review lists
-what a Budget leaves on it, so the levers on the desk stay on show in basic mode.
+rule stands on a different footing: the briefing no longer names the desk, but the review lists what
+a Budget leaves on it, so the levers on the desk stay on show in basic mode.
 
 ## Revision (2026-09-29, later): the footer's switch withdrawn (ADR-0032)
 
-The footer's "Advanced mode" switch is withdrawn for now. The button on each screen basic mode
-trims is the way between the modes, and the choice is remembered in the browser as before.
+The footer's "Advanced mode" switch is withdrawn for now. The button on each screen basic mode trims
+is the way between the modes, and the choice is remembered in the browser as before.
 
 ## Revision (2026-09-30): two picks replaced, and a pick in every spending group (ADR-0035)
 

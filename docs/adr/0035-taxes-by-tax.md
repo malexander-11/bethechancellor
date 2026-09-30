@@ -18,26 +18,16 @@ After the badges went (ADR-0034) the user asked:
 >
 > Then group things more into decisions with sub-decisions
 >
-> VAT
-> Change headline rate - 15 18 19 21 22 25
-> Make small changes - remove off gas, keep off electricity etc.
-> Remove exemption - food, home energy, public transport fares, children's clothes, new homes,
-> motability cars
+> VAT Change headline rate - 15 18 19 21 22 25 Make small changes - remove off gas, keep off
+> electricity etc. Remove exemption - food, home energy, public transport fares, children's clothes,
+> new homes, motability cars
 >
-> Also remove these options:
-> Being back health and social care levy
-> Premium insurance tax
-> Drop salary sacrifice cap
-> Tax capital gains at same rates
-> Cut vat registration threshold
-> Remove charge NI on landlords rent
-> Put up tax on selling a business
-> Add back last year's cancelled fuel duty rise
-> Undo last year's gambling duties
+> Also remove these options: Being back health and social care levy Premium insurance tax Drop
+> salary sacrifice cap Tax capital gains at same rates Cut vat registration threshold Remove charge
+> NI on landlords rent Put up tax on selling a business Add back last year's cancelled fuel duty
+> rise Undo last year's gambling duties
 >
-> Add:
-> Reducing personal allowance
-> Reduce NI for self employed
+> Add: Reducing personal allowance Reduce NI for self employed
 
 Three questions went back to the user before the plan, and their answers set its shape:
 

@@ -8,9 +8,10 @@ ADR-0024, each of which carries a dated revision pointing here.
 
 Playing the Phase 23 build (`495c505`), the user said:
 
-> Remove the whole OBR headroom guessing stuff. Just give them the estimated headroom that they
-> have and do that. None of the reveal and tinkering - needlessly complicated. Do allow users a
-> space to tinker with tax and spending with the levers. 1. Briefing 2. Set our priorities 3. Flagship policies 4. Finetune tax and spend - make sure numbers are up 5. Deliver the budget 6. Feedback
+> Remove the whole OBR headroom guessing stuff. Just give them the estimated headroom that they have
+> and do that. None of the reveal and tinkering - needlessly complicated. Do allow users a space to
+> tinker with tax and spending with the levers. 1. Briefing 2. Set our priorities 3. Flagship
+> policies 4. Finetune tax and spend - make sure numbers are up 5. Deliver the budget 6. Feedback
 
 Until then the game asked the player to guess the economy. The starting position offered four
 forecasts to plan on and a headroom target to keep. After the Budget was built, a seeded draw
@@ -46,11 +47,11 @@ cover's meta line reads "About 10 minutes · Six steps".
 
 ### One estimate
 
-The briefing's first figure is "Your headroom £6.8bn", badged Assumption: "our estimate for
-2029-30: the OBR's March forecast on today's borrowing costs and prices". It is made by the rule
-ADR-0010 used for the Chief Economic Adviser's card. For each reading that drives a macro slider,
-take the latest figure less the OBR's March figure (the mean over shared years for a series),
-rounded to the slider's step and clamped to its range:
+The briefing's first figure is "Your headroom £6.8bn", badged Assumption: "our estimate for 2029-30:
+the OBR's March forecast on today's borrowing costs and prices". It is made by the rule ADR-0010
+used for the Chief Economic Adviser's card. For each reading that drives a macro slider, take the
+latest figure less the OBR's March figure (the mean over shared years for a series), rounded to the
+slider's step and clamped to its range:
 
 | Reading                                                                                 | OBR in March   | Latest | Setting |
 | --------------------------------------------------------------------------------------- | -------------- | ------ | ------- |
@@ -62,32 +63,32 @@ The OBR's own sensitivities turn those settings into £6.8bn of headroom on the 
 2029-30, against £23.6bn in March. The briefing then says why, in words the sources support. The
 three promises made since March were paid for by moving money, so none used the headroom. What cut
 the headroom is dearer borrowing and higher inflation. The engine computes the estimate with
-`suggestedSettings(context.readings, levers)`; the web keeps it as `ESTIMATE`. With the workings
-on, "How the estimate is made" shows the table the settings come from.
+`suggestedSettings(context.readings, levers)`; the web keeps it as `ESTIMATE`. With the workings on,
+"How the estimate is made" shows the table the settings come from.
 
-The estimate is fixed for the game. Starting the game applies it. "Put every lever back" clears
-the player's measures and keeps the economy. Opening any game link puts the game on the estimate.
-In a game the desk hides the ready-made Budgets, because a preset would replace the estimate. A
-sandbox (no game) still sets its own economy on the desk; the footer's "Every lever" opens it on
-the estimate when it has none of its own.
+The estimate is fixed for the game. Starting the game applies it. "Put every lever back" clears the
+player's measures and keeps the economy. Opening any game link puts the game on the estimate. In a
+game the desk hides the ready-made Budgets, because a preset would replace the estimate. A sandbox
+(no game) still sets its own economy on the desk; the footer's "Every lever" opens it on the
+estimate when it has none of its own.
 
 ### No target: the rules are the line
 
 The bar reads "Headroom, 2029-30 £X · rules met" or names the rule missed. The three markers the
 target used to feed now read the markets' own bands. `THIN_HEADROOM_GBPM` (£10bn) and
-`AMPLE_HEADROOM_GBPM` (£20bn) are exported by the engine and a test pins them to the ceilings of
-the `thin` and `modest` bands of `reception.json`'s `mk-headroom` rule. A "cautious" Budget is one
-with headroom of at least £20bn (`headroomAmple`, where it read `headroomAtLeastTarget`). Budget
-day's third sentence says, first match wins: a rule missed, a promise broken, a promise strained,
-a thin margin under £10bn ("I accepted a thin margin: £X of headroom."), or "I kept every promise
-and £X of headroom." "What is headroom?" keeps the advisers' £20bn rule of thumb, badged Game
-judgement with its six sources.
+`AMPLE_HEADROOM_GBPM` (£20bn) are exported by the engine and a test pins them to the ceilings of the
+`thin` and `modest` bands of `reception.json`'s `mk-headroom` rule. A "cautious" Budget is one with
+headroom of at least £20bn (`headroomAmple`, where it read `headroomAtLeastTarget`). Budget day's
+third sentence says, first match wins: a rule missed, a promise broken, a promise strained, a thin
+margin under £10bn ("I accepted a thin margin: £X of headroom."), or "I kept every promise and £X of
+headroom." "What is headroom?" keeps the advisers' £20bn rule of thumb, badged Game judgement with
+its six sources.
 
 ### Step 4: a curated space for tax and spending
 
 Two screens of real levers under one step: "Fine-tune tax" (lead "Raise or cut any tax. Watch your
-headroom move.") and "Fine-tune spending" ("Trim or top up any budget. Watch your headroom
-move."). Each is the desk's own controls, hand-picked in `data/journey/finetune.json`:
+headroom move.") and "Fine-tune spending" ("Trim or top up any budget. Watch your headroom move.").
+Each is the desk's own controls, hand-picked in `data/journey/finetune.json`:
 
 - **Tax**: the twenty-six ways to pay from Phase 23, in the five who-pays groups (Everyone; The
   best-off; Business; Savers and owners; Drivers, smokers, gamblers and flyers). Eighteen toggles
@@ -98,19 +99,19 @@ move."). Each is the desk's own controls, hand-picked in `data/journey/finetune.
   decisions), each with a line from the Director of Public Spending.
 
 Every item carries a plain `title`, an adviser's `advice` (a Game judgement line with at least one
-source) and a `move`: the setting the adviser's line judges. The validator checks that every code
-is a live lever on its own side of the Budget and appears once; that every move is reachable and
-is not where the lever rests; that every tax sits in the who-pays group its incidence tag names;
-and that the screen's adviser exists and speaks on this step. The words test holds every title and
-line to twelve words with no figure, and tests each size word against the engine's own figure at
-the move (big at £5bn or more, small at £1bn or less), as ADR-0024 did for the options.
+source) and a `move`: the setting the adviser's line judges. The validator checks that every code is
+a live lever on its own side of the Budget and appears once; that every move is reachable and is not
+where the lever rests; that every tax sits in the who-pays group its incidence tag names; and that
+the screen's adviser exists and speaks on this step. The words test holds every title and line to
+twelve words with no figure, and tests each size word against the engine's own figure at the move
+(big at £5bn or more, small at £1bn or less), as ADR-0024 did for the options.
 
 The card is `LeverControl` with a few new props, so the desk renders exactly as before:
 
 - the plain title is the control's accessible name;
 - at rest, the card says what the adviser's move would do and the headroom it would leave, priced
-  against the Budget as it stands: "At 21%: raises £8.6bn · leaves …", "Switched on: raises
-  £16.8bn · leaves …". Once the lever moves, its own effect line takes over;
+  against the Budget as it stands: "At 21%: raises £8.6bn · leaves …", "Switched on: raises £16.8bn
+  · leaves …". Once the lever moves, its own effect line takes over;
 - the adviser's line, the red and amber manifesto tags, "In your flagship policies" when the lever
   belongs to a chosen flagship, any overlap that applies now and, on a moved spending lever, its
   minister's line;
@@ -125,10 +126,10 @@ here adjusts the flagship; the card's tag says so.
 
 ### Flagship policies, the review and Budget day
 
-The flagship cards are unchanged. The last flagship screen leads to fine-tuning; its "More
-policies" link went, because step 4 is next and links to every lever. A flagship card still names
-a curated tax lever as its partner ("Overlaps with Basic rate"): `optionOverlaps` now takes the set
-of levers the fine-tuning screens offer.
+The flagship cards are unchanged. The last flagship screen leads to fine-tuning; its "More policies"
+link went, because step 4 is next and links to every lever. A flagship card still names a curated
+tax lever as its partner ("Overlaps with Basic rate"): `optionOverlaps` now takes the set of levers
+the fine-tuning screens offer.
 
 The review reads back the priorities, the flagship policies with what each costs, every tax moved,
 every other budget moved, and where that leaves you in words ("Rules met.", or the rules missed and
@@ -161,11 +162,11 @@ the arithmetic, and it only ever chose among published figures (ADR-0002, ADR-00
 ### Old links
 
 Every Phase 8 to 23 game link carried a seed (`s.N`), so a link with one is read as a seven-stage
-game and its stage goes through `LEGACY_STAGE = [0, 1, 2, 3, 4, 4, 5]`. The briefing, the
-priorities and the flagships stay where they were. The forecast opens fine-tuning. The compromises
-and the add-ons open the review. A finished game stays finished. Without a seed, `st` is clamped
-to `0..FINAL_STAGE`. The retired items (`s pl hr dl rv rb br`, with Phase 8's `pp cn cp dp`) and
-`S=` are ignored silently; Phase 9's `th` still reads as the priorities that replaced it.
+game and its stage goes through `LEGACY_STAGE = [0, 1, 2, 3, 4, 4, 5]`. The briefing, the priorities
+and the flagships stay where they were. The forecast opens fine-tuning. The compromises and the
+add-ons open the review. A finished game stays finished. Without a seed, `st` is clamped to
+`0..FINAL_STAGE`. The retired items (`s pl hr dl rv rb br`, with Phase 8's `pp cn cp dp`) and `S=`
+are ignored silently; Phase 9's `th` still reads as the priorities that replaced it.
 `PERMALINK_VERSION` stays 1.
 
 Opening a game link puts it on today's estimate. When the link carried other figures (a drawn
@@ -182,14 +183,14 @@ The stage guard then sends an early game back to where it has got.
   spending 476 and 665, the review 88, Budget day 188.
 - **Readability** (the test of ADR-0024, re-measured 2026-09-27): twelve sets now, every sentence
   within twenty words and every set at a Flesch-Kincaid grade of seven or below. The guide 3.2,
-  option titles 5.1, option advice 4.6, the fine-tuning screens' titles, leads and groups 5.1,
-  their advisers' lines 4.9, the priorities 3.5, the promises 6.7, the reception labels 4.9 and
-  bands 5.3, the verdicts 5.9, the interventions 4.4, the ministers 5.5. The targets, the forecast
-  outcomes, the compromise questions and routes and the add-ons' lines left with their screens.
+  option titles 5.1, option advice 4.6, the fine-tuning screens' titles, leads and groups 5.1, their
+  advisers' lines 4.9, the priorities 3.5, the promises 6.7, the reception labels 4.9 and bands 5.3,
+  the verdicts 5.9, the interventions 4.4, the ministers 5.5. The targets, the forecast outcomes,
+  the compromise questions and routes and the add-ons' lines left with their screens.
 - **Playtime** (the Phase 20 method, unchanged: visible words at 200 words a minute, ten seconds a
   decision, three a screen change; an estimate from the rendered screens, not user testing): nine
-  screens and eight decisions; reading everything 11m 11s, the skim set 6m 52s, midpoint about
-  nine minutes. Phase 23 took fourteen screens and about eleven minutes. The cover keeps "About 10
+  screens and eight decisions; reading everything 11m 11s, the skim set 6m 52s, midpoint about nine
+  minutes. Phase 23 took fourteen screens and about eleven minutes. The cover keeps "About 10
   minutes", which sits between the skim and a full read.
 - **The walk** (`walk24.mjs`, in the session scratchpad with its predecessors): light and
   reduced-motion runs at 1300px and 360px with the contrast, size, family, hit-box, radius and
@@ -210,38 +211,38 @@ The stage guard then sends an early game back to where it has got.
 
 ## Revision (2026-09-28): the yardsticks in words, still no target (ADR-0026)
 
-The briefing now puts the advisers' yardstick beside the figure, badged Game judgement and scored
-by nothing: "Your advisers call headroom under £10bn thin. The markets notice." The review repeats
-it when a Budget meets the rules on a margin under £10bn. There is still no target: nothing asks
-the player to choose one, and the bar still says only whether the rules are met, now naming a
-missed rule and its margin. Two details above have moved on. A resting fine-tuning card reads in
-the conditional ("Up 1p to 21%: would raise £8.6bn · headroom would be £X"), and every price is the
+The briefing now puts the advisers' yardstick beside the figure, badged Game judgement and scored by
+nothing: "Your advisers call headroom under £10bn thin. The markets notice." The review repeats it
+when a Budget meets the rules on a margin under £10bn. There is still no target: nothing asks the
+player to choose one, and the bar still says only whether the rules are met, now naming a missed
+rule and its margin. Two details above have moved on. A resting fine-tuning card reads in the
+conditional ("Up 1p to 21%: would raise £8.6bn · headroom would be £X"), and every price is the
 change to the bar's headroom, interest included. The re-run playtime of this build, with a race in
 the script fixed, reproduces the 11m 11s and 6m 52s above exactly.
 
 ## Revision (2026-09-28): policies, not sliders, and no desk behind them (ADR-0027)
 
-Step 4 was hand-picked sliders and toggles, with the desk of every lever one link away and a
-sandbox that ran with no game. Phase 26 makes every policy lever a policy on step 4: a tick, or two
-or three sizes, the way that improves the public finances first and the other way in the group's
-fold. The hand-picked levers keep their places on show and the rest wait in their group's fold;
-the desk, the sandbox and the "Every tax lever" and "Every spending lever" links are gone. A link
-with no game now opens the briefing rather than the desk, and a game link that carried other
-economic figures says so on whatever screen it opens, not on the desk.
+Step 4 was hand-picked sliders and toggles, with the desk of every lever one link away and a sandbox
+that ran with no game. Phase 26 makes every policy lever a policy on step 4: a tick, or two or three
+sizes, the way that improves the public finances first and the other way in the group's fold. The
+hand-picked levers keep their places on show and the rest wait in their group's fold; the desk, the
+sandbox and the "Every tax lever" and "Every spending lever" links are gone. A link with no game now
+opens the briefing rather than the desk, and a game link that carried other economic figures says so
+on whatever screen it opens, not on the desk.
 
 ## Revision (2026-09-29): the briefing in three parts, and still no target (ADR-0030)
 
 The briefing is now three parts, in the player's own format: your headroom, what headroom is, and
-how it is calculated. The advisers' "£20bn rule of thumb" has left it: the old fold said the
-markets get nervous below about £20bn, which would contradict the new advice to keep more than
-£10bn, since the markets score £10bn to £20bn as neither thin nor ample. The advice is the
-yardstick of ADR-0026 in other words, badged Game judgement and scored by nothing: there is still
-no target, nothing asks the player to choose one, and the bar still says only whether the rules are
-met. £20bn still scores as ample on Budget day. The estimate is the one this ADR set, and the
-briefing now shows how it is made: the OBR's March £23.6bn, less what higher interest rates and
-higher inflation take, row by row. Later the same day the user's own words replaced the £10bn advice
-with a line on what reaching Chancellors' average margin would take, badged Game judgement and
-still scored by nothing (ADR-0030's revision).
+how it is calculated. The advisers' "£20bn rule of thumb" has left it: the old fold said the markets
+get nervous below about £20bn, which would contradict the new advice to keep more than £10bn, since
+the markets score £10bn to £20bn as neither thin nor ample. The advice is the yardstick of ADR-0026
+in other words, badged Game judgement and scored by nothing: there is still no target, nothing asks
+the player to choose one, and the bar still says only whether the rules are met. £20bn still scores
+as ample on Budget day. The estimate is the one this ADR set, and the briefing now shows how it is
+made: the OBR's March £23.6bn, less what higher interest rates and higher inflation take, row by
+row. Later the same day the user's own words replaced the £10bn advice with a line on what reaching
+Chancellors' average margin would take, badged Game judgement and still scored by nothing
+(ADR-0030's revision).
 
 ## Revision (2026-09-30): the tax screen goes tax by tax (ADR-0035)
 

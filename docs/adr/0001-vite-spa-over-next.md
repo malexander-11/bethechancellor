@@ -4,14 +4,14 @@
 
 ## Context
 
-The game has no backend, no authentication and no database. All computation runs in the
-browser from committed JSON. It must be shareable by URL and deploy on Vercel.
+The game has no backend, no authentication and no database. All computation runs in the browser from
+committed JSON. It must be shareable by URL and deploy on Vercel.
 
 ## Decision
 
-Build a Vite + React + TypeScript single-page app. Keep the engine as a DOM-free package so
-the shell could be replaced later. Reserve `apps/web/api/` for a small Vercel function that
-renders social-preview images per permalink (Phase 4).
+Build a Vite + React + TypeScript single-page app. Keep the engine as a DOM-free package so the
+shell could be replaced later. Reserve `apps/web/api/` for a small Vercel function that renders
+social-preview images per permalink (Phase 4).
 
 ## Consequences
 
