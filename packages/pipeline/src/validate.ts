@@ -24,6 +24,7 @@ import {
   SR25_EXTRACT_FILE,
 } from './derive.js';
 import { loadDataset } from './lib/dataset.js';
+import { liveView } from './lib/live.js';
 import { readJson, sha256 } from './lib/io.js';
 import { DERIVED_DIR, REPO_ROOT } from './lib/paths.js';
 
@@ -40,6 +41,12 @@ function main(): void {
     throw error;
   }
   problems.push(...validateDataset(ds));
+  // The game runs on the live view alone, so nothing it holds may name a retired lever.
+  const live = liveView(ds);
+  const whole = new Set(problems);
+  for (const problem of validateDataset(live)) {
+    if (!whole.has(problem)) problems.push(`in the game as shipped: ${problem}`);
+  }
 
   // Every direct costing must reproduce from the extracted published tables.
   const extracted: ExtractedSources = {};
@@ -101,7 +108,7 @@ function main(): void {
     process.exit(1);
   }
   process.stdout.write(
-    `data ok: ${ds.vintages.length} vintage(s), ${ds.ruleSets.length} rule set(s), ${ds.levers.length} lever(s), ${ds.contexts.length} context file(s), ${ds.sources.sources.length} source(s)\n`,
+    `data ok: ${ds.vintages.length} vintage(s), ${ds.ruleSets.length} rule set(s), ${ds.levers.length} lever(s) (${live.levers.length} in the game), ${ds.contexts.length} context file(s), ${ds.sources.sources.length} source(s)\n`,
   );
 }
 

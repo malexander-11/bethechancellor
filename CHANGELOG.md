@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- `validate:data` also checks the game as shipped: the levers it offers, without the retired ones
+  kept for the record. A file that names a retired lever used to pass, then stop the app loading.
 - `npm run gate` runs the static checks, the data checks and the unit tests side by side, then the
   build and the end-to-end suite, and prints the output of whatever failed: about 90 seconds where
   running each in turn took over two. CI no longer retries a failed browser test.
