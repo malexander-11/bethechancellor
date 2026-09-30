@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- A link whose `#` part is not valid percent-encoding opens its page instead of a blank one, and a
+  fault while drawing any screen now shows a plain page with a way on rather than nothing.
 - The address bar keeps up with the game. A change followed at once by moving to the next screen no
   longer puts the previous screen's address back, and Back no longer leaves an address with the
   budget as it was before the latest changes, which a player could share or reload by mistake.

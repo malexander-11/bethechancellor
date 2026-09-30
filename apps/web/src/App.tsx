@@ -11,6 +11,7 @@ import { OutlookPage } from './pages/Outlook';
 import { PMPage } from './pages/PM';
 import { ReviewPage } from './pages/Review';
 import { StartPage } from './pages/Start';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { SiteFooter } from './components/SiteFooter';
 
 /** Old and shorthand paths redirect into the journey with the budget's query string intact. */
@@ -30,6 +31,16 @@ function DeskRedirect() {
   return <RedirectKeepingQuery to={spending ? '/finetune/spending' : '/finetune/tax'} />;
 }
 
+/** A link's fragment as an id: decoded where it can be, and as written where it cannot. */
+function fragmentId(hash: string): string {
+  const raw = hash.slice(1);
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
 /**
  * A screen change in a single-page app moves nothing by itself: the reader is left wherever they
  * were scrolled, and a screen reader hears nothing at all. So on every change of path the page
@@ -42,7 +53,7 @@ function RouteFocus() {
   const { pathname, hash } = useLocation();
   const first = useRef(true);
   useEffect(() => {
-    const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null;
+    const target = hash ? document.getElementById(fragmentId(hash)) : null;
     if (first.current) {
       first.current = false;
       target?.scrollIntoView?.();
@@ -127,12 +138,16 @@ function Shell() {
 }
 
 export function App() {
+  // A fault while drawing a screen shows a plain page rather than a blank one; moving on tries again.
+  const { key } = useLocation();
   return (
-    <BudgetProvider>
-      {/* Basic and advanced (Phase 27): one preference, read by the screens that trim their ideas. */}
-      <ModeProvider>
-        <Shell />
-      </ModeProvider>
-    </BudgetProvider>
+    <ErrorBoundary resetKey={key}>
+      <BudgetProvider>
+        {/* Basic and advanced (Phase 27): one preference, read by the screens that trim their ideas. */}
+        <ModeProvider>
+          <Shell />
+        </ModeProvider>
+      </BudgetProvider>
+    </ErrorBoundary>
   );
 }
