@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- Undo on a row a chosen flagship holds, which cannot move, no longer leaves focus to jump to that
+  row the next time it changes.
 - The fine-tuning screens' tests are three files (tax, spending, basic mode) that run side by side,
   and they read their sections, decisions, picks and counts from the data instead of retyping them.
   The web tests run in 24 seconds.

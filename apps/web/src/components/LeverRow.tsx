@@ -367,7 +367,8 @@ export function LeverRow({
             type="button"
             className="linklike tune__row-undo"
             onClick={() => {
-              undone.current = true;
+              // A row a flagship holds does not move, so there is no focus to put back.
+              undone.current = !blocked;
               change(rest);
             }}
           >
