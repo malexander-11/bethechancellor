@@ -15,7 +15,8 @@ every game plans on one figure, today's estimate of your headroom (£6.8bn in 20
 March forecast brought up to date for today's borrowing costs and prices with the OBR's own
 sensitivities: an assumption), and the fiscal rules are the line to meet (ADR-0025). Every
 choice is a policy: there is no slider anywhere, and where a size makes sense a policy comes small,
-medium or large (putting up VAT is 21%, 22% or 25%). The desk that held every lever as a slider has
+medium or large, or, on the tax screen, as a scale of levels with the plan among them (VAT at 15%,
+18%, 19%, 20% as planned, 21%, 22% or 25%). The desk that held every lever as a slider has
 gone, with its ready-made Budgets and its expert switches, and every lever it held is now a policy
 on step 4 (ADR-0027). A first game is played in basic mode, which suggests only the best ideas: each
 screen's adviser picks a few, their judgement, held to rules (worth £1bn or more,
@@ -67,22 +68,25 @@ its costed options, each named for what it does and carrying its adviser's line,
 change to the headroom, interest included), whether it delivers the priority in full or makes a
 start, and a slim bar keeping score; in basic mode, the best one or two ways and any way that deals
 with something already on the desk. No two options share a lever, and two that count the same money
-cannot both be chosen. **Fine-tune tax and spend**: two screens on which every lever is a policy,
-ninety-five ways to change tax in five groups by who pays and forty-six ways to change spending in
-four, each a tick or a choice of sizes shown with their levels, carrying its adviser's line and
-saying before it is chosen what its smallest size would do and the headroom that would leave; one
-adviser above the cards when something needs saying; red and amber manifesto tags, a minister on
-every budget you move, the usual policy of each group's first three levers on show and the rest a
-fold away under their families. In basic mode each screen shows its adviser's shortlist instead,
-with no folds. A lever that moves both ways has a policy each way, and choosing one
-clears the other; two policies that count the same money cannot both be chosen; a lever a chosen
+cannot both be chosen. **Fine-tune tax and spend**: two screens on which every lever is a policy.
+Tax goes tax by tax: eleven taxes, from income tax to the tax gap, and 26 decisions about them,
+closed until you open one ("Change the headline rate" of VAT, "Remove an exemption"), 87 ways to
+change tax in all (ADR-0035). A tax with sizes is one scale of levels with the plan among them, and
+before anything is chosen it says what the nearest level each way would raise or cost and the
+headroom that would leave. Spending comes in four groups, forty-six ways to change it, each a tick
+or a choice of sizes shown with their levels, the usual policy of each group's first three levers on
+show and the rest a fold away under their families. Every card carries its adviser's line; one
+adviser speaks above the cards when something needs saying; red and amber manifesto tags, and a
+minister on every budget you move. In basic mode each screen shows its adviser's shortlist instead,
+with no folds. Two policies that count the same money cannot both be chosen; a lever a chosen
 flagship already sets shows once, as a line with a way back to that flagship. Every lever is there,
 and the menu is the one a Chancellor actually weighs: employer National Insurance, pensions, the
 smaller duties, capital-tax reliefs, going further on recent rises, capital gains at death, a lower
 council tax surcharge band, the bank surcharge, the energy profits levy again, the self-employed
-rate, VAT off gas, another compliance package, business rates, the Prime Minister's schemes and
-defence at 3% sooner. **Deliver the Budget**: the whole Budget read back with a way to change every
-part, how the headroom got from the estimate to the bar, the Prime Minister's sign-off when
+rate up or down, a lower personal allowance, VAT off gas, another compliance package, business
+rates, the Prime Minister's schemes and defence at 3% sooner. **Deliver the Budget**: the whole
+Budget read back with a way to change every part, how the headroom got from the estimate to the bar,
+the Prime Minister's sign-off when
 something needs saying, and one red button. **Feedback**: the Budget in three sentences (what you
 prioritised, who pays, what you accepted or kept), your backbenchers, the markets and the public
 each rating it out of five, with one reason that agrees with the rating, the choices that caused it
@@ -99,27 +103,30 @@ abolished on main homes, a child tax allowance, and six welfare cards from housi
 to rents to the Centre for Social Justice's benefit reset, now in step 4's Benefits group. Ten of
 those cards cannot take effect from April 2027, the wealth taxes among them, and the three
 think-tank capital gains cards cannot be collected until 2028-29, so each of the thirteen wears a
-sourced earliest start and counts nothing before it.
+sourced earliest start and counts nothing before it. On 30 September 2026 the user took nine taxes
+off the table, among them the health and social care levy, insurance premium tax, CenTax's package
+for taxing gains like income and National Insurance on rents, so eleven cards with an earliest start
+are left; each retired tax is kept for the record, and an old link carrying one opens without it
+(ADR-0035).
 
-Under the hood: the OBR March 2026 baseline, 76 tax levers (HMRC ready reckoner, Budget 2025 and
+Under the hood: the OBR March 2026 baseline, 67 tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options and
 the residence nil-rate band, HMRC's pension statistics for National Insurance on employer pension
 contributions, HMRC's banking-sector receipts, inheritance tax up to abolition, a share of the OBR's
-business rates line, HM Treasury's 2021 costing of the health and social care levy, CenTax's
-estimates for aligning capital gains with income tax, an exit charge and partnership National
-Insurance, HMRC's cost of the National Insurance exemption over pension age and of private residence
+business rates line, CenTax's estimates for an exit charge and partnership National Insurance,
+HMRC's cost of the National Insurance exemption over pension age and of private residence
 relief, HMRC's pension relief by marginal rate for relief at a flat 30% or the basic rate, HMRC's
 bank levy receipts, the government's six-month figure for the electricity zero rate, the think
 tanks' own figures for their proposals (the Resolution Foundation, IPPR, CenTax, Tax Justice UK, the
 IFS Green Budget, Demos, the Adam Smith Institute, Onward), and our own stated arithmetic where
 nobody has published a costing, recorded as such), 32 spending levers (Spending Review 2025
 settlements, OBR welfare lines, Budget 2025 spending decisions, the Prime Minister's schemes, six
-welfare cards from the think tanks) with milestones from PESA, six more levers kept for the record
-on no screen, eight priorities with 29 ways to deliver them (every option a bundle of those levers),
-all 108 of those levers on the fine-tuning screens as 141 policies, one estimate of the economy
-today from the Bank of England's gilt yields and HM Treasury's comparison of independent forecasts,
-and simulated lines in the voices of roles, every fact in them sourced. Next:
-the rebase to the 28 October 2026 forecast.
+welfare cards from the think tanks) with milestones from PESA, fifteen more levers kept for the
+record on no screen, eight priorities with 29 ways to deliver them (every option a bundle of those
+levers), all 99 of those levers on the fine-tuning screens as 133 policies, one estimate of the
+economy today from the Bank of England's gilt yields and HM Treasury's comparison of independent
+forecasts, and simulated lines in the voices of roles, every fact in them sourced. Next: the rebase
+to the 28 October 2026 forecast.
 
 ## Principles
 

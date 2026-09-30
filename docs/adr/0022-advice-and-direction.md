@@ -1,8 +1,8 @@
 # ADR-0022: Advice and direction
 
-Status: Accepted, 2026-09-25; revised 2026-09-26 (every option its own lever, below) and
-2026-09-27 (the ways to pay and the add-ons retired, ADR-0025). Follows
-ADR-0021 (nothing before it can start).
+Status: Accepted, 2026-09-25; revised 2026-09-26 (every option its own lever, below), 2026-09-27
+(the ways to pay and the add-ons retired, ADR-0025) and 2026-09-30 (two levers retired, ADR-0035,
+below). Follows ADR-0021 (nothing before it can start).
 
 ## Context
 
@@ -255,3 +255,11 @@ restoring the uprating). Both pairs still warn on the levers themselves, as `war
 the fine-tuning screens and the desk. The other two stand between ways to deliver. `optionOverlaps`
 takes the set of levers the fine-tuning screens offer, so a flagship card still names a curated tax
 lever as its partner. Counts now: 29 ways to deliver, two conflicts.
+
+## Revision (2026-09-30): the last two pairs go with their levers (ADR-0035)
+
+Both levers the revision above still paired are retired at the user's request: CenTax's capital
+gains package (`cgtalign`) and last year's cancelled fuel duty rise (`rvfuel`). Their pairs go with
+them: the package against capital gains tax at death, and the fuel duty cut against restoring the
+uprating. The fuel duty cut still warns against the April 2027 freeze, and the two conflicts between
+ways to deliver stand.

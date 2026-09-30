@@ -1,8 +1,8 @@
 # ADR-0026: A review against four goals, and the fixes
 
-Date: 2026-09-28. Status: accepted; revised 2026-09-28 and 2026-09-29 (below, ADR-0027, ADR-0030 and
-ADR-0032). Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023 and ADR-0025, each of which carries a
-dated revision pointing here.
+Date: 2026-09-28. Status: accepted; revised 2026-09-28, 2026-09-29 and 2026-09-30 (below, ADR-0027,
+ADR-0030, ADR-0032 and ADR-0035). Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023 and ADR-0025, each
+of which carries a dated revision pointing here.
 
 ## Context
 
@@ -371,3 +371,13 @@ A tapped badge opened the key at the foot of the page, so its meaning was reacha
 The key went when the footer became one row of links; a badge is a plain label, its meaning in its
 title for a mouse, and the Methodology page, linked from the footer, explains all five. The
 glossary's toggletips are unchanged.
+
+## Revision (2026-09-30): the levy and insurance premium tax retired (ADR-0035)
+
+The health and social care levy and insurance premium tax are retired at the user's request. The
+levy's re-costing (R8) stays in its file, and the test that it equals 1.25 times the game's
+one-point National Insurance rows still runs; but no Budget can now include either, so the
+before-and-after table's Budgets paid by the levy, and the walk with the levy and insurance premium
+tax, are a record of their day. Where the tests and the walk raised the levy they now raise employer
+National Insurance by two points. The relief-cost treatment (R7), the pension contributions charge's
+re-costing and every other fix here stand.

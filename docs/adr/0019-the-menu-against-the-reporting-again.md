@@ -1,6 +1,7 @@
 # ADR-0019: The menu against the reporting, again
 
-Status: Accepted, 2026-09-22. Follows ADR-0017 (the Budget 2026 menu) and ADR-0018.
+Status: Accepted, 2026-09-22. Follows ADR-0017 (the Budget 2026 menu) and ADR-0018. Revised
+2026-09-23 (the FT's list) and 2026-09-30 (the alignment package retired, ADR-0035), both below.
 
 ## Context
 
@@ -107,3 +108,12 @@ have no published costing; the fiscal devolution roadmap and mayoral overnight-s
 move money between tiers rather than raise it. The FT article is not registered as a source; every
 figure on the new cards comes from HMRC's tables or TPA's page. Counts after the revision: 62 tax
 levers (43 direct, 18 assumption, 1 mechanical), 97 lever files, 116 sources.
+
+## Revision, 2026-09-30: the alignment package retired (ADR-0035)
+
+CenTax's capital gains package (`cgtalign`), one of decision 1's seven levers, is retired at the
+user's request: marked deprecated, filed as "Shelved" and offered nowhere, its costing and sources
+kept for the record. The five pairs that stopped it being stacked on the other capital gains cards
+went with it. The other six stand: the electricity extension, National Insurance for working
+pensioners and on partnership profits, the lower rate, the charge on leavers and the card on main
+homes.

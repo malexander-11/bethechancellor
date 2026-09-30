@@ -2,7 +2,8 @@
 
 **Status:** accepted, 2026-09-20. Revises ADR-0013 (the reception gains nudges), ADR-0015 and
 ADR-0017 (the 50p rate is no longer badged direct), and the Phase 9 rule that milestones and
-interactions sit behind the workings switch.
+interactions sit behind the workings switch. Revised by ADR-0035 (2026-09-30): the levy is retired
+(below).
 
 ## Context
 
@@ -108,3 +109,12 @@ trade offs and challenges."_ Three read-only audits set the game against those f
   heading on a lever, the described slider, distinct button names, the status words, the region,
   the table, the two rounds, the since-March table, the tags, the disclosure, the verbs, the
   comparator, the who-pays panel, the stress test, the nudge.
+
+## Revision (2026-09-30): the levy retired (ADR-0035)
+
+The health and social care levy that decision 4 added to National Insurance is retired at the user's
+request: marked deprecated, filed as "Shelved" and offered nowhere. Its costing stays in its file,
+re-costed since at 1.25 times the game's own one-point National Insurance rows (ADR-0026), and so
+does the test that holds it there. The tax lock no longer lists it among its strains, and the tests
+that used it as the amber example use a point on employer National Insurance. An old link carrying
+it opens without it and says so. Everything else here stands.

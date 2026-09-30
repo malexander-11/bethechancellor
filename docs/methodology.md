@@ -154,12 +154,12 @@ differs, so the numbers in the app cannot drift from the published ones.
 
 ### Costing kinds
 
-- **Linear per unit.** Effect = setting ÷ unit size × published effect per unit. Asymmetric
-  rows (a rise "yield" and a cut "cost") are kept separate and chosen by the sign of the setting.
-  Combined levers (employee plus self-employed NICs, petrol plus diesel) sum their rows. A summed
-  lever may scale its rows by a stated multiplier, and is then badged Worked out: the health and
-  social care levy is 1.25 times the one-point rows for the employer, employee and self-employed
-  rates, main and additional, about £26bn in 2029-30 (Phase 25).
+- **Linear per unit.** Effect = setting ÷ unit size × published effect per unit. Asymmetric rows (a
+  rise "yield" and a cut "cost") are kept separate and chosen by the sign of the setting. Combined
+  levers (employee plus self-employed NICs, petrol plus diesel) sum their rows. A summed lever may
+  scale its rows by a stated multiplier, and is then badged Worked out: the health and social care
+  levy is 1.25 times the one-point rows for the employer, employee and self-employed rates, main and
+  additional, about £26bn in 2029-30 (Phase 25); the levy is retired, its costing kept (§34).
 - **Lookup table.** Where HMRC says changes are non-linear (capital gains tax, the personal
   allowance, the higher-rate threshold), the lever uses HMRC's published points only, interpolates
   in a straight line between them and never goes beyond the largest published change.
@@ -215,15 +215,13 @@ excise duty, air passenger duty, tobacco duties, inheritance tax, capital gains 
 
 ### Interactions
 
-HMRC notes that rate and threshold changes are only approximately additive, and two levers can
-touch the same tax (fuel duty rates and the fuel duty freeze reversal). Authored interaction
-notes appear when both levers of a pair are moved; they change no numbers.
+HMRC notes that rate and threshold changes are only approximately additive, and two levers can touch
+the same tax (fuel duty rates and the April 2027 freeze). Authored interaction notes appear when
+both levers of a pair are moved; they change no numbers.
 
-A pair that counts the same money is authored once with the severity `excludes`, and the
-validator checks it (Phase 25): capital gains taxed like income with CGT at death, the exit charge
-and the lower rate; the exit charge with CGT at death. On the curated screens only one of a pair
-can be chosen, with a one-tap swap priced as the swap; the desk keeps a free hand and says
-"counted twice".
+A pair that counts the same money is authored once with the severity `excludes`, and the validator
+checks it (Phase 25): fifteen pairs since §34, the exit charge with CGT at death among them. On
+step 4 only one of a pair can be chosen, with a one-tap swap priced as the swap.
 
 ### Spending levers (ADR-0006)
 
@@ -428,8 +426,8 @@ option, so a hand-edited link cannot land between options.
 - **Inheritance tax abolition** removes the OBR's forecast inheritance tax receipts (EFO Table
   A.5, now in the vintage as `receiptsByTax`) year by year; rises use HMRC's 1 percentage point
   row and cuts mirror it, an assumption the drawer states.
-- **Insurance premium tax** is retired: its code stays reserved and old links decode with a
-  warning.
+- **Insurance premium tax** is retired: its code stays reserved and old links decode with a warning.
+  (Phase 10 revived it, §16; it was retired again on 2026-09-30, §34.)
 
 ## 12. Where nobody has published a costing, and Budget day (ADR-0008, ADR-0017)
 
@@ -714,18 +712,19 @@ asks no Continues at all: every screen is a decision with one primary button (§
 
 ### The revenue menu
 
-Every option is a published figure with its published caveat. In the tax groups, direct-badged:
-the employer NICs threshold, vehicle excise duty, air passenger duty, tobacco duties, the Business
-Asset Disposal Relief rate, abolishing the residence nil-rate band, insurance premium tax, and
-employer National Insurance on pension contributions from HMRC's private pension statistics
-(£14,300m in 2024-25, grown with National Insurance receipts). Beside them, badged assumption
-(ADR-0017 moved them from the letters' group into the tax groups): a flat 30% rate of pension
-relief by the `weightedSum` method over HMRC's relief by marginal rate, and two repeats of
-certified Budget 2025 rises (investment income, gambling duties) by the `repeat` direction.
-Employer-side National Insurance is not a manifesto red line here, on the government's reading of
-the lock; the Political Adviser says on each such lever that the reading is contested. The Director
-of Tax's suggestions at the sums rank the ways to afford it not yet chosen, each with its lever's
-badge (§22); a spending saving is a cut and belongs to the spending route.
+Every option is a published figure with its published caveat. In the tax groups, direct-badged: the
+employer NICs threshold, vehicle excise duty, air passenger duty, tobacco duties, the Business Asset
+Disposal Relief rate, abolishing the residence nil-rate band, insurance premium tax, and employer
+National Insurance on pension contributions from HMRC's private pension statistics (£14,300m in
+2024-25, grown with National Insurance receipts). Beside them, badged assumption (ADR-0017 moved
+them from the letters' group into the tax groups): a flat 30% rate of pension relief by the
+`weightedSum` method over HMRC's relief by marginal rate, and two repeats of certified Budget 2025
+rises (investment income, gambling duties) by the `repeat` direction. Employer-side National
+Insurance is not a manifesto red line here, on the government's reading of the lock; the Political
+Adviser says on each such lever that the reading is contested. The Director of Tax's suggestions at
+the sums rank the ways to afford it not yet chosen, each with its lever's badge (§22); a spending
+saving is a cut and belongs to the spending route. The Business Asset Disposal Relief rate and
+insurance premium tax are retired in §34.
 
 ### The pension extract
 
@@ -784,12 +783,12 @@ the arithmetic changed; what changed is who can reach it and how much they must 
   costings; the breach route quotes the Charter's escape clause; the nine department levers carry a
   `commitment`, protected or unprotected, sourced to EFO paragraphs 4.15 to 4.16.
 - **Realistic options.** The 50p rate (`it50`) is an assumption: five times HMRC's one-penny row,
-  which HMRC calls approximate beyond small changes. A
-  lever may be `notOnTheTable`, worn as a quiet tag and sorted to the foot of its group (the six VAT
-  base toggles); every card has "What this assumes". The health and social care levy (`hscl`) is a
-  `statedProduct` on HM Treasury's 2021 figure for the legislated 1.25% levy, £12 billion a year
-  taken as 2024-25 and grown with National Insurance receipts; it scores the published rate only,
-  because no registered source costs a higher one.
+  which HMRC calls approximate beyond small changes. A lever may be `notOnTheTable`, worn as a quiet
+  tag and sorted to the foot of its group (the six VAT base toggles); every card has "What this
+  assumes". The health and social care levy (`hscl`) is a `statedProduct` on HM Treasury's 2021
+  figure for the legislated 1.25% levy, £12 billion a year taken as 2024-25 and grown with National
+  Insurance receipts; it scores the published rate only, because no registered source costs a higher
+  one. (Re-costed in §26; retired in §34.)
 - **Trade-offs in view.** Effects are verbs (raises, costs, saves; borrowing up or down); tables say
   worse or better; the package shows who pays and who benefits by the incidence tags, the
   interactions, milestones one click away, and Budget 2025's measures for scale (the net of the
@@ -806,16 +805,16 @@ rows in `data/derived/`, and built what could be built honestly.
   government's six-month £850 million and a factor of −2, grown with VAT, badged assumption; HMRC
   Notice 701/19 makes the zero rate temporary). National Insurance for workers over state pension
   age (`nicspa`, HMRC relief row `nic-s2`, £1.2 billion static, direct; breaks the tax lock).
-  Partnership NICs (`nicllp`, CenTax's £1.9 billion in 2026-27 after behaviour, grown with
-  National Insurance, assumption). Aligning capital gains with income tax (`cgtalign`, a
-  `weightedSum` of CenTax's £14.3 billion on the 2025-26 base and minus the £2.5 billion the
-  Treasury scored for the October 2024 rise, held flat in cash, assumption; every overlapping CGT
-  card warns). The CGT lower rate (`cgtl`, three HMRC rows, direct, which score a ten-point rise as
-  a loss). A charge on people who leave (`cgtexit`, CenTax's floor of £500 million, flat,
-  assumption). Charging main homes (`cgtprr`, HMRC's £32.9 billion static relief cost, direct,
-  tagged not on the table because what is floated is a cap above a value nobody has published).
-- **Two tabs.** Capital taxes is now Capital gains and Wealth and property, so the widest tab stays
-  under the 500-word budget.
+  Partnership NICs (`nicllp`, CenTax's £1.9 billion in 2026-27 after behaviour, grown with National
+  Insurance, assumption). Aligning capital gains with income tax (`cgtalign`, a `weightedSum` of
+  CenTax's £14.3 billion on the 2025-26 base and minus the £2.5 billion the Treasury scored for the
+  October 2024 rise, held flat in cash, assumption; every overlapping CGT card warns; retired in
+  §34). The CGT lower rate (`cgtl`, three HMRC rows, direct, which score a ten-point rise as a
+  loss). A charge on people who leave (`cgtexit`, CenTax's floor of £500 million, flat, assumption).
+  Charging main homes (`cgtprr`, HMRC's £32.9 billion static relief cost, direct, tagged not on the
+  table because what is floated is a cap above a value nobody has published).
+- **Two tabs.** Capital taxes is now Capital gains and Wealth and property (tax by tax since §34),
+  so the widest tab stays under the 500-word budget.
 - **Words only.** The £1.5m band's reported home counts, the warehouse rates surcharge and online
   sales levy, the flat 10% estate levy and the pension lump-sum cap are named on the cards and in
   the briefings from registered press entries that say they carry words, not numbers. Machine
@@ -848,10 +847,11 @@ nineteen cards, every one a stated figure from the primary source, badged assump
   floor, the child DLA assessment at the CSJ's lower bound) and the ceiling is named in words.
   Static figures say so and carry `static-not-yield`.
 - **The alignment card re-costed.** CenTax's September 2026 figure, £19.7 billion in 2029-30 after
-  behaviour on the OBR's current forecast, replaces the 2024 estimate net of the 2024 rise.
-- **The lock.** Rental NICs, abolishing the upper earnings limit and a 1% rate on zero-rated goods
-  break the tax lock on the game's reading; a smoothed earnings link breaks the triple lock. The
-  legal consideration on each card says the proposers read it the other way.
+  behaviour on the OBR's current forecast, replaces the 2024 estimate net of the 2024 rise. (Retired
+  in §34.)
+- **The lock.** Rental NICs (retired in §34), abolishing the upper earnings limit and a 1% rate on
+  zero-rated goods break the tax lock on the game's reading; a smoothed earnings link breaks the
+  triple lock. The legal consideration on each card says the proposers read it the other way.
 - **Two welfare tabs.** Working-age benefits and Pensioners and disability, so six more welfare
   cards fit inside the 700-word budget; every card has a minister whose figures are sourced.
 - **Grown, netted, placed.** Where a step is ours it is on the card: JRF's first-year cost grown
@@ -1043,10 +1043,10 @@ that hold every screen to the same shape:
   is tested against the engine's own figure for the option (big at £5bn or more, small at £1bn or
   less) and no line carries a figure. No adviser speaks at the top of an option screen.
 - **Amber.** A promise's `strains` list names the levers that keep its words and test its spirit
-  (the health and social care levy, the employer-side National Insurance levers, the new 50p rate).
-  The engine reports strains beside breaks all the way to the verdict; the cards and the desk show
-  an amber tag; the reception loses a point for a strain without pinning the public at the floor.
-  `rebellionRisk` weighs breaks only, a recorded follow-up.
+  (the employer-side National Insurance levers and the new 50p rate; the health and social care levy
+  until it was retired, §34). The engine reports strains beside breaks all the way to the verdict;
+  the cards and the desk show an amber tag; the reception loses a point for a strain without pinning
+  the public at the floor. `rebellionRisk` weighs breaks only, a recorded follow-up.
 - **The compromises** are three screens, one question each, taxes first (§23 above): raise more
   tax, spend less or later, keep less headroom; or, with room to spare, do more for the priorities,
   ease off a tax rise, keep the extra headroom. The mood is read again on every screen.
@@ -1080,13 +1080,14 @@ that hold every screen to the same shape:
   (one screen per ranked priority), Fine-tune tax and spend (two screens), Deliver the Budget (the
   review and the red button), Feedback (Budget day). The desk of every lever is step 4's side room.
 - **Curated levers.** `data/journey/finetune.json` hand-picks twenty-six taxes in five who-pays
-  groups and nineteen spending levers in four groups, each with a plain title, an adviser's line
-  and the move that line judges. The validator checks each lever is live, on its own side, once;
-  each move reachable and not where the lever rests; each tax in the who-pays group its incidence
-  tag names; the adviser speaking on this step. At rest a card says what its move would do against
-  the Budget as it stands and the headroom that would leave; moved, it shows the lever's own
-  effect. The first three levers of a group are on show with any moved before arrival; a lever
-  moved inside the fold stays there until the next visit.
+  groups and nineteen spending levers in four groups, each with a plain title, an adviser's line and
+  the move that line judges. The validator checks each lever is live, on its own side, once; each
+  move reachable and not where the lever rests; each tax in the who-pays group its incidence tag
+  names; the adviser speaking on this step. At rest a card says what its move would do against the
+  Budget as it stands and the headroom that would leave; moved, it shows the lever's own effect. The
+  first three levers of a group are on show with any moved before arrival; a lever moved inside the
+  fold stays there until the next visit. (Since §34 the taxes go tax by tax, and a tax's section is
+  its family.)
 - **Retired.** The forecast cards and targets, the seeded draw and its re-scoring (ADR-0012), the
   compromise screens, the add-ons, the ways to pay as option cards, and the snapshot. Old links
   still open: a link carrying a seed is read through `LEGACY_STAGE` (the forecast opens
@@ -1166,7 +1167,8 @@ and for a policy to come in small, medium and large where a size makes sense.
   ways has one policy each way, the way that improves the public finances first; its other way waits
   in the group's fold, and choosing one clears the other. The hand-picked levers keep their places
   on show; the rest are one fold away, under their family ("Income tax", "VAT"), and a fold's cards
-  mount only while it is open.
+  mount only while it is open. Since §34 the tax screen goes tax by tax, 67 taxes in eleven
+  sections, and a tax is one scale; the spending screen keeps both ways.
 - **Sizes** (`finetune.json`) are settings of the lever, checked by the validator: in range, on its
   steps, all one way. Small is the usual step, medium twice it, large five times it, capped at the
   range; where HMRC publishes points the sizes sit on them. VAT's range reaches +5 points, so putting
@@ -1176,7 +1178,8 @@ and for a policy to come in small, medium and large where a size makes sense.
   once chosen. A lever a chosen flagship holds shows once, as a line with the way back to change the
   flagship, so step 4 never undoes one silently.
 - **Pick one.** Where two levers' own texts say they count the same money or cancel, the pair is
-  `excludes`: 22 pairs, each authored once, read from either card, with a one-tap swap.
+  `excludes`: 22 pairs (fifteen since §34), each authored once, read from either card, with a
+  one-tap swap.
 - **What went**: the desk and its sandbox, the ready-made Budgets, the two expert switches (every
   Budget counts the interest on its own borrowing, §5, and is judged by the rules as they stand),
   the levers' `order`, the desk's briefings and its two step names. A link with measures and no game
@@ -1194,14 +1197,15 @@ can then go to an advanced mode if they'd like. Basic mode, only suggest the bes
 
 - **The shortlist is a judgement**, and says so: each screen's adviser picks a few ideas, badged
   Game judgement, and each pick's reason is its own sourced adviser line. Step 4 picks eight taxes
-  of ninety-five and seven spending policies of forty-six; step 3 picks one or two ways to deliver
-  each priority, thirteen of twenty-nine (`shortlist: true` in `finetune.json` and `options.json`).
+  of ninety-five (still eight, two of them new, since §34) and seven spending policies of forty-six;
+  step 3 picks one or two ways to deliver each priority, thirteen of twenty-nine (`shortlist: true`
+  in `finetune.json` and `options.json`).
 - **The rules make it checkable.** A pick moves 2029-30 headroom by at least £1bn at its smallest
   size on today's estimate, priced as its card prices it (a test, since it needs the engine); counts
   by 2029-30; is on the table; breaks no promise at any size (a strain is allowed, and shown); and
   never counts the same money as another pick or a lever already on the desk. Step 4 picks one way
-  per lever, six to ten a screen, one in every group; step 3 one or two a priority, at least one in
-  full. `validate:data` names each way a pick can break a rule.
+  per lever, six to ten a screen, one in every group (every spending group since §34); step 3 one or
+  two a priority, at least one in full. `validate:data` names each way a pick can break a rule.
 - **The desk rule.** The levers on the desk (keeping VAT off electricity, the defence plan's gap)
   are always on show in basic mode, so nothing that names them points at something hidden: the
   briefing did until ADR-0031, and the review still lists the ones a Budget leaves. They are not
@@ -1397,3 +1401,59 @@ line on what the badges meant went with them, and so did the component, its styl
   screen 554 at rest, against 615 and 582; the review 204, against 213; Budget day 190, against 199;
   the priorities 172, against 178. Each budget is re-pinned with a tenth to spare, and `walk37`,
   which fails any screen with a badge, is clean.
+
+## 34. Taxes by tax (ADR-0035)
+
+On 2026-09-30 the user asked for the tax screen to be arranged around taxes, in decisions with
+sub-decisions, with VAT as the example; for nine taxes to be taken off the table; and for two cuts
+to be added.
+
+- **Eleven taxes, twenty-six decisions.** On the tax side of `finetune.json` each group is a tax,
+  `{ id, label, decisions }`, and each decision `{ id, title, items }`; the spending side keeps
+  `groups[].items[]`. A section's label is the family (the lever file's `group`) of every tax in it,
+  and the validator says so when one is not (`tax lever X is in the F family, not S`), so the family
+  is the one record of which tax a lever is. A decision holds one to seven taxes under a title of at
+  most six words, and a tax not on the table comes last in it: 67 taxes, 87 policies. The who-pays
+  groups and their rules are gone; a tax's incidence tag still says who pays it, on the review and
+  on Budget day.
+- **Advanced mode** shows the eleven sections and 26 decisions, all closed. A decision is a button
+  in an h3 with `aria-expanded`, its title beside a status: where a one-scale decision stands ("20%
+  as planned", "22% · raises £19.8bn"), or how many choices another holds ("4 choices", "1 chosen ·
+  raises £2.4bn"). Opening it mounts its cards, at h4; a decision holding a tax that had moved when
+  the screen opened, a flagship's included, starts open. A section's heading counts what moved. It
+  is a heading's button and not a `details` so that a screen reader can move from decision to
+  decision by heading and hear which are open, and so that the word budgets, which leave folds out,
+  count the titles and the open cards.
+- **Basic mode** shows the eight picks under seven taxes, in section order; wealth tax, stamp duty,
+  business taxes and the tax gap have no pick and are left out unless something in them was chosen.
+  Only a spending group must now have a pick (§28).
+- **One scale for a tax.** Every tax with sizes is one card whose radios are its levels in order,
+  the planned level among them: "15% · 18% · 19% · 20% as planned · 21% · 22% · 25%" for VAT. The
+  levels are the lever's default and every size its ways come in, sorted and each once
+  (`scaleLevels`), and each radio is named by the level it sets. At rest the card prices the nearest
+  level each way on a line of its own; choosing the planned level puts the tax back; a level no
+  radio names, from an old link, reads "Now 23%". A card blocked by a tax that counts the same money
+  prices the swap, and Swap sets its nearest level. The spending screen keeps two policies a lever,
+  and Small, Medium and Large.
+- **Nine taxes off the table**: the health and social care levy, insurance premium tax, dropping the
+  salary-sacrifice cap, capital gains at income tax rates, a lower VAT registration threshold,
+  National Insurance on landlords' rent, the Business Asset Disposal Relief rate, last year's
+  cancelled fuel duty rise and undoing last year's gambling duties. Each is deprecated and filed as
+  "Shelved", its costing and its tests kept, the way the levers shelved in Phase 12 were (§17).
+  Everything live that named them went, which leaves fifteen pairs that count the same money, from
+  twenty-two. An old link carrying one opens without it and says so. The two basic picks that went,
+  the levy and capital gains alignment, are replaced by a point on employer National Insurance and
+  capital gains tax at death; "Put up fuel duty" takes the retired card's emissions clause, on the
+  same HMRC source.
+- **Two cuts.** The personal allowance can come down by £100 or £1,250, on HMRC's published rises
+  with the sign reversed (lookup points with `multiplier: -1`, as inheritance tax's cuts are), which
+  the card's assumptions say HMRC does not publish; it neither breaks nor strains the tax lock,
+  which names rates. Class 4 National Insurance can come down by 1, 2 or 4 points on HMRC's
+  symmetric one-point row. The couple and the tradesperson pay a lower allowance, and the
+  tradesperson gains from a Class 4 cut. The lookup points' note and the provenance drawer now say
+  each point is worked from a published figure, not that HMRC published every point.
+- **Measured** (ADR-0035): the advanced tax screen reads 405 words at rest on the walk's game,
+  against 592, and 1,030 with choices in six decisions, since an open decision shows every choice in
+  it; basic mode reads 352 and 536. The fine-tuning screens read at grade 5.3, from 5.7. On a phone
+  the advanced tax screen is 2,764px on arrival, 3.5 screens, against 5,481px; basic mode's is
+  3,372px, against 3,210px. `walk38` is clean at 1300px and 360px, in light and with reduced motion.

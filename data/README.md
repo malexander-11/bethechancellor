@@ -21,7 +21,7 @@ journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/briefings.json    sourced adviser briefings per step and lever group
 journey/pm.json           the Prime Minister: the eight priorities, the manifesto red lines
 journey/options.json      the ways to deliver each priority (ADR-0022)
-journey/finetune.json     the fine-tuning screens: every policy lever, as policies with sizes (ADR-0027)
+journey/finetune.json     the fine-tuning screens: every policy lever; tax by tax (ADR-0027, ADR-0035)
 journey/ministers.json    a minister's lines for every spending and welfare lever
 journey/interventions.json adviser lines with a closed predicate over the ambitions
 journey/speech.json       the speech fragments the assembler fills
@@ -73,9 +73,9 @@ the validator refuses gilt sales for any year but the one the context is dated i
 4. State the baseline (`baselinePolicy`, `alreadyIncludes`) from Budget 2025 Table 4.1 or the EFO.
 5. Add considerations only from documents readable in this repository's sources registry, with
    `alreadyInDirectCosting: true` when the published figure already contains the behaviour.
-6. Give the lever a `group` (its family, which heads it in step 4's folds) and a unique stable
-   `code`, and set `status: reviewed` with `reviewedOn` once the above is checked. A live lever
-   also needs its place on step 4 (`finetune.json`, below).
+6. Give the lever a `group` (its family: a tax's section on step 4, a spending lever's subhead in
+   its group's fold) and a unique stable `code`, and set `status: reviewed` with `reviewedOn` once
+   the above is checked. A live lever also needs its place on step 4 (`finetune.json`, below).
 
 ### Levels and the journey
 
@@ -96,7 +96,8 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   lever. The card then reads "raises at most £X" with one plain line on why, and the markets count
   the lever among the costings nobody has certified.
 - **A multiple of HMRC rows.** `rawSource.multiplier` scales the summed rows of a `linearPerUnit`
-  lever: 1.25 for the health and social care levy over the one-point NICs rows, minus three for
+  lever: 1.25 for the health and social care levy over the one-point NICs rows (retired in ADR-0035,
+  its costing kept), minus three for
   the fuel duty freeze over the 1% rows. It is our arithmetic on HMRC's figures, so the schema
   requires `badge: "mechanical"`.
 - **The range the source covers.** `control.sourceRange: { min, max, text }` (Phase 25): HMRC
@@ -156,11 +157,12 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
 
 Where nobody has published a costing, the arithmetic is ours and the card has to show it. Such a
 lever lives in the folder of its real category and the group of the screen it belongs to
-(`tax` · `Capital gains`, `spend` · `New programmes`); the badge, not the folder, keeps it apart
+(`tax` · `Capital gains tax`, `spend` · `New programmes`); the badge, not the folder, keeps it apart
 from the certified rows beside it (ADR-0017).
 
-- **Category and group.** The lever's real `category`, its family `group`, and its place in a
-  step-4 group in `finetune.json`; `control.kind: "toggle"` unless a published line supports a scale (business
+- **Category and group.** The lever's real `category`, its family `group`, and its place on step 4
+  in `finetune.json` (a tax's decision, or a spending group); `control.kind: "toggle"` unless a
+  published line supports a scale (business
   rates scales the OBR's line and is `mechanical`, see the spending notes above).
 - **Badge.** `assumption`, never `direct`. A `repeat` of a scorecard line, a `statedProduct`, a
   `weightedSum`, a `gdpShareGap`, and a multiple of an HMRC row beyond the small change HMRC
@@ -217,7 +219,8 @@ from the certified rows beside it (ADR-0017).
 - **Contested figures** open the `headline` with the word "contested" and carry the reason as a
   `legal`, `behavioural` or `administrative` consideration, cited. State the alternative
   published figure in the caveats where there is one.
-- **Shelving.** A lever nobody is considering stays in the data with `deprecated: true`,
+- **Shelving.** A lever nobody is considering, or one the user takes off the table (the nine of
+  ADR-0035), stays in the data with `deprecated: true`,
   `group: "Shelved"` and the headline "Kept for the record; not on offer at this
   Budget. Old links still work." Its costing, raw source and considerations stay, so
   `validate:data` and the engine tests keep reproducing it; the app filters it out at load, the
@@ -357,12 +360,15 @@ enforces:
 - **One or two ways a priority are on the advisers' shortlist** (`shortlist: true`, Phase 27), the
   ones basic mode shows; see the shortlist's rules below.
 
-### Fine-tuning (`data/journey/finetune.json`, ADR-0025, ADR-0027)
+### Fine-tuning (`data/journey/finetune.json`, ADR-0025, ADR-0027, ADR-0035)
 
 Two sides, `tax` and `spending`, each with its screen's `title` (at most four words), its `lead`
 and its `shortlistLead` (basic mode's lead, Phase 27; each at most fourteen words and 120
-characters), the `adviser` who speaks there, and `groups` of `items`. Since Phase 26 every live policy
-lever is an item, once: 76 on the tax side and 32 on the spending side. An item is the lever's
+characters), the `adviser` who speaks there, and its `groups`. A spending group holds `items`. A tax
+group is a tax, `{ id, label, decisions }`, and each decision `{ id, title, items }` holds one to
+seven of its items under a title of at most six words (ADR-0035); no two tax groups share an id or a
+label, and no two decisions an id. Since Phase 26 every live policy lever is an item, once: 67 on
+the tax side and 32 on the spending side. An item is the lever's
 `code`, its plain `name` for the review and the notes ("The main rate of VAT"; a toggle may leave it
 out and go by its policy's title), and one or two `policies`, each `{ title, sizes, advice }`: a
 title that says what the policy does ("Put up VAT", at most twelve words), the settings it comes in,
@@ -372,25 +378,28 @@ lever that moves both ways may carry a second policy the other way, and choosing
 other. Rules the validator enforces:
 
 - **A live lever on its own side, once.** Tax items are tax levers; spending items are spend or
-  welfare levers; no code appears twice in the file, so both ways of a lever share a group.
+  welfare levers; no code appears twice in the file, so both ways of a lever share a place.
 - **Sizes the lever can reach**, each inside its range and on its grid and never the setting it
   rests at, all on one side of that setting and growing away from it. A toggle's policy has one
   size, the switch turned on.
 - **One policy each way.** Two policies only where they go opposite ways.
 - **A plain name** for every lever that is not a toggle.
 - **Not on the table comes last.** A lever tagged not on the table follows every other lever in its
-  group.
-- **Every tax sits with the people who pay it**: its group is the who-pays group (`WHO_PAYS` in the
-  engine) its incidence pays-group maps to.
+  decision, or in its group on the spending side.
+- **A tax sits in its family's section**: a tax group's `label` is the family (`group`) of every
+  lever in it, so each family has one section (`tax lever X is in the F family, not S`). Who pays a
+  tax is its incidence tag, read on the review and on Budget day.
 - **The adviser exists and speaks on this step** (`finetune` in `advisers.json`).
 
-Labels follow the count of sizes: one is a tick, two are Small and Large, three are Small, Medium
-and Large, each shown with its level. By default the small size is the lever's usual step (a penny,
+On the spending screen labels follow the count of sizes: one is a tick, two are Small and Large,
+three are Small, Medium and Large, each shown with its level. On the tax screen a lever with sizes
+is one scale instead (ADR-0035): its radios are the planned level and every size its policies come
+in, sorted and each once (`scaleLevels`), each named by the level it sets ("20% as planned", "21%").
+By default the small size is the lever's usual step (a penny,
 a point, £2 a week, £100, 5% on a duty), medium twice it and large five times it, capped at the
 range, with a repeated size dropped. A test holds every sized policy to that rule, except where
 HMRC publishes points and the sizes sit on them: the personal allowance, the higher-rate threshold,
-the additional rate, the two capital gains rates, the rate on selling a business, and inheritance
-tax.
+the additional rate, the two capital gains rates and inheritance tax.
 
 The words test holds every title and line to twelve words with no figure, and checks each size word
 at every size a policy offers: "big" (or expensive, large, costly) only where the engine's own
@@ -399,7 +408,8 @@ modest, tiny) only where it is £1bn or less even at the largest. The page price
 against the Budget as it stands; no figure is authored.
 
 Where two levers' own texts say they double count, cancel or are "pick one", the pair is an
-`excludes` interaction (above), with a text that reads from either card; twenty-two pairs today.
+`excludes` interaction (above), with a text that reads from either card; fifteen pairs today, since
+the nine taxes retired in ADR-0035 took seven with them.
 Pairs whose texts say only that the combined figure is approximate stay `warn`.
 
 A side may carry `notes` (Phase 25): lines under the screen's lead that its 120 characters cannot
@@ -420,7 +430,8 @@ screen, and each pick's reason is its own adviser line; these rules keep it chec
 - **Never two that count the same money**: no `excludes` pair and no option conflict among the
   step-4 picks, the step-3 picks and the levers already on the desk (the context file's `inTray`).
 - **How many.** Step 4: at most one way per lever, six to ten picks a screen, at least one in every
-  group. Step 3: one or two picks a priority, at least one of which delivers it in full.
+  spending group (a tax need not have one, ADR-0035). Step 3: one or two picks a priority, at least
+  one of which delivers it in full.
 - **Every lever on the desk is on step 4.** Basic mode always shows a lever the briefing puts on the
   desk, pick or not, so the briefing never points at something hidden.
 

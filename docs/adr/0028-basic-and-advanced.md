@@ -1,8 +1,8 @@
 # ADR-0028: Basic and advanced
 
-Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0030, ADR-0031 and
-ADR-0032). Revises
-ADR-0013 and ADR-0027, each of which carries a dated revision pointing here.
+Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0030, ADR-0031 and ADR-0032)
+and on 2026-09-30 (below, ADR-0035). Revises ADR-0013 and ADR-0027, each of which carries a dated
+revision pointing here.
 
 ## Context
 
@@ -197,3 +197,14 @@ what a Budget leaves on it, so the levers on the desk stay on show in basic mode
 
 The footer's "Advanced mode" switch is withdrawn for now. The button on each screen basic mode
 trims is the way between the modes, and the choice is remembered in the browser as before.
+
+## Revision (2026-09-30): two picks replaced, and a pick in every spending group (ADR-0035)
+
+Two of the eight tax picks are retired with their taxes at the user's request: the health and social
+care levy and capital gains at income tax rates. The user chose two replacements, so there are still
+eight: a point on employer National Insurance and capital gains tax at death. Each meets the rules
+above, and two picks still strain the tax lock: employer National Insurance up, and on pension
+contributions. The tax screen now goes tax by tax, and four taxes have no pick (wealth tax, stamp
+duty, business taxes and the tax gap), so the rule of a pick in every group holds on the spending
+screen only. Basic mode shows the eight under seven taxes, employer National Insurance as a scale
+from the plan: 15% as planned, 16%, 17%, 18%.

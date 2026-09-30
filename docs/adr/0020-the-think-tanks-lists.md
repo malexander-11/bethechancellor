@@ -1,6 +1,7 @@
 # ADR-0020: The think tanks' lists
 
-Status: Accepted, 2026-09-23. Follows ADR-0019 (the menu against the reporting, again).
+Status: Accepted, 2026-09-23. Follows ADR-0019 (the menu against the reporting, again). Revised
+2026-09-30 by ADR-0035 (below).
 
 ## Context
 
@@ -97,3 +98,12 @@ card says so.
   is now badged assumption. Intended: a Budget built on think-tank arithmetic should read as one.
 - The welfare split touches five lever files and one briefing; the tests pin the two groups and a
   minister on every card.
+
+## Revision (2026-09-30): three cards retired (ADR-0035)
+
+Three of this record's cards are retired at the user's request: National Insurance on landlords'
+rent (`nicrent`) and a lower VAT registration threshold (`vatthr`), two of the progressive asks, and
+CenTax's capital gains package (`cgtalign`), brought up to date here. Each is marked deprecated,
+filed as "Shelved" and offered nowhere, its costing and sources kept for the record. With rent gone,
+the tax lock breaks on two of this record's cards: full National Insurance above the upper earnings
+limit (`nicuel`) and 1% VAT on zero-rated goods (`vat1z`). The rest stand.

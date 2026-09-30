@@ -1,8 +1,8 @@
 # ADR-0024: Plain words, real questions, a guided repair
 
-Date: 2026-09-27. Status: accepted; revised the same day by ADR-0025 and on 2026-09-29 by ADR-0032
-(see the revisions at the foot). Builds on ADR-0002, ADR-0011, ADR-0016, ADR-0022 and ADR-0023, each
-of which carries a dated revision pointing here.
+Date: 2026-09-27. Status: accepted; revised the same day by ADR-0025, on 2026-09-29 by ADR-0032 and
+ADR-0033, and on 2026-09-30 by ADR-0035 (see the revisions at the foot). Builds on ADR-0002,
+ADR-0011, ADR-0016, ADR-0022 and ADR-0023, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -252,3 +252,10 @@ means.
 The footer’s three links are one, "About the game & sources". The About page it opens sets out the
 game, how the numbers work (the five kinds of number, and a link on to the Methodology page), what
 the game does not do, the licence and every source.
+
+## Revision (2026-09-30): the levy retired, the amber smaller (ADR-0035)
+
+The health and social care levy is retired at the user's request, so the levers that turn amber are
+the four employer-side National Insurance levers and the new 50p rate. The tests and the walk that
+used the levy as the amber example use a point on employer National Insurance, and a Budget with
+that alone still leaves the public above the floor, the strain named.

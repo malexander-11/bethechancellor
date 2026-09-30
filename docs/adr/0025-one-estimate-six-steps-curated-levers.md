@@ -1,8 +1,8 @@
 # ADR-0025: One estimate, six steps, curated levers
 
-Date: 2026-09-27. Status: accepted; revised 2026-09-28 and 2026-09-29 (below, ADR-0026, ADR-0027 and
-ADR-0030). Revises ADR-0010, ADR-0012, ADR-0022, ADR-0023 and ADR-0024, each of which carries a
-dated revision pointing here.
+Date: 2026-09-27. Status: accepted; revised 2026-09-28, 2026-09-29 and 2026-09-30 (below, ADR-0026,
+ADR-0027, ADR-0030 and ADR-0035). Revises ADR-0010, ADR-0012, ADR-0022, ADR-0023 and ADR-0024, each
+of which carries a dated revision pointing here.
 
 ## Context
 
@@ -242,3 +242,12 @@ briefing now shows how it is made: the OBR's March £23.6bn, less what higher in
 higher inflation take, row by row. Later the same day the user's own words replaced the £10bn advice
 with a line on what reaching Chancellors' average margin would take, badged Game judgement and
 still scored by nothing (ADR-0030's revision).
+
+## Revision (2026-09-30): the tax screen goes tax by tax (ADR-0035)
+
+The tax screen no longer groups taxes by who pays them. It goes tax by tax: eleven sections, from
+Income tax to The tax gap, holding 26 decisions and 67 taxes. A section is the lever's family, its
+file's own `group`, and the validator checks it; the rule that a tax sits in the who-pays group its
+incidence tag names is gone. The incidence tag still says who pays a tax, on the review and on
+Budget day. Nine taxes are retired, the levy among them, so the tests and the walk that moved the
+levy move employer National Insurance instead. The spending screen keeps its four groups.

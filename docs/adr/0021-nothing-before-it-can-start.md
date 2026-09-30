@@ -1,6 +1,7 @@
 # ADR-0021: Nothing before it can start
 
-Status: Accepted, 2026-09-23. Follows ADR-0020 (the think tanks' lists).
+Status: Accepted, 2026-09-23. Follows ADR-0020 (the think tanks' lists). Revised the same evening
+(the payment lag) and 2026-09-30 (two floors retired, ADR-0035), both below.
 
 ## Context
 
@@ -116,3 +117,12 @@ headlines name the year. HMRC's ready-reckoner rows on the two certified capital
 (`cgth`, `cgtl`) already carry the lag inside their published years and need nothing. The death
 card's timing caveat now says the steady-state figure applies from 2028-29, the first year in which
 tax on 2027-28 disposals is paid. Thirteen cards carry a floor; 135 sources.
+
+## Revision (2026-09-30): two floors retired with their cards (ADR-0035)
+
+Two cards with a floor are retired at the user's request: National Insurance on landlords' rent
+(`nicrent`) and CenTax's capital gains package (`cgtalign`), both from 2028-29. Their floors stay in
+their files with the rest of their costings, and the test that pins the floors still reads all
+thirteen. Eleven live cards carry one now: eight taxes (the two wealth taxes, sugar and salt, the
+reserves levy, council tax on bands G and H, the child tax allowance, and capital gains at death and
+on leaving) and three welfare cards.

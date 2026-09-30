@@ -1,8 +1,8 @@
 # ADR-0027: Policies all the way through
 
-Date: 2026-09-28. Status: accepted; step 4 in basic mode revised 2026-09-29 (below, ADR-0028).
-Revises ADR-0005, ADR-0009, ADR-0025 and ADR-0026, each of which carries a dated revision pointing
-here.
+Date: 2026-09-28. Status: accepted; step 4 in basic mode revised 2026-09-29 (below, ADR-0028), and
+the tax screen 2026-09-30 (below, ADR-0035). Revises ADR-0005, ADR-0009, ADR-0025 and ADR-0026, each
+of which carries a dated revision pointing here.
 
 ## Context
 
@@ -176,3 +176,16 @@ puts it on the desk, and no folds. A policy chosen in either mode stays on show 
 basic mode's tax screen is 3,704px and its spending screen 4,263px, against 6,066px and 5,930px in
 advanced mode: the shorter screen this record said step 4 still needed, though not yet two or three
 phone screens. Advanced mode is unchanged but for one line offering the shortlist back.
+
+## Revision (2026-09-30): taxes by tax, one scale a tax (ADR-0035)
+
+On the tax screen a tax that moves both ways is no longer two policies, one on show and one in the
+group's fold: it is one card with one scale, its levels in order and the planned level among them as
+a radio, and a tax with sizes that moves one way is a scale from the plan. Small, Medium and Large
+leave the tax screen, each radio named by the level it sets; the spending screen keeps both ways and
+the sizes. The tax screen goes tax by tax, not by who pays, so a tax's family is its section rather
+than a subhead in a fold.
+
+Fifteen pairs now count the same money, from twenty-two. The seven that named a retired tax went
+with it: five against capital gains alignment, the fuel freeze against last year's cancelled rise,
+and the gambling rise against its reversal.

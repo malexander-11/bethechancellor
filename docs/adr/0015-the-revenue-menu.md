@@ -1,9 +1,10 @@
 # ADR-0015: The revenue menu
 
 **Status:** accepted, 2026-09-18. Revised by ADR-0017 (2026-09-19): decision 1's folder rule is
-withdrawn. A lever costed by our own arithmetic sits in the tax group its subject belongs to,
-beside the certified rows, and the assumption badge does the quarantining. Revised again by
-ADR-0026 (2026-09-28): decision 4 is withdrawn (below).
+withdrawn. A lever costed by our own arithmetic sits in the tax group its subject belongs to, beside
+the certified rows, and the assumption badge does the quarantining. Revised again by ADR-0026
+(2026-09-28): decision 4 is withdrawn (below). And by ADR-0035 (2026-09-30): two of decision 2's
+levers are retired (below).
 
 ## Context
 
@@ -83,3 +84,12 @@ on public sector schemes (net pay arrangements £6,300m, relief at source £200m
 split), times 15 ÷ 13.8 for the April 2025 rate, grown with nominal GDP. That is about £10.1bn in
 2029-30, not £20.0bn. It carries `reliefCost`, so its card reads "raises at most". It no longer
 heads any list of the biggest yields, as the consequences below describe.
+
+## Revision (2026-09-30): two of the seven retired (ADR-0035)
+
+Two of decision 2's seven levers are retired at the user's request: insurance premium tax, revived
+here, and the Business Asset Disposal Relief rate, which the tax screen offered as putting up the
+tax on selling a business. Each is marked deprecated, filed as "Shelved" and headlined "Kept for the
+record; not on offer at this Budget. Old links still work.", the way the levers shelved in Phase 12
+were. Their costings stay, and so do the tests that reproduce them from HMRC's rows. Nothing live
+names them now, and an old link carrying either opens without it and says so. The other five stand.
