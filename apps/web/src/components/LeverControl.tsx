@@ -306,16 +306,57 @@ export interface LeverNote {
   warn: boolean;
 }
 
-/** Another lever in the Budget counts the same money as this one (Phase 25): what it is, and why. */
+/**
+ * Another lever in the Budget counts the same money as this one, and a flagship the player chose
+ * holds it (Phase 26): the control stays reachable but will not move, and the card offers the way
+ * back to the flagship. Step 4 never undoes a flagship; anywhere else, choosing takes the other
+ * out (ADR-0036).
+ */
 export interface Blocked {
   /** What the other lever is called on this screen. */
   other: string;
-  /** Untick a toggle; put a policy with sizes back. */
-  untick: boolean;
   reason: string;
-  onSwap?: () => void;
-  /** A flagship the player chose holds the other lever (Phase 26): change it there, not here. */
-  flagship?: { title: string; to: string };
+  /** The flagship that holds it: its title and its screen. */
+  flagship: { title: string; to: string };
+}
+
+/**
+ * What choosing this lever would take out of the Budget (ADR-0036): the levers there now that
+ * count the same money, by the names this screen gives them, and why, in the first one's words.
+ * The control moves as ever; the card says so before it is touched.
+ */
+export interface TakesOut {
+  names: readonly string[];
+  reason: string;
+}
+
+/**
+ * The sentence a card opens its take-out line with (ADR-0036): "Choosing this takes out “A”." on a
+ * tick, "Choosing a level here…" on a tax's scale, "Choosing a size here…" on a policy with sizes.
+ */
+export function takesOutWords(names: readonly string[], kind: 'tick' | 'scale' | 'sizes'): string {
+  const quoted = names.map((n) => `“${n}”`);
+  const last = quoted.at(-1) ?? '';
+  const list = quoted.length > 1 ? `${quoted.slice(0, -1).join(', ')} and ${last}` : last;
+  const choosing =
+    kind === 'tick'
+      ? 'Choosing this'
+      : kind === 'scale'
+        ? 'Choosing a level here'
+        : 'Choosing a size here';
+  return `${choosing} takes out ${list}.`;
+}
+
+/**
+ * One of a set of ticks that contradict each other in one decision (ADR-0036): the card's box
+ * becomes a radio in the set's group, which the screen draws with "As planned" first, so choosing
+ * one takes the others out and the arrow keys move between them.
+ */
+export interface Radio {
+  /** The group's name, shared by every radio in the set. */
+  name: string;
+  checked: boolean;
+  onChoose: () => void;
 }
 
 /**
@@ -353,10 +394,11 @@ export const RELIEF_LINE =
 
 /**
  * A lever's card on step 4 (Phase 24; policies with sizes since Phase 26, ADR-0027), drawn by
- * PolicyCard: the policy's title, its sizes as radios or one tick, the price at rest or the effect
- * once chosen, the adviser's line, the tags that change what choosing it means, and the lever's own
- * headline and caveats under "More about this". The desk's sliders, its select and its long card
- * went with it (Phase 26).
+ * PolicyCard: the policy's title, its sizes as radios or one tick (a radio, in a set of ticks that
+ * contradict each other, ADR-0036), the price at rest or the effect once chosen, the adviser's
+ * line, what choosing it would take out, the tags that change what choosing it means, and the
+ * lever's own headline and caveats under "More about this". The desk's sliders, its select and its
+ * long card went with it (Phase 26).
  */
 export function LeverControl({
   lever,
@@ -371,6 +413,8 @@ export function LeverControl({
   advice,
   notes = [],
   blocked,
+  takesOut,
+  radio,
   sizes,
   headingLevel = 3,
   children,
@@ -401,10 +445,14 @@ export function LeverControl({
   /** Warnings that apply now: a lever this one interacts with has moved. */
   notes?: readonly LeverNote[];
   /**
-   * Another lever in the Budget counts the same money (Phase 25): the control stays reachable but
-   * will not move, and says why and how to swap.
+   * A flagship the player chose holds a lever that counts the same money (Phase 26): the control
+   * stays reachable but will not move, and says why and where to change the flagship.
    */
   blocked?: Blocked;
+  /** Choosing this would take out levers in the Budget that count the same money (ADR-0036). */
+  takesOut?: TakesOut;
+  /** One of a set of ticks that contradict each other: a radio in place of the box (ADR-0036). */
+  radio?: Radio;
   /** The policy's sizes (Phase 26): radios, or one tick. */
   sizes: SizeChoice;
   /** The title's heading level: 4 under a family subhead in a fold (Phase 26), else 3. */
@@ -475,6 +523,7 @@ export function LeverControl({
     otherWay;
   const describedBy = [
     blocked ? `${id}-blocked` : null,
+    takesOut ? `${id}-takesout` : null,
     `${id}-desc`,
     hasEffectLine ? `${id}-effect` : null,
   ]
@@ -622,11 +671,17 @@ export function LeverControl({
     <BlockedNotice
       id={`${id}-blocked`}
       other={blocked.other}
-      untick={blocked.untick}
       reason={blocked.reason}
-      {...(blocked.onSwap ? { onSwap: blocked.onSwap } : {})}
-      {...(blocked.flagship ? { flagship: blocked.flagship } : {})}
+      flagship={blocked.flagship}
     />
+  ) : null;
+  // What choosing would take out, said before anything is touched (ADR-0036): the control still
+  // moves, and its price already counts the others as gone.
+  const takesOutLine = takesOut ? (
+    <p className="lever__takes-out" id={`${id}-takesout`}>
+      <strong>{takesOutWords(takesOut.names, tick ? 'tick' : scale ? 'scale' : 'sizes')}</strong>{' '}
+      {takesOut.reason}
+    </p>
   ) : null;
   const adviceLine = advice ? <AdviceLine {...advice} /> : null;
   // A flagship ask trimmed short of what was chosen is settled lower, in the Chief Secretary's
@@ -677,20 +732,33 @@ export function LeverControl({
         {tick ? (
           <Heading className="lever__title" id={`${id}-title`}>
             <label htmlFor={id} className="lever__toggle-label">
-              <input
-                id={id}
-                type="checkbox"
-                checked={!isDefault && !otherWay}
-                aria-describedby={describedBy}
-                aria-disabled={blocked ? true : undefined}
-                onChange={(e) =>
-                  change_(
-                    e.target.checked
-                      ? (sizes.values[0] ?? lever.control.default)
-                      : lever.control.default,
-                  )
-                }
-              />
+              {radio ? (
+                // One of a set (ADR-0036): choosing it takes the others out; "As planned", the
+                // set's first radio, puts them all back.
+                <input
+                  id={id}
+                  type="radio"
+                  name={radio.name}
+                  checked={radio.checked}
+                  aria-describedby={describedBy}
+                  onChange={radio.onChoose}
+                />
+              ) : (
+                <input
+                  id={id}
+                  type="checkbox"
+                  checked={!isDefault && !otherWay}
+                  aria-describedby={describedBy}
+                  aria-disabled={blocked ? true : undefined}
+                  onChange={(e) =>
+                    change_(
+                      e.target.checked
+                        ? (sizes.values[0] ?? lever.control.default)
+                        : lever.control.default,
+                    )
+                  }
+                />
+              )}
               {title}
             </label>
           </Heading>
@@ -785,6 +853,7 @@ export function LeverControl({
         </>
       ) : null}
       {blockedLine}
+      {takesOutLine}
       {nowLine}
       {financialLine}
       {effectLine}

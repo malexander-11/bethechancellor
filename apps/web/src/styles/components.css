@@ -1365,6 +1365,21 @@ label.choice {
   display: block;
 }
 
+/*
+ * What choosing would take out (ADR-0036), said before anything is touched: the sentence in bold and
+ * the reason after it, at full contrast, never faded; the control beside it still moves.
+ */
+.lever__takes-out {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.lever__takes-out strong {
+  font-weight: 700;
+}
+
 /* The lever set the other way: what choosing here would replace, in plain ink, with no price. */
 .lever__replaces {
   color: var(--ink-2);
@@ -1476,6 +1491,60 @@ label.choice {
 
 .tune__decision-body {
   padding: 0 0 12px;
+}
+
+/*
+ * Ticks that contradict each other in one decision, drawn as one choice (ADR-0036): the set's name
+ * in small capitals, "As planned" as its first radio and the choices' cards beneath, the whole
+ * group held by a rule down its left, so it reads as one question like a tax's scale.
+ */
+.tune__choice {
+  min-width: 0;
+  margin: 4px 0;
+  padding: 0 0 0 14px;
+  border: 0;
+  border-left: 2px solid var(--axis);
+}
+
+/* Floated to the full width, the legend sits inside the rule like any other line. */
+.tune__choice-name {
+  float: left;
+  width: 100%;
+  margin: 0;
+  padding: 10px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+.tune__choice-planned {
+  clear: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 2px 0 10px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.tune__choice-planned input[type='radio'] {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
+/* Every choice in the set sits on its hairline, the first below "As planned" among them, and so
+   does the first card after the set. */
+.tune__levers .tune__choice .lever,
+.tune__levers .tune__choice + .lever {
+  border-top: 1px solid var(--border);
 }
 
 /* ------------------------------------------------------------- the review */

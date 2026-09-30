@@ -55,35 +55,90 @@ describe('LeverControl', () => {
     ).toBeInTheDocument();
   });
 
-  it('keeps a blocked lever in reach but still, and says what to untick and why', () => {
-    const exit = levers.find((l) => l.code === 'cgtexit');
-    if (!exit) throw new Error('missing cgtexit');
+  it('says first what choosing a lever would take out, and still moves (ADR-0036)', () => {
+    const one = levers.find((l) => l.code === 'vat1z');
+    const top = levers.find((l) => l.code === 'itar');
+    const item = finetuneItems(finetune).find((i) => i.code === 'itar');
+    if (!one || !top || !item) throw new Error('missing vat1z or itar');
     const onChange = vi.fn();
-    const onSwap = vi.fn();
-    render(
+    const { unmount } = render(
       <LeverControl
-        lever={exit}
+        lever={one}
         value={0}
         onChange={onChange}
-        sizes={sizesOf('cgtexit')}
-        blocked={{
-          other: 'Tax capital gains when someone dies',
-          untick: true,
-          reason: 'The £4bn for gains at death already includes a charge on people who leave.',
-          onSwap,
+        sizes={sizesOf('vat1z')}
+        takesOut={{
+          names: ['Charge VAT on food', 'Charge VAT on books, newspapers and magazines'],
+          reason: 'The 1% rate on zero-rated goods already covers food.',
         }}
       />,
     );
     const box = screen.getByRole('checkbox');
-    expect(box).toBeEnabled();
-    expect(box).toHaveAttribute('aria-disabled', 'true');
+    expect(box).not.toHaveAttribute('aria-disabled');
     expect(box).toHaveAccessibleDescription(
-      /^You can’t have both\. Untick “Tax capital gains when someone dies” to choose this\. The £4bn/,
+      /^Choosing this takes out “Charge VAT on food” and “Charge VAT on books, newspapers and magazines”\. The 1% rate/,
     );
+    expect(document.querySelector('.lever--blocked')).toBeNull();
     fireEvent.click(box);
-    expect(onChange).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole('button', { name: /Swap them/ }));
-    expect(onSwap).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(1);
+    unmount();
+    // A tax's scale says it of a level.
+    render(
+      <LeverControl
+        lever={top}
+        value={0}
+        onChange={onChange}
+        sizes={{ values: scaleLevels(top, item.policies), labels: [], scale: true }}
+        takesOut={{
+          names: ['A new 50% income tax rate above £125,140'],
+          reason: 'Both set the rate on income above £125,140.',
+        }}
+      />,
+    );
+    expect(
+      screen.getByText(
+        /^Choosing a level here takes out “A new 50% income tax rate above £125,140”\./,
+      ),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('radio', { name: '46%' }));
+    expect(onChange).toHaveBeenLastCalledWith(1);
+  });
+
+  it('draws one of a set of choices as a radio in place of its box (ADR-0036)', () => {
+    const wealth = levers.find((l) => l.code === 'wealth');
+    if (!wealth) throw new Error('missing wealth');
+    const onChoose = vi.fn();
+    const { rerender } = render(
+      <LeverControl
+        lever={wealth}
+        value={0}
+        onChange={() => undefined}
+        sizes={sizesOf('wealth')}
+        displayTitle="A 1% yearly tax on wealth above £10 million"
+        radio={{ name: 'the-wealth-tax', checked: false, onChoose }}
+      />,
+    );
+    expect(screen.queryByRole('checkbox')).toBeNull();
+    const radio = screen.getByRole('radio', {
+      name: 'A 1% yearly tax on wealth above £10 million',
+    });
+    expect(radio).toHaveAttribute('name', 'the-wealth-tax');
+    expect(radio).not.toBeChecked();
+    fireEvent.click(radio);
+    expect(onChoose).toHaveBeenCalledTimes(1);
+    rerender(
+      <LeverControl
+        lever={wealth}
+        value={1}
+        onChange={() => undefined}
+        sizes={sizesOf('wealth')}
+        displayTitle="A 1% yearly tax on wealth above £10 million"
+        radio={{ name: 'the-wealth-tax', checked: true, onChoose }}
+      />,
+    );
+    expect(screen.getByRole('radio', { name: /A 1% yearly tax/ })).toBeChecked();
+    // Chosen, it can be put back like any tick; "As planned", drawn by the screen, does the same.
+    expect(screen.getByRole('button', { name: /Undo/ })).toBeInTheDocument();
   });
 
   it('renders a reversal toggle as a checkbox that reports 1 or 0', () => {

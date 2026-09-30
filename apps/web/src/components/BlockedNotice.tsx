@@ -3,10 +3,12 @@ import { StepLink } from '../journey/links';
 /**
  * What a choice says while another in the Budget counts the same money (Phase 25): you can’t have
  * both, what to untick to choose this one, why, and a one-tap swap; or, where a flagship the
- * player chose holds the other (Phase 26), a way back to that flagship instead. It is plain text
- * at full contrast, never faded. The control it belongs to stays in the tab order (aria-disabled,
- * not disabled) and points here with aria-describedby, so a keyboard or a screen reader hears why
- * it will not move and what to do instead.
+ * player chose holds the other (Phase 26), a way back to that flagship instead. Step 3's ways to
+ * deliver a priority use both; step 4 only the flagship's, since anywhere else choosing there takes
+ * the other out and says so first (ADR-0036). It is plain text at full contrast, never faded. The
+ * control it belongs to stays in the tab order (aria-disabled, not disabled) and points here with
+ * aria-describedby, so a keyboard or a screen reader hears why it will not move and what to do
+ * instead.
  */
 export function BlockedNotice({
   id,
@@ -19,8 +21,8 @@ export function BlockedNotice({
   id: string;
   /** What the other choice is called on screen. */
   other: string;
-  /** Untick a toggle or a card; put a policy with sizes back. */
-  untick: boolean;
+  /** Untick a toggle or a card; put a policy with sizes back. Unsaid beside a flagship. */
+  untick?: boolean;
   /** Why the two count the same money, as authored. */
   reason: string;
   /** Take the other out and put this one in, in one tap. */

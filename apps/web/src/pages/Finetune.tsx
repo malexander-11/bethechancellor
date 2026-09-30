@@ -2,6 +2,7 @@ import {
   FINETUNE_SHOWN,
   ambitionStatus,
   basicPolicy,
+  decisionUnits,
   deskLevers,
   formatGbpBn,
   groupItems,
@@ -18,9 +19,10 @@ import {
   type FinetunePolicy,
   type FinetuneSideId,
   type FinetuneTaxGroup,
+  type Lever,
   type LeverEffect,
 } from '@btc/engine';
-import { useState, type ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { Interventions } from '../components/Interventions';
@@ -172,7 +174,8 @@ function opensOnArrival(decision: FinetuneDecision, start: Record<string, number
  * The tax screen goes tax by tax (ADR-0035): each tax a section, each section the decisions about
  * it, closed until opened, a decision holding a lever chosen before the screen opened open from
  * the start. Opening one shows every choice in it, a tax that moves both ways as one scale of
- * levels with the plan among them. The spending screen groups by what the money is
+ * levels with the plan among them, and ticks that contradict each other as one choice among radios
+ * (ADR-0036). The spending screen groups by what the money is
  * for: a group's first few levers show their usual policy, with any lever already chosen showing
  * the policy its way, and the rest wait under one fold, grouped by the lever's family; a policy
  * chosen inside the fold stays where it is until the next visit, so a card never jumps from under
@@ -238,16 +241,21 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
     ruleMissed: outcome.verdicts.some(isMissed),
   }).slice(0, 1);
 
-  // A tax is drawn with its ways, as one scale (ADR-0035); a spending policy, on its own. Keyed by
-  // its first way, so a scale is the same card whichever way it moves.
+  // A tax is drawn with its ways, as one scale (ADR-0035); a spending policy, on its own; a tick
+  // that contradicts others in its decision, as a radio in their set (ADR-0036). Keyed by its first
+  // way, so a scale is the same card whichever way it moves.
   const card = (
     item: FinetuneItem,
     policy: FinetunePolicy,
-    headingLevel?: 3 | 4,
-    ways?: readonly FinetunePolicy[],
+    opts: {
+      headingLevel?: 3 | 4;
+      ways?: readonly FinetunePolicy[];
+      set?: { name: string; codes: readonly string[] };
+    } = {},
   ) => {
     const lever = byCode.get(item.code);
     if (!lever) return null;
+    const { headingLevel, ways, set } = opts;
     return (
       <PolicyCard
         key={`${item.code}:${(ways?.[0] ?? policy).title}`}
@@ -262,6 +270,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         held={held}
         {...(headingLevel ? { headingLevel } : {})}
         {...(ways ? { ways } : {})}
+        {...(set ? { set } : {})}
       />
     );
   };
@@ -284,13 +293,26 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   };
 
   // A decision opened: every choice in it, each tax one scale both ways, a flagship's lever as its
-  // line, headed a level below the decision (ADR-0035).
+  // line, headed a level below the decision (ADR-0035); ticks that contradict each other, one
+  // choice among radios, "As planned" first (ADR-0036).
+  const decisionCard = (item: FinetuneItem, set?: { name: string; codes: readonly string[] }) => {
+    const h = held.get(item.code);
+    if (h) return heldLine(item, h, 4);
+    const [first] = item.policies;
+    return first
+      ? card(item, first, { headingLevel: 4, ways: item.policies, ...(set ? { set } : {}) })
+      : null;
+  };
   const decisionBody = (decision: FinetuneDecision) =>
-    decision.items.map((item) => {
-      const h = held.get(item.code);
-      if (h) return heldLine(item, h, 4);
-      const [first] = item.policies;
-      return first ? card(item, first, 4, item.policies) : null;
+    decisionUnits(decision).map((unit) => {
+      if (unit.kind === 'item') return decisionCard(unit.item);
+      const members = unit.items.flatMap((item) => byCode.get(item.code) ?? []);
+      const codes = unit.items.map((item) => item.code);
+      return (
+        <Choice key={`set:${codes.join('+')}`} name={unit.name} members={members}>
+          {(radio) => unit.items.map((item) => decisionCard(item, { name: radio, codes }))}
+        </Choice>
+      );
     });
 
   /**
@@ -324,7 +346,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         }
         const policy = basicPolicy(item, lever, start[item.code], DESK.has(item.code));
         // The one way on show, as a scale from where the tax is planned to be.
-        if (policy) shown.push(card(item, policy, undefined, [policy]));
+        if (policy) shown.push(card(item, policy, { ways: [policy] }));
       }
       if (shown.length === 0) return null;
       return (
@@ -374,7 +396,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         {families.map(({ family, entries }) => (
           <div key={family} className="tune__family">
             <h3 className="tune__family-title">{family}</h3>
-            {entries.map((e) => card(e.item, e.policy, 4))}
+            {entries.map((e) => card(e.item, e.policy, { headingLevel: 4 }))}
           </div>
         ))}
       </div>
@@ -487,6 +509,48 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         </StepLink>
       </p>
     </JourneyLayout>
+  );
+}
+
+/**
+ * Ticks that contradict each other in one decision, drawn as one choice (ADR-0036): the set's name,
+ * "As planned" first, then each tick's card with a radio in place of its box, all one group, so
+ * choosing one takes the others out and the arrow keys move between them, like a tax's scale.
+ * "As planned" puts every one of them back.
+ */
+function Choice({
+  name,
+  members,
+  children,
+}: {
+  name: string;
+  members: readonly Lever[];
+  children: (radio: string) => ReactNode;
+}) {
+  const { state, dispatch } = useBudget();
+  const radio = useId();
+  const planned = members.every(
+    (l) => (state.leverValues[l.code] ?? l.control.default) === l.control.default,
+  );
+  return (
+    <fieldset className="tune__choice">
+      <legend className="tune__choice-name">{name}</legend>
+      <label className="tune__choice-planned">
+        <input
+          type="radio"
+          name={radio}
+          checked={planned}
+          onChange={() =>
+            dispatch({
+              type: 'setLevers',
+              values: Object.fromEntries(members.map((l) => [l.code, l.control.default])),
+            })
+          }
+        />
+        As planned
+      </label>
+      {children(radio)}
+    </fieldset>
   );
 }
 

@@ -84,9 +84,11 @@ const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] =
   // tax by tax, every decision closed until opened (ADR-0035): 512, with the decision on what
   // employers pay open for the walk's two points; the tuned game opens the six decisions holding
   // its choices, each showing every choice in it: 1,176. Then one scale a tax, both ways on one
-  // card: 405 and 1,030.
+  // card: 405 and 1,030. Then ticks that contradict each other as one choice among radios, and a
+  // line saying what choosing would take out where no notice said "you can't have both" (ADR-0036):
+  // the tuned game's wealth tax and dividends are radios now, 925.
   ['/finetune/tax', 450, GAME, 'advanced'],
-  ['/finetune/tax', 1135, TUNED, 'advanced'],
+  ['/finetune/tax', 1020, TUNED, 'advanced'],
   ['/finetune/spending', 610, GAME, 'advanced'],
   ['/finetune/spending', 800, TUNED, 'advanced'],
   // Basic mode (Phase 27): the advisers' shortlist, and whatever the game has chosen besides

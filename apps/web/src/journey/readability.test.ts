@@ -1,10 +1,12 @@
-import { finetuneItems, plainText } from '@btc/engine';
+import { excludesPartners, finetuneItems, plainText } from '@btc/engine';
 import { appendFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { takesOutWords } from '../components/LeverControl';
 import { MODE_WORDS } from '../components/ModeLine';
 import { briefingTemplates, fillIn } from './briefingWords';
 import {
   finetune,
+  finetuneName,
   guide,
   interventions,
   levers,
@@ -123,6 +125,16 @@ const SETS: Record<string, readonly string[]> = {
     ),
   ],
   'the fine-tuning advice': curated.flatMap((i) => i.policies.map((p) => p.advice.text)),
+  // What choosing a lever would take out (ADR-0036), said on its card before it is touched: every
+  // pair that counts the same money, from both sides, as a tick or a scale says it.
+  'what a choice takes out': curated.flatMap((i) => {
+    const lever = levers.find((l) => l.code === i.code);
+    if (!lever) return [];
+    const kind = lever.control.kind === 'toggle' ? 'tick' : 'scale';
+    return excludesPartners(lever, levers).map(
+      (p) => `${takesOutWords([finetuneName(p.lever.code) ?? p.lever.shortTitle], kind)} ${p.text}`,
+    );
+  }),
   'the priorities': pm.priorities.flatMap((p) => [
     p.title,
     p.purpose,
@@ -174,7 +186,7 @@ const SETS: Record<string, readonly string[]> = {
 
 describe('readability: a reading age of about twelve, one idea a sentence', () => {
   it('reads every set a newcomer meets', () => {
-    expect(Object.keys(SETS).length).toBe(17);
+    expect(Object.keys(SETS).length).toBe(18);
     for (const [name, texts] of Object.entries(SETS)) expect(texts.length, name).toBeGreaterThan(0);
   });
 

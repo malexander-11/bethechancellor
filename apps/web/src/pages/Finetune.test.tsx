@@ -358,50 +358,189 @@ describe('fine-tune tax and spend: the curated levers', () => {
     ).toBeInTheDocument();
   });
 
-  it('will not let two taxes that count the same money both in, and swaps them in one tap', async () => {
+  it('makes two ticks that contradict each other one choice, As planned first (ADR-0036)', async () => {
     at(`/finetune/tax?${BASE}&${GAME}&L=cgtexit.1`);
     // The charge on leavers was chosen before the screen opened, so its decision is open.
     expect(decision('Tax gains that go untaxed')).toHaveAttribute('aria-expanded', 'true');
-    const death = screen.getByRole('checkbox', { name: 'Tax capital gains when someone dies' });
+    const set = screen.getByRole('group', { name: 'Capital gains that go untaxed' });
+    const radio = (name: string) => within(set).getByRole('radio', { name });
+    const death = radio('Tax capital gains when someone dies');
+    expect(within(set).getAllByRole('radio')).toHaveLength(3);
+    expect(radio('Charge capital gains tax on people who leave the UK')).toBeChecked();
+    expect(radio('As planned')).not.toBeChecked();
+    expect(death).not.toBeChecked();
+    // One group, so the arrow keys move between them as they do along a scale.
+    const names = within(set)
+      .getAllByRole('radio')
+      .map((r) => r.getAttribute('name'));
+    expect(new Set(names).size).toBe(1);
+    // Nothing is blocked and nothing asks to be unticked: the other radio is the swap, priced as one.
     const card = cardOf(death);
-    expect(death).toHaveAttribute('aria-disabled', 'true');
-    expect(death).toHaveAccessibleDescription(
-      /You can’t have both\. Untick “Charge capital gains tax on people who leave the UK” to choose this\./,
-    );
-    expect(card.className).toMatch(/lever--blocked/);
-    // Priced as the swap it offers, never as both at once.
-    expect(
-      within(card).getByText(/^If you swap them: would raise £\d+\.\dbn · headroom would be/),
-    ).toBeInTheDocument();
+    expect(death).not.toHaveAttribute('aria-disabled');
+    expect(card.className).not.toMatch(/lever--blocked/);
+    expect(within(card).queryByText(/can’t have both|takes out|Counted twice/)).toBeNull();
+    expect([...card.querySelectorAll('.lever__hint-line')].map((l) => l.textContent)).toEqual([
+      expect.stringMatching(
+        /^If you choose it instead: would raise £\d+\.\dbn · headroom would be £\d+\.\dbn$/,
+      ),
+    ]);
     fireEvent.click(death);
-    expect(search().get('L')).toMatch(/cgtexit\.1/);
-    expect(search().get('L') ?? '').not.toMatch(/cgtdth/);
-    fireEvent.click(within(card).getByRole('button', { name: /Swap them/ }));
     await waitFor(() => expect(search().get('L')).toMatch(/cgtdth\.1/));
     expect(search().get('L') ?? '').not.toMatch(/cgtexit/);
+    expect(radio('Tax capital gains when someone dies')).toBeChecked();
+    expect(statusOf('Tax gains that go untaxed')).toMatch(/^1 chosen · raises £\d\.\dbn$/);
+    // As planned puts both back.
+    fireEvent.click(radio('As planned'));
+    await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/cgtdth|cgtexit/));
+    expect(statusOf('Tax gains that go untaxed')).toBe('3 choices');
+    // Capital gains on main homes is no part of the choice: a tick of its own beside it.
     expect(
-      screen.getByRole('checkbox', { name: 'Charge capital gains tax on people who leave the UK' }),
-    ).toHaveAttribute('aria-disabled', 'true');
+      screen.getByRole('checkbox', { name: 'Charge capital gains tax on main homes' }),
+    ).toBeInTheDocument();
   });
 
-  it('prices a blocked scale as the swap it offers, and swaps in its nearest level', async () => {
-    // The new 50% rate and the additional rate both set the top rate: one or the other.
+  it('makes the wealth tax, pension relief and the rates on dividends one choice each', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    const wealth = within(openDecision('Tax wealth above £10 million')).getByRole('group', {
+      name: 'The wealth tax',
+    });
+    expect(within(wealth).getByRole('radio', { name: 'As planned' })).toBeChecked();
+    fireEvent.click(
+      within(wealth).getByRole('radio', { name: 'A 1% yearly tax on wealth above £10 million' }),
+    );
+    await waitFor(() => expect(search().get('L')).toMatch(/(^|_)wealth\.1/));
+    fireEvent.click(
+      within(wealth).getByRole('radio', { name: 'A 2% yearly tax on wealth above £10 million' }),
+    );
+    await waitFor(() => expect(search().get('L')).toMatch(/wealth2\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/(^|_)wealth\.1/);
+    expect(statusOf('Tax wealth above £10 million')).toMatch(/^1 chosen/);
+
+    const pensions = openDecision('Change pension tax relief');
+    const rate = within(pensions).getByRole('group', { name: 'The rate of pension tax relief' });
+    fireEvent.click(
+      within(rate).getByRole('radio', { name: 'Give everyone the same 30% pension tax relief' }),
+    );
+    // The cap on the lump sum is no part of the choice: a tick beside it, chosen with either.
+    fireEvent.click(
+      within(pensions).getByRole('checkbox', { name: 'Cap the tax-free pension lump sum' }),
+    );
+    await waitFor(() => expect(search().get('L')).toMatch(/pens30\.1/));
+    fireEvent.click(
+      within(rate).getByRole('radio', { name: 'Give pension tax relief at the basic rate only' }),
+    );
+    await waitFor(() => expect(search().get('L')).toMatch(/pens20\.1/));
+    expect(search().get('L')).toMatch(/pslump\.1/);
+    expect(search().get('L') ?? '').not.toMatch(/pens30/);
+
+    const income = openDecision('Tax on dividends, savings and rent');
+    const rates = within(income).getByRole('group', {
+      name: 'The rates on dividends, savings and rent',
+    });
+    fireEvent.click(
+      within(rates).getByRole('radio', {
+        name: 'Undo last year’s rises on dividend, savings and property income',
+      }),
+    );
+    await waitFor(() => expect(search().get('L')).toMatch(/rvinv\.1/));
+    fireEvent.click(
+      within(rates).getByRole('radio', {
+        name: 'Add another 2p to the tax on dividends, savings and rental income',
+      }),
+    );
+    await waitFor(() => expect(search().get('L')).toMatch(/iinc2\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/rvinv/);
+  });
+
+  it('checks the first of a choice an old link carries two of, and warns on both', () => {
+    at(`/finetune/tax?${BASE}&${GAME}&L=wealth.1_wealth2.1`);
+    const set = screen.getByRole('group', { name: 'The wealth tax' });
+    expect(
+      within(set).getByRole('radio', { name: 'A 1% yearly tax on wealth above £10 million' }),
+    ).toBeChecked();
+    expect(
+      within(set).getByRole('radio', { name: 'A 2% yearly tax on wealth above £10 million' }),
+    ).not.toBeChecked();
+    expect(within(set).getAllByText(/^Warning: Counted twice with/)).toHaveLength(2);
+  });
+
+  it('says first what the 1% rate on zero-rated goods would take out, and takes it out', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}&L=vatfood.1_vatbook.1`);
+    const one = screen.getByRole('checkbox', {
+      name: 'Charge 1% VAT on everything now zero-rated',
+    });
+    const card = cardOf(one);
+    // It still moves; it says first what it would take out, and why, in the first one's words.
+    expect(one).not.toHaveAttribute('aria-disabled');
+    expect(card.className).not.toMatch(/lever--blocked/);
+    expect(one).toHaveAccessibleDescription(
+      /^Choosing this takes out “Charge VAT on food” and “Charge VAT on books, newspapers and magazines”\. The 1% rate already covers food, so 20% on food too would count it twice\./,
+    );
+    // Priced with both of them gone, and no second warning about them.
+    expect(
+      within(card).getByText(
+        /^If you switch it on instead: would (raise|cost) £\d+\.\dbn · headroom would be/,
+      ),
+    ).toBeInTheDocument();
+    expect(within(card).queryByText(/Counted twice|Overlaps with/)).toBeNull();
+    fireEvent.click(one);
+    await waitFor(() => expect(search().get('L')).toMatch(/vat1z\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/vatfood|vatbook/);
+    // Now the exemptions say it the other way.
+    const food = cardOf(screen.getByRole('checkbox', { name: 'Charge VAT on food' }));
+    expect(
+      within(food).getByText(
+        /^Choosing this takes out “Charge 1% VAT on everything now zero-rated”\./,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('says first what a level on a scale would take out, priced a way each with it gone', async () => {
+    // The new 50% rate and the additional rate both set the top rate: choosing one takes the other
+    // out.
     at(`/finetune/tax?${BASE}&${GAME}&L=it50.1`);
     const card = policy('The additional rate of income tax');
-    expect(card.className).toMatch(/lever--blocked/);
+    expect(card.className).not.toMatch(/lever--blocked/);
+    expect(
+      within(card).getByText(
+        /^Choosing a level here takes out “A new 50% income tax rate above £125,140”\./,
+      ),
+    ).toBeInTheDocument();
     for (const radio of within(card).getAllByRole('radio')) {
-      expect(radio).toHaveAttribute('aria-disabled', 'true');
+      expect(radio).not.toHaveAttribute('aria-disabled');
     }
-    // One price, the swap's, not one a way.
     expect([...card.querySelectorAll('.lever__hint-line')].map((l) => l.textContent)).toEqual([
-      expect.stringMatching(/^If you swap them: would (raise|cost) £\d\.\dbn · headroom would be/),
+      expect.stringMatching(/^46% instead: would (raise|cost) £\d\.\dbn · headroom would be/),
+      expect.stringMatching(/^44% instead: would (raise|cost) £\d\.\dbn · headroom would be/),
     ]);
-    fireEvent.click(within(card).getByRole('button', { name: /Swap them/ }));
+    fireEvent.click(within(card).getByRole('radio', { name: '46%' }));
     await waitFor(() => expect(search().get('L')).toMatch(/itar\.1/));
     expect(search().get('L') ?? '').not.toMatch(/it50/);
     expect(
       within(policy('The additional rate of income tax')).getByRole('radio', { name: '46%' }),
     ).toBeChecked();
+    const fifty = cardOf(
+      screen.getByRole('checkbox', { name: 'A new 50% income tax rate above £125,140' }),
+    );
+    expect(
+      within(fifty).getByText(/^Choosing this takes out “The additional rate of income tax”\./),
+    ).toBeInTheDocument();
+  });
+
+  it('takes the rates on gains out when the 2024 rise is undone, and names both', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}&L=cgth.1_cgtl.1`);
+    const undo = screen.getByRole('checkbox', { name: 'Undo the 2024 rise in capital gains tax' });
+    expect(undo).toHaveAccessibleDescription(
+      /^Choosing this takes out “The higher rate of capital gains tax” and “The lower rate of capital gains tax”\. Both set the higher rate on gains/,
+    );
+    fireEvent.click(undo);
+    await waitFor(() => expect(search().get('L')).toMatch(/rvcgt\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/cgth|cgtl/);
+    expect(
+      within(policy('Put up the higher rate of capital gains tax')).getByText(
+        /^Choosing a level here takes out “Undo the 2024 rise in capital gains tax”\./,
+      ),
+    ).toBeInTheDocument();
   });
 
   it('lays out the spending screen, with a minister once a budget moves and the flagships held', () => {
@@ -659,6 +798,22 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     // Chosen, a group says so as it does in advanced mode.
     fireEvent.click(screen.getByRole('checkbox', { name: 'Put gambling duties up again' }));
     expect(group(/^Duties 1 chosen · raises £\d\.\dbn/)).toBeInTheDocument();
+  });
+
+  it('says in basic mode too what a pick would take out, with no radios and no decisions', () => {
+    at(`/finetune/tax?${BASE}&${GAME}&L=pens20.1`);
+    // Chosen before the screen opened, relief at the basic rate is on show beside the pick.
+    expect(
+      screen.getByRole('checkbox', { name: 'Give pension tax relief at the basic rate only' }),
+    ).toBeChecked();
+    const pick = screen.getByRole('checkbox', {
+      name: 'Give everyone the same 30% pension tax relief',
+    });
+    expect(pick).not.toHaveAttribute('aria-disabled');
+    expect(pick).toHaveAccessibleDescription(
+      /^Choosing this takes out “Give pension tax relief at the basic rate only”\. Two designs for the same relief/,
+    );
+    expect(screen.queryByRole('radio', { name: 'As planned' })).toBeNull();
   });
 
   it('swaps to every idea and back with one button, which keeps the focus', () => {

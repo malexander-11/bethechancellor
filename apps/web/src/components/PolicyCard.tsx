@@ -1,8 +1,8 @@
 import {
-  excludedBy,
   formatGbpBn,
   itemName,
   leadPolicy,
+  movedPartners,
   policyWay,
   scaleLevels,
   sizeLabels,
@@ -21,6 +21,11 @@ import { useBudget } from '../state/budget';
 import { LeverControl, sizeWords, type Hint } from './LeverControl';
 import { MinisterLine } from './MinisterLine';
 
+const byCode = new Map(levers.map((l) => [l.code, l] as const));
+
+/** What a lever is called on these screens: its plain name, else its short title. */
+const nameOf = (l: Lever) => finetuneName(l.code) ?? l.shortTitle;
+
 /** A flagship the player chose holds this lever at its own value: its title and its screen. */
 export interface Held {
   title: string;
@@ -36,9 +41,13 @@ export interface Held {
  * chosen, this card says choosing it would replace that one, and prices nothing. The red and amber
  * manifesto tags, the flagship it belongs to, the warnings that apply now and, on a spending
  * policy that is chosen, its minister's line, are all on the card; the lever's own headline and
- * caveats wait under "More about this". A relief cost reads "raises at most" (Phase 25). While a
- * lever that counts the same money is in the Budget, the card will not move and offers a swap, or,
- * where a flagship the player chose holds that lever, a way back to the flagship instead.
+ * caveats wait under "More about this". A relief cost reads "raises at most" (Phase 25).
+ *
+ * While levers that count the same money are in the Budget, the card says first that choosing it
+ * takes them out, and prices it with them gone (ADR-0036); where a flagship the player chose holds
+ * one, the card will not move, and offers the way back to the flagship instead. Given its `set`,
+ * the ticks it contradicts in its decision, its box is a radio in the set's group, and choosing it
+ * takes the others out as a radio does, without a word.
  *
  * Given its `ways`, a tax is one scale (ADR-0035): every level its ways come in, in order, with
  * where it is planned to be among them ("15% · 18% · 19% · 20% as planned · 21% · 22% · 25%"),
@@ -57,6 +66,7 @@ export function PolicyCard({
   held,
   headingLevel,
   ways,
+  set,
 }: {
   item: FinetuneItem;
   policy: FinetunePolicy;
@@ -70,50 +80,58 @@ export function PolicyCard({
   headingLevel?: 3 | 4;
   /** A tax's ways, drawn as one scale (ADR-0035): both in advanced mode, the one on show in basic. */
   ways?: readonly FinetunePolicy[];
+  /**
+   * The ticks this one contradicts in its decision, with it (ADR-0036): the radio group's name, and
+   * every tick in the set in order. Choosing this one takes the others out.
+   */
+  set?: { name: string; codes: readonly string[] };
 }) {
   const { state, dispatch, outcome } = useBudget();
   const rest = lever.control.default;
   const value = state.leverValues[lever.code] ?? rest;
   const resting = value === rest;
   const scale = ways !== undefined && ways.length > 0 && lever.control.kind !== 'toggle';
-  // The way the lever has moved leads a scale: its adviser speaks, and a swap sets its nearest
-  // level. At rest, the usual way.
+  // The way the lever has moved leads a scale, and its adviser speaks; at rest, the usual way.
   const lead = scale
     ? (ways.find((way) => policyWay(way, lever) === Math.sign(value - rest)) ?? ways[0] ?? policy)
     : policy;
   const mine = !resting && Math.sign(value - rest) === policyWay(lead, lever);
   const smallest = lead.sizes[0] ?? rest;
-  const excluder = excludedBy(lever, levers, state.leverValues);
-  // A partner a flagship holds is changed on the flagship's screen, never swapped out from here.
-  const holder = excluder ? held.get(excluder.lever.code) : undefined;
+  // What counts the same money and is in the Budget now (ADR-0036). A partner a flagship holds is
+  // changed on the flagship's screen, never taken out from here, so the card will not move; any
+  // other, choosing this takes out, and its price counts it as gone.
+  const partners = movedPartners(lever, levers, state.leverValues);
+  const heldPartner = partners.find((p) => held.has(p.lever.code));
+  const holder = heldPartner ? held.get(heldPartner.lever.code) : undefined;
+  const out = holder ? [] : partners;
+  const swapOut =
+    out.length > 0
+      ? Object.fromEntries(out.map((p) => [p.lever.code, p.lever.control.default]))
+      : undefined;
   // In the conditional and in plain ink (Phase 25): what a size would do, and the headroom it
-  // would leave, red only below nought. A blocked card is priced as the swap it offers, never as
-  // both at once.
+  // would leave, red only below nought; "instead" where it would take something out.
   const would = (opening: string, at: number): Hint => {
-    const priced = hintOf(
-      { [lever.code]: at },
-      excluder ? { [excluder.lever.code]: excluder.lever.control.default } : undefined,
-    );
+    const priced = hintOf({ [lever.code]: at }, swapOut);
     const effect = lowerFirst(priced.text);
     return {
-      text: `${opening}: ${wouldWords(lever.reliefCost ? reliefWords(effect) : effect)}`,
+      text: `${opening}${swapOut ? ' instead' : ''}: ${wouldWords(lever.reliefCost ? reliefWords(effect) : effect)}`,
       headroom: formatGbpBn(priced.headroomGbpm, 1, priced.headroomGbpm < 0),
       negative: priced.headroomGbpm < 0,
     };
   };
-  // At rest, and with no swap that only a flagship's screen could make: a scale prices the nearest
-  // level each way; any other card, its smallest size, or the swap it offers.
+  // At rest, and unless a flagship holds a partner: a scale prices the nearest level each way; any
+  // other card, its smallest size. One of a set is chosen, like any radio.
   const hints: Hint[] = [];
   if (resting && !holder) {
-    if (excluder) hints.push(would('If you swap them', smallest));
-    else if (scale) {
+    if (scale) {
       for (const way of ways) {
         const nearest = way.sizes[0] ?? rest;
         hints.push(would(sizeWords(lever, nearest), nearest));
       }
     } else {
-      const opening =
-        lever.control.kind === 'toggle'
+      const opening = set
+        ? 'If you choose it'
+        : lever.control.kind === 'toggle'
           ? 'If you switch it on'
           : policy.sizes.length === 1
             ? 'If you choose it'
@@ -121,23 +139,35 @@ export function PolicyCard({
       hints.push(would(opening, smallest));
     }
   }
-  const blocked = excluder
+  const blocked =
+    heldPartner && holder
+      ? { other: nameOf(heldPartner.lever), reason: heldPartner.text, flagship: holder }
+      : undefined;
+  // Said before anything is touched, in the first one's words; a set's radios say it themselves.
+  const [first] = out;
+  const takesOut =
+    !set && first ? { names: out.map((p) => nameOf(p.lever)), reason: first.text } : undefined;
+  const isOn = (code: string) => {
+    const l = byCode.get(code);
+    return l !== undefined && (state.leverValues[code] ?? l.control.default) !== l.control.default;
+  };
+  const radio = set
     ? {
-        other: finetuneName(excluder.lever.code) ?? excluder.lever.shortTitle,
-        untick: excluder.lever.control.kind === 'toggle',
-        reason: excluder.text,
-        ...(holder
-          ? { flagship: holder }
-          : {
-              onSwap: () =>
-                dispatch({
-                  type: 'setLevers',
-                  values: {
-                    [excluder.lever.code]: excluder.lever.control.default,
-                    [lever.code]: smallest,
-                  },
-                }),
-            }),
+        name: set.name,
+        // One radio at a time: an old link that carries two checks the first.
+        checked: set.codes.find(isOn) === lever.code,
+        onChoose: () =>
+          dispatch({
+            type: 'setLevers',
+            values: {
+              ...Object.fromEntries(
+                set.codes
+                  .filter((code) => code !== lever.code)
+                  .map((code) => [code, byCode.get(code)?.control.default ?? 0]),
+              ),
+              [lever.code]: smallest,
+            },
+          }),
       }
     : undefined;
   // Set the other way: the policy that is chosen, and where it has the lever. A scale holds both
@@ -150,14 +180,24 @@ export function PolicyCard({
         labels: sizeLabels(policy.sizes.length),
         ...(other ? { replaces: `${other.title} (${sizeWords(lever, value)})` } : {}),
       };
-  const notes = leverNotes(lever, moved).filter((n) => n.key !== excluder?.lever.code);
+  // What choosing takes out is said once, above; a pair both in from an old link still warns.
+  const notes = leverNotes(lever, moved).filter(
+    (n) => !partners.some((p) => p.lever.code === n.key),
+  );
   return (
     <LeverControl
       lever={lever}
       value={value}
       effect={outcome.leverEffects.find((e) => e.code === lever.code)}
       summaryYear={summaryYear}
-      onChange={(next) => dispatch({ type: 'setLever', code: lever.code, value: next })}
+      // Choosing takes out whatever counts the same money (ADR-0036); putting it back, nothing.
+      onChange={(next) =>
+        dispatch(
+          swapOut && next !== rest
+            ? { type: 'setLevers', values: { ...swapOut, [lever.code]: next } }
+            : { type: 'setLever', code: lever.code, value: next },
+        )
+      }
       redLines={redLinesFor(lever.code)}
       chosen={chosen ? { title: chosen.option.title, state: chosen.state } : undefined}
       displayTitle={scale && ways.length > 1 ? itemName(item) : lead.title}
@@ -165,6 +205,8 @@ export function PolicyCard({
       advice={{ line: lead.advice }}
       notes={notes}
       {...(blocked ? { blocked } : {})}
+      {...(takesOut ? { takesOut } : {})}
+      {...(radio ? { radio } : {})}
       sizes={sizes}
       {...(headingLevel ? { headingLevel } : {})}
     >

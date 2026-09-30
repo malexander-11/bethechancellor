@@ -750,7 +750,8 @@ hr {
   cursor: pointer;
 }
 
-.lever--toggle input[type='checkbox'] {
+.lever--toggle input[type='checkbox'],
+.lever--toggle input[type='radio'] {
   flex: none;
   width: 20px;
   height: 20px;

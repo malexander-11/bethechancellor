@@ -32,7 +32,7 @@ describe('interaction notices', () => {
     const both = run({ cgtdth: 1, cgtexit: 1 }).interactions;
     expect(both).toHaveLength(1);
     expect(both[0]?.severity).toBe('excludes');
-    expect(both[0]?.text).toMatch(/count it again/);
+    expect(both[0]?.text).toMatch(/together they count it twice/);
     // An excludes pair is one fact about the pair: authored twice, the validator says so.
     const broken = structuredClone(ds);
     const exit = broken.levers.find((l) => l.code === 'cgtexit');

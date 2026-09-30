@@ -120,27 +120,27 @@
   "interactions": [
     {
       "withLever": "vat-on-food",
-      "text": "The 1% rate on zero-rated goods already covers food; charging 20% on food as well counts the same goods twice.",
+      "text": "The 1% rate already covers food, so 20% on food too would count it twice.",
       "severity": "excludes"
     },
     {
       "withLever": "vat-on-new-homes",
-      "text": "The 1% rate on zero-rated goods already covers new homes; charging 20% on new homes as well counts the same goods twice.",
+      "text": "The 1% rate already covers new homes, so 20% on them too would count them twice.",
       "severity": "excludes"
     },
     {
       "withLever": "vat-on-childrens-clothing",
-      "text": "The 1% rate on zero-rated goods already covers children’s clothes; charging 20% on children’s clothes as well counts the same goods twice.",
+      "text": "The 1% rate already covers children’s clothes, so 20% on them too would count them twice.",
       "severity": "excludes"
     },
     {
       "withLever": "vat-on-books-and-newspapers",
-      "text": "The 1% rate on zero-rated goods already covers books and newspapers; charging 20% on books and newspapers as well counts the same goods twice.",
+      "text": "The 1% rate already covers books and newspapers, so 20% on them too would count them twice.",
       "severity": "excludes"
     },
     {
       "withLever": "vat-on-passenger-transport",
-      "text": "The 1% rate on zero-rated goods already covers bus, train and plane fares; charging 20% on bus, train and plane fares as well counts the same goods twice.",
+      "text": "The 1% rate already covers bus, train and plane fares, so 20% on them too would count them twice.",
       "severity": "excludes"
     }
   ],
