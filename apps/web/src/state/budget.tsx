@@ -7,6 +7,7 @@ import {
   type Outcome,
 } from '@btc/engine';
 import { createContext, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ESTIMATE, MACRO_CODES, levers, rules, vintage } from '../data';
 
 export interface BudgetState {
@@ -181,19 +182,22 @@ export function BudgetProvider({ children, search }: { children: ReactNode; sear
   );
   const query = useMemo(() => permalinkQuery(state), [state]);
 
-  // The URL is the source of truth for a budget: keep it in step on the budget pages.
+  // The URL is the source of truth for a budget: keep it in step on the budget pages. The page is
+  // read when the address is written, not when a change schedules it, so a player who moves on
+  // straight after a change keeps the page they moved to. Every navigation writes it again, so Back,
+  // which lands on an address from before the latest changes, shows the budget as it stands.
+  const { key } = useLocation();
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const path = window.location.pathname;
-    if (!isJourneyPath(path)) return;
     const id = window.setTimeout(() => {
-      const next = `${path}?${query}`;
-      if (`${window.location.pathname}${window.location.search}` !== next) {
-        window.history.replaceState(window.history.state, '', next);
+      const { pathname, search, hash } = window.location;
+      if (!isJourneyPath(pathname)) return;
+      if (search !== `?${query}`) {
+        window.history.replaceState(window.history.state, '', `${pathname}?${query}${hash}`);
       }
     }, 150);
     return () => window.clearTimeout(id);
-  }, [query]);
+  }, [query, key]);
 
   const value = useMemo(() => ({ state, dispatch, outcome, query }), [state, outcome, query]);
   return <BudgetContext.Provider value={value}>{children}</BudgetContext.Provider>;

@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The address bar keeps up with the game. A change followed at once by moving to the next screen no
+  longer puts the previous screen's address back, and Back no longer leaves an address with the
+  budget as it was before the latest changes, which a player could share or reload by mistake.
 - The workings view is deleted. Its switch had been withdrawn since ADR-0032, so no player could see
   its sources, provenance drawers, breakdown tables, charts or Budget-day briefings. Seven
   components, about 550 lines of unused styles and the page tests' "workings on" setting went with
