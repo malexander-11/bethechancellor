@@ -23,6 +23,8 @@ const IHT_ROW =
   'inheritance-tax--increase-standard-rate-for-estates-left-on-death-by-1-percentage-point';
 const IHT_LABEL = 'Increase standard rate for estates left on death by 1 percentage point';
 const perPoint = { '2026-27': 105, '2027-28': 240, '2028-29': 290 };
+/** The OBR's inheritance tax line (EFO Table A.5), the whole tax abolition gives up. */
+const ihtLine = ds.vintage.fiscal.receiptsByTax?.inheritanceTax?.values ?? {};
 const times = (k: number) =>
   Object.fromEntries(Object.entries(perPoint).map(([y, v]) => [y, v * k]));
 
@@ -53,7 +55,9 @@ function ihtLookup(): Lever {
       points: [
         {
           input: -40,
-          effect: { '2026-27': -9500, '2027-28': -11200, '2028-29': -12800 },
+          effect: Object.fromEntries(
+            ['2026-27', '2027-28', '2028-29'].map((y) => [y, -(ihtLine[y] ?? Number.NaN)]),
+          ),
           from: { vintageSeries: 'receiptsByTax.inheritanceTax', multiplier: -1 },
         },
         { input: -10, effect: times(-10), from: { rowIds: [IHT_ROW], multiplier: -10 } },
@@ -238,10 +242,9 @@ describe('inheritance tax with abolition: lookup points from HMRC rows and the O
     });
     const e = o.leverEffects.find((x) => x.code === 'iht');
     expect(e?.receipts['2026-27']).toBe(0);
-    expect(e?.receipts['2027-28']).toBeCloseTo(-11200, 3);
-    expect(e?.receipts['2028-29']).toBeCloseTo(-12800, 3);
-    expect(e?.receipts['2029-30']).toBeCloseTo(-13700, 3);
-    expect(e?.receipts['2030-31']).toBeCloseTo(-14700, 3);
+    for (const y of ['2027-28', '2028-29', '2029-30', '2030-31']) {
+      expect(e?.receipts[y], y).toBeCloseTo(-(ihtLine[y] ?? Number.NaN), 3);
+    }
     const rise = computeOutcome({
       vintage: ds.vintage,
       rules: ds.rules,

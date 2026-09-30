@@ -98,9 +98,15 @@ describe('the readings of a Budget', () => {
   });
 
   it('totals spending, tax rises and tax cuts in the target year, and who the rises fall on', () => {
-    const r = read({ ...HEALTH_ABOVE_PLAN, ...INVESTMENT, ...PENNY, it50: 1, fuel: -10 });
+    const budget = { ...HEALTH_ABOVE_PLAN, ...INVESTMENT, ...PENNY, it50: 1, fuel: -10 };
+    const r = read(budget);
     expect(r.publicServiceSpendingGbpm).toBeGreaterThan(15000);
-    expect(r.capitalChangeGbpm).toBeCloseTo(13420, -1);
+    // The investment is all the capital there is, as the Budget's own paths count it.
+    expect(r.capitalChangeGbpm).toBeCloseTo(
+      run(budget).paths.deltas.capitalSpending['2029-30'] ?? 0,
+      6,
+    );
+    expect(r.capitalChangeGbpm).toBeGreaterThan(0);
     expect(r.taxRisesGbpm).toBeGreaterThan(8000);
     expect(r.taxCutsGbpm).toBeGreaterThan(0);
     expect(r.netRevenueGbpm).toBeCloseTo((r.taxRisesGbpm ?? 0) - (r.taxCutsGbpm ?? 0), 6);

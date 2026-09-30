@@ -1,85 +1,102 @@
 import { describe, expect, it } from 'vitest';
-import { computeOutcome, headSeries } from '../src/index.js';
-import { loadDataset } from './fixtures.js';
+import {
+  computeOutcome,
+  headSeries,
+  type Lever,
+  type Settings,
+  type WelfareCapRule,
+} from '../src/index.js';
+import { TOGGLE, loadDataset, syntheticLever } from './fixtures.js';
 
+/**
+ * Spending and welfare on the engine: the cap, the sign of a benefit costed from HMRC's rows, and
+ * changes that add up. The measures are made up, with round numbers or sized from the published
+ * forecast, so a real lever's re-costing never moves these.
+ */
 const ds = loadDataset();
-const run = (leverValues: Record<string, number>, implementationYear?: string) =>
+const run = (
+  levers: Lever[],
+  leverValues: Record<string, number>,
+  settings: Partial<Settings> = {},
+) =>
   computeOutcome({
     vintage: ds.vintage,
     rules: ds.rules,
-    levers: ds.levers,
-    settings: implementationYear ? { leverValues, implementationYear } : { leverValues },
+    levers,
+    settings: { leverValues, ...settings },
   });
-const effectOf = (o: ReturnType<typeof run>, code: string) => {
-  const e = o.leverEffects.find((x) => x.code === code);
-  if (!e) throw new Error(`no effect for ${code}`);
-  return e;
-};
 const capStatus = (o: ReturnType<typeof run>) =>
   o.verdicts.find((v) => v.kind === 'welfareCap')?.status;
-
-describe('Budget 2025 spending decisions and the welfare cap', () => {
-  it('reinstating the two-child limit saves the Treasury figure on the spending side', () => {
-    const e = effectOf(run({ rv2ch: 1 }), 'rv2ch');
-    expect(e.currentSpending['2026-27']).toBe(0);
-    expect(e.currentSpending['2027-28']).toBeCloseTo(-2590, 6);
-    expect(e.currentSpending['2029-30']).toBeCloseTo(-3095, 6);
-    expect(e.currentSpending['2030-31']).toBeCloseTo(-3235, 6);
-    expect(e.welfareInCap['2029-30']).toBeCloseTo(-3095, 6);
-    expect(e.receipts['2029-30']).toBe(0);
-    expect(e.capitalSpending['2029-30']).toBe(0);
-    const early = effectOf(run({ rv2ch: 1 }, '2026-27'), 'rv2ch');
-    expect(early.currentSpending['2026-27']).toBeCloseTo(-2365, 6);
+const saving = (code: string, gbpm: number, insideWelfareCap: boolean) =>
+  syntheticLever({
+    code,
+    category: 'welfare',
+    control: TOGGLE,
+    classification: { side: 'spending', insideWelfareCap },
+    costing: {
+      kind: 'schedule',
+      effect: { '2027-28': -gbpm, '2028-29': -gbpm, '2029-30': -gbpm, '2030-31': -gbpm },
+      source: { sourceId: 'hmt-budget-2025-table-4-1' },
+      caveats: [],
+    },
   });
 
-  it('the welfare cap verdict moves from within the margin to within the cap with two toggles', () => {
-    expect(capStatus(run({}))).toBe('aboveCapWithinMargin');
-    const pipOnly = run({ rvpip: 1 });
-    expect(pipOnly.paths.policy.welfareInCap['2029-30']).toBeCloseTo(199200 - 4495, 6);
-    expect(capStatus(pipOnly)).toBe('aboveCapWithinMargin');
-    const both = run({ rvpip: 1, rv2ch: 1 });
-    expect(both.paths.policy.welfareInCap['2029-30']).toBeCloseTo(199200 - 4495 - 3095, 6);
-    expect(capStatus(both)).toBe('withinCap');
-    // All three of last year's welfare U-turns reversed.
-    const all = run({ rv2ch: 1, rvpip: 1, rvwfp: 1 });
-    expect(capStatus(all)).toBe('withinCap');
-    expect(all.paths.deltas.welfareInCap['2029-30']).toBeCloseTo(-4495 - 3095 - 1340, 6);
+describe('spending, welfare and the welfare cap', () => {
+  it('moves the cap verdict from within the margin to within the cap as capped welfare falls', () => {
+    const rule = ds.rules.rules.find((r): r is WelfareCapRule => r.kind === 'welfareCap');
+    if (!rule) throw new Error('no welfare cap');
+    const planned = ds.vintage.fiscal.welfareInCap.values[rule.capYear] ?? Number.NaN;
+    // The March forecast has capped welfare above the cap, inside its margin.
+    const above = planned - rule.capGbpm;
+    expect(above).toBeGreaterThan(0);
+    expect(capStatus(run([], {}))).toBe('aboveCapWithinMargin');
+    const part = saving('xpart', above / 2, true);
+    const whole = saving('xwhole', above + 1, true);
+    const levers = [part, whole];
+    const partly = run(levers, { xpart: 1 });
+    expect(partly.paths.policy.welfareInCap[rule.capYear]).toBeCloseTo(planned - above / 2, 6);
+    expect(capStatus(partly)).toBe('aboveCapWithinMargin');
+    expect(capStatus(run(levers, { xwhole: 1 }))).toBe('withinCap');
+    // The same saving outside the cap leaves the cap's verdict where it was.
+    expect(capStatus(run([saving('xelse', above + 1, false)], { xelse: 1 }))).toBe(
+      'aboveCapWithinMargin',
+    );
   });
 
-  it('the winter fuel toggle follows the measure’s own profile from the start year', () => {
-    const e = effectOf(run({ rvwfp: 1 }), 'rvwfp');
-    expect(e.currentSpending['2025-26']).toBe(0);
-    expect(e.currentSpending['2026-27']).toBe(0);
-    expect(e.currentSpending['2027-28']).toBeCloseTo(-910, 6);
-    expect(e.currentSpending['2029-30']).toBeCloseTo(-1340, 6);
-  });
-
-  it('dropping the efficiency savings raises day-to-day spending from 2028-29 outside the cap', () => {
-    const o = run({ rveff: 1 });
-    const e = effectOf(o, 'rveff');
-    expect(e.currentSpending['2027-28']).toBe(0);
-    expect(e.currentSpending['2028-29']).toBeCloseTo(1415, 6);
-    expect(e.currentSpending['2029-30']).toBeCloseTo(3950, 6);
-    expect(e.currentSpending['2030-31']).toBeCloseTo(4900, 6);
-    expect(e.welfareInCap['2029-30']).toBe(0);
-    expect(o.attribution.find((r) => r.code === 'rveff')?.currentBudgetGbpm).toBeCloseTo(3950, 6);
-    expect(capStatus(o)).toBe('aboveCapWithinMargin');
-  });
-
-  it('child benefit uses HMRC rows on the spending side with the right sign and uprating', () => {
-    const up = effectOf(run({ chb: 1 }, '2026-27'), 'chb');
+  it('costs a benefit from HMRC’s rows on the spending side, with their sign, grown with its line', () => {
+    const benefit = syntheticLever({
+      code: 'xbenefit',
+      category: 'welfare',
+      control: { unit: 'GBP', min: -5, max: 5, step: 1 },
+      classification: { side: 'spending', insideWelfareCap: true },
+      costing: {
+        kind: 'linearPerUnit',
+        unitDelta: 1,
+        perUnit: { '2026-27': 565, '2027-28': 575, '2028-29': 575 },
+        decreasePerUnit: { '2026-27': -565, '2027-28': -580, '2028-29': -565 },
+        basis: 'accruals',
+        symmetric: false,
+        source: { sourceId: 'hmrc-trr-2025-06' },
+        uprating: { method: 'growWithSeries', head: 'childBenefit', note: 'Grows with the line.' },
+        caveats: [],
+      },
+    });
+    const effectOf = (value: number, settings: Partial<Settings> = {}) => {
+      const e = run([benefit], { xbenefit: value }, settings).leverEffects[0];
+      if (!e) throw new Error('no effect');
+      return e;
+    };
+    const up = effectOf(1, { implementationYear: '2026-27' });
     expect(up.currentSpending['2026-27']).toBeCloseTo(565, 6);
     expect(up.currentSpending['2027-28']).toBeCloseTo(575, 6);
-    expect(up.currentSpending['2028-29']).toBeCloseTo(575, 6);
     expect(up.welfareInCap['2026-27']).toBeCloseTo(565, 6);
     expect(up.receipts['2026-27']).toBe(0);
-    const down = effectOf(run({ chb: -1 }, '2026-27'), 'chb');
+    const down = effectOf(-1, { implementationYear: '2026-27' });
     expect(down.currentSpending['2026-27']).toBeCloseTo(-565, 6);
     expect(down.currentSpending['2027-28']).toBeCloseTo(-580, 6);
-    expect(down.currentSpending['2028-29']).toBeCloseTo(-565, 6);
-    const cb = headSeries(ds.vintage, 'childBenefit');
-    const c = (y: string) => cb[y] ?? Number.NaN;
-    const shifted = effectOf(run({ chb: 2 }), 'chb');
+    const line = headSeries(ds.vintage, 'childBenefit');
+    const c = (y: string) => line[y] ?? Number.NaN;
+    const shifted = effectOf(2);
     expect(shifted.currentSpending['2026-27']).toBe(0);
     expect(shifted.currentSpending['2027-28']).toBeCloseTo(
       2 * 565 * (c('2027-28') / c('2026-27')),
@@ -92,26 +109,20 @@ describe('Budget 2025 spending decisions and the welfare cap', () => {
     expect(shifted.steps.some((s) => s.formula.includes('childBenefit spending'))).toBe(true);
   });
 
-  it('spending changes add up and interactions fire for overlapping levers', () => {
-    const nhs = run({ dhsc: 2, otherd: -3 });
-    const dhsc = effectOf(nhs, 'dhsc').currentSpending['2028-29'] ?? 0;
-    const other = effectOf(nhs, 'otherd').currentSpending['2028-29'] ?? 0;
-    expect(dhsc).toBeCloseTo(0.02 * 231977.319, 3);
-    expect(other).toBeCloseTo(-0.03 * 128004.804, 3);
-    expect(nhs.paths.deltas.currentSpending['2028-29']).toBeCloseTo(dhsc + other, 6);
-    expect(nhs.verdicts.find((v) => v.kind === 'currentBudget')?.status).toBe('met');
-    expect(run({ wdis: -5, rvpip: 1 }).interactions.length).toBeGreaterThanOrEqual(1);
-    expect(run({ wpens: 1, rvwfp: 1 }).interactions.length).toBeGreaterThanOrEqual(1);
-    expect(run({ otherd: -2, rveff: 1 }).interactions.length).toBeGreaterThanOrEqual(1);
-    expect(run({ dhsc: 1 }).interactions).toHaveLength(0);
+  it('adds spending changes up, whatever each one is', () => {
+    const levers = [saving('xa', 400, true), saving('xb', -900, false)];
+    const both = run(levers, { xa: 1, xb: 1 });
+    const each = both.leverEffects.map((e) => e.currentSpending['2028-29'] ?? 0);
+    expect(each).toHaveLength(2);
+    expect(both.paths.deltas.currentSpending['2028-29']).toBeCloseTo(each[0]! + each[1]!, 6);
   });
 
-  it('a big departmental cut can break the investment rule only through PSNFL, and a big rise breaks stability', () => {
-    const cut = run({ otherd: -10, dhsc: -10 });
-    expect(cut.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm).toBeGreaterThan(
-      cut.verdicts.find((v) => v.kind === 'currentBudget')?.baseline.headroomGbpm ?? 0,
-    );
-    const rise = run({ dhsc: 10, dfe: 10 });
+  it('lets a big departmental cut lift the current budget, and a big rise break the stability rule', () => {
+    const live = (values: Record<string, number>) => run(ds.levers, values);
+    const cut = live({ otherd: -10, dhsc: -10 });
+    const stability = cut.verdicts.find((v) => v.kind === 'currentBudget');
+    expect(stability?.headroomGbpm).toBeGreaterThan(stability?.baseline.headroomGbpm ?? 0);
+    const rise = live({ dhsc: 10, dfe: 10 });
     expect(rise.verdicts.find((v) => v.kind === 'currentBudget')?.status).toBe('notMet');
   });
 });

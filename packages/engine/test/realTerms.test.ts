@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  baselinePath,
   compoundGrowthPerYear,
   deflatorIndex,
   policyYearsOf,
@@ -35,13 +34,15 @@ describe('real terms', () => {
     expect(realGrowthPerYear(flat, deflator, '2026-27', '2028-29')).toBeCloseTo(0, 9);
   });
 
-  it('reads the health settlement as about 2.9% a year real, and +2% lifts it to 3.9%', () => {
-    const path = baselinePath(lever('dhsc'), ds.vintage, years);
-    const before = realGrowthPerYear(path.values, deflator, '2026-27', '2028-29');
-    expect(before).toBeGreaterThan(2.8);
-    expect(before).toBeLessThan(3.0);
+  it('reads a settlement growing 2.9% a year after prices as that, and +2% from 2027-28 lifts it about a point', () => {
+    // A made-up settlement, so a real one's re-costing never moves this.
+    const path = Object.fromEntries(
+      years.map((y, k) => [y, 100_000 * (deflator[y] ?? Number.NaN) * 1.029 ** k]),
+    );
+    const before = realGrowthPerYear(path, deflator, '2026-27', '2028-29');
+    expect(before).toBeCloseTo(2.9, 9);
     const raised = Object.fromEntries(
-      Object.entries(path.values).map(([y, v]) => [y, y >= '2027-28' ? v * 1.02 : v]),
+      Object.entries(path).map(([y, v]) => [y, y >= '2027-28' ? v * 1.02 : v]),
     );
     const after = realGrowthPerYear(raised, deflator, '2026-27', '2028-29');
     expect(after - before).toBeGreaterThan(0.9);

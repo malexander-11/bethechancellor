@@ -12,6 +12,23 @@ const run = (leverValues: Record<string, number>) =>
   });
 
 describe('interaction notices', () => {
+  it('notice every authored pair of live levers once, when both of them move', () => {
+    const byId = new Map(ds.levers.map((l) => [l.id, l] as const));
+    const moved = (l: (typeof ds.levers)[number]) =>
+      l.control.default + (l.control.max > l.control.default ? 1 : -1) * l.control.step;
+    for (const lever of ds.levers.filter((l) => !l.deprecated)) {
+      for (const interaction of lever.interactions ?? []) {
+        const other = byId.get(interaction.withLever);
+        if (!other || other.deprecated) continue;
+        const values = { [lever.code]: moved(lever), [other.code]: moved(other) };
+        const notices = run(values).interactions.filter(
+          (n) => n.codes.includes(lever.code) && n.codes.includes(other.code),
+        );
+        expect(notices, `${lever.code} × ${other.code}`).toHaveLength(1);
+      }
+    }
+  });
+
   it('appear only when both levers of an authored pair are moved', () => {
     expect(run({ itbr: 1 }).interactions).toEqual([]);
     const both = run({ itbr: 1, itbrl: 5 }).interactions;

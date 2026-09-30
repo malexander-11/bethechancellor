@@ -31,6 +31,8 @@ import {
   parseVintage,
   type Dataset,
   type ExtractedSources,
+  type Lever,
+  type LeverControl,
   type OutcomeOf,
   type Settings,
 } from '../src/index.js';
@@ -102,6 +104,53 @@ export function loadExtracts(): ExtractedSources {
     dwp: parseDwpBenefitExtract(readJson('derived/dwp-benefit-expenditure-2026-table-1a.raw.json')),
   };
 }
+
+/** The parts of a lever a test of the arithmetic is about; `syntheticLever` fills in the rest. */
+export interface SyntheticLeverParts {
+  code: string;
+  /** The costing as a lever file would write it; the schema fills in its defaults. */
+  costing: Record<string, unknown>;
+  category?: Lever['category'];
+  badge?: Lever['badge'];
+  control?: Partial<LeverControl>;
+  classification?: Partial<NonNullable<Lever['classification']>>;
+  earliestStart?: Lever['earliestStart'];
+}
+
+/**
+ * A lever made up for a test of the arithmetic, with round numbers of its own, so re-costing a
+ * real lever can never move the test. It is parsed, so it is valid against the schema: a slider
+ * of whole points on the receipts side, unless the parts say otherwise.
+ */
+export function syntheticLever(parts: SyntheticLeverParts): Lever {
+  const { code, category = 'tax', badge = 'assumption', control, classification, ...rest } = parts;
+  return parseLever({
+    schemaVersion: 1,
+    id: `synthetic-${code}`,
+    code,
+    category,
+    badge,
+    group: 'Synthetic',
+    title: `Synthetic lever ${code}`,
+    shortTitle: `Synthetic ${code}`,
+    headline: 'Made up for a test of the arithmetic.',
+    description: 'A lever made up for a test of the arithmetic, with round numbers of its own.',
+    baselinePolicy: { text: 'As planned.', source: { sourceId: 'obr-efo-2026-03' } },
+    control: { kind: 'slider', unit: 'pp', min: -10, max: 10, step: 1, default: 0, ...control },
+    classification: {
+      side: category === 'tax' ? 'receipts' : 'spending',
+      currentOrCapital: 'current',
+      ...classification,
+    },
+    considerations: [],
+    status: 'reviewed',
+    reviewedOn: '2026-09-30',
+    ...rest,
+  });
+}
+
+/** A toggle's control: off at 0, on at 1. */
+export const TOGGLE: Partial<LeverControl> = { kind: 'toggle', unit: 'bool', min: 0, max: 1 };
 
 export const FORECAST_YEARS = [
   '2025-26',

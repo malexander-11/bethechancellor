@@ -205,19 +205,34 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
 
   it('reads what each option puts behind its priority in the target year, and sums it', () => {
     const game = gameWith(['cost-of-living', 'defence']);
-    const s = status(game, { bus2: 1, ...DEFENCE_GAP });
-    const options = new Map(
-      s.priorities.flatMap((p) => p.options).map((o) => [o.option.id, o.spendingGbpm] as const),
-    );
-    expect(options.get('bus-cap')).toBeCloseTo(400, 6);
-    expect(options.get('dip-gap')).toBeCloseTo(1175, 6);
-    expect(options.get('free-school-meals')).toBe(0);
-    expect(s.priorities.find((p) => p.priority.id === 'defence')?.spendingGbpm).toBeCloseTo(
-      1175,
-      6,
-    );
-    // The bus cap only makes a start on the cost of living; the defence plan's gap is the bill.
-    expect(s.priorities.map((p) => p.status)).toEqual(['started', 'delivered']);
+    const values = { bus2: 1, ...DEFENCE_GAP };
+    const outcome = run(values);
+    const s = ambitionStatus(game, pm, ds.options, outcome, ds.levers);
+    // An option counts what its levers spend, less what they raise, in the target year.
+    const target = outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '';
+    const net = (code: string) => {
+      const e = outcome.leverEffects.find((x) => x.code === code);
+      return (
+        (e?.currentSpending[target] ?? 0) +
+        (e?.capitalSpending[target] ?? 0) -
+        (e?.receipts[target] ?? 0)
+      );
+    };
+    for (const p of s.priorities) {
+      for (const o of p.options) {
+        const counted = o.state === 'on' || o.state === 'adjusted';
+        const want = counted ? Object.keys(o.option.values).reduce((a, c) => a + net(c), 0) : 0;
+        expect(o.spendingGbpm, o.option.id).toBeCloseTo(want, 6);
+      }
+      expect(p.spendingGbpm, p.priority.id).toBeCloseTo(
+        p.options.reduce((a, o) => a + o.spendingGbpm, 0),
+        6,
+      );
+      // A way in full delivers its priority; a start only makes a start.
+      const on = p.options.filter((o) => o.state === 'on').map((o) => o.option.scale.kind);
+      expect(p.status, p.priority.id).toBe(on.includes('full') ? 'delivered' : 'started');
+    }
+    expect(s.priorities.every((p) => p.spendingGbpm > 0)).toBe(true);
   });
 
   it('gives every option a sourced scale, and every priority a way to deliver it in full', () => {

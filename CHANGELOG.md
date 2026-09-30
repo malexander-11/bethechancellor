@@ -5,6 +5,12 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The engine's arithmetic tests run on made-up levers with round numbers, valid against the schema,
+  so re-costing a real lever cannot break them: linear, lookup, scheduled and share-of-baseline
+  costings, one-off purchases, capital shares, the welfare cap and earliest starts. Each real
+  lever's figures are still held to their published sources; the menu's tests keep its own rules
+  (which promise a way breaks, which designs count the same money, which must agree) and drop the
+  copied figures.
 - The engine tests take their Budgets from one module, `packages/engine/test/scenarios.ts`, each
   named for the part it plays (the review's walk, a penny that breaks the tax lock, a big broad tax
   rise, thin headroom, a rule missed) with today's estimate and the typical forecast error beside

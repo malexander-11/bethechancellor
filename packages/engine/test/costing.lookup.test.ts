@@ -1,70 +1,95 @@
 import { describe, expect, it } from 'vitest';
-import { computeOutcome, EngineError, interpolateLookup } from '../src/index.js';
-import { loadDataset } from './fixtures.js';
+import {
+  EngineError,
+  computeOutcome,
+  interpolateLookup,
+  type Lever,
+  type Settings,
+} from '../src/index.js';
+import { loadDataset, syntheticLever } from './fixtures.js';
 
+/**
+ * Lookup-table costings (HMRC's non-linear rows): a published point is read as it stands, and a
+ * setting between two points on the straight line joining them, never beyond the last. The lever
+ * is made up, with round numbers, so a real lever's re-costing never moves these.
+ */
 const ds = loadDataset();
-const run = (leverValues: Record<string, number>, implementationYear = '2026-27') =>
-  computeOutcome({
+const effectOf = (lever: Lever, value: number, settings: Partial<Settings> = {}) => {
+  const e = computeOutcome({
     vintage: ds.vintage,
     rules: ds.rules,
-    levers: ds.levers,
-    settings: { leverValues, implementationYear },
-  });
+    levers: [lever],
+    settings: { leverValues: { [lever.code]: value }, implementationYear: '2026-27', ...settings },
+  }).leverEffects.find((x) => x.code === lever.code);
+  if (!e) throw new Error(`no effect for ${lever.code}`);
+  return e;
+};
+const POINTS = [
+  { input: 0, effect: { '2026-27': 0, '2027-28': 0, '2028-29': 0 } },
+  { input: 1, effect: { '2026-27': 40, '2027-28': 80, '2028-29': 90 } },
+  { input: 5, effect: { '2026-27': -170, '2027-28': -235, '2028-29': -870 } },
+  { input: 10, effect: { '2026-27': -600, '2027-28': -1500, '2028-29': -3565 } },
+];
+/** A rate on gains whose published points show a loss for a rise, as HMRC's can. */
+const GAINS = syntheticLever({
+  code: 'xgains',
+  control: { min: 0, max: 10 },
+  costing: {
+    kind: 'lookupTable',
+    input: 'pp',
+    points: POINTS,
+    interpolation: 'linear',
+    extrapolation: 'forbid',
+    source: { sourceId: 'hmrc-trr-2025-06' },
+    uprating: { method: 'growWithSeries', head: 'capitalTaxes', note: 'Grows with capital taxes.' },
+    caveats: [],
+  },
+});
 
 describe('lookup-table costings (HMRC non-linear rows)', () => {
-  it('reproduces the CGT higher-rate points and shows the revenue loss HMRC publishes', () => {
-    const at5 = run({ cgth: 5 }).leverEffects.find((x) => x.code === 'cgth');
-    expect(at5?.receipts['2026-27']).toBeCloseTo(-170, 6);
-    expect(at5?.receipts['2027-28']).toBeCloseTo(-235, 6);
-    expect(at5?.receipts['2028-29']).toBeCloseTo(-870, 6);
-    const at10 = run({ cgth: 10 }).leverEffects.find((x) => x.code === 'cgth');
-    expect(at10?.receipts['2028-29']).toBeCloseTo(-3565, 6);
+  it('reads a published point as it stands in its own years', () => {
+    const at5 = effectOf(GAINS, 5);
+    expect(at5.receipts['2026-27']).toBeCloseTo(-170, 6);
+    expect(at5.receipts['2027-28']).toBeCloseTo(-235, 6);
+    expect(at5.receipts['2028-29']).toBeCloseTo(-870, 6);
+    expect(effectOf(GAINS, 10).receipts['2028-29']).toBeCloseTo(-3565, 6);
   });
 
   it('interpolates in a straight line between published points', () => {
-    const lever = ds.levers.find((l) => l.code === 'cgth');
-    if (!lever || lever.costing.kind !== 'lookupTable') throw new Error('cgth lever missing');
-    const mid = interpolateLookup(lever.costing.points, 7.5);
+    const mid = interpolateLookup(POINTS, 7.5);
     expect(mid.effect['2028-29']).toBeCloseTo((-870 + -3565) / 2, 6);
     expect(mid.lower).toBe(5);
     expect(mid.upper).toBe(10);
-    const quarter = interpolateLookup(lever.costing.points, 2);
+    const quarter = interpolateLookup(POINTS, 2);
     expect(quarter.effect['2027-28']).toBeCloseTo(80 + 0.25 * (-235 - 80), 6);
+    // The engine reads the same line for a setting between points.
+    expect(effectOf(GAINS, 2).receipts['2027-28']).toBeCloseTo(80 + 0.25 * (-235 - 80), 6);
   });
 
-  it('refuses to extrapolate beyond HMRC’s published range', () => {
-    const lever = ds.levers.find((l) => l.code === 'cgth');
-    if (!lever || lever.costing.kind !== 'lookupTable') throw new Error('cgth lever missing');
-    const points = lever.costing.points;
-    expect(() => interpolateLookup(points, 11)).toThrow(EngineError);
-    // The control range is inside the table, so slider values are clamped before costing.
-    expect(run({ cgth: 11 }).leverEffects[0]?.value).toBe(10);
+  it('refuses to extrapolate beyond the published range', () => {
+    expect(() => interpolateLookup(POINTS, 11)).toThrow(EngineError);
+    // The control range is inside the table, so a setting past it is clamped before costing.
+    expect(effectOf(GAINS, 11).value).toBe(10);
   });
+});
 
-  it('handles thresholds: the higher-rate threshold and personal allowance points', () => {
-    const cut = run({ itbrl: -10 }).leverEffects.find((x) => x.code === 'itbrl');
-    expect(cut?.receipts['2027-28']).toBeCloseTo(7200, 6);
-    const rise = run({ itbrl: 10 }).leverEffects.find((x) => x.code === 'itbrl');
-    expect(rise?.receipts['2027-28']).toBeCloseTo(-6250, 6);
-    const one = run({ itbrl: 1 }).leverEffects.find((x) => x.code === 'itbrl');
-    expect(one?.receipts['2027-28']).toBeCloseTo(-665, 6);
-    const pa = run({ itpa: 1250 }).leverEffects.find((x) => x.code === 'itpa');
-    // Between HMRC's +£100 and +£1,257 points; 1,250 is within 1% of the 10% point.
-    expect(pa?.receipts['2027-28']).toBeLessThan(-11500);
-    expect(pa?.receipts['2027-28']).toBeGreaterThan(-11650);
-    const hundred = run({ itpa: 100 }).leverEffects.find((x) => x.code === 'itpa');
-    expect(hundred?.receipts['2027-28']).toBeCloseTo(-1050, 6);
-    // A cut mirrors HMRC's rises with the sign reversed (ADR-0035), which HMRC does not publish
-    // and the card says is an assumption: £100 off raises what £100 on costs.
-    const less = run({ itpa: -100 }).leverEffects.find((x) => x.code === 'itpa');
-    expect(less?.receipts['2027-28']).toBeCloseTo(1050, 6);
-    const most = run({ itpa: -1250 }).leverEffects.find((x) => x.code === 'itpa');
-    expect(most?.receipts['2027-28']).toBeGreaterThan(11500);
-    expect(most?.receipts['2027-28']).toBeLessThan(11650);
-    const itpa = ds.levers.find((l) => l.code === 'itpa');
-    expect(itpa?.control.min).toBe(-1250);
-    expect(itpa?.costing.kind === 'lookupTable' && itpa.costing.caveats).toContain(
-      'Cuts use the same figures with the sign reversed, which HMRC does not publish and is an assumption here.',
-    );
+describe('the personal allowance comes down as well as up (ADR-0035)', () => {
+  it('costs a cut as HMRC’s rise with the sign reversed, and says that is an assumption', () => {
+    const allowance = ds.levers.find((l) => l.code === 'itpa');
+    if (allowance?.costing.kind !== 'lookupTable') throw new Error('no personal allowance table');
+    const points = allowance.costing.points;
+    const cuts = points.filter((p) => p.input < 0);
+    expect(cuts.length).toBeGreaterThan(0);
+    for (const cut of cuts) {
+      const rise = points.find((p) => p.input === -cut.input);
+      expect(rise, `${cut.input}`).toBeDefined();
+      for (const [year, value] of Object.entries(rise?.effect ?? {})) {
+        expect(cut.effect[year], `${cut.input} ${year}`).toBeCloseTo(-value, 6);
+      }
+    }
+    expect(allowance.control.min).toBeLessThan(allowance.control.default);
+    expect(
+      allowance.costing.caveats.some((c) => /sign reversed/.test(c) && /assumption/.test(c)),
+    ).toBe(true);
   });
 });
