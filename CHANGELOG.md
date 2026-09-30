@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- CI runs five jobs in parallel, each from a clean install: the static checks (lint, format, types),
+  the data checks, every Vitest project with the coverage thresholds enforced
+  (`npm run test:coverage`), the production build, and the end-to-end suite. The web build no longer
+  type-checks first, since the static job does; `npm run gate` type-checks once and, as CI does,
+  enforces coverage and runs the end-to-end suite.
 - An end-to-end and accessibility suite in `e2e/` (`npm run e2e`: Playwright against the production
   build, on a desktop and a phone) replaces the walk scripts written outside the repository each
   round: the journey by the primary buttons, the fine-tune screen's decisions, and on each main
