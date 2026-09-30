@@ -1,8 +1,8 @@
 # ADR-0028: Basic and advanced
 
 Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0030, ADR-0031 and ADR-0032)
-and on 2026-09-30 (below, ADR-0035). Revises ADR-0013 and ADR-0027, each of which carries a dated
-revision pointing here.
+and on 2026-09-30 (below, ADR-0035 and ADR-0037). Revises ADR-0013 and ADR-0027, each of which
+carries a dated revision pointing here.
 
 ## Context
 
@@ -208,3 +208,10 @@ contributions. The tax screen now goes tax by tax, and four taxes have no pick (
 duty, business taxes and the tax gap), so the rule of a pick in every group holds on the spending
 screen only. Basic mode shows the eight under seven taxes, employer National Insurance as a scale
 from the plan: 15% as planned, 16%, 17%, 18%.
+
+## Revision (2026-09-30): one card a section in basic mode (ADR-0037)
+
+Basic mode’s step 4 still shows only the picks, the levers already on the desk and whatever was
+chosen, with no decisions. Each section’s are now one card, a row each under its policy’s title,
+with one fold for the rest, and a spending pick is a scale from the plan, as a tax pick is. Every
+spending section still has a pick.

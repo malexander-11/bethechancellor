@@ -21,7 +21,7 @@ journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/briefings.json    sourced adviser briefings per step and lever group
 journey/pm.json           the Prime Minister: the eight priorities, the manifesto red lines
 journey/options.json      the ways to deliver each priority (ADR-0022)
-journey/finetune.json     the fine-tuning screens: every policy lever; tax by tax (ADR-0027, ADR-0035)
+journey/finetune.json     the fine-tuning screens: every lever, in decisions (ADR-0035, ADR-0037)
 journey/ministers.json    a minister's lines for every spending and welfare lever
 journey/interventions.json adviser lines with a closed predicate over the ambitions
 journey/speech.json       the speech fragments the assembler fills
@@ -163,9 +163,9 @@ lever lives in the folder of its real category and the group of the screen it be
 from the certified rows beside it (ADR-0017).
 
 - **Category and group.** The lever's real `category`, its family `group`, and its place on step 4
-  in `finetune.json` (a tax's decision, or a spending group); `control.kind: "toggle"` unless a
-  published line supports a scale (business
-  rates scales the OBR's line and is `mechanical`, see the spending notes above).
+  in `finetune.json` (a decision on its screen); `control.kind: "toggle"` unless a published line
+  supports a scale (business rates scales the OBR's line and is `mechanical`, see the spending notes
+  above).
 - **Badge.** `assumption`, never `direct`. A `repeat` of a scorecard line, a `statedProduct`, a
   `weightedSum`, a `gdpShareGap`, and a multiple of an HMRC row beyond the small change HMRC
   publishes (`it50`, five one-penny steps) are all assumptions (ADR-0018).
@@ -366,11 +366,14 @@ enforces:
 
 Two sides, `tax` and `spending`, each with its screen's `title` (at most four words), its `lead` and
 its `shortlistLead` (basic mode's lead, Phase 27; each at most fourteen words and 120 characters),
-the `adviser` who speaks there, and its `groups`. A spending group holds `items`. A tax group is a
-tax, `{ id, label, decisions }`, and each decision `{ id, title, alternatives?, items }` holds one
-to eight of its items under a title of at most six words (ADR-0035, ADR-0036); no two tax groups
-share an id or a label, and no two decisions an id. Since Phase 26 every live policy lever is an
-item, once: 67 on the tax side and 32 on the spending side. An item is the lever's `code`, its plain
+the `adviser` who speaks there, and its `groups`, the sections of its screen, each
+`{ id, label, decisions }`: on the tax side a tax, on the spending side what the money is for
+(ADR-0037). Each decision `{ id, title, alternatives?, items }` holds one to eight items under a
+title of at most six words (ADR-0035, ADR-0036); no two sections on a side share an id or a label,
+and no two decisions in the file an id. Since Phase 26 every live policy lever is an item, once: 67
+on the tax side and 32 on the spending side. An item is the lever's `code`, its `label`, the short
+name it goes by inside its decision ("Food" under Remove an exemption; at most 48 characters and
+seven words, ADR-0037; without one it goes by its plain name, or its policy's title), its plain
 `name` for the review and the notes ("The main rate of VAT"; a toggle may leave it out and go by its
 policy's title), and one or two `policies`, each `{ title, sizes, advice }`: a title that says what
 the policy does ("Put up VAT", at most twelve words), the settings it comes in, smallest first, and
@@ -387,8 +390,8 @@ enforces:
 - **One policy each way.** Two policies only where they go opposite ways.
 - **A plain name** for every lever that is not a toggle.
 - **Not on the table comes last.** A lever tagged not on the table follows every other lever in its
-  decision, or in its group on the spending side.
-- **A tax sits in its family's section**: a tax group's `label` is the family (`group`) of every
+  decision.
+- **A tax sits in its family's section**: a tax section's `label` is the family (`group`) of every
   lever in it, so each family has one section (`tax lever X is in the F family, not S`). Who pays a
   tax is its incidence tag, read on the review and on Budget day.
 - **Ticks that contradict each other in a decision are one choice** (`alternatives`, ADR-0036). A
@@ -396,17 +399,20 @@ enforces:
   the set answers (“The wealth tax”, at most 60 characters). Every member excludes every other
   member and nothing outside the set, none is set by a flagship, the members sit side by side in the
   decision’s order, and no tick is in two sets. The validator also names two ticks in one decision
-  that exclude only each other but are not a set. The screen draws a set as radios with “As planned”
-  first.
+  that exclude only each other but are not a set, unless a flagship sets either, as on the spending
+  screen, where each of the three pairs is taken out instead (ADR-0037). The screen draws a set as
+  radios with “As planned” first.
+- **Each choice has a name of its own in its decision**: no two items in one decision share a short
+  name.
 - **The adviser exists and speaks on this step** (`finetune` in `advisers.json`).
 
-On the spending screen labels follow the count of sizes: one is a tick, two are Small and Large,
-three are Small, Medium and Large, each shown with its level. On the tax screen a lever with sizes
-is one scale instead (ADR-0035): its radios are the planned level and every size its policies come
-in, sorted and each once (`scaleLevels`), each named by the level it sets ("20% as planned", "21%").
-By default the small size is the lever's usual step (a penny,
-a point, £2 a week, £100, 5% on a duty), medium twice it and large five times it, capped at the
-range, with a repeated size dropped. A test holds every sized policy to that rule, except where
+A lever with sizes is one scale on either screen (ADR-0035, ADR-0037): its radios are the planned
+level and every size its policies come in, sorted and each once (`scaleLevels`), each named by the
+level it sets ("20% as planned", "21%", "5% less"). A budget's two policies make one scale, from 5%
+less to 5% more for a department or a benefit line and from 10% less to 20% more for public
+investment; Small, Medium and Large are gone. By default the small size is the lever's usual step (a
+penny, a point, £2 a week, £100, 5% on a duty), medium twice it and large five times it, capped at
+the range, with a repeated size dropped. A test holds every sized policy to that rule, except where
 HMRC publishes points and the sizes sit on them: the personal allowance, the higher-rate threshold,
 the additional rate, the two capital gains rates and inheritance tax.
 
@@ -440,8 +446,8 @@ screen, and each pick's reason is its own adviser line; these rules keep it chec
 - **Never two that count the same money**: no `excludes` pair and no option conflict among the
   step-4 picks, the step-3 picks and the levers already on the desk (the context file's `inTray`).
 - **How many.** Step 4: at most one way per lever, six to ten picks a screen, at least one in every
-  spending group (a tax need not have one, ADR-0035). Step 3: one or two picks a priority, at least
-  one of which delivers it in full.
+  spending section (a tax need not have one, ADR-0035). Step 3: one or two picks a priority, at
+  least one of which delivers it in full.
 - **Every lever on the desk is on step 4.** Basic mode always shows a lever the briefing puts on the
   desk, pick or not, so the briefing never points at something hidden.
 

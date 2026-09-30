@@ -130,35 +130,37 @@ export function MethodologyPage() {
         your briefing in three parts (your headroom on today&rsquo;s estimate, what headroom is, how
         it is calculated); set your priorities with the Prime Minister; flagship policies, one
         screen per priority; fine-tune tax and spend, two screens on which every lever is a policy,
-        the taxes tax by tax, each tax the decisions a Chancellor takes about it, closed until
-        opened, and the spending in four groups by what the money is for; deliver the Budget, a
-        review of the whole of it with one red button; and feedback. There is no forecast to guess
-        and no headroom target: every game plans on one figure, today&rsquo;s estimate, and the
-        rules are the line to meet. The road runs one way: a stage opens once the one before it has
-        been left, going back is always allowed and keeps every choice, because the Budget lives in
-        the link, and a link that jumps ahead is sent back to where the game has got. The progress
-        line at the top of every screen after the cover, which marks each step done, current, opened
-        or not yet open, and the guard on every page read the same rule. Every flagship policy is a
-        bundle of the game&rsquo;s own levers that no other option moves, priced by the engine
-        against the Budget as it stands with the headroom it would leave, two that count the same
-        money never both chosen. On the fine-tuning screens every lever is a policy under a title
-        that says what it does, with one adviser&rsquo;s line and, before it is chosen, what it
-        would do and the headroom that would leave. A tax is a tick or one scale of levels, where it
-        is planned to be among them (VAT at 15%, 18%, 19%, 20% as planned, 21%, 22% or 25%), priced
-        at the nearest level each way; a spending budget is a tick or a choice of small, medium and
-        large sizes, and one that moves both ways is two policies, choosing one clearing the other.
-        A lever a chosen flagship already sets shows once, as a line with a way back to that
-        flagship. There is no slider anywhere and no desk: every lever the desk once held is a
-        policy on these two screens, and with no game only the cover and the briefing open. Every
-        screen opens with one heading and one instruction, and for now the sources are listed on the
-        About page rather than beside each figure; the guide is chrome and quotes no figure that is
-        not sourced. The advisers, the Prime Minister and the ministers are roles, not people; a
-        briefing that cites a public document is commentary, and a judgement nobody published is the
-        game&rsquo;s own and never produces a number. Today&rsquo;s estimate follows a stated rule:
-        the latest market or independent reading minus the OBR&rsquo;s March assumption, rounded to
-        the step the assumption moves in (interest rates up three-quarters of a point, RPI inflation
-        up half a point, growth on the OBR&rsquo;s path), turned into headroom by the OBR&rsquo;s
-        own sensitivities: about £6.8 billion in 2029-30, against £23.6 billion in March. Each size
+        the taxes tax by tax and the spending by what the money is for, each in the decisions a
+        Chancellor takes, closed until opened; deliver the Budget, a review of the whole of it with
+        one red button; and feedback. There is no forecast to guess and no headroom target: every
+        game plans on one figure, today&rsquo;s estimate, and the rules are the line to meet. The
+        road runs one way: a stage opens once the one before it has been left, going back is always
+        allowed and keeps every choice, because the Budget lives in the link, and a link that jumps
+        ahead is sent back to where the game has got. The progress line at the top of every screen
+        after the cover, which marks each step done, current, opened or not yet open, and the guard
+        on every page read the same rule. Every flagship policy is a bundle of the game&rsquo;s own
+        levers that no other option moves, priced by the engine against the Budget as it stands with
+        the headroom it would leave, two that count the same money never both chosen. On the
+        fine-tuning screens an open decision is one card with a row for each choice, under a short
+        name in the decision&rsquo;s own terms (&ldquo;Food&rdquo; under Remove an exemption). A row
+        is a tick, or one scale of levels with where the lever is planned to be among them (VAT at
+        15%, 18%, 19%, 20% as planned, 21%, 22% or 25%; a department&rsquo;s budget from 5% less to
+        5% more), and before it is chosen it says only what choosing would raise, cost or save, at
+        the nearest level each way: the bar keeps the headroom. Once a row is chosen it says what it
+        does in 2029-30, its adviser speaks and Undo appears. What a card&rsquo;s rows share is said
+        once at its top, and everything else about each lever waits in the card&rsquo;s one fold. A
+        lever a chosen flagship already sets shows once, as a line with a way back to that flagship.
+        There is no slider anywhere and no desk: every lever the desk once held is a policy on these
+        two screens, and with no game only the cover and the briefing open. Every screen opens with
+        one heading and one instruction, and for now the sources are listed on the About page rather
+        than beside each figure; the guide is chrome and quotes no figure that is not sourced. The
+        advisers, the Prime Minister and the ministers are roles, not people; a briefing that cites
+        a public document is commentary, and a judgement nobody published is the game&rsquo;s own
+        and never produces a number. Today&rsquo;s estimate follows a stated rule: the latest market
+        or independent reading minus the OBR&rsquo;s March assumption, rounded to the step the
+        assumption moves in (interest rates up three-quarters of a point, RPI inflation up half a
+        point, growth on the OBR&rsquo;s path), turned into headroom by the OBR&rsquo;s own
+        sensitivities: about £6.8 billion in 2029-30, against £23.6 billion in March. Each radio
         shows the level it moves to (21% on VAT, £12,670 on the personal allowance), but the engine
         costs the change, exactly as before: levels are display only. VAT base-broadening toggles
         use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not represent what abolishing
@@ -173,23 +175,24 @@ export function MethodologyPage() {
         Every card built on HMRC&rsquo;s cost of a relief reads &ldquo;raises at most&rdquo; and
         says why, and the markets count it as a figure nobody has certified. Two measures that count
         the same money (taxing gains at death and charging people who leave the UK, for one) cannot
-        both be chosen: in one decision they are one choice among radios, and elsewhere choosing one
-        takes the other out and says so first. There are seventeen such pairs, each with a text that
-        reads from either card. Employer-side National Insurance is not a manifesto red line here,
-        on the government&rsquo;s own reading of the lock; the Political Adviser says on each such
-        lever that the reading is contested. Phase 12 added the menu the Budget 2026 reporting says
-        is on the table: ending the capital gains write-off at death, a £1.5 million council tax
-        surcharge band, reversing the farm and family-business relief reform, two points on the bank
-        surcharge, the energy profits levy package again, the self-employed Class 4 rate, VAT off
-        domestic gas, another HMRC compliance package, unfreezing the Plan 2 student loan threshold,
-        defence at 3% of GDP from 2027, and business rates as a share of the OBR&rsquo;s own line.
-        Each is a published row or a stated calculation on one, and the data records which. Nine
-        taxes were taken off the table on 30 September 2026: the health and social care levy,
-        insurance premium tax, dropping the salary-sacrifice cap, taxing capital gains at income tax
-        rates, a lower VAT threshold, National Insurance on landlords&rsquo; rent, a higher tax on
-        selling a business, adding back last year&rsquo;s cancelled fuel duty rise and undoing last
-        year&rsquo;s gambling duty rises. Their costings are kept for the record, and an old link
-        that carries one opens without it.
+        both be chosen: in one decision they are one choice among radios, and elsewhere, or where a
+        flagship sets one of them, choosing one takes the other out and says so first. There are
+        seventeen such pairs, each with a text that reads from either card. Employer-side National
+        Insurance is not a manifesto red line here, on the government&rsquo;s own reading of the
+        lock; the Political Adviser says on each such lever that the reading is contested. Phase 12
+        added the menu the Budget 2026 reporting says is on the table: ending the capital gains
+        write-off at death, a £1.5 million council tax surcharge band, reversing the farm and
+        family-business relief reform, two points on the bank surcharge, the energy profits levy
+        package again, the self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance
+        package, unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and
+        business rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated
+        calculation on one, and the data records which. Nine taxes were taken off the table on 30
+        September 2026: the health and social care levy, insurance premium tax, dropping the
+        salary-sacrifice cap, taxing capital gains at income tax rates, a lower VAT threshold,
+        National Insurance on landlords&rsquo; rent, a higher tax on selling a business, adding back
+        last year&rsquo;s cancelled fuel duty rise and undoing last year&rsquo;s gambling duty
+        rises. Their costings are kept for the record, and an old link that carries one opens
+        without it.
       </p>
 
       <h2>Spending levers</h2>
@@ -246,18 +249,19 @@ export function MethodologyPage() {
       <h2>Basic and advanced</h2>
       <p>
         A first game is played in basic mode, which suggests only the best ideas: on the fine-tuning
-        screens each adviser&rsquo;s shortlist, eight taxes and seven spending policies with no
-        folds; and on the flagship screens the best one or two ways to deliver each priority. The
-        briefing is the same in both modes. &ldquo;Best&rdquo; is the advisers&rsquo; judgement, and
-        each pick&rsquo;s reason is its own adviser&rsquo;s line. Rules keep it checkable: a pick
-        moves the 2029-30 headroom by £1 billion or more at its smallest size on today&rsquo;s
-        estimate, counts by 2029-30, is on the table, breaks no promise at any size, and never
-        counts the same money as another pick or as something already on your desk, which basic mode
-        always shows. A button on each trimmed screen shows every policy and every way, and offers
-        the shortlist back; the footer&rsquo;s switch that did the same is withdrawn for now.
-        Anything you have chosen stays on show in either mode, and the bar, the review and Budget
-        day count every idea whichever mode you are in. The mode is remembered in your browser,
-        never in the link, so a Budget you share opens in the reader&rsquo;s own mode.
+        screens each adviser&rsquo;s shortlist, eight taxes and seven spending policies, all on
+        show, one card a section; and on the flagship screens the best one or two ways to deliver
+        each priority. The briefing is the same in both modes. &ldquo;Best&rdquo; is the
+        advisers&rsquo; judgement, and each pick&rsquo;s reason is its own adviser&rsquo;s line.
+        Rules keep it checkable: a pick moves the 2029-30 headroom by £1 billion or more at its
+        smallest size on today&rsquo;s estimate, counts by 2029-30, is on the table, breaks no
+        promise at any size, and never counts the same money as another pick or as something already
+        on your desk, which basic mode always shows. A button on each trimmed screen shows every
+        policy and every way, and offers the shortlist back; the footer&rsquo;s switch that did the
+        same is withdrawn for now. Anything you have chosen stays on show in either mode, and the
+        bar, the review and Budget day count every idea whichever mode you are in. The mode is
+        remembered in your browser, never in the link, so a Budget you share opens in the
+        reader&rsquo;s own mode.
       </p>
 
       <h2>Budget day</h2>

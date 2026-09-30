@@ -1,8 +1,8 @@
 # ADR-0025: One estimate, six steps, curated levers
 
 Date: 2026-09-27. Status: accepted; revised 2026-09-28, 2026-09-29 and 2026-09-30 (below, ADR-0026,
-ADR-0027, ADR-0030 and ADR-0035). Revises ADR-0010, ADR-0012, ADR-0022, ADR-0023 and ADR-0024, each
-of which carries a dated revision pointing here.
+ADR-0027, ADR-0030, ADR-0035 and ADR-0037). Revises ADR-0010, ADR-0012, ADR-0022, ADR-0023 and
+ADR-0024, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -251,3 +251,11 @@ file's own `group`, and the validator checks it; the rule that a tax sits in the
 incidence tag names is gone. The incidence tag still says who pays a tax, on the review and on
 Budget day. Nine taxes are retired, the levy among them, so the tests and the walk that moved the
 levy move employer National Insurance instead. The spending screen keeps its four groups.
+
+## Revision (2026-09-30): one card a decision (ADR-0037)
+
+A resting card said what the adviser’s move would do and the headroom it would leave. Step 4 now
+draws each open decision as one card with a row for each choice, on both screens. At rest a row says
+only what choosing would do (“would raise at most £32.5bn”), with no headroom, since the bar keeps
+that score, and its adviser speaks once it is chosen. The spending screen goes by decisions too, and
+its groups’ folds went.

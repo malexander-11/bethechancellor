@@ -624,8 +624,8 @@ describe('fine-tune tax and spend: one card a decision', () => {
       'Foreign Office and aid',
       'All other departments',
     ]);
-    // A budget is one scale from 5% less to 5% more, the plan among them, under its plain name;
-    // no Small, Medium or Large (ADR-0037).
+    // A department's budget is one scale from 5% less to 5% more, the plan among them, under its
+    // plain name; no Small, Medium or Large (ADR-0037).
     openDecision('Change health, schools and defence');
     const schools = scale('Schools and education');
     expect(levelsOf(schools)).toEqual([

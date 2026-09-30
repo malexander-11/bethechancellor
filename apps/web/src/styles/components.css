@@ -1530,6 +1530,29 @@ label.choice {
   display: block;
 }
 
+/* On a phone the tags go under the choice, so its name and what it would do keep the full width:
+   beside a column of tags, "1% on everything now zero-rated" took four lines at 360px. */
+@media (max-width: 719px) {
+  .tune__row-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tune__row-flags {
+    justify-content: flex-start;
+    max-width: none;
+    padding-top: 0;
+    text-align: left;
+  }
+
+  .tune__row-flags:empty {
+    display: none;
+  }
+
+  .tune__row--tick .tune__row-flags {
+    padding-left: 30px;
+  }
+}
+
 /* Everything under a tick lines up with its name, past the box. */
 .tune__row--tick > .tune__row-body {
   padding-left: 30px;

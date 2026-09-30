@@ -223,7 +223,7 @@ A pair that counts the same money is authored once with the severity `excludes`,
 checks it (Phase 25): seventeen pairs since §35, the exit charge with CGT at death among them. On
 step 4 only one of a pair can be chosen: ticks that contradict each other in one decision are one
 choice among radios, and anywhere else choosing one takes the other out, which the card says first
-and prices as the swap (§35).
+and prices as the swap (§35); since §36 each is a row in its decision’s one card.
 
 ### Spending levers (ADR-0006)
 
@@ -1170,15 +1170,16 @@ and for a policy to come in small, medium and large where a size makes sense.
   in the group's fold, and choosing one clears the other. The hand-picked levers keep their places
   on show; the rest are one fold away, under their family ("Income tax", "VAT"), and a fold's cards
   mount only while it is open. Since §34 the tax screen goes tax by tax, 67 taxes in eleven
-  sections, and a tax is one scale; the spending screen keeps both ways.
+  sections, and a tax is one scale; the spending screen kept both ways until §36 put it in decisions
+  too, each budget one scale.
 - **Sizes** (`finetune.json`) are settings of the lever, checked by the validator: in range, on its
   steps, all one way. Small is the usual step, medium twice it, large five times it, capped at the
   range; where HMRC publishes points the sizes sit on them. VAT's range reaches +5 points, so putting
   it up reads 21%, 22% and 25%. A size past the range its source vouches for is straight-line
   arithmetic on HMRC's row, badged Worked out with its caveat.
-- **The card** prices its smallest size at rest, in the conditional, and the lever's own effect
-  once chosen. A lever a chosen flagship holds shows once, as a line with the way back to change the
-  flagship, so step 4 never undoes one silently.
+- **The card** (a row in its decision’s one card since §36) prices its smallest size at rest, in the
+  conditional, and the lever's own effect once chosen. A lever a chosen flagship holds shows once,
+  as a line with the way back to change the flagship, so step 4 never undoes one silently.
 - **Pick one.** Where two levers' own texts say they count the same money or cancel, the pair is
   `excludes`: 22 pairs (fifteen since §34, seventeen since §35), each authored once, read from
   either card, with a one-tap swap; since §35, one choice among radios in a decision, or a line
@@ -1213,11 +1214,12 @@ can then go to an advanced mode if they'd like. Basic mode, only suggest the bes
   are always on show in basic mode, so nothing that names them points at something hidden: the
   briefing did until ADR-0031, and the review still lists the ones a Budget leaves. They are not
   picks.
-- **What basic mode shows.** Step 4: the picks, with no folds. Step 3: the picks and a way that
-  moves a lever on the desk. The briefing: the headroom and what it means, the yardstick, the rules
-  in one line and the desk; the explanations wait for advanced mode (Phase 28 puts them in both
-  modes: §29; ADR-0031 makes the briefing the same in both: §30). On every trimmed screen one
-  button swaps the modes and keeps its focus.
+- **What basic mode shows.** Step 4: the picks, all on show with no decisions to open (since §36 one
+  card a section, the details in one fold). Step 3: the picks and a way that moves a lever on the
+  desk. The briefing: the headroom and what it means, the yardstick, the rules in one line and the
+  desk; the explanations wait for advanced mode (Phase 28 puts them in both modes: §29; ADR-0031
+  makes the briefing the same in both: §30). On every trimmed screen one button swaps the modes and
+  keeps its focus.
 - **Nothing chosen hides, and nothing is uncounted.** A screen shows whatever was chosen when it
   opened or when the mode last changed. The bar, the review, the priorities' price line and Budget
   day read every idea in either mode.
@@ -1423,11 +1425,11 @@ to be added.
 - **Advanced mode** shows the eleven sections and 26 decisions, all closed. A decision is a button
   in an h3 with `aria-expanded`, its title beside a status: where a one-scale decision stands ("20%
   as planned", "22% · raises £19.8bn"), or how many choices another holds ("4 choices", "1 chosen ·
-  raises £2.4bn"). Opening it mounts its cards, at h4; a decision holding a tax that had moved when
-  the screen opened, a flagship's included, starts open. A section's heading counts what moved. It
-  is a heading's button and not a `details` so that a screen reader can move from decision to
-  decision by heading and hear which are open, and so that the word budgets, which leave folds out,
-  count the titles and the open cards.
+  raises £2.4bn"). Opening it mounts its cards, at h4 (one card, a row a choice, since §36); a
+  decision holding a tax that had moved when the screen opened, a flagship's included, starts open.
+  A section's heading counts what moved. It is a heading's button and not a `details` so that a
+  screen reader can move from decision to decision by heading and hear which are open, and so that
+  the word budgets, which leave folds out, count the titles and the open cards.
 - **Basic mode** shows the eight picks under seven taxes, in section order; wealth tax, stamp duty,
   business taxes and the tax gap have no pick and are left out unless something in them was chosen.
   Only a spending group must now have a pick (§28).
@@ -1438,8 +1440,8 @@ to be added.
   level each way on a line of its own; choosing the planned level puts the tax back; a level no
   radio names, from an old link, reads "Now 23%". A card blocked by a tax that counts the same money
   prices the swap, and Swap sets its nearest level (since §35 it says what choosing would take out
-  instead, and still moves). The spending screen keeps two policies a lever,
-  and Small, Medium and Large.
+  instead, and still moves). The spending screen kept two policies a lever, and Small, Medium and
+  Large, until §36.
 - **Nine taxes off the table**: the health and social care levy, insurance premium tax, dropping the
   salary-sacrifice cap, capital gains at income tax rates, a lower VAT registration threshold,
   National Insurance on landlords' rent, the Business Asset Disposal Relief rate, last year's
@@ -1481,15 +1483,16 @@ contradict, and elsewhere a choice that takes the others out and says so first.
   but are not declared. Four sets are declared: the wealth tax, the rate of pension tax relief, the
   rates on dividends, savings and rent, and capital gains that go untaxed. The screen draws a set as
   a group under its name, “As planned” first and each tick’s card after it with a radio in place of
-  its box. The radios share a name, so choosing one takes the others out and the arrow keys move
-  through them. While one is chosen the others are priced “If you choose it instead”, the swap read
-  as one move. An old link that carries two of a set checks the first, and both warn that they count
-  the same money twice.
+  its box (each a row since §36). The radios share a name, so choosing one takes the others out and
+  the arrow keys move through them. While one is chosen the others are priced “If you choose it
+  instead”, the swap read as one move. An old link that carries two of a set checks the first, and
+  both warn that they count the same money twice.
 - **Taking out.** Any other card whose partner is in the Budget says so before it is touched, naming
   what it would take out (“Choosing this takes out …”, or on a scale “Choosing a level here takes
-  out …”), then giving the first partner’s reason. It still moves. Its prices count the partners as
-  gone, “instead”, and choosing it puts them back where they rest. The line describes the control
-  (`aria-describedby`), so a screen reader hears it first.
+  out …”), then giving the first partner’s reason (since §36 it names those in its own card by their
+  short names, and leaves the reason to the card’s fold). It still moves. Its prices count the
+  partners as gone, “instead”, and choosing it puts them back where they rest. The line describes
+  the control (`aria-describedby`), so a screen reader hears it first.
 - **Flagships.** Where a flagship the player chose holds the partner, the card still will not move
   and offers “Change it”, the way back to that flagship (§27), since step 4 never undoes a flagship.
   Step 3’s ways to deliver a priority keep “You can’t have both” and its swap.
@@ -1499,3 +1502,51 @@ contradict, and elsewhere a choice that takes the others out and says so first.
   advanced tax screen with choices in six decisions reads 925 words, from 1,030, pinned at 1,020,
   and the other screens are unchanged. `walk39` is clean at 1300px and 360px, in light and with
   reduced motion.
+
+## 36. One card a decision (ADR-0037)
+
+On 2026-09-30 the user asked for every decision to work like the rates: one card, and inside it a
+box for each thing it could apply to, “remove vat exemptions” and a checkbox for each exemption.
+Asked what each option should show, they chose a row each with the adviser’s line once ticked; asked
+about the spending screen, both screens in this round.
+
+- **Spending in decisions.** The spending screen goes section by section, as the tax screen does
+  (§34): four sections by what the money is for, nine decisions (“Change health, schools and
+  defence”, “Fund a new programme”, “Reverse a decision”), each closed until opened, those holding a
+  lever that had moved when the screen opened open from the start. Each budget is one scale with the
+  plan among its levels, from 5% less to 5% more (public investment from 10% less to 20% more), so
+  Small, Medium and Large leave the game (§27); at rest it still says how it grows after rising
+  prices. The groups’ folds and their family subheads went. The 2025 PIP cuts move beside the reset
+  they contradict, so each of the spending screen’s three pairs sits in one decision, as taking out
+  rather than radios, since a flagship sets one lever of each (§35). A spending section needs a pick
+  (§28).
+- **A short name for every choice.** Inside its decision a choice goes by a short name in the
+  decision’s terms, “Food” under Remove an exemption, from the item’s `label` (at most 48 characters
+  and seven words), or else its plain name or its policy’s title. No two in a decision share one.
+  Everywhere else a lever keeps its plain name.
+- **One card, a row a choice.** An open decision is one card. A tick is a box, its short name and
+  what choosing would do (“would raise at most £32.5bn”); a lever with levels is a row of them,
+  priced at the nearest level each way. No row shows headroom, which the bar keeps. Chosen, a row
+  says what it does in the target year (“raises at most £32.5bn in 2029-30”), and only then do its
+  adviser, a budget’s minister and Undo appear. What the rows share is said once at the top of the
+  card: what “at most” means for a relief’s cost, and which rule investment counts against. The
+  promises that watch a row, its flagship, “Not on the table” and any warning that applies now stay
+  on it; everything else about each lever (its headline, cash, milestones, tags, what it counts the
+  same money as, what it assumes and, with the workings on, its sources) waits under one fold a
+  card, “More about these”.
+- **Taking out, in a card.** A row that would take out another beside it names it by its short name
+  and leaves the reason to the fold; one in another decision it names plainly, with the reason
+  (§35). A set of radios is a set of rows. A lever a chosen flagship holds is a row naming the
+  flagship, with the way back to it.
+- **Basic mode** has no decisions: each section is one card of the adviser’s picks, a row each under
+  its policy’s title.
+- **Measured** (ADR-0037): the advanced tax screen reads 292 words at rest on the walk’s game, from
+  405, and 459 with choices in six decisions, from 925; spending 388, from 496, and 592, from 842;
+  basic mode 196 and 321 for tax and 270 and 421 for spending. Opened one at a time at 360px, the
+  tax screen’s 26 cards show 1,321 words, from 3,372, and the spending screen’s nine 829, from
+  1,739; Remove an exemption falls from 441 words to 117, and cards of ticks fall to between a
+  quarter and a third, scales less. The fine-tuning screens read at grade 4.9. On a phone the tax
+  screen is 2,788px on arrival, unchanged; with the walk’s two flagships the spending screen is
+  3,686px, from 4,615px, and basic mode’s screens 2,569px and 2,890px, from 3,396px and 3,823px; on
+  a phone a row’s tags sit below its name, not beside it, so the name and price keep the full width.
+  `walk41` is clean at 1300px and 360px, in light and with reduced motion.

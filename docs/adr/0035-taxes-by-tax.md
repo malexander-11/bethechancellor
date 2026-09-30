@@ -1,8 +1,8 @@
 # ADR-0035: Taxes by tax
 
-Date: 2026-09-30. Status: accepted; revised the same day (below, ADR-0036). Revises ADR-0015,
-ADR-0018, ADR-0019, ADR-0020, ADR-0021, ADR-0022, ADR-0024, ADR-0025, ADR-0026, ADR-0027 and
-ADR-0028, each of which carries a dated revision pointing here.
+Date: 2026-09-30. Status: accepted; revised the same day (below, ADR-0036 and ADR-0037). Revises
+ADR-0015, ADR-0018, ADR-0019, ADR-0020, ADR-0021, ADR-0022, ADR-0024, ADR-0025, ADR-0026, ADR-0027
+and ADR-0028, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -244,3 +244,11 @@ else no card is blocked by a tax that counts the same money: it says first what 
 take out, and its prices count the other as gone, where this ADR’s blocked scale priced the swap and
 offered Swap. Undoing the 2024 capital gains rise now excludes both rates on gains, so seventeen
 pairs count the same money, not fifteen.
+
+## Revision (2026-09-30): one card a decision (ADR-0037)
+
+Opening a decision no longer mounts a card for each tax at h4. It shows one card, a row for each
+choice under its short name in the decision (“Basic rate”, “Food”), and one fold for the rest, in
+which each lever is named at h4. A scale’s row prices the nearest level each way with no headroom
+(“21% would raise £9.9bn · 19% would cost £9.9bn”); once moved it says what it does in 2029-30, and
+only then does its adviser speak. The spending screen now goes by decisions too.

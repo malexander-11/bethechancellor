@@ -1,8 +1,8 @@
 # ADR-0027: Policies all the way through
 
 Date: 2026-09-28. Status: accepted; step 4 in basic mode revised 2026-09-29 (below, ADR-0028), and
-the tax screen and its pairs 2026-09-30 (below, ADR-0035 and ADR-0036). Revises ADR-0005, ADR-0009,
-ADR-0025 and ADR-0026, each of which carries a dated revision pointing here.
+the tax screen, its pairs and its cards 2026-09-30 (below, ADR-0035, ADR-0036 and ADR-0037). Revises
+ADR-0005, ADR-0009, ADR-0025 and ADR-0026, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -199,3 +199,13 @@ priced with it gone. The “You can’t have both” notice stays on step 4 only
 player chose holds the other, and there it offers the way back to that flagship, never a swap; step
 3 keeps the notice and its swap. Undoing the 2024 capital gains rise now counts against both rates
 on gains, which makes seventeen pairs.
+
+## Revision (2026-09-30): one card a decision (ADR-0037)
+
+A step-4 card was one policy. Now an open decision is one card with a row for each choice, and the
+spending screen goes by decisions as the tax screen does. Each budget is one scale with the plan
+among its levels, from 5% less to 5% more (public investment from 10% less to 20% more), so Small,
+Medium and Large leave the game, and “Choosing this replaces …” with them; the groups’ folds and
+their family subheads went. A row says what choosing would do, with no headroom, and its adviser’s
+line waits until it is chosen; everything else about the lever is in the card’s one fold. Every
+choice has a short name in its decision (“Food”) and keeps its plain name everywhere else.

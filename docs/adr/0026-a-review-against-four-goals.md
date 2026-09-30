@@ -1,8 +1,8 @@
 # ADR-0026: A review against four goals, and the fixes
 
 Date: 2026-09-28. Status: accepted; revised 2026-09-28, 2026-09-29 and 2026-09-30 (below, ADR-0027,
-ADR-0030, ADR-0032, ADR-0035 and ADR-0036). Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023 and
-ADR-0025, each of which carries a dated revision pointing here.
+ADR-0030, ADR-0032, ADR-0035, ADR-0036 and ADR-0037). Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023
+and ADR-0025, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -389,3 +389,12 @@ one already chosen. On step 4 it now appears only where a flagship the player ch
 of a pair, and it points back to that flagship. Everywhere else on step 4 a choice says first what
 it would take out, in plain text at full contrast that describes its control, and still moves;
 ticks that contradict each other in one decision are radios.
+
+## Revision (2026-09-30): no headroom on a row (ADR-0037)
+
+R4 had every step-4 card say the headroom it would leave. Step 4’s choices are now rows in one card
+a decision, and a row prices a choice by what it would raise, cost or save, with no headroom: the
+bar keeps that score and moves the moment a row is chosen, and the screen’s one sentence on interest
+stands. Step 3’s cards keep their price and the headroom it leaves. For R6, the tax screen on a
+phone is still 2,788px on arrival, its decisions closed, and what opening every decision adds has
+almost halved: 11,283px across its 26 cards at 360px, from 21,132px.

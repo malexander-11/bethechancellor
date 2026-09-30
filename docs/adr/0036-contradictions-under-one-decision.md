@@ -1,7 +1,7 @@
 # ADR-0036: Contradictions come under one decision
 
-Date: 2026-09-30. Status: accepted. Revises ADR-0026, ADR-0027 and ADR-0035, each of which carries a
-dated revision pointing here.
+Date: 2026-09-30. Status: accepted; revised the same day (below, ADR-0037). Revises ADR-0026,
+ADR-0027 and ADR-0035, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -125,3 +125,13 @@ gap, and capital gains tax at death.
 - Radios are native, in one group by name, so the arrow keys and a screen reader treat a set as one
   question whatever sits between its radios on the page. Tab reaches the checked radio, or “As
   planned”, and then the next card’s controls.
+
+## Revision (2026-09-30): sets and taking out, as rows (ADR-0037)
+
+A set is drawn as before, “As planned” first, but each member is a row rather than a card, priced as
+the swap (“would raise £3.5bn instead”). A row that would take out others in its own card names them
+by their short names (“Choosing this takes out “Food”.”) and leaves the reason to the card’s fold,
+where each lever lists what it counts the same money as; a row that would take out a choice in
+another decision names it plainly and gives the reason, as before. The spending screen’s three pairs
+now each sit in one decision, as taking out rather than radios, since a flagship sets one lever of
+each.
