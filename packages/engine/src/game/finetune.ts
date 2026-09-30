@@ -100,6 +100,19 @@ export function sizeLabels(count: number): readonly string[] {
   return count === 2 ? ['Small', 'Large'] : [];
 }
 
+/**
+ * The levels a tax's one scale offers (ADR-0035): where the lever is planned to be and every size
+ * its ways come in, low to high, each once. VAT's headline rate: 5, 2 and 1 points down, as
+ * planned, and 1, 2 and 5 points up.
+ */
+export function scaleLevels(
+  lever: Pick<Lever, 'control'>,
+  ways: readonly FinetunePolicy[],
+): number[] {
+  const levels = [lever.control.default, ...ways.flatMap((way) => way.sizes)];
+  return [...new Set(levels)].sort((a, b) => a - b);
+}
+
 /** A flagship the player chose, holding a lever at its own value (Phase 26). */
 export interface FlagshipHold {
   option: DeliverOption;

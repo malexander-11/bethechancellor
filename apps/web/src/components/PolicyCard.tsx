@@ -1,8 +1,10 @@
 import {
   excludedBy,
   formatGbpBn,
+  itemName,
   leadPolicy,
   policyWay,
+  scaleLevels,
   sizeLabels,
   type FinetuneItem,
   type FinetunePolicy,
@@ -16,7 +18,7 @@ import { leverNotes, type redLinesOf } from '../journey/levers';
 import { StepLink } from '../journey/links';
 import type { useLeverHints } from '../journey/prices';
 import { useBudget } from '../state/budget';
-import { LeverControl, sizeWords } from './LeverControl';
+import { LeverControl, sizeWords, type Hint } from './LeverControl';
 import { MinisterLine } from './MinisterLine';
 
 /** A flagship the player chose holds this lever at its own value: its title and its screen. */
@@ -37,6 +39,11 @@ export interface Held {
  * caveats wait under "More about this". A relief cost reads "raises at most" (Phase 25). While a
  * lever that counts the same money is in the Budget, the card will not move and offers a swap, or,
  * where a flagship the player chose holds that lever, a way back to the flagship instead.
+ *
+ * Given its `ways`, a tax is one scale (ADR-0035): every level its ways come in, in order, with
+ * where it is planned to be among them ("15% · 18% · 19% · 20% as planned · 21% · 22% · 25%"),
+ * under the lever's plain name when it moves both ways. At rest it prices the nearest level each
+ * way, one line each; the adviser speaks for the way it has moved, or the usual way at rest.
  */
 export function PolicyCard({
   item,
@@ -49,6 +56,7 @@ export function PolicyCard({
   moved,
   held,
   headingLevel,
+  ways,
 }: {
   item: FinetuneItem;
   policy: FinetunePolicy;
@@ -60,42 +68,59 @@ export function PolicyCard({
   moved: ReadonlySet<string>;
   held: ReadonlyMap<string, Held>;
   headingLevel?: 3 | 4;
+  /** A tax's ways, drawn as one scale (ADR-0035): both in advanced mode, the one on show in basic. */
+  ways?: readonly FinetunePolicy[];
 }) {
   const { state, dispatch, outcome } = useBudget();
   const rest = lever.control.default;
   const value = state.leverValues[lever.code] ?? rest;
   const resting = value === rest;
-  const mine = !resting && Math.sign(value - rest) === policyWay(policy, lever);
-  const smallest = policy.sizes[0] ?? rest;
+  const scale = ways !== undefined && ways.length > 0 && lever.control.kind !== 'toggle';
+  // The way the lever has moved leads a scale: its adviser speaks, and a swap sets its nearest
+  // level. At rest, the usual way.
+  const lead = scale
+    ? (ways.find((way) => policyWay(way, lever) === Math.sign(value - rest)) ?? ways[0] ?? policy)
+    : policy;
+  const mine = !resting && Math.sign(value - rest) === policyWay(lead, lever);
+  const smallest = lead.sizes[0] ?? rest;
   const excluder = excludedBy(lever, levers, state.leverValues);
   // A partner a flagship holds is changed on the flagship's screen, never swapped out from here.
   const holder = excluder ? held.get(excluder.lever.code) : undefined;
-  // A blocked card is priced as the swap it offers, never as both at once; one whose partner a
-  // flagship holds offers no swap, so it prices nothing.
-  const priced =
-    resting && !holder
-      ? hintOf(
-          { [lever.code]: smallest },
-          excluder ? { [excluder.lever.code]: excluder.lever.control.default } : undefined,
-        )
-      : null;
-  const effect = priced ? lowerFirst(priced.text) : '';
-  const opening = excluder
-    ? 'If you swap them'
-    : lever.control.kind === 'toggle'
-      ? 'If you switch it on'
-      : policy.sizes.length === 1
-        ? 'If you choose it'
-        : (sizeLabels(policy.sizes.length)[0] ?? 'Small');
-  // In the conditional and in plain ink (Phase 25): what the smallest size would do, and the
-  // headroom it would leave, red only below nought.
-  const hint = priced
-    ? {
-        text: `${opening}: ${wouldWords(lever.reliefCost ? reliefWords(effect) : effect)}`,
-        headroom: formatGbpBn(priced.headroomGbpm, 1, priced.headroomGbpm < 0),
-        negative: priced.headroomGbpm < 0,
+  // In the conditional and in plain ink (Phase 25): what a size would do, and the headroom it
+  // would leave, red only below nought. A blocked card is priced as the swap it offers, never as
+  // both at once.
+  const would = (opening: string, at: number): Hint => {
+    const priced = hintOf(
+      { [lever.code]: at },
+      excluder ? { [excluder.lever.code]: excluder.lever.control.default } : undefined,
+    );
+    const effect = lowerFirst(priced.text);
+    return {
+      text: `${opening}: ${wouldWords(lever.reliefCost ? reliefWords(effect) : effect)}`,
+      headroom: formatGbpBn(priced.headroomGbpm, 1, priced.headroomGbpm < 0),
+      negative: priced.headroomGbpm < 0,
+    };
+  };
+  // At rest, and with no swap that only a flagship's screen could make: a scale prices the nearest
+  // level each way; any other card, its smallest size, or the swap it offers.
+  const hints: Hint[] = [];
+  if (resting && !holder) {
+    if (excluder) hints.push(would('If you swap them', smallest));
+    else if (scale) {
+      for (const way of ways) {
+        const nearest = way.sizes[0] ?? rest;
+        hints.push(would(sizeWords(lever, nearest), nearest));
       }
-    : undefined;
+    } else {
+      const opening =
+        lever.control.kind === 'toggle'
+          ? 'If you switch it on'
+          : policy.sizes.length === 1
+            ? 'If you choose it'
+            : (sizeLabels(policy.sizes.length)[0] ?? 'Small');
+      hints.push(would(opening, smallest));
+    }
+  }
   const blocked = excluder
     ? {
         other: finetuneName(excluder.lever.code) ?? excluder.lever.shortTitle,
@@ -115,13 +140,16 @@ export function PolicyCard({
             }),
       }
     : undefined;
-  // Set the other way: the policy that is chosen, and where it has the lever.
-  const other = !resting && !mine ? leadPolicy(item, lever, value) : undefined;
-  const sizes = {
-    values: policy.sizes,
-    labels: sizeLabels(policy.sizes.length),
-    ...(other ? { replaces: `${other.title} (${sizeWords(lever, value)})` } : {}),
-  };
+  // Set the other way: the policy that is chosen, and where it has the lever. A scale holds both
+  // ways, so nothing on it is ever replaced.
+  const other = !scale && !resting && !mine ? leadPolicy(item, lever, value) : undefined;
+  const sizes = scale
+    ? { values: scaleLevels(lever, ways), labels: [], scale: true }
+    : {
+        values: policy.sizes,
+        labels: sizeLabels(policy.sizes.length),
+        ...(other ? { replaces: `${other.title} (${sizeWords(lever, value)})` } : {}),
+      };
   const notes = leverNotes(lever, moved).filter((n) => n.key !== excluder?.lever.code);
   return (
     <LeverControl
@@ -132,9 +160,9 @@ export function PolicyCard({
       onChange={(next) => dispatch({ type: 'setLever', code: lever.code, value: next })}
       redLines={redLinesFor(lever.code)}
       chosen={chosen ? { title: chosen.option.title, state: chosen.state } : undefined}
-      displayTitle={policy.title}
-      {...(hint ? { hint } : {})}
-      advice={{ line: policy.advice }}
+      displayTitle={scale && ways.length > 1 ? itemName(item) : lead.title}
+      hints={hints}
+      advice={{ line: lead.advice }}
       notes={notes}
       {...(blocked ? { blocked } : {})}
       sizes={sizes}

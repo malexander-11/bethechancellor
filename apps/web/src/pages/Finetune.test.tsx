@@ -115,32 +115,29 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(document.activeElement).toBe(button);
     expect(button).toHaveAttribute('aria-expanded', 'true');
     expect(panel).toBeVisible();
-    // Every choice about the rates, both ways where a rate moves both ways, headed a level below
-    // the decision, each with its adviser's line and no adviser's name.
+    // Every choice about the rates, headed a level below the decision, each with its adviser's
+    // line and no adviser's name: a rate that moves both ways is one scale under its plain name.
     expect(
       within(panel)
         .getAllByRole('heading', { level: 4 })
         .map((h) => h.textContent),
     ).toEqual([
-      'Put up the basic rate of income tax',
-      'Cut the basic rate of income tax',
-      'Put up the higher rate of income tax',
-      'Cut the higher rate of income tax',
-      'Put up the additional rate of income tax',
-      'Cut the additional rate of income tax',
+      'The basic rate of income tax',
+      'The higher rate of income tax',
+      'The additional rate of income tax',
       'A new 50% income tax rate above £125,140',
     ]);
     const cards = panel.querySelectorAll('.lever--curated');
-    expect(cards).toHaveLength(7);
+    expect(cards).toHaveLength(4);
     for (const card of cards) {
       expect(card.querySelector('.choice__advice')).not.toBeNull();
       expect(card.querySelector('.choice__advice .kicker')).toBeNull();
     }
     expect(
-      within(policy('Put up the basic rate of income tax'))
+      within(policy('The basic rate of income tax'))
         .getAllByRole('radio')
         .map((r) => r.closest('label')?.textContent),
-    ).toEqual(['Small 21%', 'Medium 22%', 'Large 25%']);
+    ).toEqual(['17%', '18%', '19%', '20% as planned', '21%', '22%', '25%']);
     // Nothing else opened with it, and closing it takes its cards away.
     expect(decision('Change allowances and thresholds')).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(button);
@@ -150,16 +147,19 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(panel.querySelectorAll('.lever--curated')).toHaveLength(0);
   });
 
-  it('prices a policy before it is chosen, then says what it does, and the bar keeps score', async () => {
+  it('prices a tax each way before it moves, says what it does once moved, and the bar keeps score', async () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     openDecision('Change the rates');
-    const card = policy('Put up the basic rate of income tax');
-    // At rest: what the smallest size would do, on HMRC's own figure, and what the headroom would
-    // then be, interest included (Phase 25), which the screen says once. It is in the
-    // conditional, so it cannot read as money already in the Budget.
-    expect(within(card).getByText(/^Small: would raise/).textContent).toMatch(
-      /^Small: would raise £\d\.\dbn · headroom would be £\d+\.\dbn$/,
-    );
+    const card = policy('The basic rate of income tax');
+    const hints = () => [...card.querySelectorAll('.lever__hint-line')].map((l) => l.textContent);
+    // At rest, on the plan: what the nearest level each way would do, on HMRC's own figure, and
+    // what the headroom would then be, interest included (Phase 25), which the screen says once.
+    // It is in the conditional, so it cannot read as money already in the Budget.
+    expect(within(card).getByRole('radio', { name: '20% as planned' })).toBeChecked();
+    expect(hints()).toEqual([
+      expect.stringMatching(/^21%: would raise £\d\.\dbn · headroom would be £\d+\.\dbn$/),
+      expect.stringMatching(/^19%: would cost £\d\.\dbn · headroom would be −?£\d+\.\dbn$/),
+    ]);
     expect(
       screen.getByText(
         'Headroom also moves with the interest on borrowing, so it can move more than a tax raises.',
@@ -168,12 +168,14 @@ describe('fine-tune tax and spend: the curated levers', () => {
     // The resting tag names the promise, and the name opens what it covers (Phase 25).
     expect(card.querySelector('.tag--manifesto')?.textContent).toMatch(/^Tax lock: no rise/);
     expect(within(card).getByRole('button', { name: 'Tax lock' })).toBeInTheDocument();
+    expect(within(card).getByText(/^Big money;/)).toBeInTheDocument();
     const before = barFigure();
-    fireEvent.click(within(card).getByRole('radio', { name: 'Medium 22%' }));
-    // Chosen: the hint gives way to the lever's own effect line, the red line is crossed, the
+    fireEvent.click(within(card).getByRole('radio', { name: '22%' }));
+    // Chosen: the prices give way to the lever's own effect line, the red line is crossed, the
     // decision and its tax say what they now raise, and the bar has moved.
-    expect(within(card).queryByText(/^Small: would raise/)).toBeNull();
-    expect(within(card).getByRole('radio', { name: 'Medium 22%' })).toBeChecked();
+    expect(hints()).toEqual([]);
+    expect(within(card).getByRole('radio', { name: '22%' })).toBeChecked();
+    expect(card.querySelector('.lever__value')?.textContent).toMatch(/^20% → 22%/);
     expect(
       within(card).getByText(/Day-to-day budget in 2029-30: raises £\d+\.\dbn/),
     ).toBeInTheDocument();
@@ -182,23 +184,21 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(statusOf('Change the rates')).toMatch(/^1 chosen · raises £\d+\.\dbn$/);
     expect(barFigure()).not.toBe(before);
     await waitFor(() => expect(search().get('L')).toMatch(/itbr\.2/));
-    // Large goes past HMRC's figure: the straight line is the game's arithmetic, and says so.
-    fireEvent.click(within(card).getByRole('radio', { name: 'Large 25%' }));
+    // 25% goes past HMRC's figure: the straight line is the game's arithmetic, and says so.
+    fireEvent.click(within(card).getByRole('radio', { name: '25%' }));
     expect(
       within(card).getByText(/Beyond 2p the game scales it in a straight line/),
     ).toBeInTheDocument();
-    // The other way, in the same decision, would replace it; choosing it clears this one.
-    const cut = policy('Cut the basic rate of income tax');
-    expect(
-      within(cut).getByText('Choosing this replaces Put up the basic rate of income tax (25%).'),
-    ).toBeInTheDocument();
-    fireEvent.click(within(cut).getByRole('radio', { name: 'Small 19%' }));
+    // Down the same scale: a cut, with the cut's own adviser's line; the plan puts it back.
+    fireEvent.click(within(card).getByRole('radio', { name: '19%' }));
     await waitFor(() => expect(search().get('L')).toMatch(/itbr\.-1/));
-    for (const radio of within(card).getAllByRole('radio')) expect(radio).not.toBeChecked();
-    expect(
-      within(card).getByText('Choosing this replaces Cut the basic rate of income tax (19%).'),
-    ).toBeInTheDocument();
     expect(statusOf('Change the rates')).toMatch(/^1 chosen · costs £\d+\.\dbn$/);
+    expect(within(card).getByText(/^Big money back;/)).toBeInTheDocument();
+    expect(within(card).queryByText(/Choosing this replaces/)).toBeNull();
+    fireEvent.click(within(card).getByRole('radio', { name: '20% as planned' }));
+    await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/itbr/));
+    expect(statusOf('Change the rates')).toBe('4 choices');
+    expect(hints()).toHaveLength(2);
   });
 
   it('says where a decision of one scale stands, and opens on arrival what a link chose', async () => {
@@ -212,30 +212,42 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(statusOf('Change corporation tax')).toMatch(/^26% · raises £\d\.\dbn$/);
     expect(statusOf('Change the rate')).toMatch(/^Abolish \(0%\) · costs £\d+\.\dbn$/);
     expect(group(/^Inheritance tax 1 chosen · costs £\d+\.\dbn$/)).toBeInTheDocument();
-    // The user's VAT: the headline rate, chosen here, says where it now stands.
+    // The user's VAT: the headline rate, one scale from 15% to 25%, the plan among them.
     const panel = openDecision('Change the headline rate');
-    fireEvent.click(
-      within(cardOf(within(panel).getByRole('heading', { name: 'Put up VAT' }))).getByRole(
-        'radio',
-        { name: 'Medium 22%' },
-      ),
-    );
+    const vat = policy('The main rate of VAT');
+    expect(within(panel).getAllByRole('heading', { level: 4 })).toHaveLength(1);
+    expect(
+      within(vat)
+        .getAllByRole('radio')
+        .map((r) => r.closest('label')?.textContent),
+    ).toEqual(['15%', '18%', '19%', '20% as planned', '21%', '22%', '25%']);
+    expect(within(vat).getByRole('radio', { name: '20% as planned' })).toBeChecked();
+    fireEvent.click(within(vat).getByRole('radio', { name: '22%' }));
     expect(statusOf('Change the headline rate')).toMatch(/^22% · raises £\d+\.\dbn$/);
     expect(group(/^VAT 1 chosen · raises £\d+\.\dbn$/)).toBeInTheDocument();
     await waitFor(() => expect(search().get('L')).toMatch(/vats\.2/));
   });
 
+  it('says what a level no radio names is, with nothing checked', () => {
+    // An old link's 23%: its decision open, the level named, and every radio clear.
+    at(`/finetune/tax?${BASE}&${GAME}&L=vats.3`);
+    const vat = policy('The main rate of VAT');
+    expect(within(vat).getByText('Now 23%')).toBeInTheDocument();
+    for (const radio of within(vat).getAllByRole('radio')) expect(radio).not.toBeChecked();
+    expect(statusOf('Change the headline rate')).toMatch(/^23% · raises £\d+\.\dbn$/);
+  });
+
   it('marks employer National Insurance amber, not red: the tax lock strained', () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     openDecision('Change what employers pay');
-    const card = policy('Put up employer National Insurance');
+    const card = policy('Employer National Insurance');
     expect(
-      within(card).getByText(/^Small: would raise £\d+\.\dbn · headroom would be/),
+      within(card).getByText(/^16%: would raise £\d+\.\dbn · headroom would be/),
     ).toBeInTheDocument();
     expect(card.querySelector('.tag--manifesto')?.textContent).toMatch(
       /^Tax lock: keeps its words, strains its spirit/,
     );
-    fireEvent.click(within(card).getByRole('radio', { name: 'Small 16%' }));
+    fireEvent.click(within(card).getByRole('radio', { name: '16%' }));
     expect(within(card).getByText('Strains the manifesto: The tax lock')).toHaveClass('tag--amber');
     expect(within(card).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
   });
@@ -243,27 +255,25 @@ describe('fine-tune tax and spend: the curated levers', () => {
   it('keeps a decision open while it is chosen in, and open on the next visit', () => {
     const first = at(`/finetune/tax?${BASE}&${GAME}`);
     const panel = openDecision('Tax drink, tobacco and gambling');
-    const alcohol = cardOf(within(panel).getByRole('heading', { name: 'Put up alcohol duty' }));
-    fireEvent.click(within(alcohol).getByRole('radio', { name: 'Small 5% more' }));
+    const alcohol = cardOf(within(panel).getByRole('heading', { name: 'Alcohol duty' }));
+    fireEvent.click(within(alcohol).getByRole('radio', { name: '5% more' }));
     // Still open, and the card where it was: it never jumps from under the pointer.
     expect(decision('Tax drink, tobacco and gambling')).toHaveAttribute('aria-expanded', 'true');
-    expect(policy('Put up alcohol duty')).toBe(alcohol);
+    expect(policy('Alcohol duty')).toBe(alcohol);
     expect(statusOf('Tax drink, tobacco and gambling')).toMatch(/^1 chosen · raises £0\.\dbn$/);
     expect(group(/^Duties 1 chosen · raises £0\.\dbn$/)).toBeInTheDocument();
     // Closed and opened again, the choice is as it was.
     fireEvent.click(decision('Tax drink, tobacco and gambling'));
     openDecision('Tax drink, tobacco and gambling');
-    expect(
-      within(policy('Put up alcohol duty')).getByRole('radio', { name: 'Small 5% more' }),
-    ).toBeChecked();
+    expect(within(policy('Alcohol duty')).getByRole('radio', { name: '5% more' })).toBeChecked();
     first.unmount();
-    // The next visit finds the decision open, both ways in it, and every other decision closed.
+    // The next visit finds the decision open, the scale where it was, and every other decision
+    // closed.
     at(`/finetune/tax?${BASE}&${GAME}&L=alc.5`);
     expect(decision('Tax drink, tobacco and gambling')).toHaveAttribute('aria-expanded', 'true');
-    expect(
-      within(policy('Put up alcohol duty')).getByRole('radio', { name: 'Small 5% more' }),
-    ).toBeChecked();
-    expect(policy('Cut alcohol duty')).toBeInTheDocument();
+    const again = policy('Alcohol duty');
+    expect(within(again).getByRole('radio', { name: '5% more' })).toBeChecked();
+    expect(within(again).getByRole('radio', { name: '5% less' })).not.toBeChecked();
     expect(decision('Change fuel duty')).toHaveAttribute('aria-expanded', 'false');
   });
 
@@ -337,6 +347,26 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(
       screen.getByRole('checkbox', { name: 'Charge capital gains tax on people who leave the UK' }),
     ).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('prices a blocked scale as the swap it offers, and swaps in its nearest level', async () => {
+    // The new 50% rate and the additional rate both set the top rate: one or the other.
+    at(`/finetune/tax?${BASE}&${GAME}&L=it50.1`);
+    const card = policy('The additional rate of income tax');
+    expect(card.className).toMatch(/lever--blocked/);
+    for (const radio of within(card).getAllByRole('radio')) {
+      expect(radio).toHaveAttribute('aria-disabled', 'true');
+    }
+    // One price, the swap's, not one a way.
+    expect([...card.querySelectorAll('.lever__hint-line')].map((l) => l.textContent)).toEqual([
+      expect.stringMatching(/^If you swap them: would (raise|cost) £\d\.\dbn · headroom would be/),
+    ]);
+    fireEvent.click(within(card).getByRole('button', { name: /Swap them/ }));
+    await waitFor(() => expect(search().get('L')).toMatch(/itar\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/it50/);
+    expect(
+      within(policy('The additional rate of income tax')).getByRole('radio', { name: '46%' }),
+    ).toBeChecked();
   });
 
   it('lays out the spending screen, with a minister once a budget moves and the flagships held', () => {
@@ -521,9 +551,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(status).toBeEmptyDOMElement();
     openDecision('Change the rates');
     fireEvent.click(
-      within(policy('Put up the basic rate of income tax')).getByRole('radio', {
-        name: 'Small 21%',
-      }),
+      within(policy('The basic rate of income tax')).getByRole('radio', { name: '21%' }),
     );
     // Nothing while arrow keys may still be moving across the sizes; then only what changed, in
     // the bar's words.
@@ -582,6 +610,12 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     expect(
       screen.getByRole('heading', { level: 3, name: 'Put gambling duties up again' }),
     ).toBeInTheDocument();
+    // The one way on show, as a scale from where the tax is planned to be (ADR-0035).
+    expect(
+      within(policy('Put up employer National Insurance'))
+        .getAllByRole('radio')
+        .map((r) => r.closest('label')?.textContent),
+    ).toEqual(['15% as planned', '16%', '17%', '18%']);
     // Still one primary button, and the cards still price themselves.
     expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
     expect(
@@ -630,15 +664,16 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     window.localStorage.setItem('btc.mode.v1', 'advanced');
     at(`/finetune/tax?${BASE}&${GAME}`);
     const panel = openDecision('Tax drink, tobacco and gambling');
-    const alcohol = cardOf(within(panel).getByRole('heading', { name: 'Put up alcohol duty' }));
-    fireEvent.click(within(alcohol).getByRole('radio', { name: 'Small 5% more' }));
+    const alcohol = cardOf(within(panel).getByRole('heading', { name: 'Alcohol duty' }));
+    fireEvent.click(within(alcohol).getByRole('radio', { name: '5% more' }));
     // The way back to the shortlist is the screen's own button (the footer's switch is withdrawn
     // for now, ADR-0032).
     fireEvent.click(screen.getByRole('button', { name: 'Show only the best ideas' }));
     expect(document.querySelector('main')?.getAttribute('data-mode')).toBe('basic');
+    // In basic mode, the way it was chosen, as a scale from the plan.
     expect(cardTitles()).toContain('Put up alcohol duty');
     expect(
-      within(policy('Put up alcohol duty')).getByRole('radio', { name: 'Small 5% more' }),
+      within(policy('Put up alcohol duty')).getByRole('radio', { name: '5% more' }),
     ).toBeChecked();
     expect(cardTitles()).toHaveLength(9);
     // And back: the decision holding it opens, as it would on a visit that found it chosen.
@@ -650,7 +685,7 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
   it('shows a lever a link chose, and keeps it on show after Undo until the next visit', async () => {
     at(`/finetune/tax?${BASE}&${GAME}&L=alc.5`);
     const alcohol = policy('Put up alcohol duty');
-    expect(within(alcohol).getByRole('radio', { name: 'Small 5% more' })).toBeChecked();
+    expect(within(alcohol).getByRole('radio', { name: '5% more' })).toBeChecked();
     expect(group(/^Duties 1 chosen · raises/)).toBeInTheDocument();
     fireEvent.click(within(alcohol).getByRole('button', { name: 'Undo for Put up alcohol duty' }));
     await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/alc/));

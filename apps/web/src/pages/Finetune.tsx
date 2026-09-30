@@ -171,7 +171,8 @@ function opensOnArrival(decision: FinetuneDecision, start: Record<string, number
  *
  * The tax screen goes tax by tax (ADR-0035): each tax a section, each section the decisions about
  * it, closed until opened, a decision holding a lever chosen before the screen opened open from
- * the start. Opening one shows every choice in it. The spending screen groups by what the money is
+ * the start. Opening one shows every choice in it, a tax that moves both ways as one scale of
+ * levels with the plan among them. The spending screen groups by what the money is
  * for: a group's first few levers show their usual policy, with any lever already chosen showing
  * the policy its way, and the rest wait under one fold, grouped by the lever's family; a policy
  * chosen inside the fold stays where it is until the next visit, so a card never jumps from under
@@ -237,12 +238,19 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
     ruleMissed: outcome.verdicts.some(isMissed),
   }).slice(0, 1);
 
-  const card = (item: FinetuneItem, policy: FinetunePolicy, headingLevel?: 3 | 4) => {
+  // A tax is drawn with its ways, as one scale (ADR-0035); a spending policy, on its own. Keyed by
+  // its first way, so a scale is the same card whichever way it moves.
+  const card = (
+    item: FinetuneItem,
+    policy: FinetunePolicy,
+    headingLevel?: 3 | 4,
+    ways?: readonly FinetunePolicy[],
+  ) => {
     const lever = byCode.get(item.code);
     if (!lever) return null;
     return (
       <PolicyCard
-        key={`${item.code}:${policy.title}`}
+        key={`${item.code}:${(ways?.[0] ?? policy).title}`}
         item={item}
         policy={policy}
         lever={lever}
@@ -253,6 +261,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         moved={moved}
         held={held}
         {...(headingLevel ? { headingLevel } : {})}
+        {...(ways ? { ways } : {})}
       />
     );
   };
@@ -274,13 +283,14 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
     );
   };
 
-  // A decision opened: every choice in it, a flagship's lever as its line, headed a level below
-  // the decision (ADR-0035).
+  // A decision opened: every choice in it, each tax one scale both ways, a flagship's lever as its
+  // line, headed a level below the decision (ADR-0035).
   const decisionBody = (decision: FinetuneDecision) =>
-    decision.items.flatMap((item) => {
+    decision.items.map((item) => {
       const h = held.get(item.code);
-      if (h) return [heldLine(item, h, 4)];
-      return item.policies.map((policy) => card(item, policy, 4));
+      if (h) return heldLine(item, h, 4);
+      const [first] = item.policies;
+      return first ? card(item, first, 4, item.policies) : null;
     });
 
   /**
@@ -313,7 +323,8 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
           continue;
         }
         const policy = basicPolicy(item, lever, start[item.code], DESK.has(item.code));
-        if (policy) shown.push(card(item, policy));
+        // The one way on show, as a scale from where the tax is planned to be.
+        if (policy) shown.push(card(item, policy, undefined, [policy]));
       }
       if (shown.length === 0) return null;
       return (

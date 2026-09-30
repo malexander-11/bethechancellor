@@ -1,4 +1,4 @@
-import { computeOutcome, finetuneItems, policyWay, sizeLabels } from '@btc/engine';
+import { computeOutcome, finetuneItems, policyWay, scaleLevels, sizeLabels } from '@btc/engine';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { finetune, levers, rules, vintage } from '../data';
@@ -282,7 +282,7 @@ describe('LeverControl', () => {
         summaryYear="2029-30"
         onChange={() => undefined}
         displayTitle="Put up the basic rate of income tax"
-        hint={{ text: 'Small: would raise £8.6bn', headroom: '£32.2bn' }}
+        hints={[{ text: 'Small: would raise £8.6bn', headroom: '£32.2bn' }]}
         advice={{ line }}
         notes={[
           { key: 'x', text: 'Overlaps with Something: both move the same base.', warn: true },
@@ -307,7 +307,8 @@ describe('LeverControl', () => {
       expect.stringContaining('Small: would raise £8.6bn · headroom would be £32.2bn'),
     );
     const hint = screen.getByText(/^Small: would raise £8\.6bn/);
-    expect(hint).toHaveClass('lever__hint');
+    expect(hint).toHaveClass('lever__hint-line');
+    expect(hint.parentElement).toHaveClass('lever__hint');
     expect(hint).not.toHaveClass('amount--better');
     // The screen's lead names the adviser once; the card's line is the adviser's words alone, with
     // no badge after them (ADR-0034).
@@ -345,7 +346,7 @@ describe('LeverControl', () => {
         summaryYear="2029-30"
         onChange={(v) => chosen.push(v)}
         displayTitle="Put up the basic rate of income tax"
-        hint={{ text: 'Small: would raise £8.6bn', headroom: '£32.2bn' }}
+        hints={[{ text: 'Small: would raise £8.6bn', headroom: '£32.2bn' }]}
         sizes={sizes}
       />,
     );
@@ -357,6 +358,108 @@ describe('LeverControl', () => {
       screen.getByRole('button', { name: 'Undo for Put up the basic rate of income tax' }),
     );
     expect(chosen).toEqual([5, 0]);
+  });
+
+  it('draws a tax as one scale: its levels in order, the plan among them, a price each way (ADR-0035)', () => {
+    const find = (code: string) => {
+      const lever = levers.find((l) => l.code === code);
+      const item = finetuneItems(finetune).find((i) => i.code === code);
+      if (!lever || !item) throw new Error(`no step-4 lever ${code}`);
+      return {
+        lever,
+        scale: { values: scaleLevels(lever, item.policies), labels: [], scale: true },
+      };
+    };
+    const names = () =>
+      screen.getAllByRole('radio').map((r) => r.closest('label')?.textContent ?? '');
+    const vats = find('vats');
+    const chosen: number[] = [];
+    const rest = render(
+      <LeverControl
+        lever={vats.lever}
+        value={0}
+        summaryYear="2029-30"
+        onChange={(v) => chosen.push(v)}
+        displayTitle="The main rate of VAT"
+        hints={[
+          { text: '21%: would raise £9.9bn', headroom: '£16.6bn' },
+          { text: '19%: would cost £9.9bn', headroom: '−£3.2bn', negative: true },
+        ]}
+        sizes={vats.scale}
+      />,
+    );
+    // The user's own VAT: every level each way, the planned one a radio among them, named by the
+    // level it sets, in a group of their own.
+    const group = screen.getByRole('group', { name: 'Level' });
+    expect(names()).toEqual(['15%', '18%', '19%', '20% as planned', '21%', '22%', '25%']);
+    expect(screen.getByRole('radio', { name: '20% as planned' })).toBeChecked();
+    // At rest the planned radio says where the rate is, so no line above the scale says it again.
+    expect(rest.container.querySelector('.lever__value')).toBeNull();
+    // One line a way, each opening with its nearest level, and both describing the scale.
+    expect(
+      [...rest.container.querySelectorAll('.lever__hint-line')].map((l) => l.textContent),
+    ).toEqual([
+      '21%: would raise £9.9bn · headroom would be £16.6bn',
+      '19%: would cost £9.9bn · headroom would be −£3.2bn',
+    ]);
+    expect(group).toHaveAccessibleDescription(
+      expect.stringContaining(
+        '21%: would raise £9.9bn · headroom would be £16.6bn 19%: would cost £9.9bn',
+      ),
+    );
+    expect(screen.getByText('−£3.2bn')).toHaveClass('amount--worse');
+    fireEvent.click(screen.getByRole('radio', { name: '22%' }));
+    rest.unmount();
+    // Moved, the line above the scale says where from and where to; the plan puts it back.
+    const moved = render(
+      <LeverControl
+        lever={vats.lever}
+        value={2}
+        summaryYear="2029-30"
+        onChange={(v) => chosen.push(v)}
+        displayTitle="The main rate of VAT"
+        sizes={vats.scale}
+      />,
+    );
+    expect(moved.container.querySelector('.lever__value')?.textContent).toBe('20% → 22%+2 points');
+    expect(screen.getByRole('radio', { name: '22%' })).toBeChecked();
+    expect(moved.container.querySelector('.lever__hint')).toBeNull();
+    fireEvent.click(screen.getByRole('radio', { name: '20% as planned' }));
+    expect(chosen).toEqual([2, 0]);
+    moved.unmount();
+    // Business rates have no level of their own: the plan is simply "As planned".
+    const brates = find('brates');
+    const rates = render(
+      <LeverControl
+        lever={brates.lever}
+        value={0}
+        summaryYear="2029-30"
+        onChange={() => undefined}
+        sizes={brates.scale}
+      />,
+    );
+    expect(names()).toEqual([
+      '5% less',
+      '2% less',
+      '1% less',
+      'As planned',
+      '1% more',
+      '2% more',
+      '5% more',
+    ]);
+    rates.unmount();
+    // Inheritance tax names its own levels, abolition at one end.
+    const iht = find('iht');
+    render(
+      <LeverControl
+        lever={iht.lever}
+        value={0}
+        summaryYear="2029-30"
+        onChange={() => undefined}
+        sizes={iht.scale}
+      />,
+    );
+    expect(names()).toEqual(['Abolish (0%)', '30%', '35%', '40% as planned', '45%', '50%']);
   });
 
   it('says what it would replace when the lever is set the other way, and what a stray setting is (Phase 26)', () => {

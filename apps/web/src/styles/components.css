@@ -1339,6 +1339,25 @@ label.choice {
   font-variant-numeric: tabular-nums;
 }
 
+/*
+ * A tax's one scale (ADR-0035): up to seven levels, each radio as narrow as its level allows, so
+ * the scale takes two rows on a phone; the planned level says so beneath it.
+ */
+.lever__sizes--scale {
+  gap: 6px;
+}
+
+.lever__sizes--scale .lever__size {
+  gap: 6px;
+  min-width: 64px;
+  padding: 4px 10px 4px 8px;
+}
+
+/* One line a way at rest (ADR-0035): what the nearest level would do, each on its own line. */
+.lever__hint-line {
+  display: block;
+}
+
 /* The lever set the other way: what choosing here would replace, in plain ink, with no price. */
 .lever__replaces {
   color: var(--ink-2);

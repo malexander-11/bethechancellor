@@ -11,6 +11,7 @@ import {
   leadPolicy,
   policyCount,
   priceMove,
+  scaleLevels,
   setByFlagship,
   shortlistOf,
   shortlistPolicy,
@@ -263,6 +264,27 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     expect(sizeIndex(vat.policies[0]!, 2)).toBe(1);
     expect(sizeIndex(vat.policies[0]!, 3)).toBeUndefined();
     expect(sizeIndex(vat.policies[1]!, -5)).toBe(2);
+  });
+
+  it('lays a tax’s ways out as one scale, the plan among its levels (ADR-0035)', () => {
+    const levels = (code: string) => {
+      const item = finetuneItems(file).find((i) => i.code === code);
+      if (!item) throw new Error(`no step-4 lever ${code}`);
+      return scaleLevels(lever(code), item.policies);
+    };
+    // The user's own VAT: 15%, 18%, 19%, 20% as planned, 21%, 22% and 25%.
+    expect(levels('vats')).toEqual([-5, -2, -1, 0, 1, 2, 5]);
+    expect(levels('iht')).toEqual([-40, -10, -5, 0, 5, 10]);
+    // A tax that moves one way starts from the plan: car tax at £200, £210, £220 or £250.
+    expect(levels('ved')).toEqual([0, 10, 20, 50]);
+    // Basic mode's one way on show is a scale of its own.
+    const nicer = finetuneItems(file).find((i) => i.code === 'nicer');
+    expect(scaleLevels(lever('nicer'), nicer?.policies.slice(0, 1) ?? [])).toEqual([0, 1, 2, 3]);
+    // No scale runs past seven levels, so none takes more than two rows on a phone.
+    for (const item of finetuneItems(file, 'tax')) {
+      if (lever(item.code).control.kind === 'toggle') continue;
+      expect(levels(item.code).length, item.code).toBeLessThanOrEqual(7);
+    }
   });
 
   it('holds a lever for a flagship only at the flagship’s own value', () => {

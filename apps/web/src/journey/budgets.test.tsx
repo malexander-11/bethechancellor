@@ -81,19 +81,22 @@ const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] =
   // the desk went with it (tax 611 and 776, spending 578 and 759; ADR-0027). With no badges
   // (ADR-0034): tax 592 and 750, spending 554 and 723. Nine taxes taken off the table, and the
   // walk's levy now two points on employer National Insurance (ADR-0035): tax 585 and 741. Then
-  // tax by tax, every decision closed until opened (ADR-0035): 512 at rest; the tuned game opens
-  // the six decisions holding its choices, each showing every choice in it: 1,176.
-  ['/finetune/tax', 565, GAME, 'advanced'],
-  ['/finetune/tax', 1295, TUNED, 'advanced'],
+  // tax by tax, every decision closed until opened (ADR-0035): 512, with the decision on what
+  // employers pay open for the walk's two points; the tuned game opens the six decisions holding
+  // its choices, each showing every choice in it: 1,176. Then one scale a tax, both ways on one
+  // card: 405 and 1,030.
+  ['/finetune/tax', 450, GAME, 'advanced'],
+  ['/finetune/tax', 1135, TUNED, 'advanced'],
   ['/finetune/spending', 610, GAME, 'advanced'],
   ['/finetune/spending', 800, TUNED, 'advanced'],
   // Basic mode (Phase 27): the advisers' shortlist, and whatever the game has chosen besides
   // (tax 343 and 492, spending 424 and 589); with no badges, tax 329 and 471, spending 403 and 556.
   // Employer National Insurance and CGT at death picked in place of the levy and alignment, a
   // scale of sizes where a tick was (ADR-0035): tax 354 and 494. Then grouped by tax, and the
-  // tuned game's reduced VAT rate in place of the sugar tax: 353 and 540.
+  // tuned game's reduced VAT rate in place of the sugar tax: 353 and 540; each way on show as a
+  // scale from the plan: 352 and 536.
   ['/finetune/tax', 390, GAME, 'basic'],
-  ['/finetune/tax', 595, TUNED, 'basic'],
+  ['/finetune/tax', 590, TUNED, 'basic'],
   ['/finetune/spending', 445, GAME, 'basic'],
   ['/finetune/spending', 615, TUNED, 'basic'],
   // The review 204 and Budget day 190 with no badges, against 213 and 199; 196 and 181 with

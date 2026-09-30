@@ -142,52 +142,53 @@ export function MethodologyPage() {
         bundle of the game&rsquo;s own levers that no other option moves, priced by the engine
         against the Budget as it stands with the headroom it would leave, two that count the same
         money never both chosen. On the fine-tuning screens every lever is a policy under a title
-        that says what it does, a tick or a choice of small, medium and large sizes (putting up VAT
-        is 21%, 22% or 25%), with one adviser&rsquo;s line and, before it is chosen, what its
-        smallest size would do and the headroom that would leave. A lever that moves both ways is
-        two policies, and choosing one clears the other; a lever a chosen flagship already sets
-        shows once, as a line with a way back to that flagship. There is no slider anywhere and no
-        desk: every lever the desk once held is a policy on these two screens, and with no game only
-        the cover and the briefing open. Every screen opens with one heading and one instruction,
-        and for now the sources are listed on the About page rather than beside each figure; the
-        guide is chrome and quotes no figure that is not sourced. The advisers, the Prime Minister
-        and the ministers are roles, not people; a briefing that cites a public document is
-        commentary, and a judgement nobody published is the game&rsquo;s own and never produces a
-        number. Today&rsquo;s estimate follows a stated rule: the latest market or independent
-        reading minus the OBR&rsquo;s March assumption, rounded to the step the assumption moves in
-        (interest rates up three-quarters of a point, RPI inflation up half a point, growth on the
-        OBR&rsquo;s path), turned into headroom by the OBR&rsquo;s own sensitivities: about £6.8
-        billion in 2029-30, against £23.6 billion in March. Each size shows the level it moves to
-        (21% on VAT, £12,670 on the personal allowance), but the engine costs the change, exactly as
-        before: levels are display only. VAT base-broadening toggles use HMRC&rsquo;s cost-of-relief
-        estimates, which HMRC says do not represent what abolishing a relief would raise; abolishing
-        inheritance tax removes the OBR&rsquo;s whole receipts line; reversing the October 2024
-        capital gains tax rise uses the Treasury&rsquo;s own costing of the package. The revenue
-        menu a Chancellor actually weighs is on the fine-tuning screens too, each option a published
-        figure: the employer National Insurance threshold, vehicle excise duty, air passenger duty,
-        tobacco duties, the residence nil-rate band, and employer National Insurance on pension
-        contributions from HMRC&rsquo;s private pension statistics (£14.3 billion in 2024-25, less
-        the £6.5 billion on public sector schemes, which would only move money from departments to
-        the Treasury, taken to today&rsquo;s 15% rate). Every card built on HMRC&rsquo;s cost of a
-        relief reads &ldquo;raises at most&rdquo; and says why, and the markets count it as a figure
-        nobody has certified. Two measures that count the same money (taxing gains at death and
-        charging people who leave the UK, for one) cannot both be chosen, and there are fifteen such
-        pairs, each with a text that reads from either card. Employer-side National Insurance is not
-        a manifesto red line here, on the government&rsquo;s own reading of the lock; the Political
-        Adviser says on each such lever that the reading is contested. Phase 12 added the menu the
-        Budget 2026 reporting says is on the table: ending the capital gains write-off at death, a
-        £1.5 million council tax surcharge band, reversing the farm and family-business relief
-        reform, two points on the bank surcharge, the energy profits levy package again, the
-        self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance package,
-        unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and business
-        rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated
-        calculation on one, and the data records which. Nine taxes were taken off the table on 30
-        September 2026: the health and social care levy, insurance premium tax, dropping the
-        salary-sacrifice cap, taxing capital gains at income tax rates, a lower VAT threshold,
-        National Insurance on landlords&rsquo; rent, a higher tax on selling a business, adding back
-        last year&rsquo;s cancelled fuel duty rise and undoing last year&rsquo;s gambling duty
-        rises. Their costings are kept for the record, and an old link that carries one opens
-        without it.
+        that says what it does, with one adviser&rsquo;s line and, before it is chosen, what it
+        would do and the headroom that would leave. A tax is a tick or one scale of levels, where it
+        is planned to be among them (VAT at 15%, 18%, 19%, 20% as planned, 21%, 22% or 25%), priced
+        at the nearest level each way; a spending budget is a tick or a choice of small, medium and
+        large sizes, and one that moves both ways is two policies, choosing one clearing the other.
+        A lever a chosen flagship already sets shows once, as a line with a way back to that
+        flagship. There is no slider anywhere and no desk: every lever the desk once held is a
+        policy on these two screens, and with no game only the cover and the briefing open. Every
+        screen opens with one heading and one instruction, and for now the sources are listed on the
+        About page rather than beside each figure; the guide is chrome and quotes no figure that is
+        not sourced. The advisers, the Prime Minister and the ministers are roles, not people; a
+        briefing that cites a public document is commentary, and a judgement nobody published is the
+        game&rsquo;s own and never produces a number. Today&rsquo;s estimate follows a stated rule:
+        the latest market or independent reading minus the OBR&rsquo;s March assumption, rounded to
+        the step the assumption moves in (interest rates up three-quarters of a point, RPI inflation
+        up half a point, growth on the OBR&rsquo;s path), turned into headroom by the OBR&rsquo;s
+        own sensitivities: about £6.8 billion in 2029-30, against £23.6 billion in March. Each size
+        shows the level it moves to (21% on VAT, £12,670 on the personal allowance), but the engine
+        costs the change, exactly as before: levels are display only. VAT base-broadening toggles
+        use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not represent what abolishing
+        a relief would raise; abolishing inheritance tax removes the OBR&rsquo;s whole receipts
+        line; reversing the October 2024 capital gains tax rise uses the Treasury&rsquo;s own
+        costing of the package. The revenue menu a Chancellor actually weighs is on the fine-tuning
+        screens too, each option a published figure: the employer National Insurance threshold,
+        vehicle excise duty, air passenger duty, tobacco duties, the residence nil-rate band, and
+        employer National Insurance on pension contributions from HMRC&rsquo;s private pension
+        statistics (£14.3 billion in 2024-25, less the £6.5 billion on public sector schemes, which
+        would only move money from departments to the Treasury, taken to today&rsquo;s 15% rate).
+        Every card built on HMRC&rsquo;s cost of a relief reads &ldquo;raises at most&rdquo; and
+        says why, and the markets count it as a figure nobody has certified. Two measures that count
+        the same money (taxing gains at death and charging people who leave the UK, for one) cannot
+        both be chosen, and there are fifteen such pairs, each with a text that reads from either
+        card. Employer-side National Insurance is not a manifesto red line here, on the
+        government&rsquo;s own reading of the lock; the Political Adviser says on each such lever
+        that the reading is contested. Phase 12 added the menu the Budget 2026 reporting says is on
+        the table: ending the capital gains write-off at death, a £1.5 million council tax surcharge
+        band, reversing the farm and family-business relief reform, two points on the bank
+        surcharge, the energy profits levy package again, the self-employed Class 4 rate, VAT off
+        domestic gas, another HMRC compliance package, unfreezing the Plan 2 student loan threshold,
+        defence at 3% of GDP from 2027, and business rates as a share of the OBR&rsquo;s own line.
+        Each is a published row or a stated calculation on one, and the data records which. Nine
+        taxes were taken off the table on 30 September 2026: the health and social care levy,
+        insurance premium tax, dropping the salary-sacrifice cap, taxing capital gains at income tax
+        rates, a lower VAT threshold, National Insurance on landlords&rsquo; rent, a higher tax on
+        selling a business, adding back last year&rsquo;s cancelled fuel duty rise and undoing last
+        year&rsquo;s gambling duty rises. Their costings are kept for the record, and an old link
+        that carries one opens without it.
       </p>
 
       <h2>Spending levers</h2>

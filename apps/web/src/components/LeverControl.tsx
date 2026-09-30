@@ -16,7 +16,7 @@ import {
 } from '@btc/engine';
 import { vintage } from '../data';
 import { Milestones } from './Milestones';
-import { useId, useState, type ReactNode } from 'react';
+import { Fragment, useId, useState, type ReactNode } from 'react';
 import { AdviceLine } from './AdviceLine';
 import { BlockedNotice } from './BlockedNotice';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
@@ -92,6 +92,18 @@ export function plannedWords(lever: Lever): string {
   const { level, labels } = lever.control;
   if (level || labels) return `${sizeWords(lever, lever.control.default)} as planned`;
   return 'As planned';
+}
+
+/** A scale's planned radio (ADR-0035): the level, and beneath it that it is the plan. */
+function PlannedLevel({ lever }: { lever: Lever }) {
+  const { level, labels } = lever.control;
+  if (!level && !labels) return <span className="lever__size-name">As planned</span>;
+  return (
+    <>
+      <span className="lever__size-name">{sizeWords(lever, lever.control.default)}</span>{' '}
+      <span className="lever__size-level">as planned</span>
+    </>
+  );
 }
 
 /** A spending line priced as a share of its forecast path (departments, benefits, investment). */
@@ -308,18 +320,31 @@ export interface Blocked {
 
 /**
  * A policy's sizes on a step-4 card (Phase 26, ADR-0027): the settings it offers, smallest first
- * and all one way, and what they are called.
+ * and all one way, and what they are called. On a tax, a scale (ADR-0035): every level both ways
+ * and where the lever is planned to be, low to high, each radio named by the level it sets.
  */
 export interface SizeChoice {
-  /** Settings of the lever. One is a tick; two or three are radios. */
+  /** Settings of the lever. One is a tick; two or three are radios; a scale's include the plan. */
   values: readonly number[];
-  /** Small and Large; or Small, Medium and Large. None for a tick. */
+  /** Small and Large; or Small, Medium and Large. None for a tick or a scale. */
   labels: readonly string[];
+  /** A tax's one scale (ADR-0035): the planned level is a radio among the rest. */
+  scale?: boolean;
   /**
    * The lever is set the other way, by the lever's other policy: its title and where it stands.
    * Choosing a size here replaces it, so this card shows no price and no effect of its own.
    */
   replaces?: string;
+}
+
+/**
+ * What a size would do while the lever rests (Phase 24, one line a way since ADR-0035): in the
+ * conditional and in plain ink, and the headroom that would leave, red only below nought.
+ */
+export interface Hint {
+  text: string;
+  headroom?: string;
+  negative?: boolean;
 }
 
 /** The plain line a relief cost carries on its card (Phase 25): no number of its own. */
@@ -342,7 +367,7 @@ export function LeverControl({
   redLines = [],
   chosen,
   displayTitle,
-  hint,
+  hints = [],
   advice,
   notes = [],
   blocked,
@@ -362,12 +387,12 @@ export function LeverControl({
   /** A plain title of the curated screens' own (Phase 24): the control's name, in place of the lever's. */
   displayTitle?: string;
   /**
-   * What the adviser's usual move would do, while the lever rests (Phase 24): the numbers in view
-   * before anything moves, in the conditional and in plain ink, so it cannot read as money already
-   * in the Budget (Phase 25). The headroom it would leave turns red only below nought. Once the
-   * lever has moved, the effect line takes its place.
+   * What a size would do, while the lever rests (Phase 24): the numbers in view before anything
+   * moves, in the conditional and in plain ink, so they cannot read as money already in the Budget
+   * (Phase 25). A scale gives one line a way (ADR-0035). Once the lever has moved, the effect line
+   * takes their place.
    */
-  hint?: { text: string; headroom?: string; negative?: boolean };
+  hints?: readonly Hint[];
   /**
    * One adviser's line on the lever (Phase 24). On the fine-tuning screens the screen's lead names
    * the adviser once, so a card's line carries no name (Phase 25).
@@ -417,6 +442,7 @@ export function LeverControl({
   // priority was dropped).
   const otherWay = sizes.replaces !== undefined;
   const tick = sizes.values.length === 1;
+  const scale = sizes.scale === true;
   const offGrid = !isDefault && !otherWay && !sizes.values.some((v) => Math.abs(v - value) < 1e-9);
   const improvement =
     effect && summaryYear && !isFinancialTransaction
@@ -439,7 +465,7 @@ export function LeverControl({
           .filter((p) => p !== 0)
           .map((p) => formatLeverValue(lever, p))
       : null;
-  const showHint = hint !== undefined && isDefault;
+  const showHint = hints.length > 0 && isDefault;
   // The control is described by the one-line headline and, once it has moved, by what it does;
   // at rest, by what its smallest size would do.
   const hasEffectLine =
@@ -565,18 +591,24 @@ export function LeverControl({
         {beyondSource ? <span className="lever__effect-note"> {sourceRange.text}</span> : null}
       </p>
     ) : null;
-  const hintLine =
-    showHint && hint ? (
-      <p className="lever__effect lever__hint" id={`${id}-effect`}>
-        {hint.text}
-        {hint.headroom ? (
-          <>
-            {' · headroom would be '}
-            <span className={hint.negative ? 'amount--worse' : undefined}>{hint.headroom}</span>
-          </>
-        ) : null}
-      </p>
-    ) : null;
+  const hintLine = showHint ? (
+    <p className="lever__effect lever__hint lever__hints" id={`${id}-effect`}>
+      {hints.map((hint, i) => (
+        <Fragment key={hint.text}>
+          {i > 0 ? ' ' : null}
+          <span className="lever__hint-line">
+            {hint.text}
+            {hint.headroom ? (
+              <>
+                {' · headroom would be '}
+                <span className={hint.negative ? 'amount--worse' : undefined}>{hint.headroom}</span>
+              </>
+            ) : null}
+          </span>
+        </Fragment>
+      ))}
+    </p>
+  ) : null;
   // The lever is set the other way (Phase 26): choosing a size here replaces that policy.
   const replacesLine = otherWay ? (
     <p className="lever__effect lever__replaces" id={`${id}-effect`}>
@@ -674,47 +706,55 @@ export function LeverControl({
       </div>
       {!isToggle ? (
         <>
-          <div className="lever__value">
-            {change?.real ? (
-              // Spending: growth a year after rising prices, in words (Phase 25); the cash budget
-              // waits under "More about this".
-              <strong className="lever__growth">
-                {growthWords(change.real.fromPct, change.real.toPct, !isDefault)}
-              </strong>
-            ) : change ? (
-              isDefault ? (
-                // No "20% → 20%" at rest (Phase 25): the level, as planned.
-                <>
-                  <strong className="lever__level-to">{change.to}</strong>
-                  {change.note ? <span className="lever__level-note"> {change.note}</span> : null}
-                  <span className="lever__delta">as planned</span>
-                </>
+          {/* At rest a scale's planned radio names the level, so the line waits for a move. */}
+          {scale && isDefault ? null : (
+            <div className="lever__value">
+              {change?.real ? (
+                // Spending: growth a year after rising prices, in words (Phase 25); the cash budget
+                // waits under "More about this".
+                <strong className="lever__growth">
+                  {growthWords(change.real.fromPct, change.real.toPct, !isDefault)}
+                </strong>
+              ) : change ? (
+                isDefault ? (
+                  // No "20% → 20%" at rest (Phase 25): the level, as planned.
+                  <>
+                    <strong className="lever__level-to">{change.to}</strong>
+                    {change.note ? <span className="lever__level-note"> {change.note}</span> : null}
+                    <span className="lever__delta">as planned</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="lever__level-from">{change.from}</span>
+                    <span className="lever__arrow" aria-hidden="true">
+                      {' → '}
+                    </span>
+                    <strong className="lever__level-to">{change.to}</strong>
+                    {change.note ? <span className="lever__level-note"> {change.note}</span> : null}
+                    <span className="lever__delta">{formatLeverValue(lever, value)}</span>
+                  </>
+                )
               ) : (
                 <>
-                  <span className="lever__level-from">{change.from}</span>
-                  <span className="lever__arrow" aria-hidden="true">
-                    {' → '}
-                  </span>
-                  <strong className="lever__level-to">{change.to}</strong>
-                  {change.note ? <span className="lever__level-note"> {change.note}</span> : null}
-                  <span className="lever__delta">{formatLeverValue(lever, value)}</span>
+                  <strong>{isDefault ? 'As planned' : formatLeverValue(lever, value)}</strong>
+                  {!isDefault && lever.control.formatLabel ? ` ${lever.control.formatLabel}` : ''}
                 </>
-              )
-            ) : (
-              <>
-                <strong>{isDefault ? 'As planned' : formatLeverValue(lever, value)}</strong>
-                {!isDefault && lever.control.formatLabel ? ` ${lever.control.formatLabel}` : ''}
-              </>
-            )}
-          </div>
+              )}
+            </div>
+          )}
           {tick ? null : (
             // Small, Medium and Large (Phase 26): native radios, so arrow keys move between them;
-            // the size and its setting on two lines, with no symbol read aloud between.
-            <fieldset className="lever__sizes" aria-describedby={describedBy}>
+            // the size and its setting on two lines, with no symbol read aloud between. A scale's
+            // radios are named by the level each sets, the planned one saying so (ADR-0035).
+            <fieldset
+              className={`lever__sizes${scale ? ' lever__sizes--scale' : ''}`}
+              aria-describedby={describedBy}
+            >
               {/* The card already carries the title; its sizes are a group of their own. */}
-              <legend className="sr-only">Size</legend>
+              <legend className="sr-only">{scale ? 'Level' : 'Size'}</legend>
               {sizes.values.map((v, i) => {
                 const on = Math.abs(v - value) < 1e-9;
+                const planned = scale && Math.abs(v - lever.control.default) < 1e-9;
                 return (
                   <label key={v} className={`lever__size${on ? ' lever__size--on' : ''}`}>
                     <input
@@ -726,8 +766,16 @@ export function LeverControl({
                       onChange={() => change_(v)}
                     />
                     <span className="lever__size-text">
-                      <span className="lever__size-name">{sizes.labels[i]}</span>{' '}
-                      <span className="lever__size-level">{sizeWords(lever, v)}</span>
+                      {!scale ? (
+                        <>
+                          <span className="lever__size-name">{sizes.labels[i]}</span>{' '}
+                          <span className="lever__size-level">{sizeWords(lever, v)}</span>
+                        </>
+                      ) : planned ? (
+                        <PlannedLevel lever={lever} />
+                      ) : (
+                        <span className="lever__size-name">{sizeWords(lever, v)}</span>
+                      )}
                     </span>
                   </label>
                 );
