@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- Budget day's reception meters are one picture each, named in words, rather than list items with no
+  list, so every screen now passes the end-to-end suite's accessibility checks.
 - CI runs five jobs in parallel, each from a clean install: the static checks (lint, format, types),
   the data checks, every Vitest project with the coverage thresholds enforced
   (`npm run test:coverage`), the production build, and the end-to-end suite. The web build no longer

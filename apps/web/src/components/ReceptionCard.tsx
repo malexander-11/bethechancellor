@@ -57,11 +57,12 @@ export function ReceptionCard({
           {title}
         </h3>
       </div>
-      <ol className="meter" role="img" aria-label={`${rating} of 5: ${label}`}>
+      {/* One picture, named in words: its five steps are drawing, not a list to read. */}
+      <div className="meter" role="img" aria-label={`${rating} of 5: ${label}`}>
         {[1, 2, 3, 4, 5].map((step) => (
-          <li key={step} className={`meter__step${step <= rating ? ' meter__step--lit' : ''}`} />
+          <span key={step} className={`meter__step${step <= rating ? ' meter__step--lit' : ''}`} />
         ))}
-      </ol>
+      </div>
       <p className="reception__label">
         {label} <span className="reception__score">{rating} of 5</span>
       </p>

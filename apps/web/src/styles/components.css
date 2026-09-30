@@ -703,8 +703,6 @@ label.choice {
   display: flex;
   gap: 4px;
   margin: 0 0 8px;
-  padding: 0;
-  list-style: none;
   color: var(--meter, var(--ink));
 }
 
