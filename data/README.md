@@ -108,10 +108,12 @@ pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows 
   budget"): how a Budget-day reason names its causes after "Because of", and how the speech names
   the measure.
 - **Two levers that count the same money.** An interaction with `severity: "excludes"`, authored
-  once per pair (the validator checks): step 4 and the flagship screens let only one be chosen at a
-  time and offer a swap. The text must read from either card and in either direction (Phase 26).
-  A link that carries both still opens, and each card says it is counted twice. `info` and `warn`
-  remain notes.
+  once per pair (the validator checks): only one can be chosen at a time. The flagship screens offer
+  a swap; on step 4 two ticks in one tax decision are one choice among radios (`alternatives`,
+  below), and anywhere else choosing one takes the other out and says so first (ADR-0036). The text
+  must read from either card and in either direction (Phase 26), each sentence at most twenty words,
+  since it leads a card. A link that carries both still opens, and each card says it is counted
+  twice. `info` and `warn` remain notes.
 - **A note on growth.** A `macro` consideration may carry `growth: true`: what the measure may do
   to growth and the wider economy, in words. The markets' fold on Budget day reads the biggest
   moved measure's; the schema refuses the flag on any other kind of note.
@@ -362,20 +364,20 @@ enforces:
 
 ### Fine-tuning (`data/journey/finetune.json`, ADR-0025, ADR-0027, ADR-0035)
 
-Two sides, `tax` and `spending`, each with its screen's `title` (at most four words), its `lead`
-and its `shortlistLead` (basic mode's lead, Phase 27; each at most fourteen words and 120
-characters), the `adviser` who speaks there, and its `groups`. A spending group holds `items`. A tax
-group is a tax, `{ id, label, decisions }`, and each decision `{ id, title, items }` holds one to
-seven of its items under a title of at most six words (ADR-0035); no two tax groups share an id or a
-label, and no two decisions an id. Since Phase 26 every live policy lever is an item, once: 67 on
-the tax side and 32 on the spending side. An item is the lever's
-`code`, its plain `name` for the review and the notes ("The main rate of VAT"; a toggle may leave it
-out and go by its policy's title), and one or two `policies`, each `{ title, sizes, advice }`: a
-title that says what the policy does ("Put up VAT", at most twelve words), the settings it comes in,
-smallest first, and the adviser's line, a `SimulatedLine` with at least one source. The first
-policy is the usual way, the one that improves the public finances (taxes up, spending down); a
-lever that moves both ways may carry a second policy the other way, and choosing one clears the
-other. Rules the validator enforces:
+Two sides, `tax` and `spending`, each with its screen's `title` (at most four words), its `lead` and
+its `shortlistLead` (basic mode's lead, Phase 27; each at most fourteen words and 120 characters),
+the `adviser` who speaks there, and its `groups`. A spending group holds `items`. A tax group is a
+tax, `{ id, label, decisions }`, and each decision `{ id, title, alternatives?, items }` holds one
+to eight of its items under a title of at most six words (ADR-0035, ADR-0036); no two tax groups
+share an id or a label, and no two decisions an id. Since Phase 26 every live policy lever is an
+item, once: 67 on the tax side and 32 on the spending side. An item is the lever's `code`, its plain
+`name` for the review and the notes ("The main rate of VAT"; a toggle may leave it out and go by its
+policy's title), and one or two `policies`, each `{ title, sizes, advice }`: a title that says what
+the policy does ("Put up VAT", at most twelve words), the settings it comes in, smallest first, and
+the adviser's line, a `SimulatedLine` with at least one source. The first policy is the usual way,
+the one that improves the public finances (taxes up, spending down); a lever that moves both ways
+may carry a second policy the other way, and choosing one clears the other. Rules the validator
+enforces:
 
 - **A live lever on its own side, once.** Tax items are tax levers; spending items are spend or
   welfare levers; no code appears twice in the file, so both ways of a lever share a place.
@@ -389,6 +391,13 @@ other. Rules the validator enforces:
 - **A tax sits in its family's section**: a tax group's `label` is the family (`group`) of every
   lever in it, so each family has one section (`tax lever X is in the F family, not S`). Who pays a
   tax is its incidence tag, read on the review and on Budget day.
+- **Ticks that contradict each other in a decision are one choice** (`alternatives`, ADR-0036). A
+  decision may list sets `{ name, codes }`, each two to four of its ticks, named for the question
+  the set answers (“The wealth tax”, at most 60 characters). Every member excludes every other
+  member and nothing outside the set, none is set by a flagship, the members sit side by side in the
+  decision’s order, and no tick is in two sets. The validator also names two ticks in one decision
+  that exclude only each other but are not a set. The screen draws a set as radios with “As planned”
+  first.
 - **The adviser exists and speaks on this step** (`finetune` in `advisers.json`).
 
 On the spending screen labels follow the count of sizes: one is a tick, two are Small and Large,
@@ -408,9 +417,10 @@ modest, tiny) only where it is £1bn or less even at the largest. The page price
 against the Budget as it stands; no figure is authored.
 
 Where two levers' own texts say they double count, cancel or are "pick one", the pair is an
-`excludes` interaction (above), with a text that reads from either card; fifteen pairs today, since
-the nine taxes retired in ADR-0035 took seven with them.
-Pairs whose texts say only that the combined figure is approximate stay `warn`.
+`excludes` interaction (above), with a text that reads from either card; seventeen pairs today: the
+nine taxes retired in ADR-0035 took seven with them, and undoing the 2024 capital gains rise counts
+against both rates on gains (ADR-0036). Pairs whose texts say only that the combined figure is
+approximate stay `warn`.
 
 A side may carry `notes` (Phase 25): lines under the screen's lead that its 120 characters cannot
 hold, such as how long the spending settlements run, each `{ text, badge, sources }` with the text

@@ -1,8 +1,8 @@
 # ADR-0035: Taxes by tax
 
-Date: 2026-09-30. Status: accepted. Revises ADR-0015, ADR-0018, ADR-0019, ADR-0020, ADR-0021,
-ADR-0022, ADR-0024, ADR-0025, ADR-0026, ADR-0027 and ADR-0028, each of which carries a dated
-revision pointing here.
+Date: 2026-09-30. Status: accepted; revised the same day (below, ADR-0036). Revises ADR-0015,
+ADR-0018, ADR-0019, ADR-0020, ADR-0021, ADR-0022, ADR-0024, ADR-0025, ADR-0026, ADR-0027 and
+ADR-0028, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -232,3 +232,15 @@ for child benefit.
   card ran one. Cards mount only in an open decision, and the engine's cache holds 256 outcomes.
 - **Old links** carrying a retired tax show the unknown-code note, as those carrying the levers
   shelved in Phase 12 do. A friendlier line is a possible follow-up.
+
+## Revision (2026-09-30): contradictions under one decision (ADR-0036)
+
+“Charge 1% VAT on everything now zero-rated” moves from Make small changes to Remove an exemption,
+beside the five exemptions it covers, so Make small changes holds three choices and Remove an
+exemption eight; a decision now holds one to eight taxes. Two ticks in one decision that contradict
+only each other are one choice among radios, “As planned” first: the wealth tax, the rate of pension
+tax relief, the rates on dividends, savings and rent, and capital gains that go untaxed. Anywhere
+else no card is blocked by a tax that counts the same money: it says first what choosing it would
+take out, and its prices count the other as gone, where this ADR’s blocked scale priced the swap and
+offered Swap. Undoing the 2024 capital gains rise now excludes both rates on gains, so seventeen
+pairs count the same money, not fifteen.

@@ -78,36 +78,36 @@ or a choice of sizes shown with their levels, the usual policy of each group's f
 show and the rest a fold away under their families. Every card carries its adviser's line; one
 adviser speaks above the cards when something needs saying; red and amber manifesto tags, and a
 minister on every budget you move. In basic mode each screen shows its adviser's shortlist instead,
-with no folds. Two policies that count the same money cannot both be chosen; a lever a chosen
-flagship already sets shows once, as a line with a way back to that flagship. Every lever is there,
-and the menu is the one a Chancellor actually weighs: employer National Insurance, pensions, the
-smaller duties, capital-tax reliefs, going further on recent rises, capital gains at death, a lower
-council tax surcharge band, the bank surcharge, the energy profits levy again, the self-employed
-rate up or down, a lower personal allowance, VAT off gas, another compliance package, business
-rates, the Prime Minister's schemes and defence at 3% sooner. **Deliver the Budget**: the whole
-Budget read back with a way to change every part, how the headroom got from the estimate to the bar,
-the Prime Minister's sign-off when
-something needs saying, and one red button. **Feedback**: the Budget in three sentences (what you
-prioritised, who pays, what you accepted or kept), your backbenchers, the markets and the public
-each rating it out of five, with one reason that agrees with the rating, the choices that caused it
-and a line for the other side, and a close that says which ambitions survived and who paid; the
-speech, five households and the Budget documents one fold away. Share the link. The menu was read
-against the Budget reporting again on 21 September 2026: the electricity VAT zero rate that HMRC
-says ends in March 2027, National Insurance for working pensioners and for LLP partners, and
-CenTax's package for taxing gains like income joined it; what has no published costing is named in
-words instead. On 23 September 2026 the think tanks' own lists were read and nineteen more cards
-built from their documents, each a stated figure from its own document: a levy on banks' reserves,
-National Insurance on rents, a 2% wealth tax, a sugar and salt tax, council tax on the top bands,
-the NICs upper earnings limit, 1% VAT on zero-rated goods, a pension lump-sum cap, stamp duty
-abolished on main homes, a child tax allowance, and six welfare cards from housing support relinked
-to rents to the Centre for Social Justice's benefit reset, now in step 4's Benefits group. Ten of
-those cards cannot take effect from April 2027, the wealth taxes among them, and the three
-think-tank capital gains cards cannot be collected until 2028-29, so each of the thirteen wears a
-sourced earliest start and counts nothing before it. On 30 September 2026 the user took nine taxes
-off the table, among them the health and social care levy, insurance premium tax, CenTax's package
-for taxing gains like income and National Insurance on rents, so eleven cards with an earliest start
-are left; each retired tax is kept for the record, and an old link carrying one opens without it
-(ADR-0035).
+with no folds. Two policies that count the same money cannot both be chosen: in one decision they
+are one choice among radios, and elsewhere choosing one takes the other out and says so first
+(ADR-0036). A lever a chosen flagship already sets shows once, as a line with a way back to that
+flagship. Every lever is there, and the menu is the one a Chancellor actually weighs: employer
+National Insurance, pensions, the smaller duties, capital-tax reliefs, going further on recent
+rises, capital gains at death, a lower council tax surcharge band, the bank surcharge, the energy
+profits levy again, the self-employed rate up or down, a lower personal allowance, VAT off gas,
+another compliance package, business rates, the Prime Minister's schemes and defence at 3% sooner.
+**Deliver the Budget**: the whole Budget read back with a way to change every part, how the headroom
+got from the estimate to the bar, the Prime Minister's sign-off when something needs saying, and one
+red button. **Feedback**: the Budget in three sentences (what you prioritised, who pays, what you
+accepted or kept), your backbenchers, the markets and the public each rating it out of five, with
+one reason that agrees with the rating, the choices that caused it and a line for the other side,
+and a close that says which ambitions survived and who paid; the speech, five households and the
+Budget documents one fold away. Share the link. The menu was read against the Budget reporting again
+on 21 September 2026: the electricity VAT zero rate that HMRC says ends in March 2027, National
+Insurance for working pensioners and for LLP partners, and CenTax's package for taxing gains like
+income joined it; what has no published costing is named in words instead. On 23 September 2026 the
+think tanks' own lists were read and nineteen more cards built from their documents, each a stated
+figure from its own document: a levy on banks' reserves, National Insurance on rents, a 2% wealth
+tax, a sugar and salt tax, council tax on the top bands, the NICs upper earnings limit, 1% VAT on
+zero-rated goods, a pension lump-sum cap, stamp duty abolished on main homes, a child tax allowance,
+and six welfare cards from housing support relinked to rents to the Centre for Social Justice's
+benefit reset, now in step 4's Benefits group. Ten of those cards cannot take effect from April
+2027, the wealth taxes among them, and the three think-tank capital gains cards cannot be collected
+until 2028-29, so each of the thirteen wears a sourced earliest start and counts nothing before it.
+On 30 September 2026 the user took nine taxes off the table, among them the health and social care
+levy, insurance premium tax, CenTax's package for taxing gains like income and National Insurance on
+rents, so eleven cards with an earliest start are left; each retired tax is kept for the record, and
+an old link carrying one opens without it (ADR-0035).
 
 Under the hood: the OBR March 2026 baseline, 67 tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options and

@@ -1,8 +1,8 @@
 # ADR-0026: A review against four goals, and the fixes
 
 Date: 2026-09-28. Status: accepted; revised 2026-09-28, 2026-09-29 and 2026-09-30 (below, ADR-0027,
-ADR-0030, ADR-0032 and ADR-0035). Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023 and ADR-0025, each
-of which carries a dated revision pointing here.
+ADR-0030, ADR-0032, ADR-0035 and ADR-0036). Revises ADR-0007, ADR-0013, ADR-0015, ADR-0023 and
+ADR-0025, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -381,3 +381,11 @@ before-and-after table's Budgets paid by the levy, and the walk with the levy an
 tax, are a record of their day. Where the tests and the walk raised the levy they now raise employer
 National Insurance by two points. The relief-cost treatment (R7), the pension contributions charge's
 re-costing and every other fix here stand.
+
+## Revision (2026-09-30): the blocked notice on step 4 (ADR-0036)
+
+R18.5’s accessible blocked notice stays on step 3, where a way to deliver a priority conflicts with
+one already chosen. On step 4 it now appears only where a flagship the player chose holds the other
+of a pair, and it points back to that flagship. Everywhere else on step 4 a choice says first what
+it would take out, in plain text at full contrast that describes its control, and still moves;
+ticks that contradict each other in one decision are radios.

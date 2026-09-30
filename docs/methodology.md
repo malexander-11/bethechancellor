@@ -220,8 +220,10 @@ the same tax (fuel duty rates and the April 2027 freeze). Authored interaction n
 both levers of a pair are moved; they change no numbers.
 
 A pair that counts the same money is authored once with the severity `excludes`, and the validator
-checks it (Phase 25): fifteen pairs since §34, the exit charge with CGT at death among them. On
-step 4 only one of a pair can be chosen, with a one-tap swap priced as the swap.
+checks it (Phase 25): seventeen pairs since §35, the exit charge with CGT at death among them. On
+step 4 only one of a pair can be chosen: ticks that contradict each other in one decision are one
+choice among radios, and anywhere else choosing one takes the other out, which the card says first
+and prices as the swap (§35).
 
 ### Spending levers (ADR-0006)
 
@@ -1178,8 +1180,9 @@ and for a policy to come in small, medium and large where a size makes sense.
   once chosen. A lever a chosen flagship holds shows once, as a line with the way back to change the
   flagship, so step 4 never undoes one silently.
 - **Pick one.** Where two levers' own texts say they count the same money or cancel, the pair is
-  `excludes`: 22 pairs (fifteen since §34), each authored once, read from either card, with a
-  one-tap swap.
+  `excludes`: 22 pairs (fifteen since §34, seventeen since §35), each authored once, read from
+  either card, with a one-tap swap; since §35, one choice among radios in a decision, or a line
+  saying what choosing takes out.
 - **What went**: the desk and its sandbox, the ready-made Budgets, the two expert switches (every
   Budget counts the interest on its own borrowing, §5, and is judged by the rules as they stand),
   the levers' `order`, the desk's briefings and its two step names. A link with measures and no game
@@ -1412,8 +1415,9 @@ to be added.
   `{ id, label, decisions }`, and each decision `{ id, title, items }`; the spending side keeps
   `groups[].items[]`. A section's label is the family (the lever file's `group`) of every tax in it,
   and the validator says so when one is not (`tax lever X is in the F family, not S`), so the family
-  is the one record of which tax a lever is. A decision holds one to seven taxes under a title of at
-  most six words, and a tax not on the table comes last in it: 67 taxes, 87 policies. The who-pays
+  is the one record of which tax a lever is. A decision holds one to seven taxes (eight since §35)
+  under a title of at most six words, and a tax not on the table comes last in it: 67 taxes, 87
+  policies. The who-pays
   groups and their rules are gone; a tax's incidence tag still says who pays it, on the review and
   on Budget day.
 - **Advanced mode** shows the eleven sections and 26 decisions, all closed. A decision is a button
@@ -1433,7 +1437,8 @@ to be added.
   (`scaleLevels`), and each radio is named by the level it sets. At rest the card prices the nearest
   level each way on a line of its own; choosing the planned level puts the tax back; a level no
   radio names, from an old link, reads "Now 23%". A card blocked by a tax that counts the same money
-  prices the swap, and Swap sets its nearest level. The spending screen keeps two policies a lever,
+  prices the swap, and Swap sets its nearest level (since §35 it says what choosing would take out
+  instead, and still moves). The spending screen keeps two policies a lever,
   and Small, Medium and Large.
 - **Nine taxes off the table**: the health and social care levy, insurance premium tax, dropping the
   salary-sacrifice cap, capital gains at income tax rates, a lower VAT registration threshold,
@@ -1441,7 +1446,8 @@ to be added.
   cancelled fuel duty rise and undoing last year's gambling duties. Each is deprecated and filed as
   "Shelved", its costing and its tests kept, the way the levers shelved in Phase 12 were (§17).
   Everything live that named them went, which leaves fifteen pairs that count the same money, from
-  twenty-two. An old link carrying one opens without it and says so. The two basic picks that went,
+  twenty-two (seventeen since §35). An old link carrying one opens without it and says so. The two
+  basic picks that went,
   the levy and capital gains alignment, are replaced by a point on employer National Insurance and
   capital gains tax at death; "Put up fuel duty" takes the retired card's emissions clause, on the
   same HMRC source.
@@ -1457,3 +1463,39 @@ to be added.
   it; basic mode reads 352 and 536. The fine-tuning screens read at grade 5.3, from 5.7. On a phone
   the advanced tax screen is 2,764px on arrival, 3.5 screens, against 5,481px; basic mode's is
   3,372px, against 3,210px. `walk38` is clean at 1300px and 360px, in light and with reduced motion.
+
+## 35. Contradictions under one decision (ADR-0036)
+
+On 2026-09-30 the user said the decisions should resolve contradictions too, since contradicting
+choices would come under one decision. Asked how, they chose one choice among radios where two ticks
+contradict, and elsewhere a choice that takes the others out and says so first.
+
+- **Contradictions sit together.** “Charge 1% VAT on everything now zero-rated” moves to Remove an
+  exemption, beside the five exemptions it covers, so a decision holds one to eight taxes. Undoing
+  the 2024 rise in capital gains tax now excludes moving either rate on gains, which makes seventeen
+  pairs that count the same money (§6). Only VAT off gas and full VAT on home energy still sit in
+  different decisions, where the user put them.
+- **One choice.** A decision may declare `alternatives: [{ name, codes }]`: two or more of its ticks
+  that exclude each other and nothing else, none set by a flagship, side by side in its order. The
+  validator checks each of these, and names two ticks in one decision that exclude only each other
+  but are not declared. Four sets are declared: the wealth tax, the rate of pension tax relief, the
+  rates on dividends, savings and rent, and capital gains that go untaxed. The screen draws a set as
+  a group under its name, “As planned” first and each tick’s card after it with a radio in place of
+  its box. The radios share a name, so choosing one takes the others out and the arrow keys move
+  through them. While one is chosen the others are priced “If you choose it instead”, the swap read
+  as one move. An old link that carries two of a set checks the first, and both warn that they count
+  the same money twice.
+- **Taking out.** Any other card whose partner is in the Budget says so before it is touched, naming
+  what it would take out (“Choosing this takes out …”, or on a scale “Choosing a level here takes
+  out …”), then giving the first partner’s reason. It still moves. Its prices count the partners as
+  gone, “instead”, and choosing it puts them back where they rest. The line describes the control
+  (`aria-describedby`), so a screen reader hears it first.
+- **Flagships.** Where a flagship the player chose holds the partner, the card still will not move
+  and offers “Change it”, the way back to that flagship (§27), since step 4 never undoes a flagship.
+  Step 3’s ways to deliver a priority keep “You can’t have both” and its swap.
+- **Basic mode** has no decisions, so a pick there takes out rather than offering radios.
+- **Words.** Five reasons that ran past twenty words are shorter, and every reason, as a take-out
+  line reads it, joins the readability test at grade 5.9; the fine-tuning screens read at 5.2. The
+  advanced tax screen with choices in six decisions reads 925 words, from 1,030, pinned at 1,020,
+  and the other screens are unchanged. `walk39` is clean at 1300px and 360px, in light and with
+  reduced motion.

@@ -1,8 +1,8 @@
 # ADR-0027: Policies all the way through
 
 Date: 2026-09-28. Status: accepted; step 4 in basic mode revised 2026-09-29 (below, ADR-0028), and
-the tax screen 2026-09-30 (below, ADR-0035). Revises ADR-0005, ADR-0009, ADR-0025 and ADR-0026, each
-of which carries a dated revision pointing here.
+the tax screen and its pairs 2026-09-30 (below, ADR-0035 and ADR-0036). Revises ADR-0005, ADR-0009,
+ADR-0025 and ADR-0026, each of which carries a dated revision pointing here.
 
 ## Context
 
@@ -189,3 +189,13 @@ than a subhead in a fold.
 Fifteen pairs now count the same money, from twenty-two. The seven that named a retired tax went
 with it: five against capital gains alignment, the fuel freeze against last year's cancelled rise,
 and the gambling rise against its reversal.
+
+## Revision (2026-09-30): pick one, as one choice or by taking out (ADR-0036)
+
+A pair that counts the same money no longer blocks on step 4. Where both are ticks in one tax
+decision and contradict nothing else, they are one choice among radios, “As planned” first, and
+choosing one takes the other out. Anywhere else choosing one takes the other out and says so first,
+priced with it gone. The “You can’t have both” notice stays on step 4 only where a flagship the
+player chose holds the other, and there it offers the way back to that flagship, never a swap; step
+3 keeps the notice and its swap. Undoing the 2024 capital gains rise now counts against both rates
+on gains, which makes seventeen pairs.

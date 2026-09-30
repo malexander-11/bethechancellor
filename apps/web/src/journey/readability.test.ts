@@ -222,8 +222,9 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // the modes 3.8. Then the debt rule in the running text and the softer buffer line
     // (2026-09-30): the briefing 4.7; said to be the second rule, 4.8. Then tax by tax (ADR-0035),
     // with the decisions' titles read and the tax families no longer read on their own: the
-    // fine-tuning screens 5.3 and their advisers' lines 4.8. Set GRADES to a file path to write
-    // them out.
+    // fine-tuning screens 5.3 and their advisers' lines 4.8. Then contradictions under one decision
+    // (ADR-0036): the fine-tuning screens, with each set's name, 5.2, and what a choice takes out,
+    // read from both sides of every pair, 5.9. Set GRADES to a file path to write them out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);
