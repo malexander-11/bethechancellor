@@ -57,8 +57,9 @@ const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] =
   // explanations are folds. Basic mode's short briefing was 159 words, the full one 237. Then the
   // player's own words (revised 2026-09-29): 232 in either mode. Then plain copy, the same in both
   // modes (ADR-0031): 175, so it is read in basic mode alone. Then the debt rule in the running
-  // text rather than a fold, and the softer buffer line (2026-09-30): 206.
-  ['/outlook', 230, GAME, 'basic'],
+  // text rather than a fold, and the softer buffer line (2026-09-30): 206; then said to be the
+  // second rule, in plain type: 210.
+  ['/outlook', 235, GAME, 'basic'],
   ['/pm', 195, GAME, 'basic'],
   ['/budget/deliver', 220, WIDEST, 'advanced'],
   ['/budget/deliver/2', 220, WIDEST, 'advanced'],

@@ -40,13 +40,13 @@ export const BRIEFING_WORDS = {
       'Lenders charge more when they doubt the sums. Meeting the rules with headroom to spare keeps their trust.',
     /**
      * The debt rule, in the running text beneath the rules in both modes (it was one fold away until
-     * 2026-09-30): its name in bold, then the player's words, with its year the rule's own and said
-     * as the Charter and the rules' own plain words have it (the year before, not "in five years").
-     * The investment it counts is the lesson: the day-to-day rule leaves it out.
+     * 2026-09-30), in plain type: first that it is the second of the two rules above it, then the
+     * player's words, with its year the rule's own and said as the Charter and the rules' own plain
+     * words have it (the year before, not "in five years"). The investment it counts is the lesson:
+     * the day-to-day rule leaves it out.
      */
     debtRule: {
-      name: 'The debt rule',
-      text: 'Government debt must be a smaller share of the economy in {year} than the year before. Critically, this includes any borrowing for investment as well as day-to-day spending.',
+      text: 'The second rule is the debt rule. Government debt must be a smaller share of the economy in {year} than the year before. Critically, this includes any borrowing for investment as well as day-to-day spending.',
     },
   },
   calc: {

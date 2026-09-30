@@ -1293,13 +1293,13 @@ request is read as the briefing's alone; every other screen is as it was.
   one. The glossary and its toggletips elsewhere (the manifesto, the tax lock and the rest) are
   unchanged. The OBR's name is no longer a tap away in the first row.
 - **The debt rule**, a fold under the rules line in both modes, and since 2026-09-30 a paragraph of
-  the running text straight after the rules line, its name in bold as a run-in head: "Government
-  debt must be a smaller share of the economy in 2029-30 than the year before. Critically, this
-  includes any borrowing for investment as well as day-to-day spending." The user wrote "in 5 years
-  or end of parliament"; the line gives the rule's own target year from the verdict, which the
-  Charter sets as 2029-30 until that is the forecast's third year, then the third year (paragraph
-  3.7), and "than the year before" is the rules file's plain English for "falling". With the
-  workings on, it quotes the Charter.
+  the running text straight after the rules line, in plain type and opening with which of the two
+  rules it is: "The second rule is the debt rule. Government debt must be a smaller share of the
+  economy in 2029-30 than the year before. Critically, this includes any borrowing for investment as
+  well as day-to-day spending." The user wrote "in 5 years or end of parliament"; the line gives the
+  rule's own target year from the verdict, which the Charter sets as 2029-30 until that is the
+  forecast's third year, then the third year (paragraph 3.7), and "than the year before" is the
+  rules file's plain English for "falling". With the workings on, it quotes the Charter.
 - **What went.** The folds on what changed since March and on why forecasts move: the calculation's
   opening line and rows carry the first, and the OBR's typical error the second, on Budget day. The
   three decisions since March stay in the context file but on no screen, and the readability set
@@ -1313,7 +1313,8 @@ request is read as the briefing's alone; every other screen is as it was.
 - **Measured** (ADR-0031): 175 words, against 232; grade 4.6, against 5.1; on a phone 1,752px in
   both modes, 2.2 screens of 780px, against 2.7 and 2.9 (4.1 screens with the workings on). With the
   debt rule in the text and the softer buffer line (2026-09-30): 206 words, grade 4.7, and on a
-  phone 1,608px, 2.1 screens, against 1,500px and 1.9 the day before.
+  phone 1,608px, 2.1 screens, against 1,500px and 1.9 the day before. Then said to be the second
+  rule, in plain type: 210 words, grade 4.8, and 1,632px.
 
 ## 31. A plain cover and a flat footer (ADR-0032)
 

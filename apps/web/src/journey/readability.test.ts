@@ -197,7 +197,8 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // debt rule its one fold: 4.6; the modes, without the briefing's switch, 5.2; the decisions
     // since March, on no screen now, are no longer read. Then the footer's switch went (ADR-0032):
     // the modes 3.8. Then the debt rule in the running text and the softer buffer line
-    // (2026-09-30): the briefing 4.7. Set GRADES to a file path to write them out.
+    // (2026-09-30): the briefing 4.7; said to be the second rule, 4.8. Set GRADES to a file path to
+    // write them out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);

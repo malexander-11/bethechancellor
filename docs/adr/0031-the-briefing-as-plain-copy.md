@@ -1,6 +1,6 @@
 # ADR-0031: The briefing as plain copy
 
-Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0032) and on 2026-09-30
+Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0032) and twice on 2026-09-30
 (below). Revises ADR-0030 and ADR-0028, and narrows where the badges of ADR-0002, ADR-0011 and
 ADR-0013 show; each carries a dated revision pointing here.
 
@@ -183,3 +183,28 @@ no placeholder. `walk35.mjs` (1300px and 360px, light and reduced motion, with t
 family, hit-box, radius and animation audits) is clean in both runs: it checks the paragraph's words
 and place, that its name is bold, that no fold is left in the briefing in either mode, the new
 buffer line, and that the old one is nowhere on the road.
+
+## Revision (2026-09-30, later): the second rule, in plain type
+
+Seeing the bold name, the user asked:
+
+> Don't make the debt rule in bold. Make it clear that's the second rule.
+
+The paragraph is now in plain type, with nothing in bold, and opens by saying which rule it is:
+
+> The second rule is the debt rule. Government debt must be a smaller share of the economy in
+> 2029-30 than the year before. Critically, this includes any borrowing for investment as well as
+> day-to-day spending.
+
+The rules line above it names the day-to-day rule first and the debt rule second ("pay for
+day-to-day spending with tax by 2029-30, and have debt falling by then"), so "the second rule"
+points straight back to it. The rule keeps its name, which the bar and Budget day use when it is
+missed. The opening is a sentence of its own, seven words, because the readability test allows
+twenty words a sentence and the rule's first sentence already has sixteen. The whole paragraph is
+now one template in the briefing's words, and the page sets nothing in it in bold.
+
+**Measured.** 210 words, pinned at 235; grade 4.8. On a phone (360px) the paragraph runs to six
+lines and the briefing is 1,632px tall, still 2.1 screens of 780px. The page tests pin the new
+opening and that nothing in the paragraph is bold. `walk36.mjs` is clean in both runs, light and
+reduced motion, with the audits on: it checks the paragraph's words and place, and that no element
+in it is set at 600 or heavier.

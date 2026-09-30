@@ -26,10 +26,11 @@ describe('the briefing’s words (Phase 28, ADR-0030)', () => {
   });
 
   it('says the debt rule as the Charter has it, with the year filled in', () => {
-    // The player's words, with the rule's own year and "the year before" in place of "in five
-    // years": the Charter's rule is debt falling by 2029-30, and the rules' own plain words say so.
+    // Said to be the second of the two rules, then the player's words, with the rule's own year and
+    // "the year before" in place of "in five years": the Charter's rule is debt falling by 2029-30,
+    // and the rules' own plain words say so.
     expect(fillIn(BRIEFING_WORDS.what.debtRule.text, { year: '2029-30' })).toBe(
-      'Government debt must be a smaller share of the economy in 2029-30 than the year before. Critically, this includes any borrowing for investment as well as day-to-day spending.',
+      'The second rule is the debt rule. Government debt must be a smaller share of the economy in 2029-30 than the year before. Critically, this includes any borrowing for investment as well as day-to-day spending.',
     );
   });
 

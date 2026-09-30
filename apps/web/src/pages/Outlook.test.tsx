@@ -134,11 +134,11 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(second.querySelector('details')).toBeNull();
     const rules = within(second).getByText(/pay for day-to-day spending with tax by/);
     const debt = rules.nextElementSibling as HTMLElement;
-    // Its name in bold, then the player's words, with the Charter's year: debt smaller in 2029-30
-    // than the year before.
-    expect(debt.querySelector('strong')?.textContent).toBe('The debt rule.');
+    // In plain type, said to be the second of the two rules above it, then the player's words, with
+    // the Charter's year: debt smaller in 2029-30 than the year before.
+    expect(debt.querySelector('strong, b')).toBeNull();
     expect(debt).toHaveTextContent(
-      /^The debt rule\. Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\./,
+      /^The second rule is the debt rule\. Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\./,
     );
     // With the workings on, the Charter's own words and their source.
     expect(within(debt).getByText(/The Charter says:/)).toHaveTextContent(
@@ -204,11 +204,11 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(within(part('Your headroom')).getByText(/sensible buffer/)).toHaveTextContent(
       /^This means this Budget will likely need to increase the headroom to build in a sensible buffer\.$/,
     );
-    // The debt rule's own paragraph: its bold name, then the player's words, with no fold to open.
+    // The debt rule's own paragraph: the second rule, then the player's words, with no fold to open.
     expect(
-      within(part('What is headroom?')).getByText(/^Government debt must be/),
+      within(part('What is headroom?')).getByText(/^The second rule is the debt rule\./),
     ).toHaveTextContent(
-      /^The debt rule\. Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\.$/,
+      /^The second rule is the debt rule\. Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\.$/,
     );
     expect(within(part('What is headroom?')).getByText(/plans to sell/)).toHaveTextContent(
       /^This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\. Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\.$/,
@@ -284,7 +284,7 @@ describe('the briefing in basic mode (Phase 27; the same in both modes since ADR
     expect(main().getAttribute('data-mode')).toBe('basic');
     expect(headings()).toEqual(THREE);
     expect(rows()).toHaveLength(4);
-    expect(screen.getByText('The debt rule.')).toBeInTheDocument();
+    expect(screen.getByText(/^The second rule is the debt rule\./)).toBeInTheDocument();
     expect(document.querySelector('.mode-line')).toBeNull();
     expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
     const basic = main().textContent;

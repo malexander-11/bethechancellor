@@ -172,10 +172,10 @@ export function OutlookPage() {
         <p className="brief__line">
           <Filled template={WORDS.what.rules} values={{ year: yearOf(year) }} />
         </p>
-        {/* The debt rule in the running text (it was one fold away until 2026-09-30): its name as a
-            run-in head, the player's words, and with the workings on the Charter's own. */}
+        {/* The debt rule in the running text (it was one fold away until 2026-09-30), in plain type:
+            the second of the two rules above, the player's words, and with the workings on the
+            Charter's own. */}
         <p className="brief__line">
-          <strong>{WORDS.what.debtRule.name}.</strong>{' '}
           <Filled template={WORDS.what.debtRule.text} values={{ year: yearOf(debtYear) }} />
           {workings && debtRule ? (
             <>
