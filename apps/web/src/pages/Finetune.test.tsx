@@ -543,22 +543,49 @@ describe('fine-tune tax and spend: the curated levers', () => {
     ).toBeInTheDocument();
   });
 
-  it('lays out the spending screen, with a minister once a budget moves and the flagships held', () => {
-    const held = at(`/finetune/spending?${BASE}&${GAME}&L=moj.10`);
+  it('lays the spending screen out by what the money is for, each section its decisions, all closed', () => {
+    const { container } = at(`/finetune/spending?${BASE}&${GAME}`);
     expect(h1('Fine-tune spending')).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
-    expect(group(/^Public services 1 chosen · costs £\d\.\dbn/)).toBeInTheDocument();
-    expect(group(/^Investment 5 policies/)).toBeInTheDocument();
-    // The defence plan's gap is on show before any priority is chosen (Phase 25), and council
-    // homes fill the group's third place (Phase 26).
     expect(
-      screen.getByRole('checkbox', { name: 'Fund the defence plan’s gap' }),
+      screen.getByText(
+        'Trim or top up any budget. A top-up costs what a trim saves. Your Director of Public Spending’s view is on each lever.',
+      ),
     ).toBeInTheDocument();
+    // Four sections, as the money is for, each with no count at rest (ADR-0037).
+    const sections = screen
+      .getAllByRole('region')
+      .filter((r) => (r.getAttribute('aria-labelledby') ?? '').startsWith('tune-'));
+    expect(sections.map((r) => r.querySelector('h2')?.textContent)).toEqual([
+      'Public services',
+      'Investment',
+      'Benefits',
+      'Last year’s decisions',
+    ]);
+    // Nine decisions, each a heading's button, all closed: no card on arrival, and no fold.
+    const toggles = [...container.querySelectorAll('.tune__decision-toggle')];
+    expect(toggles).toHaveLength(9);
+    for (const toggle of toggles) expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(container.querySelectorAll('.lever--curated')).toHaveLength(0);
+    expect(screen.queryByText(/more polic(y|ies)$/)).toBeNull();
     expect(
-      within(group(/^Investment/)).getByRole('checkbox', {
-        name: 'More council and social rent homes',
-      }),
-    ).toBeInTheDocument();
+      within(group(/^Public services$/))
+        .getAllByRole('button')
+        .map((b) => b.textContent),
+    ).toEqual([
+      'Change health, schools and defence 3 choices',
+      'Change the other budgets 6 choices',
+      'Fund a new programme 3 choices',
+    ]);
+    expect(
+      within(group(/^Benefits$/))
+        .getAllByRole('button')
+        .map((b) => b.textContent),
+    ).toEqual([
+      'Change benefits for pensioners 3 choices',
+      'Change working-age benefits 5 choices',
+      'Change disability benefits 4 choices',
+    ]);
     // The lead's hundred and twenty characters cannot say how long the deals run: a note does.
     expect(
       screen.getByText(/Departments’ day-to-day budgets are set to 2028-29\. Cutting one reopens/),
@@ -568,10 +595,21 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(
       screen.getByText(/^Most public services here are England’s budgets\./),
     ).toBeInTheDocument();
-    expect(group(/^Benefits 15 policies/)).toBeInTheDocument();
-    expect(group(/^Last year’s decisions 5 policies/)).toBeInTheDocument();
-    // The prisons budget is where the flagship the player chose set it: one line, and the way
-    // back to that flagship; no card that could quietly undo it (Phase 26).
+    expect(container.querySelectorAll('.btn--primary')).toHaveLength(1);
+  });
+
+  it('draws a budget as one scale, with a minister once it moves and the flagships held', () => {
+    const held = at(`/finetune/spending?${BASE}&${GAME}&L=moj.10`);
+    // The prisons budget moved before the screen opened: its decision is open, and says so.
+    expect(decision('Change the other budgets')).toHaveAttribute('aria-expanded', 'true');
+    expect(decision('Change health, schools and defence')).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
+    expect(statusOf('Change the other budgets')).toMatch(/^1 chosen · costs £\d\.\dbn$/);
+    expect(group(/^Public services 1 chosen · costs £\d\.\dbn$/)).toBeInTheDocument();
+    // It is where the flagship the player chose set it: one line, and the way back to that
+    // flagship; no card that could quietly undo it (Phase 26).
     const prisons = cardOf(screen.getByRole('heading', { name: 'Prisons and courts' }));
     expect(within(prisons).getByText('In your flagship policies')).toBeInTheDocument();
     expect(within(prisons).queryAllByRole('radio')).toHaveLength(0);
@@ -582,55 +620,61 @@ describe('fine-tune tax and spend: the curated levers', () => {
       'href',
       expect.stringMatching(/^\/budget\/deliver\?/),
     );
-    expect(document.querySelectorAll('.lever--curated .choice__advice .kicker')).toHaveLength(0);
+    // A budget is one scale from 5% less to 5% more, the plan among them, under its plain name;
+    // no Small, Medium or Large (ADR-0037).
+    openDecision('Change health, schools and defence');
+    const schools = policy('Schools and education');
     expect(
-      screen.getByText(
-        'Trim or top up any budget. A top-up costs what a trim saves. Your Director of Public Spending’s view is on each lever.',
-      ),
-    ).toBeInTheDocument();
-    // Untouched, a budget has no minister on it; cut, its minister says what stops happening.
-    const schools = policy('Cut schools and education');
+      within(schools)
+        .getAllByRole('radio')
+        .map((r) => r.closest('label')?.textContent),
+    ).toEqual(['5% less', '2% less', '1% less', 'As planned', '1% more', '2% more', '5% more']);
+    expect(within(schools).getByRole('radio', { name: 'As planned' })).toBeChecked();
+    expect(document.querySelectorAll('.lever--curated .choice__advice .kicker')).toHaveLength(0);
+    // Untouched, a budget has no minister on it; at rest, the nearest level each way in cash.
     expect(within(schools).queryByText('Education Secretary')).toBeNull();
-    // At rest, the smallest cut in cash terms, beside the sizes' shares of the budget.
-    expect(within(schools).getByText(/^Small: would save £\d\.\dbn/)).toBeInTheDocument();
-    expect(within(schools).getByRole('radio', { name: 'Small 1% less' })).toBeInTheDocument();
+    expect([...schools.querySelectorAll('.lever__hint-line')].map((l) => l.textContent)).toEqual([
+      expect.stringMatching(/^1% less: would save £\d\.\dbn · headroom would be/),
+      expect.stringMatching(/^1% more: would cost £\d\.\dbn · headroom would be/),
+    ]);
     expect(
       within(schools).getByText('Falls 0.3% a year after rising prices, as planned'),
     ).toBeInTheDocument();
-    fireEvent.click(within(schools).getByRole('radio', { name: 'Small 1% less' }));
+    // Cut, its minister says what stops happening, and the new path sits beside the plan.
+    fireEvent.click(within(schools).getByRole('radio', { name: '1% less' }));
     expect(within(schools).getByText('Education Secretary')).toBeInTheDocument();
-    // Chosen: the new path beside the plan, and the money in the card's one year.
     expect(
       within(schools).getByText('Falls 0.8% a year after rising prices (planned: 0.3%)'),
     ).toBeInTheDocument();
     expect(
       within(schools).getByText(/^£\d\.\dbn less than planned in 2029-30$/),
     ).toBeInTheDocument();
+    expect(statusOf('Change health, schools and defence')).toMatch(/^1 chosen · saves £\d\.\dbn$/);
     held.unmount();
     // Short of the flagship, a top-up is a card: the flagship settled lower, and the Chief
     // Secretary says so (Phase 25); a cut is against it.
     const lower = at(`/finetune/spending?${BASE}&${GAME}&L=moj.5`);
-    const topUp = policy('Spend more on prisons and courts');
-    expect(within(topUp).getByRole('radio', { name: 'Large 5% more' })).toBeChecked();
+    const topUp = policy('Prisons and courts');
+    expect(within(topUp).getByRole('radio', { name: '5% more' })).toBeChecked();
     expect(within(topUp).getByText('In your flagship policies')).toBeInTheDocument();
     expect(
       within(topUp).getByText(/Settled lower: the Justice Secretary asked for more/),
     ).toBeInTheDocument();
     lower.unmount();
     const against = at(`/finetune/spending?${BASE}&${GAME}&L=moj.-2`);
-    const trim = policy('Cut prisons and courts');
-    expect(within(trim).getByRole('radio', { name: 'Medium 2% less' })).toBeChecked();
+    const trim = policy('Prisons and courts');
+    expect(within(trim).getByRole('radio', { name: '2% less' })).toBeChecked();
     expect(within(trim).getByText('Against your flagship policy')).toHaveClass('tag--warn');
     against.unmount();
-    // Past its flagship's value, a top-up stays a card that shows its own size; a setting no size
-    // matches says what it is (Phase 26).
+    // Past its flagship's value, a top-up stays a card that shows its own level; a setting no
+    // level matches says what it is (Phase 26).
     const past = at(`/finetune/spending?${BASE}&g=st.3_pr.nhs&M=rate.0.75_rpi.0.5&L=dhsc.5`);
-    const nhs = policy('Spend more on health and social care');
-    expect(within(nhs).getByRole('radio', { name: 'Large 5% more' })).toBeChecked();
+    const nhs = policy('Health and social care');
+    expect(within(nhs).getByRole('radio', { name: '5% more' })).toBeChecked();
     expect(within(nhs).getByText('In your flagship policies')).toBeInTheDocument();
     past.unmount();
     at(`/finetune/spending?${BASE}&${GAME}&L=dhsc.3`);
-    const stray = policy('Spend more on health and social care');
+    const stray = policy('Health and social care');
     expect(within(stray).getByText('Now 3% more')).toBeInTheDocument();
     for (const radio of within(stray).getAllByRole('radio')) expect(radio).not.toBeChecked();
   });
@@ -899,17 +943,26 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     expect(prisons.querySelector('.lever__held')?.textContent).toMatch(
       /^More money for prisons and courts: 10% more\. Change/,
     );
+    // In the order of their decisions: the defence plan's gap after council homes, and the PIP
+    // cuts beside the reset they contradict (ADR-0037).
     expect(cardTitles()).toEqual([
       'Spend more on health and social care',
       'Spend more on schools and education',
       'Prisons and courts',
       'Spend more on public investment',
-      'Fund the defence plan’s gap',
       'More council and social rent homes',
+      'Fund the defence plan’s gap',
       'Raise housing benefit to match local rents',
       'Go ahead with the 2025 cuts to PIP',
       'Limit winter fuel payments to pensioners on pension credit',
     ]);
+    // A pick is the one way on show, a scale from where the budget is planned to be; no decisions.
+    expect(document.querySelectorAll('.tune__decision-toggle')).toHaveLength(0);
+    expect(
+      within(policy('Spend more on health and social care'))
+        .getAllByRole('radio')
+        .map((r) => r.closest('label')?.textContent),
+    ).toEqual(['As planned', '1% more', '2% more', '5% more']);
     // The screen's notes stay: how long the settlements run, and whose budgets these are.
     expect(
       screen.getByText(/Departments’ day-to-day budgets are set to 2028-29\. Cutting one reopens/),

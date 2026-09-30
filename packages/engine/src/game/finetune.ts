@@ -4,10 +4,9 @@ import type {
   FinetuneAlternatives,
   FinetuneDecision,
   FinetuneFile,
-  FinetuneGroup,
   FinetuneItem,
   FinetunePolicy,
-  FinetuneTaxGroup,
+  FinetuneSection,
   Lever,
 } from '../types/data.js';
 import type { AmbitionStatus } from './ambitions.js';
@@ -16,10 +15,10 @@ import type { AmbitionStatus } from './ambitions.js';
  * Step 4's levers (Phase 24, ADR-0025), chosen as policies since Phase 26 (ADR-0027): the tax and
  * spending levers a Chancellor fine-tunes the Budget with, each offering one or two policies (one
  * each way) in one to three sizes, with one adviser's line on each (data/journey/finetune.json).
- * The tax screen is laid out tax by tax, each tax's levers in the decisions about it (ADR-0035),
- * ticks that contradict each other in one decision as one choice (ADR-0036); the spending screen by
- * what the money is for. Nothing here prices anything: choosing a size sets the lever itself, so
- * every screen that reads the lever agrees.
+ * Both screens are laid out in sections of decisions: the tax screen tax by tax (ADR-0035), the
+ * spending screen by what the money is for (ADR-0037), each lever in the decision about it, and
+ * ticks that contradict each other in one decision as one choice (ADR-0036). Nothing here prices
+ * anything: choosing a size sets the lever itself, so every screen that reads the lever agrees.
  */
 
 export type FinetuneSideId = 'tax' | 'spending';
@@ -27,26 +26,16 @@ export type FinetuneSideId = 'tax' | 'spending';
 /** The two screens, in the order they are walked: tax first, then spending. */
 export const FINETUNE_SIDES: readonly FinetuneSideId[] = ['tax', 'spending'];
 
-/**
- * How many of a spending group's levers are on show before its fold in advanced mode: the
- * hand-picked ones. Basic mode has no fold; it shows the adviser's shortlist (Phase 27, ADR-0028).
- * The tax screen has no fold: each tax lists its decisions, closed until opened (ADR-0035).
- */
-export const FINETUNE_SHOWN = 3;
-
-/** A section of either screen: a tax and its decisions, or a group of spending levers. */
-export type FinetuneSection = FinetuneTaxGroup | FinetuneGroup;
-
-/** One lever on step 4 with the screen, the section and, on the tax screen, the decision it is in. */
+/** One lever on step 4 with the screen, the section and the decision it is in. */
 export interface FinetuneEntry extends FinetuneItem {
   side: FinetuneSideId;
   group: FinetuneSection;
-  decision?: FinetuneDecision;
+  decision: FinetuneDecision;
 }
 
-/** A section's levers in the order it shows them: a tax's across its decisions, in turn. */
+/** A section's levers in the order it shows them: across its decisions, in turn. */
 export function groupItems(group: FinetuneSection): FinetuneItem[] {
-  return 'decisions' in group ? group.decisions.flatMap((d) => d.items) : group.items;
+  return group.decisions.flatMap((d) => d.items);
 }
 
 /**
@@ -81,23 +70,28 @@ export function decisionUnits(decision: FinetuneDecision): DecisionUnit[] {
 
 /** Every curated lever on one screen, or on both, in the order the screens show them. */
 export function finetuneItems(file: FinetuneFile, side?: FinetuneSideId): FinetuneEntry[] {
-  const tax = (): FinetuneEntry[] =>
-    file.tax.groups.flatMap((group) =>
-      group.decisions.flatMap((decision) =>
-        decision.items.map((item) => ({ ...item, side: 'tax' as const, group, decision })),
-      ),
-    );
-  const spending = (): FinetuneEntry[] =>
-    file.spending.groups.flatMap((group) =>
-      group.items.map((item) => ({ ...item, side: 'spending' as const, group })),
-    );
   const sides = side ? [side] : FINETUNE_SIDES;
-  return sides.flatMap((s) => (s === 'tax' ? tax() : spending()));
+  return sides.flatMap((s) =>
+    file[s].groups.flatMap((group) =>
+      group.decisions.flatMap((decision) =>
+        decision.items.map((item) => ({ ...item, side: s, group, decision })),
+      ),
+    ),
+  );
 }
 
 /** A lever's plain name on these screens: its own, or a toggle's single policy's title. */
 export function itemName(item: FinetuneItem): string {
   return item.name ?? item.policies[0]?.title ?? item.code;
+}
+
+/**
+ * What a lever goes by inside its decision (ADR-0037): its short name in the decision's terms
+ * ("Food" under "Remove an exemption"), else its plain name. Only there: elsewhere, where the
+ * decision is not in view, it goes by its plain name.
+ */
+export function choiceName(item: FinetuneItem): string {
+  return item.label ?? itemName(item);
 }
 
 /** The plain name of each lever on step 4, by code: what the review and the notes call it. */

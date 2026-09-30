@@ -1,4 +1,4 @@
-import { computeOutcome, finetuneItems, plainText } from '@btc/engine';
+import { choiceName, computeOutcome, finetuneItems, plainText } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import {
   advisers,
@@ -153,15 +153,23 @@ describe('word budgets: one line visible, the rest a click away', () => {
       // Basic mode's lead says whose best ideas these are, in the same room (Phase 27).
       expect(words(side.shortlistLead), side.shortlistLead).toBeLessThanOrEqual(14);
     }
-    // Each tax asks its questions in at most six words (ADR-0035); a figure may name the thing
-    // decided, as a policy's title may ("Change the 5% band").
-    const decisions = finetune.tax.groups.flatMap((g) => g.decisions);
-    expect(decisions).toHaveLength(26);
+    // Each tax asks its questions in at most six words (ADR-0035), and so does each section of the
+    // spending screen (ADR-0037); a figure may name the thing decided, as a policy's title may
+    // ("Change the 5% band").
+    const decisions = [finetune.tax, finetune.spending].flatMap((side) =>
+      side.groups.flatMap((g) => g.decisions),
+    );
+    expect(decisions).toHaveLength(35);
     for (const d of decisions) expect(words(d.title), d.title).toBeLessThanOrEqual(6);
     // Ticks that contradict each other are one choice under one name, as short (ADR-0036).
     const alternatives = decisions.flatMap((d) => d.alternatives ?? []);
     expect(alternatives).toHaveLength(4);
     for (const a of alternatives) expect(words(a.name), a.name).toBeLessThanOrEqual(7);
+    // Inside its decision each choice goes by a short name, as short again (ADR-0037): "Food"
+    // under "Remove an exemption".
+    for (const item of finetuneItems(finetune)) {
+      expect(words(choiceName(item)), choiceName(item)).toBeLessThanOrEqual(7);
+    }
   });
 
   it('says what to do now in ten words, and a priority’s purpose in ten', () => {
@@ -224,10 +232,12 @@ describe('word budgets: one line visible, the rest a click away', () => {
         s.shortlistLead,
         ...s.groups.map((g) => g.label),
       ]),
-      ...finetune.tax.groups.flatMap((g) => g.decisions.map((d) => d.title)),
-      ...finetune.tax.groups.flatMap((g) =>
-        g.decisions.flatMap((d) => (d.alternatives ?? []).map((a) => a.name)),
+      ...[finetune.tax, finetune.spending].flatMap((side) =>
+        side.groups.flatMap((g) =>
+          g.decisions.flatMap((d) => [d.title, ...(d.alternatives ?? []).map((a) => a.name)]),
+        ),
       ),
+      ...curated.flatMap((i) => (i.label ? [i.label] : [])),
       ...guide.stages.map((s) => s.now),
       ...guide.stages.map((s) => s.title),
       ...all.map((o) => o.title),

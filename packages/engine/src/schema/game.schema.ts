@@ -390,20 +390,17 @@ export const finetunePolicySchema = z.strictObject({
  * One lever on the fine-tuning screens (Phase 24, ADR-0025; policies since Phase 26): the policies
  * it offers, the usual direction first, and the other way (if the lever moves both ways) second.
  * Choosing one clears the other, since both set the same lever. `name` is the lever itself, plainly,
- * for the review and the notes ("The main rate of VAT"); a toggle's is its policy's title.
+ * for the review and the notes ("The main rate of VAT"); a toggle's is its policy's title. `label`
+ * is what it goes by inside its decision (ADR-0037), a short name in the decision's own terms:
+ * "Food" under "Remove an exemption", "Basic rate" under "Change the rates". Without one it goes by
+ * its plain name.
  */
 export const finetuneItemSchema = z.strictObject({
   /** The lever's code: a live tax lever on the tax side, a spending or welfare one on the other. */
   code: z.string().min(1),
   name: z.string().min(1).max(80).optional(),
+  label: z.string().min(1).max(48).optional(),
   policies: z.array(finetunePolicySchema).min(1).max(2),
-});
-
-/** A group of levers on the spending screen: what the money is for. */
-export const finetuneGroupSchema = z.strictObject({
-  id: slug,
-  label: z.string().min(1).max(60),
-  items: z.array(finetuneItemSchema).min(1),
 });
 
 /**
@@ -418,11 +415,12 @@ export const finetuneAlternativesSchema = z.strictObject({
 });
 
 /**
- * One decision about one tax (ADR-0035): a question a Chancellor answers ("Change the headline
- * rate", "Remove an exemption"), holding the levers that answer it, in the order they are weighed.
- * Its title is at most six words; at most eight levers keep an open decision to about a screenful
- * (seven until "1% on everything now zero-rated" joined the exemptions it contradicts, ADR-0036).
- * Ticks in it that contradict each other are its `alternatives`, one choice each.
+ * One decision on either screen (ADR-0035; spending too since ADR-0037): a question a Chancellor
+ * answers ("Change the headline rate", "Remove an exemption", "Change working-age benefits"),
+ * holding the levers that answer it, in the order they are weighed. Its title is at most six words;
+ * at most eight levers keep an open decision to about a screenful (seven until "1% on everything
+ * now zero-rated" joined the exemptions it contradicts, ADR-0036). Ticks in it that contradict each
+ * other are its `alternatives`, one choice each.
  */
 export const finetuneDecisionSchema = z.strictObject({
   id: slug,
@@ -432,11 +430,12 @@ export const finetuneDecisionSchema = z.strictObject({
 });
 
 /**
- * One tax on the tax screen (ADR-0035): "Income tax", "VAT", with the decisions about it. Its label
- * is the lever family of every lever in it, so the family is the one record of which tax a lever
- * is; the validator holds each lever to its section.
+ * One section of a screen, with the decisions about it: a tax on the tax screen ("Income tax",
+ * "VAT", ADR-0035), what the money is for on the spending screen ("Public services", "Benefits",
+ * ADR-0037). A tax's label is the lever family of every lever in it, so the family is the one
+ * record of which tax a lever is; the validator holds each tax to its section.
  */
-export const finetuneTaxGroupSchema = z.strictObject({
+export const finetuneSectionSchema = z.strictObject({
   id: slug,
   label: z.string().min(1).max(60),
   decisions: z.array(finetuneDecisionSchema).min(1),
@@ -452,8 +451,8 @@ export const finetuneNoteSchema = z.strictObject({
   sources: z.array(sourceRefSchema).min(1),
 });
 
-/** One of the two screens: its heading, its one line, whose voice speaks on it, and its groups. */
-const finetuneScreen = {
+/** One of the two screens: its heading, its one line, whose voice speaks on it, and its sections. */
+export const finetuneSideSchema = z.strictObject({
   title: z.string().min(1).max(40),
   lead: z.string().min(1).max(120),
   /** The lead in basic mode (Phase 27): it says the screen shows the adviser's best ideas. */
@@ -461,107 +460,102 @@ const finetuneScreen = {
   notes: z.array(finetuneNoteSchema).default([]),
   /** The adviser who speaks every line on the screen (an id in advisers.json, on `finetune`). */
   adviser: slug,
-};
-
-/** The spending screen: its groups of levers. */
-export const finetuneSideSchema = z.strictObject({
-  ...finetuneScreen,
-  groups: z.array(finetuneGroupSchema).min(1),
-});
-
-/** The tax screen (ADR-0035): one section a tax, each holding its decisions. */
-export const finetuneTaxSideSchema = z.strictObject({
-  ...finetuneScreen,
-  groups: z.array(finetuneTaxGroupSchema).min(1),
+  groups: z.array(finetuneSectionSchema).min(1),
 });
 
 export const finetuneFileSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
-    tax: finetuneTaxSideSchema,
+    tax: finetuneSideSchema,
     spending: finetuneSideSchema,
   })
   .superRefine((file, ctx) => {
-    // A lever appears once in the file, a group id once on its screen, and a tax's name and a
-    // decision's id once on the tax screen: two cards for one lever would move together and read
-    // as two choices, and two sections for one tax would split its decisions.
+    // A lever appears once in the file, a section's id and name once on its screen, a decision's
+    // id once in the file, and a name once in its decision: two cards for one lever would move
+    // together and read as two choices, two sections under one name would split what they are
+    // about, a decision's id names its panel on the page, and two choices under one name in a
+    // decision would read as one.
     const codes = new Set<string>();
     const offer = (code: string, path: (string | number)[]) => {
       if (codes.has(code))
         ctx.addIssue({ code: 'custom', message: `lever ${code} is offered twice`, path });
       codes.add(code);
     };
-    const labels = new Set<string>();
     const decisions = new Set<string>();
-    const taxIds = new Set<string>();
-    file.tax.groups.forEach((g, i) => {
-      if (taxIds.has(g.id))
-        ctx.addIssue({
-          code: 'custom',
-          message: `two tax groups are called ${g.id}`,
-          path: ['tax', 'groups', i, 'id'],
-        });
-      taxIds.add(g.id);
-      if (labels.has(g.label))
-        ctx.addIssue({
-          code: 'custom',
-          message: `two tax sections are called ${g.label}`,
-          path: ['tax', 'groups', i, 'label'],
-        });
-      labels.add(g.label);
-      g.decisions.forEach((d, j) => {
-        if (decisions.has(d.id))
+    for (const side of ['tax', 'spending'] as const) {
+      const ids = new Set<string>();
+      const labels = new Set<string>();
+      file[side].groups.forEach((g, i) => {
+        if (ids.has(g.id))
           ctx.addIssue({
             code: 'custom',
-            message: `two tax decisions are called ${d.id}`,
-            path: ['tax', 'groups', i, 'decisions', j, 'id'],
+            message: `two ${side} groups are called ${g.id}`,
+            path: [side, 'groups', i, 'id'],
           });
-        decisions.add(d.id);
-        d.items.forEach((item, k) =>
-          offer(item.code, ['tax', 'groups', i, 'decisions', j, 'items', k, 'code']),
-        );
-        // A set of alternatives is drawn where its first lever sits, so its levers are in this
-        // decision, side by side and in its order, and each is in one set at most (ADR-0036).
-        const order = d.items.map((item) => item.code);
-        const alternated = new Set<string>();
-        (d.alternatives ?? []).forEach((alt, a) => {
-          const path = ['tax', 'groups', i, 'decisions', j, 'alternatives', a, 'codes'];
-          for (const code of alt.codes) {
-            if (!order.includes(code))
-              ctx.addIssue({
-                code: 'custom',
-                message: `the alternatives “${alt.name}” name ${code}, which is not in decision ${d.id}`,
-                path,
-              });
-            if (alternated.has(code))
-              ctx.addIssue({
-                code: 'custom',
-                message: `${code} is in two sets of alternatives`,
-                path,
-              });
-            alternated.add(code);
-          }
-          const at = alt.codes.map((code) => order.indexOf(code));
-          if (!at.includes(-1) && at.some((x, k) => k > 0 && x !== (at[k - 1] ?? -2) + 1))
+        ids.add(g.id);
+        if (labels.has(g.label))
+          ctx.addIssue({
+            code: 'custom',
+            message: `two ${side} sections are called ${g.label}`,
+            path: [side, 'groups', i, 'label'],
+          });
+        labels.add(g.label);
+        g.decisions.forEach((d, j) => {
+          const at = [side, 'groups', i, 'decisions', j];
+          if (decisions.has(d.id))
             ctx.addIssue({
               code: 'custom',
-              message: `the alternatives “${alt.name}” are not side by side, in decision ${d.id}’s order`,
-              path,
+              message: `two decisions are called ${d.id}`,
+              path: [...at, 'id'],
             });
+          decisions.add(d.id);
+          const names = new Set<string>();
+          d.items.forEach((item, k) => {
+            offer(item.code, [...at, 'items', k, 'code']);
+            const name = item.label ?? item.name ?? item.policies[0]?.title ?? item.code;
+            if (names.has(name))
+              ctx.addIssue({
+                code: 'custom',
+                message: `two choices in decision ${d.id} are called “${name}”`,
+                path: [...at, 'items', k],
+              });
+            names.add(name);
+          });
+          // A set of alternatives is drawn where its first lever sits, so its levers are in this
+          // decision, side by side and in its order, and each is in one set at most (ADR-0036).
+          const order = d.items.map((item) => item.code);
+          const alternated = new Set<string>();
+          (d.alternatives ?? []).forEach((alt, a) => {
+            const path = [...at, 'alternatives', a, 'codes'];
+            for (const code of alt.codes) {
+              if (!order.includes(code))
+                ctx.addIssue({
+                  code: 'custom',
+                  message: `the alternatives “${alt.name}” name ${code}, which is not in decision ${d.id}`,
+                  path,
+                });
+              if (alternated.has(code))
+                ctx.addIssue({
+                  code: 'custom',
+                  message: `${code} is in two sets of alternatives`,
+                  path,
+                });
+              alternated.add(code);
+            }
+            const place = alt.codes.map((code) => order.indexOf(code));
+            if (
+              !place.includes(-1) &&
+              place.some((x, k) => k > 0 && x !== (place[k - 1] ?? -2) + 1)
+            )
+              ctx.addIssue({
+                code: 'custom',
+                message: `the alternatives “${alt.name}” are not side by side, in decision ${d.id}’s order`,
+                path,
+              });
+          });
         });
       });
-    });
-    const spendingIds = new Set<string>();
-    file.spending.groups.forEach((g, i) => {
-      if (spendingIds.has(g.id))
-        ctx.addIssue({
-          code: 'custom',
-          message: `two spending groups are called ${g.id}`,
-          path: ['spending', 'groups', i, 'id'],
-        });
-      spendingIds.add(g.id);
-      g.items.forEach((item, j) => offer(item.code, ['spending', 'groups', i, 'items', j, 'code']));
-    });
+    }
   });
 
 /* ------------------------------------------------------------ the package */

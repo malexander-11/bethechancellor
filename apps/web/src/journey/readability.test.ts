@@ -109,20 +109,17 @@ const SETS: Record<string, readonly string[]> = {
       ...s.groups.map((g) => g.label),
       ...s.notes.map((n) => n.text),
     ]),
-    // The questions each tax asks (ADR-0035), read before any is opened, and the name over each
-    // set of ticks that contradict each other (ADR-0036).
-    ...finetune.tax.groups.flatMap((g) => g.decisions.map((d) => d.title)),
-    ...finetune.tax.groups.flatMap((g) =>
-      g.decisions.flatMap((d) => (d.alternatives ?? []).map((a) => a.name)),
+    // The questions each section asks (ADR-0035, spending since ADR-0037), read before any is
+    // opened, and the name over each set of ticks that contradict each other (ADR-0036).
+    ...[finetune.tax, finetune.spending].flatMap((side) =>
+      side.groups.flatMap((g) =>
+        g.decisions.flatMap((d) => [d.title, ...(d.alternatives ?? []).map((a) => a.name)]),
+      ),
     ),
     ...curated.flatMap((i) => [...(i.name ? [i.name] : []), ...i.policies.map((p) => p.title)]),
-    // A spending fold's subheads (Phase 26): the families of the levers it holds. A tax's family is
-    // its section's own heading now, read above.
-    ...new Set(
-      curated
-        .filter((i) => i.side === 'spending')
-        .map((i) => levers.find((l) => l.code === i.code)?.group ?? ''),
-    ),
+    // Each choice's short name inside its decision (ADR-0037). The spending fold's subheads went
+    // with the fold.
+    ...curated.flatMap((i) => (i.label ? [i.label] : [])),
   ],
   'the fine-tuning advice': curated.flatMap((i) => i.policies.map((p) => p.advice.text)),
   // What choosing a lever would take out (ADR-0036), said on its card before it is touched: every
@@ -224,7 +221,9 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // with the decisions' titles read and the tax families no longer read on their own: the
     // fine-tuning screens 5.3 and their advisers' lines 4.8. Then contradictions under one decision
     // (ADR-0036): the fine-tuning screens, with each set's name, 5.2, and what a choice takes out,
-    // read from both sides of every pair, 5.9. Set GRADES to a file path to write them out.
+    // read from both sides of every pair, 5.9. Then one card a decision (ADR-0037), with the
+    // spending screen's decisions and every choice's short name read, and the fold's subheads no
+    // longer: the fine-tuning screens 4.9. Set GRADES to a file path to write them out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);

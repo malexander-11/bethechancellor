@@ -10,8 +10,9 @@ const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 // have something to say.
 const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_nicer.2';
 // The same game with a tax chosen in six of the tax screen's decisions, which open on arrival with
-// every choice in them (ADR-0035), and one folded lever chosen in every spending group, so each
-// shows four: the widest those screens get on arrival.
+// every choice in them (ADR-0035), and a budget, a benefit and one of last year's decisions chosen
+// on the spending screen, whose decisions open the same way (ADR-0037): the widest those screens
+// get on arrival.
 const TUNED = GAME.replace(
   'L=moj.10_dip47.1_nicer.2',
   'L=moj.10_dip47.1_nicer.2_vatr.1_wealth2.1_banklevy.1_iinc2.1_apd.2_otherd.-1_woth.-1_rvplan2.1',
@@ -86,21 +87,25 @@ const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] =
   // its choices, each showing every choice in it: 1,176. Then one scale a tax, both ways on one
   // card: 405 and 1,030. Then ticks that contradict each other as one choice among radios, and a
   // line saying what choosing would take out where no notice said "you can't have both" (ADR-0036):
-  // the tuned game's wealth tax and dividends are radios now, 925.
+  // the tuned game's wealth tax and dividends are radios now, 925. Then the spending screen in
+  // decisions too, each budget one scale both ways (ADR-0037): 496, with the other budgets and the
+  // defence plan open for the walk's prisons and defence gap; the tuned game opens four decisions,
+  // each showing every choice in it: 842.
   ['/finetune/tax', 450, GAME, 'advanced'],
   ['/finetune/tax', 1020, TUNED, 'advanced'],
-  ['/finetune/spending', 610, GAME, 'advanced'],
-  ['/finetune/spending', 800, TUNED, 'advanced'],
+  ['/finetune/spending', 550, GAME, 'advanced'],
+  ['/finetune/spending', 930, TUNED, 'advanced'],
   // Basic mode (Phase 27): the advisers' shortlist, and whatever the game has chosen besides
   // (tax 343 and 492, spending 424 and 589); with no badges, tax 329 and 471, spending 403 and 556.
   // Employer National Insurance and CGT at death picked in place of the levy and alignment, a
   // scale of sizes where a tick was (ADR-0035): tax 354 and 494. Then grouped by tax, and the
   // tuned game's reduced VAT rate in place of the sugar tax: 353 and 540; each way on show as a
-  // scale from the plan: 352 and 536.
+  // scale from the plan: 352 and 536. The spending screen's picks as scales from the plan too
+  // (ADR-0037): 400 and 549.
   ['/finetune/tax', 390, GAME, 'basic'],
   ['/finetune/tax', 590, TUNED, 'basic'],
-  ['/finetune/spending', 445, GAME, 'basic'],
-  ['/finetune/spending', 615, TUNED, 'basic'],
+  ['/finetune/spending', 440, GAME, 'basic'],
+  ['/finetune/spending', 605, TUNED, 'basic'],
   // The review 204 and Budget day 190 with no badges, against 213 and 199; 196 and 181 with
   // employer National Insurance in the walk in place of the levy (ADR-0035).
   ['/review', 220, GAME, 'basic'],

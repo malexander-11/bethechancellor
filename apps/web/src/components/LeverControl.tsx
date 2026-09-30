@@ -774,8 +774,9 @@ export function LeverControl({
       </div>
       {!isToggle ? (
         <>
-          {/* At rest a scale's planned radio names the level, so the line waits for a move. */}
-          {scale && isDefault ? null : (
+          {/* At rest a scale's planned radio names the level, so the line waits for a move; a
+              budget's growth after rising prices is named nowhere else, so it stays. */}
+          {scale && isDefault && !change?.real ? null : (
             <div className="lever__value">
               {change?.real ? (
                 // Spending: growth a year after rising prices, in words (Phase 25); the cash budget

@@ -258,7 +258,7 @@ function collectSourceIds(value: unknown, out: Set<string>): void {
  * counts by the stability rule's target year, is on the table, and breaks no promise at any size
  * it comes in (a strain, amber, is allowed and still shown); no two picks, and no pick and lever
  * already on the desk, count the same money. Step 4 picks one way per lever, six to ten a screen,
- * at least one in every spending group (a tax with no pick is simply left out of basic mode,
+ * at least one in every spending section (a tax with no pick is simply left out of basic mode,
  * ADR-0035); step 3 picks one or two ways a priority, at least one in full.
  * Every lever on the desk is on step 4. Whether a pick is worth £1bn needs the engine, so the
  * tests check that.
@@ -307,9 +307,9 @@ function shortlistProblems(ds: Dataset): string[] {
         problems.push(`the ${side} screen picks ${picks.length} policies, not six to ten`);
       }
       if (side === 'spending') {
-        for (const group of ds.finetune.spending.groups) {
-          if (!picks.some((p) => p.group.id === group.id)) {
-            problems.push(`spending group ${group.id} has no pick`);
+        for (const section of ds.finetune.spending.groups) {
+          if (!picks.some((p) => p.group.id === section.id)) {
+            problems.push(`spending section ${section.id} has no pick`);
           }
         }
       }
@@ -679,8 +679,8 @@ export function validateDataset(ds: Dataset): string[] {
     // the lever can reach, not where it rests, and a policy's sizes go one way and grow; two
     // policies on a lever go opposite ways; a lever that is not a toggle has a plain name; a tax
     // sits in the section named for its family, one decision among that tax's (ADR-0035); a lever
-    // not on the table comes after the rest of its decision, or of its spending group; and the
-    // screen's adviser exists and speaks on that step.
+    // not on the table comes after the rest of its decision; and the screen's adviser exists and
+    // speaks on that step.
     const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
     const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
     for (const side of FINETUNE_SIDES) {
@@ -691,13 +691,13 @@ export function validateDataset(ds: Dataset): string[] {
       } else if (adviser && !adviser.steps.includes('finetune')) {
         problems.push(`the ${side} screen's adviser ${adviser.id} does not speak on finetune`);
       }
-      // A run is what is read in one go: a tax decision's levers, or a spending group's.
-      const runs =
-        side === 'tax'
-          ? ds.finetune.tax.groups.flatMap((section) =>
-              section.decisions.map((d) => ({ family: section.label, items: d.items })),
-            )
-          : ds.finetune.spending.groups.map((g) => ({ family: undefined, items: g.items }));
+      // A run is what is read in one go: a decision's levers. A tax's section is its family.
+      const runs = screen.groups.flatMap((section) =>
+        section.decisions.map((d) => ({
+          family: side === 'tax' ? section.label : undefined,
+          items: d.items,
+        })),
+      );
       for (const { family, items } of runs) {
         let pastTheTable: string | undefined;
         for (const item of items) {
@@ -757,7 +757,8 @@ export function validateDataset(ds: Dataset): string[] {
     // Ticks that contradict each other in one decision are one choice (ADR-0036). A set of
     // alternatives is ticks that exclude one another and no live lever beyond, none of them a
     // lever a flagship sets (the screen shows those as a line); and two ticks that exclude only each
-    // other, in one decision, are a set.
+    // other, in one decision, are a set, unless a flagship sets either, when choosing one takes the
+    // other out (the spending screen's three pairs, ADR-0037).
     const live = (lever: Lever) =>
       excludesPartners(lever, ds.levers)
         .filter((p) => !p.lever.deprecated)
@@ -765,54 +766,57 @@ export function validateDataset(ds: Dataset): string[] {
     const flagshipSets = new Set(
       (ds.options?.deliver ?? []).flatMap((option) => Object.keys(option.values)),
     );
-    for (const section of ds.finetune.tax.groups) {
-      for (const decision of section.decisions) {
-        const sets = decision.alternatives ?? [];
-        for (const alt of sets) {
-          const said = `the alternatives “${alt.name}”`;
-          alt.codes.forEach((code, k) => {
-            const lever = byCode.get(code);
-            if (!lever) return;
-            if (lever.control.kind !== 'toggle') problems.push(`${said} hold ${code}, not a tick`);
-            if (flagshipSets.has(code)) {
-              problems.push(`${said} hold ${code}, which a flagship sets`);
+    const file = ds.finetune;
+    const decisions = FINETUNE_SIDES.flatMap((side) =>
+      file[side].groups.flatMap((section) => section.decisions),
+    );
+    for (const decision of decisions) {
+      const sets = decision.alternatives ?? [];
+      for (const alt of sets) {
+        const said = `the alternatives “${alt.name}”`;
+        alt.codes.forEach((code, k) => {
+          const lever = byCode.get(code);
+          if (!lever) return;
+          if (lever.control.kind !== 'toggle') problems.push(`${said} hold ${code}, not a tick`);
+          if (flagshipSets.has(code)) {
+            problems.push(`${said} hold ${code}, which a flagship sets`);
+          }
+          const partners = live(lever);
+          for (const other of alt.codes.slice(k + 1)) {
+            if (!partners.includes(other)) {
+              problems.push(`${said} hold ${code} and ${other}, which do not exclude each other`);
             }
-            const partners = live(lever);
-            for (const other of alt.codes.slice(k + 1)) {
-              if (!partners.includes(other)) {
-                problems.push(`${said} hold ${code} and ${other}, which do not exclude each other`);
-              }
-            }
-            for (const other of partners) {
-              if (!alt.codes.includes(other)) {
-                problems.push(`${said} hold ${code}, which also excludes ${other}`);
-              }
-            }
-          });
-        }
-        const ticks = decision.items.filter(
-          (item) => byCode.get(item.code)?.control.kind === 'toggle',
-        );
-        ticks.forEach((a, k) => {
-          const la = byCode.get(a.code);
-          if (!la) return;
-          for (const b of ticks.slice(k + 1)) {
-            const lb = byCode.get(b.code);
-            if (!lb) continue;
-            const pa = live(la);
-            const pb = live(lb);
-            const onlyEachOther = pa.length === 1 && pa[0] === b.code && pb.length === 1;
-            const together = sets.some(
-              (alt) => alt.codes.includes(a.code) && alt.codes.includes(b.code),
-            );
-            if (onlyEachOther && !together) {
-              problems.push(
-                `${a.code} and ${b.code} contradict each other in decision ${decision.id}: make them alternatives`,
-              );
+          }
+          for (const other of partners) {
+            if (!alt.codes.includes(other)) {
+              problems.push(`${said} hold ${code}, which also excludes ${other}`);
             }
           }
         });
       }
+      const ticks = decision.items.filter(
+        (item) => byCode.get(item.code)?.control.kind === 'toggle',
+      );
+      ticks.forEach((a, k) => {
+        const la = byCode.get(a.code);
+        if (!la) return;
+        for (const b of ticks.slice(k + 1)) {
+          const lb = byCode.get(b.code);
+          if (!lb) continue;
+          const pa = live(la);
+          const pb = live(lb);
+          const onlyEachOther = pa.length === 1 && pa[0] === b.code && pb.length === 1;
+          const together = sets.some(
+            (alt) => alt.codes.includes(a.code) && alt.codes.includes(b.code),
+          );
+          const flagship = flagshipSets.has(a.code) || flagshipSets.has(b.code);
+          if (onlyEachOther && !together && !flagship) {
+            problems.push(
+              `${a.code} and ${b.code} contradict each other in decision ${decision.id}: make them alternatives`,
+            );
+          }
+        }
+      });
     }
   }
   if (ds.finetune || ds.options) problems.push(...shortlistProblems(ds));

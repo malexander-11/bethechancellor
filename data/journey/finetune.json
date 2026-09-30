@@ -17,6 +17,7 @@
               {
                 "code": "itbr",
                 "name": "The basic rate of income tax",
+                "label": "Basic rate",
                 "policies": [
                   {
                     "title": "Put up the basic rate of income tax",
@@ -60,6 +61,7 @@
               {
                 "code": "ithr",
                 "name": "The higher rate of income tax",
+                "label": "Higher rate",
                 "policies": [
                   {
                     "title": "Put up the higher rate of income tax",
@@ -98,6 +100,7 @@
               {
                 "code": "itar",
                 "name": "The additional rate of income tax",
+                "label": "Additional rate",
                 "policies": [
                   {
                     "title": "Put up the additional rate of income tax",
@@ -135,6 +138,7 @@
               },
               {
                 "code": "it50",
+                "label": "A new 50% rate above £125,140",
                 "policies": [
                   {
                     "title": "A new 50% income tax rate above £125,140",
@@ -164,6 +168,7 @@
               {
                 "code": "itpa",
                 "name": "The personal allowance",
+                "label": "Personal allowance",
                 "policies": [
                   {
                     "title": "Cut the personal allowance",
@@ -202,6 +207,7 @@
               {
                 "code": "itbrl",
                 "name": "The higher-rate threshold",
+                "label": "Higher-rate threshold",
                 "policies": [
                   {
                     "title": "Lower the higher-rate threshold by 10%",
@@ -239,6 +245,7 @@
               },
               {
                 "code": "rvfrz",
+                "label": "End the freeze early",
                 "policies": [
                   {
                     "title": "End the threshold freeze early",
@@ -290,6 +297,7 @@
             "items": [
               {
                 "code": "pens30",
+                "label": "30% for everyone",
                 "policies": [
                   {
                     "title": "Give everyone the same 30% pension tax relief",
@@ -309,6 +317,7 @@
               },
               {
                 "code": "pens20",
+                "label": "The basic rate only",
                 "policies": [
                   {
                     "title": "Give pension tax relief at the basic rate only",
@@ -327,6 +336,7 @@
               },
               {
                 "code": "pslump",
+                "label": "Cap the tax-free lump sum",
                 "policies": [
                   {
                     "title": "Cap the tax-free pension lump sum",
@@ -357,6 +367,7 @@
             "items": [
               {
                 "code": "iinc2",
+                "label": "Another 2p",
                 "policies": [
                   {
                     "title": "Add another 2p to the tax on dividends, savings and rental income",
@@ -376,6 +387,7 @@
               },
               {
                 "code": "rvinv",
+                "label": "Undo last year’s rises",
                 "policies": [
                   {
                     "title": "Undo last year’s rises on dividend, savings and property income",
@@ -407,6 +419,7 @@
               {
                 "code": "nicm",
                 "name": "The main rate of National Insurance",
+                "label": "Main rate",
                 "policies": [
                   {
                     "title": "Put up National Insurance",
@@ -442,6 +455,7 @@
               {
                 "code": "nica",
                 "name": "National Insurance on pay above £50,270",
+                "label": "Rate on pay above £50,270",
                 "policies": [
                   {
                     "title": "Put up National Insurance on pay above £50,270",
@@ -480,6 +494,7 @@
               {
                 "code": "nicpt",
                 "name": "The National Insurance threshold",
+                "label": "Threshold",
                 "policies": [
                   {
                     "title": "Lower the National Insurance threshold",
@@ -517,6 +532,7 @@
               },
               {
                 "code": "nicuel",
+                "label": "Full rate on all earnings",
                 "policies": [
                   {
                     "title": "Charge full National Insurance on all earnings, however high",
@@ -538,6 +554,7 @@
               },
               {
                 "code": "nicspa",
+                "label": "Charge workers over pension age",
                 "policies": [
                   {
                     "title": "Charge National Insurance to workers over state pension age",
@@ -563,6 +580,7 @@
               {
                 "code": "nic4",
                 "name": "National Insurance for the self-employed",
+                "label": "Main rate",
                 "policies": [
                   {
                     "title": "Put up National Insurance for the self-employed",
@@ -600,6 +618,7 @@
               },
               {
                 "code": "nicllp",
+                "label": "Charge it on partnership profits",
                 "policies": [
                   {
                     "title": "Charge National Insurance on partnership profits",
@@ -625,6 +644,7 @@
               {
                 "code": "nicer",
                 "name": "Employer National Insurance",
+                "label": "Employer rate",
                 "policies": [
                   {
                     "title": "Put up employer National Insurance",
@@ -674,6 +694,7 @@
               {
                 "code": "nicst",
                 "name": "The employer National Insurance threshold",
+                "label": "Employer threshold",
                 "policies": [
                   {
                     "title": "Lower the employer National Insurance threshold",
@@ -711,6 +732,7 @@
               },
               {
                 "code": "nicpen",
+                "label": "Charge it on pension contributions",
                 "policies": [
                   {
                     "title": "Charge employer National Insurance on pension contributions",
@@ -833,6 +855,7 @@
               {
                 "code": "vatr",
                 "name": "The reduced rate of VAT",
+                "label": "Reduced rate",
                 "policies": [
                   {
                     "title": "Put up the reduced rate of VAT",
@@ -876,6 +899,7 @@
             "items": [
               {
                 "code": "vatmot",
+                "label": "Motability cars",
                 "policies": [
                   {
                     "title": "End the VAT relief on Motability cars",
@@ -897,6 +921,7 @@
               },
               {
                 "code": "vat1z",
+                "label": "1% on everything now zero-rated",
                 "policies": [
                   {
                     "title": "Charge 1% VAT on everything now zero-rated",
@@ -915,6 +940,7 @@
               },
               {
                 "code": "vatfood",
+                "label": "Food",
                 "policies": [
                   {
                     "title": "Charge VAT on food",
@@ -936,6 +962,7 @@
               },
               {
                 "code": "vatnrg",
+                "label": "Home energy",
                 "policies": [
                   {
                     "title": "Charge full VAT on home energy",
@@ -957,6 +984,7 @@
               },
               {
                 "code": "vattrn",
+                "label": "Public transport fares",
                 "policies": [
                   {
                     "title": "Charge VAT on public transport fares",
@@ -975,6 +1003,7 @@
               },
               {
                 "code": "vatkids",
+                "label": "Children’s clothes",
                 "policies": [
                   {
                     "title": "Charge VAT on children’s clothes",
@@ -993,6 +1022,7 @@
               },
               {
                 "code": "vathome",
+                "label": "New homes",
                 "policies": [
                   {
                     "title": "Charge VAT on new homes",
@@ -1011,6 +1041,7 @@
               },
               {
                 "code": "vatbook",
+                "label": "Books, newspapers and magazines",
                 "policies": [
                   {
                     "title": "Charge VAT on books, newspapers and magazines",
@@ -1042,6 +1073,7 @@
               {
                 "code": "cgth",
                 "name": "The higher rate of capital gains tax",
+                "label": "Higher rate",
                 "policies": [
                   {
                     "title": "Put up the higher rate of capital gains tax",
@@ -1064,6 +1096,7 @@
               {
                 "code": "cgtl",
                 "name": "The lower rate of capital gains tax",
+                "label": "Lower rate",
                 "policies": [
                   {
                     "title": "Put up the lower rate of capital gains tax",
@@ -1085,6 +1118,7 @@
               },
               {
                 "code": "rvcgt",
+                "label": "Undo the 2024 rise",
                 "policies": [
                   {
                     "title": "Undo the 2024 rise in capital gains tax",
@@ -1103,6 +1137,7 @@
               },
               {
                 "code": "carried",
+                "label": "Carried interest as income",
                 "policies": [
                   {
                     "title": "Tax fund managers’ carried interest as income",
@@ -1133,6 +1168,7 @@
             "items": [
               {
                 "code": "cgtdth",
+                "label": "When someone dies",
                 "policies": [
                   {
                     "title": "Tax capital gains when someone dies",
@@ -1152,6 +1188,7 @@
               },
               {
                 "code": "cgtexit",
+                "label": "When someone leaves the UK",
                 "policies": [
                   {
                     "title": "Charge capital gains tax on people who leave the UK",
@@ -1170,6 +1207,7 @@
               },
               {
                 "code": "cgtprr",
+                "label": "On main homes",
                 "policies": [
                   {
                     "title": "Charge capital gains tax on main homes",
@@ -1244,6 +1282,7 @@
             "items": [
               {
                 "code": "rnrb",
+                "label": "End the family-home allowance",
                 "policies": [
                   {
                     "title": "End the extra inheritance tax allowance for family homes",
@@ -1264,6 +1303,7 @@
               },
               {
                 "code": "rvapr",
+                "label": "Undo the 2026 farm and business changes",
                 "policies": [
                   {
                     "title": "Reverse the 2026 farm and family-business inheritance tax changes",
@@ -1300,6 +1340,7 @@
             "items": [
               {
                 "code": "wealth",
+                "label": "1% a year",
                 "policies": [
                   {
                     "title": "A 1% yearly tax on wealth above £10 million",
@@ -1318,6 +1359,7 @@
               },
               {
                 "code": "wealth2",
+                "label": "2% a year",
                 "policies": [
                   {
                     "title": "A 2% yearly tax on wealth above £10 million",
@@ -1348,6 +1390,7 @@
             "items": [
               {
                 "code": "ctgh",
+                "label": "Double it on bands G and H",
                 "policies": [
                   {
                     "title": "Double council tax on the biggest homes (bands G and H)",
@@ -1367,6 +1410,7 @@
               },
               {
                 "code": "hvcts15",
+                "label": "Extend the surcharge to £1.5 million",
                 "policies": [
                   {
                     "title": "Extend the council tax surcharge to homes over £1.5 million",
@@ -1441,6 +1485,7 @@
             "items": [
               {
                 "code": "sdltabol",
+                "label": "Abolish it on main homes",
                 "policies": [
                   {
                     "title": "Abolish stamp duty on main homes",
@@ -1459,6 +1504,7 @@
               },
               {
                 "code": "rvhrad",
+                "label": "Additional-homes surcharge back to 3%",
                 "policies": [
                   {
                     "title": "Cut the stamp duty surcharge on additional homes back to 3%",
@@ -1578,6 +1624,7 @@
             "items": [
               {
                 "code": "qelevy",
+                "label": "A levy on banks’ reserves",
                 "policies": [
                   {
                     "title": "A levy on the interest banks earn at the Bank of England",
@@ -1615,6 +1662,7 @@
               },
               {
                 "code": "bank5",
+                "label": "Bank surcharge up to 5%",
                 "policies": [
                   {
                     "title": "Raise the bank surcharge from 3% to 5%",
@@ -1636,6 +1684,7 @@
               },
               {
                 "code": "epl2",
+                "label": "Energy profits levy up again",
                 "policies": [
                   {
                     "title": "Raise the energy profits levy again, as in 2024",
@@ -1666,6 +1715,7 @@
             "items": [
               {
                 "code": "fuelfrz",
+                "label": "Freeze it in April 2027",
                 "policies": [
                   {
                     "title": "Freeze fuel duty in April 2027",
@@ -1740,6 +1790,7 @@
               {
                 "code": "alc",
                 "name": "Alcohol duty",
+                "label": "Alcohol",
                 "policies": [
                   {
                     "title": "Put up alcohol duty",
@@ -1772,6 +1823,7 @@
               {
                 "code": "tob",
                 "name": "Tobacco duty",
+                "label": "Tobacco",
                 "policies": [
                   {
                     "title": "Put up tobacco duty",
@@ -1887,6 +1939,7 @@
             "items": [
               {
                 "code": "sugsalt",
+                "label": "A new sugar and salt tax",
                 "policies": [
                   {
                     "title": "A new tax on sugar and salt in food",
@@ -1984,405 +2037,426 @@
       {
         "id": "services",
         "label": "Public services",
-        "items": [
+        "decisions": [
           {
-            "code": "dhsc",
-            "name": "Health and social care",
-            "policies": [
+            "id": "services-protected",
+            "title": "Change health, schools and defence",
+            "items": [
               {
-                "title": "Cut health and social care",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Protected, and the biggest budget. A cut shows up in waiting lists.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-sr25-del-tables",
-                      "table": "Table 5.3 RDELex"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03",
-                      "paragraph": "4.15-4.16"
-                    },
-                    {
-                      "sourceId": "govuk-elective-reform-plan-2025"
+                "code": "dhsc",
+                "name": "Health and social care",
+                "policies": [
+                  {
+                    "title": "Cut health and social care",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Protected, and the biggest budget. A cut shows up in waiting lists.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-sr25-del-tables",
+                          "table": "Table 5.3 RDELex"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03",
+                          "paragraph": "4.15-4.16"
+                        },
+                        {
+                          "sourceId": "govuk-elective-reform-plan-2025"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Spend more on health and social care",
+                    "shortlist": true,
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Waiting lists fall slowly; strikes and pay awards are the risks.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-elective-reform-plan-2025"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ]
+                    }
+                  }
+                ]
               },
               {
-                "title": "Spend more on health and social care",
-                "shortlist": true,
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Waiting lists fall slowly; strikes and pay awards are the risks.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-elective-reform-plan-2025"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "dfe",
+                "name": "Schools and education",
+                "policies": [
+                  {
+                    "title": "Cut schools and education",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Protected. Special needs costs already squeeze what schools get.",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03",
+                          "paragraph": "4.15-4.16"
+                        },
+                        {
+                          "sourceId": "nao-send-2024"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "dfe",
-            "name": "Schools and education",
-            "policies": [
-              {
-                "title": "Cut schools and education",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Protected. Special needs costs already squeeze what schools get.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03",
-                      "paragraph": "4.15-4.16"
-                    },
-                    {
-                      "sourceId": "nao-send-2024"
+                  },
+                  {
+                    "title": "Spend more on schools and education",
+                    "shortlist": true,
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Special needs demand keeps rising and would take much of it.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "nao-send-2024"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ]
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Spend more on schools and education",
-                "shortlist": true,
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Special needs demand keeps rising and would take much of it.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "nao-send-2024"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "mod",
+                "name": "Defence, day to day",
+                "policies": [
+                  {
+                    "title": "Cut defence, day to day",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Any cut puts the defence promise at risk.",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-dip-funding-explainer"
+                        },
+                        {
+                          "sourceId": "labour-manifesto-2024-strong-foundations"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
+                  },
+                  {
+                    "title": "Spend more on defence, day to day",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Pays people and keeps kit running. It buys no submarines.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-submarine-investment-2026-07-30"
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "mod",
-            "name": "Defence, day to day",
-            "policies": [
+            "id": "services-other",
+            "title": "Change the other budgets",
+            "items": [
               {
-                "title": "Cut defence, day to day",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Any cut puts the defence promise at risk.",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-dip-funding-explainer"
-                    },
-                    {
-                      "sourceId": "labour-manifesto-2024-strong-foundations"
+                "code": "home",
+                "name": "The Home Office and borders",
+                "label": "Home Office and borders",
+                "policies": [
+                  {
+                    "title": "Cut the Home Office and borders",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "The plan assumes asylum costs fall; if not, it overspends.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-sr25-del-tables",
+                          "table": "Table 5.3 RDELex"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        },
+                        {
+                          "sourceId": "nao-asylum-system-2025"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Spend more on the Home Office and borders",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Asylum costs are eating a budget that is already falling.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "nao-asylum-system-2025"
+                        }
+                      ]
+                    }
+                  }
+                ]
               },
               {
-                "title": "Spend more on defence, day to day",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Pays people and keeps kit running. It buys no submarines.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-submarine-investment-2026-07-30"
+                "code": "moj",
+                "name": "Prisons and courts",
+                "policies": [
+                  {
+                    "title": "Cut prisons and courts",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Small money, and ministers have promised not to shorten sentences.",
+                      "sources": [
+                        {
+                          "sourceId": "no10-commons-statement-2026-09-01"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "home",
-            "name": "The Home Office and borders",
-            "policies": [
-              {
-                "title": "Cut the Home Office and borders",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "The plan assumes asylum costs fall; if not, it overspends.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-sr25-del-tables",
-                      "table": "Table 5.3 RDELex"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    },
-                    {
-                      "sourceId": "nao-asylum-system-2025"
+                  },
+                  {
+                    "title": "Spend more on prisons and courts",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Buys staff and repairs, not new cells yet.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "no10-commons-statement-2026-09-01"
+                        }
+                      ]
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Spend more on the Home Office and borders",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Asylum costs are eating a budget that is already falling.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "nao-asylum-system-2025"
+                "code": "mhclg",
+                "name": "Grants to councils",
+                "policies": [
+                  {
+                    "title": "Cut grants to councils",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Small money here; councils would feel it in social care.",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-local-government-settlement-2025-26"
+                        },
+                        {
+                          "sourceId": "no10-social-care-speech-2026-07-29"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "moj",
-            "name": "Prisons and courts",
-            "policies": [
-              {
-                "title": "Cut prisons and courts",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Small money, and ministers have promised not to shorten sentences.",
-                  "sources": [
-                    {
-                      "sourceId": "no10-commons-statement-2026-09-01"
+                  },
+                  {
+                    "title": "Raise grants to councils",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Councils would feel it first in adult social care.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "no10-social-care-speech-2026-07-29"
+                        },
+                        {
+                          "sourceId": "govuk-local-government-settlement-2025-26"
+                        }
+                      ]
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Spend more on prisons and courts",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Buys staff and repairs, not new cells yet.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "no10-commons-statement-2026-09-01"
+                "code": "dft",
+                "name": "Transport, day to day",
+                "policies": [
+                  {
+                    "title": "Cut transport, day to day",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Small money. Already falling in real terms, and unprotected.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-sr25-del-tables",
+                          "table": "Table 5.3 RDELex"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03",
+                          "paragraph": "4.15-4.16"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "mhclg",
-            "name": "Grants to councils",
-            "policies": [
-              {
-                "title": "Cut grants to councils",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Small money here; councils would feel it in social care.",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-local-government-settlement-2025-26"
-                    },
-                    {
-                      "sourceId": "no10-social-care-speech-2026-07-29"
+                  },
+                  {
+                    "title": "Spend more on transport, day to day",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Small money; it pays for bus and rail subsidies.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-sr25-del-tables"
+                        }
+                      ]
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Raise grants to councils",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Councils would feel it first in adult social care.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "no10-social-care-speech-2026-07-29"
-                    },
-                    {
-                      "sourceId": "govuk-local-government-settlement-2025-26"
+                "code": "fcdo",
+                "name": "The Foreign Office and aid",
+                "label": "Foreign Office and aid",
+                "policies": [
+                  {
+                    "title": "Cut the Foreign Office and aid",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Small money. Aid is already falling, and unprotected.",
+                      "sources": [
+                        {
+                          "sourceId": "fcdo-oda-2025"
+                        },
+                        {
+                          "sourceId": "hmt-sr25-del-tables",
+                          "table": "Table 5.3 RDELex"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03",
+                          "paragraph": "4.15-4.16"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "dft",
-            "name": "Transport, day to day",
-            "policies": [
-              {
-                "title": "Cut transport, day to day",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Small money. Already falling in real terms, and unprotected.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-sr25-del-tables",
-                      "table": "Table 5.3 RDELex"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03",
-                      "paragraph": "4.15-4.16"
+                  },
+                  {
+                    "title": "Spend more on the Foreign Office and aid",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Small money, and it softens the cut to aid.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "fcdo-oda-2025"
+                        },
+                        {
+                          "sourceId": "hmt-sr25-del-tables"
+                        }
+                      ]
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Spend more on transport, day to day",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Small money; it pays for bus and rail subsidies.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-sr25-del-tables"
+                "code": "otherd",
+                "name": "All other departments",
+                "policies": [
+                  {
+                    "title": "Cut all other departments",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Mostly Scotland, Wales and Northern Ireland’s grants; also energy and net zero.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-statement-of-funding-policy-2025"
+                        },
+                        {
+                          "sourceId": "hmt-sr25-del-tables",
+                          "table": "Table 5.3 RDELex"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
+                  },
+                  {
+                    "title": "Spend more on all other departments",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Most of it would reach Scotland, Wales and Northern Ireland.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-statement-of-funding-policy-2025"
+                        },
+                        {
+                          "sourceId": "hmt-sr25-del-tables"
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "fcdo",
-            "name": "The Foreign Office and aid",
-            "policies": [
+            "id": "new-programmes",
+            "title": "Fund a new programme",
+            "items": [
               {
-                "title": "Cut the Foreign Office and aid",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Small money. Aid is already falling, and unprotected.",
-                  "sources": [
-                    {
-                      "sourceId": "fcdo-oda-2025"
-                    },
-                    {
-                      "sourceId": "hmt-sr25-del-tables",
-                      "table": "Table 5.3 RDELex"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03",
-                      "paragraph": "4.15-4.16"
+                "code": "ufsm",
+                "policies": [
+                  {
+                    "title": "Free school meals for every child",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "England only. It pays for every place, not just meals eaten.",
+                      "sources": [
+                        {
+                          "sourceId": "dfe-school-pupils-2025-26"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Spend more on the Foreign Office and aid",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Small money, and it softens the cut to aid.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "fcdo-oda-2025"
-                    },
-                    {
-                      "sourceId": "hmt-sr25-del-tables"
+                "code": "bus2",
+                "label": "Keep the £2 bus fare cap",
+                "policies": [
+                  {
+                    "title": "Keep the £2 bus fare cap running",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small, and only for buses in England outside London.",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-bus-fare-cap-2027"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "otherd",
-            "name": "All other departments",
-            "policies": [
-              {
-                "title": "Cut all other departments",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Mostly Scotland, Wales and Northern Ireland’s grants; also energy and net zero.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-statement-of-funding-policy-2025"
-                    },
-                    {
-                      "sourceId": "hmt-sr25-del-tables",
-                      "table": "Table 5.3 RDELex"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Spend more on all other departments",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Most of it would reach Scotland, Wales and Northern Ireland.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-statement-of-funding-policy-2025"
-                    },
-                    {
-                      "sourceId": "hmt-sr25-del-tables"
+                "code": "airet",
+                "policies": [
+                  {
+                    "title": "An AI retraining programme",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "A sum set aside; whether it works depends on delivery.",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "ufsm",
-            "policies": [
-              {
-                "title": "Free school meals for every child",
-                "sizes": [1],
-                "advice": {
-                  "text": "England only. It pays for every place, not just meals eaten.",
-                  "sources": [
-                    {
-                      "sourceId": "dfe-school-pupils-2025-26"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "bus2",
-            "policies": [
-              {
-                "title": "Keep the £2 bus fare cap running",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small, and only for buses in England outside London.",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-bus-fare-cap-2027"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "airet",
-            "policies": [
-              {
-                "title": "An AI retraining programme",
-                "sizes": [1],
-                "advice": {
-                  "text": "A sum set aside; whether it works depends on delivery.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               }
             ]
           }
@@ -2391,101 +2465,115 @@
       {
         "id": "investment",
         "label": "Investment",
-        "items": [
+        "decisions": [
           {
-            "code": "cdel",
-            "name": "Public investment",
-            "policies": [
+            "id": "public-investment",
+            "title": "Change public investment",
+            "items": [
               {
-                "title": "Cut public investment",
-                "sizes": [-5, -10],
-                "advice": {
-                  "text": "Counts against the debt rule, not the day-to-day rule.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-strong-fiscal-framework-2024-10"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "cdel",
+                "name": "Public investment",
+                "policies": [
+                  {
+                    "title": "Cut public investment",
+                    "sizes": [-5, -10],
+                    "advice": {
+                      "text": "Counts against the debt rule, not the day-to-day rule.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-strong-fiscal-framework-2024-10"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Spend more on public investment",
+                    "shortlist": true,
+                    "sizes": [5, 10, 20],
+                    "advice": {
+                      "text": "Counts against the debt rule only, and departments often underspend.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ]
+                    }
+                  }
+                ]
               },
               {
-                "title": "Spend more on public investment",
-                "shortlist": true,
-                "sizes": [5, 10, 20],
-                "advice": {
-                  "text": "Counts against the debt rule only, and departments often underspend.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "socrent",
+                "policies": [
+                  {
+                    "title": "More council and social rent homes",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Counts against the debt rule only; the homes arrive over a decade.",
+                      "sources": [
+                        {
+                          "sourceId": "mhclg-sahp-2026-2036"
+                        },
+                        {
+                          "sourceId": "hmt-strong-fiscal-framework-2024-10"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "dip47",
-            "policies": [
+            "id": "defence-plan",
+            "title": "Fund the defence plan",
+            "items": [
               {
-                "title": "Fund the defence plan’s gap",
-                "sizes": [1],
-                "advice": {
-                  "text": "The defence plan counts on this money, and nothing funds it yet.",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-dip-funding-explainer"
+                "code": "dip47",
+                "label": "Fund the plan’s gap",
+                "policies": [
+                  {
+                    "title": "Fund the defence plan’s gap",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "The defence plan counts on this money, and nothing funds it yet.",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-dip-funding-explainer"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "socrent",
-            "policies": [
+                  }
+                ]
+              },
               {
-                "title": "More council and social rent homes",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Counts against the debt rule only; the homes arrive over a decade.",
-                  "sources": [
-                    {
-                      "sourceId": "mhclg-sahp-2026-2036"
-                    },
-                    {
-                      "sourceId": "hmt-strong-fiscal-framework-2024-10"
+                "code": "def3",
+                "label": "3% of GDP now, not in 2030-31",
+                "policies": [
+                  {
+                    "title": "Defence at 3% of GDP now, not in 2030-31",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Costs most at first; the bill fades by 2030.",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-dip-funding-explainer"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "def3",
-            "policies": [
-              {
-                "title": "Defence at 3% of GDP now, not in 2030-31",
-                "sizes": [1],
-                "advice": {
-                  "text": "Costs most at first; the bill fades by 2030.",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-dip-funding-explainer"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               }
             ]
           }
@@ -2494,277 +2582,321 @@
       {
         "id": "benefits",
         "label": "Benefits",
-        "items": [
+        "decisions": [
           {
-            "code": "wpens",
-            "name": "Pensioner benefits",
-            "policies": [
+            "id": "pensioner-benefits",
+            "title": "Change benefits for pensioners",
+            "items": [
               {
-                "title": "Cut pensioner benefits",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Mostly the state pension. A cut reaches every pensioner.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03",
-                      "table": "Table 4.6"
+                "code": "wpens",
+                "name": "Pensioner benefits",
+                "policies": [
+                  {
+                    "title": "Cut pensioner benefits",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Mostly the state pension. A cut reaches every pensioner.",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03",
+                          "table": "Table 4.6"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Raise pensioner benefits",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Mostly the state pension, which the triple lock already raises.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ]
+                    }
+                  }
+                ]
               },
               {
-                "title": "Raise pensioner benefits",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Mostly the state pension, which the triple lock already raises.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "cpilock",
+                "label": "Prices only, ending the triple lock",
+                "policies": [
+                  {
+                    "title": "Link the state pension to prices only, ending the triple lock",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Every pensioner feels it, and the gap widens each year.",
+                      "sources": [
+                        {
+                          "sourceId": "dwp-benefit-expenditure-2026"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "wuc",
-            "name": "Universal credit",
-            "policies": [
-              {
-                "title": "Cut universal credit",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Inside the welfare cap: already above it, but within its margin.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03",
-                      "table": "Table 4.6"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Raise universal credit",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Reaches the poorest families first, and pushes further over the welfare cap.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "labour-manifesto-2024-opportunity"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "pensmth",
+                "label": "An earnings link, ending the triple lock",
+                "policies": [
+                  {
+                    "title": "Replace the pension triple lock with an earnings link",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small now and growing; pensions still rise with pay over time.",
+                      "sources": [
+                        {
+                          "sourceId": "rf-what-a-ratchet-2026"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "wdis",
-            "name": "Disability benefits",
-            "policies": [
+            "id": "working-age-benefits",
+            "title": "Change working-age benefits",
+            "items": [
               {
-                "title": "Cut disability benefits",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Caseloads are rising fast, and past cuts saved less than planned.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    },
-                    {
-                      "sourceId": "dwp-pip-statistics-2026-04"
+                "code": "wuc",
+                "name": "Universal credit",
+                "policies": [
+                  {
+                    "title": "Cut universal credit",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Inside the welfare cap: already above it, but within its margin.",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03",
+                          "table": "Table 4.6"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Raise universal credit",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Reaches the poorest families first, and pushes further over the welfare cap.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "labour-manifesto-2024-opportunity"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ]
+                    }
+                  }
+                ]
               },
               {
-                "title": "Raise disability benefits",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Rising caseloads already push this line up fast without it.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    },
-                    {
-                      "sourceId": "dwp-pip-statistics-2026-04"
+                "code": "woth",
+                "name": "Other benefits",
+                "policies": [
+                  {
+                    "title": "Cut other benefits",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Carers and housing support; Northern Ireland sets most of its own.",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03",
+                          "table": "Table 4.6"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "woth",
-            "name": "Other benefits",
-            "policies": [
-              {
-                "title": "Cut other benefits",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Carers and housing support; Northern Ireland sets most of its own.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03",
-                      "table": "Table 4.6"
+                  },
+                  {
+                    "title": "Raise other benefits",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Reaches carers and housing support; Scotland pays carers its own benefit.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        },
+                        {
+                          "sourceId": "govuk-carers-allowance-scotland"
+                        }
+                      ]
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Raise other benefits",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Reaches carers and housing support; Scotland pays carers its own benefit.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    },
-                    {
-                      "sourceId": "govuk-carers-allowance-scotland"
+                "code": "ucfloor",
+                "policies": [
+                  {
+                    "title": "A protected floor in Universal Credit",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small, and it reaches the poorest households first.",
+                      "sources": [
+                        {
+                          "sourceId": "jrf-uc-floor-2026"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
+                  }
+                ]
+              },
+              {
+                "code": "lha30",
+                "policies": [
+                  {
+                    "title": "Raise housing benefit to match local rents",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Renters feel it, though some of it ends up with landlords.",
+                      "sources": [
+                        {
+                          "sourceId": "rf-saving-private-renters-2026"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "uitime",
+                "label": "Limit unemployment insurance to six months",
+                "policies": [
+                  {
+                    "title": "Time-limit the new unemployment insurance to six months",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Saves nothing until 2030-31, then the same each year.",
+                      "sources": [
+                        {
+                          "sourceId": "ifs-green-budget-2025"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "ucfloor",
-            "policies": [
+            "id": "disability-benefits",
+            "title": "Change disability benefits",
+            "items": [
               {
-                "title": "A protected floor in Universal Credit",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small, and it reaches the poorest households first.",
-                  "sources": [
-                    {
-                      "sourceId": "jrf-uc-floor-2026"
+                "code": "wdis",
+                "name": "Disability benefits",
+                "policies": [
+                  {
+                    "title": "Cut disability benefits",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Caseloads are rising fast, and past cuts saved less than planned.",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        },
+                        {
+                          "sourceId": "dwp-pip-statistics-2026-04"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "lha30",
-            "policies": [
+                  },
+                  {
+                    "title": "Raise disability benefits",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Rising caseloads already push this line up fast without it.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        },
+                        {
+                          "sourceId": "dwp-pip-statistics-2026-04"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
               {
-                "title": "Raise housing benefit to match local rents",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Renters feel it, though some of it ends up with landlords.",
-                  "sources": [
-                    {
-                      "sourceId": "rf-saving-private-renters-2026"
+                "code": "csjmh",
+                "label": "Stop them for milder mental health conditions",
+                "policies": [
+                  {
+                    "title": "Stop disability benefits for milder mental health conditions",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big on paper; past disability reforms saved less than planned.",
+                      "sources": [
+                        {
+                          "sourceId": "dwp-timms-review-evidence-pack"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "uitime",
-            "policies": [
+                  }
+                ]
+              },
               {
-                "title": "Time-limit the new unemployment insurance to six months",
-                "sizes": [1],
-                "advice": {
-                  "text": "Saves nothing until 2030-31, then the same each year.",
-                  "sources": [
-                    {
-                      "sourceId": "ifs-green-budget-2025"
+                "code": "rvpip",
+                "label": "Go ahead with the 2025 PIP cuts",
+                "policies": [
+                  {
+                    "title": "Go ahead with the 2025 cuts to PIP",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Undoes last year’s U-turn; your own MPs will fight it.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1",
+                          "note": "line 83"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "csjmh",
-            "policies": [
+                  }
+                ]
+              },
               {
-                "title": "Stop disability benefits for milder mental health conditions",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big on paper; past disability reforms saved less than planned.",
-                  "sources": [
-                    {
-                      "sourceId": "dwp-timms-review-evidence-pack"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "dlakids",
+                "label": "Assess children’s claims in person",
+                "policies": [
+                  {
+                    "title": "Assess children in person for Disability Living Allowance",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Nothing until 2030-31; some new autism and ADHD claims would fail.",
+                      "sources": [
+                        {
+                          "sourceId": "csj-change-the-prescription-2026"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "dlakids",
-            "policies": [
-              {
-                "title": "Assess children in person for Disability Living Allowance",
-                "sizes": [1],
-                "advice": {
-                  "text": "Nothing until 2030-31; some new autism and ADHD claims would fail.",
-                  "sources": [
-                    {
-                      "sourceId": "csj-change-the-prescription-2026"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "cpilock",
-            "policies": [
-              {
-                "title": "Link the state pension to prices only, ending the triple lock",
-                "sizes": [1],
-                "advice": {
-                  "text": "Every pensioner feels it, and the gap widens each year.",
-                  "sources": [
-                    {
-                      "sourceId": "dwp-benefit-expenditure-2026"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "pensmth",
-            "policies": [
-              {
-                "title": "Replace the pension triple lock with an earnings link",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small now and growing; pensions still rise with pay over time.",
-                  "sources": [
-                    {
-                      "sourceId": "rf-what-a-ratchet-2026"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               }
             ]
           }
@@ -2773,113 +2905,102 @@
       {
         "id": "decisions",
         "label": "Last year’s decisions",
-        "items": [
+        "decisions": [
           {
-            "code": "rvpip",
-            "policies": [
+            "id": "last-year",
+            "title": "Reverse a decision",
+            "items": [
               {
-                "title": "Go ahead with the 2025 cuts to PIP",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Undoes last year’s U-turn; your own MPs will fight it.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1",
-                      "note": "line 83"
+                "code": "rveff",
+                "label": "Cancel the extra efficiency savings",
+                "policies": [
+                  {
+                    "title": "Cancel the extra efficiency savings planned from 2028",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "The OBR already doubts these savings will ever come.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1",
+                          "note": "line 37"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rveff",
-            "policies": [
+                  }
+                ]
+              },
               {
-                "title": "Cancel the extra efficiency savings planned from 2028",
-                "sizes": [1],
-                "advice": {
-                  "text": "The OBR already doubts these savings will ever come.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1",
-                      "note": "line 37"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "rv2ch",
+                "policies": [
+                  {
+                    "title": "Reinstate the two-child limit",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Families on benefits pay, and it breaks a promise.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1",
+                          "note": "line 6"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2025-document"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rv2ch",
-            "policies": [
+                  }
+                ]
+              },
               {
-                "title": "Reinstate the two-child limit",
-                "sizes": [1],
-                "advice": {
-                  "text": "Families on benefits pay, and it breaks a promise.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1",
-                      "note": "line 6"
-                    },
-                    {
-                      "sourceId": "hmt-budget-2025-document"
+                "code": "rvwfp",
+                "label": "Winter fuel for pension credit only",
+                "policies": [
+                  {
+                    "title": "Limit winter fuel payments to pensioners on pension credit",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Brings back a cut the government reversed last year.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1",
+                          "note": "line 84"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2025-policy-costings"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rvwfp",
-            "policies": [
+                  }
+                ]
+              },
               {
-                "title": "Limit winter fuel payments to pensioners on pension credit",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Brings back a cut the government reversed last year.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1",
-                      "note": "line 84"
-                    },
-                    {
-                      "sourceId": "hmt-budget-2025-policy-costings"
+                "code": "rvplan2",
+                "label": "Let the student loan threshold rise",
+                "policies": [
+                  {
+                    "title": "Let the student loan repayment threshold rise again",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small money; graduates in England and Wales keep a little more.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1",
+                          "note": "line 48"
+                        },
+                        {
+                          "sourceId": "govuk-student-loan-plans"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rvplan2",
-            "policies": [
-              {
-                "title": "Let the student loan repayment threshold rise again",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small money; graduates in England and Wales keep a little more.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1",
-                      "note": "line 48"
-                    },
-                    {
-                      "sourceId": "govuk-student-loan-plans"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               }
             ]
           }
