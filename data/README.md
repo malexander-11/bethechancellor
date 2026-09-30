@@ -362,17 +362,16 @@ the `adviser` who speaks there, and its `groups`, the sections of its screen, ea
 `{ id, label, decisions }`: on the tax side a tax, on the spending side what the money is for
 (ADR-0037). Each decision `{ id, title, alternatives?, items }` holds one to eight items under a
 title of at most six words (ADR-0035, ADR-0036); no two sections on a side share an id or a label,
-and no two decisions in the file an id. Since Phase 26 every live policy lever is an item, once: 67
-on the tax side and 32 on the spending side. An item is the lever's `code`, its `label`, the short
-name it goes by inside its decision ("Food" under Remove an exemption; at most 48 characters and
-seven words, ADR-0037; without one it goes by its plain name, or its policy's title), its plain
-`name` for the review and the notes ("The main rate of VAT"; a toggle may leave it out and go by its
-policy's title), and one or two `policies`, each `{ title, sizes, advice }`: a title that says what
-the policy does ("Put up VAT", at most twelve words), the settings it comes in, smallest first, and
-the adviser's line, a `SimulatedLine` with at least one source. The first policy is the usual way,
-the one that improves the public finances (taxes up, spending down); a lever that moves both ways
-may carry a second policy the other way, and choosing one clears the other. Rules the validator
-enforces:
+and no two decisions in the file an id. Since Phase 26 every live policy lever is an item, once, on
+its own side. An item is the lever's `code`, its `label`, the short name it goes by inside its
+decision ("Food" under Remove an exemption; at most 48 characters and seven words, ADR-0037; without
+one it goes by its plain name, or its policy's title), its plain `name` for the review and the notes
+("The main rate of VAT"; a toggle may leave it out and go by its policy's title), and one or two
+`policies`, each `{ title, sizes, advice }`: a title that says what the policy does ("Put up VAT",
+at most twelve words), the settings it comes in, smallest first, and the adviser's line, a
+`SimulatedLine` with at least one source. The first policy is the usual way, the one that improves
+the public finances (taxes up, spending down); a lever that moves both ways may carry a second
+policy the other way, and choosing one clears the other. Rules the validator enforces:
 
 - **A live lever on its own side, once.** Tax items are tax levers; spending items are spend or
   welfare levers; no code appears twice in the file, so both ways of a lever share a place.
@@ -414,10 +413,9 @@ modest, tiny) only where it is £1bn or less even at the largest. The page price
 against the Budget as it stands; no figure is authored.
 
 Where two levers' own texts say they double count, cancel or are "pick one", the pair is an
-`excludes` interaction (above), with a text that reads from either card; seventeen pairs today: the
-nine taxes retired in ADR-0035 took seven with them, and undoing the 2024 capital gains rise counts
-against both rates on gains (ADR-0036). Pairs whose texts say only that the combined figure is
-approximate stay `warn`.
+`excludes` interaction (above), with a text that reads from either card; a retired lever's pairs go
+with it, and undoing the 2024 capital gains rise counts against both rates on gains (ADR-0036).
+Pairs whose texts say only that the combined figure is approximate stay `warn`.
 
 A side may carry `notes` (Phase 25): lines under the screen's lead that its 120 characters cannot
 hold, such as how long the spending settlements run, each `{ text, badge, sources }` with the text

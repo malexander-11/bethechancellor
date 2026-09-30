@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The README, the data README and the Methodology page no longer copy the tax screen's numbers of
+  decisions, ways, levers and pairs that count the same money, which retiring pension tax relief and
+  the stamp duty cuts made wrong; the data is the record.
 - Capital gains tax at death and on people who leave the UK are tick boxes, not radios. They still
   count the same money, so ticking one takes the other out and says so first. Whether contradicting
   ticks are radios is now the data's choice: the validator no longer insists on it (ADR-0038).

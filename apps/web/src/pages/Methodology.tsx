@@ -176,16 +176,16 @@ export function MethodologyPage() {
         says why, and the markets count it as a figure nobody has certified. Two measures that count
         the same money (taxing gains at death and charging people who leave the UK, for one) cannot
         both be chosen: choosing one takes the other out and says so first, and where the two answer
-        one question, as the wealth tax at 1% or 2% does, they are one choice among radios. There
-        are seventeen such pairs, each with a text that reads from either card. Employer-side
-        National Insurance is not a manifesto red line here, on the government&rsquo;s own reading
-        of the lock; the Political Adviser says on each such lever that the reading is contested.
-        Phase 12 added the menu the Budget 2026 reporting says is on the table: ending the capital
-        gains write-off at death, a £1.5 million council tax surcharge band, reversing the farm and
-        family-business relief reform, two points on the bank surcharge, the energy profits levy
-        package again, the self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance
-        package, unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and
-        business rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated
+        one question, as the wealth tax at 1% or 2% does, they are one choice among radios. Each
+        pair has a text that reads from either card. Employer-side National Insurance is not a
+        manifesto red line here, on the government&rsquo;s own reading of the lock; the Political
+        Adviser says on each such lever that the reading is contested. Phase 12 added the menu the
+        Budget 2026 reporting says is on the table: ending the capital gains write-off at death, a
+        £1.5 million council tax surcharge band, reversing the farm and family-business relief
+        reform, two points on the bank surcharge, the energy profits levy package again, the
+        self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance package,
+        unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and business
+        rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated
         calculation on one, and the data records which. Nine taxes were taken off the table on 30
         September 2026: the health and social care levy, insurance premium tax, dropping the
         salary-sacrifice cap, taxing capital gains at income tax rates, a lower VAT threshold,
