@@ -237,6 +237,41 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(statusOf('Change the headline rate')).toMatch(/^23% · raises £\d+\.\dbn$/);
   });
 
+  it('cuts the personal allowance or self-employed National Insurance, breaking no promise', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    openDecision('Change allowances and thresholds');
+    const allowance = policy('The personal allowance');
+    expect(
+      within(allowance)
+        .getAllByRole('radio')
+        .map((r) => r.closest('label')?.textContent),
+    ).toEqual(['£11,320', '£12,470', '£12,570 as planned', '£12,670', '£13,820']);
+    // The cut leads: it raises money, and says so first.
+    expect([...allowance.querySelectorAll('.lever__hint-line')].map((l) => l.textContent)).toEqual([
+      expect.stringMatching(/^£12,470: would raise £1\.\dbn · headroom would be/),
+      expect.stringMatching(/^£12,670: would cost £1\.\dbn · headroom would be/),
+    ]);
+    expect(within(allowance).getByText(/^Most taxpayers pay more;/)).toBeInTheDocument();
+    fireEvent.click(within(allowance).getByRole('radio', { name: '£11,320' }));
+    await waitFor(() => expect(search().get('L')).toMatch(/itpa\.-1250/));
+    expect(within(allowance).queryByText(/Breaks the manifesto/)).toBeNull();
+    expect(within(allowance).queryByText(/Strains the manifesto/)).toBeNull();
+    // Class 4 can come down to 2%; only a rise breaks the tax lock.
+    openDecision('Change what the self-employed pay');
+    const class4 = policy('National Insurance for the self-employed');
+    expect(
+      within(class4)
+        .getAllByRole('radio')
+        .map((r) => r.closest('label')?.textContent),
+    ).toEqual(['2%', '4%', '5%', '6% as planned', '7%', '8%', '10%']);
+    fireEvent.click(within(class4).getByRole('radio', { name: '5%' }));
+    await waitFor(() => expect(search().get('L')).toMatch(/nic4\.-1/));
+    expect(within(class4).getByText(/^Self-employed workers keep more/)).toBeInTheDocument();
+    expect(within(class4).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
+    fireEvent.click(within(class4).getByRole('radio', { name: '7%' }));
+    expect(within(class4).getByText('Breaks the manifesto: The tax lock')).toHaveClass('tag--warn');
+  });
+
   it('marks employer National Insurance amber, not red: the tax lock strained', () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     openDecision('Change what employers pay');
@@ -582,7 +617,7 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     expect(modeLine().textContent).toMatch(/^A shortlist\./);
     expect(document.querySelector('.badge')).toBeNull();
     expect(
-      screen.getByRole('button', { name: 'See every idea (all 85 tax policies)' }),
+      screen.getByRole('button', { name: 'See every idea (all 87 tax policies)' }),
     ).toBeInTheDocument();
     expect(cardTitles()).toEqual([
       'Give everyone the same 30% pension tax relief',

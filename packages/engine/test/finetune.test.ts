@@ -287,6 +287,27 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     }
   });
 
+  it('cuts the personal allowance and self-employed National Insurance too (ADR-0035)', () => {
+    const ways = (code: string) =>
+      finetuneItems(file)
+        .find((i) => i.code === code)
+        ?.policies.map((p) => [p.title, p.sizes]);
+    // The way that raises money leads: a lower allowance, £12,470 or £11,320.
+    expect(ways('itpa')).toEqual([
+      ['Cut the personal allowance', [-100, -1250]],
+      ['Raise the personal allowance', [100, 1250]],
+    ]);
+    // Class 4 at 5%, 4% or 2%, below the employees' 8% by more.
+    expect(ways('nic4')).toEqual([
+      ['Put up National Insurance for the self-employed', [1, 2, 4]],
+      ['Cut National Insurance for the self-employed', [-1, -2, -4]],
+    ]);
+    const levels = (code: string) =>
+      scaleLevels(lever(code), finetuneItems(file).find((i) => i.code === code)?.policies ?? []);
+    expect(levels('itpa')).toEqual([-1250, -100, 0, 100, 1250]);
+    expect(levels('nic4')).toEqual([-4, -2, -1, 0, 1, 2, 4]);
+  });
+
   it('holds a lever for a flagship only at the flagship’s own value', () => {
     const prisons = ds.options.deliver.find((o) => o.id === 'prisons');
     if (!prisons) throw new Error('no prisons option');
@@ -426,12 +447,12 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
     return found;
   };
 
-  it('picks eight taxes of eighty-five and seven spending policies of forty-six', () => {
+  it('picks eight taxes of eighty-seven and seven spending policies of forty-six', () => {
     const picked = (side: 'tax' | 'spending') =>
       shortlistOf(file, side).map((p) => [p.group.id, p.code, p.pick.title]);
     expect(picked('tax')).toEqual(TAX_PICKS);
     expect(picked('spending')).toEqual(SPENDING_PICKS);
-    expect(policyCount(file, 'tax')).toBe(85);
+    expect(policyCount(file, 'tax')).toBe(87);
     expect(policyCount(file, 'spending')).toBe(46);
     // One way per lever, and on the spending side the top-ups, not the trims, of the services.
     for (const entry of shortlistOf(file)) {

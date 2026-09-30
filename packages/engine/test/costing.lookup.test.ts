@@ -54,5 +54,17 @@ describe('lookup-table costings (HMRC non-linear rows)', () => {
     expect(pa?.receipts['2027-28']).toBeGreaterThan(-11650);
     const hundred = run({ itpa: 100 }).leverEffects.find((x) => x.code === 'itpa');
     expect(hundred?.receipts['2027-28']).toBeCloseTo(-1050, 6);
+    // A cut mirrors HMRC's rises with the sign reversed (ADR-0035), which HMRC does not publish
+    // and the card says is an assumption: £100 off raises what £100 on costs.
+    const less = run({ itpa: -100 }).leverEffects.find((x) => x.code === 'itpa');
+    expect(less?.receipts['2027-28']).toBeCloseTo(1050, 6);
+    const most = run({ itpa: -1250 }).leverEffects.find((x) => x.code === 'itpa');
+    expect(most?.receipts['2027-28']).toBeGreaterThan(11500);
+    expect(most?.receipts['2027-28']).toBeLessThan(11650);
+    const itpa = ds.levers.find((l) => l.code === 'itpa');
+    expect(itpa?.control.min).toBe(-1250);
+    expect(itpa?.costing.kind === 'lookupTable' && itpa.costing.caveats).toContain(
+      'Cuts use the same figures with the sign reversed, which HMRC does not publish and is an assumption here.',
+    );
   });
 });

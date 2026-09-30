@@ -517,8 +517,8 @@ export function LeverControl({
     <span className="tag">
       <Term id="hmrc-points">HMRC points only</Term>
       <span className="sr-only">
-        : HMRC publishes estimates at {lookupPoints.join(', ')}; between them the game draws a
-        straight line.
+        : the game&rsquo;s figures sit at {lookupPoints.join(', ')}, each worked from a published
+        figure; between them it draws a straight line.
       </span>
     </span>
   ) : null;

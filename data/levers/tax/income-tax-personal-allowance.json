@@ -8,8 +8,8 @@
   "title": "Personal allowance",
   "shortTitle": "Personal allowance",
   "noun": "the personal allowance",
-  "headline": "£12,570 and frozen to 2031. Each £100 costs about £1bn.",
-  "description": "Raise the £12,570 tax-free personal allowance. HMRC publishes the cost of +£100 and of +10% (about £1,257); values in between are interpolated in a straight line.",
+  "headline": "£12,570 and frozen to 2031. Each £100 is worth about £1bn.",
+  "description": "Raise or cut the £12,570 tax-free personal allowance. HMRC publishes the cost of +£100 and of +10% (about £1,257); a cut uses the same figures with the sign reversed, and values in between are interpolated in a straight line.",
   "baselinePolicy": {
     "text": "Personal allowance £12,570, unchanged since April 2021 and frozen until April 2031 (Budget 2025, Table 4.1 line 46). It is withdrawn at £1 for every £2 of income above £100,000.",
     "source": {
@@ -24,7 +24,7 @@
   "control": {
     "kind": "slider",
     "unit": "GBP",
-    "min": 0,
+    "min": -1250,
     "max": 1250,
     "step": 50,
     "default": 0,
@@ -51,6 +51,30 @@
     "kind": "lookupTable",
     "input": "GBP",
     "points": [
+      {
+        "input": -1257,
+        "effect": {
+          "2026-27": 10000,
+          "2027-28": 11650,
+          "2028-29": 11500
+        },
+        "from": {
+          "rowIds": ["income-tax-allowances-and-reliefs--change-personal-allowance-by-10-pct"],
+          "multiplier": -1
+        }
+      },
+      {
+        "input": -100,
+        "effect": {
+          "2026-27": 810,
+          "2027-28": 1050,
+          "2028-29": 1000
+        },
+        "from": {
+          "rowIds": ["income-tax-allowances-and-reliefs--change-personal-allowance-by-gbp-100"],
+          "multiplier": -1
+        }
+      },
       {
         "input": 0,
         "effect": {
@@ -126,6 +150,7 @@
     },
     "caveats": [
       "HMRC: the costs of raising an allowance do not scale linearly, so only HMRC's published points are used and the lever stops at HMRC's largest published change.",
+      "Cuts use the same figures with the sign reversed, which HMRC does not publish and is an assumption here.",
       "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
     ]
   },

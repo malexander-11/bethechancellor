@@ -35,6 +35,10 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     // A cut is not a rise, and a threshold is not a rate.
     expect(promiseBreaks({ itbr: -1 }, [lock], ds.levers)[0]?.kept).toBe(true);
     expect(promiseBreaks({ itpa: 500 }, [lock], ds.levers)[0]?.kept).toBe(true);
+    // Nor is a lower allowance, though it asks more of every taxpayer (ADR-0035): the manifesto
+    // named rates, and a lower threshold neither breaks nor strains its words.
+    expect(promiseBreaks({ itpa: -500 }, [lock], ds.levers)[0]?.kept).toBe(true);
+    expect(promiseStrains({ itpa: -500 }, [lock], ds.levers)[0]?.strained).toBe(false);
   });
 
   it('marks the employer-side NICs charges and the new top rate as straining the lock, not breaking it', () => {

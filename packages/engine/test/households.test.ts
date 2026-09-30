@@ -26,6 +26,16 @@ describe('the electorate as five households', () => {
     expect(family?.net).toBe('mixed');
     expect(family?.quiet).toBeNull();
     expect(family?.said.map((s) => s.lever.code).sort()).toEqual(['rv2ch', 'ufsm']);
+    // A lower personal allowance reaches every taxpayer below the top rate, and the pensioner on
+    // a full state pension it makes a taxpayer; a lower Class 4 rate, the tradesperson (ADR-0035).
+    for (const id of ['mortgage-couple', 'pensioner', 'tradesperson']) {
+      expect(of({ itpa: -100 }, id)?.net, id).toBe('pays');
+    }
+    // The professional pays the additional rate, where the allowance is already gone: in the
+    // broad base, but named by nothing.
+    expect(of({ itpa: -100 }, 'professional')?.net).toBe('unnamed');
+    expect(of({ nic4: -1 }, 'tradesperson')?.net).toBe('gains');
+    expect(of({ nic4: -1 }, 'tradesperson')?.said[0]?.touch.line.text).toMatch(/keep more/);
     const couple = of({ itbr: -1 }, 'mortgage-couple');
     expect(couple?.net).toBe('gains');
     expect(couple?.said[0]?.touch.line.text).toMatch(/penny off/);

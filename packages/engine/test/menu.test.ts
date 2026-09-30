@@ -186,7 +186,7 @@ describe('the Budget 2026 menu', () => {
     expect(effectOf({ epl2: 1 }, 'epl2', '2030-31').receipts).toBeCloseTo(955, 6);
   });
 
-  it('a point on Class 4 reproduces HMRC’s row and breaks the tax lock', () => {
+  it('a point on Class 4 reproduces HMRC’s row and breaks the tax lock; a cut breaks nothing', () => {
     const early = run({ nic4: 1 }, { implementationYear: '2026-27' }).leverEffects.find(
       (e) => e.code === 'nic4',
     );
@@ -200,8 +200,12 @@ describe('the Budget 2026 menu', () => {
       (p) => p.promise.id === 'tax-lock',
     );
     expect(lock?.kept).toBe(false);
-    expect(lever('nic4').control.min).toBe(0);
+    // Down to 2% as well as up to 10% (ADR-0035): HMRC's row is the same point either way.
+    expect(lever('nic4').control.min).toBe(-4);
     expect(lever('nic4').control.level?.baseline).toBe(6);
+    const cut = effectOf({ nic4: -2 }, 'nic4', '2029-30').receipts;
+    expect(cut).toBeCloseTo(-2 * whole, 6);
+    expect(promiseBreaks({ nic4: -4 }, ds.pm.promises, ds.levers).every((p) => p.kept)).toBe(true);
   });
 
   it('VAT off gas is a third of HMRC’s relief less the electricity already cut, grown with VAT', () => {

@@ -390,8 +390,9 @@ export function ProvenanceDrawer({ lever, effect }: { lever: Lever; effect?: Lev
       <p className="drawer__lede">{lever.description}</p>
       {lever.costing.kind === 'lookupTable' ? (
         <p className="source">
-          HMRC publishes estimates at its own points only; values in between are interpolated in a
-          straight line and the control stops at the largest published change.
+          The game&rsquo;s figures sit at set points, each worked from a published figure (a cut can
+          mirror a rise HMRC publishes, as the assumptions say); values in between are interpolated
+          in a straight line, and the control goes no further than the points.
         </p>
       ) : null}
       {lever.classification?.barnettConsequential ? (

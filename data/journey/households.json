@@ -599,6 +599,20 @@
             ],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "itpa",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "The personal allowance comes down. We both pay tax on a bit more of every payslip.",
+            "sources": [
+              {
+                "sourceId": "govuk-income-tax-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
       ],
       "exposure": [
@@ -973,12 +987,40 @@
           }
         },
         {
+          "code": "itpa",
+          "when": "below",
+          "effect": "pays",
+          "line": {
+            "text": "The personal allowance comes down. More of every year’s profit is taxed.",
+            "sources": [
+              {
+                "sourceId": "govuk-income-tax-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
           "code": "nic4",
           "when": "above",
           "effect": "pays",
           "line": {
             "text": "Class 4 National Insurance up. It comes out of my profits, with nobody to share it.",
             "sources": [],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "nic4",
+          "when": "below",
+          "effect": "gains",
+          "line": {
+            "text": "Class 4 National Insurance comes down. I keep more of every pound of profit.",
+            "sources": [
+              {
+                "sourceId": "govuk-nics-rates"
+              }
+            ],
             "badge": "simulated"
           }
         }

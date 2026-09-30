@@ -166,6 +166,22 @@
                 "name": "The personal allowance",
                 "policies": [
                   {
+                    "title": "Cut the personal allowance",
+                    "sizes": [-100, -1250],
+                    "advice": {
+                      "text": "Most taxpayers pay more; some who paid nothing start paying.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-income-tax-rates"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  },
+                  {
                     "title": "Raise the personal allowance",
                     "sizes": [100, 1250],
                     "advice": {
@@ -541,6 +557,22 @@
                     "sizes": [1, 2, 4],
                     "advice": {
                       "text": "Self-employed workers pay more on every pound of profit.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-nics-rates"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  },
+                  {
+                    "title": "Cut National Insurance for the self-employed",
+                    "sizes": [-1, -2, -4],
+                    "advice": {
+                      "text": "Self-employed workers keep more of every pound of profit.",
                       "sources": [
                         {
                           "sourceId": "hmrc-trr-2025-06"
