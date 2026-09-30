@@ -3,13 +3,16 @@ import { describe, expect, it } from 'vitest';
 import {
   ambitionStatus,
   computeOutcome,
+  formatGbpBn,
   freshGame,
   ratingOf,
   receptions,
   type GamePermalink,
+  type Outcome,
+  type Reason,
   type Reception,
 } from '../src/index.js';
-import { loadDataset, outcomeOfFor, readJson } from './fixtures.js';
+import { filledFrom, loadDataset, outcomeOfFor, readJson, wording } from './fixtures.js';
 import {
   BASIC_RATE_CUT,
   BIG_BROAD_TAX_RISE,
@@ -40,12 +43,33 @@ const ds = loadDataset();
 const outcomeOf = outcomeOfFor(ds);
 const context = latestContext(ds);
 const typicalErrorGbpm = typicalError(ds);
+/** What the audiences' reasons call a lever. */
+const noun = (code: string) => {
+  const lever = ds.levers.find((l) => l.code === code);
+  return lever?.noun ?? lever?.shortTitle ?? code;
+};
 /** What the audiences' reasons call the levers of a Budget. */
-const causes = (budget: Budget) =>
-  Object.keys(budget).map((code) => {
-    const lever = ds.levers.find((l) => l.code === code);
-    return lever?.noun ?? lever?.shortTitle ?? code;
-  });
+const causes = (budget: Budget) => Object.keys(budget).map(noun);
+/** The group a lever's tax falls on, as the incidence file names it. */
+const groupOf = (code: string) => ds.incidence.groups[ds.incidence.levers[code] ?? ''];
+const headroomOf = (outcome: Outcome) =>
+  outcome.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? Number.NaN;
+const RULES = new Map(ds.reception.audiences.flatMap((a) => a.rules).map((r) => [r.id, r]));
+/**
+ * The band a reason's words came from, by its id, or by its id and the reading that chose a
+ * variant's words: "thin (headroomChangeGbpm)". Read from the data, so rewording a band moves a
+ * snapshot, not this.
+ */
+function bandOf(reason: Reason | undefined): string | undefined {
+  for (const band of (reason && RULES.get(reason.rule)?.bands) ?? []) {
+    if (filledFrom(band.text, reason?.text)) return band.id;
+    const variant = band.variants?.find((v) => filledFrom(v.text, reason?.text));
+    if (variant) return `${band.id} (${variant.when.measure})`;
+  }
+  return undefined;
+}
+/** The words of some reasons, for a snapshot: a rewording is an updated snapshot and a diff. */
+const said = (...reasons: (Reason | undefined)[]) => reasons.map((r) => wording(r?.text));
 const run = (leverValues: Budget) =>
   computeOutcome({
     vintage: ds.vintage,
@@ -128,11 +152,11 @@ describe('cards that agree with their ratings (Phase 25)', () => {
     const mixed = by(room({ rvpip: 1, dhsc: 10 }), 'markets');
     const borrowing = mixed.all.find((r) => r.rule === 'mk-borrowing');
     expect(borrowing?.points).toBe(-1);
-    expect(borrowing?.causes).toContain('the health budget');
-    expect(borrowing?.causes).not.toContain('the 2025 PIP cuts');
+    expect(borrowing?.causes).toContain(noun('dhsc'));
+    expect(borrowing?.causes).not.toContain(noun('rvpip'));
     const headroom = mixed.all.find((r) => r.rule === 'mk-headroom');
     expect(headroom?.points).toBeLessThan(0);
-    expect(headroom?.causes).not.toContain('the 2025 PIP cuts');
+    expect(headroom?.causes).not.toContain(noun('rvpip'));
     // A band that scores nothing names no cause for a level: "less than March left" is not the
     // player's doing.
     const modest = by(room({ dhsc: 1 }), 'markets').all.find((r) => r.rule === 'mk-headroom');
@@ -140,30 +164,41 @@ describe('cards that agree with their ratings (Phase 25)', () => {
   });
 
   it('says a margin above twenty billion truly: close to March, or more than March left', () => {
-    const text = (values: Budget) =>
-      by(room(values), 'markets').all.find((r) => r.rule === 'mk-headroom')?.text ?? '';
-    // March's own headroom, £23.6bn: above twenty billion and close to what March left.
-    expect(text({})).toMatch(
-      /^Headroom of £23\.6bn, above the twenty billion .* close to what March left/,
-    );
-    // A big broad tax rise: more than March left, and said so.
-    expect(text(BIG_BROAD_TAX_RISE)).toMatch(
-      /^Headroom of £\d+\.\dbn, more than the £23\.6bn March left\./,
-    );
-    expect(text({ dhsc: 5 })).toMatch(/typical forecast error of about £33bn\.$/);
+    const headroom = (values: Budget) =>
+      by(room(values), 'markets').all.find((r) => r.rule === 'mk-headroom');
+    const march = formatGbpBn(headroomOf(run({})), 1);
+    // March's own headroom: above twenty billion and close to what March left.
+    const same = headroom({});
+    expect(bandOf(same)).toBe('ample');
+    expect(same?.text).toContain(march);
+    // A big broad tax rise: more than March left, and said so, with March's own figure.
+    const more = headroom(BIG_BROAD_TAX_RISE);
+    expect(bandOf(more)).toBe('plenty');
+    expect(more?.text).toContain(formatGbpBn(headroomOf(run(BIG_BROAD_TAX_RISE)), 1));
+    expect(more?.text).toContain(march);
+    // Under twenty billion: set against the OBR's typical forecast error, the engine's own figure.
+    const less = headroom({ dhsc: 5 });
+    expect(bandOf(less)).toBe('modest');
+    expect(less?.text).toContain(formatGbpBn(typicalErrorGbpm, 0));
+    expect(said(same, more, less)).toMatchSnapshot();
   });
 
   it('names who pays from the groups that actually pay', () => {
-    const broad = by(room(PENNY), 'backbenchers').all.find((r) => r.rule === 'bb-who-pays');
-    expect(broad?.text).toMatch(
-      /^The new money comes mainly from everyone who earns or spends, not the top/,
-    );
-    const top = by(room({ ...TAXES_AT_THE_TOP, ...HIGHER_EARNERS_PAY }), 'backbenchers').all.find(
-      (r) => r.rule === 'bb-who-pays',
-    );
-    expect(top?.text).toMatch(
-      /^More is asked of higher earners and the best-off than of everyone else/,
-    );
+    const whoPays = (values: Budget) =>
+      by(room(values), 'backbenchers').all.find((r) => r.rule === 'bb-who-pays');
+    const named = (reason: Reason | undefined, budget: Budget) => {
+      for (const code of Object.keys(budget)) {
+        expect(reason?.text.toLowerCase(), code).toContain(groupOf(code)?.label.toLowerCase());
+      }
+    };
+    const broad = whoPays(PENNY);
+    expect(bandOf(broad)).toBe('broad');
+    named(broad, PENNY);
+    const atTheTop = { ...TAXES_AT_THE_TOP, ...HIGHER_EARNERS_PAY };
+    const top = whoPays(atTheTop);
+    expect(bandOf(top)).toBe('top');
+    named(top, atTheTop);
+    expect(said(broad, top)).toMatchSnapshot();
   });
 
   it('quotes one gilt yield across the files, and it is today’s', () => {
@@ -193,13 +228,14 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
   it('measures the markets from before the Budget: doing nothing is Nervous, not Alarmed', () => {
     const nothing = at({});
     expect(by(nothing, 'markets').rating).toBe(2);
-    expect(by(nothing, 'markets').label).toBe('Nervous');
     // Nothing moved, so borrowing has not changed: the economy since March is not the player's.
     expect(rule(nothing, 'markets', 'mk-borrowing')?.points).toBe(0);
     const headroom = rule(nothing, 'markets', 'mk-headroom');
     expect(headroom?.points).toBe(-1);
-    expect(headroom?.text).toMatch(/not your measures\.$/);
+    // Thin, in the words that say what took it since March.
+    expect(bandOf(headroom)).toBe('thin (headroomChangeGbpm)');
     expect(headroom?.causes).toEqual([]);
+    expect(said(headroom)).toMatchSnapshot();
   });
 
   it('makes a missed rule cost something with every audience', () => {
@@ -218,12 +254,16 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
       expect(rule(r, 'backbenchers', 'bb-rules-missed')?.points, name).toBe(-1);
     }
     // Either rule, the same cap, and the size of the miss in the reason: the engine's own margin.
-    expect(rule(at(THREE), 'markets', 'mk-debt-rule')?.text).toMatch(
-      /^The debt rule is missed by £\d+\.\dbn/,
-    );
-    expect(rule(at(THREE), 'markets', 'mk-headroom')?.text).toMatch(
-      /^The day-to-day rule is missed by £\d+\.\dbn/,
-    );
+    const three = run({ ...ESTIMATE, ...THREE });
+    const missedBy = (kind: string) =>
+      formatGbpBn(Math.abs(three.verdicts.find((v) => v.kind === kind)?.headroomGbpm ?? NaN), 1);
+    const debt = rule(at(THREE), 'markets', 'mk-debt-rule');
+    expect(bandOf(debt)).toBe('missed');
+    expect(debt?.text).toContain(missedBy('stockFalling'));
+    const dayToDay = rule(at(THREE), 'markets', 'mk-headroom');
+    expect(bandOf(dayToDay)).toBe('missed');
+    expect(dayToDay?.text).toContain(missedBy('currentBudget'));
+    expect(said(debt, dayToDay)).toMatchSnapshot();
   });
 
   it('never rewards borrowing past the rules over paying for the same priorities', () => {
@@ -243,7 +283,9 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
     expect(by(nhs, 'public').rating).toBeLessThanOrEqual(3);
     const cuts = rule(nhs, 'public', 'pb-service-cuts');
     expect(cuts?.points).toBe(-2);
-    expect(cuts?.text).toMatch(/^Cuts to the health budget: £\d+\.\dbn a year less than planned/);
+    // Health is named as the service cut, in the words kept for the services people use most.
+    expect(bandOf(cuts)).toBe('deep (protectedCutsGbpm)');
+    expect(cuts?.text).toContain(noun('dhsc'));
     expect(rule(nhs, 'markets', 'mk-deep-cuts')?.points).toBe(-1);
     // Health and schools count from two billion: the walk's half-point trim costs nothing.
     expect(rule(at({ dhsc: -0.5 }), 'public', 'pb-service-cuts')?.points).toBe(0);
@@ -252,7 +294,9 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
     expect(rule(at({ home: -10 }), 'public', 'pb-service-cuts')?.points).toBe(0);
     // A cut is a cut even when another budget rises more, and the party hears both sides.
     const mixed = rule(at({ dhsc: 3, moj: -10, home: -10 }), 'backbenchers', 'bb-public-services');
-    expect(mixed?.text).toMatch(/with cuts to the /);
+    expect(bandOf(mixed)).toMatch(/ \(serviceCutsGbpm\)$/);
+    for (const code of ['moj', 'home']) expect(mixed?.text).toContain(noun(code));
+    expect(said(cuts, mixed)).toMatchSnapshot();
   });
 
   it('keeps benefits out of public services, and hears welfare both ways', () => {
@@ -272,11 +316,12 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
     expect(rule(banks, 'public', 'pb-tax-rises')?.points).toBe(0);
     const unfelt = rule(banks, 'public', 'pb-not-felt');
     expect(unfelt?.points).toBe(0);
-    expect(unfelt?.text).toMatch(/most households will not feel it\.$/);
-    // Employer National Insurance is felt, through pay and prices.
+    expect(bandOf(unfelt)).toBe('some');
+    // Employer National Insurance is felt, as the incidence file says business taxes are felt.
     const employers = rule(at(BIG_BROAD_TAX_RISE), 'public', 'pb-tax-rises');
     expect(employers?.points).toBeLessThan(0);
-    expect(employers?.text).toMatch(/felt through pay and prices/);
+    expect(employers?.text).toContain(groupOf('nicer')?.felt);
+    expect(said(unfelt, employers)).toMatchSnapshot();
     // A higher-rate rise is the better-off paying, as the benches see it.
     expect(rule(at({ ithr: 2 }), 'backbenchers', 'bb-who-pays')?.points).toBe(1);
   });
@@ -353,13 +398,13 @@ describe('graded delivery (Phase 25)', () => {
       by(list, 'public').all.find((r) => r.rule === 'pb-priorities');
     expect(priorities(token)?.points).toBeLessThan(priorities(full)?.points ?? 0);
     // It says so in words, and the words score nothing of their own.
-    expect(priorities(token)?.text).toMatch(/only make a start/);
+    expect(bandOf(priorities(token))).toBe('one (prioritiesStarted)');
     const downing = by(token, 'backbenchers').all.find((r) => r.rule === 'bb-downing-street');
     expect(downing?.points).toBe(0);
-    expect(downing?.text).toMatch(/some only make a start/);
-    expect(by(full, 'backbenchers').all.find((r) => r.rule === 'bb-downing-street')?.text).toBe(
-      'Everything agreed in Downing Street has something behind it in the Budget.',
-    );
+    expect(bandOf(downing)).toBe('delivered (prioritiesStarted)');
+    const everything = by(full, 'backbenchers').all.find((r) => r.rule === 'bb-downing-street');
+    expect(bandOf(everything)).toBe('delivered');
+    expect(said(priorities(token), downing, everything)).toMatchSnapshot();
   });
 
   it('a token three-tick rates no better than the funded walk, audience by audience', () => {
@@ -377,9 +422,8 @@ describe('what would have moved a rating', () => {
     const pub = by(room({ nicpen: 1 }), 'public');
     const rises = pub.all.find((r) => r.rule === 'pb-tax-rises');
     expect(rises?.points).toBeLessThan(0);
-    expect(rises?.nudge).toMatch(
-      /^£\d+\.\dbn less in tax rises would have lifted the public’s rating\.$/,
-    );
+    expect(filledFrom(RULES.get('pb-tax-rises')?.nudge, rises?.nudge)).toBe(true);
+    expect(wording(rises?.nudge)).toMatchSnapshot();
     // The best band has nowhere better to go, so it says nothing.
     const small = by(room({ ved: 10 }), 'public').all.find((r) => r.rule === 'pb-tax-rises');
     expect(small?.points).toBe(0);
@@ -400,27 +444,29 @@ describe('three audiences, five steps', () => {
       expect(r.rating).toBeGreaterThanOrEqual(1);
       expect(r.rating).toBeLessThanOrEqual(5);
       const audience = ds.reception.audiences.find((x) => x.id === r.audience);
-      expect(audience?.labels).toContain(r.label);
+      expect(r.label).toBe(audience?.labels[r.rating - 1]);
       expect(r.reasons.length).toBeLessThanOrEqual(3);
       expect(r.all).toHaveLength(audience?.rules.length ?? -1);
       expect(r.badge).toBe('simulated');
     }
     // An empty Budget: the backbenchers and the public shrug, the markets take March's headroom.
     const base = room({});
-    expect(by(base, 'backbenchers').label).toBe('Divided');
-    expect(by(base, 'public').label).toBe('Shrugging');
+    expect(by(base, 'backbenchers').rating).toBe(3);
+    expect(by(base, 'public').rating).toBe(3);
     expect(by(base, 'markets').rating).toBe(4);
   });
 
   it('pins the public at the floor when a manifesto red line is crossed, whatever else happens', () => {
     const lock = by(room({ ...SECURITY_FLAGSHIPS, ...PENNY, fuel: -10 }, SECURITY_GAME), 'public');
     expect(lock.rating).toBe(1);
-    expect(lock.label).toBe('Furious');
-    expect(lock.reasons[0]?.text).toMatch(/manifesto promise has been broken/);
-    // The same Budget paid for without crossing a line is liked.
+    expect(lock.reasons[0]?.rule).toBe('pb-manifesto');
+    expect(bandOf(lock.reasons[0])).toBe('broken');
+    // The same Budget paid for without crossing a line is liked, for its priorities.
     const base = by(room({ ...SECURITY_FLAGSHIPS, iht: 10, fuel: -10 }, SECURITY_GAME), 'public');
     expect(base.rating).toBeGreaterThan(3);
-    expect(base.reasons.some((r) => /of the Budget’s priorities/.test(r.text))).toBe(true);
+    const delivered = base.reasons.find((r) => r.rule === 'pb-priorities');
+    expect(delivered?.points).toBeGreaterThan(0);
+    expect(said(lock.reasons[0], delivered)).toMatchSnapshot();
     // Missing a rule by arithmetic is not a manifesto break: no floor.
     expect(by(room(DAY_TO_DAY_RULE_MISSED, SECURITY_GAME), 'public').rating).toBeGreaterThan(1);
   });
@@ -430,10 +476,10 @@ describe('three audiences, five steps', () => {
     const pub = by(room(budget, SECURITY_GAME), 'public');
     expect(pub.rating).toBeGreaterThan(1);
     expect(pub.all.find((r) => r.rule === 'pb-manifesto')?.points).toBe(0);
-    expect(pub.all.find((r) => r.rule === 'pb-manifesto-strain')?.points).toBe(-1);
-    expect(pub.all.find((r) => r.rule === 'pb-manifesto-strain')?.text).toMatch(
-      /kept in the words and tested in the spirit/,
-    );
+    const strain = pub.all.find((r) => r.rule === 'pb-manifesto-strain');
+    expect(strain?.points).toBe(-1);
+    expect(bandOf(strain)).toBe('strained');
+    expect(said(strain)).toMatchSnapshot();
     const benches = by(room(budget, SECURITY_GAME), 'backbenchers');
     expect(benches.all.find((r) => r.rule === 'bb-manifesto-strain')?.points).toBe(-1);
     // Paid for by the penny instead: the floor, and the strain rule has nothing to add.
@@ -451,10 +497,12 @@ describe('three audiences, five steps', () => {
     expect(labour.rating).toBeGreaterThan(austere.rating);
     expect(labour.rating).toBeGreaterThanOrEqual(4);
     expect(austere.rating).toBeLessThanOrEqual(2);
-    expect(
-      austere.reasons.some((r) => /welfare cut the party fought to reverse/.test(r.text)),
-    ).toBe(true);
-    expect(labour.reasons.some((r) => /best-off/.test(r.text))).toBe(true);
+    // The benches say why: a welfare cut they fought to reverse, and the best-off paying.
+    const reversal = austere.reasons.find((r) => r.rule === 'bb-welfare-reversals');
+    expect(reversal?.points).toBeLessThan(0);
+    const fromTheTop = labour.reasons.find((r) => r.rule === 'bb-who-pays');
+    expect(bandOf(fromTheTop)).toBe('top');
+    expect(said(reversal, fromTheTop)).toMatchSnapshot();
   });
 
   it('lowers the markets when headroom is thin or a rule missed, and raises them for a margin', () => {
@@ -464,9 +512,10 @@ describe('three audiences, five steps', () => {
     // A certified saving, not a relief cost: the markets doubt those (Phase 25).
     const ample = by(room(HEALTH_CUT), 'markets');
     expect(thin.rating).toBeLessThan(base.rating);
-    expect(missed.rating).toBeLessThanOrEqual(2);
-    expect(missed.label).toBe('Alarmed');
-    expect(missed.reasons.some((r) => /day-to-day rule is missed/.test(r.text))).toBe(true);
+    expect(missed.rating).toBe(1);
+    expect(missed.reasons.some((r) => r.rule === 'mk-headroom' && bandOf(r) === 'missed')).toBe(
+      true,
+    );
     expect(
       missed.reasons.some((r) => causes(DAY_TO_DAY_RULE_MISSED).every((c) => r.causes.includes(c))),
     ).toBe(true);
@@ -478,12 +527,13 @@ describe('three audiences, five steps', () => {
     const relief = by(room({ nicpen: 1 }), 'markets');
     const doubted = relief.all.find((r) => r.rule === 'mk-credibility');
     expect(doubted?.points).toBe(-1);
-    expect(doubted?.text).toMatch(/what tax breaks cost today/);
+    expect(bandOf(doubted)).toBe('doubted (reliefShareOfUncertified)');
     expect(doubted?.causes).toContain(ds.levers.find((l) => l.code === 'nicpen')?.noun);
     // A think tank's figure is doubted in other words.
     const other = by(room({ qelevy: 1 }), 'markets');
     const doubtedOther = other.all.find((r) => r.rule === 'mk-credibility');
-    expect(doubtedOther?.text).toMatch(/nobody has certified/);
+    expect(bandOf(doubtedOther)).toBe('doubted');
+    expect(said(doubted, doubtedOther)).toMatchSnapshot();
     // HMRC's certified rows raise no doubt.
     const certified = by(room(PENNY), 'markets');
     expect(certified.all.find((r) => r.rule === 'mk-credibility')?.points).toBe(0);

@@ -149,6 +149,29 @@ export function syntheticLever(parts: SyntheticLeverParts): Lever {
   });
 }
 
+/**
+ * A generated sentence as its words, for a snapshot: every sum the engine formats (£6.8bn,
+ * −£3.3bn, +£15bn) reads £…bn, so a snapshot moves when the wording does, not when a figure does.
+ * A test that cares about a figure checks it against the engine's own.
+ */
+export function wording(text: string | undefined): string | undefined {
+  return text?.replace(/[+−-]?£\d[\d,]*(?:\.\d+)?bn/g, '£…bn');
+}
+
+/**
+ * Whether a sentence is a data template filled in, each {placeholder} standing for any words: which
+ * fragment or band a sentence came from, read so that rewording the data moves a snapshot, not
+ * this.
+ */
+export function filledFrom(template: string | undefined, text: string | undefined): boolean {
+  if (template === undefined || text === undefined) return false;
+  const pattern = template
+    .split(/\{\w+\}/)
+    .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('.*?');
+  return new RegExp(`^${pattern}$`).test(text);
+}
+
 /** A toggle's control: off at 0, on at 1. */
 export const TOGGLE: Partial<LeverControl> = { kind: 'toggle', unit: 'bool', min: 0, max: 1 };
 

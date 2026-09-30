@@ -1,0 +1,80 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cards that agree with their ratings (Phase 25) > names who pays from the groups that actually pay 1`] = `
+[
+  "The new money comes mainly from everyone who earns or spends, not the top: £…bn net. The benches remember the manifesto.",
+  "More is asked of higher earners and the best-off than of everyone else: £…bn net. The benches wanted this.",
+]
+`;
+
+exports[`cards that agree with their ratings (Phase 25) > says a margin above twenty billion truly: close to March, or more than March left 1`] = `
+[
+  "Headroom of £…bn, above the twenty billion your advisers call comfortable and close to what March left. A buffer, as promised.",
+  "Headroom of £…bn, more than the £…bn March left. A wide buffer: money raised that this Budget does not spend.",
+  "Headroom of £…bn: less than March left, and smaller than the OBR’s typical forecast error of about £…bn.",
+]
+`;
+
+exports[`graded delivery (Phase 25) > a token three-tick earns no more with the public or the party than delivering the same priorities in full 1`] = `
+[
+  "One priority is delivered in full; the others only make a start. People will notice the one.",
+  "Every priority has something behind it, but some only make a start. No. 10 will ask for more.",
+  "Everything agreed in Downing Street has something behind it in the Budget.",
+]
+`;
+
+exports[`three audiences, five steps > doubts a yield that rests on HMRC’s cost of a relief, and says which kind of figure it is 1`] = `
+[
+  "More than two-fifths of the yield is what tax breaks cost today. HMRC says ending them raises less.",
+  "More than two-fifths of the yield rests on figures nobody has certified. The OBR may score them lower.",
+]
+`;
+
+exports[`three audiences, five steps > marks a strain amber: employer National Insurance alone leaves the public above the floor, with the strain named 1`] = `
+[
+  "A promise kept in the words and tested in the spirit. People notice a National Insurance rise by another name.",
+]
+`;
+
+exports[`three audiences, five steps > pins the public at the floor when a manifesto red line is crossed, whatever else happens 1`] = `
+[
+  "A manifesto promise has been broken. The pledge was made on every doorstep, and nothing else will be heard.",
+  "Two or more of the Budget’s priorities are delivered in full. People can see what it was for.",
+]
+`;
+
+exports[`three audiences, five steps > warms the backbenchers to services funded from the top, and cools them to cuts 1`] = `
+[
+  "A welfare cut the party fought to reverse is back. Last year’s argument now runs backwards.",
+  "More is asked of savers, investors and homeowners and the best-off than of everyone else: £…bn net. The benches wanted this.",
+]
+`;
+
+exports[`three audiences, recalibrated on today’s estimate (Phase 25) > counts the taxes most households feel, and gives no point either way for taxing the top 1`] = `
+[
+  "£…bn a year falls on banks, energy producers or the very top: most households will not feel it.",
+  "Tax rises of £…bn a year, felt through pay and prices, on top of a tax take already at a historic high.",
+]
+`;
+
+exports[`three audiences, recalibrated on today’s estimate (Phase 25) > makes a missed rule cost something with every audience 1`] = `
+[
+  "The debt rule is missed by £…bn: debt no longer falls as a share of the economy. Gilt investors watch the debt path.",
+  "The day-to-day rule is missed by £…bn, and the OBR will say so on Budget day. Gilt investors read that first.",
+]
+`;
+
+exports[`three audiences, recalibrated on today’s estimate (Phase 25) > measures the markets from before the Budget: doing nothing is Nervous, not Alarmed 1`] = `
+[
+  "Headroom of £…bn is below the ten billion commentators called wafer-thin. Dearer borrowing and prices since March took it, not your measures.",
+]
+`;
+
+exports[`three audiences, recalibrated on today’s estimate (Phase 25) > sees cuts to services, counted one by one, never netted away 1`] = `
+[
+  "Cuts to the health budget: £…bn a year less than planned, and £…bn across services in all. People will notice.",
+  "Spending on departments nets out near the plan (£…bn), with cuts to the Home Office budget and the prisons and courts budget.",
+]
+`;
+
+exports[`what would have moved a rating > says how far the reading was from the next better band, in the reading’s own unit 1`] = `"£…bn less in tax rises would have lifted the public’s rating."`;

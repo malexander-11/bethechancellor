@@ -1,0 +1,85 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`the close > reads as recorded; a rewording is an updated snapshot and a reviewed diff 1`] = `
+{
+  "a big broad tax rise, safer streets left": [
+    "cautious: A cautious Budget: the margin kept, the priorities not",
+    "The margin is kept and the costings are certified, but nothing the Prime Minister asked for is funded.",
+    "The margin is kept and the costings are certified, but nothing the Prime Minister asked for is funded. Stability is a kind of success, and the quietest. The backbenches will ask what the margin is for.",
+  ],
+  "a health cut": [
+    "paid-by-cuts: A Budget balanced by cuts",
+    "The sums add up by giving less to patients and the NHS, not by taxing more.",
+    "The sums add up by giving less to patients and the NHS, not by taxing more. That comes on top of the squeeze already in the plans for most of what government does.",
+  ],
+  "a lock break the NHS needed": [
+    "broke-the-lock: A Budget that broke a promise to keep another",
+    "The programme is funded and a written commitment was the price.",
+    "The programme is funded and a written commitment was the price. The words are on the record, and so are yours. The people the priorities were for will remember one; the people the promise was made to will remember the other.",
+  ],
+  "a penny and health above plan": [
+    "big-moves: A Budget that moves real money",
+    "Large sums move, and the rules hold on today’s estimate. The argument starts here.",
+    "Large sums move in both directions, and the rules hold on today’s estimate. Whether they moved the right way is the argument this Budget starts.",
+  ],
+  "a penny for a buffer": [
+    "broke-for-buffer: A promise broken for a bigger buffer",
+    "The rules did not need the broken promise. It bought a bigger margin, not the programme.",
+    "The rules did not need the broken promise. It bought a bigger margin, not the programme: a choice you can defend, but a choice. The people it was made to will see the promise, not the margin.",
+    "Without the change to the basic rate of income tax, you would still meet both rules, with £…bn of headroom.",
+  ],
+  "a small tobacco rise": [
+    "small-moves: A Budget of small moves",
+    "Little changed: the plans are much as the Budget found them.",
+    "Little changed: the plans are much as the Budget found them, with a few adjustments at the edges. Stability of a kind; the argument moves to next year.",
+  ],
+  "a thin margin, every promise kept": [
+    "kept-everything-thin: A Budget for safer streets that kept every promise and little headroom",
+    "Every promise kept, every priority funded, and a margin the OBR’s typical forecast error would erase.",
+    "Every promise kept, every priority funded, and a margin the OBR’s typical forecast error would erase. This is the Budget the programme asked for, on the thinnest ice the rules allow. Whether it holds is up to the next forecast, not you.",
+  ],
+  "both flagships paid for by taxes no promise names": [
+    "delivered-and-paid: A Budget for defence that delivered what it promised and paid for it",
+    "The priorities are funded, the promises stand and the margin survives. The who-pays table says who paid.",
+    "The priorities are funded, the promises stand and the margin survives. Somebody paid for that, and the who-pays table says who. It is the rarest kind of Budget because it is the hardest: it asks for the money before it spends it.",
+  ],
+  "nothing at all": [
+    "small-moves: A Budget of small moves",
+    "Little changed: the plans are much as the Budget found them.",
+    "Little changed: the plans are much as the Budget found them, with a few adjustments at the edges. Stability of a kind; the argument moves to next year.",
+  ],
+  "prisons and a restive party": [
+    "restive-party: A Budget that met the rules and lost the room",
+    "The arithmetic holds and the party does not: the rules were never the only audience.",
+    "The arithmetic holds and the party does not. Broken promises, missing priorities or benefit cuts give several groups a reason to vote against it. The rules were never the only audience.",
+  ],
+  "prisons paid for by taxes no promise names": [
+    "delivered-and-paid: A Budget for safer streets that delivered what it promised and paid for it",
+    "The priorities are funded, the promises stand and the margin survives. The who-pays table says who paid.",
+    "The priorities are funded, the promises stand and the margin survives. Somebody paid for that, and the who-pays table says who. It is the rarest kind of Budget because it is the hardest: it asks for the money before it spends it.",
+  ],
+  "prisons, defence left with room": [
+    "left-out-with-room: A priority left out with money to spare",
+    "You named defence a priority and left it unfunded, though the rules would have held.",
+    "You named defence a priority in Downing Street and left it unfunded, though the rules would have held with it paid for. The Prime Minister will want to know why.",
+    "Delivering defence in full with “Fill the funding gap in the defence investment plan” would still meet both rules, with £…bn of headroom.",
+  ],
+  "the day-to-day rule missed": [
+    "rules-missed: A Budget that misses the rules",
+    "On today’s estimate a rule is missed. The programme may be intact; its footing is not.",
+    "On today’s estimate a rule is missed, and the speech says so. The OBR’s own forecast will test it again today. The programme may be intact, but its footing is not.",
+  ],
+  "the same on uncertified costings": [
+    "left-out-with-room: A priority left out with money to spare",
+    "You named safer streets a priority and left it unfunded, though the rules would have held.",
+    "You named safer streets a priority in Downing Street and left it unfunded, though the rules would have held with it paid for. The Prime Minister will want to know why.",
+    "Delivering safer streets in full with “More money for the Home Office and borders” would still meet both rules, with £…bn of headroom.",
+  ],
+  "the walk": [
+    "broke-for-buffer: A promise broken for a bigger buffer",
+    "The rules did not need the broken promise. It bought a bigger margin, not the programme.",
+    "The rules did not need the broken promise. It bought a bigger margin, not the programme: a choice you can defend, but a choice. The people it was made to will see the promise, not the margin.",
+    "Without the change to the basic rate of income tax, you would still meet both rules, with £…bn of headroom.",
+  ],
+}
+`;

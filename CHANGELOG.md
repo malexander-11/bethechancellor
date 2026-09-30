@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The engine's generated sentences, from the three-sentence statement, the speech, the close and the
+  audiences' reasons, are held in snapshots with their sums masked, so rewording one is
+  `npx vitest -u` and a reviewed diff. The tests still check what the words must carry: the band or
+  fragment they came from, the priority, promise, rule or group they name and in what order, the
+  engine's own figures, and nothing that contradicts the rules result.
 - The engine's arithmetic tests run on made-up levers with round numbers, valid against the schema,
   so re-costing a real lever cannot break them: linear, lookup, scheduled and share-of-baseline
   costings, one-off purchases, capital shares, the welfare cap and earliest starts. Each real

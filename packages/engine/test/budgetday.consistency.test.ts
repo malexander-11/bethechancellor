@@ -11,7 +11,7 @@ import {
   readings,
   statementOf,
 } from '../src/index.js';
-import { loadDataset, outcomeOfFor } from './fixtures.js';
+import { loadDataset, outcomeOfFor, wording } from './fixtures.js';
 import {
   BASIC_RATE_CUT,
   DEBT_RULE_MISSED,
@@ -186,20 +186,39 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
   });
 
   it('reads as the review said each should', () => {
+    // The walk breaks the tax lock and accepts it, by the promise's name in running words.
     const walk = deliver(SECURITY, WALK);
     expect(walk.verdict.kind.id).toBe('broke-for-buffer');
-    expect(walk.statement.accepted).toBe('I accepted breaking the tax lock.');
+    const broken = walk.status.promises.filter(
+      (p) => !p.kept && p.promise.judgedBy !== 'fiscalRules',
+    );
+    expect(broken.map((p) => p.promise.id)).toEqual(['tax-lock']);
+    expect(walk.statement.accepted).toContain(broken[0]?.promise.noun);
     const employer = deliver(SECURITY, NICS_WALK);
     expect(employer.verdict.kind.id).toBe('delivered-and-paid');
+    // The cut is said as a tax cut for the group that has it.
     const cut = deliver(SECURITY, BASIC_RATE_CUT);
-    expect(cut.statement.paid).toMatch(/^I cut taxes for everyone who earns or spends/);
+    const cutFor = cut.verdict.paid.find((r) => r.gbpm < 0);
+    expect(cutFor).toBeDefined();
+    expect(cut.statement.paid.toLowerCase()).toContain(cutFor?.label.toLowerCase());
     const nothing = deliver(SECURITY, {});
-    expect(nothing.statement.paid).toBe('I changed no taxes and no spending.');
     expect(nothing.verdict.kind.id).toBe('left-out-with-room');
     const health = deliver(['nhs'], HEALTH_CUT);
     expect(health.verdict.kind.id).toBe('paid-by-cuts');
+    // Investment misses the debt rule alone, and the speech says so by its own margin.
     const debt = deliver(['defence'], DEBT_RULE_MISSED);
-    expect(debt.speech.paragraphs.at(-1)?.text).toMatch(/misses the debt rule by £18\.8bn\./);
+    const missed = debt.outcome.verdicts.filter(isMissed);
+    expect(missed.map((v) => v.kind)).toEqual(['stockFalling']);
+    expect(debt.speech.paragraphs.at(-1)?.text).toContain(missed[0] && missedBy(missed[0]));
+    // The words as the review read them: a rewording is an updated snapshot and a reviewed diff.
+    expect(
+      [
+        walk.statement.accepted,
+        cut.statement.paid,
+        nothing.statement.paid,
+        debt.speech.paragraphs.at(-1)?.text,
+      ].map(wording),
+    ).toMatchSnapshot();
   });
 });
 

@@ -1,0 +1,91 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`your Budget, in three sentences (Phase 25) > reads as recorded; a rewording is an updated snapshot and a reviewed diff 1`] = `
+{
+  "a basic-rate cut past the rules": [
+    "I named defence a priority but put nothing behind it.",
+    "I cut taxes for everyone who earns or spends, and paid for it by borrowing more than the rules allow.",
+    "I accepted missing the day-to-day rule by £…bn and the debt rule by £…bn.",
+  ],
+  "a corporation tax rise": [
+    "I set no priorities with the Prime Minister.",
+    "I asked business to pay more, and kept the money as headroom.",
+    "I accepted breaking the corporation tax cap.",
+  ],
+  "a health cut": [
+    "I named the NHS a priority but put nothing behind it.",
+    "I gave less to patients and the NHS, and kept the money as headroom.",
+    "I accepted putting the 18-week waiting target at risk.",
+  ],
+  "a small health trim": [
+    "I set no priorities with the Prime Minister.",
+    "I gave less to patients and the NHS, and kept the money as headroom.",
+    "I accepted putting the 18-week waiting target at risk.",
+  ],
+  "a start on the NHS": [
+    "I made a start on the NHS.",
+    "I paid for it out of the headroom I had.",
+    "I accepted a thin margin: £…bn of headroom.",
+  ],
+  "defence and safer streets delivered": [
+    "I prioritised defence and safer streets.",
+    "I paid for it by borrowing to invest and using some of the headroom I had.",
+    "I accepted a thin margin: £…bn of headroom.",
+  ],
+  "defence and safer streets left": [
+    "I named defence and safer streets priorities but put nothing behind them.",
+    "I changed no taxes and no spending.",
+    "I accepted a thin margin: £…bn of headroom.",
+  ],
+  "employer National Insurance": [
+    "I set no priorities with the Prime Minister.",
+    "I asked business to pay more, and kept the money as headroom.",
+    "I accepted straining the tax lock.",
+  ],
+  "investment within the rules": [
+    "I set no priorities with the Prime Minister.",
+    "I spent more on public investment, and paid for it by borrowing to invest.",
+    "I accepted a thin margin: £…bn of headroom.",
+  ],
+  "no priorities, nothing changed": [
+    "I set no priorities with the Prime Minister.",
+    "I changed no taxes and no spending.",
+    "I accepted a thin margin: £…bn of headroom.",
+  ],
+  "prisons out of the headroom": [
+    "I prioritised safer streets.",
+    "I paid for it out of the headroom I had.",
+    "I accepted a thin margin: £…bn of headroom.",
+  ],
+  "prisons paid for by higher earners": [
+    "I prioritised safer streets.",
+    "I paid for it by asking higher earners to pay more, and kept the rest as headroom.",
+    "I kept every promise and £…bn of headroom.",
+  ],
+  "safer streets delivered, defence left": [
+    "I prioritised safer streets, and named defence a priority but put nothing behind it.",
+    "I paid for it out of the headroom I had.",
+    "I accepted a thin margin: £…bn of headroom.",
+  ],
+  "the debt rule missed": [
+    "I named defence a priority but put nothing behind it.",
+    "I spent more on public investment, and paid for it by borrowing more than the rules allow.",
+    "I accepted missing the debt rule by £…bn.",
+  ],
+  "the two-child limit back": [
+    "I set no priorities with the Prime Minister.",
+    "I gave less to families on universal credit, and kept the money as headroom.",
+    "I accepted breaking the promise on the two-child limit.",
+  ],
+  "the welfare bill down": [
+    "I prioritised getting the welfare bill down.",
+    "I gave less to disabled people, and kept the money as headroom.",
+    "I kept every promise and £…bn of headroom.",
+  ],
+  "three priorities borrowed past the rules": [
+    "I prioritised the NHS, defence and safer streets.",
+    "I paid for it by borrowing more than the rules allow.",
+    "I accepted missing the day-to-day rule by £…bn and the debt rule by £…bn.",
+  ],
+}
+`;

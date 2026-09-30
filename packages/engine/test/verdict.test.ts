@@ -6,9 +6,10 @@ import {
   computeOutcome,
   formatGbpBn,
   freshGame,
+  isMissed,
   type GamePermalink,
 } from '../src/index.js';
-import { loadDataset, outcomeOfFor } from './fixtures.js';
+import { filledFrom, loadDataset, outcomeOfFor, wording } from './fixtures.js';
 import {
   BIG_BROAD_TAX_RISE,
   DAY_TO_DAY_RULE_MISSED,
@@ -68,11 +69,84 @@ function close(
 }
 const verdictOf = (...args: Parameters<typeof close>) => close(...args).verdict;
 const priorityTitle = (id: string) => ds.pm.priorities.find((p) => p.id === id)?.title ?? id;
+/** A priority in running words, as the Prime Minister's file names it. */
+const noun = (id: string) => ds.pm.priorities.find((p) => p.id === id)?.noun ?? id;
 /** What the close calls the levers of a Budget: their short titles. */
 const shortTitles = (budget: Budget) =>
   Object.keys(budget).map((code) => ds.levers.find((l) => l.code === code)?.shortTitle ?? code);
+/** A kind of Budget as the verdicts file writes it, before the close fills it in. */
+const kindOf = (id: string) => {
+  const kind = ds.verdicts.kinds.find((k) => k.id === id);
+  if (!kind) throw new Error(`the verdicts file has no kind ${id}`);
+  return kind;
+};
+const headroomOf = (outcome: ReturnType<typeof outcomeOf>) =>
+  outcome.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? Number.NaN;
+
+const budget = (
+  game: GamePermalink,
+  policy: Budget,
+  extra: { credibilityShare?: number; rebellionRisk?: number } = {},
+) => ({ game, policy, extra });
+/** The Budgets the close is read on, each named for the part it plays. */
+const CASES = {
+  'the day-to-day rule missed': budget(freshGame(), DAY_TO_DAY_RULE_MISSED),
+  'a big broad tax rise, safer streets left': budget(
+    gameWith(['safer-streets']),
+    BIG_BROAD_TAX_RISE,
+  ),
+  'the same on uncertified costings': budget(gameWith(['safer-streets']), BIG_BROAD_TAX_RISE, {
+    credibilityShare: 1,
+  }),
+  'a penny for a buffer': budget(gameWith(['safer-streets']), PENNY),
+  'prisons paid for by taxes no promise names': budget(gameWith(['safer-streets']), {
+    ...PRISONS,
+    ...UNPROMISED_TAXES,
+  }),
+  'both flagships paid for by taxes no promise names': budget(gameWith(SECURITY), {
+    ...SECURITY_FLAGSHIPS,
+    ...UNPROMISED_TAXES,
+  }),
+  'nothing at all': budget(freshGame(), {}),
+  'the walk': budget(gameWith(SECURITY), WALK),
+  'a lock break the NHS needed': budget(gameWith(['nhs']), NEEDED_LOCK_BREAK),
+  'prisons, defence left with room': budget(gameWith(SECURITY), PRISONS),
+  'a health cut': budget(gameWith(['nhs']), HEALTH_CUT),
+  'prisons and a restive party': budget(gameWith(['safer-streets']), PRISONS, {
+    rebellionRisk: 3,
+  }),
+  'a penny and health above plan': budget(freshGame(), { ...PENNY, ...HEALTH_ABOVE_PLAN }),
+  'a small tobacco rise': budget(freshGame(), { tob: 10 }),
+  'a thin margin, every promise kept': budget(gameWith(['safer-streets']), THIN_MARGIN),
+};
+type Case = keyof typeof CASES;
+const closed = new Map<Case, ReturnType<typeof close>>();
+/** A named Budget, closed once. */
+function read(name: Case) {
+  const hit = closed.get(name);
+  if (hit) return hit;
+  const { game, policy, extra } = CASES[name];
+  const done = close(game, policy, extra);
+  closed.set(name, done);
+  return done;
+}
 
 describe('the close', () => {
+  it('reads as recorded; a rewording is an updated snapshot and a reviewed diff', () => {
+    const said = Object.fromEntries(
+      (Object.keys(CASES) as Case[]).map((name) => {
+        const { kind } = read(name).verdict;
+        return [
+          name,
+          [`${kind.id}: ${kind.title}`, kind.line.short, kind.line.text, kind.fact]
+            .filter((line) => line !== undefined)
+            .map(wording),
+        ];
+      }),
+    );
+    expect(said).toMatchSnapshot();
+  });
+
   it('says how each ambition fared, and how each promise was lost', () => {
     const game = gameWith(['safer-streets', 'nhs']);
     // Prisons are funded as chosen; health has moved without getting there: settled lower.
@@ -135,91 +209,90 @@ describe('the close', () => {
   });
 
   it('names the kind of Budget from the closed list, first fit wins', () => {
-    const missed = verdictOf(freshGame(), DAY_TO_DAY_RULE_MISSED);
-    expect(missed.kind.id).toBe('rules-missed');
+    const kind = (name: Case) => read(name).verdict.kind;
+    expect(kind('the day-to-day rule missed').id).toBe('rules-missed');
     // Cautious: rules met with ample headroom from certified costings, and nothing done for the
     // priorities. Employer National Insurance strains the tax lock and breaks nothing.
-    const game = gameWith(['safer-streets']);
-    const cautious = close(game, BIG_BROAD_TAX_RISE);
-    const headroom = cautious.verdict.headroomGbpm;
-    expect(headroom).toBeGreaterThanOrEqual(AMPLE_HEADROOM_GBPM);
-    expect(cautious.verdict.kind.id).toBe('cautious');
+    const cautious = read('a big broad tax rise, safer streets left').verdict;
+    expect(cautious.headroomGbpm).toBeGreaterThanOrEqual(AMPLE_HEADROOM_GBPM);
+    expect(cautious.kind.id).toBe('cautious');
     // Uncertified costings are not caution (Phase 25), and the line no longer speaks for markets.
-    expect(verdictOf(game, BIG_BROAD_TAX_RISE, { credibilityShare: 1 }).kind.id).not.toBe(
-      'cautious',
-    );
-    expect(cautious.verdict.kind.title).not.toMatch(/markets/);
+    expect(kind('the same on uncertified costings').id).not.toBe('cautious');
+    expect(cautious.kind.title).not.toMatch(/markets/);
     // A penny on the basic rate breaks the tax lock the rules did not need broken.
-    const penny = verdictOf(game, PENNY);
-    expect(penny.kind.id).toBe('broke-for-buffer');
+    expect(kind('a penny for a buffer').id).toBe('broke-for-buffer');
     // Paid for by taxes no promise names: the family-home allowance and the biggest homes.
-    const delivered = verdictOf(game, { ...PRISONS, ...UNPROMISED_TAXES });
-    expect(delivered.kind.id).toBe('delivered-and-paid');
-    expect(delivered.kind.title).toBe(
-      'A Budget for safer streets that delivered what it promised and paid for it',
-    );
+    const delivered = kind('prisons paid for by taxes no promise names');
+    expect(delivered.id).toBe('delivered-and-paid');
+    expect(filledFrom(kindOf(delivered.id).title, delivered.title)).toBe(true);
+    expect(delivered.title).toContain(noun('safer-streets'));
     // The first priority ranked names the Budget.
-    const both = verdictOf(gameWith(SECURITY), { ...SECURITY_FLAGSHIPS, ...UNPROMISED_TAXES });
-    expect(both.kind.title).toBe(
-      'A Budget for defence that delivered what it promised and paid for it',
-    );
-    const quiet = verdictOf(freshGame(), {});
-    expect(quiet.kind.id).toBe('small-moves');
-    expect(quiet.kind.line.badge).toBe('simulated');
+    const both = kind('both flagships paid for by taxes no promise names');
+    expect(both.id).toBe('delivered-and-paid');
+    expect(both.title).toContain(noun('defence'));
+    expect(both.title).not.toContain(noun('safer-streets'));
+    const quiet = kind('nothing at all');
+    expect(quiet.id).toBe('small-moves');
+    expect(quiet.line.badge).toBe('simulated');
   });
 
   it('checks the trade-offs it names by re-running the engine on the same estimate', () => {
-    const game = gameWith(SECURITY);
     // The walk: the tax lock broken for a margin the rules did not need.
-    const broke = close(game, WALK);
-    expect(broke.verdict.kind.id).toBe('broke-for-buffer');
+    const broke = read('the walk').verdict.kind;
+    expect(broke.id).toBe('broke-for-buffer');
     const without = outcomeOf({ ...NICS_WALK, ...ESTIMATE });
-    const withoutHeadroom = without.verdicts.find((v) => v.kind === 'currentBudget')!.headroomGbpm;
-    expect(without.verdicts.every((v) => v.status !== 'notMet' && v.status !== 'aboveMargin')).toBe(
-      true,
-    );
-    expect(broke.verdict.kind.fact).toBe(
-      `Without the change to the basic rate of income tax, you would still meet both rules, with ${formatGbpBn(withoutHeadroom, 1)} of headroom.`,
-    );
+    expect(without.verdicts.some(isMissed)).toBe(false);
+    // The fact names what broke the promise, and the headroom the re-run leaves without it.
+    expect(filledFrom(kindOf(broke.id).fact, broke.fact)).toBe(true);
+    const breakers = Object.keys(WALK).filter((code) => !(code in NICS_WALK));
+    expect(breakers.length).toBeGreaterThan(0);
+    for (const code of breakers) {
+      expect(broke.fact).toContain(ds.levers.find((l) => l.code === code)?.noun);
+    }
+    expect(broke.fact).toContain(formatGbpBn(headroomOf(without), 1));
     // A break the rules did need is the price of the programme, not a buffer.
-    const needed = verdictOf(gameWith(['nhs']), NEEDED_LOCK_BREAK);
-    expect(needed.kind.id).toBe('broke-the-lock');
-    // A priority left out though the rules would hold with it paid for, and what it would cost.
-    const left = close(game, PRISONS);
-    expect(left.verdict.kind.id).toBe('left-out-with-room');
-    expect(left.verdict.kind.line.short).toMatch(/^You named defence a priority/);
-    expect(left.verdict.kind.fact).toMatch(
-      /^Delivering defence in full with “Fill the funding gap in the defence investment plan” would still meet both rules, with £\d+\.\dbn of headroom\.$/,
+    expect(read('a lock break the NHS needed').verdict.kind.id).toBe('broke-the-lock');
+    // A priority left out though the rules would hold with it paid for, and what it would cost:
+    // a way to deliver it in full, re-run on the same Budget, with the headroom it would leave.
+    const left = read('prisons, defence left with room').verdict.kind;
+    expect(left.id).toBe('left-out-with-room');
+    expect(filledFrom(kindOf(left.id).line.short, left.line.short)).toBe(true);
+    expect(left.line.short).toContain(noun('defence'));
+    expect(filledFrom(kindOf(left.id).fact, left.fact)).toBe(true);
+    expect(left.fact).toContain(noun('defence'));
+    const way = ds.options.deliver.find(
+      (o) => o.priority === 'defence' && o.scale.kind === 'full' && left.fact?.includes(o.title),
     );
+    if (!way) throw new Error(`no way to deliver defence in full is named in "${left.fact}"`);
+    const withWay = outcomeOf({ ...PRISONS, ...ESTIMATE, ...way.values });
+    expect(withWay.verdicts.some(isMissed)).toBe(false);
+    expect(left.fact).toContain(formatGbpBn(headroomOf(withWay), 1));
     // Paid for by cuts: named by who gets less, ahead of a cautious reading of the same margin.
-    const cuts = verdictOf(gameWith(['nhs']), HEALTH_CUT);
+    const cuts = read('a health cut').verdict;
     expect(cuts.kind.id).toBe('paid-by-cuts');
-    expect(cuts.kind.line.short).toBe(
-      'The sums add up by giving less to patients and the NHS, not by taxing more.',
-    );
+    expect(filledFrom(kindOf(cuts.kind.id).line.short, cuts.kind.line.short)).toBe(true);
+    const losers = cuts.benefited.find((r) => r.gbpm < 0);
+    expect(cuts.kind.line.short?.toLowerCase()).toContain(losers?.label.toLowerCase());
     // A restive party outranks a thin margin kept with every promise.
-    const restive = verdictOf(gameWith(['safer-streets']), PRISONS, { rebellionRisk: 3 });
-    expect(restive.kind.id).toBe('restive-party');
+    expect(read('prisons and a restive party').verdict.kind.id).toBe('restive-party');
     // Size is measured, not assumed: big moves and small ones, each without a claim it cannot keep.
-    const big = verdictOf(freshGame(), { ...PENNY, ...HEALTH_ABOVE_PLAN });
-    expect(big.kind.id).toBe('big-moves');
-    const small = verdictOf(freshGame(), { tob: 10 });
-    expect(small.kind.id).toBe('small-moves');
-    expect(small.kind.line.text).not.toMatch(/markets/i);
+    expect(read('a penny and health above plan').verdict.kind.id).toBe('big-moves');
+    const small = read('a small tobacco rise').verdict.kind;
+    expect(small.id).toBe('small-moves');
+    expect(small.line.text).not.toMatch(/markets/i);
     for (const kind of ds.verdicts.kinds) {
       expect(`${kind.title} ${kind.line.text}`).not.toMatch(/OBR’s arithmetic|OBR’s test/);
     }
   });
 
   it('calls a margin thin under ten billion, as the markets do, and not above it', () => {
-    const game = gameWith(['safer-streets']);
     // Every promise kept and the priority delivered; only the margin differs.
-    const thin = verdictOf(game, THIN_MARGIN);
+    const thin = read('a thin margin, every promise kept').verdict;
     expect(thin.headroomGbpm).toBeLessThan(THIN_HEADROOM_GBPM);
     expect(thin.kind.id).toBe('kept-everything-thin');
     // Over ten billion and under the old line (half the typical forecast error, about £16bn),
     // which once called this thin too.
-    const modest = verdictOf(game, { ...PRISONS, ...UNPROMISED_TAXES });
+    const modest = read('prisons paid for by taxes no promise names').verdict;
     expect(modest.headroomGbpm).toBeGreaterThan(THIN_HEADROOM_GBPM);
     expect(modest.headroomGbpm).toBeLessThan(typicalErrorGbpm / 2);
     expect(modest.kind.id).toBe('delivered-and-paid');
