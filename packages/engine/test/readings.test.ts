@@ -102,10 +102,11 @@ describe('the readings of a Budget', () => {
     expect(r.promisesBroken).toBe(1);
     expect(r.manifestoBroken).toBe(1);
     expect(r.manifestoStrained).toBe(0);
-    // Amber (Phase 23): the levy strains the lock; with the lock already broken it counts once.
-    expect(read({ hscl: 1, moj: 10 }, game).manifestoStrained).toBe(1);
-    expect(read({ hscl: 1, moj: 10 }, game).manifestoBroken).toBe(0);
-    expect(read({ hscl: 1, itbr: 1, moj: 10 }, game).manifestoStrained).toBe(0);
+    // Amber (Phase 23): employer National Insurance strains the lock; with the lock already broken
+    // it counts once.
+    expect(read({ nicer: 1, moj: 10 }, game).manifestoStrained).toBe(1);
+    expect(read({ nicer: 1, moj: 10 }, game).manifestoBroken).toBe(0);
+    expect(read({ nicer: 1, itbr: 1, moj: 10 }, game).manifestoStrained).toBe(0);
     expect(r.prioritiesUnfunded).toBe(1);
     expect(r.prioritiesFunded).toBe(1);
     // Two priorities ranked: not a single story, whatever the money behind either.
@@ -168,11 +169,11 @@ describe('the readings of a Budget', () => {
 
   it('measures credibility as the share of the improvement that rests on uncertified figures', () => {
     expect(read({ itbr: 2 }).credibilityShare).toBe(0);
-    expect(read({ cgtalign: 1 }).credibilityShare).toBe(1);
+    expect(read({ nicuel: 1 }).credibilityShare).toBe(1);
     // A wealth tax that cannot start before 2030-31 improves nothing in 2029-30, so it is not
     // uncertified improvement either (ADR-0021).
     expect(read({ wealth: 1 }).credibilityShare).toBe(0);
-    const mixed = read({ cgtalign: 1, itbr: 2 }).credibilityShare ?? 0;
+    const mixed = read({ nicuel: 1, itbr: 2 }).credibilityShare ?? 0;
     expect(mixed).toBeGreaterThan(0);
     expect(mixed).toBeLessThan(1);
   });

@@ -37,11 +37,10 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     expect(promiseBreaks({ itpa: 500 }, [lock], ds.levers)[0]?.kept).toBe(true);
   });
 
-  it('marks the levy, the employer-side NICs charges and the new top rate as straining the lock, not breaking it', () => {
+  it('marks the employer-side NICs charges and the new top rate as straining the lock, not breaking it', () => {
     const lock = pm.promises.find((p) => p.id === 'tax-lock');
     if (!lock) throw new Error('no tax lock');
     const cases: Record<string, number>[] = [
-      { hscl: 1 },
       { nicer: 1 },
       { nicst: -104 },
       { nicpen: 1 },
@@ -62,10 +61,10 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     expect(by?.text).toMatch(/still National Insurance/);
     // The status counts a strain once, and a promise both broken and strained once, as broken.
     const game = { ...freshGame(), priorities: [] };
-    expect(status(game, { hscl: 1 }).broken).toBe(0);
-    expect(status(game, { hscl: 1 }).strained).toBe(1);
-    expect(status(game, { hscl: 1, itbr: 1 }).broken).toBe(1);
-    expect(status(game, { hscl: 1, itbr: 1 }).strained).toBe(0);
+    expect(status(game, { nicer: 1 }).broken).toBe(0);
+    expect(status(game, { nicer: 1 }).strained).toBe(1);
+    expect(status(game, { nicer: 1, itbr: 1 }).broken).toBe(1);
+    expect(status(game, { nicer: 1, itbr: 1 }).strained).toBe(0);
   });
 
   it('strains the triple lock when pensioner benefits are cut below plan, and breaks it only by the lock levers (Phase 25)', () => {

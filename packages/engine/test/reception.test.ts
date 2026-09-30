@@ -56,7 +56,7 @@ describe('cards that agree with their ratings (Phase 25)', () => {
     { itbr: 1 },
     { itbr: -1 },
     { vats: 1 },
-    { hscl: 1 },
+    { nicer: 1 },
     { dhsc: 3 },
     { dhsc: -10 },
     { dfe: 5 },
@@ -66,7 +66,7 @@ describe('cards that agree with their ratings (Phase 25)', () => {
     { rvpip: 1 },
     { rv2ch: 1 },
     { csjmh: 1 },
-    { cgtalign: 1 },
+    { pens20: 1 },
     { wealth2: 1 },
     { nicpen: 1 },
     { it50: 1 },
@@ -146,8 +146,8 @@ describe('cards that agree with their ratings (Phase 25)', () => {
     expect(text({})).toMatch(
       /^Headroom of £23\.6bn, above the twenty billion .* close to what March left/,
     );
-    // A levy on top: more than March left, and said so.
-    expect(text({ hscl: 1 })).toMatch(
+    // Two points on employer National Insurance: more than March left, and said so.
+    expect(text({ nicer: 2 })).toMatch(
       /^Headroom of £\d+\.\dbn, more than the £23\.6bn March left\./,
     );
     expect(text({ dhsc: 5 })).toMatch(/typical forecast error of about £33bn\.$/);
@@ -158,10 +158,12 @@ describe('cards that agree with their ratings (Phase 25)', () => {
     expect(broad?.text).toMatch(
       /^The new money comes mainly from everyone who earns or spends, not the top/,
     );
-    const top = by(room({ it50: 1, wealth: 1, cgtalign: 1 }), 'backbenchers').all.find(
+    const top = by(room({ it50: 1, wealth: 1, pens20: 1 }), 'backbenchers').all.find(
       (r) => r.rule === 'bb-who-pays',
     );
-    expect(top?.text).toMatch(/^More is asked of the best-off than of everyone else/);
+    expect(top?.text).toMatch(
+      /^More is asked of higher earners and the best-off than of everyone else/,
+    );
   });
 
   it('quotes one gilt yield across the files, and it is today’s', () => {
@@ -231,7 +233,7 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
   it('never rewards borrowing past the rules over paying for the same priorities', () => {
     const borrowed = at(THREE);
     // Paid for from the top, crossing no red line.
-    const funded = at({ ...THREE, cgtalign: 1 });
+    const funded = at({ ...THREE, pens20: 1 });
     expect(by(borrowed, 'markets').rating).toBeLessThan(by(funded, 'markets').rating);
     expect(by(borrowed, 'backbenchers').rating).toBeLessThanOrEqual(
       by(funded, 'backbenchers').rating,
@@ -335,7 +337,7 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
   it('offers a nudge only when the better band would move the rating itself', () => {
     // Both priorities delivered and a felt tax rise: four either way, so nothing is offered.
     const four = at(
-      { dip47: 1, moj: 10, ipt: 8 },
+      { dip47: 1, moj: 10, fuel: 20, alc: 20 },
       { ...freshGame(), priorities: SECURITY.priorities },
     );
     expect(by(four, 'public').rating).toBe(4);
@@ -436,8 +438,8 @@ describe('three audiences, five steps', () => {
     expect(by(room({ def5: 1 }, SECURITY), 'public').rating).toBeGreaterThan(1);
   });
 
-  it('marks a strain amber: the levy alone leaves the public above the floor, with the strain named', () => {
-    const budget = { moj: 10, dip47: 1, hscl: 1 };
+  it('marks a strain amber: employer National Insurance alone leaves the public above the floor, with the strain named', () => {
+    const budget = { moj: 10, dip47: 1, nicer: 1 };
     const pub = by(room(budget, SECURITY), 'public');
     expect(pub.rating).toBeGreaterThan(1);
     expect(pub.all.find((r) => r.rule === 'pb-manifesto')?.points).toBe(0);

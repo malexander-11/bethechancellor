@@ -47,11 +47,11 @@ describe('advisers who remember', () => {
 
   it('says a strained promise is tested, not broken, and says nothing once it is broken', () => {
     const game = freshGame();
-    const strained = advice(game, { hscl: 1 }).find((x) => x.when === 'promise-strained');
+    const strained = advice(game, { nicer: 1 }).find((x) => x.when === 'promise-strained');
     expect(strained?.text).toMatch(/^The tax lock is tested, not broken/);
     expect(strained?.about).toBe('tax-lock');
-    expect(advice(game, { hscl: 1 }).some((x) => x.when === 'promise-broken')).toBe(false);
-    const both = advice(game, { hscl: 1, itbr: 1 });
+    expect(advice(game, { nicer: 1 }).some((x) => x.when === 'promise-broken')).toBe(false);
+    const both = advice(game, { nicer: 1, itbr: 1 });
     expect(both.some((x) => x.when === 'promise-strained')).toBe(false);
     expect(both.some((x) => x.when === 'promise-broken')).toBe(true);
   });

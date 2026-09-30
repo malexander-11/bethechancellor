@@ -8,9 +8,9 @@ const react = (values: Record<string, number>, themed = false) =>
 const of = (values: Record<string, number>, id: string) =>
   react(values).find((r) => r.household.id === id);
 
-/** The review's walk (Phase 25): two flagships, the levy, a penny, insurance tax, a health trim. */
-const WALK = { dip47: 1, moj: 10, hscl: 1, itbr: 1, ipt: 1, dhsc: -0.5 };
-const LEVY_WALK = { dip47: 1, moj: 10, hscl: 1, ipt: 1, dhsc: -0.5 };
+/** The review's walk (Phase 25): two flagships, employer National Insurance, a penny, a health trim. */
+const WALK = { dip47: 1, moj: 10, nicer: 2, itbr: 1, dhsc: -0.5 };
+const NICS_WALK = { dip47: 1, moj: 10, nicer: 2, dhsc: -0.5 };
 
 describe('the electorate as five households', () => {
   it('leaves everyone untouched by an empty Budget, and puzzled without a theme', () => {
@@ -56,15 +56,16 @@ describe('the electorate as five households', () => {
   });
 
   it('never calls a household hit by the walk untouched', () => {
-    for (const values of [WALK, LEVY_WALK]) {
+    for (const values of [WALK, NICS_WALK]) {
       const moved = new Set(Object.keys(values).map((code) => ds.incidence.levers[code]));
       for (const r of react(values)) {
         if (r.household.exposure.some((g) => moved.has(g)))
           expect(r.net, r.household.id).not.toBe('untouched');
       }
     }
-    // The levy reaches the couple, the tradesperson and the professional by name; the health
-    // trim reaches the pensioner; the family is in the groups and hears nothing by name.
+    // The penny reaches the couple, the tradesperson and the professional by name, and employer
+    // National Insurance the couple too; the health trim reaches the pensioner; the family is in
+    // the groups and hears nothing by name.
     const nets = Object.fromEntries(react(WALK).map((r) => [r.household.id, r.net]));
     expect(nets).toEqual({
       'uc-family': 'unnamed',

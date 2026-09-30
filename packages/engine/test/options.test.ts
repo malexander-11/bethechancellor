@@ -100,7 +100,7 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     expect(optionEarliestStart(deliverOption('mental-health-reset'), levers)).toBe('2029-30');
     expect(optionEarliestStart(deliverOption('child-tax-allowance'), levers)).toBe('2028-29');
     expect(optionEarliestStart(deliverOption('prisons'), levers)).toBeUndefined();
-    expect(optionEarliestStart({ id: 'both', values: { cgtalign: 1, wealth2: 1 } }, levers)).toBe(
+    expect(optionEarliestStart({ id: 'both', values: { cgtdth: 1, wealth2: 1 } }, levers)).toBe(
       '2030-31',
     );
   });
@@ -113,13 +113,10 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     expect(optionRedLines(bundle({ itbr: 1 }), ds.pm.promises, levers, {})).toEqual([
       { promise: lock?.title, when: 'above', severity: 'breaks', broken: true, ...red },
     ]);
-    // The levy keeps the pledge's words and tests its spirit: amber (Phase 23).
-    expect(optionRedLines(bundle({ hscl: 1 }), ds.pm.promises, levers, {})).toEqual([
-      { promise: lock?.title, when: 'on', severity: 'strains', broken: true, ...red },
+    // Employer National Insurance keeps the pledge's words and tests its spirit: amber (Phase 23).
+    expect(optionRedLines(bundle({ nicer: 1 }), ds.pm.promises, levers, {})).toEqual([
+      { promise: lock?.title, when: 'above', severity: 'strains', broken: true, ...red },
     ]);
-    expect(optionRedLines(bundle({ nicer: 1 }), ds.pm.promises, levers, {})[0]?.severity).toBe(
-      'strains',
-    );
     // A saving that breaks a promise when switched on.
     const limit = optionRedLines(deliverOption('two-child-limit'), ds.pm.promises, levers, {});
     expect(limit.map((l) => l.broken)).toEqual([true]);
@@ -131,11 +128,12 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
   });
 
   it('warns when an option meets a lever already moved that it interacts with', () => {
-    const cut = deliverOption('fuel-duty-cut');
-    expect(optionOverlaps(cut, levers, new Set())).toEqual([]);
-    const hits = optionOverlaps(cut, levers, new Set(['rvfuel']));
+    // Ending the freeze early names the basic rate from its own side of the pair.
+    const freeze = deliverOption('freeze-early');
+    expect(optionOverlaps(freeze, levers, new Set())).toEqual([]);
+    const hits = optionOverlaps(freeze, levers, new Set(['itbr']));
     expect(hits.map((h) => [h.withLever.code, h.severity, h.active])).toEqual([
-      ['rvfuel', 'warn', true],
+      ['itbr', 'info', true],
     ]);
   });
 
@@ -151,14 +149,10 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     expect(optionOverlaps(freeze, levers, new Set())).toEqual([]);
     const loud = optionOverlaps(freeze, levers, new Set(['itbr']), options);
     expect(loud[0]?.active).toBe(true);
-    // Restoring fuel duty's uprating and cutting it, the old conflict (ADR-0022), is now a
-    // warning the card names at once, because the uprating is one of step 4's levers; so is the
-    // April 2027 freeze (Phase 25), read from its own side of the pair.
+    // The April 2027 freeze (Phase 25) and a fuel duty cut both set the duty: a warning the card
+    // names at once, because the freeze is one of step 4's levers, read from its own side.
     const fuel = optionOverlaps(deliverOption('fuel-duty-cut'), levers, new Set(), options);
-    expect(fuel.map((o) => [o.withLever.code, o.severity])).toEqual([
-      ['rvfuel', 'warn'],
-      ['fuelfrz', 'warn'],
-    ]);
+    expect(fuel.map((o) => [o.withLever.code, o.severity])).toEqual([['fuelfrz', 'warn']]);
     // Another option is named as the option: the 3% path and a day-to-day uplift add up.
     const three = optionOverlaps(deliverOption('three-per-cent-now'), levers, new Set(), options);
     expect(three.find((o) => o.withLever.code === 'mod')?.option?.id).toBe('defence-uplift');

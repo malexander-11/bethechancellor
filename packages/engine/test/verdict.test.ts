@@ -63,11 +63,12 @@ describe('the close', () => {
     const lock = v.ambitions.promises.find((p) => p.title === 'The tax lock');
     expect(lock?.fate).toBe('broken-by-choice');
     expect(lock?.by).toEqual(['Basic rate']);
-    // Amber (Phase 23): paid for by the levy instead, the lock is kept in its words and strained.
-    const levy = verdictOf(game, { moj: 10, dhsc: 1, hscl: 1 });
-    const strained = levy.ambitions.promises.find((p) => p.title === 'The tax lock');
+    // Amber (Phase 23): paid for by employer National Insurance instead, the lock is kept in its
+    // words and strained.
+    const employer = verdictOf(game, { moj: 10, dhsc: 1, nicer: 1 });
+    const strained = employer.ambitions.promises.find((p) => p.title === 'The tax lock');
     expect(strained?.fate).toBe('strained');
-    expect(strained?.by).toEqual(['Health and social care levy']);
+    expect(strained?.by).toEqual(['Employer NICs']);
     // Every manifesto promise is judged; the rest were kept.
     expect(v.ambitions.promises).toHaveLength(ds.pm.promises.length);
     expect(v.ambitions.promises.filter((p) => p.fate === 'kept')).toHaveLength(
@@ -144,7 +145,7 @@ describe('the close', () => {
   it('checks the trade-offs it names by re-running the engine on the same estimate', () => {
     const game: GamePermalink = { ...freshGame(), priorities: ['defence', 'safer-streets'] };
     // The walk: the tax lock broken for a margin the rules did not need.
-    const walk = { dip47: 1, moj: 10, hscl: 1, itbr: 1, ipt: 1, dhsc: -0.5 };
+    const walk = { dip47: 1, moj: 10, nicer: 2, itbr: 1, dhsc: -0.5 };
     const broke = close(game, walk);
     expect(broke.verdict.kind.id).toBe('broke-for-buffer');
     const without = outcomeOf({ ...walk, itbr: 0, ...ESTIMATE });

@@ -25,7 +25,7 @@ describe('step 5: deliver the Budget', () => {
   });
 
   it('reads the Budget back, part by part, each with a way to change it', () => {
-    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_hscl.1_dfe.5`);
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_nicer.2_dfe.5`);
     expect(
       screen.getByRole('heading', { level: 1, name: 'Deliver your Budget' }),
     ).toBeInTheDocument();
@@ -57,9 +57,7 @@ describe('step 5: deliver the Budget', () => {
 
     // Every tax moved, under its plain title, with what it raises.
     const tax = part(/^Tax/);
-    expect(
-      within(tax).getByText(/^Bring back the health and social care levy/),
-    ).toBeInTheDocument();
+    expect(within(tax).getByText(/^Employer National Insurance/)).toBeInTheDocument();
     expect(within(tax).getByText(/raises £2\d\.\dbn/)).toBeInTheDocument();
     expect(changeIn(tax, 'Change')).toHaveAttribute(
       'href',
@@ -86,13 +84,11 @@ describe('step 5: deliver the Budget', () => {
       ),
     ).toBeInTheDocument();
     expect(
-      within(position).getByText(
-        /^Who pays most: everyone who earns or spends, £\d+\.\dbn in 2029-30\.$/,
-      ),
+      within(position).getByText(/^Who pays most: business, £\d+\.\dbn in 2029-30\.$/),
     ).toBeInTheDocument();
     expect(within(position).getByText('You meet both fiscal rules.')).toBeInTheDocument();
-    // The levy keeps the tax lock's words and strains its spirit: the Prime Minister says so, in
-    // place of the bare amber tag (Phase 25).
+    // Employer National Insurance keeps the tax lock's words and strains its spirit: the Prime
+    // Minister says so, in place of the bare amber tag (Phase 25).
     expect(
       within(position).getByText(
         'The words of the tax lock still hold. Expect the benches to ask about the spirit.',
@@ -122,21 +118,21 @@ describe('step 5: deliver the Budget', () => {
     ).toBeInTheDocument();
     thin.unmount();
     // Each dealt with, and a margin to spare: nothing left on the desk, and no yardstick said.
-    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_vatelec.1_cgtalign.1`);
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_vatelec.1_pens20.1`);
     position = part(/^Where that leaves you/);
     expect(within(position).queryByText('Still on your desk:')).toBeNull();
     expect(within(position).queryByText(/call headroom under/)).toBeNull();
   });
 
   it('says the tax take in words when it rises by more than half a point (Phase 25)', () => {
-    const levy = at(`/review?${BASE}&${G}&L=moj.10_hscl.1`);
+    const employer = at(`/review?${BASE}&${G}&L=moj.10_nicer.2`);
     const line = document.querySelector('.review__taxtake');
     expect(line?.textContent).toMatch(
       /^Taxes take \d+p more in every £100 of national income in 2029-30\. The OBR already forecasts the tax take at a historic high\./,
     );
-    levy.unmount();
+    employer.unmount();
     // A small rise says nothing: the markets' band starts at half a point.
-    at(`/review?${BASE}&${G}&L=moj.10_ipt.2`);
+    at(`/review?${BASE}&${G}&L=moj.10_ved.20`);
     expect(document.querySelector('.review__taxtake')).toBeNull();
   });
 
@@ -184,7 +180,7 @@ describe('step 5: deliver the Budget', () => {
   });
 
   it('adds up: the headroom it ends on is the bar, to the pound', () => {
-    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_hscl.1_dfe.5`);
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_nicer.2_dfe.5`);
     const bar = screen.getByRole('region', { name: 'Your Budget so far' });
     const figure = bar.querySelector('.bar__figure')?.textContent;
     const line = within(part(/^Where that leaves you/)).getByText(/^Headroom goes from/);

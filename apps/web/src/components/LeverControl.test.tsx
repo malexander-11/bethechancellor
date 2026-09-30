@@ -56,20 +56,20 @@ describe('LeverControl', () => {
   });
 
   it('keeps a blocked lever in reach but still, and says what to untick and why', () => {
-    const death = levers.find((l) => l.code === 'cgtdth');
-    if (!death) throw new Error('missing cgtdth');
+    const exit = levers.find((l) => l.code === 'cgtexit');
+    if (!exit) throw new Error('missing cgtexit');
     const onChange = vi.fn();
     const onSwap = vi.fn();
     render(
       <LeverControl
-        lever={death}
+        lever={exit}
         value={0}
         onChange={onChange}
-        sizes={sizesOf('cgtdth')}
+        sizes={sizesOf('cgtexit')}
         blocked={{
-          other: 'Tax capital gains at the same rates as income',
+          other: 'Tax capital gains when someone dies',
           untick: true,
-          reason: 'The alignment package already ends the tax-free uplift at death.',
+          reason: 'The £4bn for gains at death already includes a charge on people who leave.',
           onSwap,
         }}
       />,
@@ -78,7 +78,7 @@ describe('LeverControl', () => {
     expect(box).toBeEnabled();
     expect(box).toHaveAttribute('aria-disabled', 'true');
     expect(box).toHaveAccessibleDescription(
-      /^You can’t have both\. Untick “Tax capital gains at the same rates as income” to choose this\. The alignment package/,
+      /^You can’t have both\. Untick “Tax capital gains when someone dies” to choose this\. The £4bn/,
     );
     fireEvent.click(box);
     expect(onChange).not.toHaveBeenCalled();
@@ -200,16 +200,16 @@ describe('LeverControl', () => {
       'tag--warn',
     );
     crossed.unmount();
-    // Amber (Phase 23): the levy keeps the pledge's words and tests its spirit.
-    const hscl = levers.find((l) => l.code === 'hscl');
-    if (!hscl) throw new Error('missing levy');
+    // Amber (Phase 23): employer National Insurance keeps the pledge's words and tests its spirit.
+    const nicer = levers.find((l) => l.code === 'nicer');
+    if (!nicer) throw new Error('missing employer National Insurance');
     const strained = render(
       <LeverControl
-        lever={hscl}
+        lever={nicer}
         value={1}
         onChange={() => undefined}
-        sizes={sizesOf('hscl')}
-        redLines={[{ promise: 'The tax lock', when: 'on', broken: true, severity: 'strains' }]}
+        sizes={sizesOf('nicer')}
+        redLines={[{ promise: 'The tax lock', when: 'above', broken: true, severity: 'strains' }]}
       />,
     );
     expect(within(strained.container).getByText('Strains the manifesto: The tax lock')).toHaveClass(

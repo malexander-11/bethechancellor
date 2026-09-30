@@ -4,11 +4,11 @@
   "code": "badr",
   "category": "tax",
   "badge": "direct",
-  "group": "Capital gains",
+  "group": "Shelved",
   "title": "Business Asset Disposal Relief rate",
   "shortTitle": "BADR rate",
   "noun": "business asset disposal relief",
-  "headline": "Business owners pay 18% on selling up, not 24%. Closing the gap raises £0.8bn.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Raise the special capital gains tax rate on the first £1 million of gains when someone sells all or part of their business (Business Asset Disposal Relief, formerly Entrepreneurs' Relief), in percentage points. HMRC publishes +1 and +5 points; the relief cost £0.8bn in 2025-26.",
   "baselinePolicy": {
     "text": "Qualifying gains are charged at 14% from April 2025 and 18% from April 2026, against a main higher rate of 24%, subject to a £1 million lifetime limit; HMRC puts the relief's cost at £800m in 2025-26.",
@@ -193,5 +193,6 @@
       "text": "The relief's value is the gap between its rate and the main higher rate; raising the main rate widens the gap this lever narrows.",
       "severity": "info"
     }
-  ]
+  ],
+  "deprecated": true
 }

@@ -27,16 +27,17 @@ const typicalErrorGbpm =
   (ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0);
 
 /**
- * The review's seven Budgets (Phase 25, R3): the walk, the walk paid by the levy, a 2p cut to the
+ * The review's seven Budgets (Phase 25, R3): the walk, the walk paid by employer National
+ * Insurance, a 2p cut to the
  * basic rate, doing nothing, a priority left unfunded, a 5% cut to health, and investment that
  * misses the debt rule alone. On each, no sentence, no close and no speech figure may say the
  * opposite of the sums: the rules result, a priority's fate or the sign of a change.
  */
-const WALK = { dip47: 1, moj: 10, hscl: 1, itbr: 1, ipt: 1, dhsc: -0.5 };
-const LEVY_WALK = { dip47: 1, moj: 10, hscl: 1, ipt: 1, dhsc: -0.5 };
+const WALK = { dip47: 1, moj: 10, nicer: 2, itbr: 1, dhsc: -0.5 };
+const NICS_WALK = { dip47: 1, moj: 10, nicer: 2, dhsc: -0.5 };
 const BUDGETS: [string, string[], Record<string, number>][] = [
   ['the walk', ['defence', 'safer-streets'], WALK],
-  ['the levy walk', ['defence', 'safer-streets'], LEVY_WALK],
+  ['the employer NICs walk', ['defence', 'safer-streets'], NICS_WALK],
   ['a 2p basic-rate cut', ['defence', 'safer-streets'], { itbr: -2 }],
   ['doing nothing', ['defence', 'safer-streets'], {}],
   ['an unfunded priority', ['defence', 'safer-streets'], { moj: 10 }],
@@ -183,8 +184,8 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
     const walk = deliver(['defence', 'safer-streets'], WALK);
     expect(walk.verdict.kind.id).toBe('broke-for-buffer');
     expect(walk.statement.accepted).toBe('I accepted breaking the tax lock.');
-    const levy = deliver(['defence', 'safer-streets'], LEVY_WALK);
-    expect(levy.verdict.kind.id).toBe('delivered-and-paid');
+    const employer = deliver(['defence', 'safer-streets'], NICS_WALK);
+    expect(employer.verdict.kind.id).toBe('delivered-and-paid');
     const cut = deliver(['defence', 'safer-streets'], { itbr: -2 });
     expect(cut.statement.paid).toMatch(/^I cut taxes for everyone who earns or spends/);
     const nothing = deliver(['defence', 'safer-streets'], {});

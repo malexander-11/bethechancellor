@@ -113,13 +113,6 @@
     }
   ],
   "reliefCost": true,
-  "interactions": [
-    {
-      "withLever": "align-cgt-with-income-tax",
-      "text": "CenTax’s package leaves main homes exempt; charging them at income tax rates would raise more than either card shows.",
-      "severity": "info"
-    }
-  ],
   "status": "reviewed",
   "reviewedOn": "2026-09-22"
 }

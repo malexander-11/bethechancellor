@@ -81,7 +81,7 @@ describe('the nations, where the choice is made (Phase 25)', () => {
     wide.control.sourceRange = { min: -9, max: 2, text: 'Wider than the lever.' };
     expect(() => parseLever(wide)).toThrow(/sourceRange must hold the default/);
     // Every rate costed from HMRC's 1p row stops being HMRC's past 2p either way.
-    for (const code of ['itbr', 'ithr', 'itar', 'vats', 'ipt', 'nicm', 'nica', 'nicer']) {
+    for (const code of ['itbr', 'ithr', 'itar', 'vats', 'nicm', 'nica', 'nicer']) {
       const range = byCode.get(code)?.control.sourceRange;
       expect([range?.min, range?.max], code).toEqual([-2, 2]);
     }

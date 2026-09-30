@@ -102,13 +102,6 @@
       ]
     }
   ],
-  "interactions": [
-    {
-      "withLever": "align-cgt-with-income-tax",
-      "text": "CenTax’s 2026 package excludes carried interest, so the two cards do not overlap.",
-      "severity": "info"
-    }
-  ],
   "status": "reviewed",
   "reviewedOn": "2026-09-23"
 }

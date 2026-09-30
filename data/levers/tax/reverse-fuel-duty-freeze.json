@@ -4,11 +4,11 @@
   "code": "rvfuel",
   "category": "tax",
   "badge": "direct",
-  "group": "Budget 2025 decisions",
+  "group": "Shelved",
   "title": "Reverse the 2026-27 fuel duty freeze from April 2027",
   "shortTitle": "Reverse fuel duty freeze",
   "noun": "adding back the cancelled fuel duty rise",
-  "headline": "Restore fuel duty uprating from April 2027. Raises £0.9bn.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Budget 2025 cancelled the 2026-27 fuel duty uprating and phased out the 5p cut by March 2027. Switch this on to put duty back on its pre-Budget path from the start year, recovering the revenue the freeze gives up.",
   "baselinePolicy": {
     "text": "Fuel duty 2026-27 uprating cancelled; 5p cut extended to 31 August 2026 then phased out by March 2027 (Table 4.1 line 3).",
@@ -99,5 +99,6 @@
       "text": "Both change fuel duty rates; the combined effect is approximate.",
       "severity": "warn"
     }
-  ]
+  ],
+  "deprecated": true
 }

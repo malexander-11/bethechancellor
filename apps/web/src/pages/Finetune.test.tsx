@@ -56,8 +56,8 @@ describe('fine-tune tax and spend: the curated levers', () => {
     ]);
     // A lever that moves both ways offers two policies, one each way, and every other tax toggle
     // waits in its group's fold (Phase 26).
-    expect(group(/^Everyone 31 policies/)).toBeInTheDocument();
-    expect(group(/^Drivers, smokers, gamblers and flyers 13 policies/)).toBeInTheDocument();
+    expect(group(/^Everyone 27 policies/)).toBeInTheDocument();
+    expect(group(/^Drivers, smokers, gamblers and flyers 11 policies/)).toBeInTheDocument();
     // Stacked, not tabbed; one primary button; every lever with its adviser's line.
     expect(screen.queryByRole('tab')).toBeNull();
     expect(container.querySelectorAll('.btn--primary')).toHaveLength(1);
@@ -85,7 +85,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
         .map((r) => r.closest('label')?.textContent),
     ).toEqual(['Small 21%', 'Medium 22%', 'Large 25%']);
     expect(
-      screen.getByRole('checkbox', { name: 'Bring back the health and social care levy' }),
+      screen.getByRole('checkbox', { name: 'Keep VAT off electricity after March 2027' }),
     ).toBeInTheDocument();
     // The other way waits in the fold, which mounts its cards when opened.
     expect(screen.queryByRole('heading', { name: 'Cut the basic rate of income tax' })).toBeNull();
@@ -102,7 +102,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(
       within(fold).getByRole('checkbox', { name: 'End the threshold freeze early' }),
     ).toBeInTheDocument();
-    expect(container.querySelectorAll('.lever--curated')).toHaveLength(43);
+    expect(container.querySelectorAll('.lever--curated')).toHaveLength(39);
   });
 
   it('prices a policy before it is chosen, then says what it does, and the bar keeps score', async () => {
@@ -156,67 +156,55 @@ describe('fine-tune tax and spend: the curated levers', () => {
     ).toBeInTheDocument();
   });
 
-  it('marks the levy amber, not red: the tax lock strained', () => {
+  it('marks employer National Insurance amber, not red: the tax lock strained', () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
-    const levy = screen.getByRole('checkbox', {
-      name: 'Bring back the health and social care levy',
-    });
-    const card = cardOf(levy);
+    const card = policy('Put up employer National Insurance');
     expect(
-      within(card).getByText(/^If you switch it on: would raise £\d+\.\dbn · headroom would be/),
+      within(card).getByText(/^Small: would raise £\d+\.\dbn · headroom would be/),
     ).toBeInTheDocument();
     expect(card.querySelector('.tag--manifesto')?.textContent).toMatch(
       /^Tax lock: keeps its words, strains its spirit/,
     );
-    fireEvent.click(levy);
+    fireEvent.click(within(card).getByRole('radio', { name: 'Small 16%' }));
     expect(within(card).getByText('Strains the manifesto: The tax lock')).toHaveClass('tag--amber');
     expect(within(card).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
   });
 
   it('keeps a policy chosen inside the fold where it is, and shows it at the top next time', () => {
     const first = at(`/finetune/tax?${BASE}&${GAME}`);
-    const fold = openFold(/^Everyone/);
-    expect(within(fold).getByText('28 more policies')).toBeInTheDocument();
-    const premium = cardOf(
-      within(fold).getByRole('heading', { name: 'Put up insurance premium tax' }),
-    );
-    fireEvent.click(within(premium).getByRole('radio', { name: 'Small 14%' }));
+    const fold = openFold(/^Drivers/);
+    expect(within(fold).getByText('8 more policies')).toBeInTheDocument();
+    const alcohol = cardOf(within(fold).getByRole('heading', { name: 'Put up alcohol duty' }));
+    fireEvent.click(within(alcohol).getByRole('radio', { name: 'Small 5% more' }));
     // Still in the fold: the card never jumps from under the pointer.
-    expect(
-      cardOf(within(fold).getByRole('heading', { name: 'Put up insurance premium tax' })),
-    ).toBe(premium);
+    expect(cardOf(within(fold).getByRole('heading', { name: 'Put up alcohol duty' }))).toBe(
+      alcohol,
+    );
     first.unmount();
     // The next visit finds it chosen, and on show; its other way stays in the fold.
-    at(`/finetune/tax?${BASE}&${GAME}&L=ipt.2`);
-    const again = group(/^Everyone 1 chosen/);
-    expect(within(again).getByText('27 more policies')).toBeInTheDocument();
+    at(`/finetune/tax?${BASE}&${GAME}&L=alc.5`);
+    const again = group(/^Drivers, smokers, gamblers and flyers 1 chosen/);
+    expect(within(again).getByText('7 more policies')).toBeInTheDocument();
     expect(
-      within(policy('Put up insurance premium tax')).getByRole('radio', { name: 'Small 14%' }),
+      within(policy('Put up alcohol duty')).getByRole('radio', { name: 'Small 5% more' }),
     ).toBeChecked();
-    const folded = openFold(/^Everyone/);
-    expect(
-      within(folded).queryByRole('heading', { name: 'Put up insurance premium tax' }),
-    ).toBeNull();
-    expect(
-      within(folded).getByRole('heading', { name: 'Cut insurance premium tax' }),
-    ).toBeInTheDocument();
+    const folded = openFold(/^Drivers/);
+    expect(within(folded).queryByRole('heading', { name: 'Put up alcohol duty' })).toBeNull();
+    expect(within(folded).getByRole('heading', { name: 'Cut alcohol duty' })).toBeInTheDocument();
   });
 
-  it('warns when two levers overlap: last year’s cancelled rise against a fuel duty cut', () => {
+  it('warns when two levers overlap: the April 2027 freeze against a fuel duty cut', () => {
     at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&M=rate.0.75_rpi.0.5&L=fuel.-10`);
     // The cut is the cost-of-living flagship's own, so fuel duty is one line in the drivers'
     // group with the way back to that flagship, not a card that could undo it (Phase 26).
     const held = group(/^Drivers/).querySelector('.lever--held');
     expect(held?.querySelector('.lever__held')?.textContent).toMatch(/^Cut fuel duty by 10%/);
-    openFold(/^Drivers/);
-    const restore = cardOf(
-      screen.getByRole('checkbox', { name: 'Add back last year’s cancelled fuel duty rise' }),
-    );
-    expect(
-      within(restore).getByText(/^Warning: Overlaps with Fuel duty: Both change fuel duty rates/),
-    ).toHaveClass('choice__overlap--warn');
-    // The freeze a Chancellor faces this autumn is on show, and costs money (Phase 25).
+    // The freeze a Chancellor faces this autumn is on show, costs money (Phase 25), and says it
+    // moves the same duty as the cut.
     const freeze = cardOf(screen.getByRole('checkbox', { name: 'Freeze fuel duty in April 2027' }));
+    expect(
+      within(freeze).getByText(/^Warning: Overlaps with Fuel duty: Both change fuel duty rates/),
+    ).toHaveClass('choice__overlap--warn');
     expect(
       within(freeze).getByText(/^If you switch it on: would cost £0\.\dbn · headroom would be/),
     ).toBeInTheDocument();
@@ -250,26 +238,26 @@ describe('fine-tune tax and spend: the curated levers', () => {
   });
 
   it('will not let two taxes that count the same money both in, and swaps them in one tap', async () => {
-    at(`/finetune/tax?${BASE}&${GAME}&L=cgtalign.1`);
+    at(`/finetune/tax?${BASE}&${GAME}&L=cgtexit.1`);
     const death = screen.getByRole('checkbox', { name: 'Tax capital gains when someone dies' });
     const card = cardOf(death);
     expect(death).toHaveAttribute('aria-disabled', 'true');
     expect(death).toHaveAccessibleDescription(
-      /You can’t have both\. Untick “Tax capital gains at the same rates as income” to choose this\./,
+      /You can’t have both\. Untick “Charge capital gains tax on people who leave the UK” to choose this\./,
     );
     expect(card.className).toMatch(/lever--blocked/);
     // Priced as the swap it offers, never as both at once.
     expect(
-      within(card).getByText(/^If you swap them: would cost £\d+\.\dbn · headroom would be/),
+      within(card).getByText(/^If you swap them: would raise £\d+\.\dbn · headroom would be/),
     ).toBeInTheDocument();
     fireEvent.click(death);
-    expect(search().get('L')).toMatch(/cgtalign\.1/);
+    expect(search().get('L')).toMatch(/cgtexit\.1/);
     expect(search().get('L') ?? '').not.toMatch(/cgtdth/);
     fireEvent.click(within(card).getByRole('button', { name: /Swap them/ }));
     await waitFor(() => expect(search().get('L')).toMatch(/cgtdth\.1/));
-    expect(search().get('L') ?? '').not.toMatch(/cgtalign/);
+    expect(search().get('L') ?? '').not.toMatch(/cgtexit/);
     expect(
-      screen.getByRole('checkbox', { name: 'Tax capital gains at the same rates as income' }),
+      screen.getByRole('checkbox', { name: 'Charge capital gains tax on people who leave the UK' }),
     ).toHaveAttribute('aria-disabled', 'true');
   });
 
@@ -389,7 +377,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
   });
 
   it('leads from the spending screen to the review, the package intact', async () => {
-    at(`/finetune/spending?${BASE}&${GAME}&L=moj.10_hscl.1`);
+    at(`/finetune/spending?${BASE}&${GAME}&L=moj.10_nicer.2`);
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/finetune\/tax\?/),
@@ -398,7 +386,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(h1('Deliver your Budget')).toBeInTheDocument();
     await waitFor(() => {
       expect(search().get('g')).toBe('st.4_pr.safer-streets+defence');
-      expect(search().get('L')).toMatch(/hscl\.1/);
+      expect(search().get('L')).toMatch(/nicer\.2/);
       expect(search().get('S')).toBeNull();
     });
   });
@@ -487,15 +475,15 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     expect(modeLine().textContent).toMatch(/^A shortlist\./);
     expect(document.querySelector('.badge')).toBeNull();
     expect(
-      screen.getByRole('button', { name: 'See every idea (all 95 tax policies)' }),
+      screen.getByRole('button', { name: 'See every idea (all 85 tax policies)' }),
     ).toBeInTheDocument();
     expect(cardTitles()).toEqual([
-      'Bring back the health and social care levy',
       'Keep VAT off electricity after March 2027',
-      'Tax capital gains at the same rates as income',
       'Give everyone the same 30% pension tax relief',
       'Charge employer National Insurance on pension contributions',
+      'Put up employer National Insurance',
       'Double council tax on the biggest homes (bands G and H)',
+      'Tax capital gains when someone dies',
       'End the extra inheritance tax allowance for family homes',
       'Put gambling duties up again',
     ]);
@@ -526,7 +514,7 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     expect(within(modeLine()).getByRole('status')).toHaveTextContent('Every idea is on show.');
     expect(modeLine().textContent).not.toMatch(/A shortlist/);
     expect(document.querySelectorAll('.lever--curated')).toHaveLength(15);
-    expect(group(/^Everyone 31 policies/)).toBeInTheDocument();
+    expect(group(/^Everyone 27 policies/)).toBeInTheDocument();
     expect(
       screen.getByText(
         'Raise or cut any tax. Watch your headroom move. Your Director of Tax’s view is on each lever.',
@@ -545,34 +533,30 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
   it('never hides what was chosen: a policy picked in advanced mode stays on show in basic', () => {
     window.localStorage.setItem('btc.mode.v1', 'advanced');
     at(`/finetune/tax?${BASE}&${GAME}`);
-    const fold = openFold(/^Everyone/);
-    const premium = cardOf(
-      within(fold).getByRole('heading', { name: 'Put up insurance premium tax' }),
-    );
-    fireEvent.click(within(premium).getByRole('radio', { name: 'Small 14%' }));
+    const fold = openFold(/^Drivers/);
+    const alcohol = cardOf(within(fold).getByRole('heading', { name: 'Put up alcohol duty' }));
+    fireEvent.click(within(alcohol).getByRole('radio', { name: 'Small 5% more' }));
     // The way back to the shortlist is the screen's own button (the footer's switch is withdrawn
     // for now, ADR-0032).
     fireEvent.click(screen.getByRole('button', { name: 'Show only the best ideas' }));
     expect(document.querySelector('main')?.getAttribute('data-mode')).toBe('basic');
-    expect(cardTitles()).toContain('Put up insurance premium tax');
+    expect(cardTitles()).toContain('Put up alcohol duty');
     expect(
-      within(policy('Put up insurance premium tax')).getByRole('radio', { name: 'Small 14%' }),
+      within(policy('Put up alcohol duty')).getByRole('radio', { name: 'Small 5% more' }),
     ).toBeChecked();
     expect(cardTitles()).toHaveLength(9);
   });
 
   it('shows a lever a link chose, and keeps it on show after Undo until the next visit', async () => {
-    at(`/finetune/tax?${BASE}&${GAME}&L=ipt.2`);
-    const premium = policy('Put up insurance premium tax');
-    expect(within(premium).getByRole('radio', { name: 'Small 14%' })).toBeChecked();
-    expect(group(/^Everyone 1 chosen · raises/)).toBeInTheDocument();
-    fireEvent.click(
-      within(premium).getByRole('button', { name: 'Undo for Put up insurance premium tax' }),
-    );
-    await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/ipt/));
+    at(`/finetune/tax?${BASE}&${GAME}&L=alc.5`);
+    const alcohol = policy('Put up alcohol duty');
+    expect(within(alcohol).getByRole('radio', { name: 'Small 5% more' })).toBeChecked();
+    expect(group(/^Drivers, smokers, gamblers and flyers 1 chosen · raises/)).toBeInTheDocument();
+    fireEvent.click(within(alcohol).getByRole('button', { name: 'Undo for Put up alcohol duty' }));
+    await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/alc/));
     // Still on show: a card never vanishes from under the pointer.
-    expect(policy('Put up insurance premium tax')).toBe(premium);
-    expect(group(/^Everyone$/)).toBeInTheDocument();
+    expect(policy('Put up alcohol duty')).toBe(alcohol);
+    expect(group(/^Drivers, smokers, gamblers and flyers$/)).toBeInTheDocument();
   });
 
   it('shows the flagships’ lines and the defence plan’s gap, which the briefing puts on the desk', () => {

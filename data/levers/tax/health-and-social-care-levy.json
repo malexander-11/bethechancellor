@@ -4,11 +4,11 @@
   "code": "hscl",
   "category": "tax",
   "badge": "mechanical",
-  "group": "National Insurance",
+  "group": "Shelved",
   "title": "A health and social care levy: 1.25% on employers and employees",
   "shortTitle": "Health and social care levy",
   "noun": "the health and social care levy",
-  "headline": "The 2021 levy again: 1.25 points on every NICs rate. About £26bn, static.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Reintroduce the Health and Social Care Levy legislated in 2021: 1.25% on employers, employees and the self-employed on the National Insurance base, with the money for health and social care. This card adds up HMRC's figures for a one-point rise in each rate (employer, employee and self-employed, main and additional) and takes 1.25 times the total: the same figures the National Insurance sliders use. In 2021 HM Treasury put the levy together with the dividend tax rise announced beside it at about £12 billion a year; the dividend rise is already in today's baseline, and the employer rate and the earnings it falls on have grown since.",
   "baselinePolicy": {
     "text": "No levy. Employee NICs 8% and 2%, employer NICs 15% above a frozen secondary threshold; the 2021 levy was repealed before its first separate year.",
@@ -178,5 +178,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-28"
+  "reviewedOn": "2026-09-28",
+  "deprecated": true
 }

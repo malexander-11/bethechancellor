@@ -60,8 +60,8 @@ describe('wider feedback (Phase 25, R21)', () => {
   });
 
   it('marks money that arrives late with the markets, and moves no rating by it', () => {
-    // CGT like income raises nothing before 2028-29; the penny raises from the first year.
-    const late = lateBand({ cgtalign: 1, itbr: 1 });
+    // CGT at death raises nothing before 2028-29; the penny raises from the first year.
+    const late = lateBand({ cgtdth: 1, itbr: 1 });
     expect(late?.points).toBe(0);
     expect(late?.text).toMatch(
       /^\d+% of the new tax money in 2029-30 waits until 2028-29 or later\. The markets will want to see it arrive\.$/,
@@ -98,8 +98,8 @@ describe('wider feedback (Phase 25, R21)', () => {
     // Keeping fuel duty down adds a little to emissions; raising it takes a little off (HMRC).
     expect(advice('fuelfrz')?.text).toMatch(/emissions edge up/);
     cites('fuelfrz', 'hmrc-tiin-fuel-duty-2026-27');
-    expect(advice('rvfuel')?.text).toMatch(/emissions dip/);
-    cites('rvfuel', 'hmrc-tiin-fuel-duty-2026-27');
+    expect(advice('fuel')?.text).toMatch(/emissions dip/);
+    cites('fuel', 'hmrc-tiin-fuel-duty-2026-27');
     const cut = ds.options.deliver.find((o) => o.id === 'fuel-duty-cut');
     expect(cut?.advice.text).toMatch(/emissions edge up/);
     expect(cut?.advice.sources.map((s) => s.sourceId)).toContain('hmrc-tiin-fuel-duty-2026-27');

@@ -61,7 +61,8 @@ describe('nothing before it can start (ADR-0021)', () => {
       if (!l.earliestStart) continue;
       expect(years, l.code).toContain(l.earliestStart.year);
       expect(l.earliestStart.sources.length, l.code).toBeGreaterThan(0);
-      expect(l.headline ?? '', l.code).toContain(l.earliestStart.year);
+      // A card taken off the table keeps its floor for the record; its headline says it is kept.
+      if (!l.deprecated) expect(l.headline ?? '', l.code).toContain(l.earliestStart.year);
     }
   });
 

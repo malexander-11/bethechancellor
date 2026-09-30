@@ -21,23 +21,25 @@ describe('interaction notices', () => {
   });
 
   it('are de-duplicated when both sides declare the pair and warn for overlapping fuel duty changes', () => {
-    const fuel = run({ fuel: 5, rvfuel: 1 }).interactions;
+    // Ending the freeze early and the basic rate each name the other: one notice, not two.
+    expect(run({ itbr: 1, rvfrz: 1 }).interactions).toHaveLength(1);
+    const fuel = run({ fuel: 5, fuelfrz: 1 }).interactions;
     expect(fuel).toHaveLength(1);
     expect(fuel[0]?.severity).toBe('warn');
   });
 
   it('say when two measures count the same money, and only ever from one side (Phase 25)', () => {
-    const both = run({ cgtalign: 1, cgtdth: 1 }).interactions;
+    const both = run({ cgtdth: 1, cgtexit: 1 }).interactions;
     expect(both).toHaveLength(1);
     expect(both[0]?.severity).toBe('excludes');
-    expect(both[0]?.text).toMatch(/twice/);
+    expect(both[0]?.text).toMatch(/count it again/);
     // An excludes pair is one fact about the pair: authored twice, the validator says so.
     const broken = structuredClone(ds);
-    const death = broken.levers.find((l) => l.code === 'cgtdth');
-    if (!death) throw new Error('no cgtdth');
-    death.interactions = [
-      ...(death.interactions ?? []),
-      { withLever: 'align-cgt-with-income-tax', text: 'Counted twice.', severity: 'warn' },
+    const exit = broken.levers.find((l) => l.code === 'cgtexit');
+    if (!exit) throw new Error('no cgtexit');
+    exit.interactions = [
+      ...(exit.interactions ?? []),
+      { withLever: 'cgt-on-death', text: 'Counted twice.', severity: 'warn' },
     ];
     expect(validateDataset(broken).some((p) => /authored once/.test(p))).toBe(true);
     expect(validateDataset(ds)).toEqual([]);

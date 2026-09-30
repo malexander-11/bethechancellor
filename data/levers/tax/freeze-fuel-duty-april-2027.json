@@ -129,11 +129,6 @@
       "withLever": "fuel-duty",
       "text": "Both change fuel duty rates: a freeze is a cut of about 3% against the plan, so moving the rate as well counts from a different starting point.",
       "severity": "warn"
-    },
-    {
-      "withLever": "reverse-fuel-duty-freeze",
-      "text": "Adding back last year's cancelled rise while freezing this year's pulls the same duty both ways.",
-      "severity": "excludes"
     }
   ],
   "status": "reviewed",

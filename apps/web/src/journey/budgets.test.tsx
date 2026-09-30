@@ -5,14 +5,15 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
-// A game at the review on today's estimate, two priorities delivered and the levy raised: every
-// screen renders in its working state, and the review and the close have something to say.
-const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_hscl.1';
+// A game at the review on today's estimate, two priorities delivered and employer National
+// Insurance two points up: every screen renders in its working state, and the review and the close
+// have something to say.
+const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_nicer.2';
 // The same game with one folded lever chosen in every group of the fine-tuning screens, so each
 // group shows four: the widest those screens get on arrival.
 const TUNED = GAME.replace(
-  'L=moj.10_dip47.1_hscl.1',
-  'L=moj.10_dip47.1_hscl.1_ipt.2_wealth2.1_banklevy.1_iinc2.1_apd.2_otherd.-1_woth.-1_rvplan2.1',
+  'L=moj.10_dip47.1_nicer.2',
+  'L=moj.10_dip47.1_nicer.2_sugsalt.1_wealth2.1_banklevy.1_iinc2.1_apd.2_otherd.-1_woth.-1_rvplan2.1',
 );
 // Three priorities with the most options between them: the widest the priority screens get.
 const WIDEST = 'g=st.2_pr.cost-of-living+welfare-bill+homes-growth&M=rate.0.75_rpi.0.5';
@@ -77,20 +78,24 @@ const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] =
   // Measured after Phase 26's sizes (613, 778, 543 and 724 words), with a tenth to spare; then
   // council homes took Investment's third place on show (spending 580 and 761), and the links to
   // the desk went with it (tax 611 and 776, spending 578 and 759; ADR-0027). With no badges
-  // (ADR-0034): tax 592 and 750, spending 554 and 723.
-  ['/finetune/tax', 655, GAME, 'advanced'],
-  ['/finetune/tax', 825, TUNED, 'advanced'],
+  // (ADR-0034): tax 592 and 750, spending 554 and 723. Nine taxes taken off the table, and the
+  // walk's levy now two points on employer National Insurance (ADR-0035): tax 585 and 741.
+  ['/finetune/tax', 645, GAME, 'advanced'],
+  ['/finetune/tax', 820, TUNED, 'advanced'],
   ['/finetune/spending', 610, GAME, 'advanced'],
   ['/finetune/spending', 800, TUNED, 'advanced'],
   // Basic mode (Phase 27): the advisers' shortlist, and whatever the game has chosen besides
   // (tax 343 and 492, spending 424 and 589); with no badges, tax 329 and 471, spending 403 and 556.
-  ['/finetune/tax', 365, GAME, 'basic'],
-  ['/finetune/tax', 520, TUNED, 'basic'],
+  // Employer National Insurance and CGT at death picked in place of the levy and alignment, a
+  // scale of sizes where a tick was (ADR-0035): tax 354 and 494.
+  ['/finetune/tax', 390, GAME, 'basic'],
+  ['/finetune/tax', 545, TUNED, 'basic'],
   ['/finetune/spending', 445, GAME, 'basic'],
   ['/finetune/spending', 615, TUNED, 'basic'],
-  // The review 204 and Budget day 190 with no badges, against 213 and 199.
-  ['/review', 225, GAME, 'basic'],
-  ['/budget-day', 210, GAME, 'basic'],
+  // The review 204 and Budget day 190 with no badges, against 213 and 199; 196 and 181 with
+  // employer National Insurance in the walk in place of the levy (ADR-0035).
+  ['/review', 220, GAME, 'basic'],
+  ['/budget-day', 200, GAME, 'basic'],
 ];
 
 /** A fresh browser is in basic mode; advanced is remembered once chosen. */

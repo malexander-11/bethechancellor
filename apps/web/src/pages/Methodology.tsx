@@ -164,26 +164,29 @@ export function MethodologyPage() {
         line; reversing the October 2024 capital gains tax rise uses the Treasury&rsquo;s own
         costing of the package. The revenue menu a Chancellor actually weighs is on the fine-tuning
         screens too, each option a published figure: the employer National Insurance threshold,
-        vehicle excise duty, air passenger duty, tobacco duties, the Business Asset Disposal Relief
-        rate, the residence nil-rate band, insurance premium tax, and employer National Insurance on
-        pension contributions from HMRC&rsquo;s private pension statistics (£14.3 billion in
-        2024-25, less the £6.5 billion on public sector schemes, which would only move money from
-        departments to the Treasury, taken to today&rsquo;s 15% rate). Every card built on
-        HMRC&rsquo;s cost of a relief reads &ldquo;raises at most&rdquo; and says why, and the
-        markets count it as a figure nobody has certified. The health and social care levy is 1.25
-        times HMRC&rsquo;s own one-point figures for every National Insurance rate, the same figures
-        the National Insurance rate policies use; two measures that count the same money (aligning
-        capital gains with income and taxing gains at death, for one) cannot both be chosen, and
-        there are twenty-two such pairs, each with a text that reads from either card. Employer-side
-        National Insurance is not a manifesto red line here, on the government&rsquo;s own reading
-        of the lock; the Political Adviser says on each such lever that the reading is contested.
-        Phase 12 added the menu the Budget 2026 reporting says is on the table: ending the capital
-        gains write-off at death, a £1.5 million council tax surcharge band, reversing the farm and
-        family-business relief reform, two points on the bank surcharge, the energy profits levy
-        package again, the self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance
-        package, unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and
-        business rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated
-        calculation on one, and the data records which.
+        vehicle excise duty, air passenger duty, tobacco duties, the residence nil-rate band, and
+        employer National Insurance on pension contributions from HMRC&rsquo;s private pension
+        statistics (£14.3 billion in 2024-25, less the £6.5 billion on public sector schemes, which
+        would only move money from departments to the Treasury, taken to today&rsquo;s 15% rate).
+        Every card built on HMRC&rsquo;s cost of a relief reads &ldquo;raises at most&rdquo; and
+        says why, and the markets count it as a figure nobody has certified. Two measures that count
+        the same money (taxing gains at death and charging people who leave the UK, for one) cannot
+        both be chosen, and there are fifteen such pairs, each with a text that reads from either
+        card. Employer-side National Insurance is not a manifesto red line here, on the
+        government&rsquo;s own reading of the lock; the Political Adviser says on each such lever
+        that the reading is contested. Phase 12 added the menu the Budget 2026 reporting says is on
+        the table: ending the capital gains write-off at death, a £1.5 million council tax surcharge
+        band, reversing the farm and family-business relief reform, two points on the bank
+        surcharge, the energy profits levy package again, the self-employed Class 4 rate, VAT off
+        domestic gas, another HMRC compliance package, unfreezing the Plan 2 student loan threshold,
+        defence at 3% of GDP from 2027, and business rates as a share of the OBR&rsquo;s own line.
+        Each is a published row or a stated calculation on one, and the data records which. Nine
+        taxes were taken off the table on 30 September 2026: the health and social care levy,
+        insurance premium tax, dropping the salary-sacrifice cap, taxing capital gains at income tax
+        rates, a lower VAT threshold, National Insurance on landlords&rsquo; rent, a higher tax on
+        selling a business, adding back last year&rsquo;s cancelled fuel duty rise and undoing last
+        year&rsquo;s gambling duty rises. Their costings are kept for the record, and an old link
+        that carries one opens without it.
       </p>
 
       <h2>Spending levers</h2>

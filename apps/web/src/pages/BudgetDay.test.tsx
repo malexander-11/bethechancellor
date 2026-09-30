@@ -164,12 +164,11 @@ describe('Budget day: what your Budget means', () => {
     expect(within(couple).getByText('worse off')).toBeInTheDocument();
   });
 
-  it('marks the levy amber: the public is not pinned at the floor, and the strain is a reason', () => {
-    at(`${BASE}&${GAME}&L=moj.10_hscl.1`);
+  it('marks employer National Insurance amber: the public is not pinned at the floor, and the strain is a reason', () => {
+    at(`${BASE}&${GAME}&L=moj.10_nicer.1`);
     fireEvent.click(within(card('The public')).getByText(/^Why this rating/));
     // The floor is for the manifesto's own words: its rule reads that every red line holds. What
-    // the levy costs with the public comes from its size and its strain, both named (Phase 25
-    // prices it at about £26bn, 1.25 times the game's own National Insurance rows).
+    // employer National Insurance costs with the public comes from its strain, named.
     expect(
       within(card('The public')).getAllByText(/Every manifesto red line holds/).length,
     ).toBeGreaterThan(0);
@@ -284,8 +283,8 @@ describe('Budget day: what your Budget means', () => {
   });
 
   it('weighs growth, debt interest and money that arrives late, in the markets’ fold (Phase 25)', () => {
-    // Corporation tax up and CGT like income: the biggest measure with a note on growth speaks.
-    at(`${BASE}&${GAME}&L=dip47.1_moj.10_ct.1_cgtalign.1`);
+    // Corporation tax up and CGT at death: the biggest measure with a note on growth speaks.
+    at(`${BASE}&${GAME}&L=dip47.1_moj.10_ct.1_cgtdth.1`);
     const markets = card('The markets');
     const why = within(markets).getByText(/^Why this rating/);
     fireEvent.click(why);
@@ -293,7 +292,7 @@ describe('Budget day: what your Budget means', () => {
     expect(
       within(markets).getByText(/leaves out effects on investment and the wider economy/),
     ).toBeInTheDocument();
-    // CGT like income raises nothing before 2028-29: most of the new tax money comes late.
+    // CGT at death raises nothing before 2028-29: much of the new tax money comes late.
     expect(
       within(markets).getByText(
         /^\d+% of the new tax money in 2029-30 waits until 2028-29 or later\. The markets will want to see it arrive\.$/,

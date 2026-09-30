@@ -44,7 +44,7 @@ describe('the speech', () => {
       ufsm: 1,
       itbr: 1,
       ct: 1,
-      cgtalign: 1,
+      pens20: 1,
       fuel: -5,
       mod: -2,
     };
@@ -187,7 +187,7 @@ describe('the speech', () => {
     const cases: [Record<string, number>, string][] = [
       [{ def5: 1 }, 'rulesMissed'],
       [{ moj: 10, ct: 1 }, 'promiseBroken'],
-      [{ moj: 10, cgtalign: 1 }, 'taxUp'],
+      [{ moj: 10, pens20: 1 }, 'taxUp'],
       [{ moj: 10, dhsc: -5 }, 'cuts'],
       [{ moj: 10 }, 'default'],
     ];

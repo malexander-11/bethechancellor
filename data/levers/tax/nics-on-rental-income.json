@@ -4,11 +4,11 @@
   "code": "nicrent",
   "category": "tax",
   "badge": "assumption",
-  "group": "National Insurance",
+  "group": "Shelved",
   "title": "National Insurance on rental income",
   "shortTitle": "NICs on rental income",
   "noun": "landlords' National Insurance",
-  "headline": "NICs on landlords’ rents from 2028-29, as employees pay. CenTax: up to £3bn, static.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Employees pay National Insurance on their wages; landlords pay none on their rents. The Centre for the Analysis of Taxation costs an equivalent of Class 1 NICs on profits from rental income, savings income outside ISAs and other non-dividend investment income: up to £3 billion, £0.6 billion and £0.4 billion respectively in 2029-30, on a static basis. Only the rental figure is built here, at CenTax’s ceiling, held flat in cash. The Resolution Foundation, Demos and IPPR have each proposed the same charge in different words.",
   "baselinePolicy": {
     "text": "National Insurance is charged on earnings from employment and self-employment. Rental income bears income tax only, at up to 45%, with the property income rates two points higher than the main rates from April 2027.",
@@ -138,5 +138,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-23"
+  "reviewedOn": "2026-09-23",
+  "deprecated": true
 }

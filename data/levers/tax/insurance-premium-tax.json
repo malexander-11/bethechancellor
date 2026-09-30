@@ -4,11 +4,11 @@
   "code": "ipt",
   "category": "tax",
   "badge": "direct",
-  "group": "Duties",
+  "group": "Shelved",
   "title": "Insurance premium tax",
   "shortTitle": "Insurance premium tax",
   "noun": "insurance premium tax",
-  "headline": "12% on most general insurance. Each point raises about £0.65bn.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Change the 12% standard rate of insurance premium tax, paid on most home, motor, pet and health insurance, in percentage points. The rate has been raised four times since 2011, from 5% to 12%; a two-point rise raises about £1.3bn a year.",
   "baselinePolicy": {
     "text": "Standard rate 12% on most general insurance; higher rate 20% on travel insurance and some insurance sold with vehicles and appliances. Budget 2025 extended the standard rate to insurance on Motability vehicle leases from July 2026 (Table 4.1 line 14).",
@@ -139,5 +139,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-18"
+  "reviewedOn": "2026-09-18",
+  "deprecated": true
 }

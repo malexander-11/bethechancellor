@@ -112,7 +112,7 @@ describe('one price per choice (Phase 25)', () => {
 
 describe('the review adds up (Phase 25)', () => {
   const budgets: Record<string, Record<string, number>> = {
-    walk: { dip47: 1, moj: 10, hscl: 1, itbr: 1, ipt: 2, dhsc: -0.5 },
+    walk: { dip47: 1, moj: 10, nicer: 2, itbr: 1, dhsc: -0.5 },
     'welfare savings': { rvpip: 1, csjmh: 1 },
     'investment alone': { cdel: 10 },
     'a front-loaded rise': { def3: 1 },

@@ -36,15 +36,16 @@ const lever = (code: string) => {
  * cuts a Chancellor actually faces this autumn: keeping VAT off electricity (third in "Everyone",
  * the main VAT rate folded) and freezing fuel duty (first for drivers, last year's cancelled rise
  * folded). Phase 26 folds every other tax into its who-pays group, the toggles and then the
- * rates, after the hand-picked ones and before any lever not on the table (ADR-0027).
+ * rates, after the hand-picked ones and before any lever not on the table (ADR-0027). Nine went
+ * on 30 September 2026, kept for the record and offered nowhere (ADR-0035).
  */
 const TAX_CODES = [
   [
     'everyone',
     // prettier-ignore
     [
-      'hscl', 'itbr', 'vatelec', 'vats', 'sugsalt', 'ipt', 'hmrc2',
-      'cta', 'nicspa', 'vatgas', 'vat1z', 'rvfrz', 'rvsal',
+      'itbr', 'vatelec', 'vats', 'sugsalt', 'hmrc2',
+      'cta', 'nicspa', 'vatgas', 'vat1z', 'rvfrz',
       'itpa', 'nicm', 'nica', 'nicpt', 'nic4', 'vatr',
       'vatfood', 'vatnrg', 'vattrn', 'vatkids', 'vatbook',
     ],
@@ -53,7 +54,7 @@ const TAX_CODES = [
     'best-off',
     // prettier-ignore
     [
-      'cgtalign', 'nicuel', 'pens30', 'it50', 'wealth2',
+      'nicuel', 'pens30', 'it50', 'wealth2',
       'pens20', 'pslump', 'nicllp', 'carried', 'cgtexit', 'wealth',
       'ithr', 'itar', 'itbrl',
     ],
@@ -63,7 +64,7 @@ const TAX_CODES = [
     // prettier-ignore
     [
       'nicpen', 'nicer', 'qelevy', 'ct', 'banklevy',
-      'bank5', 'epl2', 'vatthr',
+      'bank5', 'epl2',
       'nicst', 'brates',
     ],
   ],
@@ -71,9 +72,9 @@ const TAX_CODES = [
     'savers-owners',
     // prettier-ignore
     [
-      'ctgh', 'cgtdth', 'rnrb', 'nicrent', 'iinc2',
+      'ctgh', 'cgtdth', 'rnrb', 'iinc2',
       'sdltabol', 'hvcts15', 'rvcgt', 'rvinv', 'rvapr', 'rvhrad',
-      'iht', 'sdlt5', 'cgth', 'cgtl', 'badr',
+      'iht', 'sdlt5', 'cgth', 'cgtl',
       'cgtprr', 'vathome',
     ],
   ],
@@ -81,8 +82,8 @@ const TAX_CODES = [
     'duties',
     // prettier-ignore
     [
-      'fuelfrz', 'gam2', 'tob', 'ved', 'apd', 'rvfuel',
-      'rvgam', 'vatmot',
+      'fuelfrz', 'gam2', 'tob', 'ved', 'apd',
+      'vatmot',
       'fuel', 'alc',
     ],
   ],
@@ -112,17 +113,17 @@ const SPENDING_CODES = [
 ];
 
 describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
-  it('offers seventy-six taxes in five who-pays groups, and thirty-two spending levers in four', () => {
+  it('offers sixty-seven taxes in five who-pays groups, and thirty-two spending levers in four', () => {
     expect(file.tax.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(TAX_CODES);
     expect(file.spending.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(
       SPENDING_CODES,
     );
-    expect(finetuneItems(file, 'tax')).toHaveLength(76);
+    expect(finetuneItems(file, 'tax')).toHaveLength(67);
     expect(finetuneItems(file, 'spending')).toHaveLength(32);
     // The spending screen says how long the settlements run, the squeeze already after them, and
     // whose budgets most of these are (Phase 25).
     expect(file.spending.notes.map((n) => n.badge)).toEqual(['simulated', 'direct', 'commentary']);
-    expect(finetuneItems(file)).toHaveLength(108);
+    expect(finetuneItems(file)).toHaveLength(99);
     expect(FINETUNE_SIDES).toEqual(['tax', 'spending']);
   });
 
@@ -130,7 +131,7 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     expect(validateDataset(ds)).toEqual([]);
     const names = finetuneNames(file);
     expect(names.get('itbr')).toBe('The basic rate of income tax');
-    expect(names.get('hscl')).toBe('Bring back the health and social care levy');
+    expect(names.get('vatelec')).toBe('Keep VAT off electricity after March 2027');
     expect(names.get('dhsc')).toBe('Health and social care');
     expect(names.get('rvwfp')).toBe('Limit winter fuel payments to pensioners on pension credit');
   });
@@ -181,7 +182,7 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
   it('sizes a policy at its usual step, twice it and five times it, capped at the lever’s range', () => {
     // Where HMRC publishes points the sizes sit on them, and the additional rate stops short of
     // the 50% rate, which is its own policy (ADR-0027).
-    const ON_POINTS = new Set(['itpa', 'itbrl', 'cgth', 'cgtl', 'badr', 'iht', 'itar']);
+    const ON_POINTS = new Set(['itpa', 'itbrl', 'cgth', 'cgtl', 'iht', 'itar']);
     for (const item of finetuneItems(file)) {
       const { min, max, default: rest, kind } = lever(item.code).control;
       if (kind === 'toggle' || ON_POINTS.has(item.code)) continue;
@@ -244,7 +245,9 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
       patch(copy);
       return validateDataset({ ...ds, finetune: copy }).join('\n');
     };
-    const first = (f: FinetuneFile) => f.tax.groups[0]!.items[1]!;
+    const byCode = (f: FinetuneFile, code: string) =>
+      f.tax.groups.flatMap((g) => g.items).find((i) => i.code === code)!;
+    const first = (f: FinetuneFile) => byCode(f, 'itbr');
     expect(tamper((f) => (first(f).code = 'nosuch'))).toMatch(/offers unknown lever "nosuch"/);
     expect(tamper((f) => f.spending.groups[0]!.items.push({ ...first(f), code: 'water' }))).toMatch(
       /offers shelved lever water/,
@@ -262,7 +265,7 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
       /lever itbr has two policies the same way/,
     );
     expect(tamper((f) => delete first(f).name)).toMatch(/lever itbr needs a plain name/);
-    expect(tamper((f) => (f.tax.groups[0]!.items[0]!.policies[0]!.sizes = [1, 1]))).toMatch(
+    expect(tamper((f) => (byCode(f, 'vatelec').policies[0]!.sizes = [1, 1]))).toMatch(
       /is a toggle: it is switched on, in one size/,
     );
     // A lever not on the table comes after the rest of its group, as the desk sorted them.
@@ -270,10 +273,10 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
       tamper((f) =>
         f.tax.groups[0]!.items.unshift({
           code: 'vatfood',
-          policies: [{ ...f.tax.groups[0]!.items[0]!.policies[0]!, title: 'Charge VAT on food' }],
+          policies: [{ ...byCode(f, 'vatelec').policies[0]!, title: 'Charge VAT on food' }],
         }),
       ),
-    ).toMatch(/hscl comes after vatfood, which is not on the table/);
+    ).toMatch(/itbr comes after vatfood, which is not on the table/);
     expect(tamper((f) => f.tax.groups[1]!.items.push(first(f)))).toMatch(
       /tax lever itbr falls on broad-base, not on group best-off/,
     );
@@ -295,12 +298,12 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
  * it checkable. Each pick's reason is its own adviser line, already on its card.
  */
 const TAX_PICKS = [
-  ['everyone', 'hscl', 'Bring back the health and social care levy'],
   ['everyone', 'vatelec', 'Keep VAT off electricity after March 2027'],
-  ['best-off', 'cgtalign', 'Tax capital gains at the same rates as income'],
   ['best-off', 'pens30', 'Give everyone the same 30% pension tax relief'],
   ['business', 'nicpen', 'Charge employer National Insurance on pension contributions'],
+  ['business', 'nicer', 'Put up employer National Insurance'],
   ['savers-owners', 'ctgh', 'Double council tax on the biggest homes (bands G and H)'],
+  ['savers-owners', 'cgtdth', 'Tax capital gains when someone dies'],
   ['savers-owners', 'rnrb', 'End the extra inheritance tax allowance for family homes'],
   ['duties', 'gam2', 'Put gambling duties up again'],
 ];
@@ -324,12 +327,12 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
     return found;
   };
 
-  it('picks eight taxes of ninety-five and seven spending policies of forty-six', () => {
+  it('picks eight taxes of eighty-five and seven spending policies of forty-six', () => {
     const picked = (side: 'tax' | 'spending') =>
       shortlistOf(file, side).map((p) => [p.group.id, p.code, p.pick.title]);
     expect(picked('tax')).toEqual(TAX_PICKS);
     expect(picked('spending')).toEqual(SPENDING_PICKS);
-    expect(policyCount(file, 'tax')).toBe(95);
+    expect(policyCount(file, 'tax')).toBe(85);
     expect(policyCount(file, 'spending')).toBe(46);
     // One way per lever, and on the spending side the top-ups, not the trims, of the services.
     for (const entry of shortlistOf(file)) {
@@ -381,9 +384,8 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
       if (price.rule === 'stockFalling') onTheDebtRule.push(code);
     }
     expect(onTheDebtRule).toEqual(['cdel', 'socrent']);
-    // Left out on purpose: last year's cancelled fuel duty rise is under the bar. The defence
-    // plan's gap is too, and shows only because the briefing puts it on the desk: not a pick.
-    expect(Math.abs(priceOf('rvfuel', 1).headroomChangeGbpm)).toBeLessThan(1000);
+    // Left out on purpose: the defence plan's gap is under the bar, and shows only because the
+    // briefing puts it on the desk: not a pick.
     expect(Math.abs(priceOf('dip47', 1).headroomChangeGbpm)).toBeLessThan(1000);
   });
 
@@ -436,7 +438,7 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
     expect(tamper(unpick('dfe', 'socrent'))).toMatch(
       /the spending screen picks 5 policies, not six to ten/,
     );
-    expect(tamper((f) => ['sugsalt', 'hmrc2', 'ipt'].forEach((code) => pick(code)(f)))).toMatch(
+    expect(tamper((f) => ['sugsalt', 'hmrc2', 'apd'].forEach((code) => pick(code)(f)))).toMatch(
       /the tax screen picks 11 policies, not six to ten/,
     );
     expect(tamper(unpick('gam2'))).toMatch(/tax group duties has no pick/);
@@ -449,8 +451,8 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
     expect(tamper(pick('itbr'))).toMatch(
       /picks “Put up the basic rate of income tax”, which breaks The tax lock/,
     );
-    expect(tamper(pick('rvcgt'))).toMatch(
-      /“Tax capital gains at the same rates as income” and “Undo the 2024 rise in capital gains tax” count the same money/,
+    expect(tamper(pick('cgtexit'))).toMatch(
+      /“Charge capital gains tax on people who leave the UK” and “Tax capital gains when someone dies” count the same money/,
     );
     // A pick may not count the same money as a lever already on the desk.
     expect(tamper(pick('def3'))).toMatch(

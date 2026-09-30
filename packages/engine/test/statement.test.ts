@@ -80,8 +80,8 @@ describe('your Budget, in three sentences (Phase 25)', () => {
       'I paid for it by borrowing more than the rules allow.',
     );
     // Paid for by taxes, with more raised than spent.
-    expect(say(['safer-streets'], { moj: 10, cgtalign: 1 }).paid).toBe(
-      'I paid for it by asking the best-off to pay more, and kept the rest as headroom.',
+    expect(say(['safer-streets'], { moj: 10, pens20: 1 }).paid).toBe(
+      'I paid for it by asking higher earners to pay more, and kept the rest as headroom.',
     );
     // Cuts are said as cuts, with who gets less; nothing to pay for, so the money is kept.
     expect(say(['nhs'], { dhsc: -5 }).paid).toBe(
@@ -105,7 +105,7 @@ describe('your Budget, in three sentences (Phase 25)', () => {
     expect(say([], { rv2ch: 1 }).accepted).toBe(
       'I accepted breaking the promise on the two-child limit.',
     );
-    expect(say([], { hscl: 1 }).accepted).toBe('I accepted straining the tax lock.');
+    expect(say([], { nicer: 1 }).accepted).toBe('I accepted straining the tax lock.');
     // A strain nobody scores is still said: the promise was put at risk.
     expect(say([], { dhsc: -1 }).accepted).toBe(
       'I accepted putting the 18-week waiting target at risk.',
@@ -113,7 +113,7 @@ describe('your Budget, in three sentences (Phase 25)', () => {
     expect(say(['safer-streets'], { moj: 10 }).accepted).toMatch(
       /^I accepted a thin margin: £\d\.\dbn of headroom\.$/,
     );
-    expect(say(['safer-streets'], { moj: 10, cgtalign: 1 }).accepted).toMatch(
+    expect(say(['safer-streets'], { moj: 10, pens20: 1 }).accepted).toMatch(
       /^I kept every promise and £\d+\.\dbn of headroom\.$/,
     );
   });

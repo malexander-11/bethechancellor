@@ -107,12 +107,5 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-18",
-  "interactions": [
-    {
-      "withLever": "reverse-gambling-duty-rise",
-      "text": "Reversing the first round and adding a second makes no sense together; the two cancel.",
-      "severity": "excludes"
-    }
-  ]
+  "reviewedOn": "2026-09-18"
 }

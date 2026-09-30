@@ -139,12 +139,5 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-15",
-  "interactions": [
-    {
-      "withLever": "reverse-fuel-duty-freeze",
-      "text": "Both change fuel duty rates: restoring the cancelled uprating and moving rates by a percentage overlap, so the combined effect is approximate.",
-      "severity": "warn"
-    }
-  ]
+  "reviewedOn": "2026-09-15"
 }

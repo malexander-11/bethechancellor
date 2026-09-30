@@ -4,6 +4,7 @@ import {
   computeOutcome,
   excludedBy,
   excludesPartners,
+  finetuneItems,
   headSeries,
   prevFy,
   promiseBreaks,
@@ -56,7 +57,6 @@ const MENU = {
     'hvcts15',
     'lha30',
     'nicllp',
-    'nicrent',
     'nicuel',
     'pens20',
     'pensmth',
@@ -70,10 +70,9 @@ const MENU = {
     'vatelec',
     'vatgas',
     'vatmot',
-    'vatthr',
     'wealth2',
   ],
-  mechanical: ['brates', 'fuelfrz', 'hscl'],
+  mechanical: ['brates', 'fuelfrz'],
 };
 const ALL = [...MENU.direct, ...MENU.assumption, ...MENU.mechanical];
 
@@ -392,10 +391,9 @@ describe('the Budget 2026 menu', () => {
     }
   });
 
-  it('NICs on rental income breaks the tax lock; the reserves levy and carried interest do not', () => {
+  it('the reserves levy, carried interest and the 2% wealth tax do not break the tax lock', () => {
     const lock = (values: Record<string, number>) =>
       promiseBreaks(values, ds.pm.promises, ds.levers).find((p) => p.promise.id === 'tax-lock');
-    expect(lock({ nicrent: 1 })?.kept).toBe(false);
     expect(lock({ qelevy: 1 })?.kept).toBe(true);
     expect(lock({ carried: 1 })?.kept).toBe(true);
     expect(lock({ wealth2: 1 })?.kept).toBe(true);
@@ -410,7 +408,7 @@ describe('the Budget 2026 menu', () => {
     expect(two.interactions ?? []).toEqual([]);
     expect(two.considerations.some((c) => c.id === 'avoidance-and-emigration')).toBe(true);
     expect(two.headline).toMatch(/^Contested\./);
-    expect(lever('nicrent').considerations.some((c) => c.id === 'static-not-yield')).toBe(true);
+    expect(lever('ctgh').considerations.some((c) => c.id === 'static-not-yield')).toBe(true);
   });
 
   it('a tampered think-tank figure fails the consistency check', () => {
@@ -814,5 +812,51 @@ describe('the policies that came in the post', () => {
     const term = tuition.costing.rawSource.method.terms[0];
     if (term) term.values['2029-30'] = 20000;
     expect(checkRawSourceConsistency(tuition, extracted, ds.vintage).length).toBeGreaterThan(0);
+  });
+});
+
+/**
+ * Nine taxes taken off the table on 30 September 2026 (ADR-0035), the way the Phase 12 levers
+ * were: shelved, their costings kept so the record can be checked, and offered nowhere. Nothing
+ * still in play names one, so the web, which leaves shelved levers out, never meets a dangling
+ * reference; an old link carrying one opens without it and says so.
+ */
+describe('the nine taxes taken off the table (ADR-0035)', () => {
+  const NINE = ['hscl', 'ipt', 'rvsal', 'cgtalign', 'vatthr', 'nicrent', 'badr', 'rvfuel', 'rvgam'];
+  const ids = new Set(NINE.map((code) => lever(code).id));
+  const live = ds.levers.filter((l) => !l.deprecated);
+
+  it('are shelved and kept for the record, each still reproducing from its sources', () => {
+    for (const code of NINE) {
+      const l = lever(code);
+      expect(l.deprecated, code).toBe(true);
+      expect(l.group, code).toBe('Shelved');
+      expect(l.headline, code).toMatch(/^Kept for the record/);
+      expect(l.status, code).toBe('reviewed');
+      expect(checkRawSourceConsistency(l, extracted, ds.vintage), code).toEqual([]);
+    }
+  });
+
+  it('are named by nothing still in play', () => {
+    for (const l of live) {
+      for (const i of l.interactions ?? []) {
+        expect(ids.has(i.withLever), `${l.code} names ${i.withLever}`).toBe(false);
+      }
+    }
+    const watched = ds.pm.promises.flatMap((p) => [...p.breaks, ...p.strains].map((r) => r.code));
+    const offered = finetuneItems(ds.finetune).map((i) => i.code);
+    const touched = ds.electorate.households.flatMap((h) => h.touches.map((t) => t.code));
+    for (const code of NINE) {
+      expect(watched, code).not.toContain(code);
+      expect(offered, code).not.toContain(code);
+      expect(touched, code).not.toContain(code);
+      expect(ds.electorate.reachesNone, code).not.toContain(code);
+      expect(ds.incidence.levers[code], code).toBeUndefined();
+      expect(ds.incidence.notFelt, code).not.toContain(code);
+      expect(
+        ds.options.deliver.some((o) => code in o.values),
+        code,
+      ).toBe(false);
+    }
   });
 });

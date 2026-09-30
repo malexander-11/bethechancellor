@@ -376,10 +376,6 @@
           "when": "on"
         },
         {
-          "code": "nicrent",
-          "when": "on"
-        },
-        {
           "code": "nicuel",
           "when": "on"
         },
@@ -389,11 +385,6 @@
         }
       ],
       "strains": [
-        {
-          "code": "hscl",
-          "when": "on",
-          "text": "A levy on pay and employers is National Insurance by another name."
-        },
         {
           "code": "nicer",
           "when": "above",

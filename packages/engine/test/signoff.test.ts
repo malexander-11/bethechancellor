@@ -21,9 +21,9 @@ const typicalErrorGbpm =
   (ds.vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
   (ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0);
 
-/** The review's walk (Phase 25), and the same Budget paid for by the levy alone. */
-const WALK = { dip47: 1, moj: 10, hscl: 1, itbr: 1, ipt: 1, dhsc: -0.5 };
-const LEVY_WALK = { dip47: 1, moj: 10, hscl: 1, ipt: 1, dhsc: -0.5 };
+/** The review's walk (Phase 25), and the same Budget paid for by employer National Insurance alone. */
+const WALK = { dip47: 1, moj: 10, nicer: 2, itbr: 1, dhsc: -0.5 };
+const NICS_WALK = { dip47: 1, moj: 10, nicer: 2, dhsc: -0.5 };
 
 function signOff(priorities: string[], policy: Record<string, number>) {
   const game: GamePermalink = { ...freshGame(), priorities };
@@ -68,7 +68,7 @@ describe('the Prime Minister signs off (Phase 25, R14)', () => {
   });
 
   it('names a strain in its words, and a missed rule by its plain name', () => {
-    expect(signOff(['defence', 'safer-streets'], LEVY_WALK).line?.line.text).toBe(
+    expect(signOff(['defence', 'safer-streets'], NICS_WALK).line?.line.text).toBe(
       'The words of the tax lock still hold. Expect the benches to ask about the spirit.',
     );
     const missed = signOff(['defence'], { cdel: 20 }).line;

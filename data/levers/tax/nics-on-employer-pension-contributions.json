@@ -146,11 +146,6 @@
   "reviewedOn": "2026-09-18",
   "interactions": [
     {
-      "withLever": "reverse-salary-sacrifice-cap",
-      "text": "Salary-sacrificed contributions are left out of this figure because Budget 2025's £2,000 cap already withdraws relief on them from 2029; reversing the cap while charging ordinary contributions would leave salary sacrifice as the one relieved route.",
-      "severity": "info"
-    },
-    {
       "withLever": "nics-employer-rate",
       "text": "The charge is valued at the 15% employer rate; moving the rate changes what charging contributions would raise.",
       "severity": "info"

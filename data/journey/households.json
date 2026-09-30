@@ -449,34 +449,6 @@
           }
         },
         {
-          "code": "hscl",
-          "when": "on",
-          "effect": "pays",
-          "line": {
-            "text": "A health and care levy on our pay. National Insurance by another name, and we both pay it.",
-            "sources": [
-              {
-                "sourceId": "hmt-build-back-better-2021"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
-          "code": "ipt",
-          "when": "above",
-          "effect": "pays",
-          "line": {
-            "text": "Insurance premium tax up. The car, the house, the contents: every policy costs more.",
-            "sources": [
-              {
-                "sourceId": "govuk-ipt-guidance"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
           "code": "nicer",
           "when": "above",
           "effect": "pays",
@@ -916,16 +888,6 @@
           }
         },
         {
-          "code": "rvfuel",
-          "when": "on",
-          "effect": "pays",
-          "line": {
-            "text": "Last year’s cancelled fuel duty rise is added back on top. The van costs a bit more to run.",
-            "sources": [],
-            "badge": "simulated"
-          }
-        },
-        {
           "code": "fuelfrz",
           "when": "on",
           "effect": "gains",
@@ -987,34 +949,6 @@
           "line": {
             "text": "Road tax is up on the van and on the car. It is not a lot, but it is every year, and it is on top of the diesel.",
             "sources": [],
-            "badge": "simulated"
-          }
-        },
-        {
-          "code": "hscl",
-          "when": "on",
-          "effect": "pays",
-          "line": {
-            "text": "A health and care levy on my profits. National Insurance by another name.",
-            "sources": [
-              {
-                "sourceId": "hmt-build-back-better-2021"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
-          "code": "ipt",
-          "when": "above",
-          "effect": "pays",
-          "line": {
-            "text": "Insurance premium tax up. The van cover and the liability cover both cost more.",
-            "sources": [
-              {
-                "sourceId": "govuk-ipt-guidance"
-              }
-            ],
             "badge": "simulated"
           }
         },
@@ -1204,20 +1138,6 @@
           }
         },
         {
-          "code": "hscl",
-          "when": "on",
-          "effect": "pays",
-          "line": {
-            "text": "A health and care levy on top of National Insurance. On my salary, that is a real slice.",
-            "sources": [
-              {
-                "sourceId": "hmt-build-back-better-2021"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
           "code": "itbr",
           "when": "above",
           "effect": "pays",
@@ -1234,20 +1154,6 @@
           "line": {
             "text": "The basic rate comes down. Everyone gets it, me included.",
             "sources": [],
-            "badge": "simulated"
-          }
-        },
-        {
-          "code": "cgtalign",
-          "when": "on",
-          "effect": "pays",
-          "line": {
-            "text": "Capital gains taxed like income. The shares I sell will be taxed at my top rate.",
-            "sources": [
-              {
-                "sourceId": "centax-taxes-at-the-top-2026"
-              }
-            ],
             "badge": "simulated"
           }
         },
@@ -1384,7 +1290,6 @@
   "reachesNone": [
     "airet",
     "alc",
-    "badr",
     "bank5",
     "banklevy",
     "brates",
@@ -1406,24 +1311,20 @@
     "mod",
     "moj",
     "nicllp",
-    "nicrent",
     "nicspa",
     "otherd",
     "pslump",
     "qelevy",
     "rvapr",
     "rveff",
-    "rvgam",
     "rvhrad",
     "rvplan2",
-    "rvsal",
     "socrent",
     "tob",
     "uitime",
     "vatbook",
     "vathome",
     "vatmot",
-    "vatthr",
     "wealth",
     "wealth2",
     "woth"
