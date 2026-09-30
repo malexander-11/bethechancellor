@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The tax screen's description is the user's one sentence: "Raise or cut any tax and keep an eye on
+  your headroom." It no longer adds whose view shows once you choose; instead each chosen row's line
+  names its speaker, "Director of Tax: …". The spending screen is unchanged.
 - The tax screen has no "Show only the best ideas": it shows every tax, in its decisions, in both
   modes, with no shortlist and no mode line. The spending screen and the flagship screens keep their
   shortlists and the button. A screen's shortlist is now optional in the data (ADR-0039).

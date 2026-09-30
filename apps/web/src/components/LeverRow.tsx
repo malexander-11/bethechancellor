@@ -150,6 +150,7 @@ export function LeverRow({
   chosen,
   prices = [],
   advice,
+  adviser,
   notes = [],
   blocked,
   takesOut,
@@ -172,6 +173,8 @@ export function LeverRow({
   prices?: readonly string[];
   /** The adviser's line for the way the lever has moved, said once it has. */
   advice?: SimulatedLine | undefined;
+  /** Who gives that line, where the screen's lead does not say. */
+  adviser?: string | undefined;
   /** Warnings that apply now: a lever this one interacts with has moved. */
   notes?: readonly LeverNote[];
   /** A flagship the player chose holds a lever that counts the same money (Phase 26). */
@@ -346,7 +349,7 @@ export function LeverRow({
             {beyond ? <span className="tune__row-note"> {range.text}</span> : null}
           </p>
         ) : null}
-        {!isDefault && advice ? <AdviceLine line={advice} /> : null}
+        {!isDefault && advice ? <AdviceLine who={adviser} line={advice} /> : null}
         {settled ? <AdviceLine who={settled.who} line={settled.line} /> : null}
         {notes.length > 0 ? (
           <ul className="lever__notes">

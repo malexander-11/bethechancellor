@@ -63,6 +63,13 @@ const INTEREST: Record<FinetuneSideId, string> = {
     'Headroom also moves with the interest on borrowing, so it can move more than a budget saves.',
 };
 
+/**
+ * Where a screen says whose view a chosen row gives (Phase 25). The spending screen says it once,
+ * after its lead. The tax screen's lead is the user's one sentence, so its rows name the adviser on
+ * each line instead.
+ */
+const ADVISER_IN_LEAD: Record<FinetuneSideId, boolean> = { tax: false, spending: true };
+
 /** The levers among these that are off where they rest. */
 function movedAmong(items: readonly FinetuneItem[], values: Record<string, number>) {
   return items.filter((item) => {
@@ -238,7 +245,16 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   }).slice(0, 1);
 
   // What every card on the screen reads alike (ADR-0037).
-  const cards: CardContext = { summaryYear: year, hintOf, redLinesFor, chosen, moved, held };
+  const named = ADVISER_IN_LEAD[side];
+  const cards: CardContext = {
+    summaryYear: year,
+    hintOf,
+    redLinesFor,
+    chosen,
+    moved,
+    held,
+    adviser: named ? undefined : who,
+  };
   // Inside a decision a lever goes by its short name, every way it moves on one scale (ADR-0035).
   const rowOf = (item: FinetuneItem): CardRow => ({
     item,
@@ -347,7 +363,10 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       title={spec.title}
       // The adviser is named once, here, not on every row (Phase 25), and speaks on a row once it
       // is chosen (ADR-0037); in basic mode, as the one whose best ideas these are (Phase 27).
-      lead={shortlistLead ?? `${spec.lead} Your ${who}’s view shows once you choose.`}
+      lead={
+        shortlistLead ??
+        (named ? `${spec.lead} Your ${who}’s view shows once you choose.` : spec.lead)
+      }
     >
       <HeadroomBar outcome={outcome} status={status} />
       <Interventions items={advice} />

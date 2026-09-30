@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "tax": {
     "title": "Fine-tune tax",
-    "lead": "Raise or cut any tax. Watch your headroom move.",
+    "lead": "Raise or cut any tax and keep an eye on your headroom.",
     "adviser": "director-of-tax",
     "groups": [
       {

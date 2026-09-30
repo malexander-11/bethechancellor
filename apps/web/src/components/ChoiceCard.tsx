@@ -52,6 +52,8 @@ export interface CardContext {
   moved: ReadonlySet<string>;
   /** The levers a flagship the player chose holds, read when the screen opened. */
   held: ReadonlyMap<string, Held>;
+  /** Whose line a chosen row gives, named on the line where the screen's lead does not say. */
+  adviser?: string | undefined;
 }
 
 /**
@@ -173,7 +175,7 @@ function RowOf({
   const { item, ways, name } = row;
   const lever = byCode.get(item.code);
   if (!lever) return null;
-  const { summaryYear, hintOf, redLinesFor, chosen, moved, held } = context;
+  const { summaryYear, hintOf, redLinesFor, chosen, moved, held, adviser } = context;
   const rest = lever.control.default;
   const value = state.leverValues[lever.code] ?? rest;
   const hold = held.get(lever.code);
@@ -288,6 +290,7 @@ function RowOf({
       chosen={option ? { title: option.option.title, state: option.state } : undefined}
       prices={prices}
       advice={mine ? lead?.advice : undefined}
+      adviser={adviser}
       notes={notes}
       blocked={blocked}
       takesOut={takesOut}

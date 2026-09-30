@@ -45,6 +45,9 @@ export const priceOf = (row: HTMLElement) =>
 /** What a row says once chosen: what it does. */
 export const effectOf = (row: HTMLElement) =>
   row.querySelector('.tune__row-effect')?.textContent ?? '';
+/** A chosen row's adviser's line, with whoever the screen names as saying it. */
+export const adviceOf = (row: HTMLElement) =>
+  row.querySelector('.choice__advice')?.textContent?.trim() ?? '';
 /** A decision's button, by its title: its name is the title, then where it stands. */
 export const decision = (title: string) => {
   const button = screen

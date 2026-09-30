@@ -6,6 +6,7 @@ import {
   BASE,
   GAME,
   at,
+  adviceOf,
   bar,
   barFigure,
   decision,
@@ -29,12 +30,9 @@ describe('fine-tune tax and spend: one card a decision', () => {
   it('lays the tax screen out tax by tax, each tax the decisions about it, all closed', () => {
     const { container } = at(`/finetune/tax?${BASE}&${GAME}`);
     expect(h1('Fine-tune tax')).toBeInTheDocument();
-    // The lead names the adviser once; the adviser speaks on a row once it is chosen (ADR-0037).
-    expect(
-      screen.getByText(
-        'Raise or cut any tax. Watch your headroom move. Your Director of Tax’s view shows once you choose.',
-      ),
-    ).toBeInTheDocument();
+    // The lead is the data's one sentence, naming no adviser: each chosen row names its own.
+    expect(screen.getByText(finetune.tax.lead)).toBeInTheDocument();
+    expect(screen.queryByText(/view shows once you choose/)).toBeNull();
     expect(screen.getByText(/^Fine-tune tax and spend · 1 of 2$/)).toBeInTheDocument();
     expect(bar()).toBeInTheDocument();
     // The taxes in the data's order, each named plainly and with no count at rest (ADR-0035).
@@ -151,7 +149,7 @@ describe('fine-tune tax and spend: one card a decision', () => {
     // The resting tag names the promise, and the name opens what it covers (Phase 25).
     expect(row.querySelector('.tag--manifesto')?.textContent).toMatch(/^Tax lock: no rise/);
     expect(within(row).getByRole('button', { name: 'Tax lock' })).toBeInTheDocument();
-    expect(within(row).queryByText(/^Big money;/)).toBeNull();
+    expect(adviceOf(row)).toBe('');
     const before = barFigure();
     fireEvent.click(within(row).getByRole('radio', { name: '22%' }));
     // Chosen: the prices give way to what it does, the adviser speaks, the red line is crossed,
@@ -159,7 +157,7 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(priceOf(row)).toBe('');
     expect(within(row).getByRole('radio', { name: '22%' })).toBeChecked();
     expect(effectOf(row)).toMatch(/^raises £\d+\.\dbn in 2029-30$/);
-    expect(within(row).getByText(/^Big money;/)).toBeInTheDocument();
+    expect(adviceOf(row)).toMatch(/^Director of Tax: Big money;/);
     expect(within(row).getByText('Breaks the manifesto: The tax lock')).toHaveClass('tag--warn');
     expect(group(/^Income tax 1 chosen · raises £\d+\.\dbn$/)).toBeInTheDocument();
     expect(statusOf('Change the rates')).toMatch(/^1 chosen · raises £\d+\.\dbn$/);
@@ -174,7 +172,7 @@ describe('fine-tune tax and spend: one card a decision', () => {
     fireEvent.click(within(row).getByRole('radio', { name: '19%' }));
     await waitFor(() => expect(search().get('L')).toMatch(/itbr\.-1/));
     expect(statusOf('Change the rates')).toMatch(/^1 chosen · costs £\d+\.\dbn$/);
-    expect(within(row).getByText(/^Big money back;/)).toBeInTheDocument();
+    expect(adviceOf(row)).toMatch(/^Director of Tax: Big money back;/);
     fireEvent.click(within(row).getByRole('radio', { name: '20% as planned' }));
     await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/itbr/));
     expect(statusOf('Change the rates')).toBe('4 choices');
@@ -236,7 +234,7 @@ describe('fine-tune tax and spend: one card a decision', () => {
     );
     fireEvent.click(within(allowance).getByRole('radio', { name: '£11,320' }));
     await waitFor(() => expect(search().get('L')).toMatch(/itpa\.-1250/));
-    expect(within(allowance).getByText(/^Most taxpayers pay more;/)).toBeInTheDocument();
+    expect(adviceOf(allowance)).toMatch(/^Director of Tax: Most taxpayers pay more;/);
     expect(within(allowance).queryByText(/Breaks the manifesto/)).toBeNull();
     expect(within(allowance).queryByText(/Strains the manifesto/)).toBeNull();
     // Class 4 can come down to 2%; only a rise breaks the tax lock.
@@ -245,7 +243,7 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(levelsOf(class4)).toEqual(['2%', '4%', '5%', '6% as planned', '7%', '8%', '10%']);
     fireEvent.click(within(class4).getByRole('radio', { name: '5%' }));
     await waitFor(() => expect(search().get('L')).toMatch(/nic4\.-1/));
-    expect(within(class4).getByText(/^Self-employed workers keep more/)).toBeInTheDocument();
+    expect(adviceOf(class4)).toMatch(/^Director of Tax: Self-employed workers keep more/);
     expect(within(class4).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
     fireEvent.click(within(class4).getByRole('radio', { name: '7%' }));
     expect(within(class4).getByText('Breaks the manifesto: The tax lock')).toHaveClass('tag--warn');
