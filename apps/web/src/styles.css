@@ -627,83 +627,6 @@ hr {
 
 /* ---------------------------------------------------------------- levers */
 
-.lever {
-  padding: 16px 0;
-  border-top: 1px solid var(--border);
-}
-
-.lever:first-of-type,
-.section-label + .lever {
-  border-top: 0;
-}
-
-.lever__head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px 12px;
-}
-
-.lever__title {
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-/* The tags on the head of a lever: the red lines that watch it and the promise it delivers. */
-.lever__flags {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 4px 6px;
-}
-
-.lever__value {
-  margin-top: 4px;
-  color: var(--ink-2);
-  font-size: 1rem;
-}
-
-.lever__value strong {
-  color: var(--ink);
-}
-
-.lever__level-from {
-  color: var(--muted);
-}
-
-.lever__arrow {
-  margin: 0 4px;
-  color: var(--muted);
-}
-
-.lever__level-to {
-  color: var(--ink);
-  font-size: 1.375rem;
-  font-weight: 700;
-}
-
-.lever__level-note,
-.lever__delta {
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.lever__delta {
-  display: block;
-}
-
-/* A spending line's growth after rising prices, in words (Phase 25): the card's lead figure. */
-.lever__growth {
-  display: block;
-  color: var(--ink);
-  font-size: 1.0625rem;
-  font-weight: 700;
-}
-
 .lever__desc {
   margin: 8px 0 0;
   color: var(--ink-2);
@@ -715,47 +638,6 @@ hr {
   flex-wrap: wrap;
   gap: 6px;
   margin: 8px 0 0;
-}
-
-.lever__effect {
-  margin: 8px 0 0;
-  font-size: 1rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.lever__effect-note {
-  color: var(--muted);
-  font-weight: 400;
-  font-variant-numeric: normal;
-}
-
-/* A resting card's hint (Phase 25): an explainer in plain ink, not an effect already made. */
-.lever__hint {
-  color: var(--ink-2);
-  font-weight: 400;
-}
-
-.lever__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 20px;
-  margin-top: 4px;
-}
-
-.lever--toggle .lever__toggle-label {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.lever--toggle input[type='checkbox'],
-.lever--toggle input[type='radio'] {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  margin: 2px 0 0;
 }
 
 .milestones {

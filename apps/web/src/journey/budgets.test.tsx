@@ -90,22 +90,25 @@ const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] =
   // the tuned game's wealth tax and dividends are radios now, 925. Then the spending screen in
   // decisions too, each budget one scale both ways (ADR-0037): 496, with the other budgets and the
   // defence plan open for the walk's prisons and defence gap; the tuned game opens four decisions,
-  // each showing every choice in it: 842.
-  ['/finetune/tax', 450, GAME, 'advanced'],
-  ['/finetune/tax', 1020, TUNED, 'advanced'],
-  ['/finetune/spending', 550, GAME, 'advanced'],
-  ['/finetune/spending', 930, TUNED, 'advanced'],
+  // each showing every choice in it: 842. Then one card a decision, a row a choice, what it would
+  // do in one line at rest, its adviser only once chosen and everything else in one fold
+  // (ADR-0037): tax 292 and 459, spending 388 and 592.
+  ['/finetune/tax', 325, GAME, 'advanced'],
+  ['/finetune/tax', 505, TUNED, 'advanced'],
+  ['/finetune/spending', 430, GAME, 'advanced'],
+  ['/finetune/spending', 655, TUNED, 'advanced'],
   // Basic mode (Phase 27): the advisers' shortlist, and whatever the game has chosen besides
   // (tax 343 and 492, spending 424 and 589); with no badges, tax 329 and 471, spending 403 and 556.
   // Employer National Insurance and CGT at death picked in place of the levy and alignment, a
   // scale of sizes where a tick was (ADR-0035): tax 354 and 494. Then grouped by tax, and the
   // tuned game's reduced VAT rate in place of the sugar tax: 353 and 540; each way on show as a
   // scale from the plan: 352 and 536. The spending screen's picks as scales from the plan too
-  // (ADR-0037): 400 and 549.
-  ['/finetune/tax', 390, GAME, 'basic'],
-  ['/finetune/tax', 590, TUNED, 'basic'],
-  ['/finetune/spending', 440, GAME, 'basic'],
-  ['/finetune/spending', 605, TUNED, 'basic'],
+  // (ADR-0037): 400 and 549. Then a row a pick, one card a section (ADR-0037): tax 196 and 321,
+  // spending 270 and 421.
+  ['/finetune/tax', 220, GAME, 'basic'],
+  ['/finetune/tax', 355, TUNED, 'basic'],
+  ['/finetune/spending', 300, GAME, 'basic'],
+  ['/finetune/spending', 465, TUNED, 'basic'],
   // The review 204 and Budget day 190 with no badges, against 213 and 199; 196 and 181 with
   // employer National Insurance in the walk in place of the levy (ADR-0035).
   ['/review', 220, GAME, 'basic'],

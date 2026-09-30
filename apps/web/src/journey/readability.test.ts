@@ -2,6 +2,7 @@ import { excludesPartners, finetuneItems, plainText } from '@btc/engine';
 import { appendFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { takesOutWords } from '../components/LeverControl';
+import { INVESTMENT_NOTE, RELIEF_NOTE } from '../components/LeverRow';
 import { MODE_WORDS } from '../components/ModeLine';
 import { briefingTemplates, fillIn } from './briefingWords';
 import {
@@ -120,6 +121,9 @@ const SETS: Record<string, readonly string[]> = {
     // Each choice's short name inside its decision (ADR-0037). The spending fold's subheads went
     // with the fold.
     ...curated.flatMap((i) => (i.label ? [i.label] : [])),
+    // What a card says once for all its rows (ADR-0037): a relief's cost, and investment's rule.
+    RELIEF_NOTE,
+    INVESTMENT_NOTE,
   ],
   'the fine-tuning advice': curated.flatMap((i) => i.policies.map((p) => p.advice.text)),
   // What choosing a lever would take out (ADR-0036), said on its card before it is touched: every
@@ -223,7 +227,8 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // (ADR-0036): the fine-tuning screens, with each set's name, 5.2, and what a choice takes out,
     // read from both sides of every pair, 5.9. Then one card a decision (ADR-0037), with the
     // spending screen's decisions and every choice's short name read, and the fold's subheads no
-    // longer: the fine-tuning screens 4.9. Set GRADES to a file path to write them out.
+    // longer: the fine-tuning screens 4.9, and 4.9 still with the two lines a card says once for
+    // its rows. Set GRADES to a file path to write them out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);

@@ -1,6 +1,7 @@
 import {
   ambitionStatus,
   basicPolicy,
+  choiceName,
   decisionUnits,
   deskLevers,
   formatGbpBn,
@@ -13,20 +14,24 @@ import {
   stageIndex,
   type FinetuneDecision,
   type FinetuneItem,
-  type FinetunePolicy,
   type FinetuneSection,
   type FinetuneSideId,
-  type Lever,
   type LeverEffect,
 } from '@btc/engine';
-import { useId, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
+import {
+  ChoiceCard,
+  type CardContext,
+  type CardRow,
+  type CardUnit,
+} from '../components/ChoiceCard';
 import { plannedWords, sizeWords } from '../components/LeverControl';
+import type { Held } from '../components/LeverRow';
 import { ModeLine } from '../components/ModeLine';
-import { HeldLever, PolicyCard, type Held } from '../components/PolicyCard';
 import { SourceList } from '../components/SourceLink';
 import { adviserById, context, finetune, interventions, levers, options, pm } from '../data';
 import { UNCHANGED_BELOW_GBPM } from '../journey/effects';
@@ -229,84 +234,33 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
     ruleMissed: outcome.verdicts.some(isMissed),
   }).slice(0, 1);
 
-  // A lever is drawn with its ways, as one scale (ADR-0035, spending since ADR-0037); a tick that
-  // contradicts others in its decision, as a radio in their set (ADR-0036). Keyed by its first way,
-  // so a scale is the same card whichever way it moves.
-  const card = (
-    item: FinetuneItem,
-    policy: FinetunePolicy,
-    opts: {
-      headingLevel?: 3 | 4;
-      ways?: readonly FinetunePolicy[];
-      set?: { name: string; codes: readonly string[] };
-    } = {},
-  ) => {
-    const lever = byCode.get(item.code);
-    if (!lever) return null;
-    const { headingLevel, ways, set } = opts;
-    return (
-      <PolicyCard
-        key={`${item.code}:${(ways?.[0] ?? policy).title}`}
-        item={item}
-        policy={policy}
-        lever={lever}
-        summaryYear={year}
-        hintOf={hintOf}
-        redLinesFor={redLinesFor}
-        chosen={chosen.get(item.code)}
-        moved={moved}
-        held={held}
-        {...(headingLevel ? { headingLevel } : {})}
-        {...(ways ? { ways } : {})}
-        {...(set ? { set } : {})}
-      />
-    );
-  };
-  const heldLine = (item: FinetuneItem, h: Held, headingLevel: 3 | 4 = 3) => {
-    const lever = byCode.get(item.code);
-    const value = state.leverValues[item.code];
-    const words =
-      lever && lever.control.kind !== 'toggle' && value !== undefined
-        ? sizeWords(lever, value)
-        : undefined;
-    return (
-      <HeldLever
-        key={item.code}
-        name={itemName(item)}
-        held={h}
-        headingLevel={headingLevel}
-        {...(words ? { words } : {})}
-      />
-    );
-  };
-
-  // A decision opened: every choice in it, each lever one scale both ways, a flagship's lever as
-  // its line, headed a level below the decision (ADR-0035); ticks that contradict each other, one
-  // choice among radios, "As planned" first (ADR-0036).
-  const decisionCard = (item: FinetuneItem, set?: { name: string; codes: readonly string[] }) => {
-    const h = held.get(item.code);
-    if (h) return heldLine(item, h, 4);
-    const [first] = item.policies;
-    return first
-      ? card(item, first, { headingLevel: 4, ways: item.policies, ...(set ? { set } : {}) })
-      : null;
-  };
-  const decisionBody = (decision: FinetuneDecision) =>
-    decisionUnits(decision).map((unit) => {
-      if (unit.kind === 'item') return decisionCard(unit.item);
-      const members = unit.items.flatMap((item) => byCode.get(item.code) ?? []);
-      const codes = unit.items.map((item) => item.code);
-      return (
-        <Choice key={`set:${codes.join('+')}`} name={unit.name} members={members}>
-          {(radio) => unit.items.map((item) => decisionCard(item, { name: radio, codes }))}
-        </Choice>
-      );
-    });
+  // What every card on the screen reads alike (ADR-0037).
+  const cards: CardContext = { summaryYear: year, hintOf, redLinesFor, chosen, moved, held };
+  // Inside a decision a lever goes by its short name, every way it moves on one scale (ADR-0035).
+  const rowOf = (item: FinetuneItem): CardRow => ({
+    item,
+    ways: item.policies,
+    name: choiceName(item),
+  });
+  // A decision opened: one card, a row a choice, ticks that contradict each other one set of
+  // radios with "As planned" first (ADR-0036), and one fold for the rest (ADR-0037).
+  const decisionBody = (decision: FinetuneDecision) => (
+    <ChoiceCard
+      title={decision.title}
+      aboutLevel={4}
+      context={cards}
+      units={decisionUnits(decision).map((unit): CardUnit =>
+        unit.kind === 'item'
+          ? { kind: 'row', row: rowOf(unit.item) }
+          : { kind: 'set', name: unit.name, rows: unit.items.map(rowOf) },
+      )}
+    />
+  );
 
   /**
    * One section: a tax (ADR-0035), or what the money is for (ADR-0037). Advanced mode: its
-   * decisions, each a disclosure with a status. Basic mode: the cards basic mode shows for its
-   * levers, and nothing at all when there are none.
+   * decisions, each a disclosure with a status and one card inside. Basic mode: one card of the
+   * rows basic mode shows for its levers, and nothing at all when there are none.
    */
   const section = (group: FinetuneSection) => {
     const id = `tune-${group.id}`;
@@ -324,24 +278,29 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       </h2>
     );
     if (basic) {
-      const shown: ReactNode[] = [];
+      // Each lever basic mode shows, under its policy's title, with no decision around it to
+      // name it: a flagship's as its row, else the one way on show, as a scale from the plan.
+      const rows: CardRow[] = [];
       for (const item of items) {
         const lever = byCode.get(item.code);
         if (!lever) continue;
-        const h = held.get(item.code);
-        if (h) {
-          shown.push(heldLine(item, h));
+        if (held.has(item.code)) {
+          rows.push({ item, ways: item.policies, name: itemName(item) });
           continue;
         }
         const policy = basicPolicy(item, lever, start[item.code], DESK.has(item.code));
-        // The one way on show, as a scale from where the lever is planned to be.
-        if (policy) shown.push(card(item, policy, { ways: [policy] }));
+        if (policy) rows.push({ item, ways: [policy], name: policy.title });
       }
-      if (shown.length === 0) return null;
+      if (rows.length === 0) return null;
       return (
         <section key={group.id} className="who tune" aria-labelledby={id}>
           {heading}
-          <div className="tune__levers">{shown}</div>
+          <ChoiceCard
+            title={group.label}
+            aboutLevel={3}
+            context={cards}
+            units={rows.map((row): CardUnit => ({ kind: 'row', row }))}
+          />
         </section>
       );
     }
@@ -383,9 +342,9 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       step="finetune"
       part={{ index, total: 2, label: spec.title }}
       title={spec.title}
-      // The adviser is named once, here, not on every card (Phase 25); in basic mode, as the one
-      // whose best ideas these are (Phase 27).
-      lead={basic ? spec.shortlistLead : `${spec.lead} Your ${who}’s view is on each lever.`}
+      // The adviser is named once, here, not on every row (Phase 25), and speaks on a row once it
+      // is chosen (ADR-0037); in basic mode, as the one whose best ideas these are (Phase 27).
+      lead={basic ? spec.shortlistLead : `${spec.lead} Your ${who}’s view shows once you choose.`}
     >
       <HeadroomBar outcome={outcome} status={status} />
       <Interventions items={advice} />
@@ -416,48 +375,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         </StepLink>
       </p>
     </JourneyLayout>
-  );
-}
-
-/**
- * Ticks that contradict each other in one decision, drawn as one choice (ADR-0036): the set's name,
- * "As planned" first, then each tick's card with a radio in place of its box, all one group, so
- * choosing one takes the others out and the arrow keys move between them, like a tax's scale.
- * "As planned" puts every one of them back.
- */
-function Choice({
-  name,
-  members,
-  children,
-}: {
-  name: string;
-  members: readonly Lever[];
-  children: (radio: string) => ReactNode;
-}) {
-  const { state, dispatch } = useBudget();
-  const radio = useId();
-  const planned = members.every(
-    (l) => (state.leverValues[l.code] ?? l.control.default) === l.control.default,
-  );
-  return (
-    <fieldset className="tune__choice">
-      <legend className="tune__choice-name">{name}</legend>
-      <label className="tune__choice-planned">
-        <input
-          type="radio"
-          name={radio}
-          checked={planned}
-          onChange={() =>
-            dispatch({
-              type: 'setLevers',
-              values: Object.fromEntries(members.map((l) => [l.code, l.control.default])),
-            })
-          }
-        />
-        As planned
-      </label>
-      {children(radio)}
-    </fieldset>
   );
 }
 

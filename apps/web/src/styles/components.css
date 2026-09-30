@@ -645,22 +645,20 @@ label.choice {
 /* A choice another in the Budget rules out (Phase 25): marked by a dashed rule and a quiet wash,
    never by fading, so every word keeps its contrast; the reason sits in .blocked beneath. */
 .choice--blocked,
-.lever--blocked {
+.tune__row--blocked {
   border: 1px dashed var(--ink-2);
   background: var(--surface-2);
 }
 
-.choice--blocked input[type='checkbox'],
-.lever--blocked input {
-  filter: grayscale(1);
-  cursor: not-allowed;
+.tune__row--blocked {
+  padding-right: 8px;
+  padding-left: 8px;
 }
 
-.lever__relief {
-  margin: 4px 0 0;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  line-height: 1.4;
+.choice--blocked input[type='checkbox'],
+.tune__row--blocked input {
+  filter: grayscale(1);
+  cursor: not-allowed;
 }
 
 .blocked {
@@ -1234,17 +1232,6 @@ label.choice {
 
 /* ------------------------------------------------ fine-tuning (Phase 24) */
 
-/*
- * A policy on step 4: its title and sizes, then its price (at rest) or its effect (chosen), the
- * adviser's line, any warning that applies now, and one fold for the rest.
- */
-.lever--curated .choice__advice {
-  margin: 8px 0 0;
-  color: var(--ink);
-  font-size: 0.9375rem;
-  line-height: 1.45;
-}
-
 .lever__notes {
   margin: 6px 0 0;
   padding: 0;
@@ -1255,14 +1242,6 @@ label.choice {
 
 .lever__notes li + li {
   margin-top: 4px;
-}
-
-.lever--curated .minister {
-  margin: 8px 0 0;
-}
-
-.lever__more {
-  margin: 4px 0 0;
 }
 
 .lever__assumes-title {
@@ -1360,11 +1339,6 @@ label.choice {
   font-size: 0.875rem;
 }
 
-/* One line a way at rest (ADR-0035): what the nearest level would do, each on its own line. */
-.lever__hint-line {
-  display: block;
-}
-
 /*
  * What choosing would take out (ADR-0036), said before anything is touched: the sentence in bold and
  * the reason after it, at full contrast, never faded; the control beside it still moves.
@@ -1378,12 +1352,6 @@ label.choice {
 
 .lever__takes-out strong {
   font-weight: 700;
-}
-
-/* The lever set the other way: what choosing here would replace, in plain ink, with no price. */
-.lever__replaces {
-  color: var(--ink-2);
-  font-weight: 400;
 }
 
 /* Set its way at none of its sizes (an old link, a flagship left behind): what it is now. */
@@ -1479,6 +1447,168 @@ label.choice {
 }
 
 /*
+ * A decision's one card (ADR-0037): what its rows share said once, a row a choice between
+ * hairlines, and one fold for everything else about them.
+ */
+.tune__card-note {
+  margin: 0 0 8px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.tune__row {
+  padding: 8px 0 10px;
+  border-top: 1px solid var(--border);
+}
+
+/* The first row sits under its decision's own rule, unless a shared note comes first. */
+.tune__card > .tune__row:first-child,
+.tune__card > .tune__choice:first-child {
+  border-top: 0;
+}
+
+/* The choice on the left, what changes what choosing it means on the right, on its first line. */
+.tune__row-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 4px 12px;
+}
+
+.tune__row-name {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* A tick's box, its name and its price are one target, at least 44px tall. */
+.tune__row-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 44px;
+  padding-top: 10px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.tune__row-choice input[type='checkbox'],
+.tune__row-choice input[type='radio'] {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+}
+
+.tune__row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* A scale's name sits level with a tick's, over its levels. */
+.tune__row:not(.tune__row--tick) > .tune__row-head {
+  padding-top: 10px;
+}
+
+.tune__row-flags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px 6px;
+  max-width: 11rem;
+  padding-top: 12px;
+  text-align: right;
+}
+
+/* A tag in a row's head wraps as one line of words, its glossary word among them. */
+.tune__row-flags > .tag,
+.tune__row-flags > .tag--manifesto,
+.tune__row-flags > .tag--treasury {
+  display: block;
+}
+
+/* Everything under a tick lines up with its name, past the box. */
+.tune__row--tick > .tune__row-body {
+  padding-left: 30px;
+}
+
+/* At rest, what choosing would do: an explainer in plain ink, not money already in the Budget.
+   Under a scale, a budget's growth after rising prices has a line of its own above it. */
+.tune__row-price {
+  display: block;
+  margin: 4px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+.tune__row-text > .tune__row-price {
+  margin: 0;
+}
+
+.tune__row-line {
+  display: block;
+}
+
+/* Once chosen, what it does, in plain ink: the bar is where the score is kept. */
+.tune__row-effect {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+.tune__row-note {
+  color: var(--muted);
+  font-weight: 400;
+  font-variant-numeric: normal;
+}
+
+.tune__row .choice__advice {
+  margin: 6px 0 0;
+  color: var(--ink);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.tune__row .minister {
+  margin: 8px 0 0;
+}
+
+.tune__row-undo {
+  margin-top: 2px;
+}
+
+/* The card's one fold: each lever's own headline, milestones and assumptions, one after another. */
+.tune__more {
+  margin: 4px 0 0;
+}
+
+.tune__about + .tune__about {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.tune__about-name {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.tune__about .lever__desc {
+  margin-top: 4px;
+}
+
+/*
  * Ticks that contradict each other in one decision, drawn as one choice (ADR-0036): the set's name
  * in small capitals, "As planned" as its first radio and the choices' cards beneath, the whole
  * group held by a rule down its left, so it reads as one question like a tax's scale.
@@ -1511,8 +1641,8 @@ label.choice {
   align-items: center;
   gap: 10px;
   min-height: 44px;
-  padding: 2px 0 10px;
-  font-size: 1.125rem;
+  padding: 2px 0 8px;
+  font-size: 1.0625rem;
   font-weight: 600;
   line-height: 1.3;
   cursor: pointer;
@@ -1525,10 +1655,14 @@ label.choice {
   margin: 0;
 }
 
-/* Every choice in the set sits on its hairline, the first below "As planned" among them, and so
-   does the first card after the set. */
-.tune__levers .tune__choice .lever,
-.tune__levers .tune__choice + .lever {
+/* A set that is its card's whole question needs no rule to hold it together. */
+.tune__choice--whole {
+  padding-left: 0;
+  border-left: 0;
+}
+
+/* Every row after a set sits on its hairline, as a set does after a row. */
+.tune__row + .tune__choice {
   border-top: 1px solid var(--border);
 }
 

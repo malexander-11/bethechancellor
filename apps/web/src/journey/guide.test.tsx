@@ -103,7 +103,7 @@ describe('the head of every screen', () => {
     expect(screen.getByText('Step 4 of 6')).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
     expect(
-      screen.getByText(/Your Director of Public Spending’s view is on each lever\./),
+      screen.getByText(/Your Director of Public Spending’s view shows once you choose\./),
     ).toBeInTheDocument();
     first.unmount();
     at(`/?${BASE}`);
