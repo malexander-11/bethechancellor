@@ -1,5 +1,3 @@
-import type { SourceRef } from '@btc/engine';
-
 /**
  * The briefing's words (Phase 28, ADR-0030): three parts, each a heading and a few sentences, in
  * the order the player asked for them. Your headroom; what headroom is; how it is calculated. The
@@ -67,65 +65,7 @@ export const BRIEFING_WORDS = {
     } as Record<string, { up: string; down: string }>,
     estimate: 'Today’s estimate',
   },
-  workings: 'How the estimate is made',
 } as const;
-
-/**
- * Where the briefing's words come from, by line (Phase 28), shown with the workings on. The
- * figures carry their own sources in the data; these are the sources of the words around them.
- */
-export const BRIEFING_SOURCES = {
-  /** Why Chancellors keep a margin: the OBR on shocks, and the Chancellor's own letter. */
-  safety: [
-    {
-      sourceId: 'obr-efo-2025-11',
-      paragraph: '1.30',
-      page: '18',
-      quote:
-        'increases the margin held against the Government’s fiscal targets, it still leaves the UK public finances relatively vulnerable to future shocks',
-    },
-    {
-      sourceId: 'hmt-tsc-budget-2026-letter',
-      quote:
-        'ensuring we retain a buffer to protect us against uncertainty and the impact of instability in the Middle East',
-    },
-  ],
-  /** A buffer the size of the record: the OBR sets a margin beside its typical revision. */
-  buffer: [
-    {
-      sourceId: 'obr-efo-2025-11',
-      paragraph: '1.3',
-      page: '5',
-      quote:
-        'close to the £21 billion average absolute revision in the fourth year of our pre-measures forecast between fiscal events, and around three-quarters of the £29 billion average margin set aside by previous Chancellors',
-    },
-  ],
-  /** Lenders and the sums: the Bank on 2025's long rates, and the Chancellor's own letter. */
-  lenders: [
-    {
-      sourceId: 'boe-insights-long-rates-2025',
-      quote:
-        'uncertainty about the extent of the Government’s fiscal headroom and issuance needs as being potential drivers of higher term premia',
-    },
-    {
-      sourceId: 'hmt-tsc-budget-2026-letter',
-      quote: 'Fiscal credibility is the bedrock of economic stability',
-    },
-  ],
-  /**
-   * What moved the forecast: the readings behind "higher than expected" are the context file's, and
-   * this is why the inflation row is debt, the OBR tying RPI to debt interest.
-   */
-  calc: [
-    {
-      sourceId: 'obr-efo-2026-03',
-      paragraph: '4.27',
-      page: '72',
-      quote:
-        'Debt interest spending is forecast to be, on average, £2.8 billion lower than November 2025, largely reflecting weaker RPI inflation',
-    },
-  ],
-} as const satisfies Record<string, readonly SourceRef[]>;
 
 const PLACEHOLDER = /\{([a-zA-Z]+)\}/g;
 

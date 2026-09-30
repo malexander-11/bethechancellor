@@ -30,7 +30,6 @@ import {
   shareWords,
 } from '../components/LeverControl';
 import { Spoken } from '../components/Conversation';
-import { SourceList } from '../components/SourceLink';
 import { Yardstick } from '../components/Yardstick';
 import {
   MACRO_CODES as MACRO_LIST,
@@ -434,11 +433,6 @@ export function ReviewPage() {
           <p className="review__taxtake">
             Taxes take {inEvery100(r.taxTakeChangePp)} more in every £100 of national income in{' '}
             {r.year}. The OBR already forecasts the tax take at a historic high.{' '}
-            <SourceList
-              as="span"
-              className="briefing__sources"
-              refs={[{ sourceId: 'obr-efo-2026-03', paragraph: '3.1' }]}
-            />
           </p>
         ) : null}
         <p className={missed.length > 0 ? 'review__missed' : undefined}>{rulesLine}</p>

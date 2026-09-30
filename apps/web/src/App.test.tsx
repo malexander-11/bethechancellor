@@ -106,9 +106,9 @@ describe('journey routes', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
     ).toBeInTheDocument();
-    // The documents, with the workings behind them, are one fold away.
+    // Each audience's verdict, and the documents one fold away.
+    expect(screen.getByRole('heading', { name: 'The markets' })).toBeInTheDocument();
     fireEvent.click(screen.getByText('Budget documents'));
     expect(screen.getByText('Table 4.1: your policy decisions')).toBeInTheDocument();
-    expect(screen.getAllByText('Rule met').length).toBeGreaterThanOrEqual(2);
   });
 });

@@ -5,7 +5,6 @@ import {
   distributionalNotes,
   FINAL_STAGE,
   formatGbpBn,
-  formatPct,
   growthNote,
   householdReactions,
   preBudget,
@@ -16,22 +15,15 @@ import {
 } from '@btc/engine';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AdviserBriefing } from '../components/AdviserBriefing';
-import { ClosingNotes } from '../components/ClosingNotes';
 import { Households } from '../components/Households';
-import { InteractionsNotice } from '../components/InteractionsNotice';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { MeasuresTable } from '../components/MeasuresTable';
-import { PathChart } from '../components/PathChart';
 import { ReceptionCard, type EconomyLine } from '../components/ReceptionCard';
 import { Speech } from '../components/Speech';
 import { Verdict } from '../components/Verdict';
-import { VerdictCard } from '../components/VerdictCard';
 import {
   MACRO_CODES,
-  briefingsFor,
   electorate,
-  households,
   incidence,
   levers,
   pm,
@@ -45,7 +37,6 @@ import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { useOutcomeOf } from '../journey/outcome';
 import { isMissed, missedBy } from '../journey/rules';
-import { WorkingsOnly } from '../journey/workings';
 import { useBudget } from '../state/budget';
 
 /** "a, b and c" */
@@ -225,9 +216,6 @@ export function BudgetDayPage() {
     }
   }
 
-  const toBn = (values: Record<string, number>) => years.map((y) => (values[y] ?? 0) / 1000);
-  const surplus = (values: Record<string, number>) => years.map((y) => -(values[y] ?? 0) / 1000);
-
   return (
     <JourneyLayout step="budget-day">
       {statement ? (
@@ -302,96 +290,11 @@ export function BudgetDayPage() {
               </li>
               <li>
                 <strong>Policy costings.</strong> One note per measure with the method behind it:
-                the detail and sources under each lever, with the workings on.
+                here, what each lever assumes, under its card on the fine-tune screens; the About
+                page lists every source.
               </li>
             </ul>
           </section>
-          <WorkingsOnly>
-            <details className="panel">
-              <summary className="group__head">
-                <span className="group__line">
-                  <span className="group__name">The rules in full</span>
-                  <span className="group__count">{outcome.verdicts.length}</span>
-                </span>
-                <span className="group__say">
-                  What each rule requires, the margin, and what it is worth per household.
-                </span>
-              </summary>
-              <div className="verdicts">
-                {outcome.verdicts.map((v) => (
-                  <VerdictCard
-                    key={v.ruleId}
-                    verdict={v}
-                    householdCount={households.value}
-                    typicalErrorGbpm={typicalErrorGbpm}
-                  />
-                ))}
-              </div>
-            </details>
-            {briefingsFor('budget-day').map((b) => (
-              <AdviserBriefing key={b.id} briefing={b} compact />
-            ))}
-            <details className="panel">
-              <summary className="group__head">
-                <span className="group__line">
-                  <span className="group__name">What your advisers want on the record</span>
-                </span>
-                <span className="group__say">
-                  The caveats attached to the measures you chose, in their own words.
-                </span>
-              </summary>
-              <ClosingNotes outcome={outcome} levers={levers} />
-            </details>
-            <InteractionsNotice interactions={outcome.interactions} />
-            <details className="panel details">
-              <summary>
-                <span className="details__title">Five-year paths</span>
-              </summary>
-              <div className="charts">
-                <PathChart
-                  title="Current budget surplus"
-                  subtitle="£ billion; negative means day-to-day spending exceeds revenue"
-                  years={years}
-                  baseline={surplus(paths.baseline.currentBudgetDeficit)}
-                  policy={surplus(paths.policy.currentBudgetDeficit)}
-                  format={(v) => formatGbpBn(v * 1000, 1, true)}
-                  tickFormat={(v) => formatGbpBn(v * 1000, 0, true)}
-                  highlightYear={targetYear}
-                  zeroLine
-                />
-                <PathChart
-                  title="Borrowing (PSNB)"
-                  subtitle="£ billion a year"
-                  years={years}
-                  baseline={toBn(paths.baseline.psnb)}
-                  policy={toBn(paths.policy.psnb)}
-                  format={(v) => formatGbpBn(v * 1000, 1)}
-                  tickFormat={(v) => formatGbpBn(v * 1000, 0)}
-                  highlightYear={targetYear}
-                  zeroLine
-                />
-                <PathChart
-                  title="Net financial liabilities"
-                  subtitle="% of GDP (the investment rule's debt measure)"
-                  years={years}
-                  baseline={years.map((y) => paths.baseline.psnflPctGdp[y] ?? 0)}
-                  policy={years.map((y) => paths.policy.psnflPctGdp[y] ?? 0)}
-                  format={(v) => formatPct(v, 1)}
-                  highlightYear={targetYear}
-                />
-                <PathChart
-                  title="Borrowing as a share of GDP"
-                  subtitle="% of GDP"
-                  years={years}
-                  baseline={years.map((y) => paths.baseline.psnbPctGdp[y] ?? 0)}
-                  policy={years.map((y) => paths.policy.psnbPctGdp[y] ?? 0)}
-                  format={(v) => formatPct(v, 1)}
-                  highlightYear={targetYear}
-                  zeroLine
-                />
-              </div>
-            </details>
-          </WorkingsOnly>
         </div>
       </details>
 

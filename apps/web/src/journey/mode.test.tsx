@@ -56,16 +56,6 @@ describe('basic and advanced (Phase 27, ADR-0028)', () => {
     expect(modeOf()).toBe('basic');
   });
 
-  it('is a preference of its own: it leaves the workings as they were', () => {
-    window.localStorage.setItem('btc.workings.v2', 'off');
-    at(TUNING);
-    fireEvent.click(everyIdea());
-    expect(document.querySelector('main')?.getAttribute('data-workings')).toBe('off');
-    expect(window.localStorage.getItem('btc.workings.v2')).toBe('off');
-    fireEvent.click(bestIdeas());
-    expect(window.localStorage.getItem(KEY)).toBe('basic');
-  });
-
   it('is never in the link: a change of mode leaves the query string as it was', async () => {
     at(TUNING);
     // The budget writes its own address once it settles; a change of mode must not touch it after.

@@ -1,32 +1,13 @@
-import {
-  formatGbpBn,
-  fromForecast,
-  stageIndex,
-  type ContextReading,
-  type SourceRef,
-} from '@btc/engine';
+import { formatGbpBn, fromForecast, stageIndex } from '@btc/engine';
 import { Fragment, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { EstimateRow } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { Papers } from '../components/Motifs';
-import { SourceList } from '../components/SourceLink';
-import { TableScroll } from '../components/TableScroll';
-import { ESTIMATE, context, levers, rules, vintage } from '../data';
-import {
-  BRIEFING_SOURCES,
-  BRIEFING_WORDS as WORDS,
-  fillIn,
-  templateParts,
-} from '../journey/briefingWords';
+import { ESTIMATE, context, levers } from '../data';
+import { BRIEFING_WORDS as WORDS, fillIn, templateParts } from '../journey/briefingWords';
 import { StepLink } from '../journey/links';
 import { useOutcomeOf } from '../journey/outcome';
-import { suggestSetting } from '../journey/suggest';
-import { WorkingsOnly, useWorkings } from '../journey/workings';
 import { permalinkQuery, reducer, useBudget } from '../state/budget';
-
-const reading = (id: string): ContextReading | undefined =>
-  context.readings.find((r) => r.id === id);
 
 /** A template of the briefing's words with its placeholders filled, each by text or a node. */
 function Filled({ template, values }: { template: string; values: Record<string, ReactNode> }) {
@@ -41,17 +22,6 @@ function Filled({ template, values }: { template: string; values: Record<string,
   );
 }
 
-/** Each reference once, in the order first met. */
-function distinct(refs: readonly SourceRef[]): SourceRef[] {
-  const seen = new Set<string>();
-  return refs.filter((ref) => {
-    const key = JSON.stringify(ref);
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-}
-
 /**
  * Step 1: your briefing, in three parts (Phase 28, ADR-0030), in the player's own words. Your
  * headroom: the one figure to plan on, what Chancellors have kept since 2010 and why, and that this
@@ -59,14 +29,13 @@ function distinct(refs: readonly SourceRef[]): SourceRef[] {
  * word itself, and what the government must sell to lenders this year and why they care. How
  * it is calculated: what dearer borrowing and dearer prices have done since March, then the OBR's
  * March forecast less each of them, coming to today's estimate. The page is the same in both modes
- * and reads as plain copy (ADR-0031), with no badges (ADR-0034): each figure's source waits for the
- * workings, and with them on the table the estimate is made from. Nothing is chosen here and
+ * and reads as plain copy (ADR-0031), with no badges (ADR-0034) and no sources: the About page
+ * lists them, and the Methodology page says how the estimate is made. Nothing is chosen here and
  * nothing is scored: the primary starts the game on the estimate.
  */
 export function OutlookPage() {
   const { state, dispatch } = useBudget();
   const navigate = useNavigate();
-  const workings = useWorkings();
   const outcomeOf = useOutcomeOf();
   // The starting position: today's estimate with no policy of the player's own, from the forecast.
   const pre = outcomeOf({ ...ESTIMATE });
@@ -79,31 +48,8 @@ export function OutlookPage() {
   const figures = context.briefing;
   // The line on a sensible buffer holds only while the estimate is below the record beside it.
   const belowRecord = figures ? path.estimateGbpm < figures.averageHeadroom.gbpm : false;
-  // The debt rule, beneath the rules: its own year, and the Charter's words.
-  const debtRule = rules.rules.find((r) => r.kind === 'stockFalling');
+  // The debt rule, beneath the rules, has its own year.
   const debtYear = pre.verdicts.find((v) => v.kind === 'stockFalling')?.targetYear ?? year;
-  // What the calculation's opening line rests on: the gilt yield and prices against what the OBR
-  // assumed, and the OBR tying RPI to debt interest.
-  const gilts = reading('gilt-10y');
-  const cpi = reading('cpi-latest');
-  const introSources = distinct([
-    ...(gilts ? [gilts.latest.source, gilts.obr.source] : []),
-    ...(cpi ? [cpi.latest.source, cpi.obr.source] : []),
-    ...BRIEFING_SOURCES.calc,
-  ]);
-
-  // The rows' sources, with the workings on: the March forecast's own table, then for each setting
-  // the OBR's sensitivity that turns it into money and the reading it is taken from.
-  const calcSources = distinct([
-    vintage.checks.stabilityHeadroomGbpm.source,
-    ...path.steps.flatMap((step) => {
-      const lever = levers.find((l) => l.code === step.code);
-      const id = lever?.costing.kind === 'sensitivity' ? lever.costing.sensitivityId : undefined;
-      const sensitivity = vintage.sensitivities.find((s) => s.id === id);
-      const read = context.readings.find((r) => r.leverCode === step.code);
-      return [...(sensitivity ? [sensitivity.source] : []), ...(read ? [read.latest.source] : [])];
-    }),
-  ]);
   const stepName = (code: string) => {
     const words = WORDS.calc.steps[code];
     const lever = levers.find((l) => l.code === code);
@@ -141,21 +87,10 @@ export function OutlookPage() {
               since: figures.averageHeadroom.since,
               average: formatGbpBn(figures.averageHeadroom.gbpm, 0),
             })}{' '}
-            <SourceList
-              as="span"
-              className="briefing__sources"
-              refs={[figures.averageHeadroom.source]}
-            />{' '}
             {WORDS.headroom.safety}{' '}
-            <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.safety} />
           </p>
         ) : null}
-        {belowRecord ? (
-          <p className="brief__line">
-            {WORDS.headroom.buffer}{' '}
-            <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.buffer} />
-          </p>
-        ) : null}
+        {belowRecord ? <p className="brief__line">{WORDS.headroom.buffer} </p> : null}
       </section>
 
       <section className="brief doc" aria-labelledby="brief-what">
@@ -166,33 +101,17 @@ export function OutlookPage() {
           <Filled template={WORDS.what.rules} values={{ year: yearOf(year) }} />
         </p>
         {/* The debt rule in the running text (it was one fold away until 2026-09-30), in plain type:
-            the second of the two rules above, the player's words, and with the workings on the
-            Charter's own. */}
+            the second of the two rules above, in the player's words. */}
         <p className="brief__line">
           <Filled template={WORDS.what.debtRule.text} values={{ year: yearOf(debtYear) }} />
-          {workings && debtRule ? (
-            <>
-              {' '}
-              <span className="source">The Charter says: “{debtRule.charterText}”</span>{' '}
-              <SourceList as="span" className="briefing__sources" refs={[debtRule.source]} />
-            </>
-          ) : null}
         </p>
         <p className="brief__line">{WORDS.what.meaning}</p>
         {/* What lenders must buy and why they care, as one paragraph, each part with its sources. */}
         <p className="brief__line">
           {figures ? (
-            <>
-              {fillIn(WORDS.what.gilts, { gilts: formatGbpBn(figures.giltSales.gbpm, 0) })}{' '}
-              <SourceList
-                as="span"
-                className="briefing__sources"
-                refs={[figures.giltSales.source]}
-              />{' '}
-            </>
+            <>{fillIn(WORDS.what.gilts, { gilts: formatGbpBn(figures.giltSales.gbpm, 0) })} </>
           ) : null}
           {WORDS.what.lenders}{' '}
-          <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.lenders} />
         </p>
       </section>
 
@@ -200,10 +119,7 @@ export function OutlookPage() {
         <h2 id="brief-calc" className="section-label">
           {WORDS.calc.heading}
         </h2>
-        <p className="brief__line">
-          {WORDS.calc.intro}{' '}
-          <SourceList as="span" className="briefing__sources" refs={introSources} />
-        </p>
+        <p className="brief__line">{WORDS.calc.intro} </p>
         <dl className="calc">
           <div className="calc__row">
             <dt>{WORDS.calc.forecast}</dt>
@@ -226,62 +142,6 @@ export function OutlookPage() {
             </dd>
           </div>
         </dl>
-        <SourceList className="briefing__sources" refs={calcSources} />
-        <WorkingsOnly>
-          <details className="more">
-            <summary>{WORDS.workings}</summary>
-            <div className="more__body">
-              <p className="panel__hint">
-                Each setting is the latest reading less the OBR’s March figure, rounded to the step
-                the game uses. The OBR’s own sensitivities turn the settings into headroom.
-              </p>
-              <p className="panel__hint">
-                The OBR’s figure is for Bank Rate and gilt yields moving together; we apply it to
-                the rise in gilt yields alone, so the estimate leans cautious.{' '}
-                <SourceList
-                  as="span"
-                  className="briefing__sources"
-                  refs={[{ sourceId: 'obr-efo-2026-03', paragraph: '6.17' }]}
-                />
-              </p>
-              <TableScroll label="How the estimate is made">
-                <table className="measures">
-                  <thead>
-                    <tr>
-                      <th>Reading</th>
-                      <th>OBR in March</th>
-                      <th>Latest</th>
-                      <th>Setting used</th>
-                      <th>Source</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {context.readings.map((r) => (
-                      <EstimateRow
-                        key={r.id}
-                        reading={r}
-                        lever={r.leverCode ? levers.find((l) => l.code === r.leverCode) : undefined}
-                      />
-                    ))}
-                  </tbody>
-                </table>
-              </TableScroll>
-              <ul className="since__list">
-                {context.readings.map((r) => {
-                  const lever = r.leverCode
-                    ? levers.find((l) => l.code === r.leverCode)
-                    : undefined;
-                  const s = lever ? suggestSetting(r, lever) : null;
-                  return s ? (
-                    <li key={r.id}>
-                      <strong>{r.title}</strong>: {s.rationale}
-                    </li>
-                  ) : null;
-                })}
-              </ul>
-            </div>
-          </details>
-        </WorkingsOnly>
       </section>
 
       <p className="actions">

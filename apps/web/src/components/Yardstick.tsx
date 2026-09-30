@@ -1,5 +1,4 @@
 import { THIN_HEADROOM_GBPM, formatGbpBn } from '@btc/engine';
-import { SourceList } from './SourceLink';
 
 /**
  * The advisers' yardstick, in words (Phase 25): what they call thin, the markets' own line. A
@@ -12,15 +11,6 @@ export function Yardstick({ className = 'review__yardstick' }: { className?: str
     <p className={className}>
       Your advisers call headroom under {formatGbpBn(THIN_HEADROOM_GBPM, 0)} thin. The markets
       notice.{' '}
-      <SourceList
-        as="span"
-        className="briefing__sources"
-        refs={[
-          { sourceId: 'ifg-healey-tax-budget-2026' },
-          { sourceId: 'hmt-budget-2025-speech' },
-          { sourceId: 'boe-fsr-2026-07' },
-        ]}
-      />
     </p>
   );
 }

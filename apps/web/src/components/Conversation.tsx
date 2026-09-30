@@ -1,11 +1,9 @@
 import type { SimulatedLine } from '@btc/engine';
-import { SourceList } from './SourceLink';
 
 /**
  * One line of simulated speech: who is speaking, what they say, and the published facts the line
  * leans on. Nobody published these words, and they produce no number of their own (ADR-0011); the
- * speaker's name says whose they are, since the badges went (ADR-0034). The facts' sources show
- * with the workings.
+ * speaker's name says whose they are, since the badges went (ADR-0034).
  * A line can show its short form with the rest one tap away, or fold whole under its speaker's
  * name, so a screen that has said its one thing keeps the advice without the words.
  */
@@ -35,7 +33,6 @@ export function Spoken({
         </summary>
         <div className="more__body">
           <p className="spoken__text">{line.text}</p>
-          <SourceList refs={line.sources} />
         </div>
       </details>
     );
@@ -52,7 +49,6 @@ export function Spoken({
           <p>{line.text}</p>
         </details>
       ) : null}
-      <SourceList refs={line.sources} />
     </blockquote>
   );
 }

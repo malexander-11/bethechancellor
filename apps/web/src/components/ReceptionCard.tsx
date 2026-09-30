@@ -1,5 +1,4 @@
 import type { DistributionalNote, Reason, Reception, SourceRef } from '@btc/engine';
-import { SourceList } from './SourceLink';
 
 /** A line on the wider economy for the markets' fold (Phase 25): growth in words, debt interest. */
 export interface EconomyLine {
@@ -30,8 +29,8 @@ function whySummary(tally: Reception['tally']): string {
  * agrees with the rating (Phase 25), with the decisions behind it that pushed that way. When
  * something pulled the other way, one short line names it: "Counted against: Tax burden ·
  * Uncertified costings". A "why this rating" disclosure holds the question the audience asks and
- * every rule with its points, its reading, the decisions behind it and, with the workings on, its
- * sources. Every sentence is a game judgement from data. The markets' fold also
+ * every rule with its points, its reading and the decisions behind it. Every sentence is a game
+ * judgement from data. The markets' fold also
  * says, in words, what the Budget may do to growth and, worked out, what its borrowing costs in
  * interest (Phase 25).
  */
@@ -111,7 +110,6 @@ export function ReceptionCard({
                 <span className="reception__reading reception__nudge">{r.nudge}</span>
               ) : null}
               <span className="reception__reading">{r.note}</span>
-              <SourceList as="span" className="briefing__sources" refs={r.sources} />
             </li>
           ))}
         </ul>
@@ -123,7 +121,6 @@ export function ReceptionCard({
                 <li key={line.key}>
                   {line.lead ? <strong>{line.lead}. </strong> : null}
                   {line.text}{' '}
-                  <SourceList as="span" className="briefing__sources" refs={line.sources} />
                 </li>
               ))}
             </ul>
@@ -136,7 +133,6 @@ export function ReceptionCard({
               {notes.map((note) => (
                 <li key={`${note.leverId}-${note.text.slice(0, 20)}`}>
                   <strong>{note.leverTitle}.</strong> {note.text}
-                  <SourceList as="span" className="briefing__sources" refs={note.sources} />
                 </li>
               ))}
             </ul>

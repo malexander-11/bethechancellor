@@ -303,16 +303,6 @@
 
 /* ------------------------------------------------ the briefing and theme */
 
-/* The readings' rationale, in the workings' fold beneath the calculation. */
-.since__list {
-  margin: 0 0 8px;
-  padding-left: 1.2em;
-}
-
-.since__list li {
-  margin: 0 0 4px;
-}
-
 /* The theme of the Budget, written from the ranking (Phase 23). */
 .theme {
   margin: 0 0 16px;
@@ -483,27 +473,6 @@
   font-size: 0.9375rem;
 }
 
-/* ----------------------------------------------------- the summary strip */
-
-/* --------------------------------------------------------------- a note */
-
-.note {
-  padding: 4px 0 4px 14px;
-  border-left: 2px solid var(--ink-2);
-}
-
-.note p {
-  margin: 0 0 6px;
-}
-
-.note p:last-child {
-  margin-bottom: 0;
-}
-
-.note .kicker {
-  color: var(--ink-2);
-}
-
 /* ---------------------------------------------------------- conversation */
 
 /* A spoken line: a card with a coloured edge naming who is talking. The PM's edge is red, a
@@ -547,14 +516,6 @@
   margin: 0;
   font-size: 1rem;
   line-height: 1.5;
-}
-
-.spoken__sources {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  margin: 6px 0 0;
-  font-size: 0.875rem;
 }
 
 /* ------------------------------------------------------------- choices */
@@ -945,10 +906,6 @@ label.choice {
   font-weight: 600;
 }
 
-.speech__sources {
-  font-size: 0.875rem;
-}
-
 .speech__strip {
   margin: 16px 0 0;
   padding-top: 8px;
@@ -1113,8 +1070,7 @@ label.choice {
   color: var(--critical);
 }
 
-.choice--option .spoken__more,
-.choice--option .choice__sources {
+.choice--option .spoken__more {
   margin: 0 0 0 32px;
 }
 
@@ -1736,10 +1692,6 @@ label.choice {
   color: var(--brass-ink);
   font-size: 0.9375rem;
   font-weight: 700;
-}
-
-.review__none {
-  color: var(--ink-2);
 }
 
 /* A priority short of delivery, and a lever moved against its own flagship (Phase 25). */

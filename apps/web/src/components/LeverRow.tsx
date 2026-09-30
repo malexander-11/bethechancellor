@@ -6,7 +6,7 @@ import {
   type LeverEffect,
   type SimulatedLine,
 } from '@btc/engine';
-import { useId, useState, type ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { finetuneName, levers, vintage } from '../data';
 import {
   UNCHANGED_BELOW_GBPM,
@@ -20,7 +20,6 @@ import {
 } from '../journey/effects';
 import { settledLine } from '../journey/levers';
 import { StepLink } from '../journey/links';
-import { useWorkings } from '../journey/workings';
 import { AdviceLine } from './AdviceLine';
 import { BlockedNotice } from './BlockedNotice';
 import {
@@ -38,7 +37,6 @@ import {
   type TakesOut,
 } from './LeverControl';
 import { Milestones } from './Milestones';
-import { ProvenanceDrawer } from './ProvenanceDrawer';
 import { Term } from './Term';
 
 const POLICY_YEARS = policyYearsOf(vintage);
@@ -401,26 +399,22 @@ export function HeldRow({
  * Everything else about one lever, under its card's one fold (ADR-0037): its own headline, a
  * budget's cash, the milestones it is measured against, where it stands, what it counts the same
  * money as and why (a row names what it would take out, and leaves the why here when the other is
- * beside it), and what its number rests on; with the workings on, where the number comes from.
+ * beside it), and what its number rests on.
  */
 export function LeverAbout({
   lever,
   name,
   value,
-  effect,
   summaryYear,
   headingLevel,
 }: {
   lever: Lever;
   name: string;
   value: number;
-  effect?: LeverEffect | undefined;
   summaryYear: string;
   /** A level below its card's own heading: 4 under a decision, 3 under a section in basic mode. */
   headingLevel: 3 | 4;
 }) {
-  const workings = useWorkings();
-  const [open, setOpen] = useState(false);
   const Heading = headingLevel === 4 ? 'h4' : 'h3';
   const isDefault = value === lever.control.default;
   const change = lever.control.kind === 'toggle' ? null : levelChange(lever, value, summaryYear);
@@ -513,18 +507,6 @@ export function LeverAbout({
           </ul>
         </>
       ) : null}
-      {workings ? (
-        <button
-          type="button"
-          className="linklike"
-          onClick={() => setOpen((o) => !o)}
-          aria-expanded={open}
-        >
-          {open ? 'Hide detail' : 'Detail and sources'}
-          <span className="sr-only"> for {lever.shortTitle}</span>
-        </button>
-      ) : null}
-      {open && workings ? <ProvenanceDrawer lever={lever} effect={effect} /> : null}
     </div>
   );
 }

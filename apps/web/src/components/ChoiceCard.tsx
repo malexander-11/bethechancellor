@@ -75,7 +75,7 @@ export function ChoiceCard({
   aboutLevel: 3 | 4;
   context: CardContext;
 }) {
-  const { state, outcome } = useBudget();
+  const { state } = useBudget();
   const rows = units.flatMap((u) => (u.kind === 'row' ? [u.row] : u.rows));
   const live = rows.flatMap((r) => {
     const lever = byCode.get(r.item.code);
@@ -136,7 +136,6 @@ export function ChoiceCard({
                 lever={lever}
                 name={row.name}
                 value={state.leverValues[lever.code] ?? lever.control.default}
-                effect={outcome.leverEffects.find((e) => e.code === lever.code)}
                 summaryYear={context.summaryYear}
                 headingLevel={aboutLevel}
               />,

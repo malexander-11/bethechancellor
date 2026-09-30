@@ -22,7 +22,6 @@ import { JourneyLayout } from '../components/JourneyLayout';
 import { MinisterLine } from '../components/MinisterLine';
 import { ModeLine } from '../components/ModeLine';
 import { OptionCard } from '../components/OptionCard';
-import { SourceList } from '../components/SourceLink';
 import { adviserById, context, levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
@@ -149,10 +148,7 @@ function DeliverScreen({ n }: { n: number }) {
       <HeadroomBar outcome={outcome} status={status} />
       {priority.reach ? (
         // Whose budgets these are, when they are not the whole UK's (Phase 25).
-        <p className="deliver__reach">
-          {priority.reach.text}{' '}
-          <SourceList as="span" className="briefing__sources" refs={priority.reach.sources} />
-        </p>
+        <p className="deliver__reach">{priority.reach.text} </p>
       ) : null}
       {trimmed ? <ModeLine every={`${every.length} ways`} /> : null}
       <div

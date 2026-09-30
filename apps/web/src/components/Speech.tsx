@@ -1,5 +1,4 @@
 import type { Speech as SpeechText } from '@btc/engine';
-import { SourceList } from './SourceLink';
 
 /**
  * The speech as delivered: authored fragments filled with the engine's figures. Every paragraph
@@ -17,7 +16,6 @@ export function Speech({ speech }: { speech: SpeechText }) {
       {speech.paragraphs.map((p, i) => (
         <p key={`${p.kind}-${i}`} className={`speech__para speech__para--${p.kind}`}>
           {p.text}
-          <SourceList as="span" className="speech__sources" refs={p.sources} />
         </p>
       ))}
       <p className="speech__strip">
@@ -29,10 +27,7 @@ export function Speech({ speech }: { speech: SpeechText }) {
         <h3 id="speech-reply-heading" className="section-label">
           {speech.reply.who} replies
         </h3>
-        <p>
-          {speech.reply.text}
-          <SourceList as="span" className="speech__sources" refs={speech.reply.sources} />
-        </p>
+        <p>{speech.reply.text}</p>
       </section>
     </article>
   );

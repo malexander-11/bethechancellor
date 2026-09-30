@@ -189,7 +189,7 @@ forward:
    million); only other taxes, which has no such rows, is its share of GDP (Table 3.1) × nominal
    GDP.
 3. Beyond the third published year, the third-year figure grows with the same head.
-4. Every step is recorded and shown in the provenance drawer beside the raw figure.
+4. Every step is recorded with the lever's effect, beside the raw figure.
 
 Worked example, basic rate +1p, start April 2027, income tax receipts (£m) 2026-27 359,600; 2027-28
 384,600; 2028-29 395,600; 2029-30 413,800; 2030-31 430,800:
@@ -1521,8 +1521,7 @@ about the spending screen, both screens in this round.
   card: what “at most” means for a relief’s cost, and which rule investment counts against. The
   promises that watch a row, its flagship, “Not on the table” and any warning that applies now stay
   on it; everything else about each lever (its headline, cash, milestones, tags, what it counts the
-  same money as, what it assumes and, with the workings on, its sources) waits under one fold a
-  card, “More about these”.
+  same money as and what it assumes) waits under one fold a card, “More about these”.
 - **Taking out, in a card.** A row that would take out another beside it names it by its short name
   and leaves the reason to the fold; one in another decision it names plainly, with the reason
   (§35). A set of radios is a set of rows. A lever a chosen flagship holds is a row naming the

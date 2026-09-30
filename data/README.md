@@ -283,8 +283,7 @@ left against their rules (the OBR's record), and `giltSales { gbpm, year, source
 government plans to sell in a fiscal year (HM Treasury's remit for the Debt Management Office). Each
 source names its paragraph and page and must quote the passage the figure is read from; the
 validator refuses a figure that quotes nothing, and gilt sales for any year but the one `asOf` falls
-in, since the page says "this year". The page badges both Official figure, with the workings on
-(ADR-0031). The briefing's words are not data: they are templates in
+in, since the page says "this year". The briefing's words are not data: they are templates in
 `apps/web/src/journey/briefingWords.ts`, with no figure typed in them and no glossary word marked.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)

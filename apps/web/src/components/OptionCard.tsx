@@ -15,7 +15,6 @@ import type { OptionPrice } from '../journey/prices';
 import { AdviceLine } from './AdviceLine';
 import { BlockedNotice } from './BlockedNotice';
 import { formatLeverValue, promiseWords, RestingTag } from './LeverControl';
-import { SourceList } from './SourceLink';
 import { Term } from './Term';
 
 /** How a lever that was adjusted elsewhere now stands, as its level where it has one. */
@@ -262,8 +261,7 @@ export function OptionCard({
           <span className="choice__line choice__workings">{priceWorkings(price)}</span>
           {start ? (
             <span className="choice__line">
-              Makes a start, not delivery: {lowerFirst(start.why)}{' '}
-              <SourceList as="span" refs={start.sources} className="choice__sources" />
+              Makes a start, not delivery: {lowerFirst(start.why)}
             </span>
           ) : null}
           {note ? <span className="choice__line">{note}</span> : null}
@@ -276,9 +274,6 @@ export function OptionCard({
             <span className="choice__delivery">
               <span className="kicker">{who}</span> {line.text}
             </span>
-          ) : null}
-          {line ? (
-            <SourceList refs={line.sources} className="choice__sources briefing__sources" />
           ) : null}
         </div>
       </details>

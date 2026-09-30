@@ -25,7 +25,6 @@ import {
   parseVintage,
   validateDataset,
   type Adviser,
-  type Briefing,
   type JourneyStep,
   type Lever,
   type SourceDoc,
@@ -140,9 +139,4 @@ const FINETUNE_NAMES = finetuneNames(finetune);
  */
 export function finetuneName(code: string): string | undefined {
   return FINETUNE_NAMES.get(code);
-}
-
-/** The briefings an adviser gives on a step: Budget day's, behind the workings. */
-export function briefingsFor(step: JourneyStep): Briefing[] {
-  return briefings.briefings.filter((b) => b.step === step);
 }

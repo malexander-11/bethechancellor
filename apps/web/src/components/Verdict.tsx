@@ -1,6 +1,5 @@
 import { formatGbpBn, type BudgetVerdict } from '@btc/engine';
 import { TableScroll } from './TableScroll';
-import { SourceList } from './SourceLink';
 
 const PRIORITY: Record<BudgetVerdict['ambitions']['priorities'][number]['fate'], string> = {
   delivered: 'delivered',
@@ -43,7 +42,7 @@ export function Verdict({ verdict }: { verdict: BudgetVerdict }) {
           <p>{kind.line.text}</p>
         </details>
       ) : null}
-      <SourceList refs={kind.line.sources} />
+
       {kind.fact ? <p className="verdict-close__fact">{kind.fact}</p> : null}
 
       <details className="more">

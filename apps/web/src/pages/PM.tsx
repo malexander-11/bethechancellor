@@ -9,7 +9,6 @@ import {
 import { useMemo } from 'react';
 import { Spoken } from '../components/Conversation';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { SourceList } from '../components/SourceLink';
 import { Term } from '../components/Term';
 import { levers, options, pm } from '../data';
 import { useStageGuard } from '../journey/guard';
@@ -116,9 +115,7 @@ export function PMPage() {
                     {saves.has(p.id) ? <span className="tag tag--quiet">Saves money</span> : null}
                   </span>
                   <span className="choice__line">{p.purpose}</span>
-                  <span className="choice__meta">
-                    <SourceList as="span" className="briefing__sources" refs={p.sources} />
-                  </span>
+                  <span className="choice__meta"></span>
                 </span>
               </label>
               {picked ? <Spoken line={p.reaction} who="The Prime Minister" /> : null}
@@ -137,7 +134,6 @@ export function PMPage() {
             <li key={p.id}>
               <span className="tag--quiet">{PROMISE_ORIGIN[p.origin]}</span>{' '}
               <strong>{p.title}.</strong> {p.text}
-              <SourceList as="span" className="briefing__sources" refs={p.sources} />
             </li>
           ))}
         </ul>

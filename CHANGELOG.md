@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The workings view is deleted. Its switch had been withdrawn since ADR-0032, so no player could see
+  its sources, provenance drawers, breakdown tables, charts or Budget-day briefings. Seven
+  components, about 550 lines of unused styles and the page tests' "workings on" setting went with
+  it, so the tests now see what a player sees. The About page still lists every source.
 - `validate:data` names the right file when the DWP extract is missing, and reports a missing PESA
   extract instead of passing silently.
 - Uprating follows the OBR's receipts in £ million (EFO Table A.5) for every head that has them, not

@@ -41,9 +41,9 @@ name alone and the footer one link, to the page about the game and its sources (
 The words are plain (ADR-0024): no sentence a player meets runs past twenty words, and a readability
 test holds every set of them at a reading age of about twelve. Every number still comes from an
 official source or a stated calculation on one, and is one of five kinds (an official figure, worked
-out, an assumption, commentary or a game judgement), though no screen labels which (ADR-0034). For
-now the game's screens show no sources or breakdowns: the "Show workings" switch that showed them is
-withdrawn, and the About page lists every source (ADR-0032). The briefing reads as plain copy
+out, an assumption, commentary or a game judgement), though no screen labels which (ADR-0034). The
+game's screens show no sources or breakdowns: the "Show workings" view that held them was withdrawn
+(ADR-0032) and then deleted, and the About page lists every source. The briefing reads as plain copy
 (ADR-0031). A first playthrough's required reading and decisions come to about eight and a half
 minutes in basic mode and ten and a half in advanced (an estimate from the rendered screens, not
 user testing; ADR-0028). Every screen names itself, can be reached by keyboard and screen reader,
@@ -58,57 +58,57 @@ smaller share of the economy in 2029-30 than the year before, investment include
 and the £246bn of gilts the government plans to sell this year and why lenders care. How it is
 calculated: dearer borrowing and dearer prices since March, then the OBR's March £23.6bn, less
 £11.3bn for higher interest rates and £5.5bn for higher inflation. The page is the same in both
-modes, and its sources and table of how the estimate is made wait for the workings. **Set your
-priorities**: rank up to three of eight with the Prime Minister, who reacts to each, and the game
-writes the theme of the Budget from the ranking; the promises are one fold away, and one line gives
-the price of a priority in full before anything is chosen; nothing is funded yet. **Flagship
-policies**: one screen per priority, its costed options, each named for what it does and carrying
-its adviser's line, with one price (its change to the headroom, interest included), whether it
-delivers the priority in full or makes a start, and a slim bar keeping score; in basic mode, the
-best one or two ways and any way that deals with something already on the desk. No two options share
-a lever, and two that count the same money cannot both be chosen. **Fine-tune tax and spend**: two
-screens on which every lever is a policy. Tax goes tax by tax: eleven taxes, from income tax to the
-tax gap, and 26 decisions about them, closed until you open one ("Change the headline rate" of VAT,
-"Remove an exemption"), 87 ways to change tax in all (ADR-0035). Spending goes the same way: four
-sections by what the money is for and nine decisions, 46 ways to change it, each budget one scale
-with the plan among its levels (from 5% less to 5% more, or for public investment from 10% less to
-20% more). An open decision is one card, a row for each choice under a short name ("Food" under
-Remove an exemption): a tick, or a scale of levels with the plan among them, saying what choosing
-would raise, cost or save ("would raise at most £32.5bn"). Once chosen a row says what it does in
-2029-30, and its adviser speaks, with a minister on every budget you move; what the rows share is
-said once at the top of the card, and everything else about each lever waits in one fold, "More
-about these" (ADR-0037). One adviser speaks above the cards when something needs saying; red and
-amber manifesto tags sit on the rows they watch. In basic mode each screen shows its adviser's
-shortlist instead, one card a section. Two policies that count the same money cannot both be chosen:
-in one decision they are one choice among radios, and elsewhere choosing one takes the other out and
-says so first (ADR-0036). A lever a chosen flagship already sets shows once, as a line with a way
-back to that flagship. Every lever is there, and the menu is the one a Chancellor actually weighs:
-employer National Insurance, pensions, the smaller duties, capital-tax reliefs, going further on
-recent rises, capital gains at death, a lower council tax surcharge band, the bank surcharge, the
-energy profits levy again, the self-employed rate up or down, a lower personal allowance, VAT off
-gas, another compliance package, business rates, the Prime Minister's schemes and defence at 3%
-sooner. **Deliver the Budget**: the whole Budget read back with a way to change every part, how the
-headroom got from the estimate to the bar, the Prime Minister's sign-off when something needs
-saying, and one red button. **Feedback**: the Budget in three sentences (what you prioritised, who
-pays, what you accepted or kept), your backbenchers, the markets and the public each rating it out
-of five, with one reason that agrees with the rating, the choices that caused it and a line for the
-other side, and a close that says which ambitions survived and who paid; the speech, five households
-and the Budget documents one fold away. Share the link. The menu was read against the Budget
-reporting again on 21 September 2026: the electricity VAT zero rate that HMRC says ends in March
-2027, National Insurance for working pensioners and for LLP partners, and CenTax's package for
-taxing gains like income joined it; what has no published costing is named in words instead. On 23
-September 2026 the think tanks' own lists were read and nineteen more cards built from their
-documents, each a stated figure from its own document: a levy on banks' reserves, National Insurance
-on rents, a 2% wealth tax, a sugar and salt tax, council tax on the top bands, the NICs upper
-earnings limit, 1% VAT on zero-rated goods, a pension lump-sum cap, stamp duty abolished on main
-homes, a child tax allowance, and six welfare cards from housing support relinked to rents to the
-Centre for Social Justice's benefit reset, now in step 4's Benefits group. Ten of those cards cannot
-take effect from April 2027, the wealth taxes among them, and the three think-tank capital gains
-cards cannot be collected until 2028-29, so each of the thirteen wears a sourced earliest start and
-counts nothing before it. On 30 September 2026 the user took nine taxes off the table, among them
-the health and social care levy, insurance premium tax, CenTax's package for taxing gains like
-income and National Insurance on rents, so eleven cards with an earliest start are left; each
-retired tax is kept for the record, and an old link carrying one opens without it (ADR-0035).
+modes; the Methodology page says how the estimate is made. **Set your priorities**: rank up to three
+of eight with the Prime Minister, who reacts to each, and the game writes the theme of the Budget
+from the ranking; the promises are one fold away, and one line gives the price of a priority in full
+before anything is chosen; nothing is funded yet. **Flagship policies**: one screen per priority,
+its costed options, each named for what it does and carrying its adviser's line, with one price (its
+change to the headroom, interest included), whether it delivers the priority in full or makes a
+start, and a slim bar keeping score; in basic mode, the best one or two ways and any way that deals
+with something already on the desk. No two options share a lever, and two that count the same money
+cannot both be chosen. **Fine-tune tax and spend**: two screens on which every lever is a policy.
+Tax goes tax by tax: eleven taxes, from income tax to the tax gap, and 26 decisions about them,
+closed until you open one ("Change the headline rate" of VAT, "Remove an exemption"), 87 ways to
+change tax in all (ADR-0035). Spending goes the same way: four sections by what the money is for and
+nine decisions, 46 ways to change it, each budget one scale with the plan among its levels (from 5%
+less to 5% more, or for public investment from 10% less to 20% more). An open decision is one card,
+a row for each choice under a short name ("Food" under Remove an exemption): a tick, or a scale of
+levels with the plan among them, saying what choosing would raise, cost or save ("would raise at
+most £32.5bn"). Once chosen a row says what it does in 2029-30, and its adviser speaks, with a
+minister on every budget you move; what the rows share is said once at the top of the card, and
+everything else about each lever waits in one fold, "More about these" (ADR-0037). One adviser
+speaks above the cards when something needs saying; red and amber manifesto tags sit on the rows
+they watch. In basic mode each screen shows its adviser's shortlist instead, one card a section. Two
+policies that count the same money cannot both be chosen: in one decision they are one choice among
+radios, and elsewhere choosing one takes the other out and says so first (ADR-0036). A lever a
+chosen flagship already sets shows once, as a line with a way back to that flagship. Every lever is
+there, and the menu is the one a Chancellor actually weighs: employer National Insurance, pensions,
+the smaller duties, capital-tax reliefs, going further on recent rises, capital gains at death, a
+lower council tax surcharge band, the bank surcharge, the energy profits levy again, the
+self-employed rate up or down, a lower personal allowance, VAT off gas, another compliance package,
+business rates, the Prime Minister's schemes and defence at 3% sooner. **Deliver the Budget**: the
+whole Budget read back with a way to change every part, how the headroom got from the estimate to
+the bar, the Prime Minister's sign-off when something needs saying, and one red button.
+**Feedback**: the Budget in three sentences (what you prioritised, who pays, what you accepted or
+kept), your backbenchers, the markets and the public each rating it out of five, with one reason
+that agrees with the rating, the choices that caused it and a line for the other side, and a close
+that says which ambitions survived and who paid; the speech, five households and the Budget
+documents one fold away. Share the link. The menu was read against the Budget reporting again on 21
+September 2026: the electricity VAT zero rate that HMRC says ends in March 2027, National Insurance
+for working pensioners and for LLP partners, and CenTax's package for taxing gains like income
+joined it; what has no published costing is named in words instead. On 23 September 2026 the think
+tanks' own lists were read and nineteen more cards built from their documents, each a stated figure
+from its own document: a levy on banks' reserves, National Insurance on rents, a 2% wealth tax, a
+sugar and salt tax, council tax on the top bands, the NICs upper earnings limit, 1% VAT on
+zero-rated goods, a pension lump-sum cap, stamp duty abolished on main homes, a child tax allowance,
+and six welfare cards from housing support relinked to rents to the Centre for Social Justice's
+benefit reset, now in step 4's Benefits group. Ten of those cards cannot take effect from April
+2027, the wealth taxes among them, and the three think-tank capital gains cards cannot be collected
+until 2028-29, so each of the thirteen wears a sourced earliest start and counts nothing before it.
+On 30 September 2026 the user took nine taxes off the table, among them the health and social care
+levy, insurance premium tax, CenTax's package for taxing gains like income and National Insurance on
+rents, so eleven cards with an earliest start are left; each retired tax is kept for the record, and
+an old link carrying one opens without it (ADR-0035).
 
 Under the hood: the OBR March 2026 baseline, 67 tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options and
@@ -144,7 +144,7 @@ forecast.
   quote a sourced fact and read an engine number; it never produces a number of its own. Roles, not
   people. No judgement moves the arithmetic: the seeded forecast draw, which only ever chose among
   published figures, retired in Phase 24.
-- **Where nobody has published a costing, the arithmetic is ours and the workings are on the card.**
+- **Where nobody has published a costing, the arithmetic is ours and the method is on the card.**
   Not everything a Chancellor weighs has a certified costing. Each such lever states its method, its
   published inputs and its assumptions, sits in the same group as the certified rows it resembles,
   is recorded as an assumption rather than a direct costing, and is reproduced from those inputs by
@@ -153,9 +153,8 @@ forecast.
 - **The page is plain, and the plainness is honest.** One accent, two self-hosted serifs under the
   OFL, nothing under 14px, every text colour checked for contrast; the one picture, the Budget box
   on the cover, is drawn in the page and says nothing the heading beside it does not. There are no
-  badges (ADR-0034); a verdict is always a word beside an icon and never a colour alone, the
-  provenance drawer never loses a table, and the guide's words are the only text on screen the
-  engine did not compute.
+  badges (ADR-0034); a verdict is always a word and never a colour alone, and the guide's words are
+  the only text on screen the engine did not compute.
 - **Rebasing is a data refresh.** The baseline forecast is a versioned "vintage". When the OBR
   publishes a new forecast (next: Budget, 28 October 2026) the data is regenerated and the app
   re-reads it.

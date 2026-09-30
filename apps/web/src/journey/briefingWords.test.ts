@@ -1,13 +1,7 @@
 import { plainText, segments } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import { context, levers, sourcesById } from '../data';
-import {
-  BRIEFING_SOURCES,
-  BRIEFING_WORDS,
-  briefingTemplates,
-  fillIn,
-  templateParts,
-} from './briefingWords';
+import { BRIEFING_WORDS, briefingTemplates, fillIn, templateParts } from './briefingWords';
 
 describe('the briefing’s words (Phase 28, ADR-0030)', () => {
   it('is plain copy: no word opens a definition (ADR-0031)', () => {
@@ -47,10 +41,7 @@ describe('the briefing’s words (Phase 28, ADR-0030)', () => {
   it('cites only sources the registry holds, and quotes both published figures', () => {
     const figures = context.briefing;
     expect(figures).toBeDefined();
-    const refs = [
-      ...Object.values(BRIEFING_SOURCES).flat(),
-      ...(figures ? [figures.averageHeadroom.source, figures.giltSales.source] : []),
-    ];
+    const refs = figures ? [figures.averageHeadroom.source, figures.giltSales.source] : [];
     for (const ref of refs) expect(sourcesById.get(ref.sourceId), ref.sourceId).toBeDefined();
     expect(figures?.averageHeadroom.source.quote).toBeTruthy();
     expect(figures?.giltSales.source.quote).toBeTruthy();

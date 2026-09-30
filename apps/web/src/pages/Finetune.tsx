@@ -32,7 +32,6 @@ import {
 import { plannedWords, sizeWords } from '../components/LeverControl';
 import type { Held } from '../components/LeverRow';
 import { ModeLine } from '../components/ModeLine';
-import { SourceList } from '../components/SourceLink';
 import { adviserById, context, finetune, interventions, levers, options, pm } from '../data';
 import { UNCHANGED_BELOW_GBPM } from '../journey/effects';
 import { useStageGuard } from '../journey/guard';
@@ -351,9 +350,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       {spec.notes.length > 0 ? (
         <ul className="tune__notes">
           {spec.notes.map((note) => (
-            <li key={note.text}>
-              {note.text} <SourceList as="span" className="briefing__sources" refs={note.sources} />
-            </li>
+            <li key={note.text}>{note.text}</li>
           ))}
         </ul>
       ) : null}

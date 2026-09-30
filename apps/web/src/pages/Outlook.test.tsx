@@ -58,34 +58,19 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     at(`/outlook?${BASE}`);
     const first = part('Your headroom');
     const figure = within(first).getByText(/of breathing space in/);
-    // Our estimate, not a published figure, and with no badge even with the workings on (ADR-0034).
+    // Our estimate, not a published figure, and with no badge (ADR-0034).
     expect(figure).toHaveTextContent(/^You start with £6\.8bn of breathing space in 2029-30\.$/);
     expect(document.querySelector('main .badge')).toBeNull();
     expect(within(figure).getByText('£6.8bn').tagName).toBe('STRONG');
-    // The OBR's own record, an official figure, then why Chancellors keep a margin, in words with
-    // their sources: one paragraph, each part with its own sources.
-    const history = within(first).getByText(/Chancellors have kept/);
-    expect(history).toHaveTextContent(
-      /^Since 2010, Chancellors have kept about £29bn on average\./,
+    // The OBR's own record, an official figure, then why Chancellors keep a margin: one paragraph.
+    expect(within(first).getByText(/Chancellors have kept/)).toHaveTextContent(
+      /^Since 2010, Chancellors have kept about £29bn on average\. This builds in some safety for adverse economic impact\.$/,
     );
-    expect(history).toHaveTextContent(/This builds in some safety for adverse economic impact\./);
-    expect(
-      within(history).getAllByRole('link', {
-        name: /OBR, Economic and fiscal outlook – November 2025/,
-      }),
-    ).toHaveLength(2);
-    expect(history).toHaveTextContent(/around £29 billion/);
-    expect(history).toHaveTextContent(/relatively vulnerable to future shocks/);
-    expect(
-      within(history).getByRole('link', { name: /HMT, Chancellor letter to the Treasury/ }),
-    ).toBeInTheDocument();
     // What the record means for this Budget, softened in the player's words (2026-09-30):
-    // "likely", and no figure. "Sensible" is the game's judgement; its source follows it.
-    const buffer = within(first).getByText(/to build in a sensible buffer/);
-    expect(buffer).toHaveTextContent(
-      /^This means this Budget will likely need to increase the headroom to build in a sensible buffer\./,
+    // "likely", and no figure. "Sensible" is the game's judgement.
+    expect(within(first).getByText(/to build in a sensible buffer/)).toHaveTextContent(
+      /^This means this Budget will likely need to increase the headroom to build in a sensible buffer\.$/,
     );
-    expect(buffer).toHaveTextContent(/£21 billion average absolute revision/);
     expect(screen.queryByText(/will need to find around/)).toBeNull();
     // The household line and the source line went: the rows below say where the figure comes from.
     expect(screen.queryByText(/for each household/)).toBeNull();
@@ -104,23 +89,11 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     // No word on the briefing opens a definition (ADR-0031).
     for (const brief of briefing()) expect(brief.querySelector('.term')).toBeNull();
     // What the government must sell to lenders this year, and why they care: one paragraph, an
-    // official figure and then words, each part with its own sources.
+    // official figure and then words.
     const gilts = within(second).getByText(/plans to sell/);
     expect(gilts).toHaveTextContent(
-      /^This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\./,
+      /^This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\. Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\.$/,
     );
-    expect(
-      within(gilts).getByRole('link', { name: /HMT, Revision to the DMO Financing Remit 2026-27/ }),
-    ).toBeInTheDocument();
-    expect(gilts).toHaveTextContent(/gilt sales of £246\.2 billion/);
-    expect(gilts).toHaveTextContent(
-      /Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\./,
-    );
-    expect(within(gilts).getByRole('link', { name: /BoE, Bank Insights/ })).toBeInTheDocument();
-    expect(
-      within(gilts).getByRole('link', { name: /HMT, Chancellor letter to the Treasury/ }),
-    ).toBeInTheDocument();
-    expect(within(second).getByText(/Lenders charge more/)).toBe(gilts);
   });
 
   it('says the debt rule in the text, with the rule’s own year and the investment it counts', () => {
@@ -134,28 +107,18 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     // the Charter's year: debt smaller in 2029-30 than the year before.
     expect(debt.querySelector('strong, b')).toBeNull();
     expect(debt).toHaveTextContent(
-      /^The second rule is the debt rule\. Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\./,
+      /^The second rule is the debt rule\. Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\.$/,
     );
-    // With the workings on, the Charter's own words and their source.
-    expect(within(debt).getByText(/The Charter says:/)).toHaveTextContent(
-      /is falling as a share of the economy by 2029-30/,
-    );
-    expect(
-      within(debt).getByRole('link', { name: /Charter for Budget Responsibility/ }),
-    ).toBeInTheDocument();
   });
 
   it('shows how the headroom is calculated: what moved it, then the sums, adding up', () => {
     at(`/outlook?${BASE}`);
     const third = part('How the headroom is calculated');
     // What moved the forecast, in words, before the sums. The inflation row is interest on
-    // index-linked gilts, so the line says debt, not spending; its sources say why.
-    const intro = within(third).getByText(/^Since March, interest rates and inflation/);
-    expect(intro).toHaveTextContent(
-      /^Since March, interest rates and inflation have been higher than expected\. This means the government is paying more money to borrow, and paying more on debt linked to inflation\./,
+    // index-linked gilts, so the line says debt, not spending.
+    expect(within(third).getByText(/^Since March, interest rates and inflation/)).toHaveTextContent(
+      /^Since March, interest rates and inflation have been higher than expected\. This means the government is paying more money to borrow, and paying more on debt linked to inflation\.$/,
     );
-    expect(intro).toHaveTextContent(/largely reflecting weaker RPI inflation/);
-    expect(intro).not.toHaveTextContent(/spending linked to inflation/);
     expect(rows()).toEqual([
       ['The OBR’s March forecast', '£23.6bn'],
       ['Higher interest rates', '−£11.3bn'],
@@ -167,11 +130,6 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     const shown = rows().map(([, figure]) => bn(figure));
     expect(shown[0]! + shown[1]! + shown[2]!).toBeCloseTo(shown[3]!, 9);
     expect(rows()[3]![1]).toBe(within(part('Your headroom')).getByRole('strong').textContent);
-    // Where the rows come from, with the workings on: the forecast, the sensitivities, the readings.
-    const sources = third.querySelector('.calc + .briefing__sources') as HTMLElement;
-    expect(sources).toHaveTextContent(/Table 5\.1/);
-    expect(sources).toHaveTextContent(/A sustained 1 percentage point increase in Bank Rate/);
-    expect(sources).toHaveTextContent(/A 1 percentage point increase in RPI inflation/);
     const main = document.querySelector('main')?.textContent ?? '';
     // Every placeholder filled.
     expect(main).not.toMatch(/\{[a-zA-Z]+\}/);
@@ -182,41 +140,16 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(main).not.toMatch(/That is why your headroom/);
   });
 
-  it('reads as plain copy with the workings off: no badge, no source, every figure still there', () => {
-    // A newcomer's browser: the shared setup's workings are cleared (ADR-0031).
-    window.localStorage.removeItem('btc.workings.v2');
+  it('reads as plain copy: no badge, no source, no word that opens a definition (ADR-0031)', () => {
     at(`/outlook?${BASE}`);
     expect(briefing()).toHaveLength(3);
     for (const brief of briefing()) {
       expect(brief.querySelector('.badge')).toBeNull();
-      expect(brief.querySelector('.briefing__sources')).toBeNull();
+      expect(brief.querySelector('.source, .briefing__sources')).toBeNull();
       expect(brief.querySelector('.term')).toBeNull();
+      expect(brief.querySelector('a')).toBeNull();
     }
-    expect(within(part('Your headroom')).getByText(/of breathing space in/)).toHaveTextContent(
-      /^You start with £6\.8bn of breathing space in 2029-30\.$/,
-    );
-    expect(within(part('Your headroom')).getByText(/Chancellors have kept/)).toHaveTextContent(
-      /^Since 2010, Chancellors have kept about £29bn on average\. This builds in some safety for adverse economic impact\.$/,
-    );
-    expect(within(part('Your headroom')).getByText(/sensible buffer/)).toHaveTextContent(
-      /^This means this Budget will likely need to increase the headroom to build in a sensible buffer\.$/,
-    );
-    // The debt rule's own paragraph: the second rule, then the player's words, with no fold to open.
-    expect(
-      within(part('What is headroom?')).getByText(/^The second rule is the debt rule\./),
-    ).toHaveTextContent(
-      /^The second rule is the debt rule\. Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\.$/,
-    );
-    expect(within(part('What is headroom?')).getByText(/plans to sell/)).toHaveTextContent(
-      /^This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\. Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\.$/,
-    );
-    expect(rows()).toEqual([
-      ['The OBR’s March forecast', '£23.6bn'],
-      ['Higher interest rates', '−£11.3bn'],
-      ['Higher inflation', '−£5.5bn'],
-      ['Today’s estimate', '£6.8bn'],
-    ]);
-    expect(screen.queryByText('How the estimate is made')).toBeNull();
+    expect(screen.queryByRole('table')).toBeNull();
   });
 
   it('asks nothing: no forecasts to choose, no sliders, one primary action and a way back', () => {
@@ -231,22 +164,6 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
       'href',
       expect.stringMatching(/^\/(\?|$)/),
     );
-  });
-
-  it('shows how the estimate is made, with the workings on', () => {
-    at(`/outlook?${BASE}`);
-    fireEvent.click(screen.getByText('How the estimate is made'));
-    const table = screen.getByRole('table');
-    expect(within(table).getByText('Setting used')).toBeInTheDocument();
-    // The gilt yield sets interest rates three-quarters of a point above the OBR's path.
-    expect(within(table).getByText('+0.75 points')).toBeInTheDocument();
-    // How that setting is applied, and which way it leans (Phase 25): our assumption, said in words
-    // ("we apply it"), with no badge (ADR-0034).
-    const method = screen.getByText(/we apply it to the rise in gilt yields alone/);
-    expect(method).toHaveTextContent(/so the estimate leans cautious\./);
-    expect(method.querySelector('.badge')).toBeNull();
-    expect(within(table).getByText('10-year gilt yield')).toBeInTheDocument();
-    expect(within(table).getByText('Borrowing so far in 2026-27')).toBeInTheDocument();
   });
 
   it('starts the game on today’s estimate and goes to the priorities', async () => {

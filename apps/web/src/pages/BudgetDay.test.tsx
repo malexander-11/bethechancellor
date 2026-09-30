@@ -119,7 +119,7 @@ describe('Budget day: what your Budget means', () => {
     ).toBeInTheDocument();
   });
 
-  it('gives the reasons and the decisions behind them, and shows its workings on request', () => {
+  it('gives the reasons and the decisions behind them, and every rule on request', () => {
     // Health, schools and prisons all up a tenth: about £35bn a year against £6.8bn of headroom.
     at(`${BASE}&${EMPTY}&L=dhsc.10_dfe.10_moj.10`);
     const markets = card('The markets');
@@ -129,13 +129,12 @@ describe('Budget day: what your Budget means', () => {
     expect(
       screen.getByText(/^Missed on these numbers: the day-to-day rule by £\d+\.\dbn/),
     ).toBeInTheDocument();
-    // Every rule, its points, its reading and its sources sit behind "Why this rating".
+    // Every rule, its points and its reading sit behind "Why this rating".
     fireEvent.click(within(markets).getByText(/^Why this rating/));
     expect(
       within(markets).getByText(/Headroom against the day-to-day rule: −£/),
     ).toBeInTheDocument();
     expect(within(markets).getAllByText(/Every audience starts at three/).length).toBe(1);
-    expect(within(markets).getAllByRole('link').length).toBeGreaterThan(0);
   });
 
   it('pins the public at Furious when a manifesto red line is crossed', () => {
@@ -201,9 +200,6 @@ describe('Budget day: what your Budget means', () => {
     expect(screen.getByText('Economic assumptions: today’s estimate.')).toBeInTheDocument();
     expect(screen.getByText(/this game uses today’s estimate in its place/)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'the one you opened' })).toBeNull();
-    // The tests run with the workings on, so the rules in full and the paths are there too.
-    expect(screen.getByText('The rules in full')).toBeInTheDocument();
-    expect(screen.getByText('Five-year paths')).toBeInTheDocument();
     await new Promise((r) => setTimeout(r, 200));
     expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.5/);
   });

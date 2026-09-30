@@ -14,7 +14,7 @@ function show(m: Milestone): string {
 
 /**
  * Reference points beside a spending control: what this budget has done before, and the targets.
- * One click away whatever the workings switch says, with each figure's note and source beneath it.
+ * One click away, with each figure's note beneath it.
  */
 export function Milestones({ milestones }: { milestones: readonly Milestone[] }) {
   return (

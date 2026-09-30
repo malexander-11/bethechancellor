@@ -239,9 +239,8 @@ export function MethodologyPage() {
 
       <h2>The workings</h2>
       <p>
-        The sources, the provenance drawers and the breakdown tables sat behind a &ldquo;Show
-        workings&rdquo; switch at the foot of every page, off by default. For now the switch is
-        withdrawn and the game&rsquo;s screens show none of them. Nothing else changes: every figure
+        The game&rsquo;s screens show no sources, provenance drawers or breakdown tables: the
+        &ldquo;Show workings&rdquo; view that held them was withdrawn and then deleted. Every figure
         is still an official number or arithmetic on one, though since ADR-0034 no screen labels
         which. This page and the About page, which lists every source, are the workings.
       </p>
@@ -276,10 +275,10 @@ export function MethodologyPage() {
         March is never counted as yours. Each card shows one reason, which always agrees with its
         rating, and one short line for anything that pulled the other way. Every threshold, point
         and sentence is written in the data as the game&rsquo;s judgement; &ldquo;Why this
-        rating&rdquo; on each card lists every rule with its points, the figure it read, the
-        decisions behind it and, with the workings on, its sources. Nothing predicts what a market
-        or a voter would actually do: the cards say what a judgement leans on, and the thresholds
-        are the game&rsquo;s own, written down in ADR-0013 and revised in ADR-0026.
+        rating&rdquo; on each card lists every rule with its points, the figure it read and the
+        decisions behind it. Nothing predicts what a market or a voter would actually do: the cards
+        say what a judgement leans on, and the thresholds are the game&rsquo;s own, written down in
+        ADR-0013 and revised in ADR-0026.
       </p>
 
       <h2>Why it looks plain</h2>

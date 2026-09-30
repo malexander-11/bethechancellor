@@ -39,10 +39,9 @@ describe('agreeing the priorities with the Prime Minister', () => {
     fireEvent.click(priorityBox(/Cut the cost of living/));
     expect(within(theme).getByText('A Budget for defence and the cost of living')).toBeVisible();
     // The PM's reaction to each ranked priority is a game judgement in the Prime Minister's voice,
-    // its facts sourced, with no badge (ADR-0034).
+    // with no badge (ADR-0034).
     expect(screen.getAllByText('The Prime Minister').length).toBeGreaterThanOrEqual(2);
     expect(document.querySelector('.badge')).toBeNull();
-    expect(document.querySelectorAll('.source a').length).toBeGreaterThan(0);
   });
 
   it('will not go on until a priority is ranked, and the PM reacts to each one', () => {

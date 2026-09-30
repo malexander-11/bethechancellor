@@ -403,14 +403,13 @@ describe('a row in a decision’s card (ADR-0037)', () => {
 });
 
 describe('everything else about a lever, in its card’s fold (ADR-0037)', () => {
-  it('holds the headline, a budget’s cash and milestones, its tags, and the workings', () => {
+  it('holds the headline, a budget’s cash and milestones, its tags, and what it assumes', () => {
     const dhsc = lever('dhsc');
     const { container } = render(
       <LeverAbout
         lever={dhsc}
         name="Health and social care"
         value={1}
-        effect={effectAt({ dhsc: 1 }, 'dhsc')}
         summaryYear="2029-30"
         headingLevel={4}
       />,
@@ -428,10 +427,6 @@ describe('everything else about a lever, in its card’s fold (ADR-0037)', () =>
     expect(scope.getByText('Barnett applies')).toBeInTheDocument();
     expect(scope.getByText('Protected')).toBeInTheDocument();
     expect(scope.getByText('What this assumes')).toBeInTheDocument();
-    // The workings are on outside the app's provider: where the number comes from, one click away.
-    fireEvent.click(scope.getByRole('button', { name: /Detail and sources/ }));
-    expect(scope.getByText(/Spending Review 2025 rows/)).toBeInTheDocument();
-    expect(scope.getAllByText(/would also raise those block grants/)).toHaveLength(1);
   });
 
   it('names when a measure can start, and what it counts the same money as, and why', () => {
