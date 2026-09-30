@@ -1,5 +1,6 @@
 import { computeOutcome, finetuneItems, scaleLevels } from '@btc/engine';
 import { fireEvent, render, screen, within } from '@testing-library/react';
+import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { finetune, levers, rules, vintage } from '../data';
 import { effectPhrase, LeverAbout, LeverRow, wouldPhrase } from './LeverRow';
@@ -399,6 +400,40 @@ describe('a row in a decision’s card (ADR-0037)', () => {
       'tag--warn',
     );
     expect(within(against.container).queryByText(/Settled lower/)).toBeNull();
+  });
+});
+
+describe('focus after Undo (2026-09-30)', () => {
+  /** A row that keeps its own value, as a card's state does. */
+  function Row({ code, levels, name }: { code: string; levels: readonly number[]; name: string }) {
+    const [value, setValue] = useState(1);
+    return (
+      <LeverRow
+        lever={lever(code)}
+        value={value}
+        summaryYear="2029-30"
+        name={name}
+        onChange={setValue}
+        levels={levels}
+      />
+    );
+  }
+
+  it('lands on the box that was undone, not on the page, when the button goes', () => {
+    render(<Row code="vatfood" levels={[1]} name="Food" />);
+    const undo = screen.getByRole('button', { name: 'Undo for Food' });
+    undo.focus();
+    fireEvent.click(undo);
+    expect(screen.queryByRole('button', { name: 'Undo for Food' })).toBeNull();
+    const box = screen.getByRole('checkbox', { name: 'Food' });
+    expect(box).not.toBeChecked();
+    expect(box).toHaveFocus();
+  });
+
+  it('lands on the plan on a scale', () => {
+    render(<Row code="dhsc" levels={levelsOf('dhsc')} name="Health and social care" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Undo for Health and social care' }));
+    expect(screen.getByRole('radio', { checked: true })).toHaveFocus();
   });
 });
 

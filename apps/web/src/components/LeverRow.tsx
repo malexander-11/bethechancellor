@@ -6,7 +6,7 @@ import {
   type LeverEffect,
   type SimulatedLine,
 } from '@btc/engine';
-import { useId, type ReactNode } from 'react';
+import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { finetuneName, levers, vintage } from '../data';
 import {
   UNCHANGED_BELOW_GBPM,
@@ -187,6 +187,15 @@ export function LeverRow({
   const rest = lever.control.default;
   const isDefault = value === rest;
   const tick = levels.length === 1;
+  // Undo goes with the change it undoes, so focus moves to the control it put back: the box, or
+  // the plan on a scale. Left alone, it would fall to the top of the page.
+  const row = useRef<HTMLDivElement>(null);
+  const undone = useRef(false);
+  useEffect(() => {
+    if (!undone.current || !isDefault) return;
+    undone.current = false;
+    row.current?.querySelector<HTMLInputElement>(tick ? 'input' : 'input:checked')?.focus();
+  }, [isDefault, tick]);
   // Moved to a setting none of its levels is: an old link, or a flagship's value left behind.
   const offGrid = !isDefault && !levels.some((v) => Math.abs(v - value) < 1e-9);
   // A row a flagship holds the other of a pair on stays in the tab order but does not move.
@@ -232,6 +241,7 @@ export function LeverRow({
 
   return (
     <div
+      ref={row}
       className={`tune__row${tick ? ' tune__row--tick' : ''}${isDefault ? '' : ' tune__row--on'}${blocked ? ' tune__row--blocked' : ''}`}
     >
       {tick ? (
@@ -353,7 +363,14 @@ export function LeverRow({
         ) : null}
         {isDefault ? null : children}
         {isDefault ? null : (
-          <button type="button" className="linklike tune__row-undo" onClick={() => change(rest)}>
+          <button
+            type="button"
+            className="linklike tune__row-undo"
+            onClick={() => {
+              undone.current = true;
+              change(rest);
+            }}
+          >
             Undo<span className="sr-only"> for {name}</span>
           </button>
         )}

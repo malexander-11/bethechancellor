@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- Focus no longer falls to the top of the page when a button removes itself. Undo moves it to the
+  control it put back (the box, or the plan on a scale), and dismissing the note about a link moves
+  it to the start of the screen.
 - A link whose `#` part is not valid percent-encoding opens its page instead of a blank one, and a
   fault while drawing any screen now shows a plain page with a way on rather than nothing.
 - The address bar keeps up with the game. A change followed at once by moving to the next screen no

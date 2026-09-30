@@ -15,6 +15,17 @@ function at(path: string) {
   );
 }
 
+describe('the note about a link (2026-09-30)', () => {
+  it('goes when dismissed, leaving focus at the start of the screen rather than nowhere', () => {
+    at(`/outlook?${BASE}&L=itbr.1`);
+    const dismiss = screen.getByRole('button', { name: 'Dismiss the note about this link' });
+    dismiss.focus();
+    fireEvent.click(dismiss);
+    expect(screen.queryByRole('note', { name: 'About this link' })).toBeNull();
+    expect(document.getElementById('main')).toHaveFocus();
+  });
+});
+
 describe('the road runs one way', () => {
   it('sends a game that jumps ahead back to the furthest open stage', () => {
     // Agreed with the PM (st.2), so the flagship policies are open and the review is not; with

@@ -27,7 +27,11 @@ function LinkNote() {
       <button
         type="button"
         className="linklike"
-        onClick={() => dispatch({ type: 'dismissWarnings' })}
+        onClick={() => {
+          // The note goes with the click: focus waits at the start of the screen, not nowhere.
+          document.getElementById('main')?.focus({ preventScroll: true });
+          dispatch({ type: 'dismissWarnings' });
+        }}
       >
         Dismiss<span className="sr-only"> the note about this link</span>
       </button>
