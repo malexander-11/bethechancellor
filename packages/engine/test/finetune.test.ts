@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
   FINETUNE_SIDES,
-  WHO_PAYS,
   basicPolicy,
   deskLevers,
   finetuneFileSchema,
   finetuneItems,
   finetuneNames,
   finetuneSideOf,
+  groupItems,
   leadPolicy,
   policyCount,
   priceMove,
@@ -32,61 +32,64 @@ const lever = (code: string) => {
 };
 
 /**
- * The taxes, in the order the tax screen shows them (Phase 24, ADR-0025). Phase 25 added the two
- * cuts a Chancellor actually faces this autumn: keeping VAT off electricity (third in "Everyone",
- * the main VAT rate folded) and freezing fuel duty (first for drivers, last year's cancelled rise
- * folded). Phase 26 folds every other tax into its who-pays group, the toggles and then the
- * rates, after the hand-picked ones and before any lever not on the table (ADR-0027). Nine went
- * on 30 September 2026, kept for the record and offered nowhere (ADR-0035).
+ * The taxes, in the order the tax screen shows them (ADR-0035): tax by tax, each section named for
+ * its levers' family and holding the decisions a Chancellor takes about that tax, each decision its
+ * levers, realistic choices before any not on the table. Until 30 September 2026 the screen grouped
+ * taxes by who pays them (Phase 24, ADR-0025); that day nine went, kept for the record and offered
+ * nowhere, and the rest were sorted by tax.
  */
-const TAX_CODES = [
-  [
-    'everyone',
-    // prettier-ignore
-    [
-      'itbr', 'vatelec', 'vats', 'sugsalt', 'hmrc2',
-      'cta', 'nicspa', 'vatgas', 'vat1z', 'rvfrz',
-      'itpa', 'nicm', 'nica', 'nicpt', 'nic4', 'vatr',
-      'vatfood', 'vatnrg', 'vattrn', 'vatkids', 'vatbook',
-    ],
-  ],
-  [
-    'best-off',
-    // prettier-ignore
-    [
-      'nicuel', 'pens30', 'it50', 'wealth2',
-      'pens20', 'pslump', 'nicllp', 'carried', 'cgtexit', 'wealth',
-      'ithr', 'itar', 'itbrl',
-    ],
-  ],
-  [
-    'business',
-    // prettier-ignore
-    [
-      'nicpen', 'nicer', 'qelevy', 'ct', 'banklevy',
-      'bank5', 'epl2',
-      'nicst', 'brates',
-    ],
-  ],
-  [
-    'savers-owners',
-    // prettier-ignore
-    [
-      'ctgh', 'cgtdth', 'rnrb', 'iinc2',
-      'sdltabol', 'hvcts15', 'rvcgt', 'rvinv', 'rvapr', 'rvhrad',
-      'iht', 'sdlt5', 'cgth', 'cgtl',
-      'cgtprr', 'vathome',
-    ],
-  ],
-  [
-    'duties',
-    // prettier-ignore
-    [
-      'fuelfrz', 'gam2', 'tob', 'ved', 'apd',
-      'vatmot',
-      'fuel', 'alc',
-    ],
-  ],
+type TaxTable = [section: string, label: string, decisions: [string, string, string[]][]][];
+// prettier-ignore
+const TAX: TaxTable = [
+  ['income-tax', 'Income tax', [
+    ['income-tax-rates', 'Change the rates', ['itbr', 'ithr', 'itar', 'it50']],
+    ['income-tax-allowances', 'Change allowances and thresholds', ['itpa', 'itbrl', 'rvfrz', 'cta']],
+    ['pension-relief', 'Change pension tax relief', ['pens30', 'pens20', 'pslump']],
+    ['investment-income', 'Tax on dividends, savings and rent', ['iinc2', 'rvinv']],
+  ]],
+  ['national-insurance', 'National Insurance', [
+    ['nics-employees', 'Change what employees pay', ['nicm', 'nica', 'nicpt', 'nicuel', 'nicspa']],
+    ['nics-self-employed', 'Change what the self-employed pay', ['nic4', 'nicllp']],
+    ['nics-employers', 'Change what employers pay', ['nicer', 'nicst', 'nicpen']],
+  ]],
+  ['vat', 'VAT', [
+    ['vat-rate', 'Change the headline rate', ['vats']],
+    ['vat-small-changes', 'Make small changes', ['vatgas', 'vatelec', 'vatr', 'vat1z']],
+    ['vat-exemptions', 'Remove an exemption',
+      ['vatmot', 'vatfood', 'vatnrg', 'vattrn', 'vatkids', 'vathome', 'vatbook']],
+  ]],
+  ['capital-gains-tax', 'Capital gains tax', [
+    ['cgt-rates', 'Change the rates on gains', ['cgth', 'cgtl', 'rvcgt', 'carried']],
+    ['cgt-untaxed-gains', 'Tax gains that go untaxed', ['cgtdth', 'cgtexit', 'cgtprr']],
+  ]],
+  ['inheritance-tax', 'Inheritance tax', [
+    ['iht-rate', 'Change the rate', ['iht']],
+    ['iht-reliefs', 'Change the reliefs', ['rnrb', 'rvapr']],
+  ]],
+  ['wealth-tax', 'Wealth tax', [
+    ['wealth-above-10m', 'Tax wealth above £10 million', ['wealth', 'wealth2']],
+  ]],
+  ['council-tax', 'Council tax', [
+    ['council-tax-top', 'Charge the biggest homes more', ['ctgh', 'hvcts15']],
+  ]],
+  ['stamp-duty', 'Stamp duty', [
+    ['stamp-duty-band', 'Change the 5% band', ['sdlt5']],
+    ['stamp-duty-cuts', 'Cut it for some buyers', ['sdltabol', 'rvhrad']],
+  ]],
+  ['business-taxes', 'Business taxes', [
+    ['corporation-tax', 'Change corporation tax', ['ct']],
+    ['business-rates', 'Change business rates', ['brates']],
+    ['banks-energy', 'Tax banks and energy firms more', ['qelevy', 'banklevy', 'bank5', 'epl2']],
+  ]],
+  ['duties', 'Duties', [
+    ['fuel-duty', 'Change fuel duty', ['fuelfrz', 'fuel']],
+    ['drink-tobacco-gambling', 'Tax drink, tobacco and gambling', ['alc', 'tob', 'gam2']],
+    ['cars-flights', 'Tax cars and flights more', ['ved', 'apd']],
+    ['sugar-salt', 'Tax sugar and salt in food', ['sugsalt']],
+  ]],
+  ['tax-gap', 'The tax gap', [
+    ['unpaid-tax', 'Chase more unpaid tax', ['hmrc2']],
+  ]],
 ];
 
 const SPENDING_CODES = [
@@ -113,8 +116,15 @@ const SPENDING_CODES = [
 ];
 
 describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
-  it('offers sixty-seven taxes in five who-pays groups, and thirty-two spending levers in four', () => {
-    expect(file.tax.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(TAX_CODES);
+  it('offers sixty-seven taxes in twenty-six decisions about eleven taxes, and thirty-two spending levers', () => {
+    expect(
+      file.tax.groups.map((g) => [
+        g.id,
+        g.label,
+        g.decisions.map((d) => [d.id, d.title, d.items.map((i) => i.code)]),
+      ]),
+    ).toEqual(TAX);
+    expect(file.tax.groups.flatMap((g) => g.decisions)).toHaveLength(26);
     expect(file.spending.groups.map((g) => [g.id, g.items.map((i) => i.code)])).toEqual(
       SPENDING_CODES,
     );
@@ -136,13 +146,51 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     expect(names.get('rvwfp')).toBe('Limit winter fuel payments to pensioners on pension credit');
   });
 
-  it('puts each lever on its own side of the Budget, and each tax with the people who pay it', () => {
+  it('puts each lever on its own side of the Budget, and each tax in the section for its family', () => {
     for (const item of finetuneItems(file)) {
       expect(finetuneSideOf(lever(item.code)), item.code).toBe(item.side);
+      // A tax's family, the lever file's own group, is the one record of which tax it is.
       if (item.side === 'tax') {
-        expect(WHO_PAYS[item.group.id], item.code).toContain(ds.incidence.levers[item.code]);
+        expect(lever(item.code).group, item.code).toBe(item.group.label);
+        expect(item.decision?.items.map((i) => i.code)).toContain(item.code);
+      } else {
+        expect(item.decision, item.code).toBeUndefined();
       }
     }
+    // Every family a live tax lever has is a section, and every section is a family.
+    const families = new Set(
+      ds.levers.filter((l) => !l.deprecated && l.category === 'tax').map((l) => l.group),
+    );
+    expect([...families].sort()).toEqual(file.tax.groups.map((g) => g.label).sort());
+    // A section's levers, across its decisions; a spending group's, as they come.
+    const vat = file.tax.groups.find((g) => g.id === 'vat');
+    if (!vat) throw new Error('no VAT section');
+    expect(groupItems(vat).map((i) => i.code)).toEqual(
+      TAX.find(([id]) => id === 'vat')?.[2].flatMap(([, , codes]) => codes),
+    );
+    expect(groupItems(file.spending.groups[1]!).map((i) => i.code)).toEqual(SPENDING_CODES[1]![1]);
+  });
+
+  it('keeps each decision to seven levers, and a lever not on the table at the end of it', () => {
+    for (const decision of file.tax.groups.flatMap((g) => g.decisions)) {
+      expect(decision.items.length, decision.id).toBeLessThanOrEqual(7);
+      const off = decision.items.map((i) => lever(i.code).notOnTheTable !== undefined);
+      expect(off, decision.id).toEqual([...off].sort((a, b) => Number(a) - Number(b)));
+    }
+    // The user's own list of exemptions: Motability first, the one a Chancellor might end; the
+    // six nobody proposes to tax after it, marked as not on the table, books among them.
+    const exemptions = file.tax.groups
+      .flatMap((g) => g.decisions)
+      .find((d) => d.id === 'vat-exemptions');
+    expect(exemptions?.items.map((i) => Boolean(lever(i.code).notOnTheTable))).toEqual([
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+    ]);
   });
 
   it('offers policies whose sizes each lever can reach, one way each (Phase 26)', () => {
@@ -229,14 +277,34 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     expect(setByFlagship(status, {}, ds.levers).size).toBe(0);
   });
 
-  it('refuses a lever offered twice and two groups under one name', () => {
-    const twice: FinetuneFile = structuredClone(file);
-    twice.spending.groups[0]!.items.push({ ...twice.tax.groups[0]!.items[1]! });
-    expect(finetuneFileSchema.safeParse(twice).success).toBe(false);
-    const named: FinetuneFile = structuredClone(file);
-    named.tax.groups[1]!.id = named.tax.groups[0]!.id;
-    expect(finetuneFileSchema.safeParse(named).success).toBe(false);
-    expect(finetuneFileSchema.safeParse(file).success).toBe(true);
+  it('refuses a lever offered twice, two taxes or decisions under one name, and a crowded decision', () => {
+    const refusal = (patch: (f: FinetuneFile) => void) => {
+      const copy: FinetuneFile = structuredClone(file);
+      patch(copy);
+      const parsed = finetuneFileSchema.safeParse(copy);
+      return parsed.success ? '' : parsed.error.issues.map((i) => i.message).join('\n');
+    };
+    const decisions = (f: FinetuneFile) => f.tax.groups.flatMap((g) => g.decisions);
+    expect(
+      refusal((f) => f.spending.groups[0]!.items.push({ ...decisions(f)[0]!.items[1]! })),
+    ).toMatch(/lever ithr is offered twice/);
+    expect(refusal((f) => (f.tax.groups[1]!.id = f.tax.groups[0]!.id))).toMatch(
+      /two tax groups are called income-tax/,
+    );
+    expect(refusal((f) => (f.tax.groups[1]!.label = f.tax.groups[0]!.label))).toMatch(
+      /two tax sections are called Income tax/,
+    );
+    expect(refusal((f) => (decisions(f)[5]!.id = decisions(f)[0]!.id))).toMatch(
+      /two tax decisions are called income-tax-rates/,
+    );
+    // Eight levers in one decision: VAT's gas moved in among the exemptions.
+    expect(
+      refusal((f) => {
+        const [small, exemptions] = [decisions(f)[8]!, decisions(f)[9]!];
+        exemptions.items.push(small.items.shift()!);
+      }),
+    ).toMatch(/expected array to have <=7 items/);
+    expect(refusal(() => undefined)).toBe('');
   });
 
   it('validate:data names each way a screen can be wrong', () => {
@@ -245,16 +313,21 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
       patch(copy);
       return validateDataset({ ...ds, finetune: copy }).join('\n');
     };
+    const decisionOf = (f: FinetuneFile, id: string) =>
+      f.tax.groups.flatMap((g) => g.decisions).find((d) => d.id === id)!;
     const byCode = (f: FinetuneFile, code: string) =>
-      f.tax.groups.flatMap((g) => g.items).find((i) => i.code === code)!;
+      f.tax.groups
+        .flatMap((g) => g.decisions)
+        .flatMap((d) => d.items)
+        .find((i) => i.code === code)!;
     const first = (f: FinetuneFile) => byCode(f, 'itbr');
     expect(tamper((f) => (first(f).code = 'nosuch'))).toMatch(/offers unknown lever "nosuch"/);
     expect(tamper((f) => f.spending.groups[0]!.items.push({ ...first(f), code: 'water' }))).toMatch(
       /offers shelved lever water/,
     );
-    expect(tamper((f) => f.tax.groups[0]!.items.push({ ...first(f), code: 'dhsc' }))).toMatch(
-      /the tax screen offers dhsc, a spend lever/,
-    );
+    expect(
+      tamper((f) => decisionOf(f, 'income-tax-rates').items.push({ ...first(f), code: 'dhsc' })),
+    ).toMatch(/the tax screen offers dhsc, a spend lever/);
     const up = (f: FinetuneFile) => first(f).policies[0]!;
     expect(tamper((f) => (up(f).sizes = [9]))).toMatch(/offers 9, outside the lever's range/);
     expect(tamper((f) => (up(f).sizes = [0]))).toMatch(/offers 0, where the lever rests/);
@@ -268,20 +341,24 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     expect(tamper((f) => (byCode(f, 'vatelec').policies[0]!.sizes = [1, 1]))).toMatch(
       /is a toggle: it is switched on, in one size/,
     );
-    // A lever not on the table comes after the rest of its group, as the desk sorted them.
+    // A lever not on the table comes after the rest of its decision, as the desk sorted them.
     expect(
-      tamper((f) =>
-        f.tax.groups[0]!.items.unshift({
-          code: 'vatfood',
-          policies: [{ ...byCode(f, 'vatelec').policies[0]!, title: 'Charge VAT on food' }],
-        }),
-      ),
-    ).toMatch(/itbr comes after vatfood, which is not on the table/);
-    expect(tamper((f) => f.tax.groups[1]!.items.push(first(f)))).toMatch(
-      /tax lever itbr falls on broad-base, not on group best-off/,
-    );
-    expect(tamper((f) => (f.tax.groups[0]!.id = 'nobody'))).toMatch(
-      /tax group nobody is not one of the who-pays groups/,
+      tamper((f) => {
+        const exemptions = decisionOf(f, 'vat-exemptions');
+        exemptions.items.push(exemptions.items.shift()!);
+      }),
+    ).toMatch(/vatmot comes after vatfood, which is not on the table/);
+    // A tax sits in the section for its family, whichever decision it is in.
+    expect(
+      tamper((f) => {
+        const rates = decisionOf(f, 'income-tax-rates');
+        const itbr = first(f);
+        rates.items = rates.items.filter((i) => i !== itbr);
+        decisionOf(f, 'vat-rate').items.push(itbr);
+      }),
+    ).toMatch(/tax lever itbr is in the Income tax family, not VAT/);
+    expect(tamper((f) => (f.tax.groups[0]!.label = 'Taxes on income'))).toMatch(
+      /tax lever itbr is in the Income tax family, not Taxes on income/,
     );
     expect(tamper((f) => (f.spending.adviser = 'nobody'))).toMatch(
       /the spending screen names unknown adviser nobody/,
@@ -298,13 +375,13 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
  * it checkable. Each pick's reason is its own adviser line, already on its card.
  */
 const TAX_PICKS = [
-  ['everyone', 'vatelec', 'Keep VAT off electricity after March 2027'],
-  ['best-off', 'pens30', 'Give everyone the same 30% pension tax relief'],
-  ['business', 'nicpen', 'Charge employer National Insurance on pension contributions'],
-  ['business', 'nicer', 'Put up employer National Insurance'],
-  ['savers-owners', 'ctgh', 'Double council tax on the biggest homes (bands G and H)'],
-  ['savers-owners', 'cgtdth', 'Tax capital gains when someone dies'],
-  ['savers-owners', 'rnrb', 'End the extra inheritance tax allowance for family homes'],
+  ['income-tax', 'pens30', 'Give everyone the same 30% pension tax relief'],
+  ['national-insurance', 'nicer', 'Put up employer National Insurance'],
+  ['national-insurance', 'nicpen', 'Charge employer National Insurance on pension contributions'],
+  ['vat', 'vatelec', 'Keep VAT off electricity after March 2027'],
+  ['capital-gains-tax', 'cgtdth', 'Tax capital gains when someone dies'],
+  ['inheritance-tax', 'rnrb', 'End the extra inheritance tax allowance for family homes'],
+  ['council-tax', 'ctgh', 'Double council tax on the biggest homes (bands G and H)'],
   ['duties', 'gam2', 'Put gambling duties up again'],
 ];
 
@@ -343,15 +420,19 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
       expect(shortlistPolicy(entry)).toBe(entry.pick);
     }
     expect(item('dhsc').policies[1]?.shortlist).toBe(true);
-    // Every group has a pick, so basic mode never shows an empty group on arrival.
-    for (const side of FINETUNE_SIDES) {
-      for (const group of file[side].groups) {
-        expect(
-          shortlistOf(file, side).some((p) => p.group.id === group.id),
-          group.id,
-        ).toBe(true);
-      }
+    // Every spending group has a pick, so basic mode never shows an empty group on arrival. Four
+    // taxes have none, and basic mode leaves them out (ADR-0035).
+    for (const group of file.spending.groups) {
+      expect(
+        shortlistOf(file, 'spending').some((p) => p.group.id === group.id),
+        group.id,
+      ).toBe(true);
     }
+    expect(
+      file.tax.groups
+        .filter((g) => !shortlistOf(file, 'tax').some((p) => p.group.id === g.id))
+        .map((g) => g.id),
+    ).toEqual(['wealth-tax', 'stamp-duty', 'business-taxes', 'tax-gap']);
     expect(file.tax.shortlistLead).toBe(
       'Your Director of Tax’s best ideas. Watch your headroom move.',
     );
@@ -418,7 +499,7 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
       );
     };
     const find = (f: FinetuneFile, code: string) => {
-      const found = [...f.tax.groups, ...f.spending.groups]
+      const found = [...f.tax.groups.flatMap((g) => g.decisions), ...f.spending.groups]
         .flatMap((g) => g.items)
         .find((i) => i.code === code);
       if (!found) throw new Error(`no step-4 lever ${code}`);
@@ -441,7 +522,9 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
     expect(tamper((f) => ['sugsalt', 'hmrc2', 'apd'].forEach((code) => pick(code)(f)))).toMatch(
       /the tax screen picks 11 policies, not six to ten/,
     );
-    expect(tamper(unpick('gam2'))).toMatch(/tax group duties has no pick/);
+    // A spending group needs a pick; a tax does without, and basic mode leaves it out.
+    expect(tamper(unpick('rvpip', 'rvwfp'))).toMatch(/spending group decisions has no pick/);
+    expect(tamper(unpick('gam2'))).toBe('');
     expect(tamper(pick('cgtprr'))).toMatch(
       /picks “Charge capital gains tax on main homes”, which is not on the table/,
     );
@@ -452,7 +535,7 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
       /picks “Put up the basic rate of income tax”, which breaks The tax lock/,
     );
     expect(tamper(pick('cgtexit'))).toMatch(
-      /“Charge capital gains tax on people who leave the UK” and “Tax capital gains when someone dies” count the same money/,
+      /“Tax capital gains when someone dies” and “Charge capital gains tax on people who leave the UK” count the same money/,
     );
     // A pick may not count the same money as a lever already on the desk.
     expect(tamper(pick('def3'))).toMatch(

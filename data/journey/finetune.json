@@ -7,1454 +7,1594 @@
     "adviser": "director-of-tax",
     "groups": [
       {
-        "id": "everyone",
-        "label": "Everyone",
-        "items": [
+        "id": "income-tax",
+        "label": "Income tax",
+        "decisions": [
           {
-            "code": "itbr",
-            "name": "The basic rate of income tax",
-            "policies": [
+            "id": "income-tax-rates",
+            "title": "Change the rates",
+            "items": [
               {
-                "title": "Put up the basic rate of income tax",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Big money; Scotland sets its own rates on wages and pensions.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06",
-                      "table": "Publication_Format"
-                    },
-                    {
-                      "sourceId": "labour-manifesto-2024-strong-foundations"
-                    },
-                    {
-                      "sourceId": "govuk-scottish-income-tax",
-                      "quote": "Scottish Income Tax applies to your wages, pension and most other taxable income."
+                "code": "itbr",
+                "name": "The basic rate of income tax",
+                "policies": [
+                  {
+                    "title": "Put up the basic rate of income tax",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Big money; Scotland sets its own rates on wages and pensions.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06",
+                          "table": "Publication_Format"
+                        },
+                        {
+                          "sourceId": "labour-manifesto-2024-strong-foundations"
+                        },
+                        {
+                          "sourceId": "govuk-scottish-income-tax",
+                          "quote": "Scottish Income Tax applies to your wages, pension and most other taxable income."
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Cut the basic rate of income tax",
+                    "sizes": [-1, -2, -3],
+                    "advice": {
+                      "text": "Big money back; Scotland sets its own rates on wages and pensions.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-scottish-income-tax"
+                        }
+                      ]
+                    }
+                  }
+                ]
               },
               {
-                "title": "Cut the basic rate of income tax",
-                "sizes": [-1, -2, -3],
-                "advice": {
-                  "text": "Big money back; Scotland sets its own rates on wages and pensions.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-scottish-income-tax"
+                "code": "ithr",
+                "name": "The higher rate of income tax",
+                "policies": [
+                  {
+                    "title": "Put up the higher rate of income tax",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Paid by higher earners, a group the freeze keeps growing.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "vatelec",
-            "policies": [
-              {
-                "title": "Keep VAT off electricity after March 2027",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "The zero rate ends in March; keeping it holds bills down.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-vat-notice-701-19",
-                      "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027."
-                    },
-                    {
-                      "sourceId": "govuk-vat-electricity-cut-2026"
+                  },
+                  {
+                    "title": "Cut the higher rate of income tax",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Higher earners gain, a group the freeze keeps growing.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "vats",
-            "name": "The main rate of VAT",
-            "policies": [
-              {
-                "title": "Put up VAT",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Big, and felt on every till receipt.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06",
-                      "table": "Publication_Format"
-                    },
-                    {
-                      "sourceId": "labour-manifesto-2024-strong-foundations"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut VAT",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Big money; the cut reaches prices only if shops pass it on.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-trr-2025-06-bulletin"
+                "code": "itar",
+                "name": "The additional rate of income tax",
+                "policies": [
+                  {
+                    "title": "Put up the additional rate of income tax",
+                    "sizes": [1, 2],
+                    "advice": {
+                      "text": "Raises little: top earners respond strongly to a higher rate.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-trr-2025-06-bulletin"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "sugsalt",
-            "policies": [
-              {
-                "title": "A new tax on sugar and salt in food",
-                "sizes": [1],
-                "advice": {
-                  "text": "Years to set up, and it shrinks as recipes change.",
-                  "sources": [
-                    {
-                      "sourceId": "rf-call-of-duties-2025"
+                  },
+                  {
+                    "title": "Cut the additional rate of income tax",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "A cut for top earners, who respond strongly to their rate.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-trr-2025-06-bulletin"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "hmrc2",
-            "policies": [
-              {
-                "title": "Another push to close the tax gap",
-                "sizes": [1],
-                "advice": {
-                  "text": "A repeat of last year’s package; nobody has costed a further round.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1",
-                      "table": "Table 4.1"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "cta",
-            "policies": [
-              {
-                "title": "A child tax allowance for under-fives",
-                "sizes": [1],
-                "advice": {
-                  "text": "Starts in 2028; parents who pay no income tax gain nothing.",
-                  "sources": [
-                    {
-                      "sourceId": "onward-family-support-2026"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "nicspa",
-            "policies": [
-              {
-                "title": "Charge National Insurance to workers over state pension age",
-                "sizes": [1],
-                "advice": {
-                  "text": "Some older workers would cut their hours or stop.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tax-reliefs-quality-report"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "vatgas",
-            "policies": [
-              {
-                "title": "Take VAT off gas too",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small; every home heated by gas or oil gains.",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-vat-electricity-cut-2026"
-                    },
-                    {
-                      "sourceId": "hmrc-tax-reliefs-2026-01"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "vat1z",
-            "policies": [
-              {
-                "title": "Charge 1% VAT on everything now zero-rated",
-                "sizes": [1],
-                "advice": {
-                  "text": "A new VAT rate on food and children’s clothes, paid by everyone.",
-                  "sources": [
-                    {
-                      "sourceId": "ifs-green-budget-2025"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rvfrz",
-            "policies": [
-              {
-                "title": "End the threshold freeze early",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big money back to every taxpayer, from 2028.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "itpa",
-            "name": "The personal allowance",
-            "policies": [
-              {
-                "title": "Raise the personal allowance",
-                "sizes": [100, 1250],
-                "advice": {
-                  "text": "Most taxpayers gain; people who pay no income tax gain nothing.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-income-tax-rates"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "nicm",
-            "name": "The main rate of National Insurance",
-            "policies": [
-              {
-                "title": "Put up National Insurance",
-                "sizes": [1, 2, 4],
-                "advice": {
-                  "text": "Big money from every employee and self-employed worker.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "labour-manifesto-2024-strong-foundations"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut National Insurance",
-                "sizes": [-1, -2, -4],
-                "advice": {
-                  "text": "Big money back to every employee and self-employed worker.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
+                "code": "it50",
+                "policies": [
+                  {
+                    "title": "A new 50% income tax rate above £125,140",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Symbolic money from the very highest earners.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06",
+                          "table": "Publication_Format"
+                        },
+                        {
+                          "sourceId": "labour-manifesto-2024-strong-foundations"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "nica",
-            "name": "National Insurance on pay above £50,270",
-            "policies": [
+            "id": "income-tax-allowances",
+            "title": "Change allowances and thresholds",
+            "items": [
               {
-                "title": "Put up National Insurance on pay above £50,270",
-                "sizes": [1, 2, 4],
-                "advice": {
-                  "text": "Higher earners pay it on every pound above the threshold.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-nics-rates"
+                "code": "itpa",
+                "name": "The personal allowance",
+                "policies": [
+                  {
+                    "title": "Raise the personal allowance",
+                    "sizes": [100, 1250],
+                    "advice": {
+                      "text": "Most taxpayers gain; people who pay no income tax gain nothing.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-income-tax-rates"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut National Insurance on pay above £50,270",
-                "sizes": [-1, -2],
-                "advice": {
-                  "text": "Higher earners gain on every pound above the threshold.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-nics-rates"
+                "code": "itbrl",
+                "name": "The higher-rate threshold",
+                "policies": [
+                  {
+                    "title": "Lower the higher-rate threshold by 10%",
+                    "sizes": [-10],
+                    "advice": {
+                      "text": "Pulls more earners into the higher rate, on top of the freeze.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "nicpt",
-            "name": "The National Insurance threshold",
-            "policies": [
-              {
-                "title": "Lower the National Insurance threshold",
-                "sizes": [-104, -208, -520],
-                "advice": {
-                  "text": "Every employee above the threshold pays the same sum more.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-nics-rates"
+                  },
+                  {
+                    "title": "Raise the higher-rate threshold",
+                    "sizes": [1, 10],
+                    "advice": {
+                      "text": "Eases the freeze that pulls more people into the higher rate.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Raise the National Insurance threshold",
-                "sizes": [104, 208, 520],
-                "advice": {
-                  "text": "Every employee above the threshold gains the same sum.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-nics-rates"
+                "code": "rvfrz",
+                "policies": [
+                  {
+                    "title": "End the threshold freeze early",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big money back to every taxpayer, from 2028.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "nic4",
-            "name": "National Insurance for the self-employed",
-            "policies": [
-              {
-                "title": "Put up National Insurance for the self-employed",
-                "sizes": [1, 2, 4],
-                "advice": {
-                  "text": "Self-employed workers pay more on every pound of profit.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-nics-rates"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "vatr",
-            "name": "The reduced rate of VAT",
-            "policies": [
-              {
-                "title": "Put up the reduced rate of VAT",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Mostly paid on home heating, so every gas bill goes up.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-vat-notice-701-19"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut the reduced rate of VAT",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Mostly paid on home heating, so every gas bill comes down.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-vat-notice-701-19"
+                "code": "cta",
+                "policies": [
+                  {
+                    "title": "A child tax allowance for under-fives",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Starts in 2028; parents who pay no income tax gain nothing.",
+                      "sources": [
+                        {
+                          "sourceId": "onward-family-support-2026"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "vatfood",
-            "policies": [
+            "id": "pension-relief",
+            "title": "Change pension tax relief",
+            "items": [
               {
-                "title": "Charge VAT on food",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big money; food is a bigger share of poorer families’ spending.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tax-reliefs-2026-01"
-                    },
-                    {
-                      "sourceId": "ifs-green-budget-2025"
+                "code": "pens30",
+                "policies": [
+                  {
+                    "title": "Give everyone the same 30% pension tax relief",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Higher-rate savers pay more; basic-rate savers gain.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-private-pensions-2026-07-tidy"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
+              },
+              {
+                "code": "pens20",
+                "policies": [
+                  {
+                    "title": "Give pension tax relief at the basic rate only",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big on paper; higher earners would put less into pensions.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-private-pensions-2026-07-tidy"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "pslump",
+                "policies": [
+                  {
+                    "title": "Cap the tax-free pension lump sum",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Savers would rush to take lump sums before it starts.",
+                      "sources": [
+                        {
+                          "sourceId": "demos-solving-the-tax-puzzle-2025"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "vatnrg",
-            "policies": [
+            "id": "investment-income",
+            "title": "Tax on dividends, savings and rent",
+            "items": [
               {
-                "title": "Charge full VAT on home energy",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big money, and it reverses this autumn’s cut on electricity.",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-vat-electricity-cut-2026"
-                    },
-                    {
-                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                "code": "iinc2",
+                "policies": [
+                  {
+                    "title": "Add another 2p to the tax on dividends, savings and rental income",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Investors pay again, on top of last year’s rise.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1",
+                          "table": "Table 4.1"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "vattrn",
-            "policies": [
+                  }
+                ]
+              },
               {
-                "title": "Charge VAT on public transport fares",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big money; bus and train users pay it on every fare.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                "code": "rvinv",
+                "policies": [
+                  {
+                    "title": "Undo last year’s rises on dividend, savings and property income",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Shareholders, savers and landlords keep more of what they earn.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "vatkids",
-            "policies": [
-              {
-                "title": "Charge VAT on children’s clothes",
-                "sizes": [1],
-                "advice": {
-                  "text": "Parents pay it on every size their children outgrow.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tax-reliefs-2026-01"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "vatbook",
-            "policies": [
-              {
-                "title": "Charge VAT on books, newspapers and magazines",
-                "sizes": [1],
-                "advice": {
-                  "text": "Readers pay it on every book and newspaper.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tax-reliefs-2026-01"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               }
             ]
           }
         ]
       },
       {
-        "id": "best-off",
-        "label": "The best-off",
-        "items": [
+        "id": "national-insurance",
+        "label": "National Insurance",
+        "decisions": [
           {
-            "code": "nicuel",
-            "policies": [
+            "id": "nics-employees",
+            "title": "Change what employees pay",
+            "items": [
               {
-                "title": "Charge full National Insurance on all earnings, however high",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big on paper; top earners would find ways to pay less.",
-                  "sources": [
-                    {
-                      "sourceId": "ifs-green-budget-2025"
-                    },
-                    {
-                      "sourceId": "labour-manifesto-2024-strong-foundations"
+                "code": "nicm",
+                "name": "The main rate of National Insurance",
+                "policies": [
+                  {
+                    "title": "Put up National Insurance",
+                    "sizes": [1, 2, 4],
+                    "advice": {
+                      "text": "Big money from every employee and self-employed worker.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "labour-manifesto-2024-strong-foundations"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "pens30",
-            "policies": [
-              {
-                "title": "Give everyone the same 30% pension tax relief",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Higher-rate savers pay more; basic-rate savers gain.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-private-pensions-2026-07-tidy"
+                  },
+                  {
+                    "title": "Cut National Insurance",
+                    "sizes": [-1, -2, -4],
+                    "advice": {
+                      "text": "Big money back to every employee and self-employed worker.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "it50",
-            "policies": [
-              {
-                "title": "A new 50% income tax rate above £125,140",
-                "sizes": [1],
-                "advice": {
-                  "text": "Symbolic money from the very highest earners.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06",
-                      "table": "Publication_Format"
-                    },
-                    {
-                      "sourceId": "labour-manifesto-2024-strong-foundations"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "wealth2",
-            "policies": [
-              {
-                "title": "A 2% yearly tax on wealth above £10 million",
-                "sizes": [1],
-                "advice": {
-                  "text": "Nothing before 2030-31, and hotly contested.",
-                  "sources": [
-                    {
-                      "sourceId": "tpa-wealth-tax-2025"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "pens20",
-            "policies": [
-              {
-                "title": "Give pension tax relief at the basic rate only",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big on paper; higher earners would put less into pensions.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-private-pensions-2026-07-tidy"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "pslump",
-            "policies": [
-              {
-                "title": "Cap the tax-free pension lump sum",
-                "sizes": [1],
-                "advice": {
-                  "text": "Savers would rush to take lump sums before it starts.",
-                  "sources": [
-                    {
-                      "sourceId": "demos-solving-the-tax-puzzle-2025"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "nicllp",
-            "policies": [
-              {
-                "title": "Charge National Insurance on partnership profits",
-                "sizes": [1],
-                "advice": {
-                  "text": "Most falls on the best-paid partners; some would restructure.",
-                  "sources": [
-                    {
-                      "sourceId": "centax-partnership-nics-2025"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "carried",
-            "policies": [
-              {
-                "title": "Tax fund managers’ carried interest as income",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small money from a few thousand fund managers, who can move.",
-                  "sources": [
-                    {
-                      "sourceId": "tjuk-ten-tax-reforms-2026"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "cgtexit",
-            "policies": [
-              {
-                "title": "Charge capital gains tax on people who leave the UK",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small, and a handful of people leaving decide what it raises.",
-                  "sources": [
-                    {
-                      "sourceId": "centax-business-owners-emigrate-2024"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "wealth",
-            "policies": [
-              {
-                "title": "A 1% yearly tax on wealth above £10 million",
-                "sizes": [1],
-                "advice": {
-                  "text": "Nothing until 2030-31, and nobody knows how the very rich would respond.",
-                  "sources": [
-                    {
-                      "sourceId": "wtc-revenue-modelling-2020"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "ithr",
-            "name": "The higher rate of income tax",
-            "policies": [
-              {
-                "title": "Put up the higher rate of income tax",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Paid by higher earners, a group the freeze keeps growing.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut the higher rate of income tax",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Higher earners gain, a group the freeze keeps growing.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "nica",
+                "name": "National Insurance on pay above £50,270",
+                "policies": [
+                  {
+                    "title": "Put up National Insurance on pay above £50,270",
+                    "sizes": [1, 2, 4],
+                    "advice": {
+                      "text": "Higher earners pay it on every pound above the threshold.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-nics-rates"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Cut National Insurance on pay above £50,270",
+                    "sizes": [-1, -2],
+                    "advice": {
+                      "text": "Higher earners gain on every pound above the threshold.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-nics-rates"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "nicpt",
+                "name": "The National Insurance threshold",
+                "policies": [
+                  {
+                    "title": "Lower the National Insurance threshold",
+                    "sizes": [-104, -208, -520],
+                    "advice": {
+                      "text": "Every employee above the threshold pays the same sum more.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-nics-rates"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  },
+                  {
+                    "title": "Raise the National Insurance threshold",
+                    "sizes": [104, 208, 520],
+                    "advice": {
+                      "text": "Every employee above the threshold gains the same sum.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-nics-rates"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "nicuel",
+                "policies": [
+                  {
+                    "title": "Charge full National Insurance on all earnings, however high",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big on paper; top earners would find ways to pay less.",
+                      "sources": [
+                        {
+                          "sourceId": "ifs-green-budget-2025"
+                        },
+                        {
+                          "sourceId": "labour-manifesto-2024-strong-foundations"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "nicspa",
+                "policies": [
+                  {
+                    "title": "Charge National Insurance to workers over state pension age",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Some older workers would cut their hours or stop.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tax-reliefs-quality-report"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "itar",
-            "name": "The additional rate of income tax",
-            "policies": [
+            "id": "nics-self-employed",
+            "title": "Change what the self-employed pay",
+            "items": [
               {
-                "title": "Put up the additional rate of income tax",
-                "sizes": [1, 2],
-                "advice": {
-                  "text": "Raises little: top earners respond strongly to a higher rate.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-trr-2025-06-bulletin"
+                "code": "nic4",
+                "name": "National Insurance for the self-employed",
+                "policies": [
+                  {
+                    "title": "Put up National Insurance for the self-employed",
+                    "sizes": [1, 2, 4],
+                    "advice": {
+                      "text": "Self-employed workers pay more on every pound of profit.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-nics-rates"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut the additional rate of income tax",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "A cut for top earners, who respond strongly to their rate.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-trr-2025-06-bulletin"
+                "code": "nicllp",
+                "policies": [
+                  {
+                    "title": "Charge National Insurance on partnership profits",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Most falls on the best-paid partners; some would restructure.",
+                      "sources": [
+                        {
+                          "sourceId": "centax-partnership-nics-2025"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "itbrl",
-            "name": "The higher-rate threshold",
-            "policies": [
+            "id": "nics-employers",
+            "title": "Change what employers pay",
+            "items": [
               {
-                "title": "Lower the higher-rate threshold by 10%",
-                "sizes": [-10],
-                "advice": {
-                  "text": "Pulls more earners into the higher rate, on top of the freeze.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "nicer",
+                "name": "Employer National Insurance",
+                "policies": [
+                  {
+                    "title": "Put up employer National Insurance",
+                    "shortlist": true,
+                    "sizes": [1, 2, 3],
+                    "advice": {
+                      "text": "Firms pay it first; over time it reaches pay and prices.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tiin-employer-nics-2024",
+                          "quote": "The OBR judged that the increase in costs to businesses would lead to lower wages and profits."
+                        },
+                        {
+                          "sourceId": "hmrc-trr-2025-06",
+                          "table": "Publication_Format"
+                        },
+                        {
+                          "sourceId": "labour-manifesto-2024-strong-foundations"
+                        },
+                        {
+                          "sourceId": "hmt-autumn-budget-2024-table-5-1",
+                          "table": "Table 5.1",
+                          "note": "line 26"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Cut employer National Insurance",
+                    "sizes": [-1, -2, -3],
+                    "advice": {
+                      "text": "Firms gain first; over time it reaches pay and prices.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tiin-employer-nics-2024"
+                        },
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        }
+                      ]
+                    }
+                  }
+                ]
               },
               {
-                "title": "Raise the higher-rate threshold",
-                "sizes": [1, 10],
-                "advice": {
-                  "text": "Eases the freeze that pulls more people into the higher rate.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "nicst",
+                "name": "The employer National Insurance threshold",
+                "policies": [
+                  {
+                    "title": "Lower the employer National Insurance threshold",
+                    "sizes": [-104, -208, -520],
+                    "advice": {
+                      "text": "Firms pay more for every worker; much comes out of pay.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-tiin-employer-nics-2024"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Raise the employer National Insurance threshold",
+                    "sizes": [104, 208, 520],
+                    "advice": {
+                      "text": "Firms keep more for every worker; over time it reaches pay.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-tiin-employer-nics-2024"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "nicpen",
+                "policies": [
+                  {
+                    "title": "Charge employer National Insurance on pension contributions",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big, but employers would cut what they pay in.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-private-pensions-2026-07",
+                          "table": "Table 6"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           }
         ]
       },
       {
-        "id": "business",
-        "label": "Business",
-        "items": [
+        "id": "vat",
+        "label": "VAT",
+        "decisions": [
           {
-            "code": "nicpen",
-            "policies": [
+            "id": "vat-rate",
+            "title": "Change the headline rate",
+            "items": [
               {
-                "title": "Charge employer National Insurance on pension contributions",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Big, but employers would cut what they pay in.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-private-pensions-2026-07",
-                      "table": "Table 6"
+                "code": "vats",
+                "name": "The main rate of VAT",
+                "policies": [
+                  {
+                    "title": "Put up VAT",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Big, and felt on every till receipt.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06",
+                          "table": "Publication_Format"
+                        },
+                        {
+                          "sourceId": "labour-manifesto-2024-strong-foundations"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Cut VAT",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Big money; the cut reaches prices only if shops pass it on.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-trr-2025-06-bulletin"
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "nicer",
-            "name": "Employer National Insurance",
-            "policies": [
+            "id": "vat-small-changes",
+            "title": "Make small changes",
+            "items": [
               {
-                "title": "Put up employer National Insurance",
-                "shortlist": true,
-                "sizes": [1, 2, 3],
-                "advice": {
-                  "text": "Firms pay it first; over time it reaches pay and prices.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tiin-employer-nics-2024",
-                      "quote": "The OBR judged that the increase in costs to businesses would lead to lower wages and profits."
-                    },
-                    {
-                      "sourceId": "hmrc-trr-2025-06",
-                      "table": "Publication_Format"
-                    },
-                    {
-                      "sourceId": "labour-manifesto-2024-strong-foundations"
-                    },
-                    {
-                      "sourceId": "hmt-autumn-budget-2024-table-5-1",
-                      "table": "Table 5.1",
-                      "note": "line 26"
+                "code": "vatgas",
+                "policies": [
+                  {
+                    "title": "Take VAT off gas too",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small; every home heated by gas or oil gains.",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-vat-electricity-cut-2026"
+                        },
+                        {
+                          "sourceId": "hmrc-tax-reliefs-2026-01"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut employer National Insurance",
-                "sizes": [-1, -2, -3],
-                "advice": {
-                  "text": "Firms gain first; over time it reaches pay and prices.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tiin-employer-nics-2024"
-                    },
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
+                "code": "vatelec",
+                "policies": [
+                  {
+                    "title": "Keep VAT off electricity after March 2027",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "The zero rate ends in March; keeping it holds bills down.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-vat-notice-701-19",
+                          "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027."
+                        },
+                        {
+                          "sourceId": "govuk-vat-electricity-cut-2026"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "qelevy",
-            "policies": [
-              {
-                "title": "A levy on the interest banks earn at the Bank of England",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big only while interest rates stay high; it needs a new law.",
-                  "sources": [
-                    {
-                      "sourceId": "ippr-fixing-the-leak-2025"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "ct",
-            "name": "Corporation tax",
-            "policies": [
-              {
-                "title": "Put up corporation tax",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Steady money from company profits.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06",
-                      "table": "Publication_Format"
-                    },
-                    {
-                      "sourceId": "labour-manifesto-2024-growth"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut corporation tax",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Firms keep more profit; any boost to investment is not counted.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-trr-2025-06-bulletin"
+                "code": "vatr",
+                "name": "The reduced rate of VAT",
+                "policies": [
+                  {
+                    "title": "Put up the reduced rate of VAT",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Mostly paid on home heating, so every gas bill goes up.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-vat-notice-701-19"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "code": "banklevy",
-            "policies": [
-              {
-                "title": "Double the bank levy",
-                "sizes": [1],
-                "advice": {
-                  "text": "Banks would shrink their balance sheets to pay less.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-banking-sector-receipts-2025",
-                      "table": "Table 1"
+                  },
+                  {
+                    "title": "Cut the reduced rate of VAT",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Mostly paid on home heating, so every gas bill comes down.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-vat-notice-701-19"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "bank5",
-            "policies": [
-              {
-                "title": "Raise the bank surcharge from 3% to 5%",
-                "sizes": [1],
-                "advice": {
-                  "text": "Only the largest banks pay, and they choose where profits land.",
-                  "sources": [
-                    {
-                      "sourceId": "legislation-cta-2010-s269de"
-                    },
-                    {
-                      "sourceId": "hmrc-banking-sector-receipts-2025"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "epl2",
-            "policies": [
-              {
-                "title": "Raise the energy profits levy again, as in 2024",
-                "sizes": [1],
-                "advice": {
-                  "text": "Raises less than the first round, and moves with oil prices.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-autumn-budget-2024-table-5-1"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "nicst",
-            "name": "The employer National Insurance threshold",
-            "policies": [
-              {
-                "title": "Lower the employer National Insurance threshold",
-                "sizes": [-104, -208, -520],
-                "advice": {
-                  "text": "Firms pay more for every worker; much comes out of pay.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-tiin-employer-nics-2024"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Raise the employer National Insurance threshold",
-                "sizes": [104, 208, 520],
-                "advice": {
-                  "text": "Firms keep more for every worker; over time it reaches pay.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-tiin-employer-nics-2024"
+                "code": "vat1z",
+                "policies": [
+                  {
+                    "title": "Charge 1% VAT on everything now zero-rated",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "A new VAT rate on food and children’s clothes, paid by everyone.",
+                      "sources": [
+                        {
+                          "sourceId": "ifs-green-budget-2025"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "brates",
-            "name": "Business rates",
-            "policies": [
+            "id": "vat-exemptions",
+            "title": "Remove an exemption",
+            "items": [
               {
-                "title": "Put up business rates",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Firms in England pay more on their premises.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    },
-                    {
-                      "sourceId": "hmt-statement-of-funding-policy-2025"
+                "code": "vatmot",
+                "policies": [
+                  {
+                    "title": "End the VAT relief on Motability cars",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Disabled people would pay more to lease a Motability car.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tax-reliefs-2026-01"
+                        },
+                        {
+                          "sourceId": "onward-budget-response-2025"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut business rates",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "England’s bills only; the other nations set their own.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    },
-                    {
-                      "sourceId": "hmt-statement-of-funding-policy-2025"
+                "code": "vatfood",
+                "policies": [
+                  {
+                    "title": "Charge VAT on food",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big money; food is a bigger share of poorer families’ spending.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tax-reliefs-2026-01"
+                        },
+                        {
+                          "sourceId": "ifs-green-budget-2025"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
+              },
+              {
+                "code": "vatnrg",
+                "policies": [
+                  {
+                    "title": "Charge full VAT on home energy",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big money, and it reverses this autumn’s cut on electricity.",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-vat-electricity-cut-2026"
+                        },
+                        {
+                          "sourceId": "hmrc-tax-reliefs-2026-01"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "vattrn",
+                "policies": [
+                  {
+                    "title": "Charge VAT on public transport fares",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big money; bus and train users pay it on every fare.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tax-reliefs-2026-01"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "vatkids",
+                "policies": [
+                  {
+                    "title": "Charge VAT on children’s clothes",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Parents pay it on every size their children outgrow.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tax-reliefs-2026-01"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "vathome",
+                "policies": [
+                  {
+                    "title": "Charge VAT on new homes",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big money, but buyers of new homes would pay it.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tax-reliefs-2026-01"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "vatbook",
+                "policies": [
+                  {
+                    "title": "Charge VAT on books, newspapers and magazines",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Readers pay it on every book and newspaper.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tax-reliefs-2026-01"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           }
         ]
       },
       {
-        "id": "savers-owners",
-        "label": "Savers and owners",
-        "items": [
+        "id": "capital-gains-tax",
+        "label": "Capital gains tax",
+        "decisions": [
           {
-            "code": "ctgh",
-            "policies": [
+            "id": "cgt-rates",
+            "title": "Change the rates on gains",
+            "items": [
               {
-                "title": "Double council tax on the biggest homes (bands G and H)",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Steady money from the biggest homes, in England only.",
-                  "sources": [
-                    {
-                      "sourceId": "ifs-green-budget-2025"
+                "code": "cgth",
+                "name": "The higher rate of capital gains tax",
+                "policies": [
+                  {
+                    "title": "Put up the higher rate of capital gains tax",
+                    "sizes": [1, 5, 10],
+                    "advice": {
+                      "text": "People can wait to sell; on these figures a rise loses money.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-trr-2025-06-bulletin"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "cgtdth",
-            "policies": [
-              {
-                "title": "Tax capital gains when someone dies",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Steady money from estates, but nothing before 2028.",
-                  "sources": [
-                    {
-                      "sourceId": "rf-call-of-duties-2025"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rnrb",
-            "policies": [
-              {
-                "title": "End the extra inheritance tax allowance for family homes",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Steady money from larger estates passing on a home.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tax-reliefs-2026-01",
-                      "table": "Table 2"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "iinc2",
-            "policies": [
-              {
-                "title": "Add another 2p to the tax on dividends, savings and rental income",
-                "sizes": [1],
-                "advice": {
-                  "text": "Investors pay again, on top of last year’s rise.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1",
-                      "table": "Table 4.1"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "sdltabol",
-            "policies": [
-              {
-                "title": "Abolish stamp duty on main homes",
-                "sizes": [1],
-                "advice": {
-                  "text": "Expensive; buyers gain, though some of it ends up in prices.",
-                  "sources": [
-                    {
-                      "sourceId": "asi-stamped-out-2025"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "hvcts15",
-            "policies": [
-              {
-                "title": "Extend the council tax surcharge to homes over £1.5 million",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small money, mostly from homeowners in London and the South East.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-policy-costings"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rvcgt",
-            "policies": [
-              {
-                "title": "Undo the 2024 rise in capital gains tax",
-                "sizes": [1],
-                "advice": {
-                  "text": "Sellers of shares and businesses pay less on their gains.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-autumn-budget-2024-table-5-1"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rvinv",
-            "policies": [
-              {
-                "title": "Undo last year’s rises on dividend, savings and property income",
-                "sizes": [1],
-                "advice": {
-                  "text": "Shareholders, savers and landlords keep more of what they earn.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rvapr",
-            "policies": [
-              {
-                "title": "Reverse the 2026 farm and family-business inheritance tax changes",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small; farms and family firms go back to full relief.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-autumn-budget-2024-table-5-1"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "rvhrad",
-            "policies": [
-              {
-                "title": "Cut the stamp duty surcharge on additional homes back to 3%",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small; landlords and second-home buyers pay less stamp duty.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-autumn-budget-2024-table-5-1"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "iht",
-            "name": "Inheritance tax",
-            "policies": [
-              {
-                "title": "Put up inheritance tax",
-                "sizes": [5, 10],
-                "advice": {
-                  "text": "Paid by more estates each year, as the threshold stays frozen.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-iht-thresholds"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut inheritance tax",
-                "sizes": [-5, -10, -40],
-                "advice": {
-                  "text": "Families inheriting keep more, and the larger the estate the more.",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-iht-thresholds"
-                    },
-                    {
-                      "sourceId": "obr-efo-2026-03"
+                "code": "cgtl",
+                "name": "The lower rate of capital gains tax",
+                "policies": [
+                  {
+                    "title": "Put up the lower rate of capital gains tax",
+                    "sizes": [1, 5, 10],
+                    "advice": {
+                      "text": "Raises next to nothing; the largest rise loses money.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-trr-2025-06-bulletin"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "sdlt5",
-            "name": "The 5% band of stamp duty",
-            "policies": [
-              {
-                "title": "Put up the 5% band of stamp duty",
-                "sizes": [1, 2, 5],
-                "advice": {
-                  "text": "Home buyers pay it on the middle slice; some would move less.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-sdlt-rates"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut the 5% band of stamp duty",
-                "sizes": [-1, -2, -5],
-                "advice": {
-                  "text": "Home buyers gain on the middle slice of the price.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-sdlt-rates"
+                "code": "rvcgt",
+                "policies": [
+                  {
+                    "title": "Undo the 2024 rise in capital gains tax",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Sellers of shares and businesses pay less on their gains.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-autumn-budget-2024-table-5-1"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
+              },
+              {
+                "code": "carried",
+                "policies": [
+                  {
+                    "title": "Tax fund managers’ carried interest as income",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small money from a few thousand fund managers, who can move.",
+                      "sources": [
+                        {
+                          "sourceId": "tjuk-ten-tax-reforms-2026"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "cgth",
-            "name": "The higher rate of capital gains tax",
-            "policies": [
+            "id": "cgt-untaxed-gains",
+            "title": "Tax gains that go untaxed",
+            "items": [
               {
-                "title": "Put up the higher rate of capital gains tax",
-                "sizes": [1, 5, 10],
-                "advice": {
-                  "text": "People can wait to sell; on these figures a rise loses money.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-trr-2025-06-bulletin"
+                "code": "cgtdth",
+                "policies": [
+                  {
+                    "title": "Tax capital gains when someone dies",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Steady money from estates, but nothing before 2028.",
+                      "sources": [
+                        {
+                          "sourceId": "rf-call-of-duties-2025"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
+              },
+              {
+                "code": "cgtexit",
+                "policies": [
+                  {
+                    "title": "Charge capital gains tax on people who leave the UK",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small, and a handful of people leaving decide what it raises.",
+                      "sources": [
+                        {
+                          "sourceId": "centax-business-owners-emigrate-2024"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "cgtprr",
+                "policies": [
+                  {
+                    "title": "Charge capital gains tax on main homes",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big on paper; homeowners would move less and hold on longer.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tax-reliefs-quality-report"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "inheritance-tax",
+        "label": "Inheritance tax",
+        "decisions": [
+          {
+            "id": "iht-rate",
+            "title": "Change the rate",
+            "items": [
+              {
+                "code": "iht",
+                "name": "Inheritance tax",
+                "policies": [
+                  {
+                    "title": "Put up inheritance tax",
+                    "sizes": [5, 10],
+                    "advice": {
+                      "text": "Paid by more estates each year, as the threshold stays frozen.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-iht-thresholds"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  },
+                  {
+                    "title": "Cut inheritance tax",
+                    "sizes": [-5, -10, -40],
+                    "advice": {
+                      "text": "Families inheriting keep more, and the larger the estate the more.",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-iht-thresholds"
+                        },
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "cgtl",
-            "name": "The lower rate of capital gains tax",
-            "policies": [
+            "id": "iht-reliefs",
+            "title": "Change the reliefs",
+            "items": [
               {
-                "title": "Put up the lower rate of capital gains tax",
-                "sizes": [1, 5, 10],
-                "advice": {
-                  "text": "Raises next to nothing; the largest rise loses money.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmrc-trr-2025-06-bulletin"
+                "code": "rnrb",
+                "policies": [
+                  {
+                    "title": "End the extra inheritance tax allowance for family homes",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Steady money from larger estates passing on a home.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-tax-reliefs-2026-01",
+                          "table": "Table 2"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
+              },
+              {
+                "code": "rvapr",
+                "policies": [
+                  {
+                    "title": "Reverse the 2026 farm and family-business inheritance tax changes",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small; farms and family firms go back to full relief.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-autumn-budget-2024-table-5-1"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wealth-tax",
+        "label": "Wealth tax",
+        "decisions": [
+          {
+            "id": "wealth-above-10m",
+            "title": "Tax wealth above £10 million",
+            "items": [
+              {
+                "code": "wealth",
+                "policies": [
+                  {
+                    "title": "A 1% yearly tax on wealth above £10 million",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Nothing until 2030-31, and nobody knows how the very rich would respond.",
+                      "sources": [
+                        {
+                          "sourceId": "wtc-revenue-modelling-2020"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "wealth2",
+                "policies": [
+                  {
+                    "title": "A 2% yearly tax on wealth above £10 million",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Nothing before 2030-31, and hotly contested.",
+                      "sources": [
+                        {
+                          "sourceId": "tpa-wealth-tax-2025"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "council-tax",
+        "label": "Council tax",
+        "decisions": [
+          {
+            "id": "council-tax-top",
+            "title": "Charge the biggest homes more",
+            "items": [
+              {
+                "code": "ctgh",
+                "policies": [
+                  {
+                    "title": "Double council tax on the biggest homes (bands G and H)",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Steady money from the biggest homes, in England only.",
+                      "sources": [
+                        {
+                          "sourceId": "ifs-green-budget-2025"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "hvcts15",
+                "policies": [
+                  {
+                    "title": "Extend the council tax surcharge to homes over £1.5 million",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small money, mostly from homeowners in London and the South East.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-policy-costings"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stamp-duty",
+        "label": "Stamp duty",
+        "decisions": [
+          {
+            "id": "stamp-duty-band",
+            "title": "Change the 5% band",
+            "items": [
+              {
+                "code": "sdlt5",
+                "name": "The 5% band of stamp duty",
+                "policies": [
+                  {
+                    "title": "Put up the 5% band of stamp duty",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Home buyers pay it on the middle slice; some would move less.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-sdlt-rates"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  },
+                  {
+                    "title": "Cut the 5% band of stamp duty",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Home buyers gain on the middle slice of the price.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-sdlt-rates"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "cgtprr",
-            "policies": [
+            "id": "stamp-duty-cuts",
+            "title": "Cut it for some buyers",
+            "items": [
               {
-                "title": "Charge capital gains tax on main homes",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big on paper; homeowners would move less and hold on longer.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tax-reliefs-quality-report"
+                "code": "sdltabol",
+                "policies": [
+                  {
+                    "title": "Abolish stamp duty on main homes",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Expensive; buyers gain, though some of it ends up in prices.",
+                      "sources": [
+                        {
+                          "sourceId": "asi-stamped-out-2025"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
+              },
+              {
+                "code": "rvhrad",
+                "policies": [
+                  {
+                    "title": "Cut the stamp duty surcharge on additional homes back to 3%",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small; landlords and second-home buyers pay less stamp duty.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-autumn-budget-2024-table-5-1"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "business-taxes",
+        "label": "Business taxes",
+        "decisions": [
+          {
+            "id": "corporation-tax",
+            "title": "Change corporation tax",
+            "items": [
+              {
+                "code": "ct",
+                "name": "Corporation tax",
+                "policies": [
+                  {
+                    "title": "Put up corporation tax",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Steady money from company profits.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06",
+                          "table": "Publication_Format"
+                        },
+                        {
+                          "sourceId": "labour-manifesto-2024-growth"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  },
+                  {
+                    "title": "Cut corporation tax",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "Firms keep more profit; any boost to investment is not counted.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmrc-trr-2025-06-bulletin"
+                        }
+                      ]
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "vathome",
-            "policies": [
+            "id": "business-rates",
+            "title": "Change business rates",
+            "items": [
               {
-                "title": "Charge VAT on new homes",
-                "sizes": [1],
-                "advice": {
-                  "text": "Big money, but buyers of new homes would pay it.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tax-reliefs-2026-01"
+                "code": "brates",
+                "name": "Business rates",
+                "policies": [
+                  {
+                    "title": "Put up business rates",
+                    "sizes": [1, 2, 5],
+                    "advice": {
+                      "text": "Firms in England pay more on their premises.",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        },
+                        {
+                          "sourceId": "hmt-statement-of-funding-policy-2025"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Cut business rates",
+                    "sizes": [-1, -2, -5],
+                    "advice": {
+                      "text": "England’s bills only; the other nations set their own.",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        },
+                        {
+                          "sourceId": "hmt-statement-of-funding-policy-2025"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "banks-energy",
+            "title": "Tax banks and energy firms more",
+            "items": [
+              {
+                "code": "qelevy",
+                "policies": [
+                  {
+                    "title": "A levy on the interest banks earn at the Bank of England",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Big only while interest rates stay high; it needs a new law.",
+                      "sources": [
+                        {
+                          "sourceId": "ippr-fixing-the-leak-2025"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "banklevy",
+                "policies": [
+                  {
+                    "title": "Double the bank levy",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Banks would shrink their balance sheets to pay less.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-banking-sector-receipts-2025",
+                          "table": "Table 1"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "bank5",
+                "policies": [
+                  {
+                    "title": "Raise the bank surcharge from 3% to 5%",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Only the largest banks pay, and they choose where profits land.",
+                      "sources": [
+                        {
+                          "sourceId": "legislation-cta-2010-s269de"
+                        },
+                        {
+                          "sourceId": "hmrc-banking-sector-receipts-2025"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "epl2",
+                "policies": [
+                  {
+                    "title": "Raise the energy profits levy again, as in 2024",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Raises less than the first round, and moves with oil prices.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-autumn-budget-2024-table-5-1"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -1462,229 +1602,281 @@
       },
       {
         "id": "duties",
-        "label": "Drivers, smokers, gamblers and flyers",
-        "items": [
+        "label": "Duties",
+        "decisions": [
           {
-            "code": "fuelfrz",
-            "policies": [
+            "id": "fuel-duty",
+            "title": "Change fuel duty",
+            "items": [
               {
-                "title": "Freeze fuel duty in April 2027",
-                "sizes": [1],
-                "advice": {
-                  "text": "Small money, felt at every pump; emissions edge up a little.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    },
-                    {
-                      "sourceId": "hmt-budget-2025-policy-costings",
-                      "quote": "From 1 April 2027, fuel duty rates will be uprated annually in line with the Retail Price Index."
-                    },
-                    {
-                      "sourceId": "hmrc-tiin-fuel-duty-2026-27",
-                      "quote": "which will likely maintain any marginal impact of carbon emissions from increased consumption of fossil fuels that this measure may cause"
+                "code": "fuelfrz",
+                "policies": [
+                  {
+                    "title": "Freeze fuel duty in April 2027",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small money, felt at every pump; emissions edge up a little.",
+                      "sources": [
+                        {
+                          "sourceId": "obr-efo-2026-03"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2025-policy-costings",
+                          "quote": "From 1 April 2027, fuel duty rates will be uprated annually in line with the Retail Price Index."
+                        },
+                        {
+                          "sourceId": "hmrc-tiin-fuel-duty-2026-27",
+                          "quote": "which will likely maintain any marginal impact of carbon emissions from increased consumption of fossil fuels that this measure may cause"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "gam2",
-            "policies": [
-              {
-                "title": "Put gambling duties up again",
-                "shortlist": true,
-                "sizes": [1],
-                "advice": {
-                  "text": "Betting firms pay again, on top of last year’s rise.",
-                  "sources": [
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1",
-                      "table": "Table 4.1"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "tob",
-            "name": "Tobacco duty",
-            "policies": [
-              {
-                "title": "Put up tobacco duty",
-                "sizes": [10, 20],
-                "advice": {
-                  "text": "Small money; smokers pay, and there are fewer each year.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06",
-                      "table": "Publication_Format"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut tobacco duty by 10%",
-                "sizes": [-10],
-                "advice": {
-                  "text": "Small money; smokers gain, against the health case for the duty.",
-                  "badge": "simulated",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "govuk-tobacco-duty-rates"
+                "code": "fuel",
+                "name": "Fuel duty",
+                "policies": [
+                  {
+                    "title": "Put up fuel duty",
+                    "sizes": [5, 10, 20],
+                    "advice": {
+                      "text": "Drivers pay more on top of planned rises; emissions dip.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1"
+                        },
+                        {
+                          "sourceId": "hmrc-tiin-fuel-duty-2026-27"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ]
-                }
+                  },
+                  {
+                    "title": "Cut fuel duty",
+                    "sizes": [-5, -10],
+                    "advice": {
+                      "text": "Drivers feel it at the pump; emissions edge up.",
+                      "sources": [
+                        {
+                          "sourceId": "govuk-fuel-duty-rates"
+                        },
+                        {
+                          "sourceId": "hmrc-tiin-fuel-duty-2026-27"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "ved",
-            "name": "Car tax",
-            "policies": [
+            "id": "drink-tobacco-gambling",
+            "title": "Tax drink, tobacco and gambling",
+            "items": [
               {
-                "title": "Put up car tax",
-                "sizes": [10, 20, 50],
-                "advice": {
-                  "text": "Spread across every car and van, whatever it emits.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06",
-                      "table": "Publication_Format"
-                    },
-                    {
-                      "sourceId": "govuk-ved-rate-tables",
-                      "quote": "Rates for second tax payment onwards Petrol or diesel, Electric & Alternative Fuel Single 12 month payment £200"
+                "code": "alc",
+                "name": "Alcohol duty",
+                "policies": [
+                  {
+                    "title": "Put up alcohol duty",
+                    "sizes": [5, 10, 20],
+                    "advice": {
+                      "text": "Paid on every drink, by the alcohol in it.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "apd",
-            "name": "Air passenger duty",
-            "policies": [
-              {
-                "title": "Put up air passenger duty",
-                "sizes": [2, 4, 10],
-                "advice": {
-                  "text": "Paid on every flight; it barely changes emissions either way.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06",
-                      "table": "Publication_Format"
-                    },
-                    {
-                      "sourceId": "hmrc-tiin-apd-2026-27",
-                      "quote": "We expect the measure to have a negligible impact on the environment."
+                  },
+                  {
+                    "title": "Cut alcohol duty",
+                    "sizes": [-5, -10],
+                    "advice": {
+                      "text": "Drinkers and pubs pay less duty on every drink.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "vatmot",
-            "policies": [
-              {
-                "title": "End the VAT relief on Motability cars",
-                "sizes": [1],
-                "advice": {
-                  "text": "Disabled people would pay more to lease a Motability car.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-tax-reliefs-2026-01"
-                    },
-                    {
-                      "sourceId": "onward-budget-response-2025"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
-              }
-            ]
-          },
-          {
-            "code": "fuel",
-            "name": "Fuel duty",
-            "policies": [
-              {
-                "title": "Put up fuel duty",
-                "sizes": [5, 10, 20],
-                "advice": {
-                  "text": "Drivers pay more on top of planned rises; emissions dip.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
-                    },
-                    {
-                      "sourceId": "hmt-budget-2025-table-4-1"
-                    },
-                    {
-                      "sourceId": "hmrc-tiin-fuel-duty-2026-27"
-                    }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut fuel duty",
-                "sizes": [-5, -10],
-                "advice": {
-                  "text": "Drivers feel it at the pump; emissions edge up.",
-                  "sources": [
-                    {
-                      "sourceId": "govuk-fuel-duty-rates"
-                    },
-                    {
-                      "sourceId": "hmrc-tiin-fuel-duty-2026-27"
+                "code": "tob",
+                "name": "Tobacco duty",
+                "policies": [
+                  {
+                    "title": "Put up tobacco duty",
+                    "sizes": [10, 20],
+                    "advice": {
+                      "text": "Small money; smokers pay, and there are fewer each year.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06",
+                          "table": "Publication_Format"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  },
+                  {
+                    "title": "Cut tobacco duty by 10%",
+                    "sizes": [-10],
+                    "advice": {
+                      "text": "Small money; smokers gain, against the health case for the duty.",
+                      "badge": "simulated",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06"
+                        },
+                        {
+                          "sourceId": "govuk-tobacco-duty-rates"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "gam2",
+                "policies": [
+                  {
+                    "title": "Put gambling duties up again",
+                    "shortlist": true,
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Betting firms pay again, on top of last year’s rise.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1",
+                          "table": "Table 4.1"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
           {
-            "code": "alc",
-            "name": "Alcohol duty",
-            "policies": [
+            "id": "cars-flights",
+            "title": "Tax cars and flights more",
+            "items": [
               {
-                "title": "Put up alcohol duty",
-                "sizes": [5, 10, 20],
-                "advice": {
-                  "text": "Paid on every drink, by the alcohol in it.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
+                "code": "ved",
+                "name": "Car tax",
+                "policies": [
+                  {
+                    "title": "Put up car tax",
+                    "sizes": [10, 20, 50],
+                    "advice": {
+                      "text": "Spread across every car and van, whatever it emits.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06",
+                          "table": "Publication_Format"
+                        },
+                        {
+                          "sourceId": "govuk-ved-rate-tables",
+                          "quote": "Rates for second tax payment onwards Petrol or diesel, Electric & Alternative Fuel Single 12 month payment £200"
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
               },
               {
-                "title": "Cut alcohol duty",
-                "sizes": [-5, -10],
-                "advice": {
-                  "text": "Drinkers and pubs pay less duty on every drink.",
-                  "sources": [
-                    {
-                      "sourceId": "hmrc-trr-2025-06"
+                "code": "apd",
+                "name": "Air passenger duty",
+                "policies": [
+                  {
+                    "title": "Put up air passenger duty",
+                    "sizes": [2, 4, 10],
+                    "advice": {
+                      "text": "Paid on every flight; it barely changes emissions either way.",
+                      "sources": [
+                        {
+                          "sourceId": "hmrc-trr-2025-06",
+                          "table": "Publication_Format"
+                        },
+                        {
+                          "sourceId": "hmrc-tiin-apd-2026-27",
+                          "quote": "We expect the measure to have a negligible impact on the environment."
+                        }
+                      ],
+                      "badge": "simulated"
                     }
-                  ],
-                  "badge": "simulated"
-                }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sugar-salt",
+            "title": "Tax sugar and salt in food",
+            "items": [
+              {
+                "code": "sugsalt",
+                "policies": [
+                  {
+                    "title": "A new tax on sugar and salt in food",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Years to set up, and it shrinks as recipes change.",
+                      "sources": [
+                        {
+                          "sourceId": "rf-call-of-duties-2025"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tax-gap",
+        "label": "The tax gap",
+        "decisions": [
+          {
+            "id": "unpaid-tax",
+            "title": "Chase more unpaid tax",
+            "items": [
+              {
+                "code": "hmrc2",
+                "policies": [
+                  {
+                    "title": "Another push to close the tax gap",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "A repeat of last year’s package; nobody has costed a further round.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2025-table-4-1",
+                          "table": "Table 4.1"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           }

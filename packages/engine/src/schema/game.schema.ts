@@ -399,14 +399,35 @@ export const finetuneItemSchema = z.strictObject({
   policies: z.array(finetunePolicySchema).min(1).max(2),
 });
 
-/** A group of levers on one screen: who pays, on the tax side; what the money is for, on the other. */
+/** A group of levers on the spending screen: what the money is for. */
 export const finetuneGroupSchema = z.strictObject({
   id: slug,
   label: z.string().min(1).max(60),
   items: z.array(finetuneItemSchema).min(1),
 });
 
-/** One of the two screens: its heading, its one line, whose voice speaks on it, and its groups. */
+/**
+ * One decision about one tax (ADR-0035): a question a Chancellor answers ("Change the headline
+ * rate", "Remove an exemption"), holding the levers that answer it, in the order they are weighed.
+ * Its title is at most six words; at most seven levers keep an open decision to one screenful.
+ */
+export const finetuneDecisionSchema = z.strictObject({
+  id: slug,
+  title: z.string().min(1).max(48),
+  items: z.array(finetuneItemSchema).min(1).max(7),
+});
+
+/**
+ * One tax on the tax screen (ADR-0035): "Income tax", "VAT", with the decisions about it. Its label
+ * is the lever family of every lever in it, so the family is the one record of which tax a lever
+ * is; the validator holds each lever to its section.
+ */
+export const finetuneTaxGroupSchema = z.strictObject({
+  id: slug,
+  label: z.string().min(1).max(60),
+  decisions: z.array(finetuneDecisionSchema).min(1),
+});
+
 /**
  * A line under a screen's lead (Phase 25): what the lead's hundred and twenty characters cannot
  * hold, such as how long the spending settlements run. Each wears its own badge and sources.
@@ -417,7 +438,8 @@ export const finetuneNoteSchema = z.strictObject({
   sources: z.array(sourceRefSchema).min(1),
 });
 
-export const finetuneSideSchema = z.strictObject({
+/** One of the two screens: its heading, its one line, whose voice speaks on it, and its groups. */
+const finetuneScreen = {
   title: z.string().min(1).max(40),
   lead: z.string().min(1).max(120),
   /** The lead in basic mode (Phase 27): it says the screen shows the adviser's best ideas. */
@@ -425,40 +447,78 @@ export const finetuneSideSchema = z.strictObject({
   notes: z.array(finetuneNoteSchema).default([]),
   /** The adviser who speaks every line on the screen (an id in advisers.json, on `finetune`). */
   adviser: slug,
+};
+
+/** The spending screen: its groups of levers. */
+export const finetuneSideSchema = z.strictObject({
+  ...finetuneScreen,
   groups: z.array(finetuneGroupSchema).min(1),
+});
+
+/** The tax screen (ADR-0035): one section a tax, each holding its decisions. */
+export const finetuneTaxSideSchema = z.strictObject({
+  ...finetuneScreen,
+  groups: z.array(finetuneTaxGroupSchema).min(1),
 });
 
 export const finetuneFileSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
-    tax: finetuneSideSchema,
+    tax: finetuneTaxSideSchema,
     spending: finetuneSideSchema,
   })
   .superRefine((file, ctx) => {
-    // A lever appears once in the file, and a group id once on its screen: two cards for one
-    // lever would move together and read as two choices.
+    // A lever appears once in the file, a group id once on its screen, and a tax's name and a
+    // decision's id once on the tax screen: two cards for one lever would move together and read
+    // as two choices, and two sections for one tax would split its decisions.
     const codes = new Set<string>();
-    for (const side of ['tax', 'spending'] as const) {
-      const groups = new Set<string>();
-      file[side].groups.forEach((g, i) => {
-        if (groups.has(g.id))
+    const offer = (code: string, path: (string | number)[]) => {
+      if (codes.has(code))
+        ctx.addIssue({ code: 'custom', message: `lever ${code} is offered twice`, path });
+      codes.add(code);
+    };
+    const labels = new Set<string>();
+    const decisions = new Set<string>();
+    const taxIds = new Set<string>();
+    file.tax.groups.forEach((g, i) => {
+      if (taxIds.has(g.id))
+        ctx.addIssue({
+          code: 'custom',
+          message: `two tax groups are called ${g.id}`,
+          path: ['tax', 'groups', i, 'id'],
+        });
+      taxIds.add(g.id);
+      if (labels.has(g.label))
+        ctx.addIssue({
+          code: 'custom',
+          message: `two tax sections are called ${g.label}`,
+          path: ['tax', 'groups', i, 'label'],
+        });
+      labels.add(g.label);
+      g.decisions.forEach((d, j) => {
+        if (decisions.has(d.id))
           ctx.addIssue({
             code: 'custom',
-            message: `two ${side} groups are called ${g.id}`,
-            path: [side, 'groups', i, 'id'],
+            message: `two tax decisions are called ${d.id}`,
+            path: ['tax', 'groups', i, 'decisions', j, 'id'],
           });
-        groups.add(g.id);
-        g.items.forEach((item, j) => {
-          if (codes.has(item.code))
-            ctx.addIssue({
-              code: 'custom',
-              message: `lever ${item.code} is offered twice`,
-              path: [side, 'groups', i, 'items', j, 'code'],
-            });
-          codes.add(item.code);
-        });
+        decisions.add(d.id);
+        d.items.forEach((item, k) =>
+          offer(item.code, ['tax', 'groups', i, 'decisions', j, 'items', k, 'code']),
+        );
       });
-    }
+    });
+    const spendingIds = new Set<string>();
+    file.spending.groups.forEach((g, i) => {
+      if (spendingIds.has(g.id))
+        ctx.addIssue({
+          code: 'custom',
+          message: `two spending groups are called ${g.id}`,
+          path: ['spending', 'groups', i, 'id'],
+        });
+      spendingIds.add(g.id);
+      g.items.forEach((item, j) => offer(item.code, ['spending', 'groups', i, 'items', j, 'code']));
+    });
   });
 
 /* ------------------------------------------------------------ the package */

@@ -1374,6 +1374,80 @@ label.choice {
   line-height: 1.3;
 }
 
+/*
+ * The tax screen's decisions (ADR-0035): each a row between hairlines, its title and status in a
+ * full-width button with the fold's chevron, its choices beneath once opened.
+ */
+.tune__decisions {
+  margin: 4px 0 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tune__decision {
+  border-top: 1px solid var(--border);
+}
+
+.tune__decision-head {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.tune__decision-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 0 10px 22px;
+  position: relative;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tune__decision-toggle::before {
+  content: '';
+  position: absolute;
+  top: 17px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(-45deg);
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.tune__decision-toggle[aria-expanded='true']::before {
+  top: 14px;
+  transform: rotate(45deg);
+}
+
+.tune__decision-toggle:hover .tune__decision-title {
+  color: var(--accent);
+}
+
+.tune__decision-title {
+  flex: 1 1 14em;
+}
+
+.tune__decision-status {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.tune__decision-body {
+  padding: 0 0 12px;
+}
+
 /* ------------------------------------------------------------- the review */
 
 .review {

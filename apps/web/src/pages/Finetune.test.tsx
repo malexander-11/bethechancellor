@@ -23,16 +23,27 @@ const barFigure = () => bar().querySelector('.bar__figure')?.textContent ?? '';
 const cardOf = (control: HTMLElement) => control.closest('.lever') as HTMLElement;
 /** A policy's card, by its title. */
 const policy = (name: string) => cardOf(screen.getByRole('heading', { name }));
-/** Open a group's fold of more policies. */
-const openFold = (name: RegExp) => {
-  const summary = within(group(name)).getByText(/^\d+ more polic(y|ies)$/);
-  fireEvent.click(summary);
-  return summary.closest('details') as HTMLElement;
+/** A tax decision's button, by its title: its name is the title, then where it stands. */
+const decision = (title: string) => {
+  const button = screen
+    .getAllByRole('button')
+    .find((b) => b.querySelector('.tune__decision-title')?.textContent === title);
+  if (!button) throw new Error(`no decision “${title}”`);
+  return button;
+};
+/** Where a tax decision stands, as its button says. */
+const statusOf = (title: string) =>
+  decision(title).querySelector('.tune__decision-status')?.textContent ?? '';
+/** Open a tax decision (ADR-0035), and return the panel of its choices. */
+const openDecision = (title: string) => {
+  const button = decision(title);
+  fireEvent.click(button);
+  return document.getElementById(button.getAttribute('aria-controls') ?? '') as HTMLElement;
 };
 const search = () => new URLSearchParams(window.location.search);
 
 describe('fine-tune tax and spend: the curated levers', () => {
-  it('lays the tax screen out as five who-pays groups of real levers, with one way on', () => {
+  it('lays the tax screen out tax by tax, each tax the decisions about it, all closed', () => {
     const { container } = at(`/finetune/tax?${BASE}&${GAME}`);
     expect(h1('Fine-tune tax')).toBeInTheDocument();
     // The lead names the adviser once; the cards carry no name (Phase 25).
@@ -43,23 +54,48 @@ describe('fine-tune tax and spend: the curated levers', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 1 of 2$/)).toBeInTheDocument();
     expect(bar()).toBeInTheDocument();
-    const names = screen
+    // Eleven taxes, in order, each named plainly and with no count at rest (ADR-0035).
+    const sections = screen
       .getAllByRole('region')
-      .map((r) => r.getAttribute('aria-labelledby') ?? '')
-      .filter((id) => id.startsWith('tune-'));
-    expect(names).toEqual([
-      'tune-everyone',
-      'tune-best-off',
-      'tune-business',
-      'tune-savers-owners',
-      'tune-duties',
+      .filter((r) => (r.getAttribute('aria-labelledby') ?? '').startsWith('tune-'));
+    expect(sections.map((r) => r.querySelector('h2')?.textContent)).toEqual([
+      'Income tax',
+      'National Insurance',
+      'VAT',
+      'Capital gains tax',
+      'Inheritance tax',
+      'Wealth tax',
+      'Council tax',
+      'Stamp duty',
+      'Business taxes',
+      'Duties',
+      'The tax gap',
     ]);
-    // A lever that moves both ways offers two policies, one each way, and every other tax toggle
-    // waits in its group's fold (Phase 26).
-    expect(group(/^Everyone 27 policies/)).toBeInTheDocument();
-    expect(group(/^Drivers, smokers, gamblers and flyers 11 policies/)).toBeInTheDocument();
-    // Stacked, not tabbed; one primary button; every lever with its adviser's line.
+    // Twenty-six decisions, each a heading's button, all closed: no card on arrival.
+    const toggles = [...container.querySelectorAll('.tune__decision-toggle')];
+    expect(toggles).toHaveLength(26);
+    for (const toggle of toggles) {
+      expect(toggle).toHaveAttribute('aria-expanded', 'false');
+      expect(toggle.parentElement?.tagName).toBe('H3');
+    }
+    expect(container.querySelectorAll('.lever--curated')).toHaveLength(0);
+    // What each holds, or where its one scale is planned to be: the user's VAT, for one.
+    const vat = group(/^VAT$/);
+    expect(
+      within(vat)
+        .getAllByRole('button')
+        .map((b) => b.textContent),
+    ).toEqual([
+      'Change the headline rate 20% as planned',
+      'Make small changes 4 choices',
+      'Remove an exemption 7 choices',
+    ]);
+    expect(statusOf('Change the rate')).toBe('40% as planned');
+    expect(statusOf('Change business rates')).toBe('As planned');
+    expect(statusOf('Chase more unpaid tax')).toBe('1 choice');
+    // Stacked, not tabbed; one primary button; no slider anywhere.
     expect(screen.queryByRole('tab')).toBeNull();
+    expect(screen.queryByRole('slider')).toBeNull();
     expect(container.querySelectorAll('.btn--primary')).toHaveLength(1);
     expect(screen.getByRole('link', { name: 'Next: spending' })).toHaveAttribute(
       'href',
@@ -69,44 +105,54 @@ describe('fine-tune tax and spend: the curated levers', () => {
       'href',
       expect.stringMatching(/^\/budget\/deliver\/2\?/),
     );
-    // Three on show a group, the rest mounted only when their fold opens (Phase 26).
-    const levers = container.querySelectorAll('.lever--curated');
-    expect(levers).toHaveLength(15);
-    for (const lever of levers) {
-      expect(lever.querySelector('.choice__advice')).not.toBeNull();
-      expect(lever.querySelector('.choice__advice .kicker')).toBeNull();
-    }
-    // No slider anywhere: a policy is a tick, or a choice of sizes.
-    expect(screen.queryByRole('slider')).toBeNull();
-    const penny = policy('Put up the basic rate of income tax');
+  });
+
+  it('opens a decision in place, the focus kept, with every choice in it, and closes it again', () => {
+    at(`/finetune/tax?${BASE}&${GAME}`);
+    const button = decision('Change the rates');
+    button.focus();
+    const panel = openDecision('Change the rates');
+    expect(document.activeElement).toBe(button);
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(panel).toBeVisible();
+    // Every choice about the rates, both ways where a rate moves both ways, headed a level below
+    // the decision, each with its adviser's line and no adviser's name.
     expect(
-      within(penny)
+      within(panel)
+        .getAllByRole('heading', { level: 4 })
+        .map((h) => h.textContent),
+    ).toEqual([
+      'Put up the basic rate of income tax',
+      'Cut the basic rate of income tax',
+      'Put up the higher rate of income tax',
+      'Cut the higher rate of income tax',
+      'Put up the additional rate of income tax',
+      'Cut the additional rate of income tax',
+      'A new 50% income tax rate above £125,140',
+    ]);
+    const cards = panel.querySelectorAll('.lever--curated');
+    expect(cards).toHaveLength(7);
+    for (const card of cards) {
+      expect(card.querySelector('.choice__advice')).not.toBeNull();
+      expect(card.querySelector('.choice__advice .kicker')).toBeNull();
+    }
+    expect(
+      within(policy('Put up the basic rate of income tax'))
         .getAllByRole('radio')
         .map((r) => r.closest('label')?.textContent),
     ).toEqual(['Small 21%', 'Medium 22%', 'Large 25%']);
-    expect(
-      screen.getByRole('checkbox', { name: 'Keep VAT off electricity after March 2027' }),
-    ).toBeInTheDocument();
-    // The other way waits in the fold, which mounts its cards when opened.
-    expect(screen.queryByRole('heading', { name: 'Cut the basic rate of income tax' })).toBeNull();
-    const fold = openFold(/^Everyone/);
-    expect(
-      within(fold).getByRole('heading', { name: 'Cut the basic rate of income tax' }),
-    ).toBeInTheDocument();
-    // Its policies sit under their levers' families, the toggles that joined among them.
-    expect(within(fold).getByRole('heading', { name: 'Income tax' })).toBeInTheDocument();
-    expect(within(fold).getByRole('heading', { name: 'VAT' })).toBeInTheDocument();
-    expect(
-      within(fold).getByRole('heading', { name: 'Budget 2025 decisions' }),
-    ).toBeInTheDocument();
-    expect(
-      within(fold).getByRole('checkbox', { name: 'End the threshold freeze early' }),
-    ).toBeInTheDocument();
-    expect(container.querySelectorAll('.lever--curated')).toHaveLength(39);
+    // Nothing else opened with it, and closing it takes its cards away.
+    expect(decision('Change allowances and thresholds')).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(document.activeElement).toBe(button);
+    expect(panel).not.toBeVisible();
+    expect(panel.querySelectorAll('.lever--curated')).toHaveLength(0);
   });
 
   it('prices a policy before it is chosen, then says what it does, and the bar keeps score', async () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
+    openDecision('Change the rates');
     const card = policy('Put up the basic rate of income tax');
     // At rest: what the smallest size would do, on HMRC's own figure, and what the headroom would
     // then be, interest included (Phase 25), which the screen says once. It is in the
@@ -125,14 +171,15 @@ describe('fine-tune tax and spend: the curated levers', () => {
     const before = barFigure();
     fireEvent.click(within(card).getByRole('radio', { name: 'Medium 22%' }));
     // Chosen: the hint gives way to the lever's own effect line, the red line is crossed, the
-    // group says what it now raises, and the bar has moved.
+    // decision and its tax say what they now raise, and the bar has moved.
     expect(within(card).queryByText(/^Small: would raise/)).toBeNull();
     expect(within(card).getByRole('radio', { name: 'Medium 22%' })).toBeChecked();
     expect(
       within(card).getByText(/Day-to-day budget in 2029-30: raises £\d+\.\dbn/),
     ).toBeInTheDocument();
     expect(within(card).getByText('Breaks the manifesto: The tax lock')).toHaveClass('tag--warn');
-    expect(group(/^Everyone 1 chosen · raises £\d+\.\dbn/)).toBeInTheDocument();
+    expect(group(/^Income tax 1 chosen · raises £\d+\.\dbn$/)).toBeInTheDocument();
+    expect(statusOf('Change the rates')).toMatch(/^1 chosen · raises £\d+\.\dbn$/);
     expect(barFigure()).not.toBe(before);
     await waitFor(() => expect(search().get('L')).toMatch(/itbr\.2/));
     // Large goes past HMRC's figure: the straight line is the game's arithmetic, and says so.
@@ -140,11 +187,8 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(
       within(card).getByText(/Beyond 2p the game scales it in a straight line/),
     ).toBeInTheDocument();
-    // The other way, in the fold, would replace it; choosing it clears this one (Phase 26).
-    const fold = openFold(/^Everyone/);
-    const cut = cardOf(
-      within(fold).getByRole('heading', { name: 'Cut the basic rate of income tax' }),
-    );
+    // The other way, in the same decision, would replace it; choosing it clears this one.
+    const cut = policy('Cut the basic rate of income tax');
     expect(
       within(cut).getByText('Choosing this replaces Put up the basic rate of income tax (25%).'),
     ).toBeInTheDocument();
@@ -154,10 +198,36 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(
       within(card).getByText('Choosing this replaces Cut the basic rate of income tax (19%).'),
     ).toBeInTheDocument();
+    expect(statusOf('Change the rates')).toMatch(/^1 chosen · costs £\d+\.\dbn$/);
+  });
+
+  it('says where a decision of one scale stands, and opens on arrival what a link chose', async () => {
+    at(`/finetune/tax?${BASE}&${GAME}&L=ct.1_iht.-40`);
+    // Chosen before the screen opened: open, the choice in view; everything else closed.
+    expect(decision('Change corporation tax')).toHaveAttribute('aria-expanded', 'true');
+    expect(decision('Change the rate')).toHaveAttribute('aria-expanded', 'true');
+    expect(document.querySelectorAll('.tune__decision-toggle[aria-expanded="true"]')).toHaveLength(
+      2,
+    );
+    expect(statusOf('Change corporation tax')).toMatch(/^26% · raises £\d\.\dbn$/);
+    expect(statusOf('Change the rate')).toMatch(/^Abolish \(0%\) · costs £\d+\.\dbn$/);
+    expect(group(/^Inheritance tax 1 chosen · costs £\d+\.\dbn$/)).toBeInTheDocument();
+    // The user's VAT: the headline rate, chosen here, says where it now stands.
+    const panel = openDecision('Change the headline rate');
+    fireEvent.click(
+      within(cardOf(within(panel).getByRole('heading', { name: 'Put up VAT' }))).getByRole(
+        'radio',
+        { name: 'Medium 22%' },
+      ),
+    );
+    expect(statusOf('Change the headline rate')).toMatch(/^22% · raises £\d+\.\dbn$/);
+    expect(group(/^VAT 1 chosen · raises £\d+\.\dbn$/)).toBeInTheDocument();
+    await waitFor(() => expect(search().get('L')).toMatch(/vats\.2/));
   });
 
   it('marks employer National Insurance amber, not red: the tax lock strained', () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
+    openDecision('Change what employers pay');
     const card = policy('Put up employer National Insurance');
     expect(
       within(card).getByText(/^Small: would raise £\d+\.\dbn · headroom would be/),
@@ -170,34 +240,39 @@ describe('fine-tune tax and spend: the curated levers', () => {
     expect(within(card).queryByText('Breaks the manifesto: The tax lock')).toBeNull();
   });
 
-  it('keeps a policy chosen inside the fold where it is, and shows it at the top next time', () => {
+  it('keeps a decision open while it is chosen in, and open on the next visit', () => {
     const first = at(`/finetune/tax?${BASE}&${GAME}`);
-    const fold = openFold(/^Drivers/);
-    expect(within(fold).getByText('8 more policies')).toBeInTheDocument();
-    const alcohol = cardOf(within(fold).getByRole('heading', { name: 'Put up alcohol duty' }));
+    const panel = openDecision('Tax drink, tobacco and gambling');
+    const alcohol = cardOf(within(panel).getByRole('heading', { name: 'Put up alcohol duty' }));
     fireEvent.click(within(alcohol).getByRole('radio', { name: 'Small 5% more' }));
-    // Still in the fold: the card never jumps from under the pointer.
-    expect(cardOf(within(fold).getByRole('heading', { name: 'Put up alcohol duty' }))).toBe(
-      alcohol,
-    );
-    first.unmount();
-    // The next visit finds it chosen, and on show; its other way stays in the fold.
-    at(`/finetune/tax?${BASE}&${GAME}&L=alc.5`);
-    const again = group(/^Drivers, smokers, gamblers and flyers 1 chosen/);
-    expect(within(again).getByText('7 more policies')).toBeInTheDocument();
+    // Still open, and the card where it was: it never jumps from under the pointer.
+    expect(decision('Tax drink, tobacco and gambling')).toHaveAttribute('aria-expanded', 'true');
+    expect(policy('Put up alcohol duty')).toBe(alcohol);
+    expect(statusOf('Tax drink, tobacco and gambling')).toMatch(/^1 chosen · raises £0\.\dbn$/);
+    expect(group(/^Duties 1 chosen · raises £0\.\dbn$/)).toBeInTheDocument();
+    // Closed and opened again, the choice is as it was.
+    fireEvent.click(decision('Tax drink, tobacco and gambling'));
+    openDecision('Tax drink, tobacco and gambling');
     expect(
       within(policy('Put up alcohol duty')).getByRole('radio', { name: 'Small 5% more' }),
     ).toBeChecked();
-    const folded = openFold(/^Drivers/);
-    expect(within(folded).queryByRole('heading', { name: 'Put up alcohol duty' })).toBeNull();
-    expect(within(folded).getByRole('heading', { name: 'Cut alcohol duty' })).toBeInTheDocument();
+    first.unmount();
+    // The next visit finds the decision open, both ways in it, and every other decision closed.
+    at(`/finetune/tax?${BASE}&${GAME}&L=alc.5`);
+    expect(decision('Tax drink, tobacco and gambling')).toHaveAttribute('aria-expanded', 'true');
+    expect(
+      within(policy('Put up alcohol duty')).getByRole('radio', { name: 'Small 5% more' }),
+    ).toBeChecked();
+    expect(policy('Cut alcohol duty')).toBeInTheDocument();
+    expect(decision('Change fuel duty')).toHaveAttribute('aria-expanded', 'false');
   });
 
   it('warns when two levers overlap: the April 2027 freeze against a fuel duty cut', () => {
     at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&M=rate.0.75_rpi.0.5&L=fuel.-10`);
-    // The cut is the cost-of-living flagship's own, so fuel duty is one line in the drivers'
-    // group with the way back to that flagship, not a card that could undo it (Phase 26).
-    const held = group(/^Drivers/).querySelector('.lever--held');
+    // The cut is the cost-of-living flagship's own, so its decision is open on arrival and fuel
+    // duty is one line in it, with the way back to that flagship, not a card that could undo it.
+    expect(decision('Change fuel duty')).toHaveAttribute('aria-expanded', 'true');
+    const held = group(/^Duties/).querySelector('.lever--held');
     expect(held?.querySelector('.lever__held')?.textContent).toMatch(/^Cut fuel duty by 10%/);
     // The freeze a Chancellor faces this autumn is on show, costs money (Phase 25), and says it
     // moves the same duty as the cut.
@@ -212,6 +287,7 @@ describe('fine-tune tax and spend: the curated levers', () => {
 
   it('reads a relief cost as the most it could raise, and says why in plain words', () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
+    openDecision('Change what employers pay');
     const pensions = cardOf(
       screen.getByRole('checkbox', {
         name: 'Charge employer National Insurance on pension contributions',
@@ -239,6 +315,8 @@ describe('fine-tune tax and spend: the curated levers', () => {
 
   it('will not let two taxes that count the same money both in, and swaps them in one tap', async () => {
     at(`/finetune/tax?${BASE}&${GAME}&L=cgtexit.1`);
+    // The charge on leavers was chosen before the screen opened, so its decision is open.
+    expect(decision('Tax gains that go untaxed')).toHaveAttribute('aria-expanded', 'true');
     const death = screen.getByRole('checkbox', { name: 'Tax capital gains when someone dies' });
     const card = cardOf(death);
     expect(death).toHaveAttribute('aria-disabled', 'true');
@@ -439,8 +517,9 @@ describe('fine-tune tax and spend: the curated levers', () => {
   it('has the bar say what changed, once the choice settles (Phase 25)', async () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     const status = within(bar()).getByRole('status');
-    // Mounted empty: nothing is said on arrival.
+    // Mounted empty: nothing is said on arrival, nor on opening a decision.
     expect(status).toBeEmptyDOMElement();
+    openDecision('Change the rates');
     fireEvent.click(
       within(policy('Put up the basic rate of income tax')).getByRole('radio', {
         name: 'Small 21%',
@@ -478,18 +557,31 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
       screen.getByRole('button', { name: 'See every idea (all 85 tax policies)' }),
     ).toBeInTheDocument();
     expect(cardTitles()).toEqual([
-      'Keep VAT off electricity after March 2027',
       'Give everyone the same 30% pension tax relief',
-      'Charge employer National Insurance on pension contributions',
       'Put up employer National Insurance',
-      'Double council tax on the biggest homes (bands G and H)',
+      'Charge employer National Insurance on pension contributions',
+      'Keep VAT off electricity after March 2027',
       'Tax capital gains when someone dies',
       'End the extra inheritance tax allowance for family homes',
+      'Double council tax on the biggest homes (bands G and H)',
       'Put gambling duties up again',
     ]);
-    // No folds, and a group at rest names no count of policies that are not on show.
+    // Seven taxes, the four with no pick left out; no decisions, no folds, and no count at rest.
+    expect([...document.querySelectorAll('section.tune h2')].map((h) => h.textContent)).toEqual([
+      'Income tax',
+      'National Insurance',
+      'VAT',
+      'Capital gains tax',
+      'Inheritance tax',
+      'Council tax',
+      'Duties',
+    ]);
+    expect(document.querySelectorAll('.tune__decision-toggle')).toHaveLength(0);
     expect(screen.queryByText(/more polic(y|ies)$/)).toBeNull();
-    expect(group(/^Everyone$/)).toBeInTheDocument();
+    // A card is headed a level below its tax, as there is no decision between them.
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Put gambling duties up again' }),
+    ).toBeInTheDocument();
     // Still one primary button, and the cards still price themselves.
     expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
     expect(
@@ -497,9 +589,7 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     ).toBeInTheDocument();
     // Chosen, a group says so as it does in advanced mode.
     fireEvent.click(screen.getByRole('checkbox', { name: 'Put gambling duties up again' }));
-    expect(
-      group(/^Drivers, smokers, gamblers and flyers 1 chosen · raises £\d\.\dbn/),
-    ).toBeInTheDocument();
+    expect(group(/^Duties 1 chosen · raises £\d\.\dbn/)).toBeInTheDocument();
   });
 
   it('swaps to every idea and back with one button, which keeps the focus', () => {
@@ -513,8 +603,14 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     expect(document.activeElement).toBe(button);
     expect(within(modeLine()).getByRole('status')).toHaveTextContent('Every idea is on show.');
     expect(modeLine().textContent).not.toMatch(/A shortlist/);
-    expect(document.querySelectorAll('.lever--curated')).toHaveLength(15);
-    expect(group(/^Everyone 27 policies/)).toBeInTheDocument();
+    // Advanced mode's screen: every tax, its decisions all closed.
+    expect(document.querySelectorAll('.lever--curated')).toHaveLength(0);
+    expect(
+      [...document.querySelectorAll('.tune__decision-toggle')].map((b) =>
+        b.getAttribute('aria-expanded'),
+      ),
+    ).toEqual(Array(26).fill('false'));
+    expect(group(/^Wealth tax$/)).toBeInTheDocument();
     expect(
       screen.getByText(
         'Raise or cut any tax. Watch your headroom move. Your Director of Tax’s view is on each lever.',
@@ -533,8 +629,8 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
   it('never hides what was chosen: a policy picked in advanced mode stays on show in basic', () => {
     window.localStorage.setItem('btc.mode.v1', 'advanced');
     at(`/finetune/tax?${BASE}&${GAME}`);
-    const fold = openFold(/^Drivers/);
-    const alcohol = cardOf(within(fold).getByRole('heading', { name: 'Put up alcohol duty' }));
+    const panel = openDecision('Tax drink, tobacco and gambling');
+    const alcohol = cardOf(within(panel).getByRole('heading', { name: 'Put up alcohol duty' }));
     fireEvent.click(within(alcohol).getByRole('radio', { name: 'Small 5% more' }));
     // The way back to the shortlist is the screen's own button (the footer's switch is withdrawn
     // for now, ADR-0032).
@@ -545,18 +641,22 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
       within(policy('Put up alcohol duty')).getByRole('radio', { name: 'Small 5% more' }),
     ).toBeChecked();
     expect(cardTitles()).toHaveLength(9);
+    // And back: the decision holding it opens, as it would on a visit that found it chosen.
+    fireEvent.click(screen.getByRole('button', { name: /^See every idea/ }));
+    expect(decision('Tax drink, tobacco and gambling')).toHaveAttribute('aria-expanded', 'true');
+    expect(decision('Change fuel duty')).toHaveAttribute('aria-expanded', 'false');
   });
 
   it('shows a lever a link chose, and keeps it on show after Undo until the next visit', async () => {
     at(`/finetune/tax?${BASE}&${GAME}&L=alc.5`);
     const alcohol = policy('Put up alcohol duty');
     expect(within(alcohol).getByRole('radio', { name: 'Small 5% more' })).toBeChecked();
-    expect(group(/^Drivers, smokers, gamblers and flyers 1 chosen · raises/)).toBeInTheDocument();
+    expect(group(/^Duties 1 chosen · raises/)).toBeInTheDocument();
     fireEvent.click(within(alcohol).getByRole('button', { name: 'Undo for Put up alcohol duty' }));
     await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/alc/));
     // Still on show: a card never vanishes from under the pointer.
     expect(policy('Put up alcohol duty')).toBe(alcohol);
-    expect(group(/^Drivers, smokers, gamblers and flyers$/)).toBeInTheDocument();
+    expect(group(/^Duties$/)).toBeInTheDocument();
   });
 
   it('shows the flagships’ lines and the defence plan’s gap, which the briefing puts on the desk', () => {

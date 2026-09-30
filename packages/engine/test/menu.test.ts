@@ -311,10 +311,12 @@ describe('the Budget 2026 menu', () => {
     expect(effectOf({ cgtprr: 1 }, 'cgtprr', '2029-30').receipts).toBeCloseTo(want, -1);
     const homes = lever('cgtprr');
     expect(homes.notOnTheTable).toBeDefined();
-    // Step 4 offers it after every lever in its group that is on the table (Phase 26).
+    // Step 4 offers it after every lever in its decision that is on the table (Phase 26,
+    // ADR-0035).
     const codes =
       ds.finetune.tax.groups
-        .find((g) => g.items.some((i) => i.code === 'cgtprr'))
+        .flatMap((g) => g.decisions)
+        .find((d) => d.items.some((i) => i.code === 'cgtprr'))
         ?.items.map((i) => i.code) ?? [];
     const onTable = codes.filter((c) => !lever(c).notOnTheTable).map((c) => codes.indexOf(c));
     expect(codes.indexOf('cgtprr')).toBeGreaterThan(Math.max(...onTable));

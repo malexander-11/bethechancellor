@@ -84,6 +84,16 @@ export function sizeWords(lever: Lever, value: number): string {
   return shareWords(lever, value);
 }
 
+/**
+ * Where a lever is planned to be, as a decision's status and a scale's resting size say it
+ * (ADR-0035): "20% as planned" where the lever has a level or its own labels, else "As planned".
+ */
+export function plannedWords(lever: Lever): string {
+  const { level, labels } = lever.control;
+  if (level || labels) return `${sizeWords(lever, lever.control.default)} as planned`;
+  return 'As planned';
+}
+
 /** A spending line priced as a share of its forecast path (departments, benefits, investment). */
 export function isShareOfSpending(lever: Lever): boolean {
   return lever.costing.kind === 'pctOfBaseline' && lever.classification?.side !== 'receipts';

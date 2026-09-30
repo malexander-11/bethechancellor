@@ -65,11 +65,14 @@ import type {
   optionsFileSchema,
   deliverOptionSchema,
   optionScaleSchema,
+  finetuneDecisionSchema,
   finetuneFileSchema,
   finetuneGroupSchema,
   finetuneItemSchema,
   finetunePolicySchema,
   finetuneSideSchema,
+  finetuneTaxGroupSchema,
+  finetuneTaxSideSchema,
 } from '../schema/game.schema.js';
 import type {
   glossaryFileSchema,
@@ -132,7 +135,10 @@ export type DeliverOption = z.infer<typeof deliverOptionSchema>;
 export type OptionScale = z.infer<typeof optionScaleSchema>;
 export type FinetuneFile = z.infer<typeof finetuneFileSchema>;
 export type FinetuneSide = z.infer<typeof finetuneSideSchema>;
+export type FinetuneTaxSide = z.infer<typeof finetuneTaxSideSchema>;
 export type FinetuneGroup = z.infer<typeof finetuneGroupSchema>;
+export type FinetuneTaxGroup = z.infer<typeof finetuneTaxGroupSchema>;
+export type FinetuneDecision = z.infer<typeof finetuneDecisionSchema>;
 export type FinetuneItem = z.infer<typeof finetuneItemSchema>;
 export type FinetunePolicy = z.infer<typeof finetunePolicySchema>;
 export type HouseholdsFile = z.infer<typeof householdsFileSchema>;

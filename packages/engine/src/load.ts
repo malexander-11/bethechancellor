@@ -60,7 +60,6 @@ import { policyYearsOf } from './calc/arithmetic.js';
 import { fyOfDate, fyStart } from './calc/years.js';
 import {
   FINETUNE_SIDES,
-  WHO_PAYS,
   deskLevers,
   finetuneItems,
   finetuneNames,
@@ -259,7 +258,8 @@ function collectSourceIds(value: unknown, out: Set<string>): void {
  * counts by the stability rule's target year, is on the table, and breaks no promise at any size
  * it comes in (a strain, amber, is allowed and still shown); no two picks, and no pick and lever
  * already on the desk, count the same money. Step 4 picks one way per lever, six to ten a screen,
- * at least one in every group; step 3 picks one or two ways a priority, at least one in full.
+ * at least one in every spending group (a tax with no pick is simply left out of basic mode,
+ * ADR-0035); step 3 picks one or two ways a priority, at least one in full.
  * Every lever on the desk is on step 4. Whether a pick is worth £1bn needs the engine, so the
  * tests check that.
  */
@@ -306,9 +306,11 @@ function shortlistProblems(ds: Dataset): string[] {
       if (picks.length < 6 || picks.length > 10) {
         problems.push(`the ${side} screen picks ${picks.length} policies, not six to ten`);
       }
-      for (const group of ds.finetune[side].groups) {
-        if (!picks.some((p) => p.group.id === group.id)) {
-          problems.push(`${side} group ${group.id} has no pick`);
+      if (side === 'spending') {
+        for (const group of ds.finetune.spending.groups) {
+          if (!picks.some((p) => p.group.id === group.id)) {
+            problems.push(`spending group ${group.id} has no pick`);
+          }
         }
       }
       for (const { code, pick } of picks) {
@@ -676,8 +678,9 @@ export function validateDataset(ds: Dataset): string[] {
     // a live lever on its own screen's side of the Budget; every size a policy offers is a setting
     // the lever can reach, not where it rests, and a policy's sizes go one way and grow; two
     // policies on a lever go opposite ways; a lever that is not a toggle has a plain name; a tax
-    // sits in the who-pays group its incidence tag names; a lever not on the table comes after the
-    // rest of its group; and the screen's adviser exists and speaks on that step.
+    // sits in the section named for its family, one decision among that tax's (ADR-0035); a lever
+    // not on the table comes after the rest of its decision, or of its spending group; and the
+    // screen's adviser exists and speaks on that step.
     const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
     const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
     for (const side of FINETUNE_SIDES) {
@@ -688,13 +691,16 @@ export function validateDataset(ds: Dataset): string[] {
       } else if (adviser && !adviser.steps.includes('finetune')) {
         problems.push(`the ${side} screen's adviser ${adviser.id} does not speak on finetune`);
       }
-      for (const group of screen.groups) {
-        const payers = WHO_PAYS[group.id];
-        if (side === 'tax' && !payers) {
-          problems.push(`tax group ${group.id} is not one of the who-pays groups`);
-        }
+      // A run is what is read in one go: a tax decision's levers, or a spending group's.
+      const runs =
+        side === 'tax'
+          ? ds.finetune.tax.groups.flatMap((section) =>
+              section.decisions.map((d) => ({ family: section.label, items: d.items })),
+            )
+          : ds.finetune.spending.groups.map((g) => ({ family: undefined, items: g.items }));
+      for (const { family, items } of runs) {
         let pastTheTable: string | undefined;
-        for (const item of group.items) {
+        for (const item of items) {
           const lever = byCode.get(item.code);
           if (!lever) {
             problems.push(`the ${side} screen offers unknown lever "${item.code}"`);
@@ -740,13 +746,10 @@ export function validateDataset(ds: Dataset): string[] {
           if (ways.length === 2 && ways[0] === ways[1]) {
             problems.push(`lever ${item.code} has two policies the same way`);
           }
-          if (side === 'tax' && payers && ds.incidence) {
-            const pays = ds.incidence.levers[item.code];
-            if (!pays || !payers.includes(pays)) {
-              problems.push(
-                `tax lever ${item.code} falls on ${pays ?? 'nobody'}, not on group ${group.id}`,
-              );
-            }
+          if (family !== undefined && lever.group !== family) {
+            problems.push(
+              `tax lever ${item.code} is in the ${lever.group ?? 'no'} family, not ${family}`,
+            );
           }
         }
       }

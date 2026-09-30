@@ -4,6 +4,7 @@ import {
   basicPolicy,
   deskLevers,
   formatGbpBn,
+  groupItems,
   interventionsFor,
   itemName,
   leadPolicy,
@@ -11,10 +12,12 @@ import {
   rankedPriorities,
   setByFlagship,
   stageIndex,
+  type FinetuneDecision,
   type FinetuneGroup,
   type FinetuneItem,
   type FinetunePolicy,
   type FinetuneSideId,
+  type FinetuneTaxGroup,
   type LeverEffect,
 } from '@btc/engine';
 import { useState, type ReactNode } from 'react';
@@ -22,7 +25,7 @@ import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { sizeWords } from '../components/LeverControl';
+import { plannedWords, sizeWords } from '../components/LeverControl';
 import { ModeLine } from '../components/ModeLine';
 import { HeldLever, PolicyCard, type Held } from '../components/PolicyCard';
 import { SourceList } from '../components/SourceLink';
@@ -57,32 +60,27 @@ const INTEREST: Record<FinetuneSideId, string> = {
     'Headroom also moves with the interest on borrowing, so it can move more than a budget saves.',
 };
 
-/**
- * The head of a group: at rest, how many policies it offers; once any is chosen, how many of its
- * levers are chosen and what they do in the target year: on the tax screen what they raise (or
- * cost), on the spending screen what they cost (or save), day-to-day and investment together. In
- * basic mode a group at rest says nothing (`atRest` false, Phase 27): its count would be of
- * policies that are not on show.
- */
-export function groupCount(
-  group: FinetuneGroup,
-  side: FinetuneSideId,
-  values: Record<string, number>,
-  effects: readonly LeverEffect[],
-  year: string,
-  atRest = true,
-): string {
-  const moved = group.items.filter((item) => {
+/** The levers among these that are off where they rest. */
+function movedAmong(items: readonly FinetuneItem[], values: Record<string, number>) {
+  return items.filter((item) => {
     const lever = byCode.get(item.code);
     return (
       lever !== undefined && (values[item.code] ?? lever.control.default) !== lever.control.default
     );
   });
-  if (moved.length === 0) {
-    if (!atRest) return '';
-    const count = group.items.reduce((n, item) => n + item.policies.length, 0);
-    return `${count} ${count === 1 ? 'policy' : 'policies'}`;
-  }
+}
+
+/**
+ * What moved levers do in the target year, in words: on the tax screen what they raise (or cost),
+ * on the spending screen what they cost (or save), day-to-day and investment together. Nothing
+ * when it rounds to nothing.
+ */
+function movedMoney(
+  moved: readonly FinetuneItem[],
+  side: FinetuneSideId,
+  effects: readonly LeverEffect[],
+  year: string,
+): string {
   let gbpm = 0;
   for (const item of moved) {
     const e = effects.find((x) => x.code === item.code);
@@ -92,25 +90,96 @@ export function groupCount(
         ? (e.receipts[year] ?? 0)
         : (e.currentSpending[year] ?? 0) + (e.capitalSpending[year] ?? 0);
   }
-  const head = `${moved.length} chosen`;
-  if (Math.abs(gbpm) < UNCHANGED_BELOW_GBPM) return head;
+  if (Math.abs(gbpm) < UNCHANGED_BELOW_GBPM) return '';
   const amount = formatGbpBn(Math.abs(gbpm), 1);
-  if (side === 'tax') return `${head} · ${gbpm > 0 ? 'raises' : 'costs'} ${amount}`;
-  return `${head} · ${gbpm > 0 ? 'costs' : 'saves'} ${amount}`;
+  if (side === 'tax') return `${gbpm > 0 ? 'raises' : 'costs'} ${amount}`;
+  return `${gbpm > 0 ? 'costs' : 'saves'} ${amount}`;
+}
+
+/**
+ * The head of a group of levers (a spending group, or a tax's section): at rest, how many policies
+ * it offers; once any is chosen, how many of its levers are chosen and what they do in the target
+ * year. With `atRest` false it says nothing at rest: in basic mode (Phase 27), where its count
+ * would be of policies not on show, and on a tax's section, whose decisions say what they hold
+ * (ADR-0035).
+ */
+export function groupCount(
+  items: readonly FinetuneItem[],
+  side: FinetuneSideId,
+  values: Record<string, number>,
+  effects: readonly LeverEffect[],
+  year: string,
+  atRest = true,
+): string {
+  const moved = movedAmong(items, values);
+  if (moved.length === 0) {
+    if (!atRest) return '';
+    const count = items.reduce((n, item) => n + item.policies.length, 0);
+    return `${count} ${count === 1 ? 'policy' : 'policies'}`;
+  }
+  const money = movedMoney(moved, side, effects, year);
+  const head = `${moved.length} chosen`;
+  return money ? `${head} · ${money}` : head;
+}
+
+/** A decision that is one lever with a scale of sizes, not ticks: the headline rate, say. */
+function scaleOf(decision: FinetuneDecision) {
+  const only = decision.items.length === 1 ? decision.items[0] : undefined;
+  const lever = only ? byCode.get(only.code) : undefined;
+  return lever && lever.control.kind !== 'toggle' ? lever : undefined;
+}
+
+/**
+ * The line beside a decision's title (ADR-0035). At rest, a decision that is one scale says where
+ * the lever is planned to be ("20% as planned"), any other how many choices it holds ("4
+ * choices"); once moved, where the scale now stands or how many are chosen, and what that raises
+ * or costs ("22% · raises £19.8bn", "1 chosen · raises £2.4bn").
+ */
+export function decisionStatus(
+  decision: FinetuneDecision,
+  values: Record<string, number>,
+  effects: readonly LeverEffect[],
+  year: string,
+): string {
+  const scale = scaleOf(decision);
+  const moved = movedAmong(decision.items, values);
+  if (moved.length === 0) {
+    if (scale) return plannedWords(scale);
+    const n = decision.items.length;
+    return `${n} ${n === 1 ? 'choice' : 'choices'}`;
+  }
+  const money = movedMoney(moved, 'tax', effects, year);
+  const head = scale
+    ? sizeWords(scale, values[scale.code] ?? scale.control.default)
+    : `${moved.length} chosen`;
+  return money ? `${head} · ${money}` : head;
+}
+
+/**
+ * Which decisions are open when the tax screen opens (ADR-0035): only those holding a lever that
+ * had moved by then, a flagship's among them, so everything chosen is in view and the rest is a
+ * list of questions. One predicate, so "the first open" or "all open" would be one line.
+ */
+function opensOnArrival(decision: FinetuneDecision, start: Record<string, number>): boolean {
+  return decision.items.some((item) => start[item.code] !== undefined);
 }
 
 /**
  * Step 4 (Phase 24, ADR-0025; policies since Phase 26, ADR-0027): fine-tune tax, then spending.
- * Levers are grouped (who pays, on the tax screen; what the money is for, on the other), and each
- * offers its policies: one each way where it moves both ways, in one to three sizes, under a plain
- * title with one adviser's line and the numbers in view. The bar keeps score. A group's first few
- * levers show their usual policy, with any lever already chosen showing the policy its way; the
- * rest wait under one fold, grouped by the lever's family, and a policy chosen inside the fold
- * stays where it is until the next visit, so a card never jumps from under the pointer. A lever a
- * flagship the player chose holds is one line, with the way back to that flagship. Every policy
- * lever the game has is here (Phase 26): there is no desk behind it. That is advanced mode; basic
- * mode, a first game's, shows the screen adviser's shortlist and no folds (Phase 27, ADR-0028),
- * and anything chosen before the screen opened, in either mode, stays on show.
+ * Each lever offers its policies: one each way where it moves both ways, in one to three sizes,
+ * under a plain title with one adviser's line and the numbers in view. The bar keeps score.
+ *
+ * The tax screen goes tax by tax (ADR-0035): each tax a section, each section the decisions about
+ * it, closed until opened, a decision holding a lever chosen before the screen opened open from
+ * the start. Opening one shows every choice in it. The spending screen groups by what the money is
+ * for: a group's first few levers show their usual policy, with any lever already chosen showing
+ * the policy its way, and the rest wait under one fold, grouped by the lever's family; a policy
+ * chosen inside the fold stays where it is until the next visit, so a card never jumps from under
+ * the pointer. On either screen a lever a flagship the player chose holds is one line, with the
+ * way back to that flagship. Every policy lever the game has is here (Phase 26): there is no desk
+ * behind it. That is advanced mode; basic mode, a first game's, shows the screen adviser's
+ * shortlist, no decisions and no folds (Phase 27, ADR-0028), and anything chosen before the screen
+ * opened, in either mode, stays on show.
  */
 export function FinetunePage() {
   const { side: param } = useParams();
@@ -168,7 +237,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
     ruleMissed: outcome.verdicts.some(isMissed),
   }).slice(0, 1);
 
-  const card = (item: FinetuneItem, policy: FinetunePolicy, headingLevel?: 4) => {
+  const card = (item: FinetuneItem, policy: FinetunePolicy, headingLevel?: 3 | 4) => {
     const lever = byCode.get(item.code);
     if (!lever) return null;
     return (
@@ -187,7 +256,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       />
     );
   };
-  const heldLine = (item: FinetuneItem, h: Held) => {
+  const heldLine = (item: FinetuneItem, h: Held, headingLevel: 3 | 4 = 3) => {
     const lever = byCode.get(item.code);
     const value = state.leverValues[item.code];
     const words =
@@ -195,7 +264,82 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         ? sizeWords(lever, value)
         : undefined;
     return (
-      <HeldLever key={item.code} name={itemName(item)} held={h} {...(words ? { words } : {})} />
+      <HeldLever
+        key={item.code}
+        name={itemName(item)}
+        held={h}
+        headingLevel={headingLevel}
+        {...(words ? { words } : {})}
+      />
+    );
+  };
+
+  // A decision opened: every choice in it, a flagship's lever as its line, headed a level below
+  // the decision (ADR-0035).
+  const decisionBody = (decision: FinetuneDecision) =>
+    decision.items.flatMap((item) => {
+      const h = held.get(item.code);
+      if (h) return [heldLine(item, h, 4)];
+      return item.policies.map((policy) => card(item, policy, 4));
+    });
+
+  /**
+   * One tax (ADR-0035). Advanced mode: its decisions, each a disclosure with a status. Basic mode:
+   * the cards basic mode shows for its levers, and nothing at all when there are none.
+   */
+  const taxSection = (section: FinetuneTaxGroup) => {
+    const id = `tune-${section.id}`;
+    const items = groupItems(section);
+    const count = groupCount(items, 'tax', state.leverValues, outcome.leverEffects, year, false);
+    const heading = (
+      <h2 id={id} className="section-label who__title">
+        {section.label}
+        {count ? (
+          <>
+            {' '}
+            <span className="who__count">{count}</span>
+          </>
+        ) : null}
+      </h2>
+    );
+    if (basic) {
+      const shown: ReactNode[] = [];
+      for (const item of items) {
+        const lever = byCode.get(item.code);
+        if (!lever) continue;
+        const h = held.get(item.code);
+        if (h) {
+          shown.push(heldLine(item, h));
+          continue;
+        }
+        const policy = basicPolicy(item, lever, start[item.code], DESK.has(item.code));
+        if (policy) shown.push(card(item, policy));
+      }
+      if (shown.length === 0) return null;
+      return (
+        <section key={section.id} className="who tune" aria-labelledby={id}>
+          {heading}
+          <div className="tune__levers">{shown}</div>
+        </section>
+      );
+    }
+    return (
+      <section key={section.id} className="who tune" aria-labelledby={id}>
+        {heading}
+        <div className="tune__decisions">
+          {section.decisions.map((decision) => (
+            <Decision
+              key={decision.id}
+              id={decision.id}
+              title={decision.title}
+              status={decisionStatus(decision, state.leverValues, outcome.leverEffects, year)}
+              open={opensOnArrival(decision, start)}
+            >
+              {() => decisionBody(decision)}
+            </Decision>
+          ))}
+        </div>
+      </section>
     );
   };
 
@@ -263,7 +407,8 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       <ModeLine
         every={`${policyCount(finetune, side)} ${side === 'tax' ? 'tax' : 'spending'} policies`}
       />
-      {spec.groups.map((group) => {
+      {side === 'tax' ? finetune.tax.groups.map(taxSection) : null}
+      {(side === 'spending' ? finetune.spending.groups : []).map((group: FinetuneGroup) => {
         const id = `tune-${group.id}`;
         // On show: the usual policy of the group's first levers, and of any chosen on arrival the
         // policy its way; a lever a flagship holds, as one line. Everything else waits in the fold.
@@ -295,7 +440,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         // arrival none is.
         if (shown.length === 0 && folded.length === 0) return null;
         const count = groupCount(
-          group,
+          group.items,
           side,
           state.leverValues,
           outcome.leverEffects,
@@ -335,8 +480,51 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
 }
 
 /**
- * A group's fold (Phase 26): "{n} more policies", whose cards mount only while it is open, so a
- * screen of ninety policies runs the engine for the cards on show, not for every card.
+ * One decision about a tax (ADR-0035): its title and its status in a heading's button, and its
+ * choices, mounted only while it is open, so a screen of eighty-odd policies runs the engine for
+ * the decisions opened, not for every card. A button in a heading rather than a details, so a
+ * screen reader can move from decision to decision by heading and hear whether each is open; the
+ * focus stays on the button as it opens and closes.
+ */
+function Decision({
+  id,
+  title,
+  status,
+  open: openOnArrival,
+  children,
+}: {
+  id: string;
+  title: string;
+  status: string;
+  open: boolean;
+  children: () => ReactNode;
+}) {
+  const [open, setOpen] = useState(openOnArrival);
+  const panel = `decision-${id}`;
+  return (
+    <div className="tune__decision">
+      <h3 className="tune__decision-head">
+        <button
+          type="button"
+          className="tune__decision-toggle"
+          aria-expanded={open}
+          aria-controls={panel}
+          onClick={() => setOpen((o) => !o)}
+        >
+          <span className="tune__decision-title">{title}</span>{' '}
+          <span className="tune__decision-status">{status}</span>
+        </button>
+      </h3>
+      <div id={panel} className="tune__decision-body tune__levers" hidden={!open}>
+        {open ? children() : null}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A spending group's fold (Phase 26): "{n} more policies", whose cards mount only while it is
+ * open, so a screen of forty-odd policies runs the engine for the cards on show, not every card.
  */
 function Fold({ count, children }: { count: number; children: () => ReactNode }) {
   const [open, setOpen] = useState(false);

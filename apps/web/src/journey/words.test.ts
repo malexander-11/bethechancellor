@@ -153,6 +153,11 @@ describe('word budgets: one line visible, the rest a click away', () => {
       // Basic mode's lead says whose best ideas these are, in the same room (Phase 27).
       expect(words(side.shortlistLead), side.shortlistLead).toBeLessThanOrEqual(14);
     }
+    // Each tax asks its questions in at most six words (ADR-0035); a figure may name the thing
+    // decided, as a policy's title may ("Change the 5% band").
+    const decisions = finetune.tax.groups.flatMap((g) => g.decisions);
+    expect(decisions).toHaveLength(26);
+    for (const d of decisions) expect(words(d.title), d.title).toBeLessThanOrEqual(6);
   });
 
   it('says what to do now in ten words, and a priority’s purpose in ten', () => {
@@ -215,6 +220,7 @@ describe('word budgets: one line visible, the rest a click away', () => {
         s.shortlistLead,
         ...s.groups.map((g) => g.label),
       ]),
+      ...finetune.tax.groups.flatMap((g) => g.decisions.map((d) => d.title)),
       ...guide.stages.map((s) => s.now),
       ...guide.stages.map((s) => s.title),
       ...all.map((o) => o.title),

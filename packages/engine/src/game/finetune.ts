@@ -1,20 +1,23 @@
 import type {
   ContextFile,
   DeliverOption,
+  FinetuneDecision,
   FinetuneFile,
   FinetuneGroup,
   FinetuneItem,
   FinetunePolicy,
+  FinetuneTaxGroup,
   Lever,
 } from '../types/data.js';
 import type { AmbitionStatus } from './ambitions.js';
 
 /**
  * Step 4's levers (Phase 24, ADR-0025), chosen as policies since Phase 26 (ADR-0027): the tax and
- * spending levers a Chancellor fine-tunes the Budget with, grouped, each offering one or two
- * policies (one each way) in one to three sizes, with one adviser's line on each
- * (data/journey/finetune.json). Nothing here prices anything: choosing a size sets the lever
- * itself, so every screen that reads the lever agrees.
+ * spending levers a Chancellor fine-tunes the Budget with, each offering one or two policies (one
+ * each way) in one to three sizes, with one adviser's line on each (data/journey/finetune.json).
+ * The tax screen is laid out tax by tax, each tax's levers in the decisions about it (ADR-0035);
+ * the spending screen by what the money is for. Nothing here prices anything: choosing a size sets
+ * the lever itself, so every screen that reads the lever agrees.
  */
 
 export type FinetuneSideId = 'tax' | 'spending';
@@ -23,36 +26,41 @@ export type FinetuneSideId = 'tax' | 'spending';
 export const FINETUNE_SIDES: readonly FinetuneSideId[] = ['tax', 'spending'];
 
 /**
- * Who pays, on the tax screen: each group's id and the incidence pays-groups
- * (data/journey/incidence.json) whose taxes may sit in it. Small groups join the nearest large
- * one. The labels are the data's; which tax sits where is checked against this.
- */
-export const WHO_PAYS: Readonly<Record<string, readonly string[]>> = {
-  everyone: ['broad-base', 'tax-gap', 'working-pensioners'],
-  'best-off': ['top', 'higher-earners'],
-  business: ['business'],
-  'savers-owners': ['savers-owners'],
-  duties: ['duties', 'motorists', 'flyers', 'disabled-motorists'],
-};
-
-/**
- * How many of a group's levers are on show before its fold in advanced mode: the hand-picked
- * ones. Basic mode has no fold; it shows the adviser's shortlist (Phase 27, ADR-0028).
+ * How many of a spending group's levers are on show before its fold in advanced mode: the
+ * hand-picked ones. Basic mode has no fold; it shows the adviser's shortlist (Phase 27, ADR-0028).
+ * The tax screen has no fold: each tax lists its decisions, closed until opened (ADR-0035).
  */
 export const FINETUNE_SHOWN = 3;
 
-/** One lever on step 4 with the screen and the group it sits in. */
+/** A section of either screen: a tax and its decisions, or a group of spending levers. */
+export type FinetuneSection = FinetuneTaxGroup | FinetuneGroup;
+
+/** One lever on step 4 with the screen, the section and, on the tax screen, the decision it is in. */
 export interface FinetuneEntry extends FinetuneItem {
   side: FinetuneSideId;
-  group: FinetuneGroup;
+  group: FinetuneSection;
+  decision?: FinetuneDecision;
+}
+
+/** A section's levers in the order it shows them: a tax's across its decisions, in turn. */
+export function groupItems(group: FinetuneSection): FinetuneItem[] {
+  return 'decisions' in group ? group.decisions.flatMap((d) => d.items) : group.items;
 }
 
 /** Every curated lever on one screen, or on both, in the order the screens show them. */
 export function finetuneItems(file: FinetuneFile, side?: FinetuneSideId): FinetuneEntry[] {
+  const tax = (): FinetuneEntry[] =>
+    file.tax.groups.flatMap((group) =>
+      group.decisions.flatMap((decision) =>
+        decision.items.map((item) => ({ ...item, side: 'tax' as const, group, decision })),
+      ),
+    );
+  const spending = (): FinetuneEntry[] =>
+    file.spending.groups.flatMap((group) =>
+      group.items.map((item) => ({ ...item, side: 'spending' as const, group })),
+    );
   const sides = side ? [side] : FINETUNE_SIDES;
-  return sides.flatMap((s) =>
-    file[s].groups.flatMap((group) => group.items.map((item) => ({ ...item, side: s, group }))),
-  );
+  return sides.flatMap((s) => (s === 'tax' ? tax() : spending()));
 }
 
 /** A lever's plain name on these screens: its own, or a toggle's single policy's title. */
