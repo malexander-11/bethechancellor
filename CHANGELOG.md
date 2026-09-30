@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- Word budgets are one cap for each kind of screen: 30 words for the cover, 250 for a screen with
+  one thing to read or decide, and 450 for a fine-tuning screen (700 with its decisions open). They
+  used to be a count for each screen, pinned a tenth above its last measure, so every change of
+  words meant a new number.
 - The About and Methodology pages load when opened (2 KB and 7 KB gzipped), so the script every
   player loads is 259 KB gzipped. A link that opens on part of one of them still lands there once
   the page is drawn.
