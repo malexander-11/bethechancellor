@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from '../App';
 import { useMode } from './mode';
 
@@ -56,18 +56,23 @@ describe('basic and advanced (Phase 27, ADR-0028)', () => {
     expect(modeOf()).toBe('basic');
   });
 
-  it('is never in the link: a change of mode leaves the query string as it was', async () => {
-    at(TUNING);
-    // The budget writes its own address once it settles; a change of mode must not touch it after.
-    const settle = () => new Promise((resolve) => setTimeout(resolve, 400));
-    await settle();
-    const before = window.location.search;
-    expect(before).toMatch(/L=itbr\.1/);
-    fireEvent.click(everyIdea());
-    fireEvent.click(bestIdeas());
-    await settle();
-    expect(window.location.search).toBe(before);
-    expect(window.location.search).not.toMatch(/mode|basic|advanced/);
+  it('is never in the link: a change of mode leaves the query string as it was', () => {
+    vi.useFakeTimers();
+    try {
+      at(TUNING);
+      // The budget writes its own address once it settles; a change of mode must not touch it.
+      const settle = () => act(() => vi.advanceTimersByTime(400));
+      settle();
+      const before = window.location.search;
+      expect(before).toMatch(/L=itbr\.1/);
+      fireEvent.click(everyIdea());
+      fireEvent.click(bestIdeas());
+      settle();
+      expect(window.location.search).toBe(before);
+      expect(window.location.search).not.toMatch(/mode|basic|advanced/);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('answers advanced outside a provider, so a component rendered alone shows everything', () => {

@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- No web test sleeps for a fixed time: the one waiting to prove the address did not change uses fake
+  timers, and the one waiting for it to change waits for exactly that.
 - The readability and plain-words tests read one list of what a player meets
   (`apps/web/src/test/onScreen.ts`) instead of keeping two, and check rules rather than copies: no
   pinned count of sets, items, decisions or steps, and no history of past measures in the comments.

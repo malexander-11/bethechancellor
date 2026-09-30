@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
@@ -200,8 +200,9 @@ describe('Budget day: what your Budget means', () => {
     expect(screen.getByText('Economic assumptions: today’s estimate.')).toBeInTheDocument();
     expect(screen.getByText(/this game uses today’s estimate in its place/)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'the one you opened' })).toBeNull();
-    await new Promise((r) => setTimeout(r, 200));
-    expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.5/);
+    await waitFor(() =>
+      expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.5/),
+    );
   });
 
   it('closes with the verdict: the kind of Budget, the ambitions and who paid', () => {
