@@ -2,7 +2,6 @@ import {
   formatGbpBn,
   fromForecast,
   stageIndex,
-  type Badge,
   type ContextReading,
   type SourceRef,
 } from '@btc/engine';
@@ -10,7 +9,6 @@ import { Fragment, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EstimateRow } from '../components/AssumptionsTable';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { LabelBadge } from '../components/LabelBadge';
 import { Papers } from '../components/Motifs';
 import { SourceList } from '../components/SourceLink';
 import { TableScroll } from '../components/TableScroll';
@@ -61,9 +59,9 @@ function distinct(refs: readonly SourceRef[]): SourceRef[] {
  * word itself, and what the government must sell to lenders this year and why they care. How
  * it is calculated: what dearer borrowing and dearer prices have done since March, then the OBR's
  * March forecast less each of them, coming to today's estimate. The page is the same in both modes
- * and reads as plain copy (ADR-0031): each figure's badge, like its source, waits for the workings,
- * and with them on the table the estimate is made from. Nothing is chosen here and nothing is
- * scored: the primary starts the game on the estimate.
+ * and reads as plain copy (ADR-0031), with no badges (ADR-0034): each figure's source waits for the
+ * workings, and with them on the table the estimate is made from. Nothing is chosen here and
+ * nothing is scored: the primary starts the game on the estimate.
  */
 export function OutlookPage() {
   const { state, dispatch } = useBudget();
@@ -93,9 +91,6 @@ export function OutlookPage() {
     ...(cpi ? [cpi.latest.source, cpi.obr.source] : []),
     ...BRIEFING_SOURCES.calc,
   ]);
-  // Each figure's badge waits for the workings, as its source does: with them off the briefing
-  // reads as plain copy (ADR-0031).
-  const tag = (badge: Badge) => (workings ? <LabelBadge badge={badge} /> : null);
 
   // The rows' sources, with the workings on: the March forecast's own table, then for each setting
   // the OBR's sensitivity that turns it into money and the reading it is taken from.
@@ -138,12 +133,10 @@ export function OutlookPage() {
               estimate: <strong>{formatGbpBn(Math.abs(path.estimateGbpm), 1)}</strong>,
               year: yearOf(year),
             }}
-          />{' '}
-          {tag('assumption')}
+          />
         </p>
         {figures ? (
           <p className="brief__line">
-            {tag('direct')}{' '}
             {fillIn(WORDS.headroom.history, {
               since: figures.averageHeadroom.since,
               average: formatGbpBn(figures.averageHeadroom.gbpm, 0),
@@ -153,13 +146,13 @@ export function OutlookPage() {
               className="briefing__sources"
               refs={[figures.averageHeadroom.source]}
             />{' '}
-            {tag('commentary')} {WORDS.headroom.safety}{' '}
+            {WORDS.headroom.safety}{' '}
             <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.safety} />
           </p>
         ) : null}
         {belowRecord ? (
           <p className="brief__line">
-            {tag('simulated')} {WORDS.headroom.buffer}{' '}
+            {WORDS.headroom.buffer}{' '}
             <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.buffer} />
           </p>
         ) : null}
@@ -186,11 +179,10 @@ export function OutlookPage() {
           ) : null}
         </p>
         <p className="brief__line">{WORDS.what.meaning}</p>
-        {/* What lenders must buy and why they care, as one paragraph; each part keeps its badge. */}
+        {/* What lenders must buy and why they care, as one paragraph, each part with its sources. */}
         <p className="brief__line">
           {figures ? (
             <>
-              {tag('direct')}{' '}
               {fillIn(WORDS.what.gilts, { gilts: formatGbpBn(figures.giltSales.gbpm, 0) })}{' '}
               <SourceList
                 as="span"
@@ -199,7 +191,7 @@ export function OutlookPage() {
               />{' '}
             </>
           ) : null}
-          {tag('commentary')} {WORDS.what.lenders}{' '}
+          {WORDS.what.lenders}{' '}
           <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.lenders} />
         </p>
       </section>
@@ -217,7 +209,6 @@ export function OutlookPage() {
             <dt>{WORDS.calc.forecast}</dt>
             <dd>
               <span className="calc__figure">{formatGbpBn(path.forecastGbpm, 1)}</span>
-              {tag('direct')}
             </dd>
           </div>
           {path.steps.map((step) => (
@@ -225,7 +216,6 @@ export function OutlookPage() {
               <dt>{stepName(step.code)}</dt>
               <dd>
                 <span className="calc__figure">{formatGbpBn(step.headroomGbpm, 1, true)}</span>
-                {tag(step.badge)}
               </dd>
             </div>
           ))}
@@ -233,7 +223,6 @@ export function OutlookPage() {
             <dt>{WORDS.calc.estimate}</dt>
             <dd>
               <span className="calc__figure">{estimateText}</span>
-              {tag('assumption')}
             </dd>
           </div>
         </dl>
@@ -247,9 +236,8 @@ export function OutlookPage() {
                 the game uses. The OBR’s own sensitivities turn the settings into headroom.
               </p>
               <p className="panel__hint">
-                <LabelBadge badge="assumption" /> The OBR’s figure is for Bank Rate and gilt yields
-                moving together; we apply it to the rise in gilt yields alone, so the estimate leans
-                cautious.{' '}
+                The OBR’s figure is for Bank Rate and gilt yields moving together; we apply it to
+                the rise in gilt yields alone, so the estimate leans cautious.{' '}
                 <SourceList
                   as="span"
                   className="briefing__sources"

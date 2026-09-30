@@ -2,7 +2,6 @@ import type { Briefing } from '@btc/engine';
 import { useId, type ReactNode } from 'react';
 import { adviserById } from '../data';
 import { useWorkings } from '../journey/workings';
-import { LabelBadge } from './LabelBadge';
 import { SourceList } from './SourceLink';
 
 function numberOf(value: string): number {
@@ -71,7 +70,6 @@ export function AdviserBriefing({
         <h3 className="briefing__role" id={roleId}>
           {adviser?.role ?? briefing.adviser}
         </h3>
-        <LabelBadge badge="commentary" />
       </header>
       <p className="briefing__headline">{briefing.headline}</p>
       {briefing.facts?.length ? <Facts facts={briefing.facts} /> : null}

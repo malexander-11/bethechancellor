@@ -1,5 +1,4 @@
-import type { Badge, DistributionalNote, Reason, Reception, SourceRef } from '@btc/engine';
-import { LabelBadge } from './LabelBadge';
+import type { DistributionalNote, Reason, Reception, SourceRef } from '@btc/engine';
 import { SourceList } from './SourceLink';
 
 /** A line on the wider economy for the markets' fold (Phase 25): growth in words, debt interest. */
@@ -8,7 +7,6 @@ export interface EconomyLine {
   /** Whose note it is, when it is a measure's own: "Corporation tax". */
   lead?: string;
   text: string;
-  badge: Badge;
   sources: SourceRef[];
 }
 
@@ -33,7 +31,7 @@ function whySummary(tally: Reception['tally']): string {
  * something pulled the other way, one short line names it: "Counted against: Tax burden ·
  * Uncertified costings". A "why this rating" disclosure holds the question the audience asks and
  * every rule with its points, its reading, the decisions behind it and, with the workings on, its
- * sources. Every sentence is a game judgement from data and wears the badge. The markets' fold also
+ * sources. Every sentence is a game judgement from data. The markets' fold also
  * says, in words, what the Budget may do to growth and, worked out, what its borrowing costs in
  * interest (Phase 25).
  */
@@ -59,7 +57,6 @@ export function ReceptionCard({
         <h3 id={id} className="reception__title">
           {title}
         </h3>
-        <LabelBadge badge="simulated" />
       </div>
       <ol className="meter" role="img" aria-label={`${rating} of 5: ${label}`}>
         {[1, 2, 3, 4, 5].map((step) => (
@@ -125,7 +122,7 @@ export function ReceptionCard({
               {economy.map((line) => (
                 <li key={line.key}>
                   {line.lead ? <strong>{line.lead}. </strong> : null}
-                  {line.text} <LabelBadge badge={line.badge} />
+                  {line.text}{' '}
                   <SourceList as="span" className="briefing__sources" refs={line.sources} />
                 </li>
               ))}

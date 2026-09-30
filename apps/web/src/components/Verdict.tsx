@@ -1,5 +1,4 @@
 import { formatGbpBn, type BudgetVerdict } from '@btc/engine';
-import { LabelBadge } from './LabelBadge';
 import { TableScroll } from './TableScroll';
 import { SourceList } from './SourceLink';
 
@@ -19,10 +18,10 @@ const PROMISE: Record<BudgetVerdict['ambitions']['promises'][number]['fate'], st
 
 /**
  * How your Budget went (the close): what the playthrough came to. The kind of Budget is a
- * judgement from data and wears the badge, in one sentence with the rest a tap away; when the kind
- * rests on a worked-out fact (Phase 25: the rules held without a broken promise, a priority would
- * have fitted), that fact sits beneath it with its own badge. Everything in the fold is the
- * engine's figures totalled and ranked.
+ * judgement from data, in one sentence with the rest a tap away; when the kind rests on a
+ * worked-out fact (Phase 25: the rules held without a broken promise, a priority would have
+ * fitted), that fact sits beneath it. Everything in the fold is the engine's figures totalled and
+ * ranked.
  */
 export function Verdict({ verdict }: { verdict: BudgetVerdict }) {
   const { ambitions, paid, benefited, kind, targetYear } = verdict;
@@ -35,7 +34,7 @@ export function Verdict({ verdict }: { verdict: BudgetVerdict }) {
         </span>
       </p>
       <h2 id="verdict-heading" className="verdict-close__kind">
-        {kind.title} <LabelBadge badge={kind.line.badge} />
+        {kind.title}
       </h2>
       <p className="verdict-close__line">{kind.line.short ?? kind.line.text}</p>
       {kind.line.short ? (
@@ -45,11 +44,7 @@ export function Verdict({ verdict }: { verdict: BudgetVerdict }) {
         </details>
       ) : null}
       <SourceList refs={kind.line.sources} />
-      {kind.fact ? (
-        <p className="verdict-close__fact">
-          <LabelBadge badge="mechanical" /> {kind.fact}
-        </p>
-      ) : null}
+      {kind.fact ? <p className="verdict-close__fact">{kind.fact}</p> : null}
 
       <details className="more">
         <summary>Priorities, promises and who paid</summary>
@@ -84,7 +79,7 @@ export function Verdict({ verdict }: { verdict: BudgetVerdict }) {
 
           <section aria-labelledby="incidence-heading">
             <h3 id="incidence-heading" className="section-label">
-              Who paid, who benefited <LabelBadge badge="mechanical" />
+              Who paid, who benefited
             </h3>
             {paid.length === 0 && benefited.length === 0 ? (
               <p className="panel__hint">Nothing moved money in {targetYear}.</p>

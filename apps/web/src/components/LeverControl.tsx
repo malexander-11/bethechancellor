@@ -19,7 +19,6 @@ import { Milestones } from './Milestones';
 import { useId, useState, type ReactNode } from 'react';
 import { AdviceLine } from './AdviceLine';
 import { BlockedNotice } from './BlockedNotice';
-import { LabelBadge } from './LabelBadge';
 import { ProvenanceDrawer } from './ProvenanceDrawer';
 import { Term } from './Term';
 import { useWorkings } from '../journey/workings';
@@ -553,12 +552,7 @@ export function LeverControl({
             · investment counts against the debt rule, not the day-to-day rule
           </span>
         ) : null}
-        {beyondSource ? (
-          <span className="lever__effect-note">
-            {' '}
-            <LabelBadge badge="mechanical" /> {sourceRange.text}
-          </span>
-        ) : null}
+        {beyondSource ? <span className="lever__effect-note"> {sourceRange.text}</span> : null}
       </p>
     ) : null;
   const hintLine =
@@ -666,7 +660,6 @@ export function LeverControl({
         )}
         <span className="lever__flags">
           <LeverFlags redLines={redLines} chosen={chosen} />
-          <LabelBadge badge={lever.badge} />
         </span>
       </div>
       {!isToggle ? (

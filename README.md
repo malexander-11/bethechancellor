@@ -13,12 +13,12 @@ six steps with one clear action on every screen: your briefing; set your priorit
 policies; fine-tune tax and spend; deliver the Budget; feedback. There is no forecast to guess:
 every game plans on one figure, today's estimate of your headroom (£6.8bn in 2029-30: the OBR's
 March forecast brought up to date for today's borrowing costs and prices with the OBR's own
-sensitivities, badged as an assumption), and the fiscal rules are the line to meet (ADR-0025). Every
+sensitivities: an assumption), and the fiscal rules are the line to meet (ADR-0025). Every
 choice is a policy: there is no slider anywhere, and where a size makes sense a policy comes small,
 medium or large (putting up VAT is 21%, 22% or 25%). The desk that held every lever as a slider has
 gone, with its ready-made Budgets and its expert switches, and every lever it held is now a policy
 on step 4 (ADR-0027). A first game is played in basic mode, which suggests only the best ideas: each
-screen's adviser picks a few, badged as their judgement and held to rules (worth £1bn or more,
+screen's adviser picks a few, their judgement, held to rules (worth £1bn or more,
 counting by 2029-30, on the table, breaking no promise, never two that count the same money). Step 4
 then shows eight tax and seven spending ideas with no folds, and step 3 the best one or two ways to
 deliver each priority; the briefing is the same in both modes (ADR-0031). A button on each trimmed
@@ -39,10 +39,11 @@ and one button, with the steps shown from the screen that button opens (ADR-0033
 name alone and the footer one link, to the page about the game and its sources (ADR-0032, ADR-0033).
 The words are plain (ADR-0024): no sentence a player meets runs past twenty words, and a readability
 test holds every set of them at a reading age of about twelve. Every number still comes from an
-official source or a stated calculation on one, badged for what it is (Official figure, Worked out,
-Assumption, Commentary, Game judgement). For now the game's screens show no sources or breakdowns:
-the "Show workings" switch that showed them is withdrawn, and the About page lists every source
-(ADR-0032). The briefing reads as plain copy, with no badges (ADR-0031). A first playthrough's
+official source or a stated calculation on one, and is one of five kinds (an official figure, worked
+out, an assumption, commentary or a game judgement), though no screen labels which (ADR-0034). For
+now the game's screens show no sources or breakdowns: the "Show workings" switch that showed them is
+withdrawn, and the About page lists every source (ADR-0032). The briefing reads as plain copy
+(ADR-0031). A first playthrough's
 required reading and decisions come to about eight and a half minutes in basic mode and ten and a
 half in advanced (an estimate from the rendered screens, not user testing; ADR-0028). Every screen
 names itself, can be reached by keyboard and screen reader, holds 4.5:1 contrast, keeps every
@@ -57,7 +58,7 @@ smaller share of the economy in 2029-30 than the year before, investment include
 and the £246bn of gilts the government plans to sell this year and why lenders care. How it is
 calculated: dearer borrowing and dearer prices since March, then the OBR's March £23.6bn, less
 £11.3bn for higher interest rates and £5.5bn for higher inflation. The page is the same in both
-modes, and its badges, sources and table of how the estimate is made wait for the workings.
+modes, and its sources and table of how the estimate is made wait for the workings.
 **Set your priorities**: rank up to three
 of eight with the Prime Minister, who reacts to each, and the game writes the theme of the Budget
 from the ranking; the promises are one fold away, and one line gives the price of a priority in full
@@ -91,7 +92,7 @@ against the Budget reporting again on 21 September 2026: the electricity VAT zer
 says ends in March 2027, National Insurance for working pensioners and for LLP partners, and
 CenTax's package for taxing gains like income joined it; what has no published costing is named in
 words instead. On 23 September 2026 the think tanks' own lists were read and nineteen more cards
-built from their documents, each a stated figure badged for what it is: a levy on banks' reserves,
+built from their documents, each a stated figure from its own document: a levy on banks' reserves,
 National Insurance on rents, a 2% wealth tax, a sugar and salt tax, council tax on the top bands,
 the NICs upper earnings limit, 1% VAT on zero-rated goods, a pension lump-sum cap, stamp duty
 abolished on main homes, a child tax allowance, and six welfare cards from housing support relinked
@@ -111,13 +112,13 @@ relief, HMRC's pension relief by marginal rate for relief at a flat 30% or the b
 bank levy receipts, the government's six-month figure for the electricity zero rate, the think
 tanks' own figures for their proposals (the Resolution Foundation, IPPR, CenTax, Tax Justice UK, the
 IFS Green Budget, Demos, the Adam Smith Institute, Onward), and our own stated arithmetic where
-nobody has published a costing, badged as such), 32 spending levers (Spending Review 2025
+nobody has published a costing, recorded as such), 32 spending levers (Spending Review 2025
 settlements, OBR welfare lines, Budget 2025 spending decisions, the Prime Minister's schemes, six
 welfare cards from the think tanks) with milestones from PESA, six more levers kept for the record
 on no screen, eight priorities with 29 ways to deliver them (every option a bundle of those levers),
 all 108 of those levers on the fine-tuning screens as 141 policies, one estimate of the economy
 today from the Bank of England's gilt yields and HM Treasury's comparison of independent forecasts,
-and simulated lines in the voices of roles, every one badged and every fact in them sourced. Next:
+and simulated lines in the voices of roles, every fact in them sourced. Next:
 the rebase to the 28 October 2026 forecast.
 
 ## Principles
@@ -126,27 +127,27 @@ the rebase to the 28 October 2026 forecast.
   policy costings and OBR forecast lines. They are shown as numbers, with the source and every
   transformation step visible; for now those are off the game's screens, with the switch that
   showed them withdrawn, and the About page lists every source (ADR-0032).
-- **Second-round effects are words, not numbers.** Behavioural and macroeconomic knock-on
-  effects are described qualitatively with sources. The interface labels every figure as an
-  official figure, worked out, an assumption, or commentary.
-- **The game may judge, and says so.** What the Prime Minister wants, what a minister says at a
-  cut, how a market or a household reads the Budget: these are judgements nobody published, badged
-  **simulated** wherever they appear. A simulated line may quote a sourced fact and read an engine
-  number; it never produces a number of its own. Roles, not people. No judgement moves the
-  arithmetic: the seeded forecast draw, which only ever chose among published figures, retired in
-  Phase 24.
-- **Where nobody has published a costing, the arithmetic is ours and the workings are on the
-  card.** Not everything a Chancellor weighs has a certified costing. Each such lever states its
-  method, its published inputs and its assumptions, sits in the same group as the certified rows it
-  resembles, is badged an assumption rather than a direct costing, and is reproduced from those
-  inputs by a test. Where the base is contested, the card says so before it shows the number; where
-  no published figure exists at all, there is no lever.
+- **Second-round effects are words, not numbers.** Behavioural and macroeconomic knock-on effects
+  are described qualitatively with sources. Every figure is recorded as an official figure, worked
+  out, an assumption, or commentary, though since ADR-0034 no screen labels which.
+- **The game may judge, and says so.** What the Prime Minister wants, what a minister says at a cut,
+  how a market or a household reads the Budget: these are judgements nobody published, marked
+  **simulated** in the data and said in a role's voice wherever they appear. A simulated line may
+  quote a sourced fact and read an engine number; it never produces a number of its own. Roles, not
+  people. No judgement moves the arithmetic: the seeded forecast draw, which only ever chose among
+  published figures, retired in Phase 24.
+- **Where nobody has published a costing, the arithmetic is ours and the workings are on the card.**
+  Not everything a Chancellor weighs has a certified costing. Each such lever states its method, its
+  published inputs and its assumptions, sits in the same group as the certified rows it resembles,
+  is recorded as an assumption rather than a direct costing, and is reproduced from those inputs by
+  a test. Where the base is contested, the card says so before it shows the number; where no
+  published figure exists at all, there is no lever.
 - **The page is plain, and the plainness is honest.** One accent, two self-hosted serifs under the
   OFL, nothing under 14px, every text colour checked for contrast; the one picture, the Budget box
-  on the cover, is drawn in the page and says nothing the heading beside it does not. The badges
-  never become decoration, a verdict is always a word beside an icon and never a colour alone, the
-  provenance drawer never loses a table, and the guide's words, the only text on screen the engine
-  did not compute, carry no badge.
+  on the cover, is drawn in the page and says nothing the heading beside it does not. There are no
+  badges (ADR-0034); a verdict is always a word beside an icon and never a colour alone, the
+  provenance drawer never loses a table, and the guide's words are the only text on screen the
+  engine did not compute.
 - **Rebasing is a data refresh.** The baseline forecast is a versioned "vintage". When the OBR
   publishes a new forecast (next: Budget, 28 October 2026) the data is regenerated and the app
   re-reads it.

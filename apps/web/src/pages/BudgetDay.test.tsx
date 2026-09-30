@@ -59,7 +59,7 @@ describe('Budget day: what your Budget means', () => {
     );
   });
 
-  it('reads the speech one fold away, every sentence badged as a game judgement', () => {
+  it('reads the speech one fold away, every sentence said to be a game judgement', () => {
     at(`${BASE}&${EMPTY}`);
     open('Read the speech');
     const speech = screen.getByRole('article', { name: 'The Budget speech' });
@@ -255,7 +255,8 @@ describe('Budget day: what your Budget means', () => {
     const reply = within(speech).getByRole('region', {
       name: /The Leader of the Opposition replies/,
     });
-    expect(within(reply).getByText('Game judgement')).toBeInTheDocument();
+    // A judgement, as the strip above it says, with no badge of its own (ADR-0034).
+    expect(reply.querySelector('.badge')).toBeNull();
     expect(reply.textContent).not.toMatch(/£/);
   });
 
@@ -263,11 +264,12 @@ describe('Budget day: what your Budget means', () => {
     at(`${BASE}&${GAME}&L=moj.10`);
     const close = screen.getByRole('region', { name: /A priority left out with money to spare/ });
     expect(within(close).getByText('How your Budget went')).toBeInTheDocument();
-    // The judgement wears its badge; the fact behind it is worked out, and says so.
+    // The judgement, then the worked-out fact behind it, with no badges (ADR-0034).
     const fact = within(close).getByText(
       /^Delivering defence in full with “Fill the funding gap in the defence investment plan” would still meet both rules, with £\d+\.\dbn of headroom\.$/,
     );
-    expect(within(fact).getByText('Worked out')).toBeInTheDocument();
+    expect(fact).toHaveClass('verdict-close__fact');
+    expect(close.querySelector('.badge')).toBeNull();
     expect(within(close).getByText('Priorities, promises and who paid')).toBeInTheDocument();
   });
 

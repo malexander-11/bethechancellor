@@ -178,8 +178,8 @@ describe('word budgets: one line visible, the rest a click away', () => {
   });
 
   it('keeps an adviser’s line to a consequence, not a citation or the trade’s own words', () => {
-    // Phase 25: a line carries one plain consequence; where a figure comes from is the badge's and
-    // the workings' job. No organisation a newcomer would have to look up, none of the words of
+    // Phase 25: a line carries one plain consequence; where a figure comes from is the workings'
+    // job (the badges that shared it went with ADR-0034). No organisation a newcomer would have to look up, none of the words of
     // the trade, and never "the lock" alone, which a pensioner hears as the triple lock.
     const ORGS =
       /\b(HMRC|IFS|IPPR|CenTax|JRF|CSJ|NAO|Onward|Resolution Foundation|Tax Policy Associates)\b/;

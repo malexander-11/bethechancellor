@@ -1,5 +1,4 @@
 import type { Speech as SpeechText } from '@btc/engine';
-import { LabelBadge } from './LabelBadge';
 import { SourceList } from './SourceLink';
 
 /**
@@ -22,13 +21,13 @@ export function Speech({ speech }: { speech: SpeechText }) {
         </p>
       ))}
       <p className="speech__strip">
-        <LabelBadge badge="simulated" /> Every sentence here is a game judgement; nobody said these
-        words. Every figure in them is the engine’s, formatted as the scorecard formats it, and the
-        facts the speech leans on carry their sources.
+        Every sentence here is a game judgement; nobody said these words. Every figure in them is
+        the engine’s, formatted as the scorecard formats it, and the facts the speech leans on carry
+        their sources.
       </p>
       <section className="speech__reply" aria-labelledby="speech-reply-heading">
         <h3 id="speech-reply-heading" className="section-label">
-          {speech.reply.who} replies <LabelBadge badge={speech.reply.badge} />
+          {speech.reply.who} replies
         </h3>
         <p>
           {speech.reply.text}

@@ -3,7 +3,7 @@ import { adviserById } from '../data';
 import { Spoken } from './Conversation';
 
 /**
- * Advisers who remember. The lines an intervention fires are authored and badged; which of them
+ * Advisers who remember. The lines an intervention fires are authored in data; which of them
  * appear is decided by the package against what was promised in Downing Street. One voice speaks
  * on the surface, the most pressing; the rest wait behind one fold, so no screen reads as a chorus.
  */

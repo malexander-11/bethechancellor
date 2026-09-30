@@ -1,13 +1,10 @@
 import type { InteractionNotice } from '@btc/engine';
-import { LabelBadge } from './LabelBadge';
 
 export function InteractionsNotice({ interactions }: { interactions: InteractionNotice[] }) {
   if (interactions.length === 0) return null;
   return (
     <div className="interactions" role="note">
-      <div className="interactions__title">
-        These settings interact <LabelBadge badge="commentary" />
-      </div>
+      <div className="interactions__title">These settings interact</div>
       <ul>
         {interactions.map((i) => (
           <li

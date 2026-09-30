@@ -1,6 +1,6 @@
 # ADR-0011: The game may judge, and must say so
 
-**Status:** accepted, 2026-09-16
+**Status:** accepted, 2026-09-16; revised 2026-09-27, 2026-09-29 and 2026-09-30 (below)
 
 ## Context
 
@@ -62,3 +62,10 @@ class and every rule above are unchanged (ADR-0002, revised the same day).
 On the briefing a judgement's badge now shows only with the workings on (ADR-0002, revised the same
 day): the buffer line is still the game's judgement, and says so with the switch on. Everywhere
 else a Game judgement wears its badge whatever the switch says.
+
+## Revision, 2026-09-30 (ADR-0034)
+
+No judgement wears a badge now, on any screen. A judgement is still the game's, still quotes its
+sources and still never makes a number; it says whose it is by being in a role's voice, and the
+speech's strip says every sentence in it is a game judgement. The data still marks every such line
+`simulated`, and the schema still refuses a line without its sources.

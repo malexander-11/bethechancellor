@@ -1,7 +1,7 @@
-import type { Badge } from '@btc/engine';
 import { Link } from 'react-router-dom';
-import { BADGE_LABELS, LabelBadge } from '../components/LabelBadge';
+
 import { sources, vintage } from '../data';
+import { KINDS, KIND_WORDS } from '../journey/kinds';
 import { usePageTitle } from '../journey/title';
 
 /** The page's parts, in order, for its contents list: each is a heading below. */
@@ -12,9 +12,6 @@ const PARTS = [
   { id: 'licences', title: 'Licence and attribution' },
   { id: 'sources', title: 'Sources' },
 ] as const;
-
-/** The five kinds of number, in the order the Methodology page explains them. */
-const KINDS: readonly Badge[] = ['direct', 'mechanical', 'assumption', 'commentary', 'simulated'];
 
 /**
  * About the game and its sources (ADR-0033): the one page the footer links to, and the way in to
@@ -62,13 +59,11 @@ export function AboutPage() {
       <h2 id="numbers">How the numbers work</h2>
       <p>
         Every figure is an official figure or a stated calculation on one, and everything the game
-        tells you is one of five kinds, each with its own label:
+        tells you is one of five kinds:
       </p>
       <ul className="kinds">
         {KINDS.map((kind) => (
-          <li key={kind}>
-            <LabelBadge badge={kind} /> {BADGE_LABELS[kind].title}
-          </li>
+          <li key={kind}>{KIND_WORDS[kind]}</li>
         ))}
       </ul>
       <p>
@@ -87,8 +82,8 @@ export function AboutPage() {
       <p>
         It does not model how your choices change growth, or how markets would actually move.
         Costings are official estimates; today&rsquo;s estimate of the economy is an assumption; the
-        rest is arithmetic; the reactions are judgements, and say so. Forecasts are uncertain: the
-        OBR&rsquo;s typical five-year error on receipts is 0.9% of GDP, more than any recent
+        rest is arithmetic; the reactions are the game&rsquo;s judgements. Forecasts are uncertain:
+        the OBR&rsquo;s typical five-year error on receipts is 0.9% of GDP, more than any recent
         headroom.
       </p>
 

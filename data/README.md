@@ -3,6 +3,12 @@
 Everything the engine reads lives here as JSON validated by the schemas in
 `packages/engine/src/schema`. Nothing is hard-coded in the app.
 
+Every figure and every line carries a `badge` naming its kind: `direct`, `mechanical`, `assumption`,
+`commentary` or `simulated` (ADR-0002, ADR-0011). Since ADR-0034 no screen shows it. The field is
+the data's record of what each figure is: the validator and the tests hold every figure to it, and
+the markets' credibility rule reads it. Where this file says something is badged, or wears or shows
+a badge, read it as the field it carries.
+
 ```
 sources/sources.json      registry of every source document (id, org, title, url, dates, licence)
 vintages/<id>/vintage.json  one OBR forecast: years, economy, fiscal aggregates, sensitivities, checks

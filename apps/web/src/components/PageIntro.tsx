@@ -25,7 +25,7 @@ export function Marked({ text }: { text: string }) {
  * The head of every screen: one heading and one line saying what to do. Nothing folds beneath it
  * (Phase 23): the reason a screen matters is on the screen or nowhere, and a word a newcomer must
  * know is explained where it is used. The copy is the guide's (data/journey/guide.json): chrome,
- * with no badge and no figure that is not sourced. A page may put its own heading and line in
+ * with no figure that is not sourced. A page may put its own heading and line in
  * front of the guide's, when the screen is one of several in a step and has a name of its own.
  */
 export function PageIntro({

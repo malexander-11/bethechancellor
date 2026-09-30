@@ -9,7 +9,6 @@ import {
 import { useMemo } from 'react';
 import { Spoken } from '../components/Conversation';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { LabelBadge } from '../components/LabelBadge';
 import { SourceList } from '../components/SourceLink';
 import { Term } from '../components/Term';
 import { levers, options, pm } from '../data';
@@ -94,7 +93,7 @@ export function PMPage() {
           <p className="theme__scale">
             Delivering one priority in full costs from {formatGbpBn(scale.costs.minGbpm, 1)} to{' '}
             {formatGbpBn(scale.costs.maxGbpm, 1)} a year by {scale.year}. Your headroom is{' '}
-            {formatGbpBn(headroom, 1, headroom < 0)}. <LabelBadge badge="mechanical" />
+            {formatGbpBn(headroom, 1, headroom < 0)}.
           </p>
         ) : null}
       </section>

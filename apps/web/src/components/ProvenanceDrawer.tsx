@@ -7,7 +7,6 @@ import {
   type SourceRef,
 } from '@btc/engine';
 import { applicableConsiderations } from './considerations';
-import { LabelBadge } from './LabelBadge';
 import { TableScroll } from './TableScroll';
 import { SourceLink } from './SourceLink';
 
@@ -45,9 +44,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
   if (raw.kind === 'hmrcReadyReckoner') {
     return (
       <>
-        <h4>
-          Published figures <LabelBadge badge="direct" />
-        </h4>
+        <h4>Published figures</h4>
         <TableScroll label="Published figures">
           <table className="detail-table">
             <thead>
@@ -76,7 +73,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
         {raw.multiplier !== undefined ? (
           <p className="source">
             Used here: {formatMultiplier(raw.multiplier)} the sum of these rows, our arithmetic on
-            HMRC’s figures <LabelBadge badge="mechanical" />
+            HMRC’s figures
           </p>
         ) : null}
         {source ? (
@@ -92,9 +89,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
     const years = [...new Set(raw.rows.flatMap((r) => Object.keys(r.values)))].sort();
     return (
       <>
-        <h4>
-          HMRC cost of the relief <LabelBadge badge="direct" />
-        </h4>
+        <h4>HMRC cost of the relief</h4>
         <TableScroll label="HMRC cost of the relief">
           <table className="detail-table">
             <thead>
@@ -130,9 +125,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
     const years = [...new Set(raw.rows.flatMap((r) => Object.keys(r.values)))].sort();
     return (
       <>
-        <h4>
-          Spending Review 2025 rows <LabelBadge badge="direct" />
-        </h4>
+        <h4>Spending Review 2025 rows</h4>
         <TableScroll label="Spending Review 2025 rows">
           <table className="detail-table">
             <thead>
@@ -172,9 +165,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
     const method = raw.method;
     return (
       <>
-        <h4>
-          Our own arithmetic on published figures <LabelBadge badge="assumption" />
-        </h4>
+        <h4>Our own arithmetic on published figures</h4>
         {method.name === 'gdpShareGap' ? (
           <TableScroll label="Our own arithmetic on published figures">
             <table className="detail-table">
@@ -242,9 +233,7 @@ function PublishedRows({ lever }: { lever: Lever }) {
   }
   return (
     <>
-      <h4>
-        Treasury scorecard lines <LabelBadge badge="direct" />
-      </h4>
+      <h4>Treasury scorecard lines</h4>
       <ul>
         {raw.lines.map((line) => (
           <li key={line.number}>
@@ -304,9 +293,7 @@ function BaselineTable({ lever, effect }: { lever: Lever; effect: LeverEffect })
   const pct = (f: number) => `${f > 0 ? '+' : f < 0 ? '−' : ''}${Math.abs(f * 100).toFixed(1)}%`;
   return (
     <>
-      <h4>
-        From the baseline to this budget <LabelBadge badge="mechanical" />
-      </h4>
+      <h4>From the baseline to this budget</h4>
       <TableScroll label="From the baseline to this budget">
         <table className="detail-table">
           <thead>
@@ -339,8 +326,7 @@ function BaselineTable({ lever, effect }: { lever: Lever; effect: LeverEffect })
       {extendedFrom ? (
         <p className="source">
           From {extendedFrom} the Spending Review has no departmental plans, so the last settlement
-          is carried forward with the OBR&rsquo;s total day-to-day spending path.{' '}
-          <LabelBadge badge="assumption" />
+          is carried forward with the OBR&rsquo;s total day-to-day spending path: our assumption.
         </p>
       ) : null}
       <Caveats caveats={detail.caveats} />
@@ -355,10 +341,7 @@ function UpratingTable({ lever, effect }: { lever: Lever; effect: LeverEffect })
   const isSchedule = lever.costing.kind === 'schedule';
   return (
     <>
-      <h4>
-        From the published figure to this budget{' '}
-        <LabelBadge badge={isSchedule ? 'direct' : 'assumption'} />
-      </h4>
+      <h4>From the published figure to this budget</h4>
       <TableScroll label="From the published figure to this budget">
         <table className="detail-table">
           <thead>
@@ -434,9 +417,7 @@ export function ProvenanceDrawer({ lever, effect }: { lever: Lever; effect?: Lev
 
       <PublishedRows lever={lever} />
 
-      <h4>
-        How this number is worked out <LabelBadge badge={lever.badge} />
-      </h4>
+      <h4>How this number is worked out</h4>
       {effect ? (
         <>
           <ul>
@@ -466,9 +447,7 @@ export function ProvenanceDrawer({ lever, effect }: { lever: Lever; effect?: Lev
 
       {considerations.length > 0 ? (
         <>
-          <h4>
-            What the number leaves out <LabelBadge badge="commentary" />
-          </h4>
+          <h4>What the number leaves out</h4>
           <ul>
             {considerations.map((c) => (
               <li key={c.id}>

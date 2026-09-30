@@ -94,7 +94,8 @@ describe('LeverControl', () => {
     const box = screen.getByRole('checkbox', { name: /End the personal tax threshold freeze/ });
     fireEvent.click(box);
     expect(onChange).toHaveBeenCalledWith(1);
-    expect(screen.getByText('Official figure')).toBeInTheDocument();
+    // No badge on the card (ADR-0034).
+    expect(document.querySelector('.badge')).toBeNull();
   });
 
   it('reports borrowing for a capital lever and shows a Barnett note for comparable departments', () => {
@@ -308,10 +309,12 @@ describe('LeverControl', () => {
     const hint = screen.getByText(/^Small: would raise £8\.6bn/);
     expect(hint).toHaveClass('lever__hint');
     expect(hint).not.toHaveClass('amount--better');
-    // The screen's lead names the adviser once; the card's line carries its badge after it.
+    // The screen's lead names the adviser once; the card's line is the adviser's words alone, with
+    // no badge after them (ADR-0034).
     expect(screen.queryByText('Director of Tax')).toBeNull();
     const said = screen.getByText(/A penny is big money/);
-    expect(said.textContent).toMatch(/^A penny is big money\. Game judgement/);
+    expect(said.textContent).toMatch(/^A penny is big money\./);
+    expect(said.querySelector('.badge')).toBeNull();
     // At rest there is no "20% → 20%": the level, as planned.
     expect(screen.getByText('as planned')).toBeInTheDocument();
     expect(screen.queryByText('→')).toBeNull();
@@ -396,7 +399,7 @@ describe('LeverControl', () => {
     for (const radio of screen.getAllByRole('radio')) expect(radio).not.toBeChecked();
   });
 
-  it('badges a move past its source’s range Worked out, and says why (Phase 25)', () => {
+  it('says in words when a move passes its source’s range, with no badge (Phase 25, ADR-0034)', () => {
     const itbr = levers.find((l) => l.code === 'itbr');
     if (!itbr) throw new Error('missing basic rate');
     const at = (value: number) =>
@@ -422,7 +425,7 @@ describe('LeverControl', () => {
     const note = within(five.container).getByText(
       /Beyond 2p the game scales it in a straight line/,
     );
-    expect(note.closest('.lever__effect')?.textContent).toMatch(/Worked out/);
+    expect(note.closest('.lever__effect')?.querySelector('.badge')).toBeNull();
   });
 
   it('formats pence, points, per cent and pounds', () => {

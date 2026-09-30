@@ -6,10 +6,11 @@ methodology is wrong or the app is.
 
 ## 1. The honesty contract
 
-Every figure on screen wears one of five badges (the fifth, for the game's own judgements, was
-added in Phase 8 under ADR-0011):
+Every figure and every line is one of five kinds (the fifth, for the game's own judgements, was
+added in Phase 8 under ADR-0011). Each wore its kind on screen as a badge until 2026-09-30; since
+ADR-0034 (§33) the data records it and no screen shows it:
 
-| Badge                            | Meaning                                                                                                                                                                                                                              | Examples                                                                                                      |
+| Kind                             | Meaning                                                                                                                                                                                                                              | Examples                                                                                                      |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | **Official figure** (`direct`)   | An official estimate of the direct effect of a policy on receipts or spending, reproduced from HMRC, HM Treasury or the OBR, with the transformation steps shown.                                                                    | HMRC ready reckoner: 1p on the basic rate of income tax; HMT Budget 2025 scorecard lines.                     |
 | **Worked out** (`mechanical`)    | Arithmetic that follows from the direct costings and the baseline, with no behavioural judgement.                                                                                                                                    | Adding deltas to the OBR path; debt interest on extra borrowing; ratios to GDP.                               |
@@ -18,7 +19,9 @@ added in Phase 8 under ADR-0011):
 | **Game judgement** (`simulated`) | A judgement nobody published, in a role's voice: what the Prime Minister wants, what a minister says at a cut, how a market or a household reads the Budget. May quote a sourced fact and read an engine number; never produces one. | "That is the tax lock, Chancellor." The kind of Budget named at the close.                                    |
 
 The names on the badges were made plainer on 2026-09-27 (Phase 23, for a reading age of ten to
-twelve); the ids in the data, the classes on the page and what each badge means are unchanged.
+twelve); the ids in the data and what each kind means are unchanged. The badges left the screens on
+2026-09-30 (ADR-0034, §33), and the names are now the About and Methodology pages' words for the
+five kinds.
 
 Phase 25 (ADR-0026) added three rules at the edges of the contract. A relief cost is an official
 figure but not a yield, so its card says the most the measure could raise ("raises at most £X"),
@@ -1368,3 +1371,29 @@ information behind the game, organised.
   and the footer’s link at the foot of the screen, with the box and, on a tall phone, the heading
   sized by the screen’s height. Nothing scrolls on a 375×553 phone, and on 412×788 the button ends
   620px down.
+
+## 33. No badges (ADR-0034)
+
+On 2026-09-30 the user asked for the badges to go everywhere. No screen carries one now: not the
+flagship cards, step 4's policies, the lines of the advisers, the ministers and the Prime Minister,
+the review, Budget day, the provenance drawers or the reference pages. The first flagship screen's
+line on what the badges meant went with them, and so did the component, its styles and its colours.
+
+- **What stays.** Every figure and line still records its kind in the data (`badge`); the validator
+  and the tests hold each to it, and the markets' credibility rule still reads which costings are
+  our own arithmetic. The tags that say what a choice does (the manifesto's red and amber, a promise
+  to the Prime Minister, an earliest start) are not badges, and stay.
+- **Where the words carry it.** A judgement is said in a role's voice; the speech's strip says every
+  sentence in it is a game judgement; our own arithmetic says so where it is explained; a size past
+  its source's range says so in its caveat; and a provenance drawer's carried-forward settlement now
+  ends "our assumption", where a badge said it alone. The About page gives the five kinds a sentence
+  each, and the Methodology page names them in words.
+- **What is lost.** On the flagship cards and step 4's policies nothing now shows which costing is
+  HMRC's or the Treasury's and which is a think tank's figure or our arithmetic, and with the
+  workings withdrawn (§31) no screen shows a figure's source either. ADR-0034 records this as a
+  deliberate departure from §1, with its risks.
+- **Measured** (ADR-0034): every screen that wore badges reads fewer words. The flagship screens
+  read 171, 170 and 153 words, against 205, 182 and 165; step 4's tax screen 592 and its spending
+  screen 554 at rest, against 615 and 582; the review 204, against 213; Budget day 190, against 199;
+  the priorities 172, against 178. Each budget is re-pinned with a tenth to spare, and `walk37`,
+  which fails any screen with a badge, is clean.

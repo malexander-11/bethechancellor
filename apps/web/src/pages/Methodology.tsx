@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { LabelBadge } from '../components/LabelBadge';
+
 import { ESTIMATE, vintage } from '../data';
 import { usePageTitle } from '../journey/title';
 
@@ -25,36 +25,35 @@ export function MethodologyPage() {
       </p>
 
       <h2>Five kinds of number</h2>
+      <p>
+        Every figure and every line in the game is one of five kinds. The data records which, and
+        the tests hold each to its kind. The screens do not label them (ADR-0034): the
+        speaker&rsquo;s role says whose a judgement is, and this page says what each kind means.
+      </p>
       <table>
         <thead>
           <tr>
-            <th>Badge</th>
+            <th>Kind</th>
             <th>Meaning</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>
-              <LabelBadge badge="direct" />
-            </td>
+            <td>Official figure</td>
             <td>
               An official estimate of a policy&rsquo;s direct effect on receipts or spending,
               reproduced from HMRC, HM Treasury or the OBR with every transformation step shown.
             </td>
           </tr>
           <tr>
-            <td>
-              <LabelBadge badge="mechanical" />
-            </td>
+            <td>Worked out</td>
             <td>
               Arithmetic that follows from the costings and the baseline with no judgement: adding
               deltas to the OBR path, interest on extra borrowing, ratios to GDP.
             </td>
           </tr>
           <tr>
-            <td>
-              <LabelBadge badge="assumption" />
-            </td>
+            <td>Assumption</td>
             <td>
               A number the tool chooses, using published sensitivities where they exist:
               today&rsquo;s estimate of interest rates, growth and inflation, and the year-by-year
@@ -62,18 +61,14 @@ export function MethodologyPage() {
             </td>
           </tr>
           <tr>
-            <td>
-              <LabelBadge badge="commentary" />
-            </td>
+            <td>Commentary</td>
             <td>
               Behavioural and wider economic effects described in words and direction only, with
               sources. Never a number of our own.
             </td>
           </tr>
           <tr>
-            <td>
-              <LabelBadge badge="simulated" />
-            </td>
+            <td>Game judgement</td>
             <td>
               The game&rsquo;s own opinion, in a role&rsquo;s voice: what the Prime Minister wants,
               what a minister says at a cut, how a market or a household reads the Budget. It quotes
@@ -154,41 +149,41 @@ export function MethodologyPage() {
         slider anywhere and no desk: every lever the desk once held is a policy on these two
         screens, and with no game only the cover and the briefing open. Every screen opens with one
         heading and one instruction, and for now the sources are listed on the About page rather
-        than beside each figure; the guide is chrome, carries no badge and quotes no figure that is
-        not sourced. The advisers, the Prime Minister and the ministers are roles, not people; a
-        briefing that cites a public document is labelled commentary, and a judgement nobody
-        published is labelled simulated and never produces a number. Today&rsquo;s estimate follows
-        a stated rule: the latest market or independent reading minus the OBR&rsquo;s March
-        assumption, rounded to the step the assumption moves in (interest rates up three-quarters of
-        a point, RPI inflation up half a point, growth on the OBR&rsquo;s path), turned into
-        headroom by the OBR&rsquo;s own sensitivities: about £6.8 billion in 2029-30, against £23.6
-        billion in March. Each size shows the level it moves to (21% on VAT, £12,670 on the personal
-        allowance), but the engine costs the change, exactly as before: levels are display only. VAT
-        base-broadening toggles use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not
-        represent what abolishing a relief would raise; abolishing inheritance tax removes the
-        OBR&rsquo;s whole receipts line; reversing the October 2024 capital gains tax rise uses the
-        Treasury&rsquo;s own costing of the package. The revenue menu a Chancellor actually weighs
-        is on the fine-tuning screens too, each option a published figure: the employer National
-        Insurance threshold, vehicle excise duty, air passenger duty, tobacco duties, the Business
-        Asset Disposal Relief rate, the residence nil-rate band, insurance premium tax, and employer
-        National Insurance on pension contributions from HMRC&rsquo;s private pension statistics
-        (£14.3 billion in 2024-25, less the £6.5 billion on public sector schemes, which would only
-        move money from departments to the Treasury, taken to today&rsquo;s 15% rate). Every card
-        built on HMRC&rsquo;s cost of a relief reads &ldquo;raises at most&rdquo; and says why, and
-        the markets count it as a figure nobody has certified. The health and social care levy is
-        1.25 times HMRC&rsquo;s own one-point figures for every National Insurance rate, the same
-        figures the National Insurance rate policies use; two measures that count the same money
-        (aligning capital gains with income and taxing gains at death, for one) cannot both be
-        chosen, and there are twenty-two such pairs, each with a text that reads from either card.
-        Employer-side National Insurance is not a manifesto red line here, on the government&rsquo;s
-        own reading of the lock; the Political Adviser says on each such lever that the reading is
-        contested. Phase 12 added the menu the Budget 2026 reporting says is on the table: ending
-        the capital gains write-off at death, a £1.5 million council tax surcharge band, reversing
-        the farm and family-business relief reform, two points on the bank surcharge, the energy
-        profits levy package again, the self-employed Class 4 rate, VAT off domestic gas, another
-        HMRC compliance package, unfreezing the Plan 2 student loan threshold, defence at 3% of GDP
-        from 2027, and business rates as a share of the OBR&rsquo;s own line. Each is a published
-        row or a stated calculation on one, and each card is badged for what it is.
+        than beside each figure; the guide is chrome and quotes no figure that is not sourced. The
+        advisers, the Prime Minister and the ministers are roles, not people; a briefing that cites
+        a public document is commentary, and a judgement nobody published is the game&rsquo;s own
+        and never produces a number. Today&rsquo;s estimate follows a stated rule: the latest market
+        or independent reading minus the OBR&rsquo;s March assumption, rounded to the step the
+        assumption moves in (interest rates up three-quarters of a point, RPI inflation up half a
+        point, growth on the OBR&rsquo;s path), turned into headroom by the OBR&rsquo;s own
+        sensitivities: about £6.8 billion in 2029-30, against £23.6 billion in March. Each size
+        shows the level it moves to (21% on VAT, £12,670 on the personal allowance), but the engine
+        costs the change, exactly as before: levels are display only. VAT base-broadening toggles
+        use HMRC&rsquo;s cost-of-relief estimates, which HMRC says do not represent what abolishing
+        a relief would raise; abolishing inheritance tax removes the OBR&rsquo;s whole receipts
+        line; reversing the October 2024 capital gains tax rise uses the Treasury&rsquo;s own
+        costing of the package. The revenue menu a Chancellor actually weighs is on the fine-tuning
+        screens too, each option a published figure: the employer National Insurance threshold,
+        vehicle excise duty, air passenger duty, tobacco duties, the Business Asset Disposal Relief
+        rate, the residence nil-rate band, insurance premium tax, and employer National Insurance on
+        pension contributions from HMRC&rsquo;s private pension statistics (£14.3 billion in
+        2024-25, less the £6.5 billion on public sector schemes, which would only move money from
+        departments to the Treasury, taken to today&rsquo;s 15% rate). Every card built on
+        HMRC&rsquo;s cost of a relief reads &ldquo;raises at most&rdquo; and says why, and the
+        markets count it as a figure nobody has certified. The health and social care levy is 1.25
+        times HMRC&rsquo;s own one-point figures for every National Insurance rate, the same figures
+        the National Insurance rate policies use; two measures that count the same money (aligning
+        capital gains with income and taxing gains at death, for one) cannot both be chosen, and
+        there are twenty-two such pairs, each with a text that reads from either card. Employer-side
+        National Insurance is not a manifesto red line here, on the government&rsquo;s own reading
+        of the lock; the Political Adviser says on each such lever that the reading is contested.
+        Phase 12 added the menu the Budget 2026 reporting says is on the table: ending the capital
+        gains write-off at death, a £1.5 million council tax surcharge band, reversing the farm and
+        family-business relief reform, two points on the bank surcharge, the energy profits levy
+        package again, the self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance
+        package, unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and
+        business rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated
+        calculation on one, and the data records which.
       </p>
 
       <h2>Spending levers</h2>
@@ -211,15 +206,14 @@ export function MethodologyPage() {
         schemes, a measure the papers say is on the table, a tax nobody has legislated. Rather than
         print a slogan with no number, we do the arithmetic and show it, on the same screen as the
         certified rows: each card names the method, the published figures it rests on and what it
-        assumes, wears the assumption badge beside the direct costings around it, and a test
-        reproduces the figure from those inputs. Where the base itself is contested, as with a tax
-        on wealth above £10 million, the card says so before it shows the number. The kinds of
-        arithmetic: a weighted sum of HMRC&rsquo;s pension relief by marginal rate, a repeat of a
-        certified Budget 2025 line that assumes the second round raises what the Treasury costed for
-        the first, a stated product of published quantities, and a gap between a target share of GDP
-        and the OBR&rsquo;s path. The policies MPs once campaigned for that nobody is now
-        considering are kept in the data for the record and offered on no screen; an old link to one
-        still opens, with a warning.
+        assumes, and a test reproduces the figure from those inputs. Where the base itself is
+        contested, as with a tax on wealth above £10 million, the card says so before it shows the
+        number. The kinds of arithmetic: a weighted sum of HMRC&rsquo;s pension relief by marginal
+        rate, a repeat of a certified Budget 2025 line that assumes the second round raises what the
+        Treasury costed for the first, a stated product of published quantities, and a gap between a
+        target share of GDP and the OBR&rsquo;s path. The policies MPs once campaigned for that
+        nobody is now considering are kept in the data for the record and offered on no screen; an
+        old link to one still opens, with a warning.
       </p>
 
       <h2>Buying things is not spending</h2>
@@ -239,9 +233,8 @@ export function MethodologyPage() {
         The sources, the provenance drawers and the breakdown tables sat behind a &ldquo;Show
         workings&rdquo; switch at the foot of every page, off by default. For now the switch is
         withdrawn and the game&rsquo;s screens show none of them. Nothing else changes: every figure
-        is still an official number or arithmetic on one, badged for what it is on every screen but
-        the briefing, which reads as plain copy. This page and the About page, which lists every
-        source, are the workings.
+        is still an official number or arithmetic on one, though since ADR-0034 no screen labels
+        which. This page and the About page, which lists every source, are the workings.
       </p>
 
       <h2>Basic and advanced</h2>
@@ -249,16 +242,16 @@ export function MethodologyPage() {
         A first game is played in basic mode, which suggests only the best ideas: on the fine-tuning
         screens each adviser&rsquo;s shortlist, eight taxes and seven spending policies with no
         folds; and on the flagship screens the best one or two ways to deliver each priority. The
-        briefing is the same in both modes. &ldquo;Best&rdquo; is a judgement, badged Game
-        judgement, and each pick&rsquo;s reason is its own adviser&rsquo;s line. Rules keep it
-        checkable: a pick moves the 2029-30 headroom by £1 billion or more at its smallest size on
-        today&rsquo;s estimate, counts by 2029-30, is on the table, breaks no promise at any size,
-        and never counts the same money as another pick or as something already on your desk, which
-        basic mode always shows. A button on each trimmed screen shows every policy and every way,
-        and offers the shortlist back; the footer&rsquo;s switch that did the same is withdrawn for
-        now. Anything you have chosen stays on show in either mode, and the bar, the review and
-        Budget day count every idea whichever mode you are in. The mode is remembered in your
-        browser, never in the link, so a Budget you share opens in the reader&rsquo;s own mode.
+        briefing is the same in both modes. &ldquo;Best&rdquo; is the advisers&rsquo; judgement, and
+        each pick&rsquo;s reason is its own adviser&rsquo;s line. Rules keep it checkable: a pick
+        moves the 2029-30 headroom by £1 billion or more at its smallest size on today&rsquo;s
+        estimate, counts by 2029-30, is on the table, breaks no promise at any size, and never
+        counts the same money as another pick or as something already on your desk, which basic mode
+        always shows. A button on each trimmed screen shows every policy and every way, and offers
+        the shortlist back; the footer&rsquo;s switch that did the same is withdrawn for now.
+        Anything you have chosen stays on show in either mode, and the bar, the review and Budget
+        day count every idea whichever mode you are in. The mode is remembered in your browser,
+        never in the link, so a Budget you share opens in the reader&rsquo;s own mode.
       </p>
 
       <h2>Budget day</h2>
@@ -272,11 +265,11 @@ export function MethodologyPage() {
         before your Budget, today&rsquo;s estimate with nothing moved, so what the economy did since
         March is never counted as yours. Each card shows one reason, which always agrees with its
         rating, and one short line for anything that pulled the other way. Every threshold, point
-        and sentence is written in the data and labelled simulated; &ldquo;Why this rating&rdquo; on
-        each card lists every rule with its points, the figure it read, the decisions behind it and,
-        with the workings on, its sources. Nothing predicts what a market or a voter would actually
-        do: the cards say what a judgement leans on, and the thresholds are the game&rsquo;s own,
-        written down in ADR-0013 and revised in ADR-0026.
+        and sentence is written in the data as the game&rsquo;s judgement; &ldquo;Why this
+        rating&rdquo; on each card lists every rule with its points, the figure it read, the
+        decisions behind it and, with the workings on, its sources. Nothing predicts what a market
+        or a voter would actually do: the cards say what a judgement leans on, and the thresholds
+        are the game&rsquo;s own, written down in ADR-0013 and revised in ADR-0026.
       </p>
 
       <h2>Why it looks plain</h2>
@@ -284,13 +277,13 @@ export function MethodologyPage() {
         One page colour, one accent, two serif typefaces and nothing smaller than 14px: the page is
         built to be read the way a news article is, not learnt like a game. The one picture, the
         Budget box on the cover, is drawn in the page, and the two typefaces are served with it, so
-        nothing waits on another site and nothing hides behind a picture. Badges never become status
-        marks: those five words are how you tell a certified costing from our own arithmetic, and
-        they stay plain. A rule&rsquo;s verdict is an icon beside a word, which the engine computes;
-        nowhere does colour carry a judgement on its own. Moving to the next part of a step never
-        removes what you have already read, so an adviser&rsquo;s citations stay on the page behind
-        you. The guide&rsquo;s words are the only things on screen we did not calculate, and they
-        carry no badge, because chrome must not borrow the vocabulary of a costing.
+        nothing waits on another site and nothing hides behind a picture. There are no badges
+        (ADR-0034): the five kinds of number are explained on this page, not labelled on the screen.
+        A rule&rsquo;s verdict is an icon beside a word, which the engine computes; nowhere does
+        colour carry a judgement on its own. Moving to the next part of a step never removes what
+        you have already read, so an adviser&rsquo;s citations stay on the page behind you. The
+        guide&rsquo;s words are the only things on screen we did not calculate, and they quote no
+        figure.
       </p>
 
       <h2>What is not modelled</h2>

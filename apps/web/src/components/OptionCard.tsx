@@ -2,7 +2,6 @@ import {
   formatGbpBn,
   formatLevel,
   levelValue,
-  type Badge,
   type Lever,
   type OptionConflict,
   type OptionOverlap,
@@ -15,15 +14,9 @@ import { useId, type ReactNode } from 'react';
 import type { OptionPrice } from '../journey/prices';
 import { AdviceLine } from './AdviceLine';
 import { BlockedNotice } from './BlockedNotice';
-import { LabelBadge } from './LabelBadge';
 import { formatLeverValue, promiseWords, RestingTag } from './LeverControl';
 import { SourceList } from './SourceLink';
 import { Term } from './Term';
-
-/** What a card says about the option's levers: the badges of the costings behind it, once each. */
-export function badgesOf(levers: readonly Lever[]): Badge[] {
-  return [...new Set(levers.map((l) => l.badge))];
-}
 
 /** How a lever that was adjusted elsewhere now stands, as its level where it has one. */
 function standing(lever: Lever, value: number): string {
@@ -83,19 +76,18 @@ export function priceWorkings(price: OptionPrice): string {
 /**
  * One costed option a Chancellor can choose: a checkbox card with the title, the engine's figure
  * for choosing it now against the Budget as it stands and the headroom that would leave, the
- * badges of the costings it rests on, the manifesto promises it would break (red) or strain
- * (amber), its earliest start,
- * the options it overlaps or counts the same money as, and the line of whoever proposes it.
- * Choosing it moves the levers inside; the state is read back from the levers, so a card can also
- * show that its levers were adjusted on step 4 to somewhere else (ADR-0022). While an option it
- * conflicts with is in the Budget the card is blocked: it says, in one plain sentence at full
- * contrast, what to untick and why, and offers a one-tap swap (Phase 25); its checkbox stays in
- * the tab order and will not tick. With both in from an old link, both warn and neither is blocked. On the surface a card is its title, its badge and its
- * figure, plus the tags that change what choosing it means, and one adviser's line saying who
- * proposed it and what it costs and does (Phase 23); the lever's headline, the options it quietly
- * overlaps and the proposer's line wait behind one fold, "More about this". A way that only makes
- * a start on its priority says so in a quiet tag, with the reason in the fold (Phase 25): ticking
- * it starts the priority, it does not deliver it.
+ * manifesto promises it would break (red) or strain (amber), its earliest start, the options it
+ * overlaps or counts the same money as, and the line of whoever proposes it. Choosing it moves the
+ * levers inside; the state is read back from the levers, so a card can also show that its levers
+ * were adjusted on step 4 to somewhere else (ADR-0022). While an option it conflicts with is in
+ * the Budget the card is blocked: it says, in one plain sentence at full contrast, what to untick
+ * and why, and offers a one-tap swap (Phase 25); its checkbox stays in the tab order and will not
+ * tick. With both in from an old link, both warn and neither is blocked. On the surface a card is
+ * its title and its figure, with no badge since ADR-0034, plus the tags that change what choosing
+ * it means, and one adviser's line saying who proposed it and what it costs and does (Phase 23);
+ * the lever's headline, the options it quietly overlaps and the proposer's line wait behind one
+ * fold, "More about this". A way that only makes a start on its priority says so in a quiet tag,
+ * with the reason in the fold (Phase 25): ticking it starts the priority, it does not deliver it.
  */
 export function OptionCard({
   id,
@@ -160,7 +152,6 @@ export function OptionCard({
   const adjusted = state === 'adjusted';
   const against = state === 'against';
   const blockedId = `${useId()}-blocked`;
-  const badges = badgesOf(levers);
   const quiet = overlaps.filter((o) => !o.active);
   const active = overlaps.filter((o) => o.active);
   const start = scale?.kind === 'start' ? scale : undefined;
@@ -189,12 +180,7 @@ export function OptionCard({
           }}
         />
         <span className="choice__body">
-          <span className="choice__title">
-            {title}{' '}
-            {badges.map((b) => (
-              <LabelBadge key={b} badge={b} />
-            ))}
-          </span>
+          <span className="choice__title">{title}</span>
           <span className="choice__meta">
             <span className={`choice__figure amount amount--${price.tone}`}>
               {blocked ? `Swap them: ${lowerFirst(priceLine(price))}` : priceLine(price)}
@@ -273,13 +259,10 @@ export function OptionCard({
       <details className="more more--quiet choice__more">
         <summary>More about this</summary>
         <div className="more__body">
-          <span className="choice__line choice__workings">
-            <LabelBadge badge="mechanical" /> {priceWorkings(price)}
-          </span>
+          <span className="choice__line choice__workings">{priceWorkings(price)}</span>
           {start ? (
             <span className="choice__line">
               Makes a start, not delivery: {lowerFirst(start.why)}{' '}
-              <LabelBadge badge={start.badge} />
               <SourceList as="span" refs={start.sources} className="choice__sources" />
             </span>
           ) : null}
@@ -291,7 +274,7 @@ export function OptionCard({
           ))}
           {line && who ? (
             <span className="choice__delivery">
-              <span className="kicker">{who}</span> <LabelBadge badge={line.badge} /> {line.text}
+              <span className="kicker">{who}</span> {line.text}
             </span>
           ) : null}
           {line ? (

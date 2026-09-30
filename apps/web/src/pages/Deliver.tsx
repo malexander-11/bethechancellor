@@ -19,7 +19,6 @@ import { useState } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { LabelBadge } from '../components/LabelBadge';
 import { MinisterLine } from '../components/MinisterLine';
 import { ModeLine } from '../components/ModeLine';
 import { OptionCard } from '../components/OptionCard';
@@ -148,18 +147,10 @@ function DeliverScreen({ n }: { n: number }) {
       lead="Tick the ways you want."
     >
       <HeadroomBar outcome={outcome} status={status} />
-      {n === 1 ? (
-        // The badges' key, said once where they first appear (Phase 25): a phone has no hover.
-        <p className="deliver__key">
-          Badges say what a figure is: <LabelBadge badge="direct" />,{' '}
-          <LabelBadge badge="mechanical" /> or <LabelBadge badge="assumption" />, a number we chose.{' '}
-          <LabelBadge badge="simulated" /> is the game’s opinion.
-        </p>
-      ) : null}
       {priority.reach ? (
         // Whose budgets these are, when they are not the whole UK's (Phase 25).
         <p className="deliver__reach">
-          <LabelBadge badge={priority.reach.badge} /> {priority.reach.text}{' '}
+          {priority.reach.text}{' '}
           <SourceList as="span" className="briefing__sources" refs={priority.reach.sources} />
         </p>
       ) : null}

@@ -1,5 +1,4 @@
 import { formatGbpBn, type Lever, type Outcome } from '@btc/engine';
-import { LabelBadge } from './LabelBadge';
 import { TableScroll } from './TableScroll';
 import { formatLeverValue, levelChange } from './LeverControl';
 
@@ -62,9 +61,7 @@ export function MeasuresTable({
             const settingText = row.fromYear ? `${setting} · from ${row.fromYear}` : setting;
             return (
               <tr key={row.code ?? row.label}>
-                <td>
-                  {row.label} <LabelBadge badge={row.badge} />
-                </td>
+                <td>{row.label}</td>
                 <td>{settingText}</td>
                 <td className={`amount ${tone(row.currentBudgetGbpm)}`}>
                   {betterOrWorse(row.currentBudgetGbpm)}
@@ -75,9 +72,7 @@ export function MeasuresTable({
           })}
           {interest ? (
             <tr>
-              <td>
-                {interest.label} <LabelBadge badge={interest.badge} />
-              </td>
+              <td>{interest.label}</td>
               <td />
               <td className={`amount ${tone(interest.currentBudgetGbpm)}`}>
                 {betterOrWorse(interest.currentBudgetGbpm)}

@@ -1,7 +1,6 @@
 import { formatGbp, formatGbpBn, formatPct, perHousehold, type RuleVerdict } from '@btc/engine';
 import { rules } from '../data';
 import { HeadroomGauge } from './HeadroomGauge';
-import { LabelBadge } from './LabelBadge';
 
 type Tone = 'good' | 'warning' | 'critical' | 'muted';
 
@@ -84,9 +83,7 @@ export function VerdictCard({
           </dl>
         </>
       ) : null}
-      <p className="verdict__explain">
-        {verdict.explanation} <LabelBadge badge="mechanical" />
-      </p>
+      <p className="verdict__explain">{verdict.explanation}</p>
       <details className="charter">
         <summary>What the rule says</summary>
         <p className="verdict__explain">{verdict.requirement}</p>

@@ -489,11 +489,10 @@ hr {
 /* ---------------------------------------------------------------- labels */
 
 /*
- * Labels are small capitals set on the paper, never pills: the five badges, the tags, the kickers,
- * the ranks, the bar's labels, the step counter. Colour carries the kind and the words carry the
+ * Labels are small capitals set on the paper, never pills: the tags, the kickers, the ranks, the
+ * bar's labels, the step counter. Colour carries the kind and the words carry the
  * meaning; `font-variant-caps` leaves the text itself as written for a reader.
  */
-.badge,
 .tag,
 .tag--manifesto,
 .tag--treasury,
@@ -506,18 +505,7 @@ hr {
   letter-spacing: 0.05em;
 }
 
-/* ---------------------------------------------------------------- badges */
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1.3;
-  white-space: nowrap;
-  cursor: help;
-}
+/* -------------------------------------------------------- glossary words */
 
 /* A glossary word in running text: a button that reads as the word (Phase 25, a toggletip). */
 .term__word {
@@ -540,26 +528,6 @@ hr {
 
 .term__tip {
   color: var(--ink-2);
-}
-
-.badge--direct {
-  color: var(--badge-direct-fg);
-}
-
-.badge--mechanical {
-  color: var(--badge-mechanical-fg);
-}
-
-.badge--assumption {
-  color: var(--badge-assumption-fg);
-}
-
-.badge--commentary {
-  color: var(--badge-commentary-fg);
-}
-
-.badge--simulated {
-  color: var(--badge-simulated-fg);
 }
 
 /* ------------------------------------------------------------------ tags */
@@ -684,7 +652,7 @@ hr {
   line-height: 1.3;
 }
 
-/* The tags on the head of a lever: the red lines that watch it, the promise it delivers, the badge. */
+/* The tags on the head of a lever: the red lines that watch it and the promise it delivers. */
 .lever__flags {
   display: inline-flex;
   flex-wrap: wrap;
@@ -1275,17 +1243,13 @@ details.table-view td:first-child {
   }
 }
 
-/* The five kinds of number: each badge beside its meaning. */
+/* The five kinds of number, a sentence each. */
 .kinds {
   display: grid;
   gap: 8px;
   margin: 0 0 16px;
   padding: 0;
   list-style: none;
-}
-
-.kinds .badge {
-  margin-right: 6px;
 }
 
 /* The way back from the full methodology to the page that leads to it. */

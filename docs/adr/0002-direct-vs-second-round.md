@@ -1,6 +1,6 @@
 # ADR-0002: Direct costings are numbers; second-round effects are words
 
-**Status:** accepted, 2026-09-15; revised since (below), last by ADR-0032
+**Status:** accepted, 2026-09-15; revised since (below), last by ADR-0034
 
 ## Context
 
@@ -67,3 +67,11 @@ would break this decision. It is a deliberate departure for now, not a change to
 every figure is still the engine's or a document's and badged for what it is on every screen but
 the briefing, the About page lists every source, and the code and its tests stay for the switch's
 return.
+
+## Revision, 2026-09-30 (ADR-0034)
+
+At the user's request no screen carries a badge. Every figure is still an official number or a
+stated calculation on one, and the data still records which kind each is, but the screens no longer
+separate them visibly: the words say so where they explain a figure, and the About and Methodology
+pages say what each kind means. It is a deliberate departure from this decision's "visibly
+distinct", recorded in ADR-0034 with its risks.

@@ -17,12 +17,11 @@ const search = () => new URLSearchParams(window.location.search);
 const part = (name: string) => screen.getByRole('region', { name });
 const headings = () =>
   [...document.querySelectorAll('main section > h2')].map((h) => h.textContent?.trim());
-/** Each row of the calculation: its label, its figure and its badge. */
+/** Each row of the calculation: its label and its figure (no badge since ADR-0034). */
 const rows = () =>
   [...document.querySelectorAll('.calc__row')].map((row) => [
     row.querySelector('dt')?.textContent,
     row.querySelector('.calc__figure')?.textContent,
-    row.querySelector('.badge')?.textContent,
   ]);
 /** "£6.8bn" and "−£11.3bn" as numbers of billions, signed. */
 const bn = (text: string | null | undefined) =>
@@ -59,20 +58,17 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     at(`/outlook?${BASE}`);
     const first = part('Your headroom');
     const figure = within(first).getByText(/of breathing space in/);
-    // Our estimate, not a published figure: with the workings on it wears the Assumption badge.
-    expect(figure).toHaveTextContent(
-      /^You start with £6\.8bn of breathing space in 2029-30\. Assumption$/,
-    );
+    // Our estimate, not a published figure, and with no badge even with the workings on (ADR-0034).
+    expect(figure).toHaveTextContent(/^You start with £6\.8bn of breathing space in 2029-30\.$/);
+    expect(document.querySelector('main .badge')).toBeNull();
     expect(within(figure).getByText('£6.8bn').tagName).toBe('STRONG');
     // The OBR's own record, an official figure, then why Chancellors keep a margin, in words with
-    // their sources: one paragraph, each part wearing its own badge.
+    // their sources: one paragraph, each part with its own sources.
     const history = within(first).getByText(/Chancellors have kept/);
     expect(history).toHaveTextContent(
-      /^Official figure Since 2010, Chancellors have kept about £29bn on average\./,
+      /^Since 2010, Chancellors have kept about £29bn on average\./,
     );
-    expect(history).toHaveTextContent(
-      /Commentary This builds in some safety for adverse economic impact\./,
-    );
+    expect(history).toHaveTextContent(/This builds in some safety for adverse economic impact\./);
     expect(
       within(history).getAllByRole('link', {
         name: /OBR, Economic and fiscal outlook – November 2025/,
@@ -84,10 +80,10 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
       within(history).getByRole('link', { name: /HMT, Chancellor letter to the Treasury/ }),
     ).toBeInTheDocument();
     // What the record means for this Budget, softened in the player's words (2026-09-30):
-    // "likely", and no figure. "Sensible" is a judgement, so the line wears Game judgement.
+    // "likely", and no figure. "Sensible" is the game's judgement; its source follows it.
     const buffer = within(first).getByText(/to build in a sensible buffer/);
     expect(buffer).toHaveTextContent(
-      /^Game judgement This means this Budget will likely need to increase the headroom to build in a sensible buffer\./,
+      /^This means this Budget will likely need to increase the headroom to build in a sensible buffer\./,
     );
     expect(buffer).toHaveTextContent(/£21 billion average absolute revision/);
     expect(screen.queryByText(/will need to find around/)).toBeNull();
@@ -108,17 +104,17 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     // No word on the briefing opens a definition (ADR-0031).
     for (const brief of briefing()) expect(brief.querySelector('.term')).toBeNull();
     // What the government must sell to lenders this year, and why they care: one paragraph, an
-    // official figure and then words with their sources, each part wearing its own badge.
+    // official figure and then words, each part with its own sources.
     const gilts = within(second).getByText(/plans to sell/);
     expect(gilts).toHaveTextContent(
-      /^Official figure This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\./,
+      /^This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\./,
     );
     expect(
       within(gilts).getByRole('link', { name: /HMT, Revision to the DMO Financing Remit 2026-27/ }),
     ).toBeInTheDocument();
     expect(gilts).toHaveTextContent(/gilt sales of £246\.2 billion/);
     expect(gilts).toHaveTextContent(
-      /Commentary Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\./,
+      /Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\./,
     );
     expect(within(gilts).getByRole('link', { name: /BoE, Bank Insights/ })).toBeInTheDocument();
     expect(
@@ -161,11 +157,12 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(intro).toHaveTextContent(/largely reflecting weaker RPI inflation/);
     expect(intro).not.toHaveTextContent(/spending linked to inflation/);
     expect(rows()).toEqual([
-      ['The OBR’s March forecast', '£23.6bn', 'Official figure'],
-      ['Higher interest rates', '−£11.3bn', 'Assumption'],
-      ['Higher inflation', '−£5.5bn', 'Assumption'],
-      ['Today’s estimate', '£6.8bn', 'Assumption'],
+      ['The OBR’s March forecast', '£23.6bn'],
+      ['Higher interest rates', '−£11.3bn'],
+      ['Higher inflation', '−£5.5bn'],
+      ['Today’s estimate', '£6.8bn'],
     ]);
+    expect(third.querySelector('.badge')).toBeNull();
     // The rows add up as shown, and the last is the figure the briefing opens with.
     const shown = rows().map(([, figure]) => bn(figure));
     expect(shown[0]! + shown[1]! + shown[2]!).toBeCloseTo(shown[3]!, 9);
@@ -214,10 +211,10 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
       /^This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\. Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\.$/,
     );
     expect(rows()).toEqual([
-      ['The OBR’s March forecast', '£23.6bn', undefined],
-      ['Higher interest rates', '−£11.3bn', undefined],
-      ['Higher inflation', '−£5.5bn', undefined],
-      ['Today’s estimate', '£6.8bn', undefined],
+      ['The OBR’s March forecast', '£23.6bn'],
+      ['Higher interest rates', '−£11.3bn'],
+      ['Higher inflation', '−£5.5bn'],
+      ['Today’s estimate', '£6.8bn'],
     ]);
     expect(screen.queryByText('How the estimate is made')).toBeNull();
   });
@@ -243,10 +240,11 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(within(table).getByText('Setting used')).toBeInTheDocument();
     // The gilt yield sets interest rates three-quarters of a point above the OBR's path.
     expect(within(table).getByText('+0.75 points')).toBeInTheDocument();
-    // How that setting is applied, and which way it leans, as an assumption (Phase 25).
+    // How that setting is applied, and which way it leans (Phase 25): our assumption, said in words
+    // ("we apply it"), with no badge (ADR-0034).
     const method = screen.getByText(/we apply it to the rise in gilt yields alone/);
     expect(method).toHaveTextContent(/so the estimate leans cautious\./);
-    expect(within(method).getByText('Assumption')).toBeInTheDocument();
+    expect(method.querySelector('.badge')).toBeNull();
     expect(within(table).getByText('10-year gilt yield')).toBeInTheDocument();
     expect(within(table).getByText('Borrowing so far in 2026-27')).toBeInTheDocument();
   });

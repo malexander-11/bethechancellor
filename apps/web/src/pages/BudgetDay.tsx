@@ -21,7 +21,6 @@ import { ClosingNotes } from '../components/ClosingNotes';
 import { Households } from '../components/Households';
 import { InteractionsNotice } from '../components/InteractionsNotice';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { LabelBadge } from '../components/LabelBadge';
 import { MeasuresTable } from '../components/MeasuresTable';
 import { PathChart } from '../components/PathChart';
 import { ReceptionCard, type EconomyLine } from '../components/ReceptionCard';
@@ -113,7 +112,6 @@ export function BudgetDayPage() {
             key: 'growth',
             ...(growth.leverId ? { lead: growth.leverTitle } : {}),
             text: growth.text,
-            badge: 'commentary' as const,
             sources: growth.sources,
           },
         ]
@@ -123,7 +121,6 @@ export function BudgetDayPage() {
           {
             key: 'interest',
             text: `Extra borrowing adds about ${formatGbpBn(interestGbpm, 1)} a year to debt interest by ${targetYear}.`,
-            badge: 'mechanical' as const,
             sources: [],
           },
         ]
@@ -236,16 +233,14 @@ export function BudgetDayPage() {
       {statement ? (
         <section className="statement doc" aria-labelledby="statement-heading">
           <h2 id="statement-heading" className="section-label">
-            Your Budget, in three sentences <LabelBadge badge="mechanical" />
+            Your Budget, in three sentences
           </h2>
           <p className="statement__line">{statement.prioritised}</p>
           <p className="statement__line">{statement.paid}</p>
           <p className="statement__line">{statement.accepted}</p>
         </section>
       ) : null}
-      <p className="rules-line">
-        <LabelBadge badge="mechanical" /> {rulesLine}
-      </p>
+      <p className="rules-line">{rulesLine}</p>
       <div className="receptions">
         {room.map((r) => (
           <ReceptionCard

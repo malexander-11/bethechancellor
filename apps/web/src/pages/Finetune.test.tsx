@@ -478,14 +478,14 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
   // A newcomer's game: the shared setup's advanced mode is cleared, as a fresh browser has it.
   beforeEach(() => window.localStorage.removeItem('btc.mode.v1'));
 
-  it('shows the Director of Tax’s eight picks and nothing else, badged as a judgement', () => {
+  it('shows the Director of Tax’s eight picks and nothing else, as the advisers’ shortlist', () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     expect(document.querySelector('main')?.getAttribute('data-mode')).toBe('basic');
     expect(
       screen.getByText('Your Director of Tax’s best ideas. Watch your headroom move.'),
     ).toBeInTheDocument();
-    expect(within(modeLine()).getByText('Game judgement')).toBeInTheDocument();
-    expect(modeLine().textContent).toMatch(/A shortlist\./);
+    expect(modeLine().textContent).toMatch(/^A shortlist\./);
+    expect(document.querySelector('.badge')).toBeNull();
     expect(
       screen.getByRole('button', { name: 'See every idea (all 95 tax policies)' }),
     ).toBeInTheDocument();
@@ -524,7 +524,7 @@ describe('fine-tune in basic mode: the advisers’ best ideas (Phase 27, ADR-002
     expect(screen.getByRole('button', { name: 'Show only the best ideas' })).toBe(button);
     expect(document.activeElement).toBe(button);
     expect(within(modeLine()).getByRole('status')).toHaveTextContent('Every idea is on show.');
-    expect(within(modeLine()).queryByText('Game judgement')).toBeNull();
+    expect(modeLine().textContent).not.toMatch(/A shortlist/);
     expect(document.querySelectorAll('.lever--curated')).toHaveLength(15);
     expect(group(/^Everyone 31 policies/)).toBeInTheDocument();
     expect(

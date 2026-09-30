@@ -2,7 +2,8 @@
 
 **Status:** accepted, 2026-09-18; the reception revised 2026-09-28 (below, ADR-0026); a second
 switch beside the workings 2026-09-29 (below, ADR-0028); the briefing's badges with the workings
-2026-09-29 (below, ADR-0031); both switches withdrawn for now 2026-09-29 (below, ADR-0032)
+2026-09-29 (below, ADR-0031); both switches withdrawn for now 2026-09-29 (below, ADR-0032); no
+badges 2026-09-30 (below, ADR-0034)
 
 ## Context
 
@@ -153,3 +154,9 @@ no workings; the reference pages, which are the workings, still do. The preferen
 key, so a player who had turned the workings on cannot keep them with no way to turn them off; the
 page tests set the new key to keep the code tested for the switch's return. Advanced mode is
 changed by the button on each screen basic mode trims, as it was beside the footer's switch.
+
+## Revision (2026-09-30): no badges (ADR-0034)
+
+The three audiences' cards carry no Game judgement badge, and the economy lines in the markets' fold
+none either. Every threshold, point and sentence is still written in the data as the game's
+judgement, and "Why this rating" still lists every rule with its points and the figure it read.

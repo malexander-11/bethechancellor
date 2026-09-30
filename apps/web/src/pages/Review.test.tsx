@@ -132,7 +132,7 @@ describe('step 5: deliver the Budget', () => {
     const levy = at(`/review?${BASE}&${G}&L=moj.10_hscl.1`);
     const line = document.querySelector('.review__taxtake');
     expect(line?.textContent).toMatch(
-      /^Taxes take \d+p more in every £100 of national income in 2029-30\. Worked out The OBR already forecasts the tax take at a historic high\./,
+      /^Taxes take \d+p more in every £100 of national income in 2029-30\. The OBR already forecasts the tax take at a historic high\./,
     );
     levy.unmount();
     // A small rise says nothing: the markets' band starts at half a point.

@@ -1,7 +1,6 @@
 import type { Consideration, Lever, Outcome } from '@btc/engine';
 import { adviserById } from '../data';
 import { applicableConsiderations } from './considerations';
-import { LabelBadge } from './LabelBadge';
 import { SourceLink } from './SourceLink';
 
 interface Note {
@@ -63,9 +62,7 @@ export function ClosingNotes({ outcome, levers }: { outcome: Outcome; levers: re
         .filter((id) => notes.has(id))
         .map((id) => (
           <section key={id} className="notes__adviser">
-            <h3 className="notes__role">
-              {adviserById.get(id)?.role ?? id} <LabelBadge badge="commentary" />
-            </h3>
+            <h3 className="notes__role">{adviserById.get(id)?.role ?? id}</h3>
             <ul>
               {(notes.get(id) ?? []).map(({ lever, consideration }) => (
                 <li key={`${lever.code}-${consideration.id}`}>

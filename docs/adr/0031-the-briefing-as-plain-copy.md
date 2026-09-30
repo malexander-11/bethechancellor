@@ -208,3 +208,9 @@ lines and the briefing is 1,632px tall, still 2.1 screens of 780px. The page tes
 opening and that nothing in the paragraph is bold. `walk36.mjs` is clean in both runs, light and
 reduced motion, with the audits on: it checks the paragraph's words and place, and that no element
 in it is set at 600 or heavier.
+
+## Revision (2026-09-30, last): no badges anywhere (ADR-0034)
+
+The briefing's badges waited for the workings; now there are none to wait, on the briefing or any
+other screen. With the workings on, the briefing shows its sources and the table of how the estimate
+is made, and no badge.

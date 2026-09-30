@@ -11,7 +11,7 @@ import type { SourceRef } from '@btc/engine';
 export const BRIEFING_WORDS = {
   headroom: {
     heading: 'Your headroom',
-    /** The one figure to plan on. {estimate} is the engine's, and wears the Assumption badge. */
+    /** The one figure to plan on. {estimate} is the engine's: today's estimate, an assumption. */
     figure: 'You start with {estimate} of breathing space in {year}.',
     /** The same line should a rebase ever leave the estimate below zero. */
     shortfall: 'You start {estimate} short of the rules in {year}.',
@@ -39,11 +39,11 @@ export const BRIEFING_WORDS = {
     lenders:
       'Lenders charge more when they doubt the sums. Meeting the rules with headroom to spare keeps their trust.',
     /**
-     * The debt rule, in the running text beneath the rules in both modes (it was one fold away until
-     * 2026-09-30), in plain type: first that it is the second of the two rules above it, then the
-     * player's words, with its year the rule's own and said as the Charter and the rules' own plain
-     * words have it (the year before, not "in five years"). The investment it counts is the lesson:
-     * the day-to-day rule leaves it out.
+     * The debt rule, in the running text beneath the rules in both modes (it was one fold away
+     * until 2026-09-30), in plain type: first that it is the second of the two rules above it, then
+     * the player's words, with its year the rule's own and said as the Charter and the rules' own
+     * plain words have it (the year before, not "in five years"). The investment it counts is the
+     * lesson: the day-to-day rule leaves it out.
      */
     debtRule: {
       text: 'The second rule is the debt rule. Government debt must be a smaller share of the economy in {year} than the year before. Critically, this includes any borrowing for investment as well as day-to-day spending.',

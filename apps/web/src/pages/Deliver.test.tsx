@@ -36,20 +36,20 @@ describe('build your Budget: the ways to deliver', () => {
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 
-  it('says once what the badges mean, and whose budgets a screen’s are (Phase 25)', () => {
+  it('says whose budgets a screen’s are (Phase 25), with no badges and no key to them', () => {
     const first = at(`/budget/deliver?${BASE}&${GAME}`);
-    // The first flagship screen, where badges first crowd a card: one line, and no hover needed.
-    expect(document.querySelector('.deliver__key')?.textContent).toBe(
-      'Badges say what a figure is: Official figure, Worked out or Assumption, a number we chose. Game judgement is the game’s opinion.',
-    );
+    // The badges went, and with them the line on the first flagship screen that said what they
+    // meant (ADR-0034).
+    expect(document.querySelector('.deliver__key')).toBeNull();
+    expect(document.querySelector('.badge')).toBeNull();
+    expect(screen.queryByText(/Badges say what a figure is/)).toBeNull();
     // Safer streets: prisons, courts and police are England and Wales's; Wales gets no share.
     expect(document.querySelector('.deliver__reach')?.textContent).toMatch(
       /Prisons, courts and police here are England and Wales’s\. Scotland and Northern Ireland get a share through their own grants \(the Barnett formula\), which our prices leave out\./,
     );
     first.unmount();
-    // The second screen carries no key; defence is the UK's, so no England line either.
+    // Defence is the UK's, so the second screen has no England line.
     at(`/budget/deliver/2?${BASE}&${GAME}`);
-    expect(document.querySelector('.deliver__key')).toBeNull();
     expect(document.querySelector('.deliver__reach')).toBeNull();
   });
 
@@ -62,7 +62,7 @@ describe('build your Budget: the ways to deliver', () => {
     expect(document.querySelector('.journey > .spoken')).toBeNull();
     expect(screen.getAllByText('Justice Secretary').length).toBeGreaterThan(0);
     expect(screen.queryByText('Defence Secretary')).toBeNull();
-    expect(screen.getAllByText('Game judgement').length).toBeGreaterThanOrEqual(1);
+    expect(document.querySelector('.badge')).toBeNull();
     const cards = document.querySelectorAll('.choice--option');
     expect(cards.length).toBe(2);
     for (const card of cards) expect(card.querySelector('.choice__advice')).not.toBeNull();
@@ -153,7 +153,7 @@ describe('build your Budget: the ways to deliver', () => {
 
   it('prices each flagship once, interest included: the price and what it leaves add up to the bar', () => {
     // One price per choice (Phase 25, R4): the change to the bar's headroom, with its workings in
-    // the fold, badged Worked out.
+    // the fold.
     at(`/budget/deliver/2?${BASE}&${GAME}`);
     const card = box(/^Fill the funding gap in the defence investment plan/).closest(
       '.choice',
@@ -198,7 +198,7 @@ describe('build your Budget: the ways to deliver', () => {
 
   it('says which ways only make a start, and counts a ticked start as started, not delivered', async () => {
     // Graded delivery (Phase 25): the care down-payment starts the NHS priority; the health uplift
-    // delivers it. The reason is a judgement, badged, one fold away.
+    // delivers it. The reason is a judgement, one fold away.
     at(`/budget/deliver?${BASE}&g=st.2_pr.nhs&M=rate.0.75_rpi.0.5`);
     const card = (name: RegExp) => box(name).closest('.choice') as HTMLElement;
     const care = card(/^A down-payment on the National Care Service/);
@@ -370,7 +370,8 @@ describe('flagship policies in basic mode: the best ways first (Phase 27, ADR-00
     // The uplift is the pick; the gap shows because the briefing puts it on the desk.
     expect(shownWays()).toEqual(['dip-gap', 'defence-uplift']);
     const line = document.querySelector('.mode-line') as HTMLElement;
-    expect(within(line).getByText('Game judgement')).toBeInTheDocument();
+    expect(line).toHaveTextContent(/^A shortlist\./);
+    expect(line.querySelector('.badge')).toBeNull();
     const button = screen.getByRole('button', { name: 'See every idea (all 3 ways)' });
     button.focus();
     fireEvent.click(button);

@@ -233,13 +233,13 @@
 
 /*
  * How the headroom is calculated: the forecast, what moved it, and the estimate, row by row. One
- * grid of three columns, label, figure and badge, shared by every row through subgrid, so the
- * figures line up as a sum does; a label may wrap, the figures never do. A browser without subgrid
- * lays each row out on its own.
+ * grid of two columns, label and figure, shared by every row through subgrid, so the figures line
+ * up as a sum does; a label may wrap, the figures never do. A browser without subgrid lays each
+ * row out on its own.
  */
 .calc {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   column-gap: 12px;
   max-width: 34em;
   margin: 0 0 8px;
@@ -248,7 +248,7 @@
 .calc__row {
   display: grid;
   grid-column: 1 / -1;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   grid-template-columns: subgrid;
   align-items: baseline;
   padding: 8px 0;
@@ -256,17 +256,12 @@
 }
 
 .calc__row dd {
-  display: grid;
-  grid-column: 2 / 4;
-  grid-template-columns: auto auto;
-  grid-template-columns: subgrid;
-  align-items: baseline;
   margin: 0;
+  text-align: right;
   white-space: nowrap;
 }
 
 .calc__figure {
-  justify-self: end;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
@@ -511,8 +506,8 @@
 
 /* ---------------------------------------------------------- conversation */
 
-/* A spoken line: a card with a coloured edge naming who is talking, and the badge that says it
-   is a game judgement. The PM's edge is red, a minister's grey, an adviser's the accent. */
+/* A spoken line: a card with a coloured edge naming who is talking. The PM's edge is red, a
+   minister's grey, an adviser's the accent. */
 .spoken {
   margin: 12px 0;
   padding: 4px 0 4px 14px;
@@ -1004,7 +999,7 @@ label.choice {
   line-height: 1.55;
 }
 
-/* The worked-out fact behind a kind of Budget (Phase 25), under its own badge. */
+/* The worked-out fact behind a kind of Budget (Phase 25). */
 .verdict-close__fact {
   max-width: 68ch;
   margin: 8px 0;
@@ -1051,7 +1046,7 @@ label.choice {
   white-space: nowrap;
 }
 
-/* A spoken line folded under its speaker: the role and the badge show, the words wait. */
+/* A spoken line folded under its speaker: the role shows, the words wait. */
 .spoken--folded {
   margin: 8px 0;
 }
@@ -1103,10 +1098,6 @@ label.choice {
 }
 
 /* An option card: the figure leads the meta line; an option adjusted on step 4 is neither on nor off. */
-.choice--option .choice__title .badge {
-  vertical-align: middle;
-}
-
 .choice--adjusted {
   border-style: dashed;
   border-color: var(--accent);
@@ -1511,8 +1502,7 @@ label.choice {
   font-variant-numeric: tabular-nums;
 }
 
-/* The badges' key, said once on the first flagship screen, and whose budgets a screen's are. */
-.deliver__key,
+/* Whose budgets a screen's are, when they are not the whole UK's (Phase 25). */
 .deliver__reach {
   max-width: 40em;
   margin: 0 0 12px;
@@ -1538,8 +1528,8 @@ label.choice {
 }
 
 /*
- * Basic and advanced (Phase 27): the line on a trimmed screen. The shortlist is a judgement, so
- * its badge leads; the button that swaps the screen sits in the same place in either mode.
+ * Basic and advanced (Phase 27): the line on a trimmed screen. The button that swaps the screen
+ * sits in the same place in either mode.
  */
 .mode-line {
   display: flex;

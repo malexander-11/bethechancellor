@@ -51,29 +51,24 @@ describe('the head of every screen', () => {
     expect(within(term).queryByText(short)).toBeNull();
   });
 
-  it('names each badge in plain words, and the Methodology page says what each means', () => {
-    // With the workings on, as the shared setup has them, the briefing wears its badges.
+  it('wears no badge, and says the five kinds of number in words on About and Methodology', () => {
+    // Even with the workings on, as the shared setup has them, no screen labels a figure (ADR-0034).
     const view = at(`/outlook?${BASE}`);
-    // A badge is a plain label with its meaning in its title: the key it opened at the foot of
-    // the page went when the footer became one row of links (ADR-0032).
-    const badge = document.querySelector('main .badge--direct') as HTMLElement;
-    expect(badge.tagName).toBe('SPAN');
-    expect(badge).toHaveAttribute('title', expect.stringMatching(/^A figure HMRC/));
-    expect(document.getElementById('badge-key')).toBeNull();
+    expect(document.querySelector('.badge')).toBeNull();
     expect(screen.queryByText('What the badges mean')).toBeNull();
     view.unmount();
-    // The five badges, in plain words, on the page the footer links to (ADR-0033), which links on
+    // The five kinds, a sentence each, on the page the footer links to (ADR-0033), which links on
     // to the Methodology page's fuller account.
     const about = at('/about');
     const kinds = [...document.querySelectorAll('.kinds li')];
-    expect(kinds.map((li) => li.querySelector('.badge')?.textContent)).toEqual([
-      'Official figure',
-      'Worked out',
-      'Assumption',
-      'Commentary',
-      'Game judgement',
+    expect(kinds.map((li) => li.textContent)).toEqual([
+      'An official figure is one HMRC, HM Treasury or the OBR published, shown with its working.',
+      'A worked-out figure is arithmetic on official figures, with no judgement in it.',
+      'An assumption is a number we chose, using published sensitivities where they exist.',
+      'Commentary is words about an effect, with sources, and never a number of our own.',
+      'A game judgement is the game’s opinion, in a role’s voice. It quotes sources and never makes a number.',
     ]);
-    expect(kinds[0]).toHaveTextContent(/A figure HMRC, HM Treasury or the OBR published/);
+    expect(document.querySelector('.badge')).toBeNull();
     expect(screen.getByRole('link', { name: 'How the numbers work, in full' })).toHaveAttribute(
       'href',
       '/methodology',
@@ -81,7 +76,12 @@ describe('the head of every screen', () => {
     about.unmount();
     at('/methodology');
     const heading = screen.getByRole('heading', { name: 'Five kinds of number' });
-    const table = heading.nextElementSibling as HTMLElement;
+    // A line on why nothing on screen is labelled, then the table of the five kinds in words.
+    const intro = heading.nextElementSibling as HTMLElement;
+    expect(intro).toHaveTextContent(/The screens do not label them \(ADR-0034\)/);
+    const table = intro.nextElementSibling as HTMLElement;
+    expect(table.tagName).toBe('TABLE');
+    expect(document.querySelector('.badge')).toBeNull();
     for (const label of [
       'Official figure',
       'Worked out',

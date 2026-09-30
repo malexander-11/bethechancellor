@@ -1,6 +1,5 @@
 import type { HouseholdReaction } from '@btc/engine';
 import { useWorkings } from '../journey/workings';
-import { LabelBadge } from './LabelBadge';
 import { SourceLink } from './SourceLink';
 
 const NET: Record<HouseholdReaction['net'], string> = {
@@ -27,8 +26,7 @@ export function Households({ reactions }: { reactions: HouseholdReaction[] }) {
             <span className="kicker">{r.household.who}</span>{' '}
             <span className={`tag--treasury household__net household__net--${r.net}`}>
               {NET[r.net]}
-            </span>{' '}
-            <LabelBadge badge="simulated" />
+            </span>
           </p>
           {r.quiet ? (
             <p className="household__line">“{r.quiet.text}”</p>

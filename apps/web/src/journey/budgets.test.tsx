@@ -58,30 +58,38 @@ const ROAD: readonly [path: string, limit: number, game: string, mode: Mode][] =
   // player's own words (revised 2026-09-29): 232 in either mode. Then plain copy, the same in both
   // modes (ADR-0031): 175, so it is read in basic mode alone. Then the debt rule in the running
   // text rather than a fold, and the softer buffer line (2026-09-30): 206; then said to be the
-  // second rule, in plain type: 210.
-  ['/outlook', 235, GAME, 'basic'],
-  ['/pm', 195, GAME, 'basic'],
-  ['/budget/deliver', 220, WIDEST, 'advanced'],
-  ['/budget/deliver/2', 220, WIDEST, 'advanced'],
-  ['/budget/deliver/3', 220, WIDEST, 'advanced'],
-  // The best one or two ways a priority (Phase 27): 130, 54 and 110 words, against 205, 182, 165.
-  ['/budget/deliver', 145, WIDEST, 'basic'],
-  ['/budget/deliver/2', 145, WIDEST, 'basic'],
-  ['/budget/deliver/3', 145, WIDEST, 'basic'],
+  // second rule, in plain type: 210. With the badges gone (ADR-0034) this count reads 208: the same
+  // words, two paragraphs no longer starting or ending in a space.
+  ['/outlook', 230, GAME, 'basic'],
+  // Every other screen lost its badges (ADR-0034) and was re-measured and re-pinned with a tenth
+  // to spare, as below: the priorities 172 words, against 178.
+  ['/pm', 190, GAME, 'basic'],
+  // The flagship screens 171, 170 and 153, against 205, 182 and 165: the first lost the line that
+  // said what the badges meant.
+  ['/budget/deliver', 190, WIDEST, 'advanced'],
+  ['/budget/deliver/2', 190, WIDEST, 'advanced'],
+  ['/budget/deliver/3', 170, WIDEST, 'advanced'],
+  // The best one or two ways a priority (Phase 27): 130, 54 and 110 words, against 205, 182, 165;
+  // with no badges, 101, 49 and 102.
+  ['/budget/deliver', 115, WIDEST, 'basic'],
+  ['/budget/deliver/2', 55, WIDEST, 'basic'],
+  ['/budget/deliver/3', 115, WIDEST, 'basic'],
   // Measured after Phase 26's sizes (613, 778, 543 and 724 words), with a tenth to spare; then
   // council homes took Investment's third place on show (spending 580 and 761), and the links to
-  // the desk went with it (tax 611 and 776, spending 578 and 759; ADR-0027).
-  ['/finetune/tax', 675, GAME, 'advanced'],
-  ['/finetune/tax', 860, TUNED, 'advanced'],
-  ['/finetune/spending', 640, GAME, 'advanced'],
-  ['/finetune/spending', 840, TUNED, 'advanced'],
+  // the desk went with it (tax 611 and 776, spending 578 and 759; ADR-0027). With no badges
+  // (ADR-0034): tax 592 and 750, spending 554 and 723.
+  ['/finetune/tax', 655, GAME, 'advanced'],
+  ['/finetune/tax', 825, TUNED, 'advanced'],
+  ['/finetune/spending', 610, GAME, 'advanced'],
+  ['/finetune/spending', 800, TUNED, 'advanced'],
   // Basic mode (Phase 27): the advisers' shortlist, and whatever the game has chosen besides
-  // (tax 343 and 492, spending 424 and 589).
-  ['/finetune/tax', 380, GAME, 'basic'],
-  ['/finetune/tax', 545, TUNED, 'basic'],
-  ['/finetune/spending', 470, GAME, 'basic'],
-  ['/finetune/spending', 650, TUNED, 'basic'],
-  ['/review', 235, GAME, 'basic'],
+  // (tax 343 and 492, spending 424 and 589); with no badges, tax 329 and 471, spending 403 and 556.
+  ['/finetune/tax', 365, GAME, 'basic'],
+  ['/finetune/tax', 520, TUNED, 'basic'],
+  ['/finetune/spending', 445, GAME, 'basic'],
+  ['/finetune/spending', 615, TUNED, 'basic'],
+  // The review 204 and Budget day 190 with no badges, against 213 and 199.
+  ['/review', 225, GAME, 'basic'],
   ['/budget-day', 210, GAME, 'basic'],
 ];
 

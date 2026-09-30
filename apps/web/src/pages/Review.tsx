@@ -23,7 +23,6 @@ import type { ReactNode } from 'react';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { inTrayText, leftAsIs } from '../components/InTray';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { LabelBadge } from '../components/LabelBadge';
 import {
   formatLeverValueShort,
   isShareOfSpending,
@@ -396,11 +395,7 @@ export function ReviewPage() {
                       )}
                     </ul>
                   ) : null}
-                  {short ? (
-                    <p className="review__short">
-                      {short.text} <LabelBadge badge={short.badge} />
-                    </p>
-                  ) : null}
+                  {short ? <p className="review__short">{short.text}</p> : null}
                 </li>
               );
             })}
@@ -431,16 +426,14 @@ export function ReviewPage() {
       >
         <p className="review__reconcile">
           {fromTo}
-          {how.length > 0 ? ` ${capitalise(how.join('; '))}.` : ''}{' '}
-          <LabelBadge badge="mechanical" />
+          {how.length > 0 ? ` ${capitalise(how.join('; '))}.` : ''}
         </p>
         {whoPays ? <p>{whoPays}</p> : null}
         {r.taxTakeChangePp > TAX_TAKE_SAID_PP ? (
           // The tax take in words, only when it rises by more than half a point (Phase 25).
           <p className="review__taxtake">
             Taxes take {inEvery100(r.taxTakeChangePp)} more in every £100 of national income in{' '}
-            {r.year}. <LabelBadge badge="mechanical" /> The OBR already forecasts the tax take at a
-            historic high.{' '}
+            {r.year}. The OBR already forecasts the tax take at a historic high.{' '}
             <SourceList
               as="span"
               className="briefing__sources"
@@ -481,8 +474,7 @@ export function ReviewPage() {
         ) : null}
         {preview ? (
           <p className="review__reaction">
-            <span className="kicker">{preview.audience}</span> {preview.reason.text}{' '}
-            <LabelBadge badge={preview.reason.badge} />
+            <span className="kicker">{preview.audience}</span> {preview.reason.text}
           </p>
         ) : null}
         {stillOnDesk.length > 0 ? (
@@ -490,9 +482,7 @@ export function ReviewPage() {
             <p className="review__tray">Still on your desk:</p>
             <ul className="review__list">
               {stillOnDesk.map((item) => (
-                <li key={item.id}>
-                  <LabelBadge badge={item.badge} /> {inTrayText(item, outcomeOf, state.leverValues)}
-                </li>
+                <li key={item.id}>{inTrayText(item, outcomeOf, state.leverValues)}</li>
               ))}
             </ul>
           </>

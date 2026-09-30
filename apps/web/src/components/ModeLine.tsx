@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useModeSwitch, type Mode } from '../journey/mode';
-import { LabelBadge } from './LabelBadge';
 
 /**
  * The words of basic and advanced mode (Phase 27, ADR-0028): the line on a trimmed screen, the way
@@ -8,7 +7,7 @@ import { LabelBadge } from './LabelBadge';
  * test reads what the player reads.
  */
 export const MODE_WORDS = {
-  /** Before the button on a screen of ideas in basic mode, beside its Game judgement badge. */
+  /** Before the button on a screen of ideas in basic mode. */
   shortlist: 'A shortlist.',
   ideas: { basic: 'See every idea', advanced: 'Show only the best ideas' },
   /** Said once the button is pressed, by the mode the screen is now in. */
@@ -19,7 +18,7 @@ export const MODE_WORDS = {
 
 /**
  * The line on a screen of ideas basic mode trims (Phase 27): in basic mode it says the ideas are a
- * shortlist, a judgement badged as one, and offers every idea; in advanced mode it offers the
+ * shortlist, the advisers' judgement, and offers every idea; in advanced mode it offers the
  * shortlist back. It is one button in the same place in both modes, so the focus stays on it when
  * the screen changes around it, and a quiet status says what changed. `every` names what advanced
  * mode shows ("95 tax policies"), for a screen reader. The briefing had its own line until it
@@ -34,11 +33,7 @@ export function ModeLine({ every }: { every?: string }) {
   const next: Mode = basic ? 'advanced' : 'basic';
   return (
     <p className="mode-line">
-      {basic ? (
-        <>
-          <LabelBadge badge="simulated" /> {MODE_WORDS.shortlist}{' '}
-        </>
-      ) : null}
+      {basic ? <>{MODE_WORDS.shortlist} </> : null}
       <button
         type="button"
         className="linklike"

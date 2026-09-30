@@ -22,7 +22,6 @@ import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { LabelBadge } from '../components/LabelBadge';
 import { sizeWords } from '../components/LeverControl';
 import { ModeLine } from '../components/ModeLine';
 import { HeldLever, PolicyCard, type Held } from '../components/PolicyCard';
@@ -255,8 +254,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         <ul className="tune__notes">
           {spec.notes.map((note) => (
             <li key={note.text}>
-              <LabelBadge badge={note.badge} /> {note.text}{' '}
-              <SourceList as="span" className="briefing__sources" refs={note.sources} />
+              {note.text} <SourceList as="span" className="briefing__sources" refs={note.sources} />
             </li>
           ))}
         </ul>

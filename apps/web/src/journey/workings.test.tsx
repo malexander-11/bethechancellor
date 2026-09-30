@@ -26,14 +26,15 @@ describe('the workings, with the switch withdrawn for now (ADR-0032)', () => {
   // player meets it now: nothing on the page can turn them on.
   beforeEach(() => window.localStorage.removeItem(KEY));
 
-  it('shows no switch and no workings on the game’s screens: plain numbers and badges', () => {
+  it('shows no switch, no workings and no badges on the game’s screens: plain numbers', () => {
     at(TUNING);
     expect(screen.queryByRole('switch')).toBeNull();
     expect(workingsOf()).toBe('off');
     expect(sourceLinks()).toBe(0);
     expect(screen.queryByRole('button', { name: /Detail and sources/ })).toBeNull();
-    // The badges that say what kind of number something is stay on step 4.
-    expect(screen.getAllByText('Official figure').length).toBeGreaterThan(0);
+    // No badge says what kind of number something is, on step 4 or anywhere (ADR-0034).
+    expect(document.querySelector('.badge')).toBeNull();
+    expect(screen.queryByText('Official figure')).toBeNull();
     expect(screen.queryByText(/Turn on Show workings/)).toBeNull();
   });
 
