@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The About and Methodology pages load when opened (2 KB and 7 KB gzipped), so the script every
+  player loads is 259 KB gzipped. A link that opens on part of one of them still lands there once
+  the page is drawn.
 - The data is read, checked and validated when the app is built, not in the player's browser, which
   now only parses JSON: no schema library and no validator ship. The build leaves out the retired
   levers and what no screen shows (the published tables behind a costing, quoted passages, source

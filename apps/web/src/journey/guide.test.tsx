@@ -51,8 +51,8 @@ describe('the head of every screen', () => {
     expect(within(term).queryByText(short)).toBeNull();
   });
 
-  it('wears no badge, and says the five kinds of number in words on About and Methodology', () => {
-    // Even with the workings on, as the shared setup has them, no screen labels a figure (ADR-0034).
+  it('wears no badge, and says the five kinds of number in words on About and Methodology', async () => {
+    // No screen labels a figure (ADR-0034).
     const view = at(`/outlook?${BASE}`);
     expect(document.querySelector('.badge')).toBeNull();
     expect(screen.queryByText('What the badges mean')).toBeNull();
@@ -60,6 +60,7 @@ describe('the head of every screen', () => {
     // The five kinds, a sentence each, on the page the footer links to (ADR-0033), which links on
     // to the Methodology page's fuller account.
     const about = at('/about');
+    await screen.findByRole('heading', { level: 1, name: 'About the game & sources' });
     const kinds = [...document.querySelectorAll('.kinds li')];
     expect(kinds.map((li) => li.textContent)).toEqual([
       'An official figure is one HMRC, HM Treasury or the OBR published, shown with its working.',
@@ -75,7 +76,7 @@ describe('the head of every screen', () => {
     );
     about.unmount();
     at('/methodology');
-    const heading = screen.getByRole('heading', { name: 'Five kinds of number' });
+    const heading = await screen.findByRole('heading', { name: 'Five kinds of number' });
     // A line on why nothing on screen is labelled, then the table of the five kinds in words.
     const intro = heading.nextElementSibling as HTMLElement;
     expect(intro).toHaveTextContent(/The screens do not label them \(ADR-0034\)/);

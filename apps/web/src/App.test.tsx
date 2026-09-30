@@ -81,10 +81,10 @@ describe('journey routes', () => {
     expect(document.title).toBe('Fine-tune tax · Step 4 of 6 · What’s your Budget?');
   });
 
-  it('opens a page whose link ends in a broken fragment as if it had none', () => {
+  it('opens a page whose link ends in a broken fragment as if it had none', async () => {
     // "%E0%A4%A" is not a whole character, so decoding it throws; that once blanked the page.
     at('/about#%E0%A4%A');
-    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1 })).toBeInTheDocument();
   });
 
   it('moves focus to the new screen when a step link is followed', () => {

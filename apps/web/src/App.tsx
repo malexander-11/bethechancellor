@@ -1,18 +1,22 @@
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { ModeProvider, useMode } from './journey/mode';
 import { BudgetProvider } from './state/budget';
-import { AboutPage } from './pages/About';
 import { BudgetDayPage } from './pages/BudgetDay';
 import { DeliverPage } from './pages/Deliver';
 import { FinetunePage } from './pages/Finetune';
-import { MethodologyPage } from './pages/Methodology';
 import { OutlookPage } from './pages/Outlook';
 import { PMPage } from './pages/PM';
 import { ReviewPage } from './pages/Review';
 import { StartPage } from './pages/Start';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { SiteFooter } from './components/SiteFooter';
+
+// The two reference pages are opened by few players, so their code loads when one is opened.
+const AboutPage = lazy(() => import('./pages/About').then((m) => ({ default: m.AboutPage })));
+const MethodologyPage = lazy(() =>
+  import('./pages/Methodology').then((m) => ({ default: m.MethodologyPage })),
+);
 
 /** Old and shorthand paths redirect into the journey with the budget's query string intact. */
 function RedirectKeepingQuery({ to }: { to: string }) {
@@ -46,27 +50,51 @@ function fragmentId(hash: string): string {
  * were scrolled, and a screen reader hears nothing at all. So on every change of path the page
  * goes back to the top and focus lands on the main region, whose new title the guide has just
  * set. A link to a part of a page, such as a line of the About page's contents (ADR-0033), lands
- * on that part instead, and focus with it, so the next Tab carries on from there. Not on first
- * paint: the browser has placed focus already, and taking it would be rude.
+ * on that part instead, and focus with it, so the next Tab carries on from there; on a page whose
+ * code is still loading, it lands there once the part is drawn. Not on first paint: the browser has
+ * placed focus already, and taking it would be rude.
  */
 function RouteFocus() {
   const { pathname, hash } = useLocation();
   const first = useRef(true);
   useEffect(() => {
-    const target = hash ? document.getElementById(fragmentId(hash)) : null;
-    if (first.current) {
-      first.current = false;
-      target?.scrollIntoView?.();
+    const firstPaint = first.current;
+    first.current = false;
+    const land = (target: HTMLElement | null) => {
+      if (firstPaint) {
+        target?.scrollIntoView?.();
+        return;
+      }
+      if (target) {
+        target.scrollIntoView?.();
+        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+        return;
+      }
+      document.documentElement.scrollTop = 0;
+      document.getElementById('main')?.focus({ preventScroll: true });
+    };
+    const id = hash ? fragmentId(hash) : null;
+    const target = id ? document.getElementById(id) : null;
+    const main = document.getElementById('main');
+    if (!id || target || !main) {
+      land(target);
       return;
     }
-    if (target) {
-      target.scrollIntoView?.();
-      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
-      target.focus({ preventScroll: true });
-      return;
-    }
-    document.documentElement.scrollTop = 0;
-    document.getElementById('main')?.focus({ preventScroll: true });
+    // Not drawn yet: start at the top of the screen, and move on to the part when it arrives.
+    land(null);
+    const observer = new MutationObserver(() => {
+      const found = document.getElementById(id);
+      if (!found) return;
+      observer.disconnect();
+      land(found);
+    });
+    observer.observe(main, { childList: true, subtree: true });
+    const giveUp = window.setTimeout(() => observer.disconnect(), 5000);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(giveUp);
+    };
   }, [pathname, hash]);
   return null;
 }
@@ -97,39 +125,41 @@ function Shell() {
           </div>
         </header>
         <main id="main" tabIndex={-1} className="page" data-mode={mode}>
-          <Routes>
-            <Route path="/" element={<StartPage />} />
-            <Route path="/outlook" element={<OutlookPage />} />
-            <Route path="/assumptions" element={<RedirectKeepingQuery to="/outlook" />} />
-            <Route path="/pm" element={<PMPage />} />
-            <Route path="/budget" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-            {/* The flagship screens; the desk's old addresses, below, open step 4. */}
-            <Route path="/budget/deliver" element={<DeliverPage />} />
-            <Route path="/budget/deliver/:n" element={<DeliverPage />} />
-            {/* Paying for it became fine-tuning tax and spending (Phase 24). */}
-            <Route path="/budget/afford" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-            <Route path="/budget/:tab" element={<DeskRedirect />} />
-            <Route path="/finetune" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-            <Route path="/finetune/:side" element={<FinetunePage />} />
-            <Route
-              path="/recommendations"
-              element={<RedirectKeepingQuery to="/finetune/spending" />}
-            />
-            {/*
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path="/" element={<StartPage />} />
+              <Route path="/outlook" element={<OutlookPage />} />
+              <Route path="/assumptions" element={<RedirectKeepingQuery to="/outlook" />} />
+              <Route path="/pm" element={<PMPage />} />
+              <Route path="/budget" element={<RedirectKeepingQuery to="/finetune/tax" />} />
+              {/* The flagship screens; the desk's old addresses, below, open step 4. */}
+              <Route path="/budget/deliver" element={<DeliverPage />} />
+              <Route path="/budget/deliver/:n" element={<DeliverPage />} />
+              {/* Paying for it became fine-tuning tax and spending (Phase 24). */}
+              <Route path="/budget/afford" element={<RedirectKeepingQuery to="/finetune/tax" />} />
+              <Route path="/budget/:tab" element={<DeskRedirect />} />
+              <Route path="/finetune" element={<RedirectKeepingQuery to="/finetune/tax" />} />
+              <Route path="/finetune/:side" element={<FinetunePage />} />
+              <Route
+                path="/recommendations"
+                element={<RedirectKeepingQuery to="/finetune/spending" />}
+              />
+              {/*
             The forecast that arrived later, the compromises and the add-ons retired in Phase 24:
             their old addresses open the review, and the stage guard sends an early game back.
           */}
-            <Route path="/forecast" element={<RedirectKeepingQuery to="/review" />} />
-            <Route path="/compromise" element={<RedirectKeepingQuery to="/review" />} />
-            <Route path="/compromise/:n" element={<RedirectKeepingQuery to="/review" />} />
-            <Route path="/rabbit" element={<RedirectKeepingQuery to="/review" />} />
-            <Route path="/review" element={<ReviewPage />} />
-            <Route path="/budget-day" element={<BudgetDayPage />} />
-            <Route path="/b" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-            <Route path="/methodology" element={<MethodologyPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="*" element={<RedirectKeepingQuery to="/" />} />
-          </Routes>
+              <Route path="/forecast" element={<RedirectKeepingQuery to="/review" />} />
+              <Route path="/compromise" element={<RedirectKeepingQuery to="/review" />} />
+              <Route path="/compromise/:n" element={<RedirectKeepingQuery to="/review" />} />
+              <Route path="/rabbit" element={<RedirectKeepingQuery to="/review" />} />
+              <Route path="/review" element={<ReviewPage />} />
+              <Route path="/budget-day" element={<BudgetDayPage />} />
+              <Route path="/b" element={<RedirectKeepingQuery to="/finetune/tax" />} />
+              <Route path="/methodology" element={<MethodologyPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="*" element={<RedirectKeepingQuery to="/" />} />
+            </Routes>
+          </Suspense>
           <SiteFooter />
         </main>
       </div>

@@ -14,10 +14,10 @@ function at(path: string) {
 }
 
 describe('the page about the game and its sources (ADR-0033)', () => {
-  it('is the footer’s one link, and says what is on it before it says anything else', () => {
+  it('is the footer’s one link, and says what is on it before it says anything else', async () => {
     at('/about');
     expect(
-      screen.getByRole('heading', { level: 1, name: 'About the game & sources' }),
+      await screen.findByRole('heading', { level: 1, name: 'About the game & sources' }),
     ).toBeInTheDocument();
     expect(document.title).toBe('About the game & sources · What’s your Budget?');
     const contents = screen.getByRole('navigation', { name: 'On this page' });
@@ -39,8 +39,9 @@ describe('the page about the game and its sources (ADR-0033)', () => {
     }
   });
 
-  it('keeps everything the footer’s three links led to', () => {
+  it('keeps everything the footer’s three links led to', async () => {
     at('/about');
+    await screen.findByRole('heading', { level: 1, name: 'About the game & sources' });
     // The credit to the tool it follows, and whose name it shared.
     expect(screen.getByText(/Institute for Fiscal Studies and Nesta/)).toHaveTextContent(
       /whose name it shared until September 2026/,
@@ -64,9 +65,9 @@ describe('the page about the game and its sources (ADR-0033)', () => {
     );
   });
 
-  it('takes a reader, and their focus, to the part they pick', () => {
+  it('takes a reader, and their focus, to the part they pick', async () => {
     at('/about');
-    const contents = screen.getByRole('navigation', { name: 'On this page' });
+    const contents = await screen.findByRole('navigation', { name: 'On this page' });
     fireEvent.click(within(contents).getByRole('link', { name: 'Licence and attribution' }));
     expect(document.activeElement).toBe(document.getElementById('licences'));
   });
