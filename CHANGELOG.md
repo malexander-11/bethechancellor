@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The fine-tuning screens' tests are three files (tax, spending, basic mode) that run side by side,
+  and they read their sections, decisions, picks and counts from the data instead of retyping them.
+  The web tests run in 24 seconds.
 - No web test sleeps for a fixed time: the one waiting to prove the address did not change uses fake
   timers, and the one waiting for it to change waits for exactly that.
 - The readability and plain-words tests read one list of what a player meets

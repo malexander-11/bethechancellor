@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
+import { pm } from '../data';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 
@@ -48,7 +49,7 @@ describe('agreeing the priorities with the Prime Minister', () => {
     at(`/pm?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
     expect(screen.getByRole('button', { name: 'Agree these priorities' })).toBeDisabled();
     expect(screen.getByText('Tick at least one priority.')).toBeInTheDocument();
-    expect(screen.getAllByRole('checkbox')).toHaveLength(8);
+    expect(screen.getAllByRole('checkbox')).toHaveLength(pm.priorities.length);
     fireEvent.click(priorityBox(/Defence on the NATO path/));
     // Once one is ranked, agreeing is a link to the ways to deliver.
     expect(screen.getByRole('link', { name: 'Agree these priorities' })).toBeInTheDocument();

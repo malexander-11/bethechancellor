@@ -1,4 +1,4 @@
-import { computeOutcome, finetuneItems, scaleLevels } from '@btc/engine';
+import { computeOutcome, excludesPartners, finetuneItems, scaleLevels } from '@btc/engine';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
@@ -492,6 +492,9 @@ describe('everything else about a lever, in its card’s fold (ADR-0037)', () =>
     );
     expect(within(one.container).getByText('Counts the same money as')).toBeInTheDocument();
     expect(within(one.container).getByText(/^Charge VAT on food: /)).toBeInTheDocument();
-    expect(one.container.querySelectorAll('.lever__assumes-list')[0]?.children).toHaveLength(5);
+    // One line for each lever it counts the same money as, from both sides of each pair.
+    expect(one.container.querySelectorAll('.lever__assumes-list')[0]?.children).toHaveLength(
+      excludesPartners(lever('vat1z'), levers).length,
+    );
   });
 });
