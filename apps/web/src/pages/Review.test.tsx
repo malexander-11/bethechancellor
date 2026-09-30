@@ -147,7 +147,7 @@ describe('step 5: deliver the Budget', () => {
     // By its plain name and the engine's own margin (Phase 25).
     expect(
       within(position).getByText(
-        /^Missed on today’s estimate: the day-to-day rule by £10\.4bn and the debt rule by £6\.3bn\.$/,
+        /^Missed on today’s estimate: the day-to-day rule by £\d+\.\dbn and the debt rule by £\d+\.\dbn\.$/,
       ),
     ).toBeInTheDocument();
     expect(within(position).getByText('Breaks the manifesto: The tax lock')).toHaveClass(

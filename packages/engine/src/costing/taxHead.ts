@@ -25,10 +25,49 @@ export function receiptsByTaxKey(head: GrowthHead): string | null {
   return match?.[1] ?? null;
 }
 
-/** £ million receipts for a head by fiscal year: share of GDP × financial-year nominal GDP. */
+/**
+ * The rows of EFO Table A.5 (receipts by tax, £ million) that make up a head. Where they exist the
+ * head is their sum, not a share of GDP rounded to 0.1 per cent: that rounding moved some growth
+ * factors by several per cent (fuel duties by 3.4 per cent from 2026-27 to 2029-30).
+ */
+const HEAD_ROWS: Partial<Record<TaxHead, readonly string[]>> = {
+  incomeTax: ['incomeTax'],
+  nics: ['nationalInsurance'],
+  vat: ['vat'],
+  onshoreCorporationTax: ['onshoreCorporationTax'],
+  capitalTaxes: [
+    'capitalGainsTax',
+    'inheritanceTax',
+    'propertyTransactionTaxes',
+    'stampTaxesOnShares',
+  ],
+  businessRates: ['businessRates'],
+  fuelDuties: ['fuelDuties'],
+  alcoholAndTobaccoDuties: ['alcoholDuties', 'tobaccoDuties'],
+};
+
+/** A head summed from its Table A.5 rows, or null when the vintage lacks any of them. */
+function headFromRows(vintage: Vintage, head: TaxHead): YearValues | null {
+  const rows = HEAD_ROWS[head]?.map((key) => vintage.fiscal.receiptsByTax?.[key]?.values);
+  if (!rows || rows.length === 0 || rows.some((r) => r === undefined)) return null;
+  const out: YearValues = {};
+  for (const year of Object.keys(rows[0] ?? {})) {
+    const parts = rows.map((r) => r?.[year]);
+    if (parts.every((v): v is number => v !== undefined))
+      out[year] = parts.reduce((a, b) => a + b, 0);
+  }
+  return out;
+}
+
+/**
+ * £ million receipts for a head by fiscal year: the sum of its Table A.5 rows where the vintage has
+ * them, otherwise share of GDP × financial-year nominal GDP.
+ */
 export function taxHeadSeries(vintage: Vintage, head: TaxHead): YearValues {
   const gdp = vintage.economy.nominalGdpFy.values;
   if (head === 'nominalGdp') return { ...gdp };
+  const fromRows = headFromRows(vintage, head);
+  if (fromRows) return fromRows;
   const share = vintage.fiscal.receiptsByHeadPctGdp[head];
   if (!share) throw new EngineError(`vintage ${vintage.id} has no receipts head "${head}"`);
   const out: YearValues = {};
@@ -82,7 +121,10 @@ export function headSeries(vintage: Vintage, head: GrowthHead): YearValues {
 
 /** Where the head series comes from, for derivation steps. */
 export function headSourceTable(head: GrowthHead): string {
-  if (isTaxHead(head)) return 'Table 3.1 (receipts by head, % of GDP) and derived nominal GDP';
+  if (isTaxHead(head))
+    return HEAD_ROWS[head]
+      ? 'Table A.5 (current receipts by tax)'
+      : 'Table 3.1 (receipts by head, % of GDP) and derived nominal GDP';
   if (isSpendingHead(head))
     return 'Table 4.1 (departmental limits) or Table 4.6 (welfare spending)';
   return 'Table A.5 (current receipts by tax)';

@@ -185,25 +185,25 @@ forward:
 
 1. Published year k applies to `start year + k − 1`.
 2. Each value is multiplied by the growth of the relevant OBR receipts head between the published
-   year and the target year: receipts head in £ million = share of GDP (EFO Table 3.1) × nominal
+   year and the target year. A head is the sum of its rows in EFO Table A.5 (receipts by tax, £
+   million); only other taxes, which has no such rows, is its share of GDP (Table 3.1) × nominal
    GDP.
 3. Beyond the third published year, the third-year figure grows with the same head.
 4. Every step is recorded and shown in the provenance drawer beside the raw figure.
 
-Worked example, basic rate +1p, start April 2027, income tax receipts (£m) 2026-27 360,810; 2027-28
-383,035; 2028-29 396,572; 2029-30 414,251; 2030-31 432,244:
+Worked example, basic rate +1p, start April 2027, income tax receipts (£m) 2026-27 359,600; 2027-28
+384,600; 2028-29 395,600; 2029-30 413,800; 2030-31 430,800:
 
 | Year    | Published (year taken) | Factor                    | Used  |
 | ------- | ---------------------- | ------------------------- | ----- |
-| 2027-28 | 6,900 (2026-27)        | 383,035 ÷ 360,810 = 1.062 | 7,325 |
-| 2028-29 | 8,250 (2027-28)        | 396,572 ÷ 383,035 = 1.035 | 8,542 |
-| 2029-30 | 8,200 (2028-29)        | 414,251 ÷ 396,572 = 1.045 | 8,566 |
-| 2030-31 | 8,200 (2028-29)        | 432,244 ÷ 396,572 = 1.090 | 8,938 |
+| 2027-28 | 6,900 (2026-27)        | 384,600 ÷ 359,600 = 1.070 | 7,380 |
+| 2028-29 | 8,250 (2027-28)        | 395,600 ÷ 384,600 = 1.029 | 8,486 |
+| 2029-30 | 8,200 (2028-29)        | 413,800 ÷ 395,600 = 1.046 | 8,577 |
+| 2030-31 | 8,200 (2028-29)        | 430,800 ÷ 395,600 = 1.089 | 8,930 |
 
 So a penny on the basic rate adds about £8.6 billion to 2029-30 headroom before the small interest
-saving on lower borrowing. The receipts shares are published to 0.1% of GDP, so factors carry about
-±1% of rounding noise. The level of HMRC's baseline is not rebased to March 2026; that correction
-waits for the March 2025 receipts tables.
+saving on lower borrowing. The level of HMRC's baseline is not rebased to March 2026; that
+correction waits for the March 2025 receipts tables.
 
 Head used by tax: income tax levers and the threshold-freeze reversal → income tax; NICs, the
 employer threshold and National Insurance on pension contributions → NICs; VAT → VAT; corporation
