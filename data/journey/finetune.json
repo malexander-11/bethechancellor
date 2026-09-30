@@ -3,7 +3,6 @@
   "tax": {
     "title": "Fine-tune tax",
     "lead": "Raise or cut any tax. Watch your headroom move.",
-    "shortlistLead": "Your Director of Tax’s best ideas. Watch your headroom move.",
     "adviser": "director-of-tax",
     "groups": [
       {
@@ -578,7 +577,6 @@
                 "policies": [
                   {
                     "title": "Put up employer National Insurance",
-                    "shortlist": true,
                     "sizes": [1, 2, 3],
                     "advice": {
                       "text": "Firms pay it first; over time it reaches pay and prices.",
@@ -666,7 +664,6 @@
                 "policies": [
                   {
                     "title": "Charge employer National Insurance on pension contributions",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "Big, but employers would cut what they pay in.",
@@ -764,7 +761,6 @@
                 "policies": [
                   {
                     "title": "Keep VAT off electricity after March 2027",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "The zero rate ends in March; keeping it holds bills down.",
@@ -1096,7 +1092,6 @@
                 "policies": [
                   {
                     "title": "Tax capital gains when someone dies",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "Steady money from estates, but nothing before 2028.",
@@ -1210,7 +1205,6 @@
                 "policies": [
                   {
                     "title": "End the extra inheritance tax allowance for family homes",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "Steady money from larger estates passing on a home.",
@@ -1318,7 +1312,6 @@
                 "policies": [
                   {
                     "title": "Double council tax on the biggest homes (bands G and H)",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "Steady money from the biggest homes, in England only.",
@@ -1742,7 +1735,6 @@
                 "policies": [
                   {
                     "title": "Put gambling duties up again",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "Betting firms pay again, on top of last year’s rise.",

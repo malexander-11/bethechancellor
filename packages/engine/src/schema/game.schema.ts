@@ -455,8 +455,11 @@ export const finetuneNoteSchema = z.strictObject({
 export const finetuneSideSchema = z.strictObject({
   title: z.string().min(1).max(40),
   lead: z.string().min(1).max(120),
-  /** The lead in basic mode (Phase 27): it says the screen shows the adviser's best ideas. */
-  shortlistLead: z.string().min(1).max(120),
+  /**
+   * The lead in basic mode (Phase 27): it says the screen shows the adviser's best ideas. A screen
+   * without one has no shortlist and no basic mode: it shows every policy in both modes (ADR-0039).
+   */
+  shortlistLead: z.string().min(1).max(120).optional(),
   notes: z.array(finetuneNoteSchema).default([]),
   /** The adviser who speaks every line on the screen (an id in advisers.json, on `finetune`). */
   adviser: slug,

@@ -6,8 +6,11 @@ import { useMode } from './mode';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 const KEY = 'btc.mode.v1';
-/** A game at step 4 on today's estimate, with a penny on the basic rate chosen. */
-const TUNING = `/finetune/tax?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1`;
+/**
+ * A game at step 4's spending screen, which basic mode trims (the tax screen has no shortlist,
+ * ADR-0039), on today's estimate, with a penny on the basic rate chosen.
+ */
+const TUNING = `/finetune/spending?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1`;
 
 function at(path: string) {
   window.history.replaceState(null, '', path);

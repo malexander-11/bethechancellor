@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The tax screen has no "Show only the best ideas": it shows every tax, in its decisions, in both
+  modes, with no shortlist and no mode line. The spending screen and the flagship screens keep their
+  shortlists and the button. A screen's shortlist is now optional in the data (ADR-0039).
 - The README, the data README and the Methodology page no longer copy the tax screen's numbers of
   decisions, ways, levers and pairs that count the same money, which retiring pension tax relief and
   the stamp duty cuts made wrong; the data is the record.

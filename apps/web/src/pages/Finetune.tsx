@@ -175,7 +175,8 @@ function opensOnArrival(decision: FinetuneDecision, start: Record<string, number
  * flagship the player chose holds is one line, with the way back to that flagship. Every policy
  * lever the game has is here (Phase 26): there is no desk behind it. That is advanced mode; basic
  * mode, a first game's, shows the screen adviser's shortlist and no decisions (Phase 27,
- * ADR-0028), and anything chosen before the screen opened, in either mode, stays on show.
+ * ADR-0028), and anything chosen before the screen opened, in either mode, stays on show. The tax
+ * screen has no shortlist, and is the same in both modes (ADR-0039).
  */
 export function FinetunePage() {
   const { side: param } = useParams();
@@ -203,7 +204,11 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const [seen, setSeen] = useState(() => ({ mode, values: state.leverValues }));
   if (seen.mode !== mode) setSeen({ mode, values: state.leverValues });
   const start = seen.mode === mode ? seen.values : state.leverValues;
-  const basic = mode === 'basic';
+  const spec = finetune[side];
+  // Basic mode shows the adviser's shortlist on a screen that has one; the tax screen has none,
+  // and shows every tax in both modes (ADR-0039).
+  const shortlistLead = mode === 'basic' ? spec.shortlistLead : undefined;
+  const basic = shortlistLead !== undefined;
   const [held] = useState(() => {
     const status0 = state.game ? ambitionStatus(state.game, pm, options, outcome, levers) : null;
     return new Map(
@@ -216,7 +221,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const game = state.game;
   if (!game) return null;
 
-  const spec = finetune[side];
   const status = ambitionStatus(game, pm, options, outcome, levers);
   const ranked = rankedPriorities(game, pm);
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
@@ -343,7 +347,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       title={spec.title}
       // The adviser is named once, here, not on every row (Phase 25), and speaks on a row once it
       // is chosen (ADR-0037); in basic mode, as the one whose best ideas these are (Phase 27).
-      lead={basic ? spec.shortlistLead : `${spec.lead} Your ${who}’s view shows once you choose.`}
+      lead={shortlistLead ?? `${spec.lead} Your ${who}’s view shows once you choose.`}
     >
       <HeadroomBar outcome={outcome} status={status} />
       <Interventions items={advice} />
@@ -355,9 +359,11 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         </ul>
       ) : null}
       <p className="panel__hint tune__interest">{INTEREST[side]}</p>
-      <ModeLine
-        every={`${policyCount(finetune, side)} ${side === 'tax' ? 'tax' : 'spending'} policies`}
-      />
+      {spec.shortlistLead !== undefined ? (
+        <ModeLine
+          every={`${policyCount(finetune, side)} ${side === 'tax' ? 'tax' : 'spending'} policies`}
+        />
+      ) : null}
       {spec.groups.map(section)}
       <p className="actions">
         <StepLink

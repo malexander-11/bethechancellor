@@ -3,9 +3,10 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 /**
  * Basic and advanced (Phase 27, ADR-0028).
  *
- * A first game is played in basic mode: step 4 shows each screen adviser's few best ideas, and
- * step 3 the best one or two ways to deliver each priority. Advanced mode is the whole game: every
- * policy and every way. The briefing is the same in both (ADR-0031). The choice is the viewer's
+ * A first game is played in basic mode: step 4's spending screen shows its adviser's few best
+ * ideas, and step 3 the best one or two ways to deliver each priority. Advanced mode is the whole
+ * game: every policy and every way. The briefing and the tax screen, which shows every tax, are the
+ * same in both (ADR-0031, ADR-0039). The choice is the viewer's
  * own, remembered in the browser and never carried in a link, so a shared Budget opens in the
  * recipient's mode; every lever it moves is on show anyway, because nothing chosen ever hides. The
  * way between the modes is the button on each screen basic mode trims; the footer's switch for it

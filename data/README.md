@@ -356,22 +356,23 @@ enforces:
 
 ### Fine-tuning (`data/journey/finetune.json`, ADR-0025, ADR-0027, ADR-0035)
 
-Two sides, `tax` and `spending`, each with its screen's `title` (at most four words), its `lead` and
-its `shortlistLead` (basic mode's lead, Phase 27; each at most fourteen words and 120 characters),
-the `adviser` who speaks there, and its `groups`, the sections of its screen, each
-`{ id, label, decisions }`: on the tax side a tax, on the spending side what the money is for
-(ADR-0037). Each decision `{ id, title, alternatives?, items }` holds one to eight items under a
-title of at most six words (ADR-0035, ADR-0036); no two sections on a side share an id or a label,
-and no two decisions in the file an id. Since Phase 26 every live policy lever is an item, once, on
-its own side. An item is the lever's `code`, its `label`, the short name it goes by inside its
-decision ("Food" under Remove an exemption; at most 48 characters and seven words, ADR-0037; without
-one it goes by its plain name, or its policy's title), its plain `name` for the review and the notes
-("The main rate of VAT"; a toggle may leave it out and go by its policy's title), and one or two
-`policies`, each `{ title, sizes, advice }`: a title that says what the policy does ("Put up VAT",
-at most twelve words), the settings it comes in, smallest first, and the adviser's line, a
-`SimulatedLine` with at least one source. The first policy is the usual way, the one that improves
-the public finances (taxes up, spending down); a lever that moves both ways may carry a second
-policy the other way, and choosing one clears the other. Rules the validator enforces:
+Two sides, `tax` and `spending`, each with its screen's `title` (at most four words), its `lead`
+and, where the screen has a shortlist, its `shortlistLead` (basic mode's lead, Phase 27; each at
+most fourteen words and 120 characters; the tax screen has none, ADR-0039), the `adviser` who speaks
+there, and its `groups`, the sections of its screen, each `{ id, label, decisions }`: on the tax
+side a tax, on the spending side what the money is for (ADR-0037). Each decision
+`{ id, title, alternatives?, items }` holds one to eight items under a title of at most six words
+(ADR-0035, ADR-0036); no two sections on a side share an id or a label, and no two decisions in the
+file an id. Since Phase 26 every live policy lever is an item, once, on its own side. An item is the
+lever's `code`, its `label`, the short name it goes by inside its decision ("Food" under Remove an
+exemption; at most 48 characters and seven words, ADR-0037; without one it goes by its plain name,
+or its policy's title), its plain `name` for the review and the notes ("The main rate of VAT"; a
+toggle may leave it out and go by its policy's title), and one or two `policies`, each
+`{ title, sizes, advice }`: a title that says what the policy does ("Put up VAT", at most twelve
+words), the settings it comes in, smallest first, and the adviser's line, a `SimulatedLine` with at
+least one source. The first policy is the usual way, the one that improves the public finances
+(taxes up, spending down); a lever that moves both ways may carry a second policy the other way, and
+choosing one clears the other. Rules the validator enforces:
 
 - **A live lever on its own side, once.** Tax items are tax levers; spending items are spend or
   welfare levers; no code appears twice in the file, so both ways of a lever share a place.
@@ -423,10 +424,10 @@ at most 160 characters and its own badge.
 
 ### The advisers' shortlist (`shortlist`, Phase 27, ADR-0028)
 
-Basic mode, a first game's, shows only the best ideas: a policy on step 4 or a way to deliver a
-priority on step 3 marked `"shortlist": true`. "Best" is a judgement, badged Game judgement on the
-screen, and each pick's reason is its own adviser line; these rules keep it checkable, and
-`validate:data` names each way a pick can break them:
+Basic mode, a first game's, shows only the best ideas: a policy on step 4's spending screen or a way
+to deliver a priority on step 3 marked `"shortlist": true`. "Best" is a judgement, badged Game
+judgement on the screen, and each pick's reason is its own adviser line; these rules keep it
+checkable, and `validate:data` names each way a pick can break them:
 
 - **Counts by the stability rule's target year**: no earliest start after it.
 - **On the table**: no lever tagged not on the table.
@@ -434,8 +435,9 @@ screen, and each pick's reason is its own adviser line; these rules keep it chec
   and its card still shows it.
 - **Never two that count the same money**: no `excludes` pair and no option conflict among the
   step-4 picks, the step-3 picks and the levers already on the desk (the context file's `inTray`).
-- **How many.** Step 4: at most one way per lever, six to ten picks a screen, at least one in every
-  spending section (a tax need not have one, ADR-0035). Step 3: one or two picks a priority, at
+- **How many.** Step 4: a screen with a `shortlistLead` picks at most one way per lever, six to ten
+  in all, at least one in every spending section; a screen without one picks none and shows every
+  policy in both modes, as the tax screen does (ADR-0039). Step 3: one or two picks a priority, at
   least one of which delivers it in full.
 - **Every lever on the desk is on step 4.** Basic mode always shows a lever the briefing puts on the
   desk, pick or not, so the briefing never points at something hidden.

@@ -21,7 +21,7 @@ export const MODE_WORDS = {
  * shortlist, the advisers' judgement, and offers every idea; in advanced mode it offers the
  * shortlist back. It is one button in the same place in both modes, so the focus stays on it when
  * the screen changes around it, and a quiet status says what changed. `every` names what advanced
- * mode shows ("95 tax policies"), for a screen reader. The briefing had its own line until it
+ * mode shows ("46 spending policies"), for a screen reader. The briefing had its own line until it
  * became the same in both modes (ADR-0031), and the footer had a switch doing the same until
  * ADR-0032.
  */

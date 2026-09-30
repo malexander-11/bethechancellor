@@ -139,7 +139,9 @@ describe('word budgets: one line visible, the rest a click away', () => {
       // Room for one more short sentence (Phase 25): a top-up costs what a trim saves.
       expect(words(side.lead), side.lead).toBeLessThanOrEqual(14);
       // Basic mode's lead says whose best ideas these are, in the same room (Phase 27).
-      expect(words(side.shortlistLead), side.shortlistLead).toBeLessThanOrEqual(14);
+      if (side.shortlistLead) {
+        expect(words(side.shortlistLead), side.shortlistLead).toBeLessThanOrEqual(14);
+      }
     }
     // Each tax asks its questions in at most six words (ADR-0035), and so does each section of the
     // spending screen (ADR-0037); a figure may name the thing decided, as a policy's title may

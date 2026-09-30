@@ -7,19 +7,23 @@ import {
   modeSwitch,
   panelOf,
   rowName,
-  showEveryIdea,
   test,
   walk,
 } from './journey';
 
 const { title, tick, scale } = TAX_DECISION;
 
-test.beforeEach(async ({ page }) => {
-  // A first game is in basic mode: the fine-tune screen shows a shortlist, and no decisions.
+test('a first game meets every tax decision, with no mode line', async ({ page }) => {
   await walk(page, { until: 'fine-tune tax' });
+  await expect(decisions(page).first()).toBeVisible();
+  await expect(modeSwitch(page)).toHaveCount(0);
 });
 
-test('the mode line switches between the shortlist and every decision', async ({ page }) => {
+test('the spending screen’s mode line switches between the shortlist and every decision', async ({
+  page,
+}) => {
+  // A first game is in basic mode: the spending screen shows a shortlist, and no decisions.
+  await walk(page, { until: 'fine-tune spending' });
   const choices = page.getByRole('main').getByRole('checkbox');
   await expect(decisions(page)).toHaveCount(0);
   await expect(choices.first()).toBeVisible();
@@ -38,7 +42,7 @@ test('the mode line switches between the shortlist and every decision', async ({
 });
 
 test('a decision opens, a tick goes into the link, and Undo takes it out', async ({ page }) => {
-  await showEveryIdea(page);
+  await walk(page, { until: 'fine-tune tax' });
   const toggle = decisionButton(page, title);
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await toggle.click();
@@ -57,7 +61,7 @@ test('a decision opens, a tick goes into the link, and Undo takes it out', async
 });
 
 test('the arrow keys move along a scale', async ({ page }) => {
-  await showEveryIdea(page);
+  await walk(page, { until: 'fine-tune tax' });
   await decisionButton(page, title).click();
   const panel = await panelOf(page, title);
   const radios = panel

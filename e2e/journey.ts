@@ -99,18 +99,12 @@ export async function walk(
   }
 }
 
-/** The fine-tune screen's line that switches between the shortlist and every idea. */
+/** The spending screen's line that switches between the shortlist and every idea. */
 export const modeSwitch = (page: Page) => page.locator('.mode-line').getByRole('button');
 
 /** Advanced mode's decisions: each a heading whose button opens it. */
 export const decisions = (page: Page) =>
   page.getByRole('main').getByRole('heading').locator('button[aria-expanded]');
-
-/** From the shortlist to every idea, in decisions that open one at a time. */
-export async function showEveryIdea(page: Page) {
-  await modeSwitch(page).click();
-  await expect(decisions(page).first()).toBeVisible();
-}
 
 /** A decision's button, by its title alone, since the button also says where it stands. */
 export const decisionButton = (page: Page, title: string) =>

@@ -250,11 +250,11 @@ function collectSourceIds(value: unknown, out: Set<string>): void {
  * judgement, badged as one on the screen; these are the rules that keep it checkable. A pick
  * counts by the stability rule's target year, is on the table, and breaks no promise at any size
  * it comes in (a strain, amber, is allowed and still shown); no two picks, and no pick and lever
- * already on the desk, count the same money. Step 4 picks one way per lever, six to ten a screen,
- * at least one in every spending section (a tax with no pick is simply left out of basic mode,
- * ADR-0035); step 3 picks one or two ways a priority, at least one in full.
- * Every lever on the desk is on step 4. Whether a pick is worth £1bn needs the engine, so the
- * tests check that.
+ * already on the desk, count the same money. A step-4 screen with a shortlist (a `shortlistLead`)
+ * picks one way per lever, six to ten in all, at least one in every spending section; a screen
+ * without one picks none and shows every policy in both modes, as the tax screen does (ADR-0039).
+ * Step 3 picks one or two ways a priority, at least one in full. Every lever on the desk is on
+ * step 4. Whether a pick is worth £1bn needs the engine, so the tests check that.
  */
 function shortlistProblems(ds: Dataset): string[] {
   const problems: string[] = [];
@@ -288,21 +288,29 @@ function shortlistProblems(ds: Dataset): string[] {
   };
 
   if (ds.finetune) {
-    const names = finetuneNames(ds.finetune);
+    const file = ds.finetune;
+    const names = finetuneNames(file);
+    // The levers on a screen basic mode trims: there, one on the desk is sure to show.
+    const trimmed = new Set<string>();
     for (const side of FINETUNE_SIDES) {
-      for (const item of finetuneItems(ds.finetune, side)) {
+      for (const item of finetuneItems(file, side)) {
         if (item.policies.filter((p) => p.shortlist).length > 1) {
           problems.push(`the ${side} screen picks both ways of lever ${item.code}`);
         }
       }
-      const picks = shortlistOf(ds.finetune, side);
-      if (picks.length < 6 || picks.length > 10) {
-        problems.push(`the ${side} screen picks ${picks.length} policies, not six to ten`);
-      }
-      if (side === 'spending') {
-        for (const section of ds.finetune.spending.groups) {
-          if (!picks.some((p) => p.group.id === section.id)) {
-            problems.push(`spending section ${section.id} has no pick`);
+      const picks = shortlistOf(file, side);
+      if (file[side].shortlistLead === undefined) {
+        if (picks.length > 0) problems.push(`the ${side} screen has picks but no shortlistLead`);
+      } else {
+        for (const item of finetuneItems(file, side)) trimmed.add(item.code);
+        if (picks.length < 6 || picks.length > 10) {
+          problems.push(`the ${side} screen picks ${picks.length} policies, not six to ten`);
+        }
+        if (side === 'spending') {
+          for (const section of file.spending.groups) {
+            if (!picks.some((p) => p.group.id === section.id)) {
+              problems.push(`spending section ${section.id} has no pick`);
+            }
           }
         }
       }
@@ -317,7 +325,7 @@ function shortlistProblems(ds: Dataset): string[] {
     for (const code of desk) {
       const name = names.get(code);
       if (!name) problems.push(`the desk's lever ${code} is not on step 4`);
-      else if (!shown.has(code)) shown.set(code, `“${name}” (on the desk)`);
+      else if (!shown.has(code) && trimmed.has(code)) shown.set(code, `“${name}” (on the desk)`);
     }
   }
 

@@ -702,16 +702,20 @@ describe('contradictions come under one decision (ADR-0036)', () => {
 });
 
 /**
- * The advisers' shortlist (Phase 27, ADR-0028): each screen's adviser picks the few best ideas
- * basic mode shows. "Best" is a judgement, badged as one on the screen; these rules keep it
- * checkable. Each pick's reason is its own adviser line, already on its card.
+ * The advisers' shortlist (Phase 27, ADR-0028): a screen's adviser picks the few best ideas basic
+ * mode shows. "Best" is a judgement, badged as one on the screen; these rules keep it checkable.
+ * Each pick's reason is its own adviser line, already on its card. The tax screen has no shortlist
+ * and shows every tax in both modes (ADR-0039).
  */
 describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
   const context = must(ds.contexts[ds.contexts.length - 1], 'context');
   const desk = deskLevers(context);
 
-  it('picks six to ten ways a screen, one a lever, one in every spending section, and says whose they are', () => {
-    for (const side of FINETUNE_SIDES) {
+  it('picks six to ten ways on a screen with a shortlist, one a lever, one in every spending section, and says whose they are', () => {
+    // The tax screen has none: no lead for basic mode, and no picks.
+    expect(file.tax.shortlistLead).toBeUndefined();
+    expect(shortlistOf(file, 'tax')).toEqual([]);
+    for (const side of FINETUNE_SIDES.filter((s) => file[s].shortlistLead !== undefined)) {
       const picks = shortlistOf(file, side);
       expect(picks.length, side).toBeGreaterThanOrEqual(6);
       expect(picks.length, side).toBeLessThanOrEqual(10);
@@ -737,8 +741,7 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
         expect(policyWay(entry.pick, lever(entry.code)), entry.code).toBe(1);
       }
     }
-    // Every spending section has a pick, so basic mode never shows an empty one on arrival; a tax
-    // with none is left out of basic mode (ADR-0035).
+    // Every spending section has a pick, so basic mode never shows an empty one on arrival.
     for (const group of file.spending.groups) {
       expect(
         shortlistOf(file, 'spending').some((p) => p.group === group),
@@ -823,25 +826,24 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
     expect(tamper(unpick(...spending.slice(5).map((e) => e.code)))).toContain(
       'the spending screen picks 5 policies, not six to ten',
     );
-    const more = unpicked('tax').slice(0, 11 - shortlistOf(file, 'tax').length);
+    const more = unpicked('spending').slice(0, 11 - spending.length);
     expect(tamper((f) => more.forEach((i) => pick(i.code)(f)))).toContain(
-      'the tax screen picks 11 policies, not six to ten',
+      'the spending screen picks 11 policies, not six to ten',
     );
-    // A spending section needs a pick; a tax does without, and basic mode leaves it out.
+    // A spending section needs a pick.
     const section = must(file.spending.groups[0], 'spending section');
     expect(
       tamper(unpick(...spending.filter((e) => e.group === section).map((e) => e.code))),
     ).toContain(`spending section ${section.id} has no pick`);
-    const taxPick = must(shortlistOf(file, 'tax')[0], 'tax pick');
+    // A screen with no shortlist picks nothing; with neither lead nor picks, it shows everything.
+    const tax = must(unpicked('tax')[0], 'tax lever').code;
+    expect(tamper(pick(tax))).toContain('the tax screen has picks but no shortlistLead');
     expect(
-      tamper(
-        unpick(
-          ...shortlistOf(file, 'tax')
-            .filter((e) => e.group === taxPick.group)
-            .map((e) => e.code),
-        ),
-      ),
-    ).not.toMatch(/section .* has no pick/);
+      tamper((f) => {
+        delete f.spending.shortlistLead;
+        unpick(...spending.map((e) => e.code))(f);
+      }),
+    ).toBe('');
 
     // Not on the table, counting after the target year, or breaking a promise.
     const offTable = must(
@@ -895,8 +897,8 @@ describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
       true,
     );
     const [onDesk, beside] = must(
-      FINETUNE_SIDES.flatMap(pairsOn).find(([p, q]) => !picked.has(p) && !picked.has(q)),
-      'pair that counts the same money with neither picked',
+      pairsOn('spending').find(([p, q]) => !picked.has(p) && !picked.has(q)),
+      'pair on the spending screen that counts the same money with neither picked',
     );
     const desked = structuredClone(ds.contexts);
     desked[desked.length - 1]!.inTray[0]!.leverCode = onDesk;
