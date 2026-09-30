@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- Child benefit rates, retired since Phase 5, is shelved like the other retired levers: in the
+  Shelved group, with the same headline. A test now checks every retired lever is shelved alike, not
+  only that everything shelved is retired.
 - `CONTRIBUTING.md` says how to update the engine's sentence snapshots, and to read their diff.
 - The two Budget-day adviser briefings are deleted with their file, schema, loader and checks: only
   the workings view showed them. The advisers still speak through the lines on options and policies,

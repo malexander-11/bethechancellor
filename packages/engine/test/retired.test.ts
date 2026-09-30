@@ -59,6 +59,13 @@ describe('levers taken off the table', () => {
     }
   });
 
+  it('are shelved alike: every one in the Shelved group, all saying the same thing', () => {
+    expect(retired.length).toBeGreaterThan(0);
+    for (const l of retired) expect(l.group, l.code).toBe('Shelved');
+    const headlines = new Set(retired.map((l) => l.headline));
+    expect([...headlines], 'retired levers with a headline of their own').toHaveLength(1);
+  });
+
   /**
    * Every place a value names a retired lever: by its code (step 4, the promises, the options, the
    * incidence tags, the households, the desk) or by its id (another lever's interactions).
