@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The VAT rate's headline reads "20% since 2011. A point is worth about £9.5bn.", like the other
+  rates: it was the one headline longer than its description, and it called VAT the biggest single
+  lever, which nothing checked. A test now holds every headline shorter than its description.
 - Child benefit rates, retired since Phase 5, is shelved like the other retired levers: in the
   Shelved group, with the same headline. A test now checks every retired lever is shelved alike, not
   only that everything shelved is retired.

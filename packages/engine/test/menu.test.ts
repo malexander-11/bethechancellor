@@ -110,6 +110,13 @@ describe('the Budget 2026 menu', () => {
     expect(lever('pensmth').classification?.insideWelfareCap).toBe(false);
   });
 
+  it('heads every lever with one line shorter than its description, the detail behind it', () => {
+    for (const l of ds.levers) {
+      if (!l.headline) continue;
+      expect(l.headline.length, `${l.code}: "${l.headline}"`).toBeLessThan(l.description.length);
+    }
+  });
+
   it('says on the card what its own arithmetic cannot vouch for (ADR-0017)', () => {
     // Ending the write-off at death is an upper bound by construction.
     expect(lever('cgtdth').headline).toMatch(/upper bound/);
