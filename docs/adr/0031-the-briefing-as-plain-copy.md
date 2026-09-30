@@ -1,8 +1,8 @@
 # ADR-0031: The briefing as plain copy
 
-Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0032). Revises ADR-0030 and
-ADR-0028, and narrows where the badges
-of ADR-0002, ADR-0011 and ADR-0013 show; each carries a dated revision pointing here.
+Date: 2026-09-29. Status: accepted; revised the same day (below, ADR-0032) and on 2026-09-30
+(below). Revises ADR-0030 and ADR-0028, and narrows where the badges of ADR-0002, ADR-0011 and
+ADR-0013 show; each carries a dated revision pointing here.
 
 ## Context
 
@@ -139,3 +139,47 @@ the paragraphs on March and the in-tray's heading went.
 The "Show workings" switch is withdrawn for now, so the briefing shows no badges and no sources at
 all: they waited for a switch nothing now offers. Its words still say which figure is the OBR's and
 which is ours.
+
+## Revision (2026-09-30): the debt rule in the text, and a softer buffer line
+
+The user asked:
+
+> Integrate the debt rule into the main text.
+> Soften text "This means this Budget will likely need to increase the headroom to build in a
+> sensible buffer."
+
+**The debt rule is in the running text.** It is no longer a fold: it is its own paragraph in "What
+is headroom?", straight after the rules line and before the line on what headroom is, with its name
+in bold as a run-in head and the same two sentences:
+
+> **The debt rule.** Government debt must be a smaller share of the economy in 2029-30 than the year
+> before. Critically, this includes any borrowing for investment as well as day-to-day spending.
+
+The year is still the rule's own target year, filled from the verdict, and with the workings on the
+paragraph still quotes the Charter and links it. The rules line names the debt rule's half of the
+test ("have debt falling by then"); the paragraph after it says what falling means and what it
+counts. The briefing now has no fold at all.
+
+**The buffer line is softened, in the user's words.** The quoted sentence is read as the new
+wording, since it is softer than the line it replaces: "likely", and no figure. "This means this
+Budget will need to find around £22bn to build in a sensible buffer" becomes "This means this Budget
+will likely need to increase the headroom to build in a sensible buffer." It keeps its badge, Game
+judgement, and its source, the OBR's November 2025 outlook, paragraph 1.3, both shown only with the
+workings. It still shows only while today's estimate is below the record beside it, so "increase the
+headroom" is always true where it appears. It names no figure now, so nothing is filled: the £22bn,
+the record less the estimate, is no longer on the page, and ADR-0030's risk that the figure moves
+with the data goes with it. Nothing is scored against the line, and nothing asks for a target.
+
+In the code: the briefing's words give the debt rule a `name` in place of a `heading`, and the
+buffer line has no placeholder; the page lost its fold and gained the paragraph.
+
+**Measured.** 206 words with the folds closed, against 175, since the rule's 31 words are no longer
+folded away; pinned at 230. Grade 4.7, against 4.6. On a phone (360px) the briefing is 1,608px tall
+in both modes, 2.1 screens of 780px, against 1,500px (1.9 screens) the day before, after ADR-0032
+and ADR-0033 had trimmed the header, footer and progress bar; the paragraph runs to five lines. The
+page tests pin the paragraph's words, its bold name, its place after the rules line, the Charter
+only with the workings on, and the new buffer line; the words file's test pins the buffer line with
+no placeholder. `walk35.mjs` (1300px and 360px, light and reduced motion, with the contrast, size,
+family, hit-box, radius and animation audits) is clean in both runs: it checks the paragraph's words
+and place, that its name is bold, that no fold is left in the briefing in either mode, the new
+buffer line, and that the old one is nowhere on the road.

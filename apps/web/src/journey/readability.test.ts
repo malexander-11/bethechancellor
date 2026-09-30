@@ -146,8 +146,8 @@ const SETS: Record<string, readonly string[]> = {
     `${MODE_WORDS.ideas.advanced}.`,
     ...Object.values(MODE_WORDS.said).flatMap((s) => [s.basic, s.advanced]),
   ],
-  // The briefing in three parts (Phase 28): every heading, line and fold, filled as the page
-  // fills them.
+  // The briefing in three parts (Phase 28): every heading and line, filled as the page fills
+  // them.
   'the briefing': briefingTemplates().map((t) =>
     plainText(
       fillIn(t, {
@@ -155,7 +155,6 @@ const SETS: Record<string, readonly string[]> = {
         year: '2029-30',
         since: '2010',
         average: '£29bn',
-        gap: '£22bn',
         gilts: '£246bn',
       }),
     ),
@@ -197,7 +196,8 @@ describe('readability: a reading age of about twelve, one idea a sentence', () =
     // reads at 5.1, and at 5.1 again in the player's own words. Then plain copy (ADR-0031), the
     // debt rule its one fold: 4.6; the modes, without the briefing's switch, 5.2; the decisions
     // since March, on no screen now, are no longer read. Then the footer's switch went (ADR-0032):
-    // the modes 3.8. Set GRADES to a file path to write them out.
+    // the modes 3.8. Then the debt rule in the running text and the softer buffer line
+    // (2026-09-30): the briefing 4.7. Set GRADES to a file path to write them out.
     for (const [name, texts] of Object.entries(SETS)) {
       const g = grade(texts);
       if (process.env.GRADES) appendFileSync(process.env.GRADES, `${name}: ${g.toFixed(1)}\n`);

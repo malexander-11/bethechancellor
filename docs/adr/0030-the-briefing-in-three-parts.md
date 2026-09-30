@@ -1,7 +1,8 @@
 # ADR-0030: The briefing in three parts
 
-Date: 2026-09-29. Status: accepted; revised the same day (below), then by ADR-0031. Revises
-ADR-0025, ADR-0026 and ADR-0028, each of which carries a dated revision pointing here.
+Date: 2026-09-29. Status: accepted; revised the same day (below), then by ADR-0031 and on 2026-09-30
+(below). Revises ADR-0025, ADR-0026 and ADR-0028, each of which carries a dated revision pointing
+here.
 
 ## Context
 
@@ -306,3 +307,11 @@ in the user's words with the Charter's year. The folds on what changed since Mar
 forecasts move went, and so did "Already on your desk" and the line that switched the briefing
 between its short and full forms: the briefing is the same in both modes. It reads 175 words and
 is 2.2 phone screens tall.
+
+## Revision (2026-09-30): a softer buffer line (ADR-0031)
+
+The buffer line is now the user's softer wording, "This means this Budget will likely need to
+increase the headroom to build in a sensible buffer." It names no figure, so the £22bn, the record
+less the estimate, is no longer on the page and no longer moves with the data. It is still a Game
+judgement, still shows only while the estimate is below the record, and still asks for no target.
+The debt rule is no longer a fold: it is a paragraph of the running text after the rules line.

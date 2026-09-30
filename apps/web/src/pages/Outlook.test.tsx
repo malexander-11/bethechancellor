@@ -83,13 +83,14 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(
       within(history).getByRole('link', { name: /HMT, Chancellor letter to the Treasury/ }),
     ).toBeInTheDocument();
-    // What reaching that record would take: the record less the estimate, read from the two
-    // figures above. "Sensible" is a judgement, so the line wears Game judgement.
+    // What the record means for this Budget, softened in the player's words (2026-09-30):
+    // "likely", and no figure. "Sensible" is a judgement, so the line wears Game judgement.
     const buffer = within(first).getByText(/to build in a sensible buffer/);
     expect(buffer).toHaveTextContent(
-      /^Game judgement This means this Budget will need to find around £22bn to build in a sensible buffer\./,
+      /^Game judgement This means this Budget will likely need to increase the headroom to build in a sensible buffer\./,
     );
     expect(buffer).toHaveTextContent(/£21 billion average absolute revision/);
+    expect(screen.queryByText(/will need to find around/)).toBeNull();
     // The household line and the source line went: the rows below say where the figure comes from.
     expect(screen.queryByText(/for each household/)).toBeNull();
     expect(screen.queryByText(/Our estimate: the March forecast/)).toBeNull();
@@ -126,23 +127,25 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(within(second).getByText(/Lenders charge more/)).toBe(gilts);
   });
 
-  it('keeps the debt rule one fold away, with the rule’s own year and the investment it counts', () => {
+  it('says the debt rule in the text, with the rule’s own year and the investment it counts', () => {
     at(`/outlook?${BASE}`);
     const second = part('What is headroom?');
-    const summary = within(second).getByText('The debt rule');
-    const fold = summary.closest('details') as HTMLElement;
-    expect(fold).not.toHaveAttribute('open');
-    fireEvent.click(summary);
-    // The player's words, with the Charter's year: debt smaller in 2029-30 than the year before.
-    expect(within(fold).getByText(/^Government debt must be/)).toHaveTextContent(
-      /^Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\.$/,
+    // In the running text straight after the rules, not a fold (2026-09-30): nothing to open.
+    expect(second.querySelector('details')).toBeNull();
+    const rules = within(second).getByText(/pay for day-to-day spending with tax by/);
+    const debt = rules.nextElementSibling as HTMLElement;
+    // Its name in bold, then the player's words, with the Charter's year: debt smaller in 2029-30
+    // than the year before.
+    expect(debt.querySelector('strong')?.textContent).toBe('The debt rule.');
+    expect(debt).toHaveTextContent(
+      /^The debt rule\. Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\./,
     );
     // With the workings on, the Charter's own words and their source.
-    expect(within(fold).getByText(/The Charter says:/)).toHaveTextContent(
+    expect(within(debt).getByText(/The Charter says:/)).toHaveTextContent(
       /is falling as a share of the economy by 2029-30/,
     );
     expect(
-      within(fold).getByRole('link', { name: /Charter for Budget Responsibility/ }),
+      within(debt).getByRole('link', { name: /Charter for Budget Responsibility/ }),
     ).toBeInTheDocument();
   });
 
@@ -173,7 +176,7 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(sources).toHaveTextContent(/A sustained 1 percentage point increase in Bank Rate/);
     expect(sources).toHaveTextContent(/A 1 percentage point increase in RPI inflation/);
     const main = document.querySelector('main')?.textContent ?? '';
-    // Every placeholder filled, the fold's included: it is on the page, closed.
+    // Every placeholder filled.
     expect(main).not.toMatch(/\{[a-zA-Z]+\}/);
     expect(main).not.toMatch(/your target|headroom target|want to keep/i);
     // The £10bn advice gave way to the buffer line in part 1 (revised 2026-09-29).
@@ -197,6 +200,15 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     );
     expect(within(part('Your headroom')).getByText(/Chancellors have kept/)).toHaveTextContent(
       /^Since 2010, Chancellors have kept about £29bn on average\. This builds in some safety for adverse economic impact\.$/,
+    );
+    expect(within(part('Your headroom')).getByText(/sensible buffer/)).toHaveTextContent(
+      /^This means this Budget will likely need to increase the headroom to build in a sensible buffer\.$/,
+    );
+    // The debt rule's own paragraph: its bold name, then the player's words, with no fold to open.
+    expect(
+      within(part('What is headroom?')).getByText(/^Government debt must be/),
+    ).toHaveTextContent(
+      /^The debt rule\. Government debt must be a smaller share of the economy in 2029-30 than the year before\. Critically, this includes any borrowing for investment as well as day-to-day spending\.$/,
     );
     expect(within(part('What is headroom?')).getByText(/plans to sell/)).toHaveTextContent(
       /^This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\. Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\.$/,
@@ -272,7 +284,7 @@ describe('the briefing in basic mode (Phase 27; the same in both modes since ADR
     expect(main().getAttribute('data-mode')).toBe('basic');
     expect(headings()).toEqual(THREE);
     expect(rows()).toHaveLength(4);
-    expect(screen.getByText('The debt rule')).toBeInTheDocument();
+    expect(screen.getByText('The debt rule.')).toBeInTheDocument();
     expect(document.querySelector('.mode-line')).toBeNull();
     expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
     const basic = main().textContent;

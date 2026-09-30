@@ -51,10 +51,10 @@ control at 44px and says met or missed in words.
 Six steps. **Briefing**: one sentence and the button; then your briefing in three parts, in the
 user's own words and as plain copy (ADR-0030, ADR-0031). Your headroom: you start with £6.8bn of
 breathing space in 2029-30, against about £29bn that Chancellors have kept on average since 2010
-(the OBR's record), so this Budget would need to find around £22bn to build in a sensible buffer (a
-judgement). What headroom is: the two rules in one line, the word itself, the £246bn of gilts the
-government plans to sell this year and why lenders care, and the debt rule one fold away (debt a
-smaller share of the economy in 2029-30 than the year before, investment included). How it is
+(the OBR's record), so this Budget will likely need to increase the headroom to build in a sensible
+buffer (a judgement). What headroom is: the two rules in one line, the debt rule in full (debt a
+smaller share of the economy in 2029-30 than the year before, investment included), the word itself,
+and the £246bn of gilts the government plans to sell this year and why lenders care. How it is
 calculated: dearer borrowing and dearer prices since March, then the OBR's March £23.6bn, less
 £11.3bn for higher interest rates and £5.5bn for higher inflation. The page is the same in both
 modes, and its badges, sources and table of how the estimate is made wait for the workings.

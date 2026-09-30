@@ -1236,7 +1236,8 @@ onside."
   letter to the Treasury Committee). Then what reaching the record would take: "This means this
   Budget will need to find around £22bn to build in a sensible buffer" (Game judgement). The £22bn
   is the record less the estimate, filled from the data; the line goes should a rebase put the
-  estimate above the record.
+  estimate above the record. On 2026-09-30 the line was softened, in the user's words, and names no
+  figure now (§30).
 - **What headroom is.** The two rules in one line; what headroom is; and one paragraph on what
   the government plans to sell to lenders this year, £246bn of gilts (Official figure: HM
   Treasury's revision of the Debt Management Office's remit, April 2026, paragraph 2.3), said as
@@ -1291,20 +1292,28 @@ request is read as the briefing's alone; every other screen is as it was.
 - **No word opens a definition.** The briefing's words carry no glossary marks, and a test fails on
   one. The glossary and its toggletips elsewhere (the manifesto, the tax lock and the rest) are
   unchanged. The OBR's name is no longer a tap away in the first row.
-- **The debt rule**, a fold under the rules line in both modes: "Government debt must be a smaller
-  share of the economy in 2029-30 than the year before. Critically, this includes any borrowing for
-  investment as well as day-to-day spending." The user wrote "in 5 years or end of parliament"; the
-  line gives the rule's own target year from the verdict, which the Charter sets as 2029-30 until
-  that is the forecast's third year, then the third year (paragraph 3.7), and "than the year
-  before" is the rules file's plain English for "falling". With the workings on, the fold quotes
-  the Charter.
+- **The debt rule**, a fold under the rules line in both modes, and since 2026-09-30 a paragraph of
+  the running text straight after the rules line, its name in bold as a run-in head: "Government
+  debt must be a smaller share of the economy in 2029-30 than the year before. Critically, this
+  includes any borrowing for investment as well as day-to-day spending." The user wrote "in 5 years
+  or end of parliament"; the line gives the rule's own target year from the verdict, which the
+  Charter sets as 2029-30 until that is the forecast's third year, then the third year (paragraph
+  3.7), and "than the year before" is the rules file's plain English for "falling". With the
+  workings on, it quotes the Charter.
 - **What went.** The folds on what changed since March and on why forecasts move: the calculation's
   opening line and rows carry the first, and the OBR's typical error the second, on Budget day. The
   three decisions since March stay in the context file but on no screen, and the readability set
   that read them went. "Already on your desk": the review still lists what a Budget leaves on it, so
   basic mode's desk rule stands. The line that switched the briefing: it is the same in both modes.
+- **A softer buffer line** (2026-09-30), in the user's words: "This means this Budget will likely
+  need to increase the headroom to build in a sensible buffer." It names no figure, so the £22bn,
+  the record less the estimate, is gone from the page; it keeps its Game judgement badge and its
+  source, both with the workings on, and still shows only while the estimate is below the record.
+  Nothing is scored against it.
 - **Measured** (ADR-0031): 175 words, against 232; grade 4.6, against 5.1; on a phone 1,752px in
-  both modes, 2.2 screens of 780px, against 2.7 and 2.9 (4.1 screens with the workings on).
+  both modes, 2.2 screens of 780px, against 2.7 and 2.9 (4.1 screens with the workings on). With the
+  debt rule in the text and the softer buffer line (2026-09-30): 206 words, grade 4.7, and on a
+  phone 1,608px, 2.1 screens, against 1,500px and 1.9 the day before.
 
 ## 31. A plain cover and a flat footer (ADR-0032)
 

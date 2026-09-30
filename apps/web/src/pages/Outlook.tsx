@@ -56,9 +56,9 @@ function distinct(refs: readonly SourceRef[]): SourceRef[] {
 
 /**
  * Step 1: your briefing, in three parts (Phase 28, ADR-0030), in the player's own words. Your
- * headroom: the one figure to plan on, what Chancellors have kept since 2010 and why, and what
- * reaching that record would take. What headroom is: the two rules, the word itself, what the
- * government must sell to lenders this year and why they care, and the debt rule one fold away. How
+ * headroom: the one figure to plan on, what Chancellors have kept since 2010 and why, and that this
+ * Budget will likely need to add to it. What headroom is: the two rules, the debt rule in full, the
+ * word itself, and what the government must sell to lenders this year and why they care. How
  * it is calculated: what dearer borrowing and dearer prices have done since March, then the OBR's
  * March forecast less each of them, coming to today's estimate. The page is the same in both modes
  * and reads as plain copy (ADR-0031): each figure's badge, like its source, waits for the workings,
@@ -79,9 +79,9 @@ export function OutlookPage() {
   const short = path.estimateGbpm < 0;
   const estimateText = formatGbpBn(path.estimateGbpm, 1, short);
   const figures = context.briefing;
-  // What reaching the record would take: the record less the estimate, both on show beside it.
-  const gapGbpm = figures ? figures.averageHeadroom.gbpm - path.estimateGbpm : 0;
-  // The debt rule, in the fold beneath the rules: its own year, and the Charter's words.
+  // The line on a sensible buffer holds only while the estimate is below the record beside it.
+  const belowRecord = figures ? path.estimateGbpm < figures.averageHeadroom.gbpm : false;
+  // The debt rule, beneath the rules: its own year, and the Charter's words.
   const debtRule = rules.rules.find((r) => r.kind === 'stockFalling');
   const debtYear = pre.verdicts.find((v) => v.kind === 'stockFalling')?.targetYear ?? year;
   // What the calculation's opening line rests on: the gilt yield and prices against what the OBR
@@ -157,9 +157,9 @@ export function OutlookPage() {
             <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.safety} />
           </p>
         ) : null}
-        {figures && gapGbpm > 0 ? (
+        {belowRecord ? (
           <p className="brief__line">
-            {tag('simulated')} {fillIn(WORDS.headroom.buffer, { gap: formatGbpBn(gapGbpm, 0) })}{' '}
+            {tag('simulated')} {WORDS.headroom.buffer}{' '}
             <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.buffer} />
           </p>
         ) : null}
@@ -171,6 +171,19 @@ export function OutlookPage() {
         </h2>
         <p className="brief__line">
           <Filled template={WORDS.what.rules} values={{ year: yearOf(year) }} />
+        </p>
+        {/* The debt rule in the running text (it was one fold away until 2026-09-30): its name as a
+            run-in head, the player's words, and with the workings on the Charter's own. */}
+        <p className="brief__line">
+          <strong>{WORDS.what.debtRule.name}.</strong>{' '}
+          <Filled template={WORDS.what.debtRule.text} values={{ year: yearOf(debtYear) }} />
+          {workings && debtRule ? (
+            <>
+              {' '}
+              <span className="source">The Charter says: “{debtRule.charterText}”</span>{' '}
+              <SourceList as="span" className="briefing__sources" refs={[debtRule.source]} />
+            </>
+          ) : null}
         </p>
         <p className="brief__line">{WORDS.what.meaning}</p>
         {/* What lenders must buy and why they care, as one paragraph; each part keeps its badge. */}
@@ -189,20 +202,6 @@ export function OutlookPage() {
           {tag('commentary')} {WORDS.what.lenders}{' '}
           <SourceList as="span" className="briefing__sources" refs={BRIEFING_SOURCES.lenders} />
         </p>
-        <details className="more">
-          <summary>{WORDS.what.debtRule.heading}</summary>
-          <div className="more__body">
-            <p>
-              <Filled template={WORDS.what.debtRule.text} values={{ year: yearOf(debtYear) }} />
-            </p>
-            {workings && debtRule ? (
-              <p>
-                <span className="source">The Charter says: “{debtRule.charterText}”</span>{' '}
-                <SourceList as="span" className="briefing__sources" refs={[debtRule.source]} />
-              </p>
-            ) : null}
-          </div>
-        </details>
       </section>
 
       <section className="brief doc" aria-labelledby="brief-calc">

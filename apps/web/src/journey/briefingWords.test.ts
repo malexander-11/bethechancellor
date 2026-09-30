@@ -71,9 +71,12 @@ describe('the briefing’s words (Phase 28, ADR-0030)', () => {
       { key: 'year' },
       { text: '.' },
     ]);
-    // What reaching the record would take is filled from the two figures, never typed.
-    expect(fillIn(BRIEFING_WORDS.headroom.buffer, { gap: '£22bn' })).toBe(
-      'This means this Budget will need to find around £22bn to build in a sensible buffer.',
-    );
+    // What the record means for this Budget, in the player's softer words (2026-09-30): no
+    // figure, so nothing to fill.
+    expect(templateParts(BRIEFING_WORDS.headroom.buffer)).toEqual([
+      {
+        text: 'This means this Budget will likely need to increase the headroom to build in a sensible buffer.',
+      },
+    ]);
   });
 });

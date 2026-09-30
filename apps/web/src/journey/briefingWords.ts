@@ -20,10 +20,12 @@ export const BRIEFING_WORDS = {
     /** Why they keep it, in words with their sources: Commentary. */
     safety: 'This builds in some safety for adverse economic impact.',
     /**
-     * What reaching that record would take. {gap} is the record less the estimate, both on show
-     * above it; "sensible" is a judgement, so the line is a Game judgement, and nothing scores it.
+     * What the record means for this Budget, softened in the player's own words (2026-09-30):
+     * "likely", and no figure. "Sensible" is a judgement, so the line is a Game judgement, and
+     * nothing scores it; the page shows it only while the estimate is below the record above it.
      */
-    buffer: 'This means this Budget will need to find around {gap} to build in a sensible buffer.',
+    buffer:
+      'This means this Budget will likely need to increase the headroom to build in a sensible buffer.',
   },
   what: {
     heading: 'What is headroom?',
@@ -37,12 +39,13 @@ export const BRIEFING_WORDS = {
     lenders:
       'Lenders charge more when they doubt the sums. Meeting the rules with headroom to spare keeps their trust.',
     /**
-     * The debt rule, one fold away in both modes: the player's words, with its year the rule's own
-     * and said as the Charter and the rules' own plain words have it (the year before, not "in five
-     * years"). The investment it counts is the lesson: the day-to-day rule leaves it out.
+     * The debt rule, in the running text beneath the rules in both modes (it was one fold away until
+     * 2026-09-30): its name in bold, then the player's words, with its year the rule's own and said
+     * as the Charter and the rules' own plain words have it (the year before, not "in five years").
+     * The investment it counts is the lesson: the day-to-day rule leaves it out.
      */
     debtRule: {
-      heading: 'The debt rule',
+      name: 'The debt rule',
       text: 'Government debt must be a smaller share of the economy in {year} than the year before. Critically, this includes any borrowing for investment as well as day-to-day spending.',
     },
   },
@@ -142,7 +145,7 @@ export function templateParts(template: string): ({ text: string } | { key: stri
     });
 }
 
-/** Every string of the briefing's words, headings and folds included, as templates. */
+/** Every string of the briefing's words, headings included, as templates. */
 export function briefingTemplates(): string[] {
   const out: string[] = [];
   const walk = (value: unknown) => {
