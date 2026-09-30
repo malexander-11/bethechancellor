@@ -77,7 +77,6 @@ describe('the Budget 2026 menu', () => {
     const warns = (code: string) =>
       (lever(code).interactions ?? []).filter((i) => i.severity === 'warn').map((i) => i.withLever);
     expect(warns('ctgh')).toContain(lever('hvcts15').id);
-    expect(warns('sdltabol')).toContain(lever('sdlt5').id);
   });
 
   it('keeps designs that share HMRC’s rows in step with each other', () => {

@@ -1408,50 +1408,6 @@
                 ]
               }
             ]
-          },
-          {
-            "id": "stamp-duty-cuts",
-            "title": "Cut it for some buyers",
-            "items": [
-              {
-                "code": "sdltabol",
-                "label": "Abolish it on main homes",
-                "policies": [
-                  {
-                    "title": "Abolish stamp duty on main homes",
-                    "sizes": [1],
-                    "advice": {
-                      "text": "Expensive; buyers gain, though some of it ends up in prices.",
-                      "sources": [
-                        {
-                          "sourceId": "asi-stamped-out-2025"
-                        }
-                      ],
-                      "badge": "simulated"
-                    }
-                  }
-                ]
-              },
-              {
-                "code": "rvhrad",
-                "label": "Additional-homes surcharge back to 3%",
-                "policies": [
-                  {
-                    "title": "Cut the stamp duty surcharge on additional homes back to 3%",
-                    "sizes": [1],
-                    "advice": {
-                      "text": "Small; landlords and second-home buyers pay less stamp duty.",
-                      "sources": [
-                        {
-                          "sourceId": "hmt-autumn-budget-2024-table-5-1"
-                        }
-                      ],
-                      "badge": "simulated"
-                    }
-                  }
-                ]
-              }
-            ]
           }
         ]
       },

@@ -4,11 +4,11 @@
   "code": "sdltabol",
   "category": "tax",
   "badge": "assumption",
-  "group": "Stamp duty",
+  "group": "Shelved",
   "title": "Abolish stamp duty on main homes",
   "shortTitle": "Abolish stamp duty on main homes",
   "noun": "abolishing stamp duty on main homes",
-  "headline": "Abolish stamp duty on main homes: ASI, costs £9.2bn static, £5.1bn after more moves.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "The Adam Smith Institute would abolish stamp duty land tax on every purchase of a home the buyer will live in, keeping it on second homes, landlords and companies. Its model puts the static cost at £9.2 billion a year on average over the parliament, 63% of the OBR’s forecast SDLT, and the net cost at £5.1 billion once the extra moves, building and wages it expects are counted. The static figure is used here, grown with the OBR’s property transaction taxes line, because the OBR would score only part of the dynamic offset. Conservative policy since 2025; the Treasury has ruled it out for this Budget.",
   "baselinePolicy": {
     "text": "Stamp duty land tax is charged at 0%, 2%, 5%, 10% and 12% on residential purchases in England and Northern Ireland, with a 5% surcharge on additional dwellings; the OBR forecasts property transaction taxes of £26.3bn in 2029-30.",
@@ -129,5 +129,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-23"
+  "reviewedOn": "2026-09-23",
+  "deprecated": true
 }

@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- Stamp duty's "Cut it for some buyers" is off the tax screen: abolishing stamp duty on main homes
+  and taking the additional-homes surcharge back to 3% are shelved like the other retired levers,
+  and nothing live names them. Stamp duty keeps its 5% band.
 - Pension tax relief is off the tax screen: relief at a flat 30%, relief at the basic rate only and
   the cap on the tax-free lump sum are shelved like the other retired levers, with their costings
   kept for the record, and nothing live names them. The tests that used them take live stand-ins: a

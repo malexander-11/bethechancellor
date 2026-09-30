@@ -108,8 +108,9 @@ until 2028-29, so each of the thirteen wears a sourced earliest start and counts
 On 30 September 2026 the user took nine taxes off the table, among them the health and social care
 levy, insurance premium tax, CenTax's package for taxing gains like income and National Insurance on
 rents, so eleven cards with an earliest start are left; each retired tax is kept for the record, and
-an old link carrying one opens without it (ADR-0035). Pension tax relief went the same way later
-that day: relief at a flat 30%, relief at the basic rate only and the lump-sum cap.
+an old link carrying one opens without it (ADR-0035). Pension tax relief and two stamp duty cuts
+went the same way later that day: relief at a flat 30%, relief at the basic rate only and the
+lump-sum cap; stamp duty abolished on main homes and the additional-homes surcharge back to 3%.
 
 Under the hood: the OBR March 2026 baseline, the tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options and

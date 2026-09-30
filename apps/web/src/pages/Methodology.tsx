@@ -191,9 +191,10 @@ export function MethodologyPage() {
         salary-sacrifice cap, taxing capital gains at income tax rates, a lower VAT threshold,
         National Insurance on landlords&rsquo; rent, a higher tax on selling a business, adding back
         last year&rsquo;s cancelled fuel duty rise and undoing last year&rsquo;s gambling duty
-        rises. Pension tax relief followed the same day: relief at a flat 30%, relief at the basic
-        rate only and a cap on the tax-free lump sum. Their costings are kept for the record, and an
-        old link that carries one opens without it.
+        rises. Pension tax relief and two cuts to stamp duty followed the same day: relief at a flat
+        30%, relief at the basic rate only and a cap on the tax-free lump sum; abolishing stamp duty
+        on main homes and taking the surcharge on additional homes back to 3%. Their costings are
+        kept for the record, and an old link that carries one opens without it.
       </p>
 
       <h2>Spending levers</h2>

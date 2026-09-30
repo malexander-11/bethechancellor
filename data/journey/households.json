@@ -503,20 +503,6 @@
           }
         },
         {
-          "code": "sdltabol",
-          "when": "on",
-          "effect": "gains",
-          "line": {
-            "text": "Stamp duty scrapped on the home you live in. We were hoping to move next year; that just got easier.",
-            "sources": [
-              {
-                "sourceId": "asi-stamped-out-2025"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
           "code": "cgtprr",
           "when": "on",
           "effect": "pays",
@@ -1316,7 +1302,6 @@
     "qelevy",
     "rvapr",
     "rveff",
-    "rvhrad",
     "rvplan2",
     "socrent",
     "tob",
