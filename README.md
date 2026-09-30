@@ -168,7 +168,7 @@ apps/web            Vite + React front end (deployed on Vercel); build/ makes an
                     it ships
 packages/engine     pure TypeScript fiscal engine, schemas and tests
 packages/pipeline   scripts that fetch, extract and validate source data
-data/               sourced JSON: vintages, rules, levers, context readings, adviser briefings,
+data/               sourced JSON: vintages, rules, levers, context readings, the advisers,
                     the Prime Minister's priorities, the options, the fine-tuning policies,
                     ministers, the speech, households, Budget day reaction bands, raw source files
 docs/               methodology and architecture decision records

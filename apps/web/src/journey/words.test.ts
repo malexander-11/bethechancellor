@@ -2,7 +2,6 @@ import { choiceName, computeOutcome, finetuneItems } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import {
   advisers,
-  briefings,
   finetune,
   glossary,
   guide,
@@ -30,15 +29,6 @@ describe('word budgets: one line visible, the rest a click away', () => {
       expect(words(lever.headline ?? ''), `${lever.code} headline too wordy`).toBeLessThanOrEqual(
         14,
       );
-    }
-  });
-
-  it('every briefing leads with one line and keeps its detail sourced', () => {
-    for (const b of briefings.briefings) {
-      expect(b.headline.length, `${b.id} headline too long`).toBeLessThanOrEqual(140);
-      expect(words(b.headline), `${b.id} headline too wordy`).toBeLessThanOrEqual(22);
-      expect(b.paragraphs.length).toBeGreaterThan(0);
-      for (const p of b.paragraphs) expect(p.sources.length).toBeGreaterThan(0);
     }
   });
 

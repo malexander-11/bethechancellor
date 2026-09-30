@@ -1,6 +1,5 @@
 import type {
   AdvisersFile,
-  BriefingsFile,
   ContextFile,
   FinetuneFile,
   GlossaryFile,
@@ -34,7 +33,6 @@ export interface ShippedDataset {
   households: HouseholdsReference;
   context: ContextFile;
   advisers: AdvisersFile;
-  briefings: BriefingsFile;
   reception: ReceptionFile;
   pm: PmFile;
   ministers: MinistersFile;

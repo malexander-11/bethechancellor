@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The two Budget-day adviser briefings are deleted with their file, schema, loader and checks: only
+  the workings view showed them. The advisers still speak through the lines on options and policies,
+  which the validator checks as before.
 - The engine tests trace each lever to its published sources once: one run over every lever, on
   offer or retired, its figures, baseline and milestones alike, with tamper tests showing a changed
   figure is caught. The menu's two re-runs of it, the retired levers' own, and the figures copied

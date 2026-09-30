@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url';
 import {
   computeOutcome,
   parseAdvisers,
-  parseBriefings,
   parseContext,
   parsePm,
   parseMinisters,
@@ -68,7 +67,6 @@ export function loadDataset(): Required<Dataset> {
       parseContext(JSON.parse(readFileSync(f, 'utf8'))),
     ),
     advisers: parseAdvisers(readJson('journey/advisers.json')),
-    briefings: parseBriefings(readJson('journey/briefings.json')),
     pm: parsePm(readJson('journey/pm.json')),
     ministers: parseMinisters(readJson('journey/ministers.json')),
     interventions: parseInterventions(readJson('journey/interventions.json')),

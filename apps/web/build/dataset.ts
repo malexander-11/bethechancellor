@@ -57,7 +57,6 @@ export function shippedDataset(): ShippedDataset {
     households: live.households,
     context,
     advisers: live.advisers,
-    briefings: live.briefings,
     reception: live.reception,
     pm: live.pm,
     ministers: live.ministers,

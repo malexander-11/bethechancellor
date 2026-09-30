@@ -202,11 +202,9 @@ describe('cards that agree with their ratings (Phase 25)', () => {
   });
 
   it('quotes one gilt yield across the files, and it is today’s', () => {
-    const files = [
-      readJson('journey/reception.json'),
-      readJson('journey/households.json'),
-      readJson('journey/briefings.json'),
-    ].map((x) => JSON.stringify(x));
+    const files = [readJson('journey/reception.json'), readJson('journey/households.json')].map(
+      (x) => JSON.stringify(x),
+    );
     for (const f of files) expect(f).not.toMatch(/5\.35%/);
     const gilts = context.readings.find((r) => r.id === 'gilt-10y');
     expect((gilts?.latest.value ?? 0).toFixed(1)).toBe('5.3');

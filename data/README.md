@@ -18,7 +18,6 @@ reference/*.json          non-forecast reference numbers (e.g. UK households)
 context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the latest figures, with
                           the suggestion rules that make today's estimate (ADR-0025)
 journey/advisers.json     the adviser roles (titles, remits, steps)
-journey/briefings.json    sourced adviser briefings per step and lever group
 journey/pm.json           the Prime Minister: the eight priorities, the manifesto red lines
 journey/options.json      the ways to deliver each priority (ADR-0022)
 journey/finetune.json     the fine-tuning screens: every lever, in decisions (ADR-0035, ADR-0037)
@@ -123,9 +122,7 @@ refuses gilt sales for any year but the one the context is dated in.
   caveats and sits in its tax group beside the certified rows (ADR-0017).
 - **Vintage-series lookup points.** `points[].from.vintageSeries` ("receiptsByTax.inheritanceTax")
   with a `multiplier`; checked against the vintage.
-- **Briefings** need an existing adviser who speaks on the step, a real lever group for group
-  briefings, and at least one source per paragraph. **Context readings** that name a `leverCode`
-  need a `suggestion` rule (`gap` or `authored`).
+- **Context readings** that name a `leverCode` need a `suggestion` rule (`gap` or `authored`).
 - **Today's estimate** (ADR-0025) is the `gap` rule run over every reading that names a `leverCode`,
   with the `authored` rule for growth: the one economy every game plans on. The published forecast
   ranges (`reading.alternatives`) and the forecast cards (`context.scenarios`) that Phases 7 to 23

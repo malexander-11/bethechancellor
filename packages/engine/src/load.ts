@@ -2,7 +2,6 @@ import type { ZodType } from 'zod';
 import { DataError } from './errors.js';
 import {
   advisersFileSchema,
-  briefingsFileSchema,
   pmFileSchema,
   ministersFileSchema,
   interventionsFileSchema,
@@ -30,7 +29,6 @@ import {
 } from './schema/index.js';
 import type {
   AdvisersFile,
-  BriefingsFile,
   PmFile,
   MinistersFile,
   InterventionsFile,
@@ -149,10 +147,6 @@ export function parseAdvisers(json: unknown): AdvisersFile {
   return parseWith(advisersFileSchema, json, 'advisers');
 }
 
-export function parseBriefings(json: unknown): BriefingsFile {
-  return parseWith(briefingsFileSchema, json, 'briefings');
-}
-
 export function parseReception(json: unknown): ReceptionFile {
   return parseWith(receptionFileSchema, json, 'the reception');
 }
@@ -210,7 +204,6 @@ export interface Dataset {
   /** "What has changed since the forecast" files, newest last. */
   contexts?: ContextFile[];
   advisers?: AdvisersFile;
-  briefings?: BriefingsFile;
   pm?: PmFile;
   ministers?: MinistersFile;
   interventions?: InterventionsFile;
@@ -387,7 +380,6 @@ export function validateDataset(ds: Dataset): string[] {
       ds.levers,
       ds.households ?? null,
       ds.contexts ?? null,
-      ds.briefings ?? null,
       ds.pm ?? null,
       ds.ministers ?? null,
       ds.interventions ?? null,
@@ -480,19 +472,6 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
-  const briefingIds = new Set<string>();
-  for (const briefing of ds.briefings?.briefings ?? []) {
-    if (briefingIds.has(briefing.id)) problems.push(`duplicate briefing id ${briefing.id}`);
-    briefingIds.add(briefing.id);
-    const adviser = adviserById.get(briefing.adviser);
-    if (!adviser) {
-      problems.push(`briefing ${briefing.id} names unknown adviser ${briefing.adviser}`);
-    } else if (!adviser.steps.includes(briefing.step)) {
-      problems.push(
-        `briefing ${briefing.id}: adviser ${adviser.id} does not speak on ${briefing.step}`,
-      );
-    }
-  }
   for (const context of ds.contexts ?? []) {
     if (adviserById.size > 0 && !adviserById.has(context.adviser)) {
       problems.push(`context ${context.id} names unknown adviser ${context.adviser}`);

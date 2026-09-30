@@ -30,8 +30,6 @@ import type {
 import type {
   adviserSchema,
   advisersFileSchema,
-  briefingSchema,
-  briefingsFileSchema,
   journeyStepSchema,
 } from '../schema/journey.schema.js';
 import type {
@@ -154,8 +152,6 @@ export type GlossaryTerm = z.infer<typeof glossaryTermSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;
-export type Briefing = z.infer<typeof briefingSchema>;
-export type BriefingsFile = z.infer<typeof briefingsFileSchema>;
 export type ReceptionFile = z.infer<typeof receptionFileSchema>;
 export type ReceptionAudience = z.infer<typeof receptionAudienceSchema>;
 export type ReceptionRule = z.infer<typeof receptionRuleSchema>;

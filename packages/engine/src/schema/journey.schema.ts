@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { sourceRefSchema } from './provenance.schema.js';
 
 const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
 
@@ -33,38 +32,6 @@ export const adviserSchema = z.strictObject({
 export const advisersFileSchema = z.strictObject({
   schemaVersion: z.literal(1),
   advisers: z.array(adviserSchema).min(1),
-});
-
-/** One paragraph of briefing; every paragraph cites the documents it rests on. */
-export const briefingParagraphSchema = z.strictObject({
-  text: z.string().min(1),
-  sources: z.array(sourceRefSchema).min(1),
-});
-
-export const briefingFactSchema = z.strictObject({
-  label: z.string().min(1),
-  value: z.string().min(1),
-  source: sourceRefSchema,
-});
-
-/**
- * A briefing belongs to a step. The adviser named must exist and speak on that step. The desk's
- * briefings, one per group of levers, retired with it (Phase 26).
- */
-export const briefingSchema = z.strictObject({
-  id: slug,
-  step: journeyStepSchema,
-  adviser: slug,
-  title: z.string().min(1),
-  /** The one line the adviser says out loud. The paragraphs are the detail behind it. */
-  headline: z.string().min(1).max(140),
-  paragraphs: z.array(briefingParagraphSchema).min(1),
-  facts: z.array(briefingFactSchema).optional(),
-});
-
-export const briefingsFileSchema = z.strictObject({
-  schemaVersion: z.literal(1),
-  briefings: z.array(briefingSchema).min(1),
 });
 
 /**

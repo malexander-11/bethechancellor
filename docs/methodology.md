@@ -310,14 +310,10 @@ in the URL's query string, so any step can be linked to; old `/b` links redirect
 ### Advisers
 
 Five roles, no people: Permanent Secretary, Chief Economic Adviser, Director of Tax, Director of
-Public Spending and Political Adviser (`data/journey/advisers.json`). Everything they say is an
-authored paragraph in `data/journey/briefings.json` with at least one source per paragraph, or an
-existing lever consideration; the validator checks that every adviser exists, speaks on the step,
-and that every group briefing names a real lever group. On Budget day the closing notes are the
-considerations of the levers the player moved, routed to an adviser by kind: behavioural and
-interaction notes to the tax or spending director, macro and market notes to the Chief Economic
-Adviser, administrative notes to the Permanent Secretary, distributional, devolution and legal notes
-to the Political Adviser. No text is generated.
+Public Spending and Political Adviser (`data/journey/advisers.json`). Everything they say is
+authored in the data with its sources, as the line on an option or a policy or as a lever's
+consideration; the validator checks that every adviser named exists and speaks on the step. No text
+is generated.
 
 ### The assumptions step and the suggestion rule
 

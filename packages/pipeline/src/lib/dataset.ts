@@ -1,7 +1,6 @@
 import path from 'node:path';
 import {
   parseAdvisers,
-  parseBriefings,
   parseContext,
   parsePm,
   parseMinisters,
@@ -53,7 +52,6 @@ export function loadDataset(
     parseContext(readJson(f)),
   );
   const advisers = parseAdvisers(readJson(path.join(DATA_DIR, 'journey', 'advisers.json')));
-  const briefings = parseBriefings(readJson(path.join(DATA_DIR, 'journey', 'briefings.json')));
   const pm = parsePm(readJson(path.join(DATA_DIR, 'journey', 'pm.json')));
   const ministers = parseMinisters(readJson(path.join(DATA_DIR, 'journey', 'ministers.json')));
   const interventions = parseInterventions(
@@ -82,7 +80,6 @@ export function loadDataset(
     households,
     contexts,
     advisers,
-    briefings,
     pm,
     ministers,
     interventions,

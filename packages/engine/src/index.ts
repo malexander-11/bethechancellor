@@ -16,7 +16,6 @@ export {
   parsePesaExtract,
   parseContext,
   parseAdvisers,
-  parseBriefings,
   parseReception,
   parsePm,
   parseMinisters,

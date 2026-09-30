@@ -20,7 +20,6 @@ export const {
   households,
   context,
   advisers,
-  briefings,
   reception,
   pm,
   ministers,
