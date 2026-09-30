@@ -23,44 +23,35 @@ export interface Intervention {
   short?: string;
   /** The line's own sources plus those of what it is about. */
   sources: SourceRef[];
-  /** The promise or priority id the predicate fired on, when it fired on one. */
-  about?: string;
+  /** The promise or priority id the predicate fired on. */
+  about: string;
   badge: SimulatedLine['badge'];
 }
 
-export interface DeskReading {
-  /** Stability-rule headroom in the target year, £ million. */
-  headroomGbpm: number;
-  /** Any rule missed, or the welfare cap above its margin. */
-  ruleMissed: boolean;
-}
-
-/** Most pressing first: a broken promise outranks a compliment. */
+/**
+ * Most pressing first: a broken promise outranks a strain. The fiscal rules are the bar's to say,
+ * and a Budget that funds every priority needs no line: the Permanent Secretary said both until the
+ * user asked for their advice to go.
+ */
 const ORDER: readonly InterventionWhen[] = [
   'promise-broken',
   'commitment-broken',
-  'rule-missed',
   'priority-unfunded',
   'promise-strained',
   'priority-part-funded',
-  'all-priorities-funded',
 ];
 
-export function interventionsFor(
-  file: InterventionsFile,
-  status: AmbitionStatus,
-  reading: DeskReading,
-): Intervention[] {
+export function interventionsFor(file: InterventionsFile, status: AmbitionStatus): Intervention[] {
   const out: Intervention[] = [];
   const say = (
     when: InterventionWhen,
-    name: string | undefined,
-    about: string | undefined,
+    name: string,
+    about: string,
     sources: readonly SourceRef[],
   ) => {
     for (const spec of file.interventions) {
       if (spec.when !== when) continue;
-      const fill = (s: string) => s.replace(/\{name\}/g, name ?? '');
+      const fill = (s: string) => s.replace(/\{name\}/g, name);
       out.push({
         id: spec.id,
         adviser: spec.adviser,
@@ -74,8 +65,8 @@ export function interventionsFor(
     }
   };
   const brokenIds = new Set(status.promises.filter((p) => !p.kept).map((p) => p.promise.id));
-  // A manifesto red line and a reversed commitment get their own lines (Phase 25). The fiscal
-  // rules have theirs: a missed rule is said once, as a missed rule.
+  // A manifesto red line and a reversed commitment get their own lines (Phase 25). A promise the
+  // fiscal rules judge is left to the bar.
   for (const p of status.promises) {
     if (p.kept || p.promise.judgedBy === 'fiscalRules') continue;
     const when = p.promise.origin === 'manifesto-2024' ? 'promise-broken' : 'commitment-broken';
@@ -90,16 +81,12 @@ export function interventionsFor(
     );
     if (scored) say('promise-strained', s.promise.title, s.promise.id, s.promise.sources);
   }
-  if (reading.ruleMissed) say('rule-missed', undefined, undefined, []);
   for (const p of status.priorities) {
     if (p.status === 'notFunded') {
       say('priority-unfunded', p.priority.title, p.priority.id, p.priority.sources);
     } else if (p.status === 'settledLower' || p.status === 'started') {
       say('priority-part-funded', p.priority.title, p.priority.id, p.priority.sources);
     }
-  }
-  if (status.priorities.length > 0 && status.delivered === status.priorities.length) {
-    say('all-priorities-funded', undefined, undefined, []);
   }
   return out.sort((a, b) => ORDER.indexOf(a.when) - ORDER.indexOf(b.when));
 }

@@ -48,22 +48,6 @@
       }
     },
     {
-      "id": "ps-rule-missed",
-      "adviser": "permanent-secretary",
-      "when": "rule-missed",
-      "line": {
-        "text": "On these numbers a rule is missed, and the OBR will say so on 28 October. The Charter’s escape clause is for an emergency or a significant shock, judged by the OBR, not for a choice.",
-        "short": "On these numbers a rule is missed, and the OBR will say so.",
-        "sources": [
-          {
-            "sourceId": "hmt-charter-2025-autumn",
-            "paragraph": "3.9-3.10"
-          }
-        ],
-        "badge": "simulated"
-      }
-    },
-    {
       "id": "dps-priority-unfunded",
       "adviser": "director-of-public-spending",
       "when": "priority-unfunded",
@@ -81,17 +65,6 @@
       "line": {
         "text": "{name} is started, not delivered: nothing in your Budget delivers it in full yet. A start that was trimmed counts the same.",
         "short": "{name} is started, not delivered: nothing delivers it in full yet.",
-        "sources": [],
-        "badge": "simulated"
-      }
-    },
-    {
-      "id": "ps-all-funded",
-      "adviser": "permanent-secretary",
-      "when": "all-priorities-funded",
-      "line": {
-        "text": "Every priority you agreed with the Prime Minister has something behind it. What remains is whether the rules hold, with headroom to spare.",
-        "short": "Every priority has something behind it. Now the rules must hold.",
         "sources": [],
         "badge": "simulated"
       }

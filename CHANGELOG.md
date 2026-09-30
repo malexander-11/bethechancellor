@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The Permanent Secretary no longer speaks above the fine-tuning cards: their two lines, on a missed
+  rule and on every priority funded, go with the two triggers only they used. The bar still says
+  whether the rules hold, and the other advisers still speak when a promise is broken or strained or
+  a priority falls short.
 - The tax screen's description is the user's one sentence: "Raise or cut any tax and keep an eye on
   your headroom." It no longer adds whose view shows once you choose; instead each chosen row's line
   names its speaker, "Director of Tax: …". The spending screen is unchanged.

@@ -39,7 +39,6 @@ import { chosenByLever, redLinesOf } from '../journey/levers';
 import { StepLink } from '../journey/links';
 import { useLeverHints } from '../journey/prices';
 import { useMode } from '../journey/mode';
-import { isMissed } from '../journey/rules';
 import { useBudget } from '../state/budget';
 import { deliverPath } from './Deliver';
 
@@ -239,10 +238,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const index = side === 'tax' ? 1 : 2;
   // The advisers who remember (Phase 25): the most pressing line that fires, one at a time, so the
   // screen has one voice above the cards and never a chorus.
-  const advice = interventionsFor(interventions, status, {
-    headroomGbpm: stability?.headroomGbpm ?? 0,
-    ruleMissed: outcome.verdicts.some(isMissed),
-  }).slice(0, 1);
+  const advice = interventionsFor(interventions, status).slice(0, 1);
 
   // What every card on the screen reads alike (ADR-0037).
   const named = ADVISER_IN_LEAD[side];

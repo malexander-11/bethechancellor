@@ -645,8 +645,6 @@ export const interventionWhenSchema = z.enum([
   'promise-strained',
   'priority-unfunded',
   'priority-part-funded',
-  'all-priorities-funded',
-  'rule-missed',
 ]);
 
 /**

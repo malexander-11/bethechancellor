@@ -31,11 +31,7 @@ function outcomeFor(leverValues: Budget) {
 function advice(game: GamePermalink, leverValues: Budget) {
   const outcome = outcomeFor(leverValues);
   const status = ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers);
-  const headroomGbpm = outcome.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;
-  const ruleMissed = outcome.verdicts.some(
-    (v) => v.status === 'notMet' || v.status === 'aboveMargin',
-  );
-  return interventionsFor(ds.interventions, status, { headroomGbpm, ruleMissed });
+  return interventionsFor(ds.interventions, status);
 }
 
 describe('advisers who remember', () => {
@@ -83,9 +79,8 @@ describe('advisers who remember', () => {
     expect(started?.short).toMatch(/is started, not delivered: nothing delivers it in full/);
     const care = advice(gameWith(['nhs']), NHS_START);
     expect(care.find((x) => x.about === 'nhs')?.when).toBe('priority-part-funded');
-    const done = advice(game, SECURITY_FLAGSHIPS);
-    expect(done.some((x) => x.when === 'priority-unfunded')).toBe(false);
-    expect(done.some((x) => x.when === 'all-priorities-funded')).toBe(true);
+    // Every priority funded, with no promise broken or strained, needs no line at all.
+    expect(advice(game, SECURITY_FLAGSHIPS)).toEqual([]);
   });
 
   it('has no target to hold the player to: the rules are the line (Phase 24)', () => {
@@ -101,8 +96,13 @@ describe('advisers who remember', () => {
     expect(items[0]?.when).toBe('promise-broken');
     const order = items.map((x) => x.when);
     expect(order.indexOf('priority-unfunded')).toBeGreaterThan(order.indexOf('promise-broken'));
-    // A rule missed outranks an unfunded priority.
-    const missed = advice(game, { dhsc: 10, dfe: 10, def3: 1 }).map((x) => x.when);
-    expect(missed.indexOf('rule-missed')).toBeLessThan(missed.indexOf('priority-unfunded'));
+  });
+
+  it('leaves the fiscal rules to the bar: a missed rule gets no adviser’s line', () => {
+    const game = gameWith(['safer-streets']);
+    const outcome = outcomeFor({ dhsc: 10, dfe: 10, def3: 1 });
+    expect(outcome.verdicts.some((v) => v.status === 'notMet')).toBe(true);
+    const lines = advice(game, { dhsc: 10, dfe: 10, def3: 1 });
+    expect(lines.map((x) => x.when)).toEqual(['priority-unfunded']);
   });
 });

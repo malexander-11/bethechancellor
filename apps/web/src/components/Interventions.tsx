@@ -18,7 +18,7 @@ export function Interventions({ items }: { items: Intervention[] }) {
           <summary>What the advisers say ({rest.length} more)</summary>
           <div className="more__body">
             {rest.map((x) => (
-              <Note key={`${x.id}-${x.about ?? ''}`} item={x} />
+              <Note key={`${x.id}-${x.about}`} item={x} />
             ))}
           </div>
         </details>
