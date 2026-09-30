@@ -222,10 +222,11 @@ certified rows beside it (ADR-0017).
 - **Shelving.** A lever nobody is considering, or one the user takes off the table (the nine of
   ADR-0035), stays in the data with `deprecated: true`, `group: "Shelved"` and the headline "Kept
   for the record; not on offer at this Budget. Old links still work." Its costing, raw source and
-  considerations stay, so `validate:data` and the engine tests keep reproducing it; the app filters
-  it out at load, the incidence, minister and suggestion checks skip it, and an old link decodes it
-  as an unknown code with a warning. Nothing live may name it: no incidence tag, no option, no
-  fine-tuning item, no household touch.
+  considerations stay, so `validate:data` and the engine tests keep reproducing it; the build leaves
+  it out of the app, the incidence, minister and suggestion checks skip it, and an old link decodes
+  it as an unknown code with a warning. Nothing live may name it: no incidence tag, no option, no
+  fine-tuning item, no household touch. `validate:data` checks the game as shipped as well as the
+  whole set, so a file that does is refused.
 
 ### Budget day reception (`data/journey/reception.json`, ADR-0013)
 

@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-09-30
 
+- The data is read, checked and validated when the app is built, not in the player's browser, which
+  now only parses JSON: no schema library and no validator ship. The build leaves out the retired
+  levers and what no screen shows (the published tables behind a costing, quoted passages, source
+  hashes and notes, and a description where a headline stands in for it). The script is 1.10 MB (267
+  KB gzipped), from 1.45 MB (369 KB); the web tests run in 29 seconds, from about 40.
 - `validate:data` also checks the game as shipped: the levers it offers, without the retired ones
   kept for the record. A file that names a retired lever used to pass, then stop the app loading.
 - `npm run gate` runs the static checks, the data checks and the unit tests side by side, then the

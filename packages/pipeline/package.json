@@ -5,6 +5,10 @@
   "description": "Scripts that fetch, extract, derive and validate the sourced data for What’s your Budget?",
   "license": "MIT",
   "type": "module",
+  "exports": {
+    "./dataset": "./src/lib/dataset.ts",
+    "./live": "./src/lib/live.ts"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "fetch": "tsx src/fetch.ts",

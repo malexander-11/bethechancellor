@@ -1,5 +1,5 @@
 import { EngineError } from '../errors.js';
-import { spendingHeadSchema, taxHeadSchema } from '../schema/lever.schema.js';
+import { SPENDING_HEADS, TAX_HEADS } from '../schema/heads.js';
 import type {
   GrowthHead,
   Series,
@@ -12,11 +12,11 @@ import type {
 const RECEIPTS_BY_TAX = /^receiptsByTax\.([A-Za-z]+)$/;
 
 export function isTaxHead(head: GrowthHead): head is TaxHead {
-  return (taxHeadSchema.options as readonly string[]).includes(head);
+  return (TAX_HEADS as readonly string[]).includes(head);
 }
 
 export function isSpendingHead(head: GrowthHead): head is SpendingHead {
-  return (spendingHeadSchema.options as readonly string[]).includes(head);
+  return (SPENDING_HEADS as readonly string[]).includes(head);
 }
 
 /** The receiptsByTax key named by a "receiptsByTax.<key>" head, or null for other heads. */

@@ -5,6 +5,7 @@
   "description": "Pure TypeScript fiscal engine (schemas, arithmetic, rule verdicts, permalinks) for What’s your Budget?",
   "license": "MIT",
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./src/index.ts",

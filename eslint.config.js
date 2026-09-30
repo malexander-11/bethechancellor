@@ -27,6 +27,8 @@ export default tseslint.config(
       'packages/pipeline/**/*.ts',
       '*.config.{js,ts}',
       'apps/web/vite.config.ts',
+      'apps/web/vitest.config.ts',
+      'apps/web/build/**',
       'scripts/**',
     ],
     languageOptions: { globals: { ...globals.node } },

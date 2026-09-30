@@ -267,7 +267,8 @@ describe('word budgets: one line visible, the rest a click away', () => {
   });
 
   it('gives every lever a headline of one line, not a paragraph', () => {
-    // The headline heads a policy's "More about this"; the description behind it is the drawer's.
+    // The headline heads a lever's part of its card's "More about these" (ADR-0037); a lever with
+    // one ships without its longer description (apps/web/build/dataset.ts).
     for (const side of ['tax', 'spending'] as const) {
       const stepLevers = levers.filter(
         (l) =>
@@ -276,14 +277,12 @@ describe('word budgets: one line visible, the rest a click away', () => {
             ? l.category === 'tax'
             : l.category === 'spend' || l.category === 'welfare'),
       );
+      for (const l of stepLevers) expect(l.headline ?? l.description, l.code).toBeTruthy();
       const leverWords = stepLevers.reduce((acc, l) => acc + words(l.headline ?? l.description), 0);
       const perLever = leverWords / stepLevers.length;
       expect(perLever, `${side} averages ${perLever.toFixed(1)} words a lever`).toBeLessThanOrEqual(
         12,
       );
-      // Far less than the descriptions they replace, which are still in the drawer.
-      const drawerWords = stepLevers.reduce((acc, l) => acc + words(l.description), 0);
-      expect(leverWords).toBeLessThan(drawerWords / 2);
     }
   });
 });

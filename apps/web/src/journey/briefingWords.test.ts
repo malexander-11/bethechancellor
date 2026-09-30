@@ -38,13 +38,12 @@ describe('the briefing’s words (Phase 28, ADR-0030)', () => {
     }
   });
 
-  it('cites only sources the registry holds, and quotes both published figures', () => {
+  it('cites only sources the registry holds for both published figures', () => {
     const figures = context.briefing;
     expect(figures).toBeDefined();
     const refs = figures ? [figures.averageHeadroom.source, figures.giltSales.source] : [];
+    // The passages they are read from are checked by validate:data and stay in data/.
     for (const ref of refs) expect(sourcesById.get(ref.sourceId), ref.sourceId).toBeDefined();
-    expect(figures?.averageHeadroom.source.quote).toBeTruthy();
-    expect(figures?.giltSales.source.quote).toBeTruthy();
   });
 
   it('fills a template, and leaves a placeholder it has no value for where a test will see it', () => {

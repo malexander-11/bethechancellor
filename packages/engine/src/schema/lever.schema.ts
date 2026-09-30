@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { SPENDING_HEADS, TAX_HEADS } from './heads.js';
 import {
   badgeSchema,
   fiscalYearSchema,
@@ -9,31 +10,10 @@ import {
 const yearValuesSchema = z.record(fiscalYearSchema, z.number());
 
 /** Receipts heads in the vintage's receiptsByHeadPctGdp, plus nominal GDP itself. */
-export const taxHeadSchema = z.enum([
-  'incomeTax',
-  'nics',
-  'vat',
-  'onshoreCorporationTax',
-  'capitalTaxes',
-  'businessRates',
-  'fuelDuties',
-  'alcoholAndTobaccoDuties',
-  'otherTaxes',
-  'nominalGdp',
-]);
+export const taxHeadSchema = z.enum(TAX_HEADS);
 
 /** Spending lines in the vintage that a baseline can be taken from or a published figure can grow with. */
-export const spendingHeadSchema = z.enum([
-  'rdel',
-  'cdel',
-  'welfareTotal',
-  'welfareInCap',
-  'pensionerSpending',
-  'universalCreditAndLegacy',
-  'disabilityBenefits',
-  'childBenefit',
-  'otherWelfare',
-]);
+export const spendingHeadSchema = z.enum(SPENDING_HEADS);
 
 /** A receipts line in the vintage's receiptsByTax record, e.g. "receiptsByTax.inheritanceTax". */
 export const receiptsByTaxHeadSchema = z
