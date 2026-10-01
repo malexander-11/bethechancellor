@@ -112,9 +112,8 @@ describe('journey routes', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
     ).toBeInTheDocument();
-    // Each audience's verdict, and the documents one fold away.
+    // Each audience's verdict, and no Budget documents (ADR-0043).
     expect(screen.getByRole('heading', { name: 'The markets' })).toBeInTheDocument();
-    fireEvent.click(screen.getByText('Budget documents'));
-    expect(screen.getByText('Table 4.1: your policy decisions')).toBeInTheDocument();
+    expect(screen.queryByText('Budget documents')).toBeNull();
   });
 });

@@ -48,11 +48,12 @@ describe('Budget day: what your Budget means', () => {
     expect(within(card('The markets')).getByText(/not your measures/)).toBeInTheDocument();
     // Each card is its rating and its one reason: no "Why this rating" (ADR-0043).
     expect(screen.queryByText(/^Why this rating/)).toBeNull();
-    // The households and the documents wait behind their folds, closed; no speech (ADR-0043).
-    for (const fold of ['Who feels it: five households', 'Budget documents']) {
-      expect(screen.getByText(fold).closest('details')).not.toHaveAttribute('open');
-    }
+    // The households wait behind their fold, closed; no speech and no documents (ADR-0043).
+    expect(
+      screen.getByText('Who feels it: five households').closest('details'),
+    ).not.toHaveAttribute('open');
     expect(screen.queryByText('Read the speech')).toBeNull();
+    expect(screen.queryByText('Budget documents')).toBeNull();
     // No Budget in three sentences, and no close (ADR-0043); "change something" means the review.
     expect(screen.queryByText(/in three sentences/)).toBeNull();
     expect(screen.queryByText('How your Budget went')).toBeNull();
@@ -120,13 +121,8 @@ describe('Budget day: what your Budget means', () => {
     expect(screen.queryByText(/Prison places take years to build/)).toBeNull();
   });
 
-  it('keeps the documents behind a fold, and arriving marks the game finished', async () => {
+  it('arrives as the end of the game: the link it shares opens as a finished Budget', async () => {
     at(`${BASE}&${GAME}&L=moj.10`);
-    open('Budget documents');
-    expect(screen.getByText('Table 4.1: your policy decisions')).toBeInTheDocument();
-    // The economy is named for what it is: our estimate, standing in for the OBR's own.
-    expect(screen.getByText('Economic assumptions: today’s estimate.')).toBeInTheDocument();
-    expect(screen.getByText(/this game uses today’s estimate in its place/)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'the one you opened' })).toBeNull();
     await waitFor(() =>
       expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.5/),

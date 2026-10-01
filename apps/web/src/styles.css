@@ -447,7 +447,6 @@ hr {
  * A block of the document: a hairline above and below, the text flush with the page. Two blocks
  * in a row share one rule. Nothing on the road is a box (ADR-0023, revised: official paper).
  */
-.panel,
 .doc {
   padding: 16px 0;
   border-top: 1px solid var(--border);
@@ -455,23 +454,14 @@ hr {
 }
 
 @media (min-width: 640px) {
-  .panel,
   .doc {
     padding: 20px 0;
   }
 }
 
-.panel + .panel,
-.panel + .doc,
-.doc + .panel,
 .doc + .doc {
   margin-top: 0;
   border-top: 0;
-}
-
-.panel h2 {
-  margin: 0 0 4px;
-  font-size: 1.125rem;
 }
 
 .panel__hint {
@@ -653,53 +643,6 @@ hr {
 
 .warnings__line {
   margin: 0;
-}
-
-/* ---------------------------------------------------------------- tables */
-
-.table-scroll {
-  max-width: 100%;
-  overflow-x: auto;
-}
-
-.measures caption {
-  padding: 0 0 8px;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  text-align: left;
-  caption-side: top;
-}
-
-.measures {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9375rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.measures th,
-.measures td {
-  padding: 6px 8px;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  vertical-align: top;
-}
-
-.measures thead th {
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.measures td.amount,
-.measures th:nth-child(n + 3),
-.measures td:nth-child(n + 3) {
-  text-align: right;
-  white-space: nowrap;
-}
-
-.measures tfoot th {
-  font-weight: 700;
 }
 
 /* ---------------------------------------------------------------- footer */

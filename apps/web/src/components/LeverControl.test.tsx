@@ -17,7 +17,7 @@ const lever = (code: string) => {
 
 /**
  * The words the rows are built from (ADR-0037): the card they once drew went with the rows in one
- * card a decision, and these stay, shared with the review, the measures table and step 3's cards.
+ * card a decision, and these stay, shared with the review and step 3's cards.
  */
 describe('the lever helpers', () => {
   it('formats pence, points, per cent and pounds', () => {

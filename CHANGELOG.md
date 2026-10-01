@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- Feedback no longer offers "Budget documents": the Red Book's table of your decisions and the notes
+  on what the Treasury publishes go, with the table's component and styles (ADR-0043).
 - The feedback cards lose "Why this rating": each keeps its rating, its one reason with the
   decisions behind it, and the line for the other side. The markets' growth and debt-interest notes
   and the public's "Who feels these measures" go with it, as do the tally, the nudges, the levers'

@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Households } from '../components/Households';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { MeasuresTable } from '../components/MeasuresTable';
 import { ReceptionCard } from '../components/ReceptionCard';
 import { electorate, incidence, levers, pm, reception, vintage, options } from '../data';
 import { useStageGuard } from '../journey/guard';
@@ -21,7 +20,7 @@ function list(items: readonly string[]): string {
 /**
  * Step 6: feedback, on one screen. The rules line, which is the one thing here that is arithmetic;
  * the backbenchers, the markets and the public, each rating the Budget out of five and saying
- * which choices caused it. The households and the Budget documents are one fold away.
+ * which choices caused it. The households are one fold away.
  * Arriving here marks the game finished, so a link shared from here opens as a finished Budget.
  */
 export function BudgetDayPage() {
@@ -123,36 +122,6 @@ export function BudgetDayPage() {
         <summary>Who feels it: five households</summary>
         <div className="more__body">
           <Households reactions={voters} />
-        </div>
-      </details>
-      <details className="more">
-        <summary>Budget documents</summary>
-        <div className="more__body">
-          <section className="panel" aria-labelledby="documents-heading">
-            <h3 id="documents-heading" className="section-label">
-              What the Treasury publishes
-            </h3>
-            <p className="panel__hint">
-              What the Treasury publishes as the Chancellor sits down: the Red Book with its table
-              of policy decisions, the OBR’s forecast beside it, and a costing note for every
-              measure.
-            </p>
-            <h4 className="section-label">Table 4.1: your policy decisions</h4>
-            <MeasuresTable outcome={outcome} levers={levers} targetYear={targetYear} />
-            {/* Every game is played on today's estimate (ADR-0025). */}
-            <p className="source">Economic assumptions: today’s estimate.</p>
-            <ul className="documents">
-              <li>
-                <strong>Economic and fiscal outlook.</strong> The OBR publishes its own forecast
-                beside the Budget; this game uses today’s estimate in its place.
-              </li>
-              <li>
-                <strong>Policy costings.</strong> One note per measure with the method behind it:
-                here, what each lever assumes, under its card on the fine-tune screens; the About
-                page lists every source.
-              </li>
-            </ul>
-          </section>
         </div>
       </details>
 
