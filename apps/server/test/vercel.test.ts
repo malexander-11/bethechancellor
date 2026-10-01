@@ -36,6 +36,7 @@ function destinationOf(path: string): string | undefined {
 const SAMPLES: Record<ServerPath, string> = {
   health: '/api/health',
   card: '/api/card',
+  shared: '/shared',
 };
 
 describe('the site on Vercel (ADR-0044)', () => {

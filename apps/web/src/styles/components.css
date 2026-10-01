@@ -1573,3 +1573,91 @@ label.choice {
   color: var(--ink-2);
   font-size: 0.9375rem;
 }
+
+/* ---------------------------------------------------------- sharing a Budget (ADR-0044) */
+
+/* The picture, as a link to the Budget previews it: its own shape at any width. */
+.share__picture {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  aspect-ratio: 1200 / 630;
+  margin: 8px 0 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.share__label {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+/* The networks' own pages for posting a link: a row of links, each a full-height target. */
+.share__networks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The page a shared link opens: the Budget, the invitation, then the Budget in words. */
+.shared {
+  max-width: 68ch;
+}
+
+.shared h1 {
+  margin: 4px 0 8px;
+}
+
+.facts__heading {
+  margin: 32px 0 0;
+  font-size: 1.375rem;
+}
+
+.facts__sides {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 32px;
+}
+
+@media (min-width: 640px) {
+  .facts__sides {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.facts__side .section-label {
+  margin-top: 16px;
+}
+
+.facts__rules {
+  margin: 12px 0 0;
+}
+
+.facts__met {
+  color: var(--good);
+  font-weight: 600;
+}
+
+.facts__missed {
+  color: var(--critical);
+  font-weight: 600;
+}
+
+.facts__ratings {
+  margin: 12px 0 0;
+  padding-left: 20px;
+}
+
+.facts__ratings li {
+  margin: 4px 0;
+}
+
+.facts__audience {
+  font-weight: 600;
+}

@@ -8,6 +8,7 @@ import { FinetunePage } from './pages/Finetune';
 import { OutlookPage } from './pages/Outlook';
 import { PMPage } from './pages/PM';
 import { ReviewPage } from './pages/Review';
+import { SharedPage } from './pages/Shared';
 import { StartPage } from './pages/Start';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { SiteFooter } from './components/SiteFooter';
@@ -155,6 +156,8 @@ function Shell() {
               <Route path="/review" element={<ReviewPage />} />
               <Route path="/budget-day" element={<BudgetDayPage />} />
               <Route path="/b" element={<RedirectKeepingQuery to="/finetune/tax" />} />
+              {/* Where a shared link lands (ADR-0044): its code comes with the page, not after. */}
+              <Route path="/shared" element={<SharedPage />} />
               <Route path="/methodology" element={<MethodologyPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="*" element={<RedirectKeepingQuery to="/" />} />

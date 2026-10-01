@@ -1,4 +1,17 @@
-import { excludesPartners, finetuneItems, plainText } from '@btc/engine';
+import {
+  FINAL_STAGE,
+  GAME_SETTINGS,
+  SHARE_WORDS,
+  encodePermalink,
+  excludesPartners,
+  finetuneItems,
+  gameImplementationYear,
+  gameOutcomeOf,
+  plainText,
+  readFinishedBudget,
+  summariseBudget,
+  summaryWords,
+} from '@btc/engine';
 import { takesOutWords } from '../components/LeverControl';
 import { INVESTMENT_NOTE, RELIEF_NOTE } from '../components/LeverRow';
 import { MODE_WORDS } from '../components/ModeLine';
@@ -6,6 +19,7 @@ import {
   electorate,
   finetune,
   finetuneName,
+  gameData,
   guide,
   interventions,
   levers,
@@ -15,10 +29,38 @@ import {
   reception,
 } from '../data';
 import { briefingTemplates, fillIn } from '../journey/briefingWords';
+import { SHARE_TEXT } from '../share/words';
 
 const short = (l: { text: string; short?: string | undefined }) => l.short ?? l.text;
 const all = options.deliver;
 const curated = finetuneItems(finetune);
+
+/**
+ * Three finished Budgets from the data, summed up as a shared Budget is: one that changes nothing,
+ * one with the first flagship of each of the first two priorities, and one with the first flagship
+ * of every priority, which misses rules.
+ */
+const SHARED_BUDGETS = (() => {
+  const first = (id: string) => all.find((o) => o.priority === id)?.values ?? {};
+  const ids = pm.priorities.map((p) => p.id);
+  const outcomeOf = gameOutcomeOf(gameData);
+  return [ids.slice(0, 0), ids.slice(0, 2), ids].map((chosen) => {
+    const query = encodePermalink(
+      {
+        vintageCode: gameData.vintage.permalinkCode,
+        rulesCode: gameData.rules.permalinkCode,
+        implementationYear: gameImplementationYear(gameData.vintage),
+        leverValues: Object.assign({}, ...chosen.map(first)) as Record<string, number>,
+        ...GAME_SETTINGS,
+        game: { reached: FINAL_STAGE, priorities: chosen.slice(0, 3) },
+      },
+      gameData.levers,
+    );
+    const budget = readFinishedBudget(gameData, query);
+    if (!budget) throw new Error('a finished Budget did not read as one');
+    return summariseBudget(gameData, budget, outcomeOf);
+  });
+})();
 
 /**
  * Every set of words a player meets with the folds closed, by where it is met: the one list the
@@ -113,6 +155,30 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     `${MODE_WORDS.shortlist} ${MODE_WORDS.ideas.basic}.`,
     `${MODE_WORDS.ideas.advanced}.`,
     ...Object.values(MODE_WORDS.said).flatMap((s) => [s.basic, s.advanced]),
+  ],
+  // Sharing a Budget (ADR-0044): Budget day's way to share it, the picture's words, and the page a
+  // shared link opens, with the words a preview and a post carry, for three Budgets from the data.
+  'sharing a Budget': [
+    ...Object.values(SHARE_TEXT),
+    ...Object.values(SHARE_WORDS).map((w) =>
+      w
+        .replace('{n}', '2')
+        .replace('{host}', 'example.org')
+        .replace('{label}', 'Divided')
+        .replace('{rating}', '3'),
+    ),
+    ...SHARED_BUDGETS.flatMap((summary) => {
+      const words = summaryWords(summary);
+      return [
+        words.title,
+        words.description,
+        words.share,
+        ...[...summary.tax, ...summary.spending].map((row) =>
+          [row.name, row.standing, row.words].filter(Boolean).join(' · '),
+        ),
+        ...summary.ratings.map((r) => `${r.title}: ${r.label}, ${r.rating} of 5`),
+      ];
+    }),
   ],
   // The briefing in three parts (Phase 28): every heading and line, filled as the page fills
   // them.

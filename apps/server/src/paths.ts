@@ -7,6 +7,8 @@
 export const SERVER_PATHS = {
   health: /^\/api\/health$/,
   card: /^\/api\/card$/,
+  /** A shared Budget's page: the site's own, with the Budget's preview tags. */
+  shared: /^\/shared$/,
 } as const;
 
 export type ServerPath = keyof typeof SERVER_PATHS;
@@ -14,4 +16,5 @@ export type ServerPath = keyof typeof SERVER_PATHS;
 export const SERVED_BY: Record<ServerPath, 'app' | 'card'> = {
   health: 'app',
   card: 'card',
+  shared: 'app',
 };

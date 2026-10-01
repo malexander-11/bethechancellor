@@ -1,4 +1,5 @@
 import {
+  PICTURE_SIZE,
   SHARE_WORDS,
   pictureRows,
   summaryWords,
@@ -6,9 +7,9 @@ import {
   type ChangeRow,
 } from '@btc/engine';
 
-/** The size every network previews a link at. */
-export const CARD_WIDTH = 1200;
-export const CARD_HEIGHT = 630;
+/** The size every network previews a link at; the pages that show the picture keep its shape. */
+export const CARD_WIDTH = PICTURE_SIZE.width;
+export const CARD_HEIGHT = PICTURE_SIZE.height;
 
 type Style = Record<string, string | number>;
 

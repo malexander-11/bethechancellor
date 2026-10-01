@@ -67,6 +67,16 @@ describe('budget state', () => {
     }
     expect(isJourneyPath('/methodology')).toBe(false);
     expect(isJourneyPath('/about')).toBe(false);
+    // Someone else's Budget, shared (ADR-0044).
+    expect(isJourneyPath('/shared')).toBe(false);
+  });
+
+  it('takes up a Budget from a link only when asked to load it', () => {
+    const fresh = initialStateFromLocation('');
+    const loaded = reducer(fresh, { type: 'load', search: '?L=itbr.1&g=st.5_pr.defence' });
+    expect(loaded.leverValues.itbr).toBe(1);
+    expect(loaded.game?.priorities).toEqual(['defence']);
+    expect(loaded).toEqual(initialStateFromLocation('?L=itbr.1&g=st.5_pr.defence'));
   });
 
   it('starts a game on today’s estimate, and keeps a game under way as it is', () => {

@@ -4,6 +4,7 @@ import {
   macroCodesOf,
   suggestedSettings,
   type Adviser,
+  type GameData,
   type JourneyStep,
   type SourceDoc,
 } from '@btc/engine';
@@ -33,6 +34,9 @@ export const {
 } = dataset;
 /** Step 4's curated tax and spending levers (Phase 24, ADR-0025). */
 export const finetune = dataset.finetune;
+
+/** What a finished Budget is read and summed up from, as the server does it (ADR-0044). */
+export const gameData: GameData = dataset;
 
 /**
  * Today's estimate (Phase 24, ADR-0025): the OBR's March forecast on today's borrowing costs and

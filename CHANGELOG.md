@@ -5,6 +5,12 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- Budget day shares the Budget (ADR-0044): its picture, one button that shares the link through the
+  device's own sheet or copies it, the picture to save, and each network's own page for posting the
+  link. The link opens `/shared`, a page of its own that sets the Budget out in words and invites
+  whoever opens it to make their own, or to open it in the game; the server writes the page's
+  preview tags, so a network previews the picture. Copying a bare link to Budget day gives way to
+  sharing, and what is posted with a link keeps to the Budget's name, its rules and the question.
 - `/api/card` draws a finished Budget as a 1200×630 picture, the size the networks preview a link
   at: its theme, its biggest tax and spending changes with what each does, the headroom, the rules
   and the three ratings, every figure worked out again from the link (ADR-0044). Any other link gets

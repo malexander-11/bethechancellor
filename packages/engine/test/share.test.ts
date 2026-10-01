@@ -11,6 +11,7 @@ import {
   gameImplementationYear,
   gameOutcomeOf,
   headroomWords,
+  missedBy,
   pictureRows,
   preBudget,
   readFinishedBudget,
@@ -208,5 +209,29 @@ describe('a finished Budget summed up', () => {
       }),
     );
     expect(words).toMatchSnapshot();
+  });
+
+  it('keeps what a player posts short enough to post with its link on X', () => {
+    // The longest name the game can give a Budget, with every rule missed by the most the words
+    // can say: X counts a link as 23 characters, and a post as 280.
+    const ids = ds.pm.priorities.map((p) => p.id);
+    const themes = ids.flatMap((a) =>
+      ids.flatMap((b) =>
+        ids.flatMap((c) =>
+          new Set([a, b, c]).size === 3 ? [budgetTheme(ds.pm, [a, b, c]) ?? ''] : [],
+        ),
+      ),
+    );
+    const longest = themes.reduce((x, y) => (y.length > x.length ? y : x), '');
+    const summary = summariseBudget(data, read(DEBT_RULE_MISSED), outcomeOf);
+    const missed = outcomeOf({}).verdicts.map((v) => missedBy({ ...v, headroomGbpm: -999_949 }));
+    const { share } = summaryWords({
+      ...summary,
+      theme: longest,
+      rules: { met: false, welfareOnly: false, missed },
+    });
+    expect(missed.length).toBeGreaterThan(1);
+    expect(share).toContain(longest.slice(2));
+    expect(share.length + 1 + 23).toBeLessThanOrEqual(280);
   });
 });

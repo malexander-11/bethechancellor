@@ -5,11 +5,12 @@ import {
   receptions,
   typicalErrorGbpm,
 } from '@btc/engine';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Households } from '../components/Households';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { ReceptionCard } from '../components/ReceptionCard';
+import { SharePanel } from '../components/SharePanel';
 import { electorate, incidence, levers, pm, reception, vintage, options } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
@@ -26,14 +27,14 @@ function list(items: readonly string[]): string {
 /**
  * Step 6: feedback, on one screen. The rules line, which is the one thing here that is arithmetic;
  * the backbenchers, the markets and the public, each rating the Budget out of five and saying
- * which choices caused it; and five households, each saying what the Budget did to it (ADR-0043).
- * Arriving here marks the game finished, so a link shared from here opens as a finished Budget.
+ * which choices caused it; five households, each saying what the Budget did to it (ADR-0043); and
+ * the Budget as a picture to share, whose link invites whoever opens it to play (ADR-0044).
+ * Arriving here marks the game finished, so a link to it opens as a finished Budget.
  */
 export function BudgetDayPage() {
-  const { state, dispatch, outcome, query } = useBudget();
+  const { state, dispatch, outcome } = useBudget();
   const outcomeOf = useOutcomeOf();
   const navigate = useNavigate();
-  const [copied, setCopied] = useState(false);
   const guard = useStageGuard('budget-day');
   const game = state.game;
   const targetYear =
@@ -99,17 +100,6 @@ export function BudgetDayPage() {
   // walks in. With no game there is no Budget day: the guard sends the link to the briefing.
   if (guard) return guard;
 
-  async function copyLink() {
-    const url = `${window.location.origin}/budget-day?${query}`;
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 4000);
-    } catch {
-      window.prompt('Copy this link', url);
-    }
-  }
-
   return (
     <JourneyLayout step="budget-day">
       <p className="rules-line">{rulesLine}</p>
@@ -126,10 +116,9 @@ export function BudgetDayPage() {
         <Households reactions={voters} />
       </section>
 
+      <SharePanel />
+
       <p className="actions">
-        <button type="button" className="btn btn--primary" onClick={copyLink}>
-          Copy a link to this Budget
-        </button>
         <StepLink to="/review" className="btn">
           Change something
         </StepLink>
@@ -143,9 +132,6 @@ export function BudgetDayPage() {
         >
           Play again
         </button>
-        <span role="status" className="actions__hint">
-          {copied ? 'Link copied' : ''}
-        </span>
       </p>
     </JourneyLayout>
   );

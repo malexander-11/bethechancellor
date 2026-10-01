@@ -1,7 +1,10 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { SHARE_WORDS, readFinishedBudget } from '@btc/engine';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { App } from '../App';
+import { gameData } from '../data';
+import { SHARE_TEXT } from '../share/words';
 
 function at(search: string) {
   // The provider reads the budget out of the real location, so set it before rendering.
@@ -127,9 +130,12 @@ describe('Budget day: what your Budget means', () => {
     );
   });
 
-  it('offers the ways on: a link to copy, the review to change something, and a fresh start', () => {
+  it('offers the ways on: share it, change something at the review, or start again (ADR-0044)', () => {
     at(`${BASE}&${GAME}&L=moj.10`);
-    expect(screen.getByRole('button', { name: 'Copy a link to this Budget' })).toBeInTheDocument();
+    // Sharing is the one primary; copying a bare link went with it.
+    expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
+    expect(screen.getByRole('button', { name: SHARE_TEXT.share })).toHaveClass('btn--primary');
+    expect(screen.queryByRole('button', { name: 'Copy a link to this Budget' })).toBeNull();
     expect(screen.getByRole('link', { name: 'Change something' })).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/review\?/),
@@ -146,5 +152,106 @@ describe('Budget day: what your Budget means', () => {
     expect(
       within(professional).getByText('“Nothing aimed at us by name that we could see.”'),
     ).toBeInTheDocument();
+  });
+});
+
+describe('Budget day: sharing the Budget (ADR-0044)', () => {
+  /** Give the test's browser a share sheet or a clipboard, as a phone or a desktop has. */
+  function stub(name: 'share' | 'clipboard', value: unknown) {
+    Object.defineProperty(navigator, name, { value, configurable: true });
+  }
+  afterEach(() => {
+    Reflect.deleteProperty(navigator, 'share');
+    Reflect.deleteProperty(navigator, 'clipboard');
+  });
+
+  /** The picture, said in words: its alternative text starts with the game's name. */
+  const picture = () =>
+    screen.getByRole('img', { name: new RegExp(`^${SHARE_WORDS.game.replace('?', '\\?')} `) });
+  /** The finished Budget the picture is of, as its address names it. */
+  function pictured() {
+    const src = picture().getAttribute('src') ?? '';
+    expect(src).toMatch(/^\/api\/card\?/);
+    const query = src.slice(src.indexOf('?') + 1);
+    const budget = readFinishedBudget(gameData, query);
+    if (!budget) throw new Error(`the picture is not of a finished Budget: ${src}`);
+    // Written as every link to it is, so every share of it is one picture.
+    expect(budget.query).toBe(query);
+    return budget;
+  }
+  const sharedPage = (query: string) => `${window.location.origin}/shared?${query}`;
+
+  it('shows the Budget as the picture its link previews, and saves it on request', () => {
+    at(`${BASE}&${GAME}&L=moj.10`);
+    expect(screen.getByRole('heading', { level: 2, name: SHARE_TEXT.heading })).toBeVisible();
+    const budget = pictured();
+    expect(budget.leverValues).toMatchObject({ moj: 10 });
+    expect(budget.game.priorities).toEqual(['defence', 'safer-streets']);
+    expect(picture().getAttribute('alt')).toContain('Prisons and courts');
+    const save = screen.getByRole('link', { name: SHARE_TEXT.download });
+    expect(save).toHaveAttribute('href', `${picture().getAttribute('src')}&download=1`);
+    expect(save).toHaveAttribute('download');
+  });
+
+  it('shares the shared page’s link through the device’s own sheet, with its words', async () => {
+    const share = vi.fn(async () => {});
+    stub('share', share);
+    at(`${BASE}&${GAME}&L=moj.10`);
+    fireEvent.click(screen.getByRole('button', { name: SHARE_TEXT.share }));
+    await waitFor(() => expect(share).toHaveBeenCalledTimes(1));
+    const sent = share.mock.calls[0] as unknown as [ShareData];
+    expect(sent[0].url).toBe(sharedPage(pictured().query));
+    expect(sent[0].title).toBe('A Budget for defence and safer streets');
+    expect(sent[0].text).toMatch(/^I made a Budget for defence and safer streets\. .+\?$/);
+  });
+
+  it('copies the link where the device cannot share, and says so', async () => {
+    const writeText = vi.fn(async () => {});
+    stub('clipboard', { writeText });
+    at(`${BASE}&${GAME}&L=moj.10`);
+    fireEvent.click(screen.getByRole('button', { name: SHARE_TEXT.share }));
+    await waitFor(() => expect(writeText).toHaveBeenCalledWith(sharedPage(pictured().query)));
+    expect(await screen.findByRole('status')).toHaveTextContent(SHARE_TEXT.copied);
+  });
+
+  it('copies the link on its own button, even where the device could share it', async () => {
+    const share = vi.fn(async () => {});
+    const writeText = vi.fn(async () => {});
+    stub('share', share);
+    stub('clipboard', { writeText });
+    at(`${BASE}&${GAME}&L=moj.10`);
+    fireEvent.click(screen.getByRole('button', { name: SHARE_TEXT.copy }));
+    await waitFor(() => expect(writeText).toHaveBeenCalledWith(sharedPage(pictured().query)));
+    expect(share).not.toHaveBeenCalled();
+  });
+
+  it('says nothing more when the player closes the share sheet', async () => {
+    const writeText = vi.fn(async () => {});
+    stub(
+      'share',
+      vi.fn(async () => Promise.reject(new DOMException('closed', 'AbortError'))),
+    );
+    stub('clipboard', { writeText });
+    at(`${BASE}&${GAME}&L=moj.10`);
+    fireEvent.click(screen.getByRole('button', { name: SHARE_TEXT.share }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(writeText).not.toHaveBeenCalled();
+  });
+
+  it('posts the link on each network’s own page, opened beside the game and saying so', () => {
+    at(`${BASE}&${GAME}&L=moj.10`);
+    const page = sharedPage(pictured().query);
+    const list = screen.getByRole('list', { name: SHARE_TEXT.networks });
+    const links = within(list).getAllByRole('link');
+    expect(links.length).toBeGreaterThan(3);
+    for (const link of links) {
+      const href = link.getAttribute('href') ?? '';
+      expect(href, link.textContent ?? '').toContain(encodeURIComponent(page));
+      if (href.startsWith('mailto:')) continue;
+      expect(new URL(href).protocol).toBe('https:');
+      expect(link).toHaveAttribute('target', '_blank');
+      expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
+      expect(link).toHaveAccessibleName(expect.stringContaining(SHARE_TEXT.newTab));
+    }
   });
 });

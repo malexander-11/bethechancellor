@@ -28,7 +28,9 @@ export type BudgetAction =
   | { type: 'reset' }
   | { type: 'dismissWarnings' }
   | { type: 'startGame' }
-  | { type: 'updateGame'; patch: Partial<GamePermalink> };
+  | { type: 'updateGame'; patch: Partial<GamePermalink> }
+  /** Take up a Budget from a link: a shared Budget opened in the game (ADR-0044). */
+  | { type: 'load'; search: string };
 
 /** The settings every Budget is worked out under (Phase 26); the desk's two switches for them are gone. */
 export const SETTINGS = GAME_SETTINGS;
@@ -127,12 +129,17 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
       return state.game ? { ...state, game: { ...state.game, ...action.patch } } : state;
     case 'dismissWarnings':
       return { ...state, warnings: [] };
+    case 'load':
+      return initialStateFromLocation(action.search);
   }
 }
 
-/** Every page of the journey carries the budget in its query string; only the reference pages do not. */
+/**
+ * Every page of the journey carries the budget in its query string. The reference pages do not,
+ * nor does a shared Budget's page (ADR-0044), whose link names a Budget the reader has not taken up.
+ */
 export function isJourneyPath(path: string): boolean {
-  return !['/methodology', '/about'].some((p) => path === p || path.startsWith(`${p}/`));
+  return !['/methodology', '/about', '/shared'].some((p) => path === p || path.startsWith(`${p}/`));
 }
 
 export function permalinkQuery(state: BudgetState): string {
@@ -159,9 +166,13 @@ interface BudgetContextValue {
 const BudgetContext = createContext<BudgetContextValue | null>(null);
 
 export function BudgetProvider({ children, search }: { children: ReactNode; search?: string }) {
+  // A link's Budget is taken up where the journey is; a shared Budget's link is not the reader's.
   const [state, dispatch] = useReducer(
     reducer,
-    search ?? (typeof window === 'undefined' ? '' : window.location.search),
+    search ??
+      (typeof window === 'undefined' || !isJourneyPath(window.location.pathname)
+        ? ''
+        : window.location.search),
     initialStateFromLocation,
   );
   const outcome = useMemo(

@@ -1534,3 +1534,34 @@ about the spending screen, both screens in this round.
   3,686px, from 4,615px, and basic mode’s screens 2,569px and 2,890px, from 3,396px and 3,823px; on
   a phone a row’s tags sit below its name, not beside it, so the name and price keep the full width.
   `walk41` is clean at 1300px and 360px, in light and with reduced motion.
+
+## 37. Sharing a Budget (ADR-0044)
+
+On 2026-10-01 the user asked for a way to share a Budget on social networks, with a graphic that
+explains it, the taxes and the spending changed, to get other people to play.
+
+- **The picture.** The server draws a finished Budget as a picture at the size the networks preview
+  a link at: its theme, or a plain name when it set no priority; its taxes and its spending, each
+  side's biggest changes first, each with where the lever now stands and what it raises, costs or
+  saves in the target year, and how many more when a side has more than it has room for; how the
+  headroom moved and whether the rules are met; and the three audiences' ratings with their meters.
+  A band along the foot invites whoever sees it to make their own, at the site's address. It is set
+  in the site's typefaces and colours, and colour marks only the rules' verdict and the meters,
+  always beside words.
+- **Worked out again from the link.** The server reads the Budget from its link with the engine and
+  works out every figure itself, on the data the deployment ships, as any link reopens: the economy
+  on today's estimate, each value on its lever's steps, and only the priorities the game knows. The
+  same choices are always written as the same link, so a Budget is one picture however often it is
+  shared, and the edge keeps it. A link that is not a finished Budget gets the game's own picture.
+- **On Budget day** the picture sits under the households, described in words for a screen reader,
+  with one button that shares the link, by the device's own share sheet where it has one and
+  otherwise by copying it. The link can also be copied on its own, the picture saved, and the link
+  posted on each network's own page for posting one. What goes with the link is the Budget's name,
+  the rules' verdict and the game's question, short enough to post with the link anywhere; the
+  figures are in the picture.
+- **The shared page.** The link opens a page of its own rather than the game: the Budget's name, its
+  picture, the invitation to make one's own from the briefing, and a way to open the Budget in the
+  game at Budget day; then every change it made, the headroom, the rules and the ratings in words.
+  The server writes the page's preview tags (its title, description, picture and the picture's
+  description), since the networks run no page's code. Opening it leaves the reader's own game as it
+  was.

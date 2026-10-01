@@ -222,6 +222,9 @@ export const SHARE_WORDS = {
   rating: '{label}, {rating} of 5',
 } as const;
 
+/** The picture's size: the one every network previews a link's picture at. */
+export const PICTURE_SIZE = { width: 1200, height: 630 } as const;
+
 /** The rows a side of the picture has room for: three, or two and how many more. */
 export const PICTURE_ROWS = 3;
 
@@ -249,7 +252,10 @@ export interface SummaryWords {
   description: string;
   /** The picture in words, for anyone who cannot see it. */
   alt: string;
-  /** What a player posts with the link. */
+  /**
+   * What a player posts with the link: the Budget's name, the rules and the question. The picture
+   * carries the figures, and the words stay short enough to post with the link anywhere.
+   */
   share: string;
 }
 
@@ -290,7 +296,6 @@ export function summaryWords(s: BudgetSummary): SummaryWords {
       s.theme
         ? `I made ${s.theme.charAt(0).toLowerCase()}${s.theme.slice(1)}.`
         : 'I made my Budget.',
-      moves,
       rules,
       SHARE_WORDS.game,
     ].join(' '),
