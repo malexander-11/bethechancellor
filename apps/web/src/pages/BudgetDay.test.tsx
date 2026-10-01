@@ -37,12 +37,12 @@ describe('Budget day: what your Budget means', () => {
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     // The rules by their plain names; the welfare cap only when it is missed (Phase 25).
     expect(screen.getByText('You meet both fiscal rules on these numbers.')).toBeInTheDocument();
-    for (const title of ['Your backbenchers', 'The markets', 'The public']) {
+    for (const title of ['Labour backbenchers', 'The markets', 'The public']) {
       expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
     }
     // An empty Budget: the benches and the public shrug; the markets find today's £6.8bn thin,
     // and say the economy since March took it, not the player's measures (Phase 25).
-    expect(meter('Your backbenchers')).toHaveAccessibleName('3 of 5: Divided');
+    expect(meter('Labour backbenchers')).toHaveAccessibleName('3 of 5: Divided');
     expect(meter('The public')).toHaveAccessibleName('3 of 5: Shrugging');
     expect(meter('The markets')).toHaveAccessibleName('2 of 5: Nervous');
     expect(within(card('The markets')).getAllByText(/not your measures/).length).toBe(2);
@@ -145,10 +145,10 @@ describe('Budget day: what your Budget means', () => {
     ).toBe(2);
     // On the surface each audience gives its strongest reason; the rest wait in "Why this rating".
     expect(
-      within(card('Your backbenchers')).getAllByText(/manifesto red line is crossed/).length,
+      within(card('Labour backbenchers')).getAllByText(/manifesto red line is crossed/).length,
     ).toBeGreaterThanOrEqual(1);
     expect(
-      within(card('Your backbenchers')).getAllByText(
+      within(card('Labour backbenchers')).getAllByText(
         /Because of the tax lock \(the basic rate of income tax\)/,
       ).length,
     ).toBeGreaterThan(0);
@@ -174,9 +174,9 @@ describe('Budget day: what your Budget means', () => {
     expect(
       within(card('The public')).getAllByText(/kept in the words and tested in the spirit/).length,
     ).toBeGreaterThan(0);
-    fireEvent.click(within(card('Your backbenchers')).getByText(/^Why this rating/));
+    fireEvent.click(within(card('Labour backbenchers')).getByText(/^Why this rating/));
     expect(
-      within(card('Your backbenchers')).getAllByText(/keeps the letter of the manifesto/).length,
+      within(card('Labour backbenchers')).getAllByText(/keeps the letter of the manifesto/).length,
     ).toBeGreaterThan(0);
   });
 

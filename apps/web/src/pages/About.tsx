@@ -46,7 +46,7 @@ export function AboutPage() {
       <p>
         You are the Chancellor, with a Budget to deliver. You are briefed on the headroom you have,
         agree your priorities with the Prime Minister, choose flagship policies to deliver them,
-        fine-tune tax and spending, then deliver the Budget and see how it lands with your
+        fine-tune tax and spending, then deliver the Budget and see how it lands with Labour
         backbenchers, the markets and the public.
       </p>
       <p>

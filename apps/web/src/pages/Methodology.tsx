@@ -268,20 +268,20 @@ export function MethodologyPage() {
 
       <h2>Budget day</h2>
       <p>
-        Three audiences rate the Budget out of five and say why: your backbenchers ask whether this
-        is a Labour Budget, the markets whether the headroom is enough and what it does to growth
-        and the tax burden, the public whether it made a difference to them. Each rating starts at
-        three: one or two points either way move it a step, three or more move it two. A manifesto
-        red line crossed pins the public at one, and a missed fiscal rule holds every audience at
-        three or below, whatever else happens. Borrowing, debt and the tax take are measured from
-        before your Budget, today&rsquo;s estimate with nothing moved, so what the economy did since
-        March is never counted as yours. Each card shows one reason, which always agrees with its
-        rating, and one short line for anything that pulled the other way. Every threshold, point
-        and sentence is written in the data as the game&rsquo;s judgement; &ldquo;Why this
-        rating&rdquo; on each card lists every rule with its points, the figure it read and the
-        decisions behind it. Nothing predicts what a market or a voter would actually do: the cards
-        say what a judgement leans on, and the thresholds are the game&rsquo;s own, written down in
-        ADR-0013 and revised in ADR-0026.
+        Three audiences rate the Budget out of five and say why: Labour backbenchers ask whether
+        this is a Labour Budget, the markets whether the headroom is enough and what it does to
+        growth and the tax burden, the public whether it made a difference to them. Each rating
+        starts at three: one or two points either way move it a step, three or more move it two. A
+        manifesto red line crossed pins the public at one, and a missed fiscal rule holds every
+        audience at three or below, whatever else happens. Borrowing, debt and the tax take are
+        measured from before your Budget, today&rsquo;s estimate with nothing moved, so what the
+        economy did since March is never counted as yours. Each card shows one reason, which always
+        agrees with its rating, and one short line for anything that pulled the other way. Every
+        threshold, point and sentence is written in the data as the game&rsquo;s judgement;
+        &ldquo;Why this rating&rdquo; on each card lists every rule with its points, the figure it
+        read and the decisions behind it. Nothing predicts what a market or a voter would actually
+        do: the cards say what a judgement leans on, and the thresholds are the game&rsquo;s own,
+        written down in ADR-0013 and revised in ADR-0026.
       </p>
 
       <h2>Why it looks plain</h2>

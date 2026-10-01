@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- Feedback's first card is "Labour backbenchers", not "Your backbenchers"; the review's reaction is
+  labelled the same way.
 - The tax lock now holds only headline rates and allowances: a rise in an income tax rate, a
   National Insurance rate on workers or the main VAT rate breaks it, and so does a cut to the
   personal allowance, the higher-rate threshold or the National Insurance threshold. VAT on anything

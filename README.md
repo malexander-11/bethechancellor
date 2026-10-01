@@ -87,7 +87,7 @@ rate up or down, a lower personal allowance, VAT off gas, another compliance pac
 rates, the Prime Minister's schemes and defence at 3% sooner. **Deliver the Budget**: the whole
 Budget read back with a way to change every part, how the headroom got from the estimate to the bar,
 the Prime Minister's sign-off when something needs saying, and one red button. **Feedback**: the
-Budget in three sentences (what you prioritised, who pays, what you accepted or kept), your
+Budget in three sentences (what you prioritised, who pays, what you accepted or kept), Labour
 backbenchers, the markets and the public each rating it out of five, with one reason that agrees
 with the rating, the choices that caused it and a line for the other side, and a close that says
 which ambitions survived and who paid; the speech, five households and the Budget documents one fold

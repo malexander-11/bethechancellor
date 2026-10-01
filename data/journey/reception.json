@@ -4,7 +4,7 @@
   "audiences": [
     {
       "id": "backbenchers",
-      "title": "Your backbenchers",
+      "title": "Labour backbenchers",
       "question": "Is this a Labour Budget?",
       "labels": ["In revolt", "Grumbling", "Divided", "Onside", "Cheering"],
       "rules": [
