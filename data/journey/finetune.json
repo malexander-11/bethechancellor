@@ -1868,7 +1868,6 @@
   "spending": {
     "title": "Fine-tune spending",
     "lead": "Trim or top up any budget. A top-up costs what a trim saves.",
-    "shortlistLead": "Your Director of Public Spending’s best ideas. A top-up costs what a trim saves.",
     "notes": [
       {
         "text": "Departments’ day-to-day budgets are set to 2028-29. Cutting one reopens a minister’s deal.",
@@ -1941,7 +1940,6 @@
                   },
                   {
                     "title": "Spend more on health and social care",
-                    "shortlist": true,
                     "sizes": [1, 2, 5],
                     "advice": {
                       "text": "Waiting lists fall slowly; strikes and pay awards are the risks.",
@@ -1981,7 +1979,6 @@
                   },
                   {
                     "title": "Spend more on schools and education",
-                    "shortlist": true,
                     "sizes": [1, 2, 5],
                     "advice": {
                       "text": "Special needs demand keeps rising and would take much of it.",
@@ -2364,7 +2361,6 @@
                   },
                   {
                     "title": "Spend more on public investment",
-                    "shortlist": true,
                     "sizes": [5, 10, 20],
                     "advice": {
                       "text": "Counts against the debt rule only, and departments often underspend.",
@@ -2383,7 +2379,6 @@
                 "policies": [
                   {
                     "title": "More council and social rent homes",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "Counts against the debt rule only; the homes arrive over a decade.",
@@ -2631,7 +2626,6 @@
                 "policies": [
                   {
                     "title": "Raise housing benefit to match local rents",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "Renters feel it, though some of it ends up with landlords.",
@@ -2736,7 +2730,6 @@
                 "policies": [
                   {
                     "title": "Go ahead with the 2025 cuts to PIP",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "Undoes last year’s U-turn; your own MPs will fight it.",
@@ -2833,7 +2826,6 @@
                 "policies": [
                   {
                     "title": "Limit winter fuel payments to pensioners on pension credit",
-                    "shortlist": true,
                     "sizes": [1],
                     "advice": {
                       "text": "Brings back a cut the government reversed last year.",

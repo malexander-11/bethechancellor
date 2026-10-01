@@ -162,7 +162,7 @@ export function LeverRow({
   /** What the lever does in the Budget as it stands, once it has moved. */
   effect?: LeverEffect | undefined;
   summaryYear: string;
-  /** Its short name in its decision (ADR-0037), or a policy's title in basic mode. */
+  /** Its short name in its decision (ADR-0037). */
   name: string;
   onChange: (value: number) => void;
   /** A scale's levels, low to high, the plan among them; or a tick's one setting. */
@@ -427,16 +427,12 @@ export function LeverAbout({
   name,
   value,
   summaryYear,
-  headingLevel,
 }: {
   lever: Lever;
   name: string;
   value: number;
   summaryYear: string;
-  /** A level below its card's own heading: 4 under a decision, 3 under a section in basic mode. */
-  headingLevel: 3 | 4;
 }) {
-  const Heading = headingLevel === 4 ? 'h4' : 'h3';
   const isDefault = value === lever.control.default;
   const change = lever.control.kind === 'toggle' ? null : levelChange(lever, value, summaryYear);
   const cash = change?.real
@@ -500,7 +496,7 @@ export function LeverAbout({
     ) : null;
   return (
     <div className="tune__about">
-      <Heading className="tune__about-name">{name}</Heading>
+      <h4 className="tune__about-name">{name}</h4>
       <p className="lever__desc">{lever.headline ?? lever.description}</p>
       {/* The cash budget and the years its growth is measured over (Phase 25). */}
       {cash ? <p className="lever__cash-note">{cash}</p> : null}

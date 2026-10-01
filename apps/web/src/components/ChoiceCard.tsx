@@ -32,9 +32,9 @@ const nameOf = (l: Lever) => finetuneName(l.code) ?? l.shortTitle;
 /** One row of a card: a lever, the ways it offers, and what the row is called. */
 export interface CardRow {
   item: FinetuneItem;
-  /** Every way the lever moves in advanced mode; the one on show in basic. */
+  /** Every way the lever moves. */
   ways: readonly FinetunePolicy[];
-  /** Its short name in its decision (ADR-0037), a policy's title in basic mode. */
+  /** Its short name in its decision (ADR-0037). */
   name: string;
 }
 
@@ -61,20 +61,16 @@ export interface CardContext {
  * every row shares is said once, at the top: that a relief's cost is the most ending it could
  * raise, and which rule investment counts against. Ticks that contradict each other are one set of
  * radios, "As planned" first (ADR-0036); a lever a flagship holds is a row naming the flagship.
- * Everything else about the levers waits under one fold, "More about these". Basic mode draws one
- * card a section, its rows the adviser's picks under their policies' titles.
+ * Everything else about the levers waits under one fold, "More about these".
  */
 export function ChoiceCard({
   title,
   units,
-  aboutLevel,
   context,
 }: {
   /** The card's question, for the fold's name read aloud. */
   title: string;
   units: readonly CardUnit[];
-  /** The fold's names, a level below the card's own heading. */
-  aboutLevel: 3 | 4;
   context: CardContext;
 }) {
   const { state } = useBudget();
@@ -139,7 +135,6 @@ export function ChoiceCard({
                 name={row.name}
                 value={state.leverValues[lever.code] ?? lever.control.default}
                 summaryYear={context.summaryYear}
-                headingLevel={aboutLevel}
               />,
             ];
           })}

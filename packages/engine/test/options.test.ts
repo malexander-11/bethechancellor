@@ -546,4 +546,40 @@ describe('the advisers’ shortlist on step 3 (Phase 27, ADR-0028)', () => {
       lines(tamper(set(false, ...shortlistedWays(options, any.id).map((o) => o.id)))),
     ).toContain(`priority ${any.id} has no pick`);
   });
+
+  it('validate:data refuses a pick off the table, and two picks whose levers count the same money', () => {
+    const [first, second] = shortlistedWays(options).filter(
+      (o, k, all) => all.findIndex((x) => x.priority === o.priority) === k,
+    );
+    const a = must(first, 'pick');
+    const b = must(second, 'pick for another priority');
+    const codeOf = (o: DeliverOption) => must(Object.keys(o.values)[0], `lever of ${o.id}`);
+    const withLevers = (patch: (list: typeof ds.levers) => void) => {
+      const copy = structuredClone(ds.levers);
+      patch(copy);
+      return validateDataset({ ...ds, levers: copy }).join('\n');
+    };
+    const find = (list: typeof ds.levers, code: string) =>
+      must(
+        list.find((l) => l.code === code),
+        `lever ${code}`,
+      );
+    // A pick moves no lever that is not on the table.
+    expect(
+      withLevers((list) => {
+        find(list, codeOf(a)).notOnTheTable = { note: 'Ruled out.', sources: [] };
+      }),
+    ).toContain(`step 3 picks “${a.title}”, which is not on the table`);
+    // Two picks whose levers count the same money cannot both be shown.
+    const other = find(ds.levers, codeOf(b));
+    expect(
+      withLevers((list) => {
+        const l = find(list, codeOf(a));
+        l.interactions = [
+          ...(l.interactions ?? []),
+          { withLever: other.id, text: 'Counted twice.', severity: 'excludes' },
+        ];
+      }),
+    ).toContain(`“${a.title}” and “${b.title}” count the same money`);
+  });
 });

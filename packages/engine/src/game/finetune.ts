@@ -104,16 +104,6 @@ export function policyWay(policy: FinetunePolicy, lever: Pick<Lever, 'control'>)
   return (policy.sizes[0] ?? lever.control.default) >= lever.control.default ? 1 : -1;
 }
 
-/**
- * The policy a lever's setting belongs to: the one that moves it the way it has moved, or the
- * usual one while it rests (or when no policy goes that way, as an old link can leave it).
- */
-export function leadPolicy(item: FinetuneItem, lever: Pick<Lever, 'control'>, value: number) {
-  const moved = Math.sign(value - lever.control.default);
-  const match = moved === 0 ? undefined : item.policies.find((p) => policyWay(p, lever) === moved);
-  return match ?? (item.policies[0] as FinetunePolicy);
-}
-
 /** Which of a policy's sizes the lever is at, or undefined when it is at none of them. */
 export function sizeIndex(policy: FinetunePolicy, value: number): number | undefined {
   const i = policy.sizes.findIndex((size) => Math.abs(size - value) < 1e-9);
@@ -176,58 +166,13 @@ export function setByFlagship(
 }
 
 /**
- * The way the screen's adviser picked for a lever (Phase 27, ADR-0028), if any: one of the few
- * best ideas basic mode shows. At most one way per lever, which the validator checks.
- */
-export function shortlistPolicy(item: FinetuneItem): FinetunePolicy | undefined {
-  return item.policies.find((p) => p.shortlist === true);
-}
-
-/** A lever on the shortlist, with the way that was picked. */
-export interface ShortlistEntry extends FinetuneEntry {
-  pick: FinetunePolicy;
-}
-
-/** The picks on one screen, or on both, in the order the screens show them. */
-export function shortlistOf(file: FinetuneFile, side?: FinetuneSideId): ShortlistEntry[] {
-  return finetuneItems(file, side).flatMap((item) => {
-    const pick = shortlistPolicy(item);
-    return pick ? [{ ...item, pick }] : [];
-  });
-}
-
-/** How many policies a screen offers in advanced mode: every way of every lever on it. */
-export function policyCount(file: FinetuneFile, side: FinetuneSideId): number {
-  return finetuneItems(file, side).reduce((n, item) => n + item.policies.length, 0);
-}
-
-/**
  * The levers already on the Chancellor's desk: the ones the context's in-tray names (Phase 25),
- * which the review lists while a Budget leaves them as it found them. Basic mode always shows them,
- * wherever they appear, so the review never points at something the screens hide (Phase 27, the
- * desk rule; the briefing named them too until it became plain copy, ADR-0031). Not picks.
+ * which the review lists while a Budget leaves them as it found them. Each is on step 4, where
+ * every lever is on show, and step 3's basic mode shows any way that moves one (Phase 27, the desk
+ * rule; the briefing named them too until it became plain copy, ADR-0031). Not picks.
  */
 export function deskLevers(context: Pick<ContextFile, 'inTray'> | undefined): ReadonlySet<string> {
   return new Set((context?.inTray ?? []).map((item) => item.leverCode));
-}
-
-/**
- * The policy a lever shows in basic mode (Phase 27, ADR-0028), when no chosen flagship holds it
- * (the screen shows a held lever as its line in either mode): the way it had been chosen when the
- * screen opened, so nothing chosen ever hides; else the adviser's pick; else, for a lever already
- * on the desk, its usual policy; else nothing. `arrivedAt` is the lever's value when the screen
- * opened, or when the mode last changed.
- */
-export function basicPolicy(
-  item: FinetuneItem,
-  lever: Pick<Lever, 'control'>,
-  arrivedAt: number | undefined,
-  onDesk: boolean,
-): FinetunePolicy | undefined {
-  if (arrivedAt !== undefined && arrivedAt !== lever.control.default) {
-    return leadPolicy(item, lever, arrivedAt);
-  }
-  return shortlistPolicy(item) ?? (onDesk ? item.policies[0] : undefined);
 }
 
 /** Which screen a lever belongs on: taxes on the first, spending and welfare on the second. */

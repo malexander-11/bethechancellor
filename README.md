@@ -18,36 +18,34 @@ a policy: there is no slider anywhere, and where a size makes sense a choice is 
 with the plan among them (VAT at 15%, 18%, 19%, 20% as planned, 21%, 22% or 25%; a department's
 budget from 5% less to 5% more). The desk that held every lever as a slider has gone, with its
 ready-made Budgets and its expert switches, and every lever it held is now a policy on step 4
-(ADR-0027). A first game is played in basic mode, which suggests only the best ideas: an adviser
-picks a few, their judgement, held to rules (worth £1bn or more, counting by 2029-30, on the table,
-breaking no promise, never two that count the same money). Step 4's spending screen then shows its
-adviser's ideas, all on show, one card a section (ADR-0037), and step 3 the best one or two ways to
-deliver each priority; the tax screen shows every tax in both modes (ADR-0039), and the briefing is
-the same in both (ADR-0031). A button on each trimmed screen shows the whole game, and anything
-chosen stays on show in either mode (ADR-0028; the footer's switch that did the same is withdrawn
-for now, ADR-0032). Phase 25 reviewed the game against four goals (that it reflects how a Budget is
-made, that most voters can follow it, that it shows the trade-offs, and that its feedback shows a
-Budget's pros and cons) and fixed what the review found (ADR-0026): prices corrected, one price for
-every choice, delivery graded, audiences that read from before the Budget and see cuts, Budget-day
-words that say what the sums say, a briefing that explains its one figure, a plainer step 4,
-households that notice what reaches them, the Prime Minister's sign-off and a bar that speaks. There
-are no tabs and no hand-off to click through: every screen is a decision with a primary button and a
-way back, and the Budget lives in the link, so going back keeps every choice. The identity is
-Westminster's: Commons green, warm paper, charcoal, restrained brass, Budget red for the one button
-that delivers, and the page is set like an official paper: a serif body under editorial headings in
-Fraunces, hairline rules rather than boxes, small-capital labels; the cover is an invitation, the
-red Budget box beside the premise and one button, with the steps shown from the screen that button
-opens (ADR-0033); the header is the name alone and the footer one link, to the page about the game
-and its sources (ADR-0032, ADR-0033). The words are plain (ADR-0024): no sentence a player meets
-runs past twenty words, and a readability test holds every set of them at a reading age of about
-twelve. Every number still comes from an official source or a stated calculation on one, and is one
-of five kinds (an official figure, worked out, an assumption, commentary or a game judgement),
-though no screen labels which (ADR-0034). The game's screens show no sources or breakdowns: the
-"Show workings" view that held them was withdrawn (ADR-0032) and then deleted, and the About page
-lists every source. The briefing reads as plain copy (ADR-0031). ADR-0028 estimated a first
-playthrough's required reading and decisions from the rendered screens, not from user testing. Every
-screen names itself, can be reached by keyboard and screen reader, holds 4.5:1 contrast, keeps every
-control at 44px and says met or missed in words.
+(ADR-0027). A first game is played in basic mode, which suggests only the best ways on step 3: for
+each priority its advisers pick one or two, their judgement, held to rules (worth £1bn or more,
+counting by 2029-30, on the table, breaking no promise, never two that count the same money). Step 4
+shows every policy in both modes (ADR-0041), and the briefing is the same in both (ADR-0031). A
+button on each flagship screen shows every way, and anything chosen stays on show in either mode
+(ADR-0028; the footer's switch that did the same is withdrawn for now, ADR-0032). Phase 25 reviewed
+the game against four goals (that it reflects how a Budget is made, that most voters can follow it,
+that it shows the trade-offs, and that its feedback shows a Budget's pros and cons) and fixed what
+the review found (ADR-0026): prices corrected, one price for every choice, delivery graded,
+audiences that read from before the Budget and see cuts, Budget-day words that say what the sums
+say, a briefing that explains its one figure, a plainer step 4, households that notice what reaches
+them, the Prime Minister's sign-off and a bar that speaks. There are no tabs and no hand-off to
+click through: every screen is a decision with a primary button and a way back, and the Budget lives
+in the link, so going back keeps every choice. The identity is Westminster's: Commons green, warm
+paper, charcoal, restrained brass, Budget red for the one button that delivers, and the page is set
+like an official paper: a serif body under editorial headings in Fraunces, hairline rules rather
+than boxes, small-capital labels; the cover is an invitation, the red Budget box beside the premise
+and one button, with the steps shown from the screen that button opens (ADR-0033); the header is the
+name alone and the footer one link, to the page about the game and its sources (ADR-0032, ADR-0033).
+The words are plain (ADR-0024): no sentence a player meets runs past twenty words, and a readability
+test holds every set of them at a reading age of about twelve. Every number still comes from an
+official source or a stated calculation on one, and is one of five kinds (an official figure, worked
+out, an assumption, commentary or a game judgement), though no screen labels which (ADR-0034). The
+game's screens show no sources or breakdowns: the "Show workings" view that held them was withdrawn
+(ADR-0032) and then deleted, and the About page lists every source. The briefing reads as plain copy
+(ADR-0031). ADR-0028 estimated a first playthrough's required reading and decisions from the
+rendered screens, not from user testing. Every screen names itself, can be reached by keyboard and
+screen reader, holds 4.5:1 contrast, keeps every control at 44px and says met or missed in words.
 
 Six steps. **Briefing**: one sentence and the button; then your briefing in three parts, in the
 user's own words and as plain copy (ADR-0030, ADR-0031). Your headroom: you start with £6.8bn of
@@ -78,40 +76,39 @@ chosen a row says what it does in 2029-30, and its adviser speaks, with a minist
 you move; what the rows share is said once at the top of the card, and everything else about each
 lever waits in one fold, "More about these" (ADR-0037). Red and amber manifesto tags sit on the rows
 they watch, and the bar says what a Budget breaks or leaves short; no adviser speaks above the cards
-(ADR-0040). In basic mode the spending screen shows its adviser's shortlist instead, one card a
-section; the tax screen has none (ADR-0039). Two policies that count the same money cannot both be
-chosen: where they answer one question, like the wealth tax at 1% or 2%, they are one choice among
-radios, and otherwise choosing one takes the other out and says so first (ADR-0036, ADR-0038). A
-lever a chosen flagship already sets shows once, as a line with a way back to that flagship. Every
-lever is there, and the menu is the one a Chancellor actually weighs: employer National Insurance,
-pensions, the smaller duties, capital-tax reliefs, going further on recent rises, capital gains on
-leavers and at death, a lower council tax surcharge band, the bank surcharge, the energy profits
-levy again, the self-employed rate up or down, a lower personal allowance, VAT off gas, another
-compliance package, business rates, the Prime Minister's schemes and defence at 3% sooner. **Deliver
-the Budget**: the whole Budget read back with a way to change every part, how the headroom got from
-the estimate to the bar, the Prime Minister's sign-off when something needs saying, and one red
-button. **Feedback**: the Budget in three sentences (what you prioritised, who pays, what you
-accepted or kept), your backbenchers, the markets and the public each rating it out of five, with
-one reason that agrees with the rating, the choices that caused it and a line for the other side,
-and a close that says which ambitions survived and who paid; the speech, five households and the
-Budget documents one fold away. Share the link. The menu was read against the Budget reporting again
-on 21 September 2026: the electricity VAT zero rate that HMRC says ends in March 2027, National
-Insurance for working pensioners and for LLP partners, and CenTax's package for taxing gains like
-income joined it; what has no published costing is named in words instead. On 23 September 2026 the
-think tanks' own lists were read and nineteen more cards built from their documents, each a stated
-figure from its own document: a levy on banks' reserves, National Insurance on rents, a 2% wealth
-tax, a sugar and salt tax, council tax on the top bands, the NICs upper earnings limit, 1% VAT on
-zero-rated goods, a pension lump-sum cap, stamp duty abolished on main homes, a child tax allowance,
-and six welfare cards from housing support relinked to rents to the Centre for Social Justice's
-benefit reset, now in step 4's Benefits group. Ten of those cards cannot take effect from April
-2027, the wealth taxes among them, and the three think-tank capital gains cards cannot be collected
-until 2028-29, so each of the thirteen wears a sourced earliest start and counts nothing before it.
-On 30 September 2026 the user took nine taxes off the table, among them the health and social care
-levy, insurance premium tax, CenTax's package for taxing gains like income and National Insurance on
-rents, so eleven cards with an earliest start are left; each retired tax is kept for the record, and
-an old link carrying one opens without it (ADR-0035). Pension tax relief and two stamp duty cuts
-went the same way later that day: relief at a flat 30%, relief at the basic rate only and the
-lump-sum cap; stamp duty abolished on main homes and the additional-homes surcharge back to 3%.
+(ADR-0040). Two policies that count the same money cannot both be chosen: where they answer one
+question, like the wealth tax at 1% or 2%, they are one choice among radios, and otherwise choosing
+one takes the other out and says so first (ADR-0036, ADR-0038). A lever a chosen flagship already
+sets shows once, as a line with a way back to that flagship. Every lever is there, and the menu is
+the one a Chancellor actually weighs: employer National Insurance, pensions, the smaller duties,
+capital-tax reliefs, going further on recent rises, capital gains on leavers and at death, a lower
+council tax surcharge band, the bank surcharge, the energy profits levy again, the self-employed
+rate up or down, a lower personal allowance, VAT off gas, another compliance package, business
+rates, the Prime Minister's schemes and defence at 3% sooner. **Deliver the Budget**: the whole
+Budget read back with a way to change every part, how the headroom got from the estimate to the bar,
+the Prime Minister's sign-off when something needs saying, and one red button. **Feedback**: the
+Budget in three sentences (what you prioritised, who pays, what you accepted or kept), your
+backbenchers, the markets and the public each rating it out of five, with one reason that agrees
+with the rating, the choices that caused it and a line for the other side, and a close that says
+which ambitions survived and who paid; the speech, five households and the Budget documents one fold
+away. Share the link. The menu was read against the Budget reporting again on 21 September 2026: the
+electricity VAT zero rate that HMRC says ends in March 2027, National Insurance for working
+pensioners and for LLP partners, and CenTax's package for taxing gains like income joined it; what
+has no published costing is named in words instead. On 23 September 2026 the think tanks' own lists
+were read and nineteen more cards built from their documents, each a stated figure from its own
+document: a levy on banks' reserves, National Insurance on rents, a 2% wealth tax, a sugar and salt
+tax, council tax on the top bands, the NICs upper earnings limit, 1% VAT on zero-rated goods, a
+pension lump-sum cap, stamp duty abolished on main homes, a child tax allowance, and six welfare
+cards from housing support relinked to rents to the Centre for Social Justice's benefit reset, now
+in step 4's Benefits group. Ten of those cards cannot take effect from April 2027, the wealth taxes
+among them, and the three think-tank capital gains cards cannot be collected until 2028-29, so each
+of the thirteen wears a sourced earliest start and counts nothing before it. On 30 September 2026
+the user took nine taxes off the table, among them the health and social care levy, insurance
+premium tax, CenTax's package for taxing gains like income and National Insurance on rents, so
+eleven cards with an earliest start are left; each retired tax is kept for the record, and an old
+link carrying one opens without it (ADR-0035). Pension tax relief and two stamp duty cuts went the
+same way later that day: relief at a flat 30%, relief at the basic rate only and the lump-sum cap;
+stamp duty abolished on main homes and the additional-homes surcharge back to 3%.
 
 Under the hood: the OBR March 2026 baseline, the tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options and

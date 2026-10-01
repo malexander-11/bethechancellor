@@ -56,14 +56,7 @@ import type {
 } from './types/data.js';
 import { policyYearsOf } from './calc/arithmetic.js';
 import { fyOfDate, fyStart } from './calc/years.js';
-import {
-  FINETUNE_SIDES,
-  deskLevers,
-  finetuneItems,
-  finetuneNames,
-  finetuneSideOf,
-  shortlistOf,
-} from './game/finetune.js';
+import { FINETUNE_SIDES, deskLevers, finetuneNames, finetuneSideOf } from './game/finetune.js';
 import { excludesPartners } from './game/excludes.js';
 import { optionEarliestStart, shortlistedWays } from './game/options.js';
 import { promiseBreaks } from './game/promises.js';
@@ -246,17 +239,15 @@ function collectSourceIds(value: unknown, out: Set<string>): void {
 }
 
 /**
- * The advisers' shortlist (Phase 27, ADR-0028): the few best ideas basic mode shows. "Best" is a
- * judgement, badged as one on the screen; these are the rules that keep it checkable. A pick
- * counts by the stability rule's target year, is on the table, and breaks no promise at any size
- * it comes in (a strain, amber, is allowed and still shown); no two picks, and no pick and lever
- * already on the desk, count the same money. A step-4 screen with a shortlist (a `shortlistLead`)
- * picks one way per lever, six to ten in all, at least one in every spending section; a screen
- * without one picks none and shows every policy in both modes, as the tax screen does (ADR-0039).
- * Step 3 picks one or two ways a priority, at least one in full. Every lever on the desk is on
- * step 4. Whether a pick is worth £1bn needs the engine, so the tests check that.
+ * The advisers' shortlist on step 3 (Phase 27, ADR-0028): the one or two best ways to deliver each
+ * priority, which basic mode shows; step 4 has none and shows every policy (ADR-0041). "Best" is a
+ * judgement, badged as one on the screen; these are the rules that keep it checkable. A pick counts
+ * by the stability rule's target year, is on the table, and breaks no promise (a strain, amber, is
+ * allowed and still shown); no two ways basic mode shows count the same money, whether by an
+ * option's conflict or by their levers; and at least one pick a priority delivers it in full.
+ * Whether a pick is worth £1bn needs the engine, so the tests check that.
  */
-function shortlistProblems(ds: Dataset): string[] {
+function shortlistProblems(ds: Dataset, options: OptionsFile): string[] {
   const problems: string[] = [];
   const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
   const stability = ds.rules.rules.find((r) => r.kind === 'currentBudget');
@@ -265,102 +256,52 @@ function shortlistProblems(ds: Dataset): string[] {
     : undefined;
   const promises = ds.pm?.promises ?? [];
   const desk = deskLevers(ds.contexts?.[ds.contexts.length - 1]);
-  // What basic mode is sure to show, by lever, with the name it goes by in a message.
+
+  const priorities = [...new Set(options.deliver.map((o) => o.priority))];
+  for (const priority of priorities) {
+    const picks = shortlistedWays(options, priority);
+    if (picks.length === 0) problems.push(`priority ${priority} has no pick`);
+    else if (picks.length > 2) {
+      problems.push(`priority ${priority} has ${picks.length} picks, not one or two`);
+    } else if (!picks.some((o) => o.scale.kind === 'full')) {
+      problems.push(`priority ${priority} has no pick that delivers it in full`);
+    }
+  }
+
+  // What basic mode shows: the picks, and any way that moves a lever already on the desk.
+  const basic = options.deliver.filter(
+    (o) => o.shortlist === true || Object.keys(o.values).some((code) => desk.has(code)),
+  );
+  const ids = new Set(basic.map((o) => o.id));
+  // The picks' levers, with the name each goes by in a message.
   const shown = new Map<string, string>();
-  // A pick at every setting it comes in: a step-4 policy's sizes, a step-3 way's one bundle.
-  const judge = (said: string, settings: readonly Record<string, number>[]) => {
-    const codes = [...new Set(settings.flatMap((values) => Object.keys(values)))];
+  for (const o of basic) {
+    for (const c of o.conflicts ?? []) {
+      if (!ids.has(c.with)) continue;
+      const other = options.deliver.find((x) => x.id === c.with);
+      problems.push(
+        `step 3 shows “${o.title}” and “${other?.title ?? c.with}”, which count the same money`,
+      );
+    }
+    if (o.shortlist !== true) continue;
+    const said = `step 3 picks “${o.title}”`;
+    const codes = Object.keys(o.values);
     if (codes.some((code) => byCode.get(code)?.notOnTheTable)) {
       problems.push(`${said}, which is not on the table`);
     }
-    const values = Object.fromEntries(codes.map((code) => [code, 0]));
-    const year = optionEarliestStart({ id: said, values }, ds.levers);
+    const year = optionEarliestStart(o, ds.levers);
     if (target && year && fyStart(year) > fyStart(target)) {
       problems.push(`${said}, which starts in ${year}, after ${target}`);
     }
-    const broken = new Set<string>();
-    for (const setting of settings) {
-      for (const report of promiseBreaks(setting, promises, ds.levers)) {
-        if (!report.kept) broken.add(report.promise.title);
-      }
+    for (const report of promiseBreaks(o.values, promises, ds.levers)) {
+      if (!report.kept) problems.push(`${said}, which breaks ${report.promise.title}`);
     }
-    for (const title of broken) problems.push(`${said}, which breaks ${title}`);
-  };
-
-  if (ds.finetune) {
-    const file = ds.finetune;
-    const names = finetuneNames(file);
-    // The levers on a screen basic mode trims: there, one on the desk is sure to show.
-    const trimmed = new Set<string>();
-    for (const side of FINETUNE_SIDES) {
-      for (const item of finetuneItems(file, side)) {
-        if (item.policies.filter((p) => p.shortlist).length > 1) {
-          problems.push(`the ${side} screen picks both ways of lever ${item.code}`);
-        }
-      }
-      const picks = shortlistOf(file, side);
-      if (file[side].shortlistLead === undefined) {
-        if (picks.length > 0) problems.push(`the ${side} screen has picks but no shortlistLead`);
-      } else {
-        for (const item of finetuneItems(file, side)) trimmed.add(item.code);
-        if (picks.length < 6 || picks.length > 10) {
-          problems.push(`the ${side} screen picks ${picks.length} policies, not six to ten`);
-        }
-        if (side === 'spending') {
-          for (const section of file.spending.groups) {
-            if (!picks.some((p) => p.group.id === section.id)) {
-              problems.push(`spending section ${section.id} has no pick`);
-            }
-          }
-        }
-      }
-      for (const { code, pick } of picks) {
-        judge(
-          `the ${side} screen picks “${pick.title}”`,
-          pick.sizes.map((size) => ({ [code]: size })),
-        );
-        shown.set(code, `“${pick.title}”`);
-      }
-    }
-    for (const code of desk) {
-      const name = names.get(code);
-      if (!name) problems.push(`the desk's lever ${code} is not on step 4`);
-      else if (!shown.has(code) && trimmed.has(code)) shown.set(code, `“${name}” (on the desk)`);
+    for (const code of codes) {
+      if (!shown.has(code)) shown.set(code, `“${o.title}”`);
     }
   }
 
-  if (ds.options) {
-    const priorities = [...new Set(ds.options.deliver.map((o) => o.priority))];
-    for (const priority of priorities) {
-      const picks = shortlistedWays(ds.options, priority);
-      if (picks.length === 0) problems.push(`priority ${priority} has no pick`);
-      else if (picks.length > 2) {
-        problems.push(`priority ${priority} has ${picks.length} picks, not one or two`);
-      } else if (!picks.some((o) => o.scale.kind === 'full')) {
-        problems.push(`priority ${priority} has no pick that delivers it in full`);
-      }
-    }
-    const basic = ds.options.deliver.filter(
-      (o) => o.shortlist === true || Object.keys(o.values).some((code) => desk.has(code)),
-    );
-    const ids = new Set(basic.map((o) => o.id));
-    for (const o of basic) {
-      for (const c of o.conflicts ?? []) {
-        if (!ids.has(c.with)) continue;
-        const other = ds.options.deliver.find((x) => x.id === c.with);
-        problems.push(
-          `step 3 shows “${o.title}” and “${other?.title ?? c.with}”, which count the same money`,
-        );
-      }
-      if (o.shortlist !== true) continue;
-      judge(`step 3 picks “${o.title}”`, [o.values]);
-      for (const code of Object.keys(o.values)) {
-        if (!shown.has(code)) shown.set(code, `“${o.title}”`);
-      }
-    }
-  }
-
-  // No two levers basic mode is sure to show count the same money.
+  // No two picks' levers count the same money.
   const reported = new Set<string>();
   for (const [code, name] of shown) {
     const lever = byCode.get(code);
@@ -501,12 +442,16 @@ export function validateDataset(ds: Dataset): string[] {
         );
       }
     }
-    // What is already on the desk is dealt with by a lever the player can move (Phase 25).
+    // What is already on the desk is dealt with by a lever the player can move (Phase 25), on
+    // step 4, where every lever is on show.
+    const onStep4 = ds.finetune ? finetuneNames(ds.finetune) : undefined;
     for (const item of context.inTray) {
       if (!codes.has(item.leverCode)) {
         problems.push(
           `context ${context.id} in-tray ${item.id} names unknown lever ${item.leverCode}`,
         );
+      } else if (onStep4 && !onStep4.has(item.leverCode)) {
+        problems.push(`the desk's lever ${item.leverCode} is not on step 4`);
       }
     }
     // The briefing's two published figures (Phase 28, ADR-0030): each read from a quoted passage,
@@ -782,7 +727,7 @@ export function validateDataset(ds: Dataset): string[] {
       }
     }
   }
-  if (ds.finetune || ds.options) problems.push(...shortlistProblems(ds));
+  if (ds.options) problems.push(...shortlistProblems(ds, ds.options));
   if (ds.incidence) {
     // Every lever that moves money has someone it falls on; a tag for a lever that does not exist
     // is a typo waiting to hide a real one.

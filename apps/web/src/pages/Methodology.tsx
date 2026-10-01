@@ -249,19 +249,18 @@ export function MethodologyPage() {
 
       <h2>Basic and advanced</h2>
       <p>
-        A first game is played in basic mode, which suggests only the best ideas: on the spending
-        screen its adviser&rsquo;s shortlist, all on show, one card a section, and on the flagship
-        screens the best one or two ways to deliver each priority. The tax screen, which shows every
-        tax, and the briefing are the same in both modes. &ldquo;Best&rdquo; is the advisers&rsquo;
-        judgement, and each pick&rsquo;s reason is its own adviser&rsquo;s line. Rules keep it
-        checkable: a pick moves the 2029-30 headroom by £1 billion or more at its smallest size on
-        today&rsquo;s estimate, counts by 2029-30, is on the table, breaks no promise at any size,
-        and never counts the same money as another pick or as something already on your desk, which
-        basic mode always shows. A button on each trimmed screen shows every policy and every way,
-        and offers the shortlist back; the footer&rsquo;s switch that did the same is withdrawn for
-        now. Anything you have chosen stays on show in either mode, and the bar, the review and
-        Budget day count every idea whichever mode you are in. The mode is remembered in your
-        browser, never in the link, so a Budget you share opens in the reader&rsquo;s own mode.
+        A first game is played in basic mode, which suggests only the best ideas: on the flagship
+        screens the best one or two ways to deliver each priority. The fine-tuning screens, which
+        show every policy, and the briefing are the same in both modes. &ldquo;Best&rdquo; is the
+        advisers&rsquo; judgement, and each pick&rsquo;s reason is its own adviser&rsquo;s line.
+        Rules keep it checkable: a pick moves the 2029-30 headroom by £1 billion or more on
+        today&rsquo;s estimate, counts by 2029-30, is on the table, breaks no promise, and never
+        counts the same money as another pick or as something already on your desk, which basic mode
+        always shows. A button on each flagship screen shows every way, and offers the shortlist
+        back; the footer&rsquo;s switch that did the same is withdrawn for now. Anything you have
+        chosen stays on show in either mode, and the bar, the review and Budget day count every idea
+        whichever mode you are in. The mode is remembered in your browser, never in the link, so a
+        Budget you share opens in the reader&rsquo;s own mode.
       </p>
 
       <h2>Budget day</h2>

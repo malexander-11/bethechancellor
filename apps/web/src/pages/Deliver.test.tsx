@@ -378,8 +378,16 @@ describe('flagship policies in basic mode: the best ways first (Phase 27, ADR-00
     expect(shownWays()).toEqual(['dip-gap', 'three-per-cent-now', 'defence-uplift']);
     expect(screen.getByRole('button', { name: 'Show only the best ideas' })).toBe(button);
     expect(document.activeElement).toBe(button);
+    expect(within(line).getByRole('status')).toHaveTextContent('Every idea is on show.');
+    expect(line.textContent).not.toMatch(/A shortlist/);
     // The bar counts every way in either mode.
     expect(within(bar()).getByText('0 of 2 priorities delivered')).toBeInTheDocument();
+    // And back, the same button, remembered in the browser.
+    fireEvent.click(button);
+    expect(screen.getByRole('button', { name: /^See every idea/ })).toBe(button);
+    expect(within(line).getByRole('status')).toHaveTextContent('Only the best ideas are on show.');
+    expect(shownWays()).toEqual(['dip-gap', 'defence-uplift']);
+    expect(window.localStorage.getItem('btc.mode.v1')).toBe('basic');
   });
 
   it('has no line where nothing is hidden: safer streets offers two ways, both picked', () => {

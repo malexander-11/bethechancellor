@@ -1,13 +1,9 @@
 import {
   ambitionStatus,
-  basicPolicy,
   choiceName,
   decisionUnits,
-  deskLevers,
   formatGbpBn,
   groupItems,
-  itemName,
-  policyCount,
   rankedPriorities,
   setByFlagship,
   stageIndex,
@@ -29,20 +25,16 @@ import {
 } from '../components/ChoiceCard';
 import { plannedWords, sizeWords } from '../components/LeverControl';
 import type { Held } from '../components/LeverRow';
-import { ModeLine } from '../components/ModeLine';
-import { adviserById, context, finetune, levers, options, pm } from '../data';
+import { adviserById, finetune, levers, options, pm } from '../data';
 import { UNCHANGED_BELOW_GBPM } from '../journey/effects';
 import { useStageGuard } from '../journey/guard';
 import { chosenByLever, redLinesOf } from '../journey/levers';
 import { StepLink } from '../journey/links';
 import { useLeverHints } from '../journey/prices';
-import { useMode } from '../journey/mode';
 import { useBudget } from '../state/budget';
 import { deliverPath } from './Deliver';
 
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
-/** Already on the desk: basic mode shows these levers though they are no pick (Phase 27). */
-const DESK = deskLevers(context);
 
 /** The route of one of the two screens. */
 export function finetunePath(side: FinetuneSideId): string {
@@ -177,10 +169,8 @@ function opensOnArrival(decision: FinetuneDecision, start: Record<string, number
  * every choice in it, a lever that moves both ways as one scale of levels with the plan among
  * them, and ticks that contradict each other as one choice among radios (ADR-0036). A lever a
  * flagship the player chose holds is one line, with the way back to that flagship. Every policy
- * lever the game has is here (Phase 26): there is no desk behind it. That is advanced mode; basic
- * mode, a first game's, shows the screen adviser's shortlist and no decisions (Phase 27,
- * ADR-0028), and anything chosen before the screen opened, in either mode, stays on show. The tax
- * screen has no shortlist, and is the same in both modes (ADR-0039).
+ * lever the game has is here (Phase 26): there is no desk behind it, and no shortlist in front of
+ * it, in either mode (ADR-0041).
  */
 export function FinetunePage() {
   const { side: param } = useParams();
@@ -199,20 +189,10 @@ export function FinetunePage() {
 function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const { state, dispatch, outcome } = useBudget();
   const hintOf = useLeverHints();
-  const mode = useMode();
   // The Budget as it stood when the screen was opened: a decision holding a lever chosen then is
-  // open, basic mode shows that lever the way it was chosen, and a lever a flagship held then is a
-  // line. A change of mode reads it again (Phase 27), without remounting, so what was chosen in one
-  // mode is on show in the other, and a card chosen in this mode never vanishes from under the
-  // pointer.
-  const [seen, setSeen] = useState(() => ({ mode, values: state.leverValues }));
-  if (seen.mode !== mode) setSeen({ mode, values: state.leverValues });
-  const start = seen.mode === mode ? seen.values : state.leverValues;
+  // open, and a lever a flagship held then is a line.
+  const [start] = useState(() => state.leverValues);
   const spec = finetune[side];
-  // Basic mode shows the adviser's shortlist on a screen that has one; the tax screen has none,
-  // and shows every tax in both modes (ADR-0039).
-  const shortlistLead = mode === 'basic' ? spec.shortlistLead : undefined;
-  const basic = shortlistLead !== undefined;
   const [held] = useState(() => {
     const status0 = state.game ? ambitionStatus(state.game, pm, options, outcome, levers) : null;
     return new Map(
@@ -257,7 +237,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const decisionBody = (decision: FinetuneDecision) => (
     <ChoiceCard
       title={decision.title}
-      aboutLevel={4}
       context={cards}
       units={decisionUnits(decision).map((unit): CardUnit =>
         unit.kind === 'item'
@@ -268,9 +247,8 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   );
 
   /**
-   * One section: a tax (ADR-0035), or what the money is for (ADR-0037). Advanced mode: its
-   * decisions, each a disclosure with a status and one card inside. Basic mode: one card of the
-   * rows basic mode shows for its levers, and nothing at all when there are none.
+   * One section: a tax (ADR-0035), or what the money is for (ADR-0037): its decisions, each a
+   * disclosure with a status and one card inside.
    */
   const section = (group: FinetuneSection) => {
     const id = `tune-${group.id}`;
@@ -287,33 +265,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         ) : null}
       </h2>
     );
-    if (basic) {
-      // Each lever basic mode shows, under its policy's title, with no decision around it to
-      // name it: a flagship's as its row, else the one way on show, as a scale from the plan.
-      const rows: CardRow[] = [];
-      for (const item of items) {
-        const lever = byCode.get(item.code);
-        if (!lever) continue;
-        if (held.has(item.code)) {
-          rows.push({ item, ways: item.policies, name: itemName(item) });
-          continue;
-        }
-        const policy = basicPolicy(item, lever, start[item.code], DESK.has(item.code));
-        if (policy) rows.push({ item, ways: [policy], name: policy.title });
-      }
-      if (rows.length === 0) return null;
-      return (
-        <section key={group.id} className="who tune" aria-labelledby={id}>
-          {heading}
-          <ChoiceCard
-            title={group.label}
-            aboutLevel={3}
-            context={cards}
-            units={rows.map((row): CardUnit => ({ kind: 'row', row }))}
-          />
-        </section>
-      );
-    }
     return (
       <section key={group.id} className="who tune" aria-labelledby={id}>
         {heading}
@@ -353,11 +304,8 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       part={{ index, total: 2, label: spec.title }}
       title={spec.title}
       // The adviser is named once, here, not on every row (Phase 25), and speaks on a row once it
-      // is chosen (ADR-0037); in basic mode, as the one whose best ideas these are (Phase 27).
-      lead={
-        shortlistLead ??
-        (named ? `${spec.lead} Your ${who}’s view shows once you choose.` : spec.lead)
-      }
+      // is chosen (ADR-0037).
+      lead={named ? `${spec.lead} Your ${who}’s view shows once you choose.` : spec.lead}
     >
       <HeadroomBar outcome={outcome} status={status} />
       {spec.notes.length > 0 ? (
@@ -368,11 +316,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
         </ul>
       ) : null}
       <p className="panel__hint tune__interest">{INTEREST[side]}</p>
-      {spec.shortlistLead !== undefined ? (
-        <ModeLine
-          every={`${policyCount(finetune, side)} ${side === 'tax' ? 'tax' : 'spending'} policies`}
-        />
-      ) : null}
       {spec.groups.map(section)}
       <p className="actions">
         <StepLink

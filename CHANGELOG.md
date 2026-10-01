@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The spending screen shows every policy, as the tax screen does: "Show only the best ideas" and its
+  adviser's shortlist go, so step 4 has no basic mode. Step 3 keeps its best ways and its button
+  (ADR-0041).
 - No adviser speaks above the cards on either fine-tuning screen. The rows still wear the promises
   they break or strain, and the bar says what is broken or short; the review keeps the Director of
   Public Spending's line on a priority short of delivery (ADR-0040).

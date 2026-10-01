@@ -244,6 +244,35 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 
+  it('shows every decision on both screens in a first game, with no mode line (ADR-0041)', () => {
+    // A newcomer's game, in basic mode: step 4 has no shortlist, so nothing changes.
+    window.localStorage.removeItem('btc.mode.v1');
+    for (const side of ['tax', 'spending'] as const) {
+      const view = at(`/finetune/${side}?${BASE}&${GAME}`);
+      expect(document.querySelector('main')?.getAttribute('data-mode'), side).toBe('basic');
+      expect(document.querySelector('.mode-line'), side).toBeNull();
+      expect(
+        [...document.querySelectorAll('.tune__decision-toggle')].map((b) =>
+          b.getAttribute('aria-expanded'),
+        ),
+        side,
+      ).toEqual(finetune[side].groups.flatMap((g) => g.decisions).map(() => 'false'));
+      view.unmount();
+    }
+  });
+
+  it('says first what a spending choice would take out in its decision, and takes it out', async () => {
+    at(`/finetune/spending?${BASE}&${GAME}&L=csjmh.1`);
+    const panel = panelOf('Change disability benefits');
+    const pip = within(panel).getByRole('checkbox', { name: 'Go ahead with the 2025 PIP cuts' });
+    expect(pip).toHaveAccessibleDescription(
+      /^Choosing this takes out “Stop them for milder mental health conditions”\. would (save|cost) £\d+\.\dbn instead$/,
+    );
+    fireEvent.click(pip);
+    await waitFor(() => expect(search().get('L')).toMatch(/rvpip\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/csjmh/);
+  });
+
   it('has no adviser speak above the cards on either screen: the bar says what is short (ADR-0040)', () => {
     // Nothing delivers defence yet, and a penny on the basic rate breaks the tax lock.
     for (const side of ['tax', 'spending']) {

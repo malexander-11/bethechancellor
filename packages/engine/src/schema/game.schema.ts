@@ -378,12 +378,6 @@ export const finetunePolicySchema = z.strictObject({
   title: z.string().min(1).max(80),
   sizes: z.array(z.number()).min(1).max(3),
   advice: simulatedLineSchema.extend({ sources: z.array(sourceRefSchema).min(1) }),
-  /**
-   * On the screen adviser's shortlist (Phase 27, ADR-0028): one of the few best ideas basic mode
-   * shows, at most one way per lever. A judgement, badged as one on the screen; the validator
-   * holds the picks to its rules and the tests hold them to £1bn.
-   */
-  shortlist: z.literal(true).optional(),
 });
 
 /**
@@ -455,11 +449,6 @@ export const finetuneNoteSchema = z.strictObject({
 export const finetuneSideSchema = z.strictObject({
   title: z.string().min(1).max(40),
   lead: z.string().min(1).max(120),
-  /**
-   * The lead in basic mode (Phase 27): it says the screen shows the adviser's best ideas. A screen
-   * without one has no shortlist and no basic mode: it shows every policy in both modes (ADR-0039).
-   */
-  shortlistLead: z.string().min(1).max(120).optional(),
   notes: z.array(finetuneNoteSchema).default([]),
   /** The adviser who speaks every line on the screen (an id in advisers.json, on `finetune`). */
   adviser: slug,

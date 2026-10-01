@@ -1,5 +1,5 @@
 import { expectAccessible } from './audit';
-import { JOURNEY, TAX_DECISION, decisionButton, expect, test, walk } from './journey';
+import { JOURNEY, TAX_DECISION, decisionButton, decisions, expect, test, walk } from './journey';
 
 // Motion is a courtesy, never a requirement: with less of it asked for, nothing may be moving.
 test.use({ contextOptions: { reducedMotion: 'reduce' } });
@@ -14,6 +14,12 @@ for (const screen of JOURNEY) {
 test('fine-tune tax, a decision open', async ({ page }) => {
   await walk(page, { until: 'fine-tune tax' });
   await decisionButton(page, TAX_DECISION.title).click();
+  await expectAccessible(page);
+});
+
+test('fine-tune spending, a decision open', async ({ page }) => {
+  await walk(page, { until: 'fine-tune spending' });
+  await decisions(page).first().click();
   await expectAccessible(page);
 });
 

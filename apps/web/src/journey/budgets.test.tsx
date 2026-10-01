@@ -40,8 +40,8 @@ type Mode = 'basic' | 'advanced';
 
 /**
  * Every screen of the main road with the game that renders it at its widest and the mode it is
- * read in (Phase 27): a screen basic mode trims is read in both, the rest in basic, the mode a
- * first game is played in.
+ * read in (Phase 27): a screen basic mode trims (step 3's) is read in both, the rest in basic, the
+ * mode a first game is played in.
  */
 const ROAD: readonly { path: string; kind: keyof typeof CAP; game: string; mode: Mode }[] = [
   { path: '/', kind: 'cover', game: GAME, mode: 'basic' },
@@ -55,12 +55,10 @@ const ROAD: readonly { path: string; kind: keyof typeof CAP; game: string; mode:
       mode,
     })),
   ),
-  ...(['basic', 'advanced'] as const).flatMap((mode) =>
-    ['/finetune/tax', '/finetune/spending'].flatMap((path) => [
-      { path, kind: 'tuning' as const, game: GAME, mode },
-      { path, kind: 'tuningOpen' as const, game: TUNED, mode },
-    ]),
-  ),
+  ...['/finetune/tax', '/finetune/spending'].flatMap((path) => [
+    { path, kind: 'tuning' as const, game: GAME, mode: 'basic' as const },
+    { path, kind: 'tuningOpen' as const, game: TUNED, mode: 'basic' as const },
+  ]),
   { path: '/review', kind: 'story', game: GAME, mode: 'basic' },
   { path: '/budget-day', kind: 'story', game: GAME, mode: 'basic' },
 ];

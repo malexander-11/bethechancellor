@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
   FINETUNE_SIDES,
-  basicPolicy,
   choiceName,
   computeOutcome,
   decisionUnits,
@@ -12,25 +11,14 @@ import {
   finetuneItems,
   finetuneNames,
   finetuneSideOf,
-  fyStart,
   groupItems,
-  leadPolicy,
   movedPartners,
-  policyCount,
-  policyWay,
-  priceMove,
-  promiseBreaks,
-  resolveTargetYear,
   scaleLevels,
   setByFlagship,
-  shortlistOf,
-  shortlistPolicy,
   sizeIndex,
   sizeLabels,
-  suggestedSettings,
   validateDataset,
   type ContextFile,
-  type CurrentBudgetRule,
   type FinetuneDecision,
   type FinetuneFile,
   type FinetuneItem,
@@ -38,7 +26,7 @@ import {
   type FinetuneSideId,
   type LeverControl,
 } from '../src/index.js';
-import { loadDataset, outcomeOfFor } from './fixtures.js';
+import { loadDataset } from './fixtures.js';
 
 /**
  * Step 4 (Phase 24, ADR-0025): the tax screen tax by tax (ADR-0035), the spending screen by what
@@ -95,11 +83,6 @@ function pairsOn(side: FinetuneSideId): [string, string][] {
 }
 /** The levers the flagships set, which a screen shows as a line once one is chosen. */
 const flagshipLevers = new Set(ds.options.deliver.flatMap((o) => Object.keys(o.values)));
-const stability = must(
-  ds.rules.rules.find((r): r is CurrentBudgetRule => r.kind === 'currentBudget'),
-  'stability rule',
-);
-const TARGET_YEAR = resolveTargetYear(stability, ds.vintage.years, 'vintage').targetYear;
 
 /** What the schema says of a copy of the file changed by `patch`. */
 function refusal(patch: (f: FinetuneFile) => void): string {
@@ -271,29 +254,34 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     expect(sizeLabels(1)).toEqual([]);
   });
 
-  it('reads which policy, and which size, a lever’s setting is', () => {
+  it('reads which size a lever’s setting is', () => {
     for (const item of finetuneItems(file)) {
       const l = lever(item.code);
-      // At rest a lever shows its usual way.
-      expect(leadPolicy(item, l, l.control.default), item.code).toBe(item.policies[0]);
       for (const policy of item.policies) {
         policy.sizes.forEach((size, k) => {
-          expect(leadPolicy(item, l, size), policy.title).toBe(policy);
           expect(sizeIndex(policy, size), policy.title).toBe(k);
         });
         // Between its sizes a lever is at none of them.
         expect(sizeIndex(policy, (policy.sizes[0] ?? 0) + l.control.step / 2)).toBeUndefined();
       }
     }
-    // Set the way no policy goes, as an old link can leave it, a lever reads as its usual way.
-    const oneWay = must(
-      finetuneItems(file).find((i) => !isTick(i.code) && i.policies.length === 1),
-      'lever that moves one way',
+  });
+
+  it('has every lever already on the desk on step 4, where it can be dealt with', () => {
+    const names = finetuneNames(file);
+    for (const code of deskLevers(must(ds.contexts[ds.contexts.length - 1], 'context'))) {
+      expect(names.has(code), code).toBe(true);
+    }
+    // A lever that is not on step 4, a retired one, put on the desk is refused.
+    const shelved = must(
+      ds.levers.find((l) => l.deprecated),
+      'retired lever',
+    ).code;
+    const desked = structuredClone(ds.contexts);
+    desked[desked.length - 1]!.inTray[0]!.leverCode = shelved;
+    expect(tamper(() => undefined, desked)).toContain(
+      `the desk's lever ${shelved} is not on step 4`,
     );
-    const l = lever(oneWay.code);
-    const usual = must(oneWay.policies[0], 'policy');
-    const against = l.control.default - policyWay(usual, l) * l.control.step;
-    expect(leadPolicy(oneWay, l, against)).toBe(usual);
   });
 
   it('lays a tax’s ways out as one scale, the plan among its levels (ADR-0035)', () => {
@@ -698,220 +686,5 @@ describe('contradictions come under one decision (ADR-0036)', () => {
       `the alternatives “Held” hold ${held}, which a flagship sets`,
     );
     expect(tamper(() => undefined)).toBe('');
-  });
-});
-
-/**
- * The advisers' shortlist (Phase 27, ADR-0028): a screen's adviser picks the few best ideas basic
- * mode shows. "Best" is a judgement, badged as one on the screen; these rules keep it checkable.
- * Each pick's reason is its own adviser line, already on its card. The tax screen has no shortlist
- * and shows every tax in both modes (ADR-0039).
- */
-describe('the advisers’ shortlist (Phase 27, ADR-0028)', () => {
-  const context = must(ds.contexts[ds.contexts.length - 1], 'context');
-  const desk = deskLevers(context);
-
-  it('picks six to ten ways on a screen with a shortlist, one a lever, one in every spending section, and says whose they are', () => {
-    // The tax screen has none: no lead for basic mode, and no picks.
-    expect(file.tax.shortlistLead).toBeUndefined();
-    expect(shortlistOf(file, 'tax')).toEqual([]);
-    for (const side of FINETUNE_SIDES.filter((s) => file[s].shortlistLead !== undefined)) {
-      const picks = shortlistOf(file, side);
-      expect(picks.length, side).toBeGreaterThanOrEqual(6);
-      expect(picks.length, side).toBeLessThanOrEqual(10);
-      // Advanced mode offers every way of every lever.
-      expect(policyCount(file, side)).toBe(
-        finetuneItems(file, side).flatMap((i) => i.policies).length,
-      );
-      // Basic mode's lead names whose best ideas these are: the screen's adviser.
-      const adviser = must(
-        ds.advisers.advisers.find((a) => a.id === file[side].adviser),
-        `${side} adviser`,
-      );
-      expect(file[side].shortlistLead).toContain(adviser.role);
-    }
-    for (const entry of shortlistOf(file)) {
-      expect(
-        entry.policies.filter((p) => p.shortlist),
-        entry.code,
-      ).toHaveLength(1);
-      expect(shortlistPolicy(entry)).toBe(entry.pick);
-      // On the spending side the top-ups, not the trims, of the services.
-      if (entry.side === 'spending' && entry.policies.length === 2) {
-        expect(policyWay(entry.pick, lever(entry.code)), entry.code).toBe(1);
-      }
-    }
-    // Every spending section has a pick, so basic mode never shows an empty one on arrival.
-    for (const group of file.spending.groups) {
-      expect(
-        shortlistOf(file, 'spending').some((p) => p.group === group),
-        group.id,
-      ).toBe(true);
-    }
-  });
-
-  it('holds every pick to £1bn of headroom in the target year at its smallest size, on today’s estimate', () => {
-    // The price a card already shows (priceMove): interest included, and an all-investment move
-    // priced on the debt rule, which it touches. Under the web's own settings.
-    const estimate = suggestedSettings(context.readings, ds.levers);
-    const outcomeOf = outcomeOfFor(ds, {
-      implementationYear: ds.vintage.years.forecast[1],
-      debtInterestFeedback: true,
-      assessAsOf: 'vintage',
-    });
-    for (const { code, pick } of shortlistOf(file)) {
-      const price = priceMove({
-        outcomeOf,
-        levers: ds.levers,
-        from: estimate,
-        to: { ...estimate, [code]: pick.sizes[0] ?? 1 },
-      });
-      expect(price.year).toBe(TARGET_YEAR);
-      expect(Math.abs(price.headroomChangeGbpm), pick.title).toBeGreaterThanOrEqual(1000);
-      const investment = lever(code).classification?.currentOrCapital === 'capital';
-      expect(price.rule, code).toBe(investment ? 'stockFalling' : 'currentBudget');
-    }
-  });
-
-  it('shows in basic mode what was chosen, else the pick, else what is already on the desk', () => {
-    // Every lever on the desk is on step 4, so basic mode can always show it.
-    const names = finetuneNames(file);
-    for (const code of desk) expect(names.has(code), code).toBe(true);
-    const picked = must(
-      shortlistOf(file).find((e) => e.policies.length === 2),
-      'pick on a lever that moves both ways',
-    );
-    const l = lever(picked.code);
-    expect(basicPolicy(picked, l, undefined, false)).toBe(picked.pick);
-    // A way chosen before the screen opened shows the way it was chosen.
-    const other = must(
-      picked.policies.find((p) => p !== picked.pick),
-      'the other way',
-    );
-    expect(basicPolicy(picked, l, other.sizes[0], false)).toBe(other);
-    // Neither a pick nor on the desk: nothing, until it is chosen; on the desk, its usual way.
-    const plain: FinetuneItem = structuredClone(itemIn(file, picked.code));
-    for (const policy of plain.policies) delete policy.shortlist;
-    expect(basicPolicy(plain, l, undefined, false)).toBeUndefined();
-    expect(basicPolicy(plain, l, plain.policies[1]?.sizes[0], false)).toBe(plain.policies[1]);
-    expect(basicPolicy(plain, l, undefined, true)).toBe(plain.policies[0]);
-  });
-
-  it('validate:data names each way a pick can break the shortlist’s rules', () => {
-    const pick =
-      (code: string, way = 0) =>
-      (f: FinetuneFile) => {
-        itemIn(f, code).policies[way]!.shortlist = true;
-      };
-    const unpick =
-      (...codes: string[]) =>
-      (f: FinetuneFile) => {
-        for (const code of codes) for (const p of itemIn(f, code).policies) delete p.shortlist;
-      };
-    const title = (code: string) => itemIn(file, code).policies[0]?.title;
-    const picked = new Set(shortlistOf(file).map((e) => e.code));
-    const unpicked = (side?: FinetuneSideId) =>
-      finetuneItems(file, side).filter((i) => !picked.has(i.code));
-
-    // One way a lever.
-    const both = must(
-      shortlistOf(file, 'spending').find((e) => e.policies.length === 2),
-      'spending pick on a lever that moves both ways',
-    );
-    expect(tamper(pick(both.code, both.policies.indexOf(both.pick) === 0 ? 1 : 0))).toContain(
-      `the spending screen picks both ways of lever ${both.code}`,
-    );
-    // Six to ten a screen.
-    const spending = shortlistOf(file, 'spending');
-    expect(tamper(unpick(...spending.slice(5).map((e) => e.code)))).toContain(
-      'the spending screen picks 5 policies, not six to ten',
-    );
-    const more = unpicked('spending').slice(0, 11 - spending.length);
-    expect(tamper((f) => more.forEach((i) => pick(i.code)(f)))).toContain(
-      'the spending screen picks 11 policies, not six to ten',
-    );
-    // A spending section needs a pick.
-    const section = must(file.spending.groups[0], 'spending section');
-    expect(
-      tamper(unpick(...spending.filter((e) => e.group === section).map((e) => e.code))),
-    ).toContain(`spending section ${section.id} has no pick`);
-    // A screen with no shortlist picks nothing; with neither lead nor picks, it shows everything.
-    const tax = must(unpicked('tax')[0], 'tax lever').code;
-    expect(tamper(pick(tax))).toContain('the tax screen has picks but no shortlistLead');
-    expect(
-      tamper((f) => {
-        delete f.spending.shortlistLead;
-        unpick(...spending.map((e) => e.code))(f);
-      }),
-    ).toBe('');
-
-    // Not on the table, counting after the target year, or breaking a promise.
-    const offTable = must(
-      unpicked().find((i) => lever(i.code).notOnTheTable),
-      'lever not on the table',
-    ).code;
-    expect(tamper(pick(offTable))).toContain(
-      `picks “${title(offTable)}”, which is not on the table`,
-    );
-    const late = must(
-      unpicked().find((i) => {
-        const year = lever(i.code).earliestStart?.year;
-        return year !== undefined && fyStart(year) > fyStart(TARGET_YEAR);
-      }),
-      'lever that starts after the target year',
-    ).code;
-    expect(tamper(pick(late))).toContain(
-      `picks “${title(late)}”, which starts in ${lever(late).earliestStart?.year}, after ${TARGET_YEAR}`,
-    );
-    const breaker = must(
-      unpicked()
-        .map((i) => ({
-          code: i.code,
-          broken: promiseBreaks({ [i.code]: sizeOf(i.code) }, ds.pm.promises, ds.levers).find(
-            (r) => !r.kept,
-          ),
-        }))
-        .find((x) => x.broken),
-      'way that breaks a promise',
-    );
-    expect(tamper(pick(breaker.code))).toContain(
-      `picks “${title(breaker.code)}”, which breaks ${breaker.broken?.promise.title}`,
-    );
-
-    // Never two that count the same money, nor a pick and a lever already on the desk.
-    const sameMoney = (result: string, a: string, b: string) =>
-      result
-        .split('\n')
-        .some(
-          (line) => line.includes(a) && line.includes(b) && line.endsWith('count the same money'),
-        );
-    const rival = must(
-      unpicked().find((i) => partnersOf(i.code).some((p) => picked.has(p))),
-      'lever that counts the same money as a pick',
-    ).code;
-    const rivalled = must(
-      shortlistOf(file).find((e) => partnersOf(rival).includes(e.code)),
-      'pick',
-    );
-    expect(sameMoney(tamper(pick(rival)), `“${title(rival)}”`, `“${rivalled.pick.title}”`)).toBe(
-      true,
-    );
-    const [onDesk, beside] = must(
-      pairsOn('spending').find(([p, q]) => !picked.has(p) && !picked.has(q)),
-      'pair on the spending screen that counts the same money with neither picked',
-    );
-    const desked = structuredClone(ds.contexts);
-    desked[desked.length - 1]!.inTray[0]!.leverCode = onDesk;
-    expect(
-      sameMoney(
-        tamper(pick(beside), desked),
-        `“${title(beside)}”`,
-        `“${finetuneNames(file).get(onDesk)}” (on the desk)`,
-      ),
-    ).toBe(true);
-    // What is on the desk is on step 4.
-    const lost = structuredClone(ds.contexts);
-    lost[lost.length - 1]!.inTray[0]!.leverCode = 'nosuch';
-    expect(tamper(() => undefined, lost)).toContain("the desk's lever nosuch is not on step 4");
   });
 });

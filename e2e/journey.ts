@@ -99,10 +99,10 @@ export async function walk(
   }
 }
 
-/** The spending screen's line that switches between the shortlist and every idea. */
+/** A flagship screen's line that switches between the shortlist and every way (step 3). */
 export const modeSwitch = (page: Page) => page.locator('.mode-line').getByRole('button');
 
-/** Advanced mode's decisions: each a heading whose button opens it. */
+/** Step 4's decisions: each a heading whose button opens it. */
 export const decisions = (page: Page) =>
   page.getByRole('main').getByRole('heading').locator('button[aria-expanded]');
 

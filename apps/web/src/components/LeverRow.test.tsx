@@ -441,13 +441,7 @@ describe('everything else about a lever, in its card’s fold (ADR-0037)', () =>
   it('holds the headline, a budget’s cash and milestones, its tags, and what it assumes', () => {
     const dhsc = lever('dhsc');
     const { container } = render(
-      <LeverAbout
-        lever={dhsc}
-        name="Health and social care"
-        value={1}
-        summaryYear="2029-30"
-        headingLevel={4}
-      />,
+      <LeverAbout lever={dhsc} name="Health and social care" value={1} summaryYear="2029-30" />,
     );
     const scope = within(container);
     expect(
@@ -466,13 +460,7 @@ describe('everything else about a lever, in its card’s fold (ADR-0037)', () =>
 
   it('names when a measure can start, and what it counts the same money as, and why', () => {
     const wealth2 = render(
-      <LeverAbout
-        lever={lever('wealth2')}
-        name="2% a year"
-        value={0}
-        summaryYear="2029-30"
-        headingLevel={4}
-      />,
+      <LeverAbout lever={lever('wealth2')} name="2% a year" value={0} summaryYear="2029-30" />,
     );
     const tag = within(wealth2.container).getByText('Earliest start').closest('.tag');
     expect(tag).toHaveClass('tag--quiet');
@@ -487,7 +475,6 @@ describe('everything else about a lever, in its card’s fold (ADR-0037)', () =>
         name="1% on everything now zero-rated"
         value={0}
         summaryYear="2029-30"
-        headingLevel={4}
       />,
     );
     expect(within(one.container).getByText('Counts the same money as')).toBeInTheDocument();
