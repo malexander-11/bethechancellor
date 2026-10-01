@@ -44,6 +44,26 @@ describe('a moved lever read back', () => {
     expect(investment.words).toMatch(/^adds £\d+\.\dbn of investment$/);
   });
 
+  it('says when a measure that does nothing by the target year starts, and what it does then', () => {
+    for (const code of ['wealth', 'wealth2']) {
+      const tax = row({ [code]: 1 }, code);
+      expect(tax.fromYear, code).toBeDefined();
+      expect(tax.words).toMatch(
+        new RegExp(`^nothing until ${tax.fromYear}, then raises £\\d+\\.\\dbn$`),
+      );
+      expect(tax.gbpm).toBeGreaterThan(0);
+    }
+    for (const code of ['dlakids', 'uitime']) {
+      const benefit = row({ [code]: 1 }, code);
+      expect(benefit.side).toBe('spending');
+      expect(benefit.words).toMatch(
+        new RegExp(`^nothing until ${benefit.fromYear}, then (costs|saves) £`),
+      );
+    }
+    // Anything already counting by the target year says what it does then.
+    expect(row(PENNY, 'itbr').fromYear).toBeUndefined();
+  });
+
   it('gives a tick box no standing, and a benefit is spending', () => {
     const limit = row(TWO_CHILD_LIMIT, 'rv2ch');
     expect(limit.side).toBe('spending');

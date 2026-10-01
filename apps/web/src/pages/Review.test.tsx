@@ -105,6 +105,15 @@ describe('step 5: deliver the Budget', () => {
     expect(screen.queryByText(/target/)).toBeNull();
   });
 
+  it('says when a tax that does nothing by the target year starts, never that it raises nothing', () => {
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_wealth.1`);
+    const tax = part(/^Tax/);
+    expect(
+      within(tax).getByText(/^nothing until \d{4}-\d{2}, then raises £\d+\.\dbn$/),
+    ).toBeInTheDocument();
+    expect(within(tax).queryByText(/raises £0\.0bn/)).toBeNull();
+  });
+
   it('lists what is still on the desk, and says a thin margin is thin (Phase 25)', () => {
     const thin = at(`/review?${BASE}&${G}&L=moj.10`);
     let position = part(/^Where that leaves you/);

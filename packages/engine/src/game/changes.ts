@@ -14,14 +14,20 @@ export interface ChangeRow {
   name: string;
   /** "21%", "5% more"; none for a tick box. */
   standing?: string;
-  /** "raises £8.6bn", "costs £5.2bn", "saves £2.1bn", "adds £13.4bn of investment". */
+  /**
+   * "raises £8.6bn", "costs £5.2bn", "saves £2.1bn", "adds £13.4bn of investment"; for a measure
+   * that does nothing by the target year, when it starts: "nothing until 2030-31, then raises
+   * £7.8bn".
+   */
   words: string;
   tone: 'better' | 'worse';
   /**
-   * What it does to the year's sums, £ million: receipts for a tax, day-to-day and investment
-   * spending together for the rest. Its size orders a list.
+   * What the words say it does, £ million: receipts for a tax, day-to-day and investment spending
+   * together for the rest, in the target year or the year it starts. Its size orders a list.
    */
   gbpm: number;
+  /** The year a measure that does nothing by the target year starts (Phase 17). */
+  fromYear?: string;
 }
 
 export interface ChangeRowsInput {
@@ -68,18 +74,24 @@ function amountOf(
 export function changeRows({ outcome, levers, names, exclude }: ChangeRowsInput): ChangeRow[] {
   const year = targetYearOf(outcome);
   const byCode = new Map(levers.map((l) => [l.code, l] as const));
+  const startsLater = new Map(
+    outcome.attribution.flatMap((a) => (a.code && a.fromYear ? [[a.code, a.fromYear]] : [])),
+  );
   const values = outcome.settings.leverValues;
   return outcome.leverEffects.flatMap((effect) => {
     const lever = byCode.get(effect.code);
     if (!lever || lever.category === 'macro' || exclude?.has(lever.code)) return [];
     const standing = leverStanding(lever, values[lever.code] ?? lever.control.default);
+    const fromYear = startsLater.get(lever.code);
+    const amount = amountOf(lever, effect, fromYear ?? year);
     return [
       {
         code: lever.code,
         side: lever.category === 'tax' ? 'tax' : 'spending',
         name: names?.(lever.code) ?? lever.shortTitle,
         ...(standing ? { standing } : {}),
-        ...amountOf(lever, effect, year),
+        ...amount,
+        ...(fromYear ? { words: `nothing until ${fromYear}, then ${amount.words}`, fromYear } : {}),
       },
     ];
   });

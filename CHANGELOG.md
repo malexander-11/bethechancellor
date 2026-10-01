@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The review says when a measure that does nothing by 2029-30 starts ("nothing until 2030-31, then
+  raises £7.8bn"), as the cards do, instead of saying it raises £0.0bn.
 - The review's tax and spending lines, and the words for where a lever stands, are written by the
   engine (`changeRows`, `leverStanding`), so the server can say a Budget in the review's own words.
   Nothing a player sees changes.
