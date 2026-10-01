@@ -50,9 +50,8 @@ describe('Budget day: what your Budget means', () => {
     for (const fold of ['Read the speech', 'Who feels it: five households', 'Budget documents']) {
       expect(screen.getByText(fold).closest('details')).not.toHaveAttribute('open');
     }
-    // Nothing changed, and the three sentences say so; "change something" means the review.
-    const statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
-    expect(within(statement).getByText('I changed no taxes and no spending.')).toBeInTheDocument();
+    // No Budget in three sentences (ADR-0043); "change something" means the review.
+    expect(screen.queryByText(/in three sentences/)).toBeNull();
     expect(screen.getByRole('link', { name: 'Change something' })).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/review\?/),
@@ -68,55 +67,6 @@ describe('Budget day: what your Budget means', () => {
     expect(within(speech).getByText(/nobody said these words/)).toBeInTheDocument();
     // An empty Budget meets the rules with today's estimate's headroom, and the speech says so.
     expect(within(speech).getByText(/£6\.8bn of headroom/)).toBeInTheDocument();
-  });
-
-  it('says the Budget in three sentences: what was prioritised, who pays, what was accepted', () => {
-    at(`${BASE}&${GAME}&L=moj.10_itbr.1`);
-    const statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
-    // Defence was agreed and left unfunded, and the first sentence says so (Phase 25).
-    expect(
-      within(statement).getByText(
-        'I prioritised safer streets, and named defence a priority but put nothing behind it.',
-      ),
-    ).toBeInTheDocument();
-    expect(
-      within(statement).getByText(
-        'I paid for it by asking everyone who earns or spends to pay more, and kept the rest as headroom.',
-      ),
-    ).toBeInTheDocument();
-    // A broken promise outranks a thin margin as the thing accepted.
-    expect(within(statement).getByText('I accepted breaking the tax lock.')).toBeInTheDocument();
-  });
-
-  it('says borrowing past the rules as borrowing, never as headroom', () => {
-    at(`${BASE}&${GAME}&L=itbr.-2`);
-    const statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
-    expect(
-      within(statement).getByText(
-        'I cut taxes for everyone who earns or spends, and paid for it by borrowing more than the rules allow.',
-      ),
-    ).toBeInTheDocument();
-    expect(within(statement).getByText(/^I accepted missing the day-to-day rule by/)).toBeVisible();
-    expect(within(statement).queryByText(/headroom I had/)).toBeNull();
-  });
-
-  it('says what was accepted when nothing was broken: a thin margin, or what was kept', () => {
-    // Prisons paid for out of today's estimate: under ten billion is left, and the Budget says so.
-    const thin = at(`${BASE}&${GAME}&L=moj.10`);
-    let statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
-    expect(
-      within(statement).getByText('I paid for it out of the headroom I had.'),
-    ).toBeInTheDocument();
-    expect(
-      within(statement).getByText(/^I accepted a thin margin: £\d\.\dbn of headroom\.$/),
-    ).toBeInTheDocument();
-    thin.unmount();
-    // Paid for by taxes no promise names: every promise kept.
-    at(`${BASE}&${GAME}&L=moj.10_rnrb.1_ctgh.1`);
-    statement = screen.getByRole('region', { name: /Your Budget, in three sentences/ });
-    expect(
-      within(statement).getByText(/^I kept every promise and £\d+\.\dbn of headroom\.$/),
-    ).toBeInTheDocument();
   });
 
   it('gives the reasons and the decisions behind them, and every rule on request', () => {

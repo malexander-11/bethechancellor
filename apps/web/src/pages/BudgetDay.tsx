@@ -11,7 +11,6 @@ import {
   readings,
   receptions,
   reconcile,
-  statementOf,
 } from '@btc/engine';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -46,11 +45,11 @@ function list(items: readonly string[]): string {
 }
 
 /**
- * Step 6: feedback, on one screen. The Budget in three sentences; the rules line, which is the one
- * thing here that is arithmetic; the backbenchers, the markets and the public, each rating the
- * Budget out of five and saying which choices caused it; and the close, with the ambitions and who
- * paid. The speech, the households and the Budget documents are one fold away. Arriving here marks
- * the game finished, so a link shared from here opens as a finished Budget.
+ * Step 6: feedback, on one screen. The rules line, which is the one thing here that is arithmetic;
+ * the backbenchers, the markets and the public, each rating the Budget out of five and saying
+ * which choices caused it; and the close, with the ambitions and who paid. The speech, the
+ * households and the Budget documents are one fold away. Arriving here marks the game finished, so
+ * a link shared from here opens as a finished Budget.
  */
 export function BudgetDayPage() {
   const { state, dispatch, outcome, query } = useBudget();
@@ -198,12 +197,6 @@ export function BudgetDayPage() {
   // A game in play that jumps to Budget day is sent back to where it is; a finished, shared link
   // walks in. With no game there is no Budget day: the guard sends the link to the briefing.
   if (guard) return guard;
-  // The three sentences are the engine's (Phase 25): what was delivered, how it was paid for, and
-  // what was accepted, read from the same figures as the close and the rules line.
-  const statement =
-    game && verdict && status
-      ? statementOf({ game, pm, outcome, verdict, status, levers, outcomeOf })
-      : null;
 
   async function copyLink() {
     const url = `${window.location.origin}/budget-day?${query}`;
@@ -218,16 +211,6 @@ export function BudgetDayPage() {
 
   return (
     <JourneyLayout step="budget-day">
-      {statement ? (
-        <section className="statement doc" aria-labelledby="statement-heading">
-          <h2 id="statement-heading" className="section-label">
-            Your Budget, in three sentences
-          </h2>
-          <p className="statement__line">{statement.prioritised}</p>
-          <p className="statement__line">{statement.paid}</p>
-          <p className="statement__line">{statement.accepted}</p>
-        </section>
-      ) : null}
       <p className="rules-line">{rulesLine}</p>
       <div className="receptions">
         {room.map((r) => (

@@ -68,7 +68,6 @@ export * from './game/finetune.js';
 export * from './game/households.js';
 export * from './game/speech.js';
 export * from './game/verdict.js';
-export * from './game/statement.js';
 export * from './game/signoff.js';
 export * from './game/theme.js';
 export { costLever, effectiveStartYear } from './costing/index.js';

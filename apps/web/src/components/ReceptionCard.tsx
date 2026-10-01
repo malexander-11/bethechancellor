@@ -53,9 +53,9 @@ export function ReceptionCard({
       aria-labelledby={id}
     >
       <div className="reception__head">
-        <h3 id={id} className="reception__title">
+        <h2 id={id} className="reception__title">
           {title}
-        </h3>
+        </h2>
       </div>
       {/* One picture, named in words: its five steps are drawing, not a list to read. */}
       <div className="meter" role="img" aria-label={`${rating} of 5: ${label}`}>

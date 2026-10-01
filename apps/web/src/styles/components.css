@@ -669,10 +669,13 @@ label.choice {
   gap: 8px;
 }
 
+/* A section's heading in the body face, as the cards have always read. */
 .reception__title {
   margin: 0;
+  font-family: var(--font);
   font-size: 1.125rem;
   font-weight: 600;
+  letter-spacing: normal;
 }
 
 .reception__question {
@@ -1695,28 +1698,6 @@ label.choice {
 .review__missed {
   color: var(--critical);
   font-weight: 600;
-}
-
-/* ---------------------------------------------------------- the statement */
-
-/* "I prioritised…, paid for it by…, accepted…": the Budget in three sentences, beside the red rule. */
-.doc.statement {
-  margin: 0 0 16px;
-  padding: 6px 0 6px 18px;
-  border-top: 0;
-  border-bottom: 0;
-  border-left: 4px solid var(--red);
-}
-
-.statement__line {
-  margin: 0 0 8px;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  line-height: 1.35;
-}
-
-.statement__line:last-child {
-  margin-bottom: 0;
 }
 
 /* Step 4's notes: a short list under the lead, in the quieter ink. */

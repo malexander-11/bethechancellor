@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- Feedback no longer opens with the Budget in three sentences: the engine's statement and its tests
+  go, and the three cards are the page's sections (ADR-0043).
 - Feedback's first card is "Labour backbenchers", not "Your backbenchers"; the review's reaction is
   labelled the same way.
 - The tax lock now holds only headline rates and allowances: a rise in an income tax rate, a

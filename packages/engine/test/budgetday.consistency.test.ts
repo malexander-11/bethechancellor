@@ -9,7 +9,6 @@ import {
   macroCodesOf,
   missedBy,
   readings,
-  statementOf,
 } from '../src/index.js';
 import { loadDataset, outcomeOfFor, wording } from './fixtures.js';
 import {
@@ -36,9 +35,9 @@ const typicalErrorGbpm = typicalError(ds);
 /**
  * The review's seven Budgets (Phase 25, R3): the walk, the walk paid by employer National
  * Insurance, a 2p cut to the basic rate, doing nothing, a priority left unfunded, a 5% cut to
- * health, and investment that misses the debt rule alone. On each, no sentence, no close and no
- * speech figure may say the opposite of the sums: the rules result, a priority's fate or the sign
- * of a change.
+ * health, and investment that misses the debt rule alone. On each, neither the close nor a speech
+ * figure may say the opposite of the sums: the rules result, a priority's fate or the sign of a
+ * change.
  */
 const BUDGETS: [string, readonly string[], Budget][] = [
   ['the walk', SECURITY, WALK],
@@ -81,15 +80,6 @@ function deliver(priorities: readonly string[], policy: Budget) {
     rebellionRisk: r.rebellionRisk ?? 0,
     outcomeOf,
   });
-  const statement = statementOf({
-    game,
-    pm: ds.pm,
-    outcome,
-    verdict,
-    status,
-    levers: ds.levers,
-    outcomeOf,
-  });
   const speech = assembleSpeech({
     speech: ds.speech,
     outcome,
@@ -101,21 +91,18 @@ function deliver(priorities: readonly string[], policy: Budget) {
     outcomeOf,
   });
   const pre = outcomeOf(Object.fromEntries(MACRO.map((c) => [c, ESTIMATE[c] ?? 0])));
-  return { game, outcome, status, verdict, statement, speech, pre };
+  return { game, outcome, status, verdict, speech, pre };
 }
 
 describe('Budget day agrees with the sums, on the review’s seven Budgets (Phase 25)', () => {
   it.each(BUDGETS)('%s', (_name, priorities, policy) => {
-    const { outcome, status, verdict, statement, speech, pre } = deliver(priorities, policy);
+    const { outcome, status, verdict, speech, pre } = deliver(priorities, policy);
     const year = verdict.targetYear;
-    const all = [statement.prioritised, statement.paid, statement.accepted].join(' ');
     const said = speech.paragraphs.map((p) => p.text).join(' ');
 
     // The rules result: one test, said the same way everywhere.
     const missed = outcome.verdicts.filter(isMissed);
-    const fiscalMissed = missed.some((v) => v.kind !== 'welfareCap');
     if (missed.length > 0) {
-      expect(statement.accepted).toBe(`I accepted missing ${inWords(missed.map(missedBy))}.`);
       expect(verdict.kind.id).toBe('rules-missed');
       for (const v of missed) {
         expect(said).toContain(missedBy(v));
@@ -125,36 +112,17 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
       }
       expect(said).not.toMatch(/meets the fiscal rules/);
     } else {
-      expect(statement.accepted).not.toMatch(/missing/);
       expect(verdict.kind.id).not.toBe('rules-missed');
       expect(said).toMatch(/this Budget meets the fiscal rules/);
       expect(said).not.toMatch(/misses/);
     }
-    // Borrowing past the rules is said as borrowing, and the headroom is never said to pay for it.
-    expect(statement.paid.includes('borrowing more than the rules allow')).toBe(fiscalMissed);
-    if (fiscalMissed) expect(statement.paid).not.toMatch(/headroom I had/);
     // The speech never passes today's estimate off as the OBR's confirmation.
     expect(said).not.toMatch(/confirms/);
 
-    // Each priority's fate, in the words that fit it, and the speech claims only what was funded.
+    // The speech claims only what was funded.
     const first = status.priorities.find((p) => p.status === 'delivered');
-    const clauses = statement.prioritised
-      .replace(/^I /, '')
-      .replace(/\.$/, '')
-      .split(/, and |, (?=made a start|named)/);
-    const VERB = {
-      delivered: 'prioritised',
-      started: 'made a start on',
-      settledLower: 'made a start on',
-      notFunded: 'named',
-    };
     for (const p of status.priorities) {
-      const clause = clauses.find((c) => c.includes(p.priority.noun)) ?? '';
-      expect(clause.startsWith(VERB[p.status]), `${p.priority.id}: "${clause}"`).toBe(true);
-      if (p.status === 'notFunded') {
-        expect(clause).toMatch(/but put nothing behind/);
-        expect(said).not.toContain(`${p.priority.title}:`);
-      }
+      if (p.status === 'notFunded') expect(said).not.toContain(`${p.priority.title}:`);
     }
     const opening = speech.paragraphs[0]?.text ?? '';
     expect(opening).toBe(
@@ -168,15 +136,9 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
     if (borrowingChange >= 50) expect(forecast).toMatch(/This Budget adds/);
     else if (borrowingChange <= -50) expect(forecast).toMatch(/This Budget cuts borrowing/);
     else expect(forecast).toMatch(/about where it was/);
-    const raised = verdict.paid.some((r) => r.gbpm >= 100);
-    const cut = verdict.paid.some((r) => r.gbpm <= -100);
     const less = verdict.benefited.some((r) => r.gbpm <= -100);
-    expect(/to pay more/.test(statement.paid)).toBe(raised);
-    expect(/cut taxes/.test(statement.paid)).toBe(cut);
-    expect(/less to/.test(statement.paid)).toBe(less);
     if (verdict.kind.id === 'paid-by-cuts') expect(less).toBe(true);
-    // A thin margin is the markets' line: under ten billion, in the statement and the close alike.
-    if (/thin margin/.test(all)) expect(verdict.headroomGbpm).toBeLessThan(10_000);
+    // A thin margin is the markets' line: under ten billion.
     if (verdict.kind.id === 'kept-everything-thin')
       expect(verdict.headroomGbpm).toBeLessThan(10_000);
     // Every figure in the speech is one the engine produced.
@@ -193,14 +155,11 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
       (p) => !p.kept && p.promise.judgedBy !== 'fiscalRules',
     );
     expect(broken.map((p) => p.promise.id)).toEqual(['tax-lock']);
-    expect(walk.statement.accepted).toContain(broken[0]?.promise.noun);
     const employer = deliver(SECURITY, NICS_WALK);
     expect(employer.verdict.kind.id).toBe('delivered-and-paid');
-    // The cut is said as a tax cut for the group that has it.
+    // The cut is a tax cut for the group that has it.
     const cut = deliver(SECURITY, BASIC_RATE_CUT);
-    const cutFor = cut.verdict.paid.find((r) => r.gbpm < 0);
-    expect(cutFor).toBeDefined();
-    expect(cut.statement.paid.toLowerCase()).toContain(cutFor?.label.toLowerCase());
+    expect(cut.verdict.paid.find((r) => r.gbpm < 0)).toBeDefined();
     const nothing = deliver(SECURITY, {});
     expect(nothing.verdict.kind.id).toBe('left-out-with-room');
     const health = deliver(['nhs'], HEALTH_CUT);
@@ -211,18 +170,6 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
     expect(missed.map((v) => v.kind)).toEqual(['stockFalling']);
     expect(debt.speech.paragraphs.at(-1)?.text).toContain(missed[0] && missedBy(missed[0]));
     // The words as the review read them: a rewording is an updated snapshot and a reviewed diff.
-    expect(
-      [
-        walk.statement.accepted,
-        cut.statement.paid,
-        nothing.statement.paid,
-        debt.speech.paragraphs.at(-1)?.text,
-      ].map(wording),
-    ).toMatchSnapshot();
+    expect(wording(debt.speech.paragraphs.at(-1)?.text)).toMatchSnapshot();
   });
 });
-
-function inWords(items: readonly string[]): string {
-  if (items.length <= 1) return items[0] ?? '';
-  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
-}
