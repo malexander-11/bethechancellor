@@ -483,7 +483,7 @@ export const leverSchema = z
     /**
      * What the lever is called in running words (Phase 25): "the basic rate of income tax", "the
      * health budget". A Budget-day reason names its causes with it ("Because of the levy"), so it
-     * starts in lower case; the speech reuses it.
+     * starts in lower case.
      */
     noun: z
       .string()

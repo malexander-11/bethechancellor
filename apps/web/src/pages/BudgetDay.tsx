@@ -1,6 +1,5 @@
 import {
   ambitionStatus,
-  assembleSpeech,
   distributionalNotes,
   FINAL_STAGE,
   formatGbpBn,
@@ -16,18 +15,7 @@ import { Households } from '../components/Households';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { MeasuresTable } from '../components/MeasuresTable';
 import { ReceptionCard, type EconomyLine } from '../components/ReceptionCard';
-import { Speech } from '../components/Speech';
-import {
-  MACRO_CODES,
-  electorate,
-  incidence,
-  levers,
-  pm,
-  reception,
-  speech as speechFile,
-  vintage,
-  options,
-} from '../data';
+import { electorate, incidence, levers, pm, reception, vintage, options } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { useOutcomeOf } from '../journey/outcome';
@@ -43,7 +31,7 @@ function list(items: readonly string[]): string {
 /**
  * Step 6: feedback, on one screen. The rules line, which is the one thing here that is arithmetic;
  * the backbenchers, the markets and the public, each rating the Budget out of five and saying
- * which choices caused it. The speech, the households and the Budget documents are one fold away.
+ * which choices caused it. The households and the Budget documents are one fold away.
  * Arriving here marks the game finished, so a link shared from here opens as a finished Budget.
  */
 export function BudgetDayPage() {
@@ -138,20 +126,6 @@ export function BudgetDayPage() {
     (game?.priorities.length ?? 0) > 0,
     incidence,
   );
-  const theSpeech = useMemo(
-    () =>
-      assembleSpeech({
-        speech: speechFile,
-        outcome,
-        levers,
-        ...(game ? { game } : {}),
-        pm,
-        ...(status ? { status } : {}),
-        macroCodes: MACRO_CODES,
-        outcomeOf,
-      }),
-    [outcome, game, status, outcomeOf],
-  );
   // Arriving here is the end of the story: a link shared from here opens as a finished Budget.
   // Not when the guard is sending the player back to where they are.
   const reached = game?.reached;
@@ -189,12 +163,6 @@ export function BudgetDayPage() {
         ))}
       </div>
 
-      <details className="more">
-        <summary>Read the speech</summary>
-        <div className="more__body">
-          <Speech speech={theSpeech} />
-        </div>
-      </details>
       <details className="more">
         <summary>Who feels it: five households</summary>
         <div className="more__body">

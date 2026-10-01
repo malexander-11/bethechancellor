@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- Feedback no longer offers "Read the speech": the Budget speech and the Leader of the Opposition's
+  reply go, with the speech's data, the engine code that assembled it and the tests that checked its
+  figures against the sums (ADR-0043).
 - Feedback no longer closes with "How your Budget went": the kind of Budget, which ambitions
   survived, how each promise fared and who paid go, and so does "What the money does and does not
   buy" under the households. The kinds of Budget file and the engine code that chose one go with

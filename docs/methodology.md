@@ -27,8 +27,8 @@ Phase 25 (ADR-0026) added three rules at the edges of the contract. A relief cos
 figure but not a yield, so its card says the most the measure could raise ("raises at most £X"),
 never what it raises. A choice has one price everywhere: the change it makes to the bar's headroom
 in the target year, with the interest on borrowing in it, found by re-running the engine with and
-without the choice (`optionPrice`). And a spoken Game judgement line (the Prime Minister's sign-off,
-the Opposition's reply) holds no figure at all: the schema refuses a digit.
+without the choice (`optionPrice`). And a spoken Game judgement line (the Prime Minister's sign-off)
+holds no figure at all: the schema refuses a digit.
 
 The engine never adds a behavioural or macroeconomic knock-on of its own. Where HMRC's direct
 costings already include a standard behavioural response (they do, for example, for income tax and

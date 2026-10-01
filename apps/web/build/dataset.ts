@@ -64,7 +64,6 @@ export function shippedDataset(): ShippedDataset {
     options: live.options,
     finetune: live.finetune,
     electorate: live.electorate,
-    speech: live.speech,
     incidence: live.incidence,
     guide: live.guide,
     glossary: live.glossary,

@@ -101,9 +101,6 @@ export const ESTATES_AND_HOMES_PAY: Budget = { iht: 10, sdlt5: 5 };
 /** The 50% rate and a wealth tax: more asked of the best-off than of anyone else. */
 export const TAXES_AT_THE_TOP: Budget = { it50: 1, wealth: 1 };
 
-/** A point on corporation tax: business pays more, and the manifesto's cap on it is broken. */
-export const CORPORATION_TAX_RISE: Budget = { ct: 1 };
-
 /** Two pence off the basic rate: a tax cut for everyone who earns, borrowed past the rules. */
 export const BASIC_RATE_CUT: Budget = { itbr: -2 };
 
@@ -114,9 +111,6 @@ export const HEALTH_CUT: Budget = { dhsc: -5 };
 
 /** The two-child limit reinstated: a Budget 2025 promise broken, a U-turn the party resists. */
 export const TWO_CHILD_LIMIT: Budget = { rv2ch: 1 };
-
-/** Investment the debt rule still allows: borrowing to invest, inside the rules. */
-export const INVESTMENT_WITHIN_RULES: Budget = { cdel: 5 };
 
 /** Investment alone, and more of it: all capital, so priced against the debt rule it moves. */
 export const INVESTMENT: Budget = { cdel: 10 };

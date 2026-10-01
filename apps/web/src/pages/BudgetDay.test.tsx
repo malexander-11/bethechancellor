@@ -46,10 +46,11 @@ describe('Budget day: what your Budget means', () => {
     expect(meter('The public')).toHaveAccessibleName('3 of 5: Shrugging');
     expect(meter('The markets')).toHaveAccessibleName('2 of 5: Nervous');
     expect(within(card('The markets')).getAllByText(/not your measures/).length).toBe(2);
-    // The speech, the households and the documents wait behind their folds, closed.
-    for (const fold of ['Read the speech', 'Who feels it: five households', 'Budget documents']) {
+    // The households and the documents wait behind their folds, closed; no speech (ADR-0043).
+    for (const fold of ['Who feels it: five households', 'Budget documents']) {
       expect(screen.getByText(fold).closest('details')).not.toHaveAttribute('open');
     }
+    expect(screen.queryByText('Read the speech')).toBeNull();
     // No Budget in three sentences, and no close (ADR-0043); "change something" means the review.
     expect(screen.queryByText(/in three sentences/)).toBeNull();
     expect(screen.queryByText('How your Budget went')).toBeNull();
@@ -58,17 +59,6 @@ describe('Budget day: what your Budget means', () => {
       'href',
       expect.stringMatching(/^\/review\?/),
     );
-  });
-
-  it('reads the speech one fold away, every sentence said to be a game judgement', () => {
-    at(`${BASE}&${EMPTY}`);
-    open('Read the speech');
-    const speech = screen.getByRole('article', { name: 'The Budget speech' });
-    expect(within(speech).getByText(/Madam Deputy Speaker/)).toBeInTheDocument();
-    expect(within(speech).getByText(/I commend this Budget to the House/)).toBeInTheDocument();
-    expect(within(speech).getByText(/nobody said these words/)).toBeInTheDocument();
-    // An empty Budget meets the rules with today's estimate's headroom, and the speech says so.
-    expect(within(speech).getByText(/£6\.8bn of headroom/)).toBeInTheDocument();
   });
 
   it('gives the reasons and the decisions behind them, and every rule on request', () => {
@@ -156,41 +146,6 @@ describe('Budget day: what your Budget means', () => {
     await waitFor(() =>
       expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.5/),
     );
-  });
-
-  it('the speech follows the choices: the first priority delivered, its options and its cuts', () => {
-    at(`${BASE}&${GAME}&L=moj.10_alc.-5`);
-    open('Read the speech');
-    const speech = screen.getByRole('article', { name: 'The Budget speech' });
-    // Defence is ranked first and left unfunded: the speech opens on what it did fund (Phase 25).
-    expect(
-      within(speech).getByText(/first duty of any government is the safety of its people/),
-    ).toBeInTheDocument();
-    expect(within(speech).queryByText(/security of its people/)).toBeNull();
-    // It owns the forecast before it spends a penny, in figures the engine worked out.
-    expect(
-      within(speech).getByText(
-        /^On today’s estimate, before any measure in this Budget, we borrow £\d+\.\dbn in 2026-27/,
-      ),
-    ).toBeInTheDocument();
-    // The one price (Phase 25): what the flagship does to the headroom, interest included, so
-    // a little more than the lever's own £1.4bn.
-    expect(
-      within(speech).getByText(/more money for prisons and courts, costing £1\.[5-9]bn in 2029-30/),
-    ).toBeInTheDocument();
-    expect(
-      within(speech).getByText(/we cut taxes where we can: alcohol duties/),
-    ).toBeInTheDocument();
-    // On today's estimate, not the OBR's confirmation; and the Opposition has its say.
-    expect(
-      within(speech).getByText(/^On today’s estimate, this Budget meets the fiscal rules/),
-    ).toBeInTheDocument();
-    const reply = within(speech).getByRole('region', {
-      name: /The Leader of the Opposition replies/,
-    });
-    // A judgement, as the strip above it says, with no badge of its own (ADR-0034).
-    expect(reply.querySelector('.badge')).toBeNull();
-    expect(reply.textContent).not.toMatch(/£/);
   });
 
   it('offers the ways on: a link to copy, the review to change something, and a fresh start', () => {

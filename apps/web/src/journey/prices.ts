@@ -24,8 +24,8 @@ const byCode = new Map(levers.map((l) => [l.code, l] as const));
 
 /**
  * A flagship's one price (Phase 25, R4), in words a card can carry: the change the choice makes
- * to the headroom, interest included, and the headroom that leaves. The same figure is on the card,
- * the review, the speech and the close.
+ * to the headroom, interest included, and the headroom that leaves. The same figure is on the card
+ * and the review.
  */
 export interface OptionPrice {
   /** "Costs £0.8bn", "Saves £6.4bn", "Raises £9.7bn", "Nothing until 2030-31, then saves £1.4bn". */

@@ -23,7 +23,6 @@ export {
   parseOptions,
   parseFinetune,
   parseHouseholdsFile,
-  parseSpeech,
   parseIncidence,
   parseGuide,
   parseGlossary,
@@ -64,7 +63,6 @@ export * from './game/prices.js';
 export * from './game/excludes.js';
 export * from './game/finetune.js';
 export * from './game/households.js';
-export * from './game/speech.js';
 export * from './game/verdict.js';
 export * from './game/signoff.js';
 export * from './game/theme.js';

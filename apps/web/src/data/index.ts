@@ -26,7 +26,6 @@ export const {
   interventions,
   options,
   electorate,
-  speech,
   incidence,
   guide,
   glossary,

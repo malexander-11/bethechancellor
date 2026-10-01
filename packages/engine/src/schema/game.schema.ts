@@ -731,90 +731,12 @@ export const householdsFileSchema = z
     });
   });
 
-/* -------------------------------------------------------------- the speech */
+/* ------------------------------------------------------------ who it falls on */
 
 /**
- * A fragment of the speech. `{…}` placeholders are filled by the assembler from the outcome and
- * the game: titles from data, figures from the engine, never a number typed here.
- */
-export const speechFragmentSchema = z.strictObject({
-  text: z.string().min(1),
-  sources: z.array(sourceRefSchema).default([]),
-});
-
-/**
- * The Leader of the Opposition's reply (Phase 25): one line, chosen by the Budget's biggest
- * weakness, in a voice from the other side of the House. A judgement in a role's voice, badged as
- * one, with no figure in it.
- */
-export const oppositionReplySchema = z
-  .strictObject({
-    rulesMissed: speechFragmentSchema,
-    promiseBroken: speechFragmentSchema,
-    taxUp: speechFragmentSchema,
-    borrowingUp: speechFragmentSchema,
-    cuts: speechFragmentSchema,
-    default: speechFragmentSchema,
-  })
-  .superRefine((reply, ctx) => {
-    for (const [key, line] of Object.entries(reply)) {
-      if (/\d/.test(line.text))
-        ctx.addIssue({
-          code: 'custom',
-          message: 'the Opposition makes no figure of its own',
-          path: [key, 'text'],
-        });
-    }
-  });
-
-export const speechFileSchema = z.strictObject({
-  schemaVersion: z.literal(1),
-  /**
-   * Keyed by the first priority delivered in full (Phase 25), plus `default` when none is:
-   * {priorities}, {targetYear}.
-   */
-  opening: z.record(z.string(), speechFragmentSchema),
-  /** When no priority is delivered in full but one has a start: {priority}. */
-  openingStarted: speechFragmentSchema,
-  /**
-   * The forecast before any measure, and what the Budget does to borrowing, all worked out
-   * (Phase 25): {startYear}, {borrowingThen}, {targetYear}, {borrowingTarget}, and one of the
-   * `change` lines: {change}.
-   */
-  forecast: speechFragmentSchema,
-  forecastChange: z.strictObject({
-    up: speechFragmentSchema,
-    down: speechFragmentSchema,
-    same: speechFragmentSchema,
-  }),
-  /** One paragraph per priority delivered: {title}, {options}, {price}, {targetYear}. */
-  priority: speechFragmentSchema,
-  /** Spending measures that are not flagships: {measures}. */
-  spending: speechFragmentSchema,
-  /** Departments' budgets cut: {measures}. */
-  cuts: speechFragmentSchema,
-  /** Benefits cut or reformed to save money (Phase 25): {measures}. */
-  welfareCuts: speechFragmentSchema,
-  /** Revenue paragraphs by who pays: {measures}, {yield}. */
-  revenue: z.record(z.string(), speechFragmentSchema),
-  /** Tax cuts and reversals: {measures}. */
-  giveaways: speechFragmentSchema,
-  /** Said once if a promise made in Downing Street is broken: {promises}. */
-  lockBreak: speechFragmentSchema,
-  /**
-   * The last word, keyed `met` or `missed`: {headroom}, {targetYear} when met; {missed}, each
-   * missed rule by its plain name and its own margin, when missed (Phase 25).
-   */
-  peroration: z.record(z.string(), speechFragmentSchema),
-  opposition: oppositionReplySchema,
-});
-
-/* --------------------------------------------------------------- the close */
-
-/**
- * Who a lever falls on (stage 7's "who paid, who benefited"). Every non-macro lever carries one
- * group tag; a tax group is a payer, a spending group a beneficiary. Tags are words, so the close
- * can total the engine's figures by them without adding a number of its own.
+ * Who a lever falls on. Every non-macro lever carries one group tag; a tax group is a payer, a
+ * spending group a beneficiary. Tags are words, so the review can total the engine's figures by
+ * them, and the audiences and households read them, without adding a number of their own.
  */
 export const incidenceGroupSchema = z.strictObject({
   label: z.string().min(1),

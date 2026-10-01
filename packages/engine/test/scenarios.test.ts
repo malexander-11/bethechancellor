@@ -12,7 +12,6 @@ import { loadDataset, outcomeOfFor } from './fixtures.js';
 import {
   BASIC_RATE_CUT,
   BIG_BROAD_TAX_RISE,
-  CORPORATION_TAX_RISE,
   DAY_TO_DAY_RULE_MISSED,
   DEBT_RULE_MISSED,
   DEFENCE_GAP,
@@ -23,7 +22,6 @@ import {
   HEALTH_ABOVE_PLAN,
   HEALTH_CUT,
   INVESTMENT,
-  INVESTMENT_WITHIN_RULES,
   MOVES,
   NEEDED_LOCK_BREAK,
   NHS_START,
@@ -124,16 +122,11 @@ describe('the named Budgets play their parts', () => {
     expect(headroom(ESTATES_AND_HOMES_PAY)).toBeGreaterThan(headroom({}));
     expect(broken(BASIC_RATE_CUT)).toEqual([]);
     expect(missed(BASIC_RATE_CUT).length).toBeGreaterThan(0);
-    // The top rate and a wealth tax fall on the best-off; a point on corporation tax on business,
-    // breaking the manifesto's cap.
+    // The top rate and a wealth tax fall on the best-off.
     for (const code of Object.keys(TAXES_AT_THE_TOP)) {
       expect(ds.incidence.levers[code], code).toBe('top');
     }
     expect(broken(TAXES_AT_THE_TOP)).toEqual([]);
-    for (const code of Object.keys(CORPORATION_TAX_RISE)) {
-      expect(ds.incidence.levers[code], code).toBe('business');
-    }
-    expect(broken(CORPORATION_TAX_RISE)).toEqual(['ct-cap']);
   });
 
   it('a cut to health keeps the rules; the two-child limit breaks a promise of the last Budget', () => {
@@ -145,11 +138,10 @@ describe('the named Budgets play their parts', () => {
   });
 
   it('each rule miss misses its own rule, and investment is all capital', () => {
-    expect(missed(INVESTMENT_WITHIN_RULES)).toEqual([]);
     expect(missed(DEBT_RULE_MISSED)).toEqual(['stockFalling']);
     expect(missed(DAY_TO_DAY_RULE_MISSED)).toContain('currentBudget');
     expect(missed(EVERYTHING_EXPENSIVE)).toContain('currentBudget');
-    for (const budget of [INVESTMENT_WITHIN_RULES, INVESTMENT, DEBT_RULE_MISSED]) {
+    for (const budget of [INVESTMENT, DEBT_RULE_MISSED]) {
       for (const code of Object.keys(budget)) {
         expect(lever(code).classification?.currentOrCapital, code).toBe('capital');
       }

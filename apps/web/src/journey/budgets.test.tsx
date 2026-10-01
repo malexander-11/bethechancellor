@@ -89,7 +89,7 @@ function screenWords(): number {
   if (!main) return 0;
   const clone = main.cloneNode(true) as HTMLElement;
   clone
-    .querySelectorAll('details, .speech, .sr-only, table, nav.progress, footer')
+    .querySelectorAll('details, .sr-only, table, nav.progress, footer')
     .forEach((el) => el.remove());
   return words(clone.textContent ?? '');
 }

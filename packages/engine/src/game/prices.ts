@@ -3,8 +3,8 @@ import type { Badge, Lever, OptionsFile, PmFile } from '../types/data.js';
 import type { LeverEffect, Outcome } from '../types/engine.js';
 
 /**
- * One price per choice (Phase 25, R4). Every screen that prices a flagship, the card, the review,
- * the speech and the close, reads the same figure: the change the choice makes to the headroom
+ * One price per choice (Phase 25, R4). Every screen that prices a flagship, the card and the
+ * review, reads the same figure: the change the choice makes to the headroom
  * the bar shows in the target year, debt interest included, so "costs £0.8bn · leaves £6.0bn"
  * adds up. It is the engine re-run with and without the choice: arithmetic on official figures,
  * badged Worked out, with no judgement in it.

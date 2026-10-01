@@ -8,7 +8,6 @@ import {
   optionsFileSchema,
   finetuneFileSchema,
   householdsFileSchema,
-  speechFileSchema,
   incidenceFileSchema,
   guideFileSchema,
   glossaryFileSchema,
@@ -34,7 +33,6 @@ import type {
   OptionsFile,
   FinetuneFile,
   HouseholdsFile,
-  SpeechFile,
   IncidenceFile,
   GuideFile,
   GlossaryFile,
@@ -166,10 +164,6 @@ export function parseHouseholdsFile(json: unknown): HouseholdsFile {
   return parseWith(householdsFileSchema, json, 'the households');
 }
 
-export function parseSpeech(json: unknown): SpeechFile {
-  return parseWith(speechFileSchema, json, 'the speech');
-}
-
 export function parseIncidence(json: unknown): IncidenceFile {
   return parseWith(incidenceFileSchema, json, 'incidence tags');
 }
@@ -198,7 +192,6 @@ export interface Dataset {
   /** The curated levers of step 4 (Phase 24, ADR-0025). */
   finetune?: FinetuneFile;
   electorate?: HouseholdsFile;
-  speech?: SpeechFile;
   incidence?: IncidenceFile;
   guide?: GuideFile;
   glossary?: GlossaryFile;
@@ -328,7 +321,6 @@ export function validateDataset(ds: Dataset): string[] {
       ds.options ?? null,
       ds.finetune ?? null,
       ds.electorate ?? null,
-      ds.speech ?? null,
       ds.incidence ?? null,
       ds.glossary ?? null,
       ds.reception ?? null,
@@ -759,16 +751,6 @@ export function validateDataset(ds: Dataset): string[] {
     }
     for (const code of ds.electorate.reachesNone) {
       if (!codes.has(code)) problems.push(`unknown lever "${code}" reaches no household`);
-    }
-  }
-  if (ds.speech) {
-    if (!ds.speech.opening.default) problems.push('the speech has no default opening');
-    for (const priority of ds.pm?.priorities ?? []) {
-      if (!ds.speech.opening[priority.id])
-        problems.push(`the speech has no opening for priority ${priority.id}`);
-    }
-    for (const key of ['met', 'missed']) {
-      if (!ds.speech.peroration[key]) problems.push(`the speech has no ${key} peroration`);
     }
   }
   if (ds.interventions) {

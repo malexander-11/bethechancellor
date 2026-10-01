@@ -15,7 +15,6 @@ import type {
   ReceptionFile,
   RuleSet,
   SourcesFile,
-  SpeechFile,
   Vintage,
 } from '@btc/engine';
 
@@ -39,7 +38,6 @@ export interface ShippedDataset {
   options: OptionsFile;
   finetune: FinetuneFile;
   electorate: HouseholdsFile;
-  speech: SpeechFile;
   incidence: IncidenceFile;
   guide: GuideFile;
   glossary: GlossaryFile;

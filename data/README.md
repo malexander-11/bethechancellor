@@ -23,7 +23,6 @@ journey/options.json      the ways to deliver each priority (ADR-0022)
 journey/finetune.json     the fine-tuning screens: every lever, in decisions (ADR-0035, ADR-0037)
 journey/ministers.json    a minister's lines for every spending and welfare lever
 journey/interventions.json the review's line on a priority short of delivery
-journey/speech.json       the speech fragments the assembler fills
 journey/households.json   five household archetypes and the levers that touch them
 journey/incidence.json    who each lever falls on
 journey/reception.json    Budget day: three audiences, their rules, bands, points and caps (ADR-0013)
@@ -102,7 +101,7 @@ refuses gilt sales for any year but the one the context is dated in.
   control's range. A step-4 size may go past it (Phase 26, ADR-0027): the effect is then badged
   Worked out and shows `text` (at most 140 characters).
 - **The lever's noun.** `noun`, in lower case ("the basic rate of income tax", "the health budget"):
-  how a Budget-day reason names its causes after "Because of", and how the speech names the measure.
+  how a Budget-day reason names its causes after "Because of".
 - **Two levers that count the same money.** An interaction with `severity: "excludes"`, authored
   once per pair (the validator checks): only one can be chosen at a time. The flagship screens offer
   a swap; on step 4 ticks that a decision declares a set are one choice among radios
@@ -443,7 +442,7 @@ One more rule needs the engine, so the tests hold it: on today's estimate, every
 target year's headroom by £1bn or more, priced as its card prices it (interest included, and a move
 made only of investment priced on the debt rule).
 
-### Households, who pays and the speech (Phase 25, ADR-0026)
+### Households and who pays (Phase 25, ADR-0026)
 
 - **Households** (`households.json`). Each household names its `exposure`: the incidence groups
   whose levers reach its pay, its shop, its benefits or the services it uses. It says its
@@ -458,11 +457,6 @@ made only of investment priced on the debt rule).
   figure. `notFelt` lists the taxes most households do not feel: levies on banks, on energy
   producers and on the very top. They leave the public's count of tax rises and earn no point either
   way.
-- **The speech** (`speech.json`). `forecast` says the forecast before any measure and what the
-  Budget does to borrowing, all worked out (`{startYear}`, `{borrowingThen}`, `{targetYear}`,
-  `{borrowingTarget}`, `{change}`). `opposition` holds the Leader of the Opposition's one-line
-  reply, keyed by the Budget's biggest weakness (`rulesMissed`, `promiseBroken`, `taxUp`,
-  `borrowingUp`, `cuts`, `default`): a role, never a name, and the schema refuses a digit.
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 
@@ -486,5 +480,3 @@ seven or below per set (ADR-0024). Rules for authoring one:
   person's name, and no description that identifies one.
 - **Predicates are closed.** Interventions and household touches choose from enums the engine
   evaluates; a new condition needs code, not a string.
-- The speech's `{…}` placeholders are filled from data and the outcome; a test checks every pound
-  sign in the assembled text against the engine.
