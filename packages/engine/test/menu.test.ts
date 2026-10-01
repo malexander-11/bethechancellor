@@ -60,7 +60,7 @@ describe('the Budget 2026 menu', () => {
 
   it('pairs the designs that count the same money, read from either side', () => {
     const pairs: [string, string][] = [
-      // A charge on leavers cannot sit beside the death card.
+      // The charge on leavers is already part of the package that taxes gains at death too.
       ['cgtexit', 'cgtdth'],
       // Two designs for one tax on the same wealth: one or the other.
       ['wealth', 'wealth2'],
@@ -116,8 +116,6 @@ describe('the Budget 2026 menu', () => {
   });
 
   it('says on the card what its own arithmetic cannot vouch for (ADR-0017)', () => {
-    // Ending the write-off at death is an upper bound by construction.
-    expect(lever('cgtdth').headline).toMatch(/upper bound/);
     // The contested policies say so before they show a number.
     for (const code of ['wealth', 'wealth2']) {
       expect(lever(code).headline?.toLowerCase(), code).toContain('contested');

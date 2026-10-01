@@ -1087,27 +1087,8 @@
             "title": "Tax gains that go untaxed",
             "items": [
               {
-                "code": "cgtdth",
-                "label": "When someone dies",
-                "policies": [
-                  {
-                    "title": "Tax capital gains when someone dies",
-                    "sizes": [1],
-                    "advice": {
-                      "text": "Steady money from estates, but nothing before 2028.",
-                      "sources": [
-                        {
-                          "sourceId": "rf-call-of-duties-2025"
-                        }
-                      ],
-                      "badge": "simulated"
-                    }
-                  }
-                ]
-              },
-              {
                 "code": "cgtexit",
-                "label": "When someone leaves the UK",
+                "label": "Tax leavers",
                 "policies": [
                   {
                     "title": "Charge capital gains tax on people who leave the UK",
@@ -1117,6 +1098,25 @@
                       "sources": [
                         {
                           "sourceId": "centax-business-owners-emigrate-2024"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "cgtdth",
+                "label": "Tax leavers and on death",
+                "policies": [
+                  {
+                    "title": "Tax capital gains on leaving the UK and at death",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Leavers and estates together: steady money, but nothing before 2028.",
+                      "sources": [
+                        {
+                          "sourceId": "rf-call-of-duties-2025"
                         }
                       ],
                       "badge": "simulated"

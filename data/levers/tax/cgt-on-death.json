@@ -5,13 +5,13 @@
   "category": "tax",
   "badge": "assumption",
   "group": "Capital gains tax",
-  "title": "End the capital gains write-off at death",
-  "shortTitle": "CGT at death",
-  "noun": "capital gains tax at death",
-  "headline": "End the CGT write-off at death from 2028-29. RF’s £4bn, an upper bound.",
-  "description": "Today any gain built up on an asset is wiped out for capital gains tax when its owner dies: the heir inherits it at its value at death and pays nothing on the gain that came before. The Resolution Foundation proposes that the full gain should be taxed when the heir eventually sells, and puts that together with a settling-up charge on people who leave the country at £4 billion a year. It publishes no split between the two, so this card carries the whole £4bn against the death write-off alone. The business department has ruled out a corporate exit tax; a personal charge on people who leave has not been ruled out, and the Centre for the Analysis of Taxation puts the gains tax forgone on business owners who emigrate at £0.5 billion a year or more, which the exit charge card carries on its own. It is grown with the OBR's capital gains tax forecast from 2029-30.",
+  "title": "Charge capital gains tax on leaving the UK and at death",
+  "shortTitle": "CGT on leaving and at death",
+  "noun": "capital gains tax on leaving and at death",
+  "headline": "Gains on leaving and at death, taxed from 2028-29: RF’s £4bn for both.",
+  "description": "Today any gain built up on an asset is wiped out for capital gains tax when its owner dies: the heir inherits it at its value at death and pays nothing on the gain that came before. Someone who leaves the UK before selling pays no British capital gains tax on the gain built up while they lived here either. The Resolution Foundation proposes taxing both: the full gain when the heir eventually sells, and a settling-up charge on people who leave the country. It puts the two together at £4 billion a year, and this card is that package at that figure. The Centre for the Analysis of Taxation puts the gains tax forgone on business owners who emigrate alone at £0.5 billion a year or more, which the leavers' card carries. The business department has ruled out a corporate exit tax; a personal charge on people who leave has not been ruled out. It is grown with the OBR's capital gains tax forecast from 2029-30.",
   "baselinePolicy": {
-    "text": "Gains are rebased to market value on death and the built-up gain is never charged to capital gains tax; the estate may pay inheritance tax instead. Capital gains tax receipts are forecast at £32.0bn in 2029-30.",
+    "text": "Gains are rebased to market value on death and the built-up gain is never charged to capital gains tax (the estate may pay inheritance tax instead), and someone who leaves the UK before selling pays no British capital gains tax on the gain. Capital gains tax receipts are forecast at £32.0bn in 2029-30.",
     "source": {
       "sourceId": "rf-call-of-duties-2025",
       "quote": "when assets are held until death, any built-up gains are written off for tax purposes"
@@ -80,7 +80,7 @@
           }
         ]
       },
-      "note": "The Foundation's £4bn a year is taken as a 2029-30 steady-state figure and moved with the OBR's capital gains tax receipts to the other years. It covers two measures and the exit charge is not separated, so the figure is an upper bound for the death write-off on its own. Nothing is counted before 2028-29: see earliestStart."
+      "note": "The Foundation's £4bn a year is taken as a 2029-30 steady-state figure and moved with the OBR's capital gains tax receipts to the other years. It is the Foundation's figure for both measures together, as this card is. Nothing is counted before 2028-29: see earliestStart."
     },
     "caveats": [
       "An upper bound by construction: the Resolution Foundation costs the death write-off and an exit charge together and publishes no split. Nobody has certified either figure.",
@@ -135,7 +135,7 @@
     },
     {
       "withLever": "cgt-exit-charge",
-      "text": "The £4bn for gains at death already includes a charge on people who leave: together they count it twice.",
+      "text": "This package already charges people who leave: together they count it twice.",
       "severity": "excludes"
     }
   ],

@@ -3,6 +3,14 @@
 One entry per change, newest first. A decision that shapes the architecture also gets a short record
 in `docs/adr`; older records are not revised.
 
+## 2026-10-01
+
+- Capital gains tax's untaxed gains are now "Tax leavers" and "Tax leavers and on death". The second
+  is the Resolution Foundation's £4bn package, which taxes both, so it is the source's own figure
+  and no longer an upper bound for gains at death alone; the first is CenTax's floor for leavers.
+  They are still ticks, and ticking one takes the other out, since the package already taxes
+  leavers.
+
 ## 2026-09-30
 
 - The Permanent Secretary no longer speaks above the fine-tuning cards: their two lines, on a missed

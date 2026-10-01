@@ -391,8 +391,9 @@ choosing one clears the other. Rules the validator enforces:
   the set answers (“The wealth tax”, at most 60 characters). Every member excludes every other
   member and nothing outside the set, none is set by a flagship, the members sit side by side in the
   decision’s order, and no tick is in two sets. The screen draws a set as radios with “As planned”
-  first. Whether a pair is a set is the data's choice (ADR-0038): a pair left as ticks, like capital
-  gains tax at death and on people who leave, or a pair a flagship sets, is taken out instead.
+  first. Whether a pair is a set is the data's choice (ADR-0038): a pair left as ticks, like taxing
+  leavers' gains and taxing them with gains at death, or a pair a flagship sets, is taken out
+  instead.
 - **Each choice has a name of its own in its decision**: no two items in one decision share a short
   name.
 - **The adviser exists and speaks on this step** (`finetune` in `advisers.json`).

@@ -56,7 +56,8 @@ describe('wider feedback (Phase 25, R21)', () => {
   });
 
   it('marks money that arrives late with the markets, and moves no rating by it', () => {
-    // CGT at death raises nothing before 2028-29; the penny raises from the first year.
+    // Taxing leavers and gains at death raises nothing before 2028-29; the penny raises from the
+    // first year.
     const late = lateBand({ cgtdth: 1, ...PENNY });
     expect(late?.points).toBe(0);
     expect(late?.text).toMatch(

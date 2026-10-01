@@ -386,17 +386,17 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(within(set).getAllByText(/^Warning: Counted twice with/)).toHaveLength(2);
   });
 
-  it('leaves gains at death and on leaving as ticks, one taking the other out (ADR-0038)', async () => {
+  it('offers tax on leavers alone or with gains at death, ticks that take each other out (ADR-0038)', async () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     const gains = openDecision('Tax gains that go untaxed');
     expect(within(gains).queryByRole('radio')).toBeNull();
-    fireEvent.click(within(gains).getByRole('checkbox', { name: 'When someone dies' }));
+    fireEvent.click(within(gains).getByRole('checkbox', { name: 'Tax leavers and on death' }));
     fireEvent.click(within(gains).getByRole('checkbox', { name: 'On main homes' }));
     await waitFor(() => expect(search().get('L')).toMatch(/cgtdth\.1/));
-    // The death card's figure already has a charge on leavers in it: the other tick says so first.
-    const leavers = within(gains).getByRole('checkbox', { name: 'When someone leaves the UK' });
+    // The package already charges leavers: the leavers' tick says so before it is touched.
+    const leavers = within(gains).getByRole('checkbox', { name: 'Tax leavers' });
     expect(leavers).toHaveAccessibleDescription(
-      /^Choosing this takes out “When someone dies”\. would (raise|cost) £\d+\.\dbn instead$/,
+      /^Choosing this takes out “Tax leavers and on death”\. would (raise|cost) £\d+\.\dbn instead$/,
     );
     fireEvent.click(leavers);
     await waitFor(() => expect(search().get('L')).toMatch(/cgtexit\.1/));
