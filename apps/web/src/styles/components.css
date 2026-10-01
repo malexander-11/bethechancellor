@@ -451,23 +451,6 @@
 
 /* ------------------------------------------------------- the lever groups */
 
-.interventions {
-  margin: 8px 0 4px;
-}
-
-.interventions .spoken {
-  margin: 8px 0;
-}
-
-/* One voice on the surface; the other notes wait behind one fold. */
-.interventions__more {
-  margin: 0;
-}
-
-.interventions__more > .more__body {
-  padding-bottom: 0;
-}
-
 .minister .spoken {
   margin: 4px 0 16px;
   font-size: 0.9375rem;

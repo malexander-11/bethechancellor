@@ -61,7 +61,6 @@ export { interpolateLookup } from './costing/lookup.js';
 export * from './game/scenarios.js';
 export * from './game/ambitions.js';
 export * from './game/ministers.js';
-export * from './game/interventions.js';
 export * from './game/options.js';
 export * from './game/prices.js';
 export * from './game/excludes.js';

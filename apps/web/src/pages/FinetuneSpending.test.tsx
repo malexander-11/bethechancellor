@@ -244,22 +244,15 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 
-  it('lets one adviser speak above the cards, the most pressing, one at a time (Phase 25)', () => {
-    // Nothing delivers defence yet: the Director of Public Spending says so.
-    const quiet = at(`/finetune/tax?${BASE}&${GAME}&L=moj.10`);
-    let advisers = screen.getByRole('region', { name: 'Your advisers' });
-    expect(
-      within(advisers).getByText(/^Defence on the NATO path is an agreed priority\./),
-    ).toBeInTheDocument();
-    quiet.unmount();
-    // A penny on the basic rate breaks the tax lock, which comes first: one line, and no chorus.
-    at(`/finetune/tax?${BASE}&${GAME}&L=moj.10_itbr.1`);
-    advisers = screen.getByRole('region', { name: 'Your advisers' });
-    expect(
-      within(advisers).getByText(/^The tax lock is a manifesto red line, Chancellor\./),
-    ).toBeInTheDocument();
-    expect(within(advisers).queryByText(/agreed priority/)).toBeNull();
-    expect(within(advisers).queryByText(/What the advisers say/)).toBeNull();
+  it('has no adviser speak above the cards on either screen: the bar says what is short (ADR-0040)', () => {
+    // Nothing delivers defence yet, and a penny on the basic rate breaks the tax lock.
+    for (const side of ['tax', 'spending']) {
+      const view = at(`/finetune/${side}?${BASE}&${GAME}&L=moj.10_itbr.1`);
+      expect(screen.queryByRole('region', { name: 'Your advisers' }), side).toBeNull();
+      expect(bar().textContent, side).toMatch(/promise broken/);
+      expect(bar().textContent, side).toMatch(/priorities delivered/);
+      view.unmount();
+    }
   });
 
   it('has the bar say what changed, once the choice settles (Phase 25)', async () => {

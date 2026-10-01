@@ -22,7 +22,7 @@ journey/pm.json           the Prime Minister: the eight priorities, the manifest
 journey/options.json      the ways to deliver each priority (ADR-0022)
 journey/finetune.json     the fine-tuning screens: every lever, in decisions (ADR-0035, ADR-0037)
 journey/ministers.json    a minister's lines for every spending and welfare lever
-journey/interventions.json adviser lines with a closed predicate over the ambitions
+journey/interventions.json the review's line on a priority short of delivery
 journey/speech.json       the speech fragments the assembler fills
 journey/households.json   five household archetypes and the levers that touch them
 journey/incidence.json    who each lever falls on, for the close

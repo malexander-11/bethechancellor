@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- No adviser speaks above the cards on either fine-tuning screen. The rows still wear the promises
+  they break or strain, and the bar says what is broken or short; the review keeps the Director of
+  Public Spending's line on a priority short of delivery (ADR-0040).
 - Capital gains tax's untaxed gains are now "Tax leavers" and "Tax leavers and on death". The second
   is the Resolution Foundation's £4bn package, which taxes both, so it is the source's own figure
   and no longer an upper bound for gains at death alone; the first is CenTax's floor for leavers.

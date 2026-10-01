@@ -2,52 +2,6 @@
   "schemaVersion": 1,
   "interventions": [
     {
-      "id": "pa-promise-broken",
-      "adviser": "political-adviser",
-      "when": "promise-broken",
-      "line": {
-        "text": "That is {name}, Chancellor: a manifesto red line, and the words are on the record. Nothing here will stop you. On Budget day the public’s rating starts at the floor, whatever else you do.",
-        "short": "{name} is a manifesto red line, Chancellor. The public’s rating starts at the floor.",
-        "sources": [],
-        "badge": "simulated"
-      }
-    },
-    {
-      "id": "pa-commitment-broken",
-      "adviser": "political-adviser",
-      "when": "commitment-broken",
-      "line": {
-        "text": "That is {name}, Chancellor: a decision from last year’s Budget, reversed. It is not a manifesto promise, but the benches fought for it, and a U-turn will be called one.",
-        "short": "{name}: last year’s Budget reversed, Chancellor. The benches fought for it.",
-        "sources": [
-          {
-            "sourceId": "hmt-budget-2025-speech"
-          }
-        ],
-        "badge": "simulated"
-      }
-    },
-    {
-      "id": "pa-promise-strained",
-      "adviser": "political-adviser",
-      "when": "promise-strained",
-      "line": {
-        "text": "{name} is tested, not broken: its words are kept and its spirit is not. The benches and the public will still notice.",
-        "short": "{name} is tested, not broken: the words kept, the spirit not.",
-        "sources": [
-          {
-            "sourceId": "labour-manifesto-2024-strong-foundations"
-          },
-          {
-            "sourceId": "hmt-autumn-budget-2024-table-5-1",
-            "table": "Table 5.1",
-            "note": "line 26"
-          }
-        ],
-        "badge": "simulated"
-      }
-    },
-    {
       "id": "dps-priority-unfunded",
       "adviser": "director-of-public-spending",
       "when": "priority-unfunded",

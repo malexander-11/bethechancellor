@@ -46,8 +46,6 @@ import type {
   ministerSchema,
   ministerBandSchema,
   interventionsFileSchema,
-  interventionSchema,
-  interventionWhenSchema,
   householdsFileSchema,
   householdSchema,
   householdTouchSchema,
@@ -125,8 +123,6 @@ export type MinistersFile = z.infer<typeof ministersFileSchema>;
 export type Minister = z.infer<typeof ministerSchema>;
 export type MinisterBand = z.infer<typeof ministerBandSchema>;
 export type InterventionsFile = z.infer<typeof interventionsFileSchema>;
-export type InterventionSpec = z.infer<typeof interventionSchema>;
-export type InterventionWhen = z.infer<typeof interventionWhenSchema>;
 export type OptionsFile = z.infer<typeof optionsFileSchema>;
 export type DeliverOption = z.infer<typeof deliverOptionSchema>;
 export type OptionScale = z.infer<typeof optionScaleSchema>;

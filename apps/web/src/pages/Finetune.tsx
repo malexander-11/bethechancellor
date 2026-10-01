@@ -6,7 +6,6 @@ import {
   deskLevers,
   formatGbpBn,
   groupItems,
-  interventionsFor,
   itemName,
   policyCount,
   rankedPriorities,
@@ -21,7 +20,6 @@ import {
 import { useState, type ReactNode } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
-import { Interventions } from '../components/Interventions';
 import { JourneyLayout } from '../components/JourneyLayout';
 import {
   ChoiceCard,
@@ -32,7 +30,7 @@ import {
 import { plannedWords, sizeWords } from '../components/LeverControl';
 import type { Held } from '../components/LeverRow';
 import { ModeLine } from '../components/ModeLine';
-import { adviserById, context, finetune, interventions, levers, options, pm } from '../data';
+import { adviserById, context, finetune, levers, options, pm } from '../data';
 import { UNCHANGED_BELOW_GBPM } from '../journey/effects';
 import { useStageGuard } from '../journey/guard';
 import { chosenByLever, redLinesOf } from '../journey/levers';
@@ -236,9 +234,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const redLinesFor = redLinesOf(state.leverValues);
   const who = adviserById.get(spec.adviser)?.role ?? spec.adviser;
   const index = side === 'tax' ? 1 : 2;
-  // The advisers who remember (Phase 25): the most pressing line that fires, one at a time, so the
-  // screen has one voice above the cards and never a chorus.
-  const advice = interventionsFor(interventions, status).slice(0, 1);
 
   // What every card on the screen reads alike (ADR-0037).
   const named = ADVISER_IN_LEAD[side];
@@ -365,7 +360,6 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
       }
     >
       <HeadroomBar outcome={outcome} status={status} />
-      <Interventions items={advice} />
       {spec.notes.length > 0 ? (
         <ul className="tune__notes">
           {spec.notes.map((note) => (

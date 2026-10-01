@@ -635,22 +635,16 @@ export const ministersFileSchema = z
   });
 
 /**
- * When an adviser speaks up on the package screens. A closed list of predicates over the ambition status and
- * the scorecard, not a language: each is evaluated by `interventionsFor`, and a new one needs code.
+ * When the review says a priority is short of delivery (Review.tsx): nothing funds it yet, or only a
+ * start does. A closed list, not a language: a new one needs code. The advisers no longer speak above
+ * the fine-tuning cards (ADR-0040).
  */
-export const interventionWhenSchema = z.enum([
-  'promise-broken',
-  // A promise from outside the manifesto reversed (Phase 25): a U-turn, not a red line.
-  'commitment-broken',
-  'promise-strained',
-  'priority-unfunded',
-  'priority-part-funded',
-]);
+export const interventionWhenSchema = z.enum(['priority-unfunded', 'priority-part-funded']);
 
 /**
- * An adviser's line on the package screens, shown when its predicate holds. `{name}` in the text is filled
- * with the title of the promise or flagship the predicate fired on: a title from data, never a
- * number. The line's own sources are for any fact it states beyond that.
+ * An adviser's line on a priority short of delivery, which the review shows under it. `{name}` in
+ * the text is filled with the priority's title: a title from data, never a number. The line's own
+ * sources are for any fact it states beyond that.
  */
 export const interventionSchema = z.strictObject({
   id: slug,
