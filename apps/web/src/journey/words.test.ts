@@ -209,7 +209,7 @@ describe('word budgets: one line visible, the rest a click away', () => {
 
   it('gives every lever a headline of one line, not a paragraph', () => {
     // The headline heads a lever's part of its card's "More about these" (ADR-0037); a lever with
-    // one ships without its longer description (apps/web/build/dataset.ts).
+    // one ships without its longer description (`@btc/pipeline/shipped`).
     for (const side of ['tax', 'spending'] as const) {
       const stepLevers = levers.filter(
         (l) =>

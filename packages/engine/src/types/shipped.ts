@@ -16,13 +16,14 @@ import type {
   RuleSet,
   SourcesFile,
   Vintage,
-} from '@btc/engine';
+} from './data.js';
 
 /**
- * The data set as the browser receives it (apps/web/build/dataset.ts): checked against its schemas
- * and validated at build time, with only the levers the game offers, and without what no screen
- * shows (the published tables behind a costing, the passages quoted from sources, the source files'
- * hashes and notes, and a description where a headline stands in for it).
+ * The data set as the game ships it (`@btc/pipeline/shipped`), to the browser and to the server:
+ * checked against its schemas and validated when it is built, with only the levers the game offers,
+ * and without what no screen shows (the published tables behind a costing, the passages quoted
+ * from sources, the source files' hashes and notes, and a description where a headline stands in
+ * for it).
  */
 export interface ShippedDataset {
   sources: SourcesFile;

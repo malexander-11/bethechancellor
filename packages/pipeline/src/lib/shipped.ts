@@ -1,14 +1,13 @@
 /**
- * The data the browser gets, made in Node when the app is built or served and when the tests
- * start. Everything under data/ is read and checked against its schemas here, the game as shipped
- * is validated, and what no screen shows is left out. The browser only parses JSON: it carries no
- * schemas and no validator, and a data set that does not hold together fails the build rather than
- * the player's page.
+ * The data the game ships, to the browser and to the server, made in Node when the app is built or
+ * served and when the tests start. Everything under data/ is read and checked against its schemas
+ * here, the game as shipped is validated, and what no screen shows is left out. The browser only
+ * parses JSON: it carries no schemas and no validator, and a data set that does not hold together
+ * fails the build rather than the player's page.
  */
-import { validateDataset, type Lever, type SourceDoc } from '@btc/engine';
-import { loadDataset } from '@btc/pipeline/dataset';
-import { liveView } from '@btc/pipeline/live';
-import type { ShippedDataset } from '../src/data/shipped';
+import { validateDataset, type Lever, type ShippedDataset, type SourceDoc } from '@btc/engine';
+import { loadDataset } from './dataset.js';
+import { liveView } from './live.js';
 
 /** A lever as the screens use it. */
 function shippedLever(lever: Lever): Lever {

@@ -2,6 +2,7 @@ export { DataError, EngineError } from './errors.js';
 export * from './schema/index.js';
 export type * from './types/data.js';
 export type * from './types/engine.js';
+export type * from './types/shipped.js';
 export { freshGame } from './types/engine.js';
 export {
   parseHmrcExtract,

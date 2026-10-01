@@ -162,10 +162,10 @@ See `docs/methodology.md` for the accounting spine and `docs/adr/` for design de
 ## Layout
 
 ```
-apps/web            Vite + React front end (deployed on Vercel); build/ makes and checks the data
-                    it ships
+apps/web            Vite + React front end (deployed on Vercel)
 packages/engine     pure TypeScript fiscal engine, schemas and tests
-packages/pipeline   scripts that fetch, extract and validate source data
+packages/pipeline   scripts that fetch, extract and validate source data, and make and check the
+                    data the game ships
 data/               sourced JSON: vintages, rules, levers, context readings, the advisers,
                     the Prime Minister's priorities, the options, the fine-tuning policies,
                     ministers, households, Budget day reaction bands, raw source files

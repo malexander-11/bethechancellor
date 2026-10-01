@@ -1,6 +1,6 @@
 import path from 'node:path';
+import type { ShippedDataset } from '@btc/engine';
 import type { Plugin } from 'vite';
-import type { shippedDataset } from './dataset';
 
 const ID = 'virtual:btc-dataset';
 const RESOLVED = `\0${ID}`;
@@ -11,14 +11,14 @@ const RESOLVED = `\0${ID}`;
  */
 async function made() {
   const { tsImport } = await import('tsx/esm/api');
-  const module = (await tsImport('./dataset.ts', import.meta.url)) as {
-    shippedDataset: typeof shippedDataset;
+  const module = (await tsImport('@btc/pipeline/shipped', import.meta.url)) as {
+    shippedDataset: () => ShippedDataset;
   };
   return module.shippedDataset();
 }
 
 /**
- * `import dataset from 'virtual:btc-dataset'`: the shipped data set (./dataset.ts) as one JSON
+ * `import dataset from 'virtual:btc-dataset'`: the shipped data set (`@btc/pipeline/shipped`) as one JSON
  * string, which the browser parses faster than it would the same object written out as code.
  * Served, a change under data/ reloads the page with the data made again.
  */

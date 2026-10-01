@@ -11,7 +11,7 @@ import dataset from 'virtual:btc-dataset';
 
 /**
  * The data set, read and checked against its schemas at build time and validated as the game ships
- * it (apps/web/build/dataset.ts): the browser only parses it.
+ * it (`@btc/pipeline/shipped`): the browser only parses it.
  */
 export const {
   sources,

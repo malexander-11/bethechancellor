@@ -7,7 +7,8 @@
   "type": "module",
   "exports": {
     "./dataset": "./src/lib/dataset.ts",
-    "./live": "./src/lib/live.ts"
+    "./live": "./src/lib/live.ts",
+    "./shipped": "./src/lib/shipped.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",

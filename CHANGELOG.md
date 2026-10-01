@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The data the game ships is made and checked in the pipeline (`@btc/pipeline/shipped`), with its
+  type in the engine, so a server can ship exactly what the browser gets. Nothing a player sees
+  changes.
 - The methodology's sections on Budget day's readings and the reception no longer describe the
   late-money reading, the public's distributional notes or "Why this rating" (ADR-0043).
 - Feedback shows its five households on the page, under their own heading, instead of behind "Who
