@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The methodology's sections on Budget day's readings and the reception no longer describe the
+  late-money reading, the public's distributional notes or "Why this rating" (ADR-0043).
 - Feedback shows its five households on the page, under their own heading, instead of behind "Who
   feels it". Budget day gets a word budget of its own for them, their words join the plain-words
   checks, and six of their sentences are split at their own clause breaks (ADR-0043).

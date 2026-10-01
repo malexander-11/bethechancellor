@@ -499,14 +499,14 @@ cumulative borrowing, debt and the tax take are measured from `preBudget`, today
 nothing moved, so the economy since March is never the player's doing. New readings: the headroom
 change and the debt rule's own headroom; the fiscal rules missed (the day-to-day and debt rules, not
 the welfare cap); departments' day-to-day cuts, counted one by one and never netted, with health and
-schools apart; the tax rises most households feel and those they do not (`felt` and `notFelt` in
-`incidence.json`); whether what the Budget spends and gives away is paid for in every year;
-borrowing that comes early; commitments broken outside the manifesto; priorities only started; and
-the share of new tax money that arrives late. Each cause carries how far it moved its reading, so a
-reason names only the decisions that pushed its way, by the lever's `noun`.
+schools apart; the tax rises most households feel, leaving out those they do not (`felt` and
+`notFelt` in `incidence.json`); whether what the Budget spends and gives away is paid for in every
+year; borrowing that comes early; commitments broken outside the manifesto; and priorities only
+started. Each cause carries how far it moved its reading, so a reason names only the decisions that
+pushed its way, by the lever's `noun`.
 
-The public's card also carries the distributional considerations of the levers the player moved, in
-their own words and with their own citations, ordered by the size of the measure.
+The late-money reading, the public's distributional notes and the markets' note on growth went with
+"Why this rating" (ADR-0043).
 
 ## 13. The look (ADR-0009, ADR-0016)
 
@@ -677,14 +677,14 @@ it is then held under any fired band's `cap`. One reason is shown and it always 
 rating: the capping rule when a cap binds, otherwise the biggest minus below three and at three, and
 the biggest plus above three. When something pulled the other way, one line of eight words or fewer
 names up to two rules by their `short` labels ("Counted against: Tax burden · Uncertified
-costings"). Every rule, with its points, its reading, the decisions behind it and its sources, sits
-behind "Why this rating (2 for, 1 against)". Every threshold, point and sentence is authored in
-`data/journey/reception.json`, badged simulated, and each rule names the published anchor its
-thresholds lean on; ADR-0013 records the first table and ADR-0026 the recalibration. A test checks
-that every reason on screen is a band in the file with its placeholders filled, that a band quoting
-a figure carries a source, that a broken manifesto pins the public at one whatever else happens,
-that the shown reason never contradicts the rating, and, by property, that ratings stay in one to
-five over random points and caps and over random packages.
+costings"). Since ADR-0043 no screen lists every rule: each card shows its rating, its one reason
+and that line. Every threshold, point and sentence is authored in `data/journey/reception.json`,
+badged simulated, and each rule names the published anchor its thresholds lean on; ADR-0013 records
+the first table and ADR-0026 the recalibration. A test checks that every reason on screen is a band
+in the file with its placeholders filled, that a band quoting a figure carries a source, that a
+broken manifesto pins the public at one whatever else happens, that the shown reason never
+contradicts the rating, and, by property, that ratings stay in one to five over random points and
+caps and over random packages.
 
 ## 16. One road, and the revenue menu (ADR-0014, ADR-0015)
 
