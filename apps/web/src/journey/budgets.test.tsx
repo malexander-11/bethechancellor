@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { appendFileSync } from 'node:fs';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from '../App';
+import { BOARD_TEXT } from '../board/words';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 // A game at the review on today's estimate, two priorities delivered and employer National
@@ -30,8 +31,11 @@ const CAP = {
   /** One thing to read or one question to answer: the briefing, the priorities, the flagship
    * policies and the review. */
   story: 250,
-  /** Budget day: three rated audiences and five households, open on the page (ADR-0043). */
-  feedback: 450,
+  /**
+   * Budget day: three rated audiences and five households, open on the page (ADR-0043), then the
+   * Budget to share and the way onto the leaderboard (ADR-0044).
+   */
+  feedback: 460,
   /** A fine-tuning screen, its decisions closed but for any the game has made a choice in. */
   tuning: 450,
   /** The same with the widest game: every decision holding a choice open, every choice in it. */
@@ -97,11 +101,23 @@ function screenWords(): number {
 }
 
 describe('the word budgets', () => {
+  // The leaderboard is open, so Budget day shows the way onto it (ADR-0044) and is read at its
+  // widest.
+  beforeEach(() => {
+    vi.stubGlobal('fetch', async (input: string) =>
+      input === '/api/health'
+        ? new Response(JSON.stringify({ ok: true, db: 'ok' }))
+        : new Response('{}', { status: 404 }),
+    );
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
   it.each(ROAD)(
     '$path in $mode mode ($kind): one way on, and no more words than its kind allows',
-    ({ path, kind, game, mode }) => {
+    async ({ path, kind, game, mode }) => {
       inMode(mode);
       at(`${path}?${BASE}&${game}`);
+      if (kind === 'feedback') await screen.findByLabelText(BOARD_TEXT.postLabel);
       // No Continue, no tabs, one primary action (ADR-0024).
       expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
       expect(screen.queryAllByRole('tab')).toHaveLength(0);

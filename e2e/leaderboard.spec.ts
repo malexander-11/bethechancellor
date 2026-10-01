@@ -1,7 +1,7 @@
 import type { APIRequestContext, Page, TestInfo } from '@playwright/test';
-import { BOARD_TEXT, countsWords } from '../apps/web/src/board/words';
+import { BOARD_TEXT, TITLE_REFUSED, countsWords } from '../apps/web/src/board/words';
 import { expectAccessible } from './audit';
-import { expect, test } from './journey';
+import { expect, test, walk } from './journey';
 
 // Every audit asks for reduced motion.
 test.use({ contextOptions: { reducedMotion: 'reduce' } });
@@ -81,4 +81,33 @@ test('a leaderboard entry', async ({ page, request }, info) => {
   await page.goto(`/leaderboard/${entry.id}`);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(entry.title);
   await expectAccessible(page);
+});
+
+test('a Budget posted from Budget day lands on the leaderboard under its title', async ({
+  page,
+  consoleErrors,
+}, info) => {
+  await walk(page, { until: 'Budget day' });
+  const field = page.getByLabel(BOARD_TEXT.postLabel);
+  const post = page.getByRole('button', { name: BOARD_TEXT.postButton });
+
+  // A title with a web address in it is refused, and the field says so.
+  await field.fill('See www.example.org');
+  await post.click();
+  await expect(page.getByText(TITLE_REFUSED.link ?? '')).toBeVisible();
+  await expect(field).toHaveAttribute('aria-invalid', 'true');
+  await expect(field).toBeFocused();
+  // The browser logs the refusal as a failed load; here the refusal is what is being tested.
+  const refused = consoleErrors.findIndex((error) => error.includes('status of 422'));
+  expect(refused).toBeGreaterThanOrEqual(0);
+  consoleErrors.splice(refused, 1);
+
+  // The walk's Budget is the same in both projects: whichever posts second finds it already there.
+  await field.fill(`The walk's Budget, ${info.project.name}`);
+  await post.click();
+  await expect(
+    page.getByRole('status').filter({ hasText: /is (already )?on the leaderboard/ }),
+  ).toBeVisible();
+  await page.getByRole('link', { name: BOARD_TEXT.seeEntry }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^The walk's Budget, /);
 });

@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- Budget day puts the Budget on the leaderboard (ADR-0044): once the leaderboard is open, a field
+  under the picture takes a title of up to 60 characters, and one line says what came of posting it,
+  with a link to the entry, or why the title was refused, with the field marked and focused. Budget
+  day's word budget rises to 460 to hold it.
 - The leaderboard opens (ADR-0044): `/leaderboard` lists Budgets by votes or newest, each under its
   player's title with its theme, its headroom and its rules, a vote for or against and a way to
   report the title; `/leaderboard/<id>` is an entry's own page, with the picture, the Budget in

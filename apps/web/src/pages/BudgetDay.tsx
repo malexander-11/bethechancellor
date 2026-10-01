@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { Households } from '../components/Households';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { ReceptionCard } from '../components/ReceptionCard';
+import { PostToBoard } from '../components/PostToBoard';
 import { SharePanel } from '../components/SharePanel';
 import { electorate, incidence, levers, pm, reception, vintage, options } from '../data';
 import { useStageGuard } from '../journey/guard';
@@ -27,8 +28,9 @@ function list(items: readonly string[]): string {
 /**
  * Step 6: feedback, on one screen. The rules line, which is the one thing here that is arithmetic;
  * the backbenchers, the markets and the public, each rating the Budget out of five and saying
- * which choices caused it; five households, each saying what the Budget did to it (ADR-0043); and
- * the Budget as a picture to share, whose link invites whoever opens it to play (ADR-0044).
+ * which choices caused it; five households, each saying what the Budget did to it (ADR-0043); the
+ * Budget as a picture to share, whose link invites whoever opens it to play; and, once it is open,
+ * a way onto the leaderboard under a title (ADR-0044).
  * Arriving here marks the game finished, so a link to it opens as a finished Budget.
  */
 export function BudgetDayPage() {
@@ -117,6 +119,7 @@ export function BudgetDayPage() {
       </section>
 
       <SharePanel />
+      <PostToBoard />
 
       <p className="actions">
         <StepLink to="/review" className="btn">

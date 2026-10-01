@@ -1,21 +1,8 @@
-import {
-  FINAL_STAGE,
-  PICTURE_SIZE,
-  readFinishedBudget,
-  summariseBudget,
-  summaryWords,
-} from '@btc/engine';
-import { useMemo, useState } from 'react';
-import { gameData } from '../data';
-import { useOutcomeOf } from '../journey/outcome';
+import { PICTURE_SIZE } from '@btc/engine';
+import { useState } from 'react';
+import { useSharedBudget } from '../share/finished';
 import { networks } from '../share/networks';
 import { SHARE_TEXT } from '../share/words';
-import { permalinkQuery, useBudget } from '../state/budget';
-
-/** A finished Budget's page and picture on this site, as the server serves them (ADR-0044). */
-export function sharedAddresses(query: string): { page: string; picture: string } {
-  return { page: `${window.location.origin}/shared?${query}`, picture: `/api/card?${query}` };
-}
 
 /**
  * Budget day's way to share the Budget (ADR-0044): its picture, as a link to it previews; the one
@@ -24,25 +11,8 @@ export function sharedAddresses(query: string): { page: string; picture: string 
  * posting a link. The link opens the shared page, which invites whoever opens it to play.
  */
 export function SharePanel() {
-  const { state } = useBudget();
-  const outcomeOf = useOutcomeOf();
+  const shared = useSharedBudget();
   const [copied, setCopied] = useState(false);
-  const { leverValues, game } = state;
-  // The Budget as it ends, written as every link to it is: the picture and the page are its own.
-  const shared = useMemo(() => {
-    if (!game) return null;
-    const query = permalinkQuery({
-      leverValues,
-      warnings: [],
-      game: { ...game, reached: FINAL_STAGE },
-    });
-    const budget = readFinishedBudget(gameData, query);
-    if (!budget) return null;
-    return {
-      ...sharedAddresses(budget.query),
-      words: summaryWords(summariseBudget(gameData, budget, outcomeOf)),
-    };
-  }, [leverValues, game, outcomeOf]);
   if (!shared) return null;
   const { page, picture, words } = shared;
 

@@ -1578,6 +1578,10 @@ the rules: the filter, the reports, the limits and what is kept.
   Budget is written, so one Budget is one entry whatever title it was posted under. The list and an
   entry's page work every figure out again from the link, on the data the game ships, as any link
   reopens; after a change of data an entry says what its choices do on the new data.
+- **Posting.** Once the leaderboard is open, Budget day offers a field under the picture for a title
+  and a button to post the Budget the picture shows. The server checks the title again whatever the
+  page allowed, and the page says what came of it in one line: on the leaderboard, already there
+  under another title, or refused and why, with the field marked and the player back in it.
 - **The list** orders the entries by votes for less votes against, or newest first. Each line is the
   player's title, the Budget's theme, how its headroom moved and the rules' verdict, the votes, and
   a way to report the title.

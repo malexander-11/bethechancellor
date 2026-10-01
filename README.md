@@ -90,11 +90,12 @@ the Prime Minister's sign-off when something needs saying, and one red button. *
 backbenchers, the markets and the public each rating it out of five, with one reason that agrees
 with the rating, the choices that caused it and a line for the other side, and five households, each
 saying what the Budget did to it, then the Budget as a picture to share, whose link opens a page of
-its own that invites whoever opens it to make theirs (ADR-0044). The menu was read against the
-Budget reporting again on 21 September 2026: the electricity VAT zero rate that HMRC says ends in
-March 2027, National Insurance for working pensioners and for LLP partners, and CenTax's package for
-taxing gains like income joined it; what has no published costing is named in words instead. On 23
-September 2026 the think tanks' own lists were read and nineteen more cards built from their
+its own that invites whoever opens it to make theirs, and a place on a leaderboard under a title of
+the player's own, where other players vote for or against it (ADR-0044). The menu was read against
+the Budget reporting again on 21 September 2026: the electricity VAT zero rate that HMRC says ends
+in March 2027, National Insurance for working pensioners and for LLP partners, and CenTax's package
+for taxing gains like income joined it; what has no published costing is named in words instead. On
+23 September 2026 the think tanks' own lists were read and nineteen more cards built from their
 documents, each a stated figure from its own document: a levy on banks' reserves, National Insurance
 on rents, a 2% wealth tax, a sugar and salt tax, council tax on the top bands, the NICs upper
 earnings limit, 1% VAT on zero-rated goods, a pension lump-sum cap, stamp duty abolished on main

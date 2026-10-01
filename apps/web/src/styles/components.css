@@ -1775,9 +1775,10 @@ label.choice {
   font-size: 0.9375rem;
 }
 
-.votes__said:empty,
-.report__said:empty {
-  display: none;
+/* The lines that say what came of a vote or a report stay in the page, empty, so a screen reader
+   hears them when they speak; empty, they take no room. */
+.votes__said:empty {
+  flex-basis: 0;
 }
 
 .votes__said,
@@ -1795,4 +1796,62 @@ label.choice {
   color: var(--ink-2);
   text-decoration: none;
   cursor: default;
+}
+
+/* Budget day's way onto the leaderboard: a title, one line of hint, and what came of posting. */
+.post__label {
+  display: block;
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+
+.post__hint {
+  margin: 2px 0 8px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+.post__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.post__input {
+  flex: 1 1 16rem;
+  max-width: 28rem;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--ink-2);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.post__input[aria-invalid='true'] {
+  border-color: var(--critical);
+  box-shadow: inset 0 0 0 1px var(--critical);
+}
+
+.post__said {
+  margin: 8px 0 0;
+}
+
+.post__said:empty {
+  margin: 0;
+}
+
+.post__said--refused {
+  color: var(--critical);
+  font-weight: 600;
+}
+
+.post__see a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--accent);
+  text-underline-offset: 0.15em;
 }

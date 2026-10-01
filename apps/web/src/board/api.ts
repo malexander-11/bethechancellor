@@ -53,6 +53,11 @@ const write = (body: unknown): RequestInit => ({
  * report sends this browser's code.
  */
 export const leaderboard = {
+  /** Whether the leaderboard is open: its database answers. */
+  open: async () => {
+    const answer = await send<{ db?: string }>('/api/health');
+    return answer.ok && answer.body.db === 'ok';
+  },
   list: (sort: 'top' | 'new', offset: number) =>
     send<{ entries: Entry[]; more: boolean }>(`/api/budgets?sort=${sort}&offset=${offset}`),
   entry: (id: string) => send<{ entry: Entry }>(`/api/budgets/${encodeURIComponent(id)}`),

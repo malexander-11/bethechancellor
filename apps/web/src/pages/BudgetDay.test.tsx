@@ -3,6 +3,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { App } from '../App';
+import { BOARD_TEXT, TITLE_MAX, TITLE_REFUSED } from '../board/words';
 import { gameData } from '../data';
 import { SHARE_TEXT } from '../share/words';
 
@@ -252,6 +253,122 @@ describe('Budget day: sharing the Budget (ADR-0044)', () => {
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
       expect(link).toHaveAccessibleName(expect.stringContaining(SHARE_TEXT.newTab));
+    }
+  });
+});
+
+describe('Budget day: onto the leaderboard (ADR-0044)', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  type Post = (body: { query: string; title: string }) => { status: number; body: unknown };
+  /** The server, open or not, and what it answers a post. */
+  function serve(open: boolean, post?: Post) {
+    const calls: { path: string; init?: RequestInit }[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (input: string, init?: RequestInit) => {
+        calls.push({ path: input, ...(init ? { init } : {}) });
+        if (input === '/api/health') {
+          return new Response(JSON.stringify({ ok: true, db: open ? 'ok' : 'none' }));
+        }
+        if (input === '/api/budgets' && init?.method === 'POST' && post) {
+          const answer = post(JSON.parse(String(init.body)) as { query: string; title: string });
+          return new Response(JSON.stringify(answer.body), { status: answer.status });
+        }
+        return new Response('{}', { status: 404 });
+      }),
+    );
+    return calls;
+  }
+  const entry = (title: string, query: string) => ({
+    id: 'abcd1234',
+    title,
+    query,
+    ups: 0,
+    downs: 0,
+    score: 0,
+    createdAt: '2026-10-01T12:00:00.000Z',
+  });
+  const titled = async (title: string) => {
+    const field = await screen.findByLabelText(BOARD_TEXT.postLabel);
+    fireEvent.change(field, { target: { value: title } });
+    fireEvent.click(screen.getByRole('button', { name: BOARD_TEXT.postButton }));
+    return field;
+  };
+
+  it('offers no way onto the leaderboard while it is not open', async () => {
+    const calls = serve(false);
+    at(`${BASE}&${GAME}&L=moj.10`);
+    await waitFor(() => expect(calls.some((c) => c.path === '/api/health')).toBe(true));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(screen.queryByLabelText(BOARD_TEXT.postLabel)).toBeNull();
+    expect(screen.queryByRole('heading', { name: BOARD_TEXT.postHeading })).toBeNull();
+  });
+
+  it('puts the Budget it shares on the leaderboard under a title, and links to the entry', async () => {
+    const calls = serve(true, (body) => ({
+      status: 201,
+      body: { entry: entry(body.title, body.query), created: true },
+    }));
+    at(`${BASE}&${GAME}&L=moj.10`);
+    const field = await screen.findByLabelText(BOARD_TEXT.postLabel);
+    expect(field).toHaveAttribute('maxlength', String(TITLE_MAX));
+    expect(field).toHaveAccessibleDescription(expect.stringContaining(BOARD_TEXT.postHint));
+    await titled('Safe and sound');
+    expect(await screen.findByText(BOARD_TEXT.posted)).toBeVisible();
+    expect(screen.getByRole('link', { name: BOARD_TEXT.seeEntry })).toHaveAttribute(
+      'href',
+      '/leaderboard/abcd1234',
+    );
+    expect(screen.queryByLabelText(BOARD_TEXT.postLabel)).toBeNull();
+    const sent = JSON.parse(String(calls.find((c) => c.init?.method === 'POST')?.init?.body)) as {
+      query: string;
+      title: string;
+    };
+    expect(sent.title).toBe('Safe and sound');
+    // The Budget posted is the one the picture shows.
+    const picture = screen.getByRole('img', { name: /^What’s your Budget\? / });
+    expect(`/api/card?${sent.query}`).toBe(picture.getAttribute('src'));
+  });
+
+  it('says why a title is refused, marks the field and puts the player back in it', async () => {
+    serve(true, () => ({ status: 422, body: { error: 'title', reason: 'swearing' } }));
+    at(`${BASE}&${GAME}&L=moj.10`);
+    const field = await titled('Something rude');
+    expect(await screen.findByText(TITLE_REFUSED.swearing ?? '')).toBeVisible();
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+    expect(field).toHaveFocus();
+    expect(field).toHaveAccessibleDescription(
+      expect.stringContaining(TITLE_REFUSED.swearing ?? ''),
+    );
+  });
+
+  it('finds the entry already there for a Budget posted before', async () => {
+    serve(true, (body) => ({
+      status: 200,
+      body: { entry: entry('Posted first', body.query), created: false },
+    }));
+    at(`${BASE}&${GAME}&L=moj.10`);
+    await titled('Posted second');
+    expect(
+      await screen.findByText(BOARD_TEXT.already.replace('{title}', 'Posted first')),
+    ).toBeVisible();
+    expect(screen.getByRole('link', { name: BOARD_TEXT.seeEntry })).toBeVisible();
+  });
+
+  it('says so when the leaderboard cannot take it', async () => {
+    for (const [answer, said] of [
+      [{ status: 429, body: { error: 'limit' } }, BOARD_TEXT.postLimited],
+      [{ status: 409, body: { error: 'hidden' } }, BOARD_TEXT.takenDown],
+      [{ status: 503, body: { error: 'down' } }, BOARD_TEXT.down],
+    ] as const) {
+      serve(true, () => answer);
+      const view = at(`${BASE}&${GAME}&L=moj.10`);
+      const field = await titled('A title');
+      expect(await screen.findByText(said)).toBeVisible();
+      expect(field).not.toHaveAttribute('aria-invalid');
+      view.unmount();
+      vi.unstubAllGlobals();
     }
   });
 });
