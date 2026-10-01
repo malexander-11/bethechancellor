@@ -30,15 +30,12 @@ export interface Reason {
   sources: SourceRef[];
   /** The published anchor the rule's thresholds lean on. */
   note: string;
-  /** What would have moved this rule up a band, when the rule says and a better band is next door. */
-  nudge?: string;
   badge: 'simulated';
 }
 
 export interface Reception {
   audience: AudienceId;
   title: string;
-  question: string;
   rating: Rating;
   label: string;
   /**
@@ -52,11 +49,9 @@ export interface Reception {
    * labels. "Counted against: Tax burden · Uncertified costings", or "Counted for: …".
    */
   counted?: { side: 'for' | 'against'; labels: string[] };
-  /** How many rules counted for and against, for the fold's summary. */
-  tally: { for: number; against: number };
   /** The reasons that moved the rating, at most three: the lead first, then the biggest. */
   reasons: Reason[];
-  /** Every rule's fired band, for the "why this rating" disclosure. */
+  /** Every rule's fired band: what the review's reaction is read from. */
   all: Reason[];
   badge: 'simulated';
 }
@@ -91,7 +86,6 @@ const CHANGE_READINGS = new Set([
   'serviceCutsGbpm',
   'protectedCutsGbpm',
   'feltTaxRisesGbpm',
-  'notFeltTaxRisesGbpm',
   'frontLoadedBorrowingGbpm',
 ]);
 
@@ -213,37 +207,6 @@ function wordsFor(
   return { text: band.text, sources: band.sources };
 }
 
-/**
- * "£1.2bn less in tax rises would have moved this by a point": the distance from the reading to
- * the nearest neighbouring band with more points, in the reading's own unit, dropped into the
- * rule's authored sentence. Only for money and percentage-point readings, only when the rule
- * carries a nudge, and never for the best band there is.
- */
-function nudgeFor(
-  rule: ReceptionRule,
-  band: ReceptionBand,
-  value: number,
-): { text: string; better: ReceptionBand } | undefined {
-  const unit = rule.reading.unit;
-  if (!rule.nudge || (unit !== 'GBPm' && unit !== 'pp')) return undefined;
-  const i = rule.bands.indexOf(band);
-  const gaps: { gap: number; better: ReceptionBand }[] = [];
-  const below = rule.bands[i - 1];
-  if (below && below.points > band.points && below.upTo !== undefined)
-    gaps.push({ gap: value - below.upTo, better: below });
-  const above = rule.bands[i + 1];
-  if (above && above.points > band.points && band.upTo !== undefined)
-    gaps.push({ gap: band.upTo - value, better: above });
-  const nearest = gaps.filter((g) => g.gap >= 0).sort((a, b) => a.gap - b.gap)[0];
-  if (nearest === undefined) return undefined;
-  // Written to the resolution the reading is written in, so the sentence never says "£0.0bn".
-  const shown =
-    unit === 'GBPm'
-      ? Math.max(100, Math.ceil(nearest.gap / 100) * 100)
-      : Math.max(0.01, nearest.gap);
-  return { text: rule.nudge.replace(/\{gap\}/g, sizeOf(shown, unit)), better: nearest.better };
-}
-
 export function clampRating(n: number): Rating {
   return Math.max(1, Math.min(5, Math.round(n))) as Rating;
 }
@@ -302,17 +265,13 @@ export function receptions(input: ReceptionInput): Reception[] {
       .replace(/\{protectedCut\}/g, filled.protectedCut ?? '')
       .replace(/\{protected\}/g, filled.protected || 'health and schools')
       .replace(/\{cutServices\}/g, filled.cutServices || 'some departments')
-      .replace(/\{year\}/g, filled.year ?? '')
-      .replace(/\{lateFrom\}/g, filled.lateFrom ?? '');
+      .replace(/\{year\}/g, filled.year ?? '');
   return input.reception.audiences.map((audience) => {
-    const nudges = new Map<string, { text: string; better: ReceptionBand }>();
     const all: Reason[] = audience.rules.map((rule) => {
       const value = values[rule.measure] ?? 0;
       const band = bandFor(rule, value, values);
       const unit = rule.reading.unit;
       const words = wordsFor(band, values);
-      const nudge = nudgeFor(rule, band, value);
-      if (nudge) nudges.set(rule.id, nudge);
       return {
         rule: rule.id,
         short: rule.short,
@@ -332,20 +291,6 @@ export function receptions(input: ReceptionInput): Reception[] {
       };
     });
     const rating = ratingOf(all);
-    // A nudge is said only when the better band would move the rating itself (Phase 25).
-    for (const reason of all) {
-      const nudge = nudges.get(reason.rule);
-      if (!nudge) continue;
-      const better = all.map((r) =>
-        r === reason
-          ? {
-              points: nudge.better.points,
-              ...(nudge.better.cap !== undefined ? { cap: nudge.better.cap } : {}),
-            }
-          : r,
-      );
-      if (ratingOf(better) > rating) reason.nudge = nudge.text;
-    }
     const lead = leadOf(all, rating);
     // Sort is stable, so among equal weights the authored order of the rules holds.
     const reasons = [
@@ -364,7 +309,6 @@ export function receptions(input: ReceptionInput): Reception[] {
     return {
       audience: audience.id,
       title: audience.title,
-      question: audience.question,
       rating,
       label: audience.labels[rating - 1] ?? '',
       ...(lead ? { lead } : {}),
@@ -376,10 +320,6 @@ export function receptions(input: ReceptionInput): Reception[] {
             },
           }
         : {}),
-      tally: {
-        for: all.filter((r) => r.points > 0).length,
-        against: all.filter((r) => r.points < 0).length,
-      },
       reasons,
       all,
       badge: 'simulated',

@@ -17,7 +17,6 @@
             "unit": "GBPm"
           },
           "note": "Departments only: benefits have rules of their own. About a fifth of March’s £23.6bn headroom either way is felt; fifteen billion of cuts is a programme of them.",
-          "nudge": "{gap} more for public services would have lifted the backbenchers’ rating.",
           "bands": [
             {
               "id": "deep",
@@ -158,7 +157,6 @@
             "unit": "GBPm"
           },
           "note": "Two billion a year either way is felt in benefit rates; five billion of cuts is a programme of them. Smaller moves are absorbed in uprating.",
-          "nudge": "{gap} more on benefits would have lifted the backbenchers’ rating.",
           "bands": [
             {
               "id": "deep",
@@ -218,7 +216,6 @@
             "unit": "GBPm"
           },
           "note": "The balance of new revenue: the best-off, savers and business on one side; everyone who earns or spends, motorists and duties on the other. Two billion either way is the threshold.",
-          "nudge": "{gap} more from the best-off and business, rather than the broad base, would have lifted the backbenchers’ rating.",
           "bands": [
             {
               "id": "broad",
@@ -454,7 +451,6 @@
             "unit": "GBPm"
           },
           "note": "Ten billion is where commentators called the margin wafer-thin before the last Budget doubled it to £21.7bn; twenty is your advisers’ rule of thumb. Above about twenty-seven billion the margin is more than March left. The fall from March’s £23.6bn to today’s estimate came before any measure: dearer borrowing and prices since March.",
-          "nudge": "{gap} more headroom would have lifted the markets’ rating.",
           "bands": [
             {
               "id": "missed",
@@ -561,7 +557,6 @@
             "unit": "GBPm"
           },
           "note": "Five billion less is a change in the financing remit the market notices; ten billion more is an issuance programme it prices.",
-          "nudge": "{gap} less borrowing in the target year would have lifted the markets’ rating.",
           "bands": [
             {
               "id": "less",
@@ -618,7 +613,6 @@
             "unit": "pp"
           },
           "note": "Half a point of GDP on top of a tax take the OBR already calls a historic high.",
-          "nudge": "{gap} less on the tax take would have lifted the markets’ rating.",
           "bands": [
             {
               "id": "steady",
@@ -654,7 +648,6 @@
             "unit": "GBPm"
           },
           "note": "Ten billion a year of cuts against plans, on top of the squeeze the forecast already assumes: it has unprotected day-to-day spending falling 4.4% a year in real terms in its last two years.",
-          "nudge": "{gap} less in cuts to departments would have lifted the markets’ rating.",
           "bands": [
             {
               "id": "none",
@@ -889,41 +882,6 @@
                   "sourceId": "hmt-charter-2025-autumn"
                 }
               ],
-              "badge": "simulated"
-            }
-          ]
-        },
-        {
-          "id": "mk-late-yield",
-          "short": "Late money",
-          "measure": "lateYieldShare",
-          "reading": {
-            "label": "Share of the new tax money in the target year that raises nothing in the first year",
-            "unit": "ratio"
-          },
-          "note": "A quarter of the new tax money: beyond that, much of what the rules count has yet to be collected when the markets judge the Budget. The line is the game’s, and it moves no rating.",
-          "bands": [
-            {
-              "id": "none",
-              "upTo": 0,
-              "points": 0,
-              "text": "No new tax money waits until {lateFrom} or later to arrive.",
-              "sources": [],
-              "badge": "simulated"
-            },
-            {
-              "id": "some",
-              "upTo": 0.25,
-              "points": 0,
-              "text": "{value} of the new tax money in {year} waits until {lateFrom} or later. Most of it arrives from the start.",
-              "sources": [],
-              "badge": "simulated"
-            },
-            {
-              "id": "late",
-              "points": 0,
-              "text": "{value} of the new tax money in {year} waits until {lateFrom} or later. The markets will want to see it arrive.",
-              "sources": [],
               "badge": "simulated"
             }
           ]
@@ -1180,7 +1138,6 @@
             "unit": "GBPm"
           },
           "note": "One priority ranked, delivered, and at least five billion a year behind it: a Budget people can describe in a sentence.",
-          "nudge": "{gap} more behind a single priority would have made it a story people can describe.",
           "bands": [
             {
               "id": "no",
@@ -1310,7 +1267,6 @@
             "unit": "GBPm"
           },
           "note": "Five billion a year passes quietly; twenty is felt by most households before the target year. Levies on banks, energy producers and the very top are left out: most households do not feel them.",
-          "nudge": "{gap} less in tax rises would have lifted the public’s rating.",
           "bands": [
             {
               "id": "small",
@@ -1368,33 +1324,6 @@
                   "sourceId": "hmrc-tiin-employer-nics-2024"
                 }
               ],
-              "badge": "simulated"
-            }
-          ]
-        },
-        {
-          "id": "pb-not-felt",
-          "short": "Not widely felt",
-          "measure": "notFeltTaxRisesGbpm",
-          "reading": {
-            "label": "Tax rises on banks, energy producers and the very top",
-            "unit": "GBPm"
-          },
-          "note": "No point either way: most households do not feel these, and the game has no published measure of how the public sees them.",
-          "bands": [
-            {
-              "id": "none",
-              "upTo": 499,
-              "points": 0,
-              "text": "Nothing here falls only on banks, energy producers or the very top.",
-              "sources": [],
-              "badge": "simulated"
-            },
-            {
-              "id": "some",
-              "points": 0,
-              "text": "{abs} a year falls on banks, energy producers or the very top: most households will not feel it.",
-              "sources": [],
               "badge": "simulated"
             }
           ]

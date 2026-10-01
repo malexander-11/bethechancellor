@@ -109,9 +109,7 @@ refuses gilt sales for any year but the one the context is dated in.
   (ADR-0036, ADR-0038). The text must read from either card and in either direction (Phase 26), each
   sentence at most twenty words, since it leads a card. A link that carries both still opens, and
   each card says it is counted twice. `info` and `warn` remain notes.
-- **A note on growth.** A `macro` consideration may carry `growth: true`: what the measure may do to
-  growth and the wider economy, in words. The markets' fold on Budget day reads the biggest moved
-  measure's; the schema refuses the flag on any other kind of note.
+
 - **Scorecard-backed toggles.** A `linearPerUnit` toggle may cite `hmtScorecard` lines from any
   extracted scorecard (Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is minus the
   summed lines for the cited years on the receipts side. `direction: "repeat"` makes it plus the
@@ -228,13 +226,14 @@ certified rows beside it (ADR-0017).
 One `intro` and three `audiences` (`backbenchers`, `markets`, `public`), each with a `title`, the
 `question` it asks, five `labels` worst first, and `rules`. A rule names a `measure` the engine
 reads off the outcome (the closed list in `readingMeasureSchema`), a `reading` label and unit, a
-`note` naming the published anchor its thresholds lean on, and `bands` in ascending order of `upTo`
-with the last carrying none. A band holds `points` (−3 to +3), an optional `cap` on the audience's
-rating, a `text` with `{value}` (the reading, signed) and `{abs}` (its size) placeholders, its
-sources and `badge: "simulated"`. The rating starts at three: one or two points either way move it
-one step, three or more two steps (Phase 25), and it is then held under any fired cap. A band that
-quotes a figure must carry a source; a test checks it, and that every reason on screen is one of
-these bands with its placeholders filled.
+`note` naming the published anchor its thresholds lean on, which no screen lists but which is the
+written record of the judgement (ADR-0043), and `bands` in ascending order of `upTo` with the last
+carrying none. A band holds `points` (−3 to +3), an optional `cap` on the audience's rating, a
+`text` with `{value}` (the reading, signed) and `{abs}` (its size) placeholders, its sources and
+`badge: "simulated"`. The rating starts at three: one or two points either way move it one step,
+three or more two steps (Phase 25), and it is then held under any fired cap. A band that quotes a
+figure must carry a source; a test checks it, and that every reason on screen is one of these bands
+with its placeholders filled.
 
 Since Phase 25 (ADR-0026) a rule also carries a `short` label of three words or fewer ("Tax
 burden"), which is how a card names it on the other side of its rating: "Counted against: Tax burden
@@ -243,15 +242,10 @@ passes a threshold, as cuts to health and schools count from £2bn inside the pu
 service cuts; the points, cap and words stay the band's own. A band may vary its words on a second
 reading (`variants`). Readings are measured from before the Budget (today's estimate with nothing
 moved), and the placeholders now include `{typicalError}`, `{payers}`, `{feltHow}`, `{protected}`,
-`{protectedCut}`, `{cutServices}`, `{year}` and `{lateFrom}`.
+`{protectedCut}`, `{cutServices}` and `{year}`.
 
 Bands describe what an audience watches and cite the evidence. They never predict a market move or a
 vote; they say what a judgement leans on.
-
-A rule whose reading is money or percentage points may carry a `nudge`: one sentence with `{gap}`
-for the distance from the reading to the nearest neighbouring band with more points, in the
-reading's own unit. The engine fills the gap and shows the sentence under "Why this rating"; it
-invents no threshold, and says nothing for the best band there is (ADR-0018).
 
 ### The rules' plain names (`data/rules/*.json`)
 

@@ -1,72 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import {
-  computeOutcome,
-  finetuneItems,
-  growthNote,
-  parseLever,
-  parsePm,
-  priorityScale,
-  receptions,
-} from '../src/index.js';
+import { finetuneItems, parsePm, priorityScale } from '../src/index.js';
 import { loadDataset, outcomeOfFor, readJson } from './fixtures.js';
-import { PENNY, PRISONS, todaysEstimate, typicalError, type Budget } from './scenarios.js';
+import { todaysEstimate } from './scenarios.js';
 
 const ds = loadDataset();
 const outcomeOf = outcomeOfFor(ds);
 const ESTIMATE = todaysEstimate(ds);
-const typicalErrorGbpm = typicalError(ds);
-const run = (policy: Budget) =>
-  computeOutcome({
-    vintage: ds.vintage,
-    rules: ds.rules,
-    levers: ds.levers,
-    settings: { leverValues: { ...policy, ...ESTIMATE } },
-  });
-const lateBand = (policy: Budget) =>
-  receptions({
-    outcome: run(policy),
-    levers: ds.levers,
-    reception: ds.reception,
-    typicalErrorGbpm,
-    outcomeOf,
-    pm: ds.pm,
-    incidence: ds.incidence,
-  })
-    .find((r) => r.audience === 'markets')
-    ?.all.find((r) => r.rule === 'mk-late-yield');
 
-/** The feedback made wider (Phase 25, R21): growth, interest, timing, climate and scale. */
+/** The feedback made wider (Phase 25, R21): the scale of the priorities, climate and more. */
 describe('wider feedback (Phase 25, R21)', () => {
-  it('says what the biggest measure may do to growth, or that the game does not model it', () => {
-    const ct = growthNote(run({ ct: 1 }), ds.levers, '2029-30');
-    expect(ct?.leverTitle).toBe('Corporation tax');
-    expect(ct?.text).toMatch(/effects on investment and the wider economy/);
-    // No moved measure has a note on growth: the tool's own note says it is not modelled.
-    const none = growthNote(run(PRISONS), ds.levers, '2029-30');
-    expect(none?.text).toMatch(/^Your own choices can affect growth/);
-    // Only a macro note speaks to growth.
-    const json = readJson('levers/tax/corporation-tax-rate.json') as {
-      considerations: { kind: string; growth?: boolean }[];
-    };
-    const tampered = structuredClone(json);
-    const note = tampered.considerations.find((c) => c.growth);
-    if (!note) throw new Error('no growth note on corporation tax');
-    note.kind = 'behavioural';
-    expect(() => parseLever(tampered)).toThrow(/only a macro note speaks to growth/);
-  });
-
-  it('marks money that arrives late with the markets, and moves no rating by it', () => {
-    // Taxing leavers and gains at death raises nothing before 2028-29; the penny raises from the
-    // first year.
-    const late = lateBand({ cgtdth: 1, ...PENNY });
-    expect(late?.points).toBe(0);
-    expect(late?.text).toMatch(
-      /^\d+% of the new tax money in 2029-30 waits until 2028-29 or later\. The markets will want to see it arrive\.$/,
-    );
-    expect(lateBand(PENNY)?.text).toBe('No new tax money waits until 2028-29 or later to arrive.');
-    expect(lateBand({})?.points).toBe(0);
-  });
-
   it('gives the scale of the priorities: one full way each, and which saves money', () => {
     const scale = priorityScale({
       pm: ds.pm,

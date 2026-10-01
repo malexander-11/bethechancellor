@@ -854,13 +854,11 @@ export const receptionRuleSchema = z
       label: z.string().min(1),
       unit: z.enum(['GBPm', 'pp', 'ratio', 'count', 'status']),
     }),
-    /** The published anchor the thresholds lean on, for the "why this rating" disclosure. */
-    note: z.string().min(1),
     /**
-     * What would have moved this rule up a band, with `{gap}` for the distance to the next better
-     * band in the reading's own unit. The engine fills the gap; it invents no threshold.
+     * The published anchor the thresholds lean on: the written record of the judgement, which no
+     * screen lists since "Why this rating" went (ADR-0043).
      */
-    nudge: z.string().min(1).max(160).optional(),
+    note: z.string().min(1),
     bands: z.array(receptionBandSchema).min(2),
   })
   .superRefine((rule, ctx) => {
@@ -891,7 +889,7 @@ export const receptionAudienceIdSchema = z.enum(['backbenchers', 'markets', 'pub
 export const receptionAudienceSchema = z.strictObject({
   id: receptionAudienceIdSchema,
   title: z.string().min(1),
-  /** The question this audience is asking of the Budget. */
+  /** The question this audience is asking of the Budget: the record of what it judges (ADR-0043). */
   question: z.string().min(1).max(120),
   /** The five labels, worst first. */
   labels: z.array(z.string().min(1)).length(5),

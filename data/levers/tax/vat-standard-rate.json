@@ -98,7 +98,6 @@
       "kind": "macro",
       "direction": "ambiguous",
       "alreadyInDirectCosting": false,
-      "growth": true,
       "text": "A VAT change feeds into prices. HMRC's direct estimate does not include effects on inflation or on other taxes and spending that are linked to prices; the OBR handles those in its economy forecast.",
       "sources": [
         {

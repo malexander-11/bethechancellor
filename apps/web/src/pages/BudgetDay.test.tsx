@@ -45,7 +45,9 @@ describe('Budget day: what your Budget means', () => {
     expect(meter('Labour backbenchers')).toHaveAccessibleName('3 of 5: Divided');
     expect(meter('The public')).toHaveAccessibleName('3 of 5: Shrugging');
     expect(meter('The markets')).toHaveAccessibleName('2 of 5: Nervous');
-    expect(within(card('The markets')).getAllByText(/not your measures/).length).toBe(2);
+    expect(within(card('The markets')).getByText(/not your measures/)).toBeInTheDocument();
+    // Each card is its rating and its one reason: no "Why this rating" (ADR-0043).
+    expect(screen.queryByText(/^Why this rating/)).toBeNull();
     // The households and the documents wait behind their folds, closed; no speech (ADR-0043).
     for (const fold of ['Who feels it: five households', 'Budget documents']) {
       expect(screen.getByText(fold).closest('details')).not.toHaveAttribute('open');
@@ -61,44 +63,32 @@ describe('Budget day: what your Budget means', () => {
     );
   });
 
-  it('gives the reasons and the decisions behind them, and every rule on request', () => {
+  it('gives the reason and the decisions behind it', () => {
     // Health, schools and prisons all up a tenth: about £35bn a year against £6.8bn of headroom.
     at(`${BASE}&${EMPTY}&L=dhsc.10_dfe.10_moj.10`);
     const markets = card('The markets');
     expect(meter('The markets')).toHaveAccessibleName('1 of 5: Alarmed');
-    expect(within(markets).getAllByText(/The day-to-day rule is missed/).length).toBe(2);
-    expect(within(markets).getAllByText(/the health budget/).length).toBeGreaterThan(0);
+    expect(within(markets).getByText(/The day-to-day rule is missed/)).toBeInTheDocument();
+    expect(within(markets).getByText(/Because of the health budget/)).toBeInTheDocument();
     expect(
       screen.getByText(/^Missed on these numbers: the day-to-day rule by £\d+\.\dbn/),
     ).toBeInTheDocument();
-    // Every rule, its points and its reading sit behind "Why this rating".
-    fireEvent.click(within(markets).getByText(/^Why this rating/));
-    expect(
-      within(markets).getByText(/Headroom against the day-to-day rule: −£/),
-    ).toBeInTheDocument();
-    expect(within(markets).getAllByText(/Every audience starts at three/).length).toBe(1);
   });
 
   it('pins the public at Furious when a manifesto red line is crossed', () => {
     at(`${BASE}&${GAME}&L=moj.10_itbr.1`);
     expect(meter('The public')).toHaveAccessibleName('1 of 5: Furious');
+    // Each audience gives its strongest reason, with the decisions behind it.
     expect(
-      within(card('The public')).getAllByText(/A manifesto promise has been broken/).length,
-    ).toBe(2);
-    // On the surface each audience gives its strongest reason; the rest wait in "Why this rating".
+      within(card('The public')).getByText(/A manifesto promise has been broken/),
+    ).toBeInTheDocument();
     expect(
-      within(card('Labour backbenchers')).getAllByText(/manifesto red line is crossed/).length,
-    ).toBeGreaterThanOrEqual(1);
-    expect(
-      within(card('Labour backbenchers')).getAllByText(
+      within(card('The public')).getByText(
         /Because of the tax lock \(the basic rate of income tax\)/,
-      ).length,
-    ).toBeGreaterThan(0);
+      ),
+    ).toBeInTheDocument();
     // The one reason agrees with the rating; the other side is one short line (Phase 25).
     expect(within(card('The public')).getByText('Counted for: Priorities delivered')).toBeVisible();
-    expect(
-      within(card('The public')).getByText('Why this rating (1 for, 2 against)'),
-    ).toBeInTheDocument();
     open('Who feels it: five households');
     const couple = screen.getByText(/A couple on median earnings/).closest('li') as HTMLElement;
     expect(within(couple).getByText(/A penny on the basic rate/)).toBeInTheDocument();
@@ -107,28 +97,23 @@ describe('Budget day: what your Budget means', () => {
 
   it('marks employer National Insurance amber: the public is not pinned at the floor, and the strain is a reason', () => {
     at(`${BASE}&${GAME}&L=moj.10_nicer.1`);
-    fireEvent.click(within(card('The public')).getByText(/^Why this rating/));
-    // The floor is for the manifesto's own words: its rule reads that every red line holds. What
-    // employer National Insurance costs with the public comes from its strain, named.
+    // The floor is for the manifesto's own words. What employer National Insurance costs with the
+    // public, and with the benches, is its strain, named as each card's reason.
+    expect(meter('The public')).not.toHaveAccessibleName(/^1 of 5/);
     expect(
-      within(card('The public')).getAllByText(/Every manifesto red line holds/).length,
-    ).toBeGreaterThan(0);
+      within(card('The public')).getByText(/kept in the words and tested in the spirit/),
+    ).toBeInTheDocument();
     expect(
-      within(card('The public')).getAllByText(/kept in the words and tested in the spirit/).length,
-    ).toBeGreaterThan(0);
-    fireEvent.click(within(card('Labour backbenchers')).getByText(/^Why this rating/));
-    expect(
-      within(card('Labour backbenchers')).getAllByText(/keeps the letter of the manifesto/).length,
-    ).toBeGreaterThan(0);
+      within(card('Labour backbenchers')).getByText(/keeps the letter of the manifesto/),
+    ).toBeInTheDocument();
   });
 
   it('approves of a priority carried through, and says nothing of what the money buys (ADR-0043)', () => {
     at(`${BASE}&${GAME.replace('pr.defence+safer-streets', 'pr.safer-streets')}&L=moj.10`);
     expect(meter('The public')).toHaveAccessibleName('4 of 5: Approving');
     expect(
-      within(card('The public')).getAllByText(/One of the Budget’s priorities is delivered in full/)
-        .length,
-    ).toBe(2);
+      within(card('The public')).getByText(/One of the Budget’s priorities is delivered in full/),
+    ).toBeInTheDocument();
     open('Who feels it: five households');
     expect(screen.getAllByText(/A family on universal credit/).length).toBeGreaterThan(0);
     expect(screen.queryByText(/What the money does and does not buy/)).toBeNull();
@@ -156,35 +141,6 @@ describe('Budget day: what your Budget means', () => {
       expect.stringMatching(/^\/review\?/),
     );
     expect(screen.getByRole('button', { name: 'Play again' })).toBeInTheDocument();
-  });
-
-  it('weighs growth, debt interest and money that arrives late, in the markets’ fold (Phase 25)', () => {
-    // Corporation tax up and CGT at death: the biggest measure with a note on growth speaks.
-    at(`${BASE}&${GAME}&L=dip47.1_moj.10_ct.1_cgtdth.1`);
-    const markets = card('The markets');
-    const why = within(markets).getByText(/^Why this rating/);
-    fireEvent.click(why);
-    expect(within(markets).getByText('Growth and debt interest')).toBeInTheDocument();
-    expect(
-      within(markets).getByText(/leaves out effects on investment and the wider economy/),
-    ).toBeInTheDocument();
-    // CGT at death raises nothing before 2028-29: much of the new tax money comes late.
-    expect(
-      within(markets).getByText(
-        /^\d+% of the new tax money in 2029-30 waits until 2028-29 or later\. The markets will want to see it arrive\.$/,
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it('says what extra borrowing costs in interest, worked out, when borrowing rises (Phase 25)', () => {
-    at(`${BASE}&${GAME}&L=dip47.1_moj.10_dhsc.3`);
-    const markets = card('The markets');
-    fireEvent.click(within(markets).getByText(/^Why this rating/));
-    expect(
-      within(markets).getByText(
-        /^Extra borrowing adds about £\d+\.\dbn a year to debt interest by 2029-30\.$/,
-      ),
-    ).toBeInTheDocument();
   });
 
   it('never calls a household untouched when something in its groups moved (Phase 25)', () => {

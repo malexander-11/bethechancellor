@@ -86,11 +86,7 @@ export const readingMeasureSchema = z.enum([
   'serviceCutsGbpm',
   'protectedCutsGbpm',
   'feltTaxRisesGbpm',
-  'notFeltTaxRisesGbpm',
   'paidForStatus',
   'frontLoadedBorrowingGbpm',
   'commitmentsBroken',
-  // Of the new tax money in the target year, the share that raises nothing in the first policy
-  // years (Phase 25): 0 to 1.
-  'lateYieldShare',
 ]);

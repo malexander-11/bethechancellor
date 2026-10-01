@@ -1,20 +1,10 @@
-import {
-  ambitionStatus,
-  distributionalNotes,
-  FINAL_STAGE,
-  formatGbpBn,
-  growthNote,
-  householdReactions,
-  preBudget,
-  receptions,
-  reconcile,
-} from '@btc/engine';
+import { ambitionStatus, FINAL_STAGE, householdReactions, receptions } from '@btc/engine';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Households } from '../components/Households';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { MeasuresTable } from '../components/MeasuresTable';
-import { ReceptionCard, type EconomyLine } from '../components/ReceptionCard';
+import { ReceptionCard } from '../components/ReceptionCard';
 import { electorate, incidence, levers, pm, reception, vintage, options } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
@@ -70,35 +60,6 @@ export function BudgetDayPage() {
       }),
     [outcome, typicalErrorGbpm, game, status, outcomeOf],
   );
-  const notes = distributionalNotes(outcome, levers, targetYear).slice(0, 3);
-  // The markets' fold on the wider economy (Phase 25): growth in words, from the biggest measure
-  // that has a note on it; and, when the Budget borrows more, what that costs in interest.
-  const growth = growthNote(outcome, levers, targetYear);
-  const interestGbpm = useMemo(
-    () => reconcile(outcome, preBudget(outcomeOf, state.leverValues, levers)).interestGbpm,
-    [outcome, outcomeOf, state.leverValues],
-  );
-  const wider: EconomyLine[] = [
-    ...(growth
-      ? [
-          {
-            key: 'growth',
-            ...(growth.leverId ? { lead: growth.leverTitle } : {}),
-            text: growth.text,
-            sources: growth.sources,
-          },
-        ]
-      : []),
-    ...(interestGbpm >= 50
-      ? [
-          {
-            key: 'interest',
-            text: `Extra borrowing adds about ${formatGbpBn(interestGbpm, 1)} a year to debt interest by ${targetYear}.`,
-            sources: [],
-          },
-        ]
-      : []),
-  ];
   // The one audience that is arithmetic: the rules, in a line above the three cards, by their
   // plain names and the engine's own margins (Phase 25). The welfare cap is named when missed.
   const missedRules = outcome.verdicts.filter(isMissed);
@@ -154,12 +115,7 @@ export function BudgetDayPage() {
       <p className="rules-line">{rulesLine}</p>
       <div className="receptions">
         {room.map((r) => (
-          <ReceptionCard
-            key={r.audience}
-            reception={r}
-            notes={r.audience === 'public' ? notes : undefined}
-            economy={r.audience === 'markets' ? wider : undefined}
-          />
+          <ReceptionCard key={r.audience} reception={r} />
         ))}
       </div>
 

@@ -661,12 +661,6 @@ label.choice {
   letter-spacing: normal;
 }
 
-.reception__question {
-  margin: 4px 0 12px;
-  color: var(--ink-2);
-  font-weight: 400;
-}
-
 /* The five-step meter: lit steps in the rating's colour, the label in words beside it. */
 .meter {
   display: flex;
@@ -734,50 +728,6 @@ label.choice {
   margin: 4px 0 0;
   color: var(--ink-2);
   font-size: 0.9375rem;
-}
-
-.reception__why {
-  margin-top: 8px;
-  font-size: 0.9375rem;
-}
-
-.reception__why summary {
-  padding: 10px 0;
-  color: var(--accent);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.reception__why ul {
-  margin: 8px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.reception__why li {
-  margin: 0 0 8px;
-  padding-left: 12px;
-  border-left: 3px solid var(--border);
-}
-
-.reception__why li.reason--up {
-  border-left-color: var(--good);
-}
-
-.reception__why li.reason--down {
-  border-left-color: var(--critical);
-}
-
-.reception__reading {
-  display: block;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.reception__notes-title {
-  margin: 12px 0 0;
-  font-weight: 700;
 }
 
 .households {

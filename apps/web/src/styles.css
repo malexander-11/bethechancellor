@@ -634,11 +634,6 @@ hr {
   font-size: 0.875rem;
 }
 
-.reception__nudge {
-  color: var(--ink);
-  font-style: italic;
-}
-
 .warnings {
   margin: 12px 0 0;
   padding: 4px 0 4px 14px;

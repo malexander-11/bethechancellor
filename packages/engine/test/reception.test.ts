@@ -125,8 +125,6 @@ describe('cards that agree with their ratings (Phase 25)', () => {
               words(`Counted ${r.counted.side}: ${r.counted.labels.join(' · ')}`),
             ).toBeLessThanOrEqual(8);
           }
-          expect(r.tally.for).toBe(r.all.filter((x) => x.points > 0).length);
-          expect(r.tally.against).toBe(r.all.filter((x) => x.points < 0).length);
         }
       }),
       { numRuns: 60, seed: 20260928 },
@@ -312,14 +310,11 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
   it('counts the taxes most households feel, and gives no point either way for taxing the top', () => {
     const banks = at({ bank5: 1, banklevy: 1, qelevy: 1 });
     expect(rule(banks, 'public', 'pb-tax-rises')?.points).toBe(0);
-    const unfelt = rule(banks, 'public', 'pb-not-felt');
-    expect(unfelt?.points).toBe(0);
-    expect(bandOf(unfelt)).toBe('some');
     // Employer National Insurance is felt, as the incidence file says business taxes are felt.
     const employers = rule(at(BIG_BROAD_TAX_RISE), 'public', 'pb-tax-rises');
     expect(employers?.points).toBeLessThan(0);
     expect(employers?.text).toContain(groupOf('nicer')?.felt);
-    expect(said(unfelt, employers)).toMatchSnapshot();
+    expect(said(employers)).toMatchSnapshot();
     // A higher-rate rise is the better-off paying, as the benches see it.
     expect(rule(at({ ithr: 2 }), 'backbenchers', 'bb-who-pays')?.points).toBe(1);
   });
@@ -366,19 +361,6 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
     expect(rule(strained, 'public', 'pb-manifesto-strain')?.points).toBe(-1);
     for (const r of strained) expect(r.rating, r.audience).toBeGreaterThan(1);
   });
-
-  it('offers a nudge only when the better band would move the rating itself', () => {
-    // Both priorities delivered and a felt tax rise: four either way, so nothing is offered.
-    const four = at({ ...SECURITY_FLAGSHIPS, fuel: 20, alc: 20 }, SECURITY_GAME);
-    expect(by(four, 'public').rating).toBe(4);
-    const rises = rule(four, 'public', 'pb-tax-rises');
-    expect(rises?.points).toBe(-1);
-    expect(rises?.nudge).toBeUndefined();
-    // Held at the floor by a red line, no other nudge can lift it.
-    for (const r of by(at({ ...PENNY, ...BIG_BROAD_TAX_RISE }), 'public').all) {
-      if (r.rule !== 'pb-manifesto') expect(r.nudge, r.rule).toBeUndefined();
-    }
-  });
 });
 
 describe('graded delivery (Phase 25)', () => {
@@ -411,24 +393,6 @@ describe('graded delivery (Phase 25)', () => {
     for (const audience of ['backbenchers', 'markets', 'public'] as const) {
       expect(by(token, audience).rating, audience).toBeLessThanOrEqual(by(walk, audience).rating);
     }
-  });
-});
-
-describe('what would have moved a rating', () => {
-  it('says how far the reading was from the next better band, in the reading’s own unit', () => {
-    // Employer NICs on pension contributions: a large tax rise that breaks no red line.
-    const pub = by(room({ nicpen: 1 }), 'public');
-    const rises = pub.all.find((r) => r.rule === 'pb-tax-rises');
-    expect(rises?.points).toBeLessThan(0);
-    expect(filledFrom(RULES.get('pb-tax-rises')?.nudge, rises?.nudge)).toBe(true);
-    expect(wording(rises?.nudge)).toMatchSnapshot();
-    // The best band has nowhere better to go, so it says nothing.
-    const small = by(room({ ved: 10 }), 'public').all.find((r) => r.rule === 'pb-tax-rises');
-    expect(small?.points).toBe(0);
-    expect(small?.nudge).toBeUndefined();
-    // A rule with no authored nudge never gets one, whatever the band.
-    const kept = pub.all.find((r) => r.rule === 'pb-manifesto');
-    expect(kept?.nudge).toBeUndefined();
   });
 });
 
@@ -547,7 +511,7 @@ describe('three audiences, five steps', () => {
       const pattern = template
         .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
         .replace(
-          /\\\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices|year|lateFrom)\\\}/g,
+          /\\\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices|year)\\\}/g,
           '.+?',
         );
       return new RegExp(`^${pattern}$`).test(text);
@@ -569,7 +533,7 @@ describe('three audiences, five steps', () => {
         for (const band of rule.bands) {
           expect(band.badge).toBe('simulated');
           const words = band.text.replace(
-            /\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices|year|lateFrom)\}/g,
+            /\{(value|abs|typicalError|payers|feltHow|protected|protectedCut|cutServices|year)\}/g,
             '',
           );
           if (FIGURE.test(words)) {

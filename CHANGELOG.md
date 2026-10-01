@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The feedback cards lose "Why this rating": each keeps its rating, its one reason with the
+  decisions behind it, and the line for the other side. The markets' growth and debt-interest notes
+  and the public's "Who feels these measures" go with it, as do the tally, the nudges, the levers'
+  growth flag and the two rules that scored nothing; every rule's note stays in the data as its
+  record (ADR-0043).
 - Feedback no longer offers "Read the speech": the Budget speech and the Leader of the Opposition's
   reply go, with the speech's data, the engine code that assembled it and the tests that checked its
   figures against the sums (ADR-0043).

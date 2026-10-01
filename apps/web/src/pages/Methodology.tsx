@@ -277,11 +277,10 @@ export function MethodologyPage() {
         measured from before your Budget, today&rsquo;s estimate with nothing moved, so what the
         economy did since March is never counted as yours. Each card shows one reason, which always
         agrees with its rating, and one short line for anything that pulled the other way. Every
-        threshold, point and sentence is written in the data as the game&rsquo;s judgement;
-        &ldquo;Why this rating&rdquo; on each card lists every rule with its points, the figure it
-        read and the decisions behind it. Nothing predicts what a market or a voter would actually
-        do: the cards say what a judgement leans on, and the thresholds are the game&rsquo;s own,
-        written down in ADR-0013 and revised in ADR-0026.
+        threshold, point and sentence is written in the data as the game&rsquo;s judgement, each
+        rule with a note on what it leans on. Nothing predicts what a market or a voter would
+        actually do: the cards say what a judgement leans on, and the thresholds are the
+        game&rsquo;s own, written down in ADR-0013 and revised in ADR-0026.
       </p>
 
       <h2>Why it looks plain</h2>

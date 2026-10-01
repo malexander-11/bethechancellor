@@ -93,7 +93,6 @@
       "kind": "macro",
       "direction": "ambiguous",
       "alreadyInDirectCosting": false,
-      "growth": true,
       "text": "HMRC's direct estimate leaves out effects on investment and the wider economy, which HMRC says are usually captured in the OBR's economy forecast.",
       "sources": [
         {

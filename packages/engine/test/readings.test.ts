@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
   ambitionStatus,
   computeOutcome,
-  distributionalNotes,
   readingsWithCauses,
   type GamePermalink,
 } from '../src/index.js';
@@ -84,9 +83,7 @@ describe('the readings of a Budget', () => {
     // Benefits are not public services.
     expect(read({ ...estimate, wuc: 5 }).publicServiceSpendingGbpm).toBe(0);
     // A bank levy raises money most households do not feel.
-    const banks = read({ ...estimate, banklevy: 1 });
-    expect(banks.feltTaxRisesGbpm).toBe(0);
-    expect(banks.notFeltTaxRisesGbpm).toBeGreaterThan(1000);
+    expect(read({ ...estimate, banklevy: 1 }).feltTaxRisesGbpm).toBe(0);
   });
 
   it('counts what you reversed', () => {
@@ -197,14 +194,5 @@ describe('the readings of a Budget', () => {
     const mixed = read({ nicuel: 1, itbr: 2 }).credibilityShare ?? 0;
     expect(mixed).toBeGreaterThan(0);
     expect(mixed).toBeLessThan(1);
-  });
-
-  it('carries the distributional notes of the levers you moved, biggest first', () => {
-    const outcome = run({ itbr: 2, nonuk: 1 });
-    const notes = distributionalNotes(outcome, ds.levers, '2029-30');
-    expect(notes.length).toBeGreaterThan(0);
-    expect(notes.every((n) => n.sources.length > 0)).toBe(true);
-    expect(notes[0]?.leverTitle).toBeDefined();
-    expect(distributionalNotes(run({}), ds.levers, '2029-30')).toEqual([]);
   });
 });

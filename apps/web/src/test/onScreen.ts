@@ -79,12 +79,16 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     p.title,
     ...p.strains.map((s) => s.text).filter((t): t is string => t !== undefined),
   ]),
-  'the reception labels': reception.audiences.flatMap((a) => [a.title, a.question, ...a.labels]),
-  'the reception bands': reception.audiences.flatMap((a) =>
-    a.rules.flatMap((r) =>
-      r.bands.flatMap((b) => [b.text, ...(b.variants ?? []).map((v) => v.text)]),
-    ),
-  ),
+  // What a Budget-day card shows (ADR-0043): its title, its rating's label, its one reason, and the
+  // short labels of the rules on the other side.
+  'the reception cards': reception.audiences.flatMap((a) => [
+    a.title,
+    ...a.labels,
+    ...a.rules.flatMap((r) => [
+      r.short,
+      ...r.bands.flatMap((b) => [b.text, ...(b.variants ?? []).map((v) => v.text)]),
+    ]),
+  ]),
   'the interventions': interventions.interventions.map((x) => short(x.line)),
   'the ministers': ministers.ministers.flatMap((m) =>
     [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)].map(short),

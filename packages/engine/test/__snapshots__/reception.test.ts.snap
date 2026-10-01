@@ -52,7 +52,6 @@ exports[`three audiences, five steps > warms the backbenchers to services funded
 
 exports[`three audiences, recalibrated on today’s estimate (Phase 25) > counts the taxes most households feel, and gives no point either way for taxing the top 1`] = `
 [
-  "£…bn a year falls on banks, energy producers or the very top: most households will not feel it.",
   "Tax rises of £…bn a year, felt through pay and prices, on top of a tax take already at a historic high.",
 ]
 `;
@@ -76,5 +75,3 @@ exports[`three audiences, recalibrated on today’s estimate (Phase 25) > sees c
   "Spending on departments nets out near the plan (£…bn), with cuts to the Home Office budget and the prisons and courts budget.",
 ]
 `;
-
-exports[`what would have moved a rating > says how far the reading was from the next better band, in the reading’s own unit 1`] = `"£…bn less in tax rises would have lifted the public’s rating."`;

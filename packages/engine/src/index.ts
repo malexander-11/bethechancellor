@@ -30,14 +30,7 @@ export {
   validateDataset,
   type Dataset,
 } from './load.js';
-export {
-  distributionalNotes,
-  growthNote,
-  readingsWithCauses,
-  type DistributionalNote,
-  type Readings,
-  type ReadingsInput,
-} from './reactions.js';
+export { readingsWithCauses, type Readings, type ReadingsInput } from './reactions.js';
 export * from './game/reception.js';
 export { validateVintage } from './validate/validateVintage.js';
 export { checkRawSourceConsistency, type ExtractedSources } from './validate/rawSource.js';
