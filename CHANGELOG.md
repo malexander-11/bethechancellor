@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The tax lock now holds only headline rates and allowances: a rise in an income tax rate, a
+  National Insurance rate on workers or the main VAT rate breaks it, and so does a cut to the
+  personal allowance, the higher-rate threshold or the National Insurance threshold. VAT on anything
+  exempt or zero-rated, a higher 5% rate and National Insurance on workers over pension age no
+  longer break it and carry no tag; the amber strains are unchanged (ADR-0042).
 - The spending screen's description no longer adds whose view shows once you choose: each chosen
   row's line names its speaker, "Director of Public Spending: …", as on the tax screen.
 - The spending screen shows every policy, as the tax screen does: "Show only the best ideas" and its

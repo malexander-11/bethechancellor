@@ -92,8 +92,11 @@ export const BIG_BROAD_TAX_RISE: Budget = { nicer: 2 };
  */
 export const NEEDED_LOCK_BREAK: Budget = { ...HEALTH_ABOVE_PLAN, ...PENNY };
 
-/** The higher-rate threshold 10% lower: higher earners pay more, and no promise is broken. */
-export const HIGHER_EARNERS_PAY: Budget = { itbrl: -10 };
+/**
+ * Inheritance tax at 50% and the 5% band of stamp duty at 10%: estates and home buyers pay more,
+ * and no promise is broken.
+ */
+export const ESTATES_AND_HOMES_PAY: Budget = { iht: 10, sdlt5: 5 };
 
 /** The 50% rate and a wealth tax: more asked of the best-off than of anyone else. */
 export const TAXES_AT_THE_TOP: Budget = { it50: 1, wealth: 1 };

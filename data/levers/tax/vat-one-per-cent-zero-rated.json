@@ -9,7 +9,7 @@
   "shortTitle": "1% VAT on zero-rated goods",
   "noun": "1% VAT on zero-rated goods",
   "headline": "Charge 1% VAT on everything now zero-rated: IFS, £4.2bn.",
-  "description": "Most food, children’s clothes, books, domestic passenger transport, new homes and prescriptions carry VAT at 0%. The IFS Green Budget scores a 1% rate on all of it at £4.2 billion in 2029-30, an alternative to the 20% toggles on this tab, which take one category at a time. Static and held flat in cash. A new positive rate on zero-rated goods is a VAT increase for the people who buy them, so the game treats it as breaking the tax lock.",
+  "description": "Most food, children’s clothes, books, domestic passenger transport, new homes and prescriptions carry VAT at 0%. The IFS Green Budget scores a 1% rate on all of it at £4.2 billion in 2029-30, an alternative to the 20% toggles on this tab, which take one category at a time. Static and held flat in cash. Critics would call a new rate on zero-rated goods a VAT rise, but it leaves the standard rate alone, and this game holds the tax lock to headline rates and allowances, so it breaks no promise here.",
   "baselinePolicy": {
     "text": "Zero-rated goods and services carry VAT at 0% with input tax recoverable; the IFS puts the forgone revenue on food alone at £30.6 billion in 2029-30 and on new homes at £19.0 billion.",
     "source": {
@@ -70,7 +70,7 @@
     "caveats": [
       "Static, from the IFS’s ready-reckoner table; a small rate changes behaviour little, but the compliance cost of a new rate on food, books and children’s clothes is real.",
       "Overlaps every zero-rate toggle on this tab: charging 20% on food and 1% on all zero-rated goods counts the same food twice. The cards warn each other.",
-      "A new rate on goods that carry none today is a VAT increase; the game treats it as breaking the manifesto lock."
+      "Critics would call a new rate on goods that carry none today a VAT rise; this game holds the tax lock to headline rates and allowances, so it breaks no promise here."
     ]
   },
   "considerations": [
@@ -108,7 +108,7 @@
       "direction": "ambiguous",
       "magnitudeWords": "large",
       "alreadyInDirectCosting": false,
-      "text": "The manifesto promises not to increase VAT. A new 1% rate on goods that carry none today is an increase for the people who buy them, so the game treats this switch as breaking the tax lock.",
+      "text": "The manifesto promises not to increase VAT. A new 1% rate on goods that carry none today is an increase for the people who buy them, but it leaves the standard rate alone; this game holds the tax lock to headline rates and allowances, so this switch breaks no promise here, though critics would call it a VAT rise.",
       "sources": [
         {
           "sourceId": "labour-manifesto-2024-strong-foundations",

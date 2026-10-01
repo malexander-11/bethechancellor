@@ -118,10 +118,11 @@ describe('step 5: deliver the Budget', () => {
     ).toBeInTheDocument();
     thin.unmount();
     // Each dealt with, and a margin to spare: nothing left on the desk, and no yardstick said.
-    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_vatelec.1_itbrl.-10`);
+    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_vatelec.1_iht.10_sdlt5.5`);
     position = part(/^Where that leaves you/);
     expect(within(position).queryByText('Still on your desk:')).toBeNull();
     expect(within(position).queryByText(/call headroom under/)).toBeNull();
+    expect(within(position).queryByText(/manifesto/)).toBeNull();
   });
 
   it('says the tax take in words when it rises by more than half a point (Phase 25)', () => {

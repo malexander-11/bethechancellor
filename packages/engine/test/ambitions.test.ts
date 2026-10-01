@@ -35,20 +35,21 @@ const status = (game: GamePermalink, values: Budget) =>
   ambitionStatus(game, pm, ds.options, run(values), ds.levers);
 
 describe('what the Chancellor agreed with the Prime Minister', () => {
-  it('breaks the tax lock on exactly the levers the manifesto names', () => {
+  it('breaks the tax lock on a higher headline rate or a lower allowance (ADR-0042)', () => {
     const lock = pm.promises.find((p) => p.id === 'tax-lock');
     if (!lock) throw new Error('no tax lock');
     expect(promiseBreaks({ itbr: 1 }, [lock], ds.levers)[0]?.kept).toBe(false);
     expect(promiseBreaks({ vats: 1 }, [lock], ds.levers)[0]?.brokenBy).toEqual([
       { code: 'vats', value: 1 },
     ]);
-    // A cut is not a rise, and a threshold is not a rate.
+    // A cut in a rate is not a rise.
     expect(promiseBreaks({ itbr: -1 }, [lock], ds.levers)[0]?.kept).toBe(true);
+    // A lower allowance asks more of every taxpayer at the same rates, so it breaks the lock too;
+    // a higher one asks less and breaks nothing.
+    expect(promiseBreaks({ itpa: -500 }, [lock], ds.levers)[0]?.brokenBy).toEqual([
+      { code: 'itpa', value: -500 },
+    ]);
     expect(promiseBreaks({ itpa: 500 }, [lock], ds.levers)[0]?.kept).toBe(true);
-    // Nor is a lower allowance, though it asks more of every taxpayer (ADR-0035): the manifesto
-    // named rates, and a lower threshold neither breaks nor strains its words.
-    expect(promiseBreaks({ itpa: -500 }, [lock], ds.levers)[0]?.kept).toBe(true);
-    expect(promiseStrains({ itpa: -500 }, [lock], ds.levers)[0]?.strained).toBe(false);
   });
 
   it('marks the employer-side NICs charges and the new top rate as straining the lock, not breaking it', () => {

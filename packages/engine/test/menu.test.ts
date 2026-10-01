@@ -4,6 +4,7 @@ import {
   computeOutcome,
   excludesPartners,
   promiseBreaks,
+  promiseStrains,
 } from '../src/index.js';
 import { loadDataset, loadExtracts } from './fixtures.js';
 
@@ -38,16 +39,28 @@ const promise = (values: Record<string, number>, id: string) =>
   promiseBreaks(values, ds.pm.promises, ds.levers).find((p) => p.promise.id === id);
 const breaksNothing = (values: Record<string, number>) =>
   promiseBreaks(values, ds.pm.promises, ds.levers).every((p) => p.kept);
+const strainsNothing = (values: Record<string, number>) =>
+  promiseStrains(values, ds.pm.promises, ds.levers).every((p) => !p.strained);
 const partners = (code: string) =>
   excludesPartners(lever(code), ds.levers).map((p) => p.lever.code);
 
 describe('the Budget 2026 menu', () => {
-  it('breaks the tax lock where the manifesto’s words reach, and on a rise, not a cut', () => {
-    // Class 4 up breaks it; down, to as little as the lever allows, breaks nothing (ADR-0035).
+  it('holds the tax lock to headline rates and allowances (ADR-0042)', () => {
+    // A rate on workers up breaks it, Class 4 and the full rate above £50,270 among them; Class 4
+    // down, to as little as the lever allows, breaks nothing (ADR-0035).
     expect(promise({ nic4: 0.5 }, 'tax-lock')?.kept).toBe(false);
+    expect(promise({ nicuel: 1 }, 'tax-lock')?.kept).toBe(false);
     expect(breaksNothing({ nic4: lever('nic4').control.min })).toBe(true);
-    for (const code of ['nicspa', 'nicuel', 'vat1z']) {
-      expect(promise({ [code]: 1 }, 'tax-lock')?.kept, code).toBe(false);
+    // The personal allowance and the two thresholds on pay: a cut breaks it, a rise nothing.
+    for (const code of ['itpa', 'itbrl', 'nicpt']) {
+      expect(promise({ [code]: lever(code).control.min }, 'tax-lock')?.kept, code).toBe(false);
+      expect(breaksNothing({ [code]: lever(code).control.max }), code).toBe(true);
+    }
+    // VAT or National Insurance where none is charged today, and a higher 5% rate, leave the
+    // headline rates and allowances alone: no tag at all, red or amber.
+    for (const code of ['nicspa', 'vat1z', 'vatfood', 'vatr']) {
+      expect(breaksNothing({ [code]: 1 }), code).toBe(true);
+      expect(strainsNothing({ [code]: 1 }), code).toBe(true);
     }
     for (const code of ['qelevy', 'carried', 'wealth2', 'ctgh', 'cta']) {
       expect(promise({ [code]: 1 }, 'tax-lock')?.kept, code).toBe(true);

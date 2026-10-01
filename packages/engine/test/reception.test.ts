@@ -20,10 +20,10 @@ import {
   DEBT_RULE_MISSED,
   DEFENCE_GAP,
   EMPLOYER_NICS,
+  ESTATES_AND_HOMES_PAY,
   FRONT_LOADED,
   HEALTH_ABOVE_PLAN,
   HEALTH_CUT,
-  HIGHER_EARNERS_PAY,
   MOVES,
   NHS_START,
   PENNY,
@@ -194,7 +194,7 @@ describe('cards that agree with their ratings (Phase 25)', () => {
     const broad = whoPays(PENNY);
     expect(bandOf(broad)).toBe('broad');
     named(broad, PENNY);
-    const atTheTop = { ...TAXES_AT_THE_TOP, ...HIGHER_EARNERS_PAY };
+    const atTheTop = { ...TAXES_AT_THE_TOP, ...ESTATES_AND_HOMES_PAY };
     const top = whoPays(atTheTop);
     expect(bandOf(top)).toBe('top');
     named(top, atTheTop);
@@ -267,7 +267,7 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
   it('never rewards borrowing past the rules over paying for the same priorities', () => {
     const borrowed = at(THREE);
     // Paid for from the top, crossing no red line.
-    const funded = at({ ...THREE, ...HIGHER_EARNERS_PAY });
+    const funded = at({ ...THREE, ...ESTATES_AND_HOMES_PAY });
     expect(by(borrowed, 'markets').rating).toBeLessThan(by(funded, 'markets').rating);
     expect(by(borrowed, 'backbenchers').rating).toBeLessThanOrEqual(
       by(funded, 'backbenchers').rating,

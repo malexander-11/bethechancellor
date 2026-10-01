@@ -17,11 +17,11 @@ import {
   DEBT_RULE_MISSED,
   DEFENCE_GAP,
   EMPLOYER_NICS,
+  ESTATES_AND_HOMES_PAY,
   EVERYTHING_EXPENSIVE,
   FRONT_LOADED,
   HEALTH_ABOVE_PLAN,
   HEALTH_CUT,
-  HIGHER_EARNERS_PAY,
   INVESTMENT,
   INVESTMENT_WITHIN_RULES,
   MOVES,
@@ -131,10 +131,10 @@ describe('the named Budgets play their parts', () => {
     expect(headroom(THIN_MARGIN)).toBeLessThan(THIN_HEADROOM_GBPM);
   });
 
-  it('the taxes on higher earners break no promise; a cut for everyone is borrowed past the rules', () => {
-    expect(broken(HIGHER_EARNERS_PAY)).toEqual([]);
-    expect(strained(HIGHER_EARNERS_PAY)).toEqual([]);
-    expect(headroom(HIGHER_EARNERS_PAY)).toBeGreaterThan(headroom({}));
+  it('taxes on estates and home buyers break no promise; a cut for everyone is borrowed past the rules', () => {
+    expect(broken(ESTATES_AND_HOMES_PAY)).toEqual([]);
+    expect(strained(ESTATES_AND_HOMES_PAY)).toEqual([]);
+    expect(headroom(ESTATES_AND_HOMES_PAY)).toBeGreaterThan(headroom({}));
     expect(broken(BASIC_RATE_CUT)).toEqual([]);
     expect(missed(BASIC_RATE_CUT).length).toBeGreaterThan(0);
     // The top rate and a wealth tax fall on the best-off; a point on corporation tax on business,

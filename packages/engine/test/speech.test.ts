@@ -18,9 +18,9 @@ import {
   DAY_TO_DAY_RULE_MISSED,
   DEBT_RULE_MISSED,
   DEFENCE_GAP,
+  ESTATES_AND_HOMES_PAY,
   HEALTH_ABOVE_PLAN,
   HEALTH_CUT,
-  HIGHER_EARNERS_PAY,
   INVESTMENT_WITHIN_RULES,
   NHS_START,
   PENNY,
@@ -89,8 +89,8 @@ const SPEECHES = {
     { ...PRISONS, ...CORPORATION_TAX_RISE },
     gameWith(['safer-streets']),
   ),
-  'prisons paid for by higher earners': heard(
-    { ...PRISONS, ...HIGHER_EARNERS_PAY },
+  'prisons paid for by estates and home buyers': heard(
+    { ...PRISONS, ...ESTATES_AND_HOMES_PAY },
     gameWith(['safer-streets']),
   ),
   'prisons and a health cut': heard({ ...PRISONS, ...HEALTH_CUT }, gameWith(['safer-streets'])),
@@ -293,7 +293,7 @@ describe('the speech', () => {
     const cases: [Heard, OppositionTopic][] = [
       ['the day-to-day rule missed', 'rulesMissed'],
       ['prisons and a corporation tax rise', 'promiseBroken'],
-      ['prisons paid for by higher earners', 'taxUp'],
+      ['prisons paid for by estates and home buyers', 'taxUp'],
       ['prisons and a health cut', 'cuts'],
       ['safer streets delivered, defence left', 'default'],
       // Borrowing up inside the rules: investment the debt rule still allows.

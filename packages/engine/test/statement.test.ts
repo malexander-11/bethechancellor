@@ -17,9 +17,9 @@ import {
   CORPORATION_TAX_RISE,
   DEBT_RULE_MISSED,
   EMPLOYER_NICS,
+  ESTATES_AND_HOMES_PAY,
   HEALTH_ABOVE_PLAN,
   HEALTH_CUT,
-  HIGHER_EARNERS_PAY,
   INVESTMENT_WITHIN_RULES,
   NHS_START,
   PRISONS,
@@ -88,9 +88,9 @@ const CASES = {
     ...HEALTH_ABOVE_PLAN,
     ...SECURITY_FLAGSHIPS,
   }),
-  'prisons paid for by higher earners': budget(['safer-streets'], {
+  'prisons paid for by estates and home buyers': budget(['safer-streets'], {
     ...PRISONS,
-    ...HIGHER_EARNERS_PAY,
+    ...ESTATES_AND_HOMES_PAY,
   }),
   'a health cut': budget(['nhs'], HEALTH_CUT),
   'a corporation tax rise': budget([], CORPORATION_TAX_RISE),
@@ -250,7 +250,7 @@ describe('your Budget, in three sentences (Phase 25)', () => {
     expect(asStrain('a small health trim')).not.toBe(asStrain('employer National Insurance'));
     // A thin margin is called thin, under the markets' line; above it, every promise was kept.
     const thin = read('prisons out of the headroom');
-    const kept = read('prisons paid for by higher earners');
+    const kept = read('prisons paid for by estates and home buyers');
     expect(thin.verdict.headroomGbpm).toBeLessThan(THIN_HEADROOM_GBPM);
     expect(kept.verdict.headroomGbpm).toBeGreaterThanOrEqual(THIN_HEADROOM_GBPM);
     expect(wording(thin.statement.accepted)).not.toBe(wording(kept.statement.accepted));

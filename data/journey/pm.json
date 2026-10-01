@@ -331,7 +331,7 @@
       "title": "The tax lock",
       "noun": "the tax lock",
       "tag": "Tax lock",
-      "text": "We will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT. The manifesto's words, repeated at Budget 2025.",
+      "text": "We will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT. The manifesto's words, repeated at Budget 2025. Raising one of those headline rates breaks it, and so does cutting the personal allowance, the higher-rate threshold or the National Insurance threshold.",
       "origin": "manifesto-2024",
       "sources": [
         {
@@ -372,48 +372,20 @@
           "when": "above"
         },
         {
-          "code": "nicspa",
-          "when": "on"
-        },
-        {
           "code": "nicuel",
           "when": "on"
         },
         {
-          "code": "vat1z",
-          "when": "on"
+          "code": "itpa",
+          "when": "below"
         },
         {
-          "code": "vatr",
-          "when": "above"
+          "code": "itbrl",
+          "when": "below"
         },
         {
-          "code": "vatmot",
-          "when": "on"
-        },
-        {
-          "code": "vatfood",
-          "when": "on"
-        },
-        {
-          "code": "vatnrg",
-          "when": "on"
-        },
-        {
-          "code": "vattrn",
-          "when": "on"
-        },
-        {
-          "code": "vatkids",
-          "when": "on"
-        },
-        {
-          "code": "vathome",
-          "when": "on"
-        },
-        {
-          "code": "vatbook",
-          "when": "on"
+          "code": "nicpt",
+          "when": "below"
         }
       ],
       "strains": [

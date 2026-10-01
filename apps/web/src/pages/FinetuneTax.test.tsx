@@ -217,7 +217,7 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(statusOf('Change the headline rate')).toMatch(/^23% · raises £\d+\.\dbn$/);
   });
 
-  it('cuts the personal allowance or self-employed National Insurance, breaking no promise', async () => {
+  it('breaks the tax lock on a lower personal allowance, not on a lower Class 4 rate (ADR-0042)', async () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     openDecision('Change allowances and thresholds');
     const allowance = scale('Personal allowance');
@@ -228,6 +228,8 @@ describe('fine-tune tax and spend: one card a decision', () => {
       '£12,670',
       '£13,820',
     ]);
+    // At rest it wears the promise a cut would break.
+    expect(within(allowance).getByText(/no cut/)).toHaveTextContent(/^Tax lock: no cut/);
     // The cut leads: it raises money, and says so first.
     expect(priceOf(allowance)).toMatch(
       /^£12,470 would raise £1\.\dbn · £12,670 would cost £1\.\dbn$/,
@@ -235,6 +237,11 @@ describe('fine-tune tax and spend: one card a decision', () => {
     fireEvent.click(within(allowance).getByRole('radio', { name: '£11,320' }));
     await waitFor(() => expect(search().get('L')).toMatch(/itpa\.-1250/));
     expect(adviceOf(allowance)).toMatch(/^Director of Tax: Most taxpayers pay more;/);
+    expect(within(allowance).getByText('Breaks the manifesto: The tax lock')).toHaveClass(
+      'tag--warn',
+    );
+    // A higher allowance asks less of everyone, and breaks nothing.
+    fireEvent.click(within(allowance).getByRole('radio', { name: '£12,670' }));
     expect(within(allowance).queryByText(/Breaks the manifesto/)).toBeNull();
     expect(within(allowance).queryByText(/Strains the manifesto/)).toBeNull();
     // Class 4 can come down to 2%; only a rise breaks the tax lock.

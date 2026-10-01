@@ -179,10 +179,13 @@ export function MethodologyPage() {
         answer one question, as the wealth tax at 1% or 2% does, they are one choice among radios.
         Each pair has a text that reads from either card. Employer-side National Insurance is not a
         manifesto red line here, on the government&rsquo;s own reading of the lock; the Political
-        Adviser says on each such lever that the reading is contested. Phase 12 added the menu the
-        Budget 2026 reporting says is on the table: ending the capital gains write-off at death, a
-        £1.5 million council tax surcharge band, reversing the farm and family-business relief
-        reform, two points on the bank surcharge, the energy profits levy package again, the
+        Adviser says on each such lever that the reading is contested. The lock itself is read as
+        headline rates and allowances (ADR-0042): a rise in a rate it names, or a cut to the
+        personal allowance, the higher-rate threshold or the National Insurance threshold, breaks
+        it; VAT or National Insurance charged where none is charged today does not. Phase 12 added
+        the menu the Budget 2026 reporting says is on the table: ending the capital gains write-off
+        at death, a £1.5 million council tax surcharge band, reversing the farm and family-business
+        relief reform, two points on the bank surcharge, the energy profits levy package again, the
         self-employed Class 4 rate, VAT off domestic gas, another HMRC compliance package,
         unfreezing the Plan 2 student loan threshold, defence at 3% of GDP from 2027, and business
         rates as a share of the OBR&rsquo;s own line. Each is a published row or a stated

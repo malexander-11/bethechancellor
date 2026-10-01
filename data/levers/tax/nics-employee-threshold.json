@@ -118,6 +118,23 @@
         }
       ],
       "magnitudeWords": "unknown"
+    },
+    {
+      "id": "threshold-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "appliesWhen": {
+        "below": 0
+      },
+      "text": "The manifesto promises not to increase National Insurance. A lower threshold charges it on more of every employee's pay at the same rate; this game holds the tax lock to headline rates and allowances, so a cut breaks it and a rise breaks nothing.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations",
+          "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+        }
+      ]
     }
   ],
   "status": "reviewed",

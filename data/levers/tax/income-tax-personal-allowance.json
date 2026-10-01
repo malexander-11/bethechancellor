@@ -183,6 +183,23 @@
         }
       ],
       "magnitudeWords": "unknown"
+    },
+    {
+      "id": "allowance-and-the-lock",
+      "kind": "legal",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": false,
+      "appliesWhen": {
+        "below": 0
+      },
+      "text": "The manifesto promises not to raise the rates of income tax. A lower personal allowance takes more tax from everyone who pays it at the same rates; this game holds the tax lock to headline rates and allowances, so a cut breaks it and a rise breaks nothing.",
+      "sources": [
+        {
+          "sourceId": "labour-manifesto-2024-strong-foundations",
+          "quote": "we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT"
+        }
+      ]
     }
   ],
   "status": "reviewed",
