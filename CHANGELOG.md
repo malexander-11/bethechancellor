@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The spending screen's description no longer adds whose view shows once you choose: each chosen
+  row's line names its speaker, "Director of Public Spending: …", as on the tax screen.
 - The spending screen shows every policy, as the tax screen does: "Show only the best ideas" and its
   adviser's shortlist go, so step 4 has no basic mode. Step 3 keeps its best ways and its button
   (ADR-0041).

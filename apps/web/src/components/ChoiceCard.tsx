@@ -52,8 +52,8 @@ export interface CardContext {
   moved: ReadonlySet<string>;
   /** The levers a flagship the player chose holds, read when the screen opened. */
   held: ReadonlyMap<string, Held>;
-  /** Whose line a chosen row gives, named on the line where the screen's lead does not say. */
-  adviser?: string | undefined;
+  /** The screen's adviser, named on the line a chosen row gives. */
+  adviser: string;
 }
 
 /**
@@ -284,8 +284,7 @@ function RowOf({
       redLines={redLinesFor(lever.code)}
       chosen={option ? { title: option.option.title, state: option.state } : undefined}
       prices={prices}
-      advice={mine ? lead?.advice : undefined}
-      adviser={adviser}
+      advice={mine && lead?.advice ? { who: adviser, line: lead.advice } : undefined}
       notes={notes}
       blocked={blocked}
       takesOut={takesOut}

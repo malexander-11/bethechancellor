@@ -83,7 +83,7 @@ describe('a row in a decision’s card (ADR-0037)', () => {
         onChange={onChange}
         levels={[1]}
         prices={['would raise at most £32.5bn']}
-        advice={line}
+        advice={{ who: 'Director of Tax', line }}
       >
         <p>From the minister</p>
       </LeverRow>
@@ -106,7 +106,9 @@ describe('a row in a decision’s card (ADR-0037)', () => {
     expect(screen.getByRole('checkbox', { name: 'Food' })).toBeChecked();
     expect(screen.queryByText('would raise at most £32.5bn')).toBeNull();
     expect(screen.getByText(/^raises at most £\d+\.\dbn in 2029-30$/)).toBeInTheDocument();
-    expect(screen.getByText(/A penny is big money/)).toBeInTheDocument();
+    expect(screen.getByText(/A penny is big money/)).toHaveTextContent(
+      /^Director of Tax: A penny is big money/,
+    );
     expect(screen.getByText('From the minister')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Undo for Food' }));
     expect(onChange).toHaveBeenLastCalledWith(0);
@@ -212,7 +214,7 @@ describe('a row in a decision’s card (ADR-0037)', () => {
         onChange={(v) => chosen.push(v)}
         levels={levelsOf('itbr')}
         prices={prices}
-        advice={line}
+        advice={{ who: 'Director of Tax', line }}
       />
     );
     const { rerender, container } = render(

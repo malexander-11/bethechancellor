@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
-import { glossary } from '../data';
+import { finetune, glossary } from '../data';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 const intro = () => document.querySelector('.intro') as HTMLElement;
@@ -103,9 +103,7 @@ describe('the head of every screen', () => {
     const first = at(`/finetune/spending?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
     expect(screen.getByText('Step 4 of 6')).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
-    expect(
-      screen.getByText(/Your Director of Public Spending’s view shows once you choose\./),
-    ).toBeInTheDocument();
+    expect(screen.getByText(finetune.spending.lead)).toBeInTheDocument();
     first.unmount();
     at(`/?${BASE}`);
     // The invitation to play, not a step (ADR-0033): no count, no step's name and no road.

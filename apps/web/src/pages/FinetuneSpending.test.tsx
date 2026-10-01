@@ -5,6 +5,7 @@ import { INVESTMENT_NOTE } from '../components/LeverRow';
 import {
   BASE,
   GAME,
+  adviceOf,
   at,
   bar,
   decision,
@@ -29,11 +30,9 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     const { container } = at(`/finetune/spending?${BASE}&${GAME}`);
     expect(h1('Fine-tune spending')).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        'Trim or top up any budget. A top-up costs what a trim saves. Your Director of Public Spending’s view shows once you choose.',
-      ),
-    ).toBeInTheDocument();
+    // The lead is the data's own words, naming no adviser: each chosen row names its own.
+    expect(screen.getByText(finetune.spending.lead)).toBeInTheDocument();
+    expect(screen.queryByText(/view shows once you choose/)).toBeNull();
     // The sections in the data's order, as the money is for, with no count at rest (ADR-0037).
     const sections = screen
       .getAllByRole('region')
@@ -126,11 +125,14 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     // At rest, how it grows after rising prices, then the nearest level each way in cash; no
     // minister and no adviser yet.
     expect(within(schools).queryByText('Education Secretary')).toBeNull();
+    expect(adviceOf(schools)).toBe('');
     expect(priceOf(schools)).toMatch(
       /^Falls 0\.3% a year after rising prices, as planned1% less would save £\d\.\dbn · 1% more would cost £\d\.\dbn$/,
     );
-    // Cut, its minister says what stops happening, and the new path sits beside the plan.
+    // Cut, its adviser speaks, named on the line, its minister says what stops happening, and the
+    // new path sits beside the plan.
     fireEvent.click(within(schools).getByRole('radio', { name: '1% less' }));
+    expect(adviceOf(schools)).toMatch(/^Director of Public Spending: \S/);
     expect(within(schools).getByText('Education Secretary')).toBeInTheDocument();
     expect(effectOf(schools)).toMatch(
       /^Falls 0\.8% a year after rising prices \(planned: 0\.3%\) · £\d\.\dbn less than planned in 2029-30$/,
