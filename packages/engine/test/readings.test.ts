@@ -3,7 +3,6 @@ import {
   ambitionStatus,
   computeOutcome,
   distributionalNotes,
-  readings,
   readingsWithCauses,
   type GamePermalink,
 } from '../src/index.js';
@@ -18,7 +17,6 @@ import {
   PRISONS,
   SECURITY,
   TAXES_AT_THE_TOP,
-  TWO_CHILD_LIMIT,
   gameWith,
   todaysEstimate,
   typicalError,
@@ -43,7 +41,7 @@ const run = (leverValues: Budget) =>
   });
 const read = (leverValues: Budget, game?: GamePermalink) => {
   const outcome = run(leverValues);
-  return readings({
+  return readingsWithCauses({
     outcome,
     levers: ds.levers,
     typicalErrorGbpm,
@@ -51,7 +49,7 @@ const read = (leverValues: Budget, game?: GamePermalink) => {
     pm: ds.pm,
     incidence: ds.incidence,
     ...(game ? { game, status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers) } : {}),
-  });
+  }).values;
 };
 
 describe('the readings of a Budget', () => {
@@ -138,10 +136,6 @@ describe('the readings of a Budget', () => {
     expect(r.breachAccepted).toBeUndefined();
     expect(r.headroomVsTargetGbpm).toBeUndefined();
     expect(r.rabbitGbpm).toBeUndefined();
-    expect(r.rebellionRisk).toBe(2 + 1 + 0);
-    // A benefit cut by a slider counts with the benches as a U-turn does (Phase 25).
-    expect(read({ ...PRISONS, wuc: -5 }, game).rebellionRisk).toBe(0 + 1 + 1);
-    expect(read({ ...PRISONS, ...TWO_CHILD_LIMIT }, game).rebellionRisk).toBe(2 + 1 + 1);
     // One priority ranked and delivered: a clear story worth what its options cost.
     const clear = read(PRISONS, gameWith(['safer-streets']));
     expect(clear.clearPriorityGbpm).toBeCloseTo(clear.deliveredGbpm ?? 0, 6);

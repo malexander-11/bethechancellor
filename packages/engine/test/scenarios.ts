@@ -104,15 +104,6 @@ export const TAXES_AT_THE_TOP: Budget = { it50: 1, wealth: 1 };
 /** A point on corporation tax: business pays more, and the manifesto's cap on it is broken. */
 export const CORPORATION_TAX_RISE: Budget = { ct: 1 };
 
-/** Taxes no promise names: the family-home allowance ended, the biggest homes charged more. */
-export const UNPROMISED_TAXES: Budget = { rnrb: 1, ctgh: 1 };
-
-/**
- * Thin headroom: safer streets' flagship, part-paid by ending the family-home allowance. Every
- * promise kept and the priority delivered, with a margin under ten billion.
- */
-export const THIN_MARGIN: Budget = { ...PRISONS, rnrb: 1 };
-
 /** Two pence off the basic rate: a tax cut for everyone who earns, borrowed past the rules. */
 export const BASIC_RATE_CUT: Budget = { itbr: -2 };
 

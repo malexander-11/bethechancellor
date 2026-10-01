@@ -11,7 +11,6 @@ import {
   options,
   pm,
   rules,
-  verdicts,
   vintage,
 } from '../data';
 import { ON_SCREEN } from '../test/onScreen';
@@ -51,7 +50,6 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const road: { label: string; line: Line; max: number }[] = [
       ...pm.priorities.map((p) => ({ label: `${p.id} reaction`, line: p.reaction, max: 12 })),
       ...interventions.interventions.map((x) => ({ label: x.id, line: x.line, max: 14 })),
-      ...verdicts.kinds.map((k) => ({ label: `verdict ${k.id}`, line: k.line, max: 18 })),
       ...options.deliver.map((o) => ({ label: `option ${o.id}`, line: o.line, max: 18 })),
     ];
     expect(road.length).toBeGreaterThan(0);

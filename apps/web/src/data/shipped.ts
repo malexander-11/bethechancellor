@@ -17,7 +17,6 @@ import type {
   SourcesFile,
   SpeechFile,
   Vintage,
-  VerdictsFile,
 } from '@btc/engine';
 
 /**
@@ -42,7 +41,6 @@ export interface ShippedDataset {
   electorate: HouseholdsFile;
   speech: SpeechFile;
   incidence: IncidenceFile;
-  verdicts: VerdictsFile;
   guide: GuideFile;
   glossary: GlossaryFile;
   levers: Lever[];

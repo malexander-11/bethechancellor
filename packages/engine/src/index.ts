@@ -25,7 +25,6 @@ export {
   parseHouseholdsFile,
   parseSpeech,
   parseIncidence,
-  parseVerdicts,
   parseGuide,
   parseGlossary,
   parseVintage,
@@ -35,7 +34,6 @@ export {
 export {
   distributionalNotes,
   growthNote,
-  readings,
   readingsWithCauses,
   type DistributionalNote,
   type Readings,

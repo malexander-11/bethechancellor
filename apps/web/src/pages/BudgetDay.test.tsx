@@ -50,8 +50,10 @@ describe('Budget day: what your Budget means', () => {
     for (const fold of ['Read the speech', 'Who feels it: five households', 'Budget documents']) {
       expect(screen.getByText(fold).closest('details')).not.toHaveAttribute('open');
     }
-    // No Budget in three sentences (ADR-0043); "change something" means the review.
+    // No Budget in three sentences, and no close (ADR-0043); "change something" means the review.
     expect(screen.queryByText(/in three sentences/)).toBeNull();
+    expect(screen.queryByText('How your Budget went')).toBeNull();
+    expect(screen.queryByText('Priorities, promises and who paid')).toBeNull();
     expect(screen.getByRole('link', { name: 'Change something' })).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/review\?/),
@@ -130,7 +132,7 @@ describe('Budget day: what your Budget means', () => {
     ).toBeGreaterThan(0);
   });
 
-  it('approves of a priority carried through, and names what the money does not buy', () => {
+  it('approves of a priority carried through, and says nothing of what the money buys (ADR-0043)', () => {
     at(`${BASE}&${GAME.replace('pr.defence+safer-streets', 'pr.safer-streets')}&L=moj.10`);
     expect(meter('The public')).toHaveAccessibleName('4 of 5: Approving');
     expect(
@@ -139,7 +141,8 @@ describe('Budget day: what your Budget means', () => {
     ).toBe(2);
     open('Who feels it: five households');
     expect(screen.getAllByText(/A family on universal credit/).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Prison places take years to build/)).toBeInTheDocument();
+    expect(screen.queryByText(/What the money does and does not buy/)).toBeNull();
+    expect(screen.queryByText(/Prison places take years to build/)).toBeNull();
   });
 
   it('keeps the documents behind a fold, and arriving marks the game finished', async () => {
@@ -153,22 +156,6 @@ describe('Budget day: what your Budget means', () => {
     await waitFor(() =>
       expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.5/),
     );
-  });
-
-  it('closes with the verdict: the kind of Budget, the ambitions and who paid', () => {
-    at(`${BASE}&${GAME}&L=moj.10_itbr.1`);
-    const close = screen.getByRole('region', { name: /A Budget|Half a programme|small moves/ });
-    expect(within(close).getByText(/Which ambitions survived/)).toBeInTheDocument();
-    expect(within(close).getByText(/Safer streets: prisons, police, borders/)).toBeInTheDocument();
-    expect(within(close).getByText(/broken by choice \(Basic rate\)/)).toBeInTheDocument();
-    expect(within(close).getByText(/Everyone who earns or spends/)).toBeInTheDocument();
-    expect(within(close).getByText(/Courts and prisons/)).toBeInTheDocument();
-    // Phase 24 retired the forecast that arrived later: no compromises since it, no other
-    // forecasts to re-run the Budget under, no replay of a seed.
-    expect(within(close).queryByText(/The compromises that mattered/)).toBeNull();
-    expect(within(close).queryByText(/other forecasts/)).toBeNull();
-    expect(within(close).queryByText('what arrived')).toBeNull();
-    expect(screen.queryByRole('link', { name: /Replay/ })).toBeNull();
   });
 
   it('the speech follows the choices: the first priority delivered, its options and its cuts', () => {
@@ -204,19 +191,6 @@ describe('Budget day: what your Budget means', () => {
     // A judgement, as the strip above it says, with no badge of its own (ADR-0034).
     expect(reply.querySelector('.badge')).toBeNull();
     expect(reply.textContent).not.toMatch(/£/);
-  });
-
-  it('names the trade-off it checked: a priority left out with money to spare', () => {
-    at(`${BASE}&${GAME}&L=moj.10`);
-    const close = screen.getByRole('region', { name: /A priority left out with money to spare/ });
-    expect(within(close).getByText('How your Budget went')).toBeInTheDocument();
-    // The judgement, then the worked-out fact behind it, with no badges (ADR-0034).
-    const fact = within(close).getByText(
-      /^Delivering defence in full with “Fill the funding gap in the defence investment plan” would still meet both rules, with £\d+\.\dbn of headroom\.$/,
-    );
-    expect(fact).toHaveClass('verdict-close__fact');
-    expect(close.querySelector('.badge')).toBeNull();
-    expect(within(close).getByText('Priorities, promises and who paid')).toBeInTheDocument();
   });
 
   it('offers the ways on: a link to copy, the review to change something, and a fresh start', () => {

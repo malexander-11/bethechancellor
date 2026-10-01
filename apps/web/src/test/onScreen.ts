@@ -12,7 +12,6 @@ import {
   options,
   pm,
   reception,
-  verdicts,
 } from '../data';
 import { briefingTemplates, fillIn } from '../journey/briefingWords';
 
@@ -86,7 +85,6 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
       r.bands.flatMap((b) => [b.text, ...(b.variants ?? []).map((v) => v.text)]),
     ),
   ),
-  'the verdicts': verdicts.kinds.flatMap((k) => [k.title, short(k.line)]),
   'the interventions': interventions.interventions.map((x) => short(x.line)),
   'the ministers': ministers.ministers.flatMap((m) =>
     [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)].map(short),

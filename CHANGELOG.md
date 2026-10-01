@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- Feedback no longer closes with "How your Budget went": the kind of Budget, which ambitions
+  survived, how each promise fared and who paid go, and so does "What the money does and does not
+  buy" under the households. The kinds of Budget file and the engine code that chose one go with
+  them; the review keeps its own who-paid figures and the thin line (ADR-0043).
 - Feedback no longer opens with the Budget in three sentences: the engine's statement and its tests
   go, and the three cards are the page's sections (ADR-0043).
 - Feedback's first card is "Labour backbenchers", not "Your backbenchers"; the review's reaction is

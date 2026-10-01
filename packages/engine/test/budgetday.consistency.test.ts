@@ -2,13 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
   ambitionStatus,
   assembleSpeech,
-  budgetVerdict,
   computeOutcome,
   formatGbpBn,
   isMissed,
   macroCodesOf,
   missedBy,
-  readings,
 } from '../src/index.js';
 import { loadDataset, outcomeOfFor, wording } from './fixtures.js';
 import {
@@ -22,7 +20,6 @@ import {
   gameWith,
   latestContext,
   todaysEstimate,
-  typicalError,
   type Budget,
 } from './scenarios.js';
 
@@ -30,14 +27,12 @@ const ds = loadDataset();
 const ESTIMATE = todaysEstimate(ds);
 const MACRO = macroCodesOf(latestContext(ds).readings);
 const outcomeOf = outcomeOfFor(ds);
-const typicalErrorGbpm = typicalError(ds);
 
 /**
  * The review's seven Budgets (Phase 25, R3): the walk, the walk paid by employer National
  * Insurance, a 2p cut to the basic rate, doing nothing, a priority left unfunded, a 5% cut to
- * health, and investment that misses the debt rule alone. On each, neither the close nor a speech
- * figure may say the opposite of the sums: the rules result, a priority's fate or the sign of a
- * change.
+ * health, and investment that misses the debt rule alone. On each, no speech figure may say the
+ * opposite of the sums: the rules result, a priority's fate or the sign of a change.
  */
 const BUDGETS: [string, readonly string[], Budget][] = [
   ['the walk', SECURITY, WALK],
@@ -58,28 +53,6 @@ function deliver(priorities: readonly string[], policy: Budget) {
     settings: { leverValues: { ...policy, ...ESTIMATE } },
   });
   const status = ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers);
-  const r = readings({
-    outcome,
-    levers: ds.levers,
-    typicalErrorGbpm,
-    outcomeOf,
-    game,
-    status,
-    incidence: ds.incidence,
-  });
-  const verdict = budgetVerdict({
-    levers: ds.levers,
-    pm: ds.pm,
-    options: ds.options,
-    incidence: ds.incidence,
-    kinds: ds.verdicts,
-    game,
-    outcome,
-    typicalErrorGbpm,
-    credibilityShare: r.credibilityShare ?? 0,
-    rebellionRisk: r.rebellionRisk ?? 0,
-    outcomeOf,
-  });
   const speech = assembleSpeech({
     speech: ds.speech,
     outcome,
@@ -91,19 +64,18 @@ function deliver(priorities: readonly string[], policy: Budget) {
     outcomeOf,
   });
   const pre = outcomeOf(Object.fromEntries(MACRO.map((c) => [c, ESTIMATE[c] ?? 0])));
-  return { game, outcome, status, verdict, speech, pre };
+  return { game, outcome, status, speech, pre };
 }
 
 describe('Budget day agrees with the sums, on the review’s seven Budgets (Phase 25)', () => {
   it.each(BUDGETS)('%s', (_name, priorities, policy) => {
-    const { outcome, status, verdict, speech, pre } = deliver(priorities, policy);
-    const year = verdict.targetYear;
+    const { outcome, status, speech, pre } = deliver(priorities, policy);
+    const year = outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '';
     const said = speech.paragraphs.map((p) => p.text).join(' ');
 
     // The rules result: one test, said the same way everywhere.
     const missed = outcome.verdicts.filter(isMissed);
     if (missed.length > 0) {
-      expect(verdict.kind.id).toBe('rules-missed');
       for (const v of missed) {
         expect(said).toContain(missedBy(v));
         expect(speech.paragraphs.at(-1)?.figures).toContain(
@@ -112,7 +84,6 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
       }
       expect(said).not.toMatch(/meets the fiscal rules/);
     } else {
-      expect(verdict.kind.id).not.toBe('rules-missed');
       expect(said).toMatch(/this Budget meets the fiscal rules/);
       expect(said).not.toMatch(/misses/);
     }
@@ -129,18 +100,13 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
       (first ? ds.speech.opening[first.priority.id] : ds.speech.opening.default)?.text,
     );
 
-    // The sign of every change: borrowing, taxes and spending.
+    // The sign of the change in borrowing.
     const borrowingChange =
       (outcome.paths.policy.psnb[year] ?? 0) - (pre.paths.policy.psnb[year] ?? 0);
     const forecast = speech.paragraphs.find((p) => p.kind === 'forecast')?.text ?? '';
     if (borrowingChange >= 50) expect(forecast).toMatch(/This Budget adds/);
     else if (borrowingChange <= -50) expect(forecast).toMatch(/This Budget cuts borrowing/);
     else expect(forecast).toMatch(/about where it was/);
-    const less = verdict.benefited.some((r) => r.gbpm <= -100);
-    if (verdict.kind.id === 'paid-by-cuts') expect(less).toBe(true);
-    // A thin margin is the markets' line: under ten billion.
-    if (verdict.kind.id === 'kept-everything-thin')
-      expect(verdict.headroomGbpm).toBeLessThan(10_000);
     // Every figure in the speech is one the engine produced.
     const figures = new Set(speech.paragraphs.flatMap((p) => p.figures));
     for (const match of said.match(/£\d[\d,]*\.?\d*bn/g) ?? [])
@@ -148,22 +114,12 @@ describe('Budget day agrees with the sums, on the review’s seven Budgets (Phas
   });
 
   it('reads as the review said each should', () => {
-    // The walk breaks the tax lock and accepts it, by the promise's name in running words.
+    // The walk breaks the tax lock.
     const walk = deliver(SECURITY, WALK);
-    expect(walk.verdict.kind.id).toBe('broke-for-buffer');
     const broken = walk.status.promises.filter(
       (p) => !p.kept && p.promise.judgedBy !== 'fiscalRules',
     );
     expect(broken.map((p) => p.promise.id)).toEqual(['tax-lock']);
-    const employer = deliver(SECURITY, NICS_WALK);
-    expect(employer.verdict.kind.id).toBe('delivered-and-paid');
-    // The cut is a tax cut for the group that has it.
-    const cut = deliver(SECURITY, BASIC_RATE_CUT);
-    expect(cut.verdict.paid.find((r) => r.gbpm < 0)).toBeDefined();
-    const nothing = deliver(SECURITY, {});
-    expect(nothing.verdict.kind.id).toBe('left-out-with-room');
-    const health = deliver(['nhs'], HEALTH_CUT);
-    expect(health.verdict.kind.id).toBe('paid-by-cuts');
     // Investment misses the debt rule alone, and the speech says so by its own margin.
     const debt = deliver(['defence'], DEBT_RULE_MISSED);
     const missed = debt.outcome.verdicts.filter(isMissed);

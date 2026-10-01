@@ -66,7 +66,6 @@ export const readingMeasureSchema = z.enum([
   'welfareReversals',
   'welfareChangeGbpm',
   'departmentsCut',
-  'rebellionRisk',
   'credibilityShare',
   // Of what nobody certified, the share that is HMRC's cost of a relief (Phase 25): 0 to 1.
   'reliefShareOfUncertified',

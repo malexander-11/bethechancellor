@@ -28,7 +28,6 @@ export const {
   electorate,
   speech,
   incidence,
-  verdicts,
   guide,
   glossary,
   levers,

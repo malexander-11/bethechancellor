@@ -52,8 +52,6 @@ import type {
   speechFileSchema,
   speechFragmentSchema,
   incidenceFileSchema,
-  verdictsFileSchema,
-  verdictKindSchema,
   receptionAudienceSchema,
   receptionBandSchema,
   receptionFileSchema,
@@ -139,8 +137,6 @@ export type HouseholdTouch = z.infer<typeof householdTouchSchema>;
 export type SpeechFile = z.infer<typeof speechFileSchema>;
 export type SpeechFragment = z.infer<typeof speechFragmentSchema>;
 export type IncidenceFile = z.infer<typeof incidenceFileSchema>;
-export type VerdictsFile = z.infer<typeof verdictsFileSchema>;
-export type VerdictKind = z.infer<typeof verdictKindSchema>;
 export type GuideFile = z.infer<typeof guideFileSchema>;
 export type GuideStage = z.infer<typeof guideStageSchema>;
 export type GlossaryFile = z.infer<typeof glossaryFileSchema>;

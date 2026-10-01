@@ -25,8 +25,7 @@ journey/ministers.json    a minister's lines for every spending and welfare leve
 journey/interventions.json the review's line on a priority short of delivery
 journey/speech.json       the speech fragments the assembler fills
 journey/households.json   five household archetypes and the levers that touch them
-journey/incidence.json    who each lever falls on, for the close
-journey/verdicts.json     the kinds of Budget the close chooses between
+journey/incidence.json    who each lever falls on
 journey/reception.json    Budget day: three audiences, their rules, bands, points and caps (ADR-0013)
 journey/guide.json        the guide at the head of every screen: step, title, now
 journey/glossary.json     the words a newcomer will not know, defined in words
@@ -444,7 +443,7 @@ One more rule needs the engine, so the tests hold it: on today's estimate, every
 target year's headroom by £1bn or more, priced as its card prices it (interest included, and a move
 made only of investment priced on the debt rule).
 
-### Households, who pays, the speech and the close (Phase 25, ADR-0026)
+### Households, who pays and the speech (Phase 25, ADR-0026)
 
 - **Households** (`households.json`). Each household names its `exposure`: the incidence groups
   whose levers reach its pay, its shop, its benefits or the services it uses. It says its
@@ -464,10 +463,6 @@ made only of investment priced on the debt rule).
   `{borrowingTarget}`, `{change}`). `opposition` holds the Leader of the Opposition's one-line
   reply, keyed by the Budget's biggest weakness (`rulesMissed`, `promiseBroken`, `taxUp`,
   `borrowingUp`, `cuts`, `default`): a role, never a name, and the schema refuses a digit.
-- **The close** (`verdicts.json`). A kind may carry a `fact`: a worked-out sentence of at most 200
-  characters shown beside the judgement with its own badge, its placeholders filled from the
-  engine's figures ("Without the change to the basic rate of income tax, you would still meet both
-  rules, with £36.1bn of headroom").
 
 ### Simulated content (`data/journey/*.json`, ADR-0011)
 
@@ -475,13 +470,13 @@ Everything a role says is a `SimulatedLine`: `{ text, short?, sources, badge: "s
 per item so no line inherits honesty from its file. `short` is the same line in fewer words, shown
 first with the full `text` one click behind. Every line a newcomer meets on the road has one when
 the line is over its budget, and the words test pins each kind: a minister's asking line and any
-band over eighteen words; the Prime Minister's reactions twelve; the advisers' notes fourteen; the
-verdicts' close and an option's line eighteen; an option's or a step-4 policy's adviser line
-(`advice`) twelve, with no figure and a size word only where the engine's figure bears it out (at
-every size, for a policy); every reception band twenty words in all (Phase 23). A figure in the
-short line must be a figure in the long one, so the sources cover both (a test checks it). A
-readability test reads every set a player meets with the folds closed: no sentence over twenty
-words, and a Flesch-Kincaid grade of seven or below per set (ADR-0024). Rules for authoring one:
+band over eighteen words; the Prime Minister's reactions twelve; the advisers' notes fourteen; an
+option's line eighteen; an option's or a step-4 policy's adviser line (`advice`) twelve, with no
+figure and a size word only where the engine's figure bears it out (at every size, for a policy);
+every reception band twenty words in all (Phase 23). A figure in the short line must be a figure in
+the long one, so the sources cover both (a test checks it). A readability test reads every set a
+player meets with the folds closed: no sentence over twenty words, and a Flesch-Kincaid grade of
+seven or below per set (ADR-0024). Rules for authoring one:
 
 - **Never type a number the engine or a document did not produce.** A line may quote a published
   figure (with the source beside it) and the page may print an engine figure next to the line; the
@@ -489,7 +484,7 @@ words, and a Flesch-Kincaid grade of seven or below per set (ADR-0024). Rules fo
   a source.
 - **Roles only.** "The Prime Minister", "the Justice Secretary", "MPs in marginal seats". No real
   person's name, and no description that identifies one.
-- **Predicates are closed.** Interventions, verdict kinds and household touches choose from enums
-  the engine evaluates; a new condition needs code, not a string.
+- **Predicates are closed.** Interventions and household touches choose from enums the engine
+  evaluates; a new condition needs code, not a string.
 - The speech's `{…}` placeholders are filled from data and the outcome; a test checks every pound
   sign in the assembled text against the engine.

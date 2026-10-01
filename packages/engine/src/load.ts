@@ -10,7 +10,6 @@ import {
   householdsFileSchema,
   speechFileSchema,
   incidenceFileSchema,
-  verdictsFileSchema,
   guideFileSchema,
   glossaryFileSchema,
   receptionFileSchema,
@@ -37,7 +36,6 @@ import type {
   HouseholdsFile,
   SpeechFile,
   IncidenceFile,
-  VerdictsFile,
   GuideFile,
   GlossaryFile,
   ReceptionFile,
@@ -176,10 +174,6 @@ export function parseIncidence(json: unknown): IncidenceFile {
   return parseWith(incidenceFileSchema, json, 'incidence tags');
 }
 
-export function parseVerdicts(json: unknown): VerdictsFile {
-  return parseWith(verdictsFileSchema, json, 'kinds of Budget');
-}
-
 export function parseGuide(json: unknown): GuideFile {
   return parseWith(guideFileSchema, json, 'the guide');
 }
@@ -206,7 +200,6 @@ export interface Dataset {
   electorate?: HouseholdsFile;
   speech?: SpeechFile;
   incidence?: IncidenceFile;
-  verdicts?: VerdictsFile;
   guide?: GuideFile;
   glossary?: GlossaryFile;
   reception?: ReceptionFile;
@@ -337,7 +330,6 @@ export function validateDataset(ds: Dataset): string[] {
       ds.electorate ?? null,
       ds.speech ?? null,
       ds.incidence ?? null,
-      ds.verdicts ?? null,
       ds.glossary ?? null,
       ds.reception ?? null,
     ],

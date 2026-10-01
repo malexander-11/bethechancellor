@@ -10,7 +10,6 @@ import {
   parseHouseholdsFile,
   parseSpeech,
   parseIncidence,
-  parseVerdicts,
   parseGuide,
   parseGlossary,
   parseReception,
@@ -64,7 +63,6 @@ export function loadDataset(
   );
   const speech = parseSpeech(readJson(path.join(DATA_DIR, 'journey', 'speech.json')));
   const incidence = parseIncidence(readJson(path.join(DATA_DIR, 'journey', 'incidence.json')));
-  const verdicts = parseVerdicts(readJson(path.join(DATA_DIR, 'journey', 'verdicts.json')));
   const guide = parseGuide(readJson(path.join(DATA_DIR, 'journey', 'guide.json')));
   const glossary = parseGlossary(readJson(path.join(DATA_DIR, 'journey', 'glossary.json')));
   const reception = parseReception(readJson(path.join(DATA_DIR, 'journey', 'reception.json')));
@@ -88,7 +86,6 @@ export function loadDataset(
     electorate,
     speech,
     incidence,
-    verdicts,
     guide,
     glossary,
     reception,

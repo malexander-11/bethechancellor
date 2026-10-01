@@ -866,56 +866,6 @@ export const incidenceFileSchema = z
     });
   });
 
-/**
- * A kind of Budget the close can name. Every condition present must hold; kinds are read in
- * order and the first that fits is the verdict. The text is a game judgement; `{priority}` and
- * `{headroom}` are filled from data and the engine.
- */
-export const verdictKindSchema = z.strictObject({
-  id: slug,
-  title: z.string().min(1).max(120),
-  line: simulatedLineSchema,
-  when: z.strictObject({
-    rulesMet: z.boolean().optional(),
-    promisesAllKept: z.boolean().optional(),
-    prioritiesAllFunded: z.boolean().optional(),
-    prioritiesNoneFunded: z.boolean().optional(),
-    /** Headroom of at least the advisers' rule of thumb, £20bn (Phase 24: there is no target). */
-    headroomAmple: z.boolean().optional(),
-    headroomThin: z.boolean().optional(),
-    certified: z.boolean().optional(),
-    restive: z.boolean().optional(),
-    /**
-     * Phase 25, each worked out by re-running the engine on the same estimate. The promise-breaking
-     * levers put back, and the rules still met: the break bought headroom, not the programme.
-     */
-    breakAvoidable: z.boolean().optional(),
-    /** Spending cuts of at least £1bn, larger than the tax rises: the sums add up by cutting. */
-    paidByCuts: z.boolean().optional(),
-    /** Every rise and cut counted, at least £5bn moves in the target year. */
-    bigMoves: z.boolean().optional(),
-    /** A priority left unfunded whose way to deliver it in full would still meet the rules. */
-    leftOutAffordable: z.boolean().optional(),
-  }),
-  /**
-   * A worked-out sentence shown beside the judgement with its own badge (Phase 25): the engine's
-   * figures behind the kind, never a judgement. Placeholders are filled by the engine.
-   */
-  fact: z.string().min(1).max(200).optional(),
-});
-
-export const verdictsFileSchema = z
-  .strictObject({
-    schemaVersion: z.literal(1),
-    kinds: z.array(verdictKindSchema).min(2),
-    /** The kind used when none fits; must be one of the kinds. */
-    fallback: slug,
-  })
-  .superRefine((file, ctx) => {
-    if (!file.kinds.some((k) => k.id === file.fallback))
-      ctx.addIssue({ code: 'custom', message: 'fallback names no kind', path: ['fallback'] });
-  });
-
 /* ----------------------------------------------------------- the reception */
 
 /**

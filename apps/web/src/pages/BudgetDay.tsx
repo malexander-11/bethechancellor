@@ -1,14 +1,12 @@
 import {
   ambitionStatus,
   assembleSpeech,
-  budgetVerdict,
   distributionalNotes,
   FINAL_STAGE,
   formatGbpBn,
   growthNote,
   householdReactions,
   preBudget,
-  readings,
   receptions,
   reconcile,
 } from '@btc/engine';
@@ -19,7 +17,6 @@ import { JourneyLayout } from '../components/JourneyLayout';
 import { MeasuresTable } from '../components/MeasuresTable';
 import { ReceptionCard, type EconomyLine } from '../components/ReceptionCard';
 import { Speech } from '../components/Speech';
-import { Verdict } from '../components/Verdict';
 import {
   MACRO_CODES,
   electorate,
@@ -28,7 +25,6 @@ import {
   pm,
   reception,
   speech as speechFile,
-  verdicts,
   vintage,
   options,
 } from '../data';
@@ -47,9 +43,8 @@ function list(items: readonly string[]): string {
 /**
  * Step 6: feedback, on one screen. The rules line, which is the one thing here that is arithmetic;
  * the backbenchers, the markets and the public, each rating the Budget out of five and saying
- * which choices caused it; and the close, with the ambitions and who paid. The speech, the
- * households and the Budget documents are one fold away. Arriving here marks the game finished, so
- * a link shared from here opens as a finished Budget.
+ * which choices caused it. The speech, the households and the Budget documents are one fold away.
+ * Arriving here marks the game finished, so a link shared from here opens as a finished Budget.
  */
 export function BudgetDayPage() {
   const { state, dispatch, outcome, query } = useBudget();
@@ -157,35 +152,6 @@ export function BudgetDayPage() {
       }),
     [outcome, game, status, outcomeOf],
   );
-  // The options on in the package, for what the money does and does not buy.
-  const deliveredOptions = (status?.priorities ?? []).flatMap((p) =>
-    p.options.filter((o) => o.state === 'on'),
-  );
-  // The close: what the playthrough came to.
-  const verdict = useMemo(() => {
-    if (!game) return undefined;
-    const values = readings({
-      outcome,
-      levers,
-      typicalErrorGbpm,
-      outcomeOf,
-      game,
-      ...(status ? { status } : {}),
-    });
-    return budgetVerdict({
-      levers,
-      pm,
-      options,
-      incidence,
-      kinds: verdicts,
-      game,
-      outcome,
-      typicalErrorGbpm,
-      credibilityShare: values.credibilityShare ?? 0,
-      rebellionRisk: values.rebellionRisk ?? 0,
-      outcomeOf,
-    });
-  }, [game, outcome, status, typicalErrorGbpm, outcomeOf]);
   // Arriving here is the end of the story: a link shared from here opens as a finished Budget.
   // Not when the guard is sending the player back to where they are.
   const reached = game?.reached;
@@ -222,7 +188,6 @@ export function BudgetDayPage() {
           />
         ))}
       </div>
-      {verdict ? <Verdict verdict={verdict} /> : null}
 
       <details className="more">
         <summary>Read the speech</summary>
@@ -234,20 +199,6 @@ export function BudgetDayPage() {
         <summary>Who feels it: five households</summary>
         <div className="more__body">
           <Households reactions={voters} />
-          {deliveredOptions.length > 0 ? (
-            <section className="panel" aria-labelledby="delivery-heading">
-              <h3 id="delivery-heading" className="section-label">
-                What the money does and does not buy
-              </h3>
-              <ul className="delivery">
-                {deliveredOptions.map((o) => (
-                  <li key={o.option.id}>
-                    <strong>{o.option.title}.</strong> {o.option.line.text}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
         </div>
       </details>
       <details className="more">

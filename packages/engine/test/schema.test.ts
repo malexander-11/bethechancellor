@@ -49,7 +49,6 @@ describe('every JSON file under data/ validates against its schema', () => {
       'journey/households.json',
       'journey/speech.json',
       'journey/incidence.json',
-      'journey/verdicts.json',
       'journey/guide.json',
       'journey/glossary.json',
     ]);

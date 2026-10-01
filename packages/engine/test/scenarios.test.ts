@@ -33,9 +33,7 @@ import {
   SECURITY,
   SECURITY_FLAGSHIPS,
   TAXES_AT_THE_TOP,
-  THIN_MARGIN,
   TWO_CHILD_LIMIT,
-  UNPROMISED_TAXES,
   WALK,
   gameWith,
   latestContext,
@@ -118,17 +116,6 @@ describe('the named Budgets play their parts', () => {
     for (const code of Object.keys(BIG_BROAD_TAX_RISE)) expect(lever(code).badge).toBe('direct');
     const march = outcomeOf({}).verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm;
     expect(headroom(BIG_BROAD_TAX_RISE)).toBeGreaterThan(march ?? Number.NaN);
-  });
-
-  it('taxes nobody promised against break nothing, and part-paid prisons leave thin headroom', () => {
-    expect(broken(UNPROMISED_TAXES)).toEqual([]);
-    expect(strained(UNPROMISED_TAXES)).toEqual([]);
-    expect(fates(['safer-streets'], THIN_MARGIN)).toEqual(['delivered']);
-    expect(broken(THIN_MARGIN)).toEqual([]);
-    expect(strained(THIN_MARGIN)).toEqual([]);
-    expect(missed(THIN_MARGIN)).toEqual([]);
-    expect(headroom(THIN_MARGIN)).toBeGreaterThan(headroom(PRISONS));
-    expect(headroom(THIN_MARGIN)).toBeLessThan(THIN_HEADROOM_GBPM);
   });
 
   it('taxes on estates and home buyers break no promise; a cut for everyone is borrowed past the rules', () => {

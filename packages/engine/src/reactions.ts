@@ -170,16 +170,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
   // Every reversal of a Budget 2025 or Autumn Budget 2024 decision, whichever screen it sits on.
   const reversals = levers.filter((l) => moved.has(l.code) && /^rv/.test(l.code));
   const welfareReversals = levers.filter((l) => moved.has(l.code) && WELFARE_REVERSALS.has(l.code));
-  // Benefits cut other than by a U-turn (Phase 25): a rate cut, or a reform that saves money in
-  // the target year. The benches count each as they count a U-turn.
-  const welfareCuts = outcome.leverEffects
-    .filter(
-      (e) =>
-        e.category === 'welfare' &&
-        !WELFARE_REVERSALS.has(e.code) &&
-        (e.currentSpending[year] ?? 0) <= -NAMED_CUT_GBPM,
-    )
-    .map((e) => ({ code: e.code }));
   const cutDepartments = levers.filter(
     (l) =>
       (l.category === 'spend' || l.category === 'welfare') &&
@@ -414,8 +404,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       welfareReversals: welfareReversals.length,
       welfareChangeGbpm: welfareChange,
       departmentsCut: cutDepartments.length,
-      rebellionRisk:
-        broken.length * 2 + unfunded.length + welfareReversals.length + welfareCuts.length,
       credibilityShare: improving > 0 ? uncertified / improving : 0,
       reliefShareOfUncertified: uncertified > 0 ? reliefs / uncertified : 0,
       priceRaisingMeasures: priceRaisers.length,
@@ -469,12 +457,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       welfareReversals: welfareReversals.map((l) => ({ title: title(l.code) })),
       welfareChangeGbpm: topBy(welfareEffects, (e) => e.currentSpending[year] ?? 0),
       departmentsCut: cutDepartments.map((l) => ({ title: title(l.code) })),
-      rebellionRisk: [
-        ...broken.map((p) => ({ title: p.promise.noun })),
-        ...unfunded.map((p) => ({ title: p.priority.noun })),
-        ...welfareReversals.map((l) => ({ title: title(l.code) })),
-        ...welfareCuts.map((l) => ({ title: title(l.code) })),
-      ],
       credibilityShare: uncertifiedTitles.map((t) => ({ title: t })),
       reliefShareOfUncertified: uncertifiedTitles.map((t) => ({ title: t })),
       priceRaisingMeasures: priceRaisers.map((l) => ({ title: title(l.code) })),
@@ -511,11 +493,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
     },
   };
   return out;
-}
-
-/** The readings alone. */
-export function readings(input: ReadingsInput): Record<string, number> {
-  return readingsWithCauses(input).values;
 }
 
 /**
