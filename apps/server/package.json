@@ -1,0 +1,23 @@
+{
+  "name": "@btc/server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The small server beside What’s your Budget?: shared Budgets' previews and pictures, and the leaderboard",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsx build/output.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@btc/engine": "*"
+  },
+  "devDependencies": {
+    "@btc/pipeline": "*",
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.19.0",
+    "vitest": "^4.0.0"
+  }
+}

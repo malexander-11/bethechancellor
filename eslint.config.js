@@ -25,6 +25,8 @@ export default tseslint.config(
   {
     files: [
       'packages/pipeline/**/*.ts',
+      'apps/server/**/*.ts',
+      'api/**/*.js',
       '*.config.{js,ts}',
       'apps/web/vite.config.ts',
       'apps/web/vitest.config.ts',

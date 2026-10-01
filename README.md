@@ -163,6 +163,7 @@ See `docs/methodology.md` for the accounting spine and `docs/adr/` for design de
 
 ```
 apps/web            Vite + React front end (deployed on Vercel)
+apps/server         the server beside it, bundled by the build into Vercel functions (api/)
 packages/engine     pure TypeScript fiscal engine, schemas and tests
 packages/pipeline   scripts that fetch, extract and validate source data, and make and check the
                     data the game ships
@@ -178,12 +179,12 @@ e2e/                end-to-end and accessibility suite (Playwright, on the produ
 ```
 npm install
 npm run dev            # web app
-npm test               # engine and web tests
+npm test               # every workspace's tests
 npm run typecheck
 npm run lint
 npm run validate:data  # Zod validation of everything under data/
 npm run check:derived  # regenerates data/derived and fails on drift
-npm run build
+npm run build          # the site, then the server's bundles, each asked to answer
 npm run e2e            # the build in Chromium (npx playwright install chromium, once)
 ```
 

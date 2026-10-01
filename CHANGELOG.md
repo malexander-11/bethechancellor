@@ -5,6 +5,8 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- A small server runs beside the site on Vercel (ADR-0044): `apps/server`, bundled by the build into
+  a function that answers `/api/health`. The site itself is served as before.
 - The engine reads a finished Budget from its link, in one form on today's codes and estimate, and
   sums it up: its tax and spending changes, biggest first, the headroom, the rules and the three
   ratings, with plain words for a link's preview, a picture's alt text and a post. The web shares
