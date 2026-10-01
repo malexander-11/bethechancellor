@@ -1,8 +1,10 @@
 import {
+  GAME_SETTINGS,
   computeOutcome,
   decodePermalink,
   encodePermalink,
   freshGame,
+  gameImplementationYear,
   type GamePermalink,
   type Outcome,
 } from '@btc/engine';
@@ -28,14 +30,10 @@ export type BudgetAction =
   | { type: 'startGame' }
   | { type: 'updateGame'; patch: Partial<GamePermalink> };
 
-/**
- * The settings every Budget is worked out under (Phase 26): the interest on its own borrowing is
- * counted, and it is judged by the rules as they stand. The desk's two switches for them are gone.
- */
-export const SETTINGS = { debtInterestFeedback: true, assessAsOf: 'vintage' } as const;
+/** The settings every Budget is worked out under (Phase 26); the desk's two switches for them are gone. */
+export const SETTINGS = GAME_SETTINGS;
 
-export const IMPLEMENTATION_YEAR =
-  vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? vintage.years.inYear;
+export const IMPLEMENTATION_YEAR = gameImplementationYear(vintage);
 
 /** Set lever values, dropping any that land on the lever's default (the codec omits them). */
 function withValues(

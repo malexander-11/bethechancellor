@@ -1,4 +1,10 @@
-import { ambitionStatus, FINAL_STAGE, householdReactions, receptions } from '@btc/engine';
+import {
+  ambitionStatus,
+  FINAL_STAGE,
+  householdReactions,
+  receptions,
+  typicalErrorGbpm,
+} from '@btc/engine';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Households } from '../components/Households';
@@ -30,14 +36,9 @@ export function BudgetDayPage() {
   const [copied, setCopied] = useState(false);
   const guard = useStageGuard('budget-day');
   const game = state.game;
-  const { paths } = outcome;
-  const years = paths.years;
   const targetYear =
     outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '2029-30';
-  const lastYear = years[years.length - 1] ?? targetYear;
-  const typicalErrorGbpm =
-    (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
-    (paths.baseline.nominalGdpFy[lastYear] ?? 0);
+  const typicalError = typicalErrorGbpm(vintage, outcome);
 
   // The game's readings: ambitions against the package, and the package as the OBR saw it.
   const status = useMemo(
@@ -50,14 +51,14 @@ export function BudgetDayPage() {
         outcome,
         levers,
         reception,
-        typicalErrorGbpm,
+        typicalErrorGbpm: typicalError,
         outcomeOf,
         pm,
         incidence,
         ...(game ? { game } : {}),
         ...(status ? { status } : {}),
       }),
-    [outcome, typicalErrorGbpm, game, status, outcomeOf],
+    [outcome, typicalError, game, status, outcomeOf],
   );
   // The one audience that is arithmetic: the rules, in a line above the three cards, by their
   // plain names and the engine's own margins (Phase 25). The welfare cap is named when missed.

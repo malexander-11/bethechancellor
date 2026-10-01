@@ -1,0 +1,27 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`a finished Budget summed up > says a Budget in words (snapshot, £ masked) 1`] = `
+{
+  "a tax that starts later": {
+    "alt": "What’s your Budget? A Budget for defence. Tax: A 1% yearly tax on wealth above £10 million, nothing until 2030-31, then raises £…bn; A new 50% income tax rate above £125,140, raises £…bn. No spending changed. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules. Labour backbenchers: Grumbling, 2 of 5. The markets: Nervous, 2 of 5. The public: Sceptical, 2 of 5.",
+    "description": "Taxes raise £…bn; less borrowing saves £…bn in interest. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules.",
+    "rules": "It meets both fiscal rules.",
+    "share": "I made a Budget for defence. Taxes raise £…bn; less borrowing saves £…bn in interest. It meets both fiscal rules. What’s your Budget?",
+    "title": "A Budget for defence",
+  },
+  "debt rule missed, no priorities": {
+    "alt": "What’s your Budget? My Budget. No tax changed. Spending: Public investment, 20% more, adds £…bn of investment. Headroom goes from £…bn to £…bn in 2029-30. It misses the debt rule by £…bn. Labour backbenchers: Divided, 3 of 5. The markets: Alarmed, 1 of 5. The public: Sceptical, 2 of 5.",
+    "description": "More borrowing costs £…bn in interest. Headroom goes from £…bn to £…bn in 2029-30. It misses the debt rule by £…bn.",
+    "rules": "It misses the debt rule by £…bn.",
+    "share": "I made my Budget. More borrowing costs £…bn in interest. It misses the debt rule by £…bn. What’s your Budget?",
+    "title": "My Budget",
+  },
+  "rules met": {
+    "alt": "What’s your Budget? A Budget for defence and safer streets. Tax: Employer National Insurance, 17%, raises £…bn; The basic rate of income tax, 21%, raises £…bn. Spending: Prisons and courts, 10% more, costs £…bn; Health and social care, 0.5% less, saves £…bn; Fund the defence plan’s gap, costs £…bn. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules. Labour backbenchers: Divided, 3 of 5. The markets: Reassured, 4 of 5. The public: Furious, 1 of 5.",
+    "description": "Taxes raise £…bn; day-to-day spending adds £…bn net; less borrowing saves £…bn in interest. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules.",
+    "rules": "It meets both fiscal rules.",
+    "share": "I made a Budget for defence and safer streets. Taxes raise £…bn; day-to-day spending adds £…bn net; less borrowing saves £…bn in interest. It meets both fiscal rules. What’s your Budget?",
+    "title": "A Budget for defence and safer streets",
+  },
+}
+`;

@@ -121,5 +121,6 @@ export {
   sizeWords,
 } from './levels.js';
 export * from './game/changes.js';
+export * from './game/share.js';
 export * from './game/stages.js';
 export * from './game/guide.js';

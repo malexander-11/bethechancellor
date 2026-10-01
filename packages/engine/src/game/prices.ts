@@ -1,4 +1,5 @@
 import { fyStart } from '../calc/years.js';
+import { formatGbpBn } from '../format.js';
 import type { Badge, Lever, OptionsFile, PmFile } from '../types/data.js';
 import type { LeverEffect, Outcome } from '../types/engine.js';
 
@@ -274,6 +275,46 @@ export function reconcile(outcome: Outcome, pre: Outcome): Reconciliation {
     endGbpm: headroomOn(outcome, 'currentBudget'),
     taxTakeChangePp: share(outcome) - share(pre),
   };
+}
+
+/** Below this, £ million, a part of the reconciliation is not worth saying. */
+const SAID_FROM_GBPM = 50;
+
+/**
+ * The headroom's move in a sentence: "Headroom goes from £6.8bn to £70.5bn in 2029-30.", or, when
+ * it barely moved, "Headroom stays at £6.8bn in 2029-30."
+ */
+export function headroomWords(r: Reconciliation): string {
+  const at = (gbpm: number) => formatGbpBn(gbpm, 1, gbpm < 0);
+  return Math.abs(r.endGbpm - r.startGbpm) >= SAID_FROM_GBPM
+    ? `Headroom goes from ${at(r.startGbpm)} to ${at(r.endGbpm)} in ${r.year}.`
+    : `Headroom stays at ${at(r.endGbpm)} in ${r.year}.`;
+}
+
+/**
+ * What moved it, each part worth saying in the reconciliation's order: "taxes raise £63.0bn",
+ * "day-to-day spending adds £5.1bn net", "less borrowing saves £5.8bn in interest".
+ */
+export function reconcileWords(r: Reconciliation): string[] {
+  const money = (gbpm: number) => formatGbpBn(Math.abs(gbpm), 1);
+  const said = (gbpm: number) => Math.abs(gbpm) >= SAID_FROM_GBPM;
+  return [
+    said(r.taxesGbpm)
+      ? r.taxesGbpm > 0
+        ? `taxes raise ${money(r.taxesGbpm)}`
+        : `tax cuts cost ${money(r.taxesGbpm)}`
+      : null,
+    said(r.spendingGbpm)
+      ? r.spendingGbpm > 0
+        ? `day-to-day spending adds ${money(r.spendingGbpm)} net`
+        : `day-to-day spending saves ${money(r.spendingGbpm)} net`
+      : null,
+    said(r.interestGbpm)
+      ? r.interestGbpm > 0
+        ? `more borrowing costs ${money(r.interestGbpm)} in interest`
+        : `less borrowing saves ${money(r.interestGbpm)} in interest`
+      : null,
+  ].filter((x): x is string => x !== null);
 }
 
 /**

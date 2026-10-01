@@ -3,6 +3,7 @@ import {
   budgetTheme,
   changeRows,
   formatGbpBn,
+  headroomWords,
   incidenceRows,
   leverStanding,
   optionPrice,
@@ -11,9 +12,11 @@ import {
   reactionPreview,
   receptions,
   reconcile,
+  reconcileWords,
   signOffLine,
   stageIndex,
   THIN_HEADROOM_GBPM,
+  typicalErrorGbpm,
   type Lever,
   type OptionReport,
   type PriorityReport,
@@ -137,8 +140,6 @@ export function ReviewPage() {
 
   const status = ambitionStatus(game, pm, options, outcome, levers);
   const ranked = rankedPriorities(game, pm);
-  const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
-  const year = stability?.targetYear ?? '2029-30';
   const value = (lever: Lever) => state.leverValues[lever.code] ?? lever.control.default;
 
   // Every tax and every budget moved, except those a flagship policy already accounts for: they
@@ -164,27 +165,8 @@ export function ReviewPage() {
   // How the bar got from the estimate to here (Phase 25): the four parts sum to it exactly.
   const r = reconcile(outcome, preBudget(outcomeOf, state.leverValues, levers));
   const money = (gbpm: number) => formatGbpBn(Math.abs(gbpm), 1);
-  const moved = Math.abs(r.endGbpm - r.startGbpm) >= 50;
-  const fromTo = moved
-    ? `Headroom goes from ${formatGbpBn(r.startGbpm, 1, r.startGbpm < 0)} to ${formatGbpBn(r.endGbpm, 1, r.endGbpm < 0)} in ${r.year}.`
-    : `Headroom stays at ${formatGbpBn(r.endGbpm, 1, r.endGbpm < 0)} in ${r.year}.`;
-  const how = [
-    Math.abs(r.taxesGbpm) >= 50
-      ? r.taxesGbpm > 0
-        ? `taxes raise ${money(r.taxesGbpm)}`
-        : `tax cuts cost ${money(r.taxesGbpm)}`
-      : null,
-    Math.abs(r.spendingGbpm) >= 50
-      ? r.spendingGbpm > 0
-        ? `day-to-day spending adds ${money(r.spendingGbpm)} net`
-        : `day-to-day spending saves ${money(r.spendingGbpm)} net`
-      : null,
-    Math.abs(r.interestGbpm) >= 50
-      ? r.interestGbpm > 0
-        ? `more borrowing costs ${money(r.interestGbpm)} in interest`
-        : `less borrowing saves ${money(r.interestGbpm)} in interest`
-      : null,
-  ].filter((x): x is string => x !== null);
+  const fromTo = headroomWords(r);
+  const how = reconcileWords(r);
   const { paid, benefited } = incidenceRows(outcome, levers, incidence, r.year);
   // The bills and cliff edges on the desk that this Budget leaves as it found them (Phase 25).
   const stillOnDesk = context.inTray.filter((item) => leftAsIs(item, state.leverValues));
@@ -220,15 +202,12 @@ export function ReviewPage() {
   const brokenTags = broken.filter((p) => !named.has(p.promise.id));
   const strainedTags = strained.filter((s) => !named.has(s.promise.id));
   // One reaction already in train, read out with no rating (Phase 25): the rest is Budget day's.
-  const lastYear = outcome.paths.years[outcome.paths.years.length - 1] ?? year;
   const preview = reactionPreview(
     receptions({
       outcome,
       levers,
       reception,
-      typicalErrorGbpm:
-        (vintage.uncertainty.receiptsMeanAbsFiveYearErrorPctGdp / 100) *
-        (outcome.paths.baseline.nominalGdpFy[lastYear] ?? 0),
+      typicalErrorGbpm: typicalErrorGbpm(vintage, outcome),
       outcomeOf,
       pm,
       incidence,

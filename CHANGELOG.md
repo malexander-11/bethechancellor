@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The engine reads a finished Budget from its link, in one form on today's codes and estimate, and
+  sums it up: its tax and spending changes, biggest first, the headroom, the rules and the three
+  ratings, with plain words for a link's preview, a picture's alt text and a post. The web shares
+  its settings, its re-run of the engine and the review's headroom sentences. Nothing a player sees
+  changes.
 - The review says when a measure that does nothing by 2029-30 starts ("nothing until 2030-31, then
   raises £7.8bn"), as the cards do, instead of saying it raises £0.0bn.
 - The review's tax and spending lines, and the words for where a lever stands, are written by the
