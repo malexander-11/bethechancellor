@@ -216,6 +216,8 @@ export const SHARE_WORDS = {
   more: 'and {n} more',
   /** On the picture's band, with the site's address. */
   invite: 'Make yours at {host}',
+  /** The picture of a link that is not a finished Budget. */
+  pitch: 'You are the Chancellor. Choose who pays and what to fund.',
   /** A rating, as its meter is read out. */
   rating: '{label}, {rating} of 5',
 } as const;

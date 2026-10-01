@@ -3,12 +3,13 @@ import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { datasetPlugin } from './build/datasetPlugin';
+import { serverPlugin } from './build/serverPlugin';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '../..');
 
 export default defineConfig({
-  plugins: [react(), datasetPlugin({ dataDir: path.resolve(repoRoot, 'data') })],
+  plugins: [react(), datasetPlugin({ dataDir: path.resolve(repoRoot, 'data') }), serverPlugin()],
   resolve: {
     alias: { '@data': path.resolve(repoRoot, 'data') },
   },

@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { SERVER_PATHS } from '../src/paths.js';
+import { SERVED_BY, SERVER_PATHS, type ServerPath } from '../src/paths.js';
 
 interface VercelConfig {
   buildCommand: string;
@@ -33,8 +33,9 @@ function destinationOf(path: string): string | undefined {
 }
 
 /** A path each of the server's routes answers. */
-const SAMPLES: Record<keyof typeof SERVER_PATHS, string> = {
+const SAMPLES: Record<ServerPath, string> = {
   health: '/api/health',
+  card: '/api/card',
 };
 
 describe('the site on Vercel (ADR-0044)', () => {
@@ -47,9 +48,12 @@ describe('the site on Vercel (ADR-0044)', () => {
   });
 
   it('sends every path the server answers to its function, before the single-page app', () => {
-    for (const [route, sample] of Object.entries(SAMPLES)) {
-      expect(SERVER_PATHS[route as keyof typeof SERVER_PATHS].test(sample), route).toBe(true);
-      expect(destinationOf(sample), sample).toBe('/api/app');
+    for (const [route, sample] of Object.entries(SAMPLES) as [ServerPath, string][]) {
+      expect(SERVER_PATHS[route].test(sample), route).toBe(true);
+      const fn = SERVED_BY[route];
+      expect(existsSync(new URL(`../../../api/${fn}.js`, import.meta.url)), fn).toBe(true);
+      // A function answers its own path; any other reaches it by a rewrite.
+      if (sample !== `/api/${fn}`) expect(destinationOf(sample), sample).toBe(`/api/${fn}`);
     }
   });
 

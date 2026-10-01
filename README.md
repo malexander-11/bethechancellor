@@ -178,7 +178,7 @@ e2e/                end-to-end and accessibility suite (Playwright, on the produ
 
 ```
 npm install
-npm run dev            # web app
+npm run dev            # web app, with the server's paths
 npm test               # every workspace's tests
 npm run typecheck
 npm run lint
@@ -186,6 +186,7 @@ npm run validate:data  # Zod validation of everything under data/
 npm run check:derived  # regenerates data/derived and fails on drift
 npm run build          # the site, then the server's bundles, each asked to answer
 npm run e2e            # the build in Chromium (npx playwright install chromium, once)
+npm run card -w @btc/server -- "<a Budget's link>" card.png   # draw its picture
 ```
 
 Node 22 or later (see `.nvmrc`). The repository pins `legacy-peer-deps` in `.npmrc` because npm 10's
