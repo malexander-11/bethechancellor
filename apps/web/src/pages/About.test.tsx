@@ -14,7 +14,7 @@ function at(path: string) {
 }
 
 describe('the page about the game and its sources (ADR-0033)', () => {
-  it('is the footer’s one link, and says what is on it before it says anything else', async () => {
+  it('is the footer’s first link, and says what is on it before it says anything else', async () => {
     at('/about');
     expect(
       await screen.findByRole('heading', { level: 1, name: 'About the game & sources' }),
@@ -28,6 +28,7 @@ describe('the page about the game and its sources (ADR-0033)', () => {
       ['The game', '/about#game'],
       ['How the numbers work', '/about#numbers'],
       ['What the game does not do', '/about#limits'],
+      ['Privacy and the leaderboard', '/about#privacy'],
       ['Licence and attribution', '/about#licences'],
       ['Sources', '/about#sources'],
     ]);
@@ -63,6 +64,26 @@ describe('the page about the game and its sources (ADR-0033)', () => {
       'href',
       '/methodology',
     );
+  });
+
+  it('says what the leaderboard keeps, and where to ask for an entry to be taken down', async () => {
+    at('/about#privacy');
+    const heading = await screen.findByRole('heading', { name: 'Privacy and the leaderboard' });
+    const part: HTMLElement[] = [];
+    for (
+      let el = heading.nextElementSibling;
+      el && el.tagName !== 'H2';
+      el = el.nextElementSibling
+    ) {
+      part.push(el as HTMLElement);
+    }
+    const said = part.map((p) => p.textContent ?? '').join(' ');
+    expect(said).toMatch(/no cookies/);
+    expect(said).toMatch(/forgets after 30 days/);
+    const ask = part.flatMap((p) => within(p).queryAllByRole('link'));
+    expect(ask.map((a) => a.getAttribute('href'))).toEqual([
+      'https://github.com/malexander-11/bethechancellor/issues',
+    ]);
   });
 
   it('takes a reader, and their focus, to the part they pick', async () => {

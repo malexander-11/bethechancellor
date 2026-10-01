@@ -6,6 +6,7 @@ import {
   readFinishedBudget,
 } from '@btc/engine';
 import { shippedDataset } from '@btc/pipeline/shipped';
+import { readFileSync } from 'node:fs';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Db } from '../src/board/db.js';
 import { hashKeyFrom, hasher, networkOf } from '../src/board/hash.js';
@@ -462,6 +463,50 @@ describe('what the leaderboard keeps, and for how long', () => {
     await posted(budget(0));
     await migrate(db);
     expect((await listed()).entries).toHaveLength(1);
+  });
+});
+
+describe('an entry’s page', () => {
+  const SITE = readFileSync(new URL('../../web/index.html', import.meta.url), 'utf8');
+  const withPages = asker(
+    createServer({
+      data,
+      html: async () => SITE,
+      board: { db: async () => db, hashKey: 'test', adminToken: TOKEN },
+    }),
+  );
+  const tag = (html: string, key: string) =>
+    new RegExp(`<meta (?:name|property)="${key}" content="([^"]*)"`).exec(html)?.[1];
+
+  it('previews the Budget’s picture under the player’s title, kept out of search engines', async () => {
+    const entry = await posted(budget(0), 'Guns & "butter"');
+    const page = await withPages(`/leaderboard/${entry.id}`);
+    expect(page.status).toBe(200);
+    expect(page.headers.get('cache-control')).toMatch(/s-maxage=60\b/);
+    const html = await page.text();
+    expect(html).toContain('<title>Guns &amp; &quot;butter&quot; · What’s your Budget?</title>');
+    expect(tag(html, 'og:image')?.replace(/&amp;/g, '&')).toBe(
+      `https://example.test/api/card?${entry.query}`,
+    );
+    expect(tag(html, 'og:url')).toBe(`https://example.test/leaderboard/${entry.id}`);
+    expect(tag(html, 'robots')).toBe('noindex');
+  });
+
+  it('previews the game, not a title, once the entry is taken down or the board is closed', async () => {
+    const entry = await posted(budget(0), 'Soon gone');
+    await ask(`/api/admin/budgets/${entry.id}/hide`, { method: 'POST', headers: owner });
+    for (const html of [
+      await (await withPages(`/leaderboard/${entry.id}`)).text(),
+      await (
+        await asker(
+          createServer({ data, html: async () => SITE, board: { db: null, hashKey: 'test' } }),
+        )(`/leaderboard/${entry.id}`)
+      ).text(),
+    ]) {
+      expect(html).not.toContain('Soon gone');
+      expect(tag(html, 'og:image')).toBe('https://example.test/api/card');
+      expect(tag(html, 'robots')).toBe('noindex');
+    }
   });
 });
 

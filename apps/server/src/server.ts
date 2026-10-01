@@ -1,10 +1,10 @@
 import type { ShippedDataset } from '@btc/engine';
 import { createApp } from './app.js';
-import { boardHealth, boardRoutes, type Board } from './board/routes.js';
+import { boardHealth, openBoard, type Board } from './board/routes.js';
 import type { RenderCard } from './card/render.js';
 import { cardRoute } from './card/route.js';
 import { json, type Handler } from './http.js';
-import { sharedRoute, type PageHtml } from './pages.js';
+import { entryRoute, sharedRoute, type PageHtml } from './pages.js';
 import { SERVER_PATHS } from './paths.js';
 
 /** What the server is built from: the data the game ships, made with the site. */
@@ -24,6 +24,7 @@ export interface ServerDeps {
  * deployment can be checked from outside.
  */
 export function createServer({ data, render, html, board }: ServerDeps): Handler {
+  const opened = board ? openBoard(data, board) : null;
   return createApp([
     {
       method: 'GET',
@@ -37,7 +38,9 @@ export function createServer({ data, render, html, board }: ServerDeps): Handler
         }),
     },
     ...(render ? [cardRoute(data, render)] : []),
-    ...(html ? [sharedRoute(data, html)] : []),
-    ...(board ? boardRoutes(data, board) : []),
+    ...(html
+      ? [sharedRoute(data, html), entryRoute(data, html, opened?.entry ?? (async () => null))]
+      : []),
+    ...(opened?.routes ?? []),
   ]);
 }

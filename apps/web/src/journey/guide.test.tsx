@@ -111,11 +111,16 @@ describe('the head of every screen', () => {
     expect(screen.queryByText(/Step \d of 6/)).toBeNull();
     expect(screen.getByRole('heading', { level: 1, name: 'It’s your Budget now.' })).toBeVisible();
     expect(screen.getByRole('link', { name: 'Build my Budget' })).toBeInTheDocument();
-    // The Budget box, the premise and the button, nothing else: no line above the heading and no
-    // bullets (ADR-0032), and the box a drawing with no words, hidden from a screen reader.
+    // The Budget box, the premise and the button, and under it a quiet way to the leaderboard
+    // (ADR-0044), nothing else: no line above the heading and no bullets (ADR-0032), and the box a
+    // drawing with no words, hidden from a screen reader.
     const opening = document.querySelector('.opening') as HTMLElement;
     expect(opening.textContent).toBe(
-      'It’s your Budget now.Choose what matters, decide who pays, and see what the country makes of it.Build my Budget',
+      'It’s your Budget now.Choose what matters, decide who pays, and see what the country makes of it.Build my BudgetSee the leaderboard',
+    );
+    expect(within(opening).getByRole('link', { name: 'See the leaderboard' })).toHaveAttribute(
+      'href',
+      '/leaderboard',
     );
     const art = opening.querySelectorAll('svg');
     expect(art).toHaveLength(1);
@@ -135,7 +140,7 @@ describe('the head of every screen', () => {
     expect(document.querySelector('.shell--cover')).toBeNull();
   });
 
-  it('keeps the header to the name, and the footer to one quiet link', () => {
+  it('keeps the header to the name, and the footer to two quiet links', () => {
     at(`/pm?${BASE}`);
     // The header is the name, the way home, and nothing else (ADR-0032).
     const header = document.querySelector('.site-header') as HTMLElement;
@@ -145,14 +150,16 @@ describe('the head of every screen', () => {
         .map((a) => a.textContent),
     ).toEqual(['What’s your Budget?']);
     expect(within(header).queryByRole('navigation')).toBeNull();
-    // The footer: one link, to the page about the game, its numbers, sources and licence
-    // (ADR-0033), with no switch, no key and no line of its own.
+    // The footer: a link to the page about the game, its numbers, sources and licence
+    // (ADR-0033), and one to the leaderboard (ADR-0044), with no switch, no key and no line of its
+    // own.
     const footer = document.querySelector('footer.site-footer') as HTMLElement;
     const links = within(footer).getAllByRole('link');
     expect(links.map((a) => [a.textContent, a.getAttribute('href')])).toEqual([
       ['About the game & sources', '/about'],
+      ['Leaderboard', '/leaderboard'],
     ]);
-    expect(footer.textContent).toBe('About the game & sources');
+    expect(footer.textContent).toBe('About the game & sourcesLeaderboard');
     expect(screen.queryByRole('switch')).toBeNull();
   });
 

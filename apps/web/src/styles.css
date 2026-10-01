@@ -656,6 +656,8 @@ hr {
 
 .site-footer__links {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
 }
 
 .site-footer__links a {

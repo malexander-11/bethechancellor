@@ -8,7 +8,7 @@ import { hasher, networkOf } from './hash.js';
 import { LIMITS, type Limits } from './limits.js';
 import { DEVICE_CODE, readBody } from './requests.js';
 import { migrate } from './schema.js';
-import { boardStore, type BoardStore, type VoteValue } from './store.js';
+import { boardStore, type BoardStore, type Entry, type VoteValue } from './store.js';
 import { checkTitle } from './titles.js';
 
 /** The leaderboard's side of the server (ADR-0044). */
@@ -25,12 +25,19 @@ export interface Board {
 /** Networks are forgotten after their month, checked at most this often by any one instance. */
 const FORGET_EVERY_MS = 60 * 60 * 1000;
 
+/** The leaderboard as the server serves it: its paths, and its entries for the pages that show one. */
+export interface OpenBoard {
+  routes: Route[];
+  /** A visible entry, or none: missing, hidden, or the leaderboard closed or down. */
+  entry: (id: string) => Promise<Entry | null>;
+}
+
 /**
  * The paths the leaderboard answers. Its link alone says what a Budget is: an entry keeps the link
  * written the one way every link to it is, and one Budget is one entry whatever its title. Without
  * a database the leaderboard is closed and says so; the rest of the server is unaffected.
  */
-export function boardRoutes(data: ShippedDataset, board: Board): Route[] {
+export function openBoard(data: ShippedDataset, board: Board): OpenBoard {
   const paths = [
     SERVER_PATHS.budgets,
     SERVER_PATHS.budget,
@@ -43,9 +50,12 @@ export function boardRoutes(data: ShippedDataset, board: Board): Route[] {
     const owners = board.adminToken
       ? [SERVER_PATHS.adminBudgets, SERVER_PATHS.adminBudget, SERVER_PATHS.adminAction]
       : [];
-    return [...paths, ...owners].flatMap((path) =>
-      (['GET', 'POST', 'DELETE'] as const).map((method) => ({ method, path, handle: closed })),
-    );
+    return {
+      routes: [...paths, ...owners].flatMap((path) =>
+        (['GET', 'POST', 'DELETE'] as const).map((method) => ({ method, path, handle: closed })),
+      ),
+      entry: async () => null,
+    };
   }
 
   const hash = hasher(board.hashKey);
@@ -184,7 +194,20 @@ export function boardRoutes(data: ShippedDataset, board: Board): Route[] {
       }),
     },
   ];
-  return board.adminToken ? [...routes, ...adminRoutes(board.adminToken, store, guarded)] : routes;
+  return {
+    routes: board.adminToken
+      ? [...routes, ...adminRoutes(board.adminToken, store, guarded)]
+      : routes,
+    entry: async (id) => {
+      try {
+        return await (await store()).get(id);
+      } catch (error) {
+        const said = error instanceof Error ? `${error.name}: ${error.message}` : 'unknown';
+        console.error('leaderboard entry:', said.slice(0, 300));
+        return null;
+      }
+    },
+  };
 }
 
 /**

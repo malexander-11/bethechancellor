@@ -28,6 +28,7 @@ import {
   pm,
   reception,
 } from '../data';
+import { BOARD_TEXT, countsWords } from '../board/words';
 import { briefingTemplates, fillIn } from '../journey/briefingWords';
 import { SHARE_TEXT } from '../share/words';
 
@@ -179,6 +180,11 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
         ...summary.ratings.map((r) => `${r.title}: ${r.label}, ${r.rating} of 5`),
       ];
     }),
+  ],
+  // The leaderboard (ADR-0044): its page, an entry's, the votes and reports, and the ways in.
+  'the leaderboard': [
+    ...Object.values(BOARD_TEXT).filter((line) => !line.includes('{')),
+    countsWords({ ups: 12, downs: 3 }),
   ],
   // The briefing in three parts (Phase 28): every heading and line, filled as the page fills
   // them.

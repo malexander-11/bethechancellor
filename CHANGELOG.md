@@ -5,6 +5,12 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The leaderboard opens (ADR-0044): `/leaderboard` lists Budgets by votes or newest, each under its
+  player's title with its theme, its headroom and its rules, a vote for or against and a way to
+  report the title; `/leaderboard/<id>` is an entry's own page, with the picture, the Budget in
+  words and a preview of its own kept out of search engines. The cover has a quiet link to it and
+  the footer a second link, and About says what the leaderboard keeps and where to ask for an entry
+  to be taken down.
 - The leaderboard's server (ADR-0044): `/api/budgets` lists entries by votes or newest, takes a
   finished Budget with a title, and takes a device's vote or report on one; the owner moderates with
   a token. A title is refused for swearing, a link or an @name; reports from three networks hide it;

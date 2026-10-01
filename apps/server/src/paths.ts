@@ -13,6 +13,8 @@ export const SERVER_PATHS = {
   card: /^\/api\/card$/,
   /** A shared Budget's page: the site's own, with the Budget's preview tags. */
   shared: /^\/shared$/,
+  /** A leaderboard entry's page: the site's own, with the entry's preview tags. */
+  entryPage: new RegExp(`^/leaderboard/${ID}$`),
   /** The leaderboard: its entries, one entry, and a device's vote and report on it. */
   budgets: /^\/api\/budgets$/,
   budget: new RegExp(`^/api/budgets/${ID}$`),
@@ -30,6 +32,7 @@ export const SERVED_BY: Record<ServerPath, 'app' | 'card'> = {
   health: 'app',
   card: 'card',
   shared: 'app',
+  entryPage: 'app',
   budgets: 'app',
   budget: 'app',
   vote: 'app',

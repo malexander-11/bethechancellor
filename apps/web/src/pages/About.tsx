@@ -4,11 +4,15 @@ import { sources, vintage } from '../data';
 import { KINDS, KIND_WORDS } from '../journey/kinds';
 import { usePageTitle } from '../journey/title';
 
+/** Where a reader asks for an entry to be taken down, or what is kept: the repository's issues. */
+const ISSUES = 'https://github.com/malexander-11/bethechancellor/issues';
+
 /** The page's parts, in order, for its contents list: each is a heading below. */
 const PARTS = [
   { id: 'game', title: 'The game' },
   { id: 'numbers', title: 'How the numbers work' },
   { id: 'limits', title: 'What the game does not do' },
+  { id: 'privacy', title: 'Privacy and the leaderboard' },
   { id: 'licences', title: 'Licence and attribution' },
   { id: 'sources', title: 'Sources' },
 ] as const;
@@ -85,6 +89,31 @@ export function AboutPage() {
         rest is arithmetic; the reactions are the game&rsquo;s judgements. Forecasts are uncertain:
         the OBR&rsquo;s typical five-year error on receipts is 0.9% of GDP, more than any recent
         headroom.
+      </p>
+
+      <h2 id="privacy">Privacy and the leaderboard</h2>
+      <p>
+        The game sets no cookies and runs no analytics. Your Budget lives in its link, and nothing
+        of it is kept anywhere unless you put it on the leaderboard.
+      </p>
+      <p>
+        An entry on the leaderboard keeps the title you gave it, your Budget&rsquo;s link and when
+        you posted it. Titles are checked for swearing, links and @names, and anyone can report one;
+        the owner can take any entry down.
+      </p>
+      <p>
+        The first time you vote or report a title, your browser makes a random code and keeps it,
+        with your votes, in its own storage. The server keeps only a scrambled form of that code,
+        and of your network&rsquo;s address, which it forgets after 30 days. They are used to count
+        one vote a device and to stop floods, and for nothing else.
+      </p>
+      <p>
+        The site runs on Vercel, and the leaderboard&rsquo;s database on Neon. To have an entry
+        taken down, or to ask what is kept, open an issue on the{' '}
+        <a href={ISSUES} rel="noreferrer">
+          game&rsquo;s GitHub page
+        </a>
+        .
       </p>
 
       <h2 id="licences">Licence and attribution</h2>

@@ -67,8 +67,10 @@ describe('budget state', () => {
     }
     expect(isJourneyPath('/methodology')).toBe(false);
     expect(isJourneyPath('/about')).toBe(false);
-    // Someone else's Budget, shared (ADR-0044).
-    expect(isJourneyPath('/shared')).toBe(false);
+    // Other people's Budgets: a shared one, and the leaderboard's (ADR-0044).
+    for (const path of ['/shared', '/leaderboard', '/leaderboard/abcd1234']) {
+      expect(isJourneyPath(path)).toBe(false);
+    }
   });
 
   it('takes up a Budget from a link only when asked to load it', () => {

@@ -18,6 +18,13 @@ const AboutPage = lazy(() => import('./pages/About').then((m) => ({ default: m.A
 const MethodologyPage = lazy(() =>
   import('./pages/Methodology').then((m) => ({ default: m.MethodologyPage })),
 );
+// The leaderboard is opened from the cover, the footer and Budget day (ADR-0044), not on the road.
+const LeaderboardPage = lazy(() =>
+  import('./pages/Leaderboard').then((m) => ({ default: m.LeaderboardPage })),
+);
+const LeaderboardEntryPage = lazy(() =>
+  import('./pages/LeaderboardEntry').then((m) => ({ default: m.LeaderboardEntryPage })),
+);
 
 /** Old and shorthand paths redirect into the journey with the budget's query string intact. */
 function RedirectKeepingQuery({ to }: { to: string }) {
@@ -158,6 +165,8 @@ function Shell() {
               <Route path="/b" element={<RedirectKeepingQuery to="/finetune/tax" />} />
               {/* Where a shared link lands (ADR-0044): its code comes with the page, not after. */}
               <Route path="/shared" element={<SharedPage />} />
+              <Route path="/leaderboard" element={<LeaderboardPage />} />
+              <Route path="/leaderboard/:id" element={<LeaderboardEntryPage />} />
               <Route path="/methodology" element={<MethodologyPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="*" element={<RedirectKeepingQuery to="/" />} />

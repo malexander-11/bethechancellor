@@ -1565,3 +1565,31 @@ explains it, the taxes and the spending changed, to get other people to play.
   The server writes the page's preview tags (its title, description, picture and the picture's
   description), since the networks run no page's code. Opening it leaves the reader's own game as it
   was.
+
+## 38. The leaderboard (ADR-0044)
+
+On 2026-10-01 the user also asked for a leaderboard of Budgets under titles their players give them,
+with votes for and against. Asked, they chose titles written freely and shown at once, one vote a
+device with no sign-in, and ways to it from the cover, Budget day and the footer. ADR-0044 records
+the rules: the filter, the reports, the limits and what is kept.
+
+- **An entry** is a finished Budget's link under its player's title, and nothing else of the Budget:
+  no figure is kept. The server reads the link with the engine and keeps it as every link to that
+  Budget is written, so one Budget is one entry whatever title it was posted under. The list and an
+  entry's page work every figure out again from the link, on the data the game ships, as any link
+  reopens; after a change of data an entry says what its choices do on the new data.
+- **The list** orders the entries by votes for less votes against, or newest first. Each line is the
+  player's title, the Budget's theme, how its headroom moved and the rules' verdict, the votes, and
+  a way to report the title.
+- **An entry's page** adds the picture, a way into the Budget at Budget day, its link to copy and
+  the Budget in words, as a shared Budget's page sets it out (§37). Its preview puts the player's
+  title over the Budget's picture, and it is kept out of search engines.
+- **A vote** is pressed again to take it back. The browser keeps a random code, made only when its
+  owner first votes or reports, with its own votes, so the pages show them; the server counts one
+  vote a code.
+- **Ways in and out.** The cover has a quiet link under its button, and the footer a second link.
+  The one button on the leaderboard's pages leads back to the player's own game at the stage it has
+  reached, or, with none under way, to the briefing. The About page says what the leaderboard keeps
+  and where to ask for an entry to be taken down.
+- **Not open.** Until its database is connected the leaderboard says it is not open yet, and the
+  game, the picture and the shared page work as before.

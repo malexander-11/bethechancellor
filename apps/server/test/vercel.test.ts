@@ -37,6 +37,7 @@ const SAMPLES: Record<ServerPath, string> = {
   health: '/api/health',
   card: '/api/card',
   shared: '/shared',
+  entryPage: '/leaderboard/abcd1234',
   budgets: '/api/budgets',
   budget: '/api/budgets/abcd-123',
   vote: '/api/budgets/abcd_123/vote',
@@ -66,7 +67,7 @@ describe('the site on Vercel (ADR-0044)', () => {
   });
 
   it('hands every other path to the single-page app, and never one under /api', () => {
-    for (const path of ['/', '/budget-day', '/review', '/about']) {
+    for (const path of ['/', '/budget-day', '/review', '/about', '/leaderboard']) {
       expect(destinationOf(path), path).toBe('/index.html');
     }
     expect(destinationOf('/api/anything-else')).toBeUndefined();

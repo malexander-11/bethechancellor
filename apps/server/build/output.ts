@@ -134,6 +134,18 @@ for (const [query, title] of [
   if (!html.includes(`<title>${title}`)) fail(`/shared${query} is not titled ${title}`);
 }
 
+// A leaderboard entry's page, with the leaderboard closed: the site's page, previewing the game and
+// kept out of search engines.
+const entryPage = await ask('app', 'https://example.test/leaderboard/abcd1234');
+const entryHtml = await entryPage.text();
+if (
+  entryPage.status !== 200 ||
+  !entryHtml.includes('<div id="root">') ||
+  !entryHtml.includes('<meta name="robots" content="noindex" />')
+) {
+  fail(`/leaderboard/<id> answered ${entryPage.status} without the page or its noindex`);
+}
+
 console.log(
   `server build: ${FUNCTIONS.join(', ')} bundled and answering in ${path.relative(process.cwd(), dist)}`,
 );

@@ -136,10 +136,13 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
 
 /**
  * Every page of the journey carries the budget in its query string. The reference pages do not,
- * nor does a shared Budget's page (ADR-0044), whose link names a Budget the reader has not taken up.
+ * nor do the pages of other people's Budgets: a shared one and the leaderboard (ADR-0044), whose
+ * links name Budgets the reader has not taken up.
  */
 export function isJourneyPath(path: string): boolean {
-  return !['/methodology', '/about', '/shared'].some((p) => path === p || path.startsWith(`${p}/`));
+  return !['/methodology', '/about', '/shared', '/leaderboard'].some(
+    (p) => path === p || path.startsWith(`${p}/`),
+  );
 }
 
 export function permalinkQuery(state: BudgetState): string {
