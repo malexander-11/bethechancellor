@@ -2,6 +2,7 @@ import {
   movedPartners,
   policyWay,
   scaleLevels,
+  sizeWords,
   type FinetuneItem,
   type FinetunePolicy,
   type Lever,
@@ -12,7 +13,6 @@ import { finetuneName, levers } from '../data';
 import { leverNotes, type redLinesOf } from '../journey/levers';
 import type { useLeverHints } from '../journey/prices';
 import { useBudget } from '../state/budget';
-import { sizeWords } from './LeverControl';
 import {
   HeldRow,
   INVESTMENT_NOTE,

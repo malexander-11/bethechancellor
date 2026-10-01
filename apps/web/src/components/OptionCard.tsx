@@ -1,6 +1,7 @@
 import {
   formatGbpBn,
   formatLevel,
+  formatLeverValue,
   levelValue,
   type Lever,
   type OptionConflict,
@@ -14,7 +15,7 @@ import { useId, type ReactNode } from 'react';
 import type { OptionPrice } from '../journey/prices';
 import { AdviceLine } from './AdviceLine';
 import { BlockedNotice } from './BlockedNotice';
-import { formatLeverValue, promiseWords, RestingTag } from './LeverControl';
+import { promiseWords, RestingTag } from './LeverControl';
 import { Term } from './Term';
 
 /** How a lever that was adjusted elsewhere now stands, as its level where it has one. */

@@ -6,6 +6,7 @@ import {
   groupItems,
   rankedPriorities,
   setByFlagship,
+  sizeWords,
   stageIndex,
   type FinetuneDecision,
   type FinetuneItem,
@@ -23,7 +24,7 @@ import {
   type CardRow,
   type CardUnit,
 } from '../components/ChoiceCard';
-import { plannedWords, sizeWords } from '../components/LeverControl';
+import { plannedWords } from '../components/LeverControl';
 import type { Held } from '../components/LeverRow';
 import { adviserById, finetune, levers, options, pm } from '../data';
 import { UNCHANGED_BELOW_GBPM } from '../journey/effects';

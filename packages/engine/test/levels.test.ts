@@ -2,14 +2,24 @@ import { describe, expect, it } from 'vitest';
 import {
   describeLevelChange,
   formatLevel,
+  formatLeverValue,
+  formatLeverValueShort,
+  isShareOfSpending,
   levelValue,
+  leverStanding,
   parseLever,
+  sizeWords,
   type LevelDisplay,
 } from '../src/index.js';
 import { loadDataset } from './fixtures.js';
 
 const ds = loadDataset();
 const src = { sourceId: 'govuk-income-tax-rates' };
+const lever = (code: string) => {
+  const found = ds.levers.find((l) => l.code === code);
+  if (!found) throw new Error(`missing ${code}`);
+  return found;
+};
 
 describe('level display helpers', () => {
   it('adds a change to a baseline rate or applies a percentage to a threshold', () => {
@@ -73,5 +83,31 @@ describe('level display helpers', () => {
     expect(describeLevelChange(itbr, 1)).toBe('20% → 21%');
     expect(describeLevelChange(parseLever(itbr), -1)).toBe('20% → 19%');
     expect(describeLevelChange(alc, 5)).toBeNull();
+  });
+
+  it('formats a setting in its own unit: pence, points, per cent and pounds', () => {
+    expect(formatLeverValue(lever('itbr'), -1)).toBe('−1p');
+    // A point, never "pp" (Phase 25).
+    expect(formatLeverValue(lever('nicm'), 0.5)).toBe('+0.5 points');
+    expect(formatLeverValueShort(lever('nicm'), 1)).toBe('+1 point');
+    expect(formatLeverValue(lever('fuel'), 10)).toBe('+10%');
+    expect(formatLeverValue(lever('nicpt'), 1040)).toBe('+£1,040');
+  });
+
+  it('names a level the way its radio does', () => {
+    expect(sizeWords(lever('vats'), 2)).toBe('22%');
+    expect(sizeWords(lever('iht'), -40)).toBe('Abolish (0%)');
+    expect(sizeWords(lever('dhsc'), -1)).toBe('1% less');
+    expect(sizeWords(lever('dhsc'), 5)).toBe('5% more');
+  });
+
+  it('reads back where a moved lever stands: its level, its share of a budget, or the change', () => {
+    expect(leverStanding(lever('itbr'), 1)).toBe('21%');
+    expect(isShareOfSpending(lever('dhsc'))).toBe(true);
+    expect(leverStanding(lever('dhsc'), -1)).toBe('1% less');
+    expect(isShareOfSpending(lever('alc'))).toBe(false);
+    expect(leverStanding(lever('alc'), 5)).toBe('+5%');
+    // A tick box simply is on.
+    expect(leverStanding(lever('rv2ch'), 1)).toBeUndefined();
   });
 });

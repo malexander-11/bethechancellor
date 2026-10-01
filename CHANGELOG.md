@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The review's tax and spending lines, and the words for where a lever stands, are written by the
+  engine (`changeRows`, `leverStanding`), so the server can say a Budget in the review's own words.
+  Nothing a player sees changes.
 - The data the game ships is made and checked in the pipeline (`@btc/pipeline/shipped`), with its
   type in the engine, so a server can ship exactly what the browser gets. Nothing a player sees
   changes.

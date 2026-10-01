@@ -1,10 +1,10 @@
 import {
   ambitionStatus,
   budgetTheme,
+  changeRows,
   formatGbpBn,
-  formatLevel,
   incidenceRows,
-  levelValue,
+  leverStanding,
   optionPrice,
   preBudget,
   rankedPriorities,
@@ -15,7 +15,6 @@ import {
   stageIndex,
   THIN_HEADROOM_GBPM,
   type Lever,
-  type LeverEffect,
   type OptionReport,
   type PriorityReport,
 } from '@btc/engine';
@@ -23,16 +22,11 @@ import type { ReactNode } from 'react';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { inTrayText, leftAsIs } from '../components/InTray';
 import { JourneyLayout } from '../components/JourneyLayout';
-import {
-  formatLeverValueShort,
-  isShareOfSpending,
-  promiseWords,
-  shareWords,
-} from '../components/LeverControl';
+import { ChangeList } from '../components/ChangeList';
+import { promiseWords } from '../components/LeverControl';
 import { Spoken } from '../components/Conversation';
 import { Yardstick } from '../components/Yardstick';
 import {
-  MACRO_CODES as MACRO_LIST,
   context,
   finetuneName,
   incidence,
@@ -51,7 +45,6 @@ import { isMissed, missedBy } from '../journey/rules';
 import { useBudget } from '../state/budget';
 import { deliverPath } from './Deliver';
 
-const MACRO_CODES = new Set(MACRO_LIST);
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
 const RANK = ['1st', '2nd', '3rd'];
 /** Above this rise in the tax take, in points of GDP, the review says it (Phase 25): the markets' band. */
@@ -61,49 +54,6 @@ const TAX_TAKE_SAID_PP = 0.5;
 function inEvery100(pp: number): string {
   const pence = Math.round(pp * 100);
   return pence >= 100 ? `£${(pence / 100).toFixed(2)}` : `${pence}p`;
-}
-
-/** A moved lever read back: its plain title, where it now stands, and what it does in the year. */
-interface Row {
-  lever: Lever;
-  title: string;
-  at?: string;
-  amount: { text: string; tone: 'better' | 'worse' };
-}
-
-/**
- * Where a lever stands, as its level where it has one: "21%", "£210"; a spending line as its share
- * against the plan, in the card's words: "1% less" (Phase 25); a toggle is simply on.
- */
-function standing(lever: Lever, value: number): string | undefined {
-  if (lever.control.kind === 'toggle') return undefined;
-  const level = lever.control.level;
-  if (level) return formatLevel(level, levelValue(level, value));
-  return isShareOfSpending(lever) ? shareWords(lever, value) : formatLeverValueShort(lever, value);
-}
-
-/**
- * What a tax raises or costs, and what spending costs or saves, in the target year, on the lever's
- * own figure. Investment is said as investment: it counts on the debt rule, not the headroom here.
- */
-function amountOf(lever: Lever, effect: LeverEffect | undefined, year: string): Row['amount'] {
-  if (lever.category === 'tax') {
-    const gbpm = effect?.receipts[year] ?? 0;
-    return gbpm >= 0
-      ? { text: `raises ${formatGbpBn(gbpm, 1)}`, tone: 'better' }
-      : { text: `costs ${formatGbpBn(-gbpm, 1)}`, tone: 'worse' };
-  }
-  const current = effect?.currentSpending[year] ?? 0;
-  const capital = effect?.capitalSpending[year] ?? 0;
-  if (current === 0 && capital !== 0) {
-    return capital > 0
-      ? { text: `adds ${formatGbpBn(capital, 1)} of investment`, tone: 'worse' }
-      : { text: `cuts ${formatGbpBn(-capital, 1)} of investment`, tone: 'better' };
-  }
-  const gbpm = current + capital;
-  return gbpm > 0
-    ? { text: `costs ${formatGbpBn(gbpm, 1)}`, tone: 'worse' }
-    : { text: `saves ${formatGbpBn(-gbpm, 1)}`, tone: 'better' };
 }
 
 /** "a, b and c" */
@@ -134,20 +84,6 @@ function shortfallLine(p: PriorityReport): { text: string; badge: 'simulated' } 
   const line = when ? interventions.interventions.find((x) => x.when === when)?.line : undefined;
   if (!line) return null;
   return { text: (line.short ?? line.text).replace('{name}', 'It'), badge: line.badge };
-}
-
-function RowList({ rows }: { rows: readonly Row[] }) {
-  return (
-    <ul className="review__list">
-      {rows.map((r) => (
-        <li key={r.lever.code}>
-          {r.title}
-          {r.at ? ` · ${r.at}` : ''} ·{' '}
-          <span className={`amount amount--${r.amount.tone}`}>{r.amount.text}</span>
-        </li>
-      ))}
-    </ul>
-  );
 }
 
 /** One section of the review: what it is called, what is in it, and where to change it. */
@@ -214,23 +150,9 @@ export function ReviewPage() {
       p.options.filter(counts).flatMap((o) => Object.keys(o.option.values)),
     ),
   );
-  const rows: Row[] = outcome.leverEffects
-    .map((e) => ({ effect: e, lever: byCode.get(e.code) }))
-    .filter(
-      (x): x is { effect: LeverEffect; lever: Lever } =>
-        x.lever !== undefined &&
-        x.lever.category !== 'macro' &&
-        !MACRO_CODES.has(x.lever.code) &&
-        !owned.has(x.lever.code),
-    )
-    .map(({ effect, lever }) => ({
-      lever,
-      title: finetuneName(lever.code) ?? lever.shortTitle,
-      ...(standing(lever, value(lever)) ? { at: standing(lever, value(lever)) } : {}),
-      amount: amountOf(lever, effect, year),
-    }));
-  const taxRows = rows.filter((r) => r.lever.category === 'tax');
-  const spendingRows = rows.filter((r) => r.lever.category !== 'tax');
+  const rows = changeRows({ outcome, levers, names: finetuneName, exclude: owned });
+  const taxRows = rows.filter((r) => r.side === 'tax');
+  const spendingRows = rows.filter((r) => r.side === 'spending');
   const missed = outcome.verdicts.filter(isMissed);
   const fiscalMissed = missed.filter((v) => v.kind !== 'welfareCap');
   const rulesLine =
@@ -380,7 +302,7 @@ export function ReviewPage() {
                         Object.keys(o.option.values).flatMap((code) => {
                           const lever = byCode.get(code);
                           if (!lever || value(lever) === lever.control.default) return [];
-                          const at = standing(lever, value(lever));
+                          const at = leverStanding(lever, value(lever));
                           return [
                             <li key={`${o.option.id}-${code}`} className="review__against">
                               {lever.category === 'tax'
@@ -406,7 +328,7 @@ export function ReviewPage() {
         {taxRows.length === 0 ? (
           <p className="panel__hint">No tax changed.</p>
         ) : (
-          <RowList rows={taxRows} />
+          <ChangeList rows={taxRows} />
         )}
       </Part>
 
@@ -414,7 +336,7 @@ export function ReviewPage() {
         {spendingRows.length === 0 ? (
           <p className="panel__hint">No other budget changed.</p>
         ) : (
-          <RowList rows={spendingRows} />
+          <ChangeList rows={spendingRows} />
         )}
       </Part>
 

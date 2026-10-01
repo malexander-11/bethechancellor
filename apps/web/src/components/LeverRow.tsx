@@ -1,7 +1,10 @@
 import {
   excludesPartners,
   formatGbpBn,
+  formatLeverValue,
+  isShareOfSpending,
   policyYearsOf,
+  sizeWords,
   type Lever,
   type LeverEffect,
   type SimulatedLine,
@@ -24,10 +27,7 @@ import { AdviceLine } from './AdviceLine';
 import { BlockedNotice } from './BlockedNotice';
 import {
   LeverFlags,
-  formatLeverValue,
-  isShareOfSpending,
   levelChange,
-  sizeWords,
   takesOutWords,
   type Blocked,
   type Chosen,

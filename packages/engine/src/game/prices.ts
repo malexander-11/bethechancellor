@@ -53,7 +53,8 @@ function headroomOn(outcome: Outcome, rule: PricedRule): number {
   return outcome.verdicts.find((v) => v.kind === rule)?.headroomGbpm ?? 0;
 }
 
-function targetYearOf(outcome: Outcome): string {
+/** The year the rules are judged in: the day-to-day rule's, else the last year of policy. */
+export function targetYearOf(outcome: Outcome): string {
   return (
     outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ??
     outcome.paths.policyYears[outcome.paths.policyYears.length - 1] ??

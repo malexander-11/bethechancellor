@@ -109,6 +109,17 @@ export {
   LEGACY_STAGE,
 } from './permalink/codec.js';
 export { formatGbp, formatGbpBn, formatPct, perHousehold } from './format.js';
-export { describeLevelChange, formatLevel, levelValue } from './levels.js';
+export {
+  describeLevelChange,
+  formatLevel,
+  formatLeverValue,
+  formatLeverValueShort,
+  isShareOfSpending,
+  levelValue,
+  leverStanding,
+  shareWords,
+  sizeWords,
+} from './levels.js';
+export * from './game/changes.js';
 export * from './game/stages.js';
 export * from './game/guide.js';
