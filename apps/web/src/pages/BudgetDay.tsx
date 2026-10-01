@@ -20,7 +20,7 @@ function list(items: readonly string[]): string {
 /**
  * Step 6: feedback, on one screen. The rules line, which is the one thing here that is arithmetic;
  * the backbenchers, the markets and the public, each rating the Budget out of five and saying
- * which choices caused it. The households are one fold away.
+ * which choices caused it; and five households, each saying what the Budget did to it (ADR-0043).
  * Arriving here marks the game finished, so a link shared from here opens as a finished Budget.
  */
 export function BudgetDayPage() {
@@ -118,12 +118,12 @@ export function BudgetDayPage() {
         ))}
       </div>
 
-      <details className="more">
-        <summary>Who feels it: five households</summary>
-        <div className="more__body">
-          <Households reactions={voters} />
-        </div>
-      </details>
+      <section aria-labelledby="households-heading">
+        <h2 id="households-heading" className="section-label">
+          Who feels it: five households
+        </h2>
+        <Households reactions={voters} />
+      </section>
 
       <p className="actions">
         <button type="button" className="btn btn--primary" onClick={copyLink}>

@@ -88,25 +88,26 @@ rates, the Prime Minister's schemes and defence at 3% sooner. **Deliver the Budg
 Budget read back with a way to change every part, how the headroom got from the estimate to the bar,
 the Prime Minister's sign-off when something needs saying, and one red button. **Feedback**: Labour
 backbenchers, the markets and the public each rating it out of five, with one reason that agrees
-with the rating, the choices that caused it and a line for the other side; five households one fold
-away. Share the link. The menu was read against the Budget reporting again on 21 September 2026: the
-electricity VAT zero rate that HMRC says ends in March 2027, National Insurance for working
-pensioners and for LLP partners, and CenTax's package for taxing gains like income joined it; what
-has no published costing is named in words instead. On 23 September 2026 the think tanks' own lists
-were read and nineteen more cards built from their documents, each a stated figure from its own
-document: a levy on banks' reserves, National Insurance on rents, a 2% wealth tax, a sugar and salt
-tax, council tax on the top bands, the NICs upper earnings limit, 1% VAT on zero-rated goods, a
-pension lump-sum cap, stamp duty abolished on main homes, a child tax allowance, and six welfare
-cards from housing support relinked to rents to the Centre for Social Justice's benefit reset, now
-in step 4's Benefits group. Ten of those cards cannot take effect from April 2027, the wealth taxes
-among them, and the three think-tank capital gains cards cannot be collected until 2028-29, so each
-of the thirteen wears a sourced earliest start and counts nothing before it. On 30 September 2026
-the user took nine taxes off the table, among them the health and social care levy, insurance
-premium tax, CenTax's package for taxing gains like income and National Insurance on rents, so
-eleven cards with an earliest start are left; each retired tax is kept for the record, and an old
-link carrying one opens without it (ADR-0035). Pension tax relief and two stamp duty cuts went the
-same way later that day: relief at a flat 30%, relief at the basic rate only and the lump-sum cap;
-stamp duty abolished on main homes and the additional-homes surcharge back to 3%.
+with the rating, the choices that caused it and a line for the other side, and five households, each
+saying what the Budget did to it. Share the link. The menu was read against the Budget reporting
+again on 21 September 2026: the electricity VAT zero rate that HMRC says ends in March 2027,
+National Insurance for working pensioners and for LLP partners, and CenTax's package for taxing
+gains like income joined it; what has no published costing is named in words instead. On 23
+September 2026 the think tanks' own lists were read and nineteen more cards built from their
+documents, each a stated figure from its own document: a levy on banks' reserves, National Insurance
+on rents, a 2% wealth tax, a sugar and salt tax, council tax on the top bands, the NICs upper
+earnings limit, 1% VAT on zero-rated goods, a pension lump-sum cap, stamp duty abolished on main
+homes, a child tax allowance, and six welfare cards from housing support relinked to rents to the
+Centre for Social Justice's benefit reset, now in step 4's Benefits group. Ten of those cards cannot
+take effect from April 2027, the wealth taxes among them, and the three think-tank capital gains
+cards cannot be collected until 2028-29, so each of the thirteen wears a sourced earliest start and
+counts nothing before it. On 30 September 2026 the user took nine taxes off the table, among them
+the health and social care levy, insurance premium tax, CenTax's package for taxing gains like
+income and National Insurance on rents, so eleven cards with an earliest start are left; each
+retired tax is kept for the record, and an old link carrying one opens without it (ADR-0035).
+Pension tax relief and two stamp duty cuts went the same way later that day: relief at a flat 30%,
+relief at the basic rate only and the lump-sum cap; stamp duty abolished on main homes and the
+additional-homes surcharge back to 3%.
 
 Under the hood: the OBR March 2026 baseline, the tax levers (HMRC ready reckoner, Budget 2025 and
 Autumn Budget 2024 scorecards, HMRC cost-of-relief estimates for six VAT base-broadening options and

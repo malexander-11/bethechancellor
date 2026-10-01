@@ -391,7 +391,7 @@
           "when": "above",
           "effect": "pays",
           "line": {
-            "text": "VAT up. Everything from the car service to the school shoes costs more, and it is the promise they said they would keep.",
+            "text": "VAT up. Everything from the car service to the school shoes costs more. It is the promise they said they would keep.",
             "sources": [
               {
                 "sourceId": "labour-manifesto-2024-strong-foundations"
@@ -439,7 +439,7 @@
           "when": "above",
           "effect": "gains",
           "line": {
-            "text": "More for the NHS. We have been waiting eleven months for an appointment; if this shortens it, it is worth more than a tax cut.",
+            "text": "More for the NHS. We have been waiting eleven months for an appointment. If this shortens it, it is worth more than a tax cut.",
             "sources": [
               {
                 "sourceId": "govuk-elective-reform-plan-2025"
@@ -617,7 +617,7 @@
       "id": "pensioner",
       "who": "A pensioner on the state pension",
       "fact": {
-        "text": "About 850,000 people a year reach state pension age by 2030-31, up from 700,000 in 2022-23; the triple lock decides what each of them gets.",
+        "text": "About 850,000 people a year reach state pension age by 2030-31, up from 700,000 in 2022-23. The triple lock decides what each of them gets.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",
@@ -838,7 +838,7 @@
       "id": "tradesperson",
       "who": "A self-employed tradesperson who drives for work",
       "fact": {
-        "text": "Fuel duty has not risen since 2011-12; the last Budget kept the 5p cut going and pencilled in rises from September 2026.",
+        "text": "Fuel duty has not risen since 2011-12. The last Budget kept the 5p cut going and pencilled in rises from September 2026.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",
@@ -858,7 +858,7 @@
           "when": "above",
           "effect": "pays",
           "line": {
-            "text": "Fuel duty up. Every job starts with a tank of diesel and I cannot pass that on to a customer who is already stretched.",
+            "text": "Fuel duty up. Every job starts with a tank of diesel. I cannot pass that on to a customer who is already stretched.",
             "sources": [],
             "badge": "simulated"
           }
@@ -1018,7 +1018,7 @@
       "id": "professional",
       "who": "A higher-rate professional with savings",
       "fact": {
-        "text": "Income tax thresholds are frozen to April 2031, so earnings growth pulls more people into the higher and additional rates each year.",
+        "text": "Income tax thresholds are frozen to April 2031. As earnings grow, more people are pulled into the higher and additional rates each year.",
         "sources": [
           {
             "sourceId": "obr-efo-2026-03",

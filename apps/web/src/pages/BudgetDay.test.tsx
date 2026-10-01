@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
@@ -17,8 +17,6 @@ const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 const card = (name: string) =>
   screen.getByRole('heading', { name }).closest('section') as HTMLElement;
 const meter = (name: string) => within(card(name)).getByRole('img');
-/** Open one of the folds by its summary. */
-const open = (summary: string) => fireEvent.click(screen.getByText(summary));
 
 /** Two priorities agreed, delivered from the review, on today's estimate (Phase 24). */
 const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5';
@@ -29,7 +27,7 @@ const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5';
 const EMPTY = 'g=st.4&M=rate.0.75_rpi.0.5';
 
 describe('Budget day: what your Budget means', () => {
-  it('is one screen: the rules line, three rated audiences, and the rest behind folds', () => {
+  it('is one screen: the rules line, three rated audiences and five households', () => {
     at(`${BASE}&${EMPTY}`);
     expect(
       screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
@@ -48,10 +46,12 @@ describe('Budget day: what your Budget means', () => {
     expect(within(card('The markets')).getByText(/not your measures/)).toBeInTheDocument();
     // Each card is its rating and its one reason: no "Why this rating" (ADR-0043).
     expect(screen.queryByText(/^Why this rating/)).toBeNull();
-    // The households wait behind their fold, closed; no speech and no documents (ADR-0043).
+    // The five households are on the page, behind no fold; no speech and no documents (ADR-0043).
     expect(
-      screen.getByText('Who feels it: five households').closest('details'),
-    ).not.toHaveAttribute('open');
+      screen.getByRole('heading', { level: 2, name: 'Who feels it: five households' }),
+    ).toBeInTheDocument();
+    expect(document.querySelectorAll('main .household')).toHaveLength(5);
+    expect(document.querySelector('main details')).toBeNull();
     expect(screen.queryByText('Read the speech')).toBeNull();
     expect(screen.queryByText('Budget documents')).toBeNull();
     // No Budget in three sentences, and no close (ADR-0043); "change something" means the review.
@@ -90,7 +90,6 @@ describe('Budget day: what your Budget means', () => {
     ).toBeInTheDocument();
     // The one reason agrees with the rating; the other side is one short line (Phase 25).
     expect(within(card('The public')).getByText('Counted for: Priorities delivered')).toBeVisible();
-    open('Who feels it: five households');
     const couple = screen.getByText(/A couple on median earnings/).closest('li') as HTMLElement;
     expect(within(couple).getByText(/A penny on the basic rate/)).toBeInTheDocument();
     expect(within(couple).getByText('worse off')).toBeInTheDocument();
@@ -115,7 +114,6 @@ describe('Budget day: what your Budget means', () => {
     expect(
       within(card('The public')).getByText(/One of the Budget’s priorities is delivered in full/),
     ).toBeInTheDocument();
-    open('Who feels it: five households');
     expect(screen.getAllByText(/A family on universal credit/).length).toBeGreaterThan(0);
     expect(screen.queryByText(/What the money does and does not buy/)).toBeNull();
     expect(screen.queryByText(/Prison places take years to build/)).toBeNull();
@@ -141,7 +139,6 @@ describe('Budget day: what your Budget means', () => {
 
   it('never calls a household untouched when something in its groups moved (Phase 25)', () => {
     at(`${BASE}&${GAME}&L=dip47.1_moj.10_wealth2.1`);
-    open('Who feels it: five households');
     const professional = screen
       .getByText('A higher-rate professional with savings')
       .closest('.household') as HTMLElement;

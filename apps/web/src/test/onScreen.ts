@@ -3,6 +3,7 @@ import { takesOutWords } from '../components/LeverControl';
 import { INVESTMENT_NOTE, RELIEF_NOTE } from '../components/LeverRow';
 import { MODE_WORDS } from '../components/ModeLine';
 import {
+  electorate,
   finetune,
   finetuneName,
   guide,
@@ -79,6 +80,19 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     p.title,
     ...p.strains.map((s) => s.text).filter((t): t is string => t !== undefined),
   ]),
+  // Budget day's five households, open on the page (ADR-0043): who each is, what each says of what
+  // touched it and of what the Budget was for, and its sourced fact.
+  'the households': [
+    ...electorate.households.flatMap((h) => [
+      h.who,
+      h.fact.text,
+      h.untouched.text,
+      h.understood.text,
+      h.puzzled.text,
+      ...h.touches.map((t) => t.line.text),
+    ]),
+    electorate.unnamed.text,
+  ],
   // What a Budget-day card shows (ADR-0043): its title, its rating's label, its one reason, and the
   // short labels of the rules on the other side.
   'the reception cards': reception.audiences.flatMap((a) => [

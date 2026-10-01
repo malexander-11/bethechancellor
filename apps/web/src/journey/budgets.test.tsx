@@ -6,8 +6,8 @@ import { App } from '../App';
 
 const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
 // A game at the review on today's estimate, two priorities delivered and employer National
-// Insurance two points up: every screen renders in its working state, and the review and the close
-// have something to say.
+// Insurance two points up: every screen renders in its working state, and the review and Budget
+// day have something to say.
 const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5&L=moj.10_dip47.1_nicer.2';
 // The same game with a tax chosen in six of the tax screen's decisions and a budget, a benefit and
 // one of last year's decisions chosen on the spending screen: the decisions holding a choice open
@@ -28,8 +28,10 @@ const CAP = {
   /** The premise and one button. */
   cover: 30,
   /** One thing to read or one question to answer: the briefing, the priorities, the flagship
-   * policies, the review and Budget day. */
+   * policies and the review. */
   story: 250,
+  /** Budget day: three rated audiences and five households, open on the page (ADR-0043). */
+  feedback: 450,
   /** A fine-tuning screen, its decisions closed but for any the game has made a choice in. */
   tuning: 450,
   /** The same with the widest game: every decision holding a choice open, every choice in it. */
@@ -60,7 +62,7 @@ const ROAD: readonly { path: string; kind: keyof typeof CAP; game: string; mode:
     { path, kind: 'tuningOpen' as const, game: TUNED, mode: 'basic' as const },
   ]),
   { path: '/review', kind: 'story', game: GAME, mode: 'basic' },
-  { path: '/budget-day', kind: 'story', game: GAME, mode: 'basic' },
+  { path: '/budget-day', kind: 'feedback', game: GAME, mode: 'basic' },
 ];
 
 function at(path: string) {
