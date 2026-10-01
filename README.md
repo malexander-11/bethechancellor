@@ -194,6 +194,33 @@ Node 22 or later (see `.nvmrc`). The repository pins `legacy-peer-deps` in `.npm
 peer-dependency resolver crashes on Vitest 4's peer set; `npm ci` and Vercel pick the setting up
 automatically.
 
+## Run the leaderboard
+
+The leaderboard keeps its entries in Postgres. Without a database it says it is not open yet, and
+the rest of the game, the picture and the shared page work as before (ADR-0044). To open it on
+Vercel:
+
+1. In the project's **Storage** tab, create a **Neon** database in London and connect it to the
+   Production environment, so no preview deployment writes to it. That sets `DATABASE_URL`.
+2. Under **Settings → Environment Variables**, add `ADMIN_TOKEN` for Production, made with
+   `openssl rand -base64 32`. `HASH_SECRET` is optional: without it, devices and networks are hashed
+   with a key made from `DATABASE_URL`.
+3. Redeploy, then open `/api/health`, which should say `"db":"ok"` and `"admin":true`. The tables
+   are made the first time the leaderboard is used.
+
+Moderate with the token:
+
+```
+SITE=https://bethechancellor-web.vercel.app
+AUTH="Authorization: Bearer $ADMIN_TOKEN"
+curl -H "$AUTH" "$SITE/api/admin/budgets?filter=reported"        # or hidden, or all
+curl -X POST -H "$AUTH" "$SITE/api/admin/budgets/<id>/hide"       # or show
+curl -X DELETE -H "$AUTH" "$SITE/api/admin/budgets/<id>"
+```
+
+`npm run dev` and the end-to-end suite run the leaderboard on Postgres in memory (PGlite); set
+`ADMIN_TOKEN` in the environment to moderate there too.
+
 ## Data provenance
 
 `data/sources/sources.json` lists every source document. Each series and costing carries a `source`

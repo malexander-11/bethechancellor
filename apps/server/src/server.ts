@@ -1,5 +1,6 @@
 import type { ShippedDataset } from '@btc/engine';
 import { createApp } from './app.js';
+import { boardHealth, boardRoutes, type Board } from './board/routes.js';
 import type { RenderCard } from './card/render.js';
 import { cardRoute } from './card/route.js';
 import { json, type Handler } from './http.js';
@@ -13,20 +14,30 @@ export interface ServerDeps {
   render?: RenderCard;
   /** The site's page, for the pages the server writes; the app function and the dev server have it. */
   html?: PageHtml;
+  /** The leaderboard; the app function and the dev server have it, open or closed. */
+  board?: Board;
 }
 
 /**
- * The server: everything beside the static site, as one handler. Health says it is up and which
- * data it serves, so a deployment can be checked from outside.
+ * The server: everything beside the static site, as one handler. Health says it is up, which data
+ * it serves, whether the leaderboard's database answers and whether the owner can moderate, so a
+ * deployment can be checked from outside.
  */
-export function createServer({ data, render, html }: ServerDeps): Handler {
+export function createServer({ data, render, html, board }: ServerDeps): Handler {
   return createApp([
     {
       method: 'GET',
       path: SERVER_PATHS.health,
-      handle: async () => json({ ok: true, data: data.vintage.permalinkCode, db: 'none' }),
+      handle: async () =>
+        json({
+          ok: true,
+          data: data.vintage.permalinkCode,
+          db: await boardHealth(board),
+          admin: Boolean(board?.adminToken),
+        }),
     },
     ...(render ? [cardRoute(data, render)] : []),
     ...(html ? [sharedRoute(data, html)] : []),
+    ...(board ? boardRoutes(data, board) : []),
   ]);
 }

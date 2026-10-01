@@ -37,6 +37,13 @@ const SAMPLES: Record<ServerPath, string> = {
   health: '/api/health',
   card: '/api/card',
   shared: '/shared',
+  budgets: '/api/budgets',
+  budget: '/api/budgets/abcd-123',
+  vote: '/api/budgets/abcd_123/vote',
+  report: '/api/budgets/ABCD1234/report',
+  adminBudgets: '/api/admin/budgets',
+  adminBudget: '/api/admin/budgets/abcd1234',
+  adminAction: '/api/admin/budgets/abcd1234/show',
 };
 
 describe('the site on Vercel (ADR-0044)', () => {

@@ -5,6 +5,12 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-01
 
+- The leaderboard's server (ADR-0044): `/api/budgets` lists entries by votes or newest, takes a
+  finished Budget with a title, and takes a device's vote or report on one; the owner moderates with
+  a token. A title is refused for swearing, a link or an @name; reports from three networks hide it;
+  one network can post, vote and report only so much; devices and networks are kept only as keyed
+  hashes, networks for a month. Without a database the leaderboard says it is closed, and
+  `npm run dev` runs it on Postgres in memory. README, "Run the leaderboard", says how to open it.
 - Budget day shares the Budget (ADR-0044): its picture, one button that shares the link through the
   device's own sheet or copies it, the picture to save, and each network's own page for posting the
   link. The link opens `/shared`, a page of its own that sets the Budget out in words and invites

@@ -11,6 +11,9 @@
   "rewrites": [
     { "source": "/api/health", "destination": "/api/app" },
     { "source": "/shared", "destination": "/api/app" },
+    { "source": "/api/budgets", "destination": "/api/app" },
+    { "source": "/api/budgets/:path*", "destination": "/api/app" },
+    { "source": "/api/admin/:path*", "destination": "/api/app" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

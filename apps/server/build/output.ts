@@ -78,6 +78,11 @@ await build({
   },
 });
 
+// The bundles are asked as a deployment without a database would be: the build never touches the
+// live leaderboard, whatever the environment it runs in holds.
+delete process.env.DATABASE_URL;
+delete process.env.ADMIN_TOKEN;
+
 /** One function's answer to a request, as Vercel would ask it. */
 async function ask(name: Name, url: string): Promise<Response> {
   const module = (await import(pathToFileURL(path.join(dist, `${name}.mjs`)).href)) as {
@@ -88,9 +93,15 @@ async function ask(name: Name, url: string): Promise<Response> {
 
 const health = await ask('app', 'http://localhost/api/health');
 if (health.status !== 200) fail(`/api/health answered ${health.status}`);
-const said = (await health.json()) as { ok?: boolean; data?: string };
-if (!said.ok || said.data !== data.vintage.permalinkCode) {
+const said = (await health.json()) as { ok?: boolean; data?: string; db?: string };
+if (!said.ok || said.data !== data.vintage.permalinkCode || said.db !== 'none') {
   fail(`/api/health said ${JSON.stringify(said)}`);
+}
+
+// The leaderboard, closed without its database, and saying so.
+const board = await ask('app', 'http://localhost/api/budgets');
+if (board.status !== 503 || ((await board.json()) as { error?: string }).error !== 'closed') {
+  fail(`/api/budgets answered ${board.status} without a database`);
 }
 
 // The game's own picture, and a finished Budget's: a game at Budget day that moved nothing.
