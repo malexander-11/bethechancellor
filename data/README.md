@@ -340,31 +340,41 @@ its measures join to (the source id of an extracted scorecard), `facts`, `story`
   name; a heading of at most 60 characters saying what the Chancellor did; and `explain`, a few
   sentences of at most 280 characters on what it means, with no sum in billions, since the page adds
   the Treasury's figure and the engine's. The validator holds every named lever to one card, a lever
-  to at most one card, a card to at least one measure and a theme's id to one theme. Every measure
-  no card asks about is the walk's small print, voted on and moving no money. The readability test
-  reads the themes and the cards.
+  to at most one card, a card to at least one measure and a theme's id to one theme. The readability
+  test reads the themes and the cards.
+- **The last page** (`rest`, ADR-0049) groups the measures no card asks about that a reader would
+  want to see: at most twenty rows `{ id, title, measures }`, each a plain heading of at most 60
+  characters over the ids of the measures it stands for. A tick or a cross on a row is a vote on
+  each of its measures, and its "See more" shows each measure's `plain` line and the lines of the
+  scorecard they come from. The validator holds every id to a measure that no card asks about, and
+  each measure to one row at most; the measures in no row stay in the list for the record and the
+  scorecard check. The readability test reads the headings and the lines.
 
-### The balance page's menus (`data/journey/balance.json`, ADR-0046)
+### The balance page's menus (`data/journey/balance.json`, ADR-0046, ADR-0049)
 
-Two menus, `raise` (ways to find money) and `spend` (the priorities to spend it on), each a list of
-options `{ code, step, label, each }`: the lever, how far one press moves it in the lever's own unit
-and which way, the label the player reads ("More for schools", at most 48 characters) and what one
-press does ("1% more each time", at most 40). The page prices every press on the engine; no figure
-is authored. Rules the validator enforces:
+Three menus, each a list of options `{ code, step, label, each }`: the lever, how far one press
+moves it in the lever's own unit, the label the player reads ("Schools", at most 48 characters) and
+what one press does ("5% each time", at most 40). `budgets` are the spending budgets a player may
+cut or add to, a step either way, so their `step` is positive; `raise` are the ways to find money
+and `spend` the tax cuts and other priorities, each one way, the step's sign saying which. The page
+prices every press on the engine; no figure is authored. Rules the validator enforces:
 
 - **A live lever the game may offer.** Never a measure's lever, since its card asks about it; never
   a setting of the economy; and never investment, which the headroom counts only by its interest, so
   it would read as nearly free.
 - **On the lever's own steps.** The first press lands inside the lever's range, on its grid and, for
   a select, on one of its labels. A toggle's step is 1: it switches on once.
-- **Once.** No lever appears twice across the two menus.
+- **A budget is a spending line on a scale.** A `budgets` option is a spend or welfare lever with a
+  slider, and both its first steps, down and up, land on the lever.
+- **Once.** No lever appears twice across the menus.
 
-A test holds every press of a `raise` option to finding money and every press of a `spend` option to
-spending it, all the way along the lever's range, and holds every option to breaking no promise
-however far it goes. A strain is allowed, and the page tags the option with the promise's noun. The
-words test holds a label to ten words and `each` to six, and a size word in a label to the engine's
-figure for one press: "big" (or expensive, large, costly) only at £5bn or more, "small" (or cheap,
-little, modest, tiny) only at £1bn or less.
+A test holds every press of a `raise` option to finding money, every press of a `spend` option to
+spending it, and every cut to a budget to saving and every addition to spending, all the way along
+the lever's range; and it holds every option to breaking no promise however far it goes, either way
+for a budget. A strain is allowed, and the page tags the option with the promise's noun. The words
+test holds a label to ten words and `each` to six, and a size word in a label to the engine's figure
+for one press: "big" (or expensive, large, costly) only at £5bn or more, "small" (or cheap, little,
+modest, tiny) only at £1bn or less.
 
 ### Households and who pays (Phase 25, ADR-0026)
 

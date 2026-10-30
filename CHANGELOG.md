@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- ADR-0049 records the grouped last page and the budgets to cut: the rows of the small print with
+  "See more", the least relevant lines kept in the file but off the page, and the department and
+  benefit lines as rows cut or added to a step at a time. It supersedes ADR-0046's small print list
+  and its one-way menus of priorities. Methodology §43 says how a budget's step is priced; the
+  README and the data README describe the last page and the balance page as they are now.
 - The balance page lets a player cut spending budgets to find money, as well as raise taxes
   (ADR-0049). The spending budgets, the departments' (the NHS, schools, defence, police, prisons,
   councils, transport, foreign aid and the rest) and the benefits' (universal credit, disability,

@@ -1727,3 +1727,21 @@ changed for the numbers.
   lines, as §40 describes it. "See more" says what removing the measure does to the player's money,
   the engine's figure of §40 with the interest; the bar says the same once the answer is given. The
   test of §41 still holds the second to the first plus interest, and never less.
+
+## 43. The small print grouped, and budgets to cut (ADR-0049)
+
+On 2026-10-30 the user asked for the walk's last page to be cut down and grouped, with a little
+explanation for each, and for the balance page to let a player cut budgets. ADR-0049 records the
+choices; this section says what the numbers do.
+
+- **The groups move nothing.** A row of the last page stands for measures no lever moves, so a tick
+  or a cross is a vote on each and changes no figure. "See more" quotes each measure's own line and
+  names the lines of the Treasury's table; no figure is shown.
+- **A budget's step.** A department or benefit line is a share of its planned spending, so one step
+  is 1% of that line in every year, priced as the department or benefit lever has always been (§40).
+  The row shows the larger of what one step down saves and one step up costs, on the Budget as it
+  stands, interest included; the two differ only by the interest on the step. A cut moves the
+  current budget and the headroom by the same amount as an addition, the other way.
+- **The floor is unchanged.** An addition that would leave the headroom below the Chancellor's
+  cannot be pressed; a cut can always be pressed, down to the end of the line's scale, since it only
+  raises the headroom.

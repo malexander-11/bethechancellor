@@ -40,20 +40,22 @@ heading saying what the Chancellor did and the Treasury's figure for it; "See mo
 means, what removing it would cost or save on the player's Budget as it stands, and the line of the
 Budget's table it comes from. Approve keeps the measure and Remove takes it out, the panel marked in
 the answer's colour, and the answer is the player's vote, counted once the leaderboard's database is
-connected, with what everyone said shown once the player has answered. A last page lists the rest of
-the Budget, the measures that change nothing the player has to play with, each with a tick or a
-cross. **Balance your Budget**: the money saved or given up, then, while money is still to find, the
-ways to find it, and otherwise a menu of priorities, such as the NHS, schools or defence, each a
-tile with a plus and a minus and its price, pressed again until the money runs out. A priority that
-would take the headroom below the Chancellor's cannot be pressed, and a choice that strains a
-promise says so (ADR-0046). **Deliver the Budget**: the whole Budget read back as changes to the
-Chancellor's, with a way to change every part, how the headroom got from the Chancellor's to the
-bar, the Prime Minister's sign-off when something needs saying, and one red button. **Feedback**:
-Labour backbenchers, the markets and the public each rating it out of five, with one reason that
-agrees with the rating, the choices that caused it and a line for the other side, and five
-households, each saying what the Budget did to it, then the Budget as a picture to share, whose link
-opens a page of its own that invites whoever opens it to make theirs, and a place on a leaderboard
-under a title of the player's own, where other players vote for or against it (ADR-0043, ADR-0044).
+connected, with what everyone said shown once the player has answered. A last page groups the rest
+of the Budget that a reader would recognise, the measures that change nothing the player has to play
+with, under plain headings, each with a tick or a cross and a "See more" (ADR-0049). **Balance your
+Budget**: the money saved or given up; then the spending budgets, the departments' and the
+benefits', each with a minus that cuts it and a plus that adds to it; then the taxes to raise, and,
+with money to spend, the tax cuts and other priorities, each a fixed step with its price, pressed
+again until the money runs out. An addition that would take the headroom below the Chancellor's
+cannot be pressed, and a choice that strains a promise says so (ADR-0046, ADR-0049). **Deliver the
+Budget**: the whole Budget read back as changes to the Chancellor's, with a way to change every
+part, how the headroom got from the Chancellor's to the bar, the Prime Minister's sign-off when
+something needs saying, and one red button. **Feedback**: Labour backbenchers, the markets and the
+public each rating it out of five, with one reason that agrees with the rating, the choices that
+caused it and a line for the other side, and five households, each saying what the Budget did to it,
+then the Budget as a picture to share, whose link opens a page of its own that invites whoever opens
+it to make theirs, and a place on a leaderboard under a title of the player's own, where other
+players vote for or against it (ADR-0043, ADR-0044).
 
 Under the hood: the OBR October 2026 baseline with the Budget's measures in it (the March 2026
 baseline kept for old links); the Chancellor's measures as levers costed from Table 6.1 of Budget
