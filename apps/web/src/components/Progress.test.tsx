@@ -93,12 +93,8 @@ describe('the progress bar', () => {
     for (const s of shorts) expect(s).toHaveAttribute('aria-hidden', 'true');
   });
 
-  it('leaves the Chancellor’s Budget to its invitation: the road starts on the walk', () => {
-    const opening = at(`/?${BASE}`);
-    expect(screen.queryByRole('navigation', { name: 'Budget steps' })).toBeNull();
-    expect(screen.queryByText(/Step \d of 4/)).toBeNull();
-    opening.unmount();
-    at(`/measures/${first?.id}?${BASE}&g=st.0_rd.3`);
+  it('starts the road on the first screen, with nothing ahead open yet (ADR-0047)', () => {
+    at(`/?${BASE}`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     expect(within(bar).getByText('Step 1 of 4')).toBeInTheDocument();
     expect(within(bar).queryAllByRole('link')).toHaveLength(0);

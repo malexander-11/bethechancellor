@@ -28,7 +28,7 @@ import {
 import { agreeWords, BOARD_TEXT, countsWords } from '../board/words';
 import { balanceWords } from '../journey/balance';
 import { BALANCE_TEXT } from '../pages/Balance';
-import { BUDGET_TEXT } from '../pages/Budget';
+import { WELCOME_TEXT } from '../components/Welcome';
 import { MEASURES_TEXT } from '../pages/Measures';
 import { SHARE_TEXT } from '../share/words';
 
@@ -132,14 +132,11 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     ...Object.values(BOARD_TEXT).filter((line) => !line.includes('{')),
     countsWords({ ups: 12, downs: 3 }),
   ],
-  // The Budget the game starts from (ADR-0045): the page's own words, and its story with the
-  // figures filled as the page fills them.
+  // The welcome above the first measures (ADR-0047): the Budget's name, the line saying what to
+  // do, and the story in its fold with the figures filled as the page fills them.
   'the Budget': [
     budget.title,
-    ...Object.values(BUDGET_TEXT).map((line) =>
-      line.replace('{n}', '6').replace('{year}', '2029-30'),
-    ),
-    ...budget.themes.map((t) => t.title),
+    ...Object.values(WELCOME_TEXT),
     ...budget.story.map((line) =>
       fillStory(line.text, {
         march: '£23.6bn',

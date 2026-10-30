@@ -16,8 +16,9 @@ export interface BudgetState {
   leverValues: Record<string, number>;
   warnings: string[];
   /**
-   * The playthrough (ADR-0011, ADR-0045): how far along the road it has got. Absent until the
-   * Chancellor's Budget's button starts it.
+   * The playthrough (ADR-0011, ADR-0045): how far along the road it has got. Every visit is a
+   * game from the first screen (ADR-0047); the field stays optional for the pages of other
+   * people's Budgets, which read a link without taking it up.
    */
   game?: GamePermalink;
 }
@@ -27,7 +28,6 @@ export type BudgetAction =
   | { type: 'setLevers'; values: Record<string, number> }
   | { type: 'reset' }
   | { type: 'dismissWarnings' }
-  | { type: 'startGame' }
   | { type: 'updateGame'; patch: Partial<GamePermalink> }
   /** Take up a Budget from a link: a shared Budget opened in the game (ADR-0044). */
   | { type: 'load'; search: string };
@@ -75,14 +75,6 @@ export const ESTIMATE_WARNING =
 export const EXPERT_WARNING =
   'This link changed a setting that has gone. Every Budget now counts the interest on its own borrowing, and is judged by the rules as they stand.';
 
-/** Said on the Chancellor's Budget of a link that carries measures but no game (Phase 26). */
-export const MEASURES_NOTE = 'This link’s measures will be in your Budget when you start.';
-
-/** True when a set of lever values moves anything but the economy. */
-function hasMeasures(values: Readonly<Record<string, number>>): boolean {
-  return Object.keys(values).some((code) => !MACRO_CODES.includes(code));
-}
-
 export function initialStateFromLocation(search: string): BudgetState {
   const { state, warnings } = decodePermalink(search, levers);
   const out: BudgetState = { leverValues: state.leverValues, warnings };
@@ -91,18 +83,14 @@ export function initialStateFromLocation(search: string): BudgetState {
   if (state.debtInterestFeedback === false || state.assessAsOf === 'nextBudget') {
     out.warnings = [...out.warnings, EXPERT_WARNING];
   }
-  if (state.game) {
-    // Every game is played on the OBR's forecast (ADR-0045). A link from before may carry the
-    // forecast its seed drew or figures of its own; it opens on the forecast, and says so.
-    out.game = state.game;
-    if (!onEstimate(out.leverValues)) {
-      out.leverValues = toEstimate(out.leverValues);
-      out.warnings = [...out.warnings, ESTIMATE_WARNING];
-    }
-  } else if (hasMeasures(out.leverValues)) {
-    // With no game a link opens on the Chancellor's Budget (ADR-0045), whose button starts the
-    // game with the link's measures in it; the one line says they are not lost.
-    out.warnings = [...out.warnings, MEASURES_NOTE];
+  // Every visit is a game from the first screen (ADR-0047): a link without one starts it, with the
+  // link's measures in it, at the walk's first page.
+  out.game = state.game ?? freshGame();
+  // Every game is played on the OBR's forecast (ADR-0045). A link from before may carry the
+  // forecast its seed drew or figures of its own; it opens on the forecast, and says so.
+  if (!onEstimate(out.leverValues)) {
+    out.leverValues = toEstimate(out.leverValues);
+    out.warnings = [...out.warnings, ESTIMATE_WARNING];
   }
   return out;
 }
@@ -119,17 +107,8 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
     case 'setLevers':
       return { ...state, leverValues: withValues(state.leverValues, action.values) };
     case 'reset':
-      // A reset ends the game too: every choice goes with the levers, and what the link said.
-      return { leverValues: {}, warnings: [] };
-    case 'startGame':
-      // Every game starts on the forecast; one already under way keeps its choices. The link's
-      // measures are in it now, so the line promising them has done its job.
-      return {
-        ...state,
-        leverValues: toEstimate(state.leverValues),
-        game: state.game ?? freshGame(),
-        warnings: state.warnings.filter((w) => w !== MEASURES_NOTE),
-      };
+      // A reset starts a new game: every choice goes with the levers, and what the link said.
+      return { leverValues: {}, warnings: [], game: freshGame() };
     case 'updateGame':
       return state.game ? { ...state, game: { ...state.game, ...action.patch } } : state;
     case 'dismissWarnings':

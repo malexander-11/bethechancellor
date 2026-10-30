@@ -5,6 +5,12 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The site opens straight on the first page of measures (ADR-0047). Every visit is a game from the
+  first screen: a link without one starts it, with the link's measures in it, so there is no start
+  button and no page before the walk. Above the first theme's cards, one line names the Budget and
+  the Chancellor and says what to do, and what the Budget did waits in one closed fold, every figure
+  the engine's or a quoted fact as before. The Budget page and its button are gone; its address, and
+  every retired one, opens the walk, and "Start again" on Budget day starts a fresh game there.
 - ADR-0046 records the walk and the balance: the cards and the answer as the vote, the small print,
   the money a player has to play with, the menus as data, the floor at the Chancellor's headroom and
   the server's refusal below it, the `rd.3` road and the levers' plain names, and what it supersedes

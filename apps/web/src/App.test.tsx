@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from './App';
 import { budget } from './data';
-import { BUDGET_TEXT } from './pages/Budget';
+import { WELCOME_TEXT } from './components/Welcome';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 /** A game on the walk, with a penny on the basic rate. */
@@ -22,24 +22,29 @@ function at(path: string) {
 const h1 = (name: string) => screen.getByRole('heading', { level: 1, name });
 
 describe('journey routes', () => {
-  it('opens on the Chancellor’s Budget, with one button (ADR-0045)', () => {
+  it('opens straight on the first measures, with the Budget named and its story folded (ADR-0047)', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>,
     );
-    expect(h1(budget.title)).toBeVisible();
-    // The date is a fact of the Budget now, not a countdown; no playtime (ADR-0032); and no road:
-    // the steps start on the screen the button opens (ADR-0033).
+    expect(h1(first?.title ?? '')).toBeVisible();
+    // The Budget is named once above the cards, and what it did waits in one closed fold.
+    const welcome = screen.getByRole('region', { name: budget.title });
+    expect(welcome).toHaveTextContent(budget.chancellor.name);
+    const story = screen.getByText(WELCOME_TEXT.story).closest('details');
+    expect(story).not.toHaveAttribute('open');
+    expect(story?.textContent).not.toMatch(/\{[a-zA-Z]+\}/);
+    expect(story?.textContent).toMatch(/£14\.5bn/);
+    // No playtime (ADR-0032), and the road from the first screen.
     expect(screen.queryByText(/minutes/)).toBeNull();
-    expect(screen.queryByRole('navigation', { name: 'Budget steps' })).toBeNull();
-    expect(screen.getAllByRole('button', { name: BUDGET_TEXT.start })).toHaveLength(1);
+    expect(screen.getByRole('navigation', { name: 'Budget steps' })).toBeInTheDocument();
     // No tutorial, no adviser essays.
     expect(screen.queryByText('Permanent Secretary to the Treasury')).toBeNull();
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
   });
 
-  it('sends the old addresses to the walk in a game, and to the Budget without one (ADR-0046)', () => {
+  it('sends the old addresses to the walk (ADR-0046)', () => {
     // Fine-tuning and the desk before it retired with the walk: their screens open its first page,
     // the Budget carried over.
     for (const path of [
@@ -58,13 +63,10 @@ describe('journey routes', () => {
       expect(h1(first?.title ?? ''), path).toBeInTheDocument();
       view.unmount();
     }
-    // With no game, the Chancellor's Budget: its button starts the game, and the link's measures
-    // go into it.
+    // With no game, the same page, a game started with the link's measures in it (ADR-0047).
     at(`/b?${BASE}&L=itbr.1`);
-    expect(h1(budget.title)).toBeInTheDocument();
-    expect(screen.getByRole('note', { name: 'About this link' })).toHaveTextContent(
-      'This link’s measures will be in your Budget when you start.',
-    );
+    expect(h1(first?.title ?? '')).toBeInTheDocument();
+    expect(screen.queryByRole('note', { name: 'About this link' })).toBeNull();
   });
 
   it('names each screen in the tab title and puts a skip link first in the tab order', () => {
@@ -73,7 +75,8 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    expect(document.title).toBe(`${budget.title} · What’s your Budget?`);
+    // The site's own address is the walk's first page (ADR-0047), named as that page is.
+    expect(document.title).toBe(`${first?.title} · Step 1 of 4 · What’s your Budget?`);
     const skip = screen.getByRole('link', { name: 'Skip to the step' });
     expect(skip).toHaveAttribute('href', '#main');
     expect(document.body.querySelector('a, button, input, [tabindex]')).toBe(skip);
@@ -99,9 +102,9 @@ describe('journey routes', () => {
     expect(document.activeElement).toBe(document.getElementById('main'));
   });
 
-  it('lands the retired addresses on the Budget, and Budget day with the verdicts', () => {
-    // The briefing, the priorities and the flagships (ADR-0025) open the Chancellor's Budget when
-    // there is no game.
+  it('lands the retired addresses on the walk, and Budget day with the verdicts', () => {
+    // The briefing, the priorities and the flagships (ADR-0025) open the walk's first page, a game
+    // started when the link has none (ADR-0047).
     for (const path of [
       '/assumptions',
       '/outlook',
@@ -110,7 +113,7 @@ describe('journey routes', () => {
       '/budget/deliver/2',
     ]) {
       const view = at(`${path}?${BASE}`);
-      expect(h1(budget.title), path).toBeInTheDocument();
+      expect(h1(first?.title ?? ''), path).toBeInTheDocument();
       expect(screen.queryByRole('radiogroup')).toBeNull();
       view.unmount();
     }

@@ -183,17 +183,19 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     expect(calls.filter((c) => c.path.endsWith('/vote'))).toHaveLength(0);
   });
 
-  it('leads from theme to theme, the Budget carried, and back to the Budget from the first', () => {
+  it('leads from theme to theme, the Budget carried, with no way back from the first (ADR-0047)', () => {
     serve(() => CLOSED);
     const [first, second] = budget.themes;
     at(`/measures/${first?.id}?${BASE}&${GAME}&L=b6save.1`);
-    expect(screen.getByRole('link', { name: MEASURES_TEXT.back })).toHaveAttribute(
-      'href',
-      expect.stringMatching(/^\/\?/),
-    );
+    // The first page is where the site opens: there is nothing behind it to go back to.
+    expect(screen.queryByRole('link', { name: MEASURES_TEXT.back })).toBeNull();
     fireEvent.click(screen.getByRole('link', { name: `Next: ${second?.title.toLowerCase()}` }));
     expect(h1(second?.title ?? '')).toBeInTheDocument();
     expect(search().get('L')).toMatch(/b6save\.1/);
+    expect(screen.getByRole('link', { name: MEASURES_TEXT.back })).toHaveAttribute(
+      'href',
+      expect.stringMatching(new RegExp(`^/measures/${first?.id}\\?`)),
+    );
   });
 
   it('ends on the small print: a tick or a cross each, a vote and nothing more, then the balance', async () => {

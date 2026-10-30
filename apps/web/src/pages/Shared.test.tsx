@@ -11,7 +11,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
-import { gameData, guide } from '../data';
+import { budget as theBudget, gameData, guide } from '../data';
 import { SHARE_TEXT } from '../share/words';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
@@ -84,7 +84,9 @@ describe('a shared Budget’s page (ADR-0044)', () => {
     expect(href).toMatch(/^\/\?/);
     expect(new URLSearchParams(href.split('?')[1]).get('L')).toBeNull();
     fireEvent.click(play);
-    expect(screen.getByRole('heading', { level: 1, name: stageTitle('start') })).toBeVisible();
+    expect(
+      screen.getByRole('heading', { level: 1, name: theBudget.themes[0]?.title }),
+    ).toBeVisible();
   });
 
   it('opens the Budget in the game, at Budget day', () => {

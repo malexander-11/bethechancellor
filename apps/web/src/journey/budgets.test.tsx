@@ -25,10 +25,6 @@ const SPARE = 'g=st.1_rd.3&L=b6ai.1_nicer.2';
  * its kind, and then it is the screen that should change.
  */
 const CAP = {
-  /**
-   * The Chancellor's Budget (ADR-0045): its story, and the walk ahead theme by theme (ADR-0046).
-   */
-  analysis: 250,
   /** A page of the walk (ADR-0046): a theme's cards, each heading, meaning, figure and answer. */
   walk: 350,
   /** The walk's last page: every measure no card asks about, a line and a tick or cross each. */
@@ -46,7 +42,8 @@ const CAP = {
 
 /** Every screen of the main road with the game that renders it at its widest. */
 const ROAD: readonly { path: string; kind: keyof typeof CAP; game: string }[] = [
-  { path: '/', kind: 'analysis', game: '' },
+  // The site opens on the walk's first page, with the welcome above it (ADR-0047).
+  { path: '/', kind: 'walk', game: '' },
   ...budget.themes.flatMap((t) => [
     { path: `/measures/${t.id}`, kind: 'walk' as const, game: GAME },
     { path: `/measures/${t.id}`, kind: 'walk' as const, game: DISAGREED },

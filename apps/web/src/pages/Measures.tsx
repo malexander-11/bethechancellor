@@ -1,5 +1,6 @@
 import { ambitionStatus, cardMeasures, smallPrint, stageIndex } from '@btc/engine';
 import { Navigate, useParams } from 'react-router-dom';
+import { Welcome } from '../components/Welcome';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
 import { MeasureCard, SmallPrintRow, useVoting, votingLine } from '../components/MeasureCard';
@@ -85,6 +86,7 @@ function MeasuresScreen({ page }: { page: string }) {
       title={theme?.title ?? MEASURES_TEXT.smallTitle}
       lead={theme?.lead ?? MEASURES_TEXT.smallLead}
     >
+      {index === 0 ? <Welcome /> : null}
       <HeadroomBar outcome={outcome} status={status} balance={balance} />
       <p className="panel__hint">{theme ? MEASURES_TEXT.how : MEASURES_TEXT.smallHow}</p>
       {said ? <p className="panel__hint walk__voting">{said}</p> : null}
@@ -119,9 +121,11 @@ function MeasuresScreen({ page }: { page: string }) {
             {MEASURES_TEXT.toBalance}
           </StepLink>
         )}
-        <StepLink to={before ? measuresPath(before) : '/'} className="btn">
-          {MEASURES_TEXT.back}
-        </StepLink>
+        {before ? (
+          <StepLink to={measuresPath(before)} className="btn">
+            {MEASURES_TEXT.back}
+          </StepLink>
+        ) : null}
       </p>
     </JourneyLayout>
   );

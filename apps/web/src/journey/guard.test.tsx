@@ -3,7 +3,6 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 import { budget } from '../data';
-import { BUDGET_TEXT } from '../pages/Budget';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 const h1 = (name: string | RegExp) => screen.getByRole('heading', { level: 1, name });
@@ -20,7 +19,8 @@ function at(path: string) {
 
 describe('the note about a link (2026-09-30)', () => {
   it('goes when dismissed, leaving focus at the start of the screen rather than nowhere', () => {
-    at(`/?${BASE}&L=itbr.1`);
+    // A link with figures of its own for the economy: they give way to the forecast, and it says so.
+    at(`/?${BASE}&L=itbr.1&M=rate.0.25`);
     const dismiss = screen.getByRole('button', { name: 'Dismiss the note about this link' });
     dismiss.focus();
     fireEvent.click(dismiss);
@@ -51,10 +51,11 @@ describe('the road runs one way', () => {
     expect(h1('What your Budget means')).toBeInTheDocument();
   });
 
-  it('sends a link with no game to the Budget, measures and all, and starts the game with them', async () => {
-    // Every step needs a game (Phase 26), and a link's measures wait on the Chancellor's Budget
-    // for the game its button starts (ADR-0045).
+  it('starts a game from a link with none, at the walk, measures and all (ADR-0047)', async () => {
+    // Every step needs a game (Phase 26); a link without one starts it at the walk's first page,
+    // the link's measures in it, so the later steps wait.
     for (const path of [
+      '/',
       '/measures/income',
       '/balance',
       '/budget-day',
@@ -62,34 +63,29 @@ describe('the road runs one way', () => {
       '/finetune/tax',
     ]) {
       const view = at(`${path}?${BASE}&L=itbr.1`);
-      expect(h1(budget.title), path).toBeInTheDocument();
+      expect(h1(first), path).toBeInTheDocument();
       view.unmount();
     }
     at(`/budget-day?${BASE}&L=itbr.1`);
-    expect(new URLSearchParams(window.location.search).get('L')).toBe('itbr.1');
-    // One line says the measures are not lost; starting the game keeps them.
-    const note = screen.getByRole('note', { name: 'About this link' });
-    expect(note).toHaveTextContent('This link’s measures will be in your Budget when you start.');
-    fireEvent.click(screen.getByRole('button', { name: BUDGET_TEXT.start }));
     await waitFor(() => {
       const search = new URLSearchParams(window.location.search);
       expect(search.get('L')).toBe('itbr.1');
-      expect(search.get('M')).toBeNull();
       expect(search.get('g')).toBe('st.0_rd.3');
     });
-    expect(h1(first)).toBeInTheDocument();
+    // Nothing to say about the link: its measures are in the game.
     expect(screen.queryByRole('note', { name: 'About this link' })).toBeNull();
   });
 
-  it('always lets you go back: a game at the review can reopen the walk, the balance and the Budget', () => {
+  it('always lets you go back: a game at the review can reopen the walk and the balance', () => {
     const walk = at(`/measures/income?${BASE}&g=st.2_rd.3`);
     expect(h1(first)).toBeInTheDocument();
     walk.unmount();
     const balance = at(`/balance?${BASE}&g=st.2_rd.3`);
     expect(h1('Balance your Budget')).toBeInTheDocument();
     balance.unmount();
+    // The site's own address is the walk's first page, the game kept as it was (ADR-0047).
     at(`/?${BASE}&g=st.2_rd.3`);
-    expect(h1(budget.title)).toBeInTheDocument();
+    expect(h1(first)).toBeInTheDocument();
   });
 
   it('opens the retired addresses and the old roads’ links on the stage that took their place', () => {

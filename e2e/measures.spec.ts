@@ -8,8 +8,8 @@ import { budget, cardOf, expect, leversInLink, primary, test } from './journey';
 test('disagreeing gives money up, the balance page finds it, and the Budget is delivered', async ({
   page,
 }) => {
+  // The site opens on the walk's first page (ADR-0047).
   await page.goto('/');
-  await page.getByRole('button', { name: 'Go through the measures' }).click();
   const theme = budget.themes.find((t) => t.cards.some((c) => c.lever === 'b6save'));
   const savings = theme?.cards.find((c) => c.lever === 'b6save');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(theme?.title ?? '');
