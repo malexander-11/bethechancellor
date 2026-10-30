@@ -5,6 +5,12 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- ADR-0047 records the opening straight on the measures and the app's look: a game from the first
+  screen, the welcome and the story's fold, the white cards on a soft ground, the sticky money and
+  way on, the filling progress, the tiles with their colours and steppers, one figure a card, and
+  the counts once answered; it supersedes ADR-0045's opening page, the "official paper" look of
+  ADR-0023 and the Treasury's figure on ADR-0046's cards. Methodology §41 says what changed for the
+  numbers. The README and the data README describe the game as it is now.
 - The end-to-end test of a shared Budget's "Make your own Budget" link checks where it lands now:
   the first page of measures, a fresh game with none of the shared Budget's choices. It had waited
   for the site's own address, which since the game opens straight on the measures (ADR-0047)

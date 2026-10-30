@@ -281,12 +281,13 @@ figure that quotes nothing, and gilt sales for any year but the one `asOf` falls
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
-One guide entry per step, and one for the Budget the game starts from (`start`, which shows no
-number and no road): `step`, `number` (one to four), `title` (the page's heading) and `now`, the one
-line under it saying what to do, at most ten words on the road. A word in square brackets,
-`[headroom]` or `[the OBR](obr)`, is a glossary reference and must exist in `glossary.json`. Guide
-and glossary are chrome: no badge, and no figure unless the glossary entry carries a source. (The
-`doing`, `why` and `terms` fields, and the "Why this matters" fold they filled, went in Phase 23.)
+One guide entry per step, and one for the Budget the game starts from (`start`, whose `now` is the
+welcome's line above the first measures, ADR-0047): `step`, `number` (one to four), `title` (the
+page's heading) and `now`, the one line under it saying what to do, at most ten words on the road. A
+word in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary reference and must exist in
+`glossary.json`. Guide and glossary are chrome: no badge, and no figure unless the glossary entry
+carries a source. (The `doing`, `why` and `terms` fields, and the "Why this matters" fold they
+filled, went in Phase 23.)
 
 ### The Prime Minister (`data/journey/pm.json`, ADR-0022)
 
@@ -314,9 +315,9 @@ delivery went with the Chancellor's Budget as the starting point (ADR-0045).
 
 ### The Chancellor's Budget (`data/journey/budget2026.json`, ADR-0045)
 
-The Budget the game starts from, as the analysis page tells it: `title`, `deliveredOn`, the
-`chancellor` (the one place a person is named, with a source that quotes it), the `scorecard` its
-measures join to (the source id of an extracted scorecard), `facts`, `story`, `measures` and
+The Budget the game starts from, as the welcome's fold tells it (ADR-0047): `title`, `deliveredOn`,
+the `chancellor` (the one place a person is named, with a source that quotes it), the `scorecard`
+its measures join to (the source id of an extracted scorecard), `facts`, `story`, `measures` and
 `themes`.
 
 - **Facts** are the published steps of the margin since the last forecast, £ million, each with a

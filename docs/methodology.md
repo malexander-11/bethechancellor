@@ -1693,3 +1693,21 @@ Chancellor's headroom. ADR-0046 records the choices; this section says what the 
 - **Votes.** An answer on a card is a vote on every measure the card stands for, kept as §39 says.
   No tally, and no answer beyond the lever it sets, enters the arithmetic, the reception or the
   picture.
+
+## 41. Straight in, and an app (ADR-0047)
+
+On 2026-10-30 the user asked for much less content, a game that starts at once, and the feel of an
+app. ADR-0047 records the choices; this section says what changed for the numbers.
+
+- **One figure a card.** A card shows what disagreeing does to the player's money, the engine's
+  figure of §40, and no longer the Treasury's line beside it. The engine's figure starts from that
+  line and adds the interest on what it no longer raises or spends, so it is the Treasury's figure
+  or a little more, never less; a test holds a card to that. The bar at the top says the same figure
+  once the answer is given.
+- **The story in a fold.** What the Budget did is told above the first measures in one closed fold,
+  its figures filled exactly as §39 says: quoted facts for the steps of the margin, the engine's for
+  the rest.
+- **A game from the first screen.** A link without a game starts one, with the link's measures in
+  it, on the forecast; nothing in the arithmetic changes.
+- **What everyone said.** The public's counts on a measure show once the player has answered it.
+  They are counts and nothing else, as §39 says, and enter no figure.
