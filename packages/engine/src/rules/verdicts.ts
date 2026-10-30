@@ -63,18 +63,20 @@ export function evaluateCurrentBudgetRule(
       `The ${vintage.id} forecast does not reach ${targetYear}.`,
     );
   }
+  // Once the rule rolls, "balance" allows a deficit of up to 0.5% of GDP between fiscal events,
+  // and a Budget is a fiscal event: it must return the current budget to surplus, which is how
+  // the OBR states the margin. The range is reported, never used for the verdict.
   const tolerance = rolling ? (rule.balanceTolerancePctGdp / 100) * gdp : 0;
-  const baseTolerance = rolling ? (rule.balanceTolerancePctGdp / 100) * baseGdp : 0;
-  const status: VerdictStatus = deficit <= tolerance ? 'met' : 'notMet';
-  const baseStatus: VerdictStatus = baseDeficit <= baseTolerance ? 'met' : 'notMet';
+  const status: VerdictStatus = deficit <= 0 ? 'met' : 'notMet';
+  const baseStatus: VerdictStatus = baseDeficit <= 0 ? 'met' : 'notMet';
   const headroomToSurplus = -deficit;
   const requirement = rolling
-    ? `Current budget in balance or surplus in ${targetYear} (third year of the rolling forecast), where balance allows a deficit of up to ${rule.balanceTolerancePctGdp}% of GDP.`
+    ? `Current budget in balance or surplus in ${targetYear} (third year of the rolling forecast): in surplus at a Budget, with a deficit of up to ${rule.balanceTolerancePctGdp}% of GDP allowed only between fiscal events.`
     : `Current budget in surplus in ${targetYear}.`;
   const explanation =
     deficit <= 0
       ? `Day-to-day spending is covered with a surplus of ${(Math.abs(deficit) / 1000).toFixed(1)}bn in ${targetYear}.`
-      : `Day-to-day spending exceeds revenue by ${(deficit / 1000).toFixed(1)}bn in ${targetYear}${rolling && deficit <= tolerance ? ', within the 0.5% of GDP tolerance' : ''}.`;
+      : `Day-to-day spending exceeds revenue by ${(deficit / 1000).toFixed(1)}bn in ${targetYear}${rolling && deficit <= tolerance ? ', inside the 0.5% of GDP range allowed between fiscal events, which a Budget must close' : ''}.`;
   return {
     ruleId: rule.id,
     ruleName: rule.name,
@@ -87,7 +89,7 @@ export function evaluateCurrentBudgetRule(
       label: `Current budget deficit, ${targetYear}`,
       value: deficit,
       unit: 'GBPm',
-      threshold: tolerance,
+      threshold: 0,
       comparator: '<=',
     },
     headroomGbpm: headroomToSurplus,
@@ -162,10 +164,21 @@ export function evaluateStockFallingRule(
   };
 }
 
-export function evaluateWelfareCapRule(rule: WelfareCapRule, paths: FiscalPaths): RuleVerdict {
+/**
+ * The cap is assessed on capped welfare plus the OBR's own adjustments for the year (inflation
+ * since the cap was set and the Scottish block grant), when the vintage carries them.
+ */
+export function evaluateWelfareCapRule(
+  rule: WelfareCapRule,
+  vintage: Vintage,
+  paths: FiscalPaths,
+): RuleVerdict {
   const year = rule.capYear;
-  const spend = paths.policy.welfareInCap[year];
-  const baseSpend = paths.baseline.welfareInCap[year];
+  const adjustment = vintage.fiscal.welfareCapAdjustments?.values[year] ?? 0;
+  const forecast = paths.policy.welfareInCap[year];
+  const baseForecast = paths.baseline.welfareInCap[year];
+  const spend = forecast === undefined ? undefined : forecast + adjustment;
+  const baseSpend = baseForecast === undefined ? undefined : baseForecast + adjustment;
   const gdp = paths.policy.nominalGdpFy[year];
   if (spend === undefined || baseSpend === undefined || gdp === undefined) {
     return unavailable(rule, year, false, `No capped welfare forecast for ${year}.`);
@@ -191,7 +204,10 @@ export function evaluateWelfareCapRule(rule: WelfareCapRule, paths: FiscalPaths)
     rolling: false,
     status,
     metric: {
-      label: `Welfare spending inside the cap, ${year}`,
+      label:
+        adjustment === 0
+          ? `Welfare spending inside the cap, ${year}`
+          : `Welfare spending inside the cap after the OBR's adjustments, ${year}`,
       value: spend,
       unit: 'GBPm',
       threshold: ceiling,
@@ -222,7 +238,7 @@ export function evaluateRules(
       case 'stockFalling':
         return evaluateStockFallingRule(rule, vintage, paths, assessAsOf);
       case 'welfareCap':
-        return evaluateWelfareCapRule(rule, paths);
+        return evaluateWelfareCapRule(rule, vintage, paths);
     }
   });
 }

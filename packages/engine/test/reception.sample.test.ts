@@ -70,7 +70,7 @@ describe('the audiences over 300 seeded Budgets (Phase 25)', () => {
 
   it('never lets a Budget that misses a rule please the markets more than doing nothing', () => {
     const nothing = ratingOf(rate({}, freshGame()), 'markets');
-    expect(nothing).toBe(2);
+    expect(nothing).toBe(3);
     const missing = rated.filter((r) => r.missed);
     expect(missing.length).toBeGreaterThan(20);
     for (const r of missing) {

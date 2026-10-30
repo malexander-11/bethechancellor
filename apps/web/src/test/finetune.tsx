@@ -4,9 +4,9 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { App } from '../App';
 
-export const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+export const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 /** A game that has agreed two priorities with the PM and reached fine-tuning, on today's estimate. */
-export const GAME = 'g=st.3_pr.safer-streets+defence&M=rate.0.75_rpi.0.5';
+export const GAME = 'g=st.3_pr.safer-streets+defence';
 
 export function at(path: string) {
   window.history.replaceState(null, '', path);

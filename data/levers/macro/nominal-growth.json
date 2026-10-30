@@ -6,13 +6,14 @@
   "badge": "assumption",
   "title": "Economic growth (nominal GDP, each year)",
   "shortTitle": "Growth",
-  "headline": "Faster growth raises receipts and shrinks debt. 0.1pp a year is worth £8bn.",
+  "headline": "Faster growth raises receipts and shrinks debt. 0.1pp a year is worth £5bn.",
   "description": "How much faster or slower the cash economy grows each year than the OBR forecast. Faster growth raises receipts and shrinks debt as a share of the economy.",
   "baselinePolicy": {
-    "text": "OBR March 2026: real GDP growth 1.1% in 2026 then about 1.5 to 1.6% a year; nominal GDP grows 18.6% in total between 2025-26 and 2030-31.",
+    "text": "OBR October 2026: real GDP growth 1.2% in 2026 and 1.0% in 2027, then 1.6 to 1.8% a year; nominal GDP grows 19.3% in total between 2026-27 and 2031-32.",
     "source": {
-      "sourceId": "obr-efo-2026-03",
-      "table": "Table 2.1 and Table 2.2"
+      "sourceId": "obr-efo-2026-10",
+      "table": "Table 2.1 and Table A.1",
+      "page": "26"
     }
   },
   "control": {
@@ -39,8 +40,8 @@
       "text": "Growth is the biggest single driver of the public finances: a tenth of a point a year is worth about as much by the end of the forecast as a penny on the basic rate of income tax. This is why the OBR's growth judgement, not any single tax measure, usually decides whether the rules are met.",
       "sources": [
         {
-          "sourceId": "obr-efo-2026-03",
-          "paragraph": "6.17"
+          "sourceId": "obr-efo-2026-10",
+          "paragraph": "7.32"
         },
         {
           "sourceId": "hmrc-trr-2025-06"

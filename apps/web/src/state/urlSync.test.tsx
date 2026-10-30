@@ -3,7 +3,7 @@ import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { BudgetProvider, useBudget } from './budget';
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 
 /** Two buttons a page might hold: one that changes the budget, one that moves on. */
 function Page() {

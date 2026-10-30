@@ -1,7 +1,6 @@
 import {
   guideFor as guideStageFor,
   finetuneNames,
-  macroCodesOf,
   suggestedSettings,
   type Adviser,
   type GameData,
@@ -39,17 +38,19 @@ export const finetune = dataset.finetune;
 export const gameData: GameData = dataset;
 
 /**
- * Today's estimate (Phase 24, ADR-0025): the OBR's March forecast on today's borrowing costs and
- * prices, each setting the advisers' stated rule applied to a published reading. Every game is
- * played on it.
+ * Today's estimate (Phase 24, ADR-0025): the forecast on today's borrowing costs and prices, each
+ * setting the advisers' stated rule applied to a published reading. Every game is played on it. A
+ * context with no readings, as the one written on the Budget's own forecast is, leaves it empty.
  */
 export const ESTIMATE: Readonly<Record<string, number>> = suggestedSettings(
   context.readings,
   levers,
 );
 
-/** The levers the estimate sets: the economy, not policy. */
-export const MACRO_CODES: readonly string[] = macroCodesOf(context.readings);
+/** The levers that set the economy rather than policy: a link's settings for them are read as the estimate's, never as choices. */
+export const MACRO_CODES: readonly string[] = levers
+  .filter((l) => l.category === 'macro')
+  .map((l) => l.code);
 
 export const sourcesById: ReadonlyMap<string, SourceDoc> = new Map(
   sources.sources.map((s) => [s.id, s] as const),

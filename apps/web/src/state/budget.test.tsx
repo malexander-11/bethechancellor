@@ -12,9 +12,9 @@ import {
 
 describe('budget state', () => {
   it('hydrates from a permalink and encodes back to the same query', () => {
-    const query = 'v=1&f=obr2603&r=ch2602&i=2027&L=itbr.1&M=rate.0.75_rpi.0.5&g=st.3_pr.defence';
+    const query = 'v=1&f=obr2610&r=ch2602&i=2027&L=itbr.1&g=st.3_pr.defence';
     const state = initialStateFromLocation(`?${query}`);
-    expect(state.leverValues).toEqual({ itbr: 1, rate: 0.75, rpi: 0.5 });
+    expect(state.leverValues).toEqual({ itbr: 1 });
     expect(state.game).toEqual({ reached: 3, priorities: ['defence'] });
     expect(state.warnings).toEqual([]);
     expect(permalinkQuery(state)).toBe(query);
@@ -25,10 +25,10 @@ describe('budget state', () => {
     // they stand (Phase 26): an old link's o= flags are dropped, with one line to say why.
     for (const flag of ['nb1', 'dif0']) {
       const state = initialStateFromLocation(
-        `?v=1&f=obr2603&r=ch2602&i=2027&M=rate.0.75&o=${flag}`,
+        `?v=1&f=obr2610&r=ch2602&i=2027&M=rate.0.75&o=${flag}`,
       );
       expect(state.warnings).toEqual([EXPERT_WARNING]);
-      expect(permalinkQuery(state)).toBe('v=1&f=obr2603&r=ch2602&i=2027&M=rate.0.75');
+      expect(permalinkQuery(state)).toBe('v=1&f=obr2610&r=ch2602&i=2027&M=rate.0.75');
     }
   });
 
@@ -38,7 +38,7 @@ describe('budget state', () => {
     expect(moved.leverValues).toEqual({ rate: 0.5 });
     const back = reducer(moved, { type: 'setLever', code: 'rate', value: 0 });
     expect(back.leverValues).toEqual({});
-    expect(permalinkQuery(back)).toBe('v=1&f=obr2603&r=ch2602&i=2027');
+    expect(permalinkQuery(back)).toBe('v=1&f=obr2610&r=ch2602&i=2027');
   });
 
   it('merges several settings at once and drops those back at the OBR default', () => {
@@ -88,8 +88,8 @@ describe('budget state', () => {
     // The measures are in the game now, so the note that promised them has done its job.
     expect(started.warnings).toEqual([]);
     expect(started.game).toEqual({ reached: 0, priorities: [] });
-    // Whatever economy the sandbox had, the game plays on the estimate; the policy stays.
-    expect(started.leverValues).toEqual({ itbr: 1, rate: 0.75, rpi: 0.5 });
+    // Whatever economy the sandbox had, the game plays on the forecast; the policy stays.
+    expect(started.leverValues).toEqual({ itbr: 1 });
     expect(onEstimate(started.leverValues)).toBe(true);
     const playing = { ...started, game: { reached: 3, priorities: ['defence'] } };
     expect(reducer(playing, { type: 'startGame' }).game).toEqual(playing.game);
@@ -97,9 +97,7 @@ describe('budget state', () => {
 
   it('ends the game on a reset, with every lever and the economy', () => {
     // Budget day's "Play again" (Phase 26: the desk's "Put every lever back" went with it).
-    const state = initialStateFromLocation(
-      '?g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1_moj.10',
-    );
+    const state = initialStateFromLocation('?g=st.3_pr.defence&L=itbr.1_moj.10');
     const gone = reducer(state, { type: 'reset' });
     expect(gone.game).toBeUndefined();
     expect(gone.leverValues).toEqual({});
@@ -107,15 +105,15 @@ describe('budget state', () => {
 
   it('opens every game on today’s estimate, saying so when the link carried other figures', () => {
     // A game on the estimate opens as it was, with nothing to say.
-    const fine = initialStateFromLocation('?g=st.2&M=rate.0.75_rpi.0.5&L=moj.10');
-    expect(fine.leverValues).toEqual({ moj: 10, rate: 0.75, rpi: 0.5 });
+    const fine = initialStateFromLocation('?g=st.2&L=moj.10');
+    expect(fine.leverValues).toEqual({ moj: 10 });
     expect(fine.warnings).toEqual([]);
     // A Phase 23 game drew its own forecast and kept a snapshot: both give way to the estimate.
     const old = initialStateFromLocation(
       '?g=s.417_st.5_pl.pessimistic_hr.30_pr.defence_rb.pubs&M=rate.0.75_rpi.1&L=moj.10&S=moj.10',
     );
     expect(old.game).toEqual({ reached: 4, priorities: ['defence'] });
-    expect(old.leverValues).toEqual({ moj: 10, rate: 0.75, rpi: 0.5 });
+    expect(old.leverValues).toEqual({ moj: 10 });
     expect(old.warnings).toEqual([ESTIMATE_WARNING]);
     expect(permalinkQuery(old)).not.toContain('S=');
     // A link with no game opens the briefing (Phase 26): its measures wait for the game it

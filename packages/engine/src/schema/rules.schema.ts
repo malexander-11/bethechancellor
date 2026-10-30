@@ -65,7 +65,8 @@ export const ruleSetSchema = z.strictObject({
   source: sourceRefSchema,
   assessment: z.strictObject({
     formalCadence: z.string().min(1),
-    nextFormalAssessmentOn: isoDateSchema,
+    lastFormalAssessmentOn: isoDateSchema.optional(),
+    nextFormalAssessmentOn: isoDateSchema.optional(),
     note: z.string().optional(),
   }),
   escapeClause: z.strictObject({

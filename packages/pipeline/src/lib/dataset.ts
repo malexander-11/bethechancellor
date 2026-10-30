@@ -29,7 +29,7 @@ export interface LoadedDataset extends Required<Dataset> {
 
 /** Load and schema-validate everything under data/. Throws DataError on the first bad file. */
 export function loadDataset(
-  defaultVintageId = 'obr-2026-03',
+  defaultVintageId = 'obr-2026-10',
   defaultRulesId = 'charter-2026-02',
 ): LoadedDataset {
   const isJson = (f: string) => f.endsWith('.json');

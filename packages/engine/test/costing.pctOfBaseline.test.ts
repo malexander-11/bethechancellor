@@ -53,7 +53,7 @@ const share = (
       caveats: [],
     },
   });
-const PLAN = { '2025-26': 1000, '2026-27': 1100, '2027-28': 1200, '2028-29': 1300 };
+const PLAN = { '2026-27': 1000, '2027-28': 1100, '2028-29': 1200, '2029-30': 1300 };
 const published = (values: Record<string, number>) => ({
   from: 'published',
   years: Object.keys(values),
@@ -74,32 +74,31 @@ const r = (y: string) => rdel[y] ?? Number.NaN;
 describe('percentage-of-baseline levers', () => {
   it('scales a published plan in its own years and carries it on with a forecast line after them', () => {
     const path = baselinePath(DEPARTMENT, ds.vintage, policyYears);
-    expect(path.values['2025-26']).toBe(1000);
-    expect(path.values['2028-29']).toBe(1300);
-    expect(path.values['2029-30']).toBeCloseTo(1300 * (r('2029-30') / r('2028-29')), 6);
-    expect(path.values['2030-31']).toBeCloseTo(1300 * (r('2030-31') / r('2028-29')), 6);
-    expect(path.extendedFrom).toBe('2029-30');
-    expect(path.sourceYearFor['2030-31']).toBe('2028-29');
+    expect(path.values['2026-27']).toBe(1000);
+    expect(path.values['2029-30']).toBe(1300);
+    expect(path.values['2030-31']).toBeCloseTo(1300 * (r('2030-31') / r('2029-30')), 6);
+    expect(path.values['2031-32']).toBeCloseTo(1300 * (r('2031-32') / r('2029-30')), 6);
+    expect(path.extendedFrom).toBe('2030-31');
+    expect(path.sourceYearFor['2031-32']).toBe('2029-30');
     expect(path.steps.filter((s) => s.op === 'extend')).toHaveLength(2);
 
     const e = effectOf(DEPARTMENT, 1);
-    expect(e.currentSpending['2025-26']).toBe(0);
     expect(e.currentSpending['2026-27']).toBe(0);
-    expect(e.currentSpending['2027-28']).toBeCloseTo(12, 6);
-    expect(e.currentSpending['2028-29']).toBeCloseTo(13, 6);
-    expect(e.currentSpending['2029-30']).toBeCloseTo(0.01 * (path.values['2029-30'] ?? 0), 6);
+    expect(e.currentSpending['2027-28']).toBeCloseTo(11, 6);
+    expect(e.currentSpending['2028-29']).toBeCloseTo(12, 6);
+    expect(e.currentSpending['2029-30']).toBeCloseTo(13, 6);
+    expect(e.currentSpending['2030-31']).toBeCloseTo(0.01 * (path.values['2030-31'] ?? 0), 6);
     expect(Object.values(e.receipts).every((v) => v === 0)).toBe(true);
     expect(Object.values(e.welfareInCap).every((v) => v === 0)).toBe(true);
-    expect(e.detail?.baseline?.['2028-29']).toBe(1300);
-    expect(e.detail?.extendedFrom).toBe('2029-30');
+    expect(e.detail?.baseline?.['2029-30']).toBe(1300);
+    expect(e.detail?.extendedFrom).toBe('2030-31');
     expect(e.badge).toBe('mechanical');
   });
 
   it('makes a cut a saving, and applies the plan from an earlier start year', () => {
     const e = effectOf(DEPARTMENT, -5, { implementationYear: '2026-27' });
-    expect(e.currentSpending['2025-26']).toBe(0);
-    expect(e.currentSpending['2026-27']).toBeCloseTo(-0.05 * 1100, 6);
-    expect(e.currentSpending['2028-29']).toBeCloseTo(-0.05 * 1300, 6);
+    expect(e.currentSpending['2026-27']).toBeCloseTo(-0.05 * 1000, 6);
+    expect(e.currentSpending['2029-30']).toBeCloseTo(-0.05 * 1300, 6);
     expect(run([DEPARTMENT], { [DEPARTMENT.code]: 0 }).leverEffects).toHaveLength(0);
   });
 

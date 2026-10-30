@@ -10,7 +10,7 @@ import { finetuneNames } from './finetune.js';
 import { rankedPriorities } from './options.js';
 import { headroomWords, preBudget, reconcile, reconcileWords, type OutcomeOf } from './prices.js';
 import { receptions, type Reception } from './reception.js';
-import { macroCodesOf, suggestedSettings } from './scenarios.js';
+import { suggestedSettings } from './scenarios.js';
 import { FINAL_STAGE } from './stages.js';
 import { budgetTheme } from './theme.js';
 
@@ -34,9 +34,9 @@ export type GameData = Pick<
  */
 export const GAME_SETTINGS = { debtInterestFeedback: true, assessAsOf: 'vintage' } as const;
 
-/** The first year a measure can take effect: the forecast's second year. */
+/** The first year a measure can take effect: the April after the forecast's fiscal event. */
 export function gameImplementationYear(vintage: Vintage): string {
-  return vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? vintage.years.inYear;
+  return vintage.years.policyStart;
 }
 
 /** Trial outcomes are cheap but not free; a screen of cards asks for a few dozen at once. */
@@ -100,7 +100,6 @@ export function readFinishedBudget(data: GameData, search: string): FinishedBudg
   const { state } = decodePermalink(search, data.levers);
   if (!state.game || state.game.reached !== FINAL_STAGE) return null;
   const byCode = new Map(data.levers.map((l) => [l.code, l] as const));
-  const economy = new Set(macroCodesOf(data.context.readings));
   const leverValues: Record<string, number> = {};
   const set = (code: string, raw: number) => {
     const lever = byCode.get(code);
@@ -109,7 +108,7 @@ export function readFinishedBudget(data: GameData, search: string): FinishedBudg
     if (value !== lever.control.default) leverValues[code] = value;
   };
   for (const [code, value] of Object.entries(state.leverValues)) {
-    if (!economy.has(code) && byCode.get(code)?.category !== 'macro') set(code, value);
+    if (byCode.get(code)?.category !== 'macro') set(code, value);
   }
   for (const [code, value] of Object.entries(
     suggestedSettings(data.context.readings, data.levers),

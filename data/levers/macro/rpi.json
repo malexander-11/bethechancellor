@@ -9,10 +9,11 @@
   "headline": "A quarter of government debt is index-linked, so RPI feeds straight into interest.",
   "description": "How much higher or lower RPI inflation is than the OBR assumed, sustained across the forecast. About a quarter of government debt is index-linked, so RPI feeds straight into debt interest.",
   "baselinePolicy": {
-    "text": "OBR March 2026: CPI inflation 2.3% in 2026 and 2.0% a year thereafter, with RPI running above CPI.",
+    "text": "OBR October 2026: CPI inflation 3.1% in 2026 and 3.4% in 2027, then about 2% a year; RPI 3.6% and 4.3%, running above CPI.",
     "source": {
-      "sourceId": "obr-efo-2026-03",
-      "table": "Table 2.2"
+      "sourceId": "obr-efo-2026-10",
+      "table": "Table A.1: Economy forecast",
+      "page": "180"
     }
   },
   "control": {
@@ -36,11 +37,11 @@
       "direction": "ambiguous",
       "magnitudeWords": "moderate",
       "alreadyInDirectCosting": true,
-      "text": "Higher inflation raises the interest paid on index-linked gilts at once, and reaches benefit uprating and public pay with a lag. The OBR puts one point more RPI at £11 billion more borrowing in 2030-31, and one point less at £10 billion less; it does not split the channels out.",
+      "text": "Higher inflation raises the interest paid on index-linked gilts at once, and reaches benefit uprating and public pay with a lag. The OBR puts one point more RPI at £9 billion more on the current budget deficit in 2029-30 and £11 billion in 2031-32; it does not split the channels out.",
       "sources": [
         {
-          "sourceId": "obr-efo-2026-03",
-          "paragraph": "6.17"
+          "sourceId": "obr-efo-2026-10",
+          "paragraph": "7.32"
         }
       ]
     }

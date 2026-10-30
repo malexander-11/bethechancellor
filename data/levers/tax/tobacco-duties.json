@@ -75,7 +75,7 @@
     },
     "caveats": [
       "HMRC's row is for a 1% change in duty; larger changes are scaled linearly. The published yield is small relative to the £8bn the duty raises because HMRC's estimate includes the fall in legal sales as prices rise.",
-      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the October 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
     ]
   },
   "considerations": [

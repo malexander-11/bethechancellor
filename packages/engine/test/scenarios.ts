@@ -87,10 +87,16 @@ export const EMPLOYER_NICS: Budget = { nicer: 1 };
 export const BIG_BROAD_TAX_RISE: Budget = { nicer: 2 };
 
 /**
- * Health above its plan, paid for by the penny: without the penny the day-to-day rule is missed,
- * so breaking the tax lock is the price of the programme, not a buffer.
+ * Health above its plan, both security flagships and more for the Home Office and schools: more
+ * than the October forecast's headroom, so the day-to-day rule is missed.
  */
-export const NEEDED_LOCK_BREAK: Budget = { ...HEALTH_ABOVE_PLAN, ...PENNY };
+export const PROGRAMME: Budget = { ...HEALTH_ABOVE_PLAN, ...SECURITY_FLAGSHIPS, home: 10, dfe: 5 };
+
+/**
+ * The programme paid for by the penny: without the penny the day-to-day rule is missed, so
+ * breaking the tax lock is the price of the programme, not a buffer.
+ */
+export const NEEDED_LOCK_BREAK: Budget = { ...PROGRAMME, ...PENNY };
 
 /**
  * Inheritance tax at 50% and the 5% band of stamp duty at 10%: estates and home buyers pay more,

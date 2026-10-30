@@ -89,11 +89,11 @@
     "uprating": {
       "method": "growWithSeries",
       "head": "capitalTaxes",
-      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+      "note": "Shifted to the start year and scaled by the OBR October 2026 forecast for this receipts head (ADR-0004)."
     },
     "caveats": [
       "HMRC: stamp duty changes are non-linear and asymmetrical; scaling the 1 point figures to larger changes is only approximate.",
-      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the October 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
     ],
     "decreasePerUnit": {
       "2026-27": -775,

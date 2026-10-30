@@ -70,7 +70,7 @@
     "uprating": {
       "method": "growWithSeries",
       "head": "incomeTax",
-      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+      "note": "Shifted to the start year and scaled by the OBR October 2026 forecast for this receipts head (ADR-0004)."
     },
     "caveats": [
       "Five times HMRC’s published 1p row. HMRC says its ready reckoner is approximate beyond small changes, so this is our extrapolation and wears the assumption badge; nobody has certified a 50% rate.",

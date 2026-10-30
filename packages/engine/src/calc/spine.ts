@@ -21,13 +21,11 @@ export interface ComputeInput {
   settings?: SettingsInput;
 }
 
-/** Fill in defaults: implementation from the second forecast year, feedback on, assess as at the vintage. */
+/** Fill in defaults: implementation from the vintage's policy start, feedback on, assess as at the vintage. */
 export function resolveSettings(vintage: Vintage, input: SettingsInput | undefined): Settings {
-  const defaultImplementation =
-    vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? vintage.years.inYear;
   const settings: Settings = {
     leverValues: { ...(input?.leverValues ?? {}) },
-    implementationYear: input?.implementationYear ?? defaultImplementation,
+    implementationYear: input?.implementationYear ?? vintage.years.policyStart,
     debtInterestFeedback: input?.debtInterestFeedback ?? true,
     assessAsOf: input?.assessAsOf ?? 'vintage',
   };

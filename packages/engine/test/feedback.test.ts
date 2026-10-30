@@ -19,8 +19,8 @@ describe('wider feedback (Phase 25, R21)', () => {
     });
     expect(scale.year).toBe('2029-30');
     // The defence plan's gap is the cheapest; health above its plan the dearest (one price each).
-    expect(Math.round((scale.costs?.minGbpm ?? 0) / 100) / 10).toBe(0.8);
-    expect(Math.round((scale.costs?.maxGbpm ?? 0) / 100) / 10).toBe(8.1);
+    expect(Math.round((scale.costs?.minGbpm ?? 0) / 100) / 10).toBe(0.9);
+    expect(Math.round((scale.costs?.maxGbpm ?? 0) / 100) / 10).toBe(8.2);
     expect(scale.saves).toEqual(['welfare-bill']);
   });
 

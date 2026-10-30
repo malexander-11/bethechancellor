@@ -90,7 +90,9 @@ export function headroomWithoutBreak(input: {
   outcomeOf: OutcomeOf;
 }): number | undefined {
   const { status, outcome, levers } = input;
-  if (outcome.verdicts.some(isMissed)) return undefined;
+  // The two fiscal rules: the welfare cap can be missed before any measure is moved.
+  const missesRule = (v: Outcome['verdicts'][number]) => v.kind !== 'welfareCap' && isMissed(v);
+  if (outcome.verdicts.some(missesRule)) return undefined;
   const programme = new Set(
     status.priorities.flatMap((p) =>
       p.options
@@ -101,6 +103,6 @@ export function headroomWithoutBreak(input: {
   const breakers = breakingCodes(status);
   if (breakers.length === 0 || breakers.some((code) => programme.has(code))) return undefined;
   const without = input.outcomeOf(withDefaults(outcome.settings.leverValues, breakers, levers));
-  if (without.verdicts.some(isMissed)) return undefined;
+  if (without.verdicts.some(missesRule)) return undefined;
   return without.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;
 }

@@ -13,7 +13,7 @@ import { App } from '../App';
 import { gameData, guide } from '../data';
 import { SHARE_TEXT } from '../share/words';
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 /** A finished Budget: two priorities, prisons up a tenth and a penny on the basic rate. */
 const FINISHED = `${BASE}&g=st.${FINAL_STAGE}_pr.defence+safer-streets&L=moj.10_itbr.1`;
 

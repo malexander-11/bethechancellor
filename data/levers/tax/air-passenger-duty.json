@@ -75,7 +75,7 @@
     },
     "caveats": [
       "HMRC publishes the effect of £1 on the reduced rate; larger changes are scaled linearly here. HMRC publishes an increase only, so the slider only rises. The £1 is added to every reduced-rate band alike; the standard and higher rates (premium cabins and private jets) are not moved by this lever.",
-      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the October 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
     ]
   },
   "considerations": [

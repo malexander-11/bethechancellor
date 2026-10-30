@@ -8,7 +8,7 @@
   "title": "Replace the triple lock with CPI inflation only",
   "shortTitle": "Triple lock to CPI",
   "noun": "the triple lock at CPI",
-  "headline": "Uprate the state pension by prices alone. Saves £2.7bn by 2029-30.",
+  "headline": "Uprate the state pension by prices alone. Saves £2.0bn by 2029-30.",
   "description": "The triple lock raises the state pension by the highest of CPI inflation, average earnings growth and 2.5%. Replace it with CPI inflation from April 2027. On the OBR's own forecast CPI is 2.0% and earnings growth 2.1% to 2.4%, so it is the 2.5% floor that binds every year: the whole saving comes from dropping that floor. The gap compounds, which is why a small annual difference reaches £3.7bn by 2030-31. Nothing here changes who gets the pension, only how fast it rises.",
   "baselinePolicy": {
     "text": "The OBR's forecast has the triple lock delivering 2.5% a year from 2027-28, above CPI of 2.0% and earnings growth of 2.1% to 2.4%.",
@@ -39,10 +39,10 @@
   "costing": {
     "kind": "schedule",
     "effect": {
-      "2027-28": -930,
-      "2028-29": -1755,
-      "2029-30": -2674,
-      "2030-31": -3674
+      "2027-28": -461,
+      "2028-29": -1273,
+      "2029-30": -2004,
+      "2030-31": -2974
     },
     "source": {
       "sourceId": "dwp-benefit-expenditure-2026",

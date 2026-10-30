@@ -14,7 +14,7 @@ import { loadDataset } from './fixtures.js';
 
 const ds = loadDataset();
 const base: PermalinkState = {
-  vintageCode: 'obr2603',
+  vintageCode: 'obr2610',
   rulesCode: 'ch2602',
   implementationYear: '2027-28',
   leverValues: {},
@@ -24,7 +24,7 @@ const base: PermalinkState = {
 
 describe('the playthrough in the link (g=, Phase 24)', () => {
   it('writes nothing new for a Budget with no game, so old links are byte for byte the same', () => {
-    expect(encodePermalink(base, ds.levers)).toBe('v=1&f=obr2603&r=ch2602&i=2027');
+    expect(encodePermalink(base, ds.levers)).toBe('v=1&f=obr2610&r=ch2602&i=2027');
     const q = encodePermalink({ ...base, leverValues: { itbr: 1 } }, ds.levers);
     expect(q).not.toContain('g=');
     expect(q).not.toContain('S=');

@@ -53,7 +53,10 @@ CGT), the lever says so.
 - **Headroom.** The margin by which a rule is met in its target year, in £ billion. It is a forecast
   quantity and moves with every forecast revision.
 - **Vintage.** One OBR forecast, stored as a versioned data set (`data/vintages/<id>/`). The current
-  vintage is `obr-2026-03`, the March 2026 Economic and fiscal outlook.
+  vintage is `obr-2026-10`, the October 2026 Economic and fiscal outlook, with the Budget's measures
+  in it; `obr-2026-03`, the March 2026 outlook, stays for old links. Each vintage names its
+  `policyStart`, the April after its fiscal event, which is the first year a measure can take
+  effect.
 
 ## 3. Two GDP denominators
 
@@ -88,10 +91,12 @@ them in a significant negative shock, after asking the OBR to assess its severit
 **Target-year logic.** The engine derives the target year from the vintage. The forecast period is
 the five financial years after the year in progress. If its third year is on or after 2029-30, the
 rules are rolling and the third year is the target; otherwise the target is 2029-30 and the
-stability rule requires a surplus. For the March 2026 vintage the third year is 2028-29, so the
-fixed 2029-30 target applies. From the Budget of 28 October 2026 the forecast will run 2027-28 to
-2031-32, the third year is 2029-30, and the rolling form applies. The app can preview that form on
-the March baseline (`assessAsOf: nextBudget`).
+stability rule requires a surplus. For the March 2026 vintage the third year was 2028-29, so the
+fixed 2029-30 target applied. The October 2026 forecast runs 2027-28 to 2031-32, the third year is
+2029-30, and the rolling form applies: balance allows a deficit of up to 0.5% of GDP between fiscal
+events only, so at a Budget the verdict is still judged against a surplus and the margin is the
+margin to surplus, as the OBR states it; the range is reported beside it. `assessAsOf: nextBudget`
+previews the following year's window.
 
 **Headroom is shown two ways once rolling:** against zero (a surplus) and against the 0.5%
 tolerance. Which one the OBR will headline has not been settled publicly.
@@ -273,11 +278,12 @@ Spending levers add a third source, the **Spending Review 2025 departmental DEL 
 
 ## 7. Assumption sliders
 
-The sliders use the OBR's published sensitivities for the March 2026 forecast: a sustained 1
-percentage point rise in Bank Rate and gilt yields adds about £15 billion to borrowing in 2030-31;
-0.1 percentage point a year on nominal GDP growth is worth about £8 billion by 2030-31; 1 percentage
-point on RPI inflation adds about £11 billion (a fall removes about £10 billion). The OBR publishes
-end-year figures; the year-by-year path is our stated assumption and is flagged as such in the data.
+The sliders use the OBR's published sensitivities for the October 2026 forecast (paragraph 7.32): a
+1 percentage point rise in gilt yields and Bank Rate adds £13 billion to the current budget deficit
+in 2029-30 and £16 billion in 2031-32; 0.1 percentage point a year on nominal GDP growth from
+2027-28 is worth £5 billion by 2029-30 and £9 billion by 2031-32; 1 percentage point on RPI
+inflation adds £9 billion and £11 billion. The OBR states two years; the year-by-year path between
+and before them is our stated assumption and is flagged as such in the data.
 
 ## 8. Uncertainty
 

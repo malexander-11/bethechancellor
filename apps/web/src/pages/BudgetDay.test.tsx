@@ -17,18 +17,18 @@ function at(search: string) {
   );
 }
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 const card = (name: string) =>
   screen.getByRole('heading', { name }).closest('section') as HTMLElement;
 const meter = (name: string) => within(card(name)).getByRole('img');
 
 /** Two priorities agreed, delivered from the review, on today's estimate (Phase 24). */
-const GAME = 'g=st.4_pr.defence+safer-streets&M=rate.0.75_rpi.0.5';
+const GAME = 'g=st.4_pr.defence+safer-streets';
 /**
  * A game delivered with nothing agreed and nothing changed. Budget day needs a game (Phase 26):
  * the sandbox that once opened it with none has gone.
  */
-const EMPTY = 'g=st.4&M=rate.0.75_rpi.0.5';
+const EMPTY = 'g=st.4';
 
 describe('Budget day: what your Budget means', () => {
   it('is one screen: the rules line, three rated audiences and five households', () => {
@@ -38,16 +38,22 @@ describe('Budget day: what your Budget means', () => {
     ).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
     // The rules by their plain names; the welfare cap only when it is missed (Phase 25).
-    expect(screen.getByText('You meet both fiscal rules on these numbers.')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'You meet both fiscal rules on these numbers, but miss the welfare cap by £2.8bn.',
+      ),
+    ).toBeInTheDocument();
     for (const title of ['Labour backbenchers', 'The markets', 'The public']) {
       expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
     }
-    // An empty Budget: the benches and the public shrug; the markets find today's £6.8bn thin,
-    // and say the economy since March took it, not the player's measures (Phase 25).
+    // An empty Budget: the benches and the public shrug, and so do the markets, who find the
+    // Chancellor's own £14.5bn modest and nothing of the player's behind it (Phase 25).
     expect(meter('Labour backbenchers')).toHaveAccessibleName('3 of 5: Divided');
     expect(meter('The public')).toHaveAccessibleName('3 of 5: Shrugging');
-    expect(meter('The markets')).toHaveAccessibleName('2 of 5: Nervous');
-    expect(within(card('The markets')).getByText(/not your measures/)).toBeInTheDocument();
+    expect(meter('The markets')).toHaveAccessibleName('3 of 5: Watchful');
+    expect(
+      within(card('The markets')).getByText(/Nothing in this Budget moved them either way/),
+    ).toBeInTheDocument();
     // Each card is its rating and its one reason: no "Why this rating" (ADR-0043).
     expect(screen.queryByText(/^Why this rating/)).toBeNull();
     // The five households are on the page, behind no fold; no speech and no documents (ADR-0043).

@@ -7,11 +7,11 @@ exports[`cards that agree with their ratings (Phase 25) > names who pays from th
 ]
 `;
 
-exports[`cards that agree with their ratings (Phase 25) > says a margin above twenty billion truly: close to March, or more than March left 1`] = `
+exports[`cards that agree with their ratings (Phase 25) > says a margin truly: the Chancellor’s is modest, a big rise is plenty, a spending rise is thin 1`] = `
 [
-  "Headroom of £…bn, above the twenty billion your advisers call comfortable and close to what March left. A buffer, as promised.",
-  "Headroom of £…bn, more than the £…bn March left. A wide buffer: money raised that this Budget does not spend.",
-  "Headroom of £…bn: less than March left, and smaller than the OBR’s typical forecast error of about £…bn.",
+  "Headroom of £…bn: about half the margin Chancellors have kept since 2010. It is below the OBR’s usual forecast error of £…bn.",
+  "Headroom of £…bn, close to the £…bn margin Chancellors have kept on average since 2010. A wide buffer: money raised that this Budget does not spend.",
+  "Headroom of £…bn is below the ten billion commentators called wafer-thin before the last Budget. Thin margins are noticed.",
 ]
 `;
 
@@ -63,9 +63,9 @@ exports[`three audiences, recalibrated on today’s estimate (Phase 25) > makes 
 ]
 `;
 
-exports[`three audiences, recalibrated on today’s estimate (Phase 25) > measures the markets from before the Budget: doing nothing is Nervous, not Alarmed 1`] = `
+exports[`three audiences, recalibrated on today’s estimate (Phase 25) > measures the markets from before the Budget: doing nothing is Watchful 1`] = `
 [
-  "Headroom of £…bn is below the ten billion commentators called wafer-thin. Dearer borrowing and prices since March took it, not your measures.",
+  "Headroom of £…bn: about half the margin Chancellors have kept since 2010. It is below the OBR’s usual forecast error of £…bn.",
 ]
 `;
 

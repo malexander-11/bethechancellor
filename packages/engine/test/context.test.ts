@@ -25,9 +25,9 @@ describe('the briefing’s published figures (Phase 28, ADR-0030)', () => {
     expect(briefing?.averageHeadroom.since).toBe('2010');
     expect(briefing?.averageHeadroom.source.sourceId).toBe('obr-efo-2025-11');
     expect(briefing?.averageHeadroom.source.quote).toMatch(/around £29 billion/);
-    expect(briefing?.giltSales.gbpm).toBe(246_200);
-    expect(briefing?.giltSales.source.sourceId).toBe('dmo-remit-2026-04');
-    expect(briefing?.giltSales.source.quote).toMatch(/gilt sales of £246\.2 billion/);
+    expect(briefing?.giltSales.gbpm).toBe(250_600);
+    expect(briefing?.giltSales.source.sourceId).toBe('dmo-remit-2026-10');
+    expect(briefing?.giltSales.source.quote).toMatch(/gilt sales of £250\.6 billion/);
     expect(validateDataset(ds).filter((p) => /briefing/.test(p))).toEqual([]);
   });
 

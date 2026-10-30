@@ -278,7 +278,13 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
       'retired lever',
     ).code;
     const desked = structuredClone(ds.contexts);
-    desked[desked.length - 1]!.inTray[0]!.leverCode = shelved;
+    desked[desked.length - 1]!.inTray.push({
+      id: 'x-desk',
+      text: 'A retired lever, put on the desk.',
+      badge: 'simulated',
+      leverCode: shelved,
+      sources: [{ sourceId: 'obr-efo-2026-10' }],
+    });
     expect(tamper(() => undefined, desked)).toContain(
       `the desk's lever ${shelved} is not on step 4`,
     );

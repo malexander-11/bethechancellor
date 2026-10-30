@@ -3,9 +3,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from './App';
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 /** A game at fine-tuning, on today's estimate, with a penny on the basic rate. */
-const TUNING = `${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=itbr.1`;
+const TUNING = `${BASE}&g=st.3_pr.defence&L=itbr.1`;
 
 function at(path: string) {
   // The provider reads the Budget out of the real location, so set it before rendering.
@@ -108,7 +108,7 @@ describe('journey routes', () => {
     expect(screen.getByRole('button', { name: 'Set your priorities' })).toBeInTheDocument();
     unmount();
     // Budget day opens for a game that has reached it; a finished game's link carries its g=.
-    at(`/budget-day?${BASE}&g=st.5_pr.defence&M=rate.0.75_rpi.0.5`);
+    at(`/budget-day?${BASE}&g=st.5_pr.defence`);
     expect(
       screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
     ).toBeInTheDocument();

@@ -133,7 +133,7 @@ describe('nothing before it can start (ADR-0021)', () => {
     const tampered = structuredClone(ds);
     const floored = tampered.levers.find((l) => l.earliestStart);
     if (!floored?.earliestStart) throw new Error('the data has no lever with a floor');
-    floored.earliestStart = { ...floored.earliestStart, year: '2031-32' };
+    floored.earliestStart = { ...floored.earliestStart, year: '2032-33' };
     expect(validateDataset(tampered).some((p) => /cannot start/.test(p))).toBe(true);
   });
 

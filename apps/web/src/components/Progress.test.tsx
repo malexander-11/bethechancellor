@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -27,7 +27,7 @@ const marks = (bar: HTMLElement) =>
 
 describe('the progress bar', () => {
   it('says which step this is, links the steps behind you, and leaves the road ahead inert', () => {
-    at(`/finetune/spending?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
+    at(`/finetune/spending?${BASE}&g=st.3_pr.defence`);
     expect(screen.getByText('Step 4 of 6')).toBeInTheDocument();
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     // Spending is the second of fine-tuning's two screens, and the line says so.
@@ -57,7 +57,7 @@ describe('the progress bar', () => {
   it('tells the steps behind you from a step you opened ahead and one not yet open', () => {
     // Back at the priorities in a game that had reached fine-tuning: the flagship screens were
     // finished on the way, fine-tuning was opened and not finished, and the review is not open.
-    at(`/pm?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
+    at(`/pm?${BASE}&g=st.3_pr.defence`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     expect(within(bar).getByText('Step 2 of 6')).toBeInTheDocument();
     expect(bar.querySelector('.progress__name')?.textContent).toBe('Set your priorities');
@@ -73,7 +73,7 @@ describe('the progress bar', () => {
   });
 
   it('names the six steps the player was promised, in order', () => {
-    at(`/review?${BASE}&g=st.4_pr.defence&M=rate.0.75_rpi.0.5`);
+    at(`/review?${BASE}&g=st.4_pr.defence`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     const names = within(bar)
       .getAllByRole('listitem')
@@ -120,7 +120,7 @@ describe('the progress bar', () => {
   });
 
   it('carries the budget with every link it offers', () => {
-    at(`/pm?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
+    at(`/pm?${BASE}&g=st.1`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     const briefing = within(bar).getByRole('link', { name: /Briefing/ });
     expect(briefing).toHaveAttribute('href', expect.stringContaining('/outlook?'));

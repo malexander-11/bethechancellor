@@ -52,6 +52,8 @@ export const vintageSchema = z.strictObject({
     outturn: z.array(fiscalYearSchema).min(1),
     inYear: fiscalYearSchema,
     forecast: z.array(fiscalYearSchema).length(5),
+    /** The first year a Budget on this forecast can change: the April after the fiscal event. */
+    policyStart: fiscalYearSchema,
   }),
   economy: z.strictObject({
     nominalGdpFy: seriesSchema,
@@ -81,6 +83,11 @@ export const vintageSchema = z.strictObject({
     cdel: seriesSchema,
     welfareTotal: seriesSchema,
     welfareInCap: seriesSchema,
+    /**
+     * What the OBR adds to capped welfare before it assesses the cap (inflation and the Scottish
+     * block grant adjustments): the assessment is of `welfareInCap` plus this.
+     */
+    welfareCapAdjustments: seriesSchema.optional(),
     welfareComponents: z.record(z.string(), seriesSchema).optional(),
     debtInterestNetApf: seriesSchema,
     receiptsByHeadPctGdp: z.record(z.string(), seriesSchema),

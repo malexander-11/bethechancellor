@@ -55,8 +55,11 @@ export const BRIEFING_WORDS = {
      * benefits that rise with CPI, so the line says debt, not spending.
      */
     intro:
-      'Since March, interest rates and inflation have been higher than expected. This means the government is paying more money to borrow, and paying more on debt linked to inflation.',
-    forecast: 'The OBR’s March forecast',
+      'Since the forecast, interest rates and inflation have been higher than expected. This means the government is paying more money to borrow, and paying more on debt linked to inflation.',
+    /** Said instead when nothing has moved the forecast: the Budget's own figure is the estimate. */
+    unmoved:
+      'Nothing has moved the forecast since the OBR published it: the figure is the OBR’s own.',
+    forecast: 'The OBR’s October forecast',
     /** What each economic setting of the estimate is called, by the way it moved from March. */
     steps: {
       rate: { up: 'Higher interest rates', down: 'Lower interest rates' },

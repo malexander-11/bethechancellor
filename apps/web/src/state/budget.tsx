@@ -63,8 +63,13 @@ export function onEstimate(values: Readonly<Record<string, number>>): boolean {
   return MACRO_CODES.every((code) => mine[code] === estimate[code]);
 }
 
+/** The values with the economy set to the estimate: every macro setting of their own goes. */
+function toEstimate(values: Readonly<Record<string, number>>): Record<string, number> {
+  return withValues(values, economyOf(ESTIMATE));
+}
+
 export const ESTIMATE_WARNING =
-  'Every game now plays on today’s estimate of the economy, so this link’s own economic figures were replaced.';
+  'Every game now plays on the OBR’s October 2026 forecast, so this link’s own economic figures were dropped.';
 
 /** Said of a link that switched off the interest on its own borrowing, or judged it by next year's rule. */
 export const EXPERT_WARNING =
@@ -91,7 +96,7 @@ export function initialStateFromLocation(search: string): BudgetState {
     // the forecast its seed drew or figures of its own; it opens on the estimate, and says so.
     out.game = state.game;
     if (!onEstimate(out.leverValues)) {
-      out.leverValues = withValues(out.leverValues, ESTIMATE);
+      out.leverValues = toEstimate(out.leverValues);
       out.warnings = [...out.warnings, ESTIMATE_WARNING];
     }
   } else if (hasMeasures(out.leverValues)) {
@@ -121,7 +126,7 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
       // measures are in it now, so the line promising them has done its job.
       return {
         ...state,
-        leverValues: withValues(state.leverValues, ESTIMATE),
+        leverValues: toEstimate(state.leverValues),
         game: state.game ?? freshGame(),
         warnings: state.warnings.filter((w) => w !== MEASURES_NOTE),
       };

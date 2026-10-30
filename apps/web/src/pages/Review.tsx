@@ -161,7 +161,7 @@ export function ReviewPage() {
       ? 'You meet both fiscal rules.'
       : fiscalMissed.length === 0
         ? `You meet both fiscal rules, but miss ${list(missed.map(missedBy))}.`
-        : `Missed on today’s estimate: ${list(missed.map(missedBy))}.`;
+        : `Missed on these numbers: ${list(missed.map(missedBy))}.`;
   // How the bar got from the estimate to here (Phase 25): the four parts sum to it exactly.
   const r = reconcile(outcome, preBudget(outcomeOf, state.leverValues, levers));
   const money = (gbpm: number) => formatGbpBn(Math.abs(gbpm), 1);
@@ -337,7 +337,7 @@ export function ReviewPage() {
           </p>
         ) : null}
         <p className={missed.length > 0 ? 'review__missed' : undefined}>{rulesLine}</p>
-        {missed.length === 0 && r.endGbpm < THIN_HEADROOM_GBPM ? <Yardstick /> : null}
+        {fiscalMissed.length === 0 && r.endGbpm < THIN_HEADROOM_GBPM ? <Yardstick /> : null}
         {signOff ? <Spoken line={signOff.line} who="The Prime Minister" tone="pm" /> : null}
         {brokenTags.length > 0 || strainedTags.length > 0 ? (
           <ul className="review__list">

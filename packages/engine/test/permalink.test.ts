@@ -7,7 +7,7 @@ const allLevers = loadDataset().levers;
 /** The app hides deprecated levers; their codes stay decodable with a warning (tested below). */
 const levers = allLevers.filter((l) => !l.deprecated);
 const baseState: PermalinkState = {
-  vintageCode: 'obr2603',
+  vintageCode: 'obr2610',
   rulesCode: 'ch2602',
   implementationYear: '2027-28',
   leverValues: {},
@@ -44,7 +44,7 @@ describe('permalink codec', () => {
             levers,
           );
           expect(warnings).toEqual([]);
-          expect(decoded.vintageCode).toBe('obr2603');
+          expect(decoded.vintageCode).toBe('obr2610');
           expect(decoded.rulesCode).toBe('ch2602');
           expect(decoded.implementationYear).toBe('2027-28');
           expect(decoded.debtInterestFeedback).toBe(feedback);
@@ -60,7 +60,7 @@ describe('permalink codec', () => {
 
   it('omits default values and options', () => {
     const q = encodePermalink(baseState, levers);
-    expect(q).toBe('v=1&f=obr2603&r=ch2602&i=2027');
+    expect(q).toBe('v=1&f=obr2610&r=ch2602&i=2027');
   });
 
   it('puts macro sliders under M and is deterministic', () => {
@@ -75,7 +75,7 @@ describe('permalink codec', () => {
 
   it('warns on unknown codes, malformed pairs, out-of-range values and version mismatches', () => {
     const { state, warnings } = decodePermalink(
-      '?v=9&f=obr2603&M=rate.99_nope.1_bad&i=27x',
+      '?v=9&f=obr2610&M=rate.99_nope.1_bad&i=27x',
       levers,
     );
     expect(state.leverValues.rate).toBe(3);
@@ -90,7 +90,7 @@ describe('permalink codec', () => {
   it('keeps a deprecated lever setting from an old link and says so', () => {
     const chb = allLevers.find((l) => l.code === 'chb');
     expect(chb?.deprecated).toBe(true);
-    const { state, warnings } = decodePermalink('v=1&f=obr2603&r=ch2602&i=2027&L=chb.2', allLevers);
+    const { state, warnings } = decodePermalink('v=1&f=obr2610&r=ch2602&i=2027&L=chb.2', allLevers);
     expect(state.leverValues.chb).toBe(2);
     expect(warnings.some((w) => /deprecated/.test(w))).toBe(true);
     const hidden = decodePermalink('v=1&L=chb.2', levers);

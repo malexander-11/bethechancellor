@@ -46,21 +46,26 @@ describe('spending, welfare and the welfare cap', () => {
     const rule = ds.rules.rules.find((r): r is WelfareCapRule => r.kind === 'welfareCap');
     if (!rule) throw new Error('no welfare cap');
     const planned = ds.vintage.fiscal.welfareInCap.values[rule.capYear] ?? Number.NaN;
-    // The March forecast has capped welfare above the cap, inside its margin.
-    const above = planned - rule.capGbpm;
-    expect(above).toBeGreaterThan(0);
-    expect(capStatus(run([], {}))).toBe('aboveCapWithinMargin');
-    const part = saving('xpart', above / 2, true);
+    const adjustment = ds.vintage.fiscal.welfareCapAdjustments?.values[rule.capYear] ?? 0;
+    // The October forecast has capped welfare, on the OBR's adjusted figure, above the cap and
+    // its margin.
+    const ceiling = rule.capGbpm * (1 + rule.marginPct / 100);
+    const aboveMargin = planned + adjustment - ceiling;
+    const above = planned + adjustment - rule.capGbpm;
+    expect(aboveMargin).toBeGreaterThan(0);
+    expect(capStatus(run([], {}))).toBe('aboveMargin');
+    const part = saving('xpart', aboveMargin + 1, true);
     const whole = saving('xwhole', above + 1, true);
     const levers = [part, whole];
     const partly = run(levers, { xpart: 1 });
-    expect(partly.paths.policy.welfareInCap[rule.capYear]).toBeCloseTo(planned - above / 2, 6);
+    expect(partly.paths.policy.welfareInCap[rule.capYear]).toBeCloseTo(
+      planned - aboveMargin - 1,
+      6,
+    );
     expect(capStatus(partly)).toBe('aboveCapWithinMargin');
     expect(capStatus(run(levers, { xwhole: 1 }))).toBe('withinCap');
     // The same saving outside the cap leaves the cap's verdict where it was.
-    expect(capStatus(run([saving('xelse', above + 1, false)], { xelse: 1 }))).toBe(
-      'aboveCapWithinMargin',
-    );
+    expect(capStatus(run([saving('xelse', above + 1, false)], { xelse: 1 }))).toBe('aboveMargin');
   });
 
   it('costs a benefit from HMRC’s rows on the spending side, with their sign, grown with its line', () => {

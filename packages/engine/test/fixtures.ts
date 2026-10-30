@@ -57,7 +57,7 @@ export function loadDataset(): Required<Dataset> {
   );
   return {
     sources: parseSources(readJson('sources/sources.json')),
-    vintage: parseVintage(readJson('vintages/obr-2026-03/vintage.json')),
+    vintage: parseVintage(readJson('vintages/obr-2026-10/vintage.json')),
     rules: parseRules(readJson('rules/charter-2026-02.json')),
     levers,
     households: parseHouseholds(readJson('reference/uk-households.json')),
@@ -170,12 +170,12 @@ export function filledFrom(template: string | undefined, text: string | undefine
 export const TOGGLE: Partial<LeverControl> = { kind: 'toggle', unit: 'bool', min: 0, max: 1 };
 
 export const FORECAST_YEARS = [
-  '2025-26',
   '2026-27',
   '2027-28',
   '2028-29',
   '2029-30',
   '2030-31',
+  '2031-32',
 ] as const;
 
 /**

@@ -7,8 +7,8 @@
   "source": { "sourceId": "hmt-charter-2025-autumn", "paragraph": "3.6-3.11" },
   "assessment": {
     "formalCadence": "Once a year, at the autumn Budget, by the Office for Budget Responsibility.",
-    "nextFormalAssessmentOn": "2026-10-28",
-    "note": "The March 2026 forecast was not a formal assessment. The forecast published on 28 October 2026 will cover 2027-28 to 2031-32, making 2029-30 the third year and switching both rules to their rolling form."
+    "lastFormalAssessmentOn": "2026-10-28",
+    "note": "The OBR assessed the rules formally at the Budget of 28 October 2026. Its forecast covers 2027-28 to 2031-32, so 2029-30 is the third year and both rules are in their rolling form; the next formal assessment is at the next autumn Budget."
   },
   "escapeClause": {
     "text": "In the event of an emergency, or a significant negative economic shock to the UK economy, the Chancellor of the Exchequer may temporarily suspend the fiscal mandate and supplementary targets. When making this determination, the Chancellor of the Exchequer must write to the OBR seeking its assessment of the severity of the shock, and its potential impact on the public finances.",

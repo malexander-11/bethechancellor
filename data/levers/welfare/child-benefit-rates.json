@@ -118,7 +118,7 @@
     "uprating": {
       "method": "growWithSeries",
       "head": "childBenefit",
-      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for child benefit spending (Table 4.6), following ADR-0004."
+      "note": "Shifted to the start year and scaled by the OBR October 2026 forecast for child benefit spending (Table 4.6), following ADR-0004."
     },
     "caveats": [
       "HMRC's estimates are on its Spring Statement 2025 baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the OBR's child benefit spending forecast; the level is not rebased. HMRC deferred its 2026 edition to review key assumptions.",

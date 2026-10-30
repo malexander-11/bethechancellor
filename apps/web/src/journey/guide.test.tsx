@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 import { finetune, glossary } from '../data';
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 const intro = () => document.querySelector('.intro') as HTMLElement;
 
 function at(path: string) {
@@ -38,7 +38,7 @@ describe('the head of every screen', () => {
     // A tap opens the definition beside the word, and Escape closes it (Phase 25): a phone has
     // no hover, so a tooltip alone was out of reach. The briefing is plain copy (ADR-0031); the
     // priorities explain the manifesto where they name it.
-    at(`/pm?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
+    at(`/pm?${BASE}&g=st.1`);
     const word = screen.getByRole('button', { name: 'manifesto' });
     const term = word.closest('.term') as HTMLElement;
     const short = `(${glossary.terms.manifesto?.short})`;
@@ -100,7 +100,7 @@ describe('the head of every screen', () => {
   });
 
   it('follows step 4’s screens, and the cover is an invitation with no road', () => {
-    const first = at(`/finetune/spending?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
+    const first = at(`/finetune/spending?${BASE}&g=st.3_pr.defence`);
     expect(screen.getByText('Step 4 of 6')).toBeInTheDocument();
     expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
     expect(screen.getByText(finetune.spending.lead)).toBeInTheDocument();
@@ -166,13 +166,12 @@ describe('the head of every screen', () => {
   it('offers no way round step 4: no screen links to every lever (Phase 26)', () => {
     // Every lever is a policy on step 4, so the desk and the links to it have gone: from the
     // footer, from fine-tuning and from everywhere else.
-    const estimate = 'M=rate.0.75_rpi.0.5';
     for (const path of [
       `/outlook?${BASE}`,
-      `/pm?${BASE}&g=st.1&${estimate}`,
-      `/finetune/tax?${BASE}&g=st.3_pr.defence&${estimate}`,
-      `/finetune/spending?${BASE}&g=st.3_pr.defence&${estimate}`,
-      `/review?${BASE}&g=st.4_pr.defence&${estimate}`,
+      `/pm?${BASE}&g=st.1`,
+      `/finetune/tax?${BASE}&g=st.3_pr.defence`,
+      `/finetune/spending?${BASE}&g=st.3_pr.defence`,
+      `/review?${BASE}&g=st.4_pr.defence`,
     ]) {
       const view = at(path);
       expect(screen.queryByRole('link', { name: /Every (tax |spending )?lever/ }), path).toBeNull();

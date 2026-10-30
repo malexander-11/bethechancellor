@@ -295,7 +295,7 @@ describe('fine-tune tax and spend: one card a decision', () => {
   });
 
   it('warns when two levers overlap: the April 2027 freeze against a fuel duty cut', () => {
-    at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&M=rate.0.75_rpi.0.5&L=fuel.-10`);
+    at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&L=fuel.-10`);
     // The cut is the cost-of-living flagship's own, so its decision is open on arrival and fuel
     // duty is a row naming that flagship, with the way back to it, not a scale that could undo it.
     expect(decision('Change fuel duty')).toHaveAttribute('aria-expanded', 'true');

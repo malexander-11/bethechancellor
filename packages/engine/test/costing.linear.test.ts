@@ -51,7 +51,6 @@ const RATE = linear('xrate');
 describe('linear costings on a published per-unit table', () => {
   it('reproduces the published figures when the start year is the first published year', () => {
     const e = effectOf(RATE, 1, { implementationYear: '2026-27' });
-    expect(e.receipts['2025-26']).toBe(0);
     expect(e.receipts['2026-27']).toBeCloseTo(1000, 6);
     expect(e.receipts['2027-28']).toBeCloseTo(1200, 6);
     expect(e.receipts['2028-29']).toBeCloseTo(1300, 6);

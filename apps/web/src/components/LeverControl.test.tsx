@@ -29,8 +29,8 @@ describe('the lever helpers', () => {
     expect(health?.to).toBe('£236.6bn');
     expect(health?.note).toBe('in 2028-29');
     expect(health?.real?.span).toBe('2026-27 to 2028-29');
-    expect(health?.real?.fromPct).toBeCloseTo(2.9, 1);
-    expect(health?.real?.toPct).toBeCloseTo(3.9, 1);
+    expect(health?.real?.fromPct).toBeCloseTo(2.7, 1);
+    expect(health?.real?.toPct).toBeCloseTo(3.8, 1);
     expect(levelChange(lever('rvfrz'), 1)).toBeNull();
   });
 

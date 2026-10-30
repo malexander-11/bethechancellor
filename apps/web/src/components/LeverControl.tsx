@@ -30,7 +30,7 @@ export function plannedWords(lever: Lever): string {
 export { effectWords };
 
 const POLICY_YEARS = policyYearsOf(vintage);
-const IMPLEMENTATION_YEAR = vintage.years.forecast[1] ?? vintage.years.forecast[0] ?? '';
+const IMPLEMENTATION_YEAR = vintage.years.policyStart;
 const DEFLATOR = vintage.economy.gdpDeflator ? deflatorIndex(vintage) : null;
 
 /** A promise this lever is watched by, and whether the current setting crosses it. */

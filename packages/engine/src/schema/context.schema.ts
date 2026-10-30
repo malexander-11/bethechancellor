@@ -99,7 +99,7 @@ export const contextFileSchema = z.strictObject({
   vintageId: z.string().min(1),
   adviser: z.string().min(1),
   intro: z.string().min(1),
-  readings: z.array(contextReadingSchema).min(1),
+  readings: z.array(contextReadingSchema).default([]),
   decisionsSinceForecast: z.array(decisionSinceForecastSchema).default([]),
   inTray: z.array(inTrayItemSchema).default([]),
   briefing: briefingFiguresSchema.optional(),

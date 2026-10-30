@@ -61,7 +61,7 @@ describe('the Prime Minister signs off (Phase 25, R14)', () => {
   });
 
   it('says a needed break will follow them, when the rules need it', () => {
-    // Health above its plan is paid for by the penny: without it the day-to-day rule is missed.
+    // The programme is paid for by the penny: without it the day-to-day rule is missed.
     const { line } = signOff(['nhs'], NEEDED_LOCK_BREAK);
     expect(line?.key).toBe('broken');
     expect(line?.line.text).toMatch(/^Breaking the tax lock will follow us to the next election\./);

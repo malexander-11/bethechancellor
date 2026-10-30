@@ -5,6 +5,19 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The game plays on the OBR's October 2026 forecast, with the Budget's measures in it: a new vintage
+  typed from the Economic and fiscal outlook of 28 October 2026 (`obr-2026-10`), the March 2026
+  vintage kept for old links. The forecast is the estimate: the context carries no readings, so
+  nothing is suggested and a link's own economic settings are dropped with a note. A vintage now
+  names its `policyStart`, the April after its fiscal event, as the first year a measure can take
+  effect, in place of the second forecast year. The welfare cap is assessed on the OBR's adjusted
+  figure, which the October forecast puts £2.8bn above the cap and margin before any measure; the
+  stability rule, now in its rolling form, is still judged against a surplus at a Budget, with the
+  0.5% of GDP range reported beside it; and the fiscal-rules promise, the room a broken promise
+  leaves and the review's yardstick read the two fiscal rules, not the cap. Every derived lever is
+  re-derived on the new series and runs to 2031-32; the macro levers' baselines are October's; the
+  reception's words no longer measure from March. Budget day's word budget rises to 470 to hold the
+  welfare cap in the rules line.
 - The pipeline extracts Budget 2026's Table 6.1 of policy decisions (98 measures, 2026-27 to
   2031-32) to `data/derived/hmt-budget-2026-table-6-1.raw.json` from a registered copy of the
   Treasury's workbook, and the sources registry gains the Budget 2026 document, its policy costings,

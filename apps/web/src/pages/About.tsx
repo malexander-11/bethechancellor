@@ -77,9 +77,8 @@ export function AboutPage() {
       </p>
       <h3>Current baseline</h3>
       <p>
-        {vintage.event}, published {vintage.publishedOn}. The next OBR forecast accompanies the
-        Budget on 28 October 2026; the data will be rebased when it appears and this version will
-        remain available for old links.
+        {vintage.event}, published {vintage.publishedOn}. The OBR forecasts twice a year; the data
+        is rebased when a new forecast appears, and each version stays available for old links.
       </p>
 
       <h2 id="limits">What the game does not do</h2>

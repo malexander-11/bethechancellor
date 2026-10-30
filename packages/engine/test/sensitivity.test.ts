@@ -13,23 +13,23 @@ const run = (leverValues: Record<string, number>, extra: Record<string, unknown>
   });
 
 describe('macro assumption sliders use the OBR sensitivities', () => {
-  it('interest rates +1pp adds £15bn to borrowing in 2030-31 and no extra interest of its own', () => {
+  it('interest rates +1pp adds £16bn to borrowing in 2031-32 and no extra interest of its own', () => {
     const o = run({ rate: 1 });
     expect(
-      (o.paths.policy.psnb['2030-31'] ?? 0) - (base.paths.policy.psnb['2030-31'] ?? 0),
-    ).toBeCloseTo(15000, 6);
+      (o.paths.policy.psnb['2031-32'] ?? 0) - (base.paths.policy.psnb['2031-32'] ?? 0),
+    ).toBeCloseTo(16000, 6);
     expect(
       (o.paths.policy.psnb['2026-27'] ?? 0) - (base.paths.policy.psnb['2026-27'] ?? 0),
-    ).toBeCloseTo(10000, 6);
-    expect(o.paths.deltas.debtInterest['2030-31']).toBe(0);
-    expect(o.paths.deltas.marginalRatePct['2029-30']).toBeCloseTo(5.5, 9);
+    ).toBeCloseTo(7000, 6);
+    expect(o.paths.deltas.debtInterest['2031-32']).toBe(0);
+    expect(o.paths.deltas.marginalRatePct['2029-30']).toBeCloseTo(6.7, 9);
     const stability = o.verdicts.find((v) => v.ruleId === 'stability');
-    expect(stability?.headroomGbpm).toBeCloseTo(23600 - 15000, 6);
+    expect(stability?.headroomGbpm).toBeCloseTo(14500 - 13000, 6);
     expect(o.attribution).toHaveLength(1);
     expect(o.attribution[0]).toMatchObject({
       kind: 'macro',
       code: 'rate',
-      currentBudgetGbpm: 15000,
+      currentBudgetGbpm: 13000,
     });
     expect(o.warnings.length).toBeGreaterThan(0);
   });
@@ -37,33 +37,33 @@ describe('macro assumption sliders use the OBR sensitivities', () => {
   it('interest rates −1pp lowers borrowing symmetrically', () => {
     const o = run({ rate: -1 });
     expect(
-      (o.paths.policy.psnb['2030-31'] ?? 0) - (base.paths.policy.psnb['2030-31'] ?? 0),
-    ).toBeCloseTo(-15000, 6);
+      (o.paths.policy.psnb['2031-32'] ?? 0) - (base.paths.policy.psnb['2031-32'] ?? 0),
+    ).toBeCloseTo(-16000, 6);
   });
 
-  it('growth +0.1pp a year lowers borrowing by £8bn in 2030-31 and compounds the GDP denominators', () => {
+  it('growth +0.1pp a year lowers borrowing by £9bn in 2031-32 and compounds the GDP denominators', () => {
     const o = run({ ngdp: 0.1 });
     expect(
-      (o.paths.policy.psnb['2030-31'] ?? 0) - (base.paths.policy.psnb['2030-31'] ?? 0),
-    ).toBeCloseTo(-8000, 6);
+      (o.paths.policy.psnb['2031-32'] ?? 0) - (base.paths.policy.psnb['2031-32'] ?? 0),
+    ).toBeCloseTo(-9000, 6);
     expect(
-      (o.paths.policy.nominalGdpFy['2030-31'] ?? 0) /
-        (base.paths.policy.nominalGdpFy['2030-31'] ?? 1),
+      (o.paths.policy.nominalGdpFy['2031-32'] ?? 0) /
+        (base.paths.policy.nominalGdpFy['2031-32'] ?? 1),
     ).toBeCloseTo(1.001 ** 5, 9);
     expect(o.paths.policy.psnflPctGdp['2029-30']).toBeLessThan(
       base.paths.policy.psnflPctGdp['2029-30'] ?? 0,
     );
   });
 
-  it('RPI is asymmetric: +1pp costs £11bn, −1pp saves £10bn', () => {
+  it('RPI +1pp costs £11bn in 2031-32, and −1pp saves the same: the OBR gives one figure', () => {
     expect(
-      (run({ rpi: 1 }).paths.policy.psnb['2030-31'] ?? 0) -
-        (base.paths.policy.psnb['2030-31'] ?? 0),
+      (run({ rpi: 1 }).paths.policy.psnb['2031-32'] ?? 0) -
+        (base.paths.policy.psnb['2031-32'] ?? 0),
     ).toBeCloseTo(11000, 6);
     expect(
-      (run({ rpi: -1 }).paths.policy.psnb['2030-31'] ?? 0) -
-        (base.paths.policy.psnb['2030-31'] ?? 0),
-    ).toBeCloseTo(-10000, 6);
+      (run({ rpi: -1 }).paths.policy.psnb['2031-32'] ?? 0) -
+        (base.paths.policy.psnb['2031-32'] ?? 0),
+    ).toBeCloseTo(-11000, 6);
   });
 
   it('snaps values to the control step and ignores unknown codes with a warning', () => {
@@ -73,9 +73,8 @@ describe('macro assumption sliders use the OBR sensitivities', () => {
   });
 
   it('gilt yields three-quarters of a point up shrink headroom by three-quarters of the 2029-30 sensitivity', () => {
-    // September 2026's gilt yields against the March forecast's (the estimate's rates setting).
     const o = run({ rate: 0.75 });
     const stability = o.verdicts.find((v) => v.ruleId === 'stability');
-    expect(stability?.headroomGbpm).toBeCloseTo(23600 - 0.75 * 15000, 6);
+    expect(stability?.headroomGbpm).toBeCloseTo(14500 - 0.75 * 13000, 6);
   });
 });

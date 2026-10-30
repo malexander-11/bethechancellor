@@ -3,9 +3,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 /** Two priorities agreed, fine-tuning done, on today's estimate: at the review. */
-const G = 'g=st.4_pr.safer-streets+defence&M=rate.0.75_rpi.0.5';
+const G = 'g=st.4_pr.safer-streets+defence';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -20,7 +20,7 @@ const changeIn = (region: HTMLElement, name: string) => within(region).getByRole
 
 describe('step 5: deliver the Budget', () => {
   it('sends a game that has not finished fine-tuning back to where it is', () => {
-    at(`/review?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5`);
+    at(`/review?${BASE}&g=st.3_pr.defence`);
     expect(screen.getByRole('heading', { level: 1, name: 'Fine-tune tax' })).toBeInTheDocument();
   });
 
@@ -80,13 +80,15 @@ describe('step 5: deliver the Budget', () => {
     const position = part(/^Where that leaves you/);
     expect(
       within(position).getByText(
-        /^Headroom goes from £6\.8bn to £\d+\.\dbn in 2029-30\. Taxes raise £\d+\.\dbn; day-to-day spending adds £\d+\.\dbn net; less borrowing saves £\d\.\dbn in interest\./,
+        /^Headroom goes from £14\.5bn to £\d+\.\dbn in 2029-30\. Taxes raise £\d+\.\dbn; day-to-day spending adds £\d+\.\dbn net; less borrowing saves £\d\.\dbn in interest\./,
       ),
     ).toBeInTheDocument();
     expect(
       within(position).getByText(/^Who pays most: business, £\d+\.\dbn in 2029-30\.$/),
     ).toBeInTheDocument();
-    expect(within(position).getByText('You meet both fiscal rules.')).toBeInTheDocument();
+    expect(
+      within(position).getByText('You meet both fiscal rules, but miss the welfare cap by £2.8bn.'),
+    ).toBeInTheDocument();
     // Employer National Insurance keeps the tax lock's words and strains its spirit: the Prime
     // Minister says so, in place of the bare amber tag (Phase 25).
     expect(
@@ -114,20 +116,17 @@ describe('step 5: deliver the Budget', () => {
     expect(within(tax).queryByText(/raises £0\.0bn/)).toBeNull();
   });
 
-  it('lists what is still on the desk, and says a thin margin is thin (Phase 25)', () => {
-    const thin = at(`/review?${BASE}&${G}&L=moj.10`);
+  it('says a thin margin is thin, and nothing of a desk the Budget left clear (Phase 25)', () => {
+    // Health 5% above its plan leaves under ten billion.
+    const thin = at(`/review?${BASE}&${G}&L=dhsc.5`);
     let position = part(/^Where that leaves you/);
     expect(
       within(position).getByText(/Your advisers call headroom under £10bn thin/),
     ).toBeInTheDocument();
-    expect(within(position).getByText('Still on your desk:')).toBeInTheDocument();
-    expect(within(position).getByText(/The defence plan’s last £4\.7bn/)).toBeInTheDocument();
-    expect(
-      within(position).getByText(/VAT on home electricity goes back to 5% in April 2027/),
-    ).toBeInTheDocument();
+    expect(within(position).queryByText('Still on your desk:')).toBeNull();
     thin.unmount();
-    // Each dealt with, and a margin to spare: nothing left on the desk, and no yardstick said.
-    at(`/review?${BASE}&${G}&L=moj.10_dip47.1_vatelec.1_iht.10_sdlt5.5`);
+    // A margin to spare: nothing on the desk, and no yardstick said.
+    at(`/review?${BASE}&${G}&L=moj.10`);
     position = part(/^Where that leaves you/);
     expect(within(position).queryByText('Still on your desk:')).toBeNull();
     expect(within(position).queryByText(/call headroom under/)).toBeNull();
@@ -157,7 +156,7 @@ describe('step 5: deliver the Budget', () => {
     // By its plain name and the engine's own margin (Phase 25).
     expect(
       within(position).getByText(
-        /^Missed on today’s estimate: the day-to-day rule by £\d+\.\dbn and the debt rule by £\d+\.\dbn\.$/,
+        /^Missed on these numbers: the day-to-day rule by £\d+\.\dbn and the welfare cap by £\d\.\dbn\.$/,
       ),
     ).toBeInTheDocument();
     expect(within(position).getByText('Breaks the manifesto: The tax lock')).toHaveClass(
@@ -199,7 +198,7 @@ describe('step 5: deliver the Budget', () => {
 
   it('prices every flagship with its sign: savings save, and one price throughout', () => {
     // The welfare bill (Phase 25, R4): the two savings read as savings, never as red costs.
-    at(`/review?${BASE}&g=st.4_pr.welfare-bill&M=rate.0.75_rpi.0.5&L=rvpip.1_csjmh.1`);
+    at(`/review?${BASE}&g=st.4_pr.welfare-bill&L=rvpip.1_csjmh.1`);
     const flagships = part(/^Flagship policies/);
     const saves = within(flagships).getAllByText(/^saves £\d+\.\dbn$/);
     expect(saves).toHaveLength(2);
@@ -209,7 +208,7 @@ describe('step 5: deliver the Budget', () => {
 
   it('shows a cut to a priority’s own budget as against it, and warns in amber when nothing delivers it', () => {
     // The adviser's usual health move on step 4 (−1%) with the NHS ranked: not a trimmed uplift.
-    at(`/review?${BASE}&g=st.4_pr.nhs&M=rate.0.75_rpi.0.5&L=dhsc.-1`);
+    at(`/review?${BASE}&g=st.4_pr.nhs&L=dhsc.-1`);
     const flagships = part(/^Flagship policies/);
     expect(
       within(flagships).getByText(/^Cuts against this priority: Health and social care · /),
@@ -228,7 +227,7 @@ describe('step 5: deliver the Budget', () => {
   });
 
   it('says when a priority is only started', () => {
-    at(`/review?${BASE}&g=st.4_pr.nhs&M=rate.0.75_rpi.0.5&L=mhclg.5`);
+    at(`/review?${BASE}&g=st.4_pr.nhs&L=mhclg.5`);
     expect(
       within(part(/^Flagship policies/)).getByText(
         /^It is started, not delivered: nothing delivers it in full yet\./,

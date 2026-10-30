@@ -176,7 +176,14 @@ describe('a finished Budget summed up', () => {
   });
 
   it('names a missed rule by its margin, and meets them when it does', () => {
-    expect(summariseBudget(data, read(WALK, SECURITY), outcomeOf).rules).toEqual({
+    // The October forecast misses the welfare cap before any measure: both fiscal rules met.
+    const capOnly = summariseBudget(data, read(WALK, SECURITY), outcomeOf).rules;
+    expect(capOnly.met).toBe(false);
+    expect(capOnly.welfareOnly).toBe(true);
+    expect(capOnly.missed).toHaveLength(1);
+    expect(capOnly.missed[0]).toMatch(/^the welfare cap by £\d+\.\dbn$/);
+    // The four-point rule brings capped welfare back under the cap and margin.
+    expect(summariseBudget(data, read({ ...WALK, rvpip: 1 }, SECURITY), outcomeOf).rules).toEqual({
       met: true,
       welfareOnly: false,
       missed: [],

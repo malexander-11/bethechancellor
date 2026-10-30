@@ -81,19 +81,19 @@ export function MethodologyPage() {
 
       <h2>The baseline</h2>
       <p>
-        Everything starts from the OBR&rsquo;s Economic and fiscal outlook of March 2026: borrowing,
-        the current budget, net financial liabilities, receipts, departmental and welfare spending
-        and debt interest, for 2024-25 to 2030-31. Shares of GDP use two denominators, as the OBR
-        does: financial-year GDP for flows such as borrowing, and GDP centred on end-March for the
-        debt stock. Where a figure had to be derived from rounded published tables it is flagged as
-        provisional.
+        Everything starts from the OBR&rsquo;s Economic and fiscal outlook of October 2026:
+        borrowing, the current budget, net financial liabilities, receipts, departmental and welfare
+        spending and debt interest, for 2025-26 to 2031-32, with 2024-25 carried from the March 2026
+        outlook. Shares of GDP use two denominators, as the OBR does: financial-year GDP for flows
+        such as borrowing, and GDP centred on end-March for the debt stock. Where a figure had to be
+        derived from rounded published tables it is flagged as provisional.
       </p>
 
       <h2>The rules</h2>
       <p>
         The <strong>stability rule</strong> requires the current budget (day-to-day spending against
-        revenue) to be in surplus in 2029-30. Once 2029-30 becomes the third year of the forecast,
-        from the Budget of 28 October 2026, the rule becomes rolling: the current budget must be in
+        revenue) to be in surplus in 2029-30. Since the Budget of 28 October 2026, where 2029-30
+        became the third year of the forecast, the rule is rolling: the current budget must be in
         balance or surplus in the third year. Balance allows a deficit of up to 0.5% of GDP between
         fiscal events only; at a fiscal event the test is a surplus. The{' '}
         <strong>investment rule</strong> requires public sector net financial liabilities to fall as

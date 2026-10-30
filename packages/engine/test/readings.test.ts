@@ -52,27 +52,27 @@ const read = (leverValues: Budget, game?: GamePermalink) => {
 };
 
 describe('the readings of a Budget', () => {
-  it('sits where the March forecast left it for an empty Budget', () => {
+  it('sits where the October forecast left it for an empty Budget', () => {
     const base = read({});
-    expect(base.stabilityHeadroomGbpm).toBeCloseTo(23600, -2);
+    expect(base.stabilityHeadroomGbpm).toBeCloseTo(14500, -2);
     expect(base.borrowingChangeGbpm).toBeCloseTo(0, 6);
     expect(base.budget2025Reversals).toBe(0);
     expect(base.publicServiceSpendingGbpm).toBe(0);
     expect(base.taxRisesGbpm).toBe(0);
     expect(base.taxCutsGbpm).toBe(0);
-    expect(base.rulesMissed).toBe(0);
-    // Above the cap but inside the 5% margin, as the March forecast has it.
-    expect(base.welfareCapStatus).toBe(1);
+    // The welfare cap, above its margin before any measure, is the one rule missed.
+    expect(base.rulesMissed).toBe(1);
+    expect(base.welfareCapStatus).toBe(2);
   });
 
-  it('measures from before the Budget, today’s estimate, not from March (Phase 25)', () => {
+  it('measures from before the Budget: the forecast itself, with nothing to estimate (Phase 25)', () => {
     const estimate = todaysEstimate(ds);
     const nothing = read(estimate);
     expect(nothing.borrowingChangeGbpm).toBeCloseTo(0, 6);
     expect(nothing.cumulativeBorrowingChangeGbpm).toBeCloseTo(0, 6);
     expect(nothing.taxTakeChangePp).toBeCloseTo(0, 6);
     expect(nothing.headroomChangeGbpm).toBeCloseTo(0, 6);
-    expect(nothing.stabilityHeadroomGbpm).toBeCloseTo(6850, -2);
+    expect(nothing.stabilityHeadroomGbpm).toBeCloseTo(14500, -2);
     expect(nothing.fiscalRulesMissed).toBe(0);
     expect(nothing.paidForStatus).toBe(1);
     // A cut and a rise elsewhere are both counted, never netted; health counts as protected.

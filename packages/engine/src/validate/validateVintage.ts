@@ -36,6 +36,9 @@ export function validateVintage(v: Vintage): string[] {
     if (forecast[i] !== nextFy(forecast[i - 1] ?? ''))
       problems.push(`forecast years must be consecutive at ${forecast[i]}`);
   }
+  if (!forecast.includes(v.years.policyStart)) {
+    problems.push(`policy start ${v.years.policyStart} must be a forecast year`);
+  }
 
   const policyYears = [inYear, ...forecast];
   const allYears = [...outturn, ...policyYears];

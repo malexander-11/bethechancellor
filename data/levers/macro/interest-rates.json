@@ -6,13 +6,15 @@
   "badge": "assumption",
   "title": "Interest rates (Bank Rate and gilt yields)",
   "shortTitle": "Interest rates",
-  "headline": "Markets now price gilts above the OBR's 4.5%. A point costs about £15bn.",
-  "description": "How much higher or lower interest rates are than the OBR assumed in March 2026, sustained across the forecast. Higher rates raise the cost of servicing government debt.",
+  "headline": "Gilts at 5.0% in the OBR's window. A point costs about £13bn by 2029-30.",
+  "description": "How much higher or lower interest rates are than the OBR assumed in October 2026, sustained across the forecast. Higher rates raise the cost of servicing government debt.",
   "baselinePolicy": {
-    "text": "OBR conditioning assumption, March 2026: Bank Rate averages 3.6% over 2026 to 2030; 10-year gilt yield 4.5%; 30-year gilt yield 5.3% (market prices in the 10 working days to 22 January 2026).",
+    "text": "OBR conditioning assumption, October 2026: Bank Rate averages 4.0% over 2026 and 2027; 10-year gilt yield 5.0% (market prices in the 10 working days to 19 August 2026).",
     "source": {
-      "sourceId": "obr-efo-2026-03",
-      "table": "Table 2.1"
+      "sourceId": "obr-efo-2026-10",
+      "table": "Table 2.1",
+      "paragraph": "2.5",
+      "page": "26"
     }
   },
   "control": {
@@ -31,18 +33,21 @@
   },
   "considerations": [
     {
-      "id": "rates-market-2026-09",
+      "id": "rates-window-2026-10",
       "kind": "market",
-      "direction": "costsMore",
+      "direction": "ambiguous",
       "magnitudeWords": "large",
       "alreadyInDirectCosting": false,
-      "text": "Gilt yields rose sharply after the March 2026 forecast. In September 2026 the 10-year yield was roughly 0.5 to 0.7 percentage points above the OBR's assumption and 30-year yields were the highest since 1998. Analysts estimated this alone removed about £10bn of headroom.",
+      "text": "The forecast's window closed on 19 August 2026, and the OBR took a later reading, the five working days to 15 September, for its debt interest. It notes the ten-year yield has ranged from about 4.5 to 5.5 per cent since March, a range it calls not unusual by historical standards.",
       "sources": [
         {
-          "sourceId": "press-investing-2026-09-11"
+          "sourceId": "obr-efo-2026-10",
+          "paragraph": "2.5"
         },
         {
-          "sourceId": "boe-iadb-bank-rate"
+          "sourceId": "obr-efo-2026-10",
+          "paragraph": "1.28",
+          "quote": "Gilt yields have recently been volatile, with the ten-year yield ranging from around 4.5 per cent to 5.5 per cent since March. But yields within this range are not unusual by historical standards."
         }
       ]
     },
@@ -55,8 +60,8 @@
       "text": "Higher rates also raise the interest cost of any extra borrowing you choose (shown as the mechanical debt-interest line). A full OBR forecast would also change growth and inflation in response; this tool does not.",
       "sources": [
         {
-          "sourceId": "obr-efo-2026-03",
-          "paragraph": "6.16"
+          "sourceId": "obr-efo-2026-10",
+          "paragraph": "7.32"
         }
       ]
     }

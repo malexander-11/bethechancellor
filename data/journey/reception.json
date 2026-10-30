@@ -16,7 +16,7 @@
             "label": "Change in spending on departments in the target year",
             "unit": "GBPm"
           },
-          "note": "Departments only: benefits have rules of their own. About a fifth of March’s £23.6bn headroom either way is felt; fifteen billion of cuts is a programme of them.",
+          "note": "Departments only: benefits have rules of their own. About a fifth of the Chancellor’s £14.5bn headroom either way is felt; fifteen billion of cuts is a programme of them.",
           "bands": [
             {
               "id": "deep",
@@ -450,7 +450,7 @@
             "label": "Headroom against the day-to-day rule",
             "unit": "GBPm"
           },
-          "note": "Ten billion is where commentators called the margin wafer-thin before the last Budget doubled it to £21.7bn; twenty is your advisers’ rule of thumb. Above about twenty-seven billion the margin is more than March left. The fall from March’s £23.6bn to today’s estimate came before any measure: dearer borrowing and prices since March.",
+          "note": "Ten billion is where commentators called the margin wafer-thin before Budget 2025 doubled it to £21.7bn; twenty is your advisers’ rule of thumb; above about twenty-seven billion the margin approaches the £29bn Chancellors have kept on average since 2010. The Chancellor’s own October 2026 margin sits in the modest band, with nothing of the player’s behind it.",
           "bands": [
             {
               "id": "missed",
@@ -485,30 +485,13 @@
                   "sourceId": "boe-fsr-2026-07"
                 }
               ],
-              "badge": "simulated",
-              "variants": [
-                {
-                  "when": {
-                    "measure": "headroomChangeGbpm",
-                    "above": -500
-                  },
-                  "text": "Headroom of {abs} is below the ten billion commentators called wafer-thin. Dearer borrowing and prices since March took it, not your measures.",
-                  "sources": [
-                    {
-                      "sourceId": "obr-efo-2026-03"
-                    },
-                    {
-                      "sourceId": "boe-iadb-gilt-10y"
-                    }
-                  ]
-                }
-              ]
+              "badge": "simulated"
             },
             {
               "id": "modest",
               "upTo": 20000,
               "points": 0,
-              "text": "Headroom of {abs}: less than March left, and smaller than the OBR’s typical forecast error of about {typicalError}.",
+              "text": "Headroom of {abs}: about half the margin Chancellors have kept since 2010. It is below the OBR’s usual forecast error of {typicalError}.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03",
@@ -521,7 +504,7 @@
               "id": "ample",
               "upTo": 27000,
               "points": 1,
-              "text": "Headroom of {abs}, above the twenty billion your advisers call comfortable and close to what March left. A buffer, as promised.",
+              "text": "Headroom of {abs}, above the twenty billion your advisers call comfortable and more than the Chancellor left. A buffer, as promised.",
               "sources": [
                 {
                   "sourceId": "hmt-tsc-budget-2026-letter"
@@ -535,7 +518,7 @@
             {
               "id": "plenty",
               "points": 1,
-              "text": "Headroom of {abs}, more than the £23.6bn March left. A wide buffer: money raised that this Budget does not spend.",
+              "text": "Headroom of {abs}, close to the £29bn margin Chancellors have kept on average since 2010. A wide buffer: money raised that this Budget does not spend.",
               "sources": [
                 {
                   "sourceId": "obr-efo-2026-03"
@@ -577,7 +560,7 @@
               "id": "flat",
               "upTo": 10000,
               "points": 0,
-              "text": "Borrowing is close to where it was before your Budget ({value}). Yields at about 5.3% against the OBR’s 4.5% matter more.",
+              "text": "Borrowing is close to where it was before your Budget ({value}). Gilt yields of 5.0% in the OBR’s window, and volatile since, matter more.",
               "sources": [
                 {
                   "sourceId": "boe-iadb-gilt-10y"
@@ -591,7 +574,7 @@
             {
               "id": "more",
               "points": -1,
-              "text": "Borrowing is {abs} higher than before your Budget: more gilts to sell where yields were already about 5.3% against 4.5%.",
+              "text": "Borrowing is {abs} higher than before your Budget: more gilts to sell. Ten-year yields have ranged from 4.5% to 5.5% since March.",
               "sources": [
                 {
                   "sourceId": "boe-iadb-gilt-10y"

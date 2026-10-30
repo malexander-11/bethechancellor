@@ -146,12 +146,12 @@
     "uprating": {
       "method": "growWithSeries",
       "head": "incomeTax",
-      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for this receipts head (ADR-0004)."
+      "note": "Shifted to the start year and scaled by the OBR October 2026 forecast for this receipts head (ADR-0004)."
     },
     "caveats": [
       "HMRC: the costs of raising an allowance do not scale linearly, so only HMRC's published points are used and the lever stops at HMRC's largest published change.",
       "Cuts use the same figures with the sign reversed, which HMRC does not publish and is an assumption here.",
-      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the March 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
+      "HMRC's estimates are on its Spring Statement 2025 indexed baseline for an April 2026 start. This tool shifts the profile to the chosen start year and scales it by the growth of the relevant OBR receipts head in the October 2026 forecast; the underlying level is not rebased. HMRC deferred its 2026 edition to review key assumptions."
     ]
   },
   "considerations": [

@@ -119,7 +119,9 @@ export function OutlookPage() {
         <h2 id="brief-calc" className="section-label">
           {WORDS.calc.heading}
         </h2>
-        <p className="brief__line">{WORDS.calc.intro} </p>
+        <p className="brief__line">
+          {path.steps.length > 0 ? WORDS.calc.intro : WORDS.calc.unmoved}{' '}
+        </p>
         <dl className="calc">
           <div className="calc__row">
             <dt>{WORDS.calc.forecast}</dt>

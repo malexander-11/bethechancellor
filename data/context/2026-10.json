@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "2026-10",
+  "title": "The Budget of 28 October 2026 and the OBR's forecast for it",
+  "asOf": "2026-10-30",
+  "vintageId": "obr-2026-10",
+  "adviser": "chief-economic-adviser",
+  "intro": "The OBR's October forecast is your baseline, with the Chancellor's measures already in it. Two days on, nothing has moved it.",
+  "readings": [],
+  "decisionsSinceForecast": [],
+  "inTray": [],
+  "briefing": {
+    "averageHeadroom": {
+      "gbpm": 29000,
+      "since": "2010",
+      "source": {
+        "sourceId": "obr-efo-2025-11",
+        "paragraph": "7.6",
+        "page": "162",
+        "quote": "the average margin (around £29 billion) that previous Chancellors have left themselves against meeting their fiscal mandates",
+        "note": "Paragraph 7.11 (p. 165) dates the record: the margin \"that previous Chancellors have left against their fiscal mandate since 2010\". The October 2026 EFO keeps the figure, paragraph 1.26: \"below the average margin of close to £30 billion held by Chancellors since 2010\"."
+      }
+    },
+    "giltSales": {
+      "gbpm": 250600,
+      "year": "2026-27",
+      "source": {
+        "sourceId": "dmo-remit-2026-10",
+        "paragraph": "2.3",
+        "page": "2",
+        "quote": "This increase in the NFR will be financed by gilt sales of £250.6 billion",
+        "note": "The net financing requirement rose to £258.6 billion at the Budget, £7.4 billion more than at the April revision; gilt sales meet £250.6 billion of it (£4.4 billion more than planned in April) and Treasury bills £8.0 billion."
+      }
+    }
+  }
+}

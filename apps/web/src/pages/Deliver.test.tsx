@@ -3,9 +3,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 /** A game that has agreed two priorities with the PM and reached the package. */
-const GAME = 'g=st.2_pr.safer-streets+defence&M=rate.0.75_rpi.0.5';
+const GAME = 'g=st.2_pr.safer-streets+defence';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -32,7 +32,7 @@ describe('build your Budget: the ways to deliver', () => {
     const sandbox = at(`/budget/deliver?${BASE}&L=itbr.1`);
     expect(h1('Your briefing')).toBeInTheDocument();
     sandbox.unmount();
-    at(`/budget/deliver?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
+    at(`/budget/deliver?${BASE}&g=st.1`);
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 
@@ -98,7 +98,7 @@ describe('build your Budget: the ways to deliver', () => {
   });
 
   it('says there is nothing to deliver when no priority is ranked, and leads back to the PM', () => {
-    at(`/budget/deliver?${BASE}&g=st.2&M=rate.0.75_rpi.0.5`);
+    at(`/budget/deliver?${BASE}&g=st.2`);
     expect(h1('Flagship policies')).toBeInTheDocument();
     expect(
       screen.getByText('Nothing is ranked yet, so there is nothing to deliver.'),
@@ -125,8 +125,9 @@ describe('build your Budget: the ways to deliver', () => {
     at(`/budget/deliver/2?${BASE}&${GAME}`);
     expect(within(bar()).getByText('0 of 2 priorities delivered')).toHaveClass('bar__short');
     expect(within(bar()).getByText(/Headroom, 2029-30/)).toBeInTheDocument();
-    // No target (Phase 24): the rules are the line.
-    expect(within(bar()).getByText('rules met')).toBeInTheDocument();
+    // No target (Phase 24): the rules are the line, and the welfare cap the October forecast
+    // misses before any measure is on it.
+    expect(within(bar()).getByText('Welfare cap missed by £2.8bn')).toBeInTheDocument();
     expect(within(bar()).queryByText(/target/)).toBeNull();
     const gap = () => box(/^Fill the funding gap in the defence investment plan/);
     const card = gap().closest('.choice') as HTMLElement;
@@ -180,15 +181,15 @@ describe('build your Budget: the ways to deliver', () => {
   });
 
   it('names a missed rule on the bar by its plain name and the engine’s own margin', () => {
-    // Investment up a tenth on today's estimate: the day-to-day headroom stays positive, the debt
-    // rule is missed (Phase 25, R13). The bar says which, and by how much.
-    at(`/budget/deliver?${BASE}&g=st.2_pr.homes-growth&M=rate.0.75_rpi.0.5&L=cdel.10`);
-    expect(barFigure()).toBe('£5.0bn');
-    expect(within(bar()).getByText('Debt rule missed by £4.5bn')).toHaveClass('bar__missed');
+    // Investment up a fifth: the day-to-day headroom stays positive, the debt rule is missed
+    // (Phase 25, R13). The bar says which, and by how much.
+    at(`/budget/deliver?${BASE}&g=st.2_pr.homes-growth&L=cdel.20`);
+    expect(barFigure()).toBe('£10.5bn');
+    expect(within(bar()).getByText(/^Debt rule missed by £\d+\.\dbn/)).toHaveClass('bar__missed');
   });
 
   it('prices investment on the debt rule, which it touches', () => {
-    at(`/budget/deliver?${BASE}&g=st.2_pr.homes-growth&M=rate.0.75_rpi.0.5`);
+    at(`/budget/deliver?${BASE}&g=st.2_pr.homes-growth`);
     const invest = box(/^Spend 10% more on public investment/).closest('.choice') as HTMLElement;
     expect(
       within(invest).getByText(/^On the debt rule: costs £\d+\.\dbn · leaves (−|£)/),
@@ -199,7 +200,7 @@ describe('build your Budget: the ways to deliver', () => {
   it('says which ways only make a start, and counts a ticked start as started, not delivered', async () => {
     // Graded delivery (Phase 25): the care down-payment starts the NHS priority; the health uplift
     // delivers it. The reason is a judgement, one fold away.
-    at(`/budget/deliver?${BASE}&g=st.2_pr.nhs&M=rate.0.75_rpi.0.5`);
+    at(`/budget/deliver?${BASE}&g=st.2_pr.nhs`);
     const card = (name: RegExp) => box(name).closest('.choice') as HTMLElement;
     const care = card(/^A down-payment on the National Care Service/);
     expect(within(care).getByText('Makes a start')).toBeInTheDocument();
@@ -241,7 +242,7 @@ describe('build your Budget: the ways to deliver', () => {
   });
 
   it('wears the red lines, the earliest starts and a later start on the options that carry them', async () => {
-    at(`/budget/deliver?${BASE}&g=st.2_pr.welfare-bill+families&M=rate.0.75_rpi.0.5`);
+    at(`/budget/deliver?${BASE}&g=st.2_pr.welfare-bill+families`);
     expect(h1(/^1st Get the welfare bill down/)).toBeInTheDocument();
     const twoChild = box(/Reinstate the two-child limit/);
     const twoChildCard = twoChild.closest('.choice') as HTMLElement;
@@ -332,7 +333,7 @@ describe('build your Budget: the ways to deliver', () => {
   });
 
   it('names the options it overlaps before either is chosen, and quotes the interaction once the other moves', () => {
-    const cost = 'g=st.2_pr.cost-of-living&M=rate.0.75_rpi.0.5';
+    const cost = 'g=st.2_pr.cost-of-living';
     const quiet = at(`/budget/deliver?${BASE}&${cost}`);
     const freeze = () => box(/^End the threshold freeze early/).closest('.choice') as HTMLElement;
     // Fine-tuning offers the basic rate; the two interact, so the card says so, quietly.
@@ -367,8 +368,8 @@ describe('flagship policies in basic mode: the best ways first (Phase 27, ADR-00
 
   it('shows defence’s pick and the plan’s gap on the desk, then every way, keeping the focus', () => {
     at(`/budget/deliver/2?${BASE}&${GAME}`);
-    // The uplift is the pick; the gap shows because the briefing puts it on the desk.
-    expect(shownWays()).toEqual(['dip-gap', 'defence-uplift']);
+    // The uplift is the pick, and nothing is on the desk to show beside it.
+    expect(shownWays()).toEqual(['defence-uplift']);
     const line = document.querySelector('.mode-line') as HTMLElement;
     expect(line).toHaveTextContent(/^A shortlist\./);
     expect(line.querySelector('.badge')).toBeNull();
@@ -386,7 +387,7 @@ describe('flagship policies in basic mode: the best ways first (Phase 27, ADR-00
     fireEvent.click(button);
     expect(screen.getByRole('button', { name: /^See every idea/ })).toBe(button);
     expect(within(line).getByRole('status')).toHaveTextContent('Only the best ideas are on show.');
-    expect(shownWays()).toEqual(['dip-gap', 'defence-uplift']);
+    expect(shownWays()).toEqual(['defence-uplift']);
     expect(window.localStorage.getItem('btc.mode.v1')).toBe('basic');
   });
 
@@ -398,8 +399,10 @@ describe('flagship policies in basic mode: the best ways first (Phase 27, ADR-00
 
   it('keeps a way chosen before the screen opened on show, beside the one it blocks', () => {
     at(`/budget/deliver/2?${BASE}&${GAME}&L=def3.1`);
-    expect(shownWays()).toEqual(['dip-gap', 'three-per-cent-now', 'defence-uplift']);
+    expect(shownWays()).toEqual(['three-per-cent-now', 'defence-uplift']);
     expect(box(/^Defence at 3% of GDP now/)).toBeChecked();
+    // The way it blocks is among every idea, and blocked there.
+    fireEvent.click(screen.getByRole('button', { name: 'See every idea (all 3 ways)' }));
     expect(box(/^Fill the funding gap in the defence investment plan/)).toHaveAttribute(
       'aria-disabled',
       'true',
@@ -407,7 +410,7 @@ describe('flagship policies in basic mode: the best ways first (Phase 27, ADR-00
   });
 
   it('offers one way to bring the welfare bill down: going ahead with the PIP cuts', () => {
-    at(`/budget/deliver?${BASE}&g=st.2_pr.welfare-bill&M=rate.0.75_rpi.0.5`);
+    at(`/budget/deliver?${BASE}&g=st.2_pr.welfare-bill`);
     expect(shownWays()).toEqual(['pip-changes']);
     expect(screen.getByRole('button', { name: 'See every idea (all 5 ways)' })).toBeInTheDocument();
   });

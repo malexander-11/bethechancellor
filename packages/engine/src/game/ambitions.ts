@@ -120,10 +120,11 @@ export function ambitionStatus(
   });
   // The promises are fixed: every one is in force from the first screen to the last.
   const promises = promiseBreaks(values, pm.promises, levers).map((report) => {
-    // The fiscal rules are judged by the rules themselves, not by a lever.
+    // The fiscal rules are judged by the rules themselves, not by a lever: the two fiscal rules,
+    // not the welfare cap, which the forecast can miss before any measure is moved.
     if (report.promise.judgedBy !== 'fiscalRules') return report;
     const missed = outcome.verdicts.some(
-      (v) => v.status === 'notMet' || v.status === 'aboveMargin',
+      (v) => (v.kind === 'currentBudget' || v.kind === 'stockFalling') && v.status === 'notMet',
     );
     return { ...report, kept: !missed };
   });

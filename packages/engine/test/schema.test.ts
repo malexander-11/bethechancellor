@@ -37,6 +37,7 @@ describe('every JSON file under data/ validates against its schema', () => {
     const covered = new Set([
       'sources/sources.json',
       'vintages/obr-2026-03/vintage.json',
+      'vintages/obr-2026-10/vintage.json',
       'rules/charter-2026-02.json',
       'reference/uk-households.json',
       'journey/advisers.json',

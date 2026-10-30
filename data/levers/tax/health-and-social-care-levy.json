@@ -116,7 +116,7 @@
     "uprating": {
       "method": "growWithSeries",
       "head": "nics",
-      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for National Insurance receipts, as the National Insurance sliders are (ADR-0004)."
+      "note": "Shifted to the start year and scaled by the OBR October 2026 forecast for National Insurance receipts, as the National Insurance sliders are (ADR-0004)."
     },
     "caveats": [
       "HMRC's figures for a one-point rise in each rate, added up and multiplied by 1.25: our arithmetic on official figures, with HMRC's usual allowance for behaviour and nothing more. HMRC calls larger changes approximate.",

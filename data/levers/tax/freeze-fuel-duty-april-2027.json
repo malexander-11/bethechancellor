@@ -84,7 +84,7 @@
     "uprating": {
       "method": "growWithSeries",
       "head": "fuelDuties",
-      "note": "Shifted to the start year and scaled by the OBR March 2026 forecast for fuel duty receipts, as the fuel duty slider is (ADR-0004)."
+      "note": "Shifted to the start year and scaled by the OBR October 2026 forecast for fuel duty receipts, as the fuel duty slider is (ADR-0004)."
     },
     "caveats": [
       "Freezes the April 2027 rise only; the rises after it go ahead from the lower rate, so the cost carries on. The Resolution Foundation puts the cost of freezing every year at over £5 billion a year by 2029-30.",

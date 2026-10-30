@@ -19,9 +19,9 @@ const lever = (code: string) => {
 describe('real terms', () => {
   it('chains the OBR financial-year deflator from 2024-25 = 1', () => {
     expect(deflator['2024-25']).toBe(1);
-    expect(deflator['2025-26']).toBeCloseTo(1.032, 6);
-    expect(deflator['2026-27']).toBeCloseTo(1.032 * 1.02, 6);
-    expect(deflator['2030-31']).toBeCloseTo(1.136063, 5);
+    expect(deflator['2025-26']).toBeCloseTo(1.034, 6);
+    expect(deflator['2026-27']).toBeCloseTo(1.034 * 1.026, 6);
+    expect(deflator['2031-32']).toBeCloseTo(1.171301, 5);
   });
 
   it('turns cash growth into growth a year after inflation', () => {

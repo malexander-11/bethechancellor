@@ -65,7 +65,7 @@ describe('a row in a decision’s card (ADR-0037)', () => {
       / · £13\.4bn more than planned in 2029-30$/,
     );
     expect(effectPhrase(lever('dhsc'), 1, effectAt({ dhsc: 1 }, 'dhsc'), '2029-30')).toMatch(
-      /^Grows 3\.\d% a year after rising prices \(planned: 2\.9%\) · £2\.4bn more than planned in 2029-30$/,
+      /^Grows 3\.\d% a year after rising prices \(planned: 2\.7%\) · £2\.4bn more than planned in 2029-30$/,
     );
     expect(effectPhrase(lever('vatfood'), 1, undefined, '2029-30')).toBe('');
   });
@@ -296,17 +296,17 @@ describe('a row in a decision’s card (ADR-0037)', () => {
     expect(
       screen.getByRole('radiogroup', { name: 'Health and social care' }),
     ).toHaveAccessibleDescription(
-      'Grows 2.9% a year after rising prices, as planned 1% less would save £2.4bn · 1% more would cost £2.4bn',
+      'Grows 2.7% a year after rising prices, as planned 1% less would save £2.4bn · 1% more would cost £2.4bn',
     );
     expect(
-      screen.getByText('Grows 2.9% a year after rising prices, as planned'),
+      screen.getByText('Grows 2.7% a year after rising prices, as planned'),
     ).toBeInTheDocument();
     expect(screen.queryByText('From the minister')).toBeNull();
     rerender(at(-1));
     // A cut to a growing budget cannot read as a rise.
     expect(
       screen.getByText(
-        /^Still grows 2\.4% a year after rising prices \(planned: 2\.9%\) · £2\.4bn less than planned in 2029-30$/,
+        /^Still grows 2\.2% a year after rising prices \(planned: 2\.7%\) · £2\.4bn less than planned in 2029-30$/,
       ),
     ).toBeInTheDocument();
     expect(screen.getByText('From the minister')).toBeInTheDocument();

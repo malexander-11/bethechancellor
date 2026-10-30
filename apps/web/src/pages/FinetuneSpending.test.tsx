@@ -127,7 +127,7 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     expect(within(schools).queryByText('Education Secretary')).toBeNull();
     expect(adviceOf(schools)).toBe('');
     expect(priceOf(schools)).toMatch(
-      /^Falls 0\.3% a year after rising prices, as planned1% less would save £\d\.\dbn · 1% more would cost £\d\.\dbn$/,
+      /^Falls 0\.4% a year after rising prices, as planned1% less would save £\d\.\dbn · 1% more would cost £\d\.\dbn$/,
     );
     // Cut, its adviser speaks, named on the line, its minister says what stops happening, and the
     // new path sits beside the plan.
@@ -135,7 +135,7 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     expect(adviceOf(schools)).toMatch(/^Director of Public Spending: \S/);
     expect(within(schools).getByText('Education Secretary')).toBeInTheDocument();
     expect(effectOf(schools)).toMatch(
-      /^Falls 0\.8% a year after rising prices \(planned: 0\.3%\) · £\d\.\dbn less than planned in 2029-30$/,
+      /^Falls 0\.9% a year after rising prices \(planned: 0\.4%\) · £\d\.\dbn less than planned in 2029-30$/,
     );
     expect(statusOf('Change health, schools and defence')).toMatch(/^1 chosen · saves £\d\.\dbn$/);
     held.unmount();
@@ -156,7 +156,7 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     against.unmount();
     // Past its flagship's value, a top-up stays a scale that shows its own level; a setting no
     // level matches says what it is (Phase 26).
-    const past = at(`/finetune/spending?${BASE}&g=st.3_pr.nhs&M=rate.0.75_rpi.0.5&L=dhsc.5`);
+    const past = at(`/finetune/spending?${BASE}&g=st.3_pr.nhs&L=dhsc.5`);
     const nhs = scale('Health and social care');
     expect(within(nhs).getByRole('radio', { name: '5% more' })).toBeChecked();
     expect(within(nhs).getByText('In your flagship policies')).toBeInTheDocument();
@@ -242,7 +242,7 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     );
     sandbox.unmount();
     // A game that has not yet agreed its priorities is sent back to them.
-    at(`/finetune/tax?${BASE}&g=st.1&M=rate.0.75_rpi.0.5`);
+    at(`/finetune/tax?${BASE}&g=st.1`);
     expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
   });
 

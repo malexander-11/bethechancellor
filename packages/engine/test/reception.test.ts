@@ -24,16 +24,17 @@ import {
   FRONT_LOADED,
   HEALTH_ABOVE_PLAN,
   HEALTH_CUT,
+  INVESTMENT,
   MOVES,
   NHS_START,
   PENNY,
   PRISONS,
+  PROGRAMME,
   SECURITY,
   SECURITY_FLAGSHIPS,
   TAXES_AT_THE_TOP,
   TWO_CHILD_LIMIT,
   gameWith,
-  latestContext,
   todaysEstimate,
   typicalError,
   type Budget,
@@ -41,7 +42,6 @@ import {
 
 const ds = loadDataset();
 const outcomeOf = outcomeOfFor(ds);
-const context = latestContext(ds);
 const typicalErrorGbpm = typicalError(ds);
 /** What the audiences' reasons call a lever. */
 const noun = (code: string) => {
@@ -161,23 +161,22 @@ describe('cards that agree with their ratings (Phase 25)', () => {
     if (modest?.points === 0) expect(modest.causes).toEqual([]);
   });
 
-  it('says a margin above twenty billion truly: close to March, or more than March left', () => {
+  it('says a margin truly: the Chancellor’s is modest, a big rise is plenty, a spending rise is thin', () => {
     const headroom = (values: Budget) =>
       by(room(values), 'markets').all.find((r) => r.rule === 'mk-headroom');
-    const march = formatGbpBn(headroomOf(run({})), 1);
-    // March's own headroom: above twenty billion and close to what March left.
+    // The Chancellor's own headroom: under twenty billion, set against the OBR's typical forecast
+    // error, the engine's own figure.
     const same = headroom({});
-    expect(bandOf(same)).toBe('ample');
-    expect(same?.text).toContain(march);
-    // A big broad tax rise: more than March left, and said so, with March's own figure.
+    expect(bandOf(same)).toBe('modest');
+    expect(same?.text).toContain(formatGbpBn(headroomOf(run({})), 1));
+    expect(same?.text).toContain(formatGbpBn(typicalErrorGbpm, 0));
+    // A big broad tax rise: more than the average margin since 2010, and said so.
     const more = headroom(BIG_BROAD_TAX_RISE);
     expect(bandOf(more)).toBe('plenty');
     expect(more?.text).toContain(formatGbpBn(headroomOf(run(BIG_BROAD_TAX_RISE)), 1));
-    expect(more?.text).toContain(march);
-    // Under twenty billion: set against the OBR's typical forecast error, the engine's own figure.
+    // Spending that leaves under ten billion: thin.
     const less = headroom({ dhsc: 5 });
-    expect(bandOf(less)).toBe('modest');
-    expect(less?.text).toContain(formatGbpBn(typicalErrorGbpm, 0));
+    expect(bandOf(less)).toBe('thin');
     expect(said(same, more, less)).toMatchSnapshot();
   });
 
@@ -199,14 +198,18 @@ describe('cards that agree with their ratings (Phase 25)', () => {
     expect(said(broad, top)).toMatchSnapshot();
   });
 
-  it('quotes one gilt yield across the files, and it is today’s', () => {
+  it('quotes one gilt yield across the files, and it is the forecast’s', () => {
     const files = [readJson('journey/reception.json'), readJson('journey/households.json')].map(
       (x) => JSON.stringify(x),
     );
-    for (const f of files) expect(f).not.toMatch(/5\.35%/);
-    const gilts = context.readings.find((r) => r.id === 'gilt-10y');
-    expect((gilts?.latest.value ?? 0).toFixed(1)).toBe('5.3');
-    expect(files.join(' ')).toMatch(/about 5\.3%/);
+    const assumed = ds.vintage.economy.conditioningAssumptions.giltYield10yPct?.value ?? 0;
+    expect(assumed.toFixed(1)).toBe('5.0');
+    for (const f of files) {
+      for (const quoted of f.match(/gilt yields? (?:were |at |of )?(?:about )?\d\.\d%/g) ?? []) {
+        expect(quoted.endsWith(`${assumed.toFixed(1)}%`), quoted).toBe(true);
+      }
+    }
+    expect(files.join(' ')).toMatch(/5\.0%/);
   });
 });
 
@@ -215,21 +218,22 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
   const ESTIMATE = todaysEstimate(ds);
   const PRIORITIES = gameWith(['nhs', ...SECURITY]);
   /** The three priorities, one way each and borders too, with nothing to pay for them. */
-  const THREE = { ...HEALTH_ABOVE_PLAN, ...SECURITY_FLAGSHIPS, home: 5 };
+  // Past both rules: the programme, with investment on top, misses the debt rule too.
+  const THREE = { ...PROGRAMME, ...INVESTMENT };
   const at = (policy: Budget, game: GamePermalink = PRIORITIES) =>
     room({ ...ESTIMATE, ...policy }, game);
   const rule = (list: Reception[], audience: Reception['audience'], id: string) =>
     by(list, audience).all.find((r) => r.rule === id);
 
-  it('measures the markets from before the Budget: doing nothing is Nervous, not Alarmed', () => {
+  it('measures the markets from before the Budget: doing nothing is Watchful', () => {
     const nothing = at({});
-    expect(by(nothing, 'markets').rating).toBe(2);
-    // Nothing moved, so borrowing has not changed: the economy since March is not the player's.
+    expect(by(nothing, 'markets').rating).toBe(3);
+    // Nothing moved, so borrowing has not changed.
     expect(rule(nothing, 'markets', 'mk-borrowing')?.points).toBe(0);
     const headroom = rule(nothing, 'markets', 'mk-headroom');
-    expect(headroom?.points).toBe(-1);
-    // Thin, in the words that say what took it since March.
-    expect(bandOf(headroom)).toBe('thin (headroomChangeGbpm)');
+    expect(headroom?.points).toBe(0);
+    // Modest: the Chancellor's own margin, with nothing of the player's behind it.
+    expect(bandOf(headroom)).toBe('modest');
     expect(headroom?.causes).toEqual([]);
     expect(said(headroom)).toMatchSnapshot();
   });
@@ -370,7 +374,11 @@ describe('graded delivery (Phase 25)', () => {
 
   it('a token three-tick earns no more with the public or the party than delivering the same priorities in full', () => {
     const token = room(TOKEN, THREE);
-    const full = room({ ...HEALTH_ABOVE_PLAN, ...DEFENCE_GAP, dfe: 5 }, THREE);
+    // Delivered in full and paid for from the top, crossing no red line.
+    const full = room(
+      { ...HEALTH_ABOVE_PLAN, ...DEFENCE_GAP, dfe: 5, ...ESTATES_AND_HOMES_PAY },
+      THREE,
+    );
     for (const audience of ['public', 'backbenchers'] as const) {
       expect(by(token, audience).rating, audience).toBeLessThanOrEqual(by(full, audience).rating);
     }
@@ -411,11 +419,12 @@ describe('three audiences, five steps', () => {
       expect(r.all).toHaveLength(audience?.rules.length ?? -1);
       expect(r.badge).toBe('simulated');
     }
-    // An empty Budget: the backbenchers and the public shrug, the markets take March's headroom.
+    // An empty Budget: the backbenchers and the public shrug, the markets watch the Chancellor's
+    // own modest headroom.
     const base = room({});
     expect(by(base, 'backbenchers').rating).toBe(3);
     expect(by(base, 'public').rating).toBe(3);
-    expect(by(base, 'markets').rating).toBe(4);
+    expect(by(base, 'markets').rating).toBe(3);
   });
 
   it('pins the public at the floor when a manifesto red line is crossed, whatever else happens', () => {

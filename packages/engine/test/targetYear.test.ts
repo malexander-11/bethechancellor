@@ -12,6 +12,7 @@ describe('Charter target-year logic', () => {
         outturn: ['2024-25'],
         inYear: '2025-26',
         forecast: ['2026-27', '2027-28', '2028-29', '2029-30', '2030-31'],
+        policyStart: '2027-28',
       },
       'vintage',
     );
@@ -25,6 +26,7 @@ describe('Charter target-year logic', () => {
         outturn: ['2025-26'],
         inYear: '2026-27',
         forecast: ['2027-28', '2028-29', '2029-30', '2030-31', '2031-32'],
+        policyStart: '2027-28',
       },
       'vintage',
     );
@@ -38,6 +40,7 @@ describe('Charter target-year logic', () => {
         outturn: ['2026-27'],
         inYear: '2027-28',
         forecast: ['2028-29', '2029-30', '2030-31', '2031-32', '2032-33'],
+        policyStart: '2028-29',
       },
       'vintage',
     );
@@ -51,6 +54,7 @@ describe('Charter target-year logic', () => {
         outturn: ['2024-25'],
         inYear: '2025-26',
         forecast: ['2026-27', '2027-28', '2028-29', '2029-30', '2030-31'],
+        policyStart: '2027-28',
       },
       'nextBudget',
     );
@@ -71,12 +75,14 @@ describe('Charter target-year logic', () => {
     });
     const v = outcome.verdicts.find((x) => x.ruleId === 'stability');
     expect(v?.rolling).toBe(true);
-    expect(v?.headroomGbpm).toBe(23600);
-    const gdp = ds.vintage.economy.nominalGdpFy.values['2029-30'] ?? 0;
+    // The third year of the next forecast is 2030-31, where the surplus is £21.7bn.
+    expect(v?.targetYear).toBe('2030-31');
+    expect(v?.headroomGbpm).toBe(21700);
+    const gdp = ds.vintage.economy.nominalGdpFy.values['2030-31'] ?? 0;
     expect(v?.toleranceGbpm).toBeCloseTo(0.005 * gdp, 6);
-    expect(v?.headroomToToleranceGbpm).toBeCloseTo(0.005 * gdp + 23600, 6);
+    expect(v?.headroomToToleranceGbpm).toBeCloseTo(0.005 * gdp + 21700, 6);
     const inv = outcome.verdicts.find((x) => x.ruleId === 'investment');
     expect(inv?.rolling).toBe(true);
-    expect(inv?.targetYear).toBe('2029-30');
+    expect(inv?.targetYear).toBe('2030-31');
   });
 });

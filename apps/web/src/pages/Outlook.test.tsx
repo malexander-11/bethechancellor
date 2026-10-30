@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from '../App';
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -59,9 +59,9 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     const first = part('Your headroom');
     const figure = within(first).getByText(/of breathing space in/);
     // Our estimate, not a published figure, and with no badge (ADR-0034).
-    expect(figure).toHaveTextContent(/^You start with £6\.8bn of breathing space in 2029-30\.$/);
+    expect(figure).toHaveTextContent(/^You start with £14\.5bn of breathing space in 2029-30\.$/);
     expect(document.querySelector('main .badge')).toBeNull();
-    expect(within(figure).getByText('£6.8bn').tagName).toBe('STRONG');
+    expect(within(figure).getByText('£14.5bn').tagName).toBe('STRONG');
     // The OBR's own record, an official figure, then why Chancellors keep a margin: one paragraph.
     expect(within(first).getByText(/Chancellors have kept/)).toHaveTextContent(
       /^Since 2010, Chancellors have kept about £29bn on average\. This builds in some safety for adverse economic impact\.$/,
@@ -92,7 +92,7 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     // official figure and then words.
     const gilts = within(second).getByText(/plans to sell/);
     expect(gilts).toHaveTextContent(
-      /^This year the government plans to sell £246bn of gilts, to fund its borrowing and repay old ones\. Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\.$/,
+      /^This year the government plans to sell £251bn of gilts, to fund its borrowing and repay old ones\. Lenders charge more when they doubt the sums\. Meeting the rules with headroom to spare keeps their trust\.$/,
     );
   });
 
@@ -114,22 +114,19 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
   it('shows how the headroom is calculated: what moved it, then the sums, adding up', () => {
     at(`/outlook?${BASE}`);
     const third = part('How the headroom is calculated');
-    // What moved the forecast, in words, before the sums. The inflation row is interest on
-    // index-linked gilts, so the line says debt, not spending.
-    expect(within(third).getByText(/^Since March, interest rates and inflation/)).toHaveTextContent(
-      /^Since March, interest rates and inflation have been higher than expected\. This means the government is paying more money to borrow, and paying more on debt linked to inflation\.$/,
+    // Nothing has moved the October forecast, so the sums are the OBR's own figure twice over.
+    expect(within(third).getByText(/^Nothing has moved the forecast/)).toHaveTextContent(
+      /^Nothing has moved the forecast since the OBR published it: the figure is the OBR’s own\.$/,
     );
     expect(rows()).toEqual([
-      ['The OBR’s March forecast', '£23.6bn'],
-      ['Higher interest rates', '−£11.3bn'],
-      ['Higher inflation', '−£5.5bn'],
-      ['Today’s estimate', '£6.8bn'],
+      ['The OBR’s October forecast', '£14.5bn'],
+      ['Today’s estimate', '£14.5bn'],
     ]);
     expect(third.querySelector('.badge')).toBeNull();
     // The rows add up as shown, and the last is the figure the briefing opens with.
     const shown = rows().map(([, figure]) => bn(figure));
-    expect(shown[0]! + shown[1]! + shown[2]!).toBeCloseTo(shown[3]!, 9);
-    expect(rows()[3]![1]).toBe(within(part('Your headroom')).getByRole('strong').textContent);
+    expect(shown[0]!).toBeCloseTo(shown[1]!, 9);
+    expect(rows()[1]![1]).toBe(within(part('Your headroom')).getByRole('strong').textContent);
     const main = document.querySelector('main')?.textContent ?? '';
     // Every placeholder filled.
     expect(main).not.toMatch(/\{[a-zA-Z]+\}/);
@@ -157,7 +154,6 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(screen.queryByRole('radiogroup')).toBeNull();
     expect(screen.queryByRole('radio')).toBeNull();
     expect(screen.queryByRole('slider')).toBeNull();
-    expect(screen.queryByText(/October forecast|October’s forecast/)).toBeNull();
     expect(document.querySelectorAll('.btn--primary')).toHaveLength(1);
     expect(screen.getByRole('button', { name: 'Set your priorities' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
@@ -172,14 +168,14 @@ describe('the briefing, in three parts (Phase 28, ADR-0030; plain copy, ADR-0031
     expect(await screen.findByText('What is this Budget for?')).toBeInTheDocument();
     await waitFor(() => {
       expect(search().get('g')).toBe('st.1');
-      expect(search().get('M')).toBe('rate.0.75_rpi.0.5');
+      expect(search().get('M')).toBeNull();
     });
   });
 
   it('keeps the game’s choices if the player comes back and sets off again', async () => {
-    at(`/outlook?${BASE}&g=st.3_pr.defence&M=rate.0.75_rpi.0.5&L=moj.10`);
+    at(`/outlook?${BASE}&g=st.3_pr.defence&L=moj.10`);
     // The briefing is the start of the road: a Budget already under way leaves it as it was.
-    expect(rows()[3]![1]).toBe('£6.8bn');
+    expect(rows()[1]![1]).toBe('£14.5bn');
     fireEvent.click(screen.getByRole('button', { name: 'Set your priorities' }));
     expect(await screen.findByText('What is this Budget for?')).toBeInTheDocument();
     await waitFor(() => {
@@ -198,7 +194,7 @@ describe('the briefing in basic mode (Phase 27; the same in both modes since ADR
     const main = () => document.querySelector('main') as HTMLElement;
     expect(main().getAttribute('data-mode')).toBe('basic');
     expect(headings()).toEqual(THREE);
-    expect(rows()).toHaveLength(4);
+    expect(rows()).toHaveLength(2);
     expect(screen.getByText(/^The second rule is the debt rule\./)).toBeInTheDocument();
     expect(document.querySelector('.mode-line')).toBeNull();
     expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);

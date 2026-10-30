@@ -14,7 +14,7 @@ import { BOARD_TEXT, countsWords } from '../board/words';
 import { gameData, guide } from '../data';
 import { SHARE_TEXT } from '../share/words';
 
-const BASE = 'v=1&f=obr2603&r=ch2602&i=2027';
+const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 const finished = (rest: string) => {
   const budget = readFinishedBudget(gameData, `${BASE}&g=st.${FINAL_STAGE}_${rest}`);
   if (!budget) throw new Error('not a finished Budget');
@@ -213,7 +213,7 @@ describe('the leaderboard (ADR-0044)', () => {
 
   it('leads back to the player’s own game where it stands', async () => {
     serve(() => listing(ENTRIES));
-    at(`/review?${BASE}&g=st.4_pr.defence&M=rate.0.75_rpi.0.5&L=moj.10`);
+    at(`/review?${BASE}&g=st.4_pr.defence&L=moj.10`);
     fireEvent.click(screen.getByRole('link', { name: BOARD_TEXT.footer }));
     await screen.findByRole('heading', { level: 2, name: first.title });
     expect(screen.getByRole('link', { name: BOARD_TEXT.back })).toHaveAttribute(
@@ -232,7 +232,7 @@ describe('an entry’s page (ADR-0044)', () => {
     at(`/leaderboard/${first.id}`);
     expect(await screen.findByRole('heading', { level: 1, name: first.title })).toBeVisible();
     expect(calls[0]?.path).toBe(`/api/budgets/${first.id}`);
-    expect(document.title).toContain(first.title);
+    await waitFor(() => expect(document.title).toContain(first.title));
     expect(document.querySelector('main img.share__picture')).toHaveAttribute(
       'src',
       `/api/card?${first.query}`,
