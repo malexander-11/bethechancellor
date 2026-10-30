@@ -5,6 +5,13 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The walk's last page is twenty groups, not every measure no card asks about (ADR-0049). The Budget
+  file groups the measures a reader would recognise under plain headings, such as help with bills
+  this winter, defence and Ukraine, or more money and powers for mayors, and leaves out the smallest
+  technical lines, which stay in the file for the record and the scorecard check. A tick or a cross
+  on a group is a vote on each measure in it, and "See more" says each one in its own words and the
+  lines of the Budget's table they come from. The validator holds the groups to twenty at most,
+  every measure in one group at most and none a card asks about.
 - ADR-0048 records the landing page and the news site's look: the headline, the three numbers, how
   it works and the chart of the headroom since March; the measure with the Treasury's figure on its
   face and "See more" for the rest; Approve and Remove; and the quieter panels, rules and column. It

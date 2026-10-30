@@ -706,7 +706,8 @@
   position: absolute;
 }
 
-/* The small print: one panel, a row a measure, its tick and cross beside it, each a 44px target. */
+/* The walk's last page (ADR-0049): one panel, a row a group of measures, its heading and "See more"
+   on the left and its tick and cross on the right, each a 44px target. */
 .small {
   margin: 16px 0 0;
   padding: 0;
@@ -717,21 +718,32 @@
 }
 
 .small__row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 12px;
-  padding: 8px 12px 8px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0 12px;
+  padding: 10px 12px 2px 16px;
   border-top: 1px solid var(--border);
-  font-size: 0.9375rem;
 }
 
 .small__row:first-child {
   border-top: 0;
 }
 
-.small__plain {
-  flex: 1 1 14em;
+.small__title {
+  margin: 10px 0 0;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.small__lines {
+  max-width: 36em;
+  margin: 0 0 6px;
+  padding-left: 18px;
+}
+
+.small__lines li {
+  margin: 0 0 4px;
 }
 
 .small__marks {
@@ -740,14 +752,15 @@
 }
 
 .small__mark {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   min-width: 44px;
   min-height: 44px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--accent);
-  font-size: 1.125rem;
-  font-weight: 700;
   cursor: pointer;
 }
 
@@ -767,8 +780,10 @@
   color: var(--red-ink);
 }
 
-.small__counts {
-  flex-basis: 100%;
+.small__counts,
+.small__row .votes__said {
+  grid-column: 1 / -1;
+  margin: 0 0 8px;
   color: var(--ink-2);
   font-size: 0.875rem;
 }

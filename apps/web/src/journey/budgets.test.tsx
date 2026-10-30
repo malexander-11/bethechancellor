@@ -35,8 +35,8 @@ const CAP = {
    * one figure; on the first, the welcome's line above them.
    */
   walk: 120,
-  /** The walk's last page: every measure no card asks about, a line and a tick or cross each. */
-  smallPrint: 760,
+  /** The walk's last page (ADR-0049): up to twenty groups, a heading and a tick or cross each. */
+  smallPrint: 160,
   /**
    * The balance page (ADR-0046, ADR-0047): the money, then the ways to find it while short, or the
    * priorities and the ways to find more.

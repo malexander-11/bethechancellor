@@ -7,7 +7,7 @@ import {
   gameImplementationYear,
   gameOutcomeOf,
   readFinishedBudget,
-  smallPrint,
+  restMeasures,
   summariseBudget,
   summaryWords,
 } from '@btc/engine';
@@ -173,9 +173,10 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
   ],
   // The small print (ADR-0046): every measure no card asks about, in plain words, and why the
   // ones a reader might expect to move cannot be.
-  'the small print': smallPrint(budget).flatMap((m) => [
-    m.plain,
-    ...(m.notMovable ? [m.notMovable.reason] : []),
+  // The walk's last page (ADR-0049): each group's heading, and each of its measures in its own words.
+  'the small print': budget.rest.flatMap((row) => [
+    row.title,
+    ...restMeasures(budget, row).map((m) => m.plain),
   ]),
   // The balance page (ADR-0046): what each option is and what one press does, and the page's own
   // words with their figures filled.

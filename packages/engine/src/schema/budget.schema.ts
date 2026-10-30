@@ -58,6 +58,17 @@ export const budgetThemeSchema = z.strictObject({
 });
 
 /**
+ * A row of the walk's last page (ADR-0049): measures no card asks about, grouped under one plain
+ * heading, voted on together and moving no money. "See more" lists each measure's own line.
+ */
+export const budgetRestRowSchema = z.strictObject({
+  id: slug,
+  /** What the measures do, as a heading: "Help with bills this winter". */
+  title: z.string().min(1).max(60),
+  measures: z.array(z.string().min(1)).min(1).max(8),
+});
+
+/**
  * The Budget the game starts from (ADR-0045): the one place a person is named, the scorecard its
  * measures join to, the published steps of the margin, the story in plain words with the figures
  * left as placeholders for the engine to fill, and every measure once.
@@ -84,6 +95,11 @@ export const budgetFileSchema = z
     measures: z.array(budgetMeasureSchema).min(1),
     /** The walk (ADR-0046): every measure a player can reverse, on one card of one theme. */
     themes: z.array(budgetThemeSchema).min(1).max(8),
+    /**
+     * The walk's last page (ADR-0049): the measures no card asks about that a reader would want to
+     * see, grouped; the rest stay in the list above for the record and the scorecard check.
+     */
+    rest: z.array(budgetRestRowSchema).min(1).max(20),
   })
   .superRefine((file, ctx) => {
     const themes = new Set<string>();
@@ -121,5 +137,25 @@ export const budgetFileSchema = z
         });
       ids.add(m.id);
       lines.add(m.line);
+    });
+    // The last page's rows: measures that exist, that no card asks about, each in one row.
+    const leverOf = new Map(file.measures.map((m) => [m.id, m.leverCode] as const));
+    const rows = new Set<string>();
+    const grouped = new Set<string>();
+    file.rest.forEach((row, r) => {
+      if (rows.has(row.id))
+        ctx.addIssue({ code: 'custom', message: `two rows ${row.id}`, path: ['rest', r, 'id'] });
+      rows.add(row.id);
+      row.measures.forEach((id, k) => {
+        const at = ['rest', r, 'measures', k];
+        if (!leverOf.has(id))
+          ctx.addIssue({ code: 'custom', message: `${id} is not a measure`, path: at });
+        const lever = leverOf.get(id);
+        if (lever && carded.has(lever))
+          ctx.addIssue({ code: 'custom', message: `${id} is asked about on a card`, path: at });
+        if (grouped.has(id))
+          ctx.addIssue({ code: 'custom', message: `${id} is in two rows`, path: at });
+        grouped.add(id);
+      });
     });
   });

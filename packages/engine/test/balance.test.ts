@@ -11,8 +11,10 @@ import {
   optionBack,
   optionNext,
   optionSteps,
+  parseBudget,
   promiseBreaks,
   promiseStrains,
+  restMeasures,
   smallPrint,
   validateDataset,
   type BalanceFile,
@@ -211,6 +213,30 @@ describe('the walk through the measures (ADR-0046)', () => {
     expect(small.length + ds.budget.measures.filter((m) => m.leverCode).length).toBe(
       ds.budget.measures.length,
     );
+  });
+
+  it('groups the last page into twenty rows at most, each measure once and on no card (ADR-0049)', () => {
+    const small = new Set(smallPrint(ds.budget).map((m) => m.id));
+    const grouped = ds.budget.rest.flatMap((row) => row.measures);
+    expect(ds.budget.rest.length).toBeLessThanOrEqual(20);
+    expect(new Set(grouped).size).toBe(grouped.length);
+    for (const id of grouped) expect(small.has(id), id).toBe(true);
+    for (const row of ds.budget.rest)
+      expect(restMeasures(ds.budget, row).map((m) => m.id)).toEqual(row.measures);
+  });
+
+  it('refuses a row with a measure on a card, one in two rows, or more than twenty rows', () => {
+    const carded = ds.budget.measures.find((m) => m.leverCode)?.id ?? '';
+    const [first, second] = ds.budget.rest;
+    const withCard = structuredClone(ds.budget);
+    withCard.rest[0]?.measures.push(carded);
+    expect(() => parseBudget(withCard)).toThrow(new RegExp(`${carded} is asked about on a card`));
+    const twice = structuredClone(ds.budget);
+    twice.rest[1]?.measures.push(first?.measures[0] ?? '');
+    expect(() => parseBudget(twice)).toThrow(/is in two rows/);
+    const many = structuredClone(ds.budget);
+    many.rest.push({ id: 'extra', title: 'One too many', measures: [] }, second!);
+    expect(() => parseBudget(many)).toThrow();
   });
 
   it('sums a card’s lines into one figure, on the scorecard’s own sign', () => {

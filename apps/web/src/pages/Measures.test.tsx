@@ -1,4 +1,4 @@
-import { cardMeasures, linesFigure, smallPrint } from '@btc/engine';
+import { cardMeasures, linesFigure, restMeasures } from '@btc/engine';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -219,18 +219,30 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     );
   });
 
-  it('ends on the small print: a tick or a cross each, a vote and nothing more, then the balance', async () => {
+  it('ends on the small print: grouped rows, a tick or a cross each voting on every measure in it, then the balance', async () => {
     serve(() => CLOSED);
     at(`/measures/other?${BASE}&${GAME}`);
     expect(h1(MEASURES_TEXT.smallTitle)).toBeInTheDocument();
     expect(screen.getByText(MEASURES_TEXT.smallLead)).toBeInTheDocument();
-    const rows = smallPrint(budget);
-    expect(document.querySelectorAll('.small__row')).toHaveLength(rows.length);
-    const first = rows[0];
-    const tick = screen.getByRole('button', { name: `${BOARD_TEXT.agree}: ${first?.plain}` });
+    // A row a group, as the Budget file lists them, no more than twenty (ADR-0049).
+    const rows = document.querySelectorAll('.small__row');
+    expect(rows).toHaveLength(budget.rest.length);
+    expect(rows.length).toBeLessThanOrEqual(20);
+    // Each row's See more says each of its measures in its own words, and where they come from.
+    const first = budget.rest[0];
+    const measures = restMeasures(budget, first ?? { measures: [] });
+    const row = rows[0] as HTMLElement;
+    const more = within(row).getByText(CARD_TEXT.more).closest('details') as HTMLElement;
+    expect(more).not.toHaveAttribute('open');
+    for (const m of measures) expect(within(more).getByText(m.plain)).toBeInTheDocument();
+    expect(more.querySelector('.mcard__source')?.textContent).toMatch(
+      /^Source: .*, Table 6\.1, lines? /,
+    );
+    // The tick is a vote for each measure in the row.
+    const tick = screen.getByRole('button', { name: `${BOARD_TEXT.agree}: ${first?.title}` });
     fireEvent.click(tick);
     expect(tick).toHaveAttribute('aria-pressed', 'true');
-    expect(stored().votes).toMatchObject({ [`m:${first?.id}`]: 1 });
+    for (const m of measures) expect(stored().votes).toMatchObject({ [`m:${m.id}`]: 1 });
     // A vote moves no money: nothing goes into the link.
     expect(search().get('L')).toBeNull();
     fireEvent.click(screen.getByRole('link', { name: MEASURES_TEXT.toBalance }));

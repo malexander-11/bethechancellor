@@ -1,4 +1,10 @@
-import { formatGbpBn, linesFigure, type BudgetCard, type BudgetMeasure } from '@btc/engine';
+import {
+  formatGbpBn,
+  linesFigure,
+  type BudgetCard,
+  type BudgetMeasure,
+  type BudgetRestRow,
+} from '@btc/engine';
 import { useEffect, useState } from 'react';
 import { measures as measureVotes, type Tally } from '../board/api';
 import { deviceCode, measureKey, myVote, rememberVote } from '../board/voter';
@@ -237,19 +243,31 @@ export function MeasureCard({
 }
 
 /**
- * One measure of the small print (ADR-0046): its plain line and a tick or a cross, the player's
- * vote and nothing more, since no lever moves it. Pressing the pressed mark again takes it back.
+ * One row of the walk's last page (ADR-0049): a few measures no card asks about under one plain
+ * heading, with a tick and a cross that are the player's vote on each of them and nothing more,
+ * since no lever moves them. "See more" lists each measure in its own words and the lines of the
+ * Budget's table they come from. Pressing the pressed mark again takes the vote back.
  */
-export function SmallPrintRow({ measure, voting }: { measure: BudgetMeasure; voting: Voting }) {
-  const [mine, setMine] = useState(() => myVote(measureKey(measure.id)));
-  const [tally, setTally] = useTally(measure.id, voting);
+export function SmallPrintRow({
+  row,
+  measures,
+  voting,
+}: {
+  row: BudgetRestRow;
+  measures: readonly BudgetMeasure[];
+  voting: Voting;
+}) {
+  const ids = measures.map((m) => m.id);
+  const first = ids[0] ?? '';
+  const [mine, setMine] = useState(() => myVote(measureKey(first)));
+  const [tally, setTally] = useTally(first, voting);
   const [said, setSaid] = useState('');
   const [busy, setBusy] = useState(false);
   async function answer(value: 1 | -1) {
     const next = mine === value ? 0 : value;
     setMine(next);
     setBusy(true);
-    const result = await castVote([measure.id], next, voting);
+    const result = await castVote(ids, next, voting);
     setBusy(false);
     if (result.tally) setTally(result.tally);
     setSaid(result.said);
@@ -259,16 +277,36 @@ export function SmallPrintRow({ measure, voting }: { measure: BudgetMeasure; vot
       type="button"
       className={`small__mark small__mark--${value === 1 ? 'agree' : 'disagree'}`}
       aria-pressed={mine === value}
-      aria-label={`${value === 1 ? BOARD_TEXT.agree : BOARD_TEXT.disagree}: ${measure.plain}`}
+      aria-label={`${value === 1 ? BOARD_TEXT.agree : BOARD_TEXT.disagree}: ${row.title}`}
       disabled={busy}
       onClick={() => answer(value)}
     >
-      <span aria-hidden="true">{value === 1 ? '✓' : '✗'}</span>
+      <AnswerIcon value={value} />
     </button>
   );
   return (
     <li className="small__row">
-      <span className="small__plain">{measure.plain}</span>
+      <div className="small__body">
+        <p className="small__title">{row.title}</p>
+        <details className="mcard__more small__more">
+          <summary>
+            {CARD_TEXT.more}
+            <span className="sr-only">: {row.title}</span>
+          </summary>
+          <div className="mcard__detail">
+            <ul className="small__lines">
+              {measures.map((m) => (
+                <li key={m.id}>{m.plain}</li>
+              ))}
+            </ul>
+            <p className="mcard__source">
+              {CARD_TEXT.source
+                .replace('{budget}', budget.title)
+                .replace('{lines}', linesWords(measures.map((m) => m.line)))}
+            </p>
+          </div>
+        </details>
+      </div>
       <span className="small__marks">
         {mark(1)}
         {mark(-1)}

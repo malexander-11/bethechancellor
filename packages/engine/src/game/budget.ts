@@ -3,6 +3,7 @@ import type {
   BudgetCard,
   BudgetFile,
   BudgetMeasure,
+  BudgetRestRow,
   BudgetTheme,
   ScorecardExtract,
 } from '../types/data.js';
@@ -144,6 +145,18 @@ export function cardOf(
 export function smallPrint(budget: BudgetFile): BudgetMeasure[] {
   const carded = new Set(budget.themes.flatMap((t) => t.cards.map((c) => c.lever)));
   return budget.measures.filter((m) => !m.leverCode || !carded.has(m.leverCode));
+}
+
+/** The measures a row of the walk's last page stands for, in the row's order (ADR-0049). */
+export function restMeasures(
+  budget: BudgetFile,
+  row: Pick<BudgetRestRow, 'measures'>,
+): BudgetMeasure[] {
+  const byId = new Map(budget.measures.map((m) => [m.id, m] as const));
+  return row.measures.flatMap((id) => {
+    const m = byId.get(id);
+    return m ? [m] : [];
+  });
 }
 
 /**

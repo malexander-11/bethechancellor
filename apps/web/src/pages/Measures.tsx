@@ -1,4 +1,4 @@
-import { ambitionStatus, cardMeasures, smallPrint, stageIndex } from '@btc/engine';
+import { ambitionStatus, cardMeasures, restMeasures, stageIndex } from '@btc/engine';
 import { Navigate, useParams } from 'react-router-dom';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
@@ -100,8 +100,13 @@ function MeasuresScreen({ page }: { page: string }) {
         </ul>
       ) : (
         <ul className="small">
-          {smallPrint(budget).map((m) => (
-            <SmallPrintRow key={m.id} measure={m} voting={voting} />
+          {budget.rest.map((row) => (
+            <SmallPrintRow
+              key={row.id}
+              row={row}
+              measures={restMeasures(budget, row)}
+              voting={voting}
+            />
           ))}
         </ul>
       )}

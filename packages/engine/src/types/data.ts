@@ -65,6 +65,7 @@ import type {
   budgetMeasureSchema,
   budgetCardSchema,
   budgetThemeSchema,
+  budgetRestRowSchema,
 } from '../schema/budget.schema.js';
 import type { balanceFileSchema, balanceOptionSchema } from '../schema/balance.schema.js';
 import type {
@@ -126,6 +127,7 @@ export type BudgetFact = z.infer<typeof budgetFactSchema>;
 export type BudgetMeasure = z.infer<typeof budgetMeasureSchema>;
 export type BudgetCard = z.infer<typeof budgetCardSchema>;
 export type BudgetTheme = z.infer<typeof budgetThemeSchema>;
+export type BudgetRestRow = z.infer<typeof budgetRestRowSchema>;
 export type BalanceFile = z.infer<typeof balanceFileSchema>;
 export type BalanceOption = z.infer<typeof balanceOptionSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;

@@ -918,5 +918,107 @@
         }
       ]
     }
+  ],
+  "rest": [
+    {
+      "id": "bills",
+      "title": "Help with bills this winter",
+      "measures": ["m1", "m4"]
+    },
+    {
+      "id": "energy",
+      "title": "Lower energy bills",
+      "measures": ["m71", "m17", "m69"]
+    },
+    {
+      "id": "charging",
+      "title": "Cheaper charging for electric cars",
+      "measures": ["m32", "m80"]
+    },
+    {
+      "id": "defence",
+      "title": "Defence and Ukraine",
+      "measures": ["m40", "m42", "m43", "m44"]
+    },
+    {
+      "id": "first-homes",
+      "title": "Help for first-time buyers",
+      "measures": ["m37", "m39"]
+    },
+    {
+      "id": "housing",
+      "title": "Social and supported housing",
+      "measures": ["m36", "m87"]
+    },
+    {
+      "id": "surcharge",
+      "title": "The council tax surcharge on high value homes",
+      "measures": ["m93"]
+    },
+    {
+      "id": "families",
+      "title": "Parents and carers",
+      "measures": ["m6", "m7", "m9"]
+    },
+    {
+      "id": "benefit-rules",
+      "title": "Two changes to benefit rules",
+      "measures": ["m8", "m48"]
+    },
+    {
+      "id": "jobs",
+      "title": "Jobs and training for young people",
+      "measures": ["m72", "m73", "m22"]
+    },
+    {
+      "id": "mayors",
+      "title": "More money and powers for mayors",
+      "measures": ["m20", "m21", "m23", "m24", "m25", "m76"]
+    },
+    {
+      "id": "growth",
+      "title": "Backing growing companies",
+      "measures": ["m27", "m28", "m29", "m30"]
+    },
+    {
+      "id": "shares",
+      "title": "A new tax on share deals",
+      "measures": ["m79"]
+    },
+    {
+      "id": "trade",
+      "title": "The India trade deal and steel tariffs",
+      "measures": ["m77", "m78"]
+    },
+    {
+      "id": "tariffs",
+      "title": "No tariffs on food, heating oil and fertiliser",
+      "measures": ["m10", "m16"]
+    },
+    {
+      "id": "parcels",
+      "title": "Customs duty on cheap parcels from abroad",
+      "measures": ["m95"]
+    },
+    {
+      "id": "infected-blood",
+      "title": "Infected blood compensation",
+      "measures": ["m82"]
+    },
+    {
+      "id": "student-loans",
+      "title": "A cap on student loan interest",
+      "measures": ["m83"]
+    },
+    {
+      "id": "services",
+      "title": "Pressures on public services",
+      "measures": ["m85", "m92", "m81"]
+    },
+    {
+      "id": "vehicles",
+      "title": "Red diesel, lorries and company cars",
+      "measures": ["m18", "m65", "m86"]
+    }
   ]
 }
