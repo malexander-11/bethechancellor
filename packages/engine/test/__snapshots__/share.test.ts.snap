@@ -17,7 +17,7 @@ exports[`a finished Budget summed up > says a Budget in words (snapshot, £ mask
     "title": "One change to the Chancellor’s Budget",
   },
   "rules met": {
-    "alt": "What’s your Budget? 5 changes to the Chancellor’s Budget. Tax: Employer National Insurance, 17%, raises £…bn; The basic rate of income tax, 21%, raises £…bn. Spending: Prisons and courts, 10% more, costs £…bn; Health and social care, 0.5% less, saves £…bn; Fund the defence plan’s gap, costs £…bn. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn. Labour backbenchers: Divided, 3 of 5. The markets: Reassured, 4 of 5. The public: Furious, 1 of 5.",
+    "alt": "What’s your Budget? 5 changes to the Chancellor’s Budget. Tax: Employer National Insurance, 17%, raises £…bn; The basic rate of income tax, 21%, raises £…bn. Spending: Prisons and courts, 10% more, costs £…bn; Health and social care, 0.5% less, saves £…bn; Defence plan gap, £…bn, costs £…bn. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn. Labour backbenchers: Divided, 3 of 5. The markets: Reassured, 4 of 5. The public: Furious, 1 of 5.",
     "description": "Taxes raise £…bn; day-to-day spending adds £…bn net; less borrowing saves £…bn in interest. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn.",
     "rules": "It meets both fiscal rules, but misses the welfare cap by £…bn.",
     "share": "5 changes to the Chancellor’s Budget. It meets both fiscal rules, but misses the welfare cap by £…bn. What’s your Budget?",

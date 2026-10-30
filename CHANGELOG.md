@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The defence plan's gap is shelved: the Budget funded it by moving capital to defence (Table 6.1
+  line 41), which is the lever now, so funding the gap again would count the same money twice. Old
+  links that fund it still work; the lever is off the spending screen and out of the minister,
+  incidence and household lists.
 - The Chancellor's Budget is the starting point (ADR-0045): the site opens on what the Budget of 28
   October 2026 did, told from the OBR's forecast and the Treasury's scorecard, the measures a player
   can change listed by what each does and the rest in a fold, and one button that starts a game from

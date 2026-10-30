@@ -1045,39 +1045,6 @@
       ]
     },
     {
-      "code": "dip47",
-      "role": "Defence Secretary",
-      "asking": {
-        "text": "The Defence Investment Plan’s own explainer says £4.7 billion over four years is still to be confirmed at this Budget. It is published, it is promised, and it is not yet paid for. I am asking you to confirm it.",
-        "short": "The Defence Investment Plan’s explainer says £4.7 billion over four years is still to be confirmed. Confirm it.",
-        "sources": [
-          {
-            "sourceId": "govuk-dip-funding-explainer",
-            "quote": "A further £4.7 billion over four years will be confirmed at Budget 2026, in a fair and balanced way."
-          }
-        ],
-        "badge": "simulated"
-      },
-      "whenRaised": [
-        {
-          "appliesWhen": {
-            "above": 0
-          },
-          "line": {
-            "text": "Confirmed. The plan is funded to £10.3 billion by reallocation and this closes the rest. What it does not do is take us to 3% of GDP any faster.",
-            "short": "Confirmed. This closes the plan’s funding gap; it does not take us to 3% of GDP any faster.",
-            "sources": [
-              {
-                "sourceId": "govuk-dip-funding-explainer",
-                "quote": "A further £4.7 billion over four years will be confirmed at Budget 2026, in a fair and balanced way."
-              }
-            ],
-            "badge": "simulated"
-          }
-        }
-      ]
-    },
-    {
       "code": "ufsm",
       "role": "Education Secretary",
       "asking": {

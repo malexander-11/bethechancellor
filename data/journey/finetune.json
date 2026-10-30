@@ -2899,25 +2899,6 @@
             "title": "Fund the defence plan",
             "items": [
               {
-                "code": "dip47",
-                "label": "Fund the plan’s gap",
-                "policies": [
-                  {
-                    "title": "Fund the defence plan’s gap",
-                    "sizes": [1],
-                    "advice": {
-                      "text": "The defence plan counts on this money, and nothing funds it yet.",
-                      "sources": [
-                        {
-                          "sourceId": "govuk-dip-funding-explainer"
-                        }
-                      ],
-                      "badge": "simulated"
-                    }
-                  }
-                ]
-              },
-              {
                 "code": "def3",
                 "label": "3% of GDP now, not in 2030-31",
                 "policies": [
