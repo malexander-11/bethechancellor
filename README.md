@@ -7,51 +7,53 @@ traced to an official source.
 Formerly _Be the Chancellor_. It was renamed in September 2026 so that it is not mistaken for the
 Institute for Fiscal Studies and Nesta tool of that name, which inspired it (ADR-0029).
 
-Status: **straight in, and an app (ADR-0047)**. The site opens straight on the first of the
-Chancellor's measures from the Budget of 28 October 2026, with one line naming the Budget and what
-it did in a fold, told from the OBR's October 2026 forecast and the Treasury's own scorecard
-(ADR-0045). The game walks through the Chancellor's measures a theme a page, and the player agrees
-or disagrees with each one. Disagreeing takes a measure out of their Budget, which saves money or
-gives it up. They then spend what they saved on their priorities, or find what they gave up, a fixed
-step at a time, and the headroom may never end below the Chancellor's. Then they deliver the Budget
-and hear how it lands. There is no slider anywhere and no forecast to guess: every game plans on the
-forecast with the Chancellor's measures in it, and the fiscal rules are the line to meet. There are
-no tabs and no hand-off to click through: every screen is a decision with a primary button and a way
-back, and the Budget lives in the link, so going back keeps every choice. The identity is
-Westminster's, set as an app (ADR-0047): Commons green, charcoal, restrained brass and Budget red,
-on white cards over a soft green-grey ground, the reader's own sans under headings in Fraunces; the
-money stays at the top of the screen and the way on at the foot, and the progress is four segments
-that fill as the player goes. The header is the name beside a drawn Budget box, and the footer two
-quiet links, to the page about the game and its sources and to the leaderboard (ADR-0033, ADR-0044).
-The words are plain (ADR-0024): no sentence a player meets runs past twenty words, and a readability
+Status: **a landing page, and a news site's look (ADR-0048)**. The site opens on a landing page: the
+Chancellor has delivered the Budget of 28 October 2026, and what would you change? It gives three
+numbers, how the game works, and the Budget's own chart of the headroom since March, told from the
+OBR's October 2026 forecast and the Treasury's own scorecard (ADR-0045), and one button starts. The
+game walks through the Chancellor's measures a theme a page, and the player approves or removes each
+one. Removing a measure takes it out of their Budget, which saves money or gives it up. They then
+spend what they saved on their priorities, or find what they gave up, a fixed step at a time, and
+the headroom may never end below the Chancellor's. Then they deliver the Budget and hear how it
+lands. There is no slider anywhere and no forecast to guess: every game plans on the forecast with
+the Chancellor's measures in it, and the fiscal rules are the line to meet. There are no tabs and no
+hand-off to click through: every screen is a decision with a primary button and a way back, and the
+Budget lives in the link, so going back keeps every choice. The identity is Westminster's, set as a
+news site's interactive (ADR-0048): Commons green, near-black ink and Budget red on white panels
+with hairline borders over a near-white ground, black rules over sections, the reader's own sans
+under headlines in Fraunces, and one readable column lined up with the masthead; the money stays at
+the top of the screen and the way on at the foot, and the progress is four segments that fill as the
+player goes (ADR-0047). The header is the name beside a drawn Budget box, and the footer two quiet
+links, to the page about the game and its sources and to the leaderboard (ADR-0033, ADR-0044). The
+words are plain (ADR-0024): no sentence a player meets runs past twenty words, and a readability
 test holds every set of them at a reading age of about twelve. Every number comes from an official
 source or a stated calculation on one, and is one of five kinds (an official figure, worked out, an
 assumption, commentary or a game judgement), though no screen labels which (ADR-0034); the About
 page lists every source. Every screen names itself, can be reached by keyboard and screen reader,
 holds 4.5:1 contrast, keeps every control at 44px and says met or missed in words.
 
-**The Budget**, in a fold above the first measures: what the Chancellor did, in the game's plain
-words, from the margin the OBR left in March to the headroom the measures left, with both fiscal
-rules met and the welfare cap missed on the OBR's own assessment. Every figure is a quoted fact or
-the engine's own. **The measures**: a page a theme, a tile for each measure a player can reverse,
-with a plain heading saying what the Chancellor did, a few sentences on what it means and what
-disagreeing would cost or save on the player's Budget as it stands. Agree keeps the measure and
-Disagree takes it out, the tile taking the answer's colour, and the answer is the player's vote,
-counted once the leaderboard's database is connected, with what everyone said shown once the player
-has answered. A last page lists the rest of the Budget, the measures that change nothing the player
-has to play with, each with a tick or a cross. **Balance your Budget**: the money saved or given up,
-then, while money is still to find, the ways to find it, and otherwise a menu of priorities, such as
-the NHS, schools or defence, each a tile with a plus and a minus and its price, pressed again until
-the money runs out. A priority that would take the headroom below the Chancellor's cannot be
-pressed, and a choice that strains a promise says so (ADR-0046). **Deliver the Budget**: the whole
-Budget read back as changes to the Chancellor's, with a way to change every part, how the headroom
-got from the Chancellor's to the bar, the Prime Minister's sign-off when something needs saying, and
-one red button. **Feedback**: Labour backbenchers, the markets and the public each rating it out of
-five, with one reason that agrees with the rating, the choices that caused it and a line for the
-other side, and five households, each saying what the Budget did to it, then the Budget as a picture
-to share, whose link opens a page of its own that invites whoever opens it to make theirs, and a
-place on a leaderboard under a title of the player's own, where other players vote for or against it
-(ADR-0043, ADR-0044).
+**The landing page**: the headline and the question, the headroom the Budget left, the tax its
+measures raise and how many can be changed, how the game works, and the Budget's chart of the
+headroom since March with the story in a fold. Every figure is a quoted fact or the engine's own.
+**The measures**: a page a theme, a panel for each measure a player can reverse, with a plain
+heading saying what the Chancellor did and the Treasury's figure for it; "See more" opens what it
+means, what removing it would cost or save on the player's Budget as it stands, and the line of the
+Budget's table it comes from. Approve keeps the measure and Remove takes it out, the panel marked in
+the answer's colour, and the answer is the player's vote, counted once the leaderboard's database is
+connected, with what everyone said shown once the player has answered. A last page lists the rest of
+the Budget, the measures that change nothing the player has to play with, each with a tick or a
+cross. **Balance your Budget**: the money saved or given up, then, while money is still to find, the
+ways to find it, and otherwise a menu of priorities, such as the NHS, schools or defence, each a
+tile with a plus and a minus and its price, pressed again until the money runs out. A priority that
+would take the headroom below the Chancellor's cannot be pressed, and a choice that strains a
+promise says so (ADR-0046). **Deliver the Budget**: the whole Budget read back as changes to the
+Chancellor's, with a way to change every part, how the headroom got from the Chancellor's to the
+bar, the Prime Minister's sign-off when something needs saying, and one red button. **Feedback**:
+Labour backbenchers, the markets and the public each rating it out of five, with one reason that
+agrees with the rating, the choices that caused it and a line for the other side, and five
+households, each saying what the Budget did to it, then the Budget as a picture to share, whose link
+opens a page of its own that invites whoever opens it to make theirs, and a place on a leaderboard
+under a title of the player's own, where other players vote for or against it (ADR-0043, ADR-0044).
 
 Under the hood: the OBR October 2026 baseline with the Budget's measures in it (the March 2026
 baseline kept for old links); the Chancellor's measures as levers costed from Table 6.1 of Budget

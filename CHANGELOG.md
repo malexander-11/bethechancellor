@@ -5,6 +5,12 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- ADR-0048 records the landing page and the news site's look: the headline, the three numbers, how
+  it works and the chart of the headroom since March; the measure with the Treasury's figure on its
+  face and "See more" for the rest; Approve and Remove; and the quieter panels, rules and column. It
+  supersedes ADR-0047's opening straight on the measures, its app look and its one figure a card.
+  Methodology §42 says what changed for the numbers; the README and the data README describe the
+  game as it is now.
 - The game has a landing page again, and its screens are set as a news site's interactive
   (ADR-0048). The landing page says that the Chancellor has delivered the Budget and asks what the
   player would change, gives three numbers (the headroom left, the tax the measures raise and how

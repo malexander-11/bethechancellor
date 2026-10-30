@@ -1711,3 +1711,19 @@ app. ADR-0047 records the choices; this section says what changed for the number
   it, on the forecast; nothing in the arithmetic changes.
 - **What everyone said.** The public's counts on a measure show once the player has answered it.
   They are counts and nothing else, as §39 says, and enter no figure.
+
+## 42. A landing page, and a news site's look (ADR-0048)
+
+On 2026-10-30 the user asked for a landing page that says what the site is, measures with a "See
+more", and a look a news site would publish. ADR-0048 records the choices; this section says what
+changed for the numbers.
+
+- **The landing page's numbers.** The headroom is the engine's on the untouched Budget; the tax the
+  measures raise is the sum of the scorecard's tax lines for the target year, as in §39; the count
+  of measures is the count of the walk's cards. The chart of the headroom since March draws the
+  Budget's published steps (§39) and ends on the engine's headroom, which the validator holds to
+  their sum.
+- **Two figures a card, each with its job.** The face shows the Treasury's figure for the card's
+  lines, as §40 describes it. "See more" says what removing the measure does to the player's money,
+  the engine's figure of §40 with the interest; the bar says the same once the answer is given. The
+  test of §41 still holds the second to the first plus interest, and never less.
