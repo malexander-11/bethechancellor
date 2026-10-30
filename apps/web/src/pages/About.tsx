@@ -101,10 +101,11 @@ export function AboutPage() {
         the owner can take any entry down.
       </p>
       <p>
-        The first time you vote or report a title, your browser makes a random code and keeps it,
-        with your votes, in its own storage. The server keeps only a scrambled form of that code,
-        and of your network&rsquo;s address, which it forgets after 30 days. They are used to count
-        one vote a device and to stop floods, and for nothing else.
+        The first time you vote, on one of the Chancellor&rsquo;s measures or on a Budget, or report
+        a title, your browser makes a random code and keeps it, with your votes, in its own storage.
+        The server keeps only a scrambled form of that code, and of your network&rsquo;s address,
+        which it forgets after 30 days. They are used to count one vote a device and to stop floods,
+        and for nothing else.
       </p>
       <p>
         The site runs on Vercel, and the leaderboard&rsquo;s database on Neon. To have an entry

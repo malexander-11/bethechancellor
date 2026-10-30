@@ -5,6 +5,12 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The public votes on the Chancellor's measures (ADR-0045): every measure on the Budget page takes a
+  vote for or against, one a device, with the counts in words, kept by the leaderboard's server in a
+  table of its own and tallied when asked. A device's vote is remembered in its browser beside its
+  leaderboard votes, networks are limited as they are there, and the tallies, which carry nothing of
+  the reader, may be cached for a minute. Without a database the page says voting is not open yet,
+  and shows no buttons.
 - The end-to-end suite's leaderboard tests pass in CI again: tsx 4.23.13 tagged Node's own modules
   with its namespace when PGlite required them under a newer Node, so the preview's database could
   not open and every post answered "down"; tsx 4.23.15 leaves them alone.

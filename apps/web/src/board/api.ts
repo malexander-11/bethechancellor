@@ -17,6 +17,12 @@ export interface Counts {
   score: number;
 }
 
+/** How a measure's votes stand: for and against. */
+export interface Tally {
+  ups: number;
+  downs: number;
+}
+
 /**
  * What the server answered: the body when it agreed, or why not. `closed` is a leaderboard with no
  * database yet; `down`, one that cannot be reached, which is also what a dropped connection is.
@@ -72,5 +78,18 @@ export const leaderboard = {
     send<{ reported: boolean }>(
       `/api/budgets/${encodeURIComponent(id)}/report`,
       write({ voter: deviceCode() }),
+    ),
+};
+
+/**
+ * The public's votes on the Chancellor's measures (ADR-0045), kept by the same server. The tallies
+ * carry nothing of the reader; a vote sends this browser's code.
+ */
+export const measures = {
+  tallies: () => send<{ tallies: Record<string, Tally> }>('/api/measures'),
+  vote: (id: string, value: 1 | -1 | 0) =>
+    send<Tally & { mine: 1 | -1 | 0 }>(
+      `/api/measures/${encodeURIComponent(id)}/vote`,
+      write({ voter: deviceCode(), value }),
     ),
 };

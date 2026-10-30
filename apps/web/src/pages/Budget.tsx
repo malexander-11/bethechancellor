@@ -5,10 +5,12 @@ import {
   type BudgetMeasure,
   type MeasureGroup,
 } from '@btc/engine';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { measures as measureVotes, type Tally } from '../board/api';
 import { BOARD_TEXT } from '../board/words';
 import { JourneyLayout } from '../components/JourneyLayout';
+import { MeasureVotes } from '../components/MeasureVotes';
 import { budget, levers, scorecard } from '../data';
 import { useOutcomeOf } from '../journey/outcome';
 import { usePageTitle } from '../journey/title';
@@ -34,6 +36,19 @@ export const BUDGET_TEXT = {
     'Start from what the Chancellor did, change what you would, and see what the country makes of it.',
 } as const;
 
+/** Whether the public can vote on the measures: the tallies when they can, else why not. */
+type Voting =
+  | { kind: 'unknown' }
+  | { kind: 'closed' }
+  | { kind: 'down' }
+  | { kind: 'open'; tallies: Record<string, Tally> };
+
+const VOTING_LINE: Record<Exclude<Voting['kind'], 'unknown'>, string> = {
+  open: BOARD_TEXT.votingLead,
+  closed: BOARD_TEXT.votingClosed,
+  down: BOARD_TEXT.votingDown,
+};
+
 /** The code of a measure's lever, and which fine-tuning screen it is on. */
 function screenOf(code: string): string {
   const lever = levers.find((l) => l.code === code);
@@ -47,13 +62,29 @@ function screenOf(code: string): string {
  * engine's where it has them (the headroom, the welfare cap's gap, what the measures do by the
  * target year) and the Budget file's published facts for the rest; nothing on the page is typed.
  * The measures a player can change come first, grouped by what each does by the target year, each
- * with a way to the screen its lever is on; the rest wait in one fold.
+ * with a way to the screen its lever is on; the rest wait in one fold. Every measure takes a vote,
+ * for or against, once the server's database is there; until then one line says voting waits.
  */
 export function BudgetPage() {
   const { state, dispatch } = useBudget();
   const outcomeOf = useOutcomeOf();
   const navigate = useNavigate();
   usePageTitle(budget.title);
+  const [voting, setVoting] = useState<Voting>({ kind: 'unknown' });
+  useEffect(() => {
+    let live = true;
+    void measureVotes.tallies().then((answer) => {
+      if (!live) return;
+      setVoting(
+        answer.ok
+          ? { kind: 'open', tallies: answer.body.tallies }
+          : { kind: answer.error === 'closed' ? 'closed' : 'down' },
+      );
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
   // The Chancellor's Budget is the forecast with nothing moved: the engine's own verdicts on it.
   const base = useMemo(() => outcomeOf({}), [outcomeOf]);
   const stability = base.verdicts.find((v) => v.kind === 'currentBudget');
@@ -129,6 +160,13 @@ export function BudgetPage() {
           </button>
         </>
       ) : null}
+      {voting.kind === 'open' ? (
+        <MeasureVotes
+          id={measure.id}
+          plain={measure.plain}
+          tally={voting.tallies[measure.id] ?? { ups: 0, downs: 0 }}
+        />
+      ) : null}
     </li>
   );
 
@@ -156,6 +194,9 @@ export function BudgetPage() {
           {BUDGET_TEXT.measures}
         </h2>
         <p className="panel__hint">{BUDGET_TEXT.measuresLead.replace('{year}', year)}</p>
+        {voting.kind !== 'unknown' ? (
+          <p className="panel__hint">{VOTING_LINE[voting.kind]}</p>
+        ) : null}
         {groups
           .filter((g) => g.items.length > 0)
           .map((g) => (

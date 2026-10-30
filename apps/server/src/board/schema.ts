@@ -7,7 +7,9 @@ const SCHEMA_LOCK = 4_400_442;
  * The leaderboard's tables (ADR-0044). An entry keeps its title and its link, never figures, and
  * each Budget appears once (`budget_key`). Votes and reports are keyed on a device's hashed code;
  * reports also on a network's, so three reports must come from three networks. A trigger keeps an
- * entry's counts in step with its votes. Each statement can run again harmlessly.
+ * entry's counts in step with its votes. Votes on the Chancellor's measures (ADR-0045) are keyed
+ * the same way on a measure's id, and tallied when asked: one statement covers every measure. Each
+ * statement can run again harmlessly.
  */
 export const SCHEMA: readonly string[] = [
   `CREATE TABLE IF NOT EXISTS budgets (
@@ -45,6 +47,17 @@ export const SCHEMA: readonly string[] = [
     UNIQUE (budget_id, ip_hash)
   )`,
   `CREATE INDEX IF NOT EXISTS reports_network ON reports (ip_hash, created_at)`,
+  `CREATE TABLE IF NOT EXISTS measure_votes (
+    measure_id text NOT NULL CHECK (measure_id ~ '^m[0-9]{1,3}$'),
+    voter text NOT NULL,
+    value smallint NOT NULL CHECK (value IN (-1, 1)),
+    ip_hash text,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (measure_id, voter)
+  )`,
+  `CREATE INDEX IF NOT EXISTS measure_votes_tally ON measure_votes (measure_id, value)`,
+  `CREATE INDEX IF NOT EXISTS measure_votes_network ON measure_votes (ip_hash, updated_at)`,
   `CREATE OR REPLACE FUNCTION budgets_count_votes() RETURNS trigger LANGUAGE plpgsql AS $$
   BEGIN
     IF TG_OP IN ('UPDATE', 'DELETE') THEN

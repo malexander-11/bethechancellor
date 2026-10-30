@@ -49,7 +49,7 @@ beforeAll(async () => {
 });
 beforeEach(async () => {
   await migrate(db);
-  await db.query('TRUNCATE budgets CASCADE');
+  await db.query('TRUNCATE budgets, measure_votes CASCADE');
 });
 
 function serverWith(board: Partial<Board> = {}) {
@@ -91,6 +91,13 @@ const vote = (id: string, voter: string, value: number, ip = IP(1)) =>
 const report = (id: string, voter: string, ip: string) =>
   ask(`/api/budgets/${id}/report`, { body: { voter }, ip });
 const owner = { authorization: `Bearer ${TOKEN}` };
+/** Two of the Chancellor's measures, by their ids in the Budget file. */
+const MEASURE = data.budget.measures[0]?.id ?? 'm1';
+const OTHER = data.budget.measures[1]?.id ?? 'm2';
+const voteOn = (id: string, voter: string, value: number, ip = IP(1)) =>
+  ask(`/api/measures/${id}/vote`, { body: { voter, value }, ip });
+const tallies = async () =>
+  ((await (await ask('/api/measures')).json()) as { tallies: Record<string, unknown> }).tallies;
 
 async function posted(query: string, title = 'A title', ip = IP(1)): Promise<Entry> {
   const answer = await post(query, title, ip);
@@ -289,6 +296,68 @@ describe('votes', () => {
   });
 });
 
+describe('votes on the Chancellor’s measures (ADR-0045)', () => {
+  it('tallies one vote a device on each measure, which it may change or take back', async () => {
+    expect(await tallies()).toEqual({});
+    expect(await (await voteOn(MEASURE, DEVICE(1), 1)).json()).toEqual({
+      ups: 1,
+      downs: 0,
+      mine: 1,
+    });
+    expect(await (await voteOn(MEASURE, DEVICE(1), 1)).json()).toEqual({
+      ups: 1,
+      downs: 0,
+      mine: 1,
+    });
+    expect(await (await voteOn(MEASURE, DEVICE(1), -1)).json()).toEqual({
+      ups: 0,
+      downs: 1,
+      mine: -1,
+    });
+    await voteOn(OTHER, DEVICE(2), 1, IP(2));
+    expect(await tallies()).toEqual({
+      [MEASURE]: { ups: 0, downs: 1 },
+      [OTHER]: { ups: 1, downs: 0 },
+    });
+    expect(await (await voteOn(MEASURE, DEVICE(1), 0)).json()).toEqual({
+      ups: 0,
+      downs: 0,
+      mine: 0,
+    });
+    expect(await tallies()).toEqual({ [OTHER]: { ups: 1, downs: 0 } });
+    // The tallies carry nothing of the reader, so anyone may hold them for a minute.
+    expect((await ask('/api/measures')).headers.get('cache-control')).toBe('public, max-age=60');
+  });
+
+  it('refuses a vote on a measure the Budget does not have, or without a proper code or value', async () => {
+    expect((await voteOn('m999', DEVICE(1), 1)).status).toBe(404);
+    expect((await voteOn(MEASURE, 'short', 1)).status).toBe(400);
+    expect((await voteOn(MEASURE, DEVICE(1), 2)).status).toBe(400);
+    expect((await voteOn('nonsense', DEVICE(1), 1)).status).toBe(404);
+    expect(await tallies()).toEqual({});
+  });
+
+  it('stops one network bringing more than its share of new devices to a measure in a day', async () => {
+    const few = asker(serverWith({ limits: { newVotersPerMeasurePerDay: 2 } }));
+    const cast = (id: string, n: number, value = 1) =>
+      few(`/api/measures/${id}/vote`, { body: { voter: DEVICE(n), value } });
+    expect((await cast(MEASURE, 1)).status).toBe(200);
+    expect((await cast(MEASURE, 2)).status).toBe(200);
+    expect((await cast(MEASURE, 3)).status).toBe(429);
+    // A device that has voted may still change its vote, and another measure is another share.
+    expect((await cast(MEASURE, 1, -1)).status).toBe(200);
+    expect((await cast(OTHER, 3)).status).toBe(200);
+  });
+
+  it('keeps of a device and a network only their hashes', async () => {
+    await voteOn(MEASURE, DEVICE(1), 1, IP(9));
+    const hash = hasher('test');
+    expect(await db.query('SELECT voter, ip_hash FROM measure_votes')).toEqual([
+      { voter: hash('device', DEVICE(1)), ip_hash: hash('network', networkOf(IP(9))) },
+    ]);
+  });
+});
+
 describe('reports', () => {
   it(`hides a title reported from ${REPORTS_TO_HIDE} networks until the owner shows it again`, async () => {
     const { id } = await posted(budget(0));
@@ -382,6 +451,8 @@ describe('without its database', () => {
       ['/api/budgets', 'POST'],
       ['/api/budgets/abcd1234', 'GET'],
       ['/api/budgets/abcd1234/vote', 'POST'],
+      ['/api/measures', 'GET'],
+      ['/api/measures/m45/vote', 'POST'],
     ] as const) {
       const answer = await closed(path, { method });
       expect(answer.status, path).toBe(503);
@@ -447,11 +518,13 @@ describe('what the leaderboard keeps, and for how long', () => {
     const { id } = await posted(budget(0));
     await vote(id, DEVICE(1), 1);
     await report(id, DEVICE(1), IP(1));
+    await ask(`/api/measures/${MEASURE}/vote`, { body: { voter: DEVICE(1), value: 1 } });
     await db.query(`UPDATE budgets SET created_at = now() - interval '31 days'`);
     await db.query(`UPDATE votes SET updated_at = now() - interval '31 days'`);
     await db.query(`UPDATE reports SET created_at = now() - interval '31 days'`);
+    await db.query(`UPDATE measure_votes SET updated_at = now() - interval '31 days'`);
     await boardStore(db, LIMITS).forgetNetworks();
-    for (const table of ['budgets', 'votes', 'reports']) {
+    for (const table of ['budgets', 'votes', 'reports', 'measure_votes']) {
       expect(await db.query(`SELECT ip_hash FROM ${table}`), table).toEqual([{ ip_hash: null }]);
     }
   });

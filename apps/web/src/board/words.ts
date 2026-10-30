@@ -45,6 +45,12 @@ export const BOARD_TEXT = {
   seeEntry: 'See it on the leaderboard',
   takenDown: 'This Budget was taken down from the leaderboard.',
   postLimited: 'Too many Budgets from your network today. Try again later.',
+  /** The votes on the Chancellor's measures (ADR-0045), on the Budget page. */
+  votingLead: 'Vote for or against each one. One vote a device; the counts are everyone’s.',
+  votingClosed: 'Voting is not open yet.',
+  votingDown: 'Votes cannot be counted just now.',
+  measureFor: 'For',
+  measureAgainst: 'Against',
 } as const;
 
 /** Why a title was refused, as the player is told it (apps/server/src/board/titles.ts). */

@@ -53,7 +53,13 @@ export function deviceCode(): string {
   return code;
 }
 
-/** How this browser voted on an entry: for, against, or not at all. */
+/**
+ * A measure's key among the votes this browser remembers (ADR-0045): the Chancellor's measures
+ * share the record with the leaderboard's entries, told apart by the prefix.
+ */
+export const measureKey = (id: string): string => `m:${id}`;
+
+/** How this browser voted on an entry or a measure: for, against, or not at all. */
 export function myVote(id: string): 1 | -1 | 0 {
   return read()?.votes[id] ?? 0;
 }

@@ -34,6 +34,17 @@ async function posted(
 const lineOf = (page: Page, title: string) =>
   page.getByRole('listitem').filter({ has: page.getByRole('heading', { level: 2, name: title }) });
 
+test('a vote on one of the Chancellor’s measures is counted, and taken back', async ({ page }) => {
+  await page.goto('/');
+  const forIt = page
+    .getByRole('button', { name: new RegExp(`^${BOARD_TEXT.measureFor}\\b`) })
+    .first();
+  await forIt.click();
+  await expect(forIt).toHaveAttribute('aria-pressed', 'true');
+  await forIt.click();
+  await expect(forIt).toHaveAttribute('aria-pressed', 'false');
+});
+
 test('a Budget on the leaderboard is voted on, opened and reported', async ({
   page,
   request,

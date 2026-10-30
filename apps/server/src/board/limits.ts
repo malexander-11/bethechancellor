@@ -11,6 +11,10 @@ export interface Limits {
   /** Devices voting for the first time on any one entry. */
   newVotersPerEntryPerDay: number;
   reportsPerDay: number;
+  /** Votes on the Chancellor's measures made, changed or taken back (ADR-0045). */
+  measureVotesPerHour: number;
+  /** Devices voting for the first time on any one measure. */
+  newVotersPerMeasurePerDay: number;
 }
 
 export const LIMITS: Limits = {
@@ -19,6 +23,8 @@ export const LIMITS: Limits = {
   voteChangesPerHour: 300,
   newVotersPerEntryPerDay: 20,
   reportsPerDay: 30,
+  measureVotesPerHour: 600,
+  newVotersPerMeasurePerDay: 30,
 };
 
 /** Reports from this many networks hide a title until the owner looks. */

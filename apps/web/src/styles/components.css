@@ -240,6 +240,11 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* A measure's votes (ADR-0045) sit under its line, closer than the leaderboard's to an entry. */
+.measure__votes {
+  margin-top: 6px;
+}
+
 /* The way to the screen a measure is on: a link in the line, with a touch target of its own. */
 .measure__change {
   min-height: 0;

@@ -20,6 +20,9 @@ export const SERVER_PATHS = {
   budget: new RegExp(`^/api/budgets/${ID}$`),
   vote: new RegExp(`^/api/budgets/${ID}/vote$`),
   report: new RegExp(`^/api/budgets/${ID}/report$`),
+  /** The public's votes on the Chancellor's measures (ADR-0045): the tallies, and a device's vote. */
+  measures: /^\/api\/measures$/,
+  measureVote: /^\/api\/measures\/(m[0-9]{1,3})\/vote$/,
   /** The owner's moderation. */
   adminBudgets: /^\/api\/admin\/budgets$/,
   adminBudget: new RegExp(`^/api/admin/budgets/${ID}$`),
@@ -37,6 +40,8 @@ export const SERVED_BY: Record<ServerPath, 'app' | 'card'> = {
   budget: 'app',
   vote: 'app',
   report: 'app',
+  measures: 'app',
+  measureVote: 'app',
   adminBudgets: 'app',
   adminBudget: 'app',
   adminAction: 'app',

@@ -23,6 +23,12 @@ export interface AdminEntry extends Entry {
 /** One device's vote: for, against, or none. */
 export type VoteValue = 1 | -1 | 0;
 
+/** How a measure's votes stand: for and against. */
+export interface Tally {
+  ups: number;
+  downs: number;
+}
+
 /** The entries a page of the leaderboard holds. */
 export const PAGE_SIZE = 20;
 
@@ -217,6 +223,71 @@ export function boardStore(db: Db, limits: Limits) {
       },
     },
 
+    /**
+     * The public's votes on the Chancellor's measures (ADR-0045): one a device on each, counted
+     * when asked, and limited by network as the leaderboard's are.
+     */
+    measures: {
+      /** Every measure anyone has voted on, with its counts. */
+      async tallies(): Promise<Record<string, Tally>> {
+        const rows = await db.query(
+          `SELECT measure_id,
+                  count(*) FILTER (WHERE value = 1)::int AS ups,
+                  count(*) FILTER (WHERE value = -1)::int AS downs
+             FROM measure_votes GROUP BY measure_id ORDER BY measure_id`,
+        );
+        return Object.fromEntries(
+          rows.map((r) => [String(r.measure_id), { ups: Number(r.ups), downs: Number(r.downs) }]),
+        );
+      },
+      /** A device's vote on a measure: for, against, or taken back (0). */
+      async vote(v: {
+        id: string;
+        voter: string;
+        network: string;
+        value: VoteValue;
+      }): Promise<(Tally & { mine: VoteValue }) | { limited: true }> {
+        const [state] = await db.query(
+          `SELECT EXISTS (SELECT 1 FROM measure_votes WHERE measure_id = $2 AND voter = $3) AS voted,
+             (SELECT count(*)::int FROM measure_votes
+                WHERE ip_hash = $1 AND updated_at > now() - interval '1 hour') AS changes,
+             (SELECT count(*)::int FROM measure_votes
+                WHERE ip_hash = $1 AND measure_id = $2 AND created_at > now() - interval '1 day')
+               AS newcomers`,
+          [v.network, v.id, v.voter],
+        );
+        if (
+          Number(state?.changes) >= limits.measureVotesPerHour ||
+          (!state?.voted &&
+            v.value !== 0 &&
+            Number(state?.newcomers) >= limits.newVotersPerMeasurePerDay)
+        ) {
+          return { limited: true };
+        }
+        if (v.value === 0) {
+          await db.query('DELETE FROM measure_votes WHERE measure_id = $1 AND voter = $2', [
+            v.id,
+            v.voter,
+          ]);
+        } else {
+          await db.query(
+            `INSERT INTO measure_votes (measure_id, voter, value, ip_hash) VALUES ($1, $2, $3, $4)
+               ON CONFLICT (measure_id, voter) DO UPDATE
+                 SET value = EXCLUDED.value, ip_hash = EXCLUDED.ip_hash, updated_at = now()
+                 WHERE measure_votes.value <> EXCLUDED.value`,
+            [v.id, v.voter, v.value, v.network],
+          );
+        }
+        const [tally] = await db.query(
+          `SELECT count(*) FILTER (WHERE value = 1)::int AS ups,
+                  count(*) FILTER (WHERE value = -1)::int AS downs
+             FROM measure_votes WHERE measure_id = $1`,
+          [v.id],
+        );
+        return { ups: Number(tally?.ups ?? 0), downs: Number(tally?.downs ?? 0), mine: v.value };
+      },
+    },
+
     /** Networks' hashes past their month, forgotten. */
     async forgetNetworks(): Promise<void> {
       const old = `now() - interval '${NETWORK_DAYS} days'`;
@@ -229,6 +300,9 @@ export function boardStore(db: Db, limits: Limits) {
         },
         {
           text: `UPDATE reports SET ip_hash = NULL WHERE ip_hash IS NOT NULL AND created_at < ${old}`,
+        },
+        {
+          text: `UPDATE measure_votes SET ip_hash = NULL WHERE ip_hash IS NOT NULL AND updated_at < ${old}`,
         },
       ]);
     },

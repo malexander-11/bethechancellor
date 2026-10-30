@@ -103,6 +103,11 @@ const board = await ask('app', 'http://localhost/api/budgets');
 if (board.status !== 503 || ((await board.json()) as { error?: string }).error !== 'closed') {
   fail(`/api/budgets answered ${board.status} without a database`);
 }
+// The votes on the measures, closed with it.
+const tallies = await ask('app', 'http://localhost/api/measures');
+if (tallies.status !== 503 || ((await tallies.json()) as { error?: string }).error !== 'closed') {
+  fail(`/api/measures answered ${tallies.status} without a database`);
+}
 
 // The game's own picture, and a finished Budget's: a game at Budget day that moved nothing.
 for (const query of ['', '?v=1&g=st.5']) {

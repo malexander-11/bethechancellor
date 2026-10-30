@@ -11,7 +11,7 @@ import { migrate } from './schema.js';
 import { boardStore, type BoardStore, type Entry, type VoteValue } from './store.js';
 import { checkTitle } from './titles.js';
 
-/** The leaderboard's side of the server (ADR-0044). */
+/** The leaderboard's side of the server (ADR-0044), and the votes on the measures (ADR-0045). */
 export interface Board {
   /** The database, made when first needed; none until the owner connects one. */
   db: (() => Promise<Db>) | null;
@@ -43,6 +43,8 @@ export function openBoard(data: ShippedDataset, board: Board): OpenBoard {
     SERVER_PATHS.budget,
     SERVER_PATHS.vote,
     SERVER_PATHS.report,
+    SERVER_PATHS.measures,
+    SERVER_PATHS.measureVote,
   ] as const;
   const { db } = board;
   if (!db) {
@@ -191,6 +193,40 @@ export function openBoard(data: ShippedDataset, board: Board): OpenBoard {
         await tidy(s);
         // Whether it is now hidden is the owner's business, not the reporter's.
         return json({ reported: true });
+      }),
+    },
+    {
+      method: 'GET',
+      path: SERVER_PATHS.measures,
+      // The tallies carry nothing of the reader, so anyone may hold them for a minute.
+      handle: guarded('tallies', async () =>
+        json({ tallies: await (await store()).measures.tallies() }, 200, {
+          'cache-control': 'public, max-age=60',
+        }),
+      ),
+    },
+    {
+      method: 'POST',
+      path: SERVER_PATHS.measureVote,
+      handle: guarded('measure vote', async (request, [id = ''], { ip }) => {
+        const read = await readBody(request);
+        if ('refused' in read) return read.refused;
+        const { voter, value } = read.body;
+        if (typeof voter !== 'string' || !DEVICE_CODE.test(voter)) {
+          return json({ error: 'voter' }, 400);
+        }
+        if (value !== 1 && value !== -1 && value !== 0) return json({ error: 'value' }, 400);
+        if (!data.budget.measures.some((m) => m.id === id)) return json({ error: 'missing' }, 404);
+        const s = await store();
+        const voted = await s.measures.vote({
+          id,
+          voter: hash('device', voter),
+          network: network(ip),
+          value: value as VoteValue,
+        });
+        if ('limited' in voted) return limited();
+        await tidy(s);
+        return json(voted);
       }),
     },
   ];

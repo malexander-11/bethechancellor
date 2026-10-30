@@ -42,6 +42,8 @@ const SAMPLES: Record<ServerPath, string> = {
   budget: '/api/budgets/abcd-123',
   vote: '/api/budgets/abcd_123/vote',
   report: '/api/budgets/ABCD1234/report',
+  measures: '/api/measures',
+  measureVote: '/api/measures/m45/vote',
   adminBudgets: '/api/admin/budgets',
   adminBudget: '/api/admin/budgets/abcd1234',
   adminAction: '/api/admin/budgets/abcd1234/show',

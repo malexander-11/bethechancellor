@@ -28,6 +28,8 @@ const DEV_LIMITS = {
   voteChangesPerHour: 10_000,
   newVotersPerEntryPerDay: 1000,
   reportsPerDay: 1000,
+  measureVotesPerHour: 100_000,
+  newVotersPerMeasurePerDay: 1000,
 };
 
 export function devServer({ html }: { html: PageHtml }): DevServer {
