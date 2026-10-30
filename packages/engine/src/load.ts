@@ -573,7 +573,7 @@ export function validateDataset(ds: Dataset): string[] {
     // the headroom counts only by its interest, so it would read as nearly free.
     const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
     const carded = new Set(ds.budget?.themes.flatMap((t) => t.cards.map((c) => c.lever)) ?? []);
-    for (const side of ['raise', 'spend'] as const) {
+    for (const side of ['budgets', 'raise', 'spend'] as const) {
       for (const option of ds.balance[side]) {
         const at = `balance ${side} ${option.code}`;
         const lever = byCode.get(option.code);
@@ -591,9 +591,21 @@ export function validateDataset(ds: Dataset): string[] {
         if (lever.control.kind === 'toggle' && option.step !== 1) {
           problems.push(`${at} switches a toggle on with a step of ${option.step}, not 1`);
         }
-        const first = lever.control.default + option.step;
-        const problem = settingProblem(lever, first);
-        if (problem) problems.push(`${at}'s first step, ${first}, is off the lever (${problem})`);
+        // A budget (ADR-0049) is a spending line on a scale, stepped both ways from where it rests.
+        if (side === 'budgets') {
+          if (lever.category !== 'spend' && lever.category !== 'welfare')
+            problems.push(`${at} is not a spending budget`);
+          if (lever.control.kind !== 'slider') problems.push(`${at} is not a budget on a scale`);
+        }
+        const firsts =
+          side === 'budgets'
+            ? [lever.control.default - option.step, lever.control.default + option.step]
+            : [lever.control.default + option.step];
+        for (const first of firsts) {
+          const problem = settingProblem(lever, first);
+          if (problem) problems.push(`${at}'s first step, ${first}, is off the lever (${problem})`);
+        }
+        const first = firsts[firsts.length - 1] ?? lever.control.default;
         const labels = lever.control.labels;
         if (lever.control.kind === 'select' && labels && !(String(first) in labels)) {
           problems.push(`${at}'s first step, ${first}, is not one of the lever's choices`);

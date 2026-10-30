@@ -181,8 +181,10 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
   // The balance page (ADR-0046): what each option is and what one press does, and the page's own
   // words with their figures filled.
   'the menus': [
-    ...[...balance.raise, ...balance.spend].flatMap((o) => [o.label, o.each]),
-    ...Object.values(BALANCE_TEXT).map((line) => line.replace('{money}', '£1.2bn')),
+    ...[...balance.budgets, ...balance.raise, ...balance.spend].flatMap((o) => [o.label, o.each]),
+    ...Object.values(BALANCE_TEXT).map((line) =>
+      line.replace('{money}', '£1.2bn').replace('{n}', '2').replace('{noun}', 'the triple lock'),
+    ),
     'Added once',
     'Added twice',
     'Added 3 times',

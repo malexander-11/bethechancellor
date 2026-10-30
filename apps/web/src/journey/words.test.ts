@@ -50,7 +50,7 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const base = headroomOf({});
     const BIG = /\b(big|expensive|large|costly)\b/i;
     const SMALL = /\b(small|cheap|little|modest|tiny)\b/i;
-    for (const option of [...balance.raise, ...balance.spend]) {
+    for (const option of [...balance.budgets, ...balance.raise, ...balance.spend]) {
       expect(words(option.label), option.label).toBeLessThanOrEqual(10);
       expect(words(option.each), option.each).toBeLessThanOrEqual(6);
       // A size word in a label is borne out by the engine at one press.

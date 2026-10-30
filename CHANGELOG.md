@@ -5,6 +5,15 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The balance page lets a player cut spending budgets to find money, as well as raise taxes
+  (ADR-0049). The spending budgets, the departments' (the NHS, schools, defence, police, prisons,
+  councils, transport, foreign aid and the rest) and the benefits' (universal credit, disability,
+  pensioner and other benefits), are each one row with a minus that cuts 1% and a plus that adds 1%,
+  where it stands between them and what a step is worth. A cut that tests a promise's spirit says so
+  before it is pressed. The budgets come first; then, short, the taxes to raise, and with money to
+  spend, the tax cuts and free school meals, then the taxes to raise. The menus' file gains the
+  budgets, which the validator holds to spending lines on a scale, stepped both ways, and a test
+  holds every cut to saving money and every addition to spending it, all the way along each scale.
 - The walk's last page is twenty groups, not every measure no card asks about (ADR-0049). The Budget
   file groups the measures a reader would recognise under plain headings, such as help with bills
   this winter, defence and Ukraine, or more money and powers for mayors, and leaves out the smallest

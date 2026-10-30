@@ -16,19 +16,31 @@ export const balanceOptionSchema = z.strictObject({
 });
 
 /**
- * The balance page's two menus: ways to find money (each raises the headroom) and the priorities
- * to spend it on (each lowers it). Which way an option moves the money is checked against the
- * engine by a test; a lever appears once, on one menu.
+ * A spending budget the player may cut or add to (ADR-0049): one row, a fixed step either way. The
+ * step is the size of one press and is positive; the minus cuts the budget by it and the plus adds
+ * it.
+ */
+export const balanceBudgetSchema = balanceOptionSchema.refine(
+  (option) => option.step > 0,
+  'a budget is stepped by a positive amount, either way',
+);
+
+/**
+ * The balance page's menus: the spending budgets, each cut or added to (ADR-0049); the taxes to
+ * raise, each finding money; and the tax cuts and other priorities, each spending it. Which way an
+ * option moves the money is checked against the engine by a test; a lever appears once, on one
+ * menu.
  */
 export const balanceFileSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
+    budgets: z.array(balanceBudgetSchema).min(1).max(16),
     raise: z.array(balanceOptionSchema).min(1).max(14),
     spend: z.array(balanceOptionSchema).min(1).max(14),
   })
   .superRefine((file, ctx) => {
     const seen = new Set<string>();
-    for (const side of ['raise', 'spend'] as const) {
+    for (const side of ['budgets', 'raise', 'spend'] as const) {
       file[side].forEach((option, i) => {
         if (seen.has(option.code))
           ctx.addIssue({

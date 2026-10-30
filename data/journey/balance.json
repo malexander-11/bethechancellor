@@ -1,5 +1,85 @@
 {
   "schemaVersion": 1,
+  "budgets": [
+    {
+      "code": "dhsc",
+      "step": 1,
+      "label": "The NHS and social care",
+      "each": "Each 1%"
+    },
+    {
+      "code": "dfe",
+      "step": 1,
+      "label": "Schools",
+      "each": "Each 1%"
+    },
+    {
+      "code": "mod",
+      "step": 1,
+      "label": "Defence",
+      "each": "Each 1%"
+    },
+    {
+      "code": "home",
+      "step": 1,
+      "label": "Police and borders",
+      "each": "Each 1%"
+    },
+    {
+      "code": "moj",
+      "step": 1,
+      "label": "Prisons and courts",
+      "each": "Each 1%"
+    },
+    {
+      "code": "mhclg",
+      "step": 1,
+      "label": "Councils",
+      "each": "Each 1%"
+    },
+    {
+      "code": "dft",
+      "step": 1,
+      "label": "Transport",
+      "each": "Each 1%"
+    },
+    {
+      "code": "fcdo",
+      "step": 1,
+      "label": "Foreign aid and diplomacy",
+      "each": "Each 1%"
+    },
+    {
+      "code": "otherd",
+      "step": 1,
+      "label": "Other departments",
+      "each": "Each 1%"
+    },
+    {
+      "code": "wuc",
+      "step": 1,
+      "label": "Universal credit",
+      "each": "Each 1%"
+    },
+    {
+      "code": "wdis",
+      "step": 1,
+      "label": "Disability benefits",
+      "each": "Each 1%"
+    },
+    {
+      "code": "wpens",
+      "step": 1,
+      "label": "Pensioner benefits",
+      "each": "Each 1%"
+    },
+    {
+      "code": "woth",
+      "step": 1,
+      "label": "Other benefits",
+      "each": "Each 1%"
+    }
+  ],
   "raise": [
     {
       "code": "nicer",
@@ -66,69 +146,9 @@
       "step": 5,
       "label": "Put up inheritance tax",
       "each": "5 points each time"
-    },
-    {
-      "code": "otherd",
-      "step": -1,
-      "label": "Trim the smaller departments’ budgets",
-      "each": "1% less each time"
     }
   ],
   "spend": [
-    {
-      "code": "dhsc",
-      "step": 1,
-      "label": "More for the NHS and social care",
-      "each": "1% more each time"
-    },
-    {
-      "code": "dfe",
-      "step": 1,
-      "label": "More for schools",
-      "each": "1% more each time"
-    },
-    {
-      "code": "mod",
-      "step": 1,
-      "label": "More for defence",
-      "each": "1% more each time"
-    },
-    {
-      "code": "home",
-      "step": 1,
-      "label": "More for the police and borders",
-      "each": "1% more each time"
-    },
-    {
-      "code": "moj",
-      "step": 1,
-      "label": "More for prisons and courts",
-      "each": "1% more each time"
-    },
-    {
-      "code": "mhclg",
-      "step": 1,
-      "label": "More for councils",
-      "each": "1% more each time"
-    },
-    {
-      "code": "wuc",
-      "step": 1,
-      "label": "Raise universal credit",
-      "each": "1% more each time"
-    },
-    {
-      "code": "wdis",
-      "step": 1,
-      "label": "Raise disability benefits",
-      "each": "1% more each time"
-    },
-    {
-      "code": "wpens",
-      "step": 1,
-      "label": "Raise pensioner benefits",
-      "each": "1% more each time"
-    },
     {
       "code": "ufsm",
       "step": 1,

@@ -43,8 +43,9 @@ describe('step 2: balance your Budget (ADR-0046)', () => {
         /^You gave up £\d\.\dbn more than you saved\. Find it before you deliver\.$/,
       ),
     ).toBeInTheDocument();
-    // Short, only the ways to find it: no priority can be afforded yet (ADR-0047).
-    expect(menus()).toEqual([BALANCE_TEXT.raise]);
+    // Short, the budgets to cut and the taxes to raise; no tax cut can be afforded yet (ADR-0047,
+    // ADR-0049).
+    expect(menus()).toEqual([BALANCE_TEXT.budgets, BALANCE_TEXT.raise]);
     const next = screen.getByRole('button', { name: BALANCE_TEXT.next });
     expect(next).toBeDisabled();
     expect(next).toHaveClass('btn--primary');
@@ -53,16 +54,16 @@ describe('step 2: balance your Budget (ADR-0046)', () => {
     fireEvent.click(add('Employer National Insurance up half a point'));
     await waitFor(() => expect(search().get('L')).toMatch(/nicer\.0\.5/));
     expect(screen.getByText(/^You have £\d\.\dbn to spend\./)).toBeInTheDocument();
-    expect(menus()).toEqual([BALANCE_TEXT.spend, BALANCE_TEXT.raise]);
+    expect(menus()).toEqual([BALANCE_TEXT.budgets, BALANCE_TEXT.spend, BALANCE_TEXT.raise]);
     fireEvent.click(screen.getByRole('link', { name: BALANCE_TEXT.next }));
     expect(h1('Deliver your Budget')).toBeInTheDocument();
     await waitFor(() => expect(search().get('g')).toBe('st.2_rd.3'));
   });
 
-  it('spends until the money runs out, and no further', async () => {
+  it('adds to a budget until the money runs out, and no further', async () => {
     // Disagreeing with the AI programme saves a little: not enough for 1% more for the NHS.
     at(`/balance?${BASE}&${GAME}&L=b6ai.1`);
-    const nhs = 'More for the NHS and social care';
+    const nhs = 'The NHS and social care';
     expect(add(nhs)).toBeDisabled();
     expect(within(optionNamed(nhs)).getByText(/^£\d\.\dbn short$/)).toBeInTheDocument();
     // Find money, then spend it: twice is affordable, a third time is not.
@@ -71,12 +72,42 @@ describe('step 2: balance your Budget (ADR-0046)', () => {
     fireEvent.click(add(nhs));
     fireEvent.click(add(nhs));
     await waitFor(() => expect(search().get('L')).toMatch(/dhsc\.2/));
-    expect(within(optionNamed(nhs)).getByText('Added twice')).toBeInTheDocument();
+    expect(within(optionNamed(nhs)).getByText('2% more')).toBeInTheDocument();
     expect(add(nhs)).toBeDisabled();
-    // A press taken back.
-    fireEvent.click(screen.getByRole('button', { name: named(BALANCE_TEXT.takeBack, nhs) }));
+    // The minus takes a step back.
+    fireEvent.click(screen.getByRole('button', { name: named(BALANCE_TEXT.cut, nhs) }));
     await waitFor(() => expect(search().get('L')).toMatch(/dhsc\.1/));
-    expect(within(optionNamed(nhs)).getByText('Added once')).toBeInTheDocument();
+    expect(within(optionNamed(nhs)).getByText('1% more')).toBeInTheDocument();
+  });
+
+  it('finds money by cutting a budget: welfare, foreign aid, defence (ADR-0049)', async () => {
+    // Disagreeing with the HMRC package gave its money up; cuts can find it.
+    at(`/balance?${BASE}&${GAME}&L=b6hmrc.1`);
+    const budgets = screen.getByRole('region', { name: BALANCE_TEXT.budgets });
+    expect(within(budgets).getByRole('heading', { name: BALANCE_TEXT.departments })).toBeVisible();
+    expect(within(budgets).getByRole('heading', { name: BALANCE_TEXT.benefits })).toBeVisible();
+    const aid = 'Foreign aid and diplomacy';
+    expect(within(optionNamed(aid)).getByText(BALANCE_TEXT.planned)).toBeInTheDocument();
+    const before = document.querySelector('.bar__money .bar__figure')?.textContent;
+    fireEvent.click(screen.getByRole('button', { name: named(BALANCE_TEXT.cut, aid) }));
+    await waitFor(() => expect(search().get('L')).toMatch(/fcdo\.-1/));
+    expect(within(optionNamed(aid)).getByText('1% less')).toBeInTheDocument();
+    expect(document.querySelector('.bar__money .bar__figure')?.textContent).not.toBe(before);
+    // A cut that tests a promise's spirit says so before it is pressed.
+    expect(within(optionNamed('Defence')).getByText('Cuts strain the defence path')).toHaveClass(
+      'tag--amber',
+    );
+    expect(
+      within(optionNamed('Pensioner benefits')).getByText('Cuts strain the triple lock'),
+    ).toBeInTheDocument();
+    // Cut far enough, universal credit finds the rest, and the way on opens.
+    const uc = 'Universal credit';
+    for (let i = 0; i < 4; i += 1) {
+      fireEvent.click(screen.getByRole('button', { name: named(BALANCE_TEXT.cut, uc) }));
+    }
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: BALANCE_TEXT.next })).toBeInTheDocument(),
+    );
   });
 
   it('prices each option on the Budget as it stands, and tags a promise it strains', () => {

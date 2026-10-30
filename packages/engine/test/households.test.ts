@@ -55,7 +55,7 @@ describe('the electorate as five households', () => {
     // What the game offers (ADR-0046): the measures' levers on the walk's cards, and the menus.
     const codes = new Set([
       ...ds.budget.themes.flatMap((t) => t.cards.map((c) => c.lever)),
-      ...[...ds.balance.raise, ...ds.balance.spend].map((o) => o.code),
+      ...[...ds.balance.budgets, ...ds.balance.raise, ...ds.balance.spend].map((o) => o.code),
     ]);
     const missing = [...codes].filter((code) => !touched.has(code) && !none.has(code));
     expect(missing, 'levers no household hears of').toEqual([]);

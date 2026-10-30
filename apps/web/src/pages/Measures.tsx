@@ -15,7 +15,7 @@ export const MEASURES_TEXT = {
   next: 'Next: {title}',
   smallTitle: 'The rest of the Budget',
   smallLead:
-    'These were in the Budget too, but none of them changes your money. Tick or cross any.',
+    'The other main decisions in the Budget. None of them changes your money. Tick or cross any.',
   toBalance: 'Next: balance your Budget',
   back: 'Back',
 } as const;

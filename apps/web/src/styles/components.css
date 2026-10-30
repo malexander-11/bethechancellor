@@ -860,8 +860,9 @@
   font-weight: 600;
 }
 
+/* A promise an option tests, on its own line under what the option does. */
 .option__tag {
-  display: flex;
+  display: block;
   margin-top: 2px;
 }
 
@@ -933,6 +934,26 @@
   color: var(--critical);
   font-size: 0.875rem;
   font-weight: 600;
+}
+
+/* Where a budget stands, between its minus and its plus (ADR-0049). */
+.stepper__level {
+  min-width: 6.25em;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.menu__group + .menu__group {
+  margin-top: 16px;
+}
+
+.menu__heading {
+  margin: 12px 0 6px;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 /* ---------------------------------------------------------------- motifs */

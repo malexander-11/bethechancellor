@@ -112,9 +112,42 @@ describe('the balance page’s menus (ADR-0046)', () => {
     }
   });
 
+  it('saves with every cut to a budget, and spends with every addition, all the way (ADR-0049)', () => {
+    for (const option of ds.balance.budgets) {
+      for (const [step, sign] of [
+        [-option.step, 1],
+        [option.step, -1],
+      ] as const) {
+        let before = 0;
+        const reached = presses(option.code, step);
+        expect(reached.length, option.code).toBeGreaterThan(0);
+        for (const value of reached) {
+          const after = balanceOf({ [option.code]: value });
+          expect(
+            sign * (after - before),
+            `budget ${option.code} at ${value}`,
+          ).toBeGreaterThanOrEqual(BALANCE_SETTLED_GBPM);
+          before = after;
+        }
+      }
+    }
+  });
+
+  it('offers the budgets the user named, cut or added to: welfare, foreign aid and defence', () => {
+    const codes = ds.balance.budgets.map((o) => o.code);
+    for (const code of ['mod', 'fcdo', 'wuc', 'wdis', 'wpens']) expect(codes).toContain(code);
+  });
+
   it('breaks no promise however far an option goes; a strain is allowed and shown', () => {
     const strained: string[] = [];
-    for (const option of [...ds.balance.raise, ...ds.balance.spend]) {
+    const ends = [
+      ...[...ds.balance.raise, ...ds.balance.spend].map((o) => ({ code: o.code, step: o.step })),
+      ...ds.balance.budgets.flatMap((o) => [
+        { code: o.code, step: o.step },
+        { code: o.code, step: -o.step },
+      ]),
+    ];
+    for (const option of ends) {
       const last = presses(option.code, option.step).at(-1) ?? 0;
       const values = { [option.code]: last };
       const broken = promiseBreaks(values, ds.pm.promises, ds.levers).filter((p) => !p.kept);
@@ -126,8 +159,11 @@ describe('the balance page’s menus (ADR-0046)', () => {
         strained.push(option.code);
       }
     }
-    // Employer National Insurance keeps the tax lock's words and strains its spirit.
+    // Employer National Insurance keeps the tax lock's words and strains its spirit; a cut to
+    // defence strains the defence path, and one to pensioner benefits the triple lock.
     expect(strained).toContain('nicer');
+    expect(strained).toContain('mod');
+    expect(strained).toContain('wpens');
   });
 
   it('refuses a lever a card asks about, investment, a toggle stepped by two, or a step off the lever', () => {
@@ -156,6 +192,22 @@ describe('the balance page’s menus (ADR-0046)', () => {
         b.raise[0] = { ...b.raise[0]!, code: 'nosuch' };
       }),
     ).toMatch(/nosuch names an unknown lever/);
+  });
+
+  it('refuses a budget that is not a spending line on a scale, or is stepped by a negative', () => {
+    expect(
+      tamper((b) => {
+        b.budgets[0] = { ...b.budgets[0]!, code: 'itbr' };
+      }),
+    ).toMatch(/itbr is not a spending budget/);
+    expect(
+      tamper((b) => {
+        b.budgets[0] = { ...b.budgets[0]!, code: 'ufsm' };
+      }),
+    ).toMatch(/ufsm is not a budget on a scale/);
+    const negative = structuredClone(ds.balance);
+    negative.budgets[0] = { ...negative.budgets[0]!, step: -1 };
+    expect(balanceFileSchema.safeParse(negative).success).toBe(false);
   });
 
   it('offers a lever once, on one menu', () => {

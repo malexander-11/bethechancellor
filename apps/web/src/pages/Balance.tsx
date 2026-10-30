@@ -21,13 +21,24 @@ import { StepLink } from '../journey/links';
 import { measuresPath, SMALL_PRINT } from '../journey/routes';
 import { useBudget } from '../state/budget';
 
-/** The balance page's own words (ADR-0046). */
+/** The balance page's own words (ADR-0046, ADR-0049). */
 export const BALANCE_TEXT = {
   short: 'You gave up {money} more than you saved. Find it before you deliver.',
   spare: 'You have {money} to spend. Choose your priorities, or keep it as headroom.',
   settled: 'Your Budget balances. You can find more money to spend more, or go on.',
-  raise: 'Find the money',
-  spend: 'Your priorities',
+  budgets: 'Spending budgets',
+  budgetsLead: 'Cut a budget to save money, or add to it.',
+  departments: 'Departments',
+  benefits: 'Benefits',
+  eachWay: '{money}',
+  planned: 'As planned',
+  less: '{n}% less',
+  more: '{n}% more',
+  cutsStrain: 'Cuts strain {noun}',
+  risesStrain: 'Rises strain {noun}',
+  raise: 'Raise taxes',
+  spend: 'Cut taxes, and other priorities',
+  cut: 'Cut',
   add: 'Add',
   takeBack: 'Take one back',
   shortBy: '{money} short',
@@ -147,6 +158,130 @@ function Option({ option, side }: { option: BalanceOption; side: 'raise' | 'spen
   );
 }
 
+/** Where a budget stands: "As planned", "2% less", "1.5% more". */
+function levelWords(value: number): string {
+  if (value === 0) return BALANCE_TEXT.planned;
+  const n = String(Math.abs(value));
+  return (value < 0 ? BALANCE_TEXT.less : BALANCE_TEXT.more).replace('{n}', n);
+}
+
+/** The promises a budget tests in spirit if it is cut, or if it rises, in words. */
+function budgetStrains(code: string): string[] {
+  return pm.promises.flatMap((p) =>
+    p.strains
+      .filter((r) => r.code === code && (r.when === 'below' || r.when === 'above'))
+      .map((r) =>
+        (r.when === 'below' ? BALANCE_TEXT.cutsStrain : BALANCE_TEXT.risesStrain).replace(
+          '{noun}',
+          p.noun,
+        ),
+      ),
+  );
+}
+
+/**
+ * One spending budget (ADR-0049): what it is, how big one step is and what it is worth, and a
+ * stepper with the minus cutting it and the plus adding to it, where it stands between them. A cut
+ * saves money and an addition spends it; an addition that would leave the headroom below the
+ * Chancellor's cannot be pressed, and says by how much it is short.
+ */
+function BudgetRow({ option }: { option: BalanceOption }) {
+  const { state, dispatch } = useBudget();
+  const moneyOf = useMoneyOf();
+  const balance = useBalance();
+  const lever = levers.find((l) => l.code === option.code);
+  if (!lever) return null;
+  const value = state.leverValues[option.code] ?? lever.control.default;
+  const down = optionNext(lever, value, -option.step);
+  const up = optionNext(lever, value, option.step);
+  const saves = down === undefined ? 0 : moneyOf({ ...state.leverValues, [option.code]: down });
+  const costs = up === undefined ? 0 : moneyOf({ ...state.leverValues, [option.code]: up });
+  const size = Math.max(Math.abs(saves), Math.abs(costs));
+  const after = balance.gbpm + costs;
+  const unaffordable = up !== undefined && after <= -BALANCE_SETTLED_GBPM;
+  const set = (to: number) => dispatch({ type: 'setLever', code: option.code, value: to });
+  const level = levelWords(value - lever.control.default);
+  return (
+    <li className={`option${value !== lever.control.default ? ' option--chosen' : ''}`}>
+      <p className="option__label">{option.label}</p>
+      <p className="option__each">
+        {option.each} ·{' '}
+        <span className="option__price">
+          {BALANCE_TEXT.eachWay.replace('{money}', money(size))}
+        </span>
+        {budgetStrains(option.code).map((words) => (
+          <span key={words} className="tag tag--amber option__tag">
+            {words}
+          </span>
+        ))}
+      </p>
+      <div className="option__buttons">
+        <span className="stepper">
+          <button
+            type="button"
+            className="stepper__button"
+            disabled={down === undefined}
+            onClick={() => down !== undefined && set(down)}
+          >
+            <StepIcon add={false} />
+            <span className="sr-only">
+              {BALANCE_TEXT.cut}: {option.label}
+            </span>
+          </button>
+          <span className="stepper__level">{level}</span>
+          <button
+            type="button"
+            className="stepper__button stepper__button--add"
+            disabled={up === undefined || unaffordable}
+            onClick={() => up !== undefined && set(up)}
+          >
+            <StepIcon add />
+            <span className="sr-only">
+              {BALANCE_TEXT.add}: {option.label}
+            </span>
+          </button>
+        </span>
+        {/* Short of money already, every addition waits: saying so on each row says it twelve
+            times. With money to spend, an addition it cannot afford says by how much. */}
+        {unaffordable && balance.state !== 'short' ? (
+          <span className="option__short">
+            {BALANCE_TEXT.shortBy.replace('{money}', money(after))}
+          </span>
+        ) : null}
+      </div>
+    </li>
+  );
+}
+
+/** The spending budgets, the departments' and then the benefits', each cut or added to. */
+function Budgets() {
+  const groups = [
+    { id: 'departments', title: BALANCE_TEXT.departments, category: 'spend' },
+    { id: 'benefits', title: BALANCE_TEXT.benefits, category: 'welfare' },
+  ] as const;
+  const categoryOf = (code: string) => levers.find((l) => l.code === code)?.category;
+  return (
+    <section className="menu" aria-labelledby="menu-budgets">
+      <h2 id="menu-budgets" className="section-label">
+        {BALANCE_TEXT.budgets}
+      </h2>
+      <p className="panel__hint">{BALANCE_TEXT.budgetsLead}</p>
+      {groups.map((group) => (
+        <div key={group.id} className="menu__group">
+          <h3 className="menu__heading">{group.title}</h3>
+          <ul className="options">
+            {menus.budgets
+              .filter((o) => categoryOf(o.code) === group.category)
+              .map((option) => (
+                <BudgetRow key={option.code} option={option} />
+              ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+  );
+}
+
 function Menu({ side }: { side: 'raise' | 'spend' }) {
   const id = `menu-${side}`;
   return (
@@ -178,7 +313,7 @@ export function BalancePage() {
   if (guard || !game) return guard;
 
   const status = ambitionStatus(pm, outcome, levers);
-  const onMenus = new Set([...menus.raise, ...menus.spend].map((o) => o.code));
+  const onMenus = new Set([...menus.budgets, ...menus.raise, ...menus.spend].map((o) => o.code));
   const others = changeRows({ outcome, levers }).filter(
     (row) => !onMenus.has(row.code) && !cardOf(budget, row.code),
   );
@@ -189,8 +324,9 @@ export function BalancePage() {
       : state_ === 'spare'
         ? BALANCE_TEXT.spare.replace('{money}', money(balance.gbpm))
         : BALANCE_TEXT.settled;
-  // Short, only the ways to find the money: no priority can be afforded until it is found
-  // (ADR-0047). With money to spend, the priorities first, and the ways to find more after them.
+  // The budgets first, cut to save or added to (ADR-0049). Short, then the taxes to raise: no tax
+  // cut can be afforded until the money is found (ADR-0047). With money to spend, the tax cuts and
+  // other priorities, then the taxes to raise for more.
   const order: ('raise' | 'spend')[] = state_ === 'short' ? ['raise'] : ['spend', 'raise'];
 
   /** Leaving for the review: the money balances, and the Budget is ready to read back. */
@@ -209,6 +345,7 @@ export function BalancePage() {
       <HeadroomBar outcome={outcome} status={status} balance={balance} />
       <p className={`balance__lead${state_ === 'short' ? ' balance__lead--short' : ''}`}>{lead}</p>
 
+      <Budgets />
       {order.map((side) => (
         <Menu key={side} side={side} />
       ))}
