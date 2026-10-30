@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-business-rates-reliefs",
+  "code": "b6brr",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Business taxes",
+  "title": "Drop the business rates reliefs for the high street",
+  "shortTitle": "Drop high street rates reliefs",
+  "noun": "dropping the high street rates reliefs",
+  "headline": "Drop high street rates reliefs. Raises £0.0bn in 2029-30.",
+  "description": "From April 2027 pubs, clubs and music venues get 35% relief, small shops, cafes and hotels get fuller small business relief, and high street bills are frozen in real terms for two years. Switch this on to drop all three. They cost most in 2027-28 and 2028-29 and almost nothing by 2029-30.",
+  "baselinePolicy": {
+    "text": "Business rates relief for pubs, social clubs and live music venues is 35% from 1 April 2027; small business rate relief thresholds rise for retail, hospitality and leisure; and a transitional package freezes those bills in real terms for two years (Table 6.1 lines 12, 13 and 14).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "20",
+      "quote": "The government is increasing the relief for pubs, social clubs and all but the very largest live music venues in England by 20ppt, from 15% to 35% from 1 April 2027."
+    },
+    "alreadyIncludes": [
+      "Business rates relief for pubs, social clubs and live music venues is 35% from 1 April 2027; small business rate relief thresholds rise for retail, hospitality and leisure; and a transitional package freezes those bills in real terms for two years (Table 6.1 lines 12, 13 and 14)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "businessRates",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": -10,
+      "2027-28": 485,
+      "2028-29": 665,
+      "2029-30": 5,
+      "2030-31": 10,
+      "2031-32": 10
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 12,
+          "title": "Business Rates: Increase business rates relief for pubs, social clubs and live music venues by 20ppts to 35% from 1 April 2027",
+          "values": {
+            "2026-27": 5,
+            "2027-28": -160,
+            "2028-29": -115,
+            "2029-30": -5,
+            "2030-31": -5,
+            "2031-32": -5
+          }
+        },
+        {
+          "number": 13,
+          "title": "Business Rates: Increase valuation thresholds for Small Business Rate Relief for retail, hospitality and leisure (RHL) properties from £12,000 to £18,000 for 100% relief and from £15,000 to £21,000 for tapered relief from 1 April 2027",
+          "values": {
+            "2026-27": 5,
+            "2027-28": -315,
+            "2028-29": -320,
+            "2029-30": 0,
+            "2030-31": -5,
+            "2031-32": -5
+          }
+        },
+        {
+          "number": 14,
+          "title": "Business Rates: Introduce a transitional support package, including a two-year real terms bills freeze for RHL businesses and a one-year extension of the 2023 Supporting Small Business support, part funded by extending the Transitional Relief Supplement for two years from 1 April 2027",
+          "values": {
+            "2026-27": 0,
+            "2027-28": -10,
+            "2028-29": -230,
+            "2029-30": 0,
+            "2030-31": 0,
+            "2031-32": 0
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours.",
+      "England only, as business rates are."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "20"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "lines 12, 13, 14"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30",
+  "interactions": [
+    {
+      "withLever": "business-rates",
+      "text": "Both move business rates bills: the scale moves every bill, this drops three reliefs for particular properties.",
+      "severity": "info"
+    }
+  ]
+}

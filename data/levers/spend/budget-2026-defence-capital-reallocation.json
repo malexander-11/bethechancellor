@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-defence-capital-reallocation",
+  "code": "b6dipcap",
+  "category": "spend",
+  "badge": "direct",
+  "group": "Budget 2026 decisions",
+  "title": "Give departments back the capital moved to defence",
+  "shortTitle": "Undo the defence capital move",
+  "noun": "undoing the capital moved to defence",
+  "headline": "Undo the defence capital move. Costs £1.1bn in 2029-30.",
+  "description": "The Budget funds the last £4.7 billion of the Defence Investment Plan by moving capital from other departments’ budgets, cutting them by 1% from 2027-28. Switch this on to give that capital back and borrow for the plan instead. Capital, so it counts against the debt rule.",
+  "baselinePolicy": {
+    "text": "Capital is reallocated from other departments to fully fund the Defence Investment Plan (Table 6.1 line 41); the plan’s own spending is line 40.",
+    "source": {
+      "sourceId": "hmt-budget-2026-document",
+      "paragraph": "2.6",
+      "quote": "This Budget confirms that the residual £4.7 billion will be funded through reprioritisation of capital budgets."
+    },
+    "alreadyIncludes": [
+      "Capital is reallocated from other departments to fully fund the Defence Investment Plan (Table 6.1 line 41); the plan’s own spending is line 40."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "capital",
+    "delType": "CDEL",
+    "department": "Defence",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 145,
+      "2027-28": 2135,
+      "2028-29": 1420,
+      "2029-30": 1100,
+      "2030-31": 1135,
+      "2031-32": 1180
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 41,
+          "title": "Defence Investment Plan: Reallocate capital spending to fully fund the Defence Investment Plan",
+          "values": {
+            "2026-27": 145,
+            "2027-28": 2135,
+            "2028-29": 1420,
+            "2029-30": 1100,
+            "2030-31": 1135,
+            "2031-32": 1180
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury’s costing with the sign kept (a line that reduced borrowing is spending the reversal adds back; a line that cost money is spending the reversal saves)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours.",
+      "This undoes the funding, not the plan: defence keeps its money either way, and the other departments get theirs back."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the Budget’s own costing of the measure, certified by the OBR as part of its October 2026 forecast.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-document",
+          "paragraph": "2.6"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 41"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

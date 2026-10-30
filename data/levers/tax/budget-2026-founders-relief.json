@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-founders-relief",
+  "code": "b6found",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Capital gains tax",
+  "title": "Drop Founders’ Relief",
+  "shortTitle": "Drop Founders’ Relief",
+  "noun": "dropping Founders’ Relief",
+  "headline": "Drop Founders’ Relief. Raises £0.3bn in 2029-30.",
+  "description": "From April 2027 founders and early investors in fast-growing companies pay 10% capital gains tax on up to £10 million of gains. Switch this on to drop the relief.",
+  "baselinePolicy": {
+    "text": "Founders’ Relief, a 10% capital gains tax rate with a £10 million lifetime limit, applies from 6 April 2027 (Table 6.1 line 26).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "29",
+      "quote": "This measure introduces a 10% Capital Gains Tax (CGT) rate for qualifying disposals by founders or early investors of high-growth, innovative companies, subject to a £10 million lifetime limit."
+    },
+    "alreadyIncludes": [
+      "Founders’ Relief, a 10% capital gains tax rate with a £10 million lifetime limit, applies from 6 April 2027 (Table 6.1 line 26)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "capitalTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 0,
+      "2027-28": 260,
+      "2028-29": 180,
+      "2029-30": 260,
+      "2030-31": 285,
+      "2031-32": 300
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 26,
+          "title": "Founders' Relief: Introduce a new CGT relief for qualifying founders of high-growth, innovative companies from 6 April 2027",
+          "values": {
+            "2026-27": 0,
+            "2027-28": -260,
+            "2028-29": -180,
+            "2029-30": -260,
+            "2030-31": -285,
+            "2031-32": -300
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "29"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 26"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

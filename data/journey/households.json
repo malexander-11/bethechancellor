@@ -287,6 +287,21 @@
             ],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "b6elec",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The zero rate on electricity ends three months early. It is a few pounds, and we count them.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "note": "line 2"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
       ],
       "exposure": [
@@ -816,6 +831,36 @@
             ],
             "badge": "simulated"
           }
+        },
+        {
+          "code": "b6pentx",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The allowance for pensioners goes, so the state pension is taxed again like anything else.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "note": "line 52"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "b6elec",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "VAT back on the electricity in April, not July. One more quarter of the old bill.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "note": "line 2"
+              }
+            ],
+            "badge": "simulated"
+          }
         }
       ],
       "exposure": ["broad-base", "duties", "pensioners", "councils-care", "nhs"],
@@ -870,16 +915,6 @@
           "effect": "gains",
           "line": {
             "text": "Fuel duty down. On the miles I do, that is real money, every week.",
-            "sources": [],
-            "badge": "simulated"
-          }
-        },
-        {
-          "code": "fuelfrz",
-          "when": "on",
-          "effect": "gains",
-          "line": {
-            "text": "No fuel duty rise in April after all. On the miles I do, that adds up.",
             "sources": [],
             "badge": "simulated"
           }
@@ -992,6 +1027,36 @@
             "sources": [
               {
                 "sourceId": "govuk-nics-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "b6fuel",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "Fuel duty goes up in April, not July. Three months sooner at the pump, on every run I do.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "note": "line 3"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "b6mile",
+          "when": "on",
+          "effect": "pays",
+          "line": {
+            "text": "The 55p a mile goes back down. Every work trip in my own van is worth a bit less again.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "note": "line 5"
               }
             ],
             "badge": "simulated"
@@ -1201,20 +1266,6 @@
           }
         },
         {
-          "code": "iinc2",
-          "when": "on",
-          "effect": "pays",
-          "line": {
-            "text": "Another rise on dividend and savings tax. What the savings earn is taxed harder again.",
-            "sources": [
-              {
-                "sourceId": "hmt-budget-2025-table-4-1"
-              }
-            ],
-            "badge": "simulated"
-          }
-        },
-        {
           "code": "nica",
           "when": "above",
           "effect": "pays",
@@ -1237,6 +1288,21 @@
             "sources": [
               {
                 "sourceId": "govuk-nics-rates"
+              }
+            ],
+            "badge": "simulated"
+          }
+        },
+        {
+          "code": "b6save",
+          "when": "on",
+          "effect": "gains",
+          "line": {
+            "text": "The two points on savings interest come off again. Not life-changing, but the ISA was already full.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "note": "line 62"
               }
             ],
             "badge": "simulated"
@@ -1277,6 +1343,33 @@
   "reachesNone": [
     "airet",
     "alc",
+    "b6ai",
+    "b6badr",
+    "b6bank",
+    "b6bics",
+    "b6brr",
+    "b6civil",
+    "b6ctpe",
+    "b6dipcap",
+    "b6dist",
+    "b6ets",
+    "b6found",
+    "b6fraud",
+    "b6ftbisa",
+    "b6ggs",
+    "b6grow",
+    "b6hefr",
+    "b6hmrc",
+    "b6homes",
+    "b6isa",
+    "b6mgd",
+    "b6mkt",
+    "b6phv",
+    "b6prop",
+    "b6rough",
+    "b6sov",
+    "b6trade",
+    "b6wda",
     "bank5",
     "banklevy",
     "brates",
@@ -1292,7 +1385,6 @@
     "epl2",
     "fcdo",
     "gam2",
-    "hmrc2",
     "home",
     "hvcts15",
     "mod",

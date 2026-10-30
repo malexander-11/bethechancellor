@@ -32,9 +32,10 @@ describe('wider feedback (Phase 25, R21)', () => {
         advice(code)?.sources.map((s) => s.sourceId),
         code,
       ).toContain(id);
-    // Keeping fuel duty down adds a little to emissions; raising it takes a little off (HMRC).
-    expect(advice('fuelfrz')?.text).toMatch(/emissions edge up/);
-    cites('fuelfrz', 'hmrc-tiin-fuel-duty-2026-27');
+    // Raising fuel duty sooner, or further, takes a little off emissions (HMRC); keeping it down
+    // adds a little.
+    expect(advice('b6fuel')?.text).toMatch(/emissions dip/);
+    cites('b6fuel', 'hmrc-tiin-fuel-duty-2026-27');
     expect(advice('fuel')?.text).toMatch(/emissions dip/);
     cites('fuel', 'hmrc-tiin-fuel-duty-2026-27');
     const cut = ds.options.deliver.find((o) => o.id === 'fuel-duty-cut');

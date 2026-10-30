@@ -1,5 +1,6 @@
 import type {
   AdvisersFile,
+  BudgetFile,
   ContextFile,
   FinetuneFile,
   GlossaryFile,
@@ -14,6 +15,7 @@ import type {
   PmFile,
   ReceptionFile,
   RuleSet,
+  ScorecardExtract,
   SourcesFile,
   Vintage,
 } from './data.js';
@@ -42,5 +44,8 @@ export interface ShippedDataset {
   incidence: IncidenceFile;
   guide: GuideFile;
   glossary: GlossaryFile;
+  /** The Budget the game starts from (ADR-0045), and the scorecard its measures join to by line. */
+  budget: BudgetFile;
+  scorecard: ScorecardExtract;
   levers: Lever[];
 }

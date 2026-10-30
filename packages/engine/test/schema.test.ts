@@ -51,6 +51,7 @@ describe('every JSON file under data/ validates against its schema', () => {
       'journey/incidence.json',
       'journey/guide.json',
       'journey/glossary.json',
+      'journey/budget2026.json',
     ]);
     for (const file of listJsonFiles(DATA_DIR)) {
       const rel = path.relative(DATA_DIR, file);
@@ -67,7 +68,7 @@ describe('every JSON file under data/ validates against its schema', () => {
         };
         expect(parsed.schemaVersion).toBe(1);
         if (rel.includes('hmrc-trr')) expect(() => parseHmrcExtract(parsed)).not.toThrow();
-        if (rel.includes('table-4-1') || rel.includes('table-5-1'))
+        if (rel.includes('table-4-1') || rel.includes('table-5-1') || rel.includes('table-6-1'))
           expect(() => parseScorecardExtract(parsed)).not.toThrow();
         if (rel.includes('tax-reliefs') || rel.includes('private-pensions'))
           expect(() => parseReliefExtract(parsed)).not.toThrow();

@@ -1,0 +1,718 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026",
+  "title": "The Budget, 28 October 2026",
+  "deliveredOn": "2026-10-28",
+  "chancellor": {
+    "name": "James Murray",
+    "source": {
+      "sourceId": "hmt-budget-2026-document",
+      "quote": "as laid before the House of Commons by the Chancellor of the Exchequer when opening the Budget. James Murray His Majesty’s Treasury 28 October 2026",
+      "note": "The signature on the Budget report’s title page."
+    }
+  },
+  "scorecard": "hmt-budget-2026-table-6-1",
+  "facts": {
+    "headroomInMarchGbpm": {
+      "gbpm": 23600,
+      "source": {
+        "sourceId": "hmt-budget-2026-document",
+        "page": "20",
+        "quote": "Chart 1.6: Change in stability rule headroom since March 2026 forecast",
+        "note": "The chart’s first bar: 23.6 at the March 2026 forecast."
+      }
+    },
+    "debtInterestSinceMarchGbpm": {
+      "gbpm": -12000,
+      "source": {
+        "sourceId": "hmt-budget-2026-document",
+        "page": "20",
+        "quote": "Chart 1.6: Change in stability rule headroom since March 2026 forecast",
+        "note": "The chart’s second bar: -12.0 for underlying debt interest forecast changes."
+      }
+    },
+    "otherChangesSinceMarchGbpm": {
+      "gbpm": 900,
+      "source": {
+        "sourceId": "hmt-budget-2026-document",
+        "page": "20",
+        "quote": "Chart 1.6: Change in stability rule headroom since March 2026 forecast",
+        "note": "The chart’s third bar: 0.9 for other underlying forecast changes."
+      }
+    },
+    "headroomBeforeMeasuresGbpm": {
+      "gbpm": 12500,
+      "source": {
+        "sourceId": "obr-efo-2026-10",
+        "table": "Table 7.1",
+        "page": "161",
+        "quote": "October 2026 pre-measures forecast 0.4 12.5 55"
+      }
+    },
+    "measuresOnCurrentBudgetGbpm": {
+      "gbpm": 2000,
+      "source": {
+        "sourceId": "obr-efo-2026-10",
+        "paragraph": "7.20",
+        "page": "163",
+        "quote": "The effect of policy included in this Budget, as set out in Chapter 3, increases both the current budget and PSNFL margins by £2 billion and £3 billion respectively."
+      }
+    }
+  },
+  "story": [
+    {
+      "text": "The Budget was delivered on 28 October 2026. The OBR published its forecast the same day.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-document",
+          "note": "The title page."
+        },
+        {
+          "sourceId": "obr-efo-2026-10"
+        }
+      ]
+    },
+    {
+      "text": "In March the OBR gave the Chancellor {march} of headroom against the stability rule in {year}.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-document",
+          "page": "20",
+          "note": "Chart 1.6."
+        }
+      ]
+    },
+    {
+      "text": "Since then, higher interest on the debt took {debtInterest} of that away. Other changes gave back {other}.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-document",
+          "paragraph": "1.21",
+          "page": "19",
+          "quote": "Higher debt interest costs more than account for the change in borrowing and the reduction of headroom against the stability rule, in 2029‑30."
+        }
+      ]
+    },
+    {
+      "text": "So before any measure the headroom was {before}. The measures added {measures}, leaving {headroom}.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-10",
+          "table": "Table 7.1",
+          "page": "161"
+        },
+        {
+          "sourceId": "obr-efo-2026-10",
+          "paragraph": "7.20",
+          "page": "163"
+        }
+      ]
+    },
+    {
+      "text": "The Budget document rounds that to £15 billion. The OBR calls it about half the margin Chancellors have kept since 2010.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-document",
+          "paragraph": "1.20",
+          "page": "19",
+          "quote": "There is a buffer of £15 billion against the stability rule and £24 billion against the investment rule."
+        },
+        {
+          "sourceId": "obr-efo-2026-10",
+          "paragraph": "7.21",
+          "page": "164",
+          "quote": "The margin against the Government’s fiscal mandate of £15 billion is around half of the average margin that previous Chancellors have left against their fiscal mandate since 2010."
+        }
+      ]
+    },
+    {
+      "text": "Both fiscal rules are met. The welfare cap is missed by {welfareGap}, after the OBR’s adjustments.",
+      "sources": [
+        {
+          "sourceId": "obr-efo-2026-10",
+          "paragraph": "7.25",
+          "page": "165",
+          "quote": "This results in the welfare cap being on course not to be met by £3 billion once the margin is included."
+        }
+      ]
+    },
+    {
+      "text": "By {year} the tax measures bring in {tax} a year. The spending measures cost {spending}.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1"
+        }
+      ]
+    }
+  ],
+  "measures": [
+    {
+      "id": "m1",
+      "line": 1,
+      "plain": "A £100 council tax rebate for homes in bands A to D from January 2027.",
+      "notMovable": {
+        "reason": "Paid this winter, before the first year you can change."
+      }
+    },
+    {
+      "id": "m2",
+      "line": 2,
+      "plain": "No VAT on domestic electricity from October 2026 to July 2027.",
+      "leverCode": "b6elec"
+    },
+    {
+      "id": "m3",
+      "line": 3,
+      "plain": "The 5p cut in fuel duty stays until July 2027. The rise with prices waits until then.",
+      "leverCode": "b6fuel"
+    },
+    {
+      "id": "m4",
+      "line": 4,
+      "plain": "Single bus fares in England outside London capped at £2 for a year from January 2027.",
+      "notMovable": {
+        "reason": "The cap ends in January 2028; its later years are the energy department’s savings that pay for it."
+      }
+    },
+    {
+      "id": "m5",
+      "line": 5,
+      "plain": "Higher tax-free mileage rates for people who drive their own car for work.",
+      "leverCode": "b6mile"
+    },
+    {
+      "id": "m6",
+      "line": 6,
+      "plain": "A new parental allowance for fathers, partners and adopters from April 2029."
+    },
+    {
+      "id": "m7",
+      "line": 7,
+      "plain": "Carer’s Allowance is withdrawn bit by bit above the earnings limit from 2030-31."
+    },
+    {
+      "id": "m8",
+      "line": 8,
+      "plain": "Universal credit’s £2,500 surplus earnings threshold kept for one more year from April 2027."
+    },
+    {
+      "id": "m9",
+      "line": 9,
+      "plain": "More books for children under five."
+    },
+    {
+      "id": "m10",
+      "line": 10,
+      "plain": "Tariffs suspended on food, heating oil and fertiliser until 2027 or 2028."
+    },
+    {
+      "id": "m11",
+      "line": 11,
+      "plain": "The cash ISA limit stays at £20,000 from April 2027.",
+      "leverCode": "b6isa"
+    },
+    {
+      "id": "m12",
+      "line": 12,
+      "plain": "Pubs, social clubs and live music venues get 35% off business rates from April 2027.",
+      "leverCode": "b6brr"
+    },
+    {
+      "id": "m13",
+      "line": 13,
+      "plain": "Small shops, cafes, pubs and hotels get small business rate relief up to higher values.",
+      "leverCode": "b6brr"
+    },
+    {
+      "id": "m14",
+      "line": 14,
+      "plain": "High street business rates bills frozen in real terms for two years from April 2027.",
+      "leverCode": "b6brr"
+    },
+    {
+      "id": "m15",
+      "line": 15,
+      "plain": "The tax-free trading allowance rises from £1,000 to £3,000 from April 2027.",
+      "leverCode": "b6trade"
+    },
+    {
+      "id": "m16",
+      "line": 16,
+      "plain": "Tariffs suspended on 72 more products, and kept suspended on 361 others in 2027-28."
+    },
+    {
+      "id": "m17",
+      "line": 17,
+      "plain": "Climate change levy frozen for electricity and LPG. The gas rate rises with prices from April 2028."
+    },
+    {
+      "id": "m18",
+      "line": 18,
+      "plain": "Red diesel duty cut by 3.7p a litre until July 2027."
+    },
+    {
+      "id": "m19",
+      "line": 19,
+      "plain": "Small drinks producers get a bigger duty relief from February 2027."
+    },
+    {
+      "id": "m20",
+      "line": 20,
+      "plain": "Seed funding for mayors, and £1.5 billion of cheaper loans for mayoral authorities."
+    },
+    {
+      "id": "m21",
+      "line": 21,
+      "plain": "Mayoral authorities keep a share of business rates growth from April 2027."
+    },
+    {
+      "id": "m22",
+      "line": 22,
+      "plain": "Local apprenticeship services extended to every mayor."
+    },
+    {
+      "id": "m23",
+      "line": 23,
+      "plain": "Priority investments and local growth projects across the UK."
+    },
+    {
+      "id": "m24",
+      "line": 24,
+      "plain": "A pilot in Cambridge: a new way to pay for land, homes and roads from April 2027."
+    },
+    {
+      "id": "m25",
+      "line": 25,
+      "plain": "Money for strategic authorities to build the capacity for their new powers."
+    },
+    {
+      "id": "m26",
+      "line": 26,
+      "plain": "Founders’ Relief: 10% capital gains tax for founders of fast-growing companies from April 2027.",
+      "leverCode": "b6found"
+    },
+    {
+      "id": "m27",
+      "line": 27,
+      "plain": "Simpler forms for claiming research and development tax reliefs from April 2027."
+    },
+    {
+      "id": "m28",
+      "line": 28,
+      "plain": "A bigger share option limit of £120,000 for the smallest growth companies from April 2027."
+    },
+    {
+      "id": "m29",
+      "line": 29,
+      "plain": "The British Business Bank invests £1 billion sooner and can lend £2 billion more."
+    },
+    {
+      "id": "m30",
+      "line": 30,
+      "plain": "The National Wealth Fund invests more, including £2 billion in a new Energy Wealth Fund.",
+      "notMovable": {
+        "reason": "What is scored is the running cost of lending, not the capital; the fund’s decisions are its own."
+      }
+    },
+    {
+      "id": "m31",
+      "line": 31,
+      "plain": "Money for AI security, for AI across the economy, and for UK AI capabilities.",
+      "leverCode": "b6ai"
+    },
+    {
+      "id": "m32",
+      "line": 32,
+      "plain": "Cheaper charging at local, lower-powered public chargers in Great Britain."
+    },
+    {
+      "id": "m33",
+      "line": 33,
+      "plain": "A route off the streets for rough sleepers, with housing and support afterwards.",
+      "leverCode": "b6rough"
+    },
+    {
+      "id": "m34",
+      "line": 34,
+      "plain": "Part of it paid for from the housing department’s existing budgets.",
+      "leverCode": "b6rough"
+    },
+    {
+      "id": "m35",
+      "line": 35,
+      "plain": "£1.5 billion more for around 10,000 social and affordable homes.",
+      "leverCode": "b6homes"
+    },
+    {
+      "id": "m36",
+      "line": 36,
+      "plain": "No VAT on land sold to social housing providers from April 2027."
+    },
+    {
+      "id": "m37",
+      "line": 37,
+      "plain": "Your First Home: an equity loan for around 70,000 first-time buyers from April 2027.",
+      "notMovable": {
+        "reason": "What is scored is the fee income from developers; the loans are capital the Treasury lends and gets back."
+      }
+    },
+    {
+      "id": "m38",
+      "line": 38,
+      "plain": "A First Time Buyer ISA replaces the Lifetime ISA for new savers from April 2029.",
+      "leverCode": "b6ftbisa"
+    },
+    {
+      "id": "m39",
+      "line": 39,
+      "plain": "Lifetime ISA savers buying a home above the £450,000 cap pay a 20% charge, not 25%."
+    },
+    {
+      "id": "m40",
+      "line": 40,
+      "plain": "Spending on the Defence Investment Plan beyond the savings promised in June 2026.",
+      "notMovable": {
+        "reason": "The plan’s own spending; how it is paid for is line 41."
+      }
+    },
+    {
+      "id": "m41",
+      "line": 41,
+      "plain": "Capital moved from other departments to fully fund the Defence Investment Plan.",
+      "leverCode": "b6dipcap"
+    },
+    {
+      "id": "m42",
+      "line": 42,
+      "plain": "Defence’s back-office savings go to the front line and national security."
+    },
+    {
+      "id": "m43",
+      "line": 43,
+      "plain": "Emergency winter support for Ukraine’s air defence."
+    },
+    {
+      "id": "m44",
+      "line": 44,
+      "plain": "UK Export Finance backs more defence exports. The fees come in from June 2026.",
+      "notMovable": {
+        "reason": "Income from activity already under way."
+      }
+    },
+    {
+      "id": "m45",
+      "line": 45,
+      "plain": "More HMRC staff and powers to collect tax that goes unpaid.",
+      "leverCode": "b6hmrc"
+    },
+    {
+      "id": "m46",
+      "line": 46,
+      "plain": "Online marketplaces collect the VAT on sales by UK sellers from October 2027.",
+      "leverCode": "b6mkt"
+    },
+    {
+      "id": "m47",
+      "line": 47,
+      "plain": "The DWP uses more data and checks to stop fraud and error entering the benefits system.",
+      "leverCode": "b6fraud"
+    },
+    {
+      "id": "m48",
+      "line": 48,
+      "plain": "Serious offenders held in hospital lose benefit entitlements from April 2027."
+    },
+    {
+      "id": "m49",
+      "line": 49,
+      "plain": "The rules on taking money out of a company are tightened from April 2028.",
+      "leverCode": "b6dist"
+    },
+    {
+      "id": "m50",
+      "line": 50,
+      "plain": "Advance corporation tax is abolished from April 2031."
+    },
+    {
+      "id": "m51",
+      "line": 51,
+      "plain": "A VAT rule on services bought from overseas is narrowed from April 2027."
+    },
+    {
+      "id": "m52",
+      "line": 52,
+      "plain": "Pensioners with no more income than the state pension pay no income tax. It runs from 2027 to 2030.",
+      "leverCode": "b6pentx"
+    },
+    {
+      "id": "m53",
+      "line": 53,
+      "plain": "The two-year rule on taxing pension death benefits goes from October 2026."
+    },
+    {
+      "id": "m54",
+      "line": 54,
+      "plain": "Foreign states investing in UK property pay tax on it from January 2029.",
+      "leverCode": "b6sov"
+    },
+    {
+      "id": "m55",
+      "line": 55,
+      "plain": "The bank surcharge doubles to 6% for fifteen months from January 2027.",
+      "leverCode": "b6bank"
+    },
+    {
+      "id": "m56",
+      "line": 56,
+      "plain": "Duty on higher-stake gaming machines rises from 20% to 25% from April 2027.",
+      "leverCode": "b6mgd"
+    },
+    {
+      "id": "m57",
+      "line": 57,
+      "plain": "Vape shops and adult gaming centres lose business rates reliefs from April 2027."
+    },
+    {
+      "id": "m58",
+      "line": 58,
+      "plain": "Firms write off plant and machinery more slowly. The main allowance falls from 14% to 12%.",
+      "leverCode": "b6wda"
+    },
+    {
+      "id": "m59",
+      "line": 59,
+      "plain": "The biggest taxi and private hire apps pay VAT on the whole fare from January 2028.",
+      "leverCode": "b6phv"
+    },
+    {
+      "id": "m60",
+      "line": 60,
+      "plain": "Business asset disposal relief is capped at £500,000 of gains from April 2027.",
+      "leverCode": "b6badr"
+    },
+    {
+      "id": "m61",
+      "line": 61,
+      "plain": "Two points more income tax on rental income from April 2027.",
+      "leverCode": "b6prop"
+    },
+    {
+      "id": "m62",
+      "line": 62,
+      "plain": "Two points more income tax on savings interest from April 2027.",
+      "leverCode": "b6save"
+    },
+    {
+      "id": "m63",
+      "line": 63,
+      "plain": "Departments cut their running costs by 20% by 2029-30, not the 16% planned.",
+      "leverCode": "b6civil"
+    },
+    {
+      "id": "m64",
+      "line": 64,
+      "plain": "Part of that saving funds an AI programme to cut paperwork in government."
+    },
+    {
+      "id": "m65",
+      "line": 65,
+      "plain": "Vehicle excise duty on lorries cut to £1 for a year from July 2026.",
+      "notMovable": {
+        "reason": "Over before the first year you can change."
+      }
+    },
+    {
+      "id": "m66",
+      "line": 66,
+      "plain": "VAT on family days out cut to 5% for summer 2026.",
+      "notMovable": {
+        "reason": "Over before the first year you can change."
+      }
+    },
+    {
+      "id": "m67",
+      "line": 67,
+      "plain": "Free bus travel for children aged 5 to 15 in England in August 2026.",
+      "notMovable": {
+        "reason": "Over before the first year you can change."
+      }
+    },
+    {
+      "id": "m68",
+      "line": 68,
+      "plain": "Foreign branches of UK companies are exempt from UK tax. Their losses no longer cut it.",
+      "leverCode": "b6ctpe"
+    },
+    {
+      "id": "m69",
+      "line": 69,
+      "plain": "The electricity generator levy rises from 45% to 55% until March 2028."
+    },
+    {
+      "id": "m70",
+      "line": 70,
+      "plain": "The industrial electricity scheme cuts bills for energy-intensive firms from April 2027.",
+      "leverCode": "b6bics"
+    },
+    {
+      "id": "m71",
+      "line": 71,
+      "plain": "Carbon price support ends from April 2028 to cut energy bills."
+    },
+    {
+      "id": "m72",
+      "line": 72,
+      "plain": "A bigger Youth Guarantee and more apprenticeship support."
+    },
+    {
+      "id": "m73",
+      "line": 73,
+      "plain": "The Union Learning Fund is set up again in England."
+    },
+    {
+      "id": "m74",
+      "line": 74,
+      "plain": "Investment for growth: strategic technologies, local growth and key industries.",
+      "leverCode": "b6grow"
+    },
+    {
+      "id": "m75",
+      "line": 75,
+      "plain": "The Growth Guarantee Scheme backs £6.5 billion more lending to smaller firms.",
+      "leverCode": "b6ggs"
+    },
+    {
+      "id": "m76",
+      "line": 76,
+      "plain": "Leeds keeps all the growth in its business rates."
+    },
+    {
+      "id": "m77",
+      "line": 77,
+      "plain": "The trade deal with India comes into force from July 2026.",
+      "notMovable": {
+        "reason": "A treaty in force."
+      }
+    },
+    {
+      "id": "m78",
+      "line": 78,
+      "plain": "Tariffs and quotas on imported steel change from July 2026.",
+      "notMovable": {
+        "reason": "In force since July 2026."
+      }
+    },
+    {
+      "id": "m79",
+      "line": 79,
+      "plain": "A Securities Transfer Tax replaces stamp duty on shares from late 2027."
+    },
+    {
+      "id": "m80",
+      "line": 80,
+      "plain": "No business rates on electric vehicle charging points for ten years."
+    },
+    {
+      "id": "m81",
+      "line": 81,
+      "plain": "Grassroots programmes to prevent misogyny."
+    },
+    {
+      "id": "m82",
+      "line": 82,
+      "plain": "Infected blood compensation follows the Inquiry’s further recommendations."
+    },
+    {
+      "id": "m83",
+      "line": 83,
+      "plain": "Interest on Plan 2 and Plan 3 student loans capped at 6% for a year from September 2026."
+    },
+    {
+      "id": "m84",
+      "line": 84,
+      "plain": "Landfill tax costs covered for clearing six illegal waste sites, and a pilot for councils."
+    },
+    {
+      "id": "m85",
+      "line": 85,
+      "plain": "Money for key pressures, including the NHS and the plan on violence against women and girls."
+    },
+    {
+      "id": "m86",
+      "line": 86,
+      "plain": "Company car tax rates set for 2030-31.",
+      "notMovable": {
+        "reason": "Rates for a year beyond the target year."
+      }
+    },
+    {
+      "id": "m87",
+      "line": 87,
+      "plain": "A licensing regime for supported housing from 2027-28."
+    },
+    {
+      "id": "m88",
+      "line": 88,
+      "plain": "No VAT on donated medicines from June 2026."
+    },
+    {
+      "id": "m89",
+      "line": 89,
+      "plain": "VAT on temporary medical staff restored to what the law intended.",
+      "notMovable": {
+        "reason": "A correction to what the law intended."
+      }
+    },
+    {
+      "id": "m90",
+      "line": 90,
+      "plain": "Landfill operators can give more to community funds from April 2027."
+    },
+    {
+      "id": "m91",
+      "line": 91,
+      "plain": "Franchised university providers with 300 or more students must register from September 2028.",
+      "leverCode": "b6hefr"
+    },
+    {
+      "id": "m92",
+      "line": 92,
+      "plain": "Council budgets for special educational needs adjust for pay and teachers’ pensions."
+    },
+    {
+      "id": "m93",
+      "line": 93,
+      "plain": "Who can defer or be let off the high value council tax surcharge, from April 2028."
+    },
+    {
+      "id": "m94",
+      "line": 94,
+      "plain": "Payrolling of company car and medical benefits waits until April 2027, the rest until April 2028."
+    },
+    {
+      "id": "m95",
+      "line": 95,
+      "plain": "The £135 customs duty relief on low value imports ends from October 2028.",
+      "notMovable": {
+        "reason": "Scored at nothing in the years you can change."
+      }
+    },
+    {
+      "id": "m96",
+      "line": 96,
+      "plain": "Waste incinerators join the emissions trading scheme later than planned.",
+      "leverCode": "b6ets"
+    },
+    {
+      "id": "m97",
+      "line": 97,
+      "plain": "Gas distribution firms spread a one-off change in their accounts over five years."
+    },
+    {
+      "id": "m98",
+      "line": 98,
+      "plain": "UK investors in US limited liability companies no longer pay tax twice from early 2028."
+    }
+  ]
+}

@@ -46,6 +46,10 @@ describe('a row in a decision’s card (ADR-0037)', () => {
     expect(wouldPhrase('Nothing until 2030-31, then raises £18.5bn', false)).toBe(
       'would raise nothing until 2030-31, then £18.5bn',
     );
+    // Over before the target year (ADR-0045): the year it moved, led by the verb.
+    expect(wouldPhrase('Nothing in 2029-30; raises £0.8bn in 2027-28', false)).toBe(
+      'would raise nothing in 2029-30; £0.8bn in 2027-28',
+    );
   });
 
   it('says what a moved lever does, the verb first and then the year', () => {

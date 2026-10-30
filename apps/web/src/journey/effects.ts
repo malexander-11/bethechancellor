@@ -66,15 +66,40 @@ export function laterStartYear(
 }
 
 /**
+ * When a measure moves nothing in the summary year and nothing after it, the earlier policy year
+ * it moves most (ADR-0045: a measure over before the rules bite names the year it touched).
+ */
+export function earlierMoveYear(
+  effect: LeverEffect,
+  summaryYear: string,
+  capital: boolean,
+  policyYears: readonly string[],
+): string | undefined {
+  const improve = (y: string) =>
+    capital ? borrowingImprovement(effect, y) : currentBudgetImprovement(effect, y);
+  if (Math.abs(improve(summaryYear)) >= UNCHANGED_BELOW_GBPM) return undefined;
+  let biggest: string | undefined;
+  for (const y of policyYears) {
+    if (fyStart(y) >= fyStart(summaryYear)) continue;
+    if (Math.abs(improve(y)) < UNCHANGED_BELOW_GBPM) continue;
+    if (!biggest || Math.abs(improve(y)) > Math.abs(improve(biggest))) biggest = y;
+  }
+  return biggest;
+}
+
+/**
  * A hint in the conditional (Phase 25): what a move would do, never what it has done, so a
  * resting card cannot read as money already in the Budget. "Raises £8.6bn" becomes "would raise
  * £8.6bn"; "Borrowing down £6.7bn" becomes "borrowing would fall £6.7bn"; a later start leads with
- * the verb: "would raise nothing until 2030-31, then £18.5bn".
+ * the verb: "would raise nothing until 2030-31, then £18.5bn", and so does a move that is over
+ * before the summary year: "would raise nothing in 2029-30; £0.8bn in 2027-28".
  */
 export function wouldWords(text: string): string {
   const lower = text.charAt(0).toLowerCase() + text.slice(1);
   const later = /^nothing until (\S+), then (raises|saves|costs) (.*)$/.exec(lower);
   if (later) return `would ${verb(later[2] ?? '')} nothing until ${later[1]}, then ${later[3]}`;
+  const earlier = /^nothing in (\S+); (raises|saves|costs) (.*)$/.exec(lower);
+  if (earlier) return `would ${verb(earlier[2] ?? '')} nothing in ${earlier[1]}; ${earlier[3]}`;
   return lower
     .replace(/^borrowing down /, 'borrowing would fall ')
     .replace(/^borrowing up /, 'borrowing would rise ')

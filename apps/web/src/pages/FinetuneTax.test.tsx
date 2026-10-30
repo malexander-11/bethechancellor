@@ -57,8 +57,9 @@ describe('fine-tune tax and spend: one card a decision', () => {
         .map((b) => b.textContent),
     ).toEqual([
       'Change the headline rate 20% as planned',
-      'Make small changes 3 choices',
+      'Make small changes 4 choices',
       'Remove an exemption 8 choices',
+      'This Budget’s decisions 2 choices',
     ]);
     expect(statusOf('Change the rate')).toBe('40% as planned');
     expect(statusOf('Change business rates')).toBe('As planned');
@@ -294,7 +295,7 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(decision('Change fuel duty')).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('warns when two levers overlap: the April 2027 freeze against a fuel duty cut', () => {
+  it('warns when two levers overlap: the Budget’s deferred rise against a fuel duty cut', () => {
     at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&L=fuel.-10`);
     // The cut is the cost-of-living flagship's own, so its decision is open on arrival and fuel
     // duty is a row naming that flagship, with the way back to it, not a scale that could undo it.
@@ -303,13 +304,14 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(held).toHaveClass('tune__row--held');
     expect(held.querySelector('.lever__held')?.textContent).toMatch(/^Cut fuel duty by 10%/);
     expect(within(held).queryAllByRole('radio')).toHaveLength(0);
-    // The freeze a Chancellor faces this autumn is on show, costs money (Phase 25), and warns at
-    // once that it moves the same duty as the cut.
-    const freeze = tickRow('Freeze it in April 2027');
+    // The Budget deferred the rise to July 2027 (ADR-0045): bringing it forward is on show, raises
+    // money in 2027-28 and nothing by the target year, and warns at once that it moves the same
+    // duty as the cut.
+    const sooner = tickRow('Raise it in April 2027');
     expect(
-      within(freeze).getByText(/^Warning: Overlaps with Fuel duty: Both change fuel duty rates/),
+      within(sooner).getByText(/^Warning: Overlaps with Fuel duty: Both move the duty rate/),
     ).toHaveClass('choice__overlap--warn');
-    expect(priceOf(freeze)).toMatch(/^would cost £0\.\dbn$/);
+    expect(priceOf(sooner)).toMatch(/^would raise nothing in 2029-30; £0\.\dbn in 2027-28$/);
   });
 
   it('reads a relief cost as the most it could raise, and says why once a card', () => {
@@ -327,15 +329,15 @@ describe('fine-tune tax and spend: one card a decision', () => {
   });
 
   it('makes two ticks that contradict each other one choice, As planned first (ADR-0036)', async () => {
-    at(`/finetune/tax?${BASE}&${GAME}&L=rvinv.1`);
-    // Undoing last year's rises was chosen before the screen opened, so its decision is open.
-    const title = 'Tax on dividends, savings and rent';
+    at(`/finetune/tax?${BASE}&${GAME}&L=vatelec.1`);
+    // Keeping VAT off electricity was chosen before the screen opened, so its decision is open.
+    const title = 'Make small changes';
     expect(decision(title)).toHaveAttribute('aria-expanded', 'true');
-    const set = screen.getByRole('group', { name: 'The rates on dividends, savings and rent' });
+    const set = screen.getByRole('group', { name: 'VAT on electricity' });
     const radio = (name: string) => within(set).getByRole('radio', { name });
-    const more = radio('Another 2p');
+    const more = radio('End it in April 2027');
     expect(within(set).getAllByRole('radio')).toHaveLength(3);
-    expect(radio('Undo last year’s rises')).toBeChecked();
+    expect(radio('Keep it off after July 2027')).toBeChecked();
     expect(radio('As planned')).not.toBeChecked();
     expect(more).not.toBeChecked();
     // One group, so the arrow keys move between them as they do along a scale.
@@ -348,19 +350,20 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(more).not.toHaveAttribute('aria-disabled');
     expect(row).not.toHaveClass('tune__row--blocked');
     expect(within(row).queryByText(/can’t have both|takes out|Counted twice/)).toBeNull();
+    // The swap puts the zero rate's cost back, so it reads as raising money by the target year.
     expect(priceOf(row)).toMatch(/^would raise £\d+\.\dbn instead$/);
     fireEvent.click(more);
-    await waitFor(() => expect(search().get('L')).toMatch(/iinc2\.1/));
-    expect(search().get('L') ?? '').not.toMatch(/rvinv/);
-    expect(radio('Another 2p')).toBeChecked();
-    expect(statusOf(title)).toMatch(/^1 chosen · raises £\d\.\dbn$/);
+    await waitFor(() => expect(search().get('L')).toMatch(/b6elec\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/vatelec/);
+    expect(radio('End it in April 2027')).toBeChecked();
+    expect(statusOf(title)).toMatch(/^1 chosen/);
     // As planned puts both back.
     fireEvent.click(radio('As planned'));
-    await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/iinc2|rvinv/));
-    expect(statusOf(title)).toBe('2 choices');
+    await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/b6elec|vatelec/));
+    expect(statusOf(title)).toBe('4 choices');
   });
 
-  it('makes the wealth tax and the rates on dividends one choice each', async () => {
+  it('makes the wealth tax and VAT on electricity one choice each', async () => {
     at(`/finetune/tax?${BASE}&${GAME}`);
     // The wealth tax is its card's whole question: the set's name is heard, not shown again.
     const wealthPanel = openDecision('Tax wealth above £10 million');
@@ -374,15 +377,15 @@ describe('fine-tune tax and spend: one card a decision', () => {
     expect(search().get('L') ?? '').not.toMatch(/(^|_)wealth\.1/);
     expect(statusOf('Tax wealth above £10 million')).toMatch(/^1 chosen/);
 
-    const income = openDecision('Tax on dividends, savings and rent');
-    const rates = within(income).getByRole('group', {
-      name: 'The rates on dividends, savings and rent',
-    });
-    fireEvent.click(within(rates).getByRole('radio', { name: 'Undo last year’s rises' }));
-    await waitFor(() => expect(search().get('L')).toMatch(/rvinv\.1/));
-    fireEvent.click(within(rates).getByRole('radio', { name: 'Another 2p' }));
-    await waitFor(() => expect(search().get('L')).toMatch(/iinc2\.1/));
-    expect(search().get('L') ?? '').not.toMatch(/rvinv/);
+    const small = openDecision('Make small changes');
+    const electricity = within(small).getByRole('group', { name: 'VAT on electricity' });
+    fireEvent.click(
+      within(electricity).getByRole('radio', { name: 'Keep it off after July 2027' }),
+    );
+    await waitFor(() => expect(search().get('L')).toMatch(/vatelec\.1/));
+    fireEvent.click(within(electricity).getByRole('radio', { name: 'End it in April 2027' }));
+    await waitFor(() => expect(search().get('L')).toMatch(/b6elec\.1/));
+    expect(search().get('L') ?? '').not.toMatch(/vatelec/);
   });
 
   it('checks the first of a choice an old link carries two of, and warns on both', () => {

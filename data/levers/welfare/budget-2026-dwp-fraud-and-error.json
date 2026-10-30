@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-dwp-fraud-and-error",
+  "code": "b6fraud",
+  "category": "welfare",
+  "badge": "direct",
+  "group": "Budget 2026 decisions",
+  "title": "Drop the DWP fraud and error package",
+  "shortTitle": "Drop the DWP fraud package",
+  "noun": "dropping the DWP fraud and error package",
+  "headline": "Drop the DWP fraud package. Costs £0.1bn in 2029-30.",
+  "description": "The Budget expands data checks and controls to stop fraud and error entering the benefits system, from checks on time spent abroad to pension credit capital declarations. It costs money in 2027-28 and saves from 2028-29. Switch this on to drop it.",
+  "baselinePolicy": {
+    "text": "DWP’s Budget 2026 fraud and error measures are in the forecast (Table 6.1 line 47).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "54",
+      "quote": "This measure strengthens DWP's ability to identify cases where customers remain abroad longer than benefit rules allow."
+    },
+    "alreadyIncludes": [
+      "DWP’s Budget 2026 fraud and error measures are in the forecast (Table 6.1 line 47)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "insideWelfareCap": true,
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 195,
+      "2027-28": -125,
+      "2028-29": 60,
+      "2029-30": 75,
+      "2030-31": 155,
+      "2031-32": 240
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 47,
+          "title": "DWP Fraud and Error: Expand use of data and targeted controls to prevent fraud from entering the benefits system4",
+          "values": {
+            "2026-27": 195,
+            "2027-28": -125,
+            "2028-29": 60,
+            "2029-30": 75,
+            "2030-31": 155,
+            "2031-32": 240
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury’s costing with the sign kept (a line that reduced borrowing is spending the reversal adds back; a line that cost money is spending the reversal saves)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours.",
+      "The OBR rates this package’s costing as highly uncertain: it rests on operational trials being repeated at scale (October 2026 outlook, Table 3.3)."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "54"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 47"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

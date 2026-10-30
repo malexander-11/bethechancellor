@@ -4,6 +4,7 @@ import {
   SHARE_WORDS,
   encodePermalink,
   excludesPartners,
+  fillStory,
   finetuneItems,
   gameImplementationYear,
   gameOutcomeOf,
@@ -16,6 +17,7 @@ import { takesOutWords } from '../components/LeverControl';
 import { INVESTMENT_NOTE, RELIEF_NOTE } from '../components/LeverRow';
 import { MODE_WORDS } from '../components/ModeLine';
 import {
+  budget,
   electorate,
   finetune,
   finetuneName,
@@ -185,6 +187,27 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
   'the leaderboard': [
     ...Object.values(BOARD_TEXT).filter((line) => !line.includes('{')),
     countsWords({ ups: 12, downs: 3 }),
+  ],
+  // The Budget the game starts from (ADR-0045): its story with the figures filled as the page
+  // fills them, every measure in plain words, and why the ones a reader might expect to move
+  // cannot be.
+  'the Budget': [
+    budget.title,
+    ...budget.story.map((line) =>
+      fillStory(line.text, {
+        march: '£23.6bn',
+        debtInterest: '£12.0bn',
+        other: '£0.9bn',
+        before: '£12.5bn',
+        measures: '£2.0bn',
+        headroom: '£14.5bn',
+        year: '2029-30',
+        welfareGap: '£2.8bn',
+        tax: '£5.6bn',
+        spending: '£0.4bn',
+      }),
+    ),
+    ...budget.measures.flatMap((m) => [m.plain, ...(m.notMovable ? [m.notMovable.reason] : [])]),
   ],
   // The briefing in three parts (Phase 28): every heading and line, filled as the page fills
   // them.

@@ -4,11 +4,11 @@
   "code": "hmrc2",
   "category": "tax",
   "badge": "assumption",
-  "group": "The tax gap",
+  "group": "Shelved",
   "title": "Another HMRC package to close the tax gap",
   "shortTitle": "Compliance again",
   "noun": "the tax gap package",
-  "headline": "Another compliance package, assumed to yield what the last did: £2.4bn.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
   "description": "Budget 2025 scored a package of HMRC measures to close the tax gap at £695 million in 2027-28 rising to £2.4 billion in 2029-30 and £2.6 billion in 2030-31: more third-party data, more compliance staff, faster debt collection. This card assumes a second package of the same size raises the same again, year by year. Nobody has costed one, and the easy gains go first, so this is the assumption most likely to disappoint.",
   "baselinePolicy": {
     "text": "HMRC: further measures to close the tax gap, costed at £75m, £435m, £695m, £1,250m, £2,415m and £2,590m from 2025-26 to 2030-31 (Budget 2025, Table 4.1 line 59), on top of the compliance packages of Autumn Budget 2024 and Spring Statement 2025.",
@@ -69,11 +69,11 @@
         }
       ],
       "signConvention": "positiveReducesBorrowing",
-      "note": "Repeat: the Treasury's certified costing of the Budget 2025 compliance package, taken as the yield of a further package of the same size, year by year. The published title carries a footnote marker (\"tax gap5\") and is cited as extracted. Positive scorecard values reduce borrowing; here receipts positive means more revenue. Effects before the start year are not applied."
+      "note": "Repeat: the Treasury’s certified costing of the Budget 2025 compliance package, taken as the yield of a further package of the same size, year by year. The published title carries a footnote marker (\"tax gap5\") and is cited as extracted. Positive scorecard values reduce borrowing; here receipts positive means more revenue. Effects before the start year are not applied."
     },
     "caveats": [
       "Nobody has costed a further round. The Budget 2025 package was itself the third in a year, and each costing names the size of the tax base and the behavioural response as its main uncertainties; a fourth package would be working on what three have already left.",
-      "Compliance yield arrives late and is hard to audit: HMRC's own figures for what it collects are estimates of what would otherwise have gone unpaid. The Treasury's costing is on the OBR November 2025 forecast, not the October 2026 baseline used here.",
+      "Compliance yield arrives late and is hard to audit: HMRC’s own figures for what it collects are estimates of what would otherwise have gone unpaid. The Treasury’s costing is on the OBR November 2025 forecast, not the October 2026 baseline used here.",
       "The receipts are spread across every tax, so the card books them to other taxes rather than to any one head."
     ]
   },
@@ -108,5 +108,6 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-19"
+  "reviewedOn": "2026-09-19",
+  "deprecated": true
 }

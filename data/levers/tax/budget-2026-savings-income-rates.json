@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-savings-income-rates",
+  "code": "b6save",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Income tax",
+  "title": "Drop the 2p rise in tax on savings interest",
+  "shortTitle": "Drop the savings rise",
+  "noun": "dropping the rise in tax on savings interest",
+  "headline": "Drop the savings rise. Costs £0.5bn in 2029-30.",
+  "description": "From April 2027 savings interest above the allowances is taxed two percentage points higher at every rate. Switch this on to drop the rise.",
+  "baselinePolicy": {
+    "text": "Income tax on savings income is two percentage points higher at the basic, higher and additional rates from 6 April 2027 (Table 6.1 line 62).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "75",
+      "quote": "This measure increases the Basic, Higher and Additional rates of Income Tax on savings income by 2 percentage points."
+    },
+    "alreadyIncludes": [
+      "Income tax on savings income is two percentage points higher at the basic, higher and additional rates from 6 April 2027 (Table 6.1 line 62)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": -15,
+      "2027-28": -125,
+      "2028-29": -555,
+      "2029-30": -520,
+      "2030-31": -555,
+      "2031-32": -590
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 62,
+          "title": "Savings Income: Increase tax rates on savings income by 2ppts at the basic, higher and additional rate from 6 April 2027",
+          "values": {
+            "2026-27": 15,
+            "2027-28": 125,
+            "2028-29": 555,
+            "2029-30": 520,
+            "2030-31": 555,
+            "2031-32": 590
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "75"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 62"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30",
+  "interactions": [
+    {
+      "withLever": "reverse-investment-income-rises",
+      "text": "Both change the rates on savings income: Budget 2025’s two points and this Budget’s two more.",
+      "severity": "warn"
+    }
+  ]
+}

@@ -17,6 +17,7 @@ import {
   currentBudgetImprovement,
   effectWords,
   growthWords,
+  earlierMoveYear,
   laterStartYear,
   reliefWords,
   wouldWords,
@@ -109,6 +110,8 @@ export function effectPhrase(
   };
   const later = laterStartYear(effect, year, capital, POLICY_YEARS);
   if (later) return `nothing in ${year}; from ${later} ${words(improve(later))}`;
+  const earlier = earlierMoveYear(effect, year, capital, POLICY_YEARS);
+  if (earlier) return `nothing in ${year}; ${words(improve(earlier))} in ${earlier}`;
   return `${words(improve(year))} in ${year}`;
 }
 

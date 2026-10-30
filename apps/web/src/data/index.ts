@@ -29,6 +29,8 @@ export const {
   incidence,
   guide,
   glossary,
+  budget,
+  scorecard,
   levers,
 } = dataset;
 /** Step 4's curated tax and spending levers (Phase 24, ADR-0025). */

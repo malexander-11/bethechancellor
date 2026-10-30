@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-civil-service-admin",
+  "code": "b6civil",
+  "category": "spend",
+  "badge": "direct",
+  "group": "Budget 2026 decisions",
+  "title": "Cancel the extra cut to Civil Service running costs",
+  "shortTitle": "Cancel the extra admin cut",
+  "noun": "cancelling the extra Civil Service cut",
+  "headline": "Cancel the extra admin cut. Costs £0.6bn in 2029-30.",
+  "description": "Departments’ administration budgets are cut by 20% by 2029-30 instead of the 16% the Spending Review planned, saving £0.6 billion a year by then. Switch this on to cancel the extra cut and give that money back.",
+  "baselinePolicy": {
+    "text": "Departmental administration budgets fall by 20% by 2029-30, against 16% in the Spending Review 2025 plans (Table 6.1 line 63).",
+    "source": {
+      "sourceId": "hmt-budget-2026-document",
+      "paragraph": "2.14",
+      "quote": "the government is going further by reducing departmental administration budgets by 20% by 2029‑30"
+    },
+    "alreadyIncludes": [
+      "Departmental administration budgets fall by 20% by 2029-30, against 16% in the Spending Review 2025 plans (Table 6.1 line 63)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "department": "Civil Service administration",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 0,
+      "2027-28": 185,
+      "2028-29": 405,
+      "2029-30": 595,
+      "2030-31": 615,
+      "2031-32": 635
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 63,
+          "title": "Future Civil Service: Reduce administration budgets by 20% by 2029-30 compared to 16% reduction in Spending Review 2025 plans",
+          "values": {
+            "2026-27": 0,
+            "2027-28": 185,
+            "2028-29": 405,
+            "2029-30": 595,
+            "2030-31": 615,
+            "2031-32": 635
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury’s costing with the sign kept (a line that reduced borrowing is spending the reversal adds back; a line that cost money is spending the reversal saves)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours.",
+      "The OBR already doubts that every planned efficiency saving arrives; cancelling this one puts the money back in the plans, not in any particular service."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the Budget’s own costing of the measure, certified by the OBR as part of its October 2026 forecast.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-document",
+          "paragraph": "2.14"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 63"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

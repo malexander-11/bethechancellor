@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-vat-electricity-to-july",
+  "code": "b6elec",
+  "category": "tax",
+  "badge": "direct",
+  "group": "VAT",
+  "title": "End the zero rate on electricity in April 2027",
+  "shortTitle": "End electricity zero rate early",
+  "noun": "ending the electricity zero rate early",
+  "headline": "End electricity zero rate early. Raises £0.3bn in 2027-28, nothing by 2029-30.",
+  "description": "VAT on domestic electricity is 0% from October 2026 to July 2027. Switch this on to end it in April 2027 instead, the first year you can change. It raises nothing by 2029-30, so this moves 2027-28 only.",
+  "baselinePolicy": {
+    "text": "VAT on domestic electricity is 0% from 1 October 2026 to 1 July 2027, then 5% (Table 6.1 line 2).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "12",
+      "quote": "This measure is effective from 1 October 2026 until 1 July 2027."
+    },
+    "alreadyIncludes": [
+      "VAT on domestic electricity is 0% from 1 October 2026 to 1 July 2027, then 5% (Table 6.1 line 2)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "vat",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 755,
+      "2027-28": 305,
+      "2028-29": 0,
+      "2029-30": 0,
+      "2030-31": 0,
+      "2031-32": 0
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 2,
+          "title": "Support for Energy Bills: Cut VAT on domestic electricity from 5% to 0% from 1 October 2026 to 1 July 2027",
+          "values": {
+            "2026-27": -755,
+            "2027-28": -305,
+            "2028-29": 0,
+            "2029-30": 0,
+            "2030-31": 0,
+            "2031-32": 0
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours.",
+      "Only the first quarter of 2027-28 is yours to change: the half-year to March 2027 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "12"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 2"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30",
+  "interactions": [
+    {
+      "withLever": "keep-vat-off-electricity",
+      "text": "One ends the zero rate early, the other keeps it going; the rate cannot do both.",
+      "severity": "excludes"
+    }
+  ]
+}

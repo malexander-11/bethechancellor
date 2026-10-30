@@ -189,10 +189,10 @@ describe('the options (ADR-0022): since Phase 24, the ways to deliver the priori
     expect(optionOverlaps(freeze, levers, new Set())).toEqual([]);
     const loud = optionOverlaps(freeze, levers, new Set(['itbr']), options);
     expect(loud[0]?.active).toBe(true);
-    // The April 2027 freeze (Phase 25) and a fuel duty cut both set the duty: a warning the card
-    // names at once, because the freeze is one of step 4's levers, read from its own side.
+    // The Budget's deferred rise (ADR-0045) and a fuel duty cut both set the duty: a warning the
+    // card names at once, because the rise is one of step 4's levers, read from its own side.
     const fuel = optionOverlaps(deliverOption('fuel-duty-cut'), levers, new Set(), options);
-    expect(fuel.map((o) => [o.withLever.code, o.severity])).toEqual([['fuelfrz', 'warn']]);
+    expect(fuel.map((o) => [o.withLever.code, o.severity])).toEqual([['b6fuel', 'warn']]);
     // Another option is named as the option: the 3% path and a day-to-day uplift add up.
     const three = optionOverlaps(deliverOption('three-per-cent-now'), levers, new Set(), options);
     expect(three.find((o) => o.withLever.code === 'mod')?.option?.id).toBe('defence-uplift');

@@ -5,6 +5,20 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The Chancellor's measures are levers (ADR-0045): the Budget 2026 decisions of £100m or more in
+  2029-30, and a few headline ones, are each a toggle that reverses the Treasury's own scorecard
+  line, costed from Table 6.1 and sourced to the policy costings, offered on step 4 beside the tax
+  or budget they belong to, with a minister, an incidence tag and a household for each. Three
+  levers the Budget overtook are shelved: HMRC compliance again, another 2p on investment income
+  and the April 2027 fuel duty freeze; the defence plan's gap, which the Budget funded, stays only
+  until the priorities retire with it. A measure over before the target year is priced by the year
+  it moves ("nothing in 2029-30; raises £0.8bn in 2027-28") rather than as changing nothing.
+  Keeping VAT off electricity is re-derived from the Budget's own zero rate,
+  which now runs to July 2027. `data/journey/budget2026.json` lists all 98 measures in plain words,
+  joined to the extracted scorecard by line and shipped with it, with the published steps of the
+  margin since March and the story the analysis page tells; the validator holds every movable
+  measure to a live lever on step 4 costed from that line, the steps to the forecast the engine
+  reproduces, and the story to placeholders the page fills.
 - The game plays on the OBR's October 2026 forecast, with the Budget's measures in it: a new vintage
   typed from the Economic and fiscal outlook of 28 October 2026 (`obr-2026-10`), the March 2026
   vintage kept for old links. The forecast is the estimate: the context carries no readings, so

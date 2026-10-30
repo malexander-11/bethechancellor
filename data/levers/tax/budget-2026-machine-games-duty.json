@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-machine-games-duty",
+  "code": "b6mgd",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Duties",
+  "title": "Drop the rise in machine games duty",
+  "shortTitle": "Drop machine games rise",
+  "noun": "dropping the machine games duty rise",
+  "headline": "Drop machine games rise. Costs £0.1bn in 2029-30.",
+  "description": "Duty on higher-stake gaming machines rises from 20% to 25% from April 2027, and from April 2028 the machine’s supplier pays it. Switch this on to drop both.",
+  "baselinePolicy": {
+    "text": "Machine games duty is 25% on higher-stake machines from 1 April 2027, paid by the supplier from 1 April 2028 (Table 6.1 line 56).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "67",
+      "quote": "This measure increases the Machine Games Duty rate from 20% to 25% on machines with a maximum stake above £1 or a maximum prize above £100."
+    },
+    "alreadyIncludes": [
+      "Machine games duty is 25% on higher-stake machines from 1 April 2027, paid by the supplier from 1 April 2028 (Table 6.1 line 56)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "otherTaxes",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 0,
+      "2027-28": -135,
+      "2028-29": -150,
+      "2029-30": -145,
+      "2030-31": -145,
+      "2031-32": -145
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 56,
+          "title": "Machine Games Duty: Increase the rate from 20% to 25% for higher stake machines from 1 April 2027 and move duty liability to the machine supplier from 1 April 2028",
+          "values": {
+            "2026-27": 0,
+            "2027-28": 135,
+            "2028-29": 150,
+            "2029-30": 145,
+            "2030-31": 145,
+            "2031-32": 145
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "67"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 56"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

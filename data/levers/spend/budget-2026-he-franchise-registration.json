@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-he-franchise-registration",
+  "code": "b6hefr",
+  "category": "spend",
+  "badge": "direct",
+  "group": "Budget 2026 decisions",
+  "title": "Drop the registration rule for franchised universities",
+  "shortTitle": "Drop franchise registration",
+  "noun": "dropping the franchise registration rule",
+  "headline": "Drop franchise registration. Costs £0.2bn in 2029-30.",
+  "description": "From September 2028 franchised higher education providers with 300 or more students must register with the Office for Students for their students to get loans. It saves student finance money. Switch this on to drop the rule.",
+  "baselinePolicy": {
+    "text": "Franchised higher education providers with 300 or more students must register with the Office for Students from 1 September 2028 (Table 6.1 line 91).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "100",
+      "quote": "will be required to register with the Office for Students (OfS) for new students to continue to be eligible for student finance"
+    },
+    "alreadyIncludes": [
+      "Franchised higher education providers with 300 or more students must register with the Office for Students from 1 September 2028 (Table 6.1 line 91)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "department": "Education",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 30,
+      "2027-28": 70,
+      "2028-29": 200,
+      "2029-30": 220,
+      "2030-31": 200,
+      "2031-32": 225
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 91,
+          "title": "Higher Education: Introduce registration requirements for franchise providers with 300 or more students from 1 September 2028, to strengthen quality and oversight of franchised provision",
+          "values": {
+            "2026-27": 30,
+            "2027-28": 70,
+            "2028-29": 200,
+            "2029-30": 220,
+            "2030-31": 200,
+            "2031-32": 225
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury’s costing with the sign kept (a line that reduced borrowing is spending the reversal adds back; a line that cost money is spending the reversal saves)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "100"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 91"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

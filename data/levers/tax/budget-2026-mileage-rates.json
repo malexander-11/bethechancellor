@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-mileage-rates",
+  "code": "b6mile",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Income tax",
+  "title": "Drop the higher mileage rates",
+  "shortTitle": "Drop higher mileage rates",
+  "noun": "dropping the higher mileage rates",
+  "headline": "Drop higher mileage rates. Raises £0.2bn in 2029-30.",
+  "description": "The tax-free mileage rate for driving your own car for work rose to 55p for the first 10,000 miles from April 2026, and the rate above that rises to 35p from April 2027. Switch this on to drop the rise from April 2027.",
+  "baselinePolicy": {
+    "text": "Approved mileage rates are 55p for the first 10,000 business miles from 6 April 2026 and 35p above that from 6 April 2027 (Table 6.1 line 5).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "14",
+      "quote": "The rates have been increased to 55p per mile for the first 10,000 miles of travel from 6 April 2026 with an additional increase to 35p per mile for over 10,000 miles of travel from 6 April 2027."
+    },
+    "alreadyIncludes": [
+      "Approved mileage rates are 55p for the first 10,000 business miles from 6 April 2026 and 35p above that from 6 April 2027 (Table 6.1 line 5)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 30,
+      "2027-28": 200,
+      "2028-29": 220,
+      "2029-30": 225,
+      "2030-31": 235,
+      "2031-32": 245
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 5,
+          "title": "Mileage Rates: Increase the tax-free and tax-deductible car and van rates to 55p for the first 10,000 business miles from 6 April 2026 and the higher mileage rate to 35p from 6 April 2027",
+          "values": {
+            "2026-27": -30,
+            "2027-28": -200,
+            "2028-29": -220,
+            "2029-30": -225,
+            "2030-31": -235,
+            "2031-32": -245
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "14"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 5"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

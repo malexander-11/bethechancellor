@@ -2,6 +2,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import {
+  budgetScorecardProblems,
   checkRawSourceConsistency,
   DataError,
   parseHmrcExtract,
@@ -64,6 +65,13 @@ function main(): void {
     const scorecard = parseScorecardExtract(readJson(target));
     extracted.scorecards[scorecard.sourceId] = scorecard;
   }
+  // The Budget's measure list and the scorecard it joins to are the same list.
+  const joined = extracted.scorecards[ds.budget.scorecard];
+  if (joined) problems.push(...budgetScorecardProblems(ds.budget, joined));
+  else
+    problems.push(
+      `budget ${ds.budget.id} joins scorecard ${ds.budget.scorecard}, which is not extracted`,
+    );
   extracted.reliefs = {};
   for (const file of [RELIEFS_EXTRACT_FILE, PENSIONS_EXTRACT_FILE]) {
     const target = path.join(DERIVED_DIR, file);

@@ -14,6 +14,7 @@ import {
   parseIncidence,
   parseGuide,
   parseGlossary,
+  parseBudget,
   parseReception,
   parseHmrcExtract,
   parseHouseholds,
@@ -74,6 +75,7 @@ export function loadDataset(): Required<Dataset> {
     incidence: parseIncidence(readJson('journey/incidence.json')),
     guide: parseGuide(readJson('journey/guide.json')),
     glossary: parseGlossary(readJson('journey/glossary.json')),
+    budget: parseBudget(readJson('journey/budget2026.json')),
     reception: parseReception(readJson('journey/reception.json')),
   };
 }
@@ -83,10 +85,15 @@ export function loadExtracts(): ExtractedSources {
   const autumn2024 = parseScorecardExtract(
     readJson('derived/hmt-autumn-budget-2024-table-5-1.raw.json'),
   );
+  const budget2026 = parseScorecardExtract(readJson('derived/hmt-budget-2026-table-6-1.raw.json'));
   return {
     hmrc: parseHmrcExtract(readJson('derived/hmrc-trr-2025-06.raw.json')),
     scorecard: budget2025,
-    scorecards: { [budget2025.sourceId]: budget2025, [autumn2024.sourceId]: autumn2024 },
+    scorecards: {
+      [budget2025.sourceId]: budget2025,
+      [autumn2024.sourceId]: autumn2024,
+      [budget2026.sourceId]: budget2026,
+    },
     sr25: parseSr25Extract(readJson('derived/hmt-sr25-del.raw.json')),
     reliefs: Object.fromEntries(
       [

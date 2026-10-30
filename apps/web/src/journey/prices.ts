@@ -75,6 +75,9 @@ export function priceWords(price: Price, codes: readonly string[], on: boolean):
     if (price.earlier) text += ', more in earlier years';
   } else if (price.laterStart && price.laterCostGbpm !== undefined) {
     text = `Nothing until ${price.laterStart}, then ${verbFor(-price.laterCostGbpm, receipts)}`;
+  } else if (price.earlier) {
+    // Over before the target year (ADR-0045): the year it moves, and by how much.
+    text = `Nothing in ${price.year}; ${verbFor(-price.earlier.costGbpm, receipts)} in ${price.earlier.year}`;
   } else {
     text = 'Changes nothing';
   }
@@ -192,6 +195,18 @@ export function describeMove(
       tone: toneOf(then),
       improvementGbpm: now,
       laterStart: later,
+    };
+  }
+  // Over before the summary year (ADR-0045): the earlier year it moves most, and by how much.
+  const earlier = policyYears
+    .filter((y) => fyStart(y) < fyStart(year) && Math.abs(improve(y)) >= UNCHANGED_BELOW_GBPM)
+    .sort((a, b) => Math.abs(improve(b)) - Math.abs(improve(a)))[0];
+  if (earlier) {
+    const then = improve(earlier);
+    return {
+      text: `Nothing in ${year}; ${effectWords(then, false, receipts)} in ${earlier}`,
+      tone: toneOf(then),
+      improvementGbpm: now,
     };
   }
   return { text: 'Changes nothing', tone: 'neutral', improvementGbpm: now };

@@ -72,6 +72,11 @@ import type {
   guideStageSchema,
 } from '../schema/guide.schema.js';
 import type {
+  budgetFactSchema,
+  budgetFileSchema,
+  budgetMeasureSchema,
+} from '../schema/budget.schema.js';
+import type {
   growthHeadSchema,
   levelSchema,
   milestoneSchema,
@@ -137,6 +142,9 @@ export type GuideFile = z.infer<typeof guideFileSchema>;
 export type GuideStage = z.infer<typeof guideStageSchema>;
 export type GlossaryFile = z.infer<typeof glossaryFileSchema>;
 export type GlossaryTerm = z.infer<typeof glossaryTermSchema>;
+export type BudgetFile = z.infer<typeof budgetFileSchema>;
+export type BudgetFact = z.infer<typeof budgetFactSchema>;
+export type BudgetMeasure = z.infer<typeof budgetMeasureSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

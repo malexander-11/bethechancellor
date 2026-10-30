@@ -287,33 +287,7 @@
           {
             "id": "investment-income",
             "title": "Tax on dividends, savings and rent",
-            "alternatives": [
-              {
-                "name": "The rates on dividends, savings and rent",
-                "codes": ["iinc2", "rvinv"]
-              }
-            ],
             "items": [
-              {
-                "code": "iinc2",
-                "label": "Another 2p",
-                "policies": [
-                  {
-                    "title": "Add another 2p to the tax on dividends, savings and rental income",
-                    "sizes": [1],
-                    "advice": {
-                      "text": "Investors pay again, on top of last year’s rise.",
-                      "sources": [
-                        {
-                          "sourceId": "hmt-budget-2025-table-4-1",
-                          "table": "Table 4.1"
-                        }
-                      ],
-                      "badge": "simulated"
-                    }
-                  }
-                ]
-              },
               {
                 "code": "rvinv",
                 "label": "Undo last year’s rises",
@@ -326,6 +300,156 @@
                       "sources": [
                         {
                           "sourceId": "hmt-budget-2025-table-4-1"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "income-tax-budget-2026",
+            "title": "This Budget’s decisions",
+            "items": [
+              {
+                "code": "b6prop",
+                "label": "Drop the rent income rise",
+                "policies": [
+                  {
+                    "title": "Drop the 2p rise in tax on rental income",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Landlords pay two points more; some incorporate.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 61"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "74"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6save",
+                "label": "Drop the savings rise",
+                "policies": [
+                  {
+                    "title": "Drop the 2p rise in tax on savings interest",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Savers with interest above the allowance pay two points more.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 62"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "75"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6pentx",
+                "label": "Drop pensioner allowance",
+                "policies": [
+                  {
+                    "title": "Drop the pensioners’ tax allowance",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Pensioners on little more than the state pension gain.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 52"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "63"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6mile",
+                "label": "Drop higher mileage rates",
+                "policies": [
+                  {
+                    "title": "Drop the higher mileage rates",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "People who drive their own car for work gain.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 5"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "14"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6trade",
+                "label": "Keep £1,000 trading allowance",
+                "policies": [
+                  {
+                    "title": "Keep the trading allowance at £1,000",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Side earners stop filing; small money.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 15"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "23"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6isa",
+                "label": "Drop the cash ISA promise",
+                "policies": [
+                  {
+                    "title": "Drop the promise on the cash ISA limit",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small money; the promise mattered more than the sum.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 11"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "19"
                         }
                       ],
                       "badge": "simulated"
@@ -760,17 +884,43 @@
                 "code": "vatelec",
                 "policies": [
                   {
-                    "title": "Keep VAT off electricity after March 2027",
+                    "title": "Keep VAT off electricity after July 2027",
                     "sizes": [1],
                     "advice": {
-                      "text": "The zero rate ends in March; keeping it holds bills down.",
+                      "text": "The zero rate ends in July; keeping it holds bills down.",
                       "sources": [
                         {
-                          "sourceId": "hmrc-vat-notice-701-19",
-                          "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027."
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 2"
                         },
                         {
-                          "sourceId": "govuk-vat-electricity-cut-2026"
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "12"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ],
+                "label": "Keep it off after July 2027"
+              },
+              {
+                "code": "b6elec",
+                "label": "End it in April 2027",
+                "policies": [
+                  {
+                    "title": "End the zero rate on electricity in April 2027",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Only the April to June quarter is yours to change.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 2"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "12"
                         }
                       ],
                       "badge": "simulated"
@@ -816,6 +966,12 @@
                     }
                   }
                 ]
+              }
+            ],
+            "alternatives": [
+              {
+                "name": "VAT on electricity",
+                "codes": ["vatelec", "b6elec"]
               }
             ]
           },
@@ -985,6 +1141,60 @@
                 ]
               }
             ]
+          },
+          {
+            "id": "vat-budget-2026",
+            "title": "This Budget’s decisions",
+            "items": [
+              {
+                "code": "b6mkt",
+                "label": "Drop marketplace VAT rule",
+                "policies": [
+                  {
+                    "title": "Drop VAT collection by online marketplaces",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Platforms collect the VAT; the sum is highly uncertain.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 46"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "53"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6phv",
+                "label": "Drop taxi app VAT",
+                "policies": [
+                  {
+                    "title": "Drop VAT on the full fare of the largest taxi apps",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "The largest taxi apps charge VAT on the whole fare.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 59"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "72"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -1136,6 +1346,84 @@
                       "sources": [
                         {
                           "sourceId": "hmrc-tax-reliefs-quality-report"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "capital-gains-tax-budget-2026",
+            "title": "This Budget’s decisions",
+            "items": [
+              {
+                "code": "b6dist",
+                "label": "Drop distributions reform",
+                "policies": [
+                  {
+                    "title": "Drop the reform of company distributions",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Closes a route from dividends to capital gains; owners notice.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 49"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "60"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6badr",
+                "label": "Keep the £1m relief limit",
+                "policies": [
+                  {
+                    "title": "Keep the £1 million limit on business asset relief",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Business owners selling up pay more on bigger gains.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 60"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "73"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6found",
+                "label": "Drop Founders’ Relief",
+                "policies": [
+                  {
+                    "title": "Drop Founders’ Relief",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "A low rate for founders; a signal to investors.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 26"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "29"
                         }
                       ],
                       "badge": "simulated"
@@ -1575,6 +1863,132 @@
                 ]
               }
             ]
+          },
+          {
+            "id": "business-taxes-budget-2026",
+            "title": "This Budget’s decisions",
+            "items": [
+              {
+                "code": "b6sov",
+                "label": "Drop sovereign investor tax",
+                "policies": [
+                  {
+                    "title": "Drop the tax on foreign sovereign investors",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Sovereign funds pay on UK property; the sum is highly uncertain.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 54"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "65"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6bank",
+                "label": "Drop the bank surcharge rise",
+                "policies": [
+                  {
+                    "title": "Drop the 15-month rise in the bank surcharge",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Banks pay it for fifteen months; nothing by the target year.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 55"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "66"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6wda",
+                "label": "Drop allowances cut",
+                "policies": [
+                  {
+                    "title": "Drop the cut in writing-down allowances",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Firms deduct plant and machinery more slowly; a fair sum.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 58"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "70"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6ctpe",
+                "label": "Allow foreign branch losses",
+                "policies": [
+                  {
+                    "title": "Let foreign branch losses count against UK tax again",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Foreign branch losses stop cutting UK tax; firms notice.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 68"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "78"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6brr",
+                "label": "Drop high street rates reliefs",
+                "policies": [
+                  {
+                    "title": "Drop the business rates reliefs for the high street",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Pubs and high streets; almost nothing by 2029-30.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "lines 12, 13, 14"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "20"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -1587,25 +2001,25 @@
             "title": "Change fuel duty",
             "items": [
               {
-                "code": "fuelfrz",
-                "label": "Freeze it in April 2027",
+                "code": "b6fuel",
+                "label": "Raise it in April 2027",
                 "policies": [
                   {
-                    "title": "Freeze fuel duty in April 2027",
+                    "title": "Raise fuel duty in April 2027, not July",
                     "sizes": [1],
                     "advice": {
-                      "text": "Small money, felt at every pump; emissions edge up a little.",
+                      "text": "Three months earlier at the pump; emissions dip a little.",
                       "sources": [
                         {
-                          "sourceId": "obr-efo-2026-03"
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 3"
                         },
                         {
-                          "sourceId": "hmt-budget-2025-policy-costings",
-                          "quote": "From 1 April 2027, fuel duty rates will be uprated annually in line with the Retail Price Index."
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "13"
                         },
                         {
-                          "sourceId": "hmrc-tiin-fuel-duty-2026-27",
-                          "quote": "which will likely maintain any marginal impact of carbon emissions from increased consumption of fossil fuels that this measure may cause"
+                          "sourceId": "hmrc-tiin-fuel-duty-2026-27"
                         }
                       ],
                       "badge": "simulated"
@@ -1829,6 +2243,60 @@
                 ]
               }
             ]
+          },
+          {
+            "id": "duties-budget-2026",
+            "title": "This Budget’s decisions",
+            "items": [
+              {
+                "code": "b6mgd",
+                "label": "Drop machine games rise",
+                "policies": [
+                  {
+                    "title": "Drop the rise in machine games duty",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Betting shops and arcades pay; some play moves online.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 56"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "67"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6ets",
+                "label": "Carbon-price waste burning on time",
+                "policies": [
+                  {
+                    "title": "Bring energy from waste into carbon trading on time",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Waste burners pay for their carbon on time.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 96"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "105"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -1841,17 +2309,22 @@
             "title": "Chase more unpaid tax",
             "items": [
               {
-                "code": "hmrc2",
+                "code": "b6hmrc",
+                "label": "Drop the HMRC package",
                 "policies": [
                   {
-                    "title": "Another push to close the tax gap",
+                    "title": "Drop the Budget’s HMRC tax gap package",
                     "sizes": [1],
                     "advice": {
-                      "text": "A repeat of last year’s package; nobody has costed a further round.",
+                      "text": "Highly uncertain money; the tax office keeps its staff.",
                       "sources": [
                         {
-                          "sourceId": "hmt-budget-2025-table-4-1",
-                          "table": "Table 4.1"
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 45"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "50"
                         }
                       ],
                       "badge": "simulated"
@@ -2394,6 +2867,30 @@
                     }
                   }
                 ]
+              },
+              {
+                "code": "b6homes",
+                "label": "Drop the extra social homes",
+                "policies": [
+                  {
+                    "title": "Drop the extra 10,000 social homes",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Capital for homes: the debt rule, not the day-to-day rule.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 35"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-document",
+                          "paragraph": "5.4"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -2435,6 +2932,30 @@
                         },
                         {
                           "sourceId": "obr-efo-2026-03"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6dipcap",
+                "label": "Undo the defence capital move",
+                "policies": [
+                  {
+                    "title": "Give departments back the capital moved to defence",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Capital goes back to departments; defence is borrowed for.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 41"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-document",
+                          "paragraph": "2.6"
                         }
                       ],
                       "badge": "simulated"
@@ -2657,6 +3178,30 @@
                     }
                   }
                 ]
+              },
+              {
+                "code": "b6fraud",
+                "label": "Drop the DWP fraud package",
+                "policies": [
+                  {
+                    "title": "Drop the DWP fraud and error package",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Costs up front, saves from 2028-29; the sum is uncertain.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 47"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "54"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -2769,8 +3314,202 @@
       },
       {
         "id": "decisions",
-        "label": "Last year’s decisions",
+        "label": "This Budget and last year’s decisions",
         "decisions": [
+          {
+            "id": "this-budget",
+            "title": "Reverse one of this Budget’s decisions",
+            "items": [
+              {
+                "code": "b6civil",
+                "label": "Cancel the extra admin cut",
+                "policies": [
+                  {
+                    "title": "Cancel the extra cut to Civil Service running costs",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Departments get the money back; the savings were doubted anyway.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 63"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-document",
+                          "paragraph": "2.14"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6ai",
+                "label": "Drop the AI programme",
+                "policies": [
+                  {
+                    "title": "Drop the Budget’s AI programme",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small money; the AI Security Institute loses it.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 31"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-document",
+                          "paragraph": "1.22"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6rough",
+                "label": "Drop rough sleeping programme",
+                "policies": [
+                  {
+                    "title": "Drop the rough sleeping programme",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small money; people stay on the street.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "lines 33, 34"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "36"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6ftbisa",
+                "label": "Keep the Lifetime ISA",
+                "policies": [
+                  {
+                    "title": "Keep the Lifetime ISA for new savers",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Keeps the old bonus going; costs from 2029-30.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 38"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "39"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6bics",
+                "label": "Drop industrial electricity help",
+                "policies": [
+                  {
+                    "title": "Drop the industrial electricity scheme",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Energy-intensive industry pays its own bills; most in 2027-28.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 70"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "80"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6grow",
+                "label": "Drop growth investment",
+                "policies": [
+                  {
+                    "title": "Drop the investment for growth package",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "One line, several programmes; all go together.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 74"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6ggs",
+                "label": "Drop the loan guarantee",
+                "policies": [
+                  {
+                    "title": "Drop the expanded loan guarantee for small firms",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Small firms without security lose the guarantee.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 75"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "83"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              },
+              {
+                "code": "b6hefr",
+                "label": "Drop franchise registration",
+                "policies": [
+                  {
+                    "title": "Drop the registration rule for franchised universities",
+                    "sizes": [1],
+                    "advice": {
+                      "text": "Student finance keeps flowing to unregistered franchises.",
+                      "sources": [
+                        {
+                          "sourceId": "hmt-budget-2026-table-6-1",
+                          "note": "line 91"
+                        },
+                        {
+                          "sourceId": "hmt-budget-2026-policy-costings",
+                          "page": "100"
+                        }
+                      ],
+                      "badge": "simulated"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
           {
             "id": "last-year",
             "title": "Reverse a decision",

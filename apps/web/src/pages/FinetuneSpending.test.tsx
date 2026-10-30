@@ -61,7 +61,7 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
         .map((b) => b.textContent),
     ).toEqual([
       'Change benefits for pensioners 3 choices',
-      'Change working-age benefits 5 choices',
+      'Change working-age benefits 6 choices',
       'Change disability benefits 4 choices',
     ]);
     // The lead's hundred and twenty characters cannot say how long the deals run: a note does.

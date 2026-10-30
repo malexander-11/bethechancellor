@@ -150,6 +150,23 @@ export function priceMove(input: {
   ) {
     price.earlier = peak;
   }
+  // Over before the target year (ADR-0045): the biggest earlier move, either way, so a measure
+  // that only touches the years before the rules bite is not read as doing nothing.
+  if (!price.earlier && Math.abs(change) < PRICE_UNCHANGED_BELOW_GBPM) {
+    let biggest: { year: string; costGbpm: number } | undefined;
+    for (const y of years) {
+      if (fyStart(y) >= fyStart(year)) continue;
+      const m = moveIn(y);
+      const cost = m.current + m.capital;
+      if (
+        Math.abs(cost) >= PRICE_UNCHANGED_BELOW_GBPM &&
+        (!biggest || Math.abs(cost) > Math.abs(biggest.costGbpm))
+      ) {
+        biggest = { year: y, costGbpm: cost };
+      }
+    }
+    if (biggest) price.earlier = biggest;
+  }
 
   // Nothing in the target year: the first later year that moves (ADR-0021).
   if (Math.abs(change) < PRICE_UNCHANGED_BELOW_GBPM) {

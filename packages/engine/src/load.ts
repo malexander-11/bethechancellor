@@ -11,6 +11,7 @@ import {
   incidenceFileSchema,
   guideFileSchema,
   glossaryFileSchema,
+  budgetFileSchema,
   receptionFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -36,6 +37,7 @@ import type {
   IncidenceFile,
   GuideFile,
   GlossaryFile,
+  BudgetFile,
   ReceptionFile,
   ContextFile,
   HmrcExtract,
@@ -58,6 +60,7 @@ import { optionEarliestStart, shortlistedWays } from './game/options.js';
 import { promiseBreaks } from './game/promises.js';
 import { hasHead } from './costing/taxHead.js';
 import { GUIDED_STEPS, stageTerms } from './game/guide.js';
+import { BUDGET_STORY_FILLS, storyPlaceholders } from './game/budget.js';
 import { resolveTargetYear } from './rules/targetYear.js';
 import { validateVintage } from './validate/validateVintage.js';
 
@@ -176,6 +179,10 @@ export function parseGlossary(json: unknown): GlossaryFile {
   return parseWith(glossaryFileSchema, json, 'the glossary');
 }
 
+export function parseBudget(json: unknown): BudgetFile {
+  return parseWith(budgetFileSchema, json, 'the Budget');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -195,6 +202,8 @@ export interface Dataset {
   incidence?: IncidenceFile;
   guide?: GuideFile;
   glossary?: GlossaryFile;
+  /** The Budget the game starts from (ADR-0045). */
+  budget?: BudgetFile;
   reception?: ReceptionFile;
 }
 
@@ -323,6 +332,7 @@ export function validateDataset(ds: Dataset): string[] {
       ds.electorate ?? null,
       ds.incidence ?? null,
       ds.glossary ?? null,
+      ds.budget ?? null,
       ds.reception ?? null,
     ],
     referenced,
@@ -781,6 +791,74 @@ export function validateDataset(ds: Dataset): string[] {
         }
       }
     }
+  }
+  if (ds.budget) {
+    // The Budget the game starts from (ADR-0045). A measure the page offers to change names a
+    // live lever on step 4 costed from that very line, so "Change it" moves the figure shown; the
+    // margin's published steps add up to the forecast the engine reproduces; every placeholder in
+    // the story is one the page fills; and every fact is read from a quoted passage.
+    const budget = ds.budget;
+    const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
+    const onStep4 = ds.finetune ? finetuneNames(ds.finetune) : undefined;
+    if (!known.has(budget.scorecard)) {
+      problems.push(
+        `budget ${budget.id} joins scorecard "${budget.scorecard}", which is not in the registry`,
+      );
+    }
+    for (const measure of budget.measures) {
+      if (!measure.leverCode) continue;
+      const lever = byCode.get(measure.leverCode);
+      if (!lever) {
+        problems.push(`budget measure ${measure.id} names unknown lever ${measure.leverCode}`);
+        continue;
+      }
+      if (lever.deprecated) {
+        problems.push(`budget measure ${measure.id} names shelved lever ${measure.leverCode}`);
+      }
+      if (onStep4 && !onStep4.has(measure.leverCode)) {
+        problems.push(`budget measure ${measure.id}'s lever ${measure.leverCode} is not on step 4`);
+      }
+      const raw = 'rawSource' in lever.costing ? lever.costing.rawSource : undefined;
+      const cited =
+        raw?.kind === 'hmtScorecard' &&
+        raw.sourceId === budget.scorecard &&
+        raw.lines.some((l) => l.number === measure.line);
+      if (!cited) {
+        problems.push(
+          `budget measure ${measure.id}'s lever ${measure.leverCode} is not costed from line ${measure.line} of ${budget.scorecard}`,
+        );
+      }
+    }
+    for (const [name, fact] of Object.entries(budget.facts)) {
+      if (!fact.source.quote) problems.push(`budget fact ${name} quotes nothing from its source`);
+    }
+    if (!budget.chancellor.source.quote) {
+      problems.push(`budget ${budget.id} names the Chancellor without quoting its source`);
+    }
+    const f = budget.facts;
+    const before =
+      f.headroomInMarchGbpm.gbpm +
+      f.debtInterestSinceMarchGbpm.gbpm +
+      f.otherChangesSinceMarchGbpm.gbpm;
+    if (before !== f.headroomBeforeMeasuresGbpm.gbpm) {
+      problems.push(
+        `budget facts: the margin's steps since March give ${before}, not ${f.headroomBeforeMeasuresGbpm.gbpm}`,
+      );
+    }
+    const check = ds.vintage.checks.stabilityHeadroomGbpm;
+    const after = f.headroomBeforeMeasuresGbpm.gbpm + f.measuresOnCurrentBudgetGbpm.gbpm;
+    if (Math.abs(after - check.value) > check.toleranceGbpm) {
+      problems.push(
+        `budget facts: the margin before the measures plus their effect gives ${after}, not the vintage's ${check.value}`,
+      );
+    }
+    budget.story.forEach((line, i) => {
+      for (const key of storyPlaceholders(line.text)) {
+        if (!(BUDGET_STORY_FILLS as readonly string[]).includes(key)) {
+          problems.push(`budget story line ${i + 1} has no fill for {${key}}`);
+        }
+      }
+    });
   }
   return problems;
 }

@@ -5,9 +5,19 @@
  * parses JSON: it carries no schemas and no validator, and a data set that does not hold together
  * fails the build rather than the player's page.
  */
-import { validateDataset, type Lever, type ShippedDataset, type SourceDoc } from '@btc/engine';
+import path from 'node:path';
+import {
+  budgetScorecardProblems,
+  parseScorecardExtract,
+  validateDataset,
+  type Lever,
+  type ShippedDataset,
+  type SourceDoc,
+} from '@btc/engine';
 import { loadDataset } from './dataset.js';
+import { readJson } from './io.js';
 import { liveView } from './live.js';
+import { DERIVED_DIR } from './paths.js';
 
 /** A lever as the screens use it. */
 function shippedLever(lever: Lever): Lever {
@@ -43,7 +53,12 @@ function withoutQuotes(value: unknown): unknown {
 
 export function shippedDataset(): ShippedDataset {
   const live = liveView(loadDataset());
-  const problems = validateDataset(live);
+  // The scorecard the Budget's measures join to by line: shipped with them, so the page reads
+  // every figure from the Treasury's own table and copies none.
+  const scorecard = parseScorecardExtract(
+    readJson(path.join(DERIVED_DIR, `${live.budget.scorecard}.raw.json`)),
+  );
+  const problems = [...validateDataset(live), ...budgetScorecardProblems(live.budget, scorecard)];
   if (problems.length > 0) {
     throw new Error(`the game's data does not hold together:\n - ${problems.join('\n - ')}`);
   }
@@ -66,6 +81,8 @@ export function shippedDataset(): ShippedDataset {
     incidence: live.incidence,
     guide: live.guide,
     glossary: live.glossary,
+    budget: live.budget,
+    scorecard,
     levers: live.levers.map(shippedLever),
   };
   return withoutQuotes(shipped) as ShippedDataset;

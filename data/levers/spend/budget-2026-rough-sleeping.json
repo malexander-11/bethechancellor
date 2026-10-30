@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-rough-sleeping",
+  "code": "b6rough",
+  "category": "spend",
+  "badge": "direct",
+  "group": "Budget 2026 decisions",
+  "title": "Drop the rough sleeping programme",
+  "shortTitle": "Drop rough sleeping programme",
+  "noun": "dropping the rough sleeping programme",
+  "headline": "Drop rough sleeping programme. Saves £0.1bn in 2029-30.",
+  "description": "The Budget funds a route off the streets for rough sleepers in England to 2028-29, with longer-term accommodation and support, partly from existing housing budgets. Switch this on to drop it.",
+  "baselinePolicy": {
+    "text": "A route off the streets is funded from autumn 2026 to 2028-29, partly by reprioritising existing MHCLG budgets (Table 6.1 lines 33 and 34).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "36",
+      "quote": "This measure will provide an offer of a route off the streets to rough sleepers in England from Autumn 2026 until 2028-29, alongside longer-term accommodation and intensive support."
+    },
+    "alreadyIncludes": [
+      "A route off the streets is funded from autumn 2026 to 2028-29, partly by reprioritising existing MHCLG budgets (Table 6.1 lines 33 and 34)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "department": "Communities",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": -55,
+      "2027-28": -110,
+      "2028-29": -580,
+      "2029-30": -85,
+      "2030-31": -90,
+      "2031-32": -95
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 33,
+          "title": "Rough Sleeping: Invest in a route off the streets across the Parliament, alongside longer-term accommodation and intensive support",
+          "values": {
+            "2026-27": -175,
+            "2027-28": -515,
+            "2028-29": -580,
+            "2029-30": -85,
+            "2030-31": -90,
+            "2031-32": -95
+          }
+        },
+        {
+          "number": 34,
+          "title": "Rough Sleeping: Reprioritise existing MHCLG budgets to tackle rough sleeping",
+          "values": {
+            "2026-27": 120,
+            "2027-28": 405,
+            "2028-29": 0,
+            "2029-30": 0,
+            "2030-31": 0,
+            "2031-32": 0
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury’s costing with the sign kept (a line that reduced borrowing is spending the reversal adds back; a line that cost money is spending the reversal saves)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours.",
+      "The two lines net: the new money less what MHCLG moves from its own budgets in 2026-27 and 2027-28."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "36"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "lines 33, 34"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-fuel-duty-deferral",
+  "code": "b6fuel",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Duties",
+  "title": "Raise fuel duty in April 2027, not July",
+  "shortTitle": "Raise fuel duty in April",
+  "noun": "raising fuel duty in April 2027",
+  "headline": "Raise fuel duty in April. Raises £0.8bn in 2027-28, nothing by 2029-30.",
+  "description": "The 5p cut in fuel duty lasts until July 2027, when rates rise by 5p and with RPI. Switch this on to let the rise happen in April 2027 instead, as the forecast before the Budget had it. It raises nothing by 2029-30, so this moves 2027-28 only.",
+  "baselinePolicy": {
+    "text": "The 5p cut in fuel duty runs to 1 July 2027, when rates rise by 5p and with RPI; from April 2028 rates rise with RPI each year (Table 6.1 line 3).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "13",
+      "quote": "On 1 July 2027, fuel duty rates will increase by 5ppl and will be uprated in line with the Retail Prices Index (RPI)."
+    },
+    "alreadyIncludes": [
+      "The 5p cut in fuel duty runs to 1 July 2027, when rates rise by 5p and with RPI; from April 2028 rates rise with RPI each year (Table 6.1 line 3)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "fuelDuties",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 575,
+      "2027-28": 780,
+      "2028-29": 0,
+      "2029-30": 0,
+      "2030-31": 0,
+      "2031-32": 0
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 3,
+          "title": "Fuel Duty: Extend the temporary 5p-per-litre duty cut and defer the planned Retail Prices Index (RPI) increase to 1 July 2027",
+          "values": {
+            "2026-27": -575,
+            "2027-28": -780,
+            "2028-29": 0,
+            "2029-30": 0,
+            "2030-31": 0,
+            "2031-32": 0
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "13"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 3"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30",
+  "interactions": [
+    {
+      "withLever": "fuel-duty",
+      "text": "Both move the duty rate: this brings the planned rise forward three months, the slider moves the rate itself.",
+      "severity": "warn"
+    }
+  ]
+}

@@ -5,18 +5,21 @@
   "category": "tax",
   "badge": "assumption",
   "group": "VAT",
-  "title": "Keep VAT off electricity after March 2027",
-  "shortTitle": "VAT off electricity",
+  "title": "Keep VAT off electricity after July 2027",
+  "shortTitle": "Keep VAT off electricity",
   "noun": "keeping VAT off electricity",
-  "headline": "HMRC’s zero rate ends in March 2027. Keeping it costs about £1.9bn a year.",
-  "description": "The government took VAT off domestic electricity in Great Britain from 1 October 2026 and put the cost at about £850 million for 2026-27, paid for by cancelling the Digital ID programme. HMRC’s notice says the zero rate is temporary and ends on 31 March 2027, so electricity goes back to 5% in April unless the Budget extends it. This card keeps the rate at 0%: twice the government’s six-month figure, which is our arithmetic, grown with the OBR’s VAT forecast from 2026-27. The Treasury has promised updated costs at the Budget; when they are published they replace this term.",
+  "headline": "Keep the zero rate after July 2027. Costs about £1.4bn a year.",
+  "description": "The Budget takes VAT off domestic electricity in Great Britain from 1 October 2026 to 1 July 2027, scored at £755m for the half year to March and £305m for the quarter to June. This card keeps the rate at 0% after July 2027: a full year is the Treasury’s half year plus two of its quarters, held flat in cash, for the part of each year the Budget’s zero rate does not already cover.",
   "baselinePolicy": {
-    "text": "Domestic fuel and power pay the 5% reduced rate in the October 2026 baseline, except electricity: the Budget's zero rate runs from 1 October 2026 to 1 July 2027 and is in the forecast (Table 6.1, line 2).",
+    "text": "Domestic fuel and power pay the 5% reduced rate, except electricity, at 0% from 1 October 2026 to 1 July 2027 (Table 6.1 line 2).",
     "source": {
-      "sourceId": "hmrc-vat-notice-701-19",
-      "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027."
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "12",
+      "quote": "This measure is effective from 1 October 2026 until 1 July 2027."
     },
-    "alreadyIncludes": []
+    "alreadyIncludes": [
+      "The zero rate on domestic electricity from 1 October 2026 to 1 July 2027 (Budget 2026, Table 6.1 line 2)."
+    ]
   },
   "control": {
     "kind": "toggle",
@@ -36,50 +39,63 @@
   "costing": {
     "kind": "schedule",
     "effect": {
-      "2027-28": -1789,
-      "2028-29": -1865,
-      "2029-30": -1944,
-      "2030-31": -2021,
-      "2031-32": -2096
+      "2027-28": -1023.75,
+      "2028-29": -1365,
+      "2029-30": -1365,
+      "2030-31": -1365,
+      "2031-32": -1365
     },
     "source": {
-      "sourceId": "govuk-vat-electricity-cut-2026"
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
     },
     "rawSource": {
       "kind": "derivedFromPublished",
-      "sourceId": "govuk-vat-electricity-cut-2026",
+      "sourceId": "hmt-budget-2026-table-6-1",
       "method": {
-        "name": "statedProduct",
-        "baseYear": "2026-27",
-        "resultGbpm": -1700,
-        "growWith": "vat",
+        "name": "seriesProduct",
         "terms": [
           {
-            "label": "The government’s cost of the zero rate for the six months from 1 October 2026",
-            "value": 850,
-            "unit": "£ million, October 2026 to March 2027",
+            "label": "Cost of a full year of the zero rate: the Treasury’s half year to March 2027 plus two of its quarters to June 2027, negative because receipts fall",
+            "values": {
+              "2027-28": -1365,
+              "2028-29": -1365,
+              "2029-30": -1365,
+              "2030-31": -1365,
+              "2031-32": -1365
+            },
+            "unit": "£ million",
             "source": {
-              "sourceId": "govuk-vat-electricity-cut-2026",
-              "quote": "This action is estimated to cost around £850 million in 2026-27 on the basis of estimated electricity prices. Updated costs will be set out at Budget."
+              "sourceId": "hmt-budget-2026-table-6-1",
+              "table": "Table 6.1",
+              "note": "line 2: 755 in 2026-27 (October to March) and 305 in 2027-28 (April to June); July to September is taken as the April to June quarter again"
             }
           },
           {
-            "label": "Two half-years in a full year, negative because receipts fall",
-            "value": -2,
-            "unit": "half-years",
+            "label": "Share of each year the Budget’s zero rate does not already cover",
+            "values": {
+              "2027-28": 0.75,
+              "2028-29": 1,
+              "2029-30": 1,
+              "2030-31": 1,
+              "2031-32": 1
+            },
+            "unit": "years",
             "source": {
-              "sourceId": "hmrc-vat-notice-701-19",
-              "quote": "The temporary zero rate applies from 1 October 2026 to 31 March 2027."
+              "sourceId": "hmt-budget-2026-policy-costings",
+              "page": "12",
+              "note": "The zero rate runs to 1 July 2027, so the first quarter of 2027-28 is already in the forecast."
             }
           }
         ]
       },
-      "note": "The government published one figure, about £850 million for the six months to March 2027. A full year is taken as twice that, which is our arithmetic, and grown with the OBR’s VAT receipts from 2026-27. Effects before the start year are not applied."
+      "note": "The Treasury’s own certified figures for the zero rate, held flat in cash: a full year is its half year plus two of its quarters, and the first quarter of 2027-28 is already in the baseline."
     },
     "caveats": [
-      "Annualising the six-month figure is ours. October to March is the high-use half of the year, so twice the winter cost probably overstates a full year; the Treasury has said updated costs will be set out at the Budget, and they replace this term when published.",
+      "The July to September quarter is taken as the April to June quarter again, which is our assumption; summer use is lower than winter, so a full year costs less than twice the winter half.",
+      "Held flat in cash: a growing VAT base would cost more, and nothing published says how much.",
       "Great Britain only, as the zero rate is; Northern Ireland stays at 5% under the Windsor Framework arrangements HMRC describes.",
-      "Static: no change in electricity use is allowed for, and HMRC’s relief figures carry no behavioural response."
+      "Static: no change in electricity use is allowed for."
     ]
   },
   "considerations": [
@@ -123,5 +139,5 @@
     }
   ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-22"
+  "reviewedOn": "2026-10-30"
 }

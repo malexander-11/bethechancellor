@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-online-marketplace-vat",
+  "code": "b6mkt",
+  "category": "tax",
+  "badge": "direct",
+  "group": "VAT",
+  "title": "Drop VAT collection by online marketplaces",
+  "shortTitle": "Drop marketplace VAT rule",
+  "noun": "dropping the marketplace VAT rule",
+  "headline": "Drop marketplace VAT rule. Costs £0.3bn in 2029-30.",
+  "description": "From October 2027 online marketplaces must collect and pay the VAT on sales by UK sellers through their platforms, where a seller’s sales on the platform pass £90,000. Switch this on to drop the rule and give up what the Treasury scores for it.",
+  "baselinePolicy": {
+    "text": "Online marketplace VAT liability extends to UK sellers from 1 October 2027 (Table 6.1 line 46).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "53",
+      "quote": "requiring online marketplaces to collect and remit VAT on business-to-consumer sales by UK sellers through their platforms"
+    },
+    "alreadyIncludes": [
+      "Online marketplace VAT liability extends to UK sellers from 1 October 2027 (Table 6.1 line 46)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "vat",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 0,
+      "2027-28": -165,
+      "2028-29": -320,
+      "2029-30": -270,
+      "2030-31": -250,
+      "2031-32": -265
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 46,
+          "title": "Online Marketplace Liability: Extend to UK businesses with a minimum annual sales threshold per platform of £90,000 from 1 October 2027",
+          "values": {
+            "2026-27": 0,
+            "2027-28": 165,
+            "2028-29": 320,
+            "2029-30": 270,
+            "2030-31": 250,
+            "2031-32": 265
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours.",
+      "The OBR rates this costing as highly uncertain: it depends on how much VAT the sellers it catches would otherwise have paid (October 2026 outlook, Table 3.3)."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "53"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 46"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

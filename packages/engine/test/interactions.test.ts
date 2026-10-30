@@ -40,7 +40,7 @@ describe('interaction notices', () => {
   it('are de-duplicated when both sides declare the pair and warn for overlapping fuel duty changes', () => {
     // Ending the freeze early and the basic rate each name the other: one notice, not two.
     expect(run({ itbr: 1, rvfrz: 1 }).interactions).toHaveLength(1);
-    const fuel = run({ fuel: 5, fuelfrz: 1 }).interactions;
+    const fuel = run({ fuel: 5, b6fuel: 1 }).interactions;
     expect(fuel).toHaveLength(1);
     expect(fuel[0]?.severity).toBe('warn');
   });

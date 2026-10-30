@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-social-homes",
+  "code": "b6homes",
+  "category": "spend",
+  "badge": "direct",
+  "group": "Budget 2026 decisions",
+  "title": "Drop the extra 10,000 social homes",
+  "shortTitle": "Drop the extra social homes",
+  "noun": "dropping the extra social homes",
+  "headline": "Drop the extra social homes. Saves £0.5bn in 2029-30.",
+  "description": "The Budget adds £1.5 billion of capital over four years to the Social and Affordable Homes Programme, for around 10,000 more homes, most of them for social rent. Switch this on to drop it. Capital, so it counts against the debt rule, not the day-to-day rule.",
+  "baselinePolicy": {
+    "text": "£1.5 billion more capital funds around 10,000 social and affordable homes between 2027-28 and 2030-31 (Table 6.1 line 35).",
+    "source": {
+      "sourceId": "hmt-budget-2026-document",
+      "paragraph": "5.4",
+      "quote": "The government is providing an additional £1.5 billion to deliver around 10,000 homes in England."
+    },
+    "alreadyIncludes": [
+      "£1.5 billion more capital funds around 10,000 social and affordable homes between 2027-28 and 2030-31 (Table 6.1 line 35)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "capital",
+    "delType": "CDEL",
+    "department": "Communities",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 0,
+      "2027-28": -250,
+      "2028-29": -500,
+      "2029-30": -500,
+      "2030-31": -500,
+      "2031-32": 0
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 35,
+          "title": "Social and Affordable Homes Programme: Fund delivery of around 10,000 social and affordable homes",
+          "values": {
+            "2026-27": 0,
+            "2027-28": -250,
+            "2028-29": -500,
+            "2029-30": -500,
+            "2030-31": -500,
+            "2031-32": 0
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury’s costing with the sign kept (a line that reduced borrowing is spending the reversal adds back; a line that cost money is spending the reversal saves)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the Budget’s own costing of the measure, certified by the OBR as part of its October 2026 forecast.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-document",
+          "paragraph": "5.4"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 35"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

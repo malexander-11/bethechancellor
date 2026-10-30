@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-investment-for-growth",
+  "code": "b6grow",
+  "category": "spend",
+  "badge": "direct",
+  "group": "Budget 2026 decisions",
+  "title": "Drop the investment for growth package",
+  "shortTitle": "Drop growth investment",
+  "noun": "dropping the investment for growth package",
+  "headline": "Drop growth investment. Saves £0.3bn in 2029-30.",
+  "description": "The Budget funds strategic technologies, local growth and key industries under one heading. Switch this on to drop it.",
+  "baselinePolicy": {
+    "text": "Support for strategic technologies, local growth and key industries is in the forecast (Table 6.1 line 74).",
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1",
+      "note": "line 74"
+    },
+    "alreadyIncludes": [
+      "Support for strategic technologies, local growth and key industries is in the forecast (Table 6.1 line 74)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "spending",
+    "currentOrCapital": "current",
+    "department": "Business",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": -155,
+      "2027-28": -460,
+      "2028-29": -530,
+      "2029-30": -330,
+      "2030-31": -355,
+      "2031-32": -535
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 74,
+          "title": "Investment for Growth: Support strategic technologies, local growth and key industries",
+          "values": {
+            "2026-27": -155,
+            "2027-28": -460,
+            "2028-29": -530,
+            "2029-30": -330,
+            "2030-31": -355,
+            "2031-32": -535
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal on the spending side: the Treasury’s costing with the sign kept (a line that reduced borrowing is spending the reversal adds back; a line that cost money is spending the reversal saves)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours.",
+      "One scorecard line covers several programmes; dropping it drops them all."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the Budget’s own costing of the measure, certified by the OBR as part of its October 2026 forecast.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 74"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

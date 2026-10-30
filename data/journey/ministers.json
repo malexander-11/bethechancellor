@@ -985,7 +985,7 @@
             "above": 0
           },
           "line": {
-            "text": "Thank you. A frozen threshold is a tax rise on graduates and nobody else, and the Treasury's own note calls the repayment forecasts inherently uncertain. Letting it rise again costs £355 million in 2029-30 on the Treasury's figures.",
+            "text": "Thank you. A frozen threshold is a tax rise on graduates and nobody else, and the Treasury’s own note calls the repayment forecasts inherently uncertain. Letting it rise again costs £355 million in 2029-30 on the Treasury’s figures.",
             "short": "A frozen threshold is a tax rise on graduates alone. Letting it rise costs £355 million in 2029-30.",
             "sources": [
               {
@@ -1007,7 +1007,7 @@
       "code": "def3",
       "role": "Defence Secretary",
       "asking": {
-        "text": "The Defence Investment Plan's explainer commits us to 3% of GDP in the next Parliament and the OBR's path reaches it only in 2030-31. Bring it forward to April 2027 and the cost is the years in between: about £4.2 billion in 2029-30, falling to nothing by 2030-31. I am asking you to get there first, not last.",
+        "text": "The Defence Investment Plan’s explainer commits us to 3% of GDP in the next Parliament and the OBR’s path reaches it only in 2030-31. Bring it forward to April 2027 and the cost is the years in between: about £4.2 billion in 2029-30, falling to nothing by 2030-31. I am asking you to get there first, not last.",
         "short": "The OBR’s path reaches 3% of GDP in 2030-31. Getting there first costs about £4.2 billion in 2029-30.",
         "sources": [
           {
@@ -1028,7 +1028,7 @@
             "above": 0
           },
           "line": {
-            "text": "Three per cent now rather than at the end of the forecast: that is the difference between a plan and a promise, and every allied capital will read it. The bill front-loads and falls away as the OBR's own path catches up.",
+            "text": "Three per cent now rather than at the end of the forecast: that is the difference between a plan and a promise, and every allied capital will read it. The bill front-loads and falls away as the OBR’s own path catches up.",
             "short": "Three per cent now, not later. The bill front-loads and falls away as the OBR’s path catches up.",
             "sources": [
               {
@@ -1048,7 +1048,7 @@
       "code": "dip47",
       "role": "Defence Secretary",
       "asking": {
-        "text": "The Defence Investment Plan's own explainer says £4.7 billion over four years is still to be confirmed at this Budget. It is published, it is promised, and it is not yet paid for. I am asking you to confirm it.",
+        "text": "The Defence Investment Plan’s own explainer says £4.7 billion over four years is still to be confirmed at this Budget. It is published, it is promised, and it is not yet paid for. I am asking you to confirm it.",
         "short": "The Defence Investment Plan’s explainer says £4.7 billion over four years is still to be confirmed. Confirm it.",
         "sources": [
           {
@@ -1115,7 +1115,7 @@
       "code": "bus2",
       "role": "Transport Secretary",
       "asking": {
-        "text": "The £2 cap runs to 31 December 2027 and is paid for out of the energy department's budget. Nothing funds it after that. Keeping it is £400 million a year; letting it lapse is a fare rise in an election year.",
+        "text": "The £2 cap runs to 31 December 2027 and is paid for out of the energy department’s budget. Nothing funds it after that. Keeping it is £400 million a year; letting it lapse is a fare rise in an election year.",
         "short": "The £2 cap ends in December 2027, unfunded after that. Keeping it costs £400 million a year.",
         "sources": [
           {
@@ -1135,7 +1135,7 @@
             "above": 0
           },
           "line": {
-            "text": "Kept. The government's own figure for the 2027 cap is £400 million of extra funding, and that is what this carries forward, year on year, as new spending with no offset written down.",
+            "text": "Kept. The government’s own figure for the 2027 cap is £400 million of extra funding, and that is what this carries forward, year on year, as new spending with no offset written down.",
             "short": "Kept. The government’s own figure is £400 million a year, carried forward as new spending with no offset.",
             "sources": [
               {
@@ -1169,7 +1169,7 @@
             "above": 0
           },
           "line": {
-            "text": "Thank you. Flat in cash means it buys less each year: about £940 million in today's prices by 2030-31 on the OBR's deflator. It is a start, not a settlement.",
+            "text": "Thank you. Flat in cash means it buys less each year: about £940 million in today’s prices by 2030-31 on the OBR’s deflator. It is a start, not a settlement.",
             "short": "Flat in cash buys less each year: about £940 million in today’s prices by 2030-31. A start.",
             "sources": [
               {
@@ -1186,7 +1186,7 @@
       "code": "socrent",
       "role": "Communities Secretary",
       "asking": {
-        "text": "The Spending Review's £39 billion for social and affordable homes reaches £4 billion a year by 2029-30 and could deliver around 300,000 homes, about 180,000 of them for social rent. Doubling it is £3.9 billion of capital a year. It is investment, so it tests the debt rule, not the day-to-day one.",
+        "text": "The Spending Review’s £39 billion for social and affordable homes reaches £4 billion a year by 2029-30 and could deliver around 300,000 homes, about 180,000 of them for social rent. Doubling it is £3.9 billion of capital a year. It is investment, so it tests the debt rule, not the day-to-day one.",
         "short": "Doubling the social housing programme is £3.9 billion of capital a year, against the debt rule only.",
         "sources": [
           {
@@ -1220,7 +1220,7 @@
       "code": "cpilock",
       "role": "Work and Pensions Secretary",
       "asking": {
-        "text": "The triple lock gives pensioners 2.5% a year from 2027-28 on the OBR's forecast, above prices at 2.0% and earnings at 2.1% to 2.4%. Uprating by prices alone saves £2.7 billion by 2029-30, and takes it from every one of roughly 13 million pensioners, permanently. The earnings element is in statute: this needs an Act, not a Budget line.",
+        "text": "The triple lock gives pensioners 2.5% a year from 2027-28 on the OBR’s forecast, above prices at 2.0% and earnings at 2.1% to 2.4%. Uprating by prices alone saves £2.7 billion by 2029-30, and takes it from every one of roughly 13 million pensioners, permanently. The earnings element is in statute: this needs an Act, not a Budget line.",
         "short": "Prices-only rises save £2.7 billion by 2029-30, taken for good from roughly 13 million pensioners.",
         "sources": [
           {
@@ -1241,7 +1241,7 @@
             "above": 0
           },
           "line": {
-            "text": "You have chosen it. The saving exists only because the OBR expects inflation and earnings below 2.5%; if either comes in higher, the lock would have paid the same as prices and the saving vanishes. The pensioners' loss compounds either way.",
+            "text": "You have chosen it. The saving exists only because the OBR expects inflation and earnings below 2.5%; if either comes in higher, the lock would have paid the same as prices and the saving vanishes. The pensioners’ loss compounds either way.",
             "short": "The saving exists because the OBR expects inflation and earnings below 2.5%. The pensioners’ loss compounds either way.",
             "sources": [
               {
@@ -1450,6 +1450,471 @@
               {
                 "sourceId": "csj-change-the-prescription-2026",
                 "quote": "between 50 and 75 per cent of new claims in this category would not meet a properly administered functional needs threshold"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6civil",
+      "role": "Chief Secretary to the Treasury",
+      "asking": {
+        "text": "The Budget cuts departmental administration budgets by 20% by 2029-30, four points more than the Spending Review planned, for £0.6 billion a year. I am asking you to hold the line: every department has already found the first 16%.",
+        "short": "Hold the extra 4% cut to admin budgets: every department has found the first 16%.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-document",
+            "paragraph": "2.14"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 63"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Cancelling the extra cut gives departments back £595 million in 2029-30 and the OBR will note that the plans got easier. I would rather you had kept it.",
+            "short": "Cancelling it gives departments back £595 million in 2029-30. I would rather you had kept it.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-document",
+                "paragraph": "2.14"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 63"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6homes",
+      "role": "Communities Secretary",
+      "asking": {
+        "text": "The Budget found £1.5 billion for around 10,000 more social and affordable homes, most of them council homes for social rent, building up from 2027-28 so councils can staff up. I am asking you to leave it in.",
+        "short": "Leave the £1.5 billion for 10,000 more social homes in: councils are staffing up for it.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-document",
+            "paragraph": "5.4"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 35"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Dropping the homes takes £500 million a year of capital out of the programme and 10,000 families off the list of people who will get a secure home. The money is investment, not day-to-day spending.",
+            "short": "Dropping the homes takes £500 million a year of capital out and 10,000 families off the list.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-document",
+                "paragraph": "5.4"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 35"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6dipcap",
+      "role": "Chief Secretary to the Treasury",
+      "asking": {
+        "text": "The Budget pays for the last £4.7 billion of the Defence Investment Plan by taking 1% off other departments’ capital budgets from 2027-28. I am asking you to keep that funding plan: it is what keeps the plan fully funded without more borrowing.",
+        "short": "Keep the defence plan paid for from other capital budgets: it is funded without more borrowing.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-document",
+            "paragraph": "2.6"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 41"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Giving the capital back costs £1.1 billion in 2029-30 and the defence plan is then borrowed for. The OBR counted it as fully funded; it will not now.",
+            "short": "Giving the capital back costs £1.1 billion in 2029-30, and the defence plan is borrowed for.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-document",
+                "paragraph": "2.6"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 41"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6fraud",
+      "role": "Work and Pensions Secretary",
+      "asking": {
+        "text": "The Budget’s fraud and error package uses data to catch claims that should not be paid: people abroad too long, capital not declared, repeat advances. It costs a little up front and saves from 2028-29. I am asking you to keep it.",
+        "short": "Keep the fraud and error package: it costs a little up front and saves from 2028-29.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-policy-costings",
+            "page": "54"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 47"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Dropping the package gives up £75 million in 2029-30 and more after, and the money goes to claims the rules say should not be paid. I cannot defend that.",
+            "short": "Dropping the package gives up £75 million in 2029-30, on claims the rules say should not be paid.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-policy-costings",
+                "page": "54"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 47"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6ai",
+      "role": "Science and Technology Secretary",
+      "asking": {
+        "text": "The Budget funds AI security, adoption across the economy and the UK’s own AI capabilities, including £120 million more for the AI Security Institute. I am asking you to keep it: the risks do not wait and nor do our competitors.",
+        "short": "Keep the AI programme: the risks do not wait, and nor do our competitors.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-document",
+            "paragraph": "1.22"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 31"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Dropping it saves £145 million in 2029-30 and leaves the AI Security Institute short while every other country funds its own. It is a small sum to lose a lead over.",
+            "short": "Dropping it saves £145 million in 2029-30 and leaves the AI Security Institute short.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-document",
+                "paragraph": "1.22"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 31"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6rough",
+      "role": "Communities Secretary",
+      "asking": {
+        "text": "Thousands of people sleep rough on any one night. The Budget funds a route off the streets for each of them to 2028-29, with somewhere to live afterwards. I am asking you to keep it.",
+        "short": "Keep the route off the streets: thousands sleep rough on any one night.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-policy-costings",
+            "page": "36"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 33, 34"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Dropping the programme saves £85 million in 2029-30 and leaves people on the street this winter and next. There is no cheaper version of this.",
+            "short": "Dropping it saves £85 million in 2029-30 and leaves people on the street this winter and next.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-policy-costings",
+                "page": "36"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 33, 34"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6ftbisa",
+      "role": "Chief Secretary to the Treasury",
+      "asking": {
+        "text": "The First Time Buyer ISA replaces the Lifetime ISA for new savers from 2029, a simpler product aimed at the deposit alone, and it saves money from 2029-30. I am asking you to let the switch happen.",
+        "short": "Let the First Time Buyer ISA replace the Lifetime ISA in 2029: simpler, and it saves money.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-policy-costings",
+            "page": "39"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 38"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Keeping the Lifetime ISA open costs £110 million in 2029-30 and more after, on bonuses the new product was designed to stop paying for the wrong things.",
+            "short": "Keeping the Lifetime ISA open costs £110 million in 2029-30 and more after.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-policy-costings",
+                "page": "39"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 38"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6bics",
+      "role": "Energy Secretary",
+      "asking": {
+        "text": "British industry pays more for electricity than any competitor in Europe. The Budget funds the Industrial Competitiveness Scheme from April 2027, with a payment for the year the firms waited. I am asking you to keep it.",
+        "short": "Keep the industrial electricity scheme: British industry pays the most for power in Europe.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-policy-costings",
+            "page": "80"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 70"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Dropping the scheme saves £1.2 billion in 2027-28 and £135 million in 2029-30, and the steelworks and chemical plants it was for pay the bills instead.",
+            "short": "Dropping it saves £135 million in 2029-30, and the steelworks and chemical plants pay the bills.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-policy-costings",
+                "page": "80"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 70"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6grow",
+      "role": "Business Secretary",
+      "asking": {
+        "text": "The Budget’s investment for growth backs the technologies and industries the industrial strategy named, and the places they are in. I am asking you to keep it: growth is the whole point of the plan.",
+        "short": "Keep the investment for growth: it backs the industries the strategy named.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 74"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Dropping it saves £330 million in 2029-30 and tells every firm that planned around the strategy that it was not worth the paper.",
+            "short": "Dropping it saves £330 million in 2029-30 and tells firms the strategy was not worth the paper.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 74"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6ggs",
+      "role": "Business Secretary",
+      "asking": {
+        "text": "The Growth Guarantee Scheme is how a small firm with no security gets a bank loan. The Budget backs £6.5 billion more of that lending this Parliament. I am asking you to keep it.",
+        "short": "Keep the loan guarantee: it is how small firms without security get a bank loan.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-policy-costings",
+            "page": "83"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 75"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Dropping the expansion saves £170 million in 2029-30 and takes the guarantee from the firms that need it most: the ones banks will not lend to alone.",
+            "short": "Dropping it saves £170 million in 2029-30; firms banks will not lend to alone lose the guarantee.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-policy-costings",
+                "page": "83"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 75"
+              }
+            ],
+            "badge": "simulated"
+          }
+        }
+      ]
+    },
+    {
+      "code": "b6hefr",
+      "role": "Education Secretary",
+      "asking": {
+        "text": "Unregistered franchised providers are where the student loan system has been losing money to poor recruitment and worse. The Budget makes the bigger ones register from 2028. I am asking you to keep that rule.",
+        "short": "Keep the registration rule: unregistered franchises are where student finance has been losing money.",
+        "sources": [
+          {
+            "sourceId": "hmt-budget-2026-policy-costings",
+            "page": "100"
+          },
+          {
+            "sourceId": "hmt-budget-2026-table-6-1",
+            "table": "Table 6.1",
+            "note": "line 91"
+          }
+        ],
+        "badge": "simulated"
+      },
+      "whenRaised": [
+        {
+          "appliesWhen": {
+            "above": 0
+          },
+          "line": {
+            "text": "Dropping the rule costs £220 million in 2029-30 in student finance that goes to providers nobody has inspected. The Office for Students asked for this.",
+            "short": "Dropping the rule costs £220 million in 2029-30 on providers nobody has inspected.",
+            "sources": [
+              {
+                "sourceId": "hmt-budget-2026-policy-costings",
+                "page": "100"
+              },
+              {
+                "sourceId": "hmt-budget-2026-table-6-1",
+                "table": "Table 6.1",
+                "note": "line 91"
               }
             ],
             "badge": "simulated"

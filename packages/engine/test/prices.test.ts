@@ -86,6 +86,13 @@ describe('one price per choice (Phase 25)', () => {
     );
     // A steady cost is not front-loaded.
     expect(price(DEFENCE_GAP).earlier).toBeUndefined();
+    // Over before the target year (ADR-0045): the Budget's deferred fuel duty rise, brought
+    // forward, raises money in 2027-28 and nothing by 2029-30, so the price names that year.
+    const sooner = price({ b6fuel: 1 });
+    expect(Math.abs(sooner.headroomChangeGbpm)).toBeLessThan(50);
+    expect(sooner.earlier?.year).toBe('2027-28');
+    expect(sooner.earlier?.costGbpm).toBeLessThan(0);
+    expect(sooner.laterStart).toBeUndefined();
   });
 
   it('prices a swap with the option it replaces put back, never both at once', () => {

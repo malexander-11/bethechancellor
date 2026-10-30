@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-writing-down-allowances",
+  "code": "b6wda",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Business taxes",
+  "title": "Drop the cut in writing-down allowances",
+  "shortTitle": "Drop allowances cut",
+  "noun": "dropping the writing-down allowance cut",
+  "headline": "Drop allowances cut. Costs £1.1bn in 2029-30.",
+  "description": "From April 2027 the main writing-down allowance falls from 14% to 12%, while the first-year allowance rises from 40% to 50% from January 2027. Firms deduct less of their plant and machinery each year. Switch this on to drop the change.",
+  "baselinePolicy": {
+    "text": "The main rate writing-down allowance is 12% from April 2027 and the first-year allowance 50% from 1 January 2027 (Table 6.1 line 58).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "70",
+      "quote": "This measure reduces the main rate Writing Down Allowance (WDA) for capital allowances from 14% to 12% and increases the first-year allowance (FYA), announced at Autumn Budget 2025, from 40% to 50%."
+    },
+    "alreadyIncludes": [
+      "The main rate writing-down allowance is 12% from April 2027 and the first-year allowance 50% from 1 January 2027 (Table 6.1 line 58)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "onshoreCorporationTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": -125,
+      "2027-28": -765,
+      "2028-29": -1040,
+      "2029-30": -1075,
+      "2030-31": -1100,
+      "2031-32": -1120
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 58,
+          "title": "Writing-down Allowances: Reduce the main rate writing-down allowance to 12% from April 2027 and increase the main rate first-year allowance to 50% from 1 January 2027",
+          "values": {
+            "2026-27": 125,
+            "2027-28": 765,
+            "2028-29": 1040,
+            "2029-30": 1075,
+            "2030-31": 1100,
+            "2031-32": 1120
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "70"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 58"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}

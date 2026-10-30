@@ -25,6 +25,13 @@ describe('the data the game ships', () => {
     }
   });
 
+  it('ships the Budget with the scorecard its measures join to, line for line', () => {
+    expect(shipped.scorecard.sourceId).toBe(shipped.budget.scorecard);
+    const lines = new Set(shipped.scorecard.measures.map((m) => m.number));
+    expect(shipped.budget.measures.length).toBe(lines.size);
+    for (const measure of shipped.budget.measures) expect(lines.has(measure.line)).toBe(true);
+  });
+
   it('keeps no passage quoted from a source, and no source file details', () => {
     for (const object of objects(shipped)) {
       if ('sourceId' in object) expect(object).not.toHaveProperty('quote');

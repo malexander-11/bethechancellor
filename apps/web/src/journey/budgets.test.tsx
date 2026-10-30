@@ -15,7 +15,7 @@ const GAME = 'g=st.4_pr.defence+safer-streets&L=moj.10_dip47.1_nicer.2';
 // on arrival (ADR-0035, ADR-0037), so this is the widest those screens get.
 const TUNED = GAME.replace(
   'L=moj.10_dip47.1_nicer.2',
-  'L=moj.10_dip47.1_nicer.2_vatr.1_wealth2.1_banklevy.1_iinc2.1_apd.2_otherd.-1_woth.-1_rvplan2.1',
+  'L=moj.10_dip47.1_nicer.2_vatr.1_wealth2.1_banklevy.1_b6save.1_apd.2_otherd.-1_woth.-1_rvplan2.1',
 );
 // Three priorities with the most options between them: the widest the priority screens get.
 const WIDEST = 'g=st.2_pr.cost-of-living+welfare-bill+homes-growth';

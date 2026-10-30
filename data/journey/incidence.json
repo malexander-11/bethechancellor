@@ -123,6 +123,19 @@
       "label": "Disabled people leasing a car",
       "side": "pays",
       "felt": "by disabled people leasing a car"
+    },
+    "industry": {
+      "label": "Industry and firms helped",
+      "side": "benefits"
+    },
+    "home-savers": {
+      "label": "People saving for a first home",
+      "side": "benefits"
+    },
+    "pensioner-taxpayers": {
+      "label": "Pensioners paying income tax",
+      "side": "pays",
+      "felt": "in the tax on their pension"
     }
   },
   "levers": {
@@ -145,7 +158,6 @@
     "itar": "top",
     "it50": "top",
     "wealth": "top",
-    "iinc2": "savers-owners",
     "gam2": "duties",
     "cgth": "savers-owners",
     "rvcgt": "savers-owners",
@@ -158,7 +170,6 @@
     "nicst": "business",
     "nicpen": "business",
     "fuel": "motorists",
-    "fuelfrz": "motorists",
     "alc": "duties",
     "tob": "duties",
     "ved": "motorists",
@@ -195,7 +206,6 @@
     "epl2": "business",
     "nic4": "broad-base",
     "vatgas": "broad-base",
-    "hmrc2": "tax-gap",
     "rvplan2": "students",
     "def3": "defence",
     "vatelec": "broad-base",
@@ -219,7 +229,39 @@
     "nicuel": "higher-earners",
     "vat1z": "broad-base",
     "cta": "broad-base",
-    "vatmot": "disabled-motorists"
+    "vatmot": "disabled-motorists",
+    "b6hmrc": "tax-gap",
+    "b6mkt": "business",
+    "b6dist": "top",
+    "b6sov": "business",
+    "b6bank": "business",
+    "b6mgd": "duties",
+    "b6wda": "business",
+    "b6phv": "broad-base",
+    "b6badr": "top",
+    "b6prop": "savers-owners",
+    "b6save": "savers-owners",
+    "b6ctpe": "business",
+    "b6pentx": "pensioner-taxpayers",
+    "b6mile": "motorists",
+    "b6trade": "broad-base",
+    "b6found": "top",
+    "b6isa": "savers-owners",
+    "b6elec": "broad-base",
+    "b6fuel": "motorists",
+    "b6brr": "business",
+    "b6ets": "business",
+    "b6civil": "whitehall",
+    "b6homes": "investment",
+    "b6dipcap": "whitehall",
+    "b6fraud": "families-on-benefits",
+    "b6ai": "investment",
+    "b6rough": "councils-care",
+    "b6ftbisa": "home-savers",
+    "b6bics": "industry",
+    "b6grow": "industry",
+    "b6ggs": "industry",
+    "b6hefr": "students"
   },
   "notFelt": [
     "bank5",
@@ -233,6 +275,13 @@
     "nicllp",
     "it50",
     "itar",
-    "hvcts15"
+    "hvcts15",
+    "b6hmrc",
+    "b6dist",
+    "b6sov",
+    "b6bank",
+    "b6wda",
+    "b6ctpe",
+    "b6ets"
   ]
 }

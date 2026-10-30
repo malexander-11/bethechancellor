@@ -4,12 +4,12 @@
   "code": "fuelfrz",
   "category": "tax",
   "badge": "mechanical",
-  "group": "Duties",
+  "group": "Shelved",
   "title": "Freeze fuel duty in April 2027",
   "shortTitle": "Fuel duty freeze",
   "noun": "the fuel duty freeze",
-  "headline": "Cancel April 2027's planned inflation rise, which is already in the forecast.",
-  "description": "Hold fuel duty at 57.95p in April 2027 instead of raising it with RPI inflation, as Budget 2025 plans and the forecast assumes. Later rises go ahead from the lower rate, so the cost carries on every year. The cost is HMRC's figure for a 1% change in petrol and diesel duty, times the 3% the freeze leaves the rate below plan: the OBR forecasts RPI inflation of 3.1% in 2026, and 57.95p is 3% below 57.95p grown by 3.1%. Freezing every year, as recent Chancellors have, would cost more each year.",
+  "headline": "Kept for the record; not on offer at this Budget. Old links still work.",
+  "description": "Hold fuel duty at 57.95p in April 2027 instead of raising it with RPI inflation, as Budget 2025 plans and the forecast assumes. Later rises go ahead from the lower rate, so the cost carries on every year. The cost is HMRC’s figure for a 1% change in petrol and diesel duty, times the 3% the freeze leaves the rate below plan: the OBR forecasts RPI inflation of 3.1% in 2026, and 57.95p is 3% below 57.95p grown by 3.1%. Freezing every year, as recent Chancellors have, would cost more each year.",
   "baselinePolicy": {
     "text": "Budget 2025 returns the main rate to 57.95p a litre by March 2027 and then uprates fuel duty with RPI inflation from 1 April 2027 (Table 4.1 line 3).",
     "source": {
@@ -79,7 +79,7 @@
       ],
       "combine": "sum",
       "multiplier": -3,
-      "note": "HMRC's rows for a 1% change in petrol and diesel duty, times minus 3: a freeze in April 2027 leaves the rate 3% below the planned 57.95p grown by the OBR's RPI inflation forecast for 2026 (3.1%). Our arithmetic on official figures."
+      "note": "HMRC’s rows for a 1% change in petrol and diesel duty, times minus 3: a freeze in April 2027 leaves the rate 3% below the planned 57.95p grown by the OBR’s RPI inflation forecast for 2026 (3.1%). Our arithmetic on official figures."
     },
     "uprating": {
       "method": "growWithSeries",
@@ -88,8 +88,8 @@
     },
     "caveats": [
       "Freezes the April 2027 rise only; the rises after it go ahead from the lower rate, so the cost carries on. The Resolution Foundation puts the cost of freezing every year at over £5 billion a year by 2029-30.",
-      "The OBR's RPI inflation forecast for 2026 stands for the rise in April 2027; the rate that applies will be set from the RPI figure published before it.",
-      "HMRC's rows are for a 1% change, scaled here to 3%; HMRC calls larger changes approximate."
+      "The OBR’s RPI inflation forecast for 2026 stands for the rise in April 2027; the rate that applies will be set from the RPI figure published before it.",
+      "HMRC’s rows are for a 1% change, scaled here to 3%; HMRC calls larger changes approximate."
     ]
   },
   "considerations": [
@@ -98,7 +98,7 @@
       "kind": "behavioural",
       "direction": "ambiguous",
       "alreadyInDirectCosting": true,
-      "text": "HMRC's figure is a direct effect on fuel duty. It includes HMRC's standard response of drivers to pump prices, but not wider effects on the economy such as inflation, which HMRC says are captured in the OBR's economy forecast instead.",
+      "text": "HMRC’s figure is a direct effect on fuel duty. It includes HMRC’s standard response of drivers to pump prices, but not wider effects on the economy such as inflation, which HMRC says are captured in the OBR’s economy forecast instead.",
       "sources": [
         {
           "sourceId": "hmrc-trr-2025-06-bulletin"
@@ -124,13 +124,7 @@
       "magnitudeWords": "small"
     }
   ],
-  "interactions": [
-    {
-      "withLever": "fuel-duty",
-      "text": "Both change fuel duty rates: a freeze is a cut of about 3% against the plan, so moving the rate as well counts from a different starting point.",
-      "severity": "warn"
-    }
-  ],
   "status": "reviewed",
-  "reviewedOn": "2026-09-28"
+  "reviewedOn": "2026-09-28",
+  "deprecated": true
 }

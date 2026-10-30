@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "budget-2026-trading-allowance",
+  "code": "b6trade",
+  "category": "tax",
+  "badge": "direct",
+  "group": "Income tax",
+  "title": "Keep the trading allowance at £1,000",
+  "shortTitle": "Keep £1,000 trading allowance",
+  "noun": "keeping the trading allowance at £1,000",
+  "headline": "Keep £1,000 trading allowance. Raises £0.2bn in 2029-30.",
+  "description": "The tax-free allowance for small trading and side income rises from £1,000 to £3,000 from April 2027. Switch this on to keep it at £1,000.",
+  "baselinePolicy": {
+    "text": "The income tax trading allowance is £3,000 from 6 April 2027 (Table 6.1 line 15).",
+    "source": {
+      "sourceId": "hmt-budget-2026-policy-costings",
+      "page": "23",
+      "quote": "This measure increases the tax-free trading and miscellaneous income allowance from £1,000 to £3,000."
+    },
+    "alreadyIncludes": [
+      "The income tax trading allowance is £3,000 from 6 April 2027 (Table 6.1 line 15)."
+    ]
+  },
+  "control": {
+    "kind": "toggle",
+    "unit": "bool",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "default": 0
+  },
+  "appliesFrom": "implementationYear",
+  "classification": {
+    "side": "receipts",
+    "currentOrCapital": "current",
+    "taxHead": "incomeTax",
+    "psnflTreatment": "standard"
+  },
+  "costing": {
+    "kind": "schedule",
+    "effect": {
+      "2026-27": 0,
+      "2027-28": 0,
+      "2028-29": 225,
+      "2029-30": 165,
+      "2030-31": 175,
+      "2031-32": 180
+    },
+    "source": {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "table": "Table 6.1"
+    },
+    "rawSource": {
+      "kind": "hmtScorecard",
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "lines": [
+        {
+          "number": 15,
+          "title": "Trading Allowance: Increase the Income Tax Trading Allowance to £3,000 from £1,000 from 6 April 2027",
+          "values": {
+            "2026-27": 0,
+            "2027-28": 0,
+            "2028-29": -225,
+            "2029-30": -165,
+            "2030-31": -175,
+            "2031-32": -180
+          }
+        }
+      ],
+      "signConvention": "positiveReducesBorrowing",
+      "note": "Reversal: the Treasury’s costing with its sign reversed (positive scorecard values reduce borrowing; here receipts positive means more revenue)."
+    },
+    "caveats": [
+      "The Treasury’s costing is on the OBR October 2026 forecast, the baseline used here. Effects before the start year are not applied: 2026-27 falls before any Budget of yours."
+    ]
+  },
+  "considerations": [
+    {
+      "id": "hmt-costing",
+      "kind": "behavioural",
+      "direction": "ambiguous",
+      "magnitudeWords": "unknown",
+      "alreadyInDirectCosting": true,
+      "text": "The Treasury’s scorecard figure is the certified direct costing for the measure, including the behavioural response the Treasury and OBR agreed; the Budget 2026 policy costings document gives the method.",
+      "sources": [
+        {
+          "sourceId": "hmt-budget-2026-policy-costings",
+          "page": "23"
+        },
+        {
+          "sourceId": "hmt-budget-2026-table-6-1",
+          "table": "Table 6.1",
+          "note": "line 15"
+        }
+      ]
+    }
+  ],
+  "status": "reviewed",
+  "reviewedOn": "2026-10-30"
+}
