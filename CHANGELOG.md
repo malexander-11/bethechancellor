@@ -5,6 +5,13 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- ADR-0046 records the walk and the balance: the cards and the answer as the vote, the small print,
+  the money a player has to play with, the menus as data, the floor at the Chancellor's headroom and
+  the server's refusal below it, the `rd.3` road and the levers' plain names, and what it supersedes
+  of ADR-0045 and the fine-tuning records. Methodology §40 says how a card's money line and a menu's
+  price are worked out and what the floor checks. The README, the data README and the About and
+  Methodology pages describe the game as it is now, and the data README's fine-tuning section gives
+  way to the walk's themes and the balance page's menus.
 - The fine-tuning data is retired with its screens (ADR-0046). Each lever now carries the plain name
   those screens gave it, and the review and the shared picture read it back by that name.
   `data/journey/finetune.json`, its schemas, its engine module and the checks that read it are gone;

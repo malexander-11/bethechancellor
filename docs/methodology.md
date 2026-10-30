@@ -1656,3 +1656,40 @@ do.
   first; the priorities a link carries are dropped. A link made on the March forecast opens on
   October's data with any retired code dropped and the estimate's settings noted, as any link
   reopens on the data the game ships.
+
+## 40. Agree or disagree, then balance it (ADR-0046)
+
+On 2026-10-30 the user asked for the game to explain each measure, ask whether the player agrees,
+and then have them spend what they saved or find what they gave up, never ending below the
+Chancellor's headroom. ADR-0046 records the choices; this section says what the numbers do.
+
+- **The money.** `balanceGbpm` is the review's reconciliation (§39) read as one number: the headroom
+  against the stability rule in the target year on the player's Budget, less the headroom on the
+  Chancellor's, with the player's levers taken out and the economy left as it is. Interest on the
+  extra borrowing or saving is in it, so a reversal is worth a little more or less than the
+  Treasury's line. Above `BALANCE_SETTLED_GBPM` it is money to spend, below minus that it is money
+  to find, and between the two it balances: the bound is half the tenth of a billion the game says
+  money to, so "nothing to spend or find" never hides a figure the screen would show.
+- **A card's figures.** The Treasury's figure is the scorecard's own, its lines summed on the
+  scorecard's sign for the target year, or for the year it moves most when it is over by then (§39).
+  The money line is the engine's: the balance with the card's lever on, less the balance with it
+  off, every other lever as the player has it. A tax rise reversed gives money up ("Disagreeing
+  costs you"), a spending decision reversed saves it ("Disagreeing saves you"), and a measure over
+  before the target year "changes nothing" there. A card about investment says that only the
+  interest moves the money, since the stability rule does not count investment.
+- **A menu's price.** One press is the lever moved one `step` along its own grid, clamped to its
+  range; a toggle switches on once. The price is the balance after the press less the balance now,
+  on the Budget as it stands, so a press after another is priced on what the first already did.
+  "Take one back" moves the lever one step towards where it rests, and only as many times as the
+  player pressed: a setting the other way, from a link, is not the option's to take back.
+- **The floor.** A priority whose press would leave the balance at or below minus
+  `BALANCE_SETTLED_GBPM` cannot be pressed, and says how far short it would be. The balance page's
+  way on and the review's Deliver are disabled while the balance is short. The leaderboard's server
+  decodes a posted link on the game's own data, works the balance out the same way and refuses one
+  that is short, so no route round the screens reaches the board.
+- **The small print.** Every measure no card asks about is listed once, in the Budget file's order,
+  and its tick or cross is a vote and nothing else. The validator holds every reversible measure to
+  one card, so a measure is on a card or in the small print, never both.
+- **Votes.** An answer on a card is a vote on every measure the card stands for, kept as §39 says.
+  No tally, and no answer beyond the lever it sets, enters the arithmetic, the reception or the
+  picture.

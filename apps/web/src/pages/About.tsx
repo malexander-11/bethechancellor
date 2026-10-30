@@ -49,9 +49,11 @@ export function AboutPage() {
       <h2 id="game">The game</h2>
       <p>
         The Chancellor delivered a Budget on 28 October 2026. The game shows what it did, in plain
-        words with every figure from the Treasury&rsquo;s own table, and lets you change it:
-        fine-tune tax and spending from the Chancellor&rsquo;s choices, then deliver your Budget and
-        see how it lands with Labour backbenchers, the markets and the public.
+        words with every figure from the Treasury&rsquo;s own table, and lets you change it: agree
+        or disagree with each of the Chancellor&rsquo;s measures, then spend the money you saved or
+        find the money you gave up, never leaving less headroom than the Chancellor did. Then you
+        deliver your Budget and see how it lands with Labour backbenchers, the markets and the
+        public.
       </p>
       <p>
         It is inspired by the Institute for Fiscal Studies and Nesta&rsquo;s{' '}

@@ -126,74 +126,38 @@ export function MethodologyPage() {
 
       <h2>The journey and the advisers</h2>
       <p>
-        The game starts from the Chancellor&rsquo;s Budget (ADR-0045) and walks through three steps,
-        one screen at a time, with one primary button on each: fine-tune tax and spend, two screens
-        on which every lever is a policy, the taxes tax by tax and the spending by what the money is
-        for, each in the decisions a Chancellor takes, closed until opened; deliver the Budget, a
-        review of the whole of it with one red button; and feedback. There is no forecast to guess
-        and no headroom target: every game plans on the OBR&rsquo;s October 2026 forecast, the
-        Chancellor&rsquo;s measures in it, and the rules are the line to meet. The road runs one
-        way: a stage opens once the one before it has been left, going back is always allowed and
+        The game starts from the Chancellor&rsquo;s Budget (ADR-0045) and goes one screen at a time,
+        with one primary button on each: the measures, the balance, the review and Budget day
+        (ADR-0046). The measures come a theme a page, one card for each measure a player can
+        reverse: what the Chancellor did, what it means, the Treasury&rsquo;s figure and what
+        disagreeing would cost or save on your Budget as it stands. Agree keeps a measure and
+        Disagree takes it out of your Budget, and either answer is your vote. A last page lists the
+        rest of the Budget, which changes nothing you have to play with, each with a tick or a
+        cross.
+      </p>
+      <p>
+        The money you have to play with is the headroom on your Budget less the Chancellor&rsquo;s,
+        in 2029-30 and with interest included. Short of money, you find it from a menu of taxes and
+        savings; with money to spare, you spend it on your priorities. Each choice is a fixed step,
+        pressed again to go further, and priced by the engine on your Budget as it stands. Your
+        headroom may not end below the Chancellor&rsquo;s: a priority that would take it there
+        cannot be pressed, the review will not deliver a Budget that is short, and the leaderboard
+        will not take one. The review reads the whole Budget back with one red button.
+      </p>
+      <p>
+        There is no forecast to guess: every game plans on the OBR&rsquo;s October 2026 forecast,
+        the Chancellor&rsquo;s measures in it, and the rules are the line to meet. The road runs one
+        way: a step opens once the one before it has been left, going back is always allowed and
         keeps every choice, because the Budget lives in the link, and a link that jumps ahead is
-        sent back to where the game has got. The progress line at the top of every screen after the
-        Budget, which marks each step done, current, opened or not yet open, and the guard on every
-        page read the same rule. On the fine-tuning screens an open decision is one card with a row
-        for each choice, under a short name in the decision&rsquo;s own terms (&ldquo;Food&rdquo;
-        under Remove an exemption). A row is a tick, or one scale of levels with where the lever is
-        planned to be among them (VAT at 15%, 18%, 19%, 20% as planned, 21%, 22% or 25%; a
-        department&rsquo;s budget from 5% less to 5% more), and before it is chosen it says only
-        what choosing would raise, cost or save, at the nearest level each way: the bar keeps the
-        headroom. Once a row is chosen it says what it does in 2029-30, its adviser speaks and Undo
-        appears. What a card&rsquo;s rows share is said once at its top, and everything else about
-        each lever waits in the card&rsquo;s one fold. There is no slider anywhere and no desk:
-        every lever the desk once held is a policy on these two screens, and with no game only the
-        Chancellor&rsquo;s Budget opens. Every screen opens with one heading and one instruction,
-        and for now the sources are listed on the About page rather than beside each figure; the
-        guide is chrome and quotes no figure that is not sourced. The advisers, the Prime Minister
-        and the ministers are roles, not people; a briefing that cites a public document is
-        commentary, and a judgement nobody published is the game&rsquo;s own and never produces a
-        number. Today&rsquo;s estimate follows a stated rule: the latest market or independent
-        reading minus the OBR&rsquo;s March assumption, rounded to the step the assumption moves in
-        (interest rates up three-quarters of a point, RPI inflation up half a point, growth on the
-        OBR&rsquo;s path), turned into headroom by the OBR&rsquo;s own sensitivities: about £6.8
-        billion in 2029-30, against £23.6 billion in March. Each radio shows the level it moves to
-        (21% on VAT, £12,670 on the personal allowance), but the engine costs the change, exactly as
-        before: levels are display only. VAT base-broadening toggles use HMRC&rsquo;s cost-of-relief
-        estimates, which HMRC says do not represent what abolishing a relief would raise; abolishing
-        inheritance tax removes the OBR&rsquo;s whole receipts line; reversing the October 2024
-        capital gains tax rise uses the Treasury&rsquo;s own costing of the package. The revenue
-        menu a Chancellor actually weighs is on the fine-tuning screens too, each option a published
-        figure: the employer National Insurance threshold, vehicle excise duty, air passenger duty,
-        tobacco duties, the residence nil-rate band, and employer National Insurance on pension
-        contributions from HMRC&rsquo;s private pension statistics (£14.3 billion in 2024-25, less
-        the £6.5 billion on public sector schemes, which would only move money from departments to
-        the Treasury, taken to today&rsquo;s 15% rate). Every card built on HMRC&rsquo;s cost of a
-        relief reads &ldquo;raises at most&rdquo; and says why, and the markets count it as a figure
-        nobody has certified. Two measures that count the same money (taxing people who leave the
-        UK, and taxing them and gains at death, for one) cannot both be chosen: choosing one takes
-        the other out and says so first, and where the two answer one question, as the wealth tax at
-        1% or 2% does, they are one choice among radios. Each pair has a text that reads from either
-        card. Employer-side National Insurance is not a manifesto red line here, on the
-        government&rsquo;s own reading of the lock; the Political Adviser says on each such lever
-        that the reading is contested. The lock itself is read as headline rates and allowances
-        (ADR-0042): a rise in a rate it names, or a cut to the personal allowance, the higher-rate
-        threshold or the National Insurance threshold, breaks it; VAT or National Insurance charged
-        where none is charged today does not. Phase 12 added the menu the Budget 2026 reporting says
-        is on the table: ending the capital gains write-off at death, a £1.5 million council tax
-        surcharge band, reversing the farm and family-business relief reform, two points on the bank
-        surcharge, the energy profits levy package again, the self-employed Class 4 rate, VAT off
-        domestic gas, another HMRC compliance package, unfreezing the Plan 2 student loan threshold,
-        defence at 3% of GDP from 2027, and business rates as a share of the OBR&rsquo;s own line.
-        Each is a published row or a stated calculation on one, and the data records which. Nine
-        taxes were taken off the table on 30 September 2026: the health and social care levy,
-        insurance premium tax, dropping the salary-sacrifice cap, taxing capital gains at income tax
-        rates, a lower VAT threshold, National Insurance on landlords&rsquo; rent, a higher tax on
-        selling a business, adding back last year&rsquo;s cancelled fuel duty rise and undoing last
-        year&rsquo;s gambling duty rises. Pension tax relief and two cuts to stamp duty followed the
-        same day: relief at a flat 30%, relief at the basic rate only and a cap on the tax-free lump
-        sum; abolishing stamp duty on main homes and taking the surcharge on additional homes back
-        to 3%. Their costings are kept for the record, and an old link that carries one opens
-        without it.
+        sent back to where the game has got. The other levers in the data, from VAT to the think
+        tanks&rsquo; proposals, keep their costings for old links and the record; a link that
+        carries one opens with it, and the balance page lists it to keep or undo. Employer National
+        Insurance is not a manifesto red line here, on the government&rsquo;s own reading of the tax
+        lock, which is read as headline rates and allowances (ADR-0042): a rise in a rate it names,
+        or a cut to the personal allowance, the higher-rate threshold or the National Insurance
+        threshold, breaks it. A choice that strains a promise says so. The advisers, the Prime
+        Minister and the ministers are roles, not people; a judgement nobody published is the
+        game&rsquo;s own and never produces a number.
       </p>
 
       <h2>Spending levers</h2>

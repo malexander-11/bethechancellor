@@ -19,8 +19,8 @@ context/<yyyy-mm>.json    the context: what was decided since the forecast, the 
                           published figures kept for the record (readings retired, ADR-0045)
 journey/advisers.json     the adviser roles (titles, remits, steps)
 journey/pm.json           the Prime Minister: the promises and red lines, and the sign-off
-journey/budget2026.json   the Budget the game starts from: its story, facts and measures (ADR-0045)
-journey/finetune.json     the fine-tuning screens: every lever, in decisions (ADR-0035, ADR-0037)
+journey/budget2026.json   the Budget the game starts from: its story, facts, measures and the walk's themes
+journey/balance.json      the balance page's two menus: ways to find money, and priorities (ADR-0046)
 journey/ministers.json    a minister's lines for every spending and welfare lever
 journey/households.json   five household archetypes and the levers that touch them
 journey/incidence.json    who each lever falls on
@@ -73,9 +73,11 @@ measures join the scorecard the pipeline extracts from it.
 4. State the baseline (`baselinePolicy`, `alreadyIncludes`) from Budget 2025 Table 4.1 or the EFO.
 5. Add considerations only from documents readable in this repository's sources registry, with
    `alreadyInDirectCosting: true` when the published figure already contains the behaviour.
-6. Give the lever a `group` (its family: a tax's section on step 4, a spending lever's subhead in
-   its group's fold) and a unique stable `code`, and set `status: reviewed` with `reviewedOn` once
-   the above is checked. A live lever also needs its place on step 4 (`finetune.json`, below).
+6. Give the lever a `group` (its family), a unique stable `code` and a plain `name`, the words the
+   review and the shared picture read it back by ("The main rate of VAT"; without one it goes by its
+   `shortTitle`), and set `status: reviewed` with `reviewedOn` once the above is checked. A lever
+   the game offers is a measure's, asked about on a card, or an option on a balance menu (below);
+   the rest stay for old links and the record.
 
 ### Levels and the journey
 
@@ -83,8 +85,7 @@ measures join the scorecard the pipeline extracts from it.
   `apply: add | pctChange`, `label`, `source`, optional `decimals` and `note`) so the app shows "20%
   → 21%". The level never enters the costing; percentage-of-baseline levers need no level metadata.
 - **Selects.** `control.kind: "select"` with `labels` keyed by value ("-40": "Abolish (0%)"); the
-  engine snaps to the nearest offered option, and step 4's sizes read their levels from the labels
-  ("Large: Abolish (0%)").
+  engine snaps to the nearest offered option.
 - **Relief-cost toggles.** `rawSource.kind: "hmrcReliefCost"` cites rows of a relief-cost extract by
   `sourceId`: `derived/hmrc-tax-reliefs-2026-01.raw.json` (HMRC's tax reliefs, Table 2) or
   `derived/hmrc-private-pensions-2026-07.raw.json` (HMRC's pension statistics, Table 6, with Tables
@@ -101,17 +102,13 @@ measures join the scorecard the pipeline extracts from it.
   HMRC's figures, so the schema requires `badge: "mechanical"`.
 - **The range the source covers.** `control.sourceRange: { min, max, text }` (Phase 25): HMRC
   vouches for scaling a 1p row to about 2p, not beyond. It must hold the default and sit inside the
-  control's range. A step-4 size may go past it (Phase 26, ADR-0027): the effect is then badged
-  Worked out and shows `text` (at most 140 characters).
+  control's range; `text` (at most 140 characters) says how far the source goes.
 - **The lever's noun.** `noun`, in lower case ("the basic rate of income tax", "the health budget"):
   how a Budget-day reason names its causes after "Because of".
 - **Two levers that count the same money.** An interaction with `severity: "excludes"`, authored
-  once per pair (the validator checks): only one can be chosen at a time. Ticks that a decision
-  declares a set are one choice among radios (`alternatives`, below), and anywhere else choosing one
-  takes the other out and says so first (ADR-0036, ADR-0038). The text must read from either card
-  and in either direction (Phase 26), each sentence at most twenty words, since it leads a card. A
-  link that carries both still opens, and each card says it is counted twice. `info` and `warn`
-  remain notes.
+  once per pair (the validator checks): the two count the same money, so only one may count at a
+  time. The text must read from either lever and in either direction (Phase 26), each sentence at
+  most twenty words. A link that carries both still opens. `info` and `warn` remain notes.
 
 - **Scorecard-backed toggles.** A `linearPerUnit` toggle may cite `hmtScorecard` lines from any
   extracted scorecard (Budget 2026, Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is
@@ -162,10 +159,9 @@ lever lives in the folder of its real category and the group of the screen it be
 `Capital gains tax`, `spend` · `New programmes`); the badge, not the folder, keeps it apart from the
 certified rows beside it (ADR-0017).
 
-- **Category and group.** The lever's real `category`, its family `group`, and its place on step 4
-  in `finetune.json` (a decision on its screen); `control.kind: "toggle"` unless a published line
-  supports a scale (business rates scales the OBR's line and is `mechanical`, see the spending notes
-  above).
+- **Category and group.** The lever's real `category` and its family `group`;
+  `control.kind: "toggle"` unless a published line supports a scale (business rates scales the OBR's
+  line and is `mechanical`, see the spending notes above).
 - **Badge.** `assumption`, never `direct`. A `repeat` of a scorecard line, a `statedProduct`, a
   `weightedSum`, a `gdpShareGap`, and a multiple of an HMRC row beyond the small change HMRC
   publishes (`it50`, five one-penny steps) are all assumptions (ADR-0018).
@@ -226,9 +222,9 @@ certified rows beside it (ADR-0017).
   for the record; not on offer at this Budget. Old links still work." Its costing, raw source and
   considerations stay, so `validate:data` and the engine tests keep reproducing it; the build leaves
   it out of the app, the incidence, minister and suggestion checks skip it, and an old link decodes
-  it as an unknown code with a warning. Nothing live may name it: no incidence tag, no option, no
-  fine-tuning item, no household touch. `validate:data` checks the game as shipped as well as the
-  whole set, so a file that does is refused.
+  it as an unknown code with a warning. Nothing live may name it: no incidence tag, no card, no menu
+  option, no household touch. `validate:data` checks the game as shipped as well as the whole set,
+  so a file that does is refused.
 
 ### Budget day reception (`data/journey/reception.json`, ADR-0013)
 
@@ -286,12 +282,11 @@ figure that quotes nothing, and gilt sales for any year but the one `asOf` falls
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
 One guide entry per step, and one for the Budget the game starts from (`start`, which shows no
-number and no road): `step`, `number` (one to three), `title` (the page's heading) and `now`, the
-one line under it saying what to do, at most ten words on the road. A word in square brackets,
-`[headroom]` or `[the OBR](obr)`, is a glossary reference and must exist in `glossary.json`; the
-policy cards' tags read the glossary too. Guide and glossary are chrome: no badge, and no figure
-unless the glossary entry carries a source. (The `doing`, `why` and `terms` fields, and the "Why
-this matters" fold they filled, went in Phase 23.)
+number and no road): `step`, `number` (one to four), `title` (the page's heading) and `now`, the one
+line under it saying what to do, at most ten words on the road. A word in square brackets,
+`[headroom]` or `[the OBR](obr)`, is a glossary reference and must exist in `glossary.json`. Guide
+and glossary are chrome: no badge, and no figure unless the glossary entry carries a source. (The
+`doing`, `why` and `terms` fields, and the "Why this matters" fold they filled, went in Phase 23.)
 
 ### The Prime Minister (`data/journey/pm.json`, ADR-0022)
 
@@ -321,7 +316,8 @@ delivery went with the Chancellor's Budget as the starting point (ADR-0045).
 
 The Budget the game starts from, as the analysis page tells it: `title`, `deliveredOn`, the
 `chancellor` (the one place a person is named, with a source that quotes it), the `scorecard` its
-measures join to (the source id of an extracted scorecard), `facts`, `story` and `measures`.
+measures join to (the source id of an extracted scorecard), `facts`, `story`, `measures` and
+`themes`.
 
 - **Facts** are the published steps of the margin since the last forecast, £ million, each with a
   source that quotes the passage it is read from: the margin in March, what debt interest took, the
@@ -336,75 +332,39 @@ measures join to (the source id of an extracted scorecard), `facts`, `story` and
   number by convention), `line`, `plain` (one or two sentences of at most 200 characters, held to
   the readability test), and either `leverCode`, the lever that reverses it, or nothing, with
   `notMovable.reason` where a reader would expect to move it. A lever named must exist, be live, be
-  on the fine-tuning screens and be costed from that line of that scorecard, and the pipeline checks
-  that the list and the extract are the same list.
+  asked about on a card (below) and be costed from that line of that scorecard, and the pipeline
+  checks that the list and the extract are the same list.
+- **The walk** (`themes`, ADR-0046) groups the measures a player can reverse into themes, a page
+  each: `{ id, title, lead, cards }`, with a title of at most 40 characters, a one-line lead of at
+  most 140 and at most eight cards. A card is `{ lever, title, explain }`: the lever its measures
+  name; a heading of at most 60 characters saying what the Chancellor did; and `explain`, a few
+  sentences of at most 280 characters on what it means, with no sum in billions, since the page adds
+  the Treasury's figure and the engine's. The validator holds every named lever to one card, a lever
+  to at most one card, a card to at least one measure and a theme's id to one theme. Every measure
+  no card asks about is the walk's small print, voted on and moving no money. The readability test
+  reads the themes and the cards.
 
-### Fine-tuning (`data/journey/finetune.json`, ADR-0025, ADR-0027, ADR-0035)
+### The balance page's menus (`data/journey/balance.json`, ADR-0046)
 
-Two sides, `tax` and `spending`, each with its screen's `title` (at most four words), its `lead` (at
-most fourteen words and 120 characters), the `adviser` who speaks there, and its `groups`, the
-sections of its screen, each `{ id, label, decisions }`: on the tax side a tax, on the spending side
-what the money is for (ADR-0037). Each decision `{ id, title, alternatives?, items }` holds one to
-eight items under a title of at most six words (ADR-0035, ADR-0036); no two sections on a side share
-an id or a label, and no two decisions in the file an id. Since Phase 26 every live policy lever is
-an item, once, on its own side. An item is the lever's `code`, its `label`, the short name it goes
-by inside its decision ("Food" under Remove an exemption; at most 48 characters and seven words,
-ADR-0037; without one it goes by its plain name, or its policy's title), its plain `name` for the
-review and the notes ("The main rate of VAT"; a toggle may leave it out and go by its policy's
-title), and one or two `policies`, each `{ title, sizes, advice }`: a title that says what the
-policy does ("Put up VAT", at most twelve words), the settings it comes in, smallest first, and the
-adviser's line, a `SimulatedLine` with at least one source. The first policy is the usual way, the
-one that improves the public finances (taxes up, spending down); a lever that moves both ways may
-carry a second policy the other way, and choosing one clears the other. Rules the validator
-enforces:
+Two menus, `raise` (ways to find money) and `spend` (the priorities to spend it on), each a list of
+options `{ code, step, label, each }`: the lever, how far one press moves it in the lever's own unit
+and which way, the label the player reads ("More for schools", at most 48 characters) and what one
+press does ("1% more each time", at most 40). The page prices every press on the engine; no figure
+is authored. Rules the validator enforces:
 
-- **A live lever on its own side, once.** Tax items are tax levers; spending items are spend or
-  welfare levers; no code appears twice in the file, so both ways of a lever share a place.
-- **Sizes the lever can reach**, each inside its range and on its grid and never the setting it
-  rests at, all on one side of that setting and growing away from it. A toggle's policy has one
-  size, the switch turned on.
-- **One policy each way.** Two policies only where they go opposite ways.
-- **A plain name** for every lever that is not a toggle.
-- **Not on the table comes last.** A lever tagged not on the table follows every other lever in its
-  decision.
-- **A tax sits in its family's section**: a tax section's `label` is the family (`group`) of every
-  lever in it, so each family has one section (`tax lever X is in the F family, not S`). Who pays a
-  tax is its incidence tag, read on the review and on Budget day.
-- **Ticks that contradict each other in a decision may be one choice** (`alternatives`, ADR-0036). A
-  decision may list sets `{ name, codes }`, each two to four of its ticks, named for the question
-  the set answers (“The wealth tax”, at most 60 characters). Every member excludes every other
-  member and nothing outside the set, the members sit side by side in the decision’s order, and no
-  tick is in two sets. The screen draws a set as radios with “As planned” first. Whether a pair is a
-  set is the data's choice (ADR-0038): a pair left as ticks, like taxing leavers' gains and taxing
-  them with gains at death, is taken out instead.
-- **Each choice has a name of its own in its decision**: no two items in one decision share a short
-  name.
-- **The adviser exists and speaks on this step** (`finetune` in `advisers.json`).
+- **A live lever the game may offer.** Never a measure's lever, since its card asks about it; never
+  a setting of the economy; and never investment, which the headroom counts only by its interest, so
+  it would read as nearly free.
+- **On the lever's own steps.** The first press lands inside the lever's range, on its grid and, for
+  a select, on one of its labels. A toggle's step is 1: it switches on once.
+- **Once.** No lever appears twice across the two menus.
 
-A lever with sizes is one scale on either screen (ADR-0035, ADR-0037): its radios are the planned
-level and every size its policies come in, sorted and each once (`scaleLevels`), each named by the
-level it sets ("20% as planned", "21%", "5% less"). A budget's two policies make one scale, from 5%
-less to 5% more for a department or a benefit line and from 10% less to 20% more for public
-investment; Small, Medium and Large are gone. By default the small size is the lever's usual step (a
-penny, a point, £2 a week, £100, 5% on a duty), medium twice it and large five times it, capped at
-the range, with a repeated size dropped. A test holds every sized policy to that rule, except where
-HMRC publishes points and the sizes sit on them: the personal allowance, the higher-rate threshold,
-the additional rate, the two capital gains rates and inheritance tax.
-
-The words test holds every title and line to twelve words with no figure, and checks each size word
-at every size a policy offers: "big" (or expensive, large, costly) only where the engine's own
-figure is £5bn or more in the target year even at the smallest size, "small" (or cheap, little,
-modest, tiny) only where it is £1bn or less even at the largest. The page prices the smallest size
-against the Budget as it stands; no figure is authored.
-
-Where two levers' own texts say they double count, cancel or are "pick one", the pair is an
-`excludes` interaction (above), with a text that reads from either card; a retired lever's pairs go
-with it, and undoing the 2024 capital gains rise counts against both rates on gains (ADR-0036).
-Pairs whose texts say only that the combined figure is approximate stay `warn`.
-
-A side may carry `notes` (Phase 25): lines under the screen's lead that its 120 characters cannot
-hold, such as how long the spending settlements run, each `{ text, badge, sources }` with the text
-at most 160 characters and its own badge.
+A test holds every press of a `raise` option to finding money and every press of a `spend` option to
+spending it, all the way along the lever's range, and holds every option to breaking no promise
+however far it goes. A strain is allowed, and the page tags the option with the promise's noun. The
+words test holds a label to ten words and `each` to six, and a size word in a label to the engine's
+figure for one press: "big" (or expensive, large, costly) only at £5bn or more, "small" (or cheap,
+little, modest, tiny) only at £1bn or less.
 
 ### Households and who pays (Phase 25, ADR-0026)
 
@@ -414,7 +374,7 @@ at most 160 characters and its own badge.
   touches fired, it says the file's `unnamed` line ("Nothing aimed at us by name that we could
   see."), so a tax rise on everyone is never "untouched". `reachesNone` lists the levers that reach
   none of the five by name (the bank levies, defence, a wealth tax on the very top); every lever on
-  the fine-tuning screens touches a household or is on it, a test checks it, and the validator
+  a card or a balance menu touches a household or is on it, a test checks it, and the validator
   refuses a code on the list that a household is touched by, or an exposure group that does not
   exist.
 - **Who pays** (`incidence.json`). A paying group carries `felt`, the words that follow "felt" in a
@@ -430,12 +390,12 @@ per item so no line inherits honesty from its file. `short` is the same line in 
 first with the full `text` one click behind. Every line a newcomer meets on the road has one when
 the line is over its budget, and the words test pins each kind: a minister's asking line and any
 band over eighteen words; the Prime Minister's reactions twelve; the advisers' notes fourteen; an
-option's line eighteen; an option's or a step-4 policy's adviser line (`advice`) twelve, with no
-figure and a size word only where the engine's figure bears it out (at every size, for a policy);
-every reception band twenty words in all (Phase 23). A figure in the short line must be a figure in
-the long one, so the sources cover both (a test checks it). A readability test reads every set a
-player meets with the folds closed: no sentence over twenty words, and a Flesch-Kincaid grade of
-seven or below per set (ADR-0024). Rules for authoring one:
+option's line eighteen; a balance menu's label ten and what one press does six, with a size word
+only where the engine's figure for one press bears it out; every reception band twenty words in all
+(Phase 23). A figure in the short line must be a figure in the long one, so the sources cover both
+(a test checks it). A readability test reads every set a player meets with the folds closed: no
+sentence over twenty words, and a Flesch-Kincaid grade of seven or below per set (ADR-0024). Rules
+for authoring one:
 
 - **Never type a number the engine or a document did not produce.** A line may quote a published
   figure (with the source beside it) and the page may print an engine figure next to the line; the

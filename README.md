@@ -7,16 +7,14 @@ traced to an official source.
 Formerly _Be the Chancellor_. It was renamed in September 2026 so that it is not mistaken for the
 Institute for Fiscal Studies and Nesta tool of that name, which inspired it (ADR-0029).
 
-Status: **the Chancellor's Budget (ADR-0045)**. The site opens on what the Budget of 28 October 2026
-did, told from the OBR's October 2026 forecast and the Treasury's own scorecard: the story of the
-headroom, the measures a player can change in one line each with its figure, the rest in a fold, a
-vote for or against every measure, and one button that starts a game from it. The game is three
-steps with one clear action on every screen: fine-tune tax and spend, deliver the Budget, feedback.
-Every choice is a policy: there is no slider anywhere, and where a size makes sense a choice is a
-scale of levels with the plan among them (VAT at 15%, 18%, 19%, 20% as planned, 21%, 22% or 25%; a
-department's budget from 5% less to 5% more) (ADR-0027). The Chancellor's measures are levers whose
-default is the Chancellor's own setting, so a game starts from the Budget as delivered and the
-engine measures every change from it; there is no forecast to guess and no estimate to make, and the
+Status: **agree or disagree, then balance it (ADR-0046)**. The site opens on what the Budget of 28
+October 2026 did, told from the OBR's October 2026 forecast and the Treasury's own scorecard, with
+one button that starts a game from it (ADR-0045). The game walks through the Chancellor's measures a
+theme a page, and the player agrees or disagrees with each one. Disagreeing takes a measure out of
+their Budget, which saves money or gives it up. They then spend what they saved on their priorities,
+or find what they gave up, a fixed step at a time, and the headroom may never end below the
+Chancellor's. Then they deliver the Budget and hear how it lands. There is no slider anywhere and no
+forecast to guess: every game plans on the forecast with the Chancellor's measures in it, and the
 fiscal rules are the line to meet. There are no tabs and no hand-off to click through: every screen
 is a decision with a primary button and a way back, and the Budget lives in the link, so going back
 keeps every choice. The identity is Westminster's: Commons green, warm paper, charcoal, restrained
@@ -31,43 +29,28 @@ judgement), though no screen labels which (ADR-0034); the About page lists every
 screen names itself, can be reached by keyboard and screen reader, holds 4.5:1 contrast, keeps every
 control at 44px and says met or missed in words.
 
-**The Budget.** What the Chancellor did, in the game's plain words: the margin the OBR left in March
-(£23.6bn), what dearer borrowing took and other changes gave back, the £12.5bn that left before the
-measures, what the measures added and the £14.5bn they left, with both fiscal rules met and the
-welfare cap missed by £2.8bn on the OBR's own assessment; then the measures by what each does in
-2029-30 (tax rises, tax cuts, less spending, more spending), each with "Change it", and the rest in
-a fold. Every figure is a quoted fact or the engine's own. Once the leaderboard's database is
-connected, every measure takes a vote for or against, one a device, with the counts shown.
-**Fine-tune tax and spend**: two screens on which every lever is a policy, the Chancellor's measures
-among them as "This Budget's decisions" beside the tax or budget each belongs to. Tax goes tax by
-tax, from income tax to the tax gap, and the decisions about them, closed until you open one
-("Change the headline rate" of VAT, "Remove an exemption") (ADR-0035). Spending goes the same way:
-sections by what the money is for, each budget one scale with the plan among its levels (from 5%
-less to 5% more, or for public investment from 10% less to 20% more). An open decision is one card,
-a row for each choice under a short name: a tick, or a scale of levels with the plan among them,
-saying what choosing would raise, cost or save; once chosen a row says what it does in 2029-30, and
-its adviser speaks, with a minister on every budget you move; everything else about each lever waits
-in one fold (ADR-0037). Red and amber manifesto tags sit on the rows they watch, and the bar says
-what a Budget breaks; no adviser speaks above the cards (ADR-0040). Two policies that count the same
-money cannot both be chosen: where they answer one question they are one choice among radios, and
-otherwise choosing one takes the other out and says so first (ADR-0036, ADR-0038). The menu is the
-one a Chancellor actually weighs: the Budget's own measures; employer National Insurance, pensions,
-the smaller duties, capital-tax reliefs, capital gains on leavers and at death, the bank surcharge,
-the energy profits levy again, the self-employed rate up or down, a lower personal allowance, VAT
-off gas, business rates and defence at 3% sooner; the think tanks' proposals read from their own
-documents (a levy on banks' reserves, a 2% wealth tax, a sugar and salt tax, council tax on the top
-bands, the NICs upper earnings limit, 1% VAT on zero-rated goods, a child tax allowance, and welfare
-cards from housing support relinked to rents to the Centre for Social Justice's benefit reset), each
-wearing a sourced earliest start where it cannot take effect from April 2027; and, kept for the
-record on no screen, the taxes the user took off the table and the levers the Budget overtook
-(ADR-0035, ADR-0045). **Deliver the Budget**: the whole Budget read back as changes to the
-Chancellor's, with a way to change every part, how the headroom got from the Chancellor's to the
-bar, the Prime Minister's sign-off when something needs saying, and one red button. **Feedback**:
-Labour backbenchers, the markets and the public each rating it out of five, with one reason that
-agrees with the rating, the choices that caused it and a line for the other side, and five
-households, each saying what the Budget did to it, then the Budget as a picture to share, whose link
-opens a page of its own that invites whoever opens it to make theirs, and a place on a leaderboard
-under a title of the player's own, where other players vote for or against it (ADR-0043, ADR-0044).
+**The Budget.** What the Chancellor did, in the game's plain words: the margin the OBR left in
+March, what dearer borrowing took and other changes gave back, what left before the measures, what
+the measures added and the headroom they left, with both fiscal rules met and the welfare cap missed
+on the OBR's own assessment; then the themes ahead, each a way into the walk. Every figure is a
+quoted fact or the engine's own. **The measures**: a page a theme, one card for each measure a
+player can reverse, with a plain heading saying what the Chancellor did, a few sentences on what it
+means, the Treasury's figure and what disagreeing would cost or save on the player's Budget as it
+stands. Agree keeps the measure and Disagree takes it out, and the answer is the player's vote,
+counted once the leaderboard's database is connected. A last page lists the rest of the Budget, the
+measures that change nothing the player has to play with, each with a tick or a cross. **Balance
+your Budget**: the money saved or given up, then a menu of ways to find money and a menu of
+priorities, such as the NHS, schools or defence, each a fixed step with its price, pressed again
+until the money runs out. A priority that would take the headroom below the Chancellor's cannot be
+pressed, and a choice that strains a promise says so (ADR-0046). **Deliver the Budget**: the whole
+Budget read back as changes to the Chancellor's, with a way to change every part, how the headroom
+got from the Chancellor's to the bar, the Prime Minister's sign-off when something needs saying, and
+one red button. **Feedback**: Labour backbenchers, the markets and the public each rating it out of
+five, with one reason that agrees with the rating, the choices that caused it and a line for the
+other side, and five households, each saying what the Budget did to it, then the Budget as a picture
+to share, whose link opens a page of its own that invites whoever opens it to make theirs, and a
+place on a leaderboard under a title of the player's own, where other players vote for or against it
+(ADR-0043, ADR-0044).
 
 Under the hood: the OBR October 2026 baseline with the Budget's measures in it (the March 2026
 baseline kept for old links); the Chancellor's measures as levers costed from Table 6.1 of Budget
@@ -79,10 +62,10 @@ residence relief, HMRC's bank levy receipts, the Budget's own zero rate on elect
 tanks' own figures for their proposals, and our own stated arithmetic where nobody has published a
 costing, recorded as such); the spending levers (Spending Review 2025 settlements, OBR welfare
 lines, Budget 2025 and Budget 2026 spending decisions, the Prime Minister's schemes, welfare cards
-from the think tanks) with milestones from PESA; more levers kept for the record on no screen; and
-simulated lines in the voices of roles, every fact in them sourced. The leaderboard and the votes
-run on a small server beside the site (ADR-0044, ADR-0045). Next: the rebase to the Spring 2027
-forecast.
+from the think tanks) with milestones from PESA; every lever kept with its costing, though the
+screens offer only the measures and the balance page's menus (ADR-0046); and simulated lines in the
+voices of roles, every fact in them sourced. The leaderboard and the votes run on a small server
+beside the site (ADR-0044, ADR-0045). Next: the rebase to the Spring 2027 forecast.
 
 ## Principles
 
@@ -126,7 +109,7 @@ packages/engine     pure TypeScript fiscal engine, schemas and tests
 packages/pipeline   scripts that fetch, extract and validate source data, and make and check the
                     data the game ships
 data/               sourced JSON: vintages, rules, levers, the context, the advisers, the Budget
-                    the game starts from, the fine-tuning policies, the Prime Minister's promises,
+                    the game starts from, the balance page's menus, the Prime Minister's promises,
                     ministers, households, Budget day reaction bands, raw source files
 docs/               methodology and architecture decision records
 e2e/                end-to-end and accessibility suite (Playwright, on the production build)
