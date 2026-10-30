@@ -59,8 +59,8 @@ refuses gilt sales for any year but the one the context is dated in.
 1. Start from the published table: find the row in `derived/hmrc-trr-2025-06.raw.json` (cite its
    `rowId`, label and values under `costing.rawSource.rows`, with `hmrcSign` yield or cost and
    `role` increase or decrease) or the scorecard line in
-   `derived/hmt-budget-2025-table-4-1.raw.json` (cite `number`, title and values under
-   `costing.rawSource.lines`).
+   `derived/hmt-budget-2025-table-4-1.raw.json` or `derived/hmt-budget-2026-table-6-1.raw.json`
+   (cite `number`, title and values under `costing.rawSource.lines`).
 2. Write the engine-sign tables (`perUnit`, `decreasePerUnit`, lookup `effect`, or schedule
    `effect`): receipts positive means more revenue. For a scorecard reversal the schedule is minus
    the summed lines. `npm run validate:data` rebuilds these from the cited rows and fails on any
@@ -111,11 +111,11 @@ refuses gilt sales for any year but the one the context is dated in.
   each card says it is counted twice. `info` and `warn` remain notes.
 
 - **Scorecard-backed toggles.** A `linearPerUnit` toggle may cite `hmtScorecard` lines from any
-  extracted scorecard (Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is minus the
-  summed lines for the cited years on the receipts side. `direction: "repeat"` makes it plus the
-  lines: the measure done again, on the assumption that the second round raises what the Treasury
-  costed for the first. A repeat is an assumption, so it wears `badge: "assumption"`, says so in its
-  caveats and sits in its tax group beside the certified rows (ADR-0017).
+  extracted scorecard (Budget 2026, Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is
+  minus the summed lines for the cited years on the receipts side. `direction: "repeat"` makes it
+  plus the lines: the measure done again, on the assumption that the second round raises what the
+  Treasury costed for the first. A repeat is an assumption, so it wears `badge: "assumption"`, says
+  so in its caveats and sits in its tax group beside the certified rows (ADR-0017).
 - **Vintage-series lookup points.** `points[].from.vintageSeries` ("receiptsByTax.inheritanceTax")
   with a `multiplier`; checked against the vintage.
 - **Context readings** that name a `leverCode` need a `suggestion` rule (`gap` or `authored`).

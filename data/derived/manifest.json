@@ -43,6 +43,11 @@
       "sha256": "cf68c672e022a23b4327e8f863380cdd47c286081986a6515ac2ee1e85435921"
     },
     {
+      "sourceId": "hmt-budget-2026-table-6-1",
+      "localPath": "data/raw/hmt-budget-2026/Table_6.1_and_6.2_Budget_2026_Policy_Decisions.xlsx",
+      "sha256": "359958df6b1ab9746073725f6f8017ebdbb55040e57cf28612891f1e294a7f15"
+    },
+    {
       "sourceId": "hmt-forecasts-2026-08",
       "localPath": "data/raw/hmt-forecasts-2026-08/Forecasts_for_the_UK_Economy_-_August_2026.pdf",
       "sha256": "70a6828cc4a895328e758361c64d2366dc23c170ca180f92fa616b80aa5dbdaf"
@@ -63,6 +68,7 @@
     "hmt-budget-2025-table-4-1.raw.json",
     "hmt-sr25-del.raw.json",
     "hmt-autumn-budget-2024-table-5-1.raw.json",
+    "hmt-budget-2026-table-6-1.raw.json",
     "hmrc-tax-reliefs-2026-01.raw.json",
     "hmt-pesa-2025-functions.raw.json",
     "dwp-benefit-expenditure-2026-table-1a.raw.json",

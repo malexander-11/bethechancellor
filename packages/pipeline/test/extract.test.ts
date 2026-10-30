@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   extractAutumnBudget2024Scorecard,
   extractBudget2025Scorecard,
+  extractBudget2026Scorecard,
 } from '../src/extract-budget-2025-scorecard.js';
 import { extractDwpBenefits } from '../src/extract-dwp-benefits.js';
 import { extractHmrcReadyReckoner, slugify } from '../src/extract-hmrc-trr.js';
@@ -137,6 +138,52 @@ describe('Autumn Budget 2024 scorecard extraction', () => {
       '2029-30': 2490,
     });
     expect(extract.measures.find((m) => m.number === 25)?.values['2029-30']).toBe(310);
+  });
+});
+
+describe('Budget 2026 scorecard extraction', () => {
+  it('reads all 98 measures, typed by the Tax/Spend cell and not by the fiscal head', async () => {
+    const extract = await extractBudget2026Scorecard();
+    expect(extract.sourceId).toBe('hmt-budget-2026-table-6-1');
+    expect(extract.years).toEqual([
+      '2026-27',
+      '2027-28',
+      '2028-29',
+      '2029-30',
+      '2030-31',
+      '2031-32',
+    ]);
+    expect(extract.measures).toHaveLength(98);
+    expect(extract.measures.map((m) => m.number)).toEqual(
+      Array.from({ length: 98 }, (_, i) => i + 1),
+    );
+    // The National Wealth Fund line's fiscal head reads "Tax"; its type is Spend.
+    expect(extract.measures.find((m) => m.number === 30)?.type).toBe('Spend');
+    const gap = extract.measures.find((m) => m.number === 45);
+    expect(gap?.type).toBe('Tax');
+    expect(gap?.title.startsWith('HMRC: Measures to close the tax gap')).toBe(true);
+    expect(gap?.values).toEqual({
+      '2026-27': 10,
+      '2027-28': 100,
+      '2028-29': 115,
+      '2029-30': 1980,
+      '2030-31': 2485,
+      '2031-32': 3160,
+    });
+  });
+
+  it('sums to the published totals within their £5 million rounding', async () => {
+    const extract = await extractBudget2026Scorecard();
+    const sum = (type: 'Tax' | 'Spend', year: string) =>
+      extract.measures
+        .filter((m) => m.type === type)
+        .reduce((acc, m) => acc + (m.values[year] ?? 0), 0);
+    // Table 6.1's total rows for 2029-30: tax 5,550, spending −355; "Totals may not sum due to
+    // rounding", so each line's rounding can move a total by up to half a step.
+    const taxLines = extract.measures.filter((m) => m.type === 'Tax').length;
+    const spendLines = 98 - taxLines;
+    expect(Math.abs(sum('Tax', '2029-30') - 5550)).toBeLessThanOrEqual(2.5 * taxLines);
+    expect(Math.abs(sum('Spend', '2029-30') + 355)).toBeLessThanOrEqual(2.5 * spendLines);
   });
 });
 

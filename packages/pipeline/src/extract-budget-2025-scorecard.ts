@@ -1,8 +1,8 @@
 /**
  * Extract an HM Treasury policy-decisions scorecard (xlsx) into JSON: one entry per numbered
  * measure with its title, Tax/Spend type and £ million values by fiscal year. HMT's sign
- * convention is kept as published: positive values reduce borrowing. Used for Budget 2025
- * Table 4.1 and Autumn Budget 2024 Table 5.1.
+ * convention is kept as published: positive values reduce borrowing. Used for Budget 2026
+ * Table 6.1, Budget 2025 Table 4.1 and Autumn Budget 2024 Table 5.1.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -44,6 +44,12 @@ export interface ScorecardSource {
   sheet: string;
 }
 
+export const BUDGET_2026_SCORECARD: ScorecardSource = {
+  localPath: 'data/raw/hmt-budget-2026/Table_6.1_and_6.2_Budget_2026_Policy_Decisions.xlsx',
+  sourceId: 'hmt-budget-2026-table-6-1',
+  sheet: 'Table 6.1',
+};
+
 export const BUDGET_2025_SCORECARD: ScorecardSource = {
   localPath: 'data/raw/hmt-budget-2025/Table_4.1_-_Budget_2025_Policy_Decisions.xlsx',
   sourceId: 'hmt-budget-2025-table-4-1',
@@ -55,6 +61,10 @@ export const AUTUMN_BUDGET_2024_SCORECARD: ScorecardSource = {
   sourceId: 'hmt-autumn-budget-2024-table-5-1',
   sheet: 'Table 5.1',
 };
+
+export function extractBudget2026Scorecard(): Promise<ScorecardExtract> {
+  return extractScorecard(BUDGET_2026_SCORECARD);
+}
 
 export function extractBudget2025Scorecard(): Promise<ScorecardExtract> {
   return extractScorecard(BUDGET_2025_SCORECARD);
@@ -84,11 +94,15 @@ export async function extractScorecard({
   const firstYearColumn = Math.min(...yearColumns.map((c) => c.index));
   for (const row of rows.slice(headerIndex + 1)) {
     // Columns before the first year column hold the measure number, title and Tax/Spend type,
-    // possibly with empty cells between them; locate each by content rather than position.
+    // possibly with empty cells between them; locate each by content rather than position. The
+    // type is the last Tax/Spend cell: Table 6.1 puts a fiscal head, often the word "Tax", between
+    // the title and the type.
     const lead = row.slice(0, firstYearColumn);
     const numberCell = lead.find((c) => asNumber(c) !== null && Number.isInteger(asNumber(c)));
     const number = numberCell === undefined ? null : asNumber(numberCell);
-    const type = lead.find((c) => typeof c === 'string' && /^(Tax|Spend)$/.test(c.trim()));
+    const type = [...lead]
+      .reverse()
+      .find((c) => typeof c === 'string' && /^(Tax|Spend)$/.test(c.trim()));
     const title = lead.find(
       (c) =>
         typeof c === 'string' &&

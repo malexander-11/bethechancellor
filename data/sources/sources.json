@@ -2,6 +2,18 @@
   "schemaVersion": 1,
   "sources": [
     {
+      "id": "obr-efo-2026-10",
+      "org": "OBR",
+      "title": "Economic and fiscal outlook – October 2026",
+      "edition": "Budget 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6ae1f7b839d29f3f9b9b3f36/economic-and-fiscal-outlook-october-2026-web-accessible.pdf",
+      "landingUrl": "https://www.gov.uk/government/publications/october-2026-economic-and-fiscal-outlook",
+      "publishedOn": "2026-10-28",
+      "retrievedOn": "2026-10-30",
+      "licence": "OGL-3.0",
+      "notes": "Web-accessible PDF mirrored on gov.uk, which also hosts the landing page: obr.uk refused requests from the pipeline's network. Figures are read from the PDF tables. Paragraph 7.17 (p. 160): the fiscal mandate \"is met by a margin of 0.4 per cent of GDP (£15 billion)\", the supplementary target \"is forecast to be met by a margin of 0.7 per cent of GDP (£24 billion)\", and \"The welfare cap plus margin, set for 2029-30, is on course to not be met by a margin of £3 billion\"; Table 7.1 (p. 161) gives the three margins to one decimal, 14.5, 24.4 and −2.8. Paragraph 1.24 (p. 19): the probability of meeting the mandate \"is now estimated at 56 per cent\". Paragraph 1.26 (p. 20): \"The margins against the fiscal mandate set out above are below the average margin of close to £30 billion held by Chancellors since 2010.\""
+    },
+    {
       "id": "obr-efo-2026-03",
       "org": "OBR",
       "title": "Economic and fiscal outlook – March 2026",
@@ -91,6 +103,41 @@
       "publishedOn": "2025-11-26",
       "retrievedOn": "2026-09-15",
       "licence": "OGL-3.0"
+    },
+    {
+      "id": "hmt-budget-2026-table-6-1",
+      "org": "HMT",
+      "title": "Budget 2026: Table 6.1 and 6.2 policy decisions",
+      "url": "https://assets.publishing.service.gov.uk/media/6ae187a2779378370fd80a9a/Table_6.1_and_6.2_Budget_2026_Policy_Decisions.xlsx",
+      "landingUrl": "https://www.gov.uk/government/publications/supporting-documents-for-budget-2026",
+      "publishedOn": "2026-10-28",
+      "retrievedOn": "2026-10-30",
+      "licence": "OGL-3.0",
+      "localPath": "data/raw/hmt-budget-2026/Table_6.1_and_6.2_Budget_2026_Policy_Decisions.xlsx",
+      "notes": "Positive values reduce borrowing. 98 measures, £ million, 2026-27 to 2031-32, on the sheet Table 6.1; Table 6.2 lists financial transactions. A measure's fiscal head sits between its title and its Tax/Spend type.",
+      "sha256": "359958df6b1ab9746073725f6f8017ebdbb55040e57cf28612891f1e294a7f15"
+    },
+    {
+      "id": "hmt-budget-2026-policy-costings",
+      "org": "HMT",
+      "title": "Budget 2026: policy costings",
+      "url": "https://assets.publishing.service.gov.uk/media/6ae1883fe4367e5c8b0467df/AB26_Policy_Costing.pdf",
+      "landingUrl": "https://www.gov.uk/government/publications/supporting-documents-for-budget-2026",
+      "publishedOn": "2026-10-28",
+      "retrievedOn": "2026-10-30",
+      "licence": "OGL-3.0",
+      "notes": "Introduction (p. 10): \"All of these costings were submitted to the independent Office for Budget Responsibility (OBR) for their certification. Measures that were certified by the OBR as below the negligible threshold of £10 million per annum in every year of the forecast period are not considered in this document.\" One note per measure, in Table 6.1's order, each with the measure's base, methodology and behavioural assumptions."
+    },
+    {
+      "id": "hmt-budget-2026-document",
+      "org": "HMT",
+      "title": "Budget 2026",
+      "url": "https://www.gov.uk/government/publications/budget-2026-document/budget-2026-html",
+      "landingUrl": "https://www.gov.uk/government/publications/budget-2026-document",
+      "publishedOn": "2026-10-28",
+      "retrievedOn": "2026-10-30",
+      "licence": "OGL-3.0",
+      "notes": "Print PDF at https://assets.publishing.service.gov.uk/media/6ae20b9039d29f3f9b9b3f55/E03668986_HMT_Budget_2026_TEXT_PRINT__1_.pdf, whose pages are cited. Chart 1.6 (p. 19), \"Change in stability rule headroom since March 2026 forecast\": £23.6 billion in March 2026, −£12.0 billion from underlying debt interest forecast changes, +£0.9 billion from other underlying forecast changes, £12.5 billion before measures, +£2.0 billion from the effect of policy, £14.5 billion in October 2026. Paragraph 1.22 (p. 19): \"The current budget surplus of £15 billion compares with a £4 billion third-year current budget surplus forecast at Budget 2025.\" Paragraph 1.24 (p. 19): \"overall, policies at this Budget do not add to borrowing over the forecast\"."
     },
     {
       "id": "hmt-sr25-del-tables",
@@ -1486,6 +1533,17 @@
       "retrievedOn": "2026-09-29",
       "licence": "Other",
       "notes": "Fetched 2026-09-29. HM Treasury sets the remit; the Debt Management Office carries it out. Paragraph 1.1: \"The UK Debt Management Office’s (DMO’s) financing remit for 2026-27 has been revised by HM Treasury today.\" Footnote 1: \"The DMO is an Executive Agency of HM Treasury, which is responsible for debt and cash management on behalf of the UK government.\" Paragraph 2.3 (p. 2): the net financing requirement \"is forecast to be £251.2 billion\"; \"This will be financed by gilt sales of £246.2 billion (including planned green gilt sales of £12.0 billion) and a net contribution made by Treasury bills for debt financing of £5.0 billion\". Annex C (p. 12), 2026-27, £ billion: central government net cash requirement 137.2, gilt redemptions 140.2, gross financing requirement 268.0, total gilt sales for debt financing 246.2. The remit is revised at each fiscal event, so re-read it after the Budget on 28 October 2026. Crown copyright; the DMO's terms of use sit behind a captcha that could not be passed from here, so the figure is quoted briefly with attribution."
+    },
+    {
+      "id": "dmo-remit-2026-10",
+      "org": "HMT",
+      "title": "Revision to the DMO Financing Remit 2026-27: Budget 2026",
+      "edition": "28 October 2026",
+      "url": "https://www.dmo.gov.uk/media/kqpmscb0/sa281026.pdf",
+      "publishedOn": "2026-10-28",
+      "retrievedOn": "2026-10-30",
+      "licence": "Other",
+      "notes": "Fetched 2026-10-30. The revision that followed the Budget; HM Treasury sets the remit and the Debt Management Office carries it out. Paragraph 2.3 (p. 2): \"The revised NFR for the DMO in 2026-27 is £258.6 billion; this represents a £7.4 billion increase from £251.2 billion as announced at the previous remit revision in April 2026. This increase in the NFR will be financed by gilt sales of £250.6 billion (including planned green gilt sales of £12.0 billion) and a net contribution made by Treasury bills for debt financing of £8.0 billion.\" Crown copyright; quoted briefly with attribution, as the April revision is."
     }
   ]
 }

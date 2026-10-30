@@ -3,6 +3,15 @@
 One entry per change, newest first. A decision that shapes the architecture also gets a short record
 in `docs/adr`; older records are not revised.
 
+## 2026-10-30
+
+- The pipeline extracts Budget 2026's Table 6.1 of policy decisions (98 measures, 2026-27 to
+  2031-32) to `data/derived/hmt-budget-2026-table-6-1.raw.json` from a registered copy of the
+  Treasury's workbook, and the sources registry gains the Budget 2026 document, its policy costings,
+  the OBR's October 2026 forecast and the DMO's revised remit. The scorecard extractor now types a
+  measure by the last Tax/Spend cell before the years: Table 6.1 puts a fiscal head, often the word
+  "Tax", ahead of it.
+
 ## 2026-10-01
 
 - Budget day puts the Budget on the leaderboard (ADR-0044): once the leaderboard is open, a field

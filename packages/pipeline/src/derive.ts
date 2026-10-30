@@ -8,6 +8,7 @@ import { parseSources } from '@btc/engine';
 import {
   extractAutumnBudget2024Scorecard,
   extractBudget2025Scorecard,
+  extractBudget2026Scorecard,
 } from './extract-budget-2025-scorecard.js';
 import { extractDwpBenefits } from './extract-dwp-benefits.js';
 import { extractHmrcReadyReckoner } from './extract-hmrc-trr.js';
@@ -26,6 +27,7 @@ export const HMRC_EXTRACT_FILE = 'hmrc-trr-2025-06.raw.json';
 export const SCORECARD_EXTRACT_FILE = 'hmt-budget-2025-table-4-1.raw.json';
 export const SR25_EXTRACT_FILE = 'hmt-sr25-del.raw.json';
 export const AB2024_EXTRACT_FILE = 'hmt-autumn-budget-2024-table-5-1.raw.json';
+export const B2026_EXTRACT_FILE = 'hmt-budget-2026-table-6-1.raw.json';
 export const RELIEFS_EXTRACT_FILE = 'hmrc-tax-reliefs-2026-01.raw.json';
 export const PESA_EXTRACT_FILE = 'hmt-pesa-2025-functions.raw.json';
 export const DWP_EXTRACT_FILE = 'dwp-benefit-expenditure-2026-table-1a.raw.json';
@@ -64,6 +66,11 @@ export async function derive(options: DeriveOptions = {}): Promise<string[]> {
   writeJson(ab2024Path, ab2024);
   written.push(ab2024Path);
 
+  const b2026 = await extractBudget2026Scorecard();
+  const b2026Path = path.join(outDir, B2026_EXTRACT_FILE);
+  writeJson(b2026Path, b2026);
+  written.push(b2026Path);
+
   const reliefs = extractTaxReliefs();
   const reliefsPath = path.join(outDir, RELIEFS_EXTRACT_FILE);
   writeJson(reliefsPath, reliefs);
@@ -94,6 +101,7 @@ export async function derive(options: DeriveOptions = {}): Promise<string[]> {
       SCORECARD_EXTRACT_FILE,
       SR25_EXTRACT_FILE,
       AB2024_EXTRACT_FILE,
+      B2026_EXTRACT_FILE,
       RELIEFS_EXTRACT_FILE,
       PESA_EXTRACT_FILE,
       DWP_EXTRACT_FILE,

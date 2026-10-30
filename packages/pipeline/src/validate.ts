@@ -15,6 +15,7 @@ import {
 } from '@btc/engine';
 import {
   AB2024_EXTRACT_FILE,
+  B2026_EXTRACT_FILE,
   HMRC_EXTRACT_FILE,
   DWP_EXTRACT_FILE,
   PENSIONS_EXTRACT_FILE,
@@ -54,7 +55,7 @@ function main(): void {
   if (existsSync(hmrcFile)) extracted.hmrc = parseHmrcExtract(readJson(hmrcFile));
   else problems.push(`${HMRC_EXTRACT_FILE} is missing (run npm run derive -w @btc/pipeline)`);
   extracted.scorecards = {};
-  for (const file of [SCORECARD_EXTRACT_FILE, AB2024_EXTRACT_FILE]) {
+  for (const file of [SCORECARD_EXTRACT_FILE, AB2024_EXTRACT_FILE, B2026_EXTRACT_FILE]) {
     const target = path.join(DERIVED_DIR, file);
     if (!existsSync(target)) {
       problems.push(`${file} is missing (run npm run derive -w @btc/pipeline)`);
