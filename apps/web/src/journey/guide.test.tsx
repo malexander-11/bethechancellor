@@ -149,8 +149,8 @@ describe('the head of every screen', () => {
   });
 
   it('offers no way round the walk: no screen links to every lever (Phase 26)', () => {
-    // Every lever is a policy on the fine-tuning screens, so the desk and the links to it have
-    // gone: from the footer, from fine-tuning and from everywhere else.
+    // The game offers the walk's cards and the balance page's menus (ADR-0046); the desk and the
+    // links to it have gone, from the footer and from everywhere else.
     for (const path of [
       `/?${BASE}`,
       `/measures/${first?.id}?${BASE}&${GAME}`,

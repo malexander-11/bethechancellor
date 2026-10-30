@@ -1,6 +1,6 @@
-import { choiceName, computeOutcome, finetuneItems } from '@btc/engine';
+import { computeOutcome } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
-import { finetune, glossary, guide, levers, ministers, rules, vintage } from '../data';
+import { balance, budget, glossary, guide, levers, ministers, rules, vintage } from '../data';
 import { ON_SCREEN } from '../test/onScreen';
 
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
@@ -32,10 +32,17 @@ describe('word budgets: one line visible, the rest a click away', () => {
     }
   });
 
-  it('gives every step-4 policy a plain title and one adviser line the engine bears out at every size', () => {
-    // The fine-tuning screens (Phase 24): the same rule as the options' lines, judged at every size
-    // a policy offers (Phase 26). Big is £5bn or more even at the smallest size; small is £1bn or
-    // less even at the largest, on the engine's arithmetic.
+  it('keeps the walk and the menus to a breath each, and the money words the engine’s (ADR-0046)', () => {
+    // A theme's title is a heading and its lead one line; a card's heading says what the
+    // Chancellor did in a few words; a menu's choice is a label and what one press does.
+    for (const theme of budget.themes) {
+      expect(words(theme.title), theme.title).toBeLessThanOrEqual(6);
+      expect(words(theme.lead), theme.lead).toBeLessThanOrEqual(20);
+      for (const card of theme.cards) {
+        expect(words(card.title), card.title).toBeLessThanOrEqual(10);
+        expect(words(card.explain), card.explain).toBeLessThanOrEqual(45);
+      }
+    }
     const headroomOf = (leverValues: Record<string, number>) =>
       computeOutcome({ vintage, rules, levers, settings: { leverValues } }).verdicts.find(
         (v) => v.kind === 'currentBudget',
@@ -43,55 +50,17 @@ describe('word budgets: one line visible, the rest a click away', () => {
     const base = headroomOf({});
     const BIG = /\b(big|expensive|large|costly)\b/i;
     const SMALL = /\b(small|cheap|little|modest|tiny)\b/i;
-    const FIGURE = /£\d|\d+%|\d+bn|\d{3},\d{3}/;
-    const items = finetuneItems(finetune);
-    expect(items.length).toBeGreaterThan(0);
-    for (const item of items) {
-      if (item.name) expect(words(item.name), item.name).toBeLessThanOrEqual(12);
-      for (const policy of item.policies) {
-        const text = policy.advice.text;
-        expect(words(text), `${policy.title}: "${text}"`).toBeLessThanOrEqual(12);
-        expect(text, policy.title).not.toMatch(FIGURE);
-        expect(words(policy.title), policy.title).toBeLessThanOrEqual(12);
-        const sizes = policy.sizes.map((size) =>
-          Math.abs(headroomOf({ [item.code]: size }) - base),
-        );
-        const least = Math.min(...sizes);
-        const most = Math.max(...sizes);
-        if (BIG.test(text)) {
-          expect(
-            least,
-            `${policy.title} says big at £${(least / 1000).toFixed(1)}bn`,
-          ).toBeGreaterThanOrEqual(5000);
-        }
-        if (SMALL.test(text)) {
-          expect(
-            most,
-            `${policy.title} says small at £${(most / 1000).toFixed(1)}bn`,
-          ).toBeLessThanOrEqual(1000);
-        }
-      }
+    for (const option of [...balance.raise, ...balance.spend]) {
+      expect(words(option.label), option.label).toBeLessThanOrEqual(10);
+      expect(words(option.each), option.each).toBeLessThanOrEqual(6);
+      // A size word in a label is borne out by the engine at one press.
+      const moved = Math.abs(headroomOf({ [option.code]: option.step }) - base);
+      if (BIG.test(option.label)) expect(moved, option.label).toBeGreaterThanOrEqual(5000);
+      if (SMALL.test(option.label)) expect(moved, option.label).toBeLessThanOrEqual(1000);
     }
-    for (const side of [finetune.tax, finetune.spending]) {
-      expect(words(side.title), side.title).toBeLessThanOrEqual(4);
-      // Room for one more short sentence (Phase 25): a top-up costs what a trim saves.
-      expect(words(side.lead), side.lead).toBeLessThanOrEqual(14);
-    }
-    // Each tax asks its questions in at most six words (ADR-0035), and so does each section of the
-    // spending screen (ADR-0037); a figure may name the thing decided, as a policy's title may
-    // ("Change the 5% band").
-    const decisions = [finetune.tax, finetune.spending].flatMap((side) =>
-      side.groups.flatMap((g) => g.decisions),
-    );
-    expect(decisions.length).toBeGreaterThan(0);
-    for (const d of decisions) expect(words(d.title), d.title).toBeLessThanOrEqual(6);
-    // Ticks that contradict each other are one choice under one name, as short (ADR-0036).
-    const alternatives = decisions.flatMap((d) => d.alternatives ?? []);
-    for (const a of alternatives) expect(words(a.name), a.name).toBeLessThanOrEqual(7);
-    // Inside its decision each choice goes by a short name, as short again (ADR-0037): "Food"
-    // under "Remove an exemption".
-    for (const item of finetuneItems(finetune)) {
-      expect(words(choiceName(item)), choiceName(item)).toBeLessThanOrEqual(7);
+    // A lever's plain name, as the review and the shared picture say it.
+    for (const lever of levers) {
+      if (lever.name) expect(words(lever.name), lever.name).toBeLessThanOrEqual(12);
     }
   });
 

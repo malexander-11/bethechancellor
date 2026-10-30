@@ -3,7 +3,7 @@ import { levers, rules, vintage } from '../data';
 
 /**
  * "What would the Budget look like if…": the engine re-run for a trial set of lever values. The
- * option cards and the fine-tuning hints price their choices with it. Every Budget is worked out
+ * walk's cards and the balance page's menus price their choices with it. Every Budget is worked out
  * under the same settings (Phase 26), so one cache serves every screen, and a re-render costs
  * nothing. (Phase 24 retired the delays and the OBR's re-scoring that once conditioned it.)
  */

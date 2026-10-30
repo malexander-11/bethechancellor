@@ -77,8 +77,12 @@ describe('a moved lever read back', () => {
     expect(rows(WALK).map((r) => r.code)).toEqual(order);
   });
 
-  it('names a lever by the name given, else its short title, and leaves out what is excluded', () => {
-    expect(rows(PENNY)[0]?.name).toBe(ds.levers.find((l) => l.code === 'itbr')?.shortTitle);
+  it('names a lever by the name given, else its plain name, else its short title, and leaves out what is excluded', () => {
+    const itbr = ds.levers.find((l) => l.code === 'itbr');
+    expect(itbr?.name).toBeDefined();
+    expect(rows(PENNY)[0]?.name).toBe(itbr?.name);
+    const levers = ds.levers.map((l) => (l.code === 'itbr' ? { ...l, name: undefined } : l));
+    expect(rows(PENNY, { levers })[0]?.name).toBe(itbr?.shortTitle);
     expect(rows(PENNY, { names: () => 'A penny on the basic rate' })[0]?.name).toBe(
       'A penny on the basic rate',
     );

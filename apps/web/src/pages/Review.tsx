@@ -22,7 +22,7 @@ import { JourneyLayout } from '../components/JourneyLayout';
 import { ChangeList } from '../components/ChangeList';
 import { Spoken } from '../components/Conversation';
 import { Yardstick } from '../components/Yardstick';
-import { budget, finetuneName, incidence, levers, pm, reception, vintage } from '../data';
+import { budget, incidence, levers, pm, reception, vintage } from '../data';
 import { useBalance } from '../journey/balance';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
@@ -84,7 +84,7 @@ function Part({
 
 /** A changed lever as the review names it: a measure by its card's heading, anything else plainly. */
 function nameOf(code: string): string | undefined {
-  return cardOf(budget, code)?.card.title ?? finetuneName(code);
+  return cardOf(budget, code)?.card.title;
 }
 
 /**

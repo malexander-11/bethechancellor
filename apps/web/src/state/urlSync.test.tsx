@@ -42,7 +42,7 @@ describe('the address bar follows the budget (2026-09-30)', () => {
   afterEach(() => vi.useRealTimers());
 
   it('writes the budget to the page the player is on, even one they moved to a moment ago', () => {
-    at(`/finetune/tax?${BASE}`);
+    at(`/balance?${BASE}`);
     change();
     moveOn();
     settle();
@@ -51,7 +51,7 @@ describe('the address bar follows the budget (2026-09-30)', () => {
   });
 
   it('puts the budget back in the address bar when the player goes back', async () => {
-    at(`/finetune/tax?${BASE}`);
+    at(`/balance?${BASE}`);
     moveOn();
     change();
     settle();
@@ -60,7 +60,7 @@ describe('the address bar follows the budget (2026-09-30)', () => {
     // Back lands on the entry the player left, whose address still has the budget as it was then.
     await act(async () => {
       window.history.back();
-      await vi.waitFor(() => expect(window.location.pathname).toBe('/finetune/tax'));
+      await vi.waitFor(() => expect(window.location.pathname).toBe('/balance'));
     });
     settle();
     expect(lever()).toBe('itbr.1');

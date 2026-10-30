@@ -7,6 +7,7 @@
   "group": "VAT",
   "title": "VAT reduced rate",
   "shortTitle": "VAT reduced rate",
+  "name": "The reduced rate of VAT",
   "noun": "the reduced VAT rate",
   "headline": "5% on domestic energy and a few other things. A point raises about £0.5bn.",
   "description": "Change the 5% reduced rate of VAT (domestic energy, children’s car seats and some other items), in percentage points.",

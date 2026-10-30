@@ -1,6 +1,5 @@
 import {
   guideFor as guideStageFor,
-  finetuneNames,
   suggestedSettings,
   type Adviser,
   type GameData,
@@ -32,8 +31,6 @@ export const {
   scorecard,
   levers,
 } = dataset;
-/** Step 4's curated tax and spending levers (Phase 24, ADR-0025). */
-export const finetune = dataset.finetune;
 
 /** What a finished Budget is read and summed up from, as the server does it (ADR-0044). */
 export const gameData: GameData = dataset;
@@ -64,14 +61,4 @@ export const adviserById: ReadonlyMap<string, Adviser> = new Map(
 /** The guide entry for a screen; the old step names find their screen. */
 export function guideFor(step: JourneyStep) {
   return guideStageFor(guide, step);
-}
-
-const FINETUNE_NAMES = finetuneNames(finetune);
-
-/**
- * The plain name a lever goes by on the fine-tuning screens, when it is one of theirs ("The main
- * rate of VAT"; a toggle's policy title): what the review and the notes call it (Phase 26).
- */
-export function finetuneName(code: string): string | undefined {
-  return FINETUNE_NAMES.get(code);
 }

@@ -14,7 +14,7 @@ import {
 } from '@btc/engine';
 import { HeadroomBar } from '../components/HeadroomBar';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { balance as menus, budget, finetuneName, levers, pm } from '../data';
+import { balance as menus, budget, levers, pm } from '../data';
 import { useBalance, useMoneyOf } from '../journey/balance';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
@@ -157,7 +157,7 @@ export function BalancePage() {
 
   const status = ambitionStatus(pm, outcome, levers);
   const onMenus = new Set([...menus.raise, ...menus.spend].map((o) => o.code));
-  const others = changeRows({ outcome, levers, names: finetuneName }).filter(
+  const others = changeRows({ outcome, levers }).filter(
     (row) => !onMenus.has(row.code) && !cardOf(budget, row.code),
   );
   const state_ = balanceState(balance.gbpm);

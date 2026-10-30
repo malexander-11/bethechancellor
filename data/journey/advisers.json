@@ -17,13 +17,13 @@
       "id": "director-of-tax",
       "role": "Director of Tax",
       "remit": "Briefs on each tax, where the money comes from and what HMRC's costings do and do not include.",
-      "steps": ["budget-day", "finetune"]
+      "steps": ["budget-day"]
     },
     {
       "id": "director-of-public-spending",
       "role": "Director of Public Spending",
       "remit": "Briefs on departmental settlements, investment and welfare, and the pressures the OBR has flagged.",
-      "steps": ["budget-day", "finetune"]
+      "steps": ["budget-day"]
     },
     {
       "id": "political-adviser",

@@ -7,6 +7,7 @@
   "group": "VAT",
   "title": "VAT standard rate",
   "shortTitle": "VAT standard rate",
+  "name": "The main rate of VAT",
   "noun": "the main VAT rate",
   "headline": "20% since 2011. A point is worth about £9.5bn.",
   "description": "Change the 20% standard rate of VAT, in percentage points.",

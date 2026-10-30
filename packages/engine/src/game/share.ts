@@ -6,7 +6,6 @@ import type { GamePermalink, Outcome } from '../types/engine.js';
 import type { ShippedDataset } from '../types/shipped.js';
 import { ambitionStatus } from './ambitions.js';
 import { changeRows, type ChangeRow } from './changes.js';
-import { finetuneNames } from './finetune.js';
 import { headroomWords, preBudget, reconcile, reconcileWords, type OutcomeOf } from './prices.js';
 import { receptions, type Reception } from './reception.js';
 import { suggestedSettings } from './scenarios.js';
@@ -15,7 +14,7 @@ import { FINAL_STAGE } from './stages.js';
 /** The game's files a Budget is read and summed up from: the shipped data set's, in part. */
 export type GameData = Pick<
   ShippedDataset,
-  'vintage' | 'rules' | 'levers' | 'context' | 'pm' | 'reception' | 'incidence' | 'finetune'
+  'vintage' | 'rules' | 'levers' | 'context' | 'pm' | 'reception' | 'incidence'
 >;
 
 /**
@@ -154,10 +153,7 @@ export function summariseBudget(
   outcomeOf: OutcomeOf = gameOutcomeOf(data),
 ): BudgetSummary {
   const outcome = outcomeOf(budget.leverValues);
-  const names = finetuneNames(data.finetune);
-  const rows = changeRows({ outcome, levers: data.levers, names: (code) => names.get(code) }).sort(
-    bySize,
-  );
+  const rows = changeRows({ outcome, levers: data.levers }).sort(bySize);
   const r = reconcile(outcome, preBudget(outcomeOf, budget.leverValues, data.levers));
   const missed = outcome.verdicts.filter(isMissed);
   const status = ambitionStatus(data.pm, outcome, data.levers);

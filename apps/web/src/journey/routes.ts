@@ -17,8 +17,6 @@ export const STAGE_ROUTES: Record<JourneyStep, string> = {
   start: '/',
   measures: measuresPath(WALK[0] ?? SMALL_PRINT),
   balance: '/balance',
-  // Fine-tuning retired with the walk (ADR-0046): its name reads as the walk's first page.
-  finetune: measuresPath(WALK[0] ?? SMALL_PRINT),
   review: '/review',
   'budget-day': '/budget-day',
 };

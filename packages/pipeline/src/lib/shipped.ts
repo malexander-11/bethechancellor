@@ -74,7 +74,6 @@ export function shippedDataset(): ShippedDataset {
     reception: live.reception,
     pm: live.pm,
     ministers: live.ministers,
-    finetune: live.finetune,
     electorate: live.electorate,
     incidence: live.incidence,
     guide: live.guide,

@@ -1,4 +1,4 @@
-import { finetuneItems, validateDataset } from '@btc/engine';
+import { validateDataset } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
 import { loadDataset } from '../src/lib/dataset.js';
 import { isLive, liveView } from '../src/lib/live.js';
@@ -15,8 +15,8 @@ describe('the game as shipped (2026-09-30)', () => {
   });
 
   it('is caught when something the game holds names a retired lever', () => {
-    // Retire a lever the fine-tuning screens offer: the whole set still holds it, the game does not.
-    const offered = finetuneItems(ds.finetune, 'tax')[0]?.code;
+    // Retire a lever the walk asks about: the whole set still holds it, the game does not.
+    const offered = ds.budget.themes[0]?.cards[0]?.lever;
     expect(offered).toBeDefined();
     const retired = {
       ...ds,

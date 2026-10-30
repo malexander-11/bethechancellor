@@ -5,6 +5,11 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The fine-tuning data is retired with its screens (ADR-0046). Each lever now carries the plain name
+  those screens gave it, and the review and the shared picture read it back by that name.
+  `data/journey/finetune.json`, its schemas, its engine module and the checks that read it are gone;
+  a measure's lever is checked against the walk's cards instead, and the households check covers the
+  cards and the balance menus.
 - The game is a walk through the Chancellor's measures, then a balance (ADR-0046). After the Budget
   page, six themed pages ask about each measure a player can reverse, one card each: what the
   Chancellor did, what it means, the Treasury's figure and what disagreeing would cost or save;

@@ -44,7 +44,6 @@ export const STOPS: ReadonlyArray<{
 export function stopFor(step: JourneyStep): Stop {
   switch (step) {
     case 'start':
-    case 'finetune':
     case 'measures':
       return 'measures';
     case 'balance':

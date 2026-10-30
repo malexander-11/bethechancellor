@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { finetuneItems, householdReactions } from '../src/index.js';
+import { householdReactions } from '../src/index.js';
 import { loadDataset } from './fixtures.js';
 import { NICS_WALK, PENNY, WALK } from './scenarios.js';
 
@@ -49,10 +49,14 @@ describe('the electorate as five households', () => {
     expect(of({ wealth2: 1 }, 'pensioner')?.net).toBe('untouched');
   });
 
-  it('touches a household with every curated lever, or lists it as reaching none', () => {
+  it('touches a household with every lever the game offers, or lists it as reaching none', () => {
     const touched = new Set(ds.electorate.households.flatMap((h) => h.touches.map((t) => t.code)));
     const none = new Set(ds.electorate.reachesNone);
-    const codes = new Set(finetuneItems(ds.finetune).map((i) => i.code));
+    // What the game offers (ADR-0046): the measures' levers on the walk's cards, and the menus.
+    const codes = new Set([
+      ...ds.budget.themes.flatMap((t) => t.cards.map((c) => c.lever)),
+      ...[...ds.balance.raise, ...ds.balance.spend].map((o) => o.code),
+    ]);
     const missing = [...codes].filter((code) => !touched.has(code) && !none.has(code));
     expect(missing, 'levers no household hears of').toEqual([]);
     for (const code of none) expect(touched.has(code), code).toBe(false);

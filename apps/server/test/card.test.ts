@@ -8,7 +8,6 @@ import {
   SHARE_WORDS,
   budgetTitle,
   encodePermalink,
-  finetuneNames,
   gameImplementationYear,
   gameOutcomeOf,
   readFinishedBudget,
@@ -147,10 +146,9 @@ describe('the shared picture', () => {
       });
     const serif = latin('@fontsource/source-serif-4', '400.css');
     const fraunces = latin('@fontsource/fraunces', '600.css');
-    const names = finetuneNames(data.finetune);
     const body = [
       ...Object.values(SHARE_WORDS),
-      ...data.levers.flatMap((l) => [l.shortTitle, names.get(l.code) ?? '']),
+      ...data.levers.flatMap((l) => [l.shortTitle, l.name ?? '']),
       ...data.reception.audiences.flatMap((a) => [a.title, ...a.labels]),
       '£−0123456789.,·% ',
       summaryOf(WALK).headroomLine,

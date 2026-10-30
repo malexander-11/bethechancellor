@@ -33,7 +33,7 @@ export interface ChangeRow {
 export interface ChangeRowsInput {
   outcome: Outcome;
   levers: readonly Lever[];
-  /** The name a lever goes by where it has one (the fine-tuning screens'); else its short title. */
+  /** A name to read a lever back by, where the caller has one; else the lever's plain name or short title. */
   names?: (code: string) => string | undefined;
   /** Levers read back somewhere else, under their own names. */
   exclude?: ReadonlySet<string>;
@@ -88,7 +88,7 @@ export function changeRows({ outcome, levers, names, exclude }: ChangeRowsInput)
       {
         code: lever.code,
         side: lever.category === 'tax' ? 'tax' : 'spending',
-        name: names?.(lever.code) ?? lever.shortTitle,
+        name: names?.(lever.code) ?? lever.name ?? lever.shortTitle,
         ...(standing ? { standing } : {}),
         ...amount,
         ...(fromYear ? { words: `nothing until ${fromYear}, then ${amount.words}`, fromYear } : {}),

@@ -20,7 +20,6 @@ export {
   parseReception,
   parsePm,
   parseMinisters,
-  parseFinetune,
   parseHouseholdsFile,
   parseIncidence,
   parseGuide,
@@ -56,7 +55,6 @@ export * from './game/ambitions.js';
 export * from './game/ministers.js';
 export * from './game/prices.js';
 export * from './game/excludes.js';
-export * from './game/finetune.js';
 export * from './game/households.js';
 export * from './game/verdict.js';
 export * from './game/signoff.js';

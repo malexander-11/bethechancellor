@@ -3,7 +3,6 @@ import type {
   BalanceFile,
   BudgetFile,
   ContextFile,
-  FinetuneFile,
   GlossaryFile,
   GuideFile,
   HouseholdsFile,
@@ -36,7 +35,6 @@ export interface ShippedDataset {
   reception: ReceptionFile;
   pm: PmFile;
   ministers: MinistersFile;
-  finetune: FinetuneFile;
   electorate: HouseholdsFile;
   incidence: IncidenceFile;
   guide: GuideFile;

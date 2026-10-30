@@ -52,13 +52,6 @@ import type {
   receptionBandSchema,
   receptionFileSchema,
   receptionRuleSchema,
-  finetuneAlternativesSchema,
-  finetuneDecisionSchema,
-  finetuneFileSchema,
-  finetuneItemSchema,
-  finetunePolicySchema,
-  finetuneSectionSchema,
-  finetuneSideSchema,
 } from '../schema/game.schema.js';
 import type {
   glossaryFileSchema,
@@ -120,13 +113,6 @@ export type Promise_ = z.infer<typeof promiseSchema>;
 export type MinistersFile = z.infer<typeof ministersFileSchema>;
 export type Minister = z.infer<typeof ministerSchema>;
 export type MinisterBand = z.infer<typeof ministerBandSchema>;
-export type FinetuneFile = z.infer<typeof finetuneFileSchema>;
-export type FinetuneSide = z.infer<typeof finetuneSideSchema>;
-export type FinetuneSection = z.infer<typeof finetuneSectionSchema>;
-export type FinetuneDecision = z.infer<typeof finetuneDecisionSchema>;
-export type FinetuneAlternatives = z.infer<typeof finetuneAlternativesSchema>;
-export type FinetuneItem = z.infer<typeof finetuneItemSchema>;
-export type FinetunePolicy = z.infer<typeof finetunePolicySchema>;
 export type HouseholdsFile = z.infer<typeof householdsFileSchema>;
 export type Household = z.infer<typeof householdSchema>;
 export type HouseholdTouch = z.infer<typeof householdTouchSchema>;

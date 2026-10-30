@@ -4,7 +4,6 @@ import {
   advisersFileSchema,
   pmFileSchema,
   ministersFileSchema,
-  finetuneFileSchema,
   householdsFileSchema,
   incidenceFileSchema,
   guideFileSchema,
@@ -29,7 +28,6 @@ import type {
   AdvisersFile,
   PmFile,
   MinistersFile,
-  FinetuneFile,
   HouseholdsFile,
   IncidenceFile,
   GuideFile,
@@ -52,8 +50,6 @@ import type {
 } from './types/data.js';
 import { policyYearsOf } from './calc/arithmetic.js';
 import { fyOfDate } from './calc/years.js';
-import { FINETUNE_SIDES, finetuneNames, finetuneSideOf } from './game/finetune.js';
-import { excludesPartners } from './game/excludes.js';
 import { hasHead } from './costing/taxHead.js';
 import { GUIDED_STEPS, stageTerms } from './game/guide.js';
 import { BUDGET_STORY_FILLS, cardMeasures, storyPlaceholders } from './game/budget.js';
@@ -146,10 +142,6 @@ export function parseMinisters(json: unknown): MinistersFile {
   return parseWith(ministersFileSchema, json, 'the ministers');
 }
 
-export function parseFinetune(json: unknown): FinetuneFile {
-  return parseWith(finetuneFileSchema, json, 'the fine-tuning screens');
-}
-
 export function parseHouseholdsFile(json: unknown): HouseholdsFile {
   return parseWith(householdsFileSchema, json, 'the households');
 }
@@ -185,8 +177,6 @@ export interface Dataset {
   advisers?: AdvisersFile;
   pm?: PmFile;
   ministers?: MinistersFile;
-  /** The curated levers of step 4 (Phase 24, ADR-0025). */
-  finetune?: FinetuneFile;
   electorate?: HouseholdsFile;
   incidence?: IncidenceFile;
   guide?: GuideFile;
@@ -238,7 +228,6 @@ export function validateDataset(ds: Dataset): string[] {
       ds.contexts ?? null,
       ds.pm ?? null,
       ds.ministers ?? null,
-      ds.finetune ?? null,
       ds.electorate ?? null,
       ds.incidence ?? null,
       ds.glossary ?? null,
@@ -346,16 +335,12 @@ export function validateDataset(ds: Dataset): string[] {
         );
       }
     }
-    // What is already on the desk is dealt with by a lever the player can move (Phase 25), on
-    // step 4, where every lever is on show.
-    const onStep4 = ds.finetune ? finetuneNames(ds.finetune) : undefined;
+    // What is already on the desk is dealt with by a lever the game has (Phase 25).
     for (const item of context.inTray) {
       if (!codes.has(item.leverCode)) {
         problems.push(
           `context ${context.id} in-tray ${item.id} names unknown lever ${item.leverCode}`,
         );
-      } else if (onStep4 && !onStep4.has(item.leverCode)) {
-        problems.push(`the desk's lever ${item.leverCode} is not on step 4`);
       }
     }
     // The briefing's two published figures (Phase 28, ADR-0030): each read from a quoted passage,
@@ -441,122 +426,6 @@ export function validateDataset(ds: Dataset): string[] {
       }
     }
   }
-  if (ds.finetune) {
-    // Step 4's levers (Phase 24, ADR-0025), chosen as policies since Phase 26 (ADR-0027). Each is
-    // a live lever on its own screen's side of the Budget; every size a policy offers is a setting
-    // the lever can reach, not where it rests, and a policy's sizes go one way and grow; two
-    // policies on a lever go opposite ways; a lever that is not a toggle has a plain name; a tax
-    // sits in the section named for its family, one decision among that tax's (ADR-0035); a lever
-    // not on the table comes after the rest of its decision; and the screen's adviser exists and
-    // speaks on that step.
-    const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
-    const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
-    for (const side of FINETUNE_SIDES) {
-      const screen = ds.finetune[side];
-      const adviser = adviserById.get(screen.adviser);
-      if (adviserById.size > 0 && !adviser) {
-        problems.push(`the ${side} screen names unknown adviser ${screen.adviser}`);
-      } else if (adviser && !adviser.steps.includes('finetune')) {
-        problems.push(`the ${side} screen's adviser ${adviser.id} does not speak on finetune`);
-      }
-      // A run is what is read in one go: a decision's levers. A tax's section is its family.
-      const runs = screen.groups.flatMap((section) =>
-        section.decisions.map((d) => ({
-          family: side === 'tax' ? section.label : undefined,
-          items: d.items,
-        })),
-      );
-      for (const { family, items } of runs) {
-        let pastTheTable: string | undefined;
-        for (const item of items) {
-          const lever = byCode.get(item.code);
-          if (!lever) {
-            problems.push(`the ${side} screen offers unknown lever "${item.code}"`);
-            continue;
-          }
-          if (lever.deprecated)
-            problems.push(`the ${side} screen offers shelved lever ${item.code}`);
-          if (finetuneSideOf(lever) !== side) {
-            problems.push(`the ${side} screen offers ${item.code}, a ${lever.category} lever`);
-          }
-          if (lever.notOnTheTable) pastTheTable ??= item.code;
-          else if (pastTheTable) {
-            problems.push(`${item.code} comes after ${pastTheTable}, which is not on the table`);
-          }
-          const isToggle = lever.control.kind === 'toggle';
-          if (!isToggle && !item.name) problems.push(`lever ${item.code} needs a plain name`);
-          const ways = item.policies.map((policy) => {
-            const said = `policy “${policy.title}”`;
-            let way = 0;
-            let reach = 0;
-            for (const size of policy.sizes) {
-              const setting = settingProblem(lever, size);
-              if (setting === 'range') {
-                problems.push(`${said} offers ${size}, outside the lever's range`);
-              } else if (setting === 'default') {
-                problems.push(`${said} offers ${size}, where the lever rests`);
-              } else if (setting === 'steps') {
-                problems.push(`${said} offers ${size}, off the control's steps`);
-              }
-              const moved = size - lever.control.default;
-              if (way !== 0 && Math.sign(moved) !== way) {
-                problems.push(`${said} goes both ways`);
-              }
-              if (Math.abs(moved) <= reach) problems.push(`${said} has sizes that do not grow`);
-              way = way || Math.sign(moved);
-              reach = Math.abs(moved);
-            }
-            if (isToggle && policy.sizes.length !== 1) {
-              problems.push(`${said} is a toggle: it is switched on, in one size`);
-            }
-            return way;
-          });
-          if (ways.length === 2 && ways[0] === ways[1]) {
-            problems.push(`lever ${item.code} has two policies the same way`);
-          }
-          if (family !== undefined && lever.group !== family) {
-            problems.push(
-              `tax lever ${item.code} is in the ${lever.group ?? 'no'} family, not ${family}`,
-            );
-          }
-        }
-      }
-    }
-    // Ticks that contradict each other in one decision may be one choice (ADR-0036). A set of
-    // alternatives is ticks that exclude one another and no live lever beyond. Which pairs are a
-    // set is the data's to say (ADR-0038): two ticks left apart stay ticks, and choosing one takes
-    // the other out.
-    const live = (lever: Lever) =>
-      excludesPartners(lever, ds.levers)
-        .filter((p) => !p.lever.deprecated)
-        .map((p) => p.lever.code);
-    const file = ds.finetune;
-    const decisions = FINETUNE_SIDES.flatMap((side) =>
-      file[side].groups.flatMap((section) => section.decisions),
-    );
-    for (const decision of decisions) {
-      const sets = decision.alternatives ?? [];
-      for (const alt of sets) {
-        const said = `the alternatives “${alt.name}”`;
-        alt.codes.forEach((code, k) => {
-          const lever = byCode.get(code);
-          if (!lever) return;
-          if (lever.control.kind !== 'toggle') problems.push(`${said} hold ${code}, not a tick`);
-          const partners = live(lever);
-          for (const other of alt.codes.slice(k + 1)) {
-            if (!partners.includes(other)) {
-              problems.push(`${said} hold ${code} and ${other}, which do not exclude each other`);
-            }
-          }
-          for (const other of partners) {
-            if (!alt.codes.includes(other)) {
-              problems.push(`${said} hold ${code}, which also excludes ${other}`);
-            }
-          }
-        });
-      }
-    }
-  }
   if (ds.incidence) {
     // Every lever that moves money has someone it falls on; a tag for a lever that does not exist
     // is a typo waiting to hide a real one.
@@ -620,13 +489,12 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   if (ds.budget) {
-    // The Budget the game starts from (ADR-0045). A measure the page offers to change names a
-    // live lever on step 4 costed from that very line, so "Change it" moves the figure shown; the
+    // The Budget the game starts from (ADR-0045). A measure the walk asks about names a live lever
+    // costed from that very line, so disagreeing moves the figure the card shows; the
     // margin's published steps add up to the forecast the engine reproduces; every placeholder in
     // the story is one the page fills; and every fact is read from a quoted passage.
     const budget = ds.budget;
     const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
-    const onStep4 = ds.finetune ? finetuneNames(ds.finetune) : undefined;
     if (!known.has(budget.scorecard)) {
       problems.push(
         `budget ${budget.id} joins scorecard "${budget.scorecard}", which is not in the registry`,
@@ -641,9 +509,6 @@ export function validateDataset(ds: Dataset): string[] {
       }
       if (lever.deprecated) {
         problems.push(`budget measure ${measure.id} names shelved lever ${measure.leverCode}`);
-      }
-      if (onStep4 && !onStep4.has(measure.leverCode)) {
-        problems.push(`budget measure ${measure.id}'s lever ${measure.leverCode} is not on step 4`);
       }
       const raw = 'rawSource' in lever.costing ? lever.costing.rawSource : undefined;
       const cited =

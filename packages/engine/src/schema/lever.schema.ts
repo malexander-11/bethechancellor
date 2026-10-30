@@ -476,6 +476,12 @@ export const leverSchema = z
     title: z.string().min(1),
     shortTitle: z.string().min(1),
     /**
+     * What the lever is called on the screens, in plain words (Phase 26; on the lever since
+     * ADR-0046): "The main rate of VAT", "Prisons and courts". The review and the shared picture
+     * name a change by it; without one, a lever goes by its short title.
+     */
+    name: z.string().min(1).max(72).optional(),
+    /**
      * What the lever is called in running words (Phase 25): "the basic rate of income tax", "the
      * health budget". A Budget-day reason names its causes with it ("Because of the levy"), so it
      * starts in lower case.

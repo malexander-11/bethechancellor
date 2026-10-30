@@ -5,7 +5,6 @@ import {
   budgetScorecardProblems,
   computeOutcome,
   fillStory,
-  finetuneNames,
   measureLine,
   storyPlaceholders,
   validateDataset,
@@ -57,8 +56,8 @@ describe('the Budget the game starts from (ADR-0045)', () => {
     }
   });
 
-  it('offers a measure as a lever only when the lever undoes that very line, live and on step 4', () => {
-    const onStep4 = finetuneNames(ds.finetune);
+  it('offers a measure as a lever only when the lever undoes that very line, live and on a card', () => {
+    const carded = new Set(budget.themes.flatMap((t) => t.cards.map((c) => c.lever)));
     const movable = budget.measures.filter((m) => m.leverCode);
     expect(movable.length).toBeGreaterThan(20);
     for (const measure of movable) {
@@ -66,7 +65,7 @@ describe('the Budget the game starts from (ADR-0045)', () => {
       const lever = ds.levers.find((l) => l.code === code);
       expect(lever, `${measure.id} names ${code}`).toBeDefined();
       expect(lever?.deprecated, code).toBeFalsy();
-      expect(onStep4.has(code), `${code} on step 4`).toBe(true);
+      expect(carded.has(code), `${code} on a card`).toBe(true);
       expect(lever?.control.kind, code).toBe('toggle');
       // Switched on, the lever puts the Treasury's figure for its lines back on borrowing in the
       // target year, whichever side of the scorecard the lines sit on (positive reduced it).
