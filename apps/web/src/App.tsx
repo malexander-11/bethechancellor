@@ -93,6 +93,18 @@ function RouteFocus() {
   return null;
 }
 
+/** The Budget box, drawn small beside the name (ADR-0047): a picture, so a screen reader skips it. */
+function BudgetBox() {
+  return (
+    <svg className="brand__mark" viewBox="0 0 30 24" aria-hidden="true" focusable="false">
+      <path className="brand__handle" d="M11 7V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3" />
+      <rect className="brand__box" x="1" y="6" width="28" height="17" rx="3" />
+      <rect className="brand__lid" x="1" y="6" width="28" height="6" rx="3" />
+      <rect className="brand__lock" x="13" y="14" width="4" height="5" rx="1" />
+    </svg>
+  );
+}
+
 /**
  * The brass plate: the name, which is the way home, and nothing else (ADR-0032). The journey
  * itself is not in the header: one road, entered at the start and walked by the button at the
@@ -110,6 +122,7 @@ function Shell() {
         <header className="site-header">
           <div className="site-header__inner">
             <NavLink to="/" className="brand" end>
+              <BudgetBox />
               What’s your Budget?
             </NavLink>
           </div>

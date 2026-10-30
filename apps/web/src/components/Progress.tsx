@@ -83,15 +83,15 @@ const HEARD: Record<StopKind, string> = {
 };
 
 /**
- * The road, as a running head on every screen after the Chancellor's Budget (ADR-0033): "Step 3
- * of 4 · Deliver the Budget", then four marks on a rule, one per step. The opening is the Budget
- * itself and the invitation to change it, so it carries none. A step behind you is done: a tick,
- * and a link back to it. The step you are at is a filled numeral, named on the line above it. A
- * step ahead you have already opened is an outlined numeral and a link; one not yet open is a
- * dashed numeral, inert. The tick, the fill and the dashes say which is which, and so does the
- * rule, solid behind you and dashed ahead, so nothing rests on colour; a screen reader hears each
- * step's full name and whether it is done. It reads the same `enterable` rule as the guard on
- * every page, so it never offers a link that would only bounce (ADR-0014).
+ * The road, as a running head on every screen of the game (ADR-0033, ADR-0047): "Step 3 of 4 ·
+ * Deliver the Budget", then four segments, one per step, that fill as the player goes, each over
+ * its mark. A step behind you is done: a full segment, a tick, and a link back to it. The step you
+ * are at is a filled numeral, its segment filled as far as its pages have gone, and named on the
+ * line above. A step ahead you have already opened is an outlined numeral and a link; one not yet
+ * open is a dashed numeral, inert. The tick, the fill and the dashes say which is which, so
+ * nothing rests on colour; a screen reader hears each step's full name and whether it is done. It
+ * reads the same `enterable` rule as the guard on every page, so it never offers a link that
+ * would only bounce (ADR-0014).
  */
 export function Progress({ step, part }: { step: JourneyStep; part?: SubStep }) {
   const { state } = useBudget();
@@ -123,15 +123,23 @@ export function Progress({ step, part }: { step: JourneyStep; part?: SubStep }) 
               : open
                 ? 'open'
                 : 'ahead';
-          // The mark and, on a wide screen, the step's short name; a screen reader hears the full
-          // name once, below.
+          // How far the segment fills (ADR-0047): a step behind you in full, the step you are on
+          // as far as its pages have gone, the road ahead not at all.
+          const fill = kind === 'done' ? 1 : isCurrent ? (part ? part.index / part.total : 1) : 0;
+          // The segment, the mark and, on a wide screen, the step's short name; a screen reader
+          // hears the full name once, below.
           const mark = (
             <>
-              <span className="progress__num" aria-hidden="true">
-                {kind === 'done' ? <Tick /> : i + 1}
+              <span className="progress__bar" aria-hidden="true">
+                <span className="progress__fill" style={{ inlineSize: `${fill * 100}%` }} />
               </span>
-              <span className="progress__label" aria-hidden="true">
-                {s.short}
+              <span className="progress__mark">
+                <span className="progress__num" aria-hidden="true">
+                  {kind === 'done' ? <Tick /> : i + 1}
+                </span>
+                <span className="progress__label" aria-hidden="true">
+                  {s.short}
+                </span>
               </span>
             </>
           );

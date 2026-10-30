@@ -5,6 +5,18 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The game looks and works like an app, with fewer words on every screen (ADR-0047). White cards sit
+  on a soft green-grey ground under a white bar with the Budget box beside the name, and the body is
+  set in the reader's own sans, Fraunces staying for the headings. The money stays at the top of the
+  screen in a coloured pill, red to find and green to spend, and the way on stays at the foot. The
+  progress is four segments that fill as the player goes. The measures are tiles in a grid, each
+  with a tick and a cross, taking the answer's colour once answered; a card shows one figure, what
+  disagreeing does to the player's money, and what everyone said only once the player has said it
+  too. While money is still to find, the balance page shows only the ways to find it; its options
+  are tiles with a plus and a minus. The review and Budget day's households are cards. The words go
+  down: the line repeating what to do, the menus' leads and the Treasury's figure on each card are
+  gone, and the word budgets are lower. The shared picture takes the new ground and card colours,
+  and the web app no longer loads its own serif for the body.
 - The site opens straight on the first page of measures (ADR-0047). Every visit is a game from the
   first screen: a link without one starts it, with the link's measures in it, so there is no start
   button and no page before the walk. Above the first theme's cards, one line names the Budget and

@@ -1,9 +1,9 @@
-import { formatGbpBn, linesFigure, type BudgetCard, type BudgetMeasure } from '@btc/engine';
+import { formatGbpBn, type BudgetCard, type BudgetMeasure } from '@btc/engine';
 import { useEffect, useState } from 'react';
 import { measures as measureVotes, type Tally } from '../board/api';
 import { deviceCode, measureKey, myVote, rememberVote } from '../board/voter';
 import { agreeWords, BOARD_TEXT } from '../board/words';
-import { levers, scorecard } from '../data';
+import { levers } from '../data';
 import { useMoneyOf } from '../journey/balance';
 import { useBudget } from '../state/budget';
 
@@ -88,13 +88,29 @@ export function moneyWords(gbpm: number, year: string): string {
   return `Disagreeing changes nothing in ${year}, the year that counts.`;
 }
 
+/** A tick or a cross, drawn beside an answer's word: a picture, so a screen reader hears the word. */
+function AnswerIcon({ value }: { value: 1 | -1 }) {
+  return (
+    <svg className="mcard__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <path
+        d={value === 1 ? 'M4 10.5 8.5 15 16 5.5' : 'M5 5l10 10M15 5 5 15'}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /**
- * One of the Chancellor's decisions on the walk (ADR-0046): what the Chancellor did, what it
- * means, and its figure from the Treasury's scorecard; then Agree or Disagree. Disagreeing takes the
- * measure out of the player's Budget (its lever on), agreeing keeps it; either is the player's vote
- * on each measure the card stands for, and pressing the pressed answer again takes it back. Under
- * the buttons, what disagreeing does to the money, worked out by the engine on the Budget as it
- * stands.
+ * One of the Chancellor's decisions on the walk (ADR-0046), as a tile (ADR-0047): what the
+ * Chancellor did and what it means, then Agree or Disagree. Disagreeing takes the measure out of the
+ * player's Budget (its lever on), agreeing keeps it; either is the player's vote on each measure the
+ * card stands for, and pressing the pressed answer again takes it back, and the tile takes the
+ * answer's colour. Under the buttons, the card's one figure: what disagreeing does to the money,
+ * worked out by the engine on the Budget as it stands, as the bar at the top will say it.
  */
 export function MeasureCard({
   card,
@@ -119,11 +135,6 @@ export function MeasureCard({
   const lever = levers.find((l) => l.code === card.lever);
   const disagreed = (state.leverValues[card.lever] ?? 0) !== 0;
   const agreed = !disagreed && mine === 1;
-  const figure = linesFigure(
-    scorecard,
-    measures.map((m) => m.line),
-    year,
-  );
   // What disagreeing does, measured from agreeing, whichever the Budget holds now.
   const rest = { ...state.leverValues };
   delete rest[card.lever];
@@ -145,12 +156,14 @@ export function MeasureCard({
 
   const id = `card-${card.lever}`;
   return (
-    <li className="mcard" aria-labelledby={id}>
+    <li
+      className={`mcard${disagreed ? ' mcard--disagreed' : agreed ? ' mcard--agreed' : ''}`}
+      aria-labelledby={id}
+    >
       <h2 id={id} className="mcard__title">
         {card.title}
       </h2>
       <p className="mcard__explain">{card.explain}</p>
-      {figure ? <p className="mcard__figure">The Treasury’s figure: {figure.words}.</p> : null}
       <div className="mcard__answer" role="group" aria-label={`Your answer: ${card.title}`}>
         <button
           type="button"
@@ -159,6 +172,7 @@ export function MeasureCard({
           disabled={busy}
           onClick={() => answer(1)}
         >
+          <AnswerIcon value={1} />
           {BOARD_TEXT.agree}
         </button>
         <button
@@ -168,9 +182,13 @@ export function MeasureCard({
           disabled={busy}
           onClick={() => answer(-1)}
         >
+          <AnswerIcon value={-1} />
           {BOARD_TEXT.disagree}
         </button>
-        {tally ? <span className="votes__counts">{agreeWords(tally)}</span> : null}
+        {/* What everyone said, once the player has said it too (ADR-0047). */}
+        {tally && (agreed || disagreed) ? (
+          <span className="votes__counts">{agreeWords(tally)}</span>
+        ) : null}
       </div>
       <p className={`mcard__money${disagreed ? ' mcard__money--chosen' : ''}`}>
         {moneyWords(money, year)}
@@ -220,7 +238,7 @@ export function SmallPrintRow({ measure, voting }: { measure: BudgetMeasure; vot
         {mark(1)}
         {mark(-1)}
       </span>
-      {tally ? <span className="small__counts">{agreeWords(tally)}</span> : null}
+      {tally && mine !== 0 ? <span className="small__counts">{agreeWords(tally)}</span> : null}
       {said ? (
         <span role="status" className="votes__said">
           {said}

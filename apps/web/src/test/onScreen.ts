@@ -2,29 +2,17 @@ import {
   FINAL_STAGE,
   GAME_SETTINGS,
   SHARE_WORDS,
-  cardMeasures,
   encodePermalink,
   fillStory,
   gameImplementationYear,
   gameOutcomeOf,
-  linesFigure,
   readFinishedBudget,
   smallPrint,
   summariseBudget,
   summaryWords,
 } from '@btc/engine';
 import { INVESTMENT_WORDS, moneyWords } from '../components/MeasureCard';
-import {
-  balance,
-  budget,
-  electorate,
-  gameData,
-  guide,
-  ministers,
-  pm,
-  reception,
-  scorecard,
-} from '../data';
+import { balance, budget, electorate, gameData, guide, ministers, pm, reception } from '../data';
 import { agreeWords, BOARD_TEXT, countsWords } from '../board/words';
 import { balanceWords } from '../journey/balance';
 import { BALANCE_TEXT } from '../pages/Balance';
@@ -152,21 +140,14 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
       }),
     ),
   ],
-  // The walk through the measures (ADR-0046): each theme's title and lead, each card's heading,
-  // what it means and the Treasury's figure for it, what disagreeing does to the money, the
-  // public's answers, and the walk's own words.
+  // The walk through the measures (ADR-0046, ADR-0047): each theme's title and lead, each card's
+  // heading and what it means, what disagreeing does to the money, the public's answers, and the
+  // walk's own words.
   'the measures': [
     ...budget.themes.flatMap((t) => [
       t.title,
       t.lead,
-      ...t.cards.flatMap((c) => {
-        const figure = linesFigure(
-          scorecard,
-          cardMeasures(budget, c).map((m) => m.line),
-          '2029-30',
-        );
-        return [c.title, c.explain, `The Treasury’s figure: ${figure?.words ?? ''}.`];
-      }),
+      ...t.cards.flatMap((c) => [c.title, c.explain]),
     ]),
     moneyWords(-500, '2029-30'),
     moneyWords(500, '2029-30'),

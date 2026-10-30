@@ -1,7 +1,7 @@
 /*
- * The journey: the stepper, the guide, and the cards each step is made
- * of. Plain cards on a plain page; the score stays visible through the stepper, the summary
- * strip, the status words and the reception bars, not through furniture (ADR-0016).
+ * The journey: the progress, the head of each screen, and the cards each step is made of
+ * (ADR-0047). White cards on a soft ground, the money in a sticky strip at the top and the way on
+ * in a sticky strip at the foot, as an app on a phone is laid out.
  */
 
 .journey {
@@ -11,20 +11,20 @@
 /* ---------------------------------------------------------- the progress */
 
 /*
- * "Step 2 of 3 · Deliver the Budget" over three marks on a rule, like a document's running head,
- * on every screen after the Chancellor's Budget (ADR-0033, ADR-0045). Each state has its own shape as well as its colour:
- * a step behind you is a tick on a green wash, the step you are at a filled numeral, a step ahead
- * you have opened an outlined numeral, one not yet open a dashed numeral; the rule is solid
- * behind you and dashed ahead. Square marks, like the rest of the paper (ADR-0014, ADR-0023).
+ * "Step 1 of 4 · The Chancellor's measures · 2 of 7" over four segments, one a step, that fill as
+ * the player goes: a step behind you full, the step you are on as far as its pages have gone, the
+ * road ahead empty. Under each segment its numeral, or a tick for a step behind you, and on a wide
+ * screen its short name. The numeral, the tick and the names say which is which, so nothing rests
+ * on colour (ADR-0014).
  */
 .progress {
-  margin: 0 0 20px;
+  margin: 0 0 16px;
 }
 
 .progress__where {
-  margin: 0;
+  margin: 0 0 6px;
   color: var(--ink-2);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   line-height: 1.4;
 }
 
@@ -48,105 +48,95 @@
 
 .progress__stops {
   display: flex;
-  margin: 2px 0 0;
+  gap: 6px;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .progress__stop {
-  position: relative;
   flex: 1 1 0;
   min-width: 0;
 }
 
-/* The rule from the mark before to this one: dashed on the road ahead, solid where you have been. */
-.progress__stop + .progress__stop::before {
-  content: '';
-  position: absolute;
-  top: 21px;
-  right: calc(50% + 18px);
-  left: calc(-50% + 18px);
-  border-top: 2px dashed var(--axis);
-}
-
-.progress__stop + .progress__stop--done::before,
-.progress__stop + .progress__stop--current::before {
-  border-top-style: solid;
-  border-top-color: var(--accent);
-}
-
-/* Each mark sits in a hit area at least 44px square, so a step behind you is easy to go back to. */
+/* Each stop is a hit area at least 44px tall, so a step behind you is easy to go back to. */
 .progress__stop > a,
 .progress__stop > span {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  min-width: 44px;
+  gap: 6px;
   min-height: 44px;
-  padding-top: 8px;
   color: var(--ink-2);
   text-decoration: none;
 }
 
-.progress__num {
+.progress__bar {
+  display: block;
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--grid);
+}
+
+.progress__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: inline-size var(--t-base) var(--ease);
+}
+
+.progress__mark {
   display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.progress__num {
+  display: inline-flex;
+  flex: none;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--ink-2);
-  background: var(--page);
-  color: var(--ink);
-  font-family: var(--font-display);
-  font-size: 0.9375rem;
-  font-weight: 600;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--axis);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
 .progress__tick {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
-/* Behind you: a tick, on the green wash. */
 .progress__stop--done .progress__num {
   border-color: var(--accent);
   background: var(--accent-wash);
   color: var(--accent);
 }
 
-/* Here: the numeral, filled, a little larger than the rest. */
-.progress__stop--current > span {
-  padding-top: 6px;
-}
-
 .progress__stop--current .progress__num {
-  width: 32px;
-  height: 32px;
-  margin-bottom: -2px;
   border-color: var(--accent);
   background: var(--accent);
   color: var(--accent-ink);
-  font-weight: 700;
 }
 
-/* Ahead, not yet open: dashed and muted, and inert. */
 .progress__stop--ahead .progress__num {
   border-style: dashed;
-  color: var(--ink-2);
 }
 
 .progress__stop--open > a:hover .progress__num,
 .progress__stop--done > a:hover .progress__num {
   border-color: var(--accent-hover);
-  border-width: 2px;
 }
 
-/* The steps' short names (Phase 25): on a wide screen there is room, so each mark says where it
-   goes; on a phone the marks stand alone and the line above them names the step you are on. */
+/* The steps' short names: on a wide screen there is room; on a phone the line above names the step. */
 .progress__label {
   display: none;
 }
@@ -154,7 +144,7 @@
 @media (min-width: 720px) {
   .progress__label {
     display: block;
-    max-width: 100%;
+    min-width: 0;
     overflow: hidden;
     font-size: 0.875rem;
     line-height: 1.3;
@@ -166,40 +156,116 @@
     color: var(--ink);
     font-weight: 700;
   }
-
-  .progress__stop--ahead .progress__label {
-    color: var(--ink-2);
-  }
 }
 
 /* -------------------------------------------------------------- the intro */
 
 .intro {
-  margin: 0 0 20px;
+  margin: 0 0 12px;
 }
 
 .intro__title {
-  margin: 0 0 8px;
-  font-size: clamp(1.75rem, 2.5vw + 1rem, 2.5rem);
-  line-height: 1.1;
+  margin: 0 0 4px;
+  font-size: clamp(1.625rem, 1.5vw + 1.1rem, 2.125rem);
+  line-height: 1.15;
 }
 
 .intro__lead {
   max-width: 40em;
   margin: 0;
-  font-size: 1.125rem;
-  line-height: 1.5;
+  color: var(--ink-2);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+/* ------------------------------------------------------------- the welcome */
+
+/* Above the first page of measures (ADR-0047): the Budget named, what to do, and the story folded. */
+.welcome {
+  margin: 0 0 16px;
+  padding: 16px 18px 6px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: var(--shadow);
+}
+
+.welcome__title {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.welcome__now {
+  margin: 4px 0 2px;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1vw + 1rem, 1.5rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.welcome__story > summary {
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent-ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.welcome__story > p {
+  max-width: 44em;
+  margin: 0 0 8px;
+  font-size: 0.9375rem;
 }
 
 /* ------------------------------------------------------------- the actions */
 
-/* The one primary action, the way back beside it, and a hint under both when the action waits. */
+/*
+ * The one primary action and the way back, in a strip that stays at the foot of the screen on the
+ * walk and the balance, as an app's does; a hint under both when the action waits.
+ */
 .actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 16px;
+  gap: 10px 12px;
   margin: 24px 0 8px;
+}
+
+.actions--sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  margin: 20px -16px 0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-up);
+}
+
+@media (min-width: 640px) {
+  .actions--sticky {
+    margin: 24px 0 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+}
+
+.actions--sticky .btn--primary {
+  flex: 1 1 0;
+}
+
+.actions--sticky .actions__hint {
+  margin-top: -4px;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .actions--sticky .btn--primary {
+    flex: 0 1 auto;
+    min-width: 16em;
+  }
 }
 
 .actions__hint {
@@ -208,99 +274,99 @@
   font-size: 0.9375rem;
 }
 
-/* ---------------------------------------- the Chancellor's Budget (ADR-0045) */
-
-/* The walk ahead, theme by theme (ADR-0046): each name a way straight in, and what it holds. */
-.themes {
-  margin: 8px 0 0;
-  padding: 0;
-  border-bottom: 1px solid var(--border);
-  list-style: none;
-}
-
-.themes__item {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0 10px;
-  border-top: 1px solid var(--border);
-}
-
-.themes__go {
-  font-size: 1.0625rem;
-  font-weight: 600;
-  text-align: left;
-}
-
-.themes__count {
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-}
-
-/* The quiet second way in (ADR-0044): a plain link under the button. */
-.budget__more {
-  margin: 0;
-}
-
-.budget__more a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: var(--accent);
-  font-size: 1rem;
-  text-underline-offset: 0.15em;
+@media (max-height: 560px) {
+  .actions--sticky {
+    position: static;
+  }
 }
 
 /* -------------------------------------------------------- the walk (ADR-0046) */
 
-/* A theme's cards, one under another between hairlines: each a decision of the Chancellor's. */
+/* A theme's cards in a grid: one column on a phone, two or three on a wide screen. */
 .mcards {
-  margin: 8px 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 12px 0 0;
   padding: 0;
-  border-bottom: 1px solid var(--border);
   list-style: none;
 }
 
+@media (min-width: 720px) {
+  .mcards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1040px) {
+  .mcards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* A card: white, rounded, its answer at the foot; an answer given tints it and edges it. */
 .mcard {
-  padding: 16px 0;
-  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition:
+    border-color var(--t-base) var(--ease),
+    background-color var(--t-base) var(--ease);
+}
+
+.mcard--agreed {
+  border-color: var(--accent);
+  background: linear-gradient(var(--accent-wash), var(--accent-wash)), var(--surface);
+}
+
+.mcard--disagreed {
+  border-color: var(--critical);
+  background: linear-gradient(var(--critical-wash), var(--critical-wash)), var(--surface);
 }
 
 .mcard__title {
   margin: 0 0 6px;
-  font-size: 1.1875rem;
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  font-weight: 700;
   line-height: 1.3;
+  letter-spacing: 0;
 }
 
 .mcard__explain {
-  max-width: 40em;
-  margin: 0 0 6px;
-}
-
-.mcard__figure {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   color: var(--ink-2);
   font-size: 0.9375rem;
-  font-variant-numeric: tabular-nums;
+  line-height: 1.45;
 }
 
+/* Agree and Disagree side by side, each half the card: a tick or a cross, and the word. */
 .mcard__answer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
 }
 
 .mcard__button {
-  min-width: 7.5em;
+  width: 100%;
 }
 
-/* An answer given: tinted and outlined twice as heavily, so it is never taken for the page's one
-   primary; agreeing in the accent, disagreeing in red, and each says so in words, not colour alone. */
+.mcard__icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
 .mcard__button[aria-pressed='true'],
 .mcard__button[aria-pressed='true']:hover {
-  background: var(--accent-wash);
-  box-shadow: inset 0 0 0 2px var(--accent);
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
 .mcard__button--disagree {
@@ -308,20 +374,35 @@
   color: var(--critical);
 }
 
-.mcard__button--disagree:hover,
-.mcard__button--disagree[aria-pressed='true'],
-.mcard__button--disagree[aria-pressed='true']:hover {
+.mcard__button--disagree:hover {
   background: var(--critical-wash);
 }
 
-.mcard__button--disagree[aria-pressed='true'] {
-  box-shadow: inset 0 0 0 2px var(--critical);
+.mcard__button--disagree[aria-pressed='true'],
+.mcard__button--disagree[aria-pressed='true']:hover {
+  border-color: var(--critical);
+  background: var(--critical);
+  color: var(--red-ink);
+}
+
+.mcard__answer .votes__counts {
+  grid-column: 1 / -1;
 }
 
 .mcard__money {
   margin: 8px 0 0;
   color: var(--ink-2);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
+}
+
+/* What came of a vote: no room until it speaks. */
+.mcard .votes__said {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+}
+
+.mcard .votes__said:empty {
+  margin: 0;
 }
 
 /* Disagreed: what it did to the money is now the player's, in full ink. */
@@ -330,13 +411,20 @@
   font-weight: 600;
 }
 
-/* The small print: one line a measure, its marks beside it on a wide screen and under it on a
-   phone, each mark a 44px target. */
+/* The small print: a compact card a measure, its tick and cross beside it, each a 44px target. */
 .small {
-  margin: 8px 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 12px 0 0;
   padding: 0;
-  border-bottom: 1px solid var(--border);
   list-style: none;
+}
+
+@media (min-width: 900px) {
+  .small {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .small__row {
@@ -344,23 +432,27 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 12px;
-  padding: 8px 0;
-  border-top: 1px solid var(--border);
+  padding: 8px 8px 8px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: 0.9375rem;
 }
 
 .small__plain {
-  flex: 1 1 20em;
+  flex: 1 1 12em;
 }
 
 .small__marks {
   display: inline-flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .small__mark {
   min-width: 44px;
   min-height: 44px;
   border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
   background: var(--surface);
   color: var(--accent);
   font-size: 1.125rem;
@@ -394,57 +486,148 @@
 /* What the money needs, said first: short in red, otherwise in the page's own ink. */
 .balance__lead {
   max-width: 40em;
-  margin: 0 0 8px;
-  font-size: 1.0625rem;
-  font-weight: 600;
+  margin: 0 0 4px;
+  font-size: 1.125rem;
+  font-weight: 700;
 }
 
 .balance__lead--short {
   color: var(--critical);
 }
 
+.menu {
+  margin: 20px 0 0;
+}
+
+.menu > .section-label {
+  margin: 0 0 4px;
+}
+
+/* The options as tiles: one column on a phone, two or three on a wide screen. */
 .options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
   margin: 8px 0 0;
   padding: 0;
   list-style: none;
 }
 
+@media (min-width: 640px) {
+  .options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1040px) {
+  .options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .option {
-  padding: 10px 0;
-  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 12px;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+/* Pressed at least once: edged in the accent, so a glance shows what the player chose. */
+.option--chosen {
+  border-color: var(--accent);
 }
 
 .option__label {
   margin: 0;
-  font-weight: 600;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .option__each {
-  margin: 2px 0 6px;
+  margin: 2px 0 10px;
   color: var(--ink-2);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-variant-numeric: tabular-nums;
 }
 
-.option__tag {
-  margin-left: 8px;
+.option__price {
+  color: var(--ink);
+  font-weight: 600;
 }
 
+.option__tag {
+  display: flex;
+  margin-top: 2px;
+}
+
+/* A stepper: take one back, how many, add one; each button a 44px circle. */
 .option__buttons {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 12px;
-  margin: 0;
+  margin: auto 0 0;
 }
 
-.option__count,
-.option__short {
-  font-size: 0.9375rem;
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stepper__button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background-color var(--t-fast) var(--ease);
+}
+
+.stepper__button:hover {
+  background: var(--accent-wash);
+}
+
+.stepper__button--add {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.stepper__button--add:hover {
+  background: var(--accent-hover);
+}
+
+.stepper__button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.stepper__icon {
+  width: 18px;
+  height: 18px;
+}
+
+.stepper__count {
+  min-width: 1.5em;
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 .option__short {
   color: var(--critical);
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 /* ---------------------------------------------------------------- motifs */
@@ -641,16 +824,19 @@
 .households {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 0 16px;
+  gap: 12px;
   margin: 8px 0 12px;
   padding: 0;
   list-style: none;
 }
 
+/* A household: a card, edged at the top in what the Budget did to it (ADR-0047). */
 .household {
-  padding: 12px 0 14px;
-  border-top: 3px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  padding: 14px 16px;
+  border-top: 4px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
 }
 
 .household--gains {
@@ -747,40 +933,72 @@
 
 /* ------------------------------------------------------- the headroom bar */
 
-/* The score while you build: one slim strip under the header, never over a control. */
+/*
+ * The score while you build (ADR-0047): a white strip that stays at the top of the screen, the
+ * money in a coloured pill first (red to find, green to spend), then the headroom and the rules.
+ */
 .bar {
   position: sticky;
   top: 0;
-  z-index: 3;
+  z-index: 4;
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 20px;
-  margin: 0 0 16px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--brass);
-  background: var(--page);
+  align-items: center;
+  gap: 6px 18px;
+  margin: 0 -16px 14px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+@media (min-width: 640px) {
+  .bar {
+    margin: 0 0 16px;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
 }
 
 .bar__headroom {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: 2px 10px;
   margin: 0;
 }
 
 .bar__label {
   color: var(--ink-2);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 
 .bar__figure {
-  font-size: 1.375rem;
+  font-size: 1.25rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
+}
+
+.bar__money .bar__figure {
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  font-size: 1.125rem;
+  transition:
+    background-color var(--t-base) var(--ease),
+    color var(--t-base) var(--ease);
+}
+
+.bar__money--spare .bar__figure {
+  background: var(--good-wash);
+  color: var(--good);
+}
+
+.bar__money--short .bar__figure {
+  background: var(--critical-wash);
 }
 
 .bar__figure--worse {

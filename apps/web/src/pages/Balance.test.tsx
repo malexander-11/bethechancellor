@@ -43,7 +43,8 @@ describe('step 2: balance your Budget (ADR-0046)', () => {
         /^You gave up £\d\.\dbn more than you saved\. Find it before you deliver\.$/,
       ),
     ).toBeInTheDocument();
-    expect(menus()).toEqual([BALANCE_TEXT.raise, BALANCE_TEXT.spend]);
+    // Short, only the ways to find it: no priority can be afforded yet (ADR-0047).
+    expect(menus()).toEqual([BALANCE_TEXT.raise]);
     const next = screen.getByRole('button', { name: BALANCE_TEXT.next });
     expect(next).toBeDisabled();
     expect(next).toHaveClass('btn--primary');
@@ -84,12 +85,12 @@ describe('step 2: balance your Budget (ADR-0046)', () => {
       screen.getByText('Your Budget balances. You can find more money to spend more, or go on.'),
     ).toBeInTheDocument();
     const nics = optionNamed('Employer National Insurance up half a point');
-    expect(
-      within(nics).getByText(/^Half a point each time · raises £\d+\.\dbn/),
-    ).toBeInTheDocument();
+    expect(nics.querySelector('.option__each')?.textContent).toMatch(
+      /^Half a point each time · raises £\d+\.\dbn/,
+    );
     expect(within(nics).getByText('Strains the tax lock')).toHaveClass('tag--amber');
     const meals = optionNamed('Free school meals for every child');
-    expect(within(meals).getByText(/^Once · costs £\d\.\dbn/)).toBeInTheDocument();
+    expect(meals.querySelector('.option__each')?.textContent).toMatch(/^Once · costs £\d\.\dbn/);
     // Balanced, the way on is open.
     expect(screen.getByRole('link', { name: BALANCE_TEXT.next })).toBeInTheDocument();
   });

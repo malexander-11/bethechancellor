@@ -25,19 +25,25 @@ const SPARE = 'g=st.1_rd.3&L=b6ai.1_nicer.2';
  * its kind, and then it is the screen that should change.
  */
 const CAP = {
-  /** A page of the walk (ADR-0046): a theme's cards, each heading, meaning, figure and answer. */
-  walk: 350,
+  /**
+   * A page of the walk (ADR-0046, ADR-0047): a theme's cards, each heading, meaning, answer and its
+   * one figure; on the first, the welcome's line above them.
+   */
+  walk: 260,
   /** The walk's last page: every measure no card asks about, a line and a tick or cross each. */
-  smallPrint: 900,
-  /** The balance page (ADR-0046): the money, and the two menus of a dozen choices each. */
-  menu: 360,
+  smallPrint: 760,
+  /**
+   * The balance page (ADR-0046, ADR-0047): the money, then the ways to find it while short, or the
+   * priorities and the ways to find more.
+   */
+  menu: 280,
   /** One thing to read or one question to answer: the review. */
-  story: 250,
+  story: 200,
   /**
    * Budget day: three rated audiences and five households, open on the page (ADR-0043), then the
    * Budget to share and the way onto the leaderboard (ADR-0044).
    */
-  feedback: 470,
+  feedback: 400,
 } as const;
 
 /** Every screen of the main road with the game that renders it at its widest. */

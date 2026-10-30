@@ -50,6 +50,7 @@ export function JourneyLayout({
   lead,
   tabTitle,
   intro = true,
+  banner,
   children,
 }: {
   step: JourneyStep;
@@ -59,12 +60,15 @@ export function JourneyLayout({
   title?: ReactNode;
   lead?: ReactNode;
   tabTitle?: string;
-  /** Off when the page draws its own head, as the Chancellor's Budget does. */
+  /** Off when the page draws its own head. */
   intro?: boolean;
+  /** What goes above the road: the welcome, on the screen the site opens on (ADR-0047). */
+  banner?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <div className="journey">
+      {banner}
       {step === 'start' ? null : <Progress step={step} part={part} />}
       {intro ? (
         <PageIntro step={step} part={part} title={title} lead={lead} tabTitle={tabTitle} />

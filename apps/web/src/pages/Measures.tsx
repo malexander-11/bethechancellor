@@ -13,12 +13,10 @@ import { useBudget } from '../state/budget';
 
 /** The walk's own words (ADR-0046): what is not the Budget file's. */
 export const MEASURES_TEXT = {
-  how: 'Agree or disagree with each one. Disagreeing takes it out of your Budget.',
   next: 'Next: {title}',
   smallTitle: 'The rest of the Budget',
   smallLead:
-    'These were in the Budget too. None of them changes the money you have to play with. Each is small, over before April 2027, or already under way.',
-  smallHow: 'Tick the ones you agree with, and cross the ones you don’t.',
+    'These were in the Budget too, but none of them changes your money. Tick or cross any.',
   toBalance: 'Next: balance your Budget',
   back: 'Back',
 } as const;
@@ -85,10 +83,9 @@ function MeasuresScreen({ page }: { page: string }) {
       part={part}
       title={theme?.title ?? MEASURES_TEXT.smallTitle}
       lead={theme?.lead ?? MEASURES_TEXT.smallLead}
+      banner={index === 0 ? <Welcome /> : null}
     >
-      {index === 0 ? <Welcome /> : null}
       <HeadroomBar outcome={outcome} status={status} balance={balance} />
-      <p className="panel__hint">{theme ? MEASURES_TEXT.how : MEASURES_TEXT.smallHow}</p>
       {said ? <p className="panel__hint walk__voting">{said}</p> : null}
 
       {theme ? (
@@ -111,7 +108,7 @@ function MeasuresScreen({ page }: { page: string }) {
         </ul>
       )}
 
-      <p className="actions">
+      <p className="actions actions--sticky">
         {next ? (
           <StepLink to={measuresPath(next)} className="btn btn--primary">
             {MEASURES_TEXT.next.replace('{title}', titleOf(next))}

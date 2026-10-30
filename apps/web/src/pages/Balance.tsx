@@ -27,9 +27,7 @@ export const BALANCE_TEXT = {
   spare: 'You have {money} to spend. Choose your priorities, or keep it as headroom.',
   settled: 'Your Budget balances. You can find more money to spend more, or go on.',
   raise: 'Find the money',
-  raiseLead: 'Each press raises more. Press again to go further.',
   spend: 'Your priorities',
-  spendLead: 'Each press spends more, until the money runs out.',
   add: 'Add',
   takeBack: 'Take one back',
   shortBy: '{money} short',
@@ -39,7 +37,7 @@ export const BALANCE_TEXT = {
   undo: 'Undo',
   next: 'Next: deliver the Budget',
   findFirst: 'Find {money} first.',
-  back: 'Back to the measures',
+  back: 'Back',
 } as const;
 
 const money = (gbpm: number) => formatGbpBn(Math.abs(gbpm), 1);
@@ -61,11 +59,26 @@ function strainsOf(option: BalanceOption): string[] {
     .map((p) => p.noun);
 }
 
+/** A plus or a minus, drawn on a stepper's button: a picture, so a screen reader hears the words. */
+function StepIcon({ add }: { add: boolean }) {
+  return (
+    <svg className="stepper__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <path
+        d={add ? 'M10 4v12M4 10h12' : 'M4 10h12'}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 /**
- * One way to find or spend money: what it is, what one press does and what it raises or costs on
- * the Budget as it stands, and the buttons to press it again or take a press back. A spend that
- * would leave the headroom below the Chancellor's cannot be pressed, and says by how much it is
- * short.
+ * One way to find or spend money, as a tile (ADR-0047): what it is, what one press does and what it
+ * raises or costs on the Budget as it stands, and a stepper to take a press back or add one, with
+ * how many there are between. A spend that would leave the headroom below the Chancellor's cannot
+ * be pressed, and says by how much it is short.
  */
 function Option({ option, side }: { option: BalanceOption; side: 'raise' | 'spend' }) {
   const { state, dispatch } = useBudget();
@@ -85,39 +98,51 @@ function Option({ option, side }: { option: BalanceOption; side: 'raise' | 'spen
   const strains = strainsOf(option);
   const set = (to: number) => dispatch({ type: 'setLever', code: option.code, value: to });
   return (
-    <li className="option">
+    <li className={`option${steps > 0 ? ' option--chosen' : ''}`}>
       <p className="option__label">{option.label}</p>
       <p className="option__each">
-        {option.each} · {priced}
+        {option.each} · <span className="option__price">{priced}</span>
         {strains.map((noun) => (
           <span key={noun} className="tag tag--amber option__tag">
             Strains {noun}
           </span>
         ))}
       </p>
-      <p className="option__buttons">
-        <button
-          type="button"
-          className="btn option__add"
-          disabled={next === undefined || unaffordable}
-          onClick={() => next !== undefined && set(next)}
-        >
-          {BALANCE_TEXT.add}
-          <span className="sr-only">: {option.label}</span>
-        </button>
-        {back !== undefined ? (
-          <button type="button" className="linklike option__back" onClick={() => set(back)}>
-            {BALANCE_TEXT.takeBack}
-            <span className="sr-only">: {option.label}</span>
+      <div className="option__buttons">
+        <span className="stepper">
+          <button
+            type="button"
+            className="stepper__button"
+            disabled={back === undefined}
+            onClick={() => back !== undefined && set(back)}
+          >
+            <StepIcon add={false} />
+            <span className="sr-only">
+              {BALANCE_TEXT.takeBack}: {option.label}
+            </span>
           </button>
-        ) : null}
-        {steps > 0 ? <span className="option__count">{addedWords(steps)}</span> : null}
+          <span className="stepper__count" aria-hidden="true">
+            {steps}
+          </span>
+          <button
+            type="button"
+            className="stepper__button stepper__button--add"
+            disabled={next === undefined || unaffordable}
+            onClick={() => next !== undefined && set(next)}
+          >
+            <StepIcon add />
+            <span className="sr-only">
+              {BALANCE_TEXT.add}: {option.label}
+            </span>
+          </button>
+        </span>
+        {steps > 0 ? <span className="sr-only">{addedWords(steps)}</span> : null}
         {unaffordable && next !== undefined ? (
           <span className="option__short">
             {BALANCE_TEXT.shortBy.replace('{money}', money(after))}
           </span>
         ) : null}
-      </p>
+      </div>
     </li>
   );
 }
@@ -125,13 +150,10 @@ function Option({ option, side }: { option: BalanceOption; side: 'raise' | 'spen
 function Menu({ side }: { side: 'raise' | 'spend' }) {
   const id = `menu-${side}`;
   return (
-    <section className="menu doc" aria-labelledby={id}>
+    <section className="menu" aria-labelledby={id}>
       <h2 id={id} className="section-label">
         {side === 'raise' ? BALANCE_TEXT.raise : BALANCE_TEXT.spend}
       </h2>
-      <p className="panel__hint">
-        {side === 'raise' ? BALANCE_TEXT.raiseLead : BALANCE_TEXT.spendLead}
-      </p>
       <ul className="options">
         {menus[side].map((option) => (
           <Option key={option.code} option={option} side={side} />
@@ -167,7 +189,9 @@ export function BalancePage() {
       : state_ === 'spare'
         ? BALANCE_TEXT.spare.replace('{money}', money(balance.gbpm))
         : BALANCE_TEXT.settled;
-  const order: ('raise' | 'spend')[] = state_ === 'short' ? ['raise', 'spend'] : ['spend', 'raise'];
+  // Short, only the ways to find the money: no priority can be afforded until it is found
+  // (ADR-0047). With money to spend, the priorities first, and the ways to find more after them.
+  const order: ('raise' | 'spend')[] = state_ === 'short' ? ['raise'] : ['spend', 'raise'];
 
   /** Leaving for the review: the money balances, and the Budget is ready to read back. */
   const leave = () =>
@@ -190,7 +214,7 @@ export function BalancePage() {
       ))}
 
       {others.length > 0 ? (
-        <section className="menu doc" aria-labelledby="menu-others">
+        <section className="menu" aria-labelledby="menu-others">
           <h2 id="menu-others" className="section-label">
             {BALANCE_TEXT.others}
           </h2>
@@ -214,7 +238,7 @@ export function BalancePage() {
         </section>
       ) : null}
 
-      <p className="actions">
+      <p className="actions actions--sticky">
         {balanceHolds(balance.gbpm) ? (
           <StepLink to="/review" className="btn btn--primary" onClick={leave}>
             {BALANCE_TEXT.next}

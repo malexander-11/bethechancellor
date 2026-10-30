@@ -63,7 +63,6 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
       const view = at(`/measures/${theme.id}?${BASE}&${GAME}`);
       expect(h1(theme.title)).toBeInTheDocument();
       expect(screen.getByText(theme.lead)).toBeInTheDocument();
-      expect(screen.getByText(MEASURES_TEXT.how)).toBeInTheDocument();
       const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent);
       expect(headings, theme.id).toEqual(theme.cards.map((c) => c.title));
       seen.push(...theme.cards.map((c) => c.lever));
@@ -75,20 +74,26 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     expect(seen).toHaveLength(reversible.size);
   });
 
-  it('explains each card in its own words, with the Treasury’s figure and what disagreeing costs you', () => {
+  it('explains each card in its own words, with one figure: what disagreeing costs you (ADR-0047)', () => {
     serve(() => CLOSED);
     const savings = card('b6save');
     at(`/measures/${themeOf('b6save')?.id}?${BASE}&${GAME}`);
     const el = cardNamed(savings.title);
     expect(within(el).getByText(savings.explain)).toBeInTheDocument();
+    // The card's one figure is the engine's, as the bar will say it: the Treasury's own line for
+    // the measure, with the interest on what it no longer raises on top, and never less.
+    const line = within(el).getByText(/^Disagreeing costs you £\d\.\dbn\.$/);
+    const said = Number(/£(\d\.\d)bn/.exec(line.textContent ?? '')?.[1]) * 1000;
     const figure = linesFigure(
       scorecard,
       cardMeasures(budget, savings).map((m) => m.line),
       '2029-30',
     );
-    expect(within(el).getByText(`The Treasury’s figure: ${figure?.words}.`)).toBeInTheDocument();
-    expect(figure?.words).toMatch(/^raises £\d\.\dbn in 2029-30$/);
-    expect(within(el).getByText(/^Disagreeing costs you £\d\.\dbn\.$/)).toBeInTheDocument();
+    const treasury = figure?.gbpm ?? 0;
+    expect(treasury).toBeGreaterThan(0);
+    expect(said).toBeGreaterThanOrEqual(treasury - 50);
+    expect(said).toBeLessThanOrEqual(treasury * 1.5 + 50);
+    expect(el.textContent).not.toMatch(/Treasury’s figure/);
   });
 
   it('says what disagreeing saves, and that investment moves the money only by its interest', () => {
@@ -111,6 +116,8 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     await waitFor(() => expect(search().get('L')).toMatch(/b6save\.1/));
     expect(disagree).toHaveAttribute('aria-pressed', 'true');
     expect(agree).toHaveAttribute('aria-pressed', 'false');
+    // The card takes the answer's colour, as well as its pressed button (ADR-0047).
+    expect(el).toHaveClass('mcard--disagreed');
     // The bar keeps the money: what disagreeing gave up is now to find.
     const bar = screen.getByRole('region', { name: 'Your Budget so far' });
     expect(bar.querySelector('.bar__money')?.textContent).toMatch(
@@ -133,6 +140,7 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     // Agreeing after disagreeing puts the measure back in.
     fireEvent.click(agree);
     expect(agree).toHaveAttribute('aria-pressed', 'true');
+    expect(el).toHaveClass('mcard--agreed');
     await waitFor(() => expect(search().get('L') ?? '').not.toMatch(/b6save/));
     expect(stored().votes).toMatchObject({ 'm:m62': 1 });
     fireEvent.click(agree);
@@ -157,7 +165,8 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     at(`/measures/${themeOf('b6brr')?.id}?${BASE}&${GAME}`);
     expect(await screen.findByText(BOARD_TEXT.votingLead)).toBeInTheDocument();
     const el = cardNamed(reliefs.title);
-    expect(within(el).getByText('3 agree, 1 disagree')).toBeInTheDocument();
+    // What everyone said shows once the player has said it too (ADR-0047).
+    expect(within(el).queryByText('3 agree, 1 disagree')).toBeNull();
     fireEvent.click(within(el).getByRole('button', { name: BOARD_TEXT.disagree }));
     await waitFor(() =>
       expect(calls.filter((c) => c.path.endsWith('/vote'))).toHaveLength(ids.length),

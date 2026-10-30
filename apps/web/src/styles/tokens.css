@@ -1,8 +1,8 @@
 /*
- * A Westminster skin (ADR-0023): warm paper, charcoal ink, House of Commons green as the one
- * working colour, a restrained brass for small labels and rules, and Budget red kept for the
- * Budget itself. Editorial headings in Fraunces; a book serif (Source Serif 4) for the body: a
- * set document, not an app.
+ * A Westminster skin (ADR-0023), made an app (ADR-0047): white cards on a soft green-grey ground,
+ * charcoal ink, House of Commons green as the one working colour, a restrained brass for small
+ * labels, and Budget red kept for the Budget itself and for a measure disagreed with. Editorial
+ * headings in Fraunces; the reader's own sans for everything else, as an app on their device is.
  *
  * Every text-on-ground pairing below is at or above 4.5:1 in both themes. Brass is a rule and a
  * small-caps label colour; where it carries words it is the darker `--brass-ink`. Chart series
@@ -12,10 +12,10 @@
 :root {
   color-scheme: light;
 
-  /* Surfaces: paper */
-  --page: #f3eee2;
-  --surface: #fbf8f1;
-  --surface-2: #ebe4d3;
+  /* Surfaces: white cards on a soft ground */
+  --page: #eef1ed;
+  --surface: #ffffff;
+  --surface-2: #f4f6f3;
 
   /* Text: charcoal */
   --ink: #23262a;
@@ -23,8 +23,8 @@
   --muted: #605e56;
 
   /* Rules */
-  --border: #d9d0bc;
-  --grid: #e3dccb;
+  --border: #dbe1da;
+  --grid: #e6ebe5;
   --axis: #b1a78d;
 
   /* Commons green: links, buttons, focus, the current step */
@@ -65,10 +65,15 @@
   --series-policy-wash: rgba(15, 127, 95, 0.14);
 
   --focus: var(--accent);
-  --radius: 0;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-pill: 999px;
+  --shadow: 0 1px 2px rgba(20, 32, 26, 0.06), 0 4px 14px rgba(20, 32, 26, 0.07);
+  --shadow-up: 0 -1px 2px rgba(20, 32, 26, 0.05), 0 -4px 14px rgba(20, 32, 26, 0.07);
 
-  /* Two serifs, both variable, self-hosted and OFL: Source Serif 4 for the body, Fraunces for the headings */
-  --font: 'Source Serif 4 Variable', Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  /* The reader's own sans for the body and the controls; Fraunces, self-hosted and OFL, for the headings */
+  --font:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
   --font-display: 'Fraunces Variable', Georgia, 'Iowan Old Style', 'Times New Roman', serif;
 
   /* Motion: short, and off entirely when the reader asks */

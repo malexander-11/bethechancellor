@@ -67,7 +67,7 @@ export function HeadroomBar({
   return (
     <section className="bar" aria-label="Your Budget so far" ref={ref}>
       {balance ? (
-        <p className="bar__headroom bar__money">
+        <p className={`bar__headroom bar__money bar__money--${balance.state}`}>
           <span className="bar__label">Your money, {year}</span>
           <span className={`bar__figure${balance.state === 'short' ? ' bar__figure--worse' : ''}`}>
             {balance.words}
