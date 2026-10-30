@@ -8,14 +8,15 @@ import { budget, cardOf, expect, leversInLink, primary, test } from './journey';
 test('disagreeing gives money up, the balance page finds it, and the Budget is delivered', async ({
   page,
 }) => {
-  // The site opens on the walk's first page (ADR-0047).
+  // The landing page's one button starts the walk (ADR-0048).
   await page.goto('/');
+  await primary(page).click();
   const theme = budget.themes.find((t) => t.cards.some((c) => c.lever === 'b6save'));
   const savings = theme?.cards.find((c) => c.lever === 'b6save');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(theme?.title ?? '');
   const card = cardOf(page, savings?.title ?? '');
-  await card.getByRole('button', { name: 'Disagree' }).click();
-  await expect(card.getByRole('button', { name: 'Disagree' })).toHaveAttribute(
+  await card.getByRole('button', { name: 'Remove' }).click();
+  await expect(card.getByRole('button', { name: 'Remove' })).toHaveAttribute(
     'aria-pressed',
     'true',
   );

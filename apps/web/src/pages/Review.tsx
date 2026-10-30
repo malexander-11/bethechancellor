@@ -90,7 +90,7 @@ function nameOf(code: string): string | undefined {
 /**
  * Step 3: deliver the Budget (Phase 24, ADR-0025; the third of four steps since ADR-0046). The
  * Budget as it stands, read back before it is delivered: the Chancellor's measures the player
- * disagreed with, what they added to balance it, and where that leaves them against the rules and
+ * removed, what they added to balance it, and where that leaves them against the rules and
  * the manifesto, in words (the bar above already says the figures). Every part has a way back to
  * the page that set it, carrying the Budget, so nothing is final until the red button, which waits
  * while the headroom is below the Chancellor's. Every figure is the engine's for the target year.
@@ -172,7 +172,7 @@ export function ReviewPage() {
 
       <Part
         id="disagreed"
-        title="Measures you disagreed with"
+        title="Measures you removed"
         change={{ to: measuresChange, label: 'Change' }}
       >
         {disagreed.length === 0 ? (

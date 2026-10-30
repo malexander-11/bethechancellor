@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 import { budget, glossary } from '../data';
-import { WELCOME_TEXT } from '../components/Welcome';
+import { LANDING_TEXT } from '../pages/Landing';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 /** A game just begun: the walk through the measures, where the road starts (ADR-0046). */
@@ -101,17 +101,14 @@ describe('the head of every screen', () => {
     );
   });
 
-  it('opens on the first step, with the Budget named once and its story folded (ADR-0047)', () => {
+  it('opens on the landing page, which is no step and shows no road (ADR-0048)', () => {
     at(`/?${BASE}`);
-    expect(screen.getByRole('navigation', { name: 'Budget steps' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 1, name: budget.themes[0]?.title })).toBeVisible();
-    // The welcome names the Budget and the Chancellor once, as facts of the Budget, says what to
-    // do, and keeps the story in one closed fold. No cover, no countdown, no bullets (ADR-0032).
-    const welcome = screen.getByRole('region', { name: budget.title });
-    expect(welcome.textContent).toContain(budget.chancellor.name);
-    expect(within(welcome).getByText(WELCOME_TEXT.story).closest('details')).not.toHaveAttribute(
-      'open',
-    );
+    expect(screen.queryByRole('navigation', { name: 'Budget steps' })).toBeNull();
+    // The headline names the Chancellor once, as a fact of the Budget, and asks the question.
+    const h1 = screen.getByRole('heading', { level: 1 });
+    expect(h1.textContent).toContain(budget.chancellor.name);
+    expect(screen.getByRole('button', { name: LANDING_TEXT.start })).toHaveClass('btn--primary');
+    expect(screen.getByText(LANDING_TEXT.story).closest('details')).not.toHaveAttribute('open');
     expect(document.querySelector('.opening')).toBeNull();
     expect(document.querySelector('.shell--cover')).toBeNull();
     expect(screen.queryByText(/minutes/)).toBeNull();

@@ -67,7 +67,7 @@ export function JourneyLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="journey">
+    <div className={`journey journey--${step}`}>
       {banner}
       {step === 'start' ? null : <Progress step={step} part={part} />}
       {intro ? (

@@ -36,7 +36,7 @@ describe('step 3: deliver the Budget (ADR-0046)', () => {
 
     // The measures disagreed with, by their cards' headings, with what each does to the money,
     // and the way back to the theme they are in.
-    const disagreed = part(/^Measures you disagreed with/);
+    const disagreed = part(/^Measures you removed/);
     expect(
       within(disagreed).getByText(/^Savings interest taxed two points more/),
     ).toBeInTheDocument();
@@ -129,7 +129,7 @@ describe('step 3: deliver the Budget (ADR-0046)', () => {
   it('says so when no tax or other budget moved, and names a missed rule and a broken promise', () => {
     const quiet = at(`/review?${BASE}&${G}`);
     expect(
-      within(part(/^Measures you disagreed with/)).getByText(
+      within(part(/^Measures you removed/)).getByText(
         'You agreed with every measure you could change.',
       ),
     ).toBeInTheDocument();

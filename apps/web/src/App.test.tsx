@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from './App';
 import { budget } from './data';
-import { WELCOME_TEXT } from './components/Welcome';
+import { LANDING_TEXT } from './pages/Landing';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 /** A game on the walk, with a penny on the basic rate. */
@@ -22,23 +22,29 @@ function at(path: string) {
 const h1 = (name: string) => screen.getByRole('heading', { level: 1, name });
 
 describe('journey routes', () => {
-  it('opens straight on the first measures, with the Budget named and its story folded (ADR-0047)', () => {
+  it('opens on a landing page: who delivered the Budget, three numbers, and one way in (ADR-0048)', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>,
     );
-    expect(h1(first?.title ?? '')).toBeVisible();
-    // The Budget is named once above the cards, and what it did waits in one closed fold.
-    const welcome = screen.getByRole('region', { name: budget.title });
-    expect(welcome).toHaveTextContent(budget.chancellor.name);
-    const story = screen.getByText(WELCOME_TEXT.story).closest('details');
+    expect(h1(LANDING_TEXT.headline.replace('{name}', budget.chancellor.name))).toBeVisible();
+    // Three numbers, each the engine's or the data's: the headroom the walk keeps to first.
+    const figures = screen.getByRole('region', { name: LANDING_TEXT.figures });
+    expect(figures.querySelectorAll('.figure')).toHaveLength(3);
+    expect(figures.textContent).toMatch(/£14\.5bn/);
+    // The headroom's steps since March, as the Budget's own chart has them, and the story folded.
+    const chart = screen.getByRole('region', { name: LANDING_TEXT.chart });
+    expect(chart.querySelectorAll('.wf__row')).toHaveLength(6);
+    const story = screen.getByText(LANDING_TEXT.story).closest('details');
     expect(story).not.toHaveAttribute('open');
     expect(story?.textContent).not.toMatch(/\{[a-zA-Z]+\}/);
-    expect(story?.textContent).toMatch(/£14\.5bn/);
-    // No playtime (ADR-0032), and the road from the first screen.
+    // One way in, and no road yet: the steps start on the screen it opens. No playtime (ADR-0032).
+    expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
+    expect(screen.queryByRole('navigation', { name: 'Budget steps' })).toBeNull();
     expect(screen.queryByText(/minutes/)).toBeNull();
-    expect(screen.getByRole('navigation', { name: 'Budget steps' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: LANDING_TEXT.start }));
+    expect(h1(first?.title ?? '')).toBeVisible();
     // No tutorial, no adviser essays.
     expect(screen.queryByText('Permanent Secretary to the Treasury')).toBeNull();
     expect(screen.queryByRole('button', { name: /Continue/ })).toBeNull();
@@ -75,8 +81,8 @@ describe('journey routes', () => {
         <App />
       </MemoryRouter>,
     );
-    // The site's own address is the walk's first page (ADR-0047), named as that page is.
-    expect(document.title).toBe(`${first?.title} · Step 1 of 4 · What’s your Budget?`);
+    // The landing page is named for the Budget (ADR-0048).
+    expect(document.title).toBe(`${budget.title} · What’s your Budget?`);
     const skip = screen.getByRole('link', { name: 'Skip to the step' });
     expect(skip).toHaveAttribute('href', '#main');
     expect(document.body.querySelector('a, button, input, [tabindex]')).toBe(skip);

@@ -11,15 +11,15 @@ for (const screen of JOURNEY) {
   });
 }
 
-test('a card disagreed with', async ({ page }) => {
+test('a measure removed', async ({ page }) => {
   const theme = budget.themes[0];
   const card = theme?.cards[0];
   await walk(page, { until: theme?.title ?? '' });
   await cardOf(page, card?.title ?? '')
-    .getByRole('button', { name: 'Disagree' })
+    .getByRole('button', { name: 'Remove' })
     .click();
   await expect(
-    cardOf(page, card?.title ?? '').getByRole('button', { name: 'Disagree' }),
+    cardOf(page, card?.title ?? '').getByRole('button', { name: 'Remove' }),
   ).toHaveAttribute('aria-pressed', 'true');
   await expectAccessible(page);
 });

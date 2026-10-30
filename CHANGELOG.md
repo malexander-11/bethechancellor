@@ -5,6 +5,16 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The game has a landing page again, and its screens are set as a news site's interactive
+  (ADR-0048). The landing page says that the Chancellor has delivered the Budget and asks what the
+  player would change, gives three numbers (the headroom left, the tax the measures raise and how
+  many measures can be changed), says how the game works in three steps, and shows the Budget's own
+  chart of how the headroom changed since March, with the story in a fold; one button starts. Each
+  measure now shows what was done and the Treasury's figure for it, with "See more" opening what it
+  means, what removing it does to the player's money with the interest, and the line of the Budget's
+  table it comes from; Approve keeps it and Remove takes it out. The look is quieter: a near-white
+  ground, white panels with hairline borders, black rules over sections, small corners, one readable
+  column lined up with the masthead, and the money kept in view at the top.
 - ADR-0047 records the opening straight on the measures and the app's look: a game from the first
   screen, the welcome and the story's fold, the white cards on a soft ground, the sticky money and
   way on, the filling progress, the tiles with their colours and steppers, one figure a card, and

@@ -16,7 +16,8 @@ import { balance, budget, electorate, gameData, guide, ministers, pm, reception 
 import { agreeWords, BOARD_TEXT, countsWords } from '../board/words';
 import { balanceWords } from '../journey/balance';
 import { BALANCE_TEXT } from '../pages/Balance';
-import { WELCOME_TEXT } from '../components/Welcome';
+import { LANDING_TEXT } from '../pages/Landing';
+import { CARD_TEXT } from '../components/MeasureCard';
 import { MEASURES_TEXT } from '../pages/Measures';
 import { SHARE_TEXT } from '../share/words';
 
@@ -120,11 +121,13 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     ...Object.values(BOARD_TEXT).filter((line) => !line.includes('{')),
     countsWords({ ups: 12, downs: 3 }),
   ],
-  // The welcome above the first measures (ADR-0047): the Budget's name, the line saying what to
-  // do, and the story in its fold with the figures filled as the page fills them.
+  // The landing page (ADR-0048): the Budget's name, the page's own words as it fills them, and
+  // the story in its fold with the figures filled as the page fills them.
   'the Budget': [
     budget.title,
-    ...Object.values(WELCOME_TEXT),
+    ...Object.values(LANDING_TEXT).map((line) =>
+      line.replace('{name}', 'John Healey').replace('{year}', '2029-30'),
+    ),
     ...budget.story.map((line) =>
       fillStory(line.text, {
         march: '£23.6bn',
@@ -155,6 +158,10 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     INVESTMENT_WORDS,
     BOARD_TEXT.agree,
     BOARD_TEXT.disagree,
+    CARD_TEXT.approve,
+    CARD_TEXT.remove,
+    CARD_TEXT.more,
+    CARD_TEXT.source.replace('{budget}', budget.title).replace('{lines}', 'lines 3 and 4'),
     BOARD_TEXT.votingLead,
     BOARD_TEXT.votingClosed,
     BOARD_TEXT.votingDown,

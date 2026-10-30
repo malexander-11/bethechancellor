@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { App } from '../App';
 import { BOARD_TEXT } from '../board/words';
-import { INVESTMENT_WORDS } from '../components/MeasureCard';
+import { CARD_TEXT, INVESTMENT_WORDS } from '../components/MeasureCard';
 import { budget, scorecard } from '../data';
 import { MEASURES_TEXT } from './Measures';
 
@@ -74,43 +74,53 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     expect(seen).toHaveLength(reversible.size);
   });
 
-  it('explains each card in its own words, with one figure: what disagreeing costs you (ADR-0047)', () => {
+  it('shows what was done and the Treasury’s figure, and the rest under See more (ADR-0048)', () => {
     serve(() => CLOSED);
     const savings = card('b6save');
     at(`/measures/${themeOf('b6save')?.id}?${BASE}&${GAME}`);
     const el = cardNamed(savings.title);
-    expect(within(el).getByText(savings.explain)).toBeInTheDocument();
-    // The card's one figure is the engine's, as the bar will say it: the Treasury's own line for
-    // the measure, with the interest on what it no longer raises on top, and never less.
-    const line = within(el).getByText(/^Disagreeing costs you £\d\.\dbn\.$/);
-    const said = Number(/£(\d\.\d)bn/.exec(line.textContent ?? '')?.[1]) * 1000;
-    const figure = linesFigure(
-      scorecard,
-      cardMeasures(budget, savings).map((m) => m.line),
-      '2029-30',
+    // The face: the heading and the Treasury's own figure for the card's lines.
+    const lines = cardMeasures(budget, savings).map((m) => m.line);
+    const figure = linesFigure(scorecard, lines, '2029-30');
+    expect(figure?.words).toMatch(/^raises £\d\.\dbn in 2029-30$/);
+    expect(el.querySelector('.mcard__figure')?.textContent).toBe(
+      `R${figure?.words.slice(1) ?? ''}`,
     );
+    // See more, closed until opened: what it means, what removing it does to your money, and the
+    // line of the Budget's table it comes from.
+    const more = within(el).getByText(CARD_TEXT.more).closest('details') as HTMLElement;
+    expect(more).not.toHaveAttribute('open');
+    expect(within(more).getByText(savings.explain)).toBeInTheDocument();
+    expect(
+      within(more).getByText(`Source: ${budget.title}, Table 6.1, line ${lines[0]}.`),
+    ).toBeInTheDocument();
+    // What removing it costs is the engine's, as the bar will say it: the Treasury's line with the
+    // interest on what it no longer raises on top, and never less.
+    const line = within(more).getByText(/^Removing it costs you £\d\.\dbn, with the interest\.$/);
+    const said = Number(/£(\d\.\d)bn/.exec(line.textContent ?? '')?.[1]) * 1000;
     const treasury = figure?.gbpm ?? 0;
     expect(treasury).toBeGreaterThan(0);
     expect(said).toBeGreaterThanOrEqual(treasury - 50);
     expect(said).toBeLessThanOrEqual(treasury * 1.5 + 50);
-    expect(el.textContent).not.toMatch(/Treasury’s figure/);
   });
 
-  it('says what disagreeing saves, and that investment moves the money only by its interest', () => {
+  it('says what removing saves, and that investment moves the money only by its interest', () => {
     serve(() => CLOSED);
     at(`/measures/${themeOf('b6homes')?.id}?${BASE}&${GAME}`);
     const homes = cardNamed(card('b6homes').title);
     expect(within(homes).getByText(new RegExp(INVESTMENT_WORDS.slice(0, 20)))).toBeInTheDocument();
     const growth = cardNamed(card('b6grow').title);
-    expect(within(growth).getByText(/^Disagreeing saves you £\d\.\dbn\.$/)).toBeInTheDocument();
+    expect(
+      within(growth).getByText(/^Removing it saves you £\d\.\dbn, with the interest\.$/),
+    ).toBeInTheDocument();
   });
 
   it('takes a measure out of your Budget when you disagree, and puts it back on a second press', async () => {
     serve(() => CLOSED);
     at(`/measures/${themeOf('b6save')?.id}?${BASE}&${GAME}`);
     const el = cardNamed(card('b6save').title);
-    const disagree = within(el).getByRole('button', { name: BOARD_TEXT.disagree });
-    const agree = within(el).getByRole('button', { name: BOARD_TEXT.agree });
+    const disagree = within(el).getByRole('button', { name: CARD_TEXT.remove });
+    const agree = within(el).getByRole('button', { name: CARD_TEXT.approve });
     expect(disagree).toHaveAttribute('aria-pressed', 'false');
     fireEvent.click(disagree);
     await waitFor(() => expect(search().get('L')).toMatch(/b6save\.1/));
@@ -136,7 +146,7 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     serve(() => CLOSED);
     at(`/measures/${themeOf('b6save')?.id}?${BASE}&${GAME}&L=b6save.1`);
     const el = cardNamed(card('b6save').title);
-    const agree = within(el).getByRole('button', { name: BOARD_TEXT.agree });
+    const agree = within(el).getByRole('button', { name: CARD_TEXT.approve });
     // Agreeing after disagreeing puts the measure back in.
     fireEvent.click(agree);
     expect(agree).toHaveAttribute('aria-pressed', 'true');
@@ -167,7 +177,7 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     const el = cardNamed(reliefs.title);
     // What everyone said shows once the player has said it too (ADR-0047).
     expect(within(el).queryByText('3 agree, 1 disagree')).toBeNull();
-    fireEvent.click(within(el).getByRole('button', { name: BOARD_TEXT.disagree }));
+    fireEvent.click(within(el).getByRole('button', { name: CARD_TEXT.remove }));
     await waitFor(() =>
       expect(calls.filter((c) => c.path.endsWith('/vote'))).toHaveLength(ids.length),
     );
@@ -187,17 +197,19 @@ describe('step 1: the Chancellor’s measures (ADR-0046)', () => {
     expect(await screen.findByText(BOARD_TEXT.votingClosed)).toBeInTheDocument();
     const first = budget.themes[0]?.cards[0];
     const el = cardNamed(first?.title ?? '');
-    fireEvent.click(within(el).getByRole('button', { name: BOARD_TEXT.disagree }));
+    fireEvent.click(within(el).getByRole('button', { name: CARD_TEXT.remove }));
     await waitFor(() => expect(search().get('L')).toMatch(new RegExp(`${first?.lever}\\.1`)));
     expect(calls.filter((c) => c.path.endsWith('/vote'))).toHaveLength(0);
   });
 
-  it('leads from theme to theme, the Budget carried, with no way back from the first (ADR-0047)', () => {
+  it('leads from theme to theme, the Budget carried, and back to the landing page from the first', () => {
     serve(() => CLOSED);
     const [first, second] = budget.themes;
     at(`/measures/${first?.id}?${BASE}&${GAME}&L=b6save.1`);
-    // The first page is where the site opens: there is nothing behind it to go back to.
-    expect(screen.queryByRole('link', { name: MEASURES_TEXT.back })).toBeNull();
+    expect(screen.getByRole('link', { name: MEASURES_TEXT.back })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/\?/),
+    );
     fireEvent.click(screen.getByRole('link', { name: `Next: ${second?.title.toLowerCase()}` }));
     expect(h1(second?.title ?? '')).toBeInTheDocument();
     expect(search().get('L')).toMatch(/b6save\.1/);

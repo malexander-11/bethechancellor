@@ -93,8 +93,8 @@ describe('the progress bar', () => {
     for (const s of shorts) expect(s).toHaveAttribute('aria-hidden', 'true');
   });
 
-  it('starts the road on the first screen, with nothing ahead open yet (ADR-0047)', () => {
-    at(`/?${BASE}`);
+  it('starts the road on the walk, with nothing ahead open yet, from a link with no game (ADR-0047)', () => {
+    at(`/measures/${first?.id}?${BASE}`);
     const bar = screen.getByRole('navigation', { name: 'Budget steps' });
     expect(within(bar).getByText('Step 1 of 4')).toBeInTheDocument();
     expect(within(bar).queryAllByRole('link')).toHaveLength(0);

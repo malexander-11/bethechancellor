@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { BudgetProvider } from './state/budget';
 import { BudgetDayPage } from './pages/BudgetDay';
+import { LandingPage } from './pages/Landing';
 import { BalancePage } from './pages/Balance';
 import { MeasuresPage } from './pages/Measures';
 import { ReviewPage } from './pages/Review';
@@ -130,14 +131,14 @@ function Shell() {
         <main id="main" tabIndex={-1} className="page">
           <Suspense fallback={null}>
             <Routes>
+              {/* The landing page (ADR-0048): the Budget, the question, and the way in. */}
+              <Route path="/" element={<LandingPage />} />
               {/*
-            The game opens on the walk (ADR-0047): the site's own address and every retired step's
-            (the briefing, the priorities and the flagships, ADR-0045; fine-tuning and the desk
-            before it, ADR-0046) open its first page, the query string intact, and a link without
-            a game starts one with its measures in it.
+            Every retired step's address (the briefing, the priorities and the flagships, ADR-0045;
+            fine-tuning and the desk before it, ADR-0046) opens the walk's first page, the query
+            string intact; a link without a game starts one with its measures in it (ADR-0047).
           */}
               {[
-                '/',
                 '/outlook',
                 '/assumptions',
                 '/pm',

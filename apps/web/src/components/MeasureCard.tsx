@@ -1,9 +1,9 @@
-import { formatGbpBn, type BudgetCard, type BudgetMeasure } from '@btc/engine';
+import { formatGbpBn, linesFigure, type BudgetCard, type BudgetMeasure } from '@btc/engine';
 import { useEffect, useState } from 'react';
 import { measures as measureVotes, type Tally } from '../board/api';
 import { deviceCode, measureKey, myVote, rememberVote } from '../board/voter';
 import { agreeWords, BOARD_TEXT } from '../board/words';
-import { levers } from '../data';
+import { budget, levers, scorecard } from '../data';
 import { useMoneyOf } from '../journey/balance';
 import { useBudget } from '../state/budget';
 
@@ -80,12 +80,26 @@ export async function castVote(
     : { said: '' };
 }
 
-/** What disagreeing does to a player's money, in words: "Disagreeing costs you £0.5bn." */
+/** A measure card's own words (ADR-0048). */
+export const CARD_TEXT = {
+  approve: 'Approve',
+  remove: 'Remove',
+  more: 'See more',
+  source: 'Source: {budget}, Table 6.1, {lines}.',
+} as const;
+
+/** What removing a measure does to a player's money, in words: "Removing it costs you £0.5bn." */
 export function moneyWords(gbpm: number, year: string): string {
   const size = formatGbpBn(Math.abs(gbpm), 1);
-  if (gbpm <= -50) return `Disagreeing costs you ${size}.`;
-  if (gbpm >= 50) return `Disagreeing saves you ${size}.`;
-  return `Disagreeing changes nothing in ${year}, the year that counts.`;
+  if (gbpm <= -50) return `Removing it costs you ${size}, with the interest.`;
+  if (gbpm >= 50) return `Removing it saves you ${size}, with the interest.`;
+  return `Removing it changes nothing in ${year}, the year that counts.`;
+}
+
+/** "line 62", "lines 3 and 4", "lines 3, 4 and 9": where a card's figure comes from. */
+function linesWords(lines: readonly number[]): string {
+  if (lines.length === 1) return `line ${lines[0]}`;
+  return `lines ${lines.slice(0, -1).join(', ')} and ${lines[lines.length - 1]}`;
 }
 
 /** A tick or a cross, drawn beside an answer's word: a picture, so a screen reader hears the word. */
@@ -105,12 +119,12 @@ function AnswerIcon({ value }: { value: 1 | -1 }) {
 }
 
 /**
- * One of the Chancellor's decisions on the walk (ADR-0046), as a tile (ADR-0047): what the
- * Chancellor did and what it means, then Agree or Disagree. Disagreeing takes the measure out of the
- * player's Budget (its lever on), agreeing keeps it; either is the player's vote on each measure the
- * card stands for, and pressing the pressed answer again takes it back, and the tile takes the
- * answer's colour. Under the buttons, the card's one figure: what disagreeing does to the money,
- * worked out by the engine on the Budget as it stands, as the bar at the top will say it.
+ * One of the Chancellor's decisions on the walk (ADR-0046), as a news site would set it (ADR-0048):
+ * what the Chancellor did, and the Treasury's own figure for it. "See more" opens what it means, the
+ * line of the Budget's table it comes from, and what removing it does to the player's money, worked
+ * out by the engine on the Budget as it stands, interest included. Approve keeps the measure and
+ * Remove takes it out of the player's Budget (its lever on); either is the player's vote on each
+ * measure the card stands for, and pressing the pressed answer again takes it back.
  */
 export function MeasureCard({
   card,
@@ -140,6 +154,8 @@ export function MeasureCard({
   delete rest[card.lever];
   const money = moneyOf({ ...rest, [card.lever]: 1 }) - moneyOf(rest);
   const investment = lever?.classification?.currentOrCapital === 'capital';
+  const lines = measures.map((m) => m.line);
+  const figure = linesFigure(scorecard, lines, year);
 
   async function answer(value: 1 | -1) {
     const pressed = value === 1 ? agreed : disagreed;
@@ -155,45 +171,64 @@ export function MeasureCard({
   }
 
   const id = `card-${card.lever}`;
+  const answered = agreed || disagreed;
   return (
     <li
       className={`mcard${disagreed ? ' mcard--disagreed' : agreed ? ' mcard--agreed' : ''}`}
       aria-labelledby={id}
     >
-      <h2 id={id} className="mcard__title">
-        {card.title}
-      </h2>
-      <p className="mcard__explain">{card.explain}</p>
+      <div className="mcard__body">
+        <h2 id={id} className="mcard__title">
+          {card.title}
+        </h2>
+        {figure ? (
+          <p className="mcard__figure">
+            {figure.words.charAt(0).toUpperCase() + figure.words.slice(1)}
+          </p>
+        ) : null}
+        <details className="mcard__more">
+          <summary>
+            {CARD_TEXT.more}
+            <span className="sr-only">: {card.title}</span>
+          </summary>
+          <div className="mcard__detail">
+            <p className="mcard__explain">{card.explain}</p>
+            <p className="mcard__money">
+              {moneyWords(money, year)}
+              {investment ? ` ${INVESTMENT_WORDS}` : ''}
+            </p>
+            <p className="mcard__source">
+              {CARD_TEXT.source
+                .replace('{budget}', budget.title)
+                .replace('{lines}', linesWords(lines))}
+            </p>
+          </div>
+        </details>
+      </div>
       <div className="mcard__answer" role="group" aria-label={`Your answer: ${card.title}`}>
         <button
           type="button"
-          className="btn mcard__button mcard__button--agree"
+          className="mcard__button mcard__button--agree"
           aria-pressed={agreed}
           disabled={busy}
           onClick={() => answer(1)}
         >
           <AnswerIcon value={1} />
-          {BOARD_TEXT.agree}
+          {CARD_TEXT.approve}
         </button>
         <button
           type="button"
-          className="btn mcard__button mcard__button--disagree"
+          className="mcard__button mcard__button--disagree"
           aria-pressed={disagreed}
           disabled={busy}
           onClick={() => answer(-1)}
         >
           <AnswerIcon value={-1} />
-          {BOARD_TEXT.disagree}
+          {CARD_TEXT.remove}
         </button>
-        {/* What everyone said, once the player has said it too (ADR-0047). */}
-        {tally && (agreed || disagreed) ? (
-          <span className="votes__counts">{agreeWords(tally)}</span>
-        ) : null}
       </div>
-      <p className={`mcard__money${disagreed ? ' mcard__money--chosen' : ''}`}>
-        {moneyWords(money, year)}
-        {investment ? ` ${INVESTMENT_WORDS}` : ''}
-      </p>
+      {/* What everyone said, once the player has said it too (ADR-0047). */}
+      {tally && answered ? <p className="mcard__tally">{agreeWords(tally)}</p> : null}
       <p role="status" className="votes__said">
         {said}
       </p>

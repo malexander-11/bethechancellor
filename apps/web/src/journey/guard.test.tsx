@@ -55,7 +55,6 @@ describe('the road runs one way', () => {
     // Every step needs a game (Phase 26); a link without one starts it at the walk's first page,
     // the link's measures in it, so the later steps wait.
     for (const path of [
-      '/',
       '/measures/income',
       '/balance',
       '/budget-day',
@@ -83,9 +82,9 @@ describe('the road runs one way', () => {
     const balance = at(`/balance?${BASE}&g=st.2_rd.3`);
     expect(h1('Balance your Budget')).toBeInTheDocument();
     balance.unmount();
-    // The site's own address is the walk's first page, the game kept as it was (ADR-0047).
+    // The site's own address is the landing page, the game kept as it was (ADR-0048).
     at(`/?${BASE}&g=st.2_rd.3`);
-    expect(h1(first)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(budget.chancellor.name);
   });
 
   it('opens the retired addresses and the old roads’ links on the stage that took their place', () => {

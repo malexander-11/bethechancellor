@@ -166,10 +166,11 @@ hr {
 
 /* ---------------------------------------------------------------- header */
 
-/* An app bar: white, the Commons green as a rule beneath it, the name and its mark (ADR-0047). */
+/* The masthead: white, a band of Commons green above and a hairline below, the name and its mark. */
 .site-header {
+  border-top: 4px solid var(--accent);
+  border-bottom: 1px solid var(--border);
   background: var(--surface);
-  border-bottom: 3px solid var(--accent);
   color: var(--ink);
 }
 
@@ -436,13 +437,13 @@ hr {
 
 /* --------------------------------------------------------- blocks and hints */
 
-/* A block of a screen: a white card on the ground (ADR-0047). */
+/* A block of a screen: a white panel with a hairline border (ADR-0048). */
 .doc {
   margin: 12px 0 0;
   padding: 16px;
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: var(--shadow);
 }
 
 @media (min-width: 640px) {

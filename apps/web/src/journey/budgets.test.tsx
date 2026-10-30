@@ -11,7 +11,7 @@ const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 // Insurance two points up: every screen renders in its working state, and the review and Budget
 // day have something to say.
 const GAME = 'g=st.2_rd.3&L=moj.10_b6hmrc.1_nicer.2';
-// Every measure on the walk disagreed with: each card's answer pressed and its money line said.
+// Every measure on the walk removed: each card's answer pressed.
 const DISAGREED = `g=st.2_rd.3&L=${budget.themes
   .flatMap((t) => t.cards.map((c) => `${c.lever}.1`))
   .join('_')}`;
@@ -26,10 +26,15 @@ const SPARE = 'g=st.1_rd.3&L=b6ai.1_nicer.2';
  */
 const CAP = {
   /**
+   * The landing page (ADR-0048): the headline and standfirst, three numbers, how it works, and the
+   * Budget's chart of the headroom since March.
+   */
+  analysis: 160,
+  /**
    * A page of the walk (ADR-0046, ADR-0047): a theme's cards, each heading, meaning, answer and its
    * one figure; on the first, the welcome's line above them.
    */
-  walk: 260,
+  walk: 120,
   /** The walk's last page: every measure no card asks about, a line and a tick or cross each. */
   smallPrint: 760,
   /**
@@ -48,8 +53,8 @@ const CAP = {
 
 /** Every screen of the main road with the game that renders it at its widest. */
 const ROAD: readonly { path: string; kind: keyof typeof CAP; game: string }[] = [
-  // The site opens on the walk's first page, with the welcome above it (ADR-0047).
-  { path: '/', kind: 'walk', game: '' },
+  // The site opens on its landing page (ADR-0048).
+  { path: '/', kind: 'analysis', game: '' },
   ...budget.themes.flatMap((t) => [
     { path: `/measures/${t.id}`, kind: 'walk' as const, game: GAME },
     { path: `/measures/${t.id}`, kind: 'walk' as const, game: DISAGREED },

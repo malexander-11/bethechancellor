@@ -21,11 +21,11 @@ export interface CardElement {
 
 /** The site's own colours (apps/web/src/styles/tokens.css); a test holds them to the tokens. */
 export const CARD_COLOURS = {
-  page: '#eef1ed',
+  page: '#f6f5f1',
   surface: '#ffffff',
-  ink: '#23262a',
-  ink2: '#56554e',
-  border: '#dbe1da',
+  ink: '#1b1b1a',
+  ink2: '#4f4e48',
+  border: '#dddbd2',
   brassInk: '#745a1f',
   accent: '#00644a',
   good: '#166a30',

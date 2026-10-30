@@ -39,11 +39,12 @@ export interface Screen {
 }
 
 /**
- * The road (ADR-0046): the walk through the measures a theme a page, which the site opens on
- * (ADR-0047), then the small print, the balance, the review and Budget day. Agreeing with
- * everything balances, so the primary buttons alone reach the end.
+ * The road (ADR-0046): the landing page (ADR-0048), the walk through the measures a theme a page,
+ * then the small print, the balance, the review and Budget day. Leaving every measure in balances,
+ * so the primary buttons alone reach the end.
  */
 export const JOURNEY: readonly Screen[] = [
+  { name: 'the Budget' },
   ...budget.themes.map((t) => ({ name: t.title, heading: t.title })),
   { name: 'the small print' },
   { name: 'balance', heading: stageTitle('balance') },

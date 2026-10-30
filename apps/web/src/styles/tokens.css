@@ -1,8 +1,8 @@
 /*
- * A Westminster skin (ADR-0023), made an app (ADR-0047): white cards on a soft green-grey ground,
- * charcoal ink, House of Commons green as the one working colour, a restrained brass for small
- * labels, and Budget red kept for the Budget itself and for a measure disagreed with. Editorial
- * headings in Fraunces; the reader's own sans for everything else, as an app on their device is.
+ * A Westminster skin (ADR-0023), set as a news site's interactive (ADR-0048): white panels with
+ * hairline borders on a near-white ground, near-black ink and black section rules, House of
+ * Commons green as the one working colour, and Budget red kept for the Budget itself and for a
+ * measure removed. Editorial headings in Fraunces; the reader's own sans for everything else.
  *
  * Every text-on-ground pairing below is at or above 4.5:1 in both themes. Brass is a rule and a
  * small-caps label colour; where it carries words it is the darker `--brass-ink`. Chart series
@@ -12,20 +12,22 @@
 :root {
   color-scheme: light;
 
-  /* Surfaces: white cards on a soft ground */
-  --page: #eef1ed;
+  /* Surfaces: white panels on a near-white ground */
+  --page: #f6f5f1;
   --surface: #ffffff;
-  --surface-2: #f4f6f3;
+  --surface-2: #efeee8;
 
-  /* Text: charcoal */
-  --ink: #23262a;
-  --ink-2: #56554e;
-  --muted: #605e56;
+  /* Text: near-black */
+  --ink: #1b1b1a;
+  --ink-2: #4f4e48;
+  --muted: #5d5c55;
 
-  /* Rules */
-  --border: #dbe1da;
-  --grid: #e6ebe5;
+  /* Rules: hairlines, and the black rule over a section */
+  --border: #dddbd2;
+  --border-strong: #c3c1b6;
+  --grid: #e7e5dd;
   --axis: #b1a78d;
+  --rule: #1b1b1a;
 
   /* Commons green: links, buttons, focus, the current step */
   --accent: #00644a;
@@ -65,11 +67,11 @@
   --series-policy-wash: rgba(15, 127, 95, 0.14);
 
   --focus: var(--accent);
-  --radius: 12px;
-  --radius-sm: 8px;
+  --radius: 6px;
+  --radius-sm: 4px;
   --radius-pill: 999px;
-  --shadow: 0 1px 2px rgba(20, 32, 26, 0.06), 0 4px 14px rgba(20, 32, 26, 0.07);
-  --shadow-up: 0 -1px 2px rgba(20, 32, 26, 0.05), 0 -4px 14px rgba(20, 32, 26, 0.07);
+  --shadow: 0 1px 3px rgba(20, 20, 18, 0.08);
+  --shadow-up: 0 -1px 3px rgba(20, 20, 18, 0.08);
 
   /* The reader's own sans for the body and the controls; Fraunces, self-hosted and OFL, for the headings */
   --font:

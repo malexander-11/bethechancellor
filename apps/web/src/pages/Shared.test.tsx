@@ -84,9 +84,10 @@ describe('a shared Budget’s page (ADR-0044)', () => {
     expect(href).toMatch(/^\/\?/);
     expect(new URLSearchParams(href.split('?')[1]).get('L')).toBeNull();
     fireEvent.click(play);
-    expect(
-      screen.getByRole('heading', { level: 1, name: theBudget.themes[0]?.title }),
-    ).toBeVisible();
+    // The landing page, which names the Chancellor and asks the question (ADR-0048).
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(
+      theBudget.chancellor.name,
+    );
   });
 
   it('opens the Budget in the game, at Budget day', () => {
