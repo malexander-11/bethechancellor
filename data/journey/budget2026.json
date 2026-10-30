@@ -4,11 +4,11 @@
   "title": "The Budget, 28 October 2026",
   "deliveredOn": "2026-10-28",
   "chancellor": {
-    "name": "James Murray",
+    "name": "John Healey",
     "source": {
-      "sourceId": "hmt-budget-2026-document",
-      "quote": "as laid before the House of Commons by the Chancellor of the Exchequer when opening the Budget. James Murray His Majesty’s Treasury 28 October 2026",
-      "note": "The signature on the Budget report’s title page."
+      "sourceId": "hmt-budget-2026-speech",
+      "quote": "as delivered by Chancellor John Healey",
+      "note": "The Budget speech's page on gov.uk, from \"HM Treasury and The Rt Hon John Healey MP\", delivered on 28 October 2026."
     }
   },
   "scorecard": "hmt-budget-2026-table-6-1",

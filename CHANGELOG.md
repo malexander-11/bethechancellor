@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The Budget names the Chancellor who delivered it, John Healey, on the Budget speech's own page.
+  The report's title page, which the data had read, is signed by the Treasury minister who lays it
+  before the House.
 - ADR-0045 records the Chancellor's Budget as the baseline, the three-step road, the measures as
   levers and the votes, and what it supersedes; methodology §39 says how a tweak is priced, where
   the page's figures come from and what the votes keep; the READMEs describe the game and the data

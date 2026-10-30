@@ -140,6 +140,16 @@
       "notes": "Print PDF at https://assets.publishing.service.gov.uk/media/6ae20b9039d29f3f9b9b3f55/E03668986_HMT_Budget_2026_TEXT_PRINT__1_.pdf, whose pages are cited. Chart 1.6 (p. 19), \"Change in stability rule headroom since March 2026 forecast\": £23.6 billion in March 2026, −£12.0 billion from underlying debt interest forecast changes, +£0.9 billion from other underlying forecast changes, £12.5 billion before measures, +£2.0 billion from the effect of policy, £14.5 billion in October 2026. Paragraph 1.22 (p. 19): \"The current budget surplus of £15 billion compares with a £4 billion third-year current budget surplus forecast at Budget 2025.\" Paragraph 1.24 (p. 19): \"overall, policies at this Budget do not add to borrowing over the forecast\"."
     },
     {
+      "id": "hmt-budget-2026-speech",
+      "org": "HMT",
+      "title": "Budget 2026 speech",
+      "url": "https://www.gov.uk/government/speeches/budget-2026-speech",
+      "publishedOn": "2026-10-28",
+      "retrievedOn": "2026-10-30",
+      "licence": "OGL-3.0",
+      "notes": "Fetched 2026-10-30. The page's subtitle: \"as delivered by Chancellor John Healey\"; its From line: \"HM Treasury and The Rt Hon John Healey MP\"; delivered on 28 October 2026. The Budget report's title page is signed by the Treasury minister who lays it before the House, not by the Chancellor."
+    },
+    {
       "id": "hmt-sr25-del-tables",
       "org": "HMT",
       "title": "Spending Review 2025: unrounded departmental Resource DEL, Capital DEL and Total DEL tables",
