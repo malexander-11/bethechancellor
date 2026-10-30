@@ -1603,3 +1603,56 @@ the rules: the filter, the reports, the limits and what is kept.
   and where to ask for an entry to be taken down.
 - **Not open.** Until its database is connected the leaderboard says it is not open yet, and the
   game, the picture and the shared page work as before.
+
+## 39. The Chancellor's Budget as the baseline (ADR-0045)
+
+On 2026-10-30 the user asked for the game to become an analysis of the Budget of 28 October 2026
+that people can tweak and vote on. ADR-0045 records the choices; this section says what the numbers
+do.
+
+- **The baseline.** Every game plays on the OBR's October 2026 forecast (`obr-2026-10`), which has
+  the Budget's measures in it, as every forecast has the decisions before it. "Nothing moved" is the
+  Chancellor's Budget, and the headroom it starts from is the OBR's own: the vintage's check pins
+  it, and `baseline.reproduce` proves the typing. The context carries no readings, so there is no
+  estimate to make and no suggestion to drop a link's settings for; a link's `M=` is read, noted and
+  dropped.
+- **A measure as a lever.** Each movable measure is a toggle whose default, 0, is the Chancellor's
+  setting; switched on, it reverses the measure. Its costing is a `schedule`: minus the summed
+  scorecard lines it cites, year by year, so a reversal gives back exactly what the Treasury costed
+  and no more. The engine scales a costing by the lever's value and skips a lever at its default, so
+  nothing is added to the baseline for a measure left alone, and every price, verdict, rating and
+  household reads from the Budget as delivered. A reversal is read everywhere as the `rv*` levers of
+  the March baseline were (§25), and the reception counts it among the reversals.
+- **When a measure moves.** The vintage names `policyStart`, the first April after its fiscal event
+  (2027-28), as the first year any lever takes effect; a schedule's earlier years are zeroed, so an
+  in-year line can never be reversed, which is why those measures are not offered. A measure over
+  before the target year moves the headroom there not at all; its price names the year it does move
+  ("nothing in 2029-30; raises £0.8bn in 2027-28") when that year's move is more than half as big
+  again as the target year's, so a choice never reads as changing nothing.
+- **Which measures move.** Every line of £100m or more in 2029-30 and a few headline ones under it,
+  unless its reversal cannot take effect; the rest are listed in plain words and voted on but not
+  moved, and the Budget file says why where a reader would expect otherwise (`notMovable.reason`).
+  The validator holds each movable measure to a live lever on the fine-tuning screens costed from
+  that line of the extracted scorecard, so the page's figure and the lever's price are one number.
+- **The story's figures.** The analysis page types no figure. The steps of the margin since the last
+  forecast are published facts quoted from the Budget document and held in the Budget file; the
+  validator checks that they add up (the March margin, less the cost of borrowing, plus the other
+  changes, gives the margin before the measures; that plus the measures' effect gives the headroom
+  the vintage reproduces, within its tolerance). Everything else is the engine's on the untouched
+  Budget: the headroom, the two fiscal rules' verdicts, what the tax and spending measures do by the
+  target year, and the welfare cap, which the OBR assesses as missed by £2.8bn before any measure,
+  so the untouched Budget reads "meets both fiscal rules, but misses the welfare cap".
+- **Naming a Budget.** A shared Budget is named by how far it changed the Chancellor's: unchanged,
+  one change, or the count of levers moved. The picture, the shared page and the leaderboard say the
+  same.
+- **Votes.** One a device on each measure, for or against, kept in `measure_votes` keyed on the
+  measure's id and the device's hash, limited by network as the leaderboard's votes are and
+  forgotten with them after a month. The tallies are counted when asked, one statement over the
+  table, and carry nothing of the reader, so they may be cached for a minute; without a database the
+  page says voting is not open yet. A vote is a count and nothing else: no tally enters the
+  arithmetic, the reception or the picture.
+- **Old links.** A link written on this road carries `rd.2`. One without it is read on the six-stage
+  road and its stage mapped onto the three steps; a seven-stage link goes through the older map
+  first; the priorities a link carries are dropped. A link made on the March forecast opens on
+  October's data with any retired code dropped and the estimate's settings noted, as any link
+  reopens on the data the game ships.

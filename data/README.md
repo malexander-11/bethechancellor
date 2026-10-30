@@ -15,14 +15,13 @@ vintages/<id>/vintage.json  one OBR forecast: years, economy, fiscal aggregates,
 rules/<id>.json           a Charter for Budget Responsibility rule set
 levers/<category>/*.json  policy levers (tax, spend, welfare) and the economy's assumptions (macro)
 reference/*.json          non-forecast reference numbers (e.g. UK households)
-context/<yyyy-mm>.json    dated readings: the OBR's assumptions against the latest figures, with
-                          the suggestion rules that make today's estimate (ADR-0025)
+context/<yyyy-mm>.json    the context: what was decided since the forecast, the in-tray, and two
+                          published figures kept for the record (readings retired, ADR-0045)
 journey/advisers.json     the adviser roles (titles, remits, steps)
-journey/pm.json           the Prime Minister: the eight priorities, the manifesto red lines
-journey/options.json      the ways to deliver each priority (ADR-0022)
+journey/pm.json           the Prime Minister: the promises and red lines, and the sign-off
+journey/budget2026.json   the Budget the game starts from: its story, facts and measures (ADR-0045)
 journey/finetune.json     the fine-tuning screens: every lever, in decisions (ADR-0035, ADR-0037)
 journey/ministers.json    a minister's lines for every spending and welfare lever
-journey/interventions.json the review's line on a priority short of delivery
 journey/households.json   five household archetypes and the levers that touch them
 journey/incidence.json    who each lever falls on
 journey/reception.json    Budget day: three audiences, their rules, bands, points and caps (ADR-0013)
@@ -48,11 +47,15 @@ derived/                  pipeline outputs (regenerated in CI and compared with 
 
 ## Rebasing to a new forecast
 
-Create `vintages/<new-id>/vintage.json`, run `npm run validate:data`, update the default vintage in
-the web app, and keep the old vintage so existing permalinks still render. Re-read the two figures
-the briefing states (the context file's `briefing`, below): HM Treasury revises the Debt Management
-Office's remit at every fiscal event, so the gilt sales change with the Budget, and the validator
-refuses gilt sales for any year but the one the context is dated in.
+Create `vintages/<new-id>/vintage.json` with its `policyStart` (the April after its fiscal event,
+the first year any lever takes effect), run `npm run validate:data`, change the default vintage in
+the pipeline's dataset and the engine's test fixtures, and keep the old vintage so existing
+permalinks still render. Every lever derived from a published figure is re-derived on the new series
+and the validator names each mismatch; a lever whose base year is an outturn the new vintage no
+longer prints needs that year carried over, marked provisional, as 2024-25 was in October 2026.
+Write the new context file (every context is held to the default vintage) and the Budget file the
+game starts from (`journey/budget2026.json`, below), whose facts quote the Budget document and whose
+measures join the scorecard the pipeline extracts from it.
 
 ## Authoring a lever
 
@@ -103,12 +106,12 @@ refuses gilt sales for any year but the one the context is dated in.
 - **The lever's noun.** `noun`, in lower case ("the basic rate of income tax", "the health budget"):
   how a Budget-day reason names its causes after "Because of".
 - **Two levers that count the same money.** An interaction with `severity: "excludes"`, authored
-  once per pair (the validator checks): only one can be chosen at a time. The flagship screens offer
-  a swap; on step 4 ticks that a decision declares a set are one choice among radios
-  (`alternatives`, below), and anywhere else choosing one takes the other out and says so first
-  (ADR-0036, ADR-0038). The text must read from either card and in either direction (Phase 26), each
-  sentence at most twenty words, since it leads a card. A link that carries both still opens, and
-  each card says it is counted twice. `info` and `warn` remain notes.
+  once per pair (the validator checks): only one can be chosen at a time. Ticks that a decision
+  declares a set are one choice among radios (`alternatives`, below), and anywhere else choosing one
+  takes the other out and says so first (ADR-0036, ADR-0038). The text must read from either card
+  and in either direction (Phase 26), each sentence at most twenty words, since it leads a card. A
+  link that carries both still opens, and each card says it is counted twice. `info` and `warn`
+  remain notes.
 
 - **Scorecard-backed toggles.** A `linearPerUnit` toggle may cite `hmtScorecard` lines from any
   extracted scorecard (Budget 2026, Budget 2025 or Autumn Budget 2024) by `sourceId`; `perUnit` is
@@ -118,11 +121,17 @@ refuses gilt sales for any year but the one the context is dated in.
   so in its caveats and sits in its tax group beside the certified rows (ADR-0017).
 - **Vintage-series lookup points.** `points[].from.vintageSeries` ("receiptsByTax.inheritanceTax")
   with a `multiplier`; checked against the vintage.
-- **Context readings** that name a `leverCode` need a `suggestion` rule (`gap` or `authored`).
-- **Today's estimate** (ADR-0025) is the `gap` rule run over every reading that names a `leverCode`,
-  with the `authored` rule for growth: the one economy every game plans on. The published forecast
-  ranges (`reading.alternatives`) and the forecast cards (`context.scenarios`) that Phases 7 to 23
-  read are retired, and the schema no longer accepts them.
+- **The Chancellor's measures** (`b6*`, ADR-0045) are toggles whose default, 0, is the Budget as
+  delivered; on, each reverses its measure. The costing is a `schedule` whose effect is minus the
+  summed lines it cites from the extracted scorecard (`costing.rawSource.hmtScorecard`, lines by
+  number with their titles as extracted), so the validator can check the sum; `baselinePolicy` and
+  the `hmt-costing` consideration cite the policy costings document by page. One file a measure,
+  `levers/<category>/budget-2026-<slug>.json`, with a minister, an incidence tag and a household for
+  each spending one. A measure the Budget overtook is shelved: `deprecated: true`, group "Shelved",
+  the one shared headline, its costing kept so old links still work.
+- **No readings.** The context carries no readings since ADR-0045: the forecast is the estimate, and
+  a link's own economic settings are dropped with a note. The schema accepts an empty list and
+  nothing more.
 
 ### Spending levers
 
@@ -240,9 +249,9 @@ burden"), which is how a card names it on the other side of its rating: "Counted
 · Borrowing". A band may carry `alsoWhen: { measure, above }`: it also applies when a second reading
 passes a threshold, as cuts to health and schools count from £2bn inside the public's rule on
 service cuts; the points, cap and words stay the band's own. A band may vary its words on a second
-reading (`variants`). Readings are measured from before the Budget (today's estimate with nothing
-moved), and the placeholders now include `{typicalError}`, `{payers}`, `{feltHow}`, `{protected}`,
-`{protectedCut}`, `{cutServices}` and `{year}`.
+reading (`variants`). Readings are measured from before the Budget (the Chancellor's Budget with
+nothing moved), and the placeholders now include `{typicalError}`, `{payers}`, `{feltHow}`,
+`{protected}`, `{protectedCut}`, `{cutServices}` and `{year}`.
 
 Bands describe what an audience watches and cite the evidence. They never predict a market move or a
 vote; they say what a judgement leans on.
@@ -250,8 +259,7 @@ vote; they say what a judgement leans on.
 ### The rules' plain names (`data/rules/*.json`)
 
 Each rule carries a `shortName`, the plain name the game uses on screen ("the day-to-day rule", "the
-debt rule", "the welfare cap"), carried into every rule verdict (Phase 25). The briefing's fold ties
-it to the Charter's own name.
+debt rule", "the welfare cap"), carried into every rule verdict (Phase 25).
 
 ### Decisions since the forecast (`data/context/*.json`)
 
@@ -267,33 +275,30 @@ characters; `{cost}` in it is the named lever's own figure in the target year, f
 `leverCode` names the lever that deals with it, so the review can list the items a Budget leaves as
 they are; the validator refuses an unknown lever.
 
-`briefing` (Phase 28, ADR-0030) holds the two published figures the briefing states, as data so a
-rebase re-reads them: `averageHeadroom { gbpm, since, source }`, the average margin Chancellors have
-left against their rules (the OBR's record), and `giltSales { gbpm, year, source }`, the gilts the
-government plans to sell in a fiscal year (HM Treasury's remit for the Debt Management Office). Each
-source names its paragraph and page and must quote the passage the figure is read from; the
-validator refuses a figure that quotes nothing, and gilt sales for any year but the one `asOf` falls
-in, since the page says "this year". The briefing's words are not data: they are templates in
-`apps/web/src/journey/briefingWords.ts`, with no figure typed in them and no glossary word marked.
+`briefing` (Phase 28, ADR-0030) holds two published figures the briefing stated while there was one;
+since ADR-0045 no screen shows them, and they are kept for the record:
+`averageHeadroom { gbpm, since, source }`, the average margin Chancellors have left against their
+rules (the OBR's record), and `giltSales { gbpm, year, source }`, the gilts the government plans to
+sell in a fiscal year (HM Treasury's remit for the Debt Management Office). Each source names its
+paragraph and page and must quote the passage the figure is read from; the validator refuses a
+figure that quotes nothing, and gilt sales for any year but the one `asOf` falls in.
 
 ### The guide and the glossary (`data/journey/guide.json`, `glossary.json`)
 
-One guide entry per step, with the cover and the briefing each their own: `step`, `number` (one to
-six; the cover and the briefing share the first), `title` (the page's heading, unless the page names
-itself, as each priority screen does) and `now`, the one line under it saying what to do, at most
-ten words on the road. A word in square brackets, `[headroom]` or `[the OBR](obr)`, is a glossary
-reference and must exist in `glossary.json`; the policy cards' tags read the glossary too. Guide and
-glossary are chrome: no badge, and no figure unless the glossary entry carries a source. (The
-`doing`, `why` and `terms` fields, and the "Why this matters" fold they filled, went in Phase 23.)
+One guide entry per step, and one for the Budget the game starts from (`start`, which shows no
+number and no road): `step`, `number` (one to three), `title` (the page's heading) and `now`, the
+one line under it saying what to do, at most ten words on the road. A word in square brackets,
+`[headroom]` or `[the OBR](obr)`, is a glossary reference and must exist in `glossary.json`; the
+policy cards' tags read the glossary too. Guide and glossary are chrome: no badge, and no figure
+unless the glossary entry carries a source. (The `doing`, `why` and `terms` fields, and the "Why
+this matters" fold they filled, went in Phase 23.)
 
-### Priorities and options (`data/journey/pm.json`, `options.json`, ADR-0022)
+### The Prime Minister (`data/journey/pm.json`, ADR-0022)
 
-`pm.json` names eight `priorities`: `id`, `title` and `noun` (at most forty characters each), a
-plain `purpose`, the PM's `pitch` and `reaction`, and the `lead` (an adviser's or a minister's role,
-as the data names it), with sources. Each `promise` has `breaks`, the levers that break its words,
-and may have `strains` (Phase 23): the levers that keep its words and test its spirit, each with a
-line saying why; the game marks a strain amber and a break red, and a lever is in one list or the
-other, never both. Since Phase 25 (ADR-0026) a promise also carries:
+`pm.json` names the government's `promises`, with sources. Each `promise` has `breaks`, the levers
+that break its words, and may have `strains` (Phase 23): the levers that keep its words and test its
+spirit, each with a line saying why; the game marks a strain amber and a break red, and a lever is
+in one list or the other, never both. Since Phase 25 (ADR-0026) a promise also carries:
 
 - `noun`, in lower case, for running sentences ("I accepted breaking the tax lock");
 - `tag`, its short name on a lever's resting tag, at most 24 characters ("Tax lock: no rise");
@@ -306,45 +311,33 @@ other, never both. Since Phase 25 (ADR-0026) a promise also carries:
   by no audience, because another rule already counts it: a cut to health strains England's 18-week
   target, and the public's rule on service cuts counts the cut.
 
-A priority may carry `reach` (Phase 25): commentary, sourced, saying once on its flagship screen
-where its spending reaches when that is not the whole UK ("Health and care budgets here are
-England's…").
-
 `pm.json` also carries `signOff`: four lines the Prime Minister signs the review off with, chosen by
 first match (`rulesMissed`, with `{rules}`; `brokenWithRoom`, `broken` and `strained`, with
 `{promises}`). Each is a `SimulatedLine` of twenty words or fewer with no figure: the schema refuses
-either. `options.json` holds one list, the ways to deliver (the ways to afford and the add-ons went
-in Phase 24; the ways to pay are now levers on the fine-tuning screens, below). Every option's
-`values` is a bundle of one or two levers at stated values: codes that exist and are not deprecated
-or macro, values inside the control's range and on its grid, none the default. Rules the validator
-enforces:
+either. The priorities, the ways to deliver them and the review's lines on a priority short of
+delivery went with the Chancellor's Budget as the starting point (ADR-0045).
 
-- **No lever in more than one option**, so an option's state (on, adjusted, off) is read from the
-  levers alone, is never ambiguous, and no screen can light or undo another's option.
-- **An option may name the options it counts the same money as**: `conflicts: [{ with, text }]`,
-  `with` another option's id, `text` the reason in at most two hundred characters, best quoted from
-  the levers' own interactions. Author each pair once, on one side; never on the option itself;
-  never for an unknown id. While one is in the Budget the other's card is blocked and says why.
-  Softer overlaps need no authoring: they are the levers' `interactions`, read from either side,
-  named on the card before either option is chosen and quoted once the other moves.
-- **Every priority has two to five ways to deliver it** (`deliver[].priority`); safer streets has
-  two because the game has only two levers there, and its brief says so.
-- **Every option says whether it delivers its priority in full or makes a start** (`scale`, Phase
-  25): `{ kind: "full" | "start", why, sources, badge: "simulated" }`, the reason in at most 140
-  characters. Every priority keeps at least one way to deliver it in full, which the schema checks.
-  A priority with only starts in the Budget reads "started"; only a full delivery scores.
-- **Every option carries one adviser's line** (`advice`, Phase 23): a `SimulatedLine` of at most
-  twelve words with an `adviser` id who speaks on that screen and at least one source, saying who
-  proposed it and one plain judgement of its cost and effect. No figure is typed; "big" (or
-  expensive, large, costly) may be said only where the engine's own figure for the option is £5bn or
-  more in the target year, "small" (cheap, little, modest, tiny) only at £1bn or less, and the words
-  test checks both. Titles are unique.
-- **The words are the proposer's** (`line`, a `SimulatedLine` with a `short`); the figure is never
-  authored: the page prices the bundle with the engine against the Budget as it stands, and shows
-  the headroom the move would leave. Titles say what the option does, in at most twelve words and
-  eighty characters.
-- **One or two ways a priority are on the advisers' shortlist** (`shortlist: true`, Phase 27), the
-  ones basic mode shows; see the shortlist's rules below.
+### The Chancellor's Budget (`data/journey/budget2026.json`, ADR-0045)
+
+The Budget the game starts from, as the analysis page tells it: `title`, `deliveredOn`, the
+`chancellor` (the one place a person is named, with a source that quotes it), the `scorecard` its
+measures join to (the source id of an extracted scorecard), `facts`, `story` and `measures`.
+
+- **Facts** are the published steps of the margin since the last forecast, £ million, each with a
+  source that quotes the passage it is read from: the margin in March, what debt interest took, the
+  other changes, the margin before the measures and what the measures did to it. The validator
+  checks the arithmetic: the first three give the fourth, and the fourth plus the fifth gives the
+  headroom the vintage's check pins, within its tolerance.
+- **The story** is lines of plain words with `{placeholders}` the page fills from the facts and the
+  engine (`march`, `debtInterest`, `other`, `before`, `measures`, `headroom`, `welfareGap`, `tax`,
+  `spending`, `year`), each with sources; no figure is typed, and the validator refuses a
+  placeholder the page has no fill for.
+- **The measures** list every line of the scorecard once: `id` (`m` and a number, unique; the line's
+  number by convention), `line`, `plain` (one or two sentences of at most 200 characters, held to
+  the readability test), and either `leverCode`, the lever that reverses it, or nothing, with
+  `notMovable.reason` where a reader would expect to move it. A lever named must exist, be live, be
+  on the fine-tuning screens and be costed from that line of that scorecard, and the pipeline checks
+  that the list and the extract are the same list.
 
 ### Fine-tuning (`data/journey/finetune.json`, ADR-0025, ADR-0027, ADR-0035)
 
@@ -380,11 +373,10 @@ enforces:
 - **Ticks that contradict each other in a decision may be one choice** (`alternatives`, ADR-0036). A
   decision may list sets `{ name, codes }`, each two to four of its ticks, named for the question
   the set answers (“The wealth tax”, at most 60 characters). Every member excludes every other
-  member and nothing outside the set, none is set by a flagship, the members sit side by side in the
-  decision’s order, and no tick is in two sets. The screen draws a set as radios with “As planned”
-  first. Whether a pair is a set is the data's choice (ADR-0038): a pair left as ticks, like taxing
-  leavers' gains and taxing them with gains at death, or a pair a flagship sets, is taken out
-  instead.
+  member and nothing outside the set, the members sit side by side in the decision’s order, and no
+  tick is in two sets. The screen draws a set as radios with “As planned” first. Whether a pair is a
+  set is the data's choice (ADR-0038): a pair left as ticks, like taxing leavers' gains and taxing
+  them with gains at death, is taken out instead.
 - **Each choice has a name of its own in its decision**: no two items in one decision share a short
   name.
 - **The adviser exists and speaks on this step** (`finetune` in `advisers.json`).
@@ -414,28 +406,6 @@ A side may carry `notes` (Phase 25): lines under the screen's lead that its 120 
 hold, such as how long the spending settlements run, each `{ text, badge, sources }` with the text
 at most 160 characters and its own badge.
 
-### The advisers' shortlist (`shortlist`, Phase 27, ADR-0028)
-
-Basic mode, a first game's, shows only the best ways to deliver each priority on step 3: those
-marked `"shortlist": true`. Step 4 has no shortlist and shows every policy (ADR-0041). "Best" is a
-judgement, badged Game judgement on the screen, and each pick's reason is its own adviser line;
-these rules keep it checkable, and `validate:data` names each way a pick can break them:
-
-- **Counts by the stability rule's target year**: no earliest start after it.
-- **On the table**: no lever tagged not on the table.
-- **Breaks no promise**, every promise in `pm.json`. A strain is allowed, and its card still shows
-  it.
-- **Never two that count the same money**: no option conflict among the ways basic mode shows (the
-  picks, and any way that moves a lever already on the desk, the context file's `inTray`), and no
-  `excludes` pair among the picks' levers.
-- **How many.** One or two picks a priority, at least one of which delivers it in full.
-- **Every lever on the desk is on step 4**, where every policy is on show, and step 3's basic mode
-  shows any way that moves one, so the briefing never points at something hidden.
-
-One more rule needs the engine, so the tests hold it: on today's estimate, every pick moves the
-target year's headroom by £1bn or more, priced as its card prices it (interest included, and a move
-made only of investment priced on the debt rule).
-
 ### Households and who pays (Phase 25, ADR-0026)
 
 - **Households** (`households.json`). Each household names its `exposure`: the incidence groups
@@ -443,9 +413,10 @@ made only of investment priced on the debt rule).
   `untouched` line only when nothing in those groups moved. When something did and none of its own
   touches fired, it says the file's `unnamed` line ("Nothing aimed at us by name that we could
   see."), so a tax rise on everyone is never "untouched". `reachesNone` lists the levers that reach
-  none of the five by name (the bank levies, defence, a wealth tax on the very top); every step-4
-  and flagship lever touches a household or is on it, a test checks it, and the validator refuses a
-  code on the list that a household is touched by, or an exposure group that does not exist.
+  none of the five by name (the bank levies, defence, a wealth tax on the very top); every lever on
+  the fine-tuning screens touches a household or is on it, a test checks it, and the validator
+  refuses a code on the list that a household is touched by, or an exposure group that does not
+  exist.
 - **Who pays** (`incidence.json`). A paying group carries `felt`, the words that follow "felt" in a
   sentence ("in pay packets and prices", "through pay and prices"), at most sixty characters and no
   figure. `notFelt` lists the taxes most households do not feel: levies on banks, on energy

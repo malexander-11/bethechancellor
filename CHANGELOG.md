@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- ADR-0045 records the Chancellor's Budget as the baseline, the three-step road, the measures as
+  levers and the votes, and what it supersedes; methodology §39 says how a tweak is priced, where
+  the page's figures come from and what the votes keep; the READMEs describe the game and the data
+  as they are now, the Budget file's rules and the measure levers' conventions among them.
 - The public votes on the Chancellor's measures (ADR-0045): every measure on the Budget page takes a
   vote for or against, one a device, with the counts in words, kept by the leaderboard's server in a
   table of its own and tallied when asked. A device's vote is remembered in its browser beside its
