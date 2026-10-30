@@ -5,6 +5,9 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The end-to-end suite's leaderboard tests pass in CI again: tsx 4.23.13 tagged Node's own modules
+  with its namespace when PGlite required them under a newer Node, so the preview's database could
+  not open and every post answered "down"; tsx 4.23.15 leaves them alone.
 - The defence plan's gap is shelved: the Budget funded it by moving capital to defence (Table 6.1
   line 41), which is the lever now, so funding the gap again would count the same money twice. Old
   links that fund it still work; the lever is off the spending screen and out of the minister,
