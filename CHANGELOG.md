@@ -5,6 +5,10 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The end-to-end test of a shared Budget's "Make your own Budget" link checks where it lands now:
+  the first page of measures, a fresh game with none of the shared Budget's choices. It had waited
+  for the site's own address, which since the game opens straight on the measures (ADR-0047)
+  redirects at once, so it failed whenever the redirect beat it, as it did in CI.
 - The game looks and works like an app, with fewer words on every screen (ADR-0047). White cards sit
   on a soft green-grey ground under a white bar with the Budget box beside the name, and the body is
   set in the reader's own sans, Fraunces staying for the headings. The money stays at the top of the
