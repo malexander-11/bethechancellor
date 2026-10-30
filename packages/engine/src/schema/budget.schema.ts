@@ -28,6 +28,35 @@ export const budgetMeasureSchema = z.strictObject({
   notMovable: z.strictObject({ reason: z.string().min(1).max(160) }).optional(),
 });
 
+/** A sum in billions: the money on a card is the scorecard's and the engine's, never typed. */
+const BILLIONS = /£\s?[\d.,]+\s?bn|\bbillions?\b/i;
+
+/**
+ * One of the Chancellor's decisions as the walk asks about it (ADR-0046): the lever that reverses
+ * it, what the Chancellor did in a heading, and what that means in a few plain sentences. A lever
+ * that reverses several lines is one card. The figure beside it is read from the scorecard, so the
+ * words name no sum in billions.
+ */
+export const budgetCardSchema = z.strictObject({
+  lever: z.string().min(1),
+  /** What the Chancellor did, as a heading: "Savings interest taxed two points more". */
+  title: z.string().min(1).max(60),
+  /** What it means, in one to three short sentences, held to the readability test. */
+  explain: z
+    .string()
+    .min(1)
+    .max(280)
+    .refine((text) => !BILLIONS.test(text), 'a card names no sum in billions'),
+});
+
+/** A page of the walk: a theme, a line saying what it covers, and its cards, a few at a time. */
+export const budgetThemeSchema = z.strictObject({
+  id: slug,
+  title: z.string().min(1).max(40),
+  lead: z.string().min(1).max(140),
+  cards: z.array(budgetCardSchema).min(1).max(8),
+});
+
 /**
  * The Budget the game starts from (ADR-0045): the one place a person is named, the scorecard its
  * measures join to, the published steps of the margin, the story in plain words with the figures
@@ -53,8 +82,26 @@ export const budgetFileSchema = z
       .array(z.strictObject({ text: z.string().min(1), sources: z.array(sourceRefSchema).min(1) }))
       .min(1),
     measures: z.array(budgetMeasureSchema).min(1),
+    /** The walk (ADR-0046): every measure a player can reverse, on one card of one theme. */
+    themes: z.array(budgetThemeSchema).min(1).max(8),
   })
   .superRefine((file, ctx) => {
+    const themes = new Set<string>();
+    const carded = new Set<string>();
+    file.themes.forEach((theme, t) => {
+      if (themes.has(theme.id))
+        ctx.addIssue({ code: 'custom', message: `two themes ${theme.id}`, path: ['themes', t] });
+      themes.add(theme.id);
+      theme.cards.forEach((card, c) => {
+        if (carded.has(card.lever))
+          ctx.addIssue({
+            code: 'custom',
+            message: `${card.lever} is on two cards`,
+            path: ['themes', t, 'cards', c, 'lever'],
+          });
+        carded.add(card.lever);
+      });
+    });
     const ids = new Set<string>();
     const lines = new Set<number>();
     file.measures.forEach((m, i) => {

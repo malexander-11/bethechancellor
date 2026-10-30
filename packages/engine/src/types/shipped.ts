@@ -1,5 +1,6 @@
 import type {
   AdvisersFile,
+  BalanceFile,
   BudgetFile,
   ContextFile,
   FinetuneFile,
@@ -42,6 +43,8 @@ export interface ShippedDataset {
   glossary: GlossaryFile;
   /** The Budget the game starts from (ADR-0045), and the scorecard its measures join to by line. */
   budget: BudgetFile;
+  /** The balance page's two menus (ADR-0046). */
+  balance: BalanceFile;
   scorecard: ScorecardExtract;
   levers: Lever[];
 }

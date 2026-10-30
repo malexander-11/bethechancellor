@@ -13,6 +13,7 @@ import {
   parseGuide,
   parseGlossary,
   parseBudget,
+  parseBalance,
   parseReception,
   parseHmrcExtract,
   parseHouseholds,
@@ -72,6 +73,7 @@ export function loadDataset(): Required<Dataset> {
     guide: parseGuide(readJson('journey/guide.json')),
     glossary: parseGlossary(readJson('journey/glossary.json')),
     budget: parseBudget(readJson('journey/budget2026.json')),
+    balance: parseBalance(readJson('journey/balance.json')),
     reception: parseReception(readJson('journey/reception.json')),
   };
 }

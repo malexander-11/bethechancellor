@@ -16,6 +16,7 @@ import {
 import { takesOutWords } from '../components/LeverControl';
 import { INVESTMENT_NOTE, RELIEF_NOTE } from '../components/LeverRow';
 import {
+  balance,
   budget,
   electorate,
   finetune,
@@ -197,4 +198,13 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     ),
     ...budget.measures.flatMap((m) => [m.plain, ...(m.notMovable ? [m.notMovable.reason] : [])]),
   ],
+  // The walk through the measures (ADR-0046): each theme's title and lead, and each card's heading
+  // and what it means.
+  'the measures': budget.themes.flatMap((t) => [
+    t.title,
+    t.lead,
+    ...t.cards.flatMap((c) => [c.title, c.explain]),
+  ]),
+  // The balance page's menus (ADR-0046): what each option is and what one press does.
+  'the menus': [...balance.raise, ...balance.spend].flatMap((o) => [o.label, o.each]),
 };

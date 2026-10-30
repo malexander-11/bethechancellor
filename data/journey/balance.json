@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "raise": [
+    {
+      "code": "nicer",
+      "step": 0.5,
+      "label": "Employer National Insurance up half a point",
+      "each": "Half a point each time"
+    },
+    {
+      "code": "fuel",
+      "step": 5,
+      "label": "Put up fuel duty",
+      "each": "5% each time"
+    },
+    {
+      "code": "alc",
+      "step": 5,
+      "label": "Put up alcohol duty",
+      "each": "5% each time"
+    },
+    {
+      "code": "tob",
+      "step": 10,
+      "label": "Put up tobacco duty",
+      "each": "10% each time"
+    },
+    {
+      "code": "apd",
+      "step": 2,
+      "label": "Put up air passenger duty",
+      "each": "£2 a flight each time"
+    },
+    {
+      "code": "gam2",
+      "step": 1,
+      "label": "Raise gambling duties again",
+      "each": "Once"
+    },
+    {
+      "code": "ctgh",
+      "step": 1,
+      "label": "Double council tax on the biggest homes",
+      "each": "Once"
+    },
+    {
+      "code": "sugsalt",
+      "step": 1,
+      "label": "A new tax on sugar and salt in food",
+      "each": "Once"
+    },
+    {
+      "code": "banklevy",
+      "step": 1,
+      "label": "Double the bank levy",
+      "each": "Once"
+    },
+    {
+      "code": "carried",
+      "step": 1,
+      "label": "Tax fund managers’ carried interest as income",
+      "each": "Once"
+    },
+    {
+      "code": "iht",
+      "step": 5,
+      "label": "Put up inheritance tax",
+      "each": "5 points each time"
+    },
+    {
+      "code": "otherd",
+      "step": -1,
+      "label": "Trim the smaller departments’ budgets",
+      "each": "1% less each time"
+    }
+  ],
+  "spend": [
+    {
+      "code": "dhsc",
+      "step": 1,
+      "label": "More for the NHS and social care",
+      "each": "1% more each time"
+    },
+    {
+      "code": "dfe",
+      "step": 1,
+      "label": "More for schools",
+      "each": "1% more each time"
+    },
+    {
+      "code": "mod",
+      "step": 1,
+      "label": "More for defence",
+      "each": "1% more each time"
+    },
+    {
+      "code": "home",
+      "step": 1,
+      "label": "More for the police and borders",
+      "each": "1% more each time"
+    },
+    {
+      "code": "moj",
+      "step": 1,
+      "label": "More for prisons and courts",
+      "each": "1% more each time"
+    },
+    {
+      "code": "mhclg",
+      "step": 1,
+      "label": "More for councils",
+      "each": "1% more each time"
+    },
+    {
+      "code": "wuc",
+      "step": 1,
+      "label": "Raise universal credit",
+      "each": "1% more each time"
+    },
+    {
+      "code": "wdis",
+      "step": 1,
+      "label": "Raise disability benefits",
+      "each": "1% more each time"
+    },
+    {
+      "code": "wpens",
+      "step": 1,
+      "label": "Raise pensioner benefits",
+      "each": "1% more each time"
+    },
+    {
+      "code": "ufsm",
+      "step": 1,
+      "label": "Free school meals for every child",
+      "each": "Once"
+    },
+    {
+      "code": "nicm",
+      "step": -0.5,
+      "label": "Cut National Insurance for workers",
+      "each": "Half a point each time"
+    },
+    {
+      "code": "itpa",
+      "step": 100,
+      "label": "Raise the tax-free personal allowance",
+      "each": "£100 each time"
+    }
+  ]
+}

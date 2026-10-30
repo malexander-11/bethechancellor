@@ -70,7 +70,10 @@ import type {
   budgetFactSchema,
   budgetFileSchema,
   budgetMeasureSchema,
+  budgetCardSchema,
+  budgetThemeSchema,
 } from '../schema/budget.schema.js';
+import type { balanceFileSchema, balanceOptionSchema } from '../schema/balance.schema.js';
 import type {
   growthHeadSchema,
   levelSchema,
@@ -135,6 +138,10 @@ export type GlossaryTerm = z.infer<typeof glossaryTermSchema>;
 export type BudgetFile = z.infer<typeof budgetFileSchema>;
 export type BudgetFact = z.infer<typeof budgetFactSchema>;
 export type BudgetMeasure = z.infer<typeof budgetMeasureSchema>;
+export type BudgetCard = z.infer<typeof budgetCardSchema>;
+export type BudgetTheme = z.infer<typeof budgetThemeSchema>;
+export type BalanceFile = z.infer<typeof balanceFileSchema>;
+export type BalanceOption = z.infer<typeof balanceOptionSchema>;
 export type JourneyStep = z.infer<typeof journeyStepSchema>;
 export type Adviser = z.infer<typeof adviserSchema>;
 export type AdvisersFile = z.infer<typeof advisersFileSchema>;

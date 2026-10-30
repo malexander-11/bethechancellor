@@ -10,3 +10,4 @@ export * from './journey.schema.js';
 export * from './game.schema.js';
 export * from './guide.schema.js';
 export * from './budget.schema.js';
+export * from './balance.schema.js';

@@ -10,6 +10,7 @@ import {
   guideFileSchema,
   glossaryFileSchema,
   budgetFileSchema,
+  balanceFileSchema,
   receptionFileSchema,
   contextFileSchema,
   hmrcExtractSchema,
@@ -34,6 +35,7 @@ import type {
   GuideFile,
   GlossaryFile,
   BudgetFile,
+  BalanceFile,
   ReceptionFile,
   ContextFile,
   HmrcExtract,
@@ -54,7 +56,7 @@ import { FINETUNE_SIDES, finetuneNames, finetuneSideOf } from './game/finetune.j
 import { excludesPartners } from './game/excludes.js';
 import { hasHead } from './costing/taxHead.js';
 import { GUIDED_STEPS, stageTerms } from './game/guide.js';
-import { BUDGET_STORY_FILLS, storyPlaceholders } from './game/budget.js';
+import { BUDGET_STORY_FILLS, cardMeasures, storyPlaceholders } from './game/budget.js';
 import { validateVintage } from './validate/validateVintage.js';
 
 function parseWith<T>(schema: ZodType<T>, json: unknown, label: string): T {
@@ -168,6 +170,10 @@ export function parseBudget(json: unknown): BudgetFile {
   return parseWith(budgetFileSchema, json, 'the Budget');
 }
 
+export function parseBalance(json: unknown): BalanceFile {
+  return parseWith(balanceFileSchema, json, 'the balance page');
+}
+
 export interface Dataset {
   sources: SourcesFile;
   vintage: Vintage;
@@ -187,6 +193,8 @@ export interface Dataset {
   glossary?: GlossaryFile;
   /** The Budget the game starts from (ADR-0045). */
   budget?: BudgetFile;
+  /** The balance page's two menus (ADR-0046). */
+  balance?: BalanceFile;
   reception?: ReceptionFile;
 }
 
@@ -678,6 +686,55 @@ export function validateDataset(ds: Dataset): string[] {
         }
       }
     });
+    // The walk (ADR-0046): every measure a player can reverse is asked about on one card, and a
+    // card asks about a lever some measure names.
+    const carded = new Set(budget.themes.flatMap((t) => t.cards.map((c) => c.lever)));
+    for (const measure of budget.measures) {
+      if (measure.leverCode && !carded.has(measure.leverCode)) {
+        problems.push(`budget measure ${measure.id}'s lever ${measure.leverCode} is on no card`);
+      }
+    }
+    for (const theme of budget.themes) {
+      for (const card of theme.cards) {
+        if (cardMeasures(budget, card).length === 0) {
+          problems.push(`budget card ${card.lever} in ${theme.id} reverses no measure`);
+        }
+      }
+    }
+  }
+  if (ds.balance) {
+    // The balance page's menus (ADR-0046): a live lever the player could reach on its own steps,
+    // never a measure's (its card asks about it), never the economy, and never investment, which
+    // the headroom counts only by its interest, so it would read as nearly free.
+    const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
+    const carded = new Set(ds.budget?.themes.flatMap((t) => t.cards.map((c) => c.lever)) ?? []);
+    for (const side of ['raise', 'spend'] as const) {
+      for (const option of ds.balance[side]) {
+        const at = `balance ${side} ${option.code}`;
+        const lever = byCode.get(option.code);
+        if (!lever) {
+          problems.push(`${at} names an unknown lever`);
+          continue;
+        }
+        if (lever.deprecated || lever.status !== 'reviewed') problems.push(`${at} is not live`);
+        if (lever.category === 'macro') problems.push(`${at} is a setting of the economy`);
+        if (lever.classification?.currentOrCapital === 'capital') {
+          problems.push(`${at} is investment, which the headroom counts only by its interest`);
+        }
+        if (carded.has(option.code))
+          problems.push(`${at} is a measure's lever, asked about on its card`);
+        if (lever.control.kind === 'toggle' && option.step !== 1) {
+          problems.push(`${at} switches a toggle on with a step of ${option.step}, not 1`);
+        }
+        const first = lever.control.default + option.step;
+        const problem = settingProblem(lever, first);
+        if (problem) problems.push(`${at}'s first step, ${first}, is off the lever (${problem})`);
+        const labels = lever.control.labels;
+        if (lever.control.kind === 'select' && labels && !(String(first) in labels)) {
+          problems.push(`${at}'s first step, ${first}, is not one of the lever's choices`);
+        }
+      }
+    }
   }
   return problems;
 }

@@ -28,6 +28,7 @@ export const {
   guide,
   glossary,
   budget,
+  balance,
   scorecard,
   levers,
 } = dataset;

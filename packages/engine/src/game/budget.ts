@@ -1,5 +1,11 @@
 import { formatGbpBn } from '../format.js';
-import type { BudgetFile, BudgetMeasure, ScorecardExtract } from '../types/data.js';
+import type {
+  BudgetCard,
+  BudgetFile,
+  BudgetMeasure,
+  BudgetTheme,
+  ScorecardExtract,
+} from '../types/data.js';
 
 /**
  * The placeholders the Budget's story may carry (ADR-0045), each filled by the page from the
@@ -70,16 +76,34 @@ export function measureFigure(
   measure: Pick<BudgetMeasure, 'line'>,
   year: string,
 ): MeasureFigure | undefined {
-  const line = measureLine(scorecard, measure);
-  if (!line) return undefined;
-  const tax = line.type === 'Tax';
+  return linesFigure(scorecard, [measure.line], year);
+}
+
+/**
+ * The same for several lines taken together, as a card that reverses them all shows them
+ * (ADR-0046): their figures summed year by year. The lines are one side of the scorecard, which
+ * the pipeline checks.
+ */
+export function linesFigure(
+  scorecard: ScorecardExtract,
+  numbers: readonly number[],
+  year: string,
+): MeasureFigure | undefined {
+  const found = numbers.map((n) => scorecard.measures.find((m) => m.number === n));
+  if (found.length === 0 || found.some((m) => !m)) return undefined;
+  const lines = found as ScorecardExtract['measures'];
+  const tax = lines[0]?.type === 'Tax';
+  const values: Record<string, number> = {};
+  for (const line of lines) {
+    for (const [y, v] of Object.entries(line.values)) values[y] = (values[y] ?? 0) + v;
+  }
   const verb = (gbpm: number) => {
     const size = formatGbpBn(Math.abs(gbpm), 1);
     if (gbpm > 0) return `${tax ? 'raises' : 'saves'} ${size}`;
     return `costs ${size}`;
   };
-  const gbpm = line.values[year] ?? 0;
-  const biggest = Object.entries(line.values)
+  const gbpm = values[year] ?? 0;
+  const biggest = Object.entries(values)
     .filter(([y, v]) => y !== year && Math.abs(v) >= FIGURE_UNCHANGED_BELOW_GBPM)
     .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))[0];
   const sign = Math.abs(gbpm) >= FIGURE_UNCHANGED_BELOW_GBPM ? gbpm : (biggest?.[1] ?? 0);
@@ -97,6 +121,29 @@ export function measureFigure(
         ? `nothing in ${year}; ${verb(biggest[1])} in ${biggest[0]}`
         : `nothing in ${year}`;
   return { gbpm, group, words };
+}
+
+/** The measures a card reverses: every one that names its lever, in the file's order. */
+export function cardMeasures(budget: BudgetFile, card: Pick<BudgetCard, 'lever'>): BudgetMeasure[] {
+  return budget.measures.filter((m) => m.leverCode === card.lever);
+}
+
+/** The theme a lever's card is in, and the card, or nothing for a lever the walk does not ask about. */
+export function cardOf(
+  budget: BudgetFile,
+  code: string,
+): { theme: BudgetTheme; card: BudgetCard } | undefined {
+  for (const theme of budget.themes) {
+    const card = theme.cards.find((c) => c.lever === code);
+    if (card) return { theme, card };
+  }
+  return undefined;
+}
+
+/** The measures no card asks about: the walk's small print, voted on and moving no money. */
+export function smallPrint(budget: BudgetFile): BudgetMeasure[] {
+  const carded = new Set(budget.themes.flatMap((t) => t.cards.map((c) => c.lever)));
+  return budget.measures.filter((m) => !m.leverCode || !carded.has(m.leverCode));
 }
 
 /**
@@ -126,6 +173,19 @@ export function budgetScorecardProblems(budget: BudgetFile, scorecard: Scorecard
       problems.push(
         `budget measure ${measure.id} is line ${measure.line}, which ${scorecard.sourceId} does not have`,
       );
+    }
+  }
+  // A card sums its lines into one figure (ADR-0046), so they must be one side of the scorecard.
+  for (const theme of budget.themes) {
+    for (const card of theme.cards) {
+      const types = new Set(
+        cardMeasures(budget, card).map((m) => measureLine(scorecard, m)?.type ?? 'missing'),
+      );
+      if (types.size > 1) {
+        problems.push(
+          `budget card ${card.lever} mixes tax and spending lines of ${scorecard.sourceId}`,
+        );
+      }
     }
   }
   return problems;

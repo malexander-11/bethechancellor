@@ -714,5 +714,209 @@
       "line": 98,
       "plain": "UK investors in US limited liability companies no longer pay tax twice from early 2028."
     }
+  ],
+  "themes": [
+    {
+      "id": "income",
+      "title": "Your income and savings",
+      "lead": "Tax on what people earn on the side, save, rent out and draw as a pension.",
+      "cards": [
+        {
+          "lever": "b6save",
+          "title": "Savings interest taxed two points more",
+          "explain": "From April 2027, savings interest above your tax-free allowances is taxed two points more, at every rate. Interest in an ISA stays tax-free."
+        },
+        {
+          "lever": "b6prop",
+          "title": "Rent taxed two points more",
+          "explain": "From April 2027, landlords pay two points more income tax on the rent they get, at every rate."
+        },
+        {
+          "lever": "b6pentx",
+          "title": "No income tax on the state pension alone",
+          "explain": "From 2027 to 2030, a pensioner who has only the new state pension pays no income tax on it. Above that, the help tapers away."
+        },
+        {
+          "lever": "b6trade",
+          "title": "£3,000 of side income tax-free",
+          "explain": "From April 2027, the first £3,000 a year from small trading and side jobs is tax-free, up from £1,000."
+        },
+        {
+          "lever": "b6mile",
+          "title": "More tax-free mileage for driving for work",
+          "explain": "If you drive your own car for work, your employer can pay 55p a mile tax-free for 10,000 miles. Above that, the rate rises to 35p from April 2027."
+        },
+        {
+          "lever": "b6isa",
+          "title": "The cash ISA limit stays at £20,000",
+          "explain": "You can still save up to £20,000 a year in a cash ISA from April 2027. A cut had been talked about."
+        }
+      ]
+    },
+    {
+      "id": "business",
+      "title": "Businesses and investors",
+      "lead": "What companies pay, and what owners pay when they sell up or take money out.",
+      "cards": [
+        {
+          "lever": "b6wda",
+          "title": "Firms write off machinery more slowly",
+          "explain": "From April 2027, firms deduct 12% of the value of their plant and machinery each year, not 14%. The first-year allowance rises from 40% to 50%."
+        },
+        {
+          "lever": "b6ctpe",
+          "title": "Foreign branch losses no longer cut UK tax",
+          "explain": "From January 2027, a UK company’s foreign branches are all outside UK corporation tax. Their profits are not taxed here, and their losses no longer cut the UK bill."
+        },
+        {
+          "lever": "b6dist",
+          "title": "Tighter rules on taking money out of a company",
+          "explain": "From April 2028, profits taken out of a company as capital are taxed as dividends where that is fairer."
+        },
+        {
+          "lever": "b6found",
+          "title": "Founders’ Relief: 10% tax on company gains",
+          "explain": "From April 2027, founders and early investors in fast-growing companies pay 10% capital gains tax. It covers up to £10 million of gains."
+        },
+        {
+          "lever": "b6badr",
+          "title": "Less relief when you sell your business",
+          "explain": "From April 2027, the lower tax rate when you sell your business covers £500,000 of gains, not £1 million. Gains above that pay the main rates."
+        },
+        {
+          "lever": "b6brr",
+          "title": "Business rates help for the high street",
+          "explain": "From April 2027, pubs, clubs and music venues get 35% off business rates. Small shops, cafes and hotels get more small business relief. High street bills are frozen in real terms for two years."
+        }
+      ]
+    },
+    {
+      "id": "collect",
+      "title": "Collecting more tax",
+      "lead": "Collecting tax that goes unpaid, and new or higher taxes on banks, platforms and gaming machines.",
+      "cards": [
+        {
+          "lever": "b6hmrc",
+          "title": "More HMRC staff to collect unpaid tax",
+          "explain": "The Budget pays for 670 more HMRC compliance officers and more debt collection. HMRC can also take small debts from the bank accounts of people who can pay but will not."
+        },
+        {
+          "lever": "b6sov",
+          "title": "Foreign states pay tax on UK property",
+          "explain": "From January 2029, foreign governments that invest in UK property pay tax on the income and the gains."
+        },
+        {
+          "lever": "b6mkt",
+          "title": "Online marketplaces collect sellers’ VAT",
+          "explain": "From October 2027, online marketplaces collect the VAT on sales by UK sellers whose sales on the site pass £90,000."
+        },
+        {
+          "lever": "b6phv",
+          "title": "Taxi apps pay VAT on the whole fare",
+          "explain": "From January 2028, the biggest private hire firms pay VAT on the whole fare, not just their commission. It applies to firms with fares over £50 million a year."
+        },
+        {
+          "lever": "b6bank",
+          "title": "A bigger bank surcharge for 15 months",
+          "explain": "From January 2027 to March 2028, the extra tax on bank profits doubles from 3% to 6%. It helps pay for the Budget’s help with bills."
+        },
+        {
+          "lever": "b6mgd",
+          "title": "Higher duty on gaming machines",
+          "explain": "Duty on higher-stake gaming machines rises from 20% to 25% from April 2027."
+        }
+      ]
+    },
+    {
+      "id": "energy",
+      "title": "Energy and fuel",
+      "lead": "Help with energy bills and fuel, and when waste burning starts paying for its carbon.",
+      "cards": [
+        {
+          "lever": "b6elec",
+          "title": "No VAT on electricity until July 2027",
+          "explain": "Household electricity carries no VAT from October 2026 to July 2027. Then the usual 5% comes back."
+        },
+        {
+          "lever": "b6fuel",
+          "title": "The fuel duty cut lasts until July 2027",
+          "explain": "The 5p cut in fuel duty lasts until July 2027. Then rates go up by 5p and with prices."
+        },
+        {
+          "lever": "b6ets",
+          "title": "Waste burners pay for carbon later",
+          "explain": "Waste incinerators join the UK Emissions Trading Scheme later than planned. Until they join, they buy no carbon permits."
+        },
+        {
+          "lever": "b6bics",
+          "title": "Cheaper electricity for heavy industry",
+          "explain": "From April 2027, the British Industrial Competitiveness Scheme cuts electricity bills for firms that use a lot of energy."
+        }
+      ]
+    },
+    {
+      "id": "government",
+      "title": "Defence and government",
+      "lead": "How defence is paid for, what Whitehall saves, and what it spends more on.",
+      "cards": [
+        {
+          "lever": "b6dipcap",
+          "title": "Capital moved to defence from other departments",
+          "explain": "The rest of the Defence Investment Plan is paid for by moving capital from other departments. Their capital budgets fall by 1% from 2027-28."
+        },
+        {
+          "lever": "b6civil",
+          "title": "A deeper cut to Whitehall’s running costs",
+          "explain": "Departments cut their administration budgets by 20% by 2029-30, not the 16% planned."
+        },
+        {
+          "lever": "b6ai",
+          "title": "Money for AI",
+          "explain": "The Budget spends on AI security, on using AI across the economy, and on the UK’s own AI capabilities."
+        },
+        {
+          "lever": "b6fraud",
+          "title": "More checks on benefit fraud and error",
+          "explain": "The DWP uses more data and checks to stop fraud and mistakes getting into benefits, such as time spent abroad. It costs money at first and saves later."
+        },
+        {
+          "lever": "b6hefr",
+          "title": "Big franchised colleges must register",
+          "explain": "From September 2028, franchised university providers with 300 or more students must register with the Office for Students. Otherwise their students cannot get loans."
+        }
+      ]
+    },
+    {
+      "id": "homes",
+      "title": "Homes and growth",
+      "lead": "Homes, help for rough sleepers and first-time buyers, and money for growth.",
+      "cards": [
+        {
+          "lever": "b6homes",
+          "title": "About 10,000 more social homes",
+          "explain": "The Budget adds to the Social and Affordable Homes Programme, for around 10,000 more homes. Most will be for social rent."
+        },
+        {
+          "lever": "b6rough",
+          "title": "A route off the streets for rough sleepers",
+          "explain": "Rough sleepers in England get a route off the streets to 2028-29, with housing and support after. Part is paid for from existing housing budgets."
+        },
+        {
+          "lever": "b6ftbisa",
+          "title": "A First Time Buyer ISA replaces the Lifetime ISA",
+          "explain": "From April 2029, new savers get a First Time Buyer ISA instead of a Lifetime ISA. It pays a 25% bonus towards a first home costing up to £450,000."
+        },
+        {
+          "lever": "b6grow",
+          "title": "Investment for growth",
+          "explain": "Money for new technologies, local growth and key industries."
+        },
+        {
+          "lever": "b6ggs",
+          "title": "More state-backed loans for small firms",
+          "explain": "The Growth Guarantee Scheme backs more lending to smaller firms, with longer loans."
+        }
+      ]
+    }
   ]
 }

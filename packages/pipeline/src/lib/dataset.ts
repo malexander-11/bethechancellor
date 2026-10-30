@@ -10,6 +10,7 @@ import {
   parseGuide,
   parseGlossary,
   parseBudget,
+  parseBalance,
   parseReception,
   parseHouseholds,
   parseLever,
@@ -59,6 +60,7 @@ export function loadDataset(
   const guide = parseGuide(readJson(path.join(DATA_DIR, 'journey', 'guide.json')));
   const glossary = parseGlossary(readJson(path.join(DATA_DIR, 'journey', 'glossary.json')));
   const budget = parseBudget(readJson(path.join(DATA_DIR, 'journey', 'budget2026.json')));
+  const balance = parseBalance(readJson(path.join(DATA_DIR, 'journey', 'balance.json')));
   const reception = parseReception(readJson(path.join(DATA_DIR, 'journey', 'reception.json')));
   const vintage = vintages.find((v) => v.id === defaultVintageId);
   const rules = ruleSets.find((r) => r.id === defaultRulesId);
@@ -80,6 +82,7 @@ export function loadDataset(
     guide,
     glossary,
     budget,
+    balance,
     reception,
     vintages,
     ruleSets,

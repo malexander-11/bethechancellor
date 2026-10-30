@@ -5,6 +5,15 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The walk through the Budget and the balance page's menus are data (ADR-0046), with no screen yet.
+  The Budget file groups the measures a player can reverse into six themes, one card a lever, each
+  with a plain heading saying what the Chancellor did and a few sentences saying what it means; a
+  card that reverses several lines shows them as one figure. `data/journey/balance.json` lists the
+  ways to find money and the priorities to spend it on, each a lever moved a fixed step at a time.
+  The validator holds every reversible measure to one card and every option to a live lever on its
+  own steps, never a measure's, the economy's or investment; a test holds each option to its side of
+  the money on the engine at every press and to breaking no promise. The engine works out the money
+  a player has to play with from the review's own reconciliation.
 - The Budget names the Chancellor who delivered it, John Healey, on the Budget speech's own page.
   The report's title page, which the data had read, is signed by the Treasury minister who lays it
   before the House.

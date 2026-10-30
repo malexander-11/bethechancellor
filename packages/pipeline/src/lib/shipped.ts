@@ -80,6 +80,7 @@ export function shippedDataset(): ShippedDataset {
     guide: live.guide,
     glossary: live.glossary,
     budget: live.budget,
+    balance: live.balance,
     scorecard,
     levers: live.levers.map(shippedLever),
   };
