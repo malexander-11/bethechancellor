@@ -22,17 +22,15 @@ const card = (name: string) =>
   screen.getByRole('heading', { name }).closest('section') as HTMLElement;
 const meter = (name: string) => within(card(name)).getByRole('img');
 
-/** Two priorities agreed, delivered from the review, on today's estimate (Phase 24). */
-const GAME = 'g=st.4_pr.defence+safer-streets';
 /**
- * A game delivered with nothing agreed and nothing changed. Budget day needs a game (Phase 26):
- * the sandbox that once opened it with none has gone.
+ * Fine-tuning done and the Budget delivered from the review (ADR-0045). Budget day needs a game
+ * (Phase 26): the sandbox that once opened it with none has gone.
  */
-const EMPTY = 'g=st.4';
+const GAME = 'g=st.1_rd.2';
 
 describe('Budget day: what your Budget means', () => {
   it('is one screen: the rules line, three rated audiences and five households', () => {
-    at(`${BASE}&${EMPTY}`);
+    at(`${BASE}&${GAME}`);
     expect(
       screen.getByRole('heading', { level: 1, name: 'What your Budget means' }),
     ).toBeInTheDocument();
@@ -76,7 +74,7 @@ describe('Budget day: what your Budget means', () => {
 
   it('gives the reason and the decisions behind it', () => {
     // Health, schools and prisons all up a tenth: about £35bn a year against £6.8bn of headroom.
-    at(`${BASE}&${EMPTY}&L=dhsc.10_dfe.10_moj.10`);
+    at(`${BASE}&${GAME}&L=dhsc.10_dfe.10_moj.10`);
     const markets = card('The markets');
     expect(meter('The markets')).toHaveAccessibleName('1 of 5: Alarmed');
     expect(within(markets).getByText(/The day-to-day rule is missed/)).toBeInTheDocument();
@@ -87,7 +85,8 @@ describe('Budget day: what your Budget means', () => {
   });
 
   it('pins the public at Furious when a manifesto red line is crossed', () => {
-    at(`${BASE}&${GAME}&L=moj.10_itbr.1`);
+    // Health a twentieth up, and a penny on the basic rate: the penny decides.
+    const services = at(`${BASE}&${GAME}&L=dhsc.5_itbr.1`);
     expect(meter('The public')).toHaveAccessibleName('1 of 5: Furious');
     // Each audience gives its strongest reason, with the decisions behind it.
     expect(
@@ -99,7 +98,10 @@ describe('Budget day: what your Budget means', () => {
       ),
     ).toBeInTheDocument();
     // The one reason agrees with the rating; the other side is one short line (Phase 25).
-    expect(within(card('The public')).getByText('Counted for: Priorities delivered')).toBeVisible();
+    expect(within(card('The public')).getByText('Counted for: Public services')).toBeVisible();
+    services.unmount();
+    // A household that the penny touches says so, and is worse off.
+    at(`${BASE}&${GAME}&L=moj.10_itbr.1`);
     const couple = screen.getByText(/A couple on median earnings/).closest('li') as HTMLElement;
     expect(within(couple).getByText(/A penny on the basic rate/)).toBeInTheDocument();
     expect(within(couple).getByText('worse off')).toBeInTheDocument();
@@ -118,11 +120,14 @@ describe('Budget day: what your Budget means', () => {
     ).toBeInTheDocument();
   });
 
-  it('approves of a priority carried through, and says nothing of what the money buys (ADR-0043)', () => {
-    at(`${BASE}&${GAME.replace('pr.defence+safer-streets', 'pr.safer-streets')}&L=moj.10`);
+  it('approves of money for public services, and says nothing of what it buys (ADR-0043)', () => {
+    // Health a twentieth up: more than the five billion a year the public notices.
+    at(`${BASE}&${GAME}&L=dhsc.5`);
     expect(meter('The public')).toHaveAccessibleName('4 of 5: Approving');
     expect(
-      within(card('The public')).getByText(/One of the Budget’s priorities is delivered in full/),
+      within(card('The public')).getByText(
+        /Public services get £\d+\.\dbn a year more than planned/,
+      ),
     ).toBeInTheDocument();
     expect(screen.getAllByText(/A family on universal credit/).length).toBeGreaterThan(0);
     expect(screen.queryByText(/What the money does and does not buy/)).toBeNull();
@@ -133,7 +138,7 @@ describe('Budget day: what your Budget means', () => {
     at(`${BASE}&${GAME}&L=moj.10`);
     expect(screen.queryByRole('link', { name: 'the one you opened' })).toBeNull();
     await waitFor(() =>
-      expect(new URLSearchParams(window.location.search).get('g')).toMatch(/st\.5/),
+      expect(new URLSearchParams(window.location.search).get('g')).toBe('st.2_rd.2'),
     );
   });
 
@@ -147,7 +152,7 @@ describe('Budget day: what your Budget means', () => {
       'href',
       expect.stringMatching(/^\/review\?/),
     );
-    expect(screen.getByRole('button', { name: 'Play again' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Start again' })).toBeInTheDocument();
   });
 
   it('never calls a household untouched when something in its groups moved (Phase 25)', () => {
@@ -193,7 +198,7 @@ describe('Budget day: sharing the Budget (ADR-0044)', () => {
     expect(screen.getByRole('heading', { level: 2, name: SHARE_TEXT.heading })).toBeVisible();
     const budget = pictured();
     expect(budget.leverValues).toMatchObject({ moj: 10 });
-    expect(budget.game.priorities).toEqual(['defence', 'safer-streets']);
+    expect(budget.game).toEqual({ reached: 2 });
     expect(picture().getAttribute('alt')).toContain('Prisons and courts');
     const save = screen.getByRole('link', { name: SHARE_TEXT.download });
     expect(save).toHaveAttribute('href', `${picture().getAttribute('src')}&download=1`);
@@ -208,8 +213,8 @@ describe('Budget day: sharing the Budget (ADR-0044)', () => {
     await waitFor(() => expect(share).toHaveBeenCalledTimes(1));
     const sent = share.mock.calls[0] as unknown as [ShareData];
     expect(sent[0].url).toBe(sharedPage(pictured().query));
-    expect(sent[0].title).toBe('A Budget for defence and safer streets');
-    expect(sent[0].text).toMatch(/^I made a Budget for defence and safer streets\. .+\?$/);
+    expect(sent[0].title).toBe('One change to the Chancellor’s Budget');
+    expect(sent[0].text).toMatch(/^One change to the Chancellor’s Budget\. .+\?$/);
   });
 
   it('copies the link where the device cannot share, and says so', async () => {

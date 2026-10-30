@@ -1,29 +1,24 @@
 import type { GuideFile, GuideStage, JourneyStep } from '../types/data.js';
 
 /**
- * The guide: one entry per screen a player meets, in the order they meet them. The opening and
- * the briefing are step 1. The two fine-tuning screens share one entry: each has its own heading
- * and line, from finetune.json.
+ * The guide: one entry per screen a player meets, in the order they meet them. The opening is the
+ * Chancellor's Budget (ADR-0045), before the three steps. The two fine-tuning screens share one
+ * entry: each has its own heading and line, from finetune.json.
  */
-export const GUIDED_STEPS: readonly JourneyStep[] = [
-  'start',
-  'outlook',
-  'pm',
-  'deliver',
-  'finetune',
-  'review',
-  'budget-day',
-];
+export const GUIDED_STEPS: readonly JourneyStep[] = ['start', 'finetune', 'review', 'budget-day'];
 
-/** How many steps the kicker counts to: "Step 3 of 6" (Phase 24). */
-export const STEP_COUNT = 6;
+/** How many steps the kicker counts to: "Step 2 of 3" (ADR-0045). */
+export const STEP_COUNT = 3;
 
-/** The old name finds its screen. */
-const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
-  assumptions: 'outlook',
+/** A retired step's name (the briefing, the priorities, the flagships) finds the screen it led to. */
+const ALIASES: Record<string, JourneyStep> = {
+  outlook: 'finetune',
+  assumptions: 'finetune',
+  pm: 'finetune',
+  deliver: 'finetune',
 };
 
-export function guideFor(guide: GuideFile, step: JourneyStep): GuideStage | undefined {
+export function guideFor(guide: GuideFile, step: string): GuideStage | undefined {
   const target = ALIASES[step] ?? step;
   return guide.stages.find((s) => s.step === target);
 }

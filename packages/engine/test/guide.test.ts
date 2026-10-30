@@ -15,19 +15,21 @@ const FIGURE = /£\d|\d{3},\d{3}|\d+%|\d+bn/;
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 
 describe('the guide and the glossary', () => {
-  it('has an entry for every screen, numbered one to six in the order they are met', () => {
+  it('has an entry for every screen, numbered one to three in the order they are met', () => {
     const numbers = GUIDED_STEPS.map((step) => guideFor(ds.guide, step)?.number);
     expect(numbers.every((n) => n !== undefined)).toBe(true);
     expect(numbers[0]).toBe(1);
-    expect(numbers[numbers.length - 1]).toBe(6);
-    expect(STEP_COUNT).toBe(6);
+    expect(numbers[numbers.length - 1]).toBe(3);
+    expect(STEP_COUNT).toBe(3);
     for (let i = 1; i < numbers.length; i += 1) {
       expect(numbers[i]!).toBeGreaterThanOrEqual(numbers[i - 1]!);
     }
-    // The old step names still find their screen.
-    expect(guideFor(ds.guide, 'assumptions')?.step).toBe('outlook');
-    // Step 4 is fine-tuning: every lever is a policy there, and the desk has gone (Phase 26).
-    expect(guideFor(ds.guide, 'finetune')?.number).toBe(4);
+    // The retired steps' names find the screen that took their place (ADR-0045).
+    for (const old of ['assumptions', 'outlook', 'pm', 'deliver']) {
+      expect(guideFor(ds.guide, old)?.step, old).toBe('finetune');
+    }
+    // Step 1 is fine-tuning: every lever is a policy there, and the desk has gone (Phase 26).
+    expect(guideFor(ds.guide, 'finetune')?.number).toBe(1);
     expect(ds.guide.stages.map((s) => s.title)).not.toContain('Build the package');
     expect(guideFor(ds.guide, 'review')?.title).toBe('Deliver your Budget');
     expect(validateDataset(ds).filter((p) => /guide|glossary/.test(p))).toEqual([]);

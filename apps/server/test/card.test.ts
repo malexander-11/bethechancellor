@@ -6,7 +6,7 @@ import {
   GAME_SETTINGS,
   PICTURE_ROWS,
   SHARE_WORDS,
-  budgetTheme,
+  budgetTitle,
   encodePermalink,
   finetuneNames,
   gameImplementationYear,
@@ -37,7 +37,7 @@ const draw = createDrawing(assets);
 const outcomeOf = gameOutcomeOf(data);
 
 /** A finished Budget's link, as the web writes one. */
-function link(values: Record<string, number>, priorities: readonly string[] = []): string {
+function link(values: Record<string, number>): string {
   return encodePermalink(
     {
       vintageCode: data.vintage.permalinkCode,
@@ -45,14 +45,14 @@ function link(values: Record<string, number>, priorities: readonly string[] = []
       implementationYear: gameImplementationYear(data.vintage),
       leverValues: values,
       ...GAME_SETTINGS,
-      game: { reached: FINAL_STAGE, priorities: [...priorities] },
+      game: { reached: FINAL_STAGE },
     },
     data.levers,
   );
 }
 
-function summaryOf(values: Record<string, number>, priorities: readonly string[] = []) {
-  const budget = readFinishedBudget(data, link(values, priorities));
+function summaryOf(values: Record<string, number>) {
+  const budget = readFinishedBudget(data, link(values));
   if (!budget) throw new Error('not a finished Budget');
   return summariseBudget(data, budget, outcomeOf);
 }
@@ -75,7 +75,7 @@ const WALK = { dip47: 1, dhsc: -0.5, itbr: 1, moj: 10, nicer: 2 };
 
 describe('the shared picture', () => {
   it('draws a finished Budget at the size every network previews, in the site’s colours', async () => {
-    const drawn = await draw(cardLayout(summaryOf(WALK, ['defence']), 'example.test'));
+    const drawn = await draw(cardLayout(summaryOf(WALK), 'example.test'));
     expect(pngSize(drawn.png)).toEqual({ width: CARD_WIDTH, height: CARD_HEIGHT });
     expect(colourAt(drawn, 2, 2)).toBe(CARD_COLOURS.page);
     // The band along the foot is the Commons green.
@@ -96,11 +96,17 @@ describe('the shared picture', () => {
     expect(pngSize((await draw(card)).png)).toEqual({ width: CARD_WIDTH, height: CARD_HEIGHT });
   });
 
-  it('says the theme, three changes a side or two and how many more, the rules and the ratings', () => {
-    const summary = summaryOf(
-      { cdel: 20, def5: 1, dfe: 5, dhsc: 3, itbr: -2, moj: 10, vatfood: 1, wealth: 1 },
-      ['cost-of-living', 'homes-growth', 'welfare-bill'],
-    );
+  it('says the title, three changes a side or two and how many more, the rules and the ratings', () => {
+    const summary = summaryOf({
+      cdel: 20,
+      def5: 1,
+      dfe: 5,
+      dhsc: 3,
+      itbr: -2,
+      moj: 10,
+      vatfood: 1,
+      wealth: 1,
+    });
     const said = wordsIn(cardLayout(summary, 'example.test'));
     expect(said).toContain(summaryWords(summary).title);
     const side = (rows: readonly ChangeRow[]) => {
@@ -147,12 +153,12 @@ describe('the shared picture', () => {
       ...data.levers.flatMap((l) => [l.shortTitle, names.get(l.code) ?? '']),
       ...data.reception.audiences.flatMap((a) => [a.title, ...a.labels]),
       '£−0123456789.,·% ',
-      summaryOf(WALK, ['defence']).headroomLine,
+      summaryOf(WALK).headroomLine,
       summaryWords(summaryOf(WALK)).rules,
     ].join('');
-    const themes = data.pm.priorities.map((p) => budgetTheme(data.pm, [p.id]) ?? '').join('');
+    const titles = [budgetTitle(0), budgetTitle(1), budgetTitle(12)].join('');
     expect(covered(serif, body)).toEqual([]);
-    expect(covered(fraunces, themes + SHARE_WORDS.game + SHARE_WORDS.untitled)).toEqual([]);
+    expect(covered(fraunces, titles + SHARE_WORDS.game)).toEqual([]);
   });
 
   it('uses only the site’s own colours', () => {
@@ -172,7 +178,7 @@ describe('/api/card', () => {
     server(new Request(`http://example.test/api/card${query}`), { ip: '' });
 
   it('answers a PNG the networks and the CDN may keep', async () => {
-    const card = await ask(`?${link(WALK, ['defence'])}`);
+    const card = await ask(`?${link(WALK)}`);
     expect(card.status).toBe(200);
     expect(card.headers.get('content-type')).toBe('image/png');
     expect(card.headers.get('cache-control')).toMatch(/public.*s-maxage=\d+/);

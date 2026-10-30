@@ -16,7 +16,7 @@ import { SHARE_TEXT } from '../share/words';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 const finished = (rest: string) => {
-  const budget = readFinishedBudget(gameData, `${BASE}&g=st.${FINAL_STAGE}_${rest}`);
+  const budget = readFinishedBudget(gameData, `${BASE}&g=st.${FINAL_STAGE}_rd.2&${rest}`);
   if (!budget) throw new Error('not a finished Budget');
   return budget.query;
 };
@@ -24,7 +24,7 @@ const ENTRIES: Entry[] = [
   {
     id: 'abcd1234',
     title: 'Safe streets, sound money',
-    query: finished('pr.safer-streets&L=moj.10_itbr.1'),
+    query: finished('L=moj.10_itbr.1'),
     ups: 3,
     downs: 1,
     score: 2,
@@ -33,7 +33,7 @@ const ENTRIES: Entry[] = [
   {
     id: 'efgh5678',
     title: 'Defence first',
-    query: finished('pr.defence&L=dip47.1'),
+    query: finished('L=dip47.1'),
     ups: 1,
     downs: 0,
     score: 1,

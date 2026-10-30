@@ -4,18 +4,17 @@ import { loadDataset } from './fixtures.js';
 import { NICS_WALK, PENNY, WALK } from './scenarios.js';
 
 const ds = loadDataset();
-const react = (values: Record<string, number>, themed = false) =>
-  householdReactions(ds.electorate, values, ds.levers, () => 1, null, themed, ds.incidence);
+const react = (values: Record<string, number>) =>
+  householdReactions(ds.electorate, values, ds.levers, () => 1, ds.incidence);
 const of = (values: Record<string, number>, id: string) =>
   react(values).find((r) => r.household.id === id);
 
 describe('the electorate as five households', () => {
-  it('leaves everyone untouched by an empty Budget, and puzzled without a theme', () => {
+  it('leaves everyone untouched by an empty Budget', () => {
     const out = react({});
     expect(out).toHaveLength(5);
-    expect(out.every((r) => r.net === 'untouched' && !r.understood)).toBe(true);
+    expect(out.every((r) => r.net === 'untouched')).toBe(true);
     expect(out.every((r) => r.quiet?.text === r.household.untouched.text)).toBe(true);
-    expect(out.every((r) => r.line.text === r.household.puzzled.text)).toBe(true);
   });
 
   it('fires the lines of the levers that touch a household, in the direction moved', () => {
@@ -50,13 +49,10 @@ describe('the electorate as five households', () => {
     expect(of({ wealth2: 1 }, 'pensioner')?.net).toBe('untouched');
   });
 
-  it('touches a household with every curated and flagship lever, or lists it as reaching none', () => {
+  it('touches a household with every curated lever, or lists it as reaching none', () => {
     const touched = new Set(ds.electorate.households.flatMap((h) => h.touches.map((t) => t.code)));
     const none = new Set(ds.electorate.reachesNone);
-    const codes = new Set([
-      ...finetuneItems(ds.finetune).map((i) => i.code),
-      ...ds.options.deliver.flatMap((o) => Object.keys(o.values)),
-    ]);
+    const codes = new Set(finetuneItems(ds.finetune).map((i) => i.code));
     const missing = [...codes].filter((code) => !touched.has(code) && !none.has(code));
     expect(missing, 'levers no household hears of').toEqual([]);
     for (const code of none) expect(touched.has(code), code).toBe(false);
@@ -93,8 +89,6 @@ describe('the electorate as five households', () => {
       ...ds.electorate.households.flatMap((h) => [
         h.fact,
         h.untouched,
-        h.understood,
-        h.puzzled,
         ...h.touches.map((t) => t.line),
       ]),
     ];

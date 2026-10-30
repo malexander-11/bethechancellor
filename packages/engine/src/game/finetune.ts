@@ -1,6 +1,5 @@
 import type {
   ContextFile,
-  DeliverOption,
   FinetuneAlternatives,
   FinetuneDecision,
   FinetuneFile,
@@ -9,7 +8,6 @@ import type {
   FinetuneSection,
   Lever,
 } from '../types/data.js';
-import type { AmbitionStatus } from './ambitions.js';
 
 /**
  * Step 4's levers (Phase 24, ADR-0025), chosen as policies since Phase 26 (ADR-0027): the tax and
@@ -129,47 +127,10 @@ export function scaleLevels(
   return [...new Set(levels)].sort((a, b) => a - b);
 }
 
-/** A flagship the player chose, holding a lever at its own value (Phase 26). */
-export interface FlagshipHold {
-  option: DeliverOption;
-  /** The priority's rank: which flagship screen to go back to. */
-  rank: number;
-}
-
-/**
- * The levers a flagship the player chose has set exactly (Phase 26, ADR-0027): an option of a
- * ranked priority with every one of its levers at the option's own value. Step 4 shows such a
- * lever as a line with a way back to its flagship, never as a card that could quietly undo it.
- * Exactly, not "at or past" as delivery counts it, so a step-4 size beyond a flagship's value is
- * never hidden behind the flagship's name.
- */
-export function setByFlagship(
-  status: Pick<AmbitionStatus, 'priorities'> | null,
-  values: Record<string, number>,
-  levers: readonly Pick<Lever, 'code' | 'control'>[],
-): Map<string, FlagshipHold> {
-  const rest = new Map(levers.map((l) => [l.code, l.control.default] as const));
-  const held = new Map<string, FlagshipHold>();
-  for (const p of status?.priorities ?? []) {
-    for (const { option } of p.options) {
-      const entries = Object.entries(option.values);
-      const exact =
-        entries.length > 0 &&
-        entries.every(
-          ([code, target]) => Math.abs((values[code] ?? rest.get(code) ?? 0) - target) < 1e-9,
-        );
-      if (!exact) continue;
-      for (const [code] of entries) held.set(code, { option, rank: p.rank });
-    }
-  }
-  return held;
-}
-
 /**
  * The levers already on the Chancellor's desk: the ones the context's in-tray names (Phase 25),
- * which the review lists while a Budget leaves them as it found them. Each is on step 4, where
- * every lever is on show, and step 3's basic mode shows any way that moves one (Phase 27, the desk
- * rule; the briefing named them too until it became plain copy, ADR-0031). Not picks.
+ * which the review lists while a Budget leaves them as it found them. Each is on the fine-tuning
+ * screens, where every lever is on show. Not picks; and none since the Budget was delivered.
  */
 export function deskLevers(context: Pick<ContextFile, 'inTray'> | undefined): ReadonlySet<string> {
   return new Set((context?.inTray ?? []).map((item) => item.leverCode));

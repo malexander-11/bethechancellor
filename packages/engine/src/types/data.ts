@@ -38,14 +38,12 @@ import type {
   suggestionRuleSchema,
 } from '../schema/context.schema.js';
 import type {
-  prioritySchema,
   pmFileSchema,
   promiseSchema,
   simulatedLineSchema,
   ministersFileSchema,
   ministerSchema,
   ministerBandSchema,
-  interventionsFileSchema,
   householdsFileSchema,
   householdSchema,
   householdTouchSchema,
@@ -54,9 +52,6 @@ import type {
   receptionBandSchema,
   receptionFileSchema,
   receptionRuleSchema,
-  optionsFileSchema,
-  deliverOptionSchema,
-  optionScaleSchema,
   finetuneAlternativesSchema,
   finetuneDecisionSchema,
   finetuneFileSchema,
@@ -118,15 +113,10 @@ export type ContextReading = z.infer<typeof contextReadingSchema>;
 export type SuggestionRule = z.infer<typeof suggestionRuleSchema>;
 export type SimulatedLine = z.infer<typeof simulatedLineSchema>;
 export type PmFile = z.infer<typeof pmFileSchema>;
-export type Priority = z.infer<typeof prioritySchema>;
 export type Promise_ = z.infer<typeof promiseSchema>;
 export type MinistersFile = z.infer<typeof ministersFileSchema>;
 export type Minister = z.infer<typeof ministerSchema>;
 export type MinisterBand = z.infer<typeof ministerBandSchema>;
-export type InterventionsFile = z.infer<typeof interventionsFileSchema>;
-export type OptionsFile = z.infer<typeof optionsFileSchema>;
-export type DeliverOption = z.infer<typeof deliverOptionSchema>;
-export type OptionScale = z.infer<typeof optionScaleSchema>;
 export type FinetuneFile = z.infer<typeof finetuneFileSchema>;
 export type FinetuneSide = z.infer<typeof finetuneSideSchema>;
 export type FinetuneSection = z.infer<typeof finetuneSectionSchema>;

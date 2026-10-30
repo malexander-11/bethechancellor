@@ -4,8 +4,6 @@ import {
   parseContext,
   parsePm,
   parseMinisters,
-  parseInterventions,
-  parseOptions,
   parseFinetune,
   parseHouseholdsFile,
   parseIncidence,
@@ -53,10 +51,6 @@ export function loadDataset(
   const advisers = parseAdvisers(readJson(path.join(DATA_DIR, 'journey', 'advisers.json')));
   const pm = parsePm(readJson(path.join(DATA_DIR, 'journey', 'pm.json')));
   const ministers = parseMinisters(readJson(path.join(DATA_DIR, 'journey', 'ministers.json')));
-  const interventions = parseInterventions(
-    readJson(path.join(DATA_DIR, 'journey', 'interventions.json')),
-  );
-  const options = parseOptions(readJson(path.join(DATA_DIR, 'journey', 'options.json')));
   const finetune = parseFinetune(readJson(path.join(DATA_DIR, 'journey', 'finetune.json')));
   const electorate = parseHouseholdsFile(
     readJson(path.join(DATA_DIR, 'journey', 'households.json')),
@@ -80,8 +74,6 @@ export function loadDataset(
     advisers,
     pm,
     ministers,
-    interventions,
-    options,
     finetune,
     electorate,
     incidence,

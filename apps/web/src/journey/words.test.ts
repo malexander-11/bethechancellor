@@ -1,18 +1,6 @@
 import { choiceName, computeOutcome, finetuneItems } from '@btc/engine';
 import { describe, expect, it } from 'vitest';
-import {
-  advisers,
-  finetune,
-  glossary,
-  guide,
-  interventions,
-  levers,
-  ministers,
-  options,
-  pm,
-  rules,
-  vintage,
-} from '../data';
+import { finetune, glossary, guide, levers, ministers, rules, vintage } from '../data';
 import { ON_SCREEN } from '../test/onScreen';
 
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
@@ -42,54 +30,6 @@ describe('word budgets: one line visible, the rest a click away', () => {
         if (line.short) expect(words(line.short)).toBeLessThan(words(line.text));
       }
     }
-  });
-
-  it('gives every line met on the road a short form, and reads the short form in one breath', () => {
-    // What shows on a screen is the short form; the full line is one tap away (ADR-0023).
-    type Line = { text: string; short?: string | undefined };
-    const road: { label: string; line: Line; max: number }[] = [
-      ...pm.priorities.map((p) => ({ label: `${p.id} reaction`, line: p.reaction, max: 12 })),
-      ...interventions.interventions.map((x) => ({ label: x.id, line: x.line, max: 14 })),
-      ...options.deliver.map((o) => ({ label: `option ${o.id}`, line: o.line, max: 18 })),
-    ];
-    expect(road.length).toBeGreaterThan(0);
-    for (const { label, line, max } of road) {
-      const read = line.short ?? line.text;
-      expect(words(read), `${label} reads "${read}"`).toBeLessThanOrEqual(max);
-      // A short line is a shorter version of the long one, not a second speech.
-      if (line.short) expect(words(line.short), label).toBeLessThan(words(line.text));
-    }
-  });
-
-  it('gives every option one adviser line: twelve words, no figure, a size word the engine bears out', () => {
-    // The line may say "big" or "small" only where the option's own figure for the target year
-    // says so (Phase 23): big is £5bn or more, small £1bn or less, on the engine's arithmetic.
-    const headroomOf = (leverValues: Record<string, number>) =>
-      computeOutcome({ vintage, rules, levers, settings: { leverValues } }).verdicts.find(
-        (v) => v.kind === 'currentBudget',
-      )?.headroomGbpm ?? 0;
-    const base = headroomOf({});
-    const BIG = /\b(big|expensive|large|costly)\b/i;
-    const SMALL = /\b(small|cheap|little|modest|tiny)\b/i;
-    const FIGURE = /£\d|\d+%|\d+bn|\d{3},\d{3}/;
-    const adviserIds = new Set(advisers.advisers.map((a) => a.id));
-    // Since Phase 24 every option is a way to deliver a priority (ADR-0025).
-    const all = options.deliver;
-    expect(all.length).toBeGreaterThan(0);
-    for (const o of all) {
-      const text = o.advice.text;
-      expect(words(text), `${o.id}: "${text}"`).toBeLessThanOrEqual(12);
-      expect(text, o.id).not.toMatch(FIGURE);
-      expect(adviserIds.has(o.advice.adviser), `${o.id} names ${o.advice.adviser}`).toBe(true);
-      expect(o.advice.sources.length, o.id).toBeGreaterThan(0);
-      const size = Math.abs(headroomOf(o.values) - base);
-      const bn = (size / 1000).toFixed(1);
-      if (BIG.test(text)) expect(size, `${o.id} says big at £${bn}bn`).toBeGreaterThanOrEqual(5000);
-      if (SMALL.test(text))
-        expect(size, `${o.id} says small at £${bn}bn`).toBeLessThanOrEqual(1000);
-    }
-    // Every title says what the option does, in at most twelve words.
-    for (const o of all) expect(words(o.title), o.title).toBeLessThanOrEqual(12);
   });
 
   it('gives every step-4 policy a plain title and one adviser line the engine bears out at every size', () => {
@@ -155,17 +95,11 @@ describe('word budgets: one line visible, the rest a click away', () => {
     }
   });
 
-  it('says what to do now in ten words, and a priority’s purpose in ten', () => {
+  it('says what to do now in ten words', () => {
     // Every screen on the road is one breath.
     const road = guide.stages;
     expect(road.length).toBeGreaterThan(0);
-    // The briefing's line is the player's own (Phase 28, revised 2026-09-29): what the headroom is
-    // for, in one sentence of eighteen words. Every other screen keeps to ten.
-    const limit = (step: string) => (step === 'outlook' ? 18 : 10);
-    for (const s of road)
-      expect(words(s.now), `${s.step}: "${s.now}"`).toBeLessThanOrEqual(limit(s.step));
-    // Ten words, not five (Phase 25): "Fund the plan, reach 3%" named no plan and no 3% of what.
-    for (const p of pm.priorities) expect(words(p.purpose), p.id).toBeLessThanOrEqual(10);
+    for (const s of road) expect(words(s.now), `${s.step}: "${s.now}"`).toBeLessThanOrEqual(10);
   });
 
   it('keeps an adviser’s line to a consequence, not a citation or the trade’s own words', () => {

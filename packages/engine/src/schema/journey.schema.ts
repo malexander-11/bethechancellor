@@ -10,16 +10,7 @@ const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
  * the forecast, the compromises and the add-ons (`forecast`, `compromise`, `rabbit`) in Phase 24.
  * The app still routes all their old addresses.
  */
-export const journeyStepSchema = z.enum([
-  'start',
-  'outlook',
-  'assumptions',
-  'pm',
-  'deliver',
-  'finetune',
-  'review',
-  'budget-day',
-]);
+export const journeyStepSchema = z.enum(['start', 'finetune', 'review', 'budget-day']);
 
 /** An adviser is a role, not a person: title, remit and the steps they speak on. */
 export const adviserSchema = z.strictObject({
@@ -57,12 +48,6 @@ export const readingMeasureSchema = z.enum([
   'promisesBroken',
   'manifestoBroken',
   'manifestoStrained',
-  'prioritiesUnfunded',
-  // Priorities only started, or settled lower on step 4 (Phase 25).
-  'prioritiesStarted',
-  'prioritiesFunded',
-  'deliveredGbpm',
-  'clearPriorityGbpm',
   'welfareReversals',
   'welfareChangeGbpm',
   'departmentsCut',

@@ -28,39 +28,6 @@ export const simulatedLineSchema = z.strictObject({
 /* ------------------------------------------------------------------ the PM */
 
 /**
- * A priority the Chancellor can rank with the Prime Minister (Phase 18): what the Budget is for.
- * Nothing is funded by ranking one; the ways to deliver it are options (options.json) proposed
- * by the minister or adviser who leads on it. Every line is in someone's voice and sourced.
- */
-export const prioritySchema = z.strictObject({
-  id: slug,
-  title: z.string().min(1).max(40),
-  /** The priority as a noun phrase for a sentence: "the cost of living", "defence". */
-  noun: z.string().min(1).max(40),
-  purpose: z.string().min(1).max(160),
-  /**
-   * Where the priority's spending reaches, when that is not the whole UK (Phase 25): "Health and
-   * care budgets here are England's…", said once on its flagship screen. Words about scope, sourced
-   * to the Statement of Funding Policy; commentary, never a number.
-   */
-  reach: z
-    .strictObject({
-      text: z.string().min(1).max(220),
-      badge: z.literal('commentary'),
-      sources: z.array(sourceRefSchema).min(1),
-    })
-    .optional(),
-  /** The PM's case for it, in the PM's voice. */
-  pitch: simulatedLineSchema,
-  /** What the PM says when it is ranked. */
-  reaction: simulatedLineSchema,
-  /** The role that leads on delivering it: an adviser's or a minister's, as the data names them. */
-  lead: z.string().min(1),
-  /** Where the commitment comes from. */
-  sources: z.array(sourceRefSchema).min(1),
-});
-
-/**
  * A promise the government made. `breaks` is a detector: the promise is broken when any listed
  * lever is on the wrong side of its default (or on at all, for a toggle). The promises are fixed:
  * there is no negotiating them away (Phase 9), only crossing them and being judged for it.
@@ -152,22 +119,10 @@ export const signOffSchema = z
 export const pmFileSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
-    /** What this Budget could be for; the Chancellor ranks up to three. */
-    priorities: z.array(prioritySchema).min(6).max(10),
     promises: z.array(promiseSchema).min(1),
     signOff: signOffSchema,
   })
   .superRefine((file, ctx) => {
-    const ids = new Set<string>();
-    file.priorities.forEach((p, i) => {
-      if (ids.has(p.id))
-        ctx.addIssue({
-          code: 'custom',
-          message: `duplicate priority ${p.id}`,
-          path: ['priorities', i],
-        });
-      ids.add(p.id);
-    });
     file.promises.forEach((p, i) => {
       const watched = p.breaks.length + p.strains.length;
       if (p.judgedBy === 'fiscalRules' && watched > 0)
@@ -194,175 +149,7 @@ export const pmFileSchema = z
     });
   });
 
-/* ------------------------------------------------------------ the options */
-
-/**
- * A bundle of lever settings an adviser can propose (Phase 18, ADR-0022): one or two levers and
- * the values that deliver it. Cost, yield, badge, earliest start and red lines are all read from
- * the levers and the engine on the page; nothing here carries a number. No two options anywhere
- * share a lever, so whether an option is on, adjusted or off follows from the lever values and no
- * screen can light or undo another's choice (revised 2026-09-26).
- */
-export const optionBundleSchema = z
-  .record(z.string().min(1), z.number())
-  .refine((v) => Object.keys(v).length >= 1 && Object.keys(v).length <= 2, {
-    message: 'an option moves one or two levers',
-  });
-
-/**
- * Two options that count the same money. Authored once, on either of the pair, and read from
- * both sides: while one is in the Budget the other is offered "instead of" it, never as well.
- */
-export const optionConflictSchema = z.strictObject({
-  /** The other option's id, on any screen. */
-  with: slug,
-  /** Why the two cannot both be counted, in the proposer's words. */
-  text: z.string().min(1).max(200),
-});
-
-/**
- * One adviser's line on an option (Phase 23): who proposed it and one plain judgement of its cost
- * and effect, in at most twelve words, in the voice of the screen's adviser (an id in
- * advisers.json who speaks on that screen). A size word ("big", "small") is tested against the
- * engine's own figure for the option, no figure is typed, and the sources are the option's.
- */
-export const optionAdviceSchema = simulatedLineSchema.extend({
-  adviser: slug,
-  sources: z.array(sourceRefSchema).min(1),
-});
-
-/**
- * Whether an option delivers its priority in full or makes a start on it (Phase 25): a judgement
- * in one line, with its source, badged as one. A priority with only starts in the Budget reads
- * "started", not "delivered", on the bar, on the review and on Budget day, and the scoring counts
- * only what is delivered in full.
- */
-export const optionScaleSchema = z.strictObject({
-  kind: z.enum(['full', 'start']),
-  why: z.string().min(1).max(140),
-  sources: z.array(sourceRefSchema).min(1),
-  badge: simulatedBadgeSchema,
-});
-
-/** A way to deliver a priority, proposed by the minister or adviser who leads on it. */
-export const deliverOptionSchema = z.strictObject({
-  id: slug,
-  /** The priority this delivers (an id in pm.json's priorities). */
-  priority: slug,
-  /** What it does, plainly: "More money for prisons and courts". */
-  title: z.string().min(1).max(80),
-  /** What choosing it buys and does not buy, in the proposer's voice. Sourced. */
-  line: simulatedLineSchema,
-  advice: optionAdviceSchema,
-  values: optionBundleSchema,
-  scale: optionScaleSchema,
-  conflicts: z.array(optionConflictSchema).min(1).optional(),
-  /**
-   * On the advisers' shortlist (Phase 27, ADR-0028): one of the one or two best ways to deliver
-   * the priority, the ones basic mode shows. A judgement, badged as one on the screen; the
-   * validator holds the picks to its rules and the tests hold them to £1bn.
-   */
-  shortlist: z.literal(true).optional(),
-});
-
-/**
- * The Chief Secretary's line when a step-4 trim settles a flagship's ask lower than chosen (Phase
- * 25): `{minister}` is the lever's own minister. It names no figure; the bar and the card do that.
- */
-export const settledLineSchema = simulatedLineSchema.extend({
-  role: z.string().min(1),
-  sources: z.array(sourceRefSchema).min(1),
-});
-
-export const optionsFileSchema = z
-  .strictObject({
-    schemaVersion: z.literal(1),
-    settled: settledLineSchema,
-    deliver: z.array(deliverOptionSchema).min(1),
-  })
-  .superRefine((file, ctx) => {
-    // Every priority can be delivered in full: a screen of starts only would leave it unreachable.
-    const full = new Set(
-      file.deliver.filter((o) => o.scale.kind === 'full').map((o) => o.priority),
-    );
-    const priorities = new Set(file.deliver.map((o) => o.priority));
-    for (const priority of priorities) {
-      if (!full.has(priority))
-        ctx.addIssue({
-          code: 'custom',
-          message: `priority ${priority} has no way to deliver it in full`,
-          path: ['deliver'],
-        });
-    }
-    // One list since Phase 24 (the ways to pay became step 4's levers and the add-ons went), kept
-    // in this shape so the checks read the same whichever lists the file carries.
-    const lists = [['deliver', file.deliver]] as const;
-    const ids = new Set<string>();
-    for (const [screen, list] of lists) {
-      list.forEach((o, i) => {
-        if (ids.has(o.id))
-          ctx.addIssue({ code: 'custom', message: `duplicate option ${o.id}`, path: [screen, i] });
-        ids.add(o.id);
-      });
-    }
-    // A title names one option: two cards reading the same would be one choice made twice.
-    const titles = new Set<string>();
-    for (const [screen, list] of lists) {
-      list.forEach((o, i) => {
-        if (titles.has(o.title))
-          ctx.addIssue({
-            code: 'custom',
-            message: `two options are titled "${o.title}"`,
-            path: [screen, i, 'title'],
-          });
-        titles.add(o.title);
-      });
-    }
-    // No lever twice anywhere: two options on one lever would light or undo each other.
-    const seen = new Map<string, { screen: string; id: string }>();
-    for (const [screen, list] of lists) {
-      list.forEach((o, i) => {
-        for (const code of Object.keys(o.values)) {
-          const other = seen.get(code);
-          if (other)
-            ctx.addIssue({
-              code: 'custom',
-              message: `${other.screen} option ${other.id} and ${screen} option ${o.id} both move lever ${code}`,
-              path: [screen, i, 'values', code],
-            });
-          seen.set(code, { screen, id: o.id });
-        }
-      });
-    }
-    // A conflict names another option, and each pair is authored once.
-    const pairs = new Set<string>();
-    for (const [screen, list] of lists) {
-      list.forEach((o, i) => {
-        (o.conflicts ?? []).forEach((c, j) => {
-          const path = [screen, i, 'conflicts', j, 'with'];
-          if (c.with === o.id) {
-            ctx.addIssue({ code: 'custom', message: `option ${o.id} conflicts with itself`, path });
-          } else if (!ids.has(c.with)) {
-            ctx.addIssue({
-              code: 'custom',
-              message: `option ${o.id} conflicts with unknown option ${c.with}`,
-              path,
-            });
-          }
-          const key = [o.id, c.with].sort().join('|');
-          if (pairs.has(key))
-            ctx.addIssue({
-              code: 'custom',
-              message: `options ${o.id} and ${c.with} both author their conflict; author it on one`,
-              path,
-            });
-          pairs.add(key);
-        });
-      });
-    }
-  });
-
-/* --------------------------------------------------------- fine-tuning */
+/* --------------------------------------------------------- the fine-tuning screens */
 
 /**
  * One policy on the fine-tuning screens (Phase 26, ADR-0027): a way to move a lever, under a plain
@@ -623,43 +410,6 @@ export const ministersFileSchema = z
     });
   });
 
-/**
- * When the review says a priority is short of delivery (Review.tsx): nothing funds it yet, or only a
- * start does. A closed list, not a language: a new one needs code. The advisers no longer speak above
- * the fine-tuning cards (ADR-0040).
- */
-export const interventionWhenSchema = z.enum(['priority-unfunded', 'priority-part-funded']);
-
-/**
- * An adviser's line on a priority short of delivery, which the review shows under it. `{name}` in
- * the text is filled with the priority's title: a title from data, never a number. The line's own
- * sources are for any fact it states beyond that.
- */
-export const interventionSchema = z.strictObject({
-  id: slug,
-  adviser: slug,
-  when: interventionWhenSchema,
-  line: simulatedLineSchema,
-});
-
-export const interventionsFileSchema = z
-  .strictObject({
-    schemaVersion: z.literal(1),
-    interventions: z.array(interventionSchema).min(1),
-  })
-  .superRefine((file, ctx) => {
-    const ids = new Set<string>();
-    file.interventions.forEach((x, i) => {
-      if (ids.has(x.id))
-        ctx.addIssue({
-          code: 'custom',
-          message: `duplicate id ${x.id}`,
-          path: ['interventions', i],
-        });
-      ids.add(x.id);
-    });
-  });
-
 /* ---------------------------------------------------------- the electorate */
 
 /** How one lever touches one household: the direction, and the line they say when it does. */
@@ -689,9 +439,6 @@ export const householdSchema = z.strictObject({
   exposure: z.array(slug).min(1),
   /** Said only when nothing in the household's groups moved, so it can never be wrong. */
   untouched: simulatedLineSchema,
-  /** Whether they could tell what the Budget was for: a theme delivered, or not. */
-  understood: simulatedLineSchema,
-  puzzled: simulatedLineSchema,
 });
 
 export const householdsFileSchema = z
@@ -705,7 +452,7 @@ export const householdsFileSchema = z
     unnamed: simulatedLineSchema,
     /**
      * Levers that reach none of the households by name (Phase 25): a bank levy, a wealth tax
-     * above £10 million, defence. Every curated and flagship lever touches a household or is here.
+     * above £10 million, defence. Every curated lever touches a household or is here.
      */
     reachesNone: z.array(z.string().min(1)).default([]),
   })

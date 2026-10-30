@@ -1,15 +1,11 @@
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
-import { ModeProvider, useMode } from './journey/mode';
 import { BudgetProvider } from './state/budget';
+import { BudgetPage } from './pages/Budget';
 import { BudgetDayPage } from './pages/BudgetDay';
-import { DeliverPage } from './pages/Deliver';
 import { FinetunePage } from './pages/Finetune';
-import { OutlookPage } from './pages/Outlook';
-import { PMPage } from './pages/PM';
 import { ReviewPage } from './pages/Review';
 import { SharedPage } from './pages/Shared';
-import { StartPage } from './pages/Start';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { SiteFooter } from './components/SiteFooter';
 
@@ -18,7 +14,7 @@ const AboutPage = lazy(() => import('./pages/About').then((m) => ({ default: m.A
 const MethodologyPage = lazy(() =>
   import('./pages/Methodology').then((m) => ({ default: m.MethodologyPage })),
 );
-// The leaderboard is opened from the cover, the footer and Budget day (ADR-0044), not on the road.
+// The leaderboard is opened from the Budget, the footer and Budget day (ADR-0044), not on the road.
 const LeaderboardPage = lazy(() =>
   import('./pages/Leaderboard').then((m) => ({ default: m.LeaderboardPage })),
 );
@@ -34,8 +30,8 @@ function RedirectKeepingQuery({ to }: { to: string }) {
 
 /**
  * The desk's old addresses (Phase 26, ADR-0027): its spending screen, and the letters' and the
- * recommendations' screens before it, open step 4's spending; anything else opens its tax screen.
- * The stage guard does the rest: a game lands on step 4, a link with no game on the briefing.
+ * recommendations' screens before it, open fine-tuning's spending; anything else opens its tax
+ * screen. The stage guard does the rest: a game lands there, a link with no game on the Budget.
  */
 function DeskRedirect() {
   const { tab } = useParams();
@@ -114,17 +110,13 @@ function RouteFocus() {
  * where a reader looks for it once they want it, not above the story.
  */
 function Shell() {
-  const mode = useMode();
-  // The cover fills the screen, its invitation centred between the header and the footer
-  // (ADR-0033, revised); every other screen is as long as what it holds.
-  const cover = useLocation().pathname === '/';
   return (
     <>
       <a href="#main" className="skip-link">
         Skip to the step
       </a>
       <RouteFocus />
-      <div className={cover ? 'shell shell--cover' : 'shell'}>
+      <div className="shell">
         <header className="site-header">
           <div className="site-header__inner">
             <NavLink to="/" className="brand" end>
@@ -132,17 +124,26 @@ function Shell() {
             </NavLink>
           </div>
         </header>
-        <main id="main" tabIndex={-1} className="page" data-mode={mode}>
+        <main id="main" tabIndex={-1} className="page">
           <Suspense fallback={null}>
             <Routes>
-              <Route path="/" element={<StartPage />} />
-              <Route path="/outlook" element={<OutlookPage />} />
-              <Route path="/assumptions" element={<RedirectKeepingQuery to="/outlook" />} />
-              <Route path="/pm" element={<PMPage />} />
+              <Route path="/" element={<BudgetPage />} />
+              {/*
+            The briefing, the priorities and the flagships retired with the Chancellor's Budget as the
+            starting point (ADR-0045): their old addresses open fine-tuning, which took their place on
+            the road, the query string intact; with no game, that opens the Budget, whose button
+            starts one with a link's measures in it.
+          */}
+              <Route path="/outlook" element={<RedirectKeepingQuery to="/finetune/tax" />} />
+              <Route path="/assumptions" element={<RedirectKeepingQuery to="/finetune/tax" />} />
+              <Route path="/pm" element={<RedirectKeepingQuery to="/finetune/tax" />} />
               <Route path="/budget" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-              {/* The flagship screens; the desk's old addresses, below, open step 4. */}
-              <Route path="/budget/deliver" element={<DeliverPage />} />
-              <Route path="/budget/deliver/:n" element={<DeliverPage />} />
+              <Route path="/budget/deliver" element={<RedirectKeepingQuery to="/finetune/tax" />} />
+              <Route
+                path="/budget/deliver/:n"
+                element={<RedirectKeepingQuery to="/finetune/tax" />}
+              />
+              {/* The desk's old addresses, below, open fine-tuning. */}
               {/* Paying for it became fine-tuning tax and spending (Phase 24). */}
               <Route path="/budget/afford" element={<RedirectKeepingQuery to="/finetune/tax" />} />
               <Route path="/budget/:tab" element={<DeskRedirect />} />
@@ -185,10 +186,7 @@ export function App() {
   return (
     <ErrorBoundary resetKey={key}>
       <BudgetProvider>
-        {/* Basic and advanced (Phase 27): one preference, read by the screens that trim their ideas. */}
-        <ModeProvider>
-          <Shell />
-        </ModeProvider>
+        <Shell />
       </BudgetProvider>
     </ErrorBoundary>
   );

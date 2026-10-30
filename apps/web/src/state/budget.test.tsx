@@ -12,10 +12,10 @@ import {
 
 describe('budget state', () => {
   it('hydrates from a permalink and encodes back to the same query', () => {
-    const query = 'v=1&f=obr2610&r=ch2602&i=2027&L=itbr.1&g=st.3_pr.defence';
+    const query = 'v=1&f=obr2610&r=ch2602&i=2027&L=itbr.1&g=st.1_rd.2';
     const state = initialStateFromLocation(`?${query}`);
     expect(state.leverValues).toEqual({ itbr: 1 });
-    expect(state.game).toEqual({ reached: 3, priorities: ['defence'] });
+    expect(state.game).toEqual({ reached: 1 });
     expect(state.warnings).toEqual([]);
     expect(permalinkQuery(state)).toBe(query);
   });
@@ -75,10 +75,10 @@ describe('budget state', () => {
 
   it('takes up a Budget from a link only when asked to load it', () => {
     const fresh = initialStateFromLocation('');
-    const loaded = reducer(fresh, { type: 'load', search: '?L=itbr.1&g=st.5_pr.defence' });
+    const loaded = reducer(fresh, { type: 'load', search: '?L=itbr.1&g=st.2_rd.2' });
     expect(loaded.leverValues.itbr).toBe(1);
-    expect(loaded.game?.priorities).toEqual(['defence']);
-    expect(loaded).toEqual(initialStateFromLocation('?L=itbr.1&g=st.5_pr.defence'));
+    expect(loaded.game).toEqual({ reached: 2 });
+    expect(loaded).toEqual(initialStateFromLocation('?L=itbr.1&g=st.2_rd.2'));
   });
 
   it('starts a game on today’s estimate, and keeps a game under way as it is', () => {
@@ -87,7 +87,7 @@ describe('budget state', () => {
     const started = reducer(sandbox, { type: 'startGame' });
     // The measures are in the game now, so the note that promised them has done its job.
     expect(started.warnings).toEqual([]);
-    expect(started.game).toEqual({ reached: 0, priorities: [] });
+    expect(started.game).toEqual({ reached: 0 });
     // Whatever economy the sandbox had, the game plays on the forecast; the policy stays.
     expect(started.leverValues).toEqual({ itbr: 1 });
     expect(onEstimate(started.leverValues)).toBe(true);
@@ -103,21 +103,22 @@ describe('budget state', () => {
     expect(gone.leverValues).toEqual({});
   });
 
-  it('opens every game on today’s estimate, saying so when the link carried other figures', () => {
-    // A game on the estimate opens as it was, with nothing to say.
-    const fine = initialStateFromLocation('?g=st.2&L=moj.10');
+  it('opens every game on the OBR’s forecast, saying so when the link carried other figures', () => {
+    // A game on the forecast opens as it was, with nothing to say.
+    const fine = initialStateFromLocation('?g=st.0_rd.2&L=moj.10');
     expect(fine.leverValues).toEqual({ moj: 10 });
     expect(fine.warnings).toEqual([]);
-    // A Phase 23 game drew its own forecast and kept a snapshot: both give way to the estimate.
+    // A Phase 23 game drew its own forecast and kept a snapshot: both give way to the forecast,
+    // and its stage on the seven-stage road is read onto the three-step one (ADR-0045).
     const old = initialStateFromLocation(
       '?g=s.417_st.5_pl.pessimistic_hr.30_pr.defence_rb.pubs&M=rate.0.75_rpi.1&L=moj.10&S=moj.10',
     );
-    expect(old.game).toEqual({ reached: 4, priorities: ['defence'] });
+    expect(old.game).toEqual({ reached: 1 });
     expect(old.leverValues).toEqual({ moj: 10 });
     expect(old.warnings).toEqual([ESTIMATE_WARNING]);
     expect(permalinkQuery(old)).not.toContain('S=');
-    // A link with no game opens the briefing (Phase 26): its measures wait for the game it
-    // starts, and one line says so. An economy alone is not a measure, and needs no line.
+    // A link with no game opens the Chancellor's Budget (ADR-0045): its measures wait for the
+    // game it starts, and one line says so. An economy alone is not a measure, and needs no line.
     const measures = initialStateFromLocation('?L=itbr.1');
     expect(measures.leverValues).toEqual({ itbr: 1 });
     expect(measures.warnings).toEqual([MEASURES_NOTE]);

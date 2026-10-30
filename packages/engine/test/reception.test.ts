@@ -4,10 +4,8 @@ import {
   ambitionStatus,
   computeOutcome,
   formatGbpBn,
-  freshGame,
   ratingOf,
   receptions,
-  type GamePermalink,
   type Outcome,
   type Reason,
   type Reception,
@@ -22,7 +20,6 @@ import {
   EMPLOYER_NICS,
   ESTATES_AND_HOMES_PAY,
   FRONT_LOADED,
-  HEALTH_ABOVE_PLAN,
   HEALTH_CUT,
   INVESTMENT,
   MOVES,
@@ -30,11 +27,9 @@ import {
   PENNY,
   PRISONS,
   PROGRAMME,
-  SECURITY,
   SECURITY_FLAGSHIPS,
   TAXES_AT_THE_TOP,
   TWO_CHILD_LIMIT,
-  gameWith,
   todaysEstimate,
   typicalError,
   type Budget,
@@ -77,7 +72,7 @@ const run = (leverValues: Budget) =>
     levers: ds.levers,
     settings: { leverValues },
   });
-function room(leverValues: Budget, game?: GamePermalink): Reception[] {
+function room(leverValues: Budget): Reception[] {
   const outcome = run(leverValues);
   return receptions({
     outcome,
@@ -85,9 +80,8 @@ function room(leverValues: Budget, game?: GamePermalink): Reception[] {
     reception: ds.reception,
     typicalErrorGbpm,
     outcomeOf,
-    pm: ds.pm,
     incidence: ds.incidence,
-    ...(game ? { game, status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers) } : {}),
+    status: ambitionStatus(ds.pm, outcome, ds.levers),
   });
 }
 const by = (list: Reception[], id: Reception['audience']) => {
@@ -96,7 +90,6 @@ const by = (list: Reception[], id: Reception['audience']) => {
   return r;
 };
 const FIGURE = /£\d|\d{3},\d{3}|\d+%/;
-const SECURITY_GAME = gameWith(SECURITY);
 
 describe('cards that agree with their ratings (Phase 25)', () => {
   // Moves a player can make, a few at a time; a sample of Budgets, not every one.
@@ -108,7 +101,7 @@ describe('cards that agree with their ratings (Phase 25)', () => {
   it('shows one reason that never contradicts the rating, and names the other side briefly', () => {
     fc.assert(
       fc.property(budgets, (values) => {
-        for (const r of room(values, SECURITY_GAME)) {
+        for (const r of room(values)) {
           const lead = r.lead;
           if (r.rating > 3) expect(lead?.points, r.audience).toBeGreaterThan(0);
           if (r.rating < 3) expect(lead?.points, r.audience).toBeLessThan(0);
@@ -134,7 +127,7 @@ describe('cards that agree with their ratings (Phase 25)', () => {
   it('writes levels without a plus, points of the economy in words, and causes in running words', () => {
     fc.assert(
       fc.property(budgets, (values) => {
-        for (const r of room(values, SECURITY_GAME)) {
+        for (const r of room(values)) {
           for (const x of r.all) {
             expect(x.text, x.rule).not.toMatch(/of \+£|by \+|percentage points/);
             for (const cause of x.causes) expect(cause, x.rule).not.toMatch(/^[A-Z]/);
@@ -216,12 +209,10 @@ describe('cards that agree with their ratings (Phase 25)', () => {
 describe('three audiences, recalibrated on today’s estimate (Phase 25)', () => {
   /** Today's estimate: every game is played on it (Phase 24). */
   const ESTIMATE = todaysEstimate(ds);
-  const PRIORITIES = gameWith(['nhs', ...SECURITY]);
   /** The three priorities, one way each and borders too, with nothing to pay for them. */
   // Past both rules: the programme, with investment on top, misses the debt rule too.
   const THREE = { ...PROGRAMME, ...INVESTMENT };
-  const at = (policy: Budget, game: GamePermalink = PRIORITIES) =>
-    room({ ...ESTIMATE, ...policy }, game);
+  const at = (policy: Budget) => room({ ...ESTIMATE, ...policy });
   const rule = (list: Reception[], audience: Reception['audience'], id: string) =>
     by(list, audience).all.find((r) => r.rule === id);
 
@@ -361,43 +352,19 @@ describe('three audiences, recalibrated on today’s estimate (Phase 25)', () =>
     expect(ratingOf([{ points: 3 }])).toBe(5);
     expect(ratingOf([{ points: 2 }, { points: -1, cap: 3 }])).toBe(3);
     // Partners' National Insurance strains the tax lock and is small: the strain is all there is.
-    const strained = at({ nicllp: 1 }, freshGame());
+    const strained = at({ nicllp: 1 });
     expect(rule(strained, 'public', 'pb-manifesto-strain')?.points).toBe(-1);
     for (const r of strained) expect(r.rating, r.audience).toBeGreaterThan(1);
   });
 });
 
 describe('graded delivery (Phase 25)', () => {
-  const THREE = gameWith(['nhs', 'defence', 'schools-send']);
   // One cheap way per priority: a care down-payment, the defence plan's gap, the Plan 2 threshold.
   const TOKEN = { ...NHS_START, ...DEFENCE_GAP, rvplan2: 1 };
 
-  it('a token three-tick earns no more with the public or the party than delivering the same priorities in full', () => {
-    const token = room(TOKEN, THREE);
-    // Delivered in full and paid for from the top, crossing no red line.
-    const full = room(
-      { ...HEALTH_ABOVE_PLAN, ...DEFENCE_GAP, dfe: 5, ...ESTATES_AND_HOMES_PAY },
-      THREE,
-    );
-    for (const audience of ['public', 'backbenchers'] as const) {
-      expect(by(token, audience).rating, audience).toBeLessThanOrEqual(by(full, audience).rating);
-    }
-    const priorities = (list: Reception[]) =>
-      by(list, 'public').all.find((r) => r.rule === 'pb-priorities');
-    expect(priorities(token)?.points).toBeLessThan(priorities(full)?.points ?? 0);
-    // It says so in words, and the words score nothing of their own.
-    expect(bandOf(priorities(token))).toBe('one (prioritiesStarted)');
-    const downing = by(token, 'backbenchers').all.find((r) => r.rule === 'bb-downing-street');
-    expect(downing?.points).toBe(0);
-    expect(bandOf(downing)).toBe('delivered (prioritiesStarted)');
-    const everything = by(full, 'backbenchers').all.find((r) => r.rule === 'bb-downing-street');
-    expect(bandOf(everything)).toBe('delivered');
-    expect(said(priorities(token), downing, everything)).toMatchSnapshot();
-  });
-
   it('a token three-tick rates no better than the funded walk, audience by audience', () => {
-    const token = room(TOKEN, THREE);
-    const walk = room(SECURITY_FLAGSHIPS, SECURITY_GAME);
+    const token = room(TOKEN);
+    const walk = room(SECURITY_FLAGSHIPS);
     for (const audience of ['backbenchers', 'markets', 'public'] as const) {
       expect(by(token, audience).rating, audience).toBeLessThanOrEqual(by(walk, audience).rating);
     }
@@ -428,33 +395,31 @@ describe('three audiences, five steps', () => {
   });
 
   it('pins the public at the floor when a manifesto red line is crossed, whatever else happens', () => {
-    const lock = by(room({ ...SECURITY_FLAGSHIPS, ...PENNY, fuel: -10 }, SECURITY_GAME), 'public');
+    const lock = by(room({ ...SECURITY_FLAGSHIPS, ...PENNY, fuel: -10 }), 'public');
     expect(lock.rating).toBe(1);
     expect(lock.reasons[0]?.rule).toBe('pb-manifesto');
     expect(bandOf(lock.reasons[0])).toBe('broken');
-    // The same Budget paid for without crossing a line is liked, for its priorities.
-    const base = by(room({ ...SECURITY_FLAGSHIPS, iht: 10, fuel: -10 }, SECURITY_GAME), 'public');
-    expect(base.rating).toBeGreaterThan(3);
-    const delivered = base.reasons.find((r) => r.rule === 'pb-priorities');
-    expect(delivered?.points).toBeGreaterThan(0);
-    expect(said(lock.reasons[0], delivered)).toMatchSnapshot();
+    // The same Budget paid for without crossing a line stays off the floor.
+    const base = by(room({ ...SECURITY_FLAGSHIPS, iht: 10, fuel: -10 }), 'public');
+    expect(base.rating).toBeGreaterThan(1);
+    expect(said(lock.reasons[0])).toMatchSnapshot();
     // Missing a rule by arithmetic is not a manifesto break: no floor.
-    expect(by(room(DAY_TO_DAY_RULE_MISSED, SECURITY_GAME), 'public').rating).toBeGreaterThan(1);
+    expect(by(room(DAY_TO_DAY_RULE_MISSED), 'public').rating).toBeGreaterThan(1);
   });
 
   it('marks a strain amber: employer National Insurance alone leaves the public above the floor, with the strain named', () => {
     const budget = { ...SECURITY_FLAGSHIPS, ...EMPLOYER_NICS };
-    const pub = by(room(budget, SECURITY_GAME), 'public');
+    const pub = by(room(budget), 'public');
     expect(pub.rating).toBeGreaterThan(1);
     expect(pub.all.find((r) => r.rule === 'pb-manifesto')?.points).toBe(0);
     const strain = pub.all.find((r) => r.rule === 'pb-manifesto-strain');
     expect(strain?.points).toBe(-1);
     expect(bandOf(strain)).toBe('strained');
     expect(said(strain)).toMatchSnapshot();
-    const benches = by(room(budget, SECURITY_GAME), 'backbenchers');
+    const benches = by(room(budget), 'backbenchers');
     expect(benches.all.find((r) => r.rule === 'bb-manifesto-strain')?.points).toBe(-1);
     // Paid for by the penny instead: the floor, and the strain rule has nothing to add.
-    const penny = by(room({ ...SECURITY_FLAGSHIPS, ...PENNY }, SECURITY_GAME), 'public');
+    const penny = by(room({ ...SECURITY_FLAGSHIPS, ...PENNY }), 'public');
     expect(penny.rating).toBe(1);
     expect(penny.all.find((r) => r.rule === 'pb-manifesto-strain')?.points).toBe(0);
   });
@@ -525,10 +490,7 @@ describe('three audiences, five steps', () => {
         );
       return new RegExp(`^${pattern}$`).test(text);
     };
-    for (const r of room(
-      { itbr: 3, ...DAY_TO_DAY_RULE_MISSED, ...TWO_CHILD_LIMIT },
-      SECURITY_GAME,
-    )) {
+    for (const r of room({ itbr: 3, ...DAY_TO_DAY_RULE_MISSED, ...TWO_CHILD_LIMIT })) {
       for (const reason of r.all) {
         expect(
           templates.some((t) => matches(t, reason.text)),
@@ -595,7 +557,7 @@ describe('three audiences, five steps', () => {
             );
             if (value !== lever.control.default) values[code] = value;
           });
-          for (const r of room(values, SECURITY_GAME)) {
+          for (const r of room(values)) {
             expect(r.rating).toBeGreaterThanOrEqual(1);
             expect(r.rating).toBeLessThanOrEqual(5);
           }

@@ -319,16 +319,6 @@
         "text": "Nothing in it for us either way. The rent is the same, the shop is the same, the statement is the same.",
         "sources": [],
         "badge": "simulated"
-      },
-      "understood": {
-        "text": "I could tell what it was for. Whether it reaches us is another matter, but at least I know what they were trying to do.",
-        "sources": [],
-        "badge": "simulated"
-      },
-      "puzzled": {
-        "text": "I could not tell you what that Budget was about. Lots of numbers, and none of them ours.",
-        "sources": [],
-        "badge": "simulated"
       }
     },
     {
@@ -617,16 +607,6 @@
         "text": "It left us alone. The mortgage is the thing that decides our year, and the Budget did not move it.",
         "sources": [],
         "badge": "simulated"
-      },
-      "understood": {
-        "text": "It had a point and it stuck to it. We may not agree with the point, but we could see it.",
-        "sources": [],
-        "badge": "simulated"
-      },
-      "puzzled": {
-        "text": "We watched it and could not say afterwards what it was trying to do.",
-        "sources": [],
-        "badge": "simulated"
       }
     },
     {
@@ -868,16 +848,6 @@
         "text": "Nothing for us and nothing against us. The lock held and the winter payment held; we will take that.",
         "sources": [],
         "badge": "simulated"
-      },
-      "understood": {
-        "text": "I could see what they were doing. I am not sure it was for people like me, but it was for something.",
-        "sources": [],
-        "badge": "simulated"
-      },
-      "puzzled": {
-        "text": "A lot of talk and I still do not know what it was for.",
-        "sources": [],
-        "badge": "simulated"
       }
     },
     {
@@ -1066,16 +1036,6 @@
       "exposure": ["broad-base", "duties", "business", "motorists", "investment", "nhs"],
       "untouched": {
         "text": "It did not touch the van, the diesel or the invoices. That is a good Budget as far as I am concerned.",
-        "sources": [],
-        "badge": "simulated"
-      },
-      "understood": {
-        "text": "I got what it was for. Not for me, but I got it.",
-        "sources": [],
-        "badge": "simulated"
-      },
-      "puzzled": {
-        "text": "Could not tell you. I had the radio on and it was a list of numbers.",
         "sources": [],
         "badge": "simulated"
       }
@@ -1320,16 +1280,6 @@
       ],
       "untouched": {
         "text": "Nothing in it for me and nothing out of me, beyond the freeze that was already there.",
-        "sources": [],
-        "badge": "simulated"
-      },
-      "understood": {
-        "text": "Clear enough. I could tell you what it was for in one sentence.",
-        "sources": [],
-        "badge": "simulated"
-      },
-      "puzzled": {
-        "text": "I read the coverage twice and could not find the thread.",
         "sources": [],
         "badge": "simulated"
       }

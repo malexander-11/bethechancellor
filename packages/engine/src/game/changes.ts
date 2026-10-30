@@ -35,7 +35,7 @@ export interface ChangeRowsInput {
   levers: readonly Lever[];
   /** The name a lever goes by where it has one (the fine-tuning screens'); else its short title. */
   names?: (code: string) => string | undefined;
-  /** Levers read back somewhere else: a flagship's, under its own name. */
+  /** Levers read back somewhere else, under their own names. */
   exclude?: ReadonlySet<string>;
 }
 

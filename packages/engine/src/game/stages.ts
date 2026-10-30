@@ -2,65 +2,58 @@ import type { JourneyStep } from '../types/data.js';
 import type { GamePermalink } from '../types/engine.js';
 
 /**
- * The six stages of a playthrough, in order (Phase 24, ADR-0025): the briefing, the priorities,
- * the flagship policies, fine-tuning tax and spending, delivering the Budget, and the feedback.
- * The index is what a shared link carries (`st.N`). Fine-tuning is one stage with its two screens;
- * `assumptions` is an older name that still appears in authored data.
+ * The three stages of a playthrough, in order (ADR-0045): fine-tuning tax and spending, delivering
+ * the Budget, and the feedback. The index is what a shared link carries (`st.N`, with `rd.2` to say
+ * it counts on this road). Fine-tuning is one stage with its two screens. The briefing, the
+ * priorities and the flagships of the six-stage road (ADR-0025) retired with the Chancellor's
+ * Budget as the starting point: their names still appear in old links and authored data, and each
+ * reads as fine-tuning.
  */
-export const GAME_STAGES: readonly JourneyStep[] = [
-  'outlook',
-  'pm',
-  'deliver',
-  'finetune',
-  'review',
-  'budget-day',
-];
+export const GAME_STAGES: readonly JourneyStep[] = ['finetune', 'review', 'budget-day'];
 
 export const FINAL_STAGE = GAME_STAGES.length - 1;
 
-const ALIASES: Partial<Record<JourneyStep, JourneyStep>> = {
-  assumptions: 'outlook',
+/** The retired steps, by name, each read as the stage it led to. */
+const ALIASES: Record<string, JourneyStep> = {
+  outlook: 'finetune',
+  assumptions: 'finetune',
+  pm: 'finetune',
+  deliver: 'finetune',
 };
 
+/** The canonical stage a step belongs to: a retired step is fine-tuning's. */
+function canonical(step: string): JourneyStep {
+  return ALIASES[step] ?? (step as JourneyStep);
+}
+
 /** Where a step sits in the playthrough; the start page is before everything, at −1. */
-export function stageIndex(step: JourneyStep): number {
-  return GAME_STAGES.indexOf(ALIASES[step] ?? step);
-}
-
-/** The canonical stage a step belongs to: `assumptions` is the briefing's. */
-function canonical(step: JourneyStep): JourneyStep {
-  return ALIASES[step] ?? step;
+export function stageIndex(step: string): number {
+  return GAME_STAGES.indexOf(canonical(step));
 }
 
 /**
- * With no game only the briefing is open (Phase 26, ADR-0027). The desk and its sandbox have gone:
- * every lever is a policy on step 4, and a link that carries measures but no game opens on the
- * briefing, whose button starts the game with those measures in it. A finished game is shared
- * with its `g=`, so its link still opens Budget day.
+ * Whether a step may be opened, given how far the game has got. With no game only the start page,
+ * the Chancellor's Budget, is open: a link that carries measures but no game opens there, and its
+ * button starts the game with those measures in it. The road runs one way: a stage is open once
+ * the one before it has been left (`reached` is bumped by the button that leaves it), going back
+ * is always allowed, and a link that jumps ahead is sent back to the furthest open stage. Budget
+ * day opens from the review, because `reached` only becomes `FINAL_STAGE` on delivering, and a
+ * finished, shared link is told from a game in play by that.
  */
-const SANDBOX_OPEN: ReadonlySet<JourneyStep> = new Set(['outlook']);
-
-/**
- * Whether a step may be opened, given how far the game has got. The road runs one way: a stage is
- * open once the one before it has been left (`reached` is bumped by the button that leaves it),
- * going back is always allowed, and a link that jumps ahead is sent back to the furthest open
- * stage. Budget day opens from the review, because `reached` only becomes `FINAL_STAGE` on
- * delivering, and a finished, shared link is told from a game in play by that.
- */
-export function enterable(step: JourneyStep, game: GamePermalink | undefined): boolean {
+export function enterable(step: string, game: GamePermalink | undefined): boolean {
   if (step === 'start') return true;
+  if (!game) return false;
   const stage = canonical(step);
-  if (!game) return SANDBOX_OPEN.has(stage);
   if (stage === 'budget-day') return game.reached >= stageIndex('review');
   return stageIndex(stage) <= game.reached;
 }
 
-/** Where an early arrival is sent: the furthest open stage, or the outlook when there is no game. */
+/** Where an early arrival is sent: the furthest open stage, or the start when there is no game. */
 export function furthestStep(game: GamePermalink | undefined): JourneyStep {
-  if (!game) return 'outlook';
+  if (!game) return 'start';
   for (let i = GAME_STAGES.length - 1; i >= 0; i -= 1) {
     const stage = GAME_STAGES[i];
     if (stage && enterable(stage, game)) return stage;
   }
-  return 'outlook';
+  return 'start';
 }

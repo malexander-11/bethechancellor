@@ -3,25 +3,32 @@
 exports[`a finished Budget summed up > says a Budget in words (snapshot, £ masked) 1`] = `
 {
   "a tax that starts later": {
-    "alt": "What’s your Budget? A Budget for defence. Tax: A 1% yearly tax on wealth above £10 million, nothing until 2030-31, then raises £…bn; A new 50% income tax rate above £125,140, raises £…bn. No spending changed. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn. Labour backbenchers: Grumbling, 2 of 5. The markets: Nervous, 2 of 5. The public: Sceptical, 2 of 5.",
+    "alt": "What’s your Budget? 2 changes to the Chancellor’s Budget. Tax: A 1% yearly tax on wealth above £10 million, nothing until 2030-31, then raises £…bn; A new 50% income tax rate above £125,140, raises £…bn. No spending changed. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn. Labour backbenchers: Grumbling, 2 of 5. The markets: Nervous, 2 of 5. The public: Sceptical, 2 of 5.",
     "description": "Taxes raise £…bn; less borrowing saves £…bn in interest. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn.",
     "rules": "It meets both fiscal rules, but misses the welfare cap by £…bn.",
-    "share": "I made a Budget for defence. It meets both fiscal rules, but misses the welfare cap by £…bn. What’s your Budget?",
-    "title": "A Budget for defence",
+    "share": "2 changes to the Chancellor’s Budget. It meets both fiscal rules, but misses the welfare cap by £…bn. What’s your Budget?",
+    "title": "2 changes to the Chancellor’s Budget",
   },
-  "debt rule missed, no priorities": {
-    "alt": "What’s your Budget? My Budget. No tax changed. Spending: Public investment, 20% more, adds £…bn of investment. Headroom goes from £…bn to £…bn in 2029-30. It misses the debt rule by £…bn and the welfare cap by £…bn. Labour backbenchers: Divided, 3 of 5. The markets: Alarmed, 1 of 5. The public: Sceptical, 2 of 5.",
+  "debt rule missed": {
+    "alt": "What’s your Budget? One change to the Chancellor’s Budget. No tax changed. Spending: Public investment, 20% more, adds £…bn of investment. Headroom goes from £…bn to £…bn in 2029-30. It misses the debt rule by £…bn and the welfare cap by £…bn. Labour backbenchers: Divided, 3 of 5. The markets: Alarmed, 1 of 5. The public: Shrugging, 3 of 5.",
     "description": "More borrowing costs £…bn in interest. Headroom goes from £…bn to £…bn in 2029-30. It misses the debt rule by £…bn and the welfare cap by £…bn.",
     "rules": "It misses the debt rule by £…bn and the welfare cap by £…bn.",
-    "share": "I made my Budget. It misses the debt rule by £…bn and the welfare cap by £…bn. What’s your Budget?",
-    "title": "My Budget",
+    "share": "One change to the Chancellor’s Budget. It misses the debt rule by £…bn and the welfare cap by £…bn. What’s your Budget?",
+    "title": "One change to the Chancellor’s Budget",
   },
   "rules met": {
-    "alt": "What’s your Budget? A Budget for defence and safer streets. Tax: Employer National Insurance, 17%, raises £…bn; The basic rate of income tax, 21%, raises £…bn. Spending: Prisons and courts, 10% more, costs £…bn; Health and social care, 0.5% less, saves £…bn; Fund the defence plan’s gap, costs £…bn. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn. Labour backbenchers: Divided, 3 of 5. The markets: Reassured, 4 of 5. The public: Furious, 1 of 5.",
+    "alt": "What’s your Budget? 5 changes to the Chancellor’s Budget. Tax: Employer National Insurance, 17%, raises £…bn; The basic rate of income tax, 21%, raises £…bn. Spending: Prisons and courts, 10% more, costs £…bn; Health and social care, 0.5% less, saves £…bn; Fund the defence plan’s gap, costs £…bn. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn. Labour backbenchers: Divided, 3 of 5. The markets: Reassured, 4 of 5. The public: Furious, 1 of 5.",
     "description": "Taxes raise £…bn; day-to-day spending adds £…bn net; less borrowing saves £…bn in interest. Headroom goes from £…bn to £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn.",
     "rules": "It meets both fiscal rules, but misses the welfare cap by £…bn.",
-    "share": "I made a Budget for defence and safer streets. It meets both fiscal rules, but misses the welfare cap by £…bn. What’s your Budget?",
-    "title": "A Budget for defence and safer streets",
+    "share": "5 changes to the Chancellor’s Budget. It meets both fiscal rules, but misses the welfare cap by £…bn. What’s your Budget?",
+    "title": "5 changes to the Chancellor’s Budget",
+  },
+  "unchanged": {
+    "alt": "What’s your Budget? The Chancellor’s Budget, unchanged. No tax changed. No spending changed. Headroom stays at £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn. Labour backbenchers: Divided, 3 of 5. The markets: Watchful, 3 of 5. The public: Shrugging, 3 of 5.",
+    "description": "Nothing moves the headroom. Headroom stays at £…bn in 2029-30. It meets both fiscal rules, but misses the welfare cap by £…bn.",
+    "rules": "It meets both fiscal rules, but misses the welfare cap by £…bn.",
+    "share": "The Chancellor’s Budget, unchanged. It meets both fiscal rules, but misses the welfare cap by £…bn. What’s your Budget?",
+    "title": "The Chancellor’s Budget, unchanged",
   },
 }
 `;

@@ -1,14 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  formatGbpBn,
-  fromForecast,
-  optionPrice,
-  preBudget,
-  preBudgetValues,
-  priceMove,
-  reconcile,
-  type Outcome,
-} from '../src/index.js';
+import { preBudget, preBudgetValues, priceMove, reconcile, type Outcome } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
 import {
   DEFENCE_GAP,
@@ -27,12 +18,13 @@ const ESTIMATE = todaysEstimate(ds);
 const outcomeOf = outcomeOfFor(ds, { implementationYear: '2027-28' });
 const headroom = (o: Outcome, kind: 'currentBudget' | 'stockFalling' = 'currentBudget') =>
   o.verdicts.find((v) => v.kind === kind)?.headroomGbpm ?? Number.NaN;
+/** What choosing these values now would do, against the Budget as it stands. */
 const price = (values: Budget, current: Budget = {}) =>
-  optionPrice({
+  priceMove({
     outcomeOf,
     levers: ds.levers,
-    current: { ...ESTIMATE, ...current },
-    values,
+    from: { ...ESTIMATE, ...current },
+    to: { ...ESTIMATE, ...current, ...values },
   });
 
 describe('one price per choice (Phase 25)', () => {
@@ -53,18 +45,6 @@ describe('one price per choice (Phase 25)', () => {
     );
     // More than the day-to-day cost alone, which is what a card used to show.
     expect(-gap.headroomChangeGbpm).toBeGreaterThan(gap.split.currentGbpm);
-  });
-
-  it('prices a chosen option as what it is doing: the same figure as choosing it', () => {
-    const off = price(DEFENCE_GAP);
-    const on = optionPrice({
-      outcomeOf,
-      levers: ds.levers,
-      current: { ...ESTIMATE, ...DEFENCE_GAP },
-      values: DEFENCE_GAP,
-      on: true,
-    });
-    expect(on.headroomChangeGbpm).toBeCloseTo(off.headroomChangeGbpm, 6);
   });
 
   it('prices investment on its own against the debt rule, which it touches', () => {
@@ -93,20 +73,6 @@ describe('one price per choice (Phase 25)', () => {
     expect(sooner.earlier?.year).toBe('2027-28');
     expect(sooner.earlier?.costGbpm).toBeLessThan(0);
     expect(sooner.laterStart).toBeUndefined();
-  });
-
-  it('prices a swap with the option it replaces put back, never both at once', () => {
-    const current = DEFENCE_GAP;
-    const swap = optionPrice({
-      outcomeOf,
-      levers: ds.levers,
-      current: { ...ESTIMATE, ...current },
-      values: FRONT_LOADED,
-      swapOut: Object.fromEntries(Object.keys(current).map((code) => [code, 0])),
-    });
-    expect(swap.headroomGbpm).toBeCloseTo(headroom(outcomeOf({ ...ESTIMATE, ...FRONT_LOADED })), 6);
-    const both = price(FRONT_LOADED, current);
-    expect(both.headroomGbpm).toBeLessThan(swap.headroomGbpm);
   });
 
   it('names the first year a move does anything, when it does nothing in the target year', () => {
@@ -163,37 +129,5 @@ describe('the review adds up (Phase 25)', () => {
     );
     expect(saved.spendingGbpm).toBeLessThan(0);
     expect(saved.taxesGbpm).toBe(0);
-  });
-});
-
-describe('from the forecast to today’s estimate (Phase 28)', () => {
-  // The October forecast's own headroom, with the tolerance the vintage checks it to.
-  const check = ds.vintage.checks.stabilityHeadroomGbpm;
-
-  it('is the OBR’s figure, and the estimate is the forecast itself when nothing has moved', () => {
-    const f = fromForecast(outcomeOf(ESTIMATE));
-    expect(f.year).toBe('2029-30');
-    expect(f.year).toBe(check.year);
-    // The October forecast, as the vintage checks it: what earns the Official figure badge.
-    expect(Math.abs(f.forecastGbpm - check.value)).toBeLessThanOrEqual(check.toleranceGbpm);
-    expect(f.steps).toEqual([]);
-    expect(f.estimateGbpm).toBeCloseTo(f.forecastGbpm, 6);
-    expect(f.estimateGbpm).toBeCloseTo(headroom(outcomeOf(ESTIMATE)), 6);
-    expect(formatGbpBn(f.estimateGbpm, 1)).toBe('£14.5bn');
-  });
-
-  it('has no steps with nothing set, and one for each setting that moves', () => {
-    const october = fromForecast(outcomeOf({}));
-    expect(october.steps).toEqual([]);
-    expect(october.estimateGbpm).toBeCloseTo(october.forecastGbpm, 6);
-    // Dearer borrowing, dearer prices and slower growth: three steps, adding up exactly.
-    const three = fromForecast(outcomeOf({ ...ESTIMATE, rate: 0.75, rpi: 0.5, ngdp: -0.1 }));
-    for (const step of three.steps) expect(step.badge).toBe('assumption');
-    expect(three.steps.map((s) => s.code).sort()).toEqual(['ngdp', 'rate', 'rpi']);
-    expect(three.forecastGbpm + three.steps.reduce((a, s) => a + s.headroomGbpm, 0)).toBeCloseTo(
-      three.estimateGbpm,
-      6,
-    );
-    expect(three.estimateGbpm).toBeLessThan(fromForecast(outcomeOf(ESTIMATE)).estimateGbpm);
   });
 });

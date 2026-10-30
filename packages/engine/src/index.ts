@@ -20,8 +20,6 @@ export {
   parseReception,
   parsePm,
   parseMinisters,
-  parseInterventions,
-  parseOptions,
   parseFinetune,
   parseHouseholdsFile,
   parseIncidence,
@@ -54,14 +52,12 @@ export { interpolateLookup } from './costing/lookup.js';
 export * from './game/scenarios.js';
 export * from './game/ambitions.js';
 export * from './game/ministers.js';
-export * from './game/options.js';
 export * from './game/prices.js';
 export * from './game/excludes.js';
 export * from './game/finetune.js';
 export * from './game/households.js';
 export * from './game/verdict.js';
 export * from './game/signoff.js';
-export * from './game/theme.js';
 export { costLever, effectiveStartYear } from './costing/index.js';
 export {
   computeOutcome,
@@ -109,6 +105,8 @@ export {
   encodeGame,
   decodeGame,
   LEGACY_STAGE,
+  ROAD,
+  SIX_STAGE,
 } from './permalink/codec.js';
 export { formatGbp, formatGbpBn, formatPct, perHousehold } from './format.js';
 export {

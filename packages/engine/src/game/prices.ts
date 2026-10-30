@@ -1,10 +1,10 @@
 import { fyStart } from '../calc/years.js';
 import { formatGbpBn } from '../format.js';
-import type { Badge, Lever, OptionsFile, PmFile } from '../types/data.js';
+import type { Lever } from '../types/data.js';
 import type { LeverEffect, Outcome } from '../types/engine.js';
 
 /**
- * One price per choice (Phase 25, R4). Every screen that prices a flagship, the card and the
+ * One price per choice (Phase 25, R4). Every screen that prices a choice, the card and the
  * review, reads the same figure: the change the choice makes to the headroom
  * the bar shows in the target year, debt interest included, so "costs £0.8bn · leaves £6.0bn"
  * adds up. It is the engine re-run with and without the choice: arithmetic on official figures,
@@ -200,36 +200,6 @@ export function withDefaults(
   return out;
 }
 
-/**
- * An option's one price. Off (or trimmed, or moved the other way): what choosing it now would do,
- * with any option it replaces put back in the same move. On: what it is doing, the Budget as it
- * stands against the Budget without it. The option's levers are all the price counts; everything
- * else in the Budget stays where it is.
- */
-export function optionPrice(input: {
-  outcomeOf: OutcomeOf;
-  levers: readonly Lever[];
-  current: Record<string, number>;
-  values: Record<string, number>;
-  on?: boolean;
-  /** Where the option's levers go when it is taken out: their defaults, unless said. */
-  back?: Record<string, number>;
-  /** An option this one replaces, put back to its defaults in the same move (a swap). */
-  swapOut?: Record<string, number>;
-}): Price {
-  const { outcomeOf, levers, current, values } = input;
-  if (input.on) {
-    const back = input.back ?? withDefaults({}, Object.keys(values), levers);
-    return priceMove({ outcomeOf, levers, from: { ...current, ...back }, to: current });
-  }
-  return priceMove({
-    outcomeOf,
-    levers,
-    from: current,
-    to: { ...current, ...(input.swapOut ?? {}), ...values },
-  });
-}
-
 /** The Budget before any measure: today's estimate, the macro settings alone (Phase 25). */
 export function preBudgetValues(
   values: Record<string, number>,
@@ -332,89 +302,4 @@ export function reconcileWords(r: Reconciliation): string[] {
         : `less borrowing saves ${money(r.interestGbpm)} in interest`
       : null,
   ].filter((x): x is string => x !== null);
-}
-
-/**
- * How the headroom got from the OBR's March forecast to today's estimate (Phase 28, ADR-0030): the
- * forecast's own margin on the day-to-day rule, then what each economic setting of the estimate
- * does to it in the target year. `pre` is the Budget before any measure (today's estimate: the
- * macro settings alone), so the steps are the rows the engine attributes to those settings, signed
- * as changes to the headroom, and the forecast and the steps come to the estimate exactly. Each
- * step keeps the badge its row wears: the settings are an assumption, the OBR's sensitivities
- * turn them into money.
- */
-export interface FromForecast {
-  year: string;
-  /** The March forecast's headroom, £ million: the vintage's own figure, with nothing moved. */
-  forecastGbpm: number;
-  /** What each economic setting does to the headroom, £ million: negative takes it away. */
-  steps: { code: string; headroomGbpm: number; badge: Badge }[];
-  /** Today's estimate of the headroom, £ million. */
-  estimateGbpm: number;
-}
-
-export function fromForecast(pre: Outcome): FromForecast {
-  const verdict = pre.verdicts.find((v) => v.kind === 'currentBudget');
-  const steps = pre.attribution.flatMap((row) =>
-    row.kind === 'macro' && row.code
-      ? [{ code: row.code, headroomGbpm: -row.currentBudgetGbpm, badge: row.badge }]
-      : [],
-  );
-  return {
-    year: targetYearOf(pre),
-    forecastGbpm: verdict?.baseline.headroomGbpm ?? 0,
-    steps,
-    estimateGbpm: verdict?.headroomGbpm ?? 0,
-  };
-}
-
-export interface PriorityScale {
-  year: string;
-  /**
-   * The cheapest way to deliver each priority in full, on the day-to-day rule, against the Budget
-   * as it stands: the smallest and largest of those across the priorities, £ million. Null when
-   * no priority costs anything to deliver.
-   */
-  costs: { minGbpm: number; maxGbpm: number } | null;
-  /** The priorities whose every way to deliver in full saves money on the day-to-day rule. */
-  saves: string[];
-}
-
-/**
- * The scale of the priorities, before any is chosen (Phase 25, R21, Worked out): what the cheapest
- * way to deliver each one in full would do to the headroom the bar shows, one price per option as
- * everywhere else. A priority whose full ways all save money is said to save it. Investment on its
- * own is priced on the debt rule, so it does not enter a range read against the day-to-day rule.
- */
-export function priorityScale(input: {
-  pm: PmFile;
-  options: OptionsFile;
-  levers: readonly Lever[];
-  outcomeOf: OutcomeOf;
-  current: Record<string, number>;
-}): PriorityScale {
-  const { pm, options, levers, outcomeOf, current } = input;
-  let year = '';
-  const cheapest: number[] = [];
-  const saves: string[] = [];
-  for (const priority of pm.priorities) {
-    const prices = options.deliver
-      .filter((o) => o.priority === priority.id && o.scale.kind === 'full')
-      .map((o) => optionPrice({ outcomeOf, levers, current, values: o.values }))
-      .filter((p) => p.rule === 'currentBudget');
-    if (prices.length === 0) continue;
-    year = prices[0]?.year ?? year;
-    const costs = prices.map((p) => -p.headroomChangeGbpm);
-    if (costs.every((c) => c < 0)) saves.push(priority.id);
-    const least = Math.min(...costs.filter((c) => c > 0));
-    if (Number.isFinite(least)) cheapest.push(least);
-  }
-  return {
-    year,
-    costs:
-      cheapest.length > 0
-        ? { minGbpm: Math.min(...cheapest), maxGbpm: Math.max(...cheapest) }
-        : null,
-    saves,
-  };
 }

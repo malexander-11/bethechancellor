@@ -35,7 +35,7 @@ test('a Budget shared from Budget day opens as an invitation to play', async ({ 
   // What a network reads: the site's page, previewing this Budget's picture and words.
   const html = await (await page.request.get(link)).text();
   const image = /<meta property="og:image" content="([^"]+)"/.exec(html)?.[1] ?? '';
-  expect(image.replace(/&amp;/g, '&')).toMatch(/\/api\/card\?.*g=st\.5/);
+  expect(image.replace(/&amp;/g, '&')).toMatch(/\/api\/card\?.*g=st\.2_rd\.2/);
   expect(html).toMatch(/<meta name="twitter:card" content="summary_large_image" \/>/);
   expect((await page.request.get(image.replace(/&amp;/g, '&'))).headers()['content-type']).toBe(
     'image/png',
@@ -46,13 +46,13 @@ test('a Budget shared from Budget day opens as an invitation to play', async ({ 
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   await expectDrawn(page, 'main img.share__picture');
   await page.getByRole('link', { name: SHARE_TEXT.play }).click();
-  await expect(page).toHaveURL(/\/outlook\?/);
+  await expect(page).toHaveURL(/^[^?]*\/\?/);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
   // Or the Budget itself, opened in the game where it ended.
   await page.goto(link);
   await page.getByRole('link', { name: SHARE_TEXT.open }).click();
-  await expect(page).toHaveURL(/\/budget-day\?.*g=st\.5/);
+  await expect(page).toHaveURL(/\/budget-day\?.*g=st\.2_rd\.2/);
   await expectDrawn(page, 'main img.share__picture');
 });
 

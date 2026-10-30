@@ -22,16 +22,11 @@ import {
   reliefWords,
   wouldWords,
 } from '../journey/effects';
-import { settledLine } from '../journey/levers';
-import { StepLink } from '../journey/links';
 import { AdviceLine } from './AdviceLine';
-import { BlockedNotice } from './BlockedNotice';
 import {
   LeverFlags,
   levelChange,
   takesOutWords,
-  type Blocked,
-  type Chosen,
   type LeverNote,
   type Radio,
   type RedLine,
@@ -41,12 +36,6 @@ import { Milestones } from './Milestones';
 import { Term } from './Term';
 
 const POLICY_YEARS = policyYearsOf(vintage);
-
-/** A flagship the player chose holds a lever at its own value: its title and its screen. */
-export interface Held {
-  title: string;
-  to: string;
-}
 
 /**
  * Said once on a card that prices a relief (ADR-0037): HMRC's cost of a tax break is the most
@@ -136,10 +125,9 @@ function PlannedLevel({ lever }: { lever: Lever }) {
  * a set of ticks that contradict each other (ADR-0036), with its short name; or a scale of levels
  * with the plan among them (ADR-0035). At rest it says in one line what choosing would do, with
  * no headroom, since the bar keeps that score; once chosen, what it does, its adviser's line and
- * Undo. What changes what choosing means rides in its head: the promises that watch it, the
- * flagship it belongs to, and "Not on the table"; what it would take out, or why a flagship holds
- * it still, is said before it is touched. Everything else about the lever waits under its card's
- * one fold (LeverAbout).
+ * Undo. What changes what choosing means rides in its head: the promises that watch it and "Not
+ * on the table"; what it would take out is said before it is touched. Everything else about the
+ * lever waits under its card's one fold (LeverAbout).
  */
 export function LeverRow({
   lever,
@@ -150,11 +138,9 @@ export function LeverRow({
   onChange,
   levels,
   redLines = [],
-  chosen,
   prices = [],
   advice,
   notes = [],
-  blocked,
   takesOut,
   radio,
   children,
@@ -170,15 +156,12 @@ export function LeverRow({
   /** A scale's levels, low to high, the plan among them; or a tick's one setting. */
   levels: readonly number[];
   redLines?: readonly RedLine[];
-  chosen?: Chosen | undefined;
   /** At rest, what choosing would do: one phrase for a tick, one a way for a scale. */
   prices?: readonly string[];
   /** The adviser's line for the way the lever has moved, and who says it, once it has. */
   advice?: { who: string; line: SimulatedLine } | undefined;
   /** Warnings that apply now: a lever this one interacts with has moved. */
   notes?: readonly LeverNote[];
-  /** A flagship the player chose holds a lever that counts the same money (Phase 26). */
-  blocked?: Blocked | undefined;
   /** Choosing this would take out levers in the Budget that count the same money (ADR-0036). */
   takesOut?: TakesOut | undefined;
   /** One of a set of ticks that contradict each other: a radio in place of the box. */
@@ -199,12 +182,9 @@ export function LeverRow({
     undone.current = false;
     row.current?.querySelector<HTMLInputElement>(tick ? 'input' : 'input:checked')?.focus();
   }, [isDefault, tick]);
-  // Moved to a setting none of its levels is: an old link, or a flagship's value left behind.
+  // Moved to a setting none of its levels is: an old link.
   const offGrid = !isDefault && !levels.some((v) => Math.abs(v - value) < 1e-9);
-  // A row a flagship holds the other of a pair on stays in the tab order but does not move.
-  const change = (next: number) => {
-    if (!blocked) onChange(next);
-  };
+  const change = (next: number) => onChange(next);
   // At rest a budget still says how it grows after rising prices, which no radio names; then what
   // choosing would do, on a line of its own. Once moved, what it does.
   const growth =
@@ -225,19 +205,15 @@ export function LeverRow({
   const range = lever.control.sourceRange;
   const beyond = range !== undefined && (value < range.min || value > range.max);
   const describedBy = [
-    blocked ? `${id}-blocked` : null,
     takesOut ? `${id}-takesout` : null,
     resting ? `${id}-price` : null,
     effectText ? `${id}-effect` : null,
   ]
     .filter(Boolean)
     .join(' ');
-  // A flagship ask trimmed short of what was chosen is settled lower, in the Chief Secretary's
-  // words (Phase 25).
-  const settled = chosen?.state === 'adjusted' ? settledLine(lever) : null;
   const flags = (
     <span className="tune__row-flags">
-      <LeverFlags redLines={[...redLines]} chosen={chosen} />
+      <LeverFlags redLines={[...redLines]} />
       {lever.notOnTheTable ? <span className="tag tag--quiet">Not on the table</span> : null}
     </span>
   );
@@ -245,7 +221,7 @@ export function LeverRow({
   return (
     <div
       ref={row}
-      className={`tune__row${tick ? ' tune__row--tick' : ''}${isDefault ? '' : ' tune__row--on'}${blocked ? ' tune__row--blocked' : ''}`}
+      className={`tune__row${tick ? ' tune__row--tick' : ''}${isDefault ? '' : ' tune__row--on'}`}
     >
       {tick ? (
         <div className="tune__row-head">
@@ -270,7 +246,6 @@ export function LeverRow({
                 checked={!isDefault}
                 aria-labelledby={`${id}-name`}
                 aria-describedby={describedBy || undefined}
-                aria-disabled={blocked ? true : undefined}
                 onChange={(e) => change(e.target.checked ? (levels[0] ?? rest) : rest)}
               />
             )}
@@ -308,7 +283,6 @@ export function LeverRow({
                     name={`${id}-level`}
                     value={v}
                     checked={on}
-                    aria-disabled={blocked ? true : undefined}
                     onChange={() => change(v)}
                   />
                   <span className="lever__size-text">
@@ -325,14 +299,6 @@ export function LeverRow({
         </>
       )}
       <div className="tune__row-body">
-        {blocked ? (
-          <BlockedNotice
-            id={`${id}-blocked`}
-            other={blocked.other}
-            reason={blocked.reason}
-            flagship={blocked.flagship}
-          />
-        ) : null}
         {takesOut ? (
           // Said before anything is touched (ADR-0036): the control still moves, and its price
           // already counts the others as gone.
@@ -350,7 +316,6 @@ export function LeverRow({
           </p>
         ) : null}
         {!isDefault && advice ? <AdviceLine who={advice.who} line={advice.line} /> : null}
-        {settled ? <AdviceLine who={settled.who} line={settled.line} /> : null}
         {notes.length > 0 ? (
           <ul className="lever__notes">
             {notes.map((n) => (
@@ -370,8 +335,7 @@ export function LeverRow({
             type="button"
             className="linklike tune__row-undo"
             onClick={() => {
-              // A row a flagship holds does not move, so there is no focus to put back.
-              undone.current = !blocked;
+              undone.current = true;
               change(rest);
             }}
           >
@@ -379,39 +343,6 @@ export function LeverRow({
           </button>
         )}
       </div>
-    </div>
-  );
-}
-
-/**
- * A lever a flagship the player chose holds at its own value (Phase 26): its row names the
- * flagship, with the way back to change it. Step 4 never undoes a flagship.
- */
-export function HeldRow({
-  name,
-  held,
-  words,
-}: {
-  name: string;
-  held: Held;
-  /** Where the flagship has the lever, for a lever with a level ("10% more"); none for a toggle. */
-  words?: string | undefined;
-}) {
-  return (
-    <div className="tune__row tune__row--held">
-      <div className="tune__row-head">
-        <span className="tune__row-name">{name}</span>
-        <span className="tune__row-flags">
-          <span className="tag--treasury">In your flagship policies</span>
-        </span>
-      </div>
-      <p className="lever__held">
-        {held.title}
-        {words ? `: ${words}` : ''}.{' '}
-        <StepLink to={held.to}>
-          Change<span className="sr-only"> {held.title}</span>
-        </StepLink>
-      </p>
     </div>
   );
 }

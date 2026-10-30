@@ -1,10 +1,4 @@
-import {
-  freshGame,
-  suggestedSettings,
-  type ContextFile,
-  type Dataset,
-  type GamePermalink,
-} from '../src/index.js';
+import { suggestedSettings, type ContextFile, type Dataset } from '../src/index.js';
 
 /**
  * The Budgets the engine tests play, each named for the part it plays and documented with it, and
@@ -19,16 +13,6 @@ import {
 
 /** Lever settings by code: a Budget, or the part of one a test adds to another. */
 export type Budget = Readonly<Record<string, number>>;
-
-/* ------------------------------------------------------------------------------ the priorities */
-
-/** The review's two priorities (Phase 25, R3): defence, then safer streets. */
-export const SECURITY: readonly string[] = ['defence', 'safer-streets'];
-
-/** A fresh game with these priorities ranked with the Prime Minister, in this order. */
-export function gameWith(priorities: readonly string[] = []): GamePermalink {
-  return { ...freshGame(), priorities: [...priorities] };
-}
 
 /* ------------------------------------------------------------------------ the review's Budgets */
 

@@ -11,8 +11,8 @@
 /* ---------------------------------------------------------- the progress */
 
 /*
- * "Step 2 of 6 · Set your priorities" over six marks on a rule, like a document's running head,
- * on every screen after the cover (ADR-0033). Each state has its own shape as well as its colour:
+ * "Step 2 of 3 · Deliver the Budget" over three marks on a rule, like a document's running head,
+ * on every screen after the Chancellor's Budget (ADR-0033, ADR-0045). Each state has its own shape as well as its colour:
  * a step behind you is a tick on a green wash, the step you are at a filled numeral, a step ahead
  * you have opened an outlined numeral, one not yet open a dashed numeral; the rule is solid
  * behind you and dashed ahead. Square marks, like the rest of the paper (ADR-0014, ADR-0023).
@@ -191,90 +191,7 @@
   line-height: 1.5;
 }
 
-/* -------------------------------------- the briefing, in three parts (Phase 28, ADR-0030) */
-
-.brief {
-  margin: 0;
-}
-
-/* Each part's heading starts its section. */
-.brief > .section-label {
-  margin-top: 0;
-}
-
-.brief .motif--papers {
-  color: var(--brass-ink);
-}
-
-/* The one figure to plan on, large, with the words after it at reading size. */
-.brief__figure {
-  max-width: 44em;
-  margin: 0 0 8px;
-  font-size: 1.125rem;
-  line-height: 1.5;
-}
-
-.brief__figure strong {
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
-}
-
-.brief__line {
-  max-width: 44em;
-  margin: 8px 0;
-  line-height: 1.5;
-}
-
-.brief__year {
-  white-space: nowrap;
-}
-
-/*
- * How the headroom is calculated: the forecast, what moved it, and the estimate, row by row. One
- * grid of two columns, label and figure, shared by every row through subgrid, so the figures line
- * up as a sum does; a label may wrap, the figures never do. A browser without subgrid lays each
- * row out on its own.
- */
-.calc {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: 12px;
-  max-width: 34em;
-  margin: 0 0 8px;
-}
-
-.calc__row {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-columns: subgrid;
-  align-items: baseline;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.calc__row dd {
-  margin: 0;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.calc__figure {
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.calc__row--total {
-  border-top: 2px solid var(--ink);
-  border-bottom: 0;
-}
-
-.calc__row--total dt,
-.calc__row--total .calc__figure {
-  font-weight: 700;
-}
+/* ------------------------------------------------------------- the actions */
 
 /* The one primary action, the way back beside it, and a hint under both when the action waits. */
 .actions {
@@ -291,103 +208,51 @@
   font-size: 0.9375rem;
 }
 
-/* The manifesto's red lines, in one line with a red rule. */
-.redlines-line {
+/* ---------------------------------------- the Chancellor's Budget (ADR-0045) */
+
+/* The measures by what each does: a heading a group, then one line a measure between hairlines. */
+.measures__group {
   margin: 16px 0 0;
-  padding: 8px 0 8px 14px;
-  border-left: 3px solid var(--red);
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
-/* ------------------------------------------------ the briefing and theme */
-
-/* The theme of the Budget, written from the ranking (Phase 23). */
-.theme {
-  margin: 0 0 16px;
-  padding: 12px 0 12px 14px;
-  border-left: 3px solid var(--accent);
-}
-
-.theme__title {
-  margin: 0 0 4px;
-  font-family: var(--font-display);
-  font-size: 1.375rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-.theme__line {
-  max-width: 44em;
-  margin: 0;
-  color: var(--ink-2);
-}
-
-/* The scale before choosing (Phase 25): what one priority costs against the headroom. */
-.theme__scale {
-  max-width: 44em;
+.measures {
   margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.choice__title .tag--quiet {
-  margin-left: 6px;
-}
-
-/* ------------------------------------------------------------ the opening */
-
-/*
- * The invitation (ADR-0033): the red Budget box, the heading, the premise and the button as one
- * composition, centred in the screen it fills (styles.css, `.shell--cover`). On a phone the box
- * stands above the words, all on one centre line, drawn at a size that leaves the button in view;
- * on a wide screen the words take the left and the box the right.
- */
-.opening {
-  display: grid;
-  grid-template-areas:
-    'art'
-    'words';
-  justify-items: center;
-  gap: 8px;
-  padding: 0 0 8px;
-  text-align: center;
-}
-
-/* The box grows with the screen's height as well as its width, so a tall phone is filled and a
-   short one keeps the button in view. */
-.opening__art {
-  grid-area: art;
-  width: min(100%, 340px, 42vh);
-  width: min(100%, 340px, 42svh, max(120px, calc((100svh - 410px) * 1.36)));
-}
-
-.opening__words {
-  grid-area: words;
-}
-
-.opening__title {
-  margin: 0 0 12px;
-  font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
-  line-height: 1.02;
-}
-
-.opening__lede {
-  max-width: 24em;
-  margin: 0 auto 20px;
-  font-size: 1.125rem;
+.measure {
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
   line-height: 1.5;
 }
 
-.opening__actions {
-  margin: 0 0 12px;
+/* What it does, then its figure and, for a measure not on offer, why, in the quieter ink. */
+.measure__figure,
+.measure__why {
+  color: var(--ink-2);
 }
 
-/* The cover's quiet second way in (ADR-0044): a plain link under the button. */
-.opening__more {
+.measure__figure {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The way to the screen a measure is on: a link in the line, with a touch target of its own. */
+.measure__change {
+  min-height: 0;
+  padding: 10px 0;
+  font-size: 1rem;
+}
+
+/* The quiet second way in (ADR-0044): a plain link under the button. */
+.budget__more {
   margin: 0;
 }
 
-.opening__more a {
+.budget__more a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -396,38 +261,7 @@
   text-underline-offset: 0.15em;
 }
 
-/* On a tall phone the heading grows with the screen's height, up to the width it has. */
-@media (max-width: 719px) {
-  .opening__title {
-    font-size: clamp(2.5rem, min(6svh, 11.5vw), 3rem);
-  }
-}
-
-@media (min-width: 720px) {
-  .opening {
-    grid-template-areas: 'words art';
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: center;
-    justify-items: stretch;
-    gap: 24px 40px;
-    padding: 24px 0 16px;
-    text-align: left;
-  }
-
-  .opening__art {
-    justify-self: center;
-    width: min(100%, 440px, 56vh);
-    width: min(100%, 440px, 56svh);
-  }
-
-  .opening__title {
-    margin-bottom: 16px;
-  }
-
-  .opening__lede {
-    margin: 0 0 24px;
-  }
-}
+/* ---------------------------------------------------------------- motifs */
 
 .motif {
   display: block;
@@ -496,125 +330,6 @@
   margin: 0;
   font-size: 1rem;
   line-height: 1.5;
-}
-
-/* ------------------------------------------------------------- choices */
-
-.choices {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 0 16px;
-  margin: 8px 0 16px;
-  padding: 0;
-  border-bottom: 1px solid var(--border);
-  list-style: none;
-}
-
-.choices--list {
-  grid-template-columns: 1fr;
-}
-
-.choice {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 14px 0;
-  border-top: 1px solid var(--border);
-  cursor: pointer;
-  transition: background-color var(--t-base) var(--ease);
-}
-
-label.choice {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.choice > label {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  cursor: pointer;
-}
-
-.choice--picked {
-  background: var(--accent-wash);
-  box-shadow: -3px 0 0 0 var(--accent);
-}
-
-.choice input {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  margin: 2px 0 0;
-}
-
-.choice__body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.choice__title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.choice__line {
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  line-height: 1.45;
-}
-
-.choice__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 10px;
-  font-size: 0.875rem;
-}
-
-.choice__delivery {
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  line-height: 1.45;
-}
-
-/* A choice another in the Budget rules out (Phase 25): marked by a dashed rule and a quiet wash,
-   never by fading, so every word keeps its contrast; the reason sits in .blocked beneath. */
-.choice--blocked,
-.tune__row--blocked {
-  border: 1px dashed var(--ink-2);
-  background: var(--surface-2);
-}
-
-.tune__row--blocked {
-  padding-right: 8px;
-  padding-left: 8px;
-}
-
-.choice--blocked input[type='checkbox'],
-.tune__row--blocked input {
-  filter: grayscale(1);
-  cursor: not-allowed;
-}
-
-.blocked {
-  margin: 8px 0 0;
-  color: var(--ink);
-  font-size: 1rem;
-  line-height: 1.45;
-}
-
-.blocked strong {
-  font-weight: 700;
-}
-
-.blocked__swap {
-  margin-left: 2px;
 }
 
 /* ------------------------------------------------------------ budget day */
@@ -835,17 +550,6 @@ label.choice {
   color: var(--ink);
 }
 
-/* The rest of a card, one fold: the lever's headline, the options it overlaps, the proposer. */
-.choice__more {
-  margin: 0;
-}
-
-.choice__more .choice__line,
-.choice__more .choice__delivery {
-  display: block;
-  margin: 0 0 6px;
-}
-
 /* The full line behind a shortened one: one click, no words on the surface. */
 .spoken__more {
   margin: 0;
@@ -862,30 +566,12 @@ label.choice {
   margin: 0 0 6px;
 }
 
-/* An option card: the figure leads the meta line; an option adjusted on step 4 is neither on nor off. */
-.choice--adjusted {
-  border-style: dashed;
-  border-color: var(--accent);
-}
-
-.choice__figure {
-  font-weight: 600;
-}
-
 .choice__overlap {
   color: var(--ink-2);
 }
 
 .choice__overlap--warn {
   color: var(--critical);
-}
-
-.choice--option .spoken__more {
-  margin: 0 0 0 32px;
-}
-
-.choice--option .minister {
-  margin: 0 0 0 32px;
 }
 
 /* ------------------------------------------------------- the headroom bar */
@@ -963,15 +649,6 @@ label.choice {
   .bar {
     position: static;
   }
-}
-
-/* The rank before a priority's title: "1st Safer streets". */
-.intro__rank {
-  margin-right: 2px;
-  color: var(--brass-ink);
-  font-size: 0.6em;
-  font-weight: 700;
-  vertical-align: 0.15em;
 }
 
 /* --------------------------------------------------------------- who pays */
@@ -1120,18 +797,11 @@ label.choice {
   font-weight: 700;
 }
 
-/* Set its way at none of its sizes (an old link, a flagship left behind): what it is now. */
+/* Set its way at none of its sizes (an old link): what it is now. */
 .lever__now {
   margin: 8px 0 0;
   color: var(--ink-2);
   font-size: 0.9375rem;
-}
-
-/* A lever a flagship the player chose holds (Phase 26): one line, and the way back to it. */
-.lever__held {
-  margin: 6px 0 0;
-  font-size: 1rem;
-  line-height: 1.45;
 }
 
 /*
@@ -1498,25 +1168,7 @@ label.choice {
   padding-left: 18px;
 }
 
-.review__rank {
-  color: var(--brass-ink);
-  font-size: 0.9375rem;
-  font-weight: 700;
-}
-
-/* A priority short of delivery, and a lever moved against its own flagship (Phase 25). */
-.review__short {
-  margin: 4px 0 0;
-  color: var(--warning);
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
-.review__against {
-  color: var(--critical);
-}
-
-/* How the headroom got from the estimate to the bar; a missed rule by name and margin. */
+/* How the headroom got from the Chancellor's to the bar; a missed rule by name and margin. */
 .review__reconcile {
   max-width: 44em;
 }
@@ -1548,14 +1200,6 @@ label.choice {
   font-variant-numeric: tabular-nums;
 }
 
-/* Whose budgets a screen's are, when they are not the whole UK's (Phase 25). */
-.deliver__reach {
-  max-width: 40em;
-  margin: 0 0 12px;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-}
-
 .review__taxtake {
   margin: 8px 0 0;
 }
@@ -1571,21 +1215,6 @@ label.choice {
 
 .review__reaction .kicker {
   margin-right: 4px;
-}
-
-/*
- * Basic and advanced (Phase 27): the line on a trimmed screen. The button that swaps the screen
- * sits in the same place in either mode.
- */
-.mode-line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0 8px;
-  max-width: 40em;
-  margin: 0 0 12px;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
 }
 
 /* ---------------------------------------------------------- sharing a Budget (ADR-0044) */

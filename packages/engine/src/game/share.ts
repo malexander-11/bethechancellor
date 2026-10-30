@@ -7,25 +7,15 @@ import type { ShippedDataset } from '../types/shipped.js';
 import { ambitionStatus } from './ambitions.js';
 import { changeRows, type ChangeRow } from './changes.js';
 import { finetuneNames } from './finetune.js';
-import { rankedPriorities } from './options.js';
 import { headroomWords, preBudget, reconcile, reconcileWords, type OutcomeOf } from './prices.js';
 import { receptions, type Reception } from './reception.js';
 import { suggestedSettings } from './scenarios.js';
 import { FINAL_STAGE } from './stages.js';
-import { budgetTheme } from './theme.js';
 
 /** The game's files a Budget is read and summed up from: the shipped data set's, in part. */
 export type GameData = Pick<
   ShippedDataset,
-  | 'vintage'
-  | 'rules'
-  | 'levers'
-  | 'context'
-  | 'pm'
-  | 'options'
-  | 'reception'
-  | 'incidence'
-  | 'finetune'
+  'vintage' | 'rules' | 'levers' | 'context' | 'pm' | 'reception' | 'incidence' | 'finetune'
 >;
 
 /**
@@ -83,7 +73,7 @@ export function typicalErrorGbpm(vintage: Vintage, outcome: Outcome): number {
 export interface FinishedBudget {
   /**
    * The canonical link: today's codes, the economy on today's estimate, every value snapped to
-   * its lever's steps, the priorities the game knows, at the end of the game.
+   * its lever's steps, at the end of the game.
    */
   query: string;
   leverValues: Record<string, number>;
@@ -115,10 +105,7 @@ export function readFinishedBudget(data: GameData, search: string): FinishedBudg
   )) {
     set(code, value);
   }
-  const game: GamePermalink = {
-    reached: FINAL_STAGE,
-    priorities: rankedPriorities(state.game, data.pm).map((p) => p.id),
-  };
+  const game: GamePermalink = { reached: FINAL_STAGE };
   const query = encodePermalink(
     {
       vintageCode: data.vintage.permalinkCode,
@@ -136,8 +123,8 @@ export function readFinishedBudget(data: GameData, search: string): FinishedBudg
 /** What a finished Budget did, as the shared picture and its page say it. */
 export interface BudgetSummary {
   year: string;
-  /** "A Budget for safer streets and defence"; none without priorities. */
-  theme?: string;
+  /** How many taxes and budgets the Chancellor's Budget was changed in (ADR-0045). */
+  changes: number;
   /** Every tax moved, biggest first. */
   tax: ChangeRow[];
   /** Every other budget moved, biggest first. */
@@ -173,22 +160,19 @@ export function summariseBudget(
   );
   const r = reconcile(outcome, preBudget(outcomeOf, budget.leverValues, data.levers));
   const missed = outcome.verdicts.filter(isMissed);
-  const status = ambitionStatus(budget.game, data.pm, data.options, outcome, data.levers);
+  const status = ambitionStatus(data.pm, outcome, data.levers);
   const room = receptions({
     outcome,
     levers: data.levers,
     reception: data.reception,
     typicalErrorGbpm: typicalErrorGbpm(data.vintage, outcome),
     outcomeOf,
-    pm: data.pm,
     incidence: data.incidence,
-    game: budget.game,
     status,
   });
-  const theme = budgetTheme(data.pm, budget.game.priorities);
   return {
     year: r.year,
-    ...(theme ? { theme } : {}),
+    changes: rows.length,
     tax: rows.filter((row) => row.side === 'tax'),
     spending: rows.filter((row) => row.side === 'spending'),
     headroom: { startGbpm: r.startGbpm, endGbpm: r.endGbpm },
@@ -206,7 +190,10 @@ export function summariseBudget(
 /** The picture's own words, and the lines the share and leaderboard pages build on. */
 export const SHARE_WORDS = {
   game: 'What’s your Budget?',
-  untitled: 'My Budget',
+  /** The Budget's name (ADR-0045): what was changed in the Chancellor's, or that nothing was. */
+  unchanged: 'The Chancellor’s Budget, unchanged',
+  changedOne: 'One change to the Chancellor’s Budget',
+  changed: '{n} changes to the Chancellor’s Budget',
   tax: 'Tax',
   spending: 'Spending',
   noTax: 'No tax changed.',
@@ -216,7 +203,7 @@ export const SHARE_WORDS = {
   /** On the picture's band, with the site's address. */
   invite: 'Make yours at {host}',
   /** The picture of a link that is not a finished Budget. */
-  pitch: 'You are the Chancellor. Choose who pays and what to fund.',
+  pitch: 'The Chancellor’s Budget, measure by measure. Vote on it, then change it.',
   /** A rating, as its meter is read out. */
   rating: '{label}, {rating} of 5',
 } as const;
@@ -243,7 +230,7 @@ function capitalise(text: string): string {
 }
 
 export interface SummaryWords {
-  /** The Budget's name on its page and in a link's preview: its theme, or "My Budget". */
+  /** The Budget's name on its page and in a link's preview: how far it changed the Chancellor's. */
   title: string;
   /** "It meets both fiscal rules." and the like. */
   rules: string;
@@ -258,9 +245,16 @@ export interface SummaryWords {
   share: string;
 }
 
+/** What a Budget is called by how far it changed the Chancellor's (ADR-0045). */
+export function budgetTitle(changes: number): string {
+  if (changes === 0) return SHARE_WORDS.unchanged;
+  if (changes === 1) return SHARE_WORDS.changedOne;
+  return SHARE_WORDS.changed.replace('{n}', String(changes));
+}
+
 /** A finished Budget in words: the same figures the picture draws. */
 export function summaryWords(s: BudgetSummary): SummaryWords {
-  const title = s.theme ?? SHARE_WORDS.untitled;
+  const title = budgetTitle(s.changes);
   const rules = s.rules.met
     ? 'It meets both fiscal rules.'
     : s.rules.welfareOnly
@@ -291,12 +285,6 @@ export function summaryWords(s: BudgetSummary): SummaryWords {
       rules,
       ...ratings,
     ].join(' '),
-    share: [
-      s.theme
-        ? `I made ${s.theme.charAt(0).toLowerCase()}${s.theme.slice(1)}.`
-        : 'I made my Budget.',
-      rules,
-      SHARE_WORDS.game,
-    ].join(' '),
+    share: [`${title}.`, rules, SHARE_WORDS.game].join(' '),
   };
 }

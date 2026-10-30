@@ -14,7 +14,6 @@ import {
   groupItems,
   movedPartners,
   scaleLevels,
-  setByFlagship,
   sizeIndex,
   sizeLabels,
   validateDataset,
@@ -81,9 +80,6 @@ function pairsOn(side: FinetuneSideId): [string, string][] {
   }
   return [...pairs.values()];
 }
-/** The levers the flagships set, which a screen shows as a line once one is chosen. */
-const flagshipLevers = new Set(ds.options.deliver.flatMap((o) => Object.keys(o.values)));
-
 /** What the schema says of a copy of the file changed by `patch`. */
 function refusal(patch: (f: FinetuneFile) => void): string {
   const copy: FinetuneFile = structuredClone(file);
@@ -321,23 +317,6 @@ describe('the fine-tuning screens (Phase 24, ADR-0025)', () => {
     }
   });
 
-  it('holds a lever for a flagship only at the flagship’s own value', () => {
-    for (const option of ds.options.deliver) {
-      const status = { priorities: [{ rank: 1, options: [{ option }] }] } as Parameters<
-        typeof setByFlagship
-      >[0];
-      const held = setByFlagship(status, option.values, ds.levers);
-      expect([...held.keys()].sort(), option.id).toEqual(Object.keys(option.values).sort());
-      for (const hold of held.values()) expect(hold).toEqual({ option, rank: 1 });
-      // Past it or short of it is a step-4 choice, shown as one.
-      for (const [code, value] of Object.entries(option.values)) {
-        const past = { ...option.values, [code]: value + lever(code).control.step };
-        expect(setByFlagship(status, past, ds.levers).size, `${option.id} ${code}`).toBe(0);
-      }
-      expect(setByFlagship(status, {}, ds.levers).size, option.id).toBe(0);
-    }
-  });
-
   it('refuses a lever offered twice, two taxes or decisions under one name, and a crowded decision', () => {
     const [firstTax] = file.tax.groups;
     const [firstDecision] = decisionsOf(file, 'tax');
@@ -564,11 +543,10 @@ describe('contradictions come under one decision (ADR-0036)', () => {
   });
 
   it('leaves each of the spending screen’s contradictions as two ticks, one taking the other out (ADR-0037)', () => {
-    // Each pair has a lever a flagship sets, which the screen shows as a line, never a radio; so
-    // choosing one takes the other out, and the spending screen has no set of alternatives.
+    // Each pair is two ticks in one decision, one taking the other out, and the spending screen
+    // has no set of alternatives.
     for (const [a, b] of pairsOn('spending')) {
       expect(where.get(a), `${a} × ${b}`).toBe(where.get(b));
-      expect(flagshipLevers.has(a) || flagshipLevers.has(b), `${a} × ${b}`).toBe(true);
     }
     expect(decisionsOf(file, 'spending').flatMap((d) => d.alternatives ?? [])).toEqual([]);
   });
@@ -675,22 +653,6 @@ describe('contradictions come under one decision (ADR-0036)', () => {
       'set of two',
     );
     expect(tamper((f) => delete decisionIn(f, pairSet.id).alternatives)).toBe('');
-    // A lever a flagship sets is a line on the screen, never a radio, so it is in no set.
-    const pair = must(
-      FINETUNE_SIDES.flatMap(pairsOn).find(
-        ([p, q]) =>
-          where.get(p) === where.get(q) &&
-          isTick(p) &&
-          isTick(q) &&
-          (flagshipLevers.has(p) || flagshipLevers.has(q)),
-      ),
-      'pair of contradicting ticks, one a flagship sets',
-    );
-    const held = pair.find((code) => flagshipLevers.has(code))!;
-    const decision = where.get(held)!;
-    expect(tamper(setOf(decision.id, 'Held', [...pair]))).toContain(
-      `the alternatives “Held” hold ${held}, which a flagship sets`,
-    );
     expect(tamper(() => undefined)).toBe('');
   });
 });

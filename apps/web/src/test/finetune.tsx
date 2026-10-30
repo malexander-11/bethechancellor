@@ -5,8 +5,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { App } from '../App';
 
 export const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
-/** A game that has agreed two priorities with the PM and reached fine-tuning, on today's estimate. */
-export const GAME = 'g=st.3_pr.safer-streets+defence';
+/** A game at fine-tuning, the first step, on the Chancellor's Budget (ADR-0045). */
+export const GAME = 'g=st.0_rd.2';
 
 export function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -26,7 +26,7 @@ export const rowOf = (control: HTMLElement) => control.closest('.tune__row') as 
 export const scale = (name: string) => rowOf(screen.getByRole('radiogroup', { name }));
 /** A tick's row, by what the row is called. */
 export const tickRow = (name: string) => rowOf(screen.getByRole('checkbox', { name }));
-/** Any row, by what it is called: a flagship's row has no control to find it by. */
+/** Any row, by what it is called. */
 export const namedRow = (name: string) => {
   const found = [...document.querySelectorAll('.tune__row-name')].find(
     (n) => n.textContent === name,

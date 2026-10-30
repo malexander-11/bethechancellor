@@ -2,11 +2,11 @@ import { enterable, type JourneyStep } from '@btc/engine';
 import { StepLink } from '../journey/links';
 import { useBudget } from '../state/budget';
 
-type Stop = 'briefing' | 'pm' | 'flagships' | 'finetune' | 'review' | 'budget-day';
+type Stop = 'finetune' | 'review' | 'budget-day';
 
 /**
- * The six steps, in order, as the player is told them (Phase 24, ADR-0025), with the short name a
- * wide screen shows under each numeral (Phase 25): the step's own words, cut down, never new ones.
+ * The three steps, in order, as the player is told them (ADR-0045), with the short name a wide
+ * screen shows under each numeral (Phase 25): the step's own words, cut down, never new ones.
  */
 export const STOPS: ReadonlyArray<{
   id: Stop;
@@ -15,15 +15,6 @@ export const STOPS: ReadonlyArray<{
   to: string;
   step: JourneyStep;
 }> = [
-  { id: 'briefing', label: 'Briefing', short: 'Briefing', to: '/outlook', step: 'outlook' },
-  { id: 'pm', label: 'Set your priorities', short: 'Priorities', to: '/pm', step: 'pm' },
-  {
-    id: 'flagships',
-    label: 'Flagship policies',
-    short: 'Flagships',
-    to: '/budget/deliver',
-    step: 'deliver',
-  },
   {
     id: 'finetune',
     label: 'Fine-tune tax and spend',
@@ -41,17 +32,10 @@ export const STOPS: ReadonlyArray<{
   },
 ];
 
-/** Which step a screen belongs to. The cover shows no road, but it opens the briefing's step. */
+/** Which step a screen belongs to. The Chancellor's Budget shows no road, but it opens the first step. */
 export function stopFor(step: JourneyStep): Stop {
   switch (step) {
     case 'start':
-    case 'outlook':
-    case 'assumptions':
-      return 'briefing';
-    case 'pm':
-      return 'pm';
-    case 'deliver':
-      return 'flagships';
     case 'finetune':
       return 'finetune';
     case 'review':
@@ -89,15 +73,15 @@ const HEARD: Record<StopKind, string> = {
 };
 
 /**
- * The road, as a running head on every screen after the cover (ADR-0033): "Step 2 of 6 · Set your
- * priorities", then six marks on a rule, one per step. The cover is the invitation to play, so it
- * carries none. A step behind you is done: a tick, and a link back to it. The step you are at is a
- * filled numeral, named on the line above it. A step ahead you have already opened is an outlined
- * numeral and a link; one not yet open is a dashed numeral, inert. The tick, the fill and the
- * dashes say which is which, and so does the rule, solid behind you and dashed ahead, so nothing
- * rests on colour; a screen reader hears each step's full name and whether it is done. It reads the
- * same `enterable` rule as the guard on every page, so it never offers a link that would only
- * bounce (ADR-0014).
+ * The road, as a running head on every screen after the Chancellor's Budget (ADR-0033): "Step 2
+ * of 3 · Deliver the Budget", then three marks on a rule, one per step. The opening is the Budget
+ * itself and the invitation to change it, so it carries none. A step behind you is done: a tick,
+ * and a link back to it. The step you are at is a filled numeral, named on the line above it. A
+ * step ahead you have already opened is an outlined numeral and a link; one not yet open is a
+ * dashed numeral, inert. The tick, the fill and the dashes say which is which, and so does the
+ * rule, solid behind you and dashed ahead, so nothing rests on colour; a screen reader hears each
+ * step's full name and whether it is done. It reads the same `enterable` rule as the guard on
+ * every page, so it never offers a link that would only bounce (ADR-0014).
  */
 export function Progress({ step, part }: { step: JourneyStep; part?: SubStep }) {
   const { state } = useBudget();

@@ -1,20 +1,8 @@
-import {
-  ministerFor,
-  promiseBreaks,
-  promiseStrains,
-  type AmbitionStatus,
-  type Lever,
-  type OptionReport,
-  type SimulatedLine,
-} from '@btc/engine';
+import { promiseBreaks, promiseStrains, type Lever } from '@btc/engine';
 import type { LeverNote, RedLine } from '../components/LeverControl';
-import { finetuneName, levers, ministers, options, pm } from '../data';
+import { finetuneName, levers, pm } from '../data';
 
 const byId = new Map(levers.map((l) => [l.id, l] as const));
-/** The flagship option each lever belongs to, if any: what a note names it by. */
-const flagshipOf = new Map(
-  options.deliver.flatMap((o) => Object.keys(o.values).map((code) => [code, o.title] as const)),
-);
 
 /**
  * The manifesto red lines watching each lever, read from the same file the PM's promises come
@@ -57,36 +45,9 @@ export function redLinesOf(values: Record<string, number>): (code: string) => Re
     ]);
 }
 
-/**
- * The flagship options the player chose, by the levers they move, so a lever can say it belongs
- * to one. Lever values are the only state: a flagship lever trimmed elsewhere shows the option as
- * settled lower, and one moved the other way as against it (Phase 25), which is what each now is.
- */
-export function chosenByLever(status: AmbitionStatus | null): Map<string, OptionReport> {
-  return new Map(
-    (status?.priorities ?? [])
-      .flatMap((p) => p.options)
-      .filter((o) => o.state !== 'off')
-      .flatMap((o) => Object.keys(o.option.values).map((code) => [code, o] as const)),
-  );
-}
-
-/**
- * The Chief Secretary's line when a flagship ask is trimmed short of what was chosen (Phase 25):
- * the ask is settled lower, and whoever made it will say so. The asker is the lever's minister,
- * or the Prime Minister, who agreed the priority, where the lever has none of its own (or the
- * Chief Secretary is its minister). A judgement in a role's voice, with no figure of its own.
- */
-export function settledLine(lever: Lever): { who: string; line: SimulatedLine } {
-  const { role, text, sources, badge } = options.settled;
-  const minister = ministerFor(lever.code, ministers)?.role;
-  const asker = minister && minister !== role ? minister : 'Prime Minister';
-  return { who: role, line: { text: text.replace('{minister}', asker), sources, badge } };
-}
-
-/** What a note calls another lever: its plain title on these screens, its flagship, or its short title. */
+/** What a note calls another lever: its plain title on these screens, or its short title. */
 function nameOf(lever: Lever): string {
-  return finetuneName(lever.code) ?? flagshipOf.get(lever.code) ?? lever.shortTitle;
+  return finetuneName(lever.code) ?? lever.shortTitle;
 }
 
 /**

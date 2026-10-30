@@ -11,32 +11,6 @@ const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
  * grants, which the game's prices leave out (ADR-0006). The game says so where the choice is made.
  */
 describe('the nations, where the choice is made (Phase 25)', () => {
-  it('gives every priority whose flagships spend on England alone a line saying so', () => {
-    for (const p of ds.pm.priorities) {
-      const flagged = ds.options.deliver
-        .filter((o) => o.priority === p.id)
-        .some((o) =>
-          Object.keys(o.values).some(
-            (code) => byCode.get(code)?.classification?.barnettConsequential === true,
-          ),
-        );
-      expect(p.reach !== undefined, `${p.id}`).toBe(flagged);
-      if (p.reach) {
-        expect(p.reach.text).toMatch(/England/);
-        expect(p.reach.text).toMatch(/our prices leave out\.$/);
-        expect(p.reach.sources.map((s) => s.sourceId)).toContain(
-          'hmt-statement-of-funding-policy-2025',
-        );
-      }
-    }
-    // Justice has no Welsh share (Statement of Funding Policy, Annex B.13): the line says so.
-    const streets = ds.pm.priorities.find((p) => p.id === 'safer-streets');
-    expect(streets?.reach?.text).toMatch(
-      /^Prisons, courts and police here are England and Wales’s\./,
-    );
-    expect(streets?.reach?.text).not.toMatch(/Wales and Northern Ireland get/);
-  });
-
   it('says where Scotland pays its own benefits, in gov.uk’s words, and where it sets income tax', () => {
     const scottish: Record<string, string> = {
       rvpip: 'govuk-pip-scotland',
@@ -64,9 +38,8 @@ describe('the nations, where the choice is made (Phase 25)', () => {
       expect(policy.advice.sources.map((s) => s.sourceId)).toContain('govuk-scottish-income-tax');
     }
     // Plan 2 is England and Wales's, and the line on it says so.
-    expect(ds.options.deliver.find((o) => o.id === 'plan2-threshold')?.advice.text).toMatch(
-      /England and Wales/,
-    );
+    const plan2 = finetuneItems(ds.finetune).find((i) => i.code === 'rvplan2');
+    expect(plan2?.policies[0]?.advice.text).toMatch(/England and Wales/);
   });
 
   it('keeps a lever’s source range around its plan, inside its own range', () => {

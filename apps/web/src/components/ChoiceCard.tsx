@@ -6,22 +6,13 @@ import {
   type FinetuneItem,
   type FinetunePolicy,
   type Lever,
-  type OptionReport,
 } from '@btc/engine';
 import { useId, type ReactNode } from 'react';
 import { finetuneName, levers } from '../data';
 import { leverNotes, type redLinesOf } from '../journey/levers';
 import type { useLeverHints } from '../journey/prices';
 import { useBudget } from '../state/budget';
-import {
-  HeldRow,
-  INVESTMENT_NOTE,
-  LeverAbout,
-  LeverRow,
-  RELIEF_NOTE,
-  wouldPhrase,
-  type Held,
-} from './LeverRow';
+import { INVESTMENT_NOTE, LeverAbout, LeverRow, RELIEF_NOTE, wouldPhrase } from './LeverRow';
 import { MinisterLine } from './MinisterLine';
 
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
@@ -42,16 +33,13 @@ export interface CardRow {
 export type CardUnit =
   { kind: 'row'; row: CardRow } | { kind: 'set'; name: string; rows: readonly CardRow[] };
 
-/** What every row on a screen reads alike: the year, the prices, the promises and the flagships. */
+/** What every row on a screen reads alike: the year, the prices and the promises. */
 export interface CardContext {
   summaryYear: string;
   hintOf: ReturnType<typeof useLeverHints>;
   redLinesFor: ReturnType<typeof redLinesOf>;
-  chosen: ReadonlyMap<string, OptionReport>;
   /** The levers the Budget has moved: what a row's warnings are read against. */
   moved: ReadonlySet<string>;
-  /** The levers a flagship the player chose holds, read when the screen opened. */
-  held: ReadonlyMap<string, Held>;
   /** The screen's adviser, named on the line a chosen row gives. */
   adviser: string;
 }
@@ -60,8 +48,8 @@ export interface CardContext {
  * A decision's one card (ADR-0037): "Remove an exemption", and a row for each exemption. What
  * every row shares is said once, at the top: that a relief's cost is the most ending it could
  * raise, and which rule investment counts against. Ticks that contradict each other are one set of
- * radios, "As planned" first (ADR-0036); a lever a flagship holds is a row naming the flagship.
- * Everything else about the levers waits under one fold, "More about these".
+ * radios, "As planned" first (ADR-0036). Everything else about the levers waits under one fold,
+ * "More about these".
  */
 export function ChoiceCard({
   title,
@@ -75,10 +63,7 @@ export function ChoiceCard({
 }) {
   const { state } = useBudget();
   const rows = units.flatMap((u) => (u.kind === 'row' ? [u.row] : u.rows));
-  const live = rows.flatMap((r) => {
-    const lever = byCode.get(r.item.code);
-    return lever && !context.held.has(lever.code) ? [lever] : [];
-  });
+  const live = rows.flatMap((r) => byCode.get(r.item.code) ?? []);
   const relief = live.some((l) => l.reliefCost === true);
   const investment = live.some((l) => l.classification?.currentOrCapital === 'capital');
   // A set that is the whole card is the card's own question: its name is heard, not shown again.
@@ -149,9 +134,8 @@ export function ChoiceCard({
  * scale, its adviser speaking for the way it has moved (ADR-0035). At rest it prices the nearest
  * level each way, or a tick's one setting, against the Budget as it stands; while levers that
  * count the same money are in the Budget, it says first that choosing it takes them out, and
- * prices it with them gone (ADR-0036); where a flagship the player chose holds one, it will not
- * move, and offers the way back to the flagship instead. Given its `set`, its box is a radio in the
- * set's group, and choosing it takes the others out as a radio does, without a word.
+ * prices it with them gone (ADR-0036). Given its `set`, its box is a radio in the set's group, and
+ * choosing it takes the others out as a radio does, without a word.
  */
 function RowOf({
   row,
@@ -170,21 +154,9 @@ function RowOf({
   const { item, ways, name } = row;
   const lever = byCode.get(item.code);
   if (!lever) return null;
-  const { summaryYear, hintOf, redLinesFor, chosen, moved, held, adviser } = context;
+  const { summaryYear, hintOf, redLinesFor, moved, adviser } = context;
   const rest = lever.control.default;
   const value = state.leverValues[lever.code] ?? rest;
-  const hold = held.get(lever.code);
-  if (hold) {
-    return (
-      <HeldRow
-        name={name}
-        held={hold}
-        words={
-          lever.control.kind !== 'toggle' && value !== rest ? sizeWords(lever, value) : undefined
-        }
-      />
-    );
-  }
   const resting = value === rest;
   const scale = lever.control.kind !== 'toggle';
   // The way the lever has moved leads, and its adviser speaks; at rest, the usual way.
@@ -193,23 +165,20 @@ function RowOf({
     ways[0];
   const mine = !resting && lead !== undefined && Math.sign(value - rest) === policyWay(lead, lever);
   const levels = scale ? scaleLevels(lever, ways) : [lead?.sizes[0] ?? 1];
-  // What counts the same money and is in the Budget now (ADR-0036). A partner a flagship holds is
-  // changed on the flagship's screen, never taken out from here, so the row will not move; any
-  // other, choosing this takes out, and its price counts it as gone.
+  // What counts the same money and is in the Budget now (ADR-0036): choosing this takes it out,
+  // and the price counts it as gone.
   const partners = movedPartners(lever, levers, state.leverValues);
-  const heldPartner = partners.find((p) => held.has(p.lever.code));
-  const holder = heldPartner ? held.get(heldPartner.lever.code) : undefined;
-  const out = holder ? [] : partners;
+  const out = partners;
   const swapOut =
     out.length > 0
       ? Object.fromEntries(out.map((p) => [p.lever.code, p.lever.control.default]))
       : undefined;
   const would = (at: number) =>
     wouldPhrase(hintOf({ [lever.code]: at }, swapOut).text, lever.reliefCost === true);
-  // At rest, and unless a flagship holds a partner: a scale prices the nearest level each way; a
-  // tick, its one setting. "Instead" where it would take something out.
+  // At rest a scale prices the nearest level each way; a tick, its one setting. "Instead" where
+  // it would take something out.
   const prices: string[] = [];
-  if (resting && !holder) {
+  if (resting) {
     if (scale) {
       for (const way of ways) {
         const nearest = way.sizes[0];
@@ -220,10 +189,6 @@ function RowOf({
       prices.push(`${would(levels[0] ?? 1)}${swapOut ? ' instead' : ''}`);
     }
   }
-  const blocked =
-    heldPartner && holder
-      ? { other: nameOf(heldPartner.lever), reason: heldPartner.text, flagship: holder }
-      : undefined;
   // Said before anything is touched, in the first one's words; a set's radios say it themselves.
   // What it would take out from this card is in view beside it, so the row names it by its name
   // here and leaves the reason to its card's fold; from elsewhere, why, in its plain name.
@@ -264,7 +229,6 @@ function RowOf({
   const notes = leverNotes(lever, moved).filter(
     (n) => !partners.some((p) => p.lever.code === n.key) && (n.warn || !resting),
   );
-  const option = chosen.get(lever.code);
   return (
     <LeverRow
       lever={lever}
@@ -282,11 +246,9 @@ function RowOf({
       }
       levels={levels}
       redLines={redLinesFor(lever.code)}
-      chosen={option ? { title: option.option.title, state: option.state } : undefined}
       prices={prices}
       advice={mine && lead?.advice ? { who: adviser, line: lead.advice } : undefined}
       notes={notes}
-      blocked={blocked}
       takesOut={takesOut}
       radio={radio}
     >

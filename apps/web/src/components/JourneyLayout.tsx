@@ -59,7 +59,7 @@ export function JourneyLayout({
   title?: ReactNode;
   lead?: ReactNode;
   tabTitle?: string;
-  /** Off when the page draws its own head, as the opening does. */
+  /** Off when the page draws its own head, as the Chancellor's Budget does. */
   intro?: boolean;
   children: ReactNode;
 }) {

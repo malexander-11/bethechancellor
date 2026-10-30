@@ -1,39 +1,26 @@
 import { describe, expect, it } from 'vitest';
-import {
-  ambitionStatus,
-  isMissed,
-  priceMove,
-  promiseBreaks,
-  promiseStrains,
-  type Outcome,
-} from '../src/index.js';
+import { isMissed, priceMove, promiseBreaks, promiseStrains, type Outcome } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
 import {
   BASIC_RATE_CUT,
   BIG_BROAD_TAX_RISE,
   DAY_TO_DAY_RULE_MISSED,
   DEBT_RULE_MISSED,
-  DEFENCE_GAP,
   EMPLOYER_NICS,
   ESTATES_AND_HOMES_PAY,
   EVERYTHING_EXPENSIVE,
   FRONT_LOADED,
-  HEALTH_ABOVE_PLAN,
   HEALTH_CUT,
   INVESTMENT,
   MOVES,
   NEEDED_LOCK_BREAK,
-  NHS_START,
   NICS_WALK,
   PENNY,
   PRISONS,
   PROGRAMME,
-  SECURITY,
-  SECURITY_FLAGSHIPS,
   TAXES_AT_THE_TOP,
   TWO_CHILD_LIMIT,
   WALK,
-  gameWith,
   todaysEstimate,
   type Budget,
 } from './scenarios.js';
@@ -61,10 +48,6 @@ const missed = (budget: Budget) =>
     .map((v) => v.kind);
 const headroom = (budget: Budget) =>
   run(budget).verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? Number.NaN;
-const fates = (priorities: readonly string[], budget: Budget) =>
-  ambitionStatus(gameWith(priorities), ds.pm, ds.options, run(budget), ds.levers).priorities.map(
-    (p) => p.status,
-  );
 const lever = (code: string) => {
   const found = ds.levers.find((l) => l.code === code);
   if (!found) throw new Error(`no lever ${code}`);
@@ -72,24 +55,16 @@ const lever = (code: string) => {
 };
 
 describe('the named Budgets play their parts', () => {
-  it('the walk delivers both security priorities inside the rules, and breaks the tax lock', () => {
-    expect(fates(SECURITY, WALK)).toEqual(['delivered', 'delivered']);
+  it('the walk stays inside the rules, and breaks the tax lock', () => {
     expect(missed(WALK)).toEqual([]);
     expect(broken(WALK)).toEqual(['tax-lock']);
     // Paid for by employer National Insurance alone, the lock is strained, not broken.
-    expect(fates(SECURITY, NICS_WALK)).toEqual(['delivered', 'delivered']);
     expect(missed(NICS_WALK)).toEqual([]);
     expect(broken(NICS_WALK)).toEqual([]);
     expect(strained(NICS_WALK)).toContain('tax-lock');
   });
 
-  it('each flagship delivers its priority, and a down-payment only makes a start', () => {
-    expect(fates(['defence'], DEFENCE_GAP)).toEqual(['delivered']);
-    expect(fates(['safer-streets'], PRISONS)).toEqual(['delivered']);
-    expect(fates(SECURITY, PRISONS)).toEqual(['notFunded', 'delivered']);
-    expect(fates(SECURITY, SECURITY_FLAGSHIPS)).toEqual(['delivered', 'delivered']);
-    expect(fates(['nhs'], HEALTH_ABOVE_PLAN)).toEqual(['delivered']);
-    expect(fates(['nhs'], NHS_START)).toEqual(['started']);
+  it('each flagship Budget is paid for or not, as its name says', () => {
     // Prisons paid for out of the headroom, every rule still met.
     expect(missed(PRISONS)).toEqual([]);
     expect(headroom(PRISONS)).toBeGreaterThan(0);

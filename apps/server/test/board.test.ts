@@ -25,7 +25,7 @@ const DEVICE = (n: number) => `device-${String(n).padStart(12, '0')}`;
 const IP = (n: number) => `203.0.113.${n}`;
 
 /** A finished Budget's link, as the web writes one. */
-function link(values: Record<string, number>, priorities: readonly string[] = []): string {
+function link(values: Record<string, number>): string {
   return encodePermalink(
     {
       vintageCode: data.vintage.permalinkCode,
@@ -33,18 +33,15 @@ function link(values: Record<string, number>, priorities: readonly string[] = []
       implementationYear: gameImplementationYear(data.vintage),
       leverValues: values,
       ...GAME_SETTINGS,
-      game: { reached: FINAL_STAGE, priorities: [...priorities] },
+      game: { reached: FINAL_STAGE },
     },
     data.levers,
   );
 }
-const ids = data.pm.priorities.map((p) => p.id);
-/** A different finished Budget for each n: one priority, or two. */
+/** A different finished Budget for each n: justice's budget up, and one more decision reversed. */
+const REVERSALS = ['rveff', 'rv2ch', 'rvwfp', 'rvplan2', 'b6hmrc', 'b6wda', 'b6dist', 'b6sov'];
 const budget = (n: number) =>
-  link(
-    { moj: 10 },
-    n < ids.length ? [ids[n] ?? ''] : [ids[0] ?? '', ids[n - ids.length + 1] ?? ''],
-  );
+  link({ moj: 10, ...(n > 0 ? { [REVERSALS[n - 1] ?? 'rveff']: 1 } : {}) });
 
 let db: Db;
 beforeAll(async () => {
@@ -126,13 +123,13 @@ describe('posting a Budget to the leaderboard', () => {
 
   it('keeps one entry a Budget: posting it again, however linked, finds the one there', async () => {
     const first = await posted(budget(0), 'First');
-    const again = await post(link({ moj: 10.2 }, [ids[0] ?? '']), 'Second');
+    const again = await post(link({ moj: 10.2 }), 'Second');
     expect(again.status).toBe(200);
     expect(await again.json()).toEqual({ entry: first, created: false });
   });
 
   it('refuses a link that is not a finished Budget', async () => {
-    for (const query of [link({ moj: 10 }).replace('st.5', 'st.3'), '', 'nonsense']) {
+    for (const query of [link({ moj: 10 }).replace('st.2', 'st.0'), '', 'nonsense']) {
       const answer = await post(query, 'A title');
       expect(answer.status, query).toBe(400);
       expect(await answer.json()).toEqual({ error: 'budget' });
@@ -531,7 +528,7 @@ describe('devices, networks and Budgets, as the leaderboard tells them apart', (
     expect(derived).toBe(hashKeyFrom({ DATABASE_URL: 'postgres://user:secret@host/db' }));
   });
 
-  it('knows a Budget by its choices and priorities, whatever data it was read on', () => {
+  it('knows a Budget by its choices, whatever data it was read on', () => {
     const query = readFinishedBudget(data, budget(0))?.query ?? '';
     const elsewhere = query.replace(/f=[^&]+/, 'f=older').replace(/M=[^&]+/, 'M=rate.1');
     expect(budgetKey(elsewhere)).toBe(budgetKey(query));

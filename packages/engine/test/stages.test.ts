@@ -11,66 +11,61 @@ import {
 
 const game = (reached: number) => ({ ...freshGame(), reached });
 
-describe('the road through the game (Phase 24: six steps)', () => {
-  it('has six stages, from the briefing to the feedback', () => {
-    expect(GAME_STAGES).toEqual(['outlook', 'pm', 'deliver', 'finetune', 'review', 'budget-day']);
-    expect(FINAL_STAGE).toBe(5);
+describe('the road through the game (three steps since ADR-0045)', () => {
+  it('has three stages, from fine-tuning to the feedback', () => {
+    expect(GAME_STAGES).toEqual(['finetune', 'review', 'budget-day']);
+    expect(FINAL_STAGE).toBe(2);
   });
 
   it('opens a stage once the one before it has been left, and never sooner', () => {
-    expect(enterable('pm', game(0))).toBe(false);
-    expect(enterable('pm', game(1))).toBe(true);
-    expect(enterable('deliver', game(1))).toBe(false);
-    expect(enterable('deliver', game(2))).toBe(true);
-    expect(enterable('finetune', game(2))).toBe(false);
-    expect(enterable('finetune', game(3))).toBe(true);
-    expect(stageIndex('finetune')).toBe(3);
-    expect(enterable('review', game(3))).toBe(false);
-    expect(enterable('review', game(4))).toBe(true);
+    expect(enterable('finetune', game(0))).toBe(true);
+    expect(stageIndex('finetune')).toBe(0);
+    expect(enterable('review', game(0))).toBe(false);
+    expect(enterable('review', game(1))).toBe(true);
   });
 
-  it('has no step for what Phase 24 and Phase 26 retired: the app routes their old addresses', () => {
+  it('reads the retired steps as fine-tuning, and has no step for what went before them', () => {
+    // The briefing, the priorities and the flagships (ADR-0025) retired with the Chancellor's
+    // Budget as the starting point; their names in old links and data open fine-tuning.
+    for (const step of ['outlook', 'assumptions', 'pm', 'deliver']) {
+      expect(stageIndex(step), step).toBe(0);
+      expect(journeyStepSchema.safeParse(step).success, step).toBe(false);
+      expect(enterable(step, game(0)), step).toBe(true);
+      expect(enterable(step, undefined), step).toBe(false);
+    }
     // The forecast, the compromises and the add-ons open the review; the desk's two screens open
-    // step 4, which took their levers.
+    // step 4, which took their levers: the app routes their old addresses.
     for (const step of ['afford', 'forecast', 'compromise', 'rabbit', 'taxes', 'spending']) {
       expect(journeyStepSchema.safeParse(step).success, step).toBe(false);
     }
   });
 
   it('opens Budget day from the review, because reached only becomes final on delivering', () => {
-    expect(enterable('budget-day', game(3))).toBe(false);
-    expect(enterable('budget-day', game(4))).toBe(true);
+    expect(enterable('budget-day', game(0))).toBe(false);
+    expect(enterable('budget-day', game(1))).toBe(true);
     expect(enterable('budget-day', game(FINAL_STAGE))).toBe(true);
   });
 
-  it('always lets you go back, and always opens the start and the briefing', () => {
+  it('always lets you go back, and always opens the start', () => {
     for (let reached = 0; reached <= FINAL_STAGE; reached += 1) {
       expect(enterable('start', game(reached))).toBe(true);
-      expect(enterable('outlook', game(reached))).toBe(true);
-      expect(enterable('assumptions', game(reached))).toBe(true);
+      expect(enterable('finetune', game(reached))).toBe(true);
     }
-    expect(enterable('finetune', game(FINAL_STAGE))).toBe(true);
-    expect(enterable('pm', game(FINAL_STAGE))).toBe(true);
+    expect(enterable('review', game(FINAL_STAGE))).toBe(true);
   });
 
-  it('opens only the briefing to a link with no game: the desk and its sandbox have gone', () => {
-    // Every lever is a policy on step 4 (Phase 26); a link's measures wait on the briefing for the
-    // game it starts, and a finished game carries its own g= to Budget day.
-    expect(enterable('outlook', undefined)).toBe(true);
-    expect(enterable('assumptions', undefined)).toBe(true);
-    for (const step of ['pm', 'deliver', 'finetune', 'review', 'budget-day'] as const) {
+  it('opens only the start to a link with no game: its measures wait for the game it starts', () => {
+    expect(enterable('start', undefined)).toBe(true);
+    for (const step of ['finetune', 'review', 'budget-day'] as const) {
       expect(enterable(step, undefined), step).toBe(false);
     }
   });
 
   it('sends an early arrival to the furthest open stage', () => {
-    expect(furthestStep(undefined)).toBe('outlook');
-    expect(furthestStep(game(0))).toBe('outlook');
-    expect(furthestStep(game(1))).toBe('pm');
-    expect(furthestStep(game(2))).toBe('deliver');
-    expect(furthestStep(game(3))).toBe('finetune');
+    expect(furthestStep(undefined)).toBe('start');
+    expect(furthestStep(game(0))).toBe('finetune');
     // At the review, Budget day is already open.
-    expect(furthestStep(game(4))).toBe('budget-day');
+    expect(furthestStep(game(1))).toBe('budget-day');
     expect(furthestStep(game(FINAL_STAGE))).toBe('budget-day');
   });
 });

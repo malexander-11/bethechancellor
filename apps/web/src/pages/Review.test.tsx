@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { App } from '../App';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
-/** Two priorities agreed, fine-tuning done, on today's estimate: at the review. */
-const G = 'g=st.4_pr.safer-streets+defence';
+/** Fine-tuning done: at the review. */
+const G = 'g=st.1_rd.2';
 
 function at(path: string) {
   window.history.replaceState(null, '', path);
@@ -18,9 +18,9 @@ function at(path: string) {
 const part = (name: RegExp) => screen.getByRole('region', { name });
 const changeIn = (region: HTMLElement, name: string) => within(region).getByRole('link', { name });
 
-describe('step 5: deliver the Budget', () => {
+describe('step 2: deliver the Budget', () => {
   it('sends a game that has not finished fine-tuning back to where it is', () => {
-    at(`/review?${BASE}&g=st.3_pr.defence`);
+    at(`/review?${BASE}&g=st.0_rd.2`);
     expect(screen.getByRole('heading', { level: 1, name: 'Fine-tune tax' })).toBeInTheDocument();
   });
 
@@ -29,31 +29,11 @@ describe('step 5: deliver the Budget', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'Deliver your Budget' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Step 5 of 6')).toBeInTheDocument();
+    expect(screen.getByText('Step 2 of 3')).toBeInTheDocument();
     expect(screen.queryByRole('tab')).toBeNull();
-
-    const priorities = part(/^Your priorities/);
-    expect(within(priorities).getByText(/Safer streets: prisons, police, borders/)).toBeVisible();
-    expect(within(priorities).getByText(/Defence on the NATO path/)).toBeVisible();
-    expect(changeIn(priorities, 'Change')).toHaveAttribute(
-      'href',
-      expect.stringMatching(/^\/pm\?/),
-    );
-
-    const flagships = part(/^Flagship policies/);
-    expect(within(flagships).getByText(/More money for prisons and courts/)).toBeInTheDocument();
-    expect(
-      within(flagships).getByText(/Fill the funding gap in the defence investment plan/),
-    ).toBeInTheDocument();
-    expect(within(flagships).getAllByText(/costs £\d\.\dbn/).length).toBe(2);
-    expect(changeIn(flagships, 'Change safer streets')).toHaveAttribute(
-      'href',
-      expect.stringMatching(/^\/budget\/deliver\?/),
-    );
-    expect(changeIn(flagships, 'Change defence')).toHaveAttribute(
-      'href',
-      expect.stringMatching(/^\/budget\/deliver\/2\?/),
-    );
+    // Nothing of the retired steps (ADR-0045): no priorities, no flagships.
+    expect(screen.queryByRole('region', { name: /^Your priorities/ })).toBeNull();
+    expect(screen.queryByRole('region', { name: /^Flagship policies/ })).toBeNull();
 
     // Every tax moved, under its plain title, with what it raises.
     const tax = part(/^Tax/);
@@ -64,13 +44,12 @@ describe('step 5: deliver the Budget', () => {
       expect.stringMatching(/^\/finetune\/tax\?/),
     );
 
-    // Every other budget moved that no flagship owns, with where it now stands and its cost.
+    // Every other budget moved, with where it now stands and its cost.
     const spending = part(/^Spending/);
     // A spending line in the card's words: its share against the plan (Phase 25).
     expect(within(spending).getByText(/^Schools and education · 5% more/)).toBeInTheDocument();
-    expect(within(spending).getByText(/costs £\d\.\dbn/)).toBeInTheDocument();
-    // The flagships' levers are read back once, as flagships.
-    expect(within(spending).queryByText(/Prisons and courts/)).toBeNull();
+    expect(within(spending).getAllByText(/costs £\d\.\dbn/).length).toBeGreaterThan(0);
+    expect(within(spending).getByText(/^Prisons and courts/)).toBeInTheDocument();
     expect(changeIn(spending, 'Change')).toHaveAttribute(
       'href',
       expect.stringMatching(/^\/finetune\/spending\?/),
@@ -146,9 +125,13 @@ describe('step 5: deliver the Budget', () => {
   });
 
   it('says so when no tax or other budget moved, and names a missed rule and a broken promise', () => {
-    const quiet = at(`/review?${BASE}&${G}&L=moj.10`);
-    expect(within(part(/^Tax/)).getByText('No tax changed.')).toBeInTheDocument();
-    expect(within(part(/^Spending/)).getByText('No other budget changed.')).toBeInTheDocument();
+    const quiet = at(`/review?${BASE}&${G}`);
+    expect(
+      within(part(/^Tax/)).getByText('No tax changed from the Chancellor’s Budget.'),
+    ).toBeInTheDocument();
+    expect(
+      within(part(/^Spending/)).getByText('No budget changed from the Chancellor’s Budget.'),
+    ).toBeInTheDocument();
     expect(within(part(/^Where that leaves you/)).queryByText(/manifesto/)).toBeNull();
     quiet.unmount();
     at(`/review?${BASE}&${G}&L=dhsc.10_itbr.1`);
@@ -196,43 +179,14 @@ describe('step 5: deliver the Budget', () => {
     expect(line.textContent).toContain(`to ${figure} in 2029-30`);
   });
 
-  it('prices every flagship with its sign: savings save, and one price throughout', () => {
-    // The welfare bill (Phase 25, R4): the two savings read as savings, never as red costs.
-    at(`/review?${BASE}&g=st.4_pr.welfare-bill&L=rvpip.1_csjmh.1`);
-    const flagships = part(/^Flagship policies/);
-    const saves = within(flagships).getAllByText(/^saves £\d+\.\dbn$/);
+  it('reads a saving as a saving, never as a red cost', () => {
+    // The welfare bill (Phase 25, R4): the two savings read as savings.
+    at(`/review?${BASE}&${G}&L=rvpip.1_csjmh.1`);
+    const spending = part(/^Spending/);
+    const saves = within(spending).getAllByText(/^saves £\d+\.\dbn$/);
     expect(saves).toHaveLength(2);
     for (const s of saves) expect(s).toHaveClass('amount--better');
-    expect(within(flagships).queryByText(/costs/)).toBeNull();
-  });
-
-  it('shows a cut to a priority’s own budget as against it, and warns in amber when nothing delivers it', () => {
-    // The adviser's usual health move on step 4 (−1%) with the NHS ranked: not a trimmed uplift.
-    at(`/review?${BASE}&g=st.4_pr.nhs&L=dhsc.-1`);
-    const flagships = part(/^Flagship policies/);
-    expect(
-      within(flagships).getByText(/^Cuts against this priority: Health and social care · /),
-    ).toHaveClass('review__against');
-    expect(within(flagships).queryByText(/settled lower/)).toBeNull();
-    expect(
-      within(flagships).getByText(
-        /^It is an agreed priority\. Nothing in your Budget delivers it yet\./,
-      ),
-    ).toHaveClass('review__short');
-    // The cut is a cut: in the spending list too, as a saving.
-    expect(
-      within(part(/^Spending/)).getByText(/^Health and social care · 1% less/),
-    ).toBeInTheDocument();
-    expect(within(part(/^Spending/)).getByText(/^saves £\d\.\dbn$/)).toBeInTheDocument();
-  });
-
-  it('says when a priority is only started', () => {
-    at(`/review?${BASE}&g=st.4_pr.nhs&L=mhclg.5`);
-    expect(
-      within(part(/^Flagship policies/)).getByText(
-        /^It is started, not delivered: nothing delivers it in full yet\./,
-      ),
-    ).toHaveClass('review__short');
+    expect(within(spending).queryByText(/costs/)).toBeNull();
   });
 
   it('delivers: the red button marks the game finished and opens Budget day with the Budget intact', async () => {
@@ -249,7 +203,7 @@ describe('step 5: deliver the Budget', () => {
     ).toBeInTheDocument();
     await waitFor(() => {
       const params = new URLSearchParams(window.location.search);
-      expect(params.get('g')).toMatch(/st\.5/);
+      expect(params.get('g')).toBe('st.2_rd.2');
       expect(params.get('L')).toMatch(/moj\.10/);
     });
   });

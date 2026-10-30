@@ -1,25 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import {
-  ambitionStatus,
-  computeOutcome,
-  deliversTarget,
-  freshGame,
-  promiseBreaks,
-  promiseStrains,
-  rankedPriorities,
-  type GamePermalink,
-} from '../src/index.js';
+import { ambitionStatus, computeOutcome, promiseBreaks, promiseStrains } from '../src/index.js';
 import { loadDataset } from './fixtures.js';
-import {
-  DEFENCE_GAP,
-  EMPLOYER_NICS,
-  EVERYTHING_EXPENSIVE,
-  HEALTH_ABOVE_PLAN,
-  NHS_START,
-  PENNY,
-  gameWith,
-  type Budget,
-} from './scenarios.js';
+import { EMPLOYER_NICS, EVERYTHING_EXPENSIVE, PENNY, type Budget } from './scenarios.js';
 
 const ds = loadDataset();
 const pm = ds.pm;
@@ -30,11 +12,9 @@ const run = (leverValues: Budget) =>
     levers: ds.levers,
     settings: { leverValues },
   });
-const lever = (code: string) => ds.levers.find((l) => l.code === code);
-const status = (game: GamePermalink, values: Budget) =>
-  ambitionStatus(game, pm, ds.options, run(values), ds.levers);
+const status = (values: Budget) => ambitionStatus(pm, run(values), ds.levers);
 
-describe('what the Chancellor agreed with the Prime Minister', () => {
+describe('the promises against the package', () => {
   it('breaks the tax lock on a higher headline rate or a lower allowance (ADR-0042)', () => {
     const lock = pm.promises.find((p) => p.id === 'tax-lock');
     if (!lock) throw new Error('no tax lock');
@@ -75,11 +55,10 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     expect(by?.code).toBe('nicer');
     expect(by?.text).toMatch(/still National Insurance/);
     // The status counts a strain once, and a promise both broken and strained once, as broken.
-    const game = gameWith();
-    expect(status(game, EMPLOYER_NICS).broken).toBe(0);
-    expect(status(game, EMPLOYER_NICS).strained).toBe(1);
-    expect(status(game, { ...EMPLOYER_NICS, ...PENNY }).broken).toBe(1);
-    expect(status(game, { ...EMPLOYER_NICS, ...PENNY }).strained).toBe(0);
+    expect(status(EMPLOYER_NICS).broken).toBe(0);
+    expect(status(EMPLOYER_NICS).strained).toBe(1);
+    expect(status({ ...EMPLOYER_NICS, ...PENNY }).broken).toBe(1);
+    expect(status({ ...EMPLOYER_NICS, ...PENNY }).strained).toBe(0);
   });
 
   it('strains the triple lock when pensioner benefits are cut below plan, and breaks it only by the lock levers (Phase 25)', () => {
@@ -96,9 +75,8 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
     expect(promiseStrains({ wpens: 1 }, [lock], ds.levers)[0]?.strained).toBe(false);
     expect(promiseBreaks({ cpilock: 1 }, [lock], ds.levers)[0]?.kept).toBe(false);
     expect(promiseBreaks({ pensmth: 1 }, [lock], ds.levers)[0]?.kept).toBe(false);
-    const game = gameWith();
-    expect(status(game, { wpens: -1 }).strained).toBe(1);
-    expect(status(game, { wpens: -1 }).broken).toBe(0);
+    expect(status({ wpens: -1 }).strained).toBe(1);
+    expect(status({ wpens: -1 }).broken).toBe(0);
   });
 
   it('breaks the two-child promise when the limit is reinstated, and no other way', () => {
@@ -109,12 +87,11 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
   });
 
   it('judges the fiscal-rules promise by the verdicts, since no lever names it', () => {
-    const game = freshGame();
     const rulesPromise = (values: Record<string, number>) =>
-      status(game, values).promises.find((p) => p.promise.id === 'fiscal-rules');
+      status(values).promises.find((p) => p.promise.id === 'fiscal-rules');
     expect(rulesPromise({})?.kept).toBe(true);
     // Everything expensive at once misses the stability rule.
-    const broken = status(game, EVERYTHING_EXPENSIVE);
+    const broken = status(EVERYTHING_EXPENSIVE);
     expect(broken.promises.find((p) => p.promise.id === 'fiscal-rules')?.kept).toBe(false);
     // A missed rule is counted as a missed rule, where the rules are shown, not also as a broken
     // promise on the bar (Phase 25).
@@ -146,7 +123,7 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
         id,
       ).toEqual([[code, false]]);
     }
-    const cut = status(freshGame(), { mod: -1, dhsc: -1 });
+    const cut = status({ mod: -1, dhsc: -1 });
     expect(cut.broken).toBe(0);
     expect(cut.strains.filter((s) => s.strained).map((s) => s.promise.id)).toEqual([
       'defence-path',
@@ -155,100 +132,13 @@ describe('what the Chancellor agreed with the Prime Minister', () => {
   });
 
   it('holds every manifesto promise in force from the first screen to the last', () => {
-    const s = status(freshGame(), {});
+    const s = status({});
     expect(s.promises.map((p) => p.promise.id)).toEqual(pm.promises.map((p) => p.id));
     expect(s.broken).toBe(0);
     // A red line cannot be negotiated away: the data carries no push-backs or concessions.
     expect(pm.promises.every((p) => !('pushBack' in p))).toBe(true);
-  });
-
-  it('ranks only priorities the data knows, first three, in the order given', () => {
-    const game = {
-      ...freshGame(),
-      priorities: ['nhs', 'prisons', 'defence', 'families', 'schools-send'],
-    };
-    expect(rankedPriorities(game, pm).map((p) => p.id)).toEqual(['nhs', 'defence', 'families']);
-    expect(status(game, {}).priorities.map((p) => p.rank)).toEqual([1, 2, 3]);
-  });
-
-  it('reads a priority delivered, settled lower, started or not funded from its options (Phase 25)', () => {
-    const game = gameWith(['nhs', 'schools-send', 'families']);
-    const s = status(game, { ...HEALTH_ABOVE_PLAN, dfe: 2 });
-    const by = new Map(s.priorities.map((p) => [p.priority.id, p] as const));
-    expect(by.get('nhs')?.status).toBe('delivered');
-    // Chosen in full and trimmed short of it on step 4: settled lower, not delivered.
-    expect(by.get('schools-send')?.status).toBe('settledLower');
-    expect(by.get('families')?.status).toBe('notFunded');
-    expect(s.delivered).toBe(1);
-    expect(s.settledLower).toBe(1);
-    expect(s.notFunded).toBe(1);
-    // A way that only makes a start is a start, however it is ticked.
-    const starts = status(game, { ...NHS_START, rvplan2: 1, ucfloor: 1 });
-    expect(starts.priorities.map((p) => p.status)).toEqual(['started', 'started', 'started']);
-    expect(starts.delivered).toBe(0);
-    expect(starts.started).toBe(3);
-    const health = by.get('nhs')?.options.find((o) => o.option.id === 'health-above-sr');
-    expect(health?.state).toBe('on');
-    const send = by.get('schools-send')?.options.find((o) => o.option.id === 'send-settlement');
-    expect(send?.state).toBe('adjusted');
-    // Overshooting the value still counts as delivering it.
-    expect(deliversTarget(lever('dhsc'), 4, 3)).toBe(true);
-    // A cut is delivered by going at least as far down.
-    expect(deliversTarget(lever('fuel'), -10, -10)).toBe(true);
-    expect(deliversTarget(lever('fuel'), -5, -10)).toBe(false);
-    // Cutting a flagship's own budget is against it, and funds nothing.
-    const cut = status(game, { dhsc: -2 });
-    const cutHealth = cut.priorities[0]?.options.find((o) => o.option.id === 'health-above-sr');
-    expect(cutHealth?.state).toBe('against');
-    expect(cut.priorities[0]?.status).toBe('notFunded');
-    expect(cutHealth?.spendingGbpm).toBe(0);
-  });
-
-  it('reads what each option puts behind its priority in the target year, and sums it', () => {
-    const game = gameWith(['cost-of-living', 'defence']);
-    const values = { bus2: 1, ...DEFENCE_GAP };
-    const outcome = run(values);
-    const s = ambitionStatus(game, pm, ds.options, outcome, ds.levers);
-    // An option counts what its levers spend, less what they raise, in the target year.
-    const target = outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '';
-    const net = (code: string) => {
-      const e = outcome.leverEffects.find((x) => x.code === code);
-      return (
-        (e?.currentSpending[target] ?? 0) +
-        (e?.capitalSpending[target] ?? 0) -
-        (e?.receipts[target] ?? 0)
-      );
-    };
-    for (const p of s.priorities) {
-      for (const o of p.options) {
-        const counted = o.state === 'on' || o.state === 'adjusted';
-        const want = counted ? Object.keys(o.option.values).reduce((a, c) => a + net(c), 0) : 0;
-        expect(o.spendingGbpm, o.option.id).toBeCloseTo(want, 6);
-      }
-      expect(p.spendingGbpm, p.priority.id).toBeCloseTo(
-        p.options.reduce((a, o) => a + o.spendingGbpm, 0),
-        6,
-      );
-      // A way in full delivers its priority; a start only makes a start.
-      const on = p.options.filter((o) => o.state === 'on').map((o) => o.option.scale.kind);
-      expect(p.status, p.priority.id).toBe(on.includes('full') ? 'delivered' : 'started');
-    }
-    expect(s.priorities.every((p) => p.spendingGbpm > 0)).toBe(true);
-  });
-
-  it('gives every option a sourced scale, and every priority a way to deliver it in full', () => {
-    for (const option of ds.options.deliver) {
-      expect(option.scale.badge).toBe('simulated');
-      expect(option.scale.sources.length).toBeGreaterThan(0);
-      expect(option.scale.why.split(/\s+/).length, option.id).toBeLessThanOrEqual(14);
-    }
-    for (const priority of pm.priorities) {
-      expect(
-        ds.options.deliver.some((o) => o.priority === priority.id && o.scale.kind === 'full'),
-        priority.id,
-      ).toBe(true);
-    }
-    // The defence plan's gap is the whole published bill: in full, whatever its size.
-    expect(ds.options.deliver.find((o) => o.id === 'dip-gap')?.scale.kind).toBe('full');
+    // The priorities agreed with the Prime Minister retired with the Chancellor's Budget as the
+    // starting point (ADR-0045): the file carries promises and the sign-off, nothing to rank.
+    expect('priorities' in pm).toBe(false);
   });
 });

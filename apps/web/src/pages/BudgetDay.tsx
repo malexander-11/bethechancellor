@@ -12,7 +12,7 @@ import { JourneyLayout } from '../components/JourneyLayout';
 import { ReceptionCard } from '../components/ReceptionCard';
 import { PostToBoard } from '../components/PostToBoard';
 import { SharePanel } from '../components/SharePanel';
-import { electorate, incidence, levers, pm, reception, vintage, options } from '../data';
+import { electorate, incidence, levers, pm, reception, vintage } from '../data';
 import { useStageGuard } from '../journey/guard';
 import { StepLink } from '../journey/links';
 import { useOutcomeOf } from '../journey/outcome';
@@ -26,7 +26,7 @@ function list(items: readonly string[]): string {
 }
 
 /**
- * Step 6: feedback, on one screen. The rules line, which is the one thing here that is arithmetic;
+ * Step 3: feedback, on one screen. The rules line, which is the one thing here that is arithmetic;
  * the backbenchers, the markets and the public, each rating the Budget out of five and saying
  * which choices caused it; five households, each saying what the Budget did to it (ADR-0043); the
  * Budget as a picture to share, whose link invites whoever opens it to play; and, once it is open,
@@ -43,11 +43,8 @@ export function BudgetDayPage() {
     outcome.verdicts.find((v) => v.kind === 'currentBudget')?.targetYear ?? '2029-30';
   const typicalError = typicalErrorGbpm(vintage, outcome);
 
-  // The game's readings: ambitions against the package, and the package as the OBR saw it.
-  const status = useMemo(
-    () => (game ? ambitionStatus(game, pm, options, outcome, levers) : undefined),
-    [game, outcome],
-  );
+  // The game's readings: the promises against the package, and the package as the OBR saw it.
+  const status = useMemo(() => ambitionStatus(pm, outcome, levers), [outcome]);
   const room = useMemo(
     () =>
       receptions({
@@ -56,12 +53,10 @@ export function BudgetDayPage() {
         reception,
         typicalErrorGbpm: typicalError,
         outcomeOf,
-        pm,
         incidence,
-        ...(game ? { game } : {}),
-        ...(status ? { status } : {}),
+        status,
       }),
-    [outcome, typicalError, game, status, outcomeOf],
+    [outcome, typicalError, status, outcomeOf],
   );
   // The one audience that is arithmetic: the rules, in a line above the three cards, by their
   // plain names and the engine's own margins (Phase 25). The welfare cap is named when missed.
@@ -86,8 +81,6 @@ export function BudgetDayPage() {
     outcome.settings.leverValues,
     levers,
     sizeOf,
-    status ?? null,
-    (game?.priorities.length ?? 0) > 0,
     incidence,
   );
   // Arriving here is the end of the story: a link shared from here opens as a finished Budget.
@@ -99,7 +92,7 @@ export function BudgetDayPage() {
     }
   }, [guard, game, reached, dispatch]);
   // A game in play that jumps to Budget day is sent back to where it is; a finished, shared link
-  // walks in. With no game there is no Budget day: the guard sends the link to the briefing.
+  // walks in. With no game there is no Budget day: the guard sends the link to the start.
   if (guard) return guard;
 
   return (
@@ -133,7 +126,7 @@ export function BudgetDayPage() {
             navigate('/');
           }}
         >
-          Play again
+          Start again
         </button>
       </p>
     </JourneyLayout>

@@ -341,64 +341,6 @@
           ]
         },
         {
-          "id": "bb-downing-street",
-          "short": "Downing Street",
-          "measure": "prioritiesUnfunded",
-          "reading": {
-            "label": "Flagships agreed with the Prime Minister no longer funded",
-            "unit": "count"
-          },
-          "note": "Any priority agreed in Downing Street with nothing behind it. A priority only started is said in words and scores nothing (Phase 25).",
-          "bands": [
-            {
-              "id": "delivered",
-              "upTo": 0,
-              "points": 0,
-              "text": "Everything agreed in Downing Street has something behind it in the Budget.",
-              "sources": [
-                {
-                  "sourceId": "no10-first-speech-2026-07-20"
-                },
-                {
-                  "sourceId": "no10-commons-statement-2026-09-01"
-                }
-              ],
-              "badge": "simulated",
-              "variants": [
-                {
-                  "when": {
-                    "measure": "prioritiesStarted",
-                    "above": 0
-                  },
-                  "text": "Every priority has something behind it, but some only make a start. No. 10 will ask for more.",
-                  "sources": [
-                    {
-                      "sourceId": "no10-first-speech-2026-07-20"
-                    },
-                    {
-                      "sourceId": "no10-commons-statement-2026-09-01"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "pulled",
-              "points": -1,
-              "text": "A priority agreed in Downing Street has nothing behind it. No. 10 will notice before anyone else.",
-              "sources": [
-                {
-                  "sourceId": "no10-first-speech-2026-07-20"
-                },
-                {
-                  "sourceId": "no10-commons-statement-2026-09-01"
-                }
-              ],
-              "badge": "simulated"
-            }
-          ]
-        },
-        {
           "id": "bb-rules-missed",
           "short": "Rules missed",
           "measure": "fiscalRulesMissed",
@@ -1035,119 +977,6 @@
           ]
         },
         {
-          "id": "pb-priorities",
-          "short": "Priorities delivered",
-          "measure": "prioritiesFunded",
-          "reading": {
-            "label": "Priorities delivered in full",
-            "unit": "count"
-          },
-          "note": "A priority counts when a way to deliver it in full is on. A start or a trimmed ask is said in words and scores nothing (Phase 25).",
-          "bands": [
-            {
-              "id": "none",
-              "upTo": 0,
-              "points": 0,
-              "text": "No priority was delivered in full: nothing people can point at yet.",
-              "sources": [
-                {
-                  "sourceId": "no10-first-speech-2026-07-20"
-                }
-              ],
-              "badge": "simulated",
-              "variants": [
-                {
-                  "when": {
-                    "measure": "prioritiesStarted",
-                    "above": 0
-                  },
-                  "text": "Your priorities are started, not delivered. People notice a start far less than a result.",
-                  "sources": [
-                    {
-                      "sourceId": "no10-first-speech-2026-07-20"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "one",
-              "upTo": 1,
-              "points": 1,
-              "text": "One of the Budget’s priorities is delivered in full. People will notice it.",
-              "sources": [
-                {
-                  "sourceId": "no10-first-speech-2026-07-20"
-                }
-              ],
-              "badge": "simulated",
-              "variants": [
-                {
-                  "when": {
-                    "measure": "prioritiesStarted",
-                    "above": 0
-                  },
-                  "text": "One priority is delivered in full; the others only make a start. People will notice the one.",
-                  "sources": [
-                    {
-                      "sourceId": "no10-first-speech-2026-07-20"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "all",
-              "points": 2,
-              "text": "Two or more of the Budget’s priorities are delivered in full. People can see what it was for.",
-              "sources": [
-                {
-                  "sourceId": "no10-first-speech-2026-07-20"
-                },
-                {
-                  "sourceId": "no10-commons-statement-2026-09-01"
-                }
-              ],
-              "badge": "simulated"
-            }
-          ]
-        },
-        {
-          "id": "pb-clear-priority",
-          "short": "A clear story",
-          "measure": "clearPriorityGbpm",
-          "reading": {
-            "label": "Money behind a single, fully delivered priority",
-            "unit": "GBPm"
-          },
-          "note": "One priority ranked, delivered, and at least five billion a year behind it: a Budget people can describe in a sentence.",
-          "bands": [
-            {
-              "id": "no",
-              "upTo": 4999,
-              "points": 0,
-              "text": "There is no single story: more than one priority, an option cut back, or too little money behind it.",
-              "sources": [
-                {
-                  "sourceId": "no10-first-speech-2026-07-20"
-                }
-              ],
-              "badge": "simulated"
-            },
-            {
-              "id": "yes",
-              "points": 1,
-              "text": "One clear priority with {abs} a year behind it: a Budget people can describe in a sentence.",
-              "sources": [
-                {
-                  "sourceId": "no10-first-speech-2026-07-20"
-                }
-              ],
-              "badge": "simulated"
-            }
-          ]
-        },
-        {
           "id": "pb-service-cuts",
           "short": "Service cuts",
           "measure": "serviceCutsGbpm",
@@ -1337,6 +1166,76 @@
                 {
                   "sourceId": "rf-policy-landscape-2026",
                   "quote": "the cost-of-living crisis is back centre stage"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-services",
+          "short": "Public services",
+          "measure": "publicServiceSpendingGbpm",
+          "reading": {
+            "label": "Change in spending on departments in the target year",
+            "unit": "GBPm"
+          },
+          "note": "Departments only: benefits have rules of their own. Five billion a year more than the Spending Review planned is enough to show in a service people use; cuts are counted by their own rule.",
+          "bands": [
+            {
+              "id": "steady",
+              "upTo": 4999,
+              "points": 0,
+              "text": "Public services get about what was planned.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "more",
+              "points": 1,
+              "text": "Public services get {abs} a year more than planned. People notice a service that improves.",
+              "sources": [
+                {
+                  "sourceId": "hmt-sr25-del-tables"
+                }
+              ],
+              "badge": "simulated"
+            }
+          ]
+        },
+        {
+          "id": "pb-who-pays",
+          "short": "Who pays",
+          "measure": "progressiveBalanceGbpm",
+          "reading": {
+            "label": "Revenue from the top and business, less revenue from everyone else",
+            "unit": "GBPm"
+          },
+          "note": "The balance of new revenue: the best-off, savers and business on one side; everyone who earns or spends, motorists and duties on the other. Two billion a year from the top is enough to be noticed; a rise on everyone is counted by its own rule.",
+          "bands": [
+            {
+              "id": "even",
+              "upTo": 2000,
+              "points": 0,
+              "text": "Nothing much is asked of the best-off that is not asked of everyone.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
+                }
+              ],
+              "badge": "simulated"
+            },
+            {
+              "id": "top",
+              "points": 1,
+              "text": "The best-off and business pay {abs} a year more than everyone else does. Most people wanted that.",
+              "sources": [
+                {
+                  "sourceId": "labour-manifesto-2024-strong-foundations"
                 }
               ],
               "badge": "simulated"

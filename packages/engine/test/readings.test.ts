@@ -1,22 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import {
-  ambitionStatus,
-  computeOutcome,
-  readingsWithCauses,
-  type GamePermalink,
-} from '../src/index.js';
+import { ambitionStatus, computeOutcome, readingsWithCauses } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
 import {
   DAY_TO_DAY_RULE_MISSED,
   EMPLOYER_NICS,
   HEALTH_ABOVE_PLAN,
   INVESTMENT,
-  NHS_START,
   PENNY,
   PRISONS,
-  SECURITY,
   TAXES_AT_THE_TOP,
-  gameWith,
   todaysEstimate,
   typicalError,
   type Budget,
@@ -38,16 +30,15 @@ const run = (leverValues: Budget) =>
     levers: ds.levers,
     settings: { leverValues },
   });
-const read = (leverValues: Budget, game?: GamePermalink) => {
+const read = (leverValues: Budget) => {
   const outcome = run(leverValues);
   return readingsWithCauses({
     outcome,
     levers: ds.levers,
     typicalErrorGbpm,
     outcomeOf,
-    pm: ds.pm,
     incidence: ds.incidence,
-    ...(game ? { game, status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers) } : {}),
+    status: ambitionStatus(ds.pm, outcome, ds.levers),
   }).values;
 };
 
@@ -113,57 +104,39 @@ describe('the readings of a Budget', () => {
     expect(read({ wuc: -5 }).welfareReversals).toBe(0);
   });
 
-  it('reads the game: red lines and priorities', () => {
-    const game = gameWith(SECURITY);
-    const r = read({ ...PENNY, ...PRISONS }, game);
+  it('reads the game: the red lines', () => {
+    const r = read({ ...PENNY, ...PRISONS });
     expect(r.promisesBroken).toBe(1);
     expect(r.manifestoBroken).toBe(1);
     expect(r.manifestoStrained).toBe(0);
     // Amber (Phase 23): employer National Insurance strains the lock; with the lock already broken
     // it counts once.
-    expect(read({ ...EMPLOYER_NICS, ...PRISONS }, game).manifestoStrained).toBe(1);
-    expect(read({ ...EMPLOYER_NICS, ...PRISONS }, game).manifestoBroken).toBe(0);
-    expect(read({ ...EMPLOYER_NICS, ...PENNY, ...PRISONS }, game).manifestoStrained).toBe(0);
-    expect(r.prioritiesUnfunded).toBe(1);
-    expect(r.prioritiesFunded).toBe(1);
-    // Two priorities ranked: not a single story, whatever the money behind either.
-    expect(r.clearPriorityGbpm).toBe(0);
-    expect(r.deliveredGbpm).toBeGreaterThan(1000);
-    // The target, the breach and the add-ons went with the forecast (Phase 24).
+    expect(read({ ...EMPLOYER_NICS, ...PRISONS }).manifestoStrained).toBe(1);
+    expect(read({ ...EMPLOYER_NICS, ...PRISONS }).manifestoBroken).toBe(0);
+    expect(read({ ...EMPLOYER_NICS, ...PENNY, ...PRISONS }).manifestoStrained).toBe(0);
+    // The target, the breach and the add-ons went with the forecast (Phase 24); the priorities
+    // with the Chancellor's Budget as the starting point (ADR-0045).
     expect(r.breachAccepted).toBeUndefined();
     expect(r.headroomVsTargetGbpm).toBeUndefined();
     expect(r.rabbitGbpm).toBeUndefined();
-    // One priority ranked and delivered: a clear story worth what its options cost.
-    const clear = read(PRISONS, gameWith(['safer-streets']));
-    expect(clear.clearPriorityGbpm).toBeCloseTo(clear.deliveredGbpm ?? 0, 6);
-    expect(clear.clearPriorityGbpm).toBeGreaterThan(1000);
-    // Graded delivery (Phase 25): a way that only makes a start is started, not funded, and a
-    // single started priority is not a clear story.
-    const started = read(NHS_START, gameWith(['nhs']));
-    expect(started.prioritiesStarted).toBe(1);
-    expect(started.prioritiesFunded).toBe(0);
-    expect(started.prioritiesUnfunded).toBe(0);
-    expect(started.clearPriorityGbpm).toBe(0);
-    expect(r.prioritiesStarted).toBe(0);
+    expect(r.prioritiesFunded).toBeUndefined();
+    expect(r.clearPriorityGbpm).toBeUndefined();
     // Missing the stability rule breaks the fiscal-rules promise but crosses no manifesto red line.
-    const missed = read(DAY_TO_DAY_RULE_MISSED, game);
+    const missed = read(DAY_TO_DAY_RULE_MISSED);
     expect(missed.rulesMissed).toBeGreaterThan(0);
     expect(missed.promisesBroken).toBe(1);
     expect(missed.manifestoBroken).toBe(0);
   });
 
   it('names the decisions behind each reading', () => {
-    const game = gameWith(['safer-streets']);
     const outcome = run({ ...PENNY, ...PRISONS, ...DAY_TO_DAY_RULE_MISSED });
-    const status = ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers);
+    const status = ambitionStatus(ds.pm, outcome, ds.levers);
     const { causes: found } = readingsWithCauses({
       outcome,
       levers: ds.levers,
       typicalErrorGbpm,
       outcomeOf,
-      pm: ds.pm,
       incidence: ds.incidence,
-      game,
       status,
     });
     // Causes carry how far each decision moved the reading, and are named in running words
@@ -177,9 +150,6 @@ describe('the readings of a Budget', () => {
     const lock = ds.pm.promises.find((p) => p.id === 'tax-lock')?.noun;
     expect(titles('manifestoBroken')[0]?.startsWith(`${lock} (${penny})`)).toBe(true);
     expect(titles('taxRisesGbpm')).toEqual(causes(PENNY));
-    expect(titles('prioritiesFunded')).toEqual(
-      ds.pm.priorities.filter((p) => p.id === 'safer-streets').map((p) => p.noun),
-    );
     expect(titles('publicServiceSpendingGbpm')[0]).toBe(miss);
     // The economy is not the player's decision: never a cause.
     expect(titles('borrowingChangeGbpm')).not.toContain('the economy since March');

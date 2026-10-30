@@ -8,10 +8,8 @@ import type {
   HouseholdsFile,
   HouseholdsReference,
   IncidenceFile,
-  InterventionsFile,
   Lever,
   MinistersFile,
-  OptionsFile,
   PmFile,
   ReceptionFile,
   RuleSet,
@@ -37,8 +35,6 @@ export interface ShippedDataset {
   reception: ReceptionFile;
   pm: PmFile;
   ministers: MinistersFile;
-  interventions: InterventionsFile;
-  options: OptionsFile;
   finetune: FinetuneFile;
   electorate: HouseholdsFile;
   incidence: IncidenceFile;

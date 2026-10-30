@@ -1,6 +1,5 @@
 import type { Lever } from '../types/data.js';
 import { freshGame, type AssessAsOf, type GamePermalink } from '../types/engine.js';
-import { LEGACY_THEME_PRIORITY } from '../game/options.js';
 import { FINAL_STAGE } from '../game/stages.js';
 
 export const PERMALINK_VERSION = 1;
@@ -12,7 +11,7 @@ export interface PermalinkState {
   leverValues: Record<string, number>;
   debtInterestFeedback: boolean;
   assessAsOf: AssessAsOf;
-  /** The playthrough, once the player has left the briefing (`g=`). */
+  /** The playthrough, once the player has started changing the Budget (`g=`). */
   game?: GamePermalink;
 }
 
@@ -22,34 +21,40 @@ export interface DecodedPermalink {
 }
 
 const ITEM_SEPARATOR = '_';
-const LIST_SEPARATOR = '+';
-const LIST_SPLIT = /[+ ]/;
-const slugOk = (s: string) => /^[a-z0-9][a-z0-9:-]*$/.test(s);
 
 /**
- * How a stage from before Phase 24 reads now, by its old index: the outlook, the PM and the
- * flagships stay where they were; the forecast (3) opens fine-tuning; the compromises (4) and the
- * final choices (5) open the review, short of Budget day; a finished Budget (6) stays finished.
+ * How a stage from before Phase 24 reads on the six-stage road, by its old index: the outlook,
+ * the PM and the flagships stay where they were; the forecast (3) opens fine-tuning; the
+ * compromises (4) and the final choices (5) open the review, short of Budget day; a finished
+ * Budget (6) stays finished.
  */
 export const LEGACY_STAGE: readonly number[] = [0, 1, 2, 3, 4, 4, 5];
 
 /**
- * `g=` holds the story of a playthrough as `key.value` items: `g=st.3_pr.defence+nhs`. The stage
- * is always written, so a `g=` always marks a game (`st.0` is a game at the briefing).
+ * How a stage of the six-stage road (ADR-0025) reads on the three-stage one (ADR-0045): the
+ * briefing, the priorities and the flagships open fine-tuning; the rest keep their place.
+ */
+export const SIX_STAGE: readonly number[] = [0, 0, 0, 0, 1, 2];
+
+/** The road marker a link written on the three-stage road carries (`rd.2`). */
+export const ROAD = 2;
+
+/**
+ * `g=` holds the story of a playthrough as `key.value` items: `g=st.1_rd.2`. The stage is always
+ * written, so a `g=` always marks a game (`st.0` is a game at fine-tuning), and the road marker says
+ * which road the stage counts on; a link without one is read on the six-stage road, and one with a
+ * seed on the seven-stage road before it.
  *
  * Retired keys, never to be reused, ignored without a warning when an old link carries them:
  * `s` (the seed of the in-game OBR draw), `pl` (the forecast planned on), `hr` (the headroom
  * target), `dl` (delayed measures), `rv` (the forecast opened), `rb` (the add-ons) and `br` (a
  * rule breach accepted) went with the forecast, the compromises and the add-ons in Phase 24
- * (ADR-0025); `pp`, `cn`, `cp` and `dp` carried the Phase 8 negotiation with the PM. A link that
- * carries a seed is from before Phase 24, so its stage is read through `LEGACY_STAGE`. `th` (the
- * Phase 9 themes) still reads as the priority that took each one's place (Phase 18). The `S=`
- * snapshot of the package before the forecast is no longer read or written.
+ * (ADR-0025); `pp`, `cn`, `cp` and `dp` carried the Phase 8 negotiation with the PM; `th` (the
+ * Phase 9 themes) and `pr` (the priorities ranked with the PM, Phase 18) went with the priorities
+ * (ADR-0045). The `S=` snapshot of the package before the forecast is no longer read or written.
  */
 export function encodeGame(g: GamePermalink): string {
-  const items = [`st.${g.reached}`];
-  if (g.priorities.length > 0) items.push(`pr.${g.priorities.join(LIST_SEPARATOR)}`);
-  return items.join(ITEM_SEPARATOR);
+  return [`st.${g.reached}`, `rd.${ROAD}`].join(ITEM_SEPARATOR);
 }
 
 /** Never throws. A `g=` with nothing in it that can be read is no game; unknown items are ignored. */
@@ -66,22 +71,17 @@ export function decodeGame(raw: string, warnings: string[]): GamePermalink | und
   }
   const g = freshGame();
   const st = Number(items.get('st'));
-  const stage = Number.isInteger(st) ? st : 0;
-  // A link from before Phase 24 carried a seed and seven stages.
-  const legacy = items.has('s');
-  const reached = legacy ? (LEGACY_STAGE[Math.min(Math.max(stage, 0), 6)] ?? 0) : stage;
-  g.reached = Math.min(Math.max(reached, 0), FINAL_STAGE);
-  // A `+` typed into a browser's address bar arrives here as a space, so both separate items.
-  const list = (key: string) =>
-    (items.get(key) ?? '').split(LIST_SPLIT).filter((s) => s.length > 0 && slugOk(s));
-  // A Phase 9 link ranked themes; each reads as the priority that took its place, ahead of any
-  // priorities the link also names. An id the data no longer knows is kept here and dropped by
-  // rankedPriorities, so the codec needs no data.
-  const themes = list('th')
-    .map((t) => LEGACY_THEME_PRIORITY[t])
-    .filter((p): p is string => p !== undefined);
-  g.priorities = [...new Set([...themes, ...list('pr')])];
+  const stage = Number.isInteger(st) ? Math.max(stage0(st), 0) : 0;
+  const onThisRoad = Number(items.get('rd')) === ROAD;
+  // A link from before Phase 24 carried a seed and seven stages; one from before ADR-0045 six.
+  const six = items.has('s') ? (LEGACY_STAGE[Math.min(stage, 6)] ?? 0) : stage;
+  const reached = onThisRoad ? stage : (SIX_STAGE[Math.min(six, 5)] ?? 0);
+  g.reached = Math.min(reached, FINAL_STAGE);
   return g;
+}
+
+function stage0(n: number): number {
+  return Number.isFinite(n) ? n : 0;
 }
 
 const PAIR_SEPARATOR = '_';

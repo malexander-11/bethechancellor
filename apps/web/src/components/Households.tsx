@@ -10,7 +10,7 @@ const NET: Record<HouseholdReaction['net'], string> = {
 
 /**
  * The electorate as five households. Each says what changed for them, from the levers that
- * touched them, and whether they could tell what the Budget was for. Simulated throughout: the
+ * touched them. Simulated throughout: the
  * one fact each carries has its source, and nothing here is a number the engine did not compute.
  * A household says "untouched" only when nothing in its groups moved (Phase 25).
  */
@@ -34,7 +34,6 @@ export function Households({ reactions }: { reactions: HouseholdReaction[] }) {
               </p>
             ))
           )}
-          <p className="household__line household__line--verdict">“{r.line.text}”</p>
           <p className="source household__fact">{r.household.fact.text}</p>
         </li>
       ))}

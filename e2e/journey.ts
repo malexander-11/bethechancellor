@@ -11,9 +11,6 @@ import { test as base, expect, type Page } from '@playwright/test';
 interface Guide {
   stages: { step: string; title: string }[];
 }
-interface Pm {
-  priorities: { id: string; title: string }[];
-}
 interface FinetuneItem {
   code: string;
   name?: string;
@@ -34,7 +31,6 @@ const read = <T>(file: string): T =>
   JSON.parse(readFileSync(new URL(`../data/journey/${file}`, import.meta.url), 'utf8')) as T;
 
 const guide = read<Guide>('guide.json');
-const pm = read<Pm>('pm.json');
 const finetune = read<{ tax: FinetuneSide; spending: FinetuneSide }>('finetune.json');
 
 function stageTitle(step: string): string {
@@ -45,28 +41,17 @@ function stageTitle(step: string): string {
 
 const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-/** The priorities the walk ticks: the first two the Prime Minister offers. */
-const PRIORITIES = pm.priorities.slice(0, 2);
-
 export interface Screen {
   name: string;
-  /** Its heading as the data gives it; a flagship screen puts the priority's rank in front. */
+  /** Its heading as the data gives it. */
   heading?: string;
   /** What the player does before pressing the primary button. */
   act?: (page: Page) => Promise<void>;
 }
 
+/** The road (ADR-0045): the Chancellor's Budget, then the three steps. */
 export const JOURNEY: readonly Screen[] = [
-  { name: 'cover' },
-  { name: 'briefing', heading: stageTitle('outlook') },
-  {
-    name: 'priorities',
-    heading: stageTitle('pm'),
-    act: async (page) => {
-      for (const p of PRIORITIES) await page.getByRole('checkbox', { name: p.title }).check();
-    },
-  },
-  ...PRIORITIES.map((p, i) => ({ name: `flagship ${i + 1}`, heading: p.title })),
+  { name: 'the Budget', heading: stageTitle('start') },
   { name: 'fine-tune tax', heading: finetune.tax.title },
   { name: 'fine-tune spending', heading: finetune.spending.title },
   { name: 'review', heading: stageTitle('review') },
@@ -77,8 +62,8 @@ export const JOURNEY: readonly Screen[] = [
 export const primary = (page: Page) => page.locator('.btn--primary');
 
 /**
- * From the cover by the primary buttons to the screen called `until`, or to the end, checking each
- * screen's heading on arrival and handing it to `visit` before moving on.
+ * From the Budget by the primary buttons to the screen called `until`, or to the end, checking
+ * each screen's heading on arrival and handing it to `visit` before moving on.
  */
 export async function walk(
   page: Page,
@@ -99,10 +84,7 @@ export async function walk(
   }
 }
 
-/** A flagship screen's line that switches between the shortlist and every way (step 3). */
-export const modeSwitch = (page: Page) => page.locator('.mode-line').getByRole('button');
-
-/** Step 4's decisions: each a heading whose button opens it. */
+/** Step 1's decisions: each a heading whose button opens it. */
 export const decisions = (page: Page) =>
   page.getByRole('main').getByRole('heading').locator('button[aria-expanded]');
 

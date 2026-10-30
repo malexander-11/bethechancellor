@@ -16,8 +16,8 @@ export interface BudgetState {
   leverValues: Record<string, number>;
   warnings: string[];
   /**
-   * The playthrough (ADR-0011, ADR-0025): how far it has got and the priorities agreed. Absent
-   * until the briefing's "Set your priorities" starts it on today's estimate.
+   * The playthrough (ADR-0011, ADR-0045): how far along the road it has got. Absent until the
+   * Chancellor's Budget's button starts it.
    */
   game?: GamePermalink;
 }
@@ -56,7 +56,7 @@ function economyOf(values: Readonly<Record<string, number>>): Record<string, num
   return Object.fromEntries(MACRO_CODES.map((code) => [code, values[code] ?? 0]));
 }
 
-/** True when a set of lever values carries today's estimate of the economy exactly. */
+/** True when a set of lever values carries the forecast's economy exactly: nothing of its own. */
 export function onEstimate(values: Readonly<Record<string, number>>): boolean {
   const mine = economyOf(values);
   const estimate = economyOf(ESTIMATE);
@@ -75,7 +75,7 @@ export const ESTIMATE_WARNING =
 export const EXPERT_WARNING =
   'This link changed a setting that has gone. Every Budget now counts the interest on its own borrowing, and is judged by the rules as they stand.';
 
-/** Said on the briefing of a link that carries measures but no game (Phase 26). */
+/** Said on the Chancellor's Budget of a link that carries measures but no game (Phase 26). */
 export const MEASURES_NOTE = 'This link’s measures will be in your Budget when you start.';
 
 /** True when a set of lever values moves anything but the economy. */
@@ -92,16 +92,16 @@ export function initialStateFromLocation(search: string): BudgetState {
     out.warnings = [...out.warnings, EXPERT_WARNING];
   }
   if (state.game) {
-    // Every game is played on today's estimate (ADR-0025). A link from before Phase 24 may carry
-    // the forecast its seed drew or figures of its own; it opens on the estimate, and says so.
+    // Every game is played on the OBR's forecast (ADR-0045). A link from before may carry the
+    // forecast its seed drew or figures of its own; it opens on the forecast, and says so.
     out.game = state.game;
     if (!onEstimate(out.leverValues)) {
       out.leverValues = toEstimate(out.leverValues);
       out.warnings = [...out.warnings, ESTIMATE_WARNING];
     }
   } else if (hasMeasures(out.leverValues)) {
-    // With no game a link opens on the briefing (Phase 26), whose button starts the game with the
-    // link's measures in it; the one line says they are not lost.
+    // With no game a link opens on the Chancellor's Budget (ADR-0045), whose button starts the
+    // game with the link's measures in it; the one line says they are not lost.
     out.warnings = [...out.warnings, MEASURES_NOTE];
   }
   return out;
@@ -122,7 +122,7 @@ export function reducer(state: BudgetState, action: BudgetAction): BudgetState {
       // A reset ends the game too: every choice goes with the levers, and what the link said.
       return { leverValues: {}, warnings: [] };
     case 'startGame':
-      // Every game starts on today's estimate; one already under way keeps its choices. The link's
+      // Every game starts on the forecast; one already under way keeps its choices. The link's
       // measures are in it now, so the line promising them has done its job.
       return {
         ...state,

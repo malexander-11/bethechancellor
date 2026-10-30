@@ -23,8 +23,6 @@ export const {
   reception,
   pm,
   ministers,
-  interventions,
-  options,
   electorate,
   incidence,
   guide,

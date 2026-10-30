@@ -119,7 +119,7 @@ for (const query of ['', '?v=1&g=st.5']) {
 // A shared Budget's page: the site's own, previewing that Budget's picture; and any other link's,
 // previewing the game's.
 for (const [query, title] of [
-  ['?v=1&g=st.5', 'My Budget'],
+  ['?v=1&g=st.2_rd.2', 'The Chancellor’s Budget, unchanged'],
   ['?nonsense', 'What’s your Budget?'],
 ] as const) {
   const shared = await ask('app', `https://example.test/shared${query}`);

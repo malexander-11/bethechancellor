@@ -6,8 +6,8 @@
  */
 import { fyStart } from './calc/years.js';
 import { formatGbpBn } from './format.js';
-import type { IncidenceFile, Lever, PmFile } from './types/data.js';
-import type { GamePermalink, Outcome } from './types/engine.js';
+import type { IncidenceFile, Lever } from './types/data.js';
+import type { Outcome } from './types/engine.js';
 import type { AmbitionStatus } from './game/ambitions.js';
 import { preBudget, type OutcomeOf } from './game/prices.js';
 
@@ -22,12 +22,8 @@ export interface ReadingsInput {
    * economy since March is never the player's doing.
    */
   outcomeOf: OutcomeOf;
-  /** The playthrough, when there is one (Phase 8). Without it the game readings sit at nought. */
-  game?: GamePermalink;
-  /** Ambitions against the package, computed by the caller from the same outcome. */
+  /** The promises against the package, computed by the caller from the same outcome. */
   status?: AmbitionStatus;
-  /** The PM file; kept so callers need not change, read by nothing since Phase 18. */
-  pm?: PmFile;
   /** Who each lever falls on, for whether the revenue comes from the top or the broad base. */
   incidence?: IncidenceFile;
 }
@@ -230,11 +226,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
 
   // The game's own readings.
   const broken = status?.promises.filter((p) => !p.kept) ?? [];
-  // Graded delivery (Phase 25): in full, started (or settled lower on step 4), or nothing.
-  const unfunded = status?.priorities.filter((p) => p.status === 'notFunded') ?? [];
-  const started =
-    status?.priorities.filter((p) => p.status === 'started' || p.status === 'settledLower') ?? [];
-  const funded = status?.priorities.filter((p) => p.status === 'delivered') ?? [];
   const missedRules = outcome.verdicts
     .filter((v) => v.status === 'notMet' || v.status === 'aboveMargin')
     .map((v) => v.shortName);
@@ -336,13 +327,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
     .filter(([, gbpm]) => Math.sign(gbpm) === Math.sign(progressive) && gbpm !== 0)
     .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
     .map(([group]) => lowerFirst(input.incidence?.groups[group]?.label ?? group));
-  // Priorities: one priority ranked, delivered, with nothing partly done, is a clear story.
-  const ranked = status?.priorities ?? [];
-  const deliveredGbpm = funded.reduce((acc, p) => acc + Math.abs(p.spendingGbpm), 0);
-  const clearPriorityGbpm =
-    ranked.length === 1 && funded.length === 1 && unfunded.length === 0 && started.length === 0
-      ? deliveredGbpm
-      : 0;
   // Only the 2024 manifesto's own words are red lines (Phase 25). A Budget 2025 decision
   // reversed is a broken commitment, a U-turn; the fiscal rules are read as the rules.
   const byLevers = broken.filter((p) => p.promise.judgedBy !== 'fiscalRules');
@@ -376,11 +360,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       promisesBroken: broken.length,
       manifestoBroken: manifestoBroken.length,
       manifestoStrained: strained.length,
-      prioritiesUnfunded: unfunded.length,
-      prioritiesStarted: started.length,
-      prioritiesFunded: funded.length,
-      deliveredGbpm,
-      clearPriorityGbpm,
       welfareReversals: welfareReversals.length,
       welfareChangeGbpm: welfareChange,
       departmentsCut: cutDepartments.length,
@@ -426,12 +405,6 @@ export function readingsWithCauses(input: ReadingsInput): Readings {
       manifestoStrained: strained.map((s) => ({
         title: `${s.promise.noun} (${s.strainedBy.map((b) => title(b.code)).join(', ')})`,
       })),
-      prioritiesUnfunded: unfunded.map((p) => ({ title: p.priority.noun })),
-      prioritiesStarted: started.map((p) => ({ title: p.priority.noun })),
-      prioritiesFunded: funded.map((p) => ({ title: p.priority.noun })),
-      deliveredGbpm: funded.map((p) => ({ title: p.priority.noun })),
-      clearPriorityGbpm:
-        clearPriorityGbpm > 0 ? funded.map((p) => ({ title: p.priority.noun })) : [],
       welfareReversals: welfareReversals.map((l) => ({ title: title(l.code) })),
       welfareChangeGbpm: topBy(welfareEffects, (e) => e.currentSpending[year] ?? 0),
       departmentsCut: cutDepartments.map((l) => ({ title: title(l.code) })),

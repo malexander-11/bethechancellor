@@ -147,9 +147,9 @@ function page(...children: CardElement[]): CardElement {
 }
 
 /**
- * A finished Budget as a picture: its theme, its biggest tax and spending changes with what each
+ * A finished Budget as a picture: its title, its biggest tax and spending changes with what each
  * does, the headroom and the rules, and the three ratings, over the game's name and the invitation
- * to play. Only the changes give way when a long theme takes two lines: they are cut, never the
+ * to play. Only the changes give way when a long title takes two lines: they are cut, never the
  * verdict or the invitation. Colour only marks the rules and the meters, always beside words.
  */
 function budgetCard(summary: BudgetSummary, host: string): CardElement {
@@ -159,7 +159,7 @@ function budgetCard(summary: BudgetSummary, host: string): CardElement {
     : summary.rules.welfareOnly
       ? C.warning
       : C.critical;
-  const theme = box(
+  const title = box(
     { flexShrink: 0, padding: `30px ${SIDE_PADDING}px 0` },
     words(
       { fontFamily: 'Fraunces', fontWeight: 600, fontSize: 48, lineHeight: 1.1, lineClamp: 2 },
@@ -201,7 +201,7 @@ function budgetCard(summary: BudgetSummary, host: string): CardElement {
     ),
     ratings,
   );
-  return page(theme, changes, verdict, band(host, true));
+  return page(title, changes, verdict, band(host, true));
 }
 
 /** The red Budget box, drawn plainly: its lid, its body and its gilt handle. */

@@ -318,7 +318,6 @@ describe('a row in a decision’s card (ADR-0037)', () => {
 
   it('wears the manifesto red line and the promise to the PM as tags', () => {
     const itbr = lever('itbr');
-    const moj = lever('moj');
     const row = (props: Partial<Parameters<typeof LeverRow>[0]>) => (
       <LeverRow
         lever={itbr}
@@ -376,36 +375,6 @@ describe('a row in a decision’s card (ADR-0037)', () => {
       'tag--amber',
     );
     strained.unmount();
-    const prisons = (value: number, state: 'on' | 'adjusted' | 'against') =>
-      render(
-        row({
-          lever: moj,
-          value,
-          name: 'Prisons and courts',
-          levels: levelsOf('moj'),
-          chosen: { title: 'More money for prisons and courts', state },
-        }),
-      );
-    const funded = prisons(10, 'on');
-    expect(within(funded.container).getByText('In your flagship policies')).toBeInTheDocument();
-    funded.unmount();
-    // Trimmed short of what was chosen (Phase 25): still the flagship's, settled lower, in the
-    // Chief Secretary's words, naming whoever asked.
-    const settled = prisons(5, 'adjusted');
-    expect(within(settled.container).getByText('In your flagship policies')).toBeInTheDocument();
-    expect(
-      within(settled.container).getByText('Chief Secretary to the Treasury'),
-    ).toBeInTheDocument();
-    expect(
-      within(settled.container).getByText(/Settled lower: the Justice Secretary asked for more/),
-    ).toBeInTheDocument();
-    settled.unmount();
-    // Moved the other way: a red tag, and no line about settling.
-    const against = prisons(-2, 'against');
-    expect(within(against.container).getByText('Against your flagship policy')).toHaveClass(
-      'tag--warn',
-    );
-    expect(within(against.container).queryByText(/Settled lower/)).toBeNull();
   });
 });
 

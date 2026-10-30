@@ -27,7 +27,7 @@ export function SharedPage() {
   usePageTitle(words?.title ?? SHARE_TEXT.missing);
 
   const play = (
-    <StepLink to="/outlook" className="btn btn--primary">
+    <StepLink to="/" className="btn btn--primary">
       {SHARE_TEXT.play}
     </StepLink>
   );

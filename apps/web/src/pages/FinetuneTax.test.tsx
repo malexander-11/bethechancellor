@@ -14,7 +14,6 @@ import {
   group,
   h1,
   levelsOf,
-  namedRow,
   openDecision,
   panelOf,
   priceOf,
@@ -72,9 +71,10 @@ describe('fine-tune tax and spend: one card a decision', () => {
       'href',
       expect.stringMatching(/^\/finetune\/spending\?/),
     );
+    // Back is the Chancellor's Budget, where the game began (ADR-0045).
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
       'href',
-      expect.stringMatching(/^\/budget\/deliver\/2\?/),
+      expect.stringMatching(/^\/\?/),
     );
   });
 
@@ -296,14 +296,15 @@ describe('fine-tune tax and spend: one card a decision', () => {
   });
 
   it('warns when two levers overlap: the Budget’s deferred rise against a fuel duty cut', () => {
-    at(`/finetune/tax?${BASE}&g=st.3_pr.cost-of-living&L=fuel.-10`);
-    // The cut is the cost-of-living flagship's own, so its decision is open on arrival and fuel
-    // duty is a row naming that flagship, with the way back to it, not a scale that could undo it.
+    at(`/finetune/tax?${BASE}&g=st.0_rd.2&L=fuel.-10`);
+    // The cut came with the link, so its decision is open on arrival, the scale at the cut.
     expect(decision('Change fuel duty')).toHaveAttribute('aria-expanded', 'true');
-    const held = namedRow('Fuel duty');
-    expect(held).toHaveClass('tune__row--held');
-    expect(held.querySelector('.lever__held')?.textContent).toMatch(/^Cut fuel duty by 10%/);
-    expect(within(held).queryAllByRole('radio')).toHaveLength(0);
+    const fuel = scale('Fuel duty');
+    expect(
+      within(fuel)
+        .getAllByRole('radio')
+        .filter((r) => (r as HTMLInputElement).checked),
+    ).toHaveLength(1);
     // The Budget deferred the rise to July 2027 (ADR-0045): bringing it forward is on show, raises
     // money in 2027-28 and nothing by the target year, and warns at once that it moves the same
     // duty as the cut.

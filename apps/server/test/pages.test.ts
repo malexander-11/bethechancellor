@@ -24,7 +24,7 @@ const ask = (path: string, method = 'GET') =>
   server(new Request(`https://example.test${path}`, { method }), { ip: '' });
 
 /** A finished Budget's link, as the web writes one. */
-function link(values: Record<string, number>, priorities: readonly string[] = []): string {
+function link(values: Record<string, number>): string {
   return encodePermalink(
     {
       vintageCode: data.vintage.permalinkCode,
@@ -32,7 +32,7 @@ function link(values: Record<string, number>, priorities: readonly string[] = []
       implementationYear: gameImplementationYear(data.vintage),
       leverValues: values,
       ...GAME_SETTINGS,
-      game: { reached: FINAL_STAGE, priorities: [...priorities] },
+      game: { reached: FINAL_STAGE },
     },
     data.levers,
   );
@@ -62,7 +62,7 @@ const WALK = { dip47: 1, dhsc: -0.5, itbr: 1, moj: 10, nicer: 2 };
 
 describe('a shared Budget’s page', () => {
   it('is the site’s own page, previewing the Budget as its picture and its words', async () => {
-    const query = link(WALK, ['defence']);
+    const query = link(WALK);
     const page = await ask(`/shared?${query}`);
     expect(page.status).toBe(200);
     expect(page.headers.get('content-type')).toBe('text/html; charset=utf-8');

@@ -1,4 +1,4 @@
-import type { IncidenceFile, Lever, PmFile } from '../types/data.js';
+import type { IncidenceFile, Lever } from '../types/data.js';
 import type { Outcome } from '../types/engine.js';
 import { isMissed } from '../rules/words.js';
 import type { AmbitionStatus } from './ambitions.js';
@@ -7,7 +7,7 @@ import { withDefaults, type OutcomeOf } from './prices.js';
 /**
  * What the review reads of a Budget beyond its rules: who paid and who benefited, the engine's
  * figures totalled by the incidence tags; whether a broken promise was needed; where a margin turns
- * thin; and the priorities in words. Nothing here adds a number: it totals and re-runs the engine.
+ * thin. Nothing here adds a number: it totals and re-runs the engine.
  */
 
 /**
@@ -56,15 +56,6 @@ export function incidenceRows(
   };
 }
 
-/** "the cost of living", "defence and the NHS", "a, b and c": the ranked priorities as words. */
-export function prioritiesInWords(pm: PmFile, ids: readonly string[]): string {
-  const nouns = ids
-    .map((id) => pm.priorities.find((p) => p.id === id)?.noun)
-    .filter((n): n is string => n !== undefined);
-  if (nouns.length <= 1) return nouns[0] ?? '';
-  return `${nouns.slice(0, -1).join(', ')} and ${nouns[nouns.length - 1]}`;
-}
-
 /** The levers that break a promise with levers of its own, each once. */
 function breakingCodes(status: AmbitionStatus): string[] {
   return [
@@ -79,9 +70,8 @@ function breakingCodes(status: AmbitionStatus): string[] {
 /**
  * Was the broken promise needed (Phase 25, Worked out)? Put the levers that break it back and
  * re-run the engine on the same estimate: the headroom without the break when both rules would
- * still be met, else undefined. A lever inside a priority's chosen way to deliver it is the
- * programme itself, so a break there is never called avoidable; nor is one in a Budget that
- * already misses a rule.
+ * still be met, else undefined. A break in a Budget that already misses a rule is never called
+ * avoidable.
  */
 export function headroomWithoutBreak(input: {
   status: AmbitionStatus;
@@ -93,15 +83,8 @@ export function headroomWithoutBreak(input: {
   // The two fiscal rules: the welfare cap can be missed before any measure is moved.
   const missesRule = (v: Outcome['verdicts'][number]) => v.kind !== 'welfareCap' && isMissed(v);
   if (outcome.verdicts.some(missesRule)) return undefined;
-  const programme = new Set(
-    status.priorities.flatMap((p) =>
-      p.options
-        .filter((o) => o.state === 'on' || o.state === 'adjusted')
-        .flatMap((o) => Object.keys(o.option.values)),
-    ),
-  );
   const breakers = breakingCodes(status);
-  if (breakers.length === 0 || breakers.some((code) => programme.has(code))) return undefined;
+  if (breakers.length === 0) return undefined;
   const without = input.outcomeOf(withDefaults(outcome.settings.leverValues, breakers, levers));
   if (without.verdicts.some(missesRule)) return undefined;
   return without.verdicts.find((v) => v.kind === 'currentBudget')?.headroomGbpm ?? 0;

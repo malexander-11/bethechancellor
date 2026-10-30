@@ -262,8 +262,8 @@ function adminRoutes(
 }
 
 /**
- * What makes two links the same Budget: its choices and its priorities, without the codes of the
- * data and the economy it was read on, which change when the data does.
+ * What makes two links the same Budget: its choices and its game, without the codes of the data
+ * and the economy it was read on, which change when the data does.
  */
 export function budgetKey(query: string): string {
   const params = new URLSearchParams(query);

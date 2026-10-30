@@ -1,21 +1,8 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import {
-  ambitionStatus,
-  freshGame,
-  receptions,
-  type GamePermalink,
-  type Reception,
-} from '../src/index.js';
+import { ambitionStatus, receptions, type Reception } from '../src/index.js';
 import { loadDataset, outcomeOfFor } from './fixtures.js';
-import {
-  MOVES,
-  SECURITY,
-  gameWith,
-  todaysEstimate,
-  typicalError,
-  type Budget,
-} from './scenarios.js';
+import { MOVES, todaysEstimate, typicalError, type Budget } from './scenarios.js';
 
 /**
  * The recalibrated audiences over a seeded sample of Budgets (Phase 25, ADR-0026). The sample pins
@@ -27,14 +14,12 @@ const ESTIMATE = todaysEstimate(ds);
 const outcomeOf = outcomeOfFor(ds);
 const typicalErrorGbpm = typicalError(ds);
 
-const GAMES: GamePermalink[] = [gameWith(SECURITY), gameWith(['nhs']), freshGame()];
 const budget = fc.record({
   moves: fc.subarray([...MOVES], { minLength: 1, maxLength: 5 }),
-  game: fc.constantFrom(...GAMES),
 });
 const SAMPLE = fc.sample(budget, { numRuns: 300, seed: 20260928 });
 
-function rate(policy: Budget, game: GamePermalink): Reception[] {
+function rate(policy: Budget): Reception[] {
   const outcome = outcomeOf({ ...ESTIMATE, ...policy });
   return receptions({
     outcome,
@@ -42,21 +27,19 @@ function rate(policy: Budget, game: GamePermalink): Reception[] {
     reception: ds.reception,
     typicalErrorGbpm,
     outcomeOf,
-    pm: ds.pm,
     incidence: ds.incidence,
-    game,
-    status: ambitionStatus(game, ds.pm, ds.options, outcome, ds.levers),
+    status: ambitionStatus(ds.pm, outcome, ds.levers),
   });
 }
 
 describe('the audiences over 300 seeded Budgets (Phase 25)', () => {
-  const rated = SAMPLE.map(({ moves, game }) => {
+  const rated = SAMPLE.map(({ moves }) => {
     const policy = moves.reduce<Record<string, number>>((acc, m) => ({ ...acc, ...m }), {});
     const outcome = outcomeOf({ ...ESTIMATE, ...policy });
     const missed = outcome.verdicts.some(
       (v) => (v.kind === 'currentBudget' || v.kind === 'stockFalling') && v.status === 'notMet',
     );
-    return { missed, room: rate(policy, game) };
+    return { missed, room: rate(policy) };
   });
   const ratingOf = (room: Reception[], audience: Reception['audience']) =>
     room.find((r) => r.audience === audience)?.rating ?? 0;
@@ -69,7 +52,7 @@ describe('the audiences over 300 seeded Budgets (Phase 25)', () => {
   });
 
   it('never lets a Budget that misses a rule please the markets more than doing nothing', () => {
-    const nothing = ratingOf(rate({}, freshGame()), 'markets');
+    const nothing = ratingOf(rate({}), 'markets');
     expect(nothing).toBe(3);
     const missing = rated.filter((r) => r.missed);
     expect(missing.length).toBeGreaterThan(20);

@@ -15,14 +15,6 @@ exports[`cards that agree with their ratings (Phase 25) > says a margin truly: t
 ]
 `;
 
-exports[`graded delivery (Phase 25) > a token three-tick earns no more with the public or the party than delivering the same priorities in full 1`] = `
-[
-  "One priority is delivered in full; the others only make a start. People will notice the one.",
-  "Every priority has something behind it, but some only make a start. No. 10 will ask for more.",
-  "Everything agreed in Downing Street has something behind it in the Budget.",
-]
-`;
-
 exports[`three audiences, five steps > doubts a yield that rests on HMRC’s cost of a relief, and says which kind of figure it is 1`] = `
 [
   "More than two-fifths of the yield is what tax breaks cost today. HMRC says ending them raises less.",
@@ -39,7 +31,6 @@ exports[`three audiences, five steps > marks a strain amber: employer National I
 exports[`three audiences, five steps > pins the public at the floor when a manifesto red line is crossed, whatever else happens 1`] = `
 [
   "A manifesto promise has been broken. The pledge was made on every doorstep, and nothing else will be heard.",
-  "Two or more of the Budget’s priorities are delivered in full. People can see what it was for.",
 ]
 `;
 

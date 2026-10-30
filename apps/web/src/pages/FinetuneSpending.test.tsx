@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { finetune } from '../data';
+import { budget, finetune } from '../data';
 import { INVESTMENT_NOTE } from '../components/LeverRow';
 import {
   BASE,
@@ -13,12 +13,10 @@ import {
   group,
   h1,
   levelsOf,
-  namedRow,
   openDecision,
   panelOf,
   priceOf,
   rowNames,
-  rowOf,
   scale,
   search,
   statusOf,
@@ -76,8 +74,8 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     expect(container.querySelectorAll('.btn--primary')).toHaveLength(1);
   });
 
-  it('draws a budget as one scale, with a minister once it moves and the flagships held', () => {
-    const held = at(`/finetune/spending?${BASE}&${GAME}&L=moj.10`);
+  it('draws a budget as one scale, with a minister once it moves', () => {
+    const chosen = at(`/finetune/spending?${BASE}&${GAME}&L=moj.5`);
     // The prisons budget moved before the screen opened: its decision is open, and says so.
     expect(decision('Change the other budgets')).toHaveAttribute('aria-expanded', 'true');
     expect(decision('Change health, schools and defence')).toHaveAttribute(
@@ -86,19 +84,10 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     );
     expect(statusOf('Change the other budgets')).toMatch(/^1 chosen · costs £\d\.\dbn$/);
     expect(group(/^Public services 1 chosen · costs £\d\.\dbn$/)).toBeInTheDocument();
-    // It is where the flagship the player chose set it: a row naming the flagship, and the way
-    // back to it; no scale that could quietly undo it (Phase 26).
-    const prisons = namedRow('Prisons and courts');
-    expect(prisons).toHaveClass('tune__row--held');
-    expect(within(prisons).getByText('In your flagship policies')).toBeInTheDocument();
-    expect(within(prisons).queryAllByRole('radio')).toHaveLength(0);
-    expect(prisons.querySelector('.lever__held')?.textContent).toMatch(
-      /^More money for prisons and courts: 10% more\. Change/,
-    );
-    expect(within(prisons).getByRole('link', { name: /Change/ })).toHaveAttribute(
-      'href',
-      expect.stringMatching(/^\/budget\/deliver\?/),
-    );
+    // It is a scale like any other, at the level the link set it (ADR-0045): nothing holds it.
+    const prisons = scale('Prisons and courts');
+    expect(within(prisons).getByRole('radio', { name: '5% more' })).toBeChecked();
+    expect(prisons).not.toHaveClass('tune__row--held');
     // The other budgets go by their short names in the card.
     expect(rowNames(panelOf('Change the other budgets'))).toEqual([
       'Home Office and borders',
@@ -138,29 +127,8 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
       /^Falls 0\.9% a year after rising prices \(planned: 0\.4%\) · £\d\.\dbn less than planned in 2029-30$/,
     );
     expect(statusOf('Change health, schools and defence')).toMatch(/^1 chosen · saves £\d\.\dbn$/);
-    held.unmount();
-    // Short of the flagship, a top-up is a scale: the flagship settled lower, and the Chief
-    // Secretary says so (Phase 25); a cut is against it.
-    const lower = at(`/finetune/spending?${BASE}&${GAME}&L=moj.5`);
-    const topUp = scale('Prisons and courts');
-    expect(within(topUp).getByRole('radio', { name: '5% more' })).toBeChecked();
-    expect(within(topUp).getByText('In your flagship policies')).toBeInTheDocument();
-    expect(
-      within(topUp).getByText(/Settled lower: the Justice Secretary asked for more/),
-    ).toBeInTheDocument();
-    lower.unmount();
-    const against = at(`/finetune/spending?${BASE}&${GAME}&L=moj.-2`);
-    const trim = scale('Prisons and courts');
-    expect(within(trim).getByRole('radio', { name: '2% less' })).toBeChecked();
-    expect(within(trim).getByText('Against your flagship policy')).toHaveClass('tag--warn');
-    against.unmount();
-    // Past its flagship's value, a top-up stays a scale that shows its own level; a setting no
-    // level matches says what it is (Phase 26).
-    const past = at(`/finetune/spending?${BASE}&g=st.3_pr.nhs&L=dhsc.5`);
-    const nhs = scale('Health and social care');
-    expect(within(nhs).getByRole('radio', { name: '5% more' })).toBeChecked();
-    expect(within(nhs).getByText('In your flagship policies')).toBeInTheDocument();
-    past.unmount();
+    chosen.unmount();
+    // A setting no level matches says what it is (Phase 26).
     at(`/finetune/spending?${BASE}&${GAME}&L=dhsc.3`);
     const stray = scale('Health and social care');
     expect(within(stray).getByText('Now 3% more')).toBeInTheDocument();
@@ -179,31 +147,6 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     );
   });
 
-  it('offers the way back to a flagship, not a swap, when the flagship holds the other of a pair', () => {
-    // The 3% path, chosen for defence on step 3, holds its lever; the plan's gap counts some of the
-    // same money, so step 4 cannot swap it in behind the flagship's back (Phase 26).
-    at(`/finetune/spending?${BASE}&${GAME}&L=def3.1`);
-    const gap = screen.getByRole('checkbox', { name: 'Fund the plan’s gap' });
-    const row = rowOf(gap);
-    expect(gap).toHaveAttribute('aria-disabled', 'true');
-    expect(row).toHaveClass('tune__row--blocked');
-    expect(gap).toHaveAccessibleDescription(
-      /^You can’t have both\. “Defence at 3% of GDP now, not in 2030-31” is in your flagship policies\./,
-    );
-    expect(within(row).queryByRole('button', { name: /Swap them/ })).toBeNull();
-    expect(within(row).getByRole('link', { name: /Change it/ })).toHaveAttribute(
-      'href',
-      expect.stringMatching(/^\/budget\/deliver\/2\?/),
-    );
-    // Nothing to price: there is no swap.
-    expect(priceOf(row)).toBe('');
-    // The 3% path itself is a row naming its flagship, not a tick.
-    const held = namedRow('3% of GDP now, not in 2030-31');
-    expect(held).toHaveClass('tune__row--held');
-    expect(held.textContent).toMatch(/In your flagship policies/);
-    expect(within(held).queryAllByRole('checkbox')).toHaveLength(0);
-  });
-
   it('leads from the spending screen to the review, the package intact', async () => {
     at(`/finetune/spending?${BASE}&${GAME}&L=moj.10_nicer.2`);
     expect(screen.getByRole('link', { name: 'Back' })).toHaveAttribute(
@@ -213,13 +156,13 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     fireEvent.click(screen.getByRole('link', { name: 'Next: deliver the Budget' }));
     expect(h1('Deliver your Budget')).toBeInTheDocument();
     await waitFor(() => {
-      expect(search().get('g')).toBe('st.4_pr.safer-streets+defence');
+      expect(search().get('g')).toBe('st.1_rd.2');
       expect(search().get('L')).toMatch(/nicer\.2/);
       expect(search().get('S')).toBeNull();
     });
   });
 
-  it('sends the old and odd addresses to the right screen, and a link with no game to the briefing', () => {
+  it('sends the old and odd addresses to the right screen, and a link with no game to the Budget', () => {
     const old = at(`/budget/afford?${BASE}&${GAME}`);
     expect(h1('Fine-tune tax')).toBeInTheDocument();
     old.unmount();
@@ -234,25 +177,22 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
     expect(h1('Fine-tune spending')).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Every (tax|spending) lever/ })).toBeNull();
     desk.unmount();
-    // With no game there is no sandbox: the briefing, and the link's measures wait for the game.
+    // With no game there is no sandbox: the Chancellor's Budget, and the link's measures wait for
+    // the game its button starts (ADR-0045).
     const sandbox = at(`/finetune/spending?${BASE}&L=dfe.-2`);
-    expect(h1('Your briefing')).toBeInTheDocument();
+    expect(h1(budget.title)).toBeInTheDocument();
     expect(screen.getByRole('note', { name: 'About this link' })).toHaveTextContent(
       'This link’s measures will be in your Budget when you start.',
     );
     sandbox.unmount();
-    // A game that has not yet agreed its priorities is sent back to them.
+    // A six-stage link at its priorities opens fine-tuning, where the road starts now (ADR-0045).
     at(`/finetune/tax?${BASE}&g=st.1`);
-    expect(screen.getByText('What is this Budget for?')).toBeInTheDocument();
+    expect(h1('Fine-tune tax')).toBeInTheDocument();
   });
 
-  it('shows every decision on both screens in a first game, with no mode line (ADR-0041)', () => {
-    // A newcomer's game, in basic mode: step 4 has no shortlist, so nothing changes.
-    window.localStorage.removeItem('btc.mode.v1');
+  it('shows every decision closed on both screens in a game that has chosen nothing', () => {
     for (const side of ['tax', 'spending'] as const) {
       const view = at(`/finetune/${side}?${BASE}&${GAME}`);
-      expect(document.querySelector('main')?.getAttribute('data-mode'), side).toBe('basic');
-      expect(document.querySelector('.mode-line'), side).toBeNull();
       expect(
         [...document.querySelectorAll('.tune__decision-toggle')].map((b) =>
           b.getAttribute('aria-expanded'),
@@ -276,12 +216,11 @@ describe('fine-tune spending: one card a decision (ADR-0037)', () => {
   });
 
   it('has no adviser speak above the cards on either screen: the bar says what is short (ADR-0040)', () => {
-    // Nothing delivers defence yet, and a penny on the basic rate breaks the tax lock.
+    // A penny on the basic rate breaks the tax lock.
     for (const side of ['tax', 'spending']) {
       const view = at(`/finetune/${side}?${BASE}&${GAME}&L=moj.10_itbr.1`);
       expect(screen.queryByRole('region', { name: 'Your advisers' }), side).toBeNull();
       expect(bar().textContent, side).toMatch(/promise broken/);
-      expect(bar().textContent, side).toMatch(/priorities delivered/);
       view.unmount();
     }
   });

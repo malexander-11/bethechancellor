@@ -10,7 +10,6 @@ import {
   realGrowthPerYear,
   sizeWords,
   type Lever,
-  type OptionState,
   type YearValues,
 } from '@btc/engine';
 import { vintage } from '../data';
@@ -47,12 +46,6 @@ export interface RedLine {
   manifesto?: boolean;
   /** False for a strain shown and scored by no audience (Phase 25). */
   scored?: boolean;
-}
-
-/** An option the player chose that this lever belongs to, and how it now stands (Phase 25). */
-export interface Chosen {
-  title: string;
-  state: OptionState;
 }
 
 const RED_LINE_WORDS: Record<RedLine['when'], string> = {
@@ -106,26 +99,12 @@ export function RestingTag({ r }: { r: RedLine }) {
 /**
  * The warnings on the lever. A watched lever always wears a quiet tag naming the promise, so a
  * newcomer learns it before touching the control; a crossed line turns red, or amber where the
- * promise's words are kept and its spirit tested (Phase 23). A lever inside an option the player
- * chose wears the option's tag while it counts towards it, delivered or settled lower (the Chief
- * Secretary's line says which), and a red tag once it has moved the other way (Phase 25). Which
- * promise, and which option, is in the tag's text for a screen reader; a tooltip would reach only
- * a mouse.
+ * promise's words are kept and its spirit tested (Phase 23). Which promise is in the tag's text
+ * for a screen reader; a tooltip would reach only a mouse.
  */
-export function LeverFlags({ redLines, chosen }: { redLines: RedLine[]; chosen?: Chosen }) {
+export function LeverFlags({ redLines }: { redLines: RedLine[] }) {
   return (
     <>
-      {chosen ? (
-        chosen.state === 'against' ? (
-          <span className="tag--treasury tag--warn">
-            Against your flagship policy<span className="sr-only">: {chosen.title}</span>
-          </span>
-        ) : (
-          <span className="tag--treasury">
-            In your flagship policies<span className="sr-only">: {chosen.title}</span>
-          </span>
-        )
-      ) : null}
       {redLines.map((r) =>
         r.broken ? (
           <span
@@ -220,20 +199,6 @@ export interface LeverNote {
   key: string;
   text: string;
   warn: boolean;
-}
-
-/**
- * Another lever in the Budget counts the same money as this one, and a flagship the player chose
- * holds it (Phase 26): the control stays reachable but will not move, and the card offers the way
- * back to the flagship. Step 4 never undoes a flagship; anywhere else, choosing takes the other
- * out (ADR-0036).
- */
-export interface Blocked {
-  /** What the other lever is called on this screen. */
-  other: string;
-  reason: string;
-  /** The flagship that holds it: its title and its screen. */
-  flagship: { title: string; to: string };
 }
 
 /**

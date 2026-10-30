@@ -24,7 +24,7 @@ async function posted(
   variant: number,
 ): Promise<Entry> {
   const size = info.project.name === 'phone' ? 5 : 10;
-  const query = `v=1&g=st.5_pr.safer-streets&L=moj.${size}_dhsc.${variant}`;
+  const query = `v=1&g=st.2_rd.2&L=moj.${size}_dhsc.${variant}`;
   const answer = await request.post('/api/budgets', { data: { query, title } });
   expect([200, 201], await answer.text()).toContain(answer.status());
   return ((await answer.json()) as { entry: Entry }).entry;

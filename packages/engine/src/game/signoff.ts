@@ -35,8 +35,7 @@ export interface SignOffInput {
  * The Prime Minister's one line, by first match: a fiscal rule missed; a promise broken when the
  * rules would still hold without it ("with room to spare", worked out by putting the breaking
  * levers back); a promise broken; a promise strained, where the strain is scored. Nothing when
- * all is well. A priority left unfunded is not the PM's line here: the review already says it
- * under the priority.
+ * all is well.
  */
 export function signOffLine(input: SignOffInput): SignOff | null {
   const { pm, outcome, status } = input;

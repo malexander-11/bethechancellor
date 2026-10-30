@@ -4,7 +4,6 @@ import {
   decisions,
   expect,
   leversInLink,
-  modeSwitch,
   panelOf,
   rowName,
   test,
@@ -13,34 +12,11 @@ import {
 
 const { title, tick, scale } = TAX_DECISION;
 
-test('a first game meets every decision on both fine-tune screens, with no mode line', async ({
-  page,
-}) => {
+test('a first game meets every decision on both fine-tune screens', async ({ page }) => {
   for (const until of ['fine-tune tax', 'fine-tune spending']) {
     await walk(page, { until });
     await expect(decisions(page).first()).toBeVisible();
-    await expect(modeSwitch(page)).toHaveCount(0);
   }
-});
-
-test('the mode line on a flagship screen switches between the shortlist and every way', async ({
-  page,
-}) => {
-  // A first game is in basic mode: step 3 shows the best ways and any that deal with the desk.
-  await walk(page, { until: 'flagship 1' });
-  const ways = page.getByRole('group', { name: /^Ways to deliver/ }).getByRole('checkbox');
-  const shortlist = await ways.count();
-  expect(shortlist, 'ways on show in basic mode').toBeGreaterThan(0);
-  const line = await modeSwitch(page).innerText();
-
-  await modeSwitch(page).click();
-  await expect.poll(() => ways.count(), 'every way').toBeGreaterThan(shortlist);
-  await expect(modeSwitch(page)).not.toHaveText(line);
-  await expect(modeSwitch(page)).toBeFocused();
-
-  await modeSwitch(page).click();
-  await expect(ways).toHaveCount(shortlist);
-  await expect(modeSwitch(page)).toHaveText(line);
 });
 
 test('a decision opens, a tick goes into the link, and Undo takes it out', async ({ page }) => {

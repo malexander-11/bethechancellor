@@ -4,44 +4,26 @@
     {
       "step": "start",
       "number": 1,
-      "title": "You have been appointed Chancellor.",
-      "now": "Take the job, then read your briefing."
-    },
-    {
-      "step": "outlook",
-      "number": 1,
-      "title": "Your briefing",
-      "now": "The headroom you have to play with, and the rules you need to meet to keep markets onside."
-    },
-    {
-      "step": "pm",
-      "number": 2,
-      "title": "What is this Budget for?",
-      "now": "Tick up to three, in the order they matter."
-    },
-    {
-      "step": "deliver",
-      "number": 3,
-      "title": "Flagship policies",
-      "now": "Tick the flagship policies you want."
+      "title": "The Budget, 28 October 2026",
+      "now": "Read what the Chancellor did, then change it."
     },
     {
       "step": "finetune",
-      "number": 4,
+      "number": 1,
       "title": "Fine-tune tax and spend",
-      "now": "Choose policies until the numbers add up."
+      "now": "Change the Chancellor’s choices until the numbers add up."
     },
     {
       "step": "review",
-      "number": 5,
+      "number": 2,
       "title": "Deliver your Budget",
       "now": "Check it, change anything, then deliver it."
     },
     {
       "step": "budget-day",
-      "number": 6,
+      "number": 3,
       "title": "What your Budget means",
-      "now": "Share it, change something, or play again."
+      "now": "Share it, change something, or start again."
     }
   ]
 }

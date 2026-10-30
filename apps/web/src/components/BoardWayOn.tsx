@@ -14,13 +14,13 @@ export function BoardWayOn() {
   const { state } = useBudget();
   return state.game ? (
     <StepLink
-      to={STAGE_ROUTES[GAME_STAGES[state.game.reached] ?? 'outlook']}
+      to={STAGE_ROUTES[GAME_STAGES[state.game.reached] ?? 'finetune']}
       className="btn btn--primary"
     >
       {BOARD_TEXT.back}
     </StepLink>
   ) : (
-    <StepLink to="/outlook" className="btn btn--primary">
+    <StepLink to="/" className="btn btn--primary">
       {SHARE_TEXT.play}
     </StepLink>
   );

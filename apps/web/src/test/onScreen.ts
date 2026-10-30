@@ -8,14 +8,13 @@ import {
   finetuneItems,
   gameImplementationYear,
   gameOutcomeOf,
-  plainText,
+  measureFigure,
   readFinishedBudget,
   summariseBudget,
   summaryWords,
 } from '@btc/engine';
 import { takesOutWords } from '../components/LeverControl';
 import { INVESTMENT_NOTE, RELIEF_NOTE } from '../components/LeverRow';
-import { MODE_WORDS } from '../components/ModeLine';
 import {
   budget,
   electorate,
@@ -23,39 +22,40 @@ import {
   finetuneName,
   gameData,
   guide,
-  interventions,
   levers,
   ministers,
-  options,
   pm,
   reception,
+  scorecard,
 } from '../data';
 import { BOARD_TEXT, countsWords } from '../board/words';
-import { briefingTemplates, fillIn } from '../journey/briefingWords';
+import { BUDGET_TEXT } from '../pages/Budget';
 import { SHARE_TEXT } from '../share/words';
 
 const short = (l: { text: string; short?: string | undefined }) => l.short ?? l.text;
-const all = options.deliver;
 const curated = finetuneItems(finetune);
 
 /**
  * Three finished Budgets from the data, summed up as a shared Budget is: one that changes nothing,
- * one with the first flagship of each of the first two priorities, and one with the first flagship
- * of every priority, which misses rules.
+ * one that reverses the Budget's biggest tax rise, and one that puts a lot on everything, which
+ * misses rules.
  */
 const SHARED_BUDGETS = (() => {
-  const first = (id: string) => all.find((o) => o.priority === id)?.values ?? {};
-  const ids = pm.priorities.map((p) => p.id);
   const outcomeOf = gameOutcomeOf(gameData);
-  return [ids.slice(0, 0), ids.slice(0, 2), ids].map((chosen) => {
+  const budgets: Record<string, number>[] = [
+    {},
+    { b6hmrc: 1 },
+    { dhsc: 5, dfe: 5, mod: 5, home: 10, cdel: 20, itbr: -2 },
+  ];
+  return budgets.map((leverValues) => {
     const query = encodePermalink(
       {
         vintageCode: gameData.vintage.permalinkCode,
         rulesCode: gameData.rules.permalinkCode,
         implementationYear: gameImplementationYear(gameData.vintage),
-        leverValues: Object.assign({}, ...chosen.map(first)) as Record<string, number>,
+        leverValues,
         ...GAME_SETTINGS,
-        game: { reached: FINAL_STAGE, priorities: chosen.slice(0, 3) },
+        game: { reached: FINAL_STAGE },
       },
       gameData.levers,
     );
@@ -72,10 +72,6 @@ const SHARED_BUDGETS = (() => {
  */
 export const ON_SCREEN: Record<string, readonly string[]> = {
   'the guide': guide.stages.flatMap((s) => [s.title, s.now]),
-  'option titles': all.map((o) => o.title),
-  'option advice': all.map((o) => o.advice.text),
-  // Graded delivery (Phase 25): why a way only makes a start, and the Chief Secretary's line.
-  'the delivery scales': [...all.map((o) => o.scale.why), options.settled.text],
   'the fine-tuning screens': [
     ...[finetune.tax, finetune.spending].flatMap((s) => [
       s.title,
@@ -109,14 +105,6 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
       (p) => `${takesOutWords([finetuneName(p.lever.code) ?? p.lever.shortTitle], kind)} ${p.text}`,
     );
   }),
-  'the priorities': pm.priorities.flatMap((p) => [
-    p.title,
-    p.purpose,
-    short(p.reaction),
-    ...(p.reach ? [p.reach.text] : []),
-  ]),
-  // Phase 25: the lines that say why two options cannot both be on.
-  'the conflicts': all.flatMap((o) => (o.conflicts ?? []).map((c) => c.text)),
   // Phase 25: the Prime Minister at sign-off, as the review reads a line out.
   'the sign-off': Object.values(pm.signOff).map((l) =>
     l.text.replace('{rules}', 'the debt rule').replace('{promises}', 'the tax lock'),
@@ -132,8 +120,6 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
       h.who,
       h.fact.text,
       h.untouched.text,
-      h.understood.text,
-      h.puzzled.text,
       ...h.touches.map((t) => t.line.text),
     ]),
     electorate.unnamed.text,
@@ -148,17 +134,9 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
       ...r.bands.flatMap((b) => [b.text, ...(b.variants ?? []).map((v) => v.text)]),
     ]),
   ]),
-  'the interventions': interventions.interventions.map((x) => short(x.line)),
   'the ministers': ministers.ministers.flatMap((m) =>
     [m.asking, ...m.whenCut.map((b) => b.line), ...m.whenRaised.map((b) => b.line)].map(short),
   ),
-  // Basic and advanced (Phase 27): the line on a trimmed screen and what it says once pressed.
-  // The footer's switch and its note went with ADR-0032.
-  'the modes': [
-    `${MODE_WORDS.shortlist} ${MODE_WORDS.ideas.basic}.`,
-    `${MODE_WORDS.ideas.advanced}.`,
-    ...Object.values(MODE_WORDS.said).flatMap((s) => [s.basic, s.advanced]),
-  ],
   // Sharing a Budget (ADR-0044): Budget day's way to share it, the picture's words, and the page a
   // shared link opens, with the words a preview and a post carry, for three Budgets from the data.
   'sharing a Budget': [
@@ -188,11 +166,21 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     ...Object.values(BOARD_TEXT).filter((line) => !line.includes('{')),
     countsWords({ ups: 12, downs: 3 }),
   ],
-  // The Budget the game starts from (ADR-0045): its story with the figures filled as the page
-  // fills them, every measure in plain words, and why the ones a reader might expect to move
-  // cannot be.
+  // The Budget the game starts from (ADR-0045): the page's own words, its story with the figures
+  // filled as the page fills them, every measure in plain words with its figure, and why the ones a
+  // reader might expect to move cannot be.
   'the Budget': [
     budget.title,
+    BUDGET_TEXT.story,
+    BUDGET_TEXT.measures,
+    BUDGET_TEXT.measuresLead.replace('{year}', '2029-30'),
+    ...Object.values(BUDGET_TEXT.groups),
+    BUDGET_TEXT.change,
+    BUDGET_TEXT.rest,
+    BUDGET_TEXT.restLead,
+    BUDGET_TEXT.start,
+    BUDGET_TEXT.startLead,
+    ...budget.measures.map((m) => measureFigure(scorecard, m, '2029-30')?.words ?? ''),
     ...budget.story.map((line) =>
       fillStory(line.text, {
         march: '£23.6bn',
@@ -209,17 +197,4 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     ),
     ...budget.measures.flatMap((m) => [m.plain, ...(m.notMovable ? [m.notMovable.reason] : [])]),
   ],
-  // The briefing in three parts (Phase 28): every heading and line, filled as the page fills
-  // them.
-  'the briefing': briefingTemplates().map((t) =>
-    plainText(
-      fillIn(t, {
-        estimate: '£6.8bn',
-        year: '2029-30',
-        since: '2010',
-        average: '£29bn',
-        gilts: '£246bn',
-      }),
-    ),
-  ),
 };

@@ -4,8 +4,6 @@ import {
   advisersFileSchema,
   pmFileSchema,
   ministersFileSchema,
-  interventionsFileSchema,
-  optionsFileSchema,
   finetuneFileSchema,
   householdsFileSchema,
   incidenceFileSchema,
@@ -30,8 +28,6 @@ import type {
   AdvisersFile,
   PmFile,
   MinistersFile,
-  InterventionsFile,
-  OptionsFile,
   FinetuneFile,
   HouseholdsFile,
   IncidenceFile,
@@ -53,15 +49,12 @@ import type {
   Vintage,
 } from './types/data.js';
 import { policyYearsOf } from './calc/arithmetic.js';
-import { fyOfDate, fyStart } from './calc/years.js';
-import { FINETUNE_SIDES, deskLevers, finetuneNames, finetuneSideOf } from './game/finetune.js';
+import { fyOfDate } from './calc/years.js';
+import { FINETUNE_SIDES, finetuneNames, finetuneSideOf } from './game/finetune.js';
 import { excludesPartners } from './game/excludes.js';
-import { optionEarliestStart, shortlistedWays } from './game/options.js';
-import { promiseBreaks } from './game/promises.js';
 import { hasHead } from './costing/taxHead.js';
 import { GUIDED_STEPS, stageTerms } from './game/guide.js';
 import { BUDGET_STORY_FILLS, storyPlaceholders } from './game/budget.js';
-import { resolveTargetYear } from './rules/targetYear.js';
 import { validateVintage } from './validate/validateVintage.js';
 
 function parseWith<T>(schema: ZodType<T>, json: unknown, label: string): T {
@@ -151,14 +144,6 @@ export function parseMinisters(json: unknown): MinistersFile {
   return parseWith(ministersFileSchema, json, 'the ministers');
 }
 
-export function parseInterventions(json: unknown): InterventionsFile {
-  return parseWith(interventionsFileSchema, json, 'adviser interventions');
-}
-
-export function parseOptions(json: unknown): OptionsFile {
-  return parseWith(optionsFileSchema, json, 'the options');
-}
-
 export function parseFinetune(json: unknown): FinetuneFile {
   return parseWith(finetuneFileSchema, json, 'the fine-tuning screens');
 }
@@ -194,8 +179,6 @@ export interface Dataset {
   advisers?: AdvisersFile;
   pm?: PmFile;
   ministers?: MinistersFile;
-  interventions?: InterventionsFile;
-  options?: OptionsFile;
   /** The curated levers of step 4 (Phase 24, ADR-0025). */
   finetune?: FinetuneFile;
   electorate?: HouseholdsFile;
@@ -210,7 +193,7 @@ export interface Dataset {
 /**
  * Why a card cannot propose a setting: it is outside the control's range, it is where the lever
  * rests (so choosing it would change nothing), or it is off the control's steps (so the player
- * could never reach it). Shared by the options and the fine-tuning screens.
+ * could never reach it).
  */
 function settingProblem(lever: Lever, value: number): 'range' | 'default' | 'steps' | undefined {
   const { min, max, step } = lever.control;
@@ -233,85 +216,6 @@ function collectSourceIds(value: unknown, out: Set<string>): void {
   }
 }
 
-/**
- * The advisers' shortlist on step 3 (Phase 27, ADR-0028): the one or two best ways to deliver each
- * priority, which basic mode shows; step 4 has none and shows every policy (ADR-0041). "Best" is a
- * judgement, badged as one on the screen; these are the rules that keep it checkable. A pick counts
- * by the stability rule's target year, is on the table, and breaks no promise (a strain, amber, is
- * allowed and still shown); no two ways basic mode shows count the same money, whether by an
- * option's conflict or by their levers; and at least one pick a priority delivers it in full.
- * Whether a pick is worth £1bn needs the engine, so the tests check that.
- */
-function shortlistProblems(ds: Dataset, options: OptionsFile): string[] {
-  const problems: string[] = [];
-  const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
-  const stability = ds.rules.rules.find((r) => r.kind === 'currentBudget');
-  const target = stability
-    ? resolveTargetYear(stability, ds.vintage.years, 'vintage').targetYear
-    : undefined;
-  const promises = ds.pm?.promises ?? [];
-  const desk = deskLevers(ds.contexts?.[ds.contexts.length - 1]);
-
-  const priorities = [...new Set(options.deliver.map((o) => o.priority))];
-  for (const priority of priorities) {
-    const picks = shortlistedWays(options, priority);
-    if (picks.length === 0) problems.push(`priority ${priority} has no pick`);
-    else if (picks.length > 2) {
-      problems.push(`priority ${priority} has ${picks.length} picks, not one or two`);
-    } else if (!picks.some((o) => o.scale.kind === 'full')) {
-      problems.push(`priority ${priority} has no pick that delivers it in full`);
-    }
-  }
-
-  // What basic mode shows: the picks, and any way that moves a lever already on the desk.
-  const basic = options.deliver.filter(
-    (o) => o.shortlist === true || Object.keys(o.values).some((code) => desk.has(code)),
-  );
-  const ids = new Set(basic.map((o) => o.id));
-  // The picks' levers, with the name each goes by in a message.
-  const shown = new Map<string, string>();
-  for (const o of basic) {
-    for (const c of o.conflicts ?? []) {
-      if (!ids.has(c.with)) continue;
-      const other = options.deliver.find((x) => x.id === c.with);
-      problems.push(
-        `step 3 shows “${o.title}” and “${other?.title ?? c.with}”, which count the same money`,
-      );
-    }
-    if (o.shortlist !== true) continue;
-    const said = `step 3 picks “${o.title}”`;
-    const codes = Object.keys(o.values);
-    if (codes.some((code) => byCode.get(code)?.notOnTheTable)) {
-      problems.push(`${said}, which is not on the table`);
-    }
-    const year = optionEarliestStart(o, ds.levers);
-    if (target && year && fyStart(year) > fyStart(target)) {
-      problems.push(`${said}, which starts in ${year}, after ${target}`);
-    }
-    for (const report of promiseBreaks(o.values, promises, ds.levers)) {
-      if (!report.kept) problems.push(`${said}, which breaks ${report.promise.title}`);
-    }
-    for (const code of codes) {
-      if (!shown.has(code)) shown.set(code, `“${o.title}”`);
-    }
-  }
-
-  // No two picks' levers count the same money.
-  const reported = new Set<string>();
-  for (const [code, name] of shown) {
-    const lever = byCode.get(code);
-    if (!lever) continue;
-    for (const partner of excludesPartners(lever, ds.levers)) {
-      const other = shown.get(partner.lever.code);
-      const key = [code, partner.lever.code].sort().join('|');
-      if (!other || reported.has(key)) continue;
-      reported.add(key);
-      problems.push(`${name} and ${other} count the same money`);
-    }
-  }
-  return problems;
-}
-
 /** Cross-file checks: every source reference resolves, lever codes are unique, and so on. */
 export function validateDataset(ds: Dataset): string[] {
   const problems: string[] = [];
@@ -326,8 +230,6 @@ export function validateDataset(ds: Dataset): string[] {
       ds.contexts ?? null,
       ds.pm ?? null,
       ds.ministers ?? null,
-      ds.interventions ?? null,
-      ds.options ?? null,
       ds.finetune ?? null,
       ds.electorate ?? null,
       ds.incidence ?? null,
@@ -470,35 +372,8 @@ export function validateDataset(ds: Dataset): string[] {
     }
   }
   if (ds.pm) {
-    // A priority is led by a role the game has a voice for; a promise that names a lever the game
-    // does not have would be a commitment the player could never keep or break.
-    const roles = new Set([
-      ...(ds.advisers?.advisers ?? []).map((a) => a.role),
-      ...(ds.ministers?.ministers ?? []).map((m) => m.role),
-    ]);
-    if (roles.size > 0) {
-      for (const priority of ds.pm.priorities) {
-        if (!roles.has(priority.lead)) {
-          problems.push(
-            `priority ${priority.id} is led by "${priority.lead}", a role nobody holds`,
-          );
-        }
-      }
-    }
-    if (ds.options) {
-      const ids = new Set(ds.pm.priorities.map((p) => p.id));
-      for (const o of ds.options.deliver) {
-        if (!ids.has(o.priority)) {
-          problems.push(`deliver option ${o.id} delivers unknown priority ${o.priority}`);
-        }
-      }
-      for (const priority of ds.pm.priorities) {
-        const n = ds.options.deliver.filter((o) => o.priority === priority.id).length;
-        if (n < 2 || n > 5) {
-          problems.push(`priority ${priority.id} has ${n} ways to deliver it; 2 to 5 expected`);
-        }
-      }
-    }
+    // A promise that names a lever the game does not have would be a commitment the player
+    // could never keep or break.
     for (const promise of ds.pm.promises) {
       for (const rule of [...promise.breaks, ...promise.strains]) {
         if (!codes.has(rule.code)) {
@@ -555,47 +430,6 @@ export function validateDataset(ds: Dataset): string[] {
         problems.push(
           `minister for ${minister.code} has nothing to say at a rise the slider allows`,
         );
-      }
-    }
-  }
-  if (ds.options) {
-    // An option is a bundle of lever settings the engine prices; one that names a lever the game
-    // lacks, a setting the control cannot reach, or a lever left where it is could never be
-    // chosen. Since Phase 24 every option is a way to deliver a priority (ADR-0025).
-    const byCode = new Map(ds.levers.map((l) => [l.code, l] as const));
-    const all = ds.options.deliver.map((o) => ({ screen: 'deliver', o }));
-    // The adviser's line on every option is spoken by an adviser who is on that screen (Phase 23).
-    const adviserById = new Map((ds.advisers?.advisers ?? []).map((a) => [a.id, a] as const));
-    for (const { screen, o } of all) {
-      const adviser = adviserById.get(o.advice.adviser);
-      if (adviserById.size > 0 && !adviser) {
-        problems.push(`${screen} option ${o.id} names unknown adviser ${o.advice.adviser}`);
-      } else if (adviser && !adviser.steps.includes('deliver')) {
-        problems.push(`${screen} option ${o.id}: adviser ${adviser.id} does not speak on deliver`);
-      }
-    }
-    for (const { screen, o } of all) {
-      for (const [code, value] of Object.entries(o.values)) {
-        const lever = byCode.get(code);
-        if (!lever) {
-          problems.push(`${screen} option ${o.id} names unknown lever "${code}"`);
-          continue;
-        }
-        if (lever.deprecated) problems.push(`${screen} option ${o.id} moves shelved lever ${code}`);
-        if (lever.category === 'macro')
-          problems.push(`${screen} option ${o.id} moves macro slider ${code}`);
-        const setting = settingProblem(lever, value);
-        if (setting === 'range') {
-          problems.push(
-            `${screen} option ${o.id} sets ${code} to ${value}, outside the lever's range`,
-          );
-        } else if (setting === 'default') {
-          problems.push(`${screen} option ${o.id} leaves lever ${code} where it is`);
-        } else if (setting === 'steps') {
-          problems.push(
-            `${screen} option ${o.id} sets ${code} to ${value}, off the control's steps`,
-          );
-        }
       }
     }
   }
@@ -681,16 +515,13 @@ export function validateDataset(ds: Dataset): string[] {
       }
     }
     // Ticks that contradict each other in one decision may be one choice (ADR-0036). A set of
-    // alternatives is ticks that exclude one another and no live lever beyond, none of them a
-    // lever a flagship sets (the screen shows those as a line). Which pairs are a set is the data's
-    // to say (ADR-0038): two ticks left apart stay ticks, and choosing one takes the other out.
+    // alternatives is ticks that exclude one another and no live lever beyond. Which pairs are a
+    // set is the data's to say (ADR-0038): two ticks left apart stay ticks, and choosing one takes
+    // the other out.
     const live = (lever: Lever) =>
       excludesPartners(lever, ds.levers)
         .filter((p) => !p.lever.deprecated)
         .map((p) => p.lever.code);
-    const flagshipSets = new Set(
-      (ds.options?.deliver ?? []).flatMap((option) => Object.keys(option.values)),
-    );
     const file = ds.finetune;
     const decisions = FINETUNE_SIDES.flatMap((side) =>
       file[side].groups.flatMap((section) => section.decisions),
@@ -703,9 +534,6 @@ export function validateDataset(ds: Dataset): string[] {
           const lever = byCode.get(code);
           if (!lever) return;
           if (lever.control.kind !== 'toggle') problems.push(`${said} hold ${code}, not a tick`);
-          if (flagshipSets.has(code)) {
-            problems.push(`${said} hold ${code}, which a flagship sets`);
-          }
           const partners = live(lever);
           for (const other of alt.codes.slice(k + 1)) {
             if (!partners.includes(other)) {
@@ -721,7 +549,6 @@ export function validateDataset(ds: Dataset): string[] {
       }
     }
   }
-  if (ds.options) problems.push(...shortlistProblems(ds, ds.options));
   if (ds.incidence) {
     // Every lever that moves money has someone it falls on; a tag for a lever that does not exist
     // is a typo waiting to hide a real one.
@@ -761,14 +588,6 @@ export function validateDataset(ds: Dataset): string[] {
     }
     for (const code of ds.electorate.reachesNone) {
       if (!codes.has(code)) problems.push(`unknown lever "${code}" reaches no household`);
-    }
-  }
-  if (ds.interventions) {
-    const adviserIds = new Set((ds.advisers?.advisers ?? []).map((a) => a.id));
-    for (const x of ds.interventions.interventions) {
-      if (adviserIds.size > 0 && !adviserIds.has(x.adviser)) {
-        problems.push(`intervention ${x.id} names unknown adviser ${x.adviser}`);
-      }
     }
   }
   if (ds.guide) {

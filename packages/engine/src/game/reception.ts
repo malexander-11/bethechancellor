@@ -141,8 +141,7 @@ function polarityOf(rule: ReceptionRule): 1 | -1 | 0 {
  * The causes a reason names (Phase 25): only those that pushed the way the reason says. For a
  * change, the decisions that moved it the way it moved; for a level, those that pushed it the way
  * the band points (a thin margin names what cut it, never what added to it), and none for a band
- * that scores nothing. A list with no direction (a promise broken, a priority left unfunded) is
- * named as it is.
+ * that scores nothing. A list with no direction (a promise broken) is named as it is.
  */
 function causesFor(
   rule: ReceptionRule,

@@ -1,29 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { finetuneItems, parsePm, priorityScale } from '../src/index.js';
-import { loadDataset, outcomeOfFor, readJson } from './fixtures.js';
-import { todaysEstimate } from './scenarios.js';
+import { finetuneItems, parsePm } from '../src/index.js';
+import { loadDataset, readJson } from './fixtures.js';
 
 const ds = loadDataset();
-const outcomeOf = outcomeOfFor(ds);
-const ESTIMATE = todaysEstimate(ds);
 
-/** The feedback made wider (Phase 25, R21): the scale of the priorities, climate and more. */
+/** The feedback made wider (Phase 25, R21): climate and more. */
 describe('wider feedback (Phase 25, R21)', () => {
-  it('gives the scale of the priorities: one full way each, and which saves money', () => {
-    const scale = priorityScale({
-      pm: ds.pm,
-      options: ds.options,
-      levers: ds.levers,
-      outcomeOf,
-      current: ESTIMATE,
-    });
-    expect(scale.year).toBe('2029-30');
-    // The defence plan's gap is the cheapest; health above its plan the dearest (one price each).
-    expect(Math.round((scale.costs?.minGbpm ?? 0) / 100) / 10).toBe(0.9);
-    expect(Math.round((scale.costs?.maxGbpm ?? 0) / 100) / 10).toBe(8.2);
-    expect(scale.saves).toEqual(['welfare-bill']);
-  });
-
   it('says a word on climate where a registered source does, both ways', () => {
     const advice = (code: string) =>
       finetuneItems(ds.finetune).find((i) => i.code === code)?.policies[0]?.advice;
@@ -38,9 +20,6 @@ describe('wider feedback (Phase 25, R21)', () => {
     cites('b6fuel', 'hmrc-tiin-fuel-duty-2026-27');
     expect(advice('fuel')?.text).toMatch(/emissions dip/);
     cites('fuel', 'hmrc-tiin-fuel-duty-2026-27');
-    const cut = ds.options.deliver.find((o) => o.id === 'fuel-duty-cut');
-    expect(cut?.advice.text).toMatch(/emissions edge up/);
-    expect(cut?.advice.sources.map((s) => s.sourceId)).toContain('hmrc-tiin-fuel-duty-2026-27');
     // A few pounds a ticket barely changes emissions (HMRC).
     expect(advice('apd')?.text).toMatch(/barely changes emissions either way/);
     cites('apd', 'hmrc-tiin-apd-2026-27');

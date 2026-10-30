@@ -4,8 +4,9 @@ import {
   FINAL_STAGE,
   GAME_SETTINGS,
   PICTURE_ROWS,
+  SHARE_WORDS,
   ambitionStatus,
-  budgetTheme,
+  budgetTitle,
   decodePermalink,
   encodePermalink,
   gameImplementationYear,
@@ -28,7 +29,6 @@ import {
 import { loadDataset, wording } from './fixtures.js';
 import {
   DEBT_RULE_MISSED,
-  SECURITY,
   TAXES_AT_THE_TOP,
   WALK,
   latestContext,
@@ -56,12 +56,9 @@ function link(values: Budget, game?: GamePermalink, codes = data): string {
     ds.levers,
   );
 }
-const finished = (priorities: readonly string[] = []): GamePermalink => ({
-  reached: FINAL_STAGE,
-  priorities: [...priorities],
-});
-const read = (values: Budget, priorities: readonly string[] = []) => {
-  const budget = readFinishedBudget(data, link({ ...estimate, ...values }, finished(priorities)));
+const finished = (): GamePermalink => ({ reached: FINAL_STAGE });
+const read = (values: Budget) => {
+  const budget = readFinishedBudget(data, link({ ...estimate, ...values }, finished()));
   if (!budget) throw new Error('not read as a finished Budget');
   return budget;
 };
@@ -69,18 +66,16 @@ const read = (values: Budget, priorities: readonly string[] = []) => {
 describe('a finished Budget read from its link', () => {
   it('is read only from a game at Budget day', () => {
     expect(readFinishedBudget(data, link(WALK))).toBeNull();
-    expect(
-      readFinishedBudget(data, link(WALK, { reached: FINAL_STAGE - 1, priorities: [] })),
-    ).toBeNull();
+    expect(readFinishedBudget(data, link(WALK, { reached: FINAL_STAGE - 1 }))).toBeNull();
     expect(readFinishedBudget(data, 'not a link at all')).toBeNull();
     expect(readFinishedBudget(data, link(WALK, finished()))).not.toBeNull();
   });
 
   it('puts every link to the same choices in one form, on today’s codes and estimate', () => {
-    const canonical = read(WALK, SECURITY);
+    const canonical = read(WALK);
     // Whatever a link says of the economy, the game plays today's estimate (ADR-0025).
     const odd = Object.fromEntries(Object.keys(estimate).map((code) => [code, 2]));
-    const other = readFinishedBudget(data, link({ ...WALK, ...odd }, finished(SECURITY)));
+    const other = readFinishedBudget(data, link({ ...WALK, ...odd }, finished()));
     expect(other).toEqual(canonical);
     const params = new URLSearchParams(canonical.query);
     expect(params.get('f')).toBe(data.vintage.permalinkCode);
@@ -91,13 +86,13 @@ describe('a finished Budget read from its link', () => {
     }
   });
 
-  it('keeps only the priorities the game knows, at most three, in their order', () => {
-    const budget = read(WALK, ['defence', 'not-a-priority', ...ds.pm.priorities.map((p) => p.id)]);
-    const known = new Set(ds.pm.priorities.map((p) => p.id));
-    expect(budget.game.priorities.length).toBeLessThanOrEqual(3);
-    expect(budget.game.priorities[0]).toBe('defence');
-    expect(budget.game.priorities.every((id) => known.has(id))).toBe(true);
-    expect(budget.game.reached).toBe(FINAL_STAGE);
+  it('reads a link from the six-stage road as the same Budget, its priorities dropped (ADR-0045)', () => {
+    const old = `${link(WALK)}&g=st.5_pr.defence+nhs`;
+    const budget = readFinishedBudget(data, old);
+    expect(budget).not.toBeNull();
+    expect(budget?.game).toEqual({ reached: FINAL_STAGE });
+    expect(budget?.query).toBe(read(WALK).query);
+    expect(new URLSearchParams(budget?.query).get('g')).toBe(`st.${FINAL_STAGE}_rd.2`);
   });
 
   it('reads its own link back unchanged, every value on its lever’s steps (property)', () => {
@@ -113,10 +108,9 @@ describe('a finished Budget read from its link', () => {
         { maxLength: 8 },
       )
       .map((pairs) => Object.fromEntries(pairs.map(([l, v]) => [l.code, v])));
-    const priorities = fc.subarray(ds.pm.priorities.map((p) => p.id));
     fc.assert(
-      fc.property(values, priorities, (budget, ids) => {
-        const first = readFinishedBudget(data, link(budget, finished(ids)));
+      fc.property(values, (budget) => {
+        const first = readFinishedBudget(data, link(budget, finished()));
         expect(first).not.toBeNull();
         if (!first) return;
         expect(readFinishedBudget(data, first.query)).toEqual(first);
@@ -137,8 +131,8 @@ describe('a finished Budget read from its link', () => {
 });
 
 describe('a finished Budget summed up', () => {
-  it('says the engine’s own figures: the review’s reconciliation, the theme and the three ratings', () => {
-    const budget = read(WALK, SECURITY);
+  it('says the engine’s own figures: the review’s reconciliation, the changes and the three ratings', () => {
+    const budget = read(WALK);
     const summary = summariseBudget(data, budget, outcomeOf);
     const outcome = outcomeOf(budget.leverValues);
     const r = reconcile(outcome, preBudget(outcomeOf, budget.leverValues, ds.levers));
@@ -146,17 +140,15 @@ describe('a finished Budget summed up', () => {
     expect(summary.headroom).toEqual({ startGbpm: r.startGbpm, endGbpm: r.endGbpm });
     expect(summary.headroomLine).toBe(headroomWords(r));
     expect(summary.moves).toEqual(reconcileWords(r));
-    expect(summary.theme).toBe(budgetTheme(ds.pm, budget.game.priorities));
+    expect(summary.changes).toBe(summary.tax.length + summary.spending.length);
     const room = receptions({
       outcome,
       levers: ds.levers,
       reception: ds.reception,
       typicalErrorGbpm: typicalErrorGbpm(ds.vintage, outcome),
       outcomeOf,
-      pm: ds.pm,
       incidence: ds.incidence,
-      game: budget.game,
-      status: ambitionStatus(budget.game, ds.pm, ds.options, outcome, ds.levers),
+      status: ambitionStatus(ds.pm, outcome, ds.levers),
     });
     expect(summary.ratings.map((x) => [x.audience, x.rating, x.label])).toEqual(
       room.map((x) => [x.audience, x.rating, x.label]),
@@ -164,7 +156,7 @@ describe('a finished Budget summed up', () => {
   });
 
   it('lists every moved lever on its side, biggest first', () => {
-    const summary = summariseBudget(data, read(WALK, SECURITY), outcomeOf);
+    const summary = summariseBudget(data, read(WALK), outcomeOf);
     const moved = Object.keys(WALK);
     expect([...summary.tax, ...summary.spending].map((r) => r.code).sort()).toEqual(moved.sort());
     for (const side of [summary.tax, summary.spending]) {
@@ -177,13 +169,13 @@ describe('a finished Budget summed up', () => {
 
   it('names a missed rule by its margin, and meets them when it does', () => {
     // The October forecast misses the welfare cap before any measure: both fiscal rules met.
-    const capOnly = summariseBudget(data, read(WALK, SECURITY), outcomeOf).rules;
+    const capOnly = summariseBudget(data, read(WALK), outcomeOf).rules;
     expect(capOnly.met).toBe(false);
     expect(capOnly.welfareOnly).toBe(true);
     expect(capOnly.missed).toHaveLength(1);
     expect(capOnly.missed[0]).toMatch(/^the welfare cap by £\d+\.\dbn$/);
     // The four-point rule brings capped welfare back under the cap and margin.
-    expect(summariseBudget(data, read({ ...WALK, rvpip: 1 }, SECURITY), outcomeOf).rules).toEqual({
+    expect(summariseBudget(data, read({ ...WALK, rvpip: 1 }), outcomeOf).rules).toEqual({
       met: true,
       welfareOnly: false,
       missed: [],
@@ -204,14 +196,15 @@ describe('a finished Budget summed up', () => {
   });
 
   it('says a Budget in words (snapshot, £ masked)', () => {
-    const budgets: Record<string, [Budget, readonly string[]]> = {
-      'rules met': [WALK, SECURITY],
-      'debt rule missed, no priorities': [DEBT_RULE_MISSED, []],
-      'a tax that starts later': [TAXES_AT_THE_TOP, ['defence']],
+    const budgets: Record<string, Budget> = {
+      'rules met': WALK,
+      'debt rule missed': DEBT_RULE_MISSED,
+      'a tax that starts later': TAXES_AT_THE_TOP,
+      unchanged: {},
     };
     const words = Object.fromEntries(
-      Object.entries(budgets).map(([name, [values, priorities]]) => {
-        const said = summaryWords(summariseBudget(data, read(values, priorities), outcomeOf));
+      Object.entries(budgets).map(([name, values]) => {
+        const said = summaryWords(summariseBudget(data, read(values), outcomeOf));
         return [name, Object.fromEntries(Object.entries(said).map(([k, v]) => [k, wording(v)]))];
       }),
     );
@@ -219,26 +212,21 @@ describe('a finished Budget summed up', () => {
   });
 
   it('keeps what a player posts short enough to post with its link on X', () => {
-    // The longest name the game can give a Budget, with every rule missed by the most the words
-    // can say: X counts a link as 23 characters, and a post as 280.
-    const ids = ds.pm.priorities.map((p) => p.id);
-    const themes = ids.flatMap((a) =>
-      ids.flatMap((b) =>
-        ids.flatMap((c) =>
-          new Set([a, b, c]).size === 3 ? [budgetTheme(ds.pm, [a, b, c]) ?? ''] : [],
-        ),
-      ),
-    );
-    const longest = themes.reduce((x, y) => (y.length > x.length ? y : x), '');
+    // The longest name the game can give a Budget (every lever moved), with every rule missed by
+    // the most the words can say: X counts a link as 23 characters, and a post as 280.
+    const longest = budgetTitle(live.length);
+    expect(longest).toBe(SHARE_WORDS.changed.replace('{n}', String(live.length)));
+    expect(budgetTitle(0)).toBe(SHARE_WORDS.unchanged);
+    expect(budgetTitle(1)).toBe(SHARE_WORDS.changedOne);
     const summary = summariseBudget(data, read(DEBT_RULE_MISSED), outcomeOf);
     const missed = outcomeOf({}).verdicts.map((v) => missedBy({ ...v, headroomGbpm: -999_949 }));
     const { share } = summaryWords({
       ...summary,
-      theme: longest,
+      changes: live.length,
       rules: { met: false, welfareOnly: false, missed },
     });
     expect(missed.length).toBeGreaterThan(1);
-    expect(share).toContain(longest.slice(2));
+    expect(share).toContain(longest);
     expect(share.length + 1 + 23).toBeLessThanOrEqual(280);
   });
 });

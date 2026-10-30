@@ -14,8 +14,8 @@ import { gameData, guide } from '../data';
 import { SHARE_TEXT } from '../share/words';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
-/** A finished Budget: two priorities, prisons up a tenth and a penny on the basic rate. */
-const FINISHED = `${BASE}&g=st.${FINAL_STAGE}_pr.defence+safer-streets&L=moj.10_itbr.1`;
+/** A finished Budget: prisons up a tenth and a penny on the basic rate. */
+const FINISHED = `${BASE}&g=st.${FINAL_STAGE}_rd.2&L=moj.10_itbr.1`;
 
 function at(path: string) {
   // The provider reads the location itself, so set it before rendering, as a browser would.
@@ -67,23 +67,23 @@ describe('a shared Budget’s page (ADR-0044)', () => {
   });
 
   it('says so when a side moved nothing', () => {
-    const search = `${BASE}&g=st.${FINAL_STAGE}&L=itbr.1`;
+    const search = `${BASE}&g=st.${FINAL_STAGE}_rd.2&L=itbr.1`;
     at(`/shared?${search}`);
     expect(screen.getByText(SHARE_WORDS.noSpending)).toBeVisible();
-    expect(screen.getByRole('heading', { level: 1, name: SHARE_WORDS.untitled })).toBeVisible();
+    expect(screen.getByRole('heading', { level: 1, name: SHARE_WORDS.changedOne })).toBeVisible();
   });
 
-  it('invites the reader to make their own, from the briefing, with one primary button', () => {
+  it('invites the reader to make their own, from the Chancellor’s Budget, with one primary button', () => {
     at(`/shared?${FINISHED}`);
     expect(document.querySelectorAll('main .btn--primary')).toHaveLength(1);
     const play = screen.getByRole('link', { name: SHARE_TEXT.play });
     expect(play).toHaveClass('btn--primary');
     // A fresh game: the reader's own link carries none of the shared Budget's choices.
     const href = play.getAttribute('href') ?? '';
-    expect(href).toMatch(/^\/outlook\?/);
+    expect(href).toMatch(/^\/\?/);
     expect(new URLSearchParams(href.split('?')[1]).get('L')).toBeNull();
     fireEvent.click(play);
-    expect(screen.getByRole('heading', { level: 1, name: stageTitle('outlook') })).toBeVisible();
+    expect(screen.getByRole('heading', { level: 1, name: stageTitle('start') })).toBeVisible();
   });
 
   it('opens the Budget in the game, at Budget day', () => {
@@ -94,10 +94,11 @@ describe('a shared Budget’s page (ADR-0044)', () => {
     fireEvent.click(open);
     expect(screen.getByRole('heading', { level: 1, name: stageTitle('budget-day') })).toBeVisible();
     // The game took it up: Budget day shares the same Budget.
-    expect(screen.getByRole('img', { name: /^What’s your Budget\? A Budget for/ })).toHaveAttribute(
-      'src',
-      `/api/card?${budget.query}`,
-    );
+    expect(
+      screen.getByRole('img', {
+        name: /^What’s your Budget\? 2 changes to the Chancellor’s Budget/,
+      }),
+    ).toHaveAttribute('src', `/api/card?${budget.query}`);
   });
 
   it('leaves the reader’s own address alone: the link is someone else’s Budget', async () => {

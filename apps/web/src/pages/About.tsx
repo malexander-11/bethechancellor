@@ -48,10 +48,10 @@ export function AboutPage() {
 
       <h2 id="game">The game</h2>
       <p>
-        You are the Chancellor, with a Budget to deliver. You are briefed on the headroom you have,
-        agree your priorities with the Prime Minister, choose flagship policies to deliver them,
-        fine-tune tax and spending, then deliver the Budget and see how it lands with Labour
-        backbenchers, the markets and the public.
+        The Chancellor delivered a Budget on 28 October 2026. The game shows what it did, in plain
+        words with every figure from the Treasury&rsquo;s own table, and lets you change it:
+        fine-tune tax and spending from the Chancellor&rsquo;s choices, then deliver your Budget and
+        see how it lands with Labour backbenchers, the markets and the public.
       </p>
       <p>
         It is inspired by the Institute for Fiscal Studies and Nesta&rsquo;s{' '}

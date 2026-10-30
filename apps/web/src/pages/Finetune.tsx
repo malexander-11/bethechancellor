@@ -4,8 +4,6 @@ import {
   decisionUnits,
   formatGbpBn,
   groupItems,
-  rankedPriorities,
-  setByFlagship,
   sizeWords,
   stageIndex,
   type FinetuneDecision,
@@ -25,15 +23,13 @@ import {
   type CardUnit,
 } from '../components/ChoiceCard';
 import { plannedWords } from '../components/LeverControl';
-import type { Held } from '../components/LeverRow';
-import { adviserById, finetune, levers, options, pm } from '../data';
+import { adviserById, finetune, levers, pm } from '../data';
 import { UNCHANGED_BELOW_GBPM } from '../journey/effects';
 import { useStageGuard } from '../journey/guard';
-import { chosenByLever, redLinesOf } from '../journey/levers';
+import { redLinesOf } from '../journey/levers';
 import { StepLink } from '../journey/links';
 import { useLeverHints } from '../journey/prices';
 import { useBudget } from '../state/budget';
-import { deliverPath } from './Deliver';
 
 const byCode = new Map(levers.map((l) => [l.code, l] as const));
 
@@ -145,31 +141,31 @@ export function decisionStatus(
 
 /**
  * Which decisions are open when a screen opens (ADR-0035): only those holding a lever that had
- * moved by then, a flagship's among them, so everything chosen is in view and the rest is a list
- * of questions. One predicate, so "the first open" or "all open" would be one line.
+ * moved by then, so everything chosen is in view and the rest is a list of questions. One predicate, so "the first open" or "all open" would be one line.
  */
 function opensOnArrival(decision: FinetuneDecision, start: Record<string, number>): boolean {
   return decision.items.some((item) => start[item.code] !== undefined);
 }
 
 /**
- * Step 4 (Phase 24, ADR-0025; policies since Phase 26, ADR-0027): fine-tune tax, then spending.
- * Each lever offers its policies: one each way where it moves both ways, in one to three sizes,
- * under a plain title with one adviser's line and the numbers in view. The bar keeps score.
+ * Step 1 (fine-tuning: step 4 of the six-step road, Phase 24, ADR-0025; policies since Phase 26,
+ * ADR-0027; the first step since ADR-0045): fine-tune tax, then spending, starting from the
+ * Chancellor's Budget. Each lever offers its policies: one each way where it moves both ways, in
+ * one to three sizes, under a plain title with one adviser's line and the numbers in view. The bar
+ * keeps score.
  *
  * Both screens go section by section, the tax screen tax by tax (ADR-0035), the spending screen by
  * what the money is for (ADR-0037): each section the decisions about it, closed until opened, a
  * decision holding a lever chosen before the screen opened open from the start. Opening one shows
  * every choice in it, a lever that moves both ways as one scale of levels with the plan among
- * them, and ticks that contradict each other as one choice among radios (ADR-0036). A lever a
- * flagship the player chose holds is one line, with the way back to that flagship. Every policy
+ * them, and ticks that contradict each other as one choice among radios (ADR-0036). Every policy
  * lever the game has is here (Phase 26): there is no desk behind it, and no shortlist in front of
- * it, in either mode (ADR-0041).
+ * it (ADR-0041).
  */
 export function FinetunePage() {
   const { side: param } = useParams();
   const { search } = useLocation();
-  // A link with no game is sent to the briefing, measures and all, by the guard.
+  // A link with no game is sent to the Chancellor's Budget, measures and all, by the guard.
   const guard = useStageGuard('finetune');
   if (guard) return guard;
   if (param !== 'tax' && param !== 'spending') {
@@ -184,27 +180,16 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
   const { state, dispatch, outcome } = useBudget();
   const hintOf = useLeverHints();
   // The Budget as it stood when the screen was opened: a decision holding a lever chosen then is
-  // open, and a lever a flagship held then is a line.
+  // open.
   const [start] = useState(() => state.leverValues);
   const spec = finetune[side];
-  const [held] = useState(() => {
-    const status0 = state.game ? ambitionStatus(state.game, pm, options, outcome, levers) : null;
-    return new Map(
-      [...setByFlagship(status0, state.leverValues, levers)].map(([code, h]): [string, Held] => [
-        code,
-        { title: h.option.title, to: deliverPath(h.rank) },
-      ]),
-    );
-  });
   const game = state.game;
   if (!game) return null;
 
-  const status = ambitionStatus(game, pm, options, outcome, levers);
-  const ranked = rankedPriorities(game, pm);
+  const status = ambitionStatus(pm, outcome, levers);
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const year = stability?.targetYear ?? '2029-30';
   const moved = new Set(outcome.leverEffects.map((e) => e.code));
-  const chosen = chosenByLever(status);
   const redLinesFor = redLinesOf(state.leverValues);
   const who = adviserById.get(spec.adviser)?.role ?? spec.adviser;
   const index = side === 'tax' ? 1 : 2;
@@ -214,9 +199,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
     summaryYear: year,
     hintOf,
     redLinesFor,
-    chosen,
     moved,
-    held,
     adviser: who,
   };
   // Inside a decision a lever goes by its short name, every way it moves on one scale (ADR-0035).
@@ -278,7 +261,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
     );
   };
 
-  /** On to step 5: the review, and the red button. */
+  /** On to step 2: the review, and the red button. */
   const leave = () =>
     dispatch({
       type: 'updateGame',
@@ -288,8 +271,7 @@ function FinetuneScreen({ side }: { side: FinetuneSideId }) {
     side === 'tax'
       ? { to: finetunePath('spending'), label: 'Next: spending', leave: false }
       : { to: '/review', label: 'Next: deliver the Budget', leave: true };
-  const back =
-    side === 'tax' ? (ranked.length > 0 ? deliverPath(ranked.length) : '/pm') : finetunePath('tax');
+  const back = side === 'tax' ? '/' : finetunePath('tax');
 
   return (
     <JourneyLayout
