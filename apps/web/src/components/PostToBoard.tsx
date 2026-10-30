@@ -63,9 +63,11 @@ export function PostToBoard() {
         ? BOARD_TEXT.takenDown
         : answer.error === 'limit'
           ? BOARD_TEXT.postLimited
-          : answer.error === 'closed'
-            ? BOARD_TEXT.closed
-            : BOARD_TEXT.down;
+          : answer.error === 'short'
+            ? BOARD_TEXT.postShort
+            : answer.error === 'closed'
+              ? BOARD_TEXT.closed
+              : BOARD_TEXT.down;
     setOutcome({ kind: 'failed', said });
   }
 

@@ -102,20 +102,16 @@ describe('word budgets: one line visible, the rest a click away', () => {
     for (const s of road) expect(words(s.now), `${s.step}: "${s.now}"`).toBeLessThanOrEqual(10);
   });
 
-  it('keeps an adviser’s line to a consequence, not a citation or the trade’s own words', () => {
-    // Phase 25: a line carries one plain consequence, not where its figure comes from. No
-    // organisation a newcomer would have to look up, none of the words of the trade, and never
-    // "the lock" alone, which a pensioner hears as the triple lock.
+  it('keeps the balance page’s choices to plain words, not a citation or the trade’s own', () => {
+    // Phase 25, on the menus since ADR-0046: a choice says what it does, not where its figure
+    // comes from. No organisation a newcomer would have to look up, none of the words of the
+    // trade, and never "the lock" alone, which a pensioner hears as the triple lock.
     const ORGS =
       /\b(HMRC|IFS|IPPR|CenTax|JRF|CSJ|NAO|Onward|Resolution Foundation|Tax Policy Associates)\b/;
     const INSIDE =
       /\b(static|rows?|penny row|Bank Rate|front-loaded|steady-state|settlement|the benches)\b/i;
     const LOCK = /\bthe lock\b/i;
-    const lines = [
-      ...(ON_SCREEN['the fine-tuning advice'] ?? []),
-      ...(ON_SCREEN['option advice'] ?? []),
-      ...(ON_SCREEN['the conflicts'] ?? []),
-    ];
+    const lines = [...(ON_SCREEN['the menus'] ?? [])];
     expect(lines.length).toBeGreaterThan(0);
     for (const text of lines) {
       expect(text, text).not.toMatch(ORGS);

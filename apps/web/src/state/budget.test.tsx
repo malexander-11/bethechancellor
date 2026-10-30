@@ -12,7 +12,7 @@ import {
 
 describe('budget state', () => {
   it('hydrates from a permalink and encodes back to the same query', () => {
-    const query = 'v=1&f=obr2610&r=ch2602&i=2027&L=itbr.1&g=st.1_rd.2';
+    const query = 'v=1&f=obr2610&r=ch2602&i=2027&L=itbr.1&g=st.1_rd.3';
     const state = initialStateFromLocation(`?${query}`);
     expect(state.leverValues).toEqual({ itbr: 1 });
     expect(state.game).toEqual({ reached: 1 });
@@ -75,10 +75,10 @@ describe('budget state', () => {
 
   it('takes up a Budget from a link only when asked to load it', () => {
     const fresh = initialStateFromLocation('');
-    const loaded = reducer(fresh, { type: 'load', search: '?L=itbr.1&g=st.2_rd.2' });
+    const loaded = reducer(fresh, { type: 'load', search: '?L=itbr.1&g=st.2_rd.3' });
     expect(loaded.leverValues.itbr).toBe(1);
     expect(loaded.game).toEqual({ reached: 2 });
-    expect(loaded).toEqual(initialStateFromLocation('?L=itbr.1&g=st.2_rd.2'));
+    expect(loaded).toEqual(initialStateFromLocation('?L=itbr.1&g=st.2_rd.3'));
   });
 
   it('starts a game on today’s estimate, and keeps a game under way as it is', () => {
@@ -105,7 +105,7 @@ describe('budget state', () => {
 
   it('opens every game on the OBR’s forecast, saying so when the link carried other figures', () => {
     // A game on the forecast opens as it was, with nothing to say.
-    const fine = initialStateFromLocation('?g=st.0_rd.2&L=moj.10');
+    const fine = initialStateFromLocation('?g=st.0_rd.3&L=moj.10');
     expect(fine.leverValues).toEqual({ moj: 10 });
     expect(fine.warnings).toEqual([]);
     // A Phase 23 game drew its own forecast and kept a snapshot: both give way to the forecast,
@@ -113,7 +113,7 @@ describe('budget state', () => {
     const old = initialStateFromLocation(
       '?g=s.417_st.5_pl.pessimistic_hr.30_pr.defence_rb.pubs&M=rate.0.75_rpi.1&L=moj.10&S=moj.10',
     );
-    expect(old.game).toEqual({ reached: 1 });
+    expect(old.game).toEqual({ reached: 2 });
     expect(old.leverValues).toEqual({ moj: 10 });
     expect(old.warnings).toEqual([ESTIMATE_WARNING]);
     expect(permalinkQuery(old)).not.toContain('S=');

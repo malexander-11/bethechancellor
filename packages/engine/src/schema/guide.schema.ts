@@ -26,7 +26,7 @@ export const glossaryFileSchema = z.strictObject({
 export const guideStageSchema = z.strictObject({
   step: journeyStepSchema,
   /** Which of the six steps this screen belongs to (Phase 24); step 4's screens share one. */
-  number: z.number().int().min(1).max(3),
+  number: z.number().int().min(1).max(4),
   title: z.string().min(1).max(60),
   /** The one line under the heading: what to do on this screen. */
   now: z.string().min(1).max(200),

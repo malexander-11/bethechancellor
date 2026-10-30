@@ -1,12 +1,14 @@
 import { lazy, Suspense, useEffect, useRef } from 'react';
-import { Navigate, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { BudgetProvider } from './state/budget';
 import { BudgetPage } from './pages/Budget';
 import { BudgetDayPage } from './pages/BudgetDay';
-import { FinetunePage } from './pages/Finetune';
+import { BalancePage } from './pages/Balance';
+import { MeasuresPage } from './pages/Measures';
 import { ReviewPage } from './pages/Review';
 import { SharedPage } from './pages/Shared';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { STAGE_ROUTES } from './journey/routes';
 import { SiteFooter } from './components/SiteFooter';
 
 // The two reference pages are opened by few players, so their code loads when one is opened.
@@ -26,17 +28,6 @@ const LeaderboardEntryPage = lazy(() =>
 function RedirectKeepingQuery({ to }: { to: string }) {
   const { search } = useLocation();
   return <Navigate to={{ pathname: to, search }} replace />;
-}
-
-/**
- * The desk's old addresses (Phase 26, ADR-0027): its spending screen, and the letters' and the
- * recommendations' screens before it, open fine-tuning's spending; anything else opens its tax
- * screen. The stage guard does the rest: a game lands there, a link with no game on the Budget.
- */
-function DeskRedirect() {
-  const { tab } = useParams();
-  const spending = tab === 'spending' || tab === 'policies' || tab === 'recommendations';
-  return <RedirectKeepingQuery to={spending ? '/finetune/spending' : '/finetune/tax'} />;
 }
 
 /** A link's fragment as an id: decoded where it can be, and as written where it cannot. */
@@ -129,30 +120,34 @@ function Shell() {
             <Routes>
               <Route path="/" element={<BudgetPage />} />
               {/*
-            The briefing, the priorities and the flagships retired with the Chancellor's Budget as the
-            starting point (ADR-0045): their old addresses open fine-tuning, which took their place on
-            the road, the query string intact; with no game, that opens the Budget, whose button
-            starts one with a link's measures in it.
+            The briefing, the priorities and the flagships (ADR-0045), and then fine-tuning and the
+            desk before it (ADR-0046), retired: their old addresses open the walk through the
+            Chancellor's measures, which took their place, the query string intact. With no game,
+            that opens the Budget, whose button starts one with a link's measures in it.
           */}
-              <Route path="/outlook" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-              <Route path="/assumptions" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-              <Route path="/pm" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-              <Route path="/budget" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-              <Route path="/budget/deliver" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-              <Route
-                path="/budget/deliver/:n"
-                element={<RedirectKeepingQuery to="/finetune/tax" />}
-              />
-              {/* The desk's old addresses, below, open fine-tuning. */}
-              {/* Paying for it became fine-tuning tax and spending (Phase 24). */}
-              <Route path="/budget/afford" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-              <Route path="/budget/:tab" element={<DeskRedirect />} />
-              <Route path="/finetune" element={<RedirectKeepingQuery to="/finetune/tax" />} />
-              <Route path="/finetune/:side" element={<FinetunePage />} />
-              <Route
-                path="/recommendations"
-                element={<RedirectKeepingQuery to="/finetune/spending" />}
-              />
+              {[
+                '/outlook',
+                '/assumptions',
+                '/pm',
+                '/budget',
+                '/budget/deliver',
+                '/budget/deliver/:n',
+                '/budget/afford',
+                '/budget/:tab',
+                '/finetune',
+                '/finetune/:side',
+                '/recommendations',
+                '/b',
+                '/measures',
+              ].map((path) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={<RedirectKeepingQuery to={STAGE_ROUTES.measures} />}
+                />
+              ))}
+              <Route path="/measures/:page" element={<MeasuresPage />} />
+              <Route path="/balance" element={<BalancePage />} />
               {/*
             The forecast that arrived later, the compromises and the add-ons retired in Phase 24:
             their old addresses open the review, and the stage guard sends an early game back.
@@ -163,7 +158,6 @@ function Shell() {
               <Route path="/rabbit" element={<RedirectKeepingQuery to="/review" />} />
               <Route path="/review" element={<ReviewPage />} />
               <Route path="/budget-day" element={<BudgetDayPage />} />
-              <Route path="/b" element={<RedirectKeepingQuery to="/finetune/tax" />} />
               {/* Where a shared link lands (ADR-0044): its code comes with the page, not after. */}
               <Route path="/shared" element={<SharedPage />} />
               <Route path="/leaderboard" element={<LeaderboardPage />} />

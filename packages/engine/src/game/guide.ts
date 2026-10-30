@@ -1,21 +1,31 @@
 import type { GuideFile, GuideStage, JourneyStep } from '../types/data.js';
 
 /**
- * The guide: one entry per screen a player meets, in the order they meet them. The opening is the
- * Chancellor's Budget (ADR-0045), before the three steps. The two fine-tuning screens share one
- * entry: each has its own heading and line, from finetune.json.
+ * The guide: one entry per step a player meets, in the order they meet them. The opening is the
+ * Chancellor's Budget (ADR-0045), before the four steps. The walk's pages share one entry: each
+ * names its theme, from the Budget file (ADR-0046).
  */
-export const GUIDED_STEPS: readonly JourneyStep[] = ['start', 'finetune', 'review', 'budget-day'];
+export const GUIDED_STEPS: readonly JourneyStep[] = [
+  'start',
+  'measures',
+  'balance',
+  'review',
+  'budget-day',
+];
 
-/** How many steps the kicker counts to: "Step 2 of 3" (ADR-0045). */
-export const STEP_COUNT = 3;
+/** How many steps the kicker counts to: "Step 2 of 4" (ADR-0046). */
+export const STEP_COUNT = 4;
 
-/** A retired step's name (the briefing, the priorities, the flagships) finds the screen it led to. */
+/**
+ * A retired step's name (the briefing, the priorities, the flagships, fine-tuning) finds the step
+ * that took its place.
+ */
 const ALIASES: Record<string, JourneyStep> = {
-  outlook: 'finetune',
-  assumptions: 'finetune',
-  pm: 'finetune',
-  deliver: 'finetune',
+  outlook: 'measures',
+  assumptions: 'measures',
+  pm: 'measures',
+  deliver: 'measures',
+  finetune: 'measures',
 };
 
 export function guideFor(guide: GuideFile, step: string): GuideStage | undefined {

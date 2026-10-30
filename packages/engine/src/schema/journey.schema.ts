@@ -5,12 +5,20 @@ const slug = z.string().regex(/^[a-z0-9][a-z0-9-]*$/);
 /**
  * The steps of the guided Budget journey, in order. `assumptions` is the Phase 4 name of what
  * became `outlook`; it stays so that advisers authored against it keep validating, and the app
- * routes it on. `finetune` is step 4's two screens of policies (Phase 24, ADR-0025; every lever
- * since Phase 26, ADR-0027). The desk's `taxes` and `spending` retired with the desk in Phase 26;
+ * routes it on. `measures` is the walk through the Chancellor's measures and `balance` the page that
+ * spends or finds the money (ADR-0046). `finetune`, the two screens of policies (Phase 24, ADR-0025;
+ * every lever since Phase 26, ADR-0027), retired with them and reads as the walk. The desk's `taxes` and `spending` retired with the desk in Phase 26;
  * the forecast, the compromises and the add-ons (`forecast`, `compromise`, `rabbit`) in Phase 24.
  * The app still routes all their old addresses.
  */
-export const journeyStepSchema = z.enum(['start', 'finetune', 'review', 'budget-day']);
+export const journeyStepSchema = z.enum([
+  'start',
+  'measures',
+  'balance',
+  'finetune',
+  'review',
+  'budget-day',
+]);
 
 /** An adviser is a role, not a person: title, remit and the steps they speak on. */
 export const adviserSchema = z.strictObject({

@@ -1,5 +1,6 @@
 import {
   FINAL_STAGE,
+  ROAD,
   SHARE_WORDS,
   gameOutcomeOf,
   readFinishedBudget,
@@ -15,7 +16,7 @@ import { SHARE_TEXT } from '../share/words';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 /** A finished Budget: prisons up a tenth and a penny on the basic rate. */
-const FINISHED = `${BASE}&g=st.${FINAL_STAGE}_rd.2&L=moj.10_itbr.1`;
+const FINISHED = `${BASE}&g=st.${FINAL_STAGE}_rd.${ROAD}&L=moj.10_itbr.1`;
 
 function at(path: string) {
   // The provider reads the location itself, so set it before rendering, as a browser would.
@@ -67,7 +68,7 @@ describe('a shared Budget’s page (ADR-0044)', () => {
   });
 
   it('says so when a side moved nothing', () => {
-    const search = `${BASE}&g=st.${FINAL_STAGE}_rd.2&L=itbr.1`;
+    const search = `${BASE}&g=st.${FINAL_STAGE}_rd.${ROAD}&L=itbr.1`;
     at(`/shared?${search}`);
     expect(screen.getByText(SHARE_WORDS.noSpending)).toBeVisible();
     expect(screen.getByRole('heading', { level: 1, name: SHARE_WORDS.changedOne })).toBeVisible();

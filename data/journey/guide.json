@@ -5,23 +5,29 @@
       "step": "start",
       "number": 1,
       "title": "The Budget, 28 October 2026",
-      "now": "Read what the Chancellor did, then change it."
+      "now": "Read what the Chancellor did, then have your say."
     },
     {
-      "step": "finetune",
+      "step": "measures",
       "number": 1,
-      "title": "Fine-tune tax and spend",
-      "now": "Change the Chancellor’s choices until the numbers add up."
+      "title": "The Chancellor’s measures",
+      "now": "Agree or disagree with each one."
+    },
+    {
+      "step": "balance",
+      "number": 2,
+      "title": "Balance your Budget",
+      "now": "Spend what you saved, or find the [headroom] you lost."
     },
     {
       "step": "review",
-      "number": 2,
+      "number": 3,
       "title": "Deliver your Budget",
       "now": "Check it, change anything, then deliver it."
     },
     {
       "step": "budget-day",
-      "number": 3,
+      "number": 4,
       "title": "What your Budget means",
       "now": "Share it, change something, or start again."
     }

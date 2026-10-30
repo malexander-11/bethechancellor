@@ -1,5 +1,6 @@
 import { formatGbpBn, type AmbitionStatus, type Outcome } from '@btc/engine';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { Balance } from '../journey/balance';
 import { isMissed, ruleTitle } from '../journey/rules';
 
 /**
@@ -18,8 +19,19 @@ export const BAR_SETTLE_MS = 800;
  * The bar speaks (Phase 25): one visually hidden polite status region, mounted empty, says the
  * facts that changed, in the bar's own words, once the Budget has settled. While the bar is
  * sticky, the page keeps the height it covers clear, so a focused control never hides under it.
+ *
+ * Given the money (ADR-0046), the bar leads with it: what a player has to spend or to find against
+ * the Chancellor's headroom, which is the line the walk and the balance page work to.
  */
-export function HeadroomBar({ outcome, status }: { outcome: Outcome; status: AmbitionStatus }) {
+export function HeadroomBar({
+  outcome,
+  status,
+  balance,
+}: {
+  outcome: Outcome;
+  status: AmbitionStatus;
+  balance?: Balance;
+}) {
   const stability = outcome.verdicts.find((v) => v.kind === 'currentBudget');
   const year = stability?.targetYear ?? '';
   const headroom = stability?.headroomGbpm ?? 0;
@@ -43,6 +55,7 @@ export function HeadroomBar({ outcome, status }: { outcome: Outcome; status: Amb
   }
   const figure = formatGbpBn(headroom, 1, headroom < 0);
   const said = {
+    money: balance ? `Your money, ${year}: ${balance.words}` : '',
     headroom: `Headroom, ${year}: ${figure}`,
     rules,
     promises:
@@ -53,6 +66,14 @@ export function HeadroomBar({ outcome, status }: { outcome: Outcome; status: Amb
   const ref = useStickyClearance();
   return (
     <section className="bar" aria-label="Your Budget so far" ref={ref}>
+      {balance ? (
+        <p className="bar__headroom bar__money">
+          <span className="bar__label">Your money, {year}</span>
+          <span className={`bar__figure${balance.state === 'short' ? ' bar__figure--worse' : ''}`}>
+            {balance.words}
+          </span>
+        </p>
+      ) : null}
       <p className="bar__headroom">
         <span className="bar__label">Headroom, {year}</span>
         <span className={`bar__figure${tone}`}>{figure}</span>

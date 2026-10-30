@@ -5,6 +5,18 @@ in `docs/adr`; older records are not revised.
 
 ## 2026-10-30
 
+- The game is a walk through the Chancellor's measures, then a balance (ADR-0046). After the Budget
+  page, six themed pages ask about each measure a player can reverse, one card each: what the
+  Chancellor did, what it means, the Treasury's figure and what disagreeing would cost or save;
+  Agree keeps it and Disagree takes it out, and either answer is the player's vote. One page of
+  small print follows, a tick or a cross for each measure no card asks about, which moves no money.
+  The balance page then shows what disagreeing saved or gave up: short, it offers ways to find the
+  money; with money to spend, a list of priorities, each a fixed step pressed until the money runs
+  out. The headroom may not end below the Chancellor's: a step that would take it there cannot be
+  pressed, the review will not deliver a Budget short of it, and the leaderboard will not take one.
+  The road is four steps, measures, balance, deliver and feedback; a link written on it carries
+  `rd.3`, and links from the three-step road open on the step that took their place. The fine-tuning
+  screens are gone, with their styles and tests.
 - The walk through the Budget and the balance page's menus are data (ADR-0046), with no screen yet.
   The Budget file groups the measures a player can reverse into six themes, one card a lever, each
   with a plain heading saying what the Chancellor did and a few sentences saying what it means; a

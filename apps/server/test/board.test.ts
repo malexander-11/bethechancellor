@@ -38,10 +38,13 @@ function link(values: Record<string, number>): string {
     data.levers,
   );
 }
-/** A different finished Budget for each n: justice's budget up, and one more decision reversed. */
+/**
+ * A different finished Budget for each n: employer National Insurance a point up, which keeps the
+ * headroom above the Chancellor's, justice's budget up, and one more decision reversed.
+ */
 const REVERSALS = ['rveff', 'rv2ch', 'rvwfp', 'rvplan2', 'b6hmrc', 'b6wda', 'b6dist', 'b6sov'];
 const budget = (n: number) =>
-  link({ moj: 10, ...(n > 0 ? { [REVERSALS[n - 1] ?? 'rveff']: 1 } : {}) });
+  link({ nicer: 1, moj: 10, ...(n > 0 ? { [REVERSALS[n - 1] ?? 'rveff']: 1 } : {}) });
 
 let db: Db;
 beforeAll(async () => {
@@ -130,18 +133,26 @@ describe('posting a Budget to the leaderboard', () => {
 
   it('keeps one entry a Budget: posting it again, however linked, finds the one there', async () => {
     const first = await posted(budget(0), 'First');
-    const again = await post(link({ moj: 10.2 }), 'Second');
+    const again = await post(link({ nicer: 1, moj: 10.2 }), 'Second');
     expect(again.status).toBe(200);
     expect(await again.json()).toEqual({ entry: first, created: false });
   });
 
   it('refuses a link that is not a finished Budget', async () => {
-    for (const query of [link({ moj: 10 }).replace('st.2', 'st.0'), '', 'nonsense']) {
+    for (const query of [link({ nicer: 1 }).replace('st.3', 'st.0'), '', 'nonsense']) {
       const answer = await post(query, 'A title');
       expect(answer.status, query).toBe(400);
       expect(await answer.json()).toEqual({ error: 'budget' });
     }
     expect((await ask('/api/budgets', { body: { title: 'No link' } })).status).toBe(400);
+  });
+
+  it('refuses a Budget that leaves less headroom than the Chancellor’s (ADR-0046)', async () => {
+    // Justice's budget up a tenth, and nothing found to pay for it: the game would not deliver it.
+    const answer = await post(link({ moj: 10 }), 'Prisons first');
+    expect(answer.status).toBe(422);
+    expect(await answer.json()).toEqual({ error: 'short' });
+    expect((await listed()).entries).toEqual([]);
   });
 
   it('refuses a title for what is wrong with it, and says what', async () => {

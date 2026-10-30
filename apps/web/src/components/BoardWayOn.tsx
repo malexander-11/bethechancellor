@@ -14,7 +14,7 @@ export function BoardWayOn() {
   const { state } = useBudget();
   return state.game ? (
     <StepLink
-      to={STAGE_ROUTES[GAME_STAGES[state.game.reached] ?? 'finetune']}
+      to={STAGE_ROUTES[GAME_STAGES[state.game.reached] ?? 'measures']}
       className="btn btn--primary"
     >
       {BOARD_TEXT.back}

@@ -1,11 +1,12 @@
 import { enterable, type JourneyStep } from '@btc/engine';
 import { StepLink } from '../journey/links';
+import { STAGE_ROUTES } from '../journey/routes';
 import { useBudget } from '../state/budget';
 
-type Stop = 'finetune' | 'review' | 'budget-day';
+type Stop = 'measures' | 'balance' | 'review' | 'budget-day';
 
 /**
- * The three steps, in order, as the player is told them (ADR-0045), with the short name a wide
+ * The four steps, in order, as the player is told them (ADR-0046), with the short name a wide
  * screen shows under each numeral (Phase 25): the step's own words, cut down, never new ones.
  */
 export const STOPS: ReadonlyArray<{
@@ -16,11 +17,18 @@ export const STOPS: ReadonlyArray<{
   step: JourneyStep;
 }> = [
   {
-    id: 'finetune',
-    label: 'Fine-tune tax and spend',
-    short: 'Fine-tune',
-    to: '/finetune/tax',
-    step: 'finetune',
+    id: 'measures',
+    label: 'The Chancellor’s measures',
+    short: 'Measures',
+    to: STAGE_ROUTES.measures,
+    step: 'measures',
+  },
+  {
+    id: 'balance',
+    label: 'Balance your Budget',
+    short: 'Balance',
+    to: '/balance',
+    step: 'balance',
   },
   { id: 'review', label: 'Deliver the Budget', short: 'Deliver', to: '/review', step: 'review' },
   {
@@ -37,7 +45,10 @@ export function stopFor(step: JourneyStep): Stop {
   switch (step) {
     case 'start':
     case 'finetune':
-      return 'finetune';
+    case 'measures':
+      return 'measures';
+    case 'balance':
+      return 'balance';
     case 'review':
       return 'review';
     case 'budget-day':
@@ -45,7 +56,7 @@ export function stopFor(step: JourneyStep): Stop {
   }
 }
 
-/** Which screen of a step this is, when a step has more than one: "Fine-tune tax and spend · 2 of 2". */
+/** Which page of a step this is, when a step has more than one: "The Chancellor’s measures · 2 of 7". */
 export interface SubStep {
   index: number;
   total: number;
@@ -73,8 +84,8 @@ const HEARD: Record<StopKind, string> = {
 };
 
 /**
- * The road, as a running head on every screen after the Chancellor's Budget (ADR-0033): "Step 2
- * of 3 · Deliver the Budget", then three marks on a rule, one per step. The opening is the Budget
+ * The road, as a running head on every screen after the Chancellor's Budget (ADR-0033): "Step 3
+ * of 4 · Deliver the Budget", then four marks on a rule, one per step. The opening is the Budget
  * itself and the invitation to change it, so it carries none. A step behind you is done: a tick,
  * and a link back to it. The step you are at is a filled numeral, named on the line above it. A
  * step ahead you have already opened is an outlined numeral and a link; one not yet open is a

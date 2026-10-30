@@ -45,12 +45,19 @@ export const BOARD_TEXT = {
   seeEntry: 'See it on the leaderboard',
   takenDown: 'This Budget was taken down from the leaderboard.',
   postLimited: 'Too many Budgets from your network today. Try again later.',
-  /** The votes on the Chancellor's measures (ADR-0045), on the Budget page. */
-  votingLead: 'Vote for or against each one. One vote a device; the counts are everyone’s.',
-  votingClosed: 'Voting is not open yet.',
-  votingDown: 'Votes cannot be counted just now.',
-  measureFor: 'For',
-  measureAgainst: 'Against',
+  postShort:
+    'This Budget leaves less headroom than the Chancellor’s, so it cannot go on the leaderboard.',
+  /**
+   * The votes on the Chancellor's measures (ADR-0045): on the walk, agreeing or disagreeing is the
+   * vote (ADR-0046).
+   */
+  votingLead: 'Your answers count as votes too: one a device. The counts are everyone’s.',
+  votingClosed: 'Voting is not open yet, so your answers shape your Budget only.',
+  votingDown: 'Votes cannot be counted just now. Your answers still shape your Budget.',
+  agree: 'Agree',
+  disagree: 'Disagree',
+  /** "12 agree, 3 disagree" */
+  agreeCounts: '{ups} agree, {downs} disagree',
 } as const;
 
 /** Why a title was refused, as the player is told it (apps/server/src/board/titles.ts). */
@@ -68,4 +75,9 @@ export const TITLE_MAX = 60;
 /** "12 for, 3 against" */
 export function countsWords({ ups, downs }: { ups: number; downs: number }): string {
   return BOARD_TEXT.counts.replace('{ups}', String(ups)).replace('{downs}', String(downs));
+}
+
+/** "12 agree, 3 disagree": the public's answers on a measure (ADR-0046). */
+export function agreeWords({ ups, downs }: { ups: number; downs: number }): string {
+  return BOARD_TEXT.agreeCounts.replace('{ups}', String(ups)).replace('{downs}', String(downs));
 }

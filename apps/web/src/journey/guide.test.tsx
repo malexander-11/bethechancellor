@@ -2,12 +2,13 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { App } from '../App';
-import { budget, finetune, glossary } from '../data';
+import { budget, glossary } from '../data';
 import { BUDGET_TEXT } from '../pages/Budget';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
-/** A game just begun: fine-tuning, where the road starts (ADR-0045). */
-const GAME = 'g=st.0_rd.2';
+/** A game just begun: the walk through the measures, where the road starts (ADR-0046). */
+const GAME = 'g=st.0_rd.3';
+const [first, second] = budget.themes;
 const intro = () => document.querySelector('.intro') as HTMLElement;
 
 function at(path: string) {
@@ -21,11 +22,13 @@ function at(path: string) {
 
 describe('the head of every screen', () => {
   it('numbers the step, names the screen, says what to do in one line, and folds nothing beneath', () => {
-    at(`/finetune/spending?${BASE}&${GAME}`);
-    expect(screen.getByText('Step 1 of 3')).toBeInTheDocument();
-    expect(screen.getByText(/^Fine-tune tax and spend · 2 of 2$/)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 1, name: 'Fine-tune spending' })).toBeVisible();
-    expect(screen.getByText(finetune.spending.lead)).toBeInTheDocument();
+    at(`/measures/${second?.id}?${BASE}&${GAME}`);
+    expect(screen.getByText('Step 1 of 4')).toBeInTheDocument();
+    expect(
+      screen.getByText(`The Chancellor’s measures · 2 of ${budget.themes.length + 1}`),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: second?.title })).toBeVisible();
+    expect(screen.getByText(second?.lead ?? '')).toBeInTheDocument();
     // The reason a screen matters is on the screen or nowhere (Phase 23).
     expect(screen.queryByText('Why this matters')).toBeNull();
     expect(intro().querySelector('details')).toBeNull();
@@ -36,12 +39,11 @@ describe('the head of every screen', () => {
 
   it('explains a word where it is used', () => {
     // A tap opens the definition beside the word, and Escape closes it (Phase 25): a phone has
-    // no hover, so a tooltip alone was out of reach. A budget's row tags the Barnett formula.
-    at(`/finetune/spending?${BASE}&${GAME}`);
-    fireEvent.click(screen.getByRole('button', { name: /^Change health, schools and defence/ }));
-    const word = screen.getAllByRole('button', { name: 'Barnett applies' })[0] as HTMLElement;
+    // no hover, so a tooltip alone was out of reach. The balance step's line names the headroom.
+    at(`/balance?${BASE}&g=st.1_rd.3`);
+    const word = within(intro()).getByRole('button', { name: 'headroom' });
     const term = word.closest('.term') as HTMLElement;
-    const short = `(${glossary.terms.barnett?.short})`;
+    const short = `(${glossary.terms.headroom?.short})`;
     expect(word).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(word);
     expect(word).toHaveAttribute('aria-expanded', 'true');
@@ -53,7 +55,7 @@ describe('the head of every screen', () => {
 
   it('wears no badge, and says the five kinds of number in words on About and Methodology', async () => {
     // No screen labels a figure (ADR-0034).
-    const view = at(`/finetune/tax?${BASE}&${GAME}`);
+    const view = at(`/measures/${first?.id}?${BASE}&${GAME}`);
     expect(document.querySelector('.badge')).toBeNull();
     expect(screen.queryByText('What the badges mean')).toBeNull();
     view.unmount();
@@ -109,9 +111,7 @@ describe('the head of every screen', () => {
     // What the Chancellor did, the measures, and one button to change them; under it a quiet way
     // to the leaderboard (ADR-0044). No cover, no countdown, no bullets (ADR-0032).
     expect(screen.getByRole('heading', { level: 2, name: BUDGET_TEXT.story })).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 2, name: BUDGET_TEXT.measures }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: BUDGET_TEXT.themes })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: BUDGET_TEXT.start })).toHaveClass('btn--primary');
     expect(screen.getByRole('link', { name: 'See the leaderboard' })).toHaveAttribute(
       'href',
@@ -148,15 +148,15 @@ describe('the head of every screen', () => {
     expect(screen.queryByRole('switch')).toBeNull();
   });
 
-  it('offers no way round fine-tuning: no screen links to every lever (Phase 26)', () => {
+  it('offers no way round the walk: no screen links to every lever (Phase 26)', () => {
     // Every lever is a policy on the fine-tuning screens, so the desk and the links to it have
     // gone: from the footer, from fine-tuning and from everywhere else.
     for (const path of [
       `/?${BASE}`,
-      `/finetune/tax?${BASE}&${GAME}`,
-      `/finetune/spending?${BASE}&${GAME}`,
-      `/review?${BASE}&g=st.1_rd.2`,
-      `/budget-day?${BASE}&g=st.1_rd.2`,
+      `/measures/${first?.id}?${BASE}&${GAME}`,
+      `/balance?${BASE}&g=st.1_rd.3`,
+      `/review?${BASE}&g=st.2_rd.3`,
+      `/budget-day?${BASE}&g=st.2_rd.3`,
     ]) {
       const view = at(path);
       expect(screen.queryByRole('link', { name: /Every (tax |spending )?lever/ }), path).toBeNull();

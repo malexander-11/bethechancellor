@@ -2,39 +2,37 @@ import {
   FINAL_STAGE,
   GAME_SETTINGS,
   SHARE_WORDS,
+  cardMeasures,
   encodePermalink,
-  excludesPartners,
   fillStory,
-  finetuneItems,
   gameImplementationYear,
   gameOutcomeOf,
-  measureFigure,
+  linesFigure,
   readFinishedBudget,
+  smallPrint,
   summariseBudget,
   summaryWords,
 } from '@btc/engine';
-import { takesOutWords } from '../components/LeverControl';
-import { INVESTMENT_NOTE, RELIEF_NOTE } from '../components/LeverRow';
+import { INVESTMENT_WORDS, moneyWords } from '../components/MeasureCard';
 import {
   balance,
   budget,
   electorate,
-  finetune,
-  finetuneName,
   gameData,
   guide,
-  levers,
   ministers,
   pm,
   reception,
   scorecard,
 } from '../data';
-import { BOARD_TEXT, countsWords } from '../board/words';
+import { agreeWords, BOARD_TEXT, countsWords } from '../board/words';
+import { balanceWords } from '../journey/balance';
+import { BALANCE_TEXT } from '../pages/Balance';
 import { BUDGET_TEXT } from '../pages/Budget';
+import { MEASURES_TEXT } from '../pages/Measures';
 import { SHARE_TEXT } from '../share/words';
 
 const short = (l: { text: string; short?: string | undefined }) => l.short ?? l.text;
-const curated = finetuneItems(finetune);
 
 /**
  * Three finished Budgets from the data, summed up as a shared Budget is: one that changes nothing,
@@ -73,39 +71,6 @@ const SHARED_BUDGETS = (() => {
  */
 export const ON_SCREEN: Record<string, readonly string[]> = {
   'the guide': guide.stages.flatMap((s) => [s.title, s.now]),
-  'the fine-tuning screens': [
-    ...[finetune.tax, finetune.spending].flatMap((s) => [
-      s.title,
-      s.lead,
-      ...s.groups.map((g) => g.label),
-      ...s.notes.map((n) => n.text),
-    ]),
-    // The questions each section asks (ADR-0035, spending since ADR-0037), read before any is
-    // opened, and the name over each set of ticks that contradict each other (ADR-0036).
-    ...[finetune.tax, finetune.spending].flatMap((side) =>
-      side.groups.flatMap((g) =>
-        g.decisions.flatMap((d) => [d.title, ...(d.alternatives ?? []).map((a) => a.name)]),
-      ),
-    ),
-    ...curated.flatMap((i) => [...(i.name ? [i.name] : []), ...i.policies.map((p) => p.title)]),
-    // Each choice's short name inside its decision (ADR-0037). The spending fold's subheads went
-    // with the fold.
-    ...curated.flatMap((i) => (i.label ? [i.label] : [])),
-    // What a card says once for all its rows (ADR-0037): a relief's cost, and investment's rule.
-    RELIEF_NOTE,
-    INVESTMENT_NOTE,
-  ],
-  'the fine-tuning advice': curated.flatMap((i) => i.policies.map((p) => p.advice.text)),
-  // What choosing a lever would take out (ADR-0036), said on its card before it is touched: every
-  // pair that counts the same money, from both sides, as a tick or a scale says it.
-  'what a choice takes out': curated.flatMap((i) => {
-    const lever = levers.find((l) => l.code === i.code);
-    if (!lever) return [];
-    const kind = lever.control.kind === 'toggle' ? 'tick' : 'scale';
-    return excludesPartners(lever, levers).map(
-      (p) => `${takesOutWords([finetuneName(p.lever.code) ?? p.lever.shortTitle], kind)} ${p.text}`,
-    );
-  }),
   // Phase 25: the Prime Minister at sign-off, as the review reads a line out.
   'the sign-off': Object.values(pm.signOff).map((l) =>
     l.text.replace('{rules}', 'the debt rule').replace('{promises}', 'the tax lock'),
@@ -167,21 +132,14 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
     ...Object.values(BOARD_TEXT).filter((line) => !line.includes('{')),
     countsWords({ ups: 12, downs: 3 }),
   ],
-  // The Budget the game starts from (ADR-0045): the page's own words, its story with the figures
-  // filled as the page fills them, every measure in plain words with its figure, and why the ones a
-  // reader might expect to move cannot be.
+  // The Budget the game starts from (ADR-0045): the page's own words, and its story with the
+  // figures filled as the page fills them.
   'the Budget': [
     budget.title,
-    BUDGET_TEXT.story,
-    BUDGET_TEXT.measures,
-    BUDGET_TEXT.measuresLead.replace('{year}', '2029-30'),
-    ...Object.values(BUDGET_TEXT.groups),
-    BUDGET_TEXT.change,
-    BUDGET_TEXT.rest,
-    BUDGET_TEXT.restLead,
-    BUDGET_TEXT.start,
-    BUDGET_TEXT.startLead,
-    ...budget.measures.map((m) => measureFigure(scorecard, m, '2029-30')?.words ?? ''),
+    ...Object.values(BUDGET_TEXT).map((line) =>
+      line.replace('{n}', '6').replace('{year}', '2029-30'),
+    ),
+    ...budget.themes.map((t) => t.title),
     ...budget.story.map((line) =>
       fillStory(line.text, {
         march: '£23.6bn',
@@ -196,15 +154,52 @@ export const ON_SCREEN: Record<string, readonly string[]> = {
         spending: '£0.4bn',
       }),
     ),
-    ...budget.measures.flatMap((m) => [m.plain, ...(m.notMovable ? [m.notMovable.reason] : [])]),
   ],
-  // The walk through the measures (ADR-0046): each theme's title and lead, and each card's heading
-  // and what it means.
-  'the measures': budget.themes.flatMap((t) => [
-    t.title,
-    t.lead,
-    ...t.cards.flatMap((c) => [c.title, c.explain]),
+  // The walk through the measures (ADR-0046): each theme's title and lead, each card's heading,
+  // what it means and the Treasury's figure for it, what disagreeing does to the money, the
+  // public's answers, and the walk's own words.
+  'the measures': [
+    ...budget.themes.flatMap((t) => [
+      t.title,
+      t.lead,
+      ...t.cards.flatMap((c) => {
+        const figure = linesFigure(
+          scorecard,
+          cardMeasures(budget, c).map((m) => m.line),
+          '2029-30',
+        );
+        return [c.title, c.explain, `The Treasury’s figure: ${figure?.words ?? ''}.`];
+      }),
+    ]),
+    moneyWords(-500, '2029-30'),
+    moneyWords(500, '2029-30'),
+    moneyWords(0, '2029-30'),
+    INVESTMENT_WORDS,
+    BOARD_TEXT.agree,
+    BOARD_TEXT.disagree,
+    BOARD_TEXT.votingLead,
+    BOARD_TEXT.votingClosed,
+    BOARD_TEXT.votingDown,
+    agreeWords({ ups: 12, downs: 3 }),
+    ...Object.values(MEASURES_TEXT).map((line) => line.replace('{title}', 'businesses')),
+    `Your money, 2029-30: ${balanceWords(-500)}`,
+    balanceWords(1200),
+    balanceWords(0),
+  ],
+  // The small print (ADR-0046): every measure no card asks about, in plain words, and why the
+  // ones a reader might expect to move cannot be.
+  'the small print': smallPrint(budget).flatMap((m) => [
+    m.plain,
+    ...(m.notMovable ? [m.notMovable.reason] : []),
   ]),
-  // The balance page's menus (ADR-0046): what each option is and what one press does.
-  'the menus': [...balance.raise, ...balance.spend].flatMap((o) => [o.label, o.each]),
+  // The balance page (ADR-0046): what each option is and what one press does, and the page's own
+  // words with their figures filled.
+  'the menus': [
+    ...[...balance.raise, ...balance.spend].flatMap((o) => [o.label, o.each]),
+    ...Object.values(BALANCE_TEXT).map((line) => line.replace('{money}', '£1.2bn')),
+    'Added once',
+    'Added twice',
+    'Added 3 times',
+    'Strains the tax lock',
+  ],
 };

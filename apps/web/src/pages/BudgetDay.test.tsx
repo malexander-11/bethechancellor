@@ -1,4 +1,4 @@
-import { SHARE_WORDS, readFinishedBudget } from '@btc/engine';
+import { FINAL_STAGE, SHARE_WORDS, readFinishedBudget } from '@btc/engine';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -26,7 +26,7 @@ const meter = (name: string) => within(card(name)).getByRole('img');
  * Fine-tuning done and the Budget delivered from the review (ADR-0045). Budget day needs a game
  * (Phase 26): the sandbox that once opened it with none has gone.
  */
-const GAME = 'g=st.1_rd.2';
+const GAME = 'g=st.2_rd.3';
 
 describe('Budget day: what your Budget means', () => {
   it('is one screen: the rules line, three rated audiences and five households', () => {
@@ -138,7 +138,7 @@ describe('Budget day: what your Budget means', () => {
     at(`${BASE}&${GAME}&L=moj.10`);
     expect(screen.queryByRole('link', { name: 'the one you opened' })).toBeNull();
     await waitFor(() =>
-      expect(new URLSearchParams(window.location.search).get('g')).toBe('st.2_rd.2'),
+      expect(new URLSearchParams(window.location.search).get('g')).toBe('st.3_rd.3'),
     );
   });
 
@@ -156,7 +156,7 @@ describe('Budget day: what your Budget means', () => {
   });
 
   it('never calls a household untouched when something in its groups moved (Phase 25)', () => {
-    at(`${BASE}&${GAME}&L=dip47.1_moj.10_wealth2.1`);
+    at(`${BASE}&${GAME}&L=b6dipcap.1_moj.10_wealth2.1`);
     const professional = screen
       .getByText('A higher-rate professional with savings')
       .closest('.household') as HTMLElement;
@@ -198,7 +198,7 @@ describe('Budget day: sharing the Budget (ADR-0044)', () => {
     expect(screen.getByRole('heading', { level: 2, name: SHARE_TEXT.heading })).toBeVisible();
     const budget = pictured();
     expect(budget.leverValues).toMatchObject({ moj: 10 });
-    expect(budget.game).toEqual({ reached: 2 });
+    expect(budget.game).toEqual({ reached: FINAL_STAGE });
     expect(picture().getAttribute('alt')).toContain('Prisons and courts');
     const save = screen.getByRole('link', { name: SHARE_TEXT.download });
     expect(save).toHaveAttribute('href', `${picture().getAttribute('src')}&download=1`);

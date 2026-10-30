@@ -1,5 +1,6 @@
 import {
   FINAL_STAGE,
+  ROAD,
   readFinishedBudget,
   summariseBudget,
   gameOutcomeOf,
@@ -16,7 +17,7 @@ import { SHARE_TEXT } from '../share/words';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
 const finished = (rest: string) => {
-  const budget = readFinishedBudget(gameData, `${BASE}&g=st.${FINAL_STAGE}_rd.2&${rest}`);
+  const budget = readFinishedBudget(gameData, `${BASE}&g=st.${FINAL_STAGE}_rd.${ROAD}&${rest}`);
   if (!budget) throw new Error('not a finished Budget');
   return budget.query;
 };
@@ -33,7 +34,7 @@ const ENTRIES: Entry[] = [
   {
     id: 'efgh5678',
     title: 'Defence first',
-    query: finished('L=dip47.1'),
+    query: finished('L=b6dipcap.1'),
     ups: 1,
     downs: 0,
     score: 1,

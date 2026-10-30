@@ -4,6 +4,7 @@ import {
   FINAL_STAGE,
   GAME_SETTINGS,
   PICTURE_ROWS,
+  ROAD,
   SHARE_WORDS,
   ambitionStatus,
   budgetTitle,
@@ -92,7 +93,7 @@ describe('a finished Budget read from its link', () => {
     expect(budget).not.toBeNull();
     expect(budget?.game).toEqual({ reached: FINAL_STAGE });
     expect(budget?.query).toBe(read(WALK).query);
-    expect(new URLSearchParams(budget?.query).get('g')).toBe(`st.${FINAL_STAGE}_rd.2`);
+    expect(new URLSearchParams(budget?.query).get('g')).toBe(`st.${FINAL_STAGE}_rd.${ROAD}`);
   });
 
   it('reads its own link back unchanged, every value on its lever’s steps (property)', () => {

@@ -4,19 +4,20 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from '../App';
 import { BOARD_TEXT } from '../board/words';
+import { budget } from '../data';
 
 const BASE = 'v=1&f=obr2610&r=ch2602&i=2027';
-// A game at the review, prisons a tenth up, the defence plan's gap filled and employer National
+// A game at the review, prisons a tenth up, the HMRC package dropped and employer National
 // Insurance two points up: every screen renders in its working state, and the review and Budget
 // day have something to say.
-const GAME = 'g=st.1_rd.2&L=moj.10_dip47.1_nicer.2';
-// The same game with a tax chosen in six of the tax screen's decisions and a budget, a benefit and
-// one of last year's decisions chosen on the spending screen: the decisions holding a choice open
-// on arrival (ADR-0035, ADR-0037), so this is the widest those screens get.
-const TUNED = GAME.replace(
-  'L=moj.10_dip47.1_nicer.2',
-  'L=moj.10_dip47.1_nicer.2_vatr.1_wealth2.1_banklevy.1_b6save.1_apd.2_otherd.-1_woth.-1_rvplan2.1',
-);
+const GAME = 'g=st.2_rd.3&L=moj.10_b6hmrc.1_nicer.2';
+// Every measure on the walk disagreed with: each card's answer pressed and its money line said.
+const DISAGREED = `g=st.2_rd.3&L=${budget.themes
+  .flatMap((t) => t.cards.map((c) => `${c.lever}.1`))
+  .join('_')}`;
+// Short of money on the balance page, and with money to spend: the two ways it opens.
+const SHORT = 'g=st.1_rd.3&L=b6hmrc.1';
+const SPARE = 'g=st.1_rd.3&L=b6ai.1_nicer.2';
 
 /**
  * The most words a screen may show before any fold is opened, by the kind of screen it is. One cap
@@ -25,10 +26,15 @@ const TUNED = GAME.replace(
  */
 const CAP = {
   /**
-   * The Chancellor's Budget (ADR-0045): its story, and every measure a player can change in one
-   * line each with its figure; the rest wait in the fold.
+   * The Chancellor's Budget (ADR-0045): its story, and the walk ahead theme by theme (ADR-0046).
    */
-  analysis: 900,
+  analysis: 250,
+  /** A page of the walk (ADR-0046): a theme's cards, each heading, meaning, figure and answer. */
+  walk: 350,
+  /** The walk's last page: every measure no card asks about, a line and a tick or cross each. */
+  smallPrint: 900,
+  /** The balance page (ADR-0046): the money, and the two menus of a dozen choices each. */
+  menu: 360,
   /** One thing to read or one question to answer: the review. */
   story: 250,
   /**
@@ -36,19 +42,18 @@ const CAP = {
    * Budget to share and the way onto the leaderboard (ADR-0044).
    */
   feedback: 470,
-  /** A fine-tuning screen, its decisions closed but for any the game has made a choice in. */
-  tuning: 450,
-  /** The same with the widest game: every decision holding a choice open, every choice in it. */
-  tuningOpen: 700,
 } as const;
 
 /** Every screen of the main road with the game that renders it at its widest. */
 const ROAD: readonly { path: string; kind: keyof typeof CAP; game: string }[] = [
   { path: '/', kind: 'analysis', game: '' },
-  ...['/finetune/tax', '/finetune/spending'].flatMap((path) => [
-    { path, kind: 'tuning' as const, game: GAME },
-    { path, kind: 'tuningOpen' as const, game: TUNED },
+  ...budget.themes.flatMap((t) => [
+    { path: `/measures/${t.id}`, kind: 'walk' as const, game: GAME },
+    { path: `/measures/${t.id}`, kind: 'walk' as const, game: DISAGREED },
   ]),
+  { path: '/measures/other', kind: 'smallPrint', game: GAME },
+  { path: '/balance', kind: 'menu', game: SHORT },
+  { path: '/balance', kind: 'menu', game: SPARE },
   { path: '/review', kind: 'story', game: GAME },
   { path: '/budget-day', kind: 'feedback', game: GAME },
 ];
@@ -91,7 +96,7 @@ describe('the word budgets', () => {
   afterEach(() => vi.unstubAllGlobals());
 
   it.each(ROAD)(
-    '$path ($kind): one way on, and no more words than its kind allows',
+    '$path ($kind, $game): one way on, and no more words than its kind allows',
     async ({ path, kind, game }) => {
       at(`${path}?${BASE}${game ? `&${game}` : ''}`);
       if (kind === 'feedback') await screen.findByLabelText(BOARD_TEXT.postLabel);

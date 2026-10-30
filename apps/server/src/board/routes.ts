@@ -1,5 +1,11 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
-import { readFinishedBudget, type ShippedDataset } from '@btc/engine';
+import {
+  balanceGbpm,
+  balanceHolds,
+  gameOutcomeOf,
+  readFinishedBudget,
+  type ShippedDataset,
+} from '@btc/engine';
 import type { Route } from '../app.js';
 import { json } from '../http.js';
 import { SERVER_PATHS } from '../paths.js';
@@ -62,6 +68,7 @@ export function openBoard(data: ShippedDataset, board: Board): OpenBoard {
 
   const hash = hasher(board.hashKey);
   const limits = { ...LIMITS, ...board.limits };
+  const outcomeOf = gameOutcomeOf(data);
   let ready: Promise<BoardStore> | undefined;
   let forgotten = 0;
   /** The store, its database brought up to the schema on first use; tried afresh after a failure. */
@@ -133,6 +140,10 @@ export function openBoard(data: ShippedDataset, board: Board): OpenBoard {
           typeof read.body.query === 'string' ? read.body.query : '',
         );
         if (!budget) return json({ error: 'budget' }, 400);
+        // The floor (ADR-0046): a Budget that leaves less headroom than the Chancellor's could
+        // never be delivered in the game, so it has no place on the leaderboard either.
+        const money = balanceGbpm(outcomeOf, outcomeOf(budget.leverValues), data.levers);
+        if (!balanceHolds(money)) return json({ error: 'short' }, 422);
         const checked = checkTitle(read.body.title);
         if ('problem' in checked) return json({ error: 'title', reason: checked.problem }, 422);
         const s = await store();

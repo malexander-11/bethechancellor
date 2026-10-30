@@ -109,6 +109,7 @@ export {
   LEGACY_STAGE,
   ROAD,
   SIX_STAGE,
+  THREE_STAGE,
 } from './permalink/codec.js';
 export { formatGbp, formatGbpBn, formatPct, perHousehold } from './format.js';
 export {

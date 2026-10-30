@@ -36,14 +36,20 @@ export const LEGACY_STAGE: readonly number[] = [0, 1, 2, 3, 4, 4, 5];
  */
 export const SIX_STAGE: readonly number[] = [0, 0, 0, 0, 1, 2];
 
-/** The road marker a link written on the three-stage road carries (`rd.2`). */
-export const ROAD = 2;
+/**
+ * How a stage of the three-stage road (ADR-0045, `rd.2`) reads on the four-stage one (ADR-0046):
+ * fine-tuning opens the walk through the measures; the review and Budget day keep their place.
+ */
+export const THREE_STAGE: readonly number[] = [0, 2, 3];
+
+/** The road marker a link written on the four-stage road carries (`rd.3`). */
+export const ROAD = 3;
 
 /**
- * `g=` holds the story of a playthrough as `key.value` items: `g=st.1_rd.2`. The stage is always
- * written, so a `g=` always marks a game (`st.0` is a game at fine-tuning), and the road marker says
- * which road the stage counts on; a link without one is read on the six-stage road, and one with a
- * seed on the seven-stage road before it.
+ * `g=` holds the story of a playthrough as `key.value` items: `g=st.1_rd.3`. The stage is always
+ * written, so a `g=` always marks a game (`st.0` is a game on the walk through the measures), and
+ * the road marker says which road the stage counts on: `rd.2` the three-stage road before it, none
+ * the six-stage road, and a seed the seven-stage road before that.
  *
  * Retired keys, never to be reused, ignored without a warning when an old link carries them:
  * `s` (the seed of the in-game OBR draw), `pl` (the forecast planned on), `hr` (the headroom
@@ -72,10 +78,12 @@ export function decodeGame(raw: string, warnings: string[]): GamePermalink | und
   const g = freshGame();
   const st = Number(items.get('st'));
   const stage = Number.isInteger(st) ? Math.max(stage0(st), 0) : 0;
-  const onThisRoad = Number(items.get('rd')) === ROAD;
-  // A link from before Phase 24 carried a seed and seven stages; one from before ADR-0045 six.
+  const road = Number(items.get('rd'));
+  // A link from before Phase 24 carried a seed and seven stages; one from before ADR-0045 six, and
+  // one from before ADR-0046 three.
   const six = items.has('s') ? (LEGACY_STAGE[Math.min(stage, 6)] ?? 0) : stage;
-  const reached = onThisRoad ? stage : (SIX_STAGE[Math.min(six, 5)] ?? 0);
+  const three = road === 2 ? stage : (SIX_STAGE[Math.min(six, 5)] ?? 0);
+  const reached = road === ROAD ? stage : (THREE_STAGE[Math.min(three, 2)] ?? 0);
   g.reached = Math.min(reached, FINAL_STAGE);
   return g;
 }

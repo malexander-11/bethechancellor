@@ -96,7 +96,7 @@
   box-sizing: border-box;
   width: 28px;
   height: 28px;
-  border: 1px solid var(--muted);
+  border: 1px solid var(--ink-2);
   background: var(--page);
   color: var(--ink);
   font-family: var(--font-display);
@@ -136,7 +136,7 @@
 /* Ahead, not yet open: dashed and muted, and inert. */
 .progress__stop--ahead .progress__num {
   border-style: dashed;
-  color: var(--muted);
+  color: var(--ink-2);
 }
 
 .progress__stop--open > a:hover .progress__num,
@@ -168,7 +168,7 @@
   }
 
   .progress__stop--ahead .progress__label {
-    color: var(--muted);
+    color: var(--ink-2);
   }
 }
 
@@ -210,46 +210,31 @@
 
 /* ---------------------------------------- the Chancellor's Budget (ADR-0045) */
 
-/* The measures by what each does: a heading a group, then one line a measure between hairlines. */
-.measures__group {
-  margin: 16px 0 0;
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.measures {
+/* The walk ahead, theme by theme (ADR-0046): each name a way straight in, and what it holds. */
+.themes {
   margin: 8px 0 0;
   padding: 0;
+  border-bottom: 1px solid var(--border);
   list-style: none;
 }
 
-.measure {
-  padding: 8px 0;
+.themes__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 10px;
   border-top: 1px solid var(--border);
-  line-height: 1.5;
 }
 
-/* What it does, then its figure and, for a measure not on offer, why, in the quieter ink. */
-.measure__figure,
-.measure__why {
+.themes__go {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.themes__count {
   color: var(--ink-2);
-}
-
-.measure__figure {
-  font-variant-numeric: tabular-nums;
-}
-
-/* A measure's votes (ADR-0045) sit under its line, closer than the leaderboard's to an entry. */
-.measure__votes {
-  margin-top: 6px;
-}
-
-/* The way to the screen a measure is on: a link in the line, with a touch target of its own. */
-.measure__change {
-  min-height: 0;
-  padding: 10px 0;
-  font-size: 1rem;
+  font-size: 0.9375rem;
 }
 
 /* The quiet second way in (ADR-0044): a plain link under the button. */
@@ -264,6 +249,202 @@
   color: var(--accent);
   font-size: 1rem;
   text-underline-offset: 0.15em;
+}
+
+/* -------------------------------------------------------- the walk (ADR-0046) */
+
+/* A theme's cards, one under another between hairlines: each a decision of the Chancellor's. */
+.mcards {
+  margin: 8px 0 0;
+  padding: 0;
+  border-bottom: 1px solid var(--border);
+  list-style: none;
+}
+
+.mcard {
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+
+.mcard__title {
+  margin: 0 0 6px;
+  font-size: 1.1875rem;
+  line-height: 1.3;
+}
+
+.mcard__explain {
+  max-width: 40em;
+  margin: 0 0 6px;
+}
+
+.mcard__figure {
+  margin: 0 0 12px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mcard__answer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.mcard__button {
+  min-width: 7.5em;
+}
+
+/* An answer given: tinted and outlined twice as heavily, so it is never taken for the page's one
+   primary; agreeing in the accent, disagreeing in red, and each says so in words, not colour alone. */
+.mcard__button[aria-pressed='true'],
+.mcard__button[aria-pressed='true']:hover {
+  background: var(--accent-wash);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.mcard__button--disagree {
+  border-color: var(--critical);
+  color: var(--critical);
+}
+
+.mcard__button--disagree:hover,
+.mcard__button--disagree[aria-pressed='true'],
+.mcard__button--disagree[aria-pressed='true']:hover {
+  background: var(--critical-wash);
+}
+
+.mcard__button--disagree[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 2px var(--critical);
+}
+
+.mcard__money {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+/* Disagreed: what it did to the money is now the player's, in full ink. */
+.mcard__money--chosen {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* The small print: one line a measure, its marks beside it on a wide screen and under it on a
+   phone, each mark a 44px target. */
+.small {
+  margin: 8px 0 0;
+  padding: 0;
+  border-bottom: 1px solid var(--border);
+  list-style: none;
+}
+
+.small__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
+
+.small__plain {
+  flex: 1 1 20em;
+}
+
+.small__marks {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.small__mark {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--accent);
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.small__mark--disagree {
+  border-color: var(--critical);
+  color: var(--critical);
+}
+
+.small__mark[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.small__mark--disagree[aria-pressed='true'] {
+  background: var(--critical);
+  color: var(--red-ink);
+}
+
+.small__counts {
+  flex-basis: 100%;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+/* ------------------------------------------------------- the balance (ADR-0046) */
+
+/* What the money needs, said first: short in red, otherwise in the page's own ink. */
+.balance__lead {
+  max-width: 40em;
+  margin: 0 0 8px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.balance__lead--short {
+  color: var(--critical);
+}
+
+.options {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.option {
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.option__label {
+  margin: 0;
+  font-weight: 600;
+}
+
+.option__each {
+  margin: 2px 0 6px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.option__tag {
+  margin-left: 8px;
+}
+
+.option__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin: 0;
+}
+
+.option__count,
+.option__short {
+  font-size: 0.9375rem;
+}
+
+.option__short {
+  color: var(--critical);
 }
 
 /* ---------------------------------------------------------------- motifs */
@@ -285,13 +466,6 @@
   vertical-align: -4px;
 }
 
-/* ------------------------------------------------------- the lever groups */
-
-.minister .spoken {
-  margin: 4px 0 16px;
-  font-size: 0.9375rem;
-}
-
 /* ---------------------------------------------------------- conversation */
 
 /* A spoken line: a card with a coloured edge naming who is talking. The PM's edge is red, a
@@ -311,7 +485,7 @@
 }
 
 .spoken--press {
-  border-left-color: var(--muted);
+  border-left-color: var(--ink-2);
 }
 
 .spoken__who {
@@ -447,7 +621,7 @@
 }
 
 .reason--flat .reason__mark {
-  color: var(--muted);
+  color: var(--ink-2);
 }
 
 .reason__causes {
@@ -571,14 +745,6 @@
   margin: 0 0 6px;
 }
 
-.choice__overlap {
-  color: var(--ink-2);
-}
-
-.choice__overlap--warn {
-  color: var(--critical);
-}
-
 /* ------------------------------------------------------- the headroom bar */
 
 /* The score while you build: one slim strip under the header, never over a control. */
@@ -636,7 +802,7 @@
 .bar__fact::before {
   content: '·';
   margin-right: 8px;
-  color: var(--muted);
+  color: var(--ink-2);
 }
 
 .bar__missed {
@@ -654,480 +820,6 @@
   .bar {
     position: static;
   }
-}
-
-/* --------------------------------------------------------------- who pays */
-
-.who {
-  margin: 20px 0 0;
-}
-
-.who__title {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 2px 12px;
-  margin: 0 0 6px;
-}
-
-.who__count {
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-/* ------------------------------------------------ fine-tuning (Phase 24) */
-
-.lever__notes {
-  margin: 6px 0 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.9375rem;
-  line-height: 1.45;
-}
-
-.lever__notes li + li {
-  margin-top: 4px;
-}
-
-.lever__assumes-title {
-  margin: 8px 0 2px;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.lever__assumes-list {
-  margin: 0;
-  padding-left: 1.2em;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-}
-
-.lever__assumes-list li + li {
-  margin-top: 4px;
-}
-
-/*
- * A policy's sizes (Phase 26): Small, Medium and Large as native radios, each a box of at least
- * 44px with its setting beneath its name; the chosen one takes the accent, as a picked choice does.
- */
-.lever__sizes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  min-width: 0;
-  margin: 8px 0 0;
-  padding: 0;
-  border: 0;
-}
-
-.lever__size {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 96px;
-  min-height: 44px;
-  padding: 4px 12px 4px 10px;
-  border: 1px solid var(--axis);
-  background: var(--surface);
-  cursor: pointer;
-}
-
-.lever__size--on {
-  border-color: var(--accent);
-  box-shadow: inset 0 0 0 1px var(--accent);
-  background: var(--accent-wash);
-}
-
-.lever__size input[type='radio'] {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  margin: 0;
-}
-
-.lever__size-name,
-.lever__size-level {
-  display: block;
-  line-height: 1.25;
-}
-
-.lever__size-name {
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
-.lever__size-level {
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  font-variant-numeric: tabular-nums;
-}
-
-/*
- * A tax's one scale (ADR-0035): up to seven levels, each a column with its radio above it, so the
- * scale takes two rows on a phone; the planned level says so beneath it.
- */
-.lever__sizes--scale {
-  gap: 6px;
-}
-
-.lever__sizes--scale .lever__size {
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  min-width: 64px;
-  padding: 6px;
-  text-align: center;
-}
-
-.lever__sizes--scale .lever__size-level {
-  font-size: 0.875rem;
-}
-
-/*
- * What choosing would take out (ADR-0036), said before anything is touched: the sentence in bold and
- * the reason after it, at full contrast, never faded; the control beside it still moves.
- */
-.lever__takes-out {
-  margin: 8px 0 0;
-  color: var(--ink);
-  font-size: 1rem;
-  line-height: 1.45;
-}
-
-.lever__takes-out strong {
-  font-weight: 700;
-}
-
-/* Set its way at none of its sizes (an old link): what it is now. */
-.lever__now {
-  margin: 8px 0 0;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-}
-
-/*
- * Step 4's decisions (ADR-0035; spending too since ADR-0037): each a row between hairlines, its
- * title and status in a full-width button with the fold's chevron, its choices beneath once opened.
- */
-.tune__decisions {
-  margin: 4px 0 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.tune__decision {
-  border-top: 1px solid var(--border);
-}
-
-.tune__decision-head {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.35;
-}
-
-.tune__decision-toggle {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 44px;
-  padding: 10px 0 10px 22px;
-  position: relative;
-  border: 0;
-  background: none;
-  color: var(--ink);
-  font-weight: 600;
-  text-align: left;
-  cursor: pointer;
-}
-
-.tune__decision-toggle::before {
-  content: '';
-  position: absolute;
-  top: 17px;
-  left: 4px;
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid var(--accent);
-  border-bottom: 2px solid var(--accent);
-  transform: rotate(-45deg);
-  transition: transform var(--t-fast) var(--ease);
-}
-
-.tune__decision-toggle[aria-expanded='true']::before {
-  top: 14px;
-  transform: rotate(45deg);
-}
-
-.tune__decision-toggle:hover .tune__decision-title {
-  color: var(--accent);
-}
-
-.tune__decision-title {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-/* On the right of the title's first line, wrapping within its own column when it is long. */
-.tune__decision-status {
-  flex: none;
-  max-width: 45%;
-  color: var(--ink-2);
-  text-align: right;
-  font-size: 0.875rem;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-.tune__decision-body {
-  padding: 0 0 12px;
-}
-
-/*
- * A decision's one card (ADR-0037): what its rows share said once, a row a choice between
- * hairlines, and one fold for everything else about them.
- */
-.tune__card-note {
-  margin: 0 0 8px;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  line-height: 1.4;
-}
-
-.tune__row {
-  padding: 8px 0 10px;
-  border-top: 1px solid var(--border);
-}
-
-/* The first row sits under its decision's own rule, unless a shared note comes first. */
-.tune__card > .tune__row:first-child,
-.tune__card > .tune__choice:first-child {
-  border-top: 0;
-}
-
-/* The choice on the left, what changes what choosing it means on the right, on its first line. */
-.tune__row-head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 4px 12px;
-}
-
-.tune__row-name {
-  font-size: 1.0625rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-/* A tick's box, its name and its price are one target, at least 44px tall. */
-.tune__row-choice {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  min-height: 44px;
-  padding-top: 10px;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-.tune__row-choice input[type='checkbox'],
-.tune__row-choice input[type='radio'] {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  margin: 1px 0 0;
-}
-
-.tune__row-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-/* A scale's name sits level with a tick's, over its levels. */
-.tune__row:not(.tune__row--tick) > .tune__row-head {
-  padding-top: 10px;
-}
-
-.tune__row-flags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 4px 6px;
-  max-width: 11rem;
-  padding-top: 12px;
-  text-align: right;
-}
-
-/* A tag in a row's head wraps as one line of words, its glossary word among them. */
-.tune__row-flags > .tag,
-.tune__row-flags > .tag--manifesto,
-.tune__row-flags > .tag--treasury {
-  display: block;
-}
-
-/* On a phone the tags go under the choice, so its name and what it would do keep the full width:
-   beside a column of tags, "1% on everything now zero-rated" took four lines at 360px. */
-@media (max-width: 719px) {
-  .tune__row-head {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .tune__row-flags {
-    justify-content: flex-start;
-    max-width: none;
-    padding-top: 0;
-    text-align: left;
-  }
-
-  .tune__row-flags:empty {
-    display: none;
-  }
-
-  .tune__row--tick .tune__row-flags {
-    padding-left: 30px;
-  }
-}
-
-/* Everything under a tick lines up with its name, past the box. */
-.tune__row--tick > .tune__row-body {
-  padding-left: 30px;
-}
-
-/* At rest, what choosing would do: an explainer in plain ink, not money already in the Budget.
-   Under a scale, a budget's growth after rising prices has a line of its own above it. */
-.tune__row-price {
-  display: block;
-  margin: 4px 0 0;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  font-weight: 400;
-  line-height: 1.4;
-  font-variant-numeric: tabular-nums;
-}
-
-.tune__row-text > .tune__row-price {
-  margin: 0;
-}
-
-.tune__row-line {
-  display: block;
-}
-
-/* Once chosen, what it does, in plain ink: the bar is where the score is kept. */
-.tune__row-effect {
-  margin: 4px 0 0;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.4;
-  font-variant-numeric: tabular-nums;
-}
-
-.tune__row-note {
-  color: var(--muted);
-  font-weight: 400;
-  font-variant-numeric: normal;
-}
-
-.tune__row .choice__advice {
-  margin: 6px 0 0;
-  color: var(--ink);
-  font-size: 0.9375rem;
-  line-height: 1.45;
-}
-
-.tune__row .minister {
-  margin: 8px 0 0;
-}
-
-.tune__row-undo {
-  margin-top: 2px;
-}
-
-/* The card's one fold: each lever's own headline, milestones and assumptions, one after another. */
-.tune__more {
-  margin: 4px 0 0;
-}
-
-.tune__about + .tune__about {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-}
-
-.tune__about-name {
-  margin: 0;
-  color: var(--ink);
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.tune__about .lever__desc {
-  margin-top: 4px;
-}
-
-/*
- * Ticks that contradict each other in one decision, drawn as one choice (ADR-0036): the set's name
- * in small capitals, "As planned" as its first radio and the choices' cards beneath, the whole
- * group held by a rule down its left, so it reads as one question like a tax's scale.
- */
-.tune__choice {
-  min-width: 0;
-  margin: 4px 0;
-  padding: 0 0 0 14px;
-  border: 0;
-  border-left: 2px solid var(--axis);
-}
-
-/* Floated to the full width, the legend sits inside the rule like any other line. */
-.tune__choice-name {
-  float: left;
-  width: 100%;
-  margin: 0;
-  padding: 10px 0 0;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  font-variant-caps: all-small-caps;
-  letter-spacing: 0.05em;
-  line-height: 1.3;
-}
-
-.tune__choice-planned {
-  clear: left;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 44px;
-  padding: 2px 0 8px;
-  font-size: 1.0625rem;
-  font-weight: 600;
-  line-height: 1.3;
-  cursor: pointer;
-}
-
-.tune__choice-planned input[type='radio'] {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  margin: 0;
-}
-
-/* A set that is its card's whole question needs no rule to hold it together. */
-.tune__choice--whole {
-  padding-left: 0;
-  border-left: 0;
-}
-
-/* Every row after a set sits on its hairline, as a set does after a row. */
-.tune__row + .tune__choice {
-  border-top: 1px solid var(--border);
 }
 
 /* ------------------------------------------------------------- the review */
@@ -1183,27 +875,7 @@
   font-weight: 600;
 }
 
-/* Step 4's notes: a short list under the lead, in the quieter ink. */
-.tune__notes {
-  margin: 8px 0 0;
-  padding-left: 1.2em;
-  color: var(--ink-2);
-}
-
-.tune__notes li {
-  margin: 4px 0;
-  max-width: 68ch;
-}
-
-/* ------------------------------------------ plain words on step 3 and 4 (Phase 25) */
-
-/* The fold's cash budget: detail, in the quieter ink. */
-.lever__cash-note {
-  margin: 8px 0 0;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  font-variant-numeric: tabular-nums;
-}
+/* ----------------------------------------------- the review, read out (Phase 25) */
 
 .review__taxtake {
   margin: 8px 0 0;

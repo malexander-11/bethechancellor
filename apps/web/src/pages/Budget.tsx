@@ -1,90 +1,38 @@
-import {
-  fillStory,
-  formatGbpBn,
-  measureFigure,
-  type BudgetMeasure,
-  type MeasureGroup,
-} from '@btc/engine';
-import { useEffect, useMemo, useState } from 'react';
+import { fillStory, formatGbpBn, smallPrint } from '@btc/engine';
+import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { measures as measureVotes, type Tally } from '../board/api';
 import { BOARD_TEXT } from '../board/words';
 import { JourneyLayout } from '../components/JourneyLayout';
-import { MeasureVotes } from '../components/MeasureVotes';
-import { budget, levers, scorecard } from '../data';
+import { budget, scorecard } from '../data';
 import { useOutcomeOf } from '../journey/outcome';
+import { measuresPath, SMALL_PRINT, STAGE_ROUTES } from '../journey/routes';
 import { usePageTitle } from '../journey/title';
 import { permalinkQuery, reducer, useBudget } from '../state/budget';
 
-/** The page's own words (ADR-0045): what is not the data's or the engine's. */
+/** The page's own words (ADR-0045, ADR-0046): what is not the data's or the engine's. */
 export const BUDGET_TEXT = {
   story: 'What the Chancellor did',
-  measures: 'The measures',
-  measuresLead:
-    'The ones you can change, by what each does in {year}. Change it opens the screen it is on.',
-  groups: {
-    taxRise: 'Tax rises',
-    taxCut: 'Tax cuts',
-    lessSpending: 'Less spending',
-    moreSpending: 'More spending',
-  } satisfies Record<MeasureGroup, string>,
-  change: 'Change it',
-  rest: 'Everything else in the Budget',
-  restLead: 'Smaller lines, and the ones already over or not yours to move.',
-  start: 'Change the Chancellor’s Budget',
-  startLead:
-    'Start from what the Chancellor did, change what you would, and see what the country makes of it.',
+  themes: 'Have your say',
+  themesLead:
+    'Go through the measures theme by theme, and agree or disagree with each one. Then spend what you saved, or find what you gave up.',
+  count: '{n} measures',
+  rest: 'The rest of the Budget',
+  restCount: '{n} smaller measures to tick or cross',
+  start: 'Go through the measures',
 } as const;
-
-/** Whether the public can vote on the measures: the tallies when they can, else why not. */
-type Voting =
-  | { kind: 'unknown' }
-  | { kind: 'closed' }
-  | { kind: 'down' }
-  | { kind: 'open'; tallies: Record<string, Tally> };
-
-const VOTING_LINE: Record<Exclude<Voting['kind'], 'unknown'>, string> = {
-  open: BOARD_TEXT.votingLead,
-  closed: BOARD_TEXT.votingClosed,
-  down: BOARD_TEXT.votingDown,
-};
-
-/** The code of a measure's lever, and which fine-tuning screen it is on. */
-function screenOf(code: string): string {
-  const lever = levers.find((l) => l.code === code);
-  return lever?.category === 'tax' ? '/finetune/tax' : '/finetune/spending';
-}
 
 /**
  * The Budget of 28 October 2026 (ADR-0045): what the Chancellor did, in the game's plain words,
  * with every figure read from the Treasury's own scorecard or worked out by the engine on the
- * OBR's forecast; and the one button that starts a game from it. The story's figures are the
- * engine's where it has them (the headroom, the welfare cap's gap, what the measures do by the
- * target year) and the Budget file's published facts for the rest; nothing on the page is typed.
- * The measures a player can change come first, grouped by what each does by the target year, each
- * with a way to the screen its lever is on; the rest wait in one fold. Every measure takes a vote,
- * for or against, once the server's database is there; until then one line says voting waits.
+ * OBR's forecast; nothing on the page is typed. Then the walk ahead, theme by theme (ADR-0046),
+ * each a way straight in, and the one button that starts a game from the Chancellor's Budget at
+ * the first theme, a link's measures in it.
  */
 export function BudgetPage() {
   const { state, dispatch } = useBudget();
   const outcomeOf = useOutcomeOf();
   const navigate = useNavigate();
   usePageTitle(budget.title);
-  const [voting, setVoting] = useState<Voting>({ kind: 'unknown' });
-  useEffect(() => {
-    let live = true;
-    void measureVotes.tallies().then((answer) => {
-      if (!live) return;
-      setVoting(
-        answer.ok
-          ? { kind: 'open', tallies: answer.body.tallies }
-          : { kind: answer.error === 'closed' ? 'closed' : 'down' },
-      );
-    });
-    return () => {
-      live = false;
-    };
-  }, []);
   // The Chancellor's Budget is the forecast with nothing moved: the engine's own verdicts on it.
   const base = useMemo(() => outcomeOf({}), [outcomeOf]);
   const stability = base.verdicts.find((v) => v.kind === 'currentBudget');
@@ -115,17 +63,6 @@ export function BudgetPage() {
     tax: money(totals.tax),
     spending: money(totals.spending),
   };
-  // Every measure with its figure, the movable ones grouped by what each does.
-  const figured = budget.measures.map((m) => ({
-    measure: m,
-    figure: measureFigure(scorecard, m, year),
-  }));
-  const movable = figured.filter((x) => x.measure.leverCode !== undefined);
-  const rest = figured.filter((x) => x.measure.leverCode === undefined);
-  const groups = (Object.keys(BUDGET_TEXT.groups) as MeasureGroup[]).map((group) => ({
-    group,
-    items: movable.filter((x) => x.figure?.group === group),
-  }));
 
   /** The one way in: the game starts from the Chancellor's Budget, a link's measures in it. */
   const begin = (to: string) => {
@@ -134,39 +71,16 @@ export function BudgetPage() {
     navigate({ pathname: to, search: `?${permalinkQuery(started)}` });
   };
 
-  const row = ({
-    measure,
-    figure,
-  }: {
-    measure: BudgetMeasure;
-    figure: ReturnType<typeof measureFigure>;
-  }) => (
-    <li key={measure.id} className="measure">
-      <span className="measure__plain">{measure.plain}</span>{' '}
-      {figure ? <span className="measure__figure">{figure.words}</span> : null}
-      {measure.notMovable ? (
-        <span className="measure__why"> {measure.notMovable.reason}</span>
-      ) : null}
-      {measure.leverCode ? (
-        <>
-          {' '}
-          <button
-            type="button"
-            className="linklike measure__change"
-            onClick={() => begin(screenOf(measure.leverCode ?? ''))}
-          >
-            {BUDGET_TEXT.change}
-            <span className="sr-only">: {measure.plain}</span>
-          </button>
-        </>
-      ) : null}
-      {voting.kind === 'open' ? (
-        <MeasureVotes
-          id={measure.id}
-          plain={measure.plain}
-          tally={voting.tallies[measure.id] ?? { ups: 0, downs: 0 }}
-        />
-      ) : null}
+  const way = (page: string, title: string, count: string) => (
+    <li key={page} className="themes__item">
+      <button
+        type="button"
+        className="linklike themes__go"
+        onClick={() => begin(measuresPath(page))}
+      >
+        {title}
+      </button>{' '}
+      <span className="themes__count">{count}</span>
     </li>
   );
 
@@ -189,39 +103,28 @@ export function BudgetPage() {
         ))}
       </section>
 
-      <section className="doc" aria-labelledby="measures-heading">
-        <h2 id="measures-heading" className="section-label">
-          {BUDGET_TEXT.measures}
+      <section className="doc" aria-labelledby="themes-heading">
+        <h2 id="themes-heading" className="section-label">
+          {BUDGET_TEXT.themes}
         </h2>
-        <p className="panel__hint">{BUDGET_TEXT.measuresLead.replace('{year}', year)}</p>
-        {voting.kind !== 'unknown' ? (
-          <p className="panel__hint">{VOTING_LINE[voting.kind]}</p>
-        ) : null}
-        {groups
-          .filter((g) => g.items.length > 0)
-          .map((g) => (
-            <section key={g.group} aria-labelledby={`measures-${g.group}`}>
-              <h3 id={`measures-${g.group}`} className="measures__group">
-                {BUDGET_TEXT.groups[g.group]}
-              </h3>
-              <ul className="measures">{g.items.map(row)}</ul>
-            </section>
-          ))}
-        <details className="more more--quiet">
-          <summary>{BUDGET_TEXT.rest}</summary>
-          <div className="more__body">
-            <p className="panel__hint">{BUDGET_TEXT.restLead}</p>
-            <ul className="measures">{rest.map(row)}</ul>
-          </div>
-        </details>
+        <p className="panel__hint">{BUDGET_TEXT.themesLead}</p>
+        <ul className="themes">
+          {budget.themes.map((t) =>
+            way(t.id, t.title, BUDGET_TEXT.count.replace('{n}', String(t.cards.length))),
+          )}
+          {way(
+            SMALL_PRINT,
+            BUDGET_TEXT.rest,
+            BUDGET_TEXT.restCount.replace('{n}', String(smallPrint(budget).length)),
+          )}
+        </ul>
       </section>
 
-      <p className="panel__hint">{BUDGET_TEXT.startLead}</p>
       <p className="actions">
         <button
           type="button"
           className="btn btn--primary btn--big"
-          onClick={() => begin('/finetune/tax')}
+          onClick={() => begin(STAGE_ROUTES.measures)}
         >
           {BUDGET_TEXT.start}
         </button>

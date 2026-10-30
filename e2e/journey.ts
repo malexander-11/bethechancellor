@@ -11,27 +11,16 @@ import { test as base, expect, type Page } from '@playwright/test';
 interface Guide {
   stages: { step: string; title: string }[];
 }
-interface FinetuneItem {
-  code: string;
-  name?: string;
-  label?: string;
-  policies: { title: string; sizes: number[] }[];
-}
-interface FinetuneDecision {
-  title: string;
-  items: FinetuneItem[];
-  alternatives?: { codes: string[] }[];
-}
-interface FinetuneSide {
-  title: string;
-  groups: { decisions: FinetuneDecision[] }[];
+interface Budget {
+  themes: { id: string; title: string; cards: { lever: string; title: string }[] }[];
 }
 
 const read = <T>(file: string): T =>
   JSON.parse(readFileSync(new URL(`../data/journey/${file}`, import.meta.url), 'utf8')) as T;
 
 const guide = read<Guide>('guide.json');
-const finetune = read<{ tax: FinetuneSide; spending: FinetuneSide }>('finetune.json');
+/** The walk's themes and cards, as the Budget file gives them (ADR-0046). */
+export const budget = read<Budget>('budget2026.json');
 
 function stageTitle(step: string): string {
   const stage = guide.stages.find((s) => s.step === step);
@@ -49,11 +38,16 @@ export interface Screen {
   act?: (page: Page) => Promise<void>;
 }
 
-/** The road (ADR-0045): the Chancellor's Budget, then the three steps. */
+/**
+ * The road (ADR-0046): the Chancellor's Budget, the walk through the measures a theme a page and
+ * then the small print, the balance, the review and Budget day. Agreeing with everything balances,
+ * so the primary buttons alone reach the end.
+ */
 export const JOURNEY: readonly Screen[] = [
   { name: 'the Budget', heading: stageTitle('start') },
-  { name: 'fine-tune tax', heading: finetune.tax.title },
-  { name: 'fine-tune spending', heading: finetune.spending.title },
+  ...budget.themes.map((t) => ({ name: t.title, heading: t.title })),
+  { name: 'the small print' },
+  { name: 'balance', heading: stageTitle('balance') },
   { name: 'review', heading: stageTitle('review') },
   { name: 'Budget day', heading: stageTitle('budget-day') },
 ];
@@ -84,43 +78,9 @@ export async function walk(
   }
 }
 
-/** Step 1's decisions: each a heading whose button opens it. */
-export const decisions = (page: Page) =>
-  page.getByRole('main').getByRole('heading').locator('button[aria-expanded]');
-
-/** A decision's button, by its title alone, since the button also says where it stands. */
-export const decisionButton = (page: Page, title: string) =>
-  decisions(page).filter({ has: page.getByText(title, { exact: true }) });
-
-/** The panel a decision's button opens. */
-export async function panelOf(page: Page, title: string) {
-  const id = await decisionButton(page, title).getAttribute('aria-controls');
-  if (!id) throw new Error(`The decision "${title}" controls no panel`);
-  return page.locator(`[id="${id}"]`);
-}
-
-/** What a row is called inside its decision: its short name, else its own (as the engine does). */
-export const rowName = (item: FinetuneItem) =>
-  item.label ?? item.name ?? item.policies[0]?.title ?? item.code;
-
-/** A tick: a lever with one policy of one size, and not in a set the card draws as radios. */
-const isTick = (item: FinetuneItem, decision: FinetuneDecision) =>
-  item.policies.length === 1 &&
-  item.policies[0]?.sizes.length === 1 &&
-  !decision.alternatives?.some((set) => set.codes.includes(item.code));
-
-/** A scale: a lever with more than one size, the plan among them. */
-const isScale = (item: FinetuneItem) => item.policies.flatMap((p) => p.sizes).length > 1;
-
-/** The first tax decision holding both a tick and a scale, with one of each. */
-export const TAX_DECISION = (() => {
-  for (const decision of finetune.tax.groups.flatMap((g) => g.decisions)) {
-    const tick = decision.items.find((item) => isTick(item, decision));
-    const scale = decision.items.find(isScale);
-    if (tick && scale) return { title: decision.title, tick, scale };
-  }
-  throw new Error('finetune.json has no tax decision with both a tick and a scale');
-})();
+/** A card on the walk, found by its heading. */
+export const cardOf = (page: Page, title: string) =>
+  page.getByRole('listitem').filter({ has: page.getByRole('heading', { level: 2, name: title }) });
 
 /** The Budget's lever settings, as the link carries them. */
 export const leversInLink = (page: Page) => new URL(page.url()).searchParams.get('L') ?? '';

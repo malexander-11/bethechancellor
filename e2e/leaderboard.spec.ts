@@ -24,7 +24,8 @@ async function posted(
   variant: number,
 ): Promise<Entry> {
   const size = info.project.name === 'phone' ? 5 : 10;
-  const query = `v=1&g=st.2_rd.2&L=moj.${size}_dhsc.${variant}`;
+  // Employer National Insurance a point up keeps it above the Chancellor's headroom (ADR-0046).
+  const query = `v=1&g=st.3_rd.3&L=nicer.1_moj.${size}_dhsc.${variant}`;
   const answer = await request.post('/api/budgets', { data: { query, title } });
   expect([200, 201], await answer.text()).toContain(answer.status());
   return ((await answer.json()) as { entry: Entry }).entry;
@@ -34,15 +35,16 @@ async function posted(
 const lineOf = (page: Page, title: string) =>
   page.getByRole('listitem').filter({ has: page.getByRole('heading', { level: 2, name: title }) });
 
-test('a vote on one of the Chancellor’s measures is counted, and taken back', async ({ page }) => {
-  await page.goto('/');
-  const forIt = page
-    .getByRole('button', { name: new RegExp(`^${BOARD_TEXT.measureFor}\\b`) })
-    .first();
-  await forIt.click();
-  await expect(forIt).toHaveAttribute('aria-pressed', 'true');
-  await forIt.click();
-  await expect(forIt).toHaveAttribute('aria-pressed', 'false');
+test('an answer on the walk is counted as a vote, and taken back (ADR-0046)', async ({ page }) => {
+  await page.goto('/measures/other?v=1&g=st.0_rd.3');
+  // The small print's marks are votes and nothing more; voting is open on the preview's database.
+  await expect(page.getByText(BOARD_TEXT.votingLead)).toBeVisible();
+  const tick = page.getByRole('button', { name: new RegExp(`^${BOARD_TEXT.agree}:`) }).first();
+  await tick.click();
+  await expect(tick).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.small__counts').first()).toContainText(/^[1-9]\d* agree/);
+  await tick.click();
+  await expect(tick).toHaveAttribute('aria-pressed', 'false');
 });
 
 test('a Budget on the leaderboard is voted on, opened and reported', async ({
